@@ -183,7 +183,7 @@ describe("MapPage", () => {
   });
 
   test("applies leaf bindings only through the explicit diagnosis action", async () => {
-    renderMap();
+    renderMap("/map?keep=1&tag=a&tag=b");
     const tree = await loadedTree();
     fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
     const question = within(tree).getByRole("treeitem", { name: /質問/u });
@@ -204,6 +204,8 @@ describe("MapPage", () => {
       nodeIds: new Set(mapFixture().nodes.map((item) => item.node_id)),
       questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
     }).state.answers.Q01).toEqual({ status: "answered", values: ["binary"] });
+    expect(new URLSearchParams(currentSearch()).get("keep")).toBe("1");
+    expect(new URLSearchParams(currentSearch()).getAll("tag")).toEqual(["a", "b"]);
   });
 
   test("highlights every node whose exact bindings match Diagnose answers", async () => {
@@ -216,13 +218,47 @@ describe("MapPage", () => {
     });
     renderMap(`/map?state=${token}`);
     const tree = await loadedTree();
-    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
-    const question = within(tree).getByRole("treeitem", { name: /質問/u });
-    fireEvent.click(within(question).getByRole("button", { name: /質問 を展開/u }));
-
-    expect(within(tree).getByRole("treeitem", { name: /0-1/u })).toHaveClass(
+    const match = await within(tree).findByRole("treeitem", { name: /0-1/u });
+    expect(match).toHaveClass(
       "map-tree-item-answer-match",
     );
+    await waitFor(() => expect(match).toHaveAttribute("aria-selected", "true"));
+    expect(screen.getByRole("heading", { level: 2, name: "0-1" })).toBeVisible();
+    const canonical = new URLSearchParams(currentSearch()).get("state")!;
+    const decoded = decodeAtlasState(canonical, {
+      datasetVersion: "0.2.0", viewId: "problem-structure", viewVersion: "1.0.0",
+      nodeIds: new Set(mapFixture().nodes.map((item) => item.node_id)),
+      questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
+    }).state;
+    expect(decoded.selectedNodeId).toBe("totally-opaque-leaf");
+    expect(decoded.answers.Q01).toEqual({ status: "answered", values: ["binary"] });
+  });
+
+  test("shows a recoverable error when the explicit Map CTA cannot encode state", async () => {
+    const fixture = mapFixture();
+    const huge = "answer".repeat(350);
+    const question = fixture.nodes.find((item) => item.node_id === "opaque-question") as unknown as {
+      allowed_answers: string[];
+    };
+    question.allowed_answers = [huge];
+    const leaf = fixture.nodes.find((item) => item.node_id === "totally-opaque-leaf") as unknown as {
+      answer_bindings: Array<{ question_id: string; answer_value: string }>;
+    };
+    leaf.answer_bindings = [{ question_id: "Q01", answer_value: huge }];
+    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+    renderMap("/map?keep=1");
+    const tree = await loadedTree();
+    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
+    const questionItem = within(tree).getByRole("treeitem", { name: /質問/u });
+    fireEvent.click(within(questionItem).getByRole("button", { name: /質問 を展開/u }));
+    fireEvent.click(within(tree).getByRole("treeitem", { name: /0-1/u }));
+    const before = currentSearch();
+
+    fireEvent.click(screen.getByRole("button", { name: "この条件で診断を続ける" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/maximum is 1800/u);
+    expect(currentSearch()).toBe(before);
+    expect(screen.queryByText("DIAGNOSE ROUTE")).not.toBeInTheDocument();
   });
 
   test("implements visible-tree keyboard movement without selecting on focus", async () => {

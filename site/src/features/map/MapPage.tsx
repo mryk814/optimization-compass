@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { buildMapModel, parseViewSpec, type MapModel, type ViewSpec } from "../../contracts/viewspec";
-import { encodeAtlasState, type AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
 import { MapDetail } from "./MapDetail";
 import { ancestorIds, applyAnswerBindings, matchingBindingNodeIds } from "./map-state";
@@ -42,7 +42,7 @@ function Diagnostics({ model }: { model: MapModel }) {
 function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   const catalog = useMemo(() => catalogFromView(view), [view]);
   const atlas = useAtlasState(catalog);
-  const navigate = useNavigate();
+  const atlasNavigation = useAtlasNavigation();
   const answerMatchIds = useMemo(
     () => new Set(matchingBindingNodeIds(view.nodes, atlas.state)),
     [atlas.state, view.nodes],
@@ -58,6 +58,23 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   const [focusRequest, setFocusRequest] = useState<{ nodeId: string; sequence: number }>();
   const focusSequence = useRef(0);
   const nodeRefs = useRef(new Map<string, HTMLElement>());
+
+  useEffect(() => {
+    if (answerMatchIds.size === 0) return;
+    setExpanded((current) => {
+      const next = new Set(current);
+      answerMatchIds.forEach((nodeId) => {
+        ancestorIds(nodeId, model.parentByChild).forEach((ancestorId) => next.add(ancestorId));
+      });
+      return next;
+    });
+    if (!atlas.state.selectedNodeId) {
+      const firstMatch = answerMatchIds.values().next().value as string | undefined;
+      if (firstMatch) {
+        atlas.setState((current) => ({ ...current, selectedNodeId: firstMatch }), { replace: true });
+      }
+    }
+  }, [answerMatchIds, atlas.setState, atlas.state.selectedNodeId, model.parentByChild]);
 
   useEffect(() => {
     const selectedId = atlas.state.selectedNodeId;
@@ -114,7 +131,7 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
       : undefined;
     if (!selected || selected.answer_bindings.length === 0) return;
     const next = applyAnswerBindings(atlas.state, selected.answer_bindings, catalog);
-    navigate({ pathname: "/diagnose", search: `?state=${encodeAtlasState(next)}` });
+    atlasNavigation.navigateWithState("/diagnose", next);
   };
 
   if (atlas.error) {
@@ -143,6 +160,7 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
           {atlas.warnings.map((warning) => <p key={warning}>{warning}</p>)}
         </div>
       )}
+      {atlasNavigation.error && <p className="map-state-panel" role="alert">{atlasNavigation.error.message}</p>}
       <Diagnostics model={model} />
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
         <button aria-pressed={activePane === "map"} onClick={() => setActivePane("map")} type="button">地図</button>

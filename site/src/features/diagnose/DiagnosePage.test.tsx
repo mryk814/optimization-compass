@@ -7,6 +7,7 @@ import rawSiteData from "../../../public/data/recommendation/site-data.json";
 import rawView from "../../../public/data/views/problem-structure.json";
 import { decodeAtlasState, encodeAtlasState, type AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { DiagnosePage } from "./DiagnosePage";
+import { MapPage } from "../map/MapPage";
 
 function catalog(): AtlasCompatibilityCatalog {
   return {
@@ -48,13 +49,13 @@ function LocationProbe() {
   return <output data-testid="location">{useLocation().pathname + useLocation().search}</output>;
 }
 
-function renderDiagnose(entry = "/diagnose") {
+function renderDiagnose(entry = "/diagnose", realMap = false) {
   return render(
     <MemoryRouter initialEntries={[entry]}>
       <LocationProbe />
       <Routes>
         <Route path="/diagnose" element={<DiagnosePage />} />
-        <Route path="/map" element={<p>MAP ROUTE</p>} />
+        <Route path="/map" element={realMap ? <MapPage /> : <p>MAP ROUTE</p>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -63,6 +64,13 @@ function renderDiagnose(entry = "/diagnose") {
 function tokenFromLocation(): string {
   const location = screen.getByTestId("location").textContent ?? "";
   return new URLSearchParams(location.split("?")[1] ?? "").get("state") ?? "";
+}
+
+function encodeRawState(value: unknown): string {
+  const bytes = new TextEncoder().encode(JSON.stringify(value));
+  let binary = "";
+  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/u, "");
 }
 
 describe("DiagnosePage", () => {
@@ -96,6 +104,32 @@ describe("DiagnosePage", () => {
     renderDiagnose();
 
     expect(await screen.findByRole("alert")).toHaveTextContent(/データ版.*一致しません/u);
+    expect(screen.queryByText(rawSiteData.questions[0].question_ja)).not.toBeInTheDocument();
+  });
+
+  test.each([
+    ["top-level version", { ...rawManifest, version: "9.9.9" }],
+    [
+      "recommendation path traversal",
+      { ...rawManifest, recommendation: { ...rawManifest.recommendation, path: "../site-data.json" } },
+    ],
+    [
+      "alternate ViewSpec path",
+      { ...rawManifest, views: [{ ...rawManifest.views[0], path: "views/alternate.json" }] },
+    ],
+    [
+      "recommendation entry version",
+      { ...rawManifest, recommendation: { ...rawManifest.recommendation, version: "9.9.9" } },
+    ],
+    [
+      "ViewSpec entry version",
+      { ...rawManifest, views: [{ ...rawManifest.views[0], version: "9.9.9" }] },
+    ],
+  ])("rejects manifest %s mismatch", async (_label, invalidManifest) => {
+    mockArtifacts({ manifest: invalidManifest });
+    renderDiagnose();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/manifest/u);
     expect(screen.queryByText(rawSiteData.questions[0].question_ja)).not.toBeInTheDocument();
   });
 
@@ -177,13 +211,81 @@ describe("DiagnosePage", () => {
   });
 
   test("preserves the token when navigating to Map", async () => {
-    renderDiagnose();
+    renderDiagnose("/diagnose?keep=1&tag=a&tag=b");
     const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
     fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
     const token = tokenFromLocation();
     fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
     await waitFor(() => expect(screen.getByText("MAP ROUTE")).toBeVisible());
     expect(tokenFromLocation()).toBe(token);
+    const location = screen.getByTestId("location").textContent ?? "";
+    const params = new URLSearchParams(location.split("?")[1] ?? "");
+    expect(params.get("keep")).toBe("1");
+    expect(params.getAll("tag")).toEqual(["a", "b"]);
+  });
+
+  test("transitions answers-only Diagnose state into a visible deterministic Map selection", async () => {
+    renderDiagnose("/diagnose?keep=1", true);
+    const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
+    fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
+
+    const tree = await screen.findByRole("tree", { name: "最適化問題の構造" });
+    const match = await within(tree).findByRole("treeitem", { name: /^0-1answer$/u });
+    expect(match).toHaveClass("map-tree-item-answer-match");
+    await waitFor(() => expect(match).toHaveAttribute("aria-selected", "true"));
+    expect(screen.getByRole("heading", { level: 2, name: "0-1" })).toBeVisible();
+    expect(new URLSearchParams((screen.getByTestId("location").textContent ?? "").split("?")[1]).get("keep")).toBe("1");
+  });
+
+  test("shows a recoverable candidate navigation error without changing route or token", async () => {
+    const hugeId = "0".repeat(2000);
+    const hugeView = structuredClone(rawView);
+    const nodes = hugeView.nodes as unknown as Array<Record<string, unknown>>;
+    nodes.push({
+      ...hugeView.nodes[0],
+      node_id: hugeId,
+      parent_node_id: null,
+      display_order: 0,
+      answer_bindings: [],
+      related_entities: rawSiteData.methods.map((method) => ({
+        entity_type: "method",
+        entity_id: method.method_id,
+      })),
+    });
+    mockArtifacts({ view: hugeView });
+    const token = encodeAtlasState({
+      stateVersion: 1,
+      datasetVersion: rawSiteData.dataset_version,
+      viewId: rawView.view_id,
+      viewVersion: rawView.version,
+      answers: {
+        Q01: { status: "answered", values: ["continuous"] },
+        Q05: { status: "answered", values: ["autodiff"] },
+      },
+    });
+    renderDiagnose(`/diagnose?keep=1&state=${token}`);
+    const before = screen.getByTestId("location").textContent;
+
+    fireEvent.click((await screen.findAllByRole("button", { name: "地図で見る" }))[0]);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/maximum is 1800/u);
+    expect(screen.getByTestId("location")).toHaveTextContent(before ?? "");
+    expect(screen.queryByText("MAP ROUTE")).not.toBeInTheDocument();
+  });
+
+  test("recovers from a duplicate multi-choice URL token before recommendation render", async () => {
+    const token = encodeRawState({
+      stateVersion: 1,
+      datasetVersion: rawSiteData.dataset_version,
+      viewId: rawView.view_id,
+      viewVersion: rawView.version,
+      answers: { Q04: { status: "answered", values: ["linear", "linear"] } },
+    });
+    renderDiagnose(`/diagnose?state=${token}`);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/Q04.*duplicate/u);
+    expect(screen.getByRole("button", { name: "状態をリセット" })).toBeVisible();
   });
 
   test("shows malformed URL recovery without silently resetting", async () => {

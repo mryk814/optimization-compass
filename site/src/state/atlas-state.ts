@@ -67,6 +67,9 @@ function validateAnswer(value: unknown, questionId: string): AtlasAnswer {
     throw new Error(`AtlasState answer "${questionId}" has invalid values.`);
   }
   values.forEach((answerValue) => requireNonEmptyString(answerValue, "answer ID"));
+  if (new Set(values).size !== values.length) {
+    throw new Error(`AtlasState answer "${questionId}" contains duplicate values.`);
+  }
 
   if (value.status === "answered") {
     if (values.length === 0 || values.includes("unknown")) {

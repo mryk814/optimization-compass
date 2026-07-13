@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { parseSiteData, type SiteData, type SiteQuestion } from "../../contracts/site-data";
 import {
@@ -8,11 +7,11 @@ import {
   type ViewSpec,
 } from "../../contracts/viewspec";
 import {
-  encodeAtlasState,
   toRecommendationAnswers,
   type AtlasCompatibilityCatalog,
 } from "../../state/atlas-state";
 import { useAtlasState } from "../../state/useAtlasState";
+import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { updateDiagnosticAnswer } from "./diagnose-state";
 import {
@@ -33,6 +32,10 @@ interface DiagnoseArtifacts {
   data: SiteData;
   view: ViewSpec;
 }
+
+const MANIFEST_VERSION = "1.0.0";
+const RECOMMENDATION_PATH = "recommendation/site-data.json";
+const VIEW_PATH = "views/problem-structure.json";
 
 type LoadState =
   | { status: "loading" }
@@ -68,6 +71,9 @@ function manifest(value: unknown): SiteManifest {
     }
     return { view_id: row.view_id, path: row.path, version: row.version };
   });
+  if (raw.version !== MANIFEST_VERSION) {
+    throw new Error(`manifest version は ${MANIFEST_VERSION} である必要があります。`);
+  }
   return {
     version: raw.version,
     dataset_version: raw.dataset_version,
@@ -93,6 +99,12 @@ async function loadArtifacts(): Promise<DiagnoseArtifacts> {
   const data = parseSiteData(rawData);
   const view = parseViewSpec(rawView);
   const manifestView = parsedManifest.views.find((item) => item.view_id === view.view_id);
+  if (parsedManifest.recommendation.path !== RECOMMENDATION_PATH) {
+    throw new Error(`manifest recommendation path が許可値 ${RECOMMENDATION_PATH} と一致しません。`);
+  }
+  if (!manifestView || manifestView.path !== VIEW_PATH) {
+    throw new Error(`manifest ViewSpec path が許可値 ${VIEW_PATH} と一致しません。`);
+  }
   if (
     parsedManifest.dataset_version !== data.dataset_version ||
     view.dataset_version !== data.dataset_version
@@ -104,7 +116,7 @@ async function loadArtifacts(): Promise<DiagnoseArtifacts> {
   if (parsedManifest.recommendation.version !== data.contract_version) {
     throw new Error("manifest と SiteData のartifact版が一致しません。");
   }
-  if (!manifestView || manifestView.version !== view.version) {
+  if (manifestView.version !== view.version) {
     throw new Error("manifest と ViewSpec のartifact版が一致しません。");
   }
   return { manifest: parsedManifest, data, view };
@@ -277,14 +289,14 @@ function Results({
 function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">) {
   const catalog = useMemo(() => catalogFromArtifacts(data, view), [data, view]);
   const atlas = useAtlasState(catalog);
-  const navigate = useNavigate();
+  const atlasNavigation = useAtlasNavigation();
   const result = useMemo(
     () => recommend(data, toRecommendationAnswers(atlas.state), { expected_dataset_version: view.dataset_version }),
     [atlas.state, data, view.dataset_version],
   );
   const navigateMap = (selectedNodeId?: string) => {
     const next = selectedNodeId ? { ...atlas.state, selectedNodeId } : atlas.state;
-    navigate({ pathname: "/map", search: `?state=${encodeAtlasState(next)}` });
+    atlasNavigation.navigateWithState("/map", next);
   };
   const methodMap = (methodId: string) => navigateMap(resolveRelatedNodeId(view.nodes, "method", methodId));
 
@@ -300,6 +312,7 @@ function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">
   return (
     <>
       {atlas.warnings.length > 0 && <div className="diagnose-warning-list" role="status">{atlas.warnings.map((warning) => <p key={warning}>{warning}</p>)}</div>}
+      {atlasNavigation.error && <p className="diagnose-error" role="alert">{atlasNavigation.error.message}</p>}
       <div className="diagnose-layout">
         <section className="diagnose-form" aria-label="診断条件">
           {data.questions.map((question) => (

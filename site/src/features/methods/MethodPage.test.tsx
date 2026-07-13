@@ -37,7 +37,7 @@ describe("MethodPage Map deep link", () => {
       answers: { Q01: { status: "answered", values: ["binary"] } },
     });
     render(
-      <MemoryRouter initialEntries={[`/methods/M_TARGET?state=${token}`]}>
+      <MemoryRouter initialEntries={[`/methods/M_TARGET?keep=1&tag=a&tag=b&state=${token}`]}>
         <Probe />
         <Routes>
           <Route path="/methods/:methodId" element={<MethodPage />} />
@@ -56,5 +56,33 @@ describe("MethodPage Map deep link", () => {
     }).state;
     expect(decoded.selectedNodeId).toBe("opaque-first");
     expect(decoded.answers.Q01).toEqual({ status: "answered", values: ["binary"] });
+    const params = new URLSearchParams(screen.getByTestId("location").textContent ?? "");
+    expect(params.get("keep")).toBe("1");
+    expect(params.getAll("tag")).toEqual(["a", "b"]);
+  });
+
+  test("keeps MethodPage in place and shows an alert when the target state is too long", async () => {
+    const hugeId = "opaque".repeat(400);
+    const hugeView = {
+      ...view,
+      root_node_ids: [hugeId],
+      nodes: [node(hugeId, 0)],
+    };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => hugeView }));
+    render(
+      <MemoryRouter initialEntries={["/methods/M_TARGET?keep=1"]}>
+        <Probe />
+        <Routes>
+          <Route path="/methods/:methodId" element={<MethodPage />} />
+          <Route path="/map" element={<p>MAP ROUTE</p>} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    const before = screen.getByTestId("location").textContent;
+    fireEvent.click(await screen.findByRole("button", { name: "地図上で見る" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(/maximum is 1800/u);
+    expect(screen.getByTestId("location")).toHaveTextContent(before ?? "");
+    expect(screen.queryByText("MAP ROUTE")).not.toBeInTheDocument();
   });
 });

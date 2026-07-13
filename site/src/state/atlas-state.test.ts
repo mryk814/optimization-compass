@@ -202,7 +202,7 @@ describe("AtlasState URL codec", () => {
   });
 
   test.each([
-    ["duplicate single-choice value", ["single", "single"], /single_choice/u],
+    ["duplicate single-choice value", ["single", "single"], /duplicate/u],
     ["multiple single-choice values", ["single", "multi"], /single_choice/u],
   ])("rejects %s", (_label, values, expectedError) => {
     const token = encodeRawJson(
@@ -210,6 +210,18 @@ describe("AtlasState URL codec", () => {
     );
 
     expect(() => decodeAtlasState(token, catalog)).toThrow(expectedError);
+  });
+
+  test("rejects duplicate multi-choice values as malformed instead of silently deduplicating", () => {
+    const token = encodeRawJson(
+      validRawState({
+        answers: {
+          constraints: { status: "answered", values: ["linear", "linear"] },
+        },
+      }),
+    );
+
+    expect(() => decodeAtlasState(token, catalog)).toThrow(/constraints.*duplicate/u);
   });
 
   test.each([

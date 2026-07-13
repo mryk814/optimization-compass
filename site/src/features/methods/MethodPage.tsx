@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { parseViewSpec, type ViewSpec } from "../../contracts/viewspec";
-import { encodeAtlasState, type AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
 import { resolveRelatedNodeId } from "../map/map-state";
 
@@ -24,23 +25,23 @@ function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
 
 function MapAction({ methodId, view }: { methodId: string; view: ViewSpec }) {
   const atlas = useAtlasState(useMemo(() => catalogFromView(view), [view]));
-  const navigate = useNavigate();
+  const atlasNavigation = useAtlasNavigation();
   const nodeId = resolveRelatedNodeId(view.nodes, "method", methodId);
   if (atlas.error) return <p role="alert">{atlas.error.message}</p>;
   return (
-    <button
-      disabled={!nodeId}
-      onClick={() => {
-        if (!nodeId) return;
-        navigate({
-          pathname: "/map",
-          search: `?state=${encodeAtlasState({ ...atlas.state, selectedNodeId: nodeId })}`,
-        });
-      }}
-      type="button"
-    >
-      地図上で見る
-    </button>
+    <>
+      <button
+        disabled={!nodeId}
+        onClick={() => {
+          if (!nodeId) return;
+          atlasNavigation.navigateWithState("/map", { ...atlas.state, selectedNodeId: nodeId });
+        }}
+        type="button"
+      >
+        地図上で見る
+      </button>
+      {atlasNavigation.error && <p role="alert">{atlasNavigation.error.message}</p>}
+    </>
   );
 }
 
