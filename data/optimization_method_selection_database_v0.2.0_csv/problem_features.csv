@@ -1,0 +1,212 @@
+﻿feature_id,feature_code,category,name_ja,name_en,value_type,unit,allowed_vocab_id,definition,why_it_matters,boundary_notes,source_ids,confidence,last_verified
+F_VARIABLE_DOMAIN,variable_domain,variable,変数領域,Variable domain,enum,,F_VARIABLE_DOMAIN_values,変数領域,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_OBJECTIVE_FORM,objective_form,objective,目的関数形式,Objective form,enum,,F_OBJECTIVE_FORM_values,目的関数形式,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_CONVEXITY,convexity,objective,凸性,Convexity,enum,,F_CONVEXITY_values,凸性,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_SMOOTHNESS,smoothness,objective,滑らかさ,Smoothness,enum,,F_SMOOTHNESS_values,滑らかさ,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_DERIVATIVE_ACCESS,derivative_access,derivative,微分情報,Derivative access,enum,,F_DERIVATIVE_ACCESS_values,微分情報,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_CONSTRAINT_CLASS,constraint_class,constraint,制約クラス,Constraint class,enum,,F_CONSTRAINT_CLASS_values,制約クラス,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_DIMENSION_CONTEXT,dimension_context,scale,次元文脈,Dimension context,enum,,F_DIMENSION_CONTEXT_values,次元文脈,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_EVALUATION_COST,evaluation_cost,budget,評価費,Evaluation cost,enum,,F_EVALUATION_COST_values,評価費,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NOISE_LEVEL,noise_level,objective,ノイズ,Noise level,enum,,F_NOISE_LEVEL_values,ノイズ,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_SOLUTION_GOAL,solution_goal,guarantee,解要求,Solution goal,enum,,F_SOLUTION_GOAL_values,解要求,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_SCALE_STRUCTURE,scale_structure,scale,規模・構造,Scale structure,enum,,F_SCALE_STRUCTURE_values,規模・構造,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_EVALUATION_RELIABILITY,evaluation_reliability,evaluation,評価信頼性,Evaluation reliability,enum,,F_EVALUATION_RELIABILITY_values,評価信頼性,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_REPEATED_SOLVE,repeated_solve,budget,反復求解,Repeated solve,enum,,F_REPEATED_SOLVE_values,反復求解,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_PARALLEL_BUDGET,parallel_budget,budget,並列予算,Parallel budget,enum,,F_PARALLEL_BUDGET_values,並列予算,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_VARIABLE_CONTINUOUS,variable.continuous,variable,continuous,Continuous,enum,,truth_status,continuous,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_INTEGER,variable.integer,variable,integer,Integer,enum,,truth_status,integer,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_BINARY,variable.binary,variable,binary,Binary,enum,,truth_status,binary,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_CATEGORICAL,variable.categorical,variable,categorical,Categorical,enum,,truth_status,categorical,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_ORDINAL,variable.ordinal,variable,ordinal,Ordinal,enum,,truth_status,ordinal,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_MIXED,variable.mixed,variable,mixed,Mixed,enum,,truth_status,mixed,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_COMPLEX,variable.complex,variable,complex,Complex,enum,,truth_status,complex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_MATRIX,variable.matrix,variable,matrix,Matrix,enum,,truth_status,matrix,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_PSD_MATRIX,variable.psd_matrix,variable,psd matrix,Psd Matrix,enum,,truth_status,psd matrix,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_PROBABILITY_DISTRIBUTION,variable.probability_distribution,variable,probability distribution,Probability Distribution,enum,,truth_status,probability distribution,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_FUNCTION,variable.function,variable,function,Function,enum,,truth_status,function,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_TRAJECTORY,variable.trajectory,variable,trajectory,Trajectory,enum,,truth_status,trajectory,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_GRAPH,variable.graph,variable,graph,Graph,enum,,truth_status,graph,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_PERMUTATION,variable.permutation,variable,permutation,Permutation,enum,,truth_status,permutation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_SET,variable.set,variable,set,Set,enum,,truth_status,set,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_MANIFOLD,variable.manifold,variable,manifold,Manifold,enum,,truth_status,manifold,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_SIMPLEX,variable.simplex,variable,simplex,Simplex,enum,,truth_status,simplex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_SPHERE,variable.sphere,variable,sphere,Sphere,enum,,truth_status,sphere,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_VARIABLE_LIE_GROUP,variable.lie_group,variable,lie group,Lie Group,enum,,truth_status,lie group,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_LINEAR,objective.linear,objective,linear,Linear,enum,,truth_status,linear,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_QUADRATIC,objective.quadratic,objective,quadratic,Quadratic,enum,,truth_status,quadratic,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_SUM_OF_SQUARES,objective.sum_of_squares,objective,sum of squares,Sum Of Squares,enum,,truth_status,sum of squares,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_CONVEX,objective.convex,objective,convex,Convex,enum,,truth_status,convex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_STRONGLY_CONVEX,objective.strongly_convex,objective,strongly convex,Strongly Convex,enum,,truth_status,strongly convex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_QUASICONVEX,objective.quasiconvex,objective,quasiconvex,Quasiconvex,enum,,truth_status,quasiconvex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_NONCONVEX,objective.nonconvex,objective,nonconvex,Nonconvex,enum,,truth_status,nonconvex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_MULTIMODAL,objective.multimodal,objective,multimodal,Multimodal,enum,,truth_status,multimodal,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_NONSMOOTH,objective.nonsmooth,objective,nonsmooth,Nonsmooth,enum,,truth_status,nonsmooth,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_PIECEWISE_SMOOTH,objective.piecewise_smooth,objective,piecewise smooth,Piecewise Smooth,enum,,truth_status,piecewise smooth,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_DISCONTINUOUS,objective.discontinuous,objective,discontinuous,Discontinuous,enum,,truth_status,discontinuous,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_DISCRETE,objective.discrete,objective,discrete,Discrete,enum,,truth_status,discrete,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_NOISY,objective.noisy,objective,noisy,Noisy,enum,,truth_status,noisy,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_STOCHASTIC,objective.stochastic,objective,stochastic,Stochastic,enum,,truth_status,stochastic,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_TIME_VARYING,objective.time_varying,objective,time varying,Time Varying,enum,,truth_status,time varying,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_SIMULATION,objective.simulation,objective,simulation,Simulation,enum,,truth_status,simulation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_EXPERIMENT,objective.experiment,objective,experiment,Experiment,enum,,truth_status,experiment,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_MAY_FAIL,objective.may_fail,objective,may fail,May Fail,enum,,truth_status,may fail,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_MISSING_OR_OUTLIER,objective.missing_or_outlier,objective,missing or outlier,Missing Or Outlier,enum,,truth_status,missing or outlier,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_MULTIOBJECTIVE,objective.multiobjective,objective,multiobjective,Multiobjective,enum,,truth_status,multiobjective,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_LEXICOGRAPHIC,objective.lexicographic,objective,lexicographic,Lexicographic,enum,,truth_status,lexicographic,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_OBJECTIVE_PENALIZED,objective.penalized,objective,penalized,Penalized,enum,,truth_status,penalized,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_ANALYTIC_GRADIENT,derivative.analytic_gradient,derivative,analytic gradient,Analytic Gradient,enum,,truth_status,analytic gradient,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_AUTODIFF,derivative.autodiff,derivative,autodiff,Autodiff,enum,,truth_status,autodiff,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_NUMERICAL,derivative.numerical,derivative,numerical,Numerical,enum,,truth_status,numerical,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_COMPLEX_STEP,derivative.complex_step,derivative,complex step,Complex Step,enum,,truth_status,complex step,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_SUBGRADIENT,derivative.subgradient,derivative,subgradient,Subgradient,enum,,truth_status,subgradient,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_STOCHASTIC_GRADIENT,derivative.stochastic_gradient,derivative,stochastic gradient,Stochastic Gradient,enum,,truth_status,stochastic gradient,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_GRADIENT_ESTIMATION,derivative.gradient_estimation,derivative,gradient estimation,Gradient Estimation,enum,,truth_status,gradient estimation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_JACOBIAN,derivative.jacobian,derivative,jacobian,Jacobian,enum,,truth_status,jacobian,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_HESSIAN,derivative.hessian,derivative,hessian,Hessian,enum,,truth_status,hessian,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_HVP,derivative.hvp,derivative,hvp,Hvp,enum,,truth_status,hvp,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_UNRELIABLE,derivative.unreliable,derivative,unreliable,Unreliable,enum,,truth_status,unreliable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_NOISY,derivative.noisy,derivative,noisy,Noisy,enum,,truth_status,noisy,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_NOT_DIFFERENTIABLE,derivative.not_differentiable,derivative,not differentiable,Not Differentiable,enum,,truth_status,not differentiable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_NUMDIFF_BUDGET_LIMITED,derivative.numdiff_budget_limited,derivative,numdiff budget limited,Numdiff Budget Limited,enum,,truth_status,numdiff budget limited,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_NUMDIFF_SCALE_UNSTABLE,derivative.numdiff_scale_unstable,derivative,numdiff scale unstable,Numdiff Scale Unstable,enum,,truth_status,numdiff scale unstable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_BRANCHING_INVALID,derivative.branching_invalid,derivative,branching invalid,Branching Invalid,enum,,truth_status,branching invalid,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_INTERNAL_RANDOMNESS,derivative.internal_randomness,derivative,internal randomness,Internal Randomness,enum,,truth_status,internal randomness,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_DERIVATIVE_INNER_ITERATION,derivative.inner_iteration,derivative,inner iteration,Inner Iteration,enum,,truth_status,inner iteration,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NONE,constraint.none,constraint,none,None,enum,,truth_status,none,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_BOUNDS,constraint.bounds,constraint,bounds,Bounds,enum,,truth_status,bounds,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_LINEAR_EQUALITY,constraint.linear_equality,constraint,linear equality,Linear Equality,enum,,truth_status,linear equality,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_LINEAR_INEQUALITY,constraint.linear_inequality,constraint,linear inequality,Linear Inequality,enum,,truth_status,linear inequality,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NONLINEAR_EQUALITY,constraint.nonlinear_equality,constraint,nonlinear equality,Nonlinear Equality,enum,,truth_status,nonlinear equality,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NONLINEAR_INEQUALITY,constraint.nonlinear_inequality,constraint,nonlinear inequality,Nonlinear Inequality,enum,,truth_status,nonlinear inequality,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_CONVEX,constraint.convex,constraint,convex,Convex,enum,,truth_status,convex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NONCONVEX,constraint.nonconvex,constraint,nonconvex,Nonconvex,enum,,truth_status,nonconvex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_LOGICAL,constraint.logical,constraint,logical,Logical,enum,,truth_status,logical,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_COMBINATORIAL,constraint.combinatorial,constraint,combinatorial,Combinatorial,enum,,truth_status,combinatorial,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_CHANCE,constraint.chance,constraint,chance,Chance,enum,,truth_status,chance,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_ROBUST,constraint.robust,constraint,robust,Robust,enum,,truth_status,robust,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_COMPLEMENTARITY,constraint.complementarity,constraint,complementarity,Complementarity,enum,,truth_status,complementarity,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_SEMIDEFINITE,constraint.semidefinite,constraint,semidefinite,Semidefinite,enum,,truth_status,semidefinite,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_SOC,constraint.soc,constraint,soc,Soc,enum,,truth_status,soc,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_SIMPLEX,constraint.simplex,constraint,simplex,Simplex,enum,,truth_status,simplex,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NORM,constraint.norm,constraint,norm,Norm,enum,,truth_status,norm,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_MANIFOLD,constraint.manifold,constraint,manifold,Manifold,enum,,truth_status,manifold,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_DYNAMICS,constraint.dynamics,constraint,dynamics,Dynamics,enum,,truth_status,dynamics,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_PATH,constraint.path,constraint,path,Path,enum,,truth_status,path,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_PDE,constraint.pde,constraint,pde,Pde,enum,,truth_status,pde,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_IMPLICIT,constraint.implicit,constraint,implicit,Implicit,enum,,truth_status,implicit,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_EXPENSIVE,constraint.expensive,constraint,expensive,Expensive,enum,,truth_status,expensive,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_NOISY,constraint.noisy,constraint,noisy,Noisy,enum,,truth_status,noisy,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_FEASIBILITY_HARD,constraint.feasibility_hard,constraint,feasibility hard,Feasibility Hard,enum,,truth_status,feasibility hard,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_ALWAYS_FEASIBLE_REQUIRED,constraint.always_feasible_required,constraint,always feasible required,Always Feasible Required,enum,,truth_status,always feasible required,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_TEMPORARY_VIOLATION_ALLOWED,constraint.temporary_violation_allowed,constraint,temporary violation allowed,Temporary Violation Allowed,enum,,truth_status,temporary violation allowed,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_FEASIBLE_START_REQUIRED,constraint.feasible_start_required,constraint,feasible start required,Feasible Start Required,enum,,truth_status,feasible start required,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_EASY_FEASIBLE_GENERATION,constraint.easy_feasible_generation,constraint,easy feasible generation,Easy Feasible Generation,enum,,truth_status,easy feasible generation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_PROJECTION_EASY,constraint.projection_easy,constraint,projection easy,Projection Easy,enum,,truth_status,projection easy,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_PROJECTION_EXPENSIVE,constraint.projection_expensive,constraint,projection expensive,Projection Expensive,enum,,truth_status,projection expensive,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_ELIMINABLE,constraint.eliminable,constraint,eliminable,Eliminable,enum,,truth_status,eliminable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_PENALTY_SUITABLE,constraint.penalty_suitable,constraint,penalty suitable,Penalty Suitable,enum,,truth_status,penalty suitable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_BARRIER_SUITABLE,constraint.barrier_suitable,constraint,barrier suitable,Barrier Suitable,enum,,truth_status,barrier suitable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_CONSTRAINT_LAGRANGIAN_RELAXATION,constraint.lagrangian_relaxation,constraint,lagrangian relaxation,Lagrangian Relaxation,enum,,truth_status,lagrangian relaxation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_REALTIME,budget.realtime,budget,realtime,Realtime,enum,,truth_status,realtime,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_ONLINE,budget.online,budget,online,Online,enum,,truth_status,online,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_OFFLINE,budget.offline,budget,offline,Offline,enum,,truth_status,offline,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_WARM_START,budget.warm_start,budget,warm start,Warm Start,enum,,truth_status,warm start,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_REPEATED,budget.repeated,budget,repeated,Repeated,enum,,truth_status,repeated,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_GPU,budget.gpu,budget,gpu,Gpu,enum,,truth_status,gpu,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_DISTRIBUTED,budget.distributed,budget,distributed,Distributed,enum,,truth_status,distributed,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_PARALLEL_EVALUATION,budget.parallel_evaluation,budget,parallel evaluation,Parallel Evaluation,enum,,truth_status,parallel evaluation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_BUDGET_EARLY_GOOD_SOLUTION,budget.early_good_solution,budget,early good solution,Early Good Solution,enum,,truth_status,early good solution,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_LOCAL_OK,guarantee.local_ok,guarantee,local ok,Local Ok,enum,,truth_status,local ok,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_GLOBAL_DESIRED,guarantee.global_desired,guarantee,global desired,Global Desired,enum,,truth_status,global desired,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_GLOBAL_CERTIFICATE,guarantee.global_certificate,guarantee,global certificate,Global Certificate,enum,,truth_status,global certificate,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_FEASIBLE_ONLY,guarantee.feasible_only,guarantee,feasible only,Feasible Only,enum,,truth_status,feasible only,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_APPROXIMATION_GUARANTEE,guarantee.approximation_guarantee,guarantee,approximation guarantee,Approximation Guarantee,enum,,truth_status,approximation guarantee,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_OPTIMALITY_GAP,guarantee.optimality_gap,guarantee,optimality gap,Optimality Gap,enum,,truth_status,optimality gap,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_BOUNDS,guarantee.bounds,guarantee,bounds,Bounds,enum,,truth_status,bounds,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_EXACT_REQUIRED,guarantee.exact_required,guarantee,exact required,Exact Required,enum,,truth_status,exact required,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_HEURISTIC_OK,guarantee.heuristic_ok,guarantee,heuristic ok,Heuristic Ok,enum,,truth_status,heuristic ok,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_ANYTIME,guarantee.anytime,guarantee,anytime,Anytime,enum,,truth_status,anytime,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_REPRODUCIBILITY,guarantee.reproducibility,guarantee,reproducibility,Reproducibility,enum,,truth_status,reproducibility,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_MULTIPLE_SOLUTIONS,guarantee.multiple_solutions,guarantee,multiple solutions,Multiple Solutions,enum,,truth_status,multiple solutions,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_PARETO_SET,guarantee.pareto_set,guarantee,pareto set,Pareto Set,enum,,truth_status,pareto set,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_GUARANTEE_UNCERTAINTY,guarantee.uncertainty,guarantee,uncertainty,Uncertainty,enum,,truth_status,uncertainty,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_SCALING,numerical.scaling,numerical,scaling,Scaling,enum,,truth_status,scaling,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_ILL_CONDITIONED,numerical.ill_conditioned,numerical,ill conditioned,Ill Conditioned,enum,,truth_status,ill conditioned,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_UNIT_MISMATCH,numerical.unit_mismatch,numerical,unit mismatch,Unit Mismatch,enum,,truth_status,unit mismatch,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_OBJECTIVE_SCALE,numerical.objective_scale,numerical,objective scale,Objective Scale,enum,,truth_status,objective scale,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_FLAT_REGION,numerical.flat_region,numerical,flat region,Flat Region,enum,,truth_status,flat region,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_NARROW_VALLEY,numerical.narrow_valley,numerical,narrow valley,Narrow Valley,enum,,truth_status,narrow valley,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_SADDLE,numerical.saddle,numerical,saddle,Saddle,enum,,truth_status,saddle,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_MANY_LOCAL_OPTIMA,numerical.many_local_optima,numerical,many local optima,Many Local Optima,enum,,truth_status,many local optima,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_BOUNDARY_SOLUTION,numerical.boundary_solution,numerical,boundary solution,Boundary Solution,enum,,truth_status,boundary solution,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_SINGULAR,numerical.singular,numerical,singular,Singular,enum,,truth_status,singular,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_RANK_DEFICIENT,numerical.rank_deficient,numerical,rank deficient,Rank Deficient,enum,,truth_status,rank deficient,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_NONIDENTIFIABLE,numerical.nonidentifiable,numerical,nonidentifiable,Nonidentifiable,enum,,truth_status,nonidentifiable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_REDUNDANT_CONSTRAINTS,numerical.redundant_constraints,numerical,redundant constraints,Redundant Constraints,enum,,truth_status,redundant constraints,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_INCONSISTENT_CONSTRAINTS,numerical.inconsistent_constraints,numerical,inconsistent constraints,Inconsistent Constraints,enum,,truth_status,inconsistent constraints,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_INITIALIZATION_SENSITIVE,numerical.initialization_sensitive,numerical,initialization sensitive,Initialization Sensitive,enum,,truth_status,initialization sensitive,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_ROUNDOFF,numerical.roundoff,numerical,roundoff,Roundoff,enum,,truth_status,roundoff,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUMERICAL_NONDETERMINISTIC,numerical.nondeterministic,numerical,nondeterministic,Nondeterministic,enum,,truth_status,nondeterministic,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_LP,structure.lp,structure,lp,Lp,enum,,truth_status,lp,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_QP,structure.qp,structure,qp,Qp,enum,,truth_status,qp,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_QCQP,structure.qcqp,structure,qcqp,Qcqp,enum,,truth_status,qcqp,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_CONIC,structure.conic,structure,conic,Conic,enum,,truth_status,conic,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SDP,structure.sdp,structure,sdp,Sdp,enum,,truth_status,sdp,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_LEAST_SQUARES,structure.least_squares,structure,least squares,Least Squares,enum,,truth_status,least squares,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_NONLINEAR_LEAST_SQUARES,structure.nonlinear_least_squares,structure,nonlinear least squares,Nonlinear Least Squares,enum,,truth_status,nonlinear least squares,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_ROBUST_REGRESSION,structure.robust_regression,structure,robust regression,Robust Regression,enum,,truth_status,robust regression,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SPARSE,structure.sparse,structure,sparse,Sparse,enum,,truth_status,sparse,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_REGULARIZED,structure.regularized,structure,regularized,Regularized,enum,,truth_status,regularized,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_COMPOSITE,structure.composite,structure,composite,Composite,enum,,truth_status,composite,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_PROX,structure.prox,structure,prox,Prox,enum,,truth_status,prox,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SEPARABLE,structure.separable,structure,separable,Separable,enum,,truth_status,separable,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_NETWORK_FLOW,structure.network_flow,structure,network flow,Network Flow,enum,,truth_status,network flow,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SHORTEST_PATH,structure.shortest_path,structure,shortest path,Shortest Path,enum,,truth_status,shortest path,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_ASSIGNMENT,structure.assignment,structure,assignment,Assignment,enum,,truth_status,assignment,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_TRANSPORT,structure.transport,structure,transport,Transport,enum,,truth_status,transport,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SCHEDULING,structure.scheduling,structure,scheduling,Scheduling,enum,,truth_status,scheduling,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_ROUTING,structure.routing,structure,routing,Routing,enum,,truth_status,routing,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_KNAPSACK,structure.knapsack,structure,knapsack,Knapsack,enum,,truth_status,knapsack,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SET_COVER,structure.set_cover,structure,set cover,Set Cover,enum,,truth_status,set cover,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_GRAPH_CUT,structure.graph_cut,structure,graph cut,Graph Cut,enum,,truth_status,graph cut,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_MATCHING,structure.matching,structure,matching,Matching,enum,,truth_status,matching,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_SAT,structure.sat,structure,sat,Sat,enum,,truth_status,sat,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_CONSTRAINT_PROGRAMMING,structure.constraint_programming,structure,constraint programming,Constraint Programming,enum,,truth_status,constraint programming,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_DYNAMIC_PROGRAMMING,structure.dynamic_programming,structure,dynamic programming,Dynamic Programming,enum,,truth_status,dynamic programming,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_STOCHASTIC_PROGRAMMING,structure.stochastic_programming,structure,stochastic programming,Stochastic Programming,enum,,truth_status,stochastic programming,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_ROBUST_OPTIMIZATION,structure.robust_optimization,structure,robust optimization,Robust Optimization,enum,,truth_status,robust optimization,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_DRO,structure.dro,structure,dro,Dro,enum,,truth_status,dro,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_MULTIOBJECTIVE,structure.multiobjective,structure,multiobjective,Multiobjective,enum,,truth_status,multiobjective,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_OPTIMAL_CONTROL,structure.optimal_control,structure,optimal control,Optimal Control,enum,,truth_status,optimal control,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_MPC,structure.mpc,structure,mpc,Mpc,enum,,truth_status,mpc,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_TRAJECTORY,structure.trajectory,structure,trajectory,Trajectory,enum,,truth_status,trajectory,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_PDE_CONSTRAINED,structure.pde_constrained,structure,pde constrained,Pde Constrained,enum,,truth_status,pde constrained,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_BILEVEL,structure.bilevel,structure,bilevel,Bilevel,enum,,truth_status,bilevel,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_GAME_EQUILIBRIUM,structure.game_equilibrium,structure,game equilibrium,Game Equilibrium,enum,,truth_status,game equilibrium,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_VARIATIONAL_INEQUALITY,structure.variational_inequality,structure,variational inequality,Variational Inequality,enum,,truth_status,variational inequality,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_COMPLEMENTARITY,structure.complementarity,structure,complementarity,Complementarity,enum,,truth_status,complementarity,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_MANIFOLD,structure.manifold,structure,manifold,Manifold,enum,,truth_status,manifold,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_DISTRIBUTED,structure.distributed,structure,distributed,Distributed,enum,,truth_status,distributed,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_FEDERATED,structure.federated,structure,federated,Federated,enum,,truth_status,federated,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_ML_TRAINING,structure.ml_training,structure,ml training,Ml Training,enum,,truth_status,ml training,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_HPO,structure.hpo,structure,hpo,Hpo,enum,,truth_status,hpo,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_NEURAL_NETWORK,structure.neural_network,structure,neural network,Neural Network,enum,,truth_status,neural network,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_INVERSE_PROBLEM,structure.inverse_problem,structure,inverse problem,Inverse Problem,enum,,truth_status,inverse problem,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_PARAMETER_ESTIMATION,structure.parameter_estimation,structure,parameter estimation,Parameter Estimation,enum,,truth_status,parameter estimation,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_STRUCTURE_DESIGN_OF_EXPERIMENTS,structure.design_of_experiments,structure,design of experiments,Design Of Experiments,enum,,truth_status,design of experiments,手法・実装・保証・計算費の選択を変える。,,S054;S055;S056,high,2026-07-13
+F_NUM_VARIABLES,num_variables,scale,変数数,number of variables,decimal,count,,変数数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_CONSTRAINTS,num_constraints,scale,制約数,number of constraints,decimal,count,,制約数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_NONZEROS,num_nonzeros,scale,非ゼロ数,number of nonzeros,decimal,count,,非ゼロ数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_SAMPLES,num_samples,scale,サンプル数,sample count,decimal,count,,サンプル数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_SCENARIOS,num_scenarios,scale,シナリオ数,scenario count,decimal,count,,シナリオ数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_TIMESTEPS,num_timesteps,scale,時間step数,time steps,decimal,count,,時間step数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_NUM_DISCRETE_VARIABLES,num_discrete_variables,scale,離散変数数,discrete variables,decimal,count,,離散変数数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_TIME_OBJECTIVE_SEC,time_objective_sec,budget,目的1評価秒,objective evaluation seconds,decimal,seconds,,目的1評価秒,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_TIME_CONSTRAINT_SEC,time_constraint_sec,budget,制約1評価秒,constraint evaluation seconds,decimal,seconds,,制約1評価秒,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_TIME_GRADIENT_SEC,time_gradient_sec,budget,勾配計算秒,gradient seconds,decimal,seconds,,勾配計算秒,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_TIME_JACOBIAN_SEC,time_jacobian_sec,budget,Jacobian計算秒,Jacobian seconds,decimal,seconds,,Jacobian計算秒,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_TIME_HESSIAN_SEC,time_hessian_sec,budget,Hessian計算秒,Hessian seconds,decimal,seconds,,Hessian計算秒,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_BUDGET_MAX_EVALUATIONS,budget_max_evaluations,budget,最大評価回数,maximum evaluations,decimal,count,,最大評価回数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_BUDGET_MAX_ITERATIONS,budget_max_iterations,budget,最大反復回数,maximum iterations,decimal,count,,最大反復回数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_BUDGET_MEMORY_GB,budget_memory_gb,budget,利用可能memory,memory,decimal,GB,,利用可能memory,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13
+F_BUDGET_PARALLEL_WORKERS,budget_parallel_workers,budget,並列worker数,parallel workers,decimal,count,,並列worker数,手法・実装・保証・計算費の選択を変える。,,S054;S056,high,2026-07-13

@@ -1,0 +1,25 @@
+﻿section,item,value,notes
+title,dataset_name,Optimization Method Selection Database / 最適化手法選択データベース,検証可能な研究データ版
+release,version,0.2.0,schema/data quality release; last verified 2026-07-13
+scope,included,連続・凸・非凸・離散・black-box・HPO・多目的・最適制御・多様体・MLを代表的に収録,網羅的製品catalogではなく、選択判断に必要な代表データを優先。
+scope,not_in_initial_scope,全solver option、全benchmark、全商用license tier、全分野専用algorithm,19_backlog参照。
+design,normalized_entities,problem archetype / feature / method / implementation / fit / decision / evidence,many-to-many bridgeをcanonical relationとする。
+design,method_vs_implementation,theoretical method and software implementation are separate,APIが受け付けることと実務推奨を分離。
+design,recommendation_model,fit_level + beginner_priority + conditions + exclusions + guarantee + confidence,単一総合scoreでrankingしない。
+design,unknown_policy,yes / no / conditional / unknown / not_applicable / implementation_dependent,推測でyes/noへ埋めない。
+design,alternative_first,"closed-form, linear system, root, least squares, graph, CP, DP, inference, etc.",汎用最適化の前に代替解法を確認。
+terminology,black_box,"dimension, cost, noise, failure, parallelism, variable type, smoothness are separate",DFO/BO/direct search/evolutionaryを同一視しない。
+terminology,global,local / convex_global / global_candidate / global_certificate / feasible_only / pareto,大域探索と大域証明を分離。
+users,beginner,"12 questions → first/second choice, warnings, switch conditions",17_beginner_view
+users,intermediate,feature-method trade-offs and implementations,18_advanced_view
+users,expert,"assumptions, guarantees, diagnostics, provenance",normalized base tables
+use_case,spreadsheet,filter/search/compare in Excel,all tables contain stable IDs
+use_case,database,relational migration with PK/FK bridges,SQL schema file included
+use_case,application,"decision UI, search, AI retrieval, library-specific views",JSON/JSONL/CSV included
+source_policy,priority,official docs > official repos > original papers > standards > trusted textbooks,current software facts verified against official sources where available
+source_policy,excluded_sources,Qiita and Zenn,"not accessed, cited, summarized, or used"
+quality,limitations,representative initial data; implementation details may change by version/backend,unknown/implementation_dependent and last_verified are retained
+quality,validation,28 concrete scenarios + FK/vocabulary/source checks,30_model_revisions records schema changes from scenario validation
+workflow,selection_order,1 alternative check; 2 model class; 3 guarantees; 4 derivative/cost/noise/scale; 5 method; 6 implementation; 7 diagnostics,do not begin from a library API menu
+release,v0.2.0_highlights,SQLite full-load validation; nullable optional foreign keys; decision target typing; current implementation metadata; Manopt.jl addition,詳細は32_release_checksとreportを参照。
+quality,validation_policy,"Manifest claims are backed by executable checks, including full DDL creation, row insertion, and PRAGMA foreign_key_check.",pass/warn/failを32_release_checksに保存。

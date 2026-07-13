@@ -1,0 +1,96 @@
+﻿source_id,source_type,title,author_or_organization,publication_date,accessed_date,url,supported_claim,source_quality,notes,currentness_status
+S001,official_documentation,SciPy Optimization and root finding,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/optimize.html,SciPy optimize API分類,primary,,verified_current
+S002,official_documentation,scipy.optimize.minimize,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html,minimize手法・微分・制約,primary,,verified_current
+S003,official_documentation,scipy.optimize.least_squares,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html,非線形最小二乗,primary,,verified_current
+S004,official_documentation,scipy.optimize.linprog,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html,LP/HiGHS,primary,,verified_current
+S005,official_documentation,scipy.optimize.milp,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.milp.html,MILP/HiGHS,primary,,verified_current
+S006,official_documentation,scipy.optimize.differential_evolution,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.differential_evolution.html,差分進化,primary,,verified_current
+S007,official_documentation,scipy.optimize.shgo,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html,SHGO,primary,,verified_current
+S008,official_documentation,scipy.optimize.direct,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.direct.html,DIRECT,primary,,verified_current
+S009,official_documentation,scipy.optimize.dual_annealing,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html,Dual annealing,primary,,verified_current
+S010,official_documentation,CVXPY,CVXPY,,2026-07-13,https://www.cvxpy.org/,DCPモデリング,primary,,verified_current
+S011,official_documentation,CVXPY Solver Features,CVXPY,,2026-07-13,https://www.cvxpy.org/tutorial/solvers/index.html,backend対応,primary,,verified_current
+S012,official_documentation,OSQP Documentation,OSQP,,2026-07-13,https://osqp.org/docs/,凸QP/ADMM/warm start,primary,,verified_current
+S013,official_documentation,SCS Documentation,SCS,,2026-07-13,https://www.cvxgrp.org/scs/,一次錐solver,primary,,verified_current
+S014,official_documentation,Clarabel Documentation,Clarabel,,2026-07-13,https://clarabel.org/stable/,内点錐solver,primary,,verified_current
+S015,official_documentation,CVXOPT,CVXOPT,,2026-07-13,https://cvxopt.org/,凸最適化,primary,,verified_current
+S016,official_documentation,HiGHS,HiGHS,,2026-07-13,https://highs.dev/,LP/MIP/QP,primary,,verified_current
+S017,official_documentation,Ipopt Documentation,COIN-OR,,2026-07-13,https://coin-or.github.io/Ipopt/,大規模滑らかNLP,primary,,verified_current
+S018,official_documentation,NLopt Documentation,NLopt,,2026-07-13,https://nlopt.readthedocs.io/en/latest/,局所・大域手法集,primary,,verified_current
+S019,official_documentation,PETSc TAO,PETSc,,2026-07-13,https://petsc.org/release/overview/tao/,大規模並列最適化,primary,,verified_current
+S020,official_documentation,Pyomo Documentation,Pyomo,,2026-07-13,https://pyomo.readthedocs.io/en/stable/,数理モデリング,primary,,verified_current
+S021,official_documentation,SCIP Optimization Suite,SCIP,,2026-07-13,https://www.scipopt.org/doc/html/,MIP/MINLP,primary,,verified_current
+S022,official_documentation,OR-Tools CP-SAT,Google,,2026-07-13,https://developers.google.com/optimization/cp/cp_solver,CP-SAT,primary,,verified_current
+S023,official_documentation,OR-Tools Routing,Google,,2026-07-13,https://developers.google.com/optimization/routing,routing,primary,,verified_current
+S024,vendor_manual,Gurobi Optimizer Reference Manual,Gurobi,,2026-07-13,https://docs.gurobi.com/projects/optimizer/en/current/,LP/QP/MIP/QCP,primary,,verified_current
+S025,vendor_manual,IBM CPLEX Documentation,IBM,,2026-07-13,https://www.ibm.com/docs/en/icos,LP/QP/MIP/CP,primary,,verified_current
+S026,official_repository,COIN-OR Cbc,COIN-OR,,2026-07-13,https://github.com/coin-or/Cbc,MILP,primary,,verified_current
+S027,official_documentation,GNU GLPK,GNU,,2026-07-13,https://www.gnu.org/software/glpk/,LP/MIP,primary,,verified_current
+S028,vendor_manual,MOSEK Python API,MOSEK,,2026-07-13,https://docs.mosek.com/latest/pythonapi/index.html,LP/QP/錐/SDP/MIP,primary,,verified_current
+S029,vendor_manual,Knitro User Manual,Artelys,,2026-07-13,https://www.artelys.com/app/docs/knitro/,NLP/MINLP,primary,,verified_current
+S030,official_documentation,SNOPT,Stanford CCoM,,2026-07-13,https://ccom.ucsd.edu/~optimizers/solvers/snopt/,疎SQP,primary,,verified_current
+S031,official_documentation,NOMAD,GERAD,,2026-07-13,https://www.gerad.ca/en/software/nomad/,MADS/black-box constraints,primary,,verified_current
+S032,official_documentation,pycma,CMA-ES community,,2026-07-13,https://cma-es.github.io/apidocs-pycma/,CMA-ES,primary,,verified_current
+S033,official_documentation,Nevergrad,Meta,,2026-07-13,https://facebookresearch.github.io/nevergrad/,DFO portfolio,primary,,verified_current
+S034,official_documentation,Optuna,Optuna,,2026-07-13,https://optuna.readthedocs.io/en/stable/,HPO samplers/pruners,primary,,verified_current
+S035,official_documentation,BoTorch,Meta/PyTorch,,2026-07-13,https://botorch.org/,Bayesian optimization,primary,,verified_current
+S036,official_documentation,Ax,Meta,,2026-07-13,https://ax.dev/,adaptive experimentation,primary,,verified_current
+S037,official_documentation,SMAC3,AutoML.org,,2026-07-13,https://automl.github.io/SMAC3/latest/,RF surrogate HPO,primary,,verified_current
+S038,official_documentation,Ray Tune,Ray,,2026-07-13,https://docs.ray.io/en/latest/tune/index.html,distributed HPO,primary,,verified_current
+S039,official_documentation,pymoo,pymoo,,2026-07-13,https://pymoo.org/,multiobjective/evolutionary,primary,,verified_current
+S040,official_documentation,DEAP,DEAP,,2026-07-13,https://deap.readthedocs.io/en/master/,evolution framework,primary,,verified_current
+S041,official_documentation,Ceres Solver,Google,,2026-07-13,https://ceres-solver.readthedocs.io/latest/,nonlinear least squares,primary,,verified_current
+S042,official_documentation,CasADi,CasADi,,2026-07-13,https://web.casadi.org/docs/,AD/NLP/optimal control,primary,,verified_current
+S043,official_documentation,acados,acados,,2026-07-13,https://docs.acados.org/,real-time optimal control,primary,,verified_current
+S044,official_documentation,Pymanopt,Pymanopt,,2026-07-13,https://pymanopt.org/,Riemannian optimization,primary,,verified_current
+S045,official_documentation,Manopt,Manopt,,2026-07-13,https://www.manopt.org/,manifold optimization,primary,,verified_current
+S046,official_documentation,JAXopt,Google,,2026-07-13,https://jaxopt.github.io/stable/,differentiable optimization,primary,,verified_current
+S047,official_documentation,Optax,Google DeepMind,,2026-07-13,https://optax.readthedocs.io/en/latest/,JAX optimizers,primary,,verified_current
+S048,official_documentation,torch.optim,PyTorch,,2026-07-13,https://docs.pytorch.org/docs/stable/optim.html,ML optimizers,primary,,verified_current
+S049,official_documentation,Keras optimizers,TensorFlow,,2026-07-13,https://www.tensorflow.org/api_docs/python/tf/keras/optimizers,ML optimizers,primary,,verified_current
+S050,official_documentation,Drake MathematicalProgram,Drake,,2026-07-13,https://drake.mit.edu/doxygen_cxx/group__solvers.html,robotics optimization,primary,,verified_current
+S051,official_documentation,JuMP Documentation,JuMP,,2026-07-13,https://jump.dev/JuMP.jl/stable/,Julia modeling,primary,,verified_current
+S052,official_documentation,Optim.jl,JuliaNLSolvers,,2026-07-13,https://julianlsolvers.github.io/Optim.jl/stable/,Julia continuous optimization,primary,,verified_current
+S053,official_documentation,MiniZinc Documentation,MiniZinc,,2026-07-13,https://docs.minizinc.dev/en/stable/,constraint modeling,primary,,verified_current
+S054,university_material,NEOS Guide: Optimization Problem Types,NEOS,,2026-07-13,https://neos-guide.org/guide/types/,problem classes,high,,verified_current
+S055,textbook,Convex Optimization,Boyd and Vandenberghe,2004,2026-07-13,https://web.stanford.edu/~boyd/cvxbook/,convexity/duality/conic,high,,not_time_sensitive
+S056,textbook,Numerical Optimization,Nocedal and Wright,2006,2026-07-13,https://link.springer.com/book/10.1007/978-0-387-40065-5,continuous optimization,high,,not_time_sensitive
+S057,original_paper,A new approach to variable metric algorithms,Fletcher,1970,2026-07-13,https://doi.org/10.1093/comjnl/13.3.317,BFGS,primary,,historical_primary
+S058,original_paper,The CMA Evolution Strategy: A Tutorial,Hansen,2016,2026-07-13,https://arxiv.org/abs/1604.00772,CMA-ES,primary,,historical_primary
+S059,original_paper,A Tutorial on Bayesian Optimization,Frazier,2018,2026-07-13,https://arxiv.org/abs/1807.02811,BO,primary,,historical_primary
+S060,original_paper,Mesh Adaptive Direct Search,Audet and Dennis,2006,2026-07-13,https://doi.org/10.1137/040603371,MADS,primary,,historical_primary
+S061,original_paper,Distributed Optimization via ADMM,Boyd et al.,2011,2026-07-13,https://web.stanford.edu/~boyd/papers/admm_distr_stats.html,ADMM,primary,,historical_primary
+S062,original_paper,OSQP: Operator Splitting QP Solver,Stellato et al.,2020,2026-07-13,https://web.stanford.edu/~boyd/papers/osqp.html,OSQP,primary,,historical_primary
+S063,original_paper,A Simplex Method for Function Minimization,Nelder and Mead,1965,2026-07-13,https://doi.org/10.1093/comjnl/7.4.308,Nelder-Mead,primary,,historical_primary
+S064,original_paper,SLSQP software package,Kraft,1988,2026-07-13,https://degenerateconic.com/uploads/2018/03/DFVLR_FB_88_28.pdf,SLSQP,primary,,historical_primary
+S065,original_paper,Limited Memory Algorithm for Bound Constrained Optimization,Byrd et al.,1995,2026-07-13,https://doi.org/10.1137/0916069,L-BFGS-B,primary,,historical_primary
+S066,original_paper,Proximal Algorithms,Parikh and Boyd,2014,2026-07-13,https://web.stanford.edu/~boyd/papers/prox_algs.html,proximal methods,primary,,historical_primary
+S067,original_paper,FISTA,Beck and Teboulle,2009,2026-07-13,https://doi.org/10.1137/080716542,FISTA,primary,,historical_primary
+S068,original_paper,NSGA-II,Deb et al.,2002,2026-07-13,https://doi.org/10.1109/4235.996017,NSGA-II,primary,,historical_primary
+S069,original_paper,Hyperband,Li et al.,2018,2026-07-13,https://jmlr.org/papers/v18/16-558.html,Hyperband,primary,,historical_primary
+S070,original_paper,Adam,Kingma and Ba,2014,2026-07-13,https://arxiv.org/abs/1412.6980,Adam,primary,,historical_primary
+S071,textbook,Optimization Algorithms on Matrix Manifolds,Absil et al.,2008,2026-07-13,https://press.princeton.edu/books/hardcover/9780691132983/optimization-algorithms-on-matrix-manifolds,manifold optimization,high,,not_time_sensitive
+S072,original_paper,SHGO,Endres et al.,2018,2026-07-13,https://doi.org/10.1007/s10898-018-0645-y,SHGO,primary,,historical_primary
+S073,original_paper,DIRECT,Jones et al.,1993,2026-07-13,https://doi.org/10.1007/BF00941892,DIRECT,primary,,historical_primary
+S074,original_paper,Differential Evolution,Storn and Price,1997,2026-07-13,https://doi.org/10.1023/A:1008202821328,DE,primary,,historical_primary
+S075,original_paper,Practical Bayesian Optimization of ML Algorithms,Snoek et al.,2012,2026-07-13,https://proceedings.neurips.cc/paper/2012/hash/05311655a15b75fab86956663e1819cd-Abstract.html,HPO BO,primary,,historical_primary
+S076,original_paper,acados framework,Verschueren et al.,2022,2026-07-13,https://doi.org/10.1007/s12532-021-00208-8,acados,primary,,historical_primary
+S077,official_documentation,Ceres Bibliography,Google,,2026-07-13,https://ceres-solver.readthedocs.io/latest/bibliography.html,Ceres methods,primary,,verified_current
+S078,official_documentation,OR-Tools Linear Optimization,Google,,2026-07-13,https://developers.google.com/optimization/lp,LP/GLOP/PDLP,primary,,verified_current
+S079,official_documentation,OR-Tools MIP,Google,,2026-07-13,https://developers.google.com/optimization/mip/mip_example,MIP/CP-SAT guidance,primary,,verified_current
+S080,official_documentation,scipy.optimize.root,SciPy,,2026-07-13,https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html,root finding,primary,,verified_current
+S081,official_documentation,Define and solve a problem by using Solver,Microsoft,,2026-07-13,https://support.microsoft.com/en-us/office/define-and-solve-a-problem-by-using-solver-5d1a388f-079d-43ac-a7eb-f63e45925040,Excel Solver,primary,,verified_current
+S082,official_repository,SciPy Releases,SciPy,,2026-07-13,https://github.com/scipy/scipy/releases,Current SciPy release metadata,primary,,verified_current
+S083,official_repository,HiGHS Releases,HiGHS,,2026-07-13,https://github.com/ERGO-Code/HiGHS/releases,Current HiGHS release metadata,primary,,verified_current
+S084,official_repository,OSQP Repository,OSQP,,2026-07-13,https://github.com/osqp/OSQP,"Core version, license, and maintenance metadata",primary,,verified_current
+S085,official_repository,OSQP Python Releases,OSQP,,2026-07-13,https://github.com/osqp/osqp-python/releases,Python wrapper release metadata,primary,,verified_current
+S086,official_repository,CVXPY Releases,CVXPY,,2026-07-13,https://github.com/cvxpy/cvxpy/releases,Current CVXPY release metadata,primary,,verified_current
+S087,official_repository,Ipopt Releases,COIN-OR,,2026-07-13,https://github.com/coin-or/Ipopt/releases,Current Ipopt release metadata,primary,,verified_current
+S088,official_repository,OR-Tools Releases,Google,,2026-07-13,https://github.com/google/or-tools/releases,Current OR-Tools release metadata,primary,,verified_current
+S089,official_repository,SCIP Releases,SCIP Optimization Suite,,2026-07-13,https://github.com/scipopt/scip/releases,Current SCIP release metadata,primary,,verified_current
+S090,official_repository,Nevergrad Releases,Meta / facebookresearch,,2026-07-13,https://github.com/facebookresearch/nevergrad/releases,Current Nevergrad release metadata,primary,,verified_current
+S091,official_repository,Pymanopt Releases,Pymanopt,,2026-07-13,https://github.com/pymanopt/pymanopt/releases,Current Pymanopt release metadata,primary,,verified_current
+S092,official_repository,Manopt MATLAB Repository README,Manopt,,2026-07-13,https://github.com/NicolasBoumal/manopt,License and current distribution metadata,primary,,verified_current
+S093,official_repository,JAXopt Repository Status,Google,,2026-07-13,https://github.com/google/jaxopt,Maintenance status and latest release metadata,primary,,verified_current
+S094,official_repository,NOMAD Repository,NOMAD / GERAD,,2026-07-13,https://github.com/bbopt/nomad,License and current release metadata,primary,,verified_current
+S095,official_repository,Manopt.jl Repository,JuliaManifolds,,2026-07-13,https://github.com/JuliaManifolds/Manopt.jl,"Implementation, license, and current release metadata",primary,,verified_current

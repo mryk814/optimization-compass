@@ -1,0 +1,104 @@
+{
+  "generated_at": "2026-07-13",
+  "version": "0.2.0",
+  "dataset_name": "Optimization Method Selection Database",
+  "files": {
+    "optimization_method_selection_database_v0.2.0.xlsx": {
+      "bytes": 690324,
+      "sha256": "391c3748fab456b4b39d2b8e8bc536c0b5fcafb2eea41da8ac7796b6f18a80d5"
+    },
+    "optimization_method_selection_database_v0.2.0_csv.zip": {
+      "bytes": 263064,
+      "sha256": "605be44143e8b3729ce23341a7d23e53c6f75b1be032733d61133d27511e3230"
+    },
+    "optimization_method_selection_database_v0.2.0.json": {
+      "bytes": 5271402,
+      "sha256": "77bd99bb33d7ad584831d1f9e76809a42714714b6d35897fd797eb4fe708cca6"
+    },
+    "optimization_method_selection_database_v0.2.0.jsonl": {
+      "bytes": 4851356,
+      "sha256": "c4c53b9e784f59e63654b9442a0566972377f2cbb897b69278df4885046bf843"
+    },
+    "optimization_method_selection_database_v0.2.0_report.md": {
+      "bytes": 4532,
+      "sha256": "40e32f178f148f7b4881fe6bbffc7a3dcf792898051e7ef3f14c9cdefcb081dc"
+    },
+    "optimization_method_selection_database_v0.2.0_schema.sql": {
+      "bytes": 26059,
+      "sha256": "aac71aff22b0c6bb93f7dba7be106804cdb739fedbee9f0c50bb0f0ec7959892"
+    },
+    "optimization_method_selection_database_v0.2.0_preview.png": {
+      "bytes": 356997,
+      "sha256": "577df671678b05e97f1463daacf80b907785f40279899ba3d318263cdbeffc57"
+    },
+    "optimization_method_selection_database_v0.2.0.sqlite": {
+      "bytes": 3506176,
+      "sha256": "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13"
+    }
+  },
+  "table_counts": {
+    "readme": 24,
+    "problem_archetypes": 56,
+    "problem_features": 211,
+    "feature_values": 93,
+    "methods": 98,
+    "method_hierarchy": 82,
+    "implementations": 64,
+    "problem_feature_map": 842,
+    "problem_method_fit": 280,
+    "method_implementation_map": 163,
+    "decision_questions": 12,
+    "decision_rules": 78,
+    "failure_modes": 42,
+    "diagnostics": 42,
+    "example_cases": 28,
+    "sources": 95,
+    "glossary": 84,
+    "beginner_view": 28,
+    "advanced_view": 280,
+    "backlog": 38,
+    "controlled_vocab": 129,
+    "alternative_solution_checks": 18,
+    "problem_alternative_map": 96,
+    "case_feature_map": 280,
+    "case_method_map": 84,
+    "case_implementation_map": 71,
+    "case_alternative_map": 48,
+    "evidence_links": 4193,
+    "model_revisions": 6,
+    "version_history": 2,
+    "schema_dictionary": 487,
+    "sheet_catalog": 33,
+    "release_checks": 12
+  },
+  "validation": {
+    "table_count": 33,
+    "total_row_count": 8099,
+    "duplicate_primary_keys": [],
+    "missing_sources": [],
+    "invalid_foreign_key_references": [],
+    "invalid_controlled_vocab_values": [],
+    "unresolved_evidence_targets": [],
+    "unresolved_decision_action_targets": [],
+    "blank_string_optional_foreign_keys": [],
+    "csv_member_count": 33,
+    "json_table_count": 33,
+    "jsonl_line_count": 8100,
+    "sql_ddl_parse": "pass",
+    "sqlite_full_load": "pass",
+    "sqlite_inserted_rows": 8099,
+    "sqlite_foreign_key_check": "pass (0 violations)",
+    "formula_error_scan": "pass (0 matched cells)",
+    "release_check_summary": {
+      "pass": 11,
+      "warn": 1,
+      "fail": 0
+    }
+  },
+  "source_policy": "official documentation/repositories, original papers, trusted textbooks; Qiita/Zenn excluded",
+  "notes": [
+    "Release versions are point-in-time metadata and not compatibility guarantees.",
+    "Unknown values are retained explicitly rather than guessed.",
+    "Semicolon-separated ID lists are convenience fields; bridge tables are canonical when available."
+  ]
+}

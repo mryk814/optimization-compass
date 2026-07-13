@@ -1,0 +1,13 @@
+﻿check_id,check_name,scope,severity,status,observed_value,expected_condition,details,checked_at
+CHK001,SQL DDL creation,all tables,critical,pass,DDL executed without error,DDL executes with PRAGMA foreign_keys=ON,Schema compiled in SQLite.,2026-07-13
+CHK002,SQLite full data load,all base/derived tables,critical,pass,"8,099 rows inserted",every row inserts without constraint error,Validated before packaging.,2026-07-13
+CHK003,Foreign-key integrity,all declared foreign keys,critical,pass,0 violations,PRAGMA foreign_key_check returns zero rows,Includes self-referencing method hierarchy and optional FKs.,2026-07-13
+CHK004,Primary-key uniqueness,all tables with declared PK,critical,pass,0 duplicates,zero duplicate primary-key tuples,Composite keys included.,2026-07-13
+CHK005,Source reference integrity,all source_id/source_ids fields,high,pass,0 unresolved source IDs,every referenced source ID exists,Semicolon-separated convenience fields included.,2026-07-13
+CHK006,Evidence target integrity,evidence_links,high,pass,0 unresolved targets,every target_table/target_id pair resolves,Six malformed v0.1.0 model-revision links were repaired.,2026-07-13
+CHK007,Decision action target typing,decision_rules,high,pass,78/78 typed; 0 unresolved IDs,every action_target_ids value resolves under action_target_type,Polymorphic target interpretation is now explicit.,2026-07-13
+CHK008,Optional foreign-key null semantics,methods/problem_feature_map/case_feature_map/case_method_map,critical,pass,0 blank-string optional FKs,absent optional references are JSON null / SQL NULL,Prevents false FK failures caused by empty strings.,2026-07-13
+CHK009,Objective-form enum normalization,feature_values + case_feature_map,medium,pass,FV0093 added; 3 cases normalized,no free-text 'discrete' remains for F_OBJECTIVE_FORM,Controlled enum added without changing case meaning.,2026-07-13
+CHK010,Implementation release coverage,implementations,medium,warn,39/64 have non-unknown release metadata,high-use and risk-sensitive implementations refreshed; unknown remains explicit,Remaining unknown versions are tracked in backlog B002.,2026-07-13
+CHK011,License verification,Manopt MATLAB and NOMAD,high,pass,Manopt=GPL-3.0-or-later; NOMAD=LGPL-3.0-or-later,exact license family recorded from official repositories,Backlog B001 closed.,2026-07-13
+CHK012,Maintenance-status risk,JAXopt,high,pass,legacy; latest recorded as 0.8.5,official no-longer-maintained status is represented,New-adoption note points users toward maintained alternatives.,2026-07-13

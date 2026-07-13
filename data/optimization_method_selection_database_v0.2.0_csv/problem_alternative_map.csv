@@ -1,0 +1,97 @@
+﻿problem_alternative_map_id,problem_id,alternative_id,priority,sequence,rationale,source_ids,confidence,last_verified
+PAM0001,PA001,ALT_CLOSED_FORM,precheck,1,閉形式解候補に汎用最適化を適用する前に 閉形式解 を検討。,S055;S056;S054,high,2026-07-13
+PAM0002,PA001,ALT_SYMBOLIC,precheck,2,閉形式解候補に汎用最適化を適用する前に 記号計算 を検討。,S055;S056;S054,high,2026-07-13
+PAM0003,PA002,ALT_LINEAR_SYSTEM,precheck,1,線形方程式に還元に汎用最適化を適用する前に 線形方程式 を検討。,S054;S056;S055,high,2026-07-13
+PAM0004,PA003,ALT_EIGEN,precheck,1,固有値・特異値問題に汎用最適化を適用する前に 固有値・SVD を検討。,S054;S071;S055;S056,high,2026-07-13
+PAM0005,PA004,ALT_ROOT,precheck,1,方程式の求根に汎用最適化を適用する前に 求根 を検討。,S080;S056;S054;S055,high,2026-07-13
+PAM0006,PA004,ALT_LEAST_SQUARES,precheck,2,方程式の求根に汎用最適化を適用する前に 最小二乗専用法 を検討。,S080;S056;S054;S055,high,2026-07-13
+PAM0007,PA005,ALT_LEAST_SQUARES,precheck,1,線形最小二乗に汎用最適化を適用する前に 最小二乗専用法 を検討。,S003;S056;S054;S055,high,2026-07-13
+PAM0008,PA005,ALT_LINEAR_SYSTEM,precheck,2,線形最小二乗に汎用最適化を適用する前に 線形方程式 を検討。,S003;S056;S054;S055,high,2026-07-13
+PAM0009,PA006,ALT_CLOSED_FORM,precheck,1,滑らかな低次元無制約に汎用最適化を適用する前に 閉形式解 を検討。,S002;S056;S054;S055,high,2026-07-13
+PAM0010,PA006,ALT_GENERIC_OPT,precheck,2,滑らかな低次元無制約に汎用最適化を適用する前に 汎用最適化 を検討。,S002;S056;S054;S055,high,2026-07-13
+PAM0011,PA007,ALT_DECOMPOSITION,precheck,1,高次元・勾配利用可能に汎用最適化を適用する前に 分解 を検討。,S019;S046;S056;S054;S055,high,2026-07-13
+PAM0012,PA007,ALT_GENERIC_OPT,precheck,2,高次元・勾配利用可能に汎用最適化を適用する前に 汎用最適化 を検討。,S019;S046;S056;S054;S055,high,2026-07-13
+PAM0013,PA008,ALT_PROJECTION_PROX,precheck,1,上下限制約付き滑らかに汎用最適化を適用する前に 射影・近接作用素 を検討。,S002;S065;S054;S055;S056,high,2026-07-13
+PAM0014,PA008,ALT_GENERIC_OPT,precheck,2,上下限制約付き滑らかに汎用最適化を適用する前に 汎用最適化 を検討。,S002;S065;S054;S055;S056,high,2026-07-13
+PAM0015,PA009,ALT_SPECIALIZED,precheck,1,一般滑らか制約付きNLPに汎用最適化を適用する前に 専用solver を検討。,S017;S029;S030;S056;S054;S055,high,2026-07-13
+PAM0016,PA009,ALT_GENERIC_OPT,precheck,2,一般滑らか制約付きNLPに汎用最適化を適用する前に 汎用最適化 を検討。,S017;S029;S030;S056;S054;S055,high,2026-07-13
+PAM0017,PA010,ALT_PROJECTION_PROX,precheck,1,非滑らか凸複合に汎用最適化を適用する前に 射影・近接作用素 を検討。,S055;S066;S067;S054;S056,high,2026-07-13
+PAM0018,PA011,ALT_GENERIC_OPT,precheck,1,一般非滑らか局所に汎用最適化を適用する前に 汎用最適化 を検討。,S018;S031;S060;S054;S055;S056,high,2026-07-13
+PAM0019,PA012,ALT_SURROGATE,precheck,1,不連続決定論black-boxに汎用最適化を適用する前に surrogate を検討。,S031;S033;S054;S055;S056,high,2026-07-13
+PAM0020,PA012,ALT_SIMULATION_SEARCH,precheck,2,不連続決定論black-boxに汎用最適化を適用する前に simulation/探索 を検討。,S031;S033;S054;S055;S056,high,2026-07-13
+PAM0021,PA013,ALT_SURROGATE,precheck,1,noiseを含むblack-boxに汎用最適化を適用する前に surrogate を検討。,S032;S035;S059;S054;S055;S056,high,2026-07-13
+PAM0022,PA013,ALT_STAT_INFERENCE,precheck,2,noiseを含むblack-boxに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S032;S035;S059;S054;S055;S056,high,2026-07-13
+PAM0023,PA014,ALT_SURROGATE,precheck,1,非常に高価な低次元評価に汎用最適化を適用する前に surrogate を検討。,S035;S059;S075;S054;S055;S056,high,2026-07-13
+PAM0024,PA014,ALT_GENERIC_OPT,precheck,2,非常に高価な低次元評価に汎用最適化を適用する前に 汎用最適化 を検討。,S035;S059;S075;S054;S055;S056,high,2026-07-13
+PAM0025,PA015,ALT_DECOMPOSITION,precheck,1,高次元black-boxに汎用最適化を適用する前に 分解 を検討。,S033;S035;S054;S055;S056,high,2026-07-13
+PAM0026,PA015,ALT_SURROGATE,precheck,2,高次元black-boxに汎用最適化を適用する前に surrogate を検討。,S033;S035;S054;S055;S056,high,2026-07-13
+PAM0027,PA016,ALT_FEASIBILITY,precheck,1,失敗・NaNを伴うsimulationに汎用最適化を適用する前に 制約充足 を検討。,S031;S035;S054;S055;S056,high,2026-07-13
+PAM0028,PA016,ALT_SURROGATE,precheck,2,失敗・NaNを伴うsimulationに汎用最適化を適用する前に surrogate を検討。,S031;S035;S054;S055;S056,high,2026-07-13
+PAM0029,PA017,ALT_SPECIALIZED,precheck,1,線形計画に汎用最適化を適用する前に 専用solver を検討。,S004;S016;S055;S054;S056,high,2026-07-13
+PAM0030,PA017,ALT_GRAPH,precheck,2,線形計画に汎用最適化を適用する前に グラフ専用法 を検討。,S004;S016;S055;S054;S056,high,2026-07-13
+PAM0031,PA018,ALT_SPECIALIZED,precheck,1,凸二次計画に汎用最適化を適用する前に 専用solver を検討。,S012;S016;S062;S054;S055;S056,high,2026-07-13
+PAM0032,PA018,ALT_PROJECTION_PROX,precheck,2,凸二次計画に汎用最適化を適用する前に 射影・近接作用素 を検討。,S012;S016;S062;S054;S055;S056,high,2026-07-13
+PAM0033,PA019,ALT_RELAXATION,precheck,1,非凸QP/QCQPに汎用最適化を適用する前に 緩和 を検討。,S021;S024;S028;S054;S055;S056,high,2026-07-13
+PAM0034,PA019,ALT_GENERIC_OPT,precheck,2,非凸QP/QCQPに汎用最適化を適用する前に 汎用最適化 を検討。,S021;S024;S028;S054;S055;S056,high,2026-07-13
+PAM0035,PA020,ALT_SPECIALIZED,precheck,1,二次錐計画に汎用最適化を適用する前に 専用solver を検討。,S010;S013;S014;S028;S055;S054;S056,high,2026-07-13
+PAM0036,PA021,ALT_RELAXATION,precheck,1,半正定値計画に汎用最適化を適用する前に 緩和 を検討。,S015;S028;S055;S054;S056,high,2026-07-13
+PAM0037,PA021,ALT_SPECIALIZED,precheck,2,半正定値計画に汎用最適化を適用する前に 専用solver を検討。,S015;S028;S055;S054;S056,high,2026-07-13
+PAM0038,PA022,ALT_SPECIALIZED,precheck,1,一般錐最適化に汎用最適化を適用する前に 専用solver を検討。,S010;S013;S014;S028;S054;S055;S056,high,2026-07-13
+PAM0039,PA023,ALT_GRAPH,precheck,1,混合整数線形計画に汎用最適化を適用する前に グラフ専用法 を検討。,S005;S016;S021;S024;S054;S055;S056,high,2026-07-13
+PAM0040,PA023,ALT_DYNAMIC_PROGRAMMING,precheck,2,混合整数線形計画に汎用最適化を適用する前に 動的計画法 を検討。,S005;S016;S021;S024;S054;S055;S056,high,2026-07-13
+PAM0041,PA023,ALT_SPECIALIZED,precheck,3,混合整数線形計画に汎用最適化を適用する前に 専用solver を検討。,S005;S016;S021;S024;S054;S055;S056,high,2026-07-13
+PAM0042,PA024,ALT_RELAXATION,precheck,1,混合整数二次計画に汎用最適化を適用する前に 緩和 を検討。,S021;S024;S028;S054;S055;S056,high,2026-07-13
+PAM0043,PA024,ALT_SPECIALIZED,precheck,2,混合整数二次計画に汎用最適化を適用する前に 専用solver を検討。,S021;S024;S028;S054;S055;S056,high,2026-07-13
+PAM0044,PA025,ALT_RELAXATION,precheck,1,混合整数非線形計画に汎用最適化を適用する前に 緩和 を検討。,S021;S029;S054;S055;S056,high,2026-07-13
+PAM0045,PA025,ALT_DECOMPOSITION,precheck,2,混合整数非線形計画に汎用最適化を適用する前に 分解 を検討。,S021;S029;S054;S055;S056,high,2026-07-13
+PAM0046,PA026,ALT_FEASIBILITY,precheck,1,制約programming型schedulingに汎用最適化を適用する前に 制約充足 を検討。,S022;S053;S054;S055;S056,high,2026-07-13
+PAM0047,PA026,ALT_DYNAMIC_PROGRAMMING,precheck,2,制約programming型schedulingに汎用最適化を適用する前に 動的計画法 を検討。,S022;S053;S054;S055;S056,high,2026-07-13
+PAM0048,PA027,ALT_FEASIBILITY,precheck,1,SAT・MaxSATに汎用最適化を適用する前に 制約充足 を検討。,S022;S053;S054;S055;S056,high,2026-07-13
+PAM0049,PA027,ALT_SPECIALIZED,precheck,2,SAT・MaxSATに汎用最適化を適用する前に 専用solver を検討。,S022;S053;S054;S055;S056,high,2026-07-13
+PAM0050,PA028,ALT_GRAPH,precheck,1,network flowに汎用最適化を適用する前に グラフ専用法 を検討。,S054;S055;S056,high,2026-07-13
+PAM0051,PA029,ALT_GRAPH,precheck,1,最短路に汎用最適化を適用する前に グラフ専用法 を検討。,S054;S055;S056,high,2026-07-13
+PAM0052,PA029,ALT_DYNAMIC_PROGRAMMING,precheck,2,最短路に汎用最適化を適用する前に 動的計画法 を検討。,S054;S055;S056,high,2026-07-13
+PAM0053,PA030,ALT_GRAPH,precheck,1,割当・matchingに汎用最適化を適用する前に グラフ専用法 を検討。,S054;S055;S056,high,2026-07-13
+PAM0054,PA031,ALT_GRAPH,precheck,1,配送routingに汎用最適化を適用する前に グラフ専用法 を検討。,S023;S024;S054;S055;S056,high,2026-07-13
+PAM0055,PA031,ALT_DYNAMIC_PROGRAMMING,precheck,2,配送routingに汎用最適化を適用する前に 動的計画法 を検討。,S023;S024;S054;S055;S056,high,2026-07-13
+PAM0056,PA032,ALT_DYNAMIC_PROGRAMMING,precheck,1,knapsack・set coverに汎用最適化を適用する前に 動的計画法 を検討。,S021;S022;S054;S055;S056,high,2026-07-13
+PAM0057,PA032,ALT_SPECIALIZED,precheck,2,knapsack・set coverに汎用最適化を適用する前に 専用solver を検討。,S021;S022;S054;S055;S056,high,2026-07-13
+PAM0058,PA033,ALT_LEAST_SQUARES,precheck,1,非線形最小二乗に汎用最適化を適用する前に 最小二乗専用法 を検討。,S003;S041;S054;S055;S056,high,2026-07-13
+PAM0059,PA034,ALT_LEAST_SQUARES,precheck,1,外れ値を含むrobust regressionに汎用最適化を適用する前に 最小二乗専用法 を検討。,S003;S041;S054;S055;S056,high,2026-07-13
+PAM0060,PA034,ALT_STAT_INFERENCE,precheck,2,外れ値を含むrobust regressionに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S003;S041;S054;S055;S056,high,2026-07-13
+PAM0061,PA035,ALT_PROJECTION_PROX,precheck,1,L1・sparse regularizationに汎用最適化を適用する前に 射影・近接作用素 を検討。,S055;S066;S067;S054;S056,high,2026-07-13
+PAM0062,PA036,ALT_PROJECTION_PROX,precheck,1,単体上の最適化に汎用最適化を適用する前に 射影・近接作用素 を検討。,S055;S066;S054;S056,high,2026-07-13
+PAM0063,PA037,ALT_EIGEN,precheck,1,SO(3)/SE(3)上の最適化に汎用最適化を適用する前に 固有値・SVD を検討。,S041;S044;S071;S054;S055;S056,high,2026-07-13
+PAM0064,PA037,ALT_SPECIALIZED,precheck,2,SO(3)/SE(3)上の最適化に汎用最適化を適用する前に 専用solver を検討。,S041;S044;S071;S054;S055;S056,high,2026-07-13
+PAM0065,PA038,ALT_STAT_INFERENCE,precheck,1,多目的連続最適化に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S039;S068;S054;S055;S056,high,2026-07-13
+PAM0066,PA038,ALT_GENERIC_OPT,precheck,2,多目的連続最適化に汎用最適化を適用する前に 汎用最適化 を検討。,S039;S068;S054;S055;S056,high,2026-07-13
+PAM0067,PA039,ALT_SURROGATE,precheck,1,hyperparameter optimizationに汎用最適化を適用する前に surrogate を検討。,S034;S035;S037;S038;S054;S055;S056,high,2026-07-13
+PAM0068,PA039,ALT_STAT_INFERENCE,precheck,2,hyperparameter optimizationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S034;S035;S037;S038;S054;S055;S056,high,2026-07-13
+PAM0069,PA040,ALT_STAT_INFERENCE,precheck,1,neural network学習に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S047;S048;S049;S070;S054;S055;S056,high,2026-07-13
+PAM0070,PA040,ALT_DECOMPOSITION,precheck,2,neural network学習に汎用最適化を適用する前に 分解 を検討。,S047;S048;S049;S070;S054;S055;S056,high,2026-07-13
+PAM0071,PA041,ALT_DECOMPOSITION,precheck,1,大規模確率的ERMに汎用最適化を適用する前に 分解 を検討。,S047;S048;S049;S054;S055;S056,high,2026-07-13
+PAM0072,PA042,ALT_SPECIALIZED,precheck,1,最適制御に汎用最適化を適用する前に 専用solver を検討。,S042;S043;S076;S054;S055;S056,high,2026-07-13
+PAM0073,PA042,ALT_DECOMPOSITION,precheck,2,最適制御に汎用最適化を適用する前に 分解 を検討。,S042;S043;S076;S054;S055;S056,high,2026-07-13
+PAM0074,PA043,ALT_SPECIALIZED,precheck,1,model predictive controlに汎用最適化を適用する前に 専用solver を検討。,S012;S043;S076;S054;S055;S056,high,2026-07-13
+PAM0075,PA044,ALT_SPECIALIZED,precheck,1,軌道最適化に汎用最適化を適用する前に 専用solver を検討。,S042;S043;S050;S054;S055;S056,high,2026-07-13
+PAM0076,PA045,ALT_DECOMPOSITION,precheck,1,PDE制約付き最適化に汎用最適化を適用する前に 分解 を検討。,S017;S019;S056;S054;S055,high,2026-07-13
+PAM0077,PA045,ALT_SPECIALIZED,precheck,2,PDE制約付き最適化に汎用最適化を適用する前に 専用solver を検討。,S017;S019;S056;S054;S055,high,2026-07-13
+PAM0078,PA046,ALT_RELAXATION,precheck,1,bilevel optimizationに汎用最適化を適用する前に 緩和 を検討。,S054;S055;S056,high,2026-07-13
+PAM0079,PA046,ALT_DECOMPOSITION,precheck,2,bilevel optimizationに汎用最適化を適用する前に 分解 を検討。,S054;S055;S056,high,2026-07-13
+PAM0080,PA047,ALT_ROOT,precheck,1,game・equilibrium・VIに汎用最適化を適用する前に 求根 を検討。,S054;S055;S056,high,2026-07-13
+PAM0081,PA047,ALT_SPECIALIZED,precheck,2,game・equilibrium・VIに汎用最適化を適用する前に 専用solver を検討。,S054;S055;S056,high,2026-07-13
+PAM0082,PA048,ALT_ROOT,precheck,1,相補性問題に汎用最適化を適用する前に 求根 を検討。,S054;S056;S055,high,2026-07-13
+PAM0083,PA048,ALT_SPECIALIZED,precheck,2,相補性問題に汎用最適化を適用する前に 専用solver を検討。,S054;S056;S055,high,2026-07-13
+PAM0084,PA049,ALT_DECOMPOSITION,precheck,1,確率計画に汎用最適化を適用する前に 分解 を検討。,S054;S061;S055;S056,high,2026-07-13
+PAM0085,PA049,ALT_STAT_INFERENCE,precheck,2,確率計画に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S054;S061;S055;S056,high,2026-07-13
+PAM0086,PA050,ALT_RELAXATION,precheck,1,robust optimizationに汎用最適化を適用する前に 緩和 を検討。,S055;S054;S056,high,2026-07-13
+PAM0087,PA050,ALT_SPECIALIZED,precheck,2,robust optimizationに汎用最適化を適用する前に 専用solver を検討。,S055;S054;S056,high,2026-07-13
+PAM0088,PA051,ALT_DECOMPOSITION,precheck,1,分散・合意最適化に汎用最適化を適用する前に 分解 を検討。,S061;S054;S055;S056,high,2026-07-13
+PAM0089,PA052,ALT_STAT_INFERENCE,precheck,1,online optimizationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S054;S055;S056,high,2026-07-13
+PAM0090,PA053,ALT_SPECIALIZED,precheck,1,反復parametric optimizationに汎用最適化を適用する前に 専用solver を検討。,S012;S016;S043;S054;S055;S056,high,2026-07-13
+PAM0091,PA054,ALT_STAT_INFERENCE,precheck,1,実験計画に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S035;S055;S059;S054;S056,high,2026-07-13
+PAM0092,PA054,ALT_SURROGATE,precheck,2,実験計画に汎用最適化を適用する前に surrogate を検討。,S035;S055;S059;S054;S056,high,2026-07-13
+PAM0093,PA055,ALT_LEAST_SQUARES,precheck,1,逆問題に汎用最適化を適用する前に 最小二乗専用法 を検討。,S003;S041;S056;S054;S055,high,2026-07-13
+PAM0094,PA055,ALT_PROJECTION_PROX,precheck,2,逆問題に汎用最適化を適用する前に 射影・近接作用素 を検討。,S003;S041;S056;S054;S055,high,2026-07-13
+PAM0095,PA056,ALT_LEAST_SQUARES,precheck,1,外れ値を含むparameter estimationに汎用最適化を適用する前に 最小二乗専用法 を検討。,S003;S041;S054;S055;S056,high,2026-07-13
+PAM0096,PA056,ALT_STAT_INFERENCE,precheck,2,外れ値を含むparameter estimationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,S003;S041;S054;S055;S056,high,2026-07-13
