@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { buildMapModel, parseViewSpec, type MapModel, type ViewSpec } from "../../contracts/viewspec";
-import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import { encodeAtlasState, type AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasState } from "../../state/useAtlasState";
 import { MapDetail } from "./MapDetail";
-import { ancestorIds } from "./map-state";
+import { ancestorIds, applyAnswerBindings, matchingBindingNodeIds } from "./map-state";
 import { MapTree } from "./MapTree";
 
 type LoadState =
@@ -41,6 +42,11 @@ function Diagnostics({ model }: { model: MapModel }) {
 function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   const catalog = useMemo(() => catalogFromView(view), [view]);
   const atlas = useAtlasState(catalog);
+  const navigate = useNavigate();
+  const answerMatchIds = useMemo(
+    () => new Set(matchingBindingNodeIds(view.nodes, atlas.state)),
+    [atlas.state, view.nodes],
+  );
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set(view.nodes.filter((node) => !node.default_collapsed).map((node) => node.node_id)),
   );
@@ -102,6 +108,14 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
     focusSequence.current += 1;
     setFocusRequest({ nodeId: selectedId, sequence: focusSequence.current });
   };
+  const continueDiagnosis = () => {
+    const selected = atlas.state.selectedNodeId
+      ? model.nodeById.get(atlas.state.selectedNodeId)
+      : undefined;
+    if (!selected || selected.answer_bindings.length === 0) return;
+    const next = applyAnswerBindings(atlas.state, selected.answer_bindings, catalog);
+    navigate({ pathname: "/diagnose", search: `?state=${encodeAtlasState(next)}` });
+  };
 
   if (atlas.error) {
     return (
@@ -144,6 +158,7 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
       <div className="map-workspace">
         <section className="map-tree-pane" data-active={activePane === "map"} data-testid="map-tree-pane">
           <MapTree
+            answerMatchIds={answerMatchIds}
             expanded={expanded}
             focusedId={focusedId}
             model={model}
@@ -156,7 +171,11 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
           />
         </section>
         <aside className="map-detail-pane" data-active={activePane === "detail"} data-testid="map-detail-pane">
-          <MapDetail model={model} selectedId={atlas.state.selectedNodeId} />
+          <MapDetail
+            model={model}
+            onContinueDiagnosis={continueDiagnosis}
+            selectedId={atlas.state.selectedNodeId}
+          />
         </aside>
       </div>
     </>

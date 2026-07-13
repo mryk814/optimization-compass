@@ -3,7 +3,12 @@ import type { PropsWithChildren } from "react";
 import { MemoryRouter, useLocation, useNavigate } from "react-router-dom";
 import { describe, expect, test } from "vitest";
 
-import { encodeAtlasState, type AtlasCompatibilityCatalog, type AtlasStateV1 } from "./atlas-state";
+import {
+  AtlasStateUrlTooLongError,
+  encodeAtlasState,
+  type AtlasCompatibilityCatalog,
+  type AtlasStateV1,
+} from "./atlas-state";
 import { useAtlasState } from "./useAtlasState";
 
 const catalog: AtlasCompatibilityCatalog = {
@@ -78,5 +83,25 @@ describe("useAtlasState", () => {
     act(() => result.current.navigate(-1));
     await act(async () => undefined);
     expect(result.current.atlas.state.selectedNodeId).toBe("A");
+  });
+
+  test("reports URL-too-long visibly without truncating or changing location", () => {
+    const { result } = renderHook(useHarness, { wrapper: wrapper("/diagnose?keep=1") });
+    const before = result.current.location.search;
+
+    act(() =>
+      result.current.atlas.setState((state) => ({
+        ...state,
+        answers: Object.fromEntries(
+          Array.from({ length: 80 }, (_, index) => [
+            `Q-${index}`,
+            { status: "answered" as const, values: [`${"value".repeat(8)}-${index}`] },
+          ]),
+        ),
+      })),
+    );
+
+    expect(result.current.atlas.error).toBeInstanceOf(AtlasStateUrlTooLongError);
+    expect(result.current.location.search).toBe(before);
   });
 });

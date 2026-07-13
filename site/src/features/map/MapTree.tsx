@@ -8,6 +8,7 @@ interface MapTreeProps {
   expanded: ReadonlySet<string>;
   selectedId?: string;
   focusedId?: string;
+  answerMatchIds?: ReadonlySet<string>;
   zoom: number;
   nodeRefs: MutableRefObject<Map<string, HTMLElement>>;
   onToggle(nodeId: string): void;
@@ -20,6 +21,7 @@ export function MapTree({
   expanded,
   selectedId,
   focusedId,
+  answerMatchIds = new Set(),
   zoom,
   nodeRefs,
   onToggle,
@@ -90,6 +92,7 @@ export function MapTree({
       "map-tree-item",
       isSelected ? "map-tree-item-selected" : "",
       isAncestor ? "map-tree-item-ancestor" : "",
+      answerMatchIds.has(node.node_id) ? "map-tree-item-answer-match" : "",
       selectedId && !isRelated ? "map-tree-item-unrelated" : "",
       `map-tree-item-${node.emphasis}`,
     ].filter(Boolean).join(" ");

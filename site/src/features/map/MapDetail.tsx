@@ -4,6 +4,7 @@ import { ancestorIds } from "./map-state";
 interface MapDetailProps {
   model: MapModel;
   selectedId?: string;
+  onContinueDiagnosis?(): void;
 }
 
 const entityTypeLabels: Record<string, string> = {
@@ -29,7 +30,7 @@ function EntityItem({ entity }: { entity: ViewEntity }) {
   );
 }
 
-export function MapDetail({ model, selectedId }: MapDetailProps) {
+export function MapDetail({ model, selectedId, onContinueDiagnosis }: MapDetailProps) {
   const selected = selectedId ? model.nodeById.get(selectedId) : undefined;
   if (!selected) {
     return (
@@ -94,6 +95,11 @@ export function MapDetail({ model, selectedId }: MapDetailProps) {
             ))}
           </ul>
           <p className="map-binding-note">探索中の選択です。診断回答は変更していません。</p>
+          {onContinueDiagnosis && (
+            <button className="map-action-button" onClick={onContinueDiagnosis} type="button">
+              この条件で診断を続ける
+            </button>
+          )}
         </section>
       )}
 

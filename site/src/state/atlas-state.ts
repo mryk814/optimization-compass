@@ -184,6 +184,9 @@ export function decodeAtlasState(
   token: string,
   catalog: AtlasCompatibilityCatalog,
 ): { state: AtlasStateV1; warnings: string[] } {
+  if (token.length > ATLAS_STATE_TOKEN_MAX_LENGTH) {
+    throw new AtlasStateUrlTooLongError(token.length);
+  }
   let parsed: unknown;
   try {
     parsed = JSON.parse(decodeUtf8Base64Url(token)) as unknown;
@@ -229,7 +232,17 @@ export function decodeAtlasState(
     }
 
     const question = catalog.questions[questionId];
-    if (answer.status !== "answered") {
+    if (answer.status === "unknown") {
+      if (!question.allowedAnswers.includes("unknown")) {
+        warnings.push(
+          `質問「${questionId}」の回答「unknown」は現在の選択肢にないため除外しました。`,
+        );
+        continue;
+      }
+      validAnswerEntries.push([questionId, answer]);
+      continue;
+    }
+    if (answer.status === "not_applicable") {
       validAnswerEntries.push([questionId, answer]);
       continue;
     }

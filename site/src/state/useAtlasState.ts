@@ -39,6 +39,7 @@ export function useAtlasState(catalog: AtlasCompatibilityCatalog): AtlasStateCon
   const location = useLocation();
   const navigate = useNavigate();
   const [migrationWarnings, setMigrationWarnings] = useState<readonly string[]>([]);
+  const [mutationError, setMutationError] = useState<Error>();
   const token = useMemo(() => new URLSearchParams(location.search).get("state"), [location.search]);
 
   const decoded = useMemo<DecodedControllerState>(() => {
@@ -76,20 +77,26 @@ export function useAtlasState(catalog: AtlasCompatibilityCatalog): AtlasStateCon
     (update, options) => {
       const next = update(decoded.state);
       setMigrationWarnings([]);
-      navigateWithToken(encodeAtlasState(next), options?.replace ?? false);
+      setMutationError(undefined);
+      try {
+        navigateWithToken(encodeAtlasState(next), options?.replace ?? false);
+      } catch (caught) {
+        setMutationError(caught instanceof Error ? caught : new Error(String(caught)));
+      }
     },
     [decoded.state, navigateWithToken],
   );
 
   const reset = useCallback(() => {
     setMigrationWarnings([]);
+    setMutationError(undefined);
     navigateWithToken(undefined, true);
   }, [navigateWithToken]);
 
   return {
     state: decoded.state,
     warnings: decoded.warnings.length > 0 ? decoded.warnings : migrationWarnings,
-    error: decoded.error,
+    error: mutationError ?? decoded.error,
     setState,
     reset,
   };

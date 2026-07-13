@@ -99,6 +99,7 @@ function renderMap(entry = "/map") {
       <LocationProbe />
       <Routes>
         <Route path="/map" element={<MapPage />} />
+        <Route path="/diagnose" element={<p>DIAGNOSE ROUTE</p>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -179,6 +180,49 @@ describe("MapPage", () => {
         questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
       }).state.answers,
     ).toEqual({});
+  });
+
+  test("applies leaf bindings only through the explicit diagnosis action", async () => {
+    renderMap();
+    const tree = await loadedTree();
+    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
+    const question = within(tree).getByRole("treeitem", { name: /質問/u });
+    fireEvent.click(within(question).getByRole("button", { name: /質問 を展開/u }));
+    fireEvent.click(within(tree).getByRole("treeitem", { name: /0-1/u }));
+    let token = new URLSearchParams(currentSearch()).get("state")!;
+    expect(decodeAtlasState(token, {
+      datasetVersion: "0.2.0", viewId: "problem-structure", viewVersion: "1.0.0",
+      nodeIds: new Set(mapFixture().nodes.map((item) => item.node_id)),
+      questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
+    }).state.answers).toEqual({});
+
+    fireEvent.click(screen.getByRole("button", { name: "この条件で診断を続ける" }));
+    expect(await screen.findByText("DIAGNOSE ROUTE")).toBeVisible();
+    token = new URLSearchParams(currentSearch()).get("state")!;
+    expect(decodeAtlasState(token, {
+      datasetVersion: "0.2.0", viewId: "problem-structure", viewVersion: "1.0.0",
+      nodeIds: new Set(mapFixture().nodes.map((item) => item.node_id)),
+      questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
+    }).state.answers.Q01).toEqual({ status: "answered", values: ["binary"] });
+  });
+
+  test("highlights every node whose exact bindings match Diagnose answers", async () => {
+    const token = encodeAtlasState({
+      stateVersion: 1,
+      datasetVersion: "0.2.0",
+      viewId: "problem-structure",
+      viewVersion: "1.0.0",
+      answers: { Q01: { status: "answered", values: ["binary"] } },
+    });
+    renderMap(`/map?state=${token}`);
+    const tree = await loadedTree();
+    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
+    const question = within(tree).getByRole("treeitem", { name: /質問/u });
+    fireEvent.click(within(question).getByRole("button", { name: /質問 を展開/u }));
+
+    expect(within(tree).getByRole("treeitem", { name: /0-1/u })).toHaveClass(
+      "map-tree-item-answer-match",
+    );
   });
 
   test("implements visible-tree keyboard movement without selecting on focus", async () => {

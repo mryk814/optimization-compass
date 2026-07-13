@@ -7,6 +7,146 @@
   text-rendering: optimizeLegibility;
 }
 
+.diagnose-page {
+  padding: 1rem clamp(0.75rem, 2vw, 1.5rem) 2rem;
+}
+
+.diagnose-header {
+  margin-bottom: 0.75rem;
+}
+
+.diagnose-header h1,
+.diagnose-header p {
+  margin: 0.2rem 0;
+}
+
+.diagnose-layout {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.8fr) minmax(20rem, 1.2fr);
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.diagnose-form,
+.diagnose-result-pane {
+  min-width: 0;
+}
+
+.diagnose-question,
+.diagnose-result-band,
+.diagnose-trace,
+.diagnose-error {
+  border: 1px solid var(--border-color, #d7d9df);
+  border-radius: 0.55rem;
+  margin: 0 0 0.55rem;
+  padding: 0.6rem;
+}
+
+.diagnose-question legend {
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+.diagnose-question p,
+.diagnose-result-card p,
+.diagnose-result-card ul,
+.diagnose-result-band h2,
+.diagnose-trace h2,
+.diagnose-trace p {
+  margin: 0.3rem 0;
+}
+
+.diagnose-choice-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.diagnose-choice-list button,
+.diagnose-result-toolbar button,
+.diagnose-result-heading button {
+  border: 1px solid #bcc2cf;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.25rem 0.55rem;
+  font: inherit;
+  font-size: 0.78rem;
+}
+
+.diagnose-choice-list button[aria-pressed="true"] {
+  border-color: #315bda;
+  background: #eaf0ff;
+  color: #163486;
+}
+
+.diagnose-result-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.45rem;
+}
+
+.diagnose-result-band h2,
+.diagnose-trace h2 {
+  font-size: 0.95rem;
+}
+
+.diagnose-result-card + .diagnose-result-card {
+  border-top: 1px solid #e0e2e8;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.diagnose-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.diagnose-result-heading h3 {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.diagnose-result-card,
+.diagnose-empty,
+.diagnose-disclaimer {
+  font-size: 0.78rem;
+}
+
+.diagnose-warning,
+.diagnose-warning-list,
+.diagnose-error {
+  color: #8a2b1c;
+  background: #fff4f0;
+}
+
+.diagnose-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.map-tree-item-answer-match {
+  box-shadow: inset 3px 0 #315bda;
+  background: #eef3ff;
+}
+
+@media (max-width: 720px) {
+  .diagnose-page {
+    padding-inline: 0.6rem;
+  }
+
+  .diagnose-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .diagnose-choice-list button {
+    font-size: 0.74rem;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

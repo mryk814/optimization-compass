@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 
 import { MapPage } from "./features/map/MapPage";
+import { DiagnosePage } from "./features/diagnose/DiagnosePage";
+import { MethodPage } from "./features/methods/MethodPage";
 
 import "./styles.css";
 
@@ -43,20 +45,6 @@ function HomePage() {
       <h1>Optimization Atlas</h1>
       <p>
         問題構造からたどる地図、条件を整理する診断、手法の理解、比較、実問題の事例を一つの入口から探します。
-      </p>
-    </section>
-  );
-}
-
-function MethodPage() {
-  const { methodId } = useParams();
-
-  return (
-    <section className="page-panel">
-      <h1>手法を理解する</h1>
-      <p>最適化手法の前提、直感、適用範囲を確認する画面です。</p>
-      <p className="route-parameter">
-        Method ID: <strong>{methodId}</strong>
       </p>
     </section>
   );
@@ -145,15 +133,7 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/map" element={<MapPage />} />
-          <Route
-            path="/diagnose"
-            element={
-              <PurposePage
-                heading="診断"
-                purpose="問題の条件を整理し、候補・除外・代替解法を確認する画面です。"
-              />
-            }
-          />
+          <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
           <Route

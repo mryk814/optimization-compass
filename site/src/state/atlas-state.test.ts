@@ -17,7 +17,7 @@ const catalog: AtlasCompatibilityCatalog = {
   questions: {
     objective: {
       answerType: "single_choice",
-      allowedAnswers: ["single", "multi"],
+      allowedAnswers: ["single", "multi", "unknown"],
     },
     constraints: {
       answerType: "multi_choice",
@@ -270,6 +270,22 @@ describe("AtlasState URL codec", () => {
     expect(decoded.warnings.some((warning) => warning.includes("deleted-answer"))).toBe(true);
   });
 
+  test("removes unknown status when the current catalog has no canonical unknown answer", () => {
+    const token = encodeRawJson(
+      validRawState({
+        answers: { landscape: { status: "unknown", values: ["unknown"] } },
+      }),
+    );
+
+    const decoded = decodeAtlasState(token, catalog);
+
+    expect(decoded.state.answers.landscape).toBeUndefined();
+    expect(decoded.warnings).toEqual([
+      "質問「landscape」の回答「unknown」は現在の選択肢にないため除外しました。",
+    ]);
+    expect(toRecommendationAnswers(decoded.state)).toEqual({});
+  });
+
   test("throws a named error instead of truncating tokens longer than 1800 characters", () => {
     const answers = Object.fromEntries(
       Array.from({ length: 80 }, (_, index) => [
@@ -292,5 +308,11 @@ describe("AtlasState URL codec", () => {
     } catch (error) {
       expect(error).toHaveProperty("name", "AtlasStateUrlTooLongError");
     }
+  });
+
+  test("rejects an incoming over-limit URL token before decoding it", () => {
+    expect(() => decodeAtlasState("a".repeat(1801), catalog)).toThrow(
+      AtlasStateUrlTooLongError,
+    );
   });
 });
