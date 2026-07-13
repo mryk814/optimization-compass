@@ -1,0 +1,33 @@
+name: Data correction
+about: Report incorrect or stale knowledge-base data
+labels: [data, correction]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: Target ID / table
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current value or recommendation
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed correction
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Primary source or original paper
+      description: Qiita and Zenn are not accepted as evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Cases affected

@@ -1,0 +1,17 @@
+{
+  "language": "ja",
+  "answers": {
+    "Q01": ["continuous"],
+    "Q02": ["experiment_only"],
+    "Q03": ["general_nonlinear"],
+    "Q04": ["bounds"],
+    "Q05": ["unreliable_or_none"],
+    "Q06": ["hours_or_more"],
+    "Q07": ["small_noise", "occasional_failure"],
+    "Q08": ["10_to_100"],
+    "Q09": ["global_candidate_desired"],
+    "Q10": ["no_certificate_needed"],
+    "Q11": ["none_known"],
+    "Q12": ["parallel_evaluations"]
+  }
+}

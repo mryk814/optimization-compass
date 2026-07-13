@@ -1,0 +1,82 @@
+from __future__ import annotations
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
+
+from optimization_compass import __version__
+from optimization_compass.db import KnowledgeRepository
+from optimization_compass.engine import RecommendationEngine
+from optimization_compass.models import (
+    Question,
+    RecommendationRequest,
+    RecommendationResponse,
+    VerificationResult,
+)
+from optimization_compass.web import HTML
+
+repository = KnowledgeRepository()
+engine = RecommendationEngine(repository)
+
+app = FastAPI(
+    title="Optimization Compass",
+    version=__version__,
+    description="Traceable guidance for optimization methods and implementations.",
+)
+
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def index() -> str:
+    return HTML
+
+
+@app.get("/healthz")
+def healthz() -> dict[str, str]:
+    return {
+        "status": "ok",
+        "app_version": __version__,
+        "dataset_version": repository.dataset_version(),
+    }
+
+
+@app.get("/v1/questions", response_model=list[Question])
+def questions(language: str = "ja") -> list[dict[str, object]]:
+    if language not in {"ja", "en"}:
+        raise HTTPException(status_code=422, detail="language must be ja or en")
+    return repository.questions(language)
+
+
+@app.post("/v1/recommendations", response_model=RecommendationResponse)
+def recommendations(request: RecommendationRequest) -> RecommendationResponse:
+    try:
+        return engine.recommend(request)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+
+@app.get("/v1/methods/{method_id}")
+def method(method_id: str) -> dict[str, object]:
+    row = repository.method(method_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="method not found")
+    return row
+
+
+@app.get("/v1/implementations/{implementation_id}")
+def implementation(implementation_id: str) -> dict[str, object]:
+    row = repository.implementation(implementation_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="implementation not found")
+    return row
+
+
+@app.get("/v1/sources/{source_id}")
+def source(source_id: str) -> dict[str, object]:
+    row = repository.source(source_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="source not found")
+    return row
+
+
+@app.get("/v1/data/verify", response_model=VerificationResult)
+def verify_data() -> dict[str, object]:
+    return repository.verify()

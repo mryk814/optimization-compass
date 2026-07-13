@@ -1,0 +1,17 @@
+{
+  "language": "ja",
+  "answers": {
+    "Q01": ["continuous"],
+    "Q02": ["automatic_differentiation_graph"],
+    "Q03": ["general_nonlinear"],
+    "Q04": ["none"],
+    "Q05": ["autodiff", "jacobian_or_hvp"],
+    "Q06": ["milliseconds_or_less"],
+    "Q07": ["deterministic_reliable"],
+    "Q08": ["100_to_10000"],
+    "Q09": ["local_is_fine"],
+    "Q10": ["no_certificate_needed"],
+    "Q11": ["none_known"],
+    "Q12": ["repeated_similar", "warm_start_available"]
+  }
+}

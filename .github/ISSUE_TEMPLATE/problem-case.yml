@@ -1,0 +1,26 @@
+name: New optimization case
+about: Add a real-world problem scenario or golden case
+labels: [case]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem description
+    validations:
+      required: true
+  - type: textarea
+    id: structure
+    attributes:
+      label: Variables, objective, constraints, derivatives, budget, noise, dimension
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected alternatives, methods, and methods to avoid
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or benchmark result

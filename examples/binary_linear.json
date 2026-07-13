@@ -1,0 +1,17 @@
+{
+  "language": "ja",
+  "answers": {
+    "Q01": ["binary"],
+    "Q02": ["explicit_algebraic"],
+    "Q03": ["linear"],
+    "Q04": ["linear", "logical_or_combinatorial"],
+    "Q05": ["unreliable_or_none"],
+    "Q06": ["milliseconds_or_less"],
+    "Q07": ["deterministic_reliable"],
+    "Q08": ["100_to_10000"],
+    "Q09": ["global_candidate_desired"],
+    "Q10": ["gap_desired"],
+    "Q11": ["scheduling_routing"],
+    "Q12": ["one_off"]
+  }
+}
