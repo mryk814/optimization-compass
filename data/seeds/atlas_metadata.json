@@ -1,0 +1,264 @@
+{
+  "view_presets": [
+    {
+      "preset_id": "VIEW_PROBLEM_STRUCTURE",
+      "family": "semantic_tree",
+      "name_ja": "問題構造マップ",
+      "name_en": "Problem structure map",
+      "description_ja": "問題の特徴から手法候補へ辿る意味階層。",
+      "description_en": "A semantic hierarchy from problem features to method candidates.",
+      "root_support_status": "supported",
+      "root_entity_type": "view_preset",
+      "root_entity_id": "VIEW_PROBLEM_STRUCTURE",
+      "axis": "problem_structure",
+      "relation_types": ["question", "answer", "recommendation"],
+      "max_depth": 3,
+      "source_ids": ["S001"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "preset_id": "VIEW_NELDER_MEAD_THEATER",
+      "family": "algorithm_theater",
+      "name_ja": "Nelder–Mead劇場",
+      "name_en": "Nelder–Mead theater",
+      "description_ja": "単体の反射・膨張・収縮を二次元で追う。",
+      "description_en": "Follow simplex reflection, expansion, and contraction in two dimensions.",
+      "root_support_status": "supported",
+      "root_entity_type": "method",
+      "root_entity_id": "M_NELDER_MEAD",
+      "axis": "algorithm_state",
+      "relation_types": ["state", "event"],
+      "max_depth": 2,
+      "source_ids": ["S002"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "preset_id": "VIEW_FIRST_ORDER_COMPARISON",
+      "family": "comparison",
+      "name_ja": "一次法の比較",
+      "name_en": "First-order comparison",
+      "description_ja": "同一の初期点と評価予算で軌跡を比較する。",
+      "description_en": "Compare trajectories under one initial point and evaluation budget.",
+      "root_support_status": "supported",
+      "root_entity_type": "view_preset",
+      "root_entity_id": "VIEW_FIRST_ORDER_COMPARISON",
+      "axis": "oracle_evaluations",
+      "relation_types": ["member", "trajectory"],
+      "max_depth": 2,
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "method_visualization_profiles": [
+    {
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "method_id": "M_NELDER_MEAD",
+      "family": "simplex_2d",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.nelder_mead.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["vertices", "values", "best_vertex"],
+      "event_types": ["initialize", "reflect", "expand", "contract", "shrink", "stop"],
+      "source_ids": ["S002"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "profile_id": "PROFILE_GRADIENT_DESCENT_2D",
+      "method_id": "M_GRADIENT_DESCENT",
+      "family": "first_order_trajectory_2d",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.gradient_descent.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["position", "objective", "gradient", "oracle_evaluations"],
+      "event_types": ["initialize", "step", "stop"],
+      "source_ids": ["S001"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "profile_id": "PROFILE_MOMENTUM_2D",
+      "method_id": "M_MOMENTUM_SGD",
+      "family": "first_order_trajectory_2d",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.momentum.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["position", "objective", "gradient", "velocity", "oracle_evaluations"],
+      "event_types": ["initialize", "step", "stop"],
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "profile_id": "PROFILE_ADAM_2D",
+      "method_id": "M_ADAM",
+      "family": "first_order_trajectory_2d",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.adam.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["position", "objective", "gradient", "first_moment", "second_moment", "oracle_evaluations"],
+      "event_types": ["initialize", "step", "stop"],
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "demo_objectives": [
+    {
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "name_ja": "二次関数",
+      "name_en": "Quadratic bowl",
+      "family": "quadratic",
+      "support_status": "supported",
+      "dimensions": 2,
+      "generator_id": "objective.quadratic.v1",
+      "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},
+      "display_range": {"x": [-4.0, 4.0], "y": [-4.0, 4.0], "z": [0.0, 40.0]},
+      "display_expression": "f(x, y) = (x - 1)^2 + 2(y + 1)^2",
+      "optimum": {"point": [1.0, -1.0], "value": 0.0},
+      "source_ids": ["S001"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
+      "name_ja": "Rosenbrock関数",
+      "name_en": "Rosenbrock function",
+      "family": "rosenbrock",
+      "support_status": "supported",
+      "dimensions": 2,
+      "generator_id": "objective.rosenbrock.v1",
+      "domain": {"x": [-2.0, 2.0], "y": [-1.0, 3.0]},
+      "display_range": {"x": [-2.0, 2.0], "y": [-1.0, 3.0], "z": [0.0, 2500.0]},
+      "display_expression": "f(x, y) = (1 - x)^2 + 100(y - x^2)^2",
+      "optimum": {"point": [1.0, 1.0], "value": 0.0},
+      "source_ids": ["S001"],
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "demo_scenarios": [
+    {
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "method_id": "M_NELDER_MEAD",
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "name_ja": "二次関数で単体操作を学ぶ",
+      "name_en": "Learn simplex operations on a quadratic",
+      "initial_point": [-2.5, 2.0],
+      "parameters": {"initial_scale": 0.8, "adaptive": false},
+      "stopping": {"max_oracle_evaluations": 80, "simplex_tolerance": 0.0001},
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 80,
+      "source_ids": ["S002"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "scenario_id": "SCENARIO_NM_ROSENBROCK",
+      "method_id": "M_NELDER_MEAD",
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
+      "name_ja": "Rosenbrock谷で単体を追う",
+      "name_en": "Follow a simplex through the Rosenbrock valley",
+      "initial_point": [-1.2, 1.0],
+      "parameters": {"initial_scale": 0.5, "adaptive": false},
+      "stopping": {"max_oracle_evaluations": 160, "simplex_tolerance": 0.0001},
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 160,
+      "source_ids": ["S002"],
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "comparison_sets": [
+    {
+      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
+      "name_ja": "Rosenbrockで一次法を比較",
+      "name_en": "Compare first-order methods on Rosenbrock",
+      "initial_point": [-1.2, 1.0],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 200,
+      "stopping": {"gradient_norm": 0.0001, "max_oracle_evaluations": 200},
+      "synchronization": "oracle_evaluations",
+      "fairness_note": "全手法を同一の初期点・目的関数・累積oracle評価回数で比較する。",
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "comparison_set_members": [
+    {
+      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "member_id": "gradient-descent",
+      "method_id": "M_GRADIENT_DESCENT",
+      "profile_id": "PROFILE_GRADIENT_DESCENT_2D",
+      "label": "Gradient descent",
+      "display_order": 1,
+      "parameters": {"learning_rate": 0.001}
+    },
+    {
+      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "member_id": "momentum",
+      "method_id": "M_MOMENTUM_SGD",
+      "profile_id": "PROFILE_MOMENTUM_2D",
+      "label": "Momentum",
+      "display_order": 2,
+      "parameters": {"learning_rate": 0.001, "momentum": 0.9}
+    },
+    {
+      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "member_id": "adam",
+      "method_id": "M_ADAM",
+      "profile_id": "PROFILE_ADAM_2D",
+      "label": "Adam",
+      "display_order": 3,
+      "parameters": {"learning_rate": 0.03, "beta1": 0.9, "beta2": 0.999}
+    }
+  ],
+  "learning_edges": [
+    {
+      "edge_id": "LEARN_GD_TO_MOMENTUM",
+      "source_type": "method",
+      "source_id": "M_GRADIENT_DESCENT",
+      "target_type": "method",
+      "target_id": "M_MOMENTUM_SGD",
+      "relation": "next",
+      "rationale": "勾配降下法の振動を理解してから慣性項へ進む。",
+      "display_order": 1,
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "edge_id": "LEARN_MOMENTUM_TO_ADAM",
+      "source_type": "method",
+      "source_id": "M_MOMENTUM_SGD",
+      "target_type": "method",
+      "target_id": "M_ADAM",
+      "relation": "next",
+      "rationale": "一次モーメントの役割を理解してから適応的二次モーメントへ進む。",
+      "display_order": 2,
+      "source_ids": ["S070"],
+      "last_verified": "2026-07-13"
+    },
+    {
+      "edge_id": "LEARN_NM_CONTRAST_GD",
+      "source_type": "method",
+      "source_id": "M_NELDER_MEAD",
+      "target_type": "method",
+      "target_id": "M_GRADIENT_DESCENT",
+      "relation": "contrast",
+      "rationale": "導関数を使わない単体操作と勾配方向の更新を対比する。",
+      "display_order": 3,
+      "source_ids": ["S001", "S002"],
+      "last_verified": "2026-07-13"
+    }
+  ]
+}

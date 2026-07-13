@@ -8,6 +8,8 @@ from importlib.resources import as_file, files
 from pathlib import Path
 from typing import Any
 
+from optimization_compass.dataset_release import verify_database
+
 
 def split_ids(value: str | None) -> list[str]:
     if not value:
@@ -338,23 +340,36 @@ class KnowledgeRepository:
         return implementations, mappings
 
     def verify(self) -> dict[str, Any]:
-        with self.connect() as connection:
-            foreign_key_rows = connection.execute("PRAGMA foreign_key_check").fetchall()
-            checks = [
-                dict(row)
-                for row in connection.execute(
-                    "SELECT * FROM release_checks ORDER BY check_id"
-                ).fetchall()
-            ]
-        failed = [row for row in checks if row.get("status") == "fail"]
-        warned = [row for row in checks if row.get("status") == "warn"]
+        if self._explicit_path is not None:
+            result = verify_database(self._explicit_path)
+        else:
+            resource = files("optimization_compass").joinpath("resources/knowledge.sqlite")
+            with as_file(resource) as database_path:
+                result = verify_database(database_path)
+        checks = [
+            {
+                "check_id": check.check_id,
+                "check_name": check.check_name,
+                "scope": check.scope,
+                "severity": check.severity,
+                "status": check.status,
+                "observed_value": check.observed_value,
+                "expected_condition": check.expected_condition,
+                "details": check.details,
+                "checked_at": check.checked_at,
+            }
+            for check in result.checks
+        ]
+        failed = [check for check in result.checks if check.status == "fail"]
+        warned = [check for check in result.checks if check.status == "warn"]
         return {
-            "ok": not foreign_key_rows and not failed,
-            "foreign_key_violations": len(foreign_key_rows),
+            "ok": result.ok,
+            "foreign_key_violations": result.foreign_key_violations,
             "failed_release_checks": len(failed),
             "warning_release_checks": len(warned),
             "total_release_checks": len(checks),
-            "dataset_version": self.dataset_version(),
+            "dataset_version": result.dataset_version,
+            "stored_status_mismatches": list(result.status_mismatches),
             "details": checks,
         }
 

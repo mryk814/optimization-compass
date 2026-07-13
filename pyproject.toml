@@ -11,6 +11,7 @@ requires-python = ">=3.12"
 authors = [{ name = "TAKUYA OTANI" }]
 dependencies = [
   "fastapi>=0.115,<1",
+  "openpyxl>=3.1,<4",
   "pydantic>=2.8,<3",
   "typer>=0.12,<1",
   "uvicorn[standard]>=0.30,<1",
@@ -54,3 +55,8 @@ python_version = "3.12"
 strict = true
 packages = ["optimization_compass"]
 warn_unused_ignores = true
+
+[dependency-groups]
+dev = [
+    "types-openpyxl>=3.1,<4",
+]

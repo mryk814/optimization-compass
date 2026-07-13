@@ -143,7 +143,7 @@ src/optimization_compass/
     knowledge.sqlite
 scripts/
   verify_data.py
-  update_dataset.py
+  rebuild_dataset.py # deterministic stage/publish gate
 examples/
 tests/
 docs/
@@ -171,18 +171,25 @@ npm run build
 
 ## データ更新
 
-新しい SQLite を取り込む場合:
+まず公開物を変更しないstaged rebuildを実行します:
 
 ```bash
-uv run python scripts/update_dataset.py /path/to/new.sqlite --version 0.3.0
+uv run python scripts/rebuild_dataset.py --stage
 uv run optimization-compass verify-data
 uv run pytest
 ```
 
+stage modeは公開済みv0.2.0をhash固定のbaseとして一時領域へcopyし、atlas metadataの
+migration/seed適用、live `CHK001`–`CHK020`、全形式round-trip、2回の同一tree hashまでを
+検証します。公開distribution、runtime DB、`DATASET_VERSION`は変更しません。metadataの
+authority境界は [`docs/metadata-responsibilities.md`](docs/metadata-responsibilities.md) に固定しています。
+
 更新PRでは最低限、次を確認します。
 
 - `PRAGMA foreign_key_check` が 0 件
-- `release_checks` に `fail` がない
+- stored resultではなくliveに再計算した `release_checks` に `fail` がない
+- DDL / JSON / JSONL / CSV / ZIP / XLSX / SQLiteが厳密にround-tripする
+- 2回のstaged rebuildでtree hashが一致する
 - 既存の golden case が意図せず変化していない
 - 変更された推薦に evidence/source がある
 
