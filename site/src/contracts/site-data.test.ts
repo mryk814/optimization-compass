@@ -39,4 +39,22 @@ describe("SiteData boundary", () => {
     extraField.legacy_rules = [];
     expect(() => parseSiteData(extraField)).toThrow(/extra=legacy_rules/u);
   });
+
+  test("rejects duplicate feature values and non-integer ordering metadata", () => {
+    const duplicateValue = structuredClone(rawSiteData);
+    duplicateValue.feature_values.push(duplicateValue.feature_values[0]);
+    expect(() => parseSiteData(duplicateValue)).toThrow(/Duplicate feature value/u);
+
+    const fractionalSequence = structuredClone(rawSiteData);
+    fractionalSequence.questions[0].sequence = 1.5;
+    expect(() => parseSiteData(fractionalSequence)).toThrow(/sequence.*integer/u);
+
+    const zeroSequence = structuredClone(rawSiteData);
+    zeroSequence.questions[0].sequence = 0;
+    expect(() => parseSiteData(zeroSequence)).toThrow(/sequence.*at least 1/u);
+
+    const fractionalSortOrder = structuredClone(rawSiteData);
+    fractionalSortOrder.feature_values[0].sort_order = 1.5;
+    expect(() => parseSiteData(fractionalSortOrder)).toThrow(/sort_order.*integer/u);
+  });
 });

@@ -311,7 +311,23 @@ def build_site_data(repository: KnowledgeRepository) -> SiteData:
 
 def recommendation_projection(result: RecommendationResponse) -> dict[str, Any]:
     def entities(items: list[EntityRecommendation]) -> list[dict[str, Any]]:
-        return [{"entity_id": item.entity_id, "source_ids": item.source_ids} for item in items]
+        return [
+            {
+                "entity_id": item.entity_id,
+                "name": item.name,
+                "priority_band": item.priority_band,
+                "supporting_rule_count": item.supporting_rule_count,
+                "high_priority_rule_count": item.high_priority_rule_count,
+                "medium_priority_rule_count": item.medium_priority_rule_count,
+                "reasons": item.reasons,
+                "warnings": item.warnings,
+                "source_ids": item.source_ids,
+                "implementation_ids": [
+                    implementation.implementation_id for implementation in item.implementations
+                ],
+            }
+            for item in items
+        ]
 
     return {
         "alternatives_first": entities(result.alternatives_first),
@@ -322,15 +338,17 @@ def recommendation_projection(result: RecommendationResponse) -> dict[str, Any]:
         "followups": [
             {
                 "question_id": item.question_id,
+                "explanation": item.explanation,
                 "target_type": item.target_type,
                 "target_ids": item.target_ids,
             }
             for item in result.followups
         ],
         "warnings": result.warnings,
-        "trace": [
-            {"rule_id": item.rule_id, "source_ids": item.source_ids} for item in result.trace
-        ],
+        "trace": [item.model_dump(mode="json") for item in result.trace],
+        "answered_question_count": result.answered_question_count,
+        "dataset_version": result.dataset_version,
+        "disclaimer": result.disclaimer,
     }
 
 

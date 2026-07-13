@@ -14,13 +14,29 @@ type Fixture = {
   dataset_version: string;
   cases: Array<{
     case_id: string;
-    request: { answers: Record<string, string[]>; language?: "ja" | "en" };
+    request: {
+      answers: Record<string, string[]>;
+      language?: "ja" | "en";
+      max_methods?: number;
+      max_implementations_per_method?: number;
+    };
     expected: Projection;
   }>;
 };
 
 function entities(items: EntityRecommendation[]) {
-  return items.map((item) => ({ entity_id: item.entity_id, source_ids: item.source_ids }));
+  return items.map((item) => ({
+    entity_id: item.entity_id,
+    name: item.name,
+    priority_band: item.priority_band,
+    supporting_rule_count: item.supporting_rule_count,
+    high_priority_rule_count: item.high_priority_rule_count,
+    medium_priority_rule_count: item.medium_priority_rule_count,
+    reasons: item.reasons,
+    warnings: item.warnings,
+    source_ids: item.source_ids,
+    implementation_ids: item.implementations.map((implementation) => implementation.implementation_id),
+  }));
 }
 function project(result: RecommendationResult): Projection {
   return {
@@ -29,13 +45,17 @@ function project(result: RecommendationResult): Projection {
     conditional_choices: entities(result.conditional_choices),
     excluded_methods: entities(result.excluded_methods),
     candidate_problem_archetypes: entities(result.candidate_problem_archetypes),
-    followups: result.followups.map(({ question_id, target_type, target_ids }) => ({
+    followups: result.followups.map(({ question_id, explanation, target_type, target_ids }) => ({
       question_id,
+      explanation,
       target_type,
       target_ids,
     })),
     warnings: result.warnings,
-    trace: result.trace.map(({ rule_id, source_ids }) => ({ rule_id, source_ids })),
+    trace: result.trace,
+    answered_question_count: result.answered_question_count,
+    dataset_version: result.dataset_version,
+    disclaimer: result.disclaimer,
   };
 }
 
@@ -66,9 +86,19 @@ parityDescribe("live Python/TypeScript recommendation parity", () => {
     const pythonById = new Map(python.map((item) => [item.case_id, item.result]));
 
     expect(fixture.cases).toHaveLength(9);
+    const smooth = fixture.cases.find((item) => item.case_id === "smooth_continuous");
+    expect(smooth?.request).toMatchObject({
+      language: "ja",
+      max_methods: 5,
+      max_implementations_per_method: 4,
+    });
     fixture.cases.forEach((item) => {
       const browser = project(
-        recommend(data, item.request.answers, { language: item.request.language ?? "ja" }),
+        recommend(data, item.request.answers, {
+          language: item.request.language ?? "ja",
+          max_methods: item.request.max_methods,
+          max_implementations_per_method: item.request.max_implementations_per_method,
+        }),
       );
       expect(browser, `${item.case_id}: browser vs Python`).toEqual(pythonById.get(item.case_id));
       expect(browser, `${item.case_id}: browser vs expected`).toEqual(item.expected);

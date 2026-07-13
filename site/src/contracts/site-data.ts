@@ -90,6 +90,14 @@ function number(value: unknown, owner: string): number {
   if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`SiteData ${owner} must be finite.`);
   return value;
 }
+function integer(value: unknown, owner: string, minimum?: number): number {
+  const result = number(value, owner);
+  if (!Number.isInteger(result)) throw new Error(`SiteData ${owner} must be an integer.`);
+  if (minimum !== undefined && result < minimum) {
+    throw new Error(`SiteData ${owner} must be at least ${minimum}.`);
+  }
+  return result;
+}
 function strings(value: unknown, owner: string, nonEmpty = false): string[] {
   if (!Array.isArray(value) || (nonEmpty && value.length === 0)) throw new Error(`SiteData ${owner} must be an array.`);
   const result = value.map((item, index) => string(item, `${owner}[${index}]`, true));
@@ -137,7 +145,7 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
     if (choices.map((choice) => choice.value).join("\0") !== allowed.join("\0")) throw new Error("SiteData choices do not match allowed answers.");
     if (typeof item.required !== "boolean") throw new Error("SiteData question.required must be boolean.");
     return {
-      question_id: string(item.question_id, "question_id", true), sequence: number(item.sequence, "sequence"),
+      question_id: string(item.question_id, "question_id", true), sequence: integer(item.sequence, "sequence", 1),
       question_ja: string(item.question_ja, "question_ja", true), question_en: string(item.question_en, "question_en", true),
       beginner_wording: string(item.beginner_wording, "beginner_wording", true), answer_type: answerType,
       allowed_answers: allowed, choices, mapped_feature_id: string(item.mapped_feature_id, "mapped_feature_id", true),
@@ -196,7 +204,7 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
   const featureValues = rows(data.feature_values, "feature_values").map((item): SiteFeatureValue => (exactKeys(item, ["feature_id", "value_code", "label_ja", "label_en", "sort_order"], "feature value"), {
     feature_id: string(item.feature_id, "feature_value.feature_id", true), value_code: string(item.value_code, "feature_value.value_code", true),
     label_ja: string(item.label_ja, "feature_value.label_ja", true), label_en: string(item.label_en, "feature_value.label_en", true),
-    sort_order: number(item.sort_order, "feature_value.sort_order"),
+    sort_order: integer(item.sort_order, "sort_order"),
   }));
   const sources = rows(data.sources, "sources").map((item): SiteSource => (exactKeys(item, ["source_id", "title", "supported_claim", "url"], "source"), {
     source_id: string(item.source_id, "source_id", true), title: string(item.title, "source.title", true),
@@ -233,7 +241,13 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
     mappingKeys.add(key);
     if (!methodById.has(mapping.method_id) || !implementationById.has(mapping.implementation_id)) throw new Error(`Broken method implementation mapping: ${key}`);
   });
-  featureValues.forEach((item) => { if (!featureById.has(item.feature_id)) throw new Error(`Missing feature for value: ${item.feature_id}`); });
+  const featureValueKeys = new Set<string>();
+  featureValues.forEach((item) => {
+    const key = `${item.feature_id}\0${item.value_code}`;
+    if (featureValueKeys.has(key)) throw new Error(`Duplicate feature value: ${item.feature_id}/${item.value_code}`);
+    featureValueKeys.add(key);
+    if (!featureById.has(item.feature_id)) throw new Error(`Missing feature for value: ${item.feature_id}`);
+  });
   return {
     contract_version: "1.0.0", dataset_version: datasetVersion, generated_at: generatedAt,
     questions, rules, methods, implementations, method_implementation_map: mappings,

@@ -45,4 +45,19 @@ describe("offline recommendation evaluator", () => {
       /dataset mismatch/u,
     );
   });
+
+  test("honors non-default method and implementation limits", () => {
+    const result = recommend(
+      data,
+      {
+        Q01: ["continuous"],
+        Q05: ["autodiff", "jacobian_or_hvp"],
+        Q09: ["local_is_fine"],
+      },
+      { max_methods: 1, max_implementations_per_method: 1 },
+    );
+
+    expect(result.first_choices).toHaveLength(1);
+    expect(result.first_choices[0].implementations).toHaveLength(1);
+  });
 });
