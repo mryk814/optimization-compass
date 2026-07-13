@@ -134,6 +134,78 @@ class KnowledgeRepository:
         )
         return str(row["version"]) if row else "unknown"
 
+    def latest_release(self) -> dict[str, str]:
+        row = self.fetch_one(
+            """
+            SELECT version, release_date
+            FROM version_history
+            WHERE release_date IS NOT NULL
+            ORDER BY release_date DESC, version DESC
+            LIMIT 1
+            """
+        )
+        if row is None:
+            raise ValueError("version_history has no dated release")
+        return {"version": str(row["version"]), "release_date": str(row["release_date"])}
+
+    def atlas_questions(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            """
+            SELECT question_id, sequence, question_ja, question_en, answer_type,
+                   allowed_answers, mapped_feature_id, source_ids
+            FROM decision_questions
+            ORDER BY sequence, question_id
+            """
+        )
+        for row in rows:
+            row["allowed_answers"] = split_ids(row["allowed_answers"])
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def atlas_features(self, feature_ids: list[str]) -> list[dict[str, Any]]:
+        if not feature_ids:
+            return []
+        placeholders = ",".join("?" for _ in feature_ids)
+        rows = self.fetch_all(
+            f"""
+            SELECT feature_id, name_ja, name_en, source_ids
+            FROM problem_features
+            WHERE feature_id IN ({placeholders})
+            ORDER BY feature_id
+            """,
+            feature_ids,
+        )
+        for row in rows:
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def atlas_alternatives(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            """
+            SELECT alternative_id, name_ja, name_en, source_ids
+            FROM alternative_solution_checks
+            ORDER BY alternative_id
+            """
+        )
+        for row in rows:
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def atlas_sources(self, source_ids: list[str]) -> list[dict[str, Any]]:
+        if not source_ids:
+            return []
+        unique_ids = sorted(set(source_ids))
+        placeholders = ",".join("?" for _ in unique_ids)
+        return self.fetch_all(
+            f"""
+            SELECT source_id, title
+            FROM sources
+            WHERE source_id IN ({placeholders})
+            ORDER BY source_id
+            """,
+            unique_ids,
+        )
+
     def verify(self) -> dict[str, Any]:
         with self.connect() as connection:
             foreign_key_rows = connection.execute("PRAGMA foreign_key_check").fetchall()

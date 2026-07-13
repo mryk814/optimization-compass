@@ -1,0 +1,3728 @@
+{
+  "dataset_version": "0.2.0",
+  "edges": [
+    {
+      "edge_id": "hierarchy:branch:alternative-first:feature:alternative-first",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:alternative-first",
+      "target_node_id": "feature:alternative-first"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_CLOSED_FORM",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_CLOSED_FORM"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_DECOMPOSITION",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_DECOMPOSITION"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_DYNAMIC_PROGRAMMING",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_DYNAMIC_PROGRAMMING"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_EIGEN",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_EIGEN"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_ENUMERATION",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_ENUMERATION"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_FEASIBILITY",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_FEASIBILITY"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_GENERIC_OPT",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_GENERIC_OPT"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_GRAPH",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_GRAPH"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_LEAST_SQUARES",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_LEAST_SQUARES"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_LINEAR_SYSTEM",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_LINEAR_SYSTEM"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_PROJECTION_PROX",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_PROJECTION_PROX"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_RELAXATION",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_RELAXATION"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_ROOT",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_ROOT"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_SIMULATION_SEARCH",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_SIMULATION_SEARCH"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_SPECIALIZED",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_SPECIALIZED"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_STAT_INFERENCE",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_STAT_INFERENCE"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_SURROGATE",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_SURROGATE"
+    },
+    {
+      "edge_id": "hierarchy:feature:alternative-first:entity:alternative:ALT_SYMBOLIC",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "feature:alternative-first",
+      "target_node_id": "entity:alternative:ALT_SYMBOLIC"
+    },
+    {
+      "edge_id": "hierarchy:branch:variable-domain:question:Q01",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:variable-domain",
+      "target_node_id": "question:Q01"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:continuous",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:continuous"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:integer",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:integer"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:binary",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:binary"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:categorical",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:categorical"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:mixed",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:mixed"
+    },
+    {
+      "edge_id": "hierarchy:question:Q01:answer:Q01:structured_or_unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q01",
+      "target_node_id": "answer:Q01:structured_or_unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:variable-domain:question:Q08",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:variable-domain",
+      "target_node_id": "question:Q08"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:under_10",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:under_10"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:10_to_100",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:10_to_100"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:100_to_10000",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:100_to_10000"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:over_10000",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:over_10000"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:huge_sparse_or_distributed",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:huge_sparse_or_distributed"
+    },
+    {
+      "edge_id": "hierarchy:question:Q08:answer:Q08:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q08",
+      "target_node_id": "answer:Q08:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:variable-domain:question:Q12",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:variable-domain",
+      "target_node_id": "question:Q12"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:one_off",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:one_off"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:repeated_similar",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:repeated_similar"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:online_or_realtime",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:online_or_realtime"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:parallel_evaluations",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:parallel_evaluations"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:distributed",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:distributed"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:gpu_available",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:gpu_available"
+    },
+    {
+      "edge_id": "hierarchy:question:Q12:answer:Q12:warm_start_available",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q12",
+      "target_node_id": "answer:Q12:warm_start_available"
+    },
+    {
+      "edge_id": "hierarchy:branch:objective-information:question:Q02",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:objective-information",
+      "target_node_id": "question:Q02"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:explicit_algebraic",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:explicit_algebraic"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:residual_vector",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:residual_vector"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:automatic_differentiation_graph",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:automatic_differentiation_graph"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:simulation_only",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:simulation_only"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:experiment_only",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:experiment_only"
+    },
+    {
+      "edge_id": "hierarchy:question:Q02:answer:Q02:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q02",
+      "target_node_id": "answer:Q02:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:objective-information:question:Q03",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:objective-information",
+      "target_node_id": "question:Q03"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:linear",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:linear"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:quadratic",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:quadratic"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:sum_of_squares",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:sum_of_squares"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:general_nonlinear",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:general_nonlinear"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:multiobjective",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:multiobjective"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:equation_or_feasibility",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:equation_or_feasibility"
+    },
+    {
+      "edge_id": "hierarchy:question:Q03:answer:Q03:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q03",
+      "target_node_id": "answer:Q03:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:objective-information:question:Q05",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:objective-information",
+      "target_node_id": "question:Q05"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:analytic_gradient",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:analytic_gradient"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:autodiff",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:autodiff"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:jacobian_or_hvp",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:jacobian_or_hvp"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:numerical_difference_only",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:numerical_difference_only"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:stochastic_gradient",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:stochastic_gradient"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:unreliable_or_none",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:unreliable_or_none"
+    },
+    {
+      "edge_id": "hierarchy:question:Q05:answer:Q05:not_differentiable",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q05",
+      "target_node_id": "answer:Q05:not_differentiable"
+    },
+    {
+      "edge_id": "hierarchy:branch:objective-information:question:Q06",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:objective-information",
+      "target_node_id": "question:Q06"
+    },
+    {
+      "edge_id": "hierarchy:question:Q06:answer:Q06:milliseconds_or_less",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q06",
+      "target_node_id": "answer:Q06:milliseconds_or_less"
+    },
+    {
+      "edge_id": "hierarchy:question:Q06:answer:Q06:seconds",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q06",
+      "target_node_id": "answer:Q06:seconds"
+    },
+    {
+      "edge_id": "hierarchy:question:Q06:answer:Q06:minutes",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q06",
+      "target_node_id": "answer:Q06:minutes"
+    },
+    {
+      "edge_id": "hierarchy:question:Q06:answer:Q06:hours_or_more",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q06",
+      "target_node_id": "answer:Q06:hours_or_more"
+    },
+    {
+      "edge_id": "hierarchy:question:Q06:answer:Q06:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q06",
+      "target_node_id": "answer:Q06:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:objective-information:question:Q07",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:objective-information",
+      "target_node_id": "question:Q07"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:deterministic_reliable",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:deterministic_reliable"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:small_noise",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:small_noise"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:large_noise",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:large_noise"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:random_seeded",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:random_seeded"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:occasional_failure",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:occasional_failure"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:frequent_failure",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:frequent_failure"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:timeout_possible",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:timeout_possible"
+    },
+    {
+      "edge_id": "hierarchy:question:Q07:answer:Q07:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q07",
+      "target_node_id": "answer:Q07:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:constraint-structure:question:Q04",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:constraint-structure",
+      "target_node_id": "question:Q04"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:none",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:none"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:bounds",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:bounds"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:linear",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:linear"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:nonlinear",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:nonlinear"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:logical_or_combinatorial",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:logical_or_combinatorial"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:conic_or_psd",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:conic_or_psd"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:dynamics_or_manifold",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:dynamics_or_manifold"
+    },
+    {
+      "edge_id": "hierarchy:question:Q04:answer:Q04:implicit_or_failure",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q04",
+      "target_node_id": "answer:Q04:implicit_or_failure"
+    },
+    {
+      "edge_id": "hierarchy:branch:constraint-structure:question:Q11",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:constraint-structure",
+      "target_node_id": "question:Q11"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:none_known",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:none_known"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:least_squares",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:least_squares"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:lp_qp_conic",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:lp_qp_conic"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:graph_flow_path_matching",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:graph_flow_path_matching"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:scheduling_routing",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:scheduling_routing"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:prox_separable",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:prox_separable"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:optimal_control",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:optimal_control"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:manifold",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:manifold"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:stochastic_or_robust",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:stochastic_or_robust"
+    },
+    {
+      "edge_id": "hierarchy:question:Q11:answer:Q11:other",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q11",
+      "target_node_id": "answer:Q11:other"
+    },
+    {
+      "edge_id": "hierarchy:branch:required-outcome-guarantee:question:Q09",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:required-outcome-guarantee",
+      "target_node_id": "question:Q09"
+    },
+    {
+      "edge_id": "hierarchy:question:Q09:answer:Q09:local_is_fine",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q09",
+      "target_node_id": "answer:Q09:local_is_fine"
+    },
+    {
+      "edge_id": "hierarchy:question:Q09:answer:Q09:global_candidate_desired",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q09",
+      "target_node_id": "answer:Q09:global_candidate_desired"
+    },
+    {
+      "edge_id": "hierarchy:question:Q09:answer:Q09:multiple_distinct_solutions",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q09",
+      "target_node_id": "answer:Q09:multiple_distinct_solutions"
+    },
+    {
+      "edge_id": "hierarchy:question:Q09:answer:Q09:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q09",
+      "target_node_id": "answer:Q09:unknown"
+    },
+    {
+      "edge_id": "hierarchy:branch:required-outcome-guarantee:question:Q10",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "branch:required-outcome-guarantee",
+      "target_node_id": "question:Q10"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:no_certificate_needed",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:no_certificate_needed"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:gap_desired",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:gap_desired"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:global_proof_required",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:global_proof_required"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:feasible_solution_first",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:feasible_solution_first"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:approximation_guarantee",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:approximation_guarantee"
+    },
+    {
+      "edge_id": "hierarchy:question:Q10:answer:Q10:unknown",
+      "edge_type": "hierarchy",
+      "label": "",
+      "source_node_id": "question:Q10",
+      "target_node_id": "answer:Q10:unknown"
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "F_CONSTRAINT_CLASS",
+      "entity_type": "feature",
+      "label": "制約クラス",
+      "label_en": "Constraint class",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_DERIVATIVE_ACCESS",
+      "entity_type": "feature",
+      "label": "微分情報",
+      "label_en": "Derivative access",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_DIMENSION_CONTEXT",
+      "entity_type": "feature",
+      "label": "次元文脈",
+      "label_en": "Dimension context",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_EVALUATION_COST",
+      "entity_type": "feature",
+      "label": "評価費",
+      "label_en": "Evaluation cost",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_EVALUATION_RELIABILITY",
+      "entity_type": "feature",
+      "label": "評価信頼性",
+      "label_en": "Evaluation reliability",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_GUARANTEE_GLOBAL_CERTIFICATE",
+      "entity_type": "feature",
+      "label": "global certificate",
+      "label_en": "Global Certificate",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_OBJECTIVE_FORM",
+      "entity_type": "feature",
+      "label": "目的関数形式",
+      "label_en": "Objective form",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_OBJECTIVE_SIMULATION",
+      "entity_type": "feature",
+      "label": "simulation",
+      "label_en": "Simulation",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_REPEATED_SOLVE",
+      "entity_type": "feature",
+      "label": "反復求解",
+      "label_en": "Repeated solve",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_SOLUTION_GOAL",
+      "entity_type": "feature",
+      "label": "解要求",
+      "label_en": "Solution goal",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_STRUCTURE_LEAST_SQUARES",
+      "entity_type": "feature",
+      "label": "least squares",
+      "label_en": "Least Squares",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "F_VARIABLE_DOMAIN",
+      "entity_type": "feature",
+      "label": "変数領域",
+      "label_en": "Variable domain",
+      "source_ids": [
+        "S054",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_CLOSED_FORM",
+      "entity_type": "alternative",
+      "label": "閉形式解",
+      "label_en": "Closed-form solution",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_DECOMPOSITION",
+      "entity_type": "alternative",
+      "label": "分解",
+      "label_en": "Decomposition",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_DYNAMIC_PROGRAMMING",
+      "entity_type": "alternative",
+      "label": "動的計画法",
+      "label_en": "Dynamic programming",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_EIGEN",
+      "entity_type": "alternative",
+      "label": "固有値・SVD",
+      "label_en": "Eigen/SVD",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_ENUMERATION",
+      "entity_type": "alternative",
+      "label": "列挙",
+      "label_en": "Enumeration",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_FEASIBILITY",
+      "entity_type": "alternative",
+      "label": "制約充足",
+      "label_en": "Feasibility",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_GENERIC_OPT",
+      "entity_type": "alternative",
+      "label": "汎用最適化",
+      "label_en": "Generic optimization",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_GRAPH",
+      "entity_type": "alternative",
+      "label": "グラフ専用法",
+      "label_en": "Graph algorithm",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_LEAST_SQUARES",
+      "entity_type": "alternative",
+      "label": "最小二乗専用法",
+      "label_en": "Least-squares solver",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_LINEAR_SYSTEM",
+      "entity_type": "alternative",
+      "label": "線形方程式",
+      "label_en": "Linear system",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_PROJECTION_PROX",
+      "entity_type": "alternative",
+      "label": "射影・近接作用素",
+      "label_en": "Projection/prox",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_RELAXATION",
+      "entity_type": "alternative",
+      "label": "緩和",
+      "label_en": "Relaxation",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_ROOT",
+      "entity_type": "alternative",
+      "label": "求根",
+      "label_en": "Root finding",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_SIMULATION_SEARCH",
+      "entity_type": "alternative",
+      "label": "simulation/探索",
+      "label_en": "Simulation/search",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_SPECIALIZED",
+      "entity_type": "alternative",
+      "label": "専用solver",
+      "label_en": "Specialized solver",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_STAT_INFERENCE",
+      "entity_type": "alternative",
+      "label": "統計推定・Bayes推論",
+      "label_en": "Statistical inference",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_SURROGATE",
+      "entity_type": "alternative",
+      "label": "surrogate",
+      "label_en": "Surrogate modeling",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "ALT_SYMBOLIC",
+      "entity_type": "alternative",
+      "label": "記号計算",
+      "label_en": "Symbolic",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "entity_id": "S054",
+      "entity_type": "source",
+      "label": "NEOS Guide: Optimization Problem Types",
+      "label_en": "",
+      "source_ids": []
+    },
+    {
+      "entity_id": "S055",
+      "entity_type": "source",
+      "label": "Convex Optimization",
+      "label_en": "",
+      "source_ids": []
+    },
+    {
+      "entity_id": "S056",
+      "entity_type": "source",
+      "label": "Numerical Optimization",
+      "label_en": "",
+      "source_ids": []
+    }
+  ],
+  "generated_at": "2026-07-13T00:00:00Z",
+  "nodes": [
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "alternative-first",
+      "label_en": "alternative-first",
+      "node_id": "branch:alternative-first",
+      "node_type": "branch",
+      "parent_node_id": null,
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "variable domain",
+      "label_en": "variable domain",
+      "node_id": "branch:variable-domain",
+      "node_type": "branch",
+      "parent_node_id": null,
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "objective information",
+      "label_en": "objective information",
+      "node_id": "branch:objective-information",
+      "node_type": "branch",
+      "parent_node_id": null,
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "constraint structure",
+      "label_en": "constraint structure",
+      "node_id": "branch:constraint-structure",
+      "node_type": "branch",
+      "parent_node_id": null,
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "required outcome / guarantee",
+      "label_en": "required outcome / guarantee",
+      "node_id": "branch:required-outcome-guarantee",
+      "node_type": "branch",
+      "parent_node_id": null,
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "generic optimization alternatives",
+      "label_en": "generic optimization alternatives",
+      "node_id": "feature:alternative-first",
+      "node_type": "feature",
+      "parent_node_id": "branch:alternative-first",
+      "question_id": null,
+      "source_ids": []
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_CLOSED_FORM",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "閉形式解",
+      "label_en": "Closed-form solution",
+      "node_id": "entity:alternative:ALT_CLOSED_FORM",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_DECOMPOSITION",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "分解",
+      "label_en": "Decomposition",
+      "node_id": "entity:alternative:ALT_DECOMPOSITION",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_DYNAMIC_PROGRAMMING",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "動的計画法",
+      "label_en": "Dynamic programming",
+      "node_id": "entity:alternative:ALT_DYNAMIC_PROGRAMMING",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_EIGEN",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "固有値・SVD",
+      "label_en": "Eigen/SVD",
+      "node_id": "entity:alternative:ALT_EIGEN",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_ENUMERATION",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "列挙",
+      "label_en": "Enumeration",
+      "node_id": "entity:alternative:ALT_ENUMERATION",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_FEASIBILITY",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "制約充足",
+      "label_en": "Feasibility",
+      "node_id": "entity:alternative:ALT_FEASIBILITY",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_GENERIC_OPT",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "汎用最適化",
+      "label_en": "Generic optimization",
+      "node_id": "entity:alternative:ALT_GENERIC_OPT",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_GRAPH",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "グラフ専用法",
+      "label_en": "Graph algorithm",
+      "node_id": "entity:alternative:ALT_GRAPH",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_LEAST_SQUARES",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "最小二乗専用法",
+      "label_en": "Least-squares solver",
+      "node_id": "entity:alternative:ALT_LEAST_SQUARES",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_LINEAR_SYSTEM",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "線形方程式",
+      "label_en": "Linear system",
+      "node_id": "entity:alternative:ALT_LINEAR_SYSTEM",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_PROJECTION_PROX",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "射影・近接作用素",
+      "label_en": "Projection/prox",
+      "node_id": "entity:alternative:ALT_PROJECTION_PROX",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_RELAXATION",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "緩和",
+      "label_en": "Relaxation",
+      "node_id": "entity:alternative:ALT_RELAXATION",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_ROOT",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "求根",
+      "label_en": "Root finding",
+      "node_id": "entity:alternative:ALT_ROOT",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_SIMULATION_SEARCH",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "simulation/探索",
+      "label_en": "Simulation/search",
+      "node_id": "entity:alternative:ALT_SIMULATION_SEARCH",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_SPECIALIZED",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "専用solver",
+      "label_en": "Specialized solver",
+      "node_id": "entity:alternative:ALT_SPECIALIZED",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_STAT_INFERENCE",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "統計推定・Bayes推論",
+      "label_en": "Statistical inference",
+      "node_id": "entity:alternative:ALT_STAT_INFERENCE",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_SURROGATE",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "surrogate",
+      "label_en": "Surrogate modeling",
+      "node_id": "entity:alternative:ALT_SURROGATE",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [],
+      "answer_type": null,
+      "entity_refs": [
+        {
+          "entity_id": "ALT_SYMBOLIC",
+          "entity_type": "alternative"
+        }
+      ],
+      "label": "記号計算",
+      "label_en": "Symbolic",
+      "node_id": "entity:alternative:ALT_SYMBOLIC",
+      "node_type": "entity_reference",
+      "parent_node_id": "feature:alternative-first",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "continuous",
+        "integer",
+        "binary",
+        "categorical",
+        "mixed",
+        "structured_or_unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_VARIABLE_DOMAIN",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "変数は連続・整数・0-1・カテゴリ・混合のどれですか？",
+      "label_en": "What variable types are present?",
+      "node_id": "question:Q01",
+      "node_type": "question",
+      "parent_node_id": "branch:variable-domain",
+      "question_id": "Q01",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "continuous",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Continuous",
+      "label_en": "Continuous",
+      "node_id": "answer:Q01:continuous",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "integer",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Integer",
+      "label_en": "Integer",
+      "node_id": "answer:Q01:integer",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "binary",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Binary",
+      "label_en": "Binary",
+      "node_id": "answer:Q01:binary",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "categorical",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Categorical",
+      "label_en": "Categorical",
+      "node_id": "answer:Q01:categorical",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "mixed",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Mixed",
+      "label_en": "Mixed",
+      "node_id": "answer:Q01:mixed",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "structured_or_unknown",
+          "question_id": "Q01"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Structured or unknown",
+      "label_en": "Structured or unknown",
+      "node_id": "answer:Q01:structured_or_unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q01",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "under_10",
+        "10_to_100",
+        "100_to_10000",
+        "over_10000",
+        "huge_sparse_or_distributed",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_DIMENSION_CONTEXT",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "変数の数と疎性・block構造はどの程度ですか？",
+      "label_en": "What are the dimension and structure?",
+      "node_id": "question:Q08",
+      "node_type": "question",
+      "parent_node_id": "branch:variable-domain",
+      "question_id": "Q08",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "under_10",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Under 10",
+      "label_en": "Under 10",
+      "node_id": "answer:Q08:under_10",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "10_to_100",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "10 to 100",
+      "label_en": "10 to 100",
+      "node_id": "answer:Q08:10_to_100",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "100_to_10000",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "100 to 10000",
+      "label_en": "100 to 10000",
+      "node_id": "answer:Q08:100_to_10000",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "over_10000",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Over 10000",
+      "label_en": "Over 10000",
+      "node_id": "answer:Q08:over_10000",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "huge_sparse_or_distributed",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Huge sparse or distributed",
+      "label_en": "Huge sparse or distributed",
+      "node_id": "answer:Q08:huge_sparse_or_distributed",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q08"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q08:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q08",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "one_off",
+        "repeated_similar",
+        "online_or_realtime",
+        "parallel_evaluations",
+        "distributed",
+        "gpu_available",
+        "warm_start_available"
+      ],
+      "answer_bindings": [],
+      "answer_type": "multi_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_REPEATED_SOLVE",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "同種問題を繰り返し解きますか。並列・GPU・warm startを使えますか？",
+      "label_en": "Will similar problems be solved repeatedly, and what compute is available?",
+      "node_id": "question:Q12",
+      "node_type": "question",
+      "parent_node_id": "branch:variable-domain",
+      "question_id": "Q12",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "one_off",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "One off",
+      "label_en": "One off",
+      "node_id": "answer:Q12:one_off",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "repeated_similar",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Repeated similar",
+      "label_en": "Repeated similar",
+      "node_id": "answer:Q12:repeated_similar",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "online_or_realtime",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Online or realtime",
+      "label_en": "Online or realtime",
+      "node_id": "answer:Q12:online_or_realtime",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "parallel_evaluations",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Parallel evaluations",
+      "label_en": "Parallel evaluations",
+      "node_id": "answer:Q12:parallel_evaluations",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "distributed",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Distributed",
+      "label_en": "Distributed",
+      "node_id": "answer:Q12:distributed",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "gpu_available",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Gpu available",
+      "label_en": "Gpu available",
+      "node_id": "answer:Q12:gpu_available",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "warm_start_available",
+          "question_id": "Q12"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Warm start available",
+      "label_en": "Warm start available",
+      "node_id": "answer:Q12:warm_start_available",
+      "node_type": "answer",
+      "parent_node_id": "question:Q12",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "explicit_algebraic",
+        "residual_vector",
+        "automatic_differentiation_graph",
+        "simulation_only",
+        "experiment_only",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_OBJECTIVE_SIMULATION",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "目的関数と制約を数式・係数・計算graphとして記述できますか？",
+      "label_en": "Can the objective and constraints be written explicitly?",
+      "node_id": "question:Q02",
+      "node_type": "question",
+      "parent_node_id": "branch:objective-information",
+      "question_id": "Q02",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "explicit_algebraic",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Explicit algebraic",
+      "label_en": "Explicit algebraic",
+      "node_id": "answer:Q02:explicit_algebraic",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "residual_vector",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Residual vector",
+      "label_en": "Residual vector",
+      "node_id": "answer:Q02:residual_vector",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "automatic_differentiation_graph",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Automatic differentiation graph",
+      "label_en": "Automatic differentiation graph",
+      "node_id": "answer:Q02:automatic_differentiation_graph",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "simulation_only",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Simulation only",
+      "label_en": "Simulation only",
+      "node_id": "answer:Q02:simulation_only",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "experiment_only",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Experiment only",
+      "label_en": "Experiment only",
+      "node_id": "answer:Q02:experiment_only",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q02"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q02:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q02",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "linear",
+        "quadratic",
+        "sum_of_squares",
+        "general_nonlinear",
+        "multiobjective",
+        "equation_or_feasibility",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_OBJECTIVE_FORM",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "問題は線形、二次、最小二乗、一般非線形、複数目的のどれに近いですか？",
+      "label_en": "Which objective structure is closest?",
+      "node_id": "question:Q03",
+      "node_type": "question",
+      "parent_node_id": "branch:objective-information",
+      "question_id": "Q03",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "linear",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Linear",
+      "label_en": "Linear",
+      "node_id": "answer:Q03:linear",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "quadratic",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Quadratic",
+      "label_en": "Quadratic",
+      "node_id": "answer:Q03:quadratic",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "sum_of_squares",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Sum of squares",
+      "label_en": "Sum of squares",
+      "node_id": "answer:Q03:sum_of_squares",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "general_nonlinear",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "General nonlinear",
+      "label_en": "General nonlinear",
+      "node_id": "answer:Q03:general_nonlinear",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "multiobjective",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Multiobjective",
+      "label_en": "Multiobjective",
+      "node_id": "answer:Q03:multiobjective",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "equation_or_feasibility",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Equation or feasibility",
+      "label_en": "Equation or feasibility",
+      "node_id": "answer:Q03:equation_or_feasibility",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q03"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q03:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q03",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "analytic_gradient",
+        "autodiff",
+        "jacobian_or_hvp",
+        "numerical_difference_only",
+        "stochastic_gradient",
+        "unreliable_or_none",
+        "not_differentiable"
+      ],
+      "answer_bindings": [],
+      "answer_type": "multi_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_DERIVATIVE_ACCESS",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "勾配・Jacobian・自動微分を信頼して利用できますか？",
+      "label_en": "What derivative information is reliably available?",
+      "node_id": "question:Q05",
+      "node_type": "question",
+      "parent_node_id": "branch:objective-information",
+      "question_id": "Q05",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "analytic_gradient",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Analytic gradient",
+      "label_en": "Analytic gradient",
+      "node_id": "answer:Q05:analytic_gradient",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "autodiff",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Autodiff",
+      "label_en": "Autodiff",
+      "node_id": "answer:Q05:autodiff",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "jacobian_or_hvp",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Jacobian or hvp",
+      "label_en": "Jacobian or hvp",
+      "node_id": "answer:Q05:jacobian_or_hvp",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "numerical_difference_only",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Numerical difference only",
+      "label_en": "Numerical difference only",
+      "node_id": "answer:Q05:numerical_difference_only",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "stochastic_gradient",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Stochastic gradient",
+      "label_en": "Stochastic gradient",
+      "node_id": "answer:Q05:stochastic_gradient",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unreliable_or_none",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unreliable or none",
+      "label_en": "Unreliable or none",
+      "node_id": "answer:Q05:unreliable_or_none",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "not_differentiable",
+          "question_id": "Q05"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Not differentiable",
+      "label_en": "Not differentiable",
+      "node_id": "answer:Q05:not_differentiable",
+      "node_type": "answer",
+      "parent_node_id": "question:Q05",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "milliseconds_or_less",
+        "seconds",
+        "minutes",
+        "hours_or_more",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_EVALUATION_COST",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "目的・制約を1回評価する費用はどの程度ですか？",
+      "label_en": "How expensive is one evaluation?",
+      "node_id": "question:Q06",
+      "node_type": "question",
+      "parent_node_id": "branch:objective-information",
+      "question_id": "Q06",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "milliseconds_or_less",
+          "question_id": "Q06"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Milliseconds or less",
+      "label_en": "Milliseconds or less",
+      "node_id": "answer:Q06:milliseconds_or_less",
+      "node_type": "answer",
+      "parent_node_id": "question:Q06",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "seconds",
+          "question_id": "Q06"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Seconds",
+      "label_en": "Seconds",
+      "node_id": "answer:Q06:seconds",
+      "node_type": "answer",
+      "parent_node_id": "question:Q06",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "minutes",
+          "question_id": "Q06"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Minutes",
+      "label_en": "Minutes",
+      "node_id": "answer:Q06:minutes",
+      "node_type": "answer",
+      "parent_node_id": "question:Q06",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "hours_or_more",
+          "question_id": "Q06"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Hours or more",
+      "label_en": "Hours or more",
+      "node_id": "answer:Q06:hours_or_more",
+      "node_type": "answer",
+      "parent_node_id": "question:Q06",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q06"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q06:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q06",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "deterministic_reliable",
+        "small_noise",
+        "large_noise",
+        "random_seeded",
+        "occasional_failure",
+        "frequent_failure",
+        "timeout_possible",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "multi_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_EVALUATION_RELIABILITY",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "評価にnoise、乱数、timeout、NaN、失敗がありますか？",
+      "label_en": "Are evaluations noisy or failure-prone?",
+      "node_id": "question:Q07",
+      "node_type": "question",
+      "parent_node_id": "branch:objective-information",
+      "question_id": "Q07",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "deterministic_reliable",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Deterministic reliable",
+      "label_en": "Deterministic reliable",
+      "node_id": "answer:Q07:deterministic_reliable",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "small_noise",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Small noise",
+      "label_en": "Small noise",
+      "node_id": "answer:Q07:small_noise",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "large_noise",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Large noise",
+      "label_en": "Large noise",
+      "node_id": "answer:Q07:large_noise",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "random_seeded",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Random seeded",
+      "label_en": "Random seeded",
+      "node_id": "answer:Q07:random_seeded",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "occasional_failure",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Occasional failure",
+      "label_en": "Occasional failure",
+      "node_id": "answer:Q07:occasional_failure",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "frequent_failure",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Frequent failure",
+      "label_en": "Frequent failure",
+      "node_id": "answer:Q07:frequent_failure",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "timeout_possible",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Timeout possible",
+      "label_en": "Timeout possible",
+      "node_id": "answer:Q07:timeout_possible",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q07"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q07:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q07",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "none",
+        "bounds",
+        "linear",
+        "nonlinear",
+        "logical_or_combinatorial",
+        "conic_or_psd",
+        "dynamics_or_manifold",
+        "implicit_or_failure"
+      ],
+      "answer_bindings": [],
+      "answer_type": "multi_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_CONSTRAINT_CLASS",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "制約はありますか。どの種類ですか？",
+      "label_en": "What constraints are present?",
+      "node_id": "question:Q04",
+      "node_type": "question",
+      "parent_node_id": "branch:constraint-structure",
+      "question_id": "Q04",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "none",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "None",
+      "label_en": "None",
+      "node_id": "answer:Q04:none",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "bounds",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Bounds",
+      "label_en": "Bounds",
+      "node_id": "answer:Q04:bounds",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "linear",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Linear",
+      "label_en": "Linear",
+      "node_id": "answer:Q04:linear",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "nonlinear",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Nonlinear",
+      "label_en": "Nonlinear",
+      "node_id": "answer:Q04:nonlinear",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "logical_or_combinatorial",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Logical or combinatorial",
+      "label_en": "Logical or combinatorial",
+      "node_id": "answer:Q04:logical_or_combinatorial",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "conic_or_psd",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Conic or psd",
+      "label_en": "Conic or psd",
+      "node_id": "answer:Q04:conic_or_psd",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "dynamics_or_manifold",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Dynamics or manifold",
+      "label_en": "Dynamics or manifold",
+      "node_id": "answer:Q04:dynamics_or_manifold",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "implicit_or_failure",
+          "question_id": "Q04"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Implicit or failure",
+      "label_en": "Implicit or failure",
+      "node_id": "answer:Q04:implicit_or_failure",
+      "node_type": "answer",
+      "parent_node_id": "question:Q04",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "none_known",
+        "least_squares",
+        "lp_qp_conic",
+        "graph_flow_path_matching",
+        "scheduling_routing",
+        "prox_separable",
+        "optimal_control",
+        "manifold",
+        "stochastic_or_robust",
+        "other"
+      ],
+      "answer_bindings": [],
+      "answer_type": "multi_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_STRUCTURE_LEAST_SQUARES",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "最小二乗、graph、scheduling、錐、dynamic control、多様体などの特殊構造がありますか？",
+      "label_en": "Is there exploitable special structure?",
+      "node_id": "question:Q11",
+      "node_type": "question",
+      "parent_node_id": "branch:constraint-structure",
+      "question_id": "Q11",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "none_known",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "None known",
+      "label_en": "None known",
+      "node_id": "answer:Q11:none_known",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "least_squares",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Least squares",
+      "label_en": "Least squares",
+      "node_id": "answer:Q11:least_squares",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "lp_qp_conic",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Lp qp conic",
+      "label_en": "Lp qp conic",
+      "node_id": "answer:Q11:lp_qp_conic",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "graph_flow_path_matching",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Graph flow path matching",
+      "label_en": "Graph flow path matching",
+      "node_id": "answer:Q11:graph_flow_path_matching",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "scheduling_routing",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Scheduling routing",
+      "label_en": "Scheduling routing",
+      "node_id": "answer:Q11:scheduling_routing",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "prox_separable",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Prox separable",
+      "label_en": "Prox separable",
+      "node_id": "answer:Q11:prox_separable",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "optimal_control",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Optimal control",
+      "label_en": "Optimal control",
+      "node_id": "answer:Q11:optimal_control",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "manifold",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Manifold",
+      "label_en": "Manifold",
+      "node_id": "answer:Q11:manifold",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "stochastic_or_robust",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Stochastic or robust",
+      "label_en": "Stochastic or robust",
+      "node_id": "answer:Q11:stochastic_or_robust",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "other",
+          "question_id": "Q11"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Other",
+      "label_en": "Other",
+      "node_id": "answer:Q11:other",
+      "node_type": "answer",
+      "parent_node_id": "question:Q11",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "local_is_fine",
+        "global_candidate_desired",
+        "multiple_distinct_solutions",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_SOLUTION_GOAL",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "局所的に良い解で十分ですか、それとも複数basinを探索すべきですか？",
+      "label_en": "Is a local solution sufficient?",
+      "node_id": "question:Q09",
+      "node_type": "question",
+      "parent_node_id": "branch:required-outcome-guarantee",
+      "question_id": "Q09",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "local_is_fine",
+          "question_id": "Q09"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Local is fine",
+      "label_en": "Local is fine",
+      "node_id": "answer:Q09:local_is_fine",
+      "node_type": "answer",
+      "parent_node_id": "question:Q09",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "global_candidate_desired",
+          "question_id": "Q09"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Global candidate desired",
+      "label_en": "Global candidate desired",
+      "node_id": "answer:Q09:global_candidate_desired",
+      "node_type": "answer",
+      "parent_node_id": "question:Q09",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "multiple_distinct_solutions",
+          "question_id": "Q09"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Multiple distinct solutions",
+      "label_en": "Multiple distinct solutions",
+      "node_id": "answer:Q09:multiple_distinct_solutions",
+      "node_type": "answer",
+      "parent_node_id": "question:Q09",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q09"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q09:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q09",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [
+        "no_certificate_needed",
+        "gap_desired",
+        "global_proof_required",
+        "feasible_solution_first",
+        "approximation_guarantee",
+        "unknown"
+      ],
+      "answer_bindings": [],
+      "answer_type": "single_choice",
+      "entity_refs": [
+        {
+          "entity_id": "F_GUARANTEE_GLOBAL_CERTIFICATE",
+          "entity_type": "feature"
+        }
+      ],
+      "label": "大域最適性の証明、gap、上下界が必要ですか？",
+      "label_en": "Is a certificate or optimality gap required?",
+      "node_id": "question:Q10",
+      "node_type": "question",
+      "parent_node_id": "branch:required-outcome-guarantee",
+      "question_id": "Q10",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "no_certificate_needed",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "No certificate needed",
+      "label_en": "No certificate needed",
+      "node_id": "answer:Q10:no_certificate_needed",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "gap_desired",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Gap desired",
+      "label_en": "Gap desired",
+      "node_id": "answer:Q10:gap_desired",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "global_proof_required",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Global proof required",
+      "label_en": "Global proof required",
+      "node_id": "answer:Q10:global_proof_required",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "feasible_solution_first",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Feasible solution first",
+      "label_en": "Feasible solution first",
+      "node_id": "answer:Q10:feasible_solution_first",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "approximation_guarantee",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Approximation guarantee",
+      "label_en": "Approximation guarantee",
+      "node_id": "answer:Q10:approximation_guarantee",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    },
+    {
+      "allowed_answers": [],
+      "answer_bindings": [
+        {
+          "answer_value": "unknown",
+          "question_id": "Q10"
+        }
+      ],
+      "answer_type": null,
+      "entity_refs": [],
+      "label": "Unknown",
+      "label_en": "Unknown",
+      "node_id": "answer:Q10:unknown",
+      "node_type": "answer",
+      "parent_node_id": "question:Q10",
+      "question_id": null,
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ]
+    }
+  ],
+  "root_node_ids": [
+    "branch:alternative-first",
+    "branch:variable-domain",
+    "branch:objective-information",
+    "branch:constraint-structure",
+    "branch:required-outcome-guarantee"
+  ],
+  "version": "1.0.0",
+  "view_id": "problem-structure"
+}
