@@ -25,3 +25,20 @@ jobs:
       - run: uv run mypy src
       - run: uv run pytest --cov=optimization_compass --cov-report=term-missing
       - run: uv run optimization-compass verify-data
+
+  site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test -- --run
+      - run: npm run build
