@@ -55,9 +55,12 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     second_view_bytes = (second_output / "views/problem-structure.json").read_bytes()
     first_manifest_bytes = (first_output / "manifest.json").read_bytes()
     second_manifest_bytes = (second_output / "manifest.json").read_bytes()
+    first_recommendation_bytes = (first_output / "recommendation/site-data.json").read_bytes()
+    second_recommendation_bytes = (second_output / "recommendation/site-data.json").read_bytes()
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
+    assert first_recommendation_bytes == second_recommendation_bytes
     assert first_manifest == second_manifest
     assert first_view_bytes.endswith(b"\n")
     assert first_manifest_bytes.endswith(b"\n")
@@ -159,3 +162,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
             "version": "1.0.0",
         }
     ]
+    assert manifest_payload["recommendation"] == {
+        "path": "recommendation/site-data.json",
+        "version": "1.0.0",
+    }

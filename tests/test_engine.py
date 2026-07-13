@@ -1,3 +1,5 @@
+import pytest
+
 from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import EntityRecommendation, RecommendationRequest
 
@@ -90,3 +92,28 @@ def test_invalid_answer_is_rejected(engine: RecommendationEngine) -> None:
         assert "invalid answers" in str(exc)
     else:
         raise AssertionError("invalid answer should fail")
+
+
+@pytest.mark.parametrize(
+    ("question_id", "values", "message"),
+    [
+        ("Q01", ["binary", "continuous"], "single_choice"),
+        ("Q01", ["binary", "binary"], "duplicate"),
+        ("Q01", [], "non-empty"),
+        ("Q07", ["unknown", "small_noise"], "sole value"),
+        ("Q01", ["unknown"], "invalid answers"),
+    ],
+)
+def test_non_canonical_answer_shapes_are_rejected(
+    engine: RecommendationEngine, question_id: str, values: list[str], message: str
+) -> None:
+    with pytest.raises(ValueError, match=message):
+        engine.recommend(RecommendationRequest(answers={question_id: values}))
+
+
+def test_canonical_unknown_remains_data(engine: RecommendationEngine) -> None:
+    result = engine.recommend(RecommendationRequest(answers={"Q02": ["unknown"]}))
+
+    assert result.answered_question_count == 1
+    assert [followup.question_id for followup in result.followups] == ["Q02"]
+    assert [item.rule_id for item in result.trace] == ["R012"]

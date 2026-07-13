@@ -10,6 +10,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
+    ManifestAsset,
     ManifestView,
     SiteManifest,
     ViewEdge,
@@ -198,14 +199,19 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         alternatives=alternatives,
         sources=sources,
     )
+    from optimization_compass.site_recommendation import build_site_data
+
+    recommendation_data = build_site_data(repository)
     manifest = SiteManifest(
         version=VIEW_VERSION,
         dataset_version=release["version"],
         generated_at=generated_at,
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
+        recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
     )
 
     _write_json(output_dir / VIEW_PATH, view)
+    _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
     _write_json(output_dir / "manifest.json", manifest)
     return manifest
 
@@ -564,7 +570,7 @@ def _stable_union(*values: list[str]) -> list[str]:
     return list(dict.fromkeys(item for value in values for item in value))
 
 
-def _write_json(path: Path, model: ViewSpec | SiteManifest) -> None:
+def _write_json(path: Path, model: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(
         model.model_dump(mode="json"), ensure_ascii=False, indent=2, sort_keys=True

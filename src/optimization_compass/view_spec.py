@@ -199,11 +199,17 @@ class ManifestView(ContractModel):
     path: str = Field(min_length=1)
 
 
+class ManifestAsset(ContractModel):
+    version: Literal["1.0.0"]
+    path: str = Field(min_length=1)
+
+
 class SiteManifest(ContractModel):
     version: Literal["1.0.0"] = "1.0.0"
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     views: list[ManifestView]
+    recommendation: ManifestAsset
 
 
 def _unique_by[ContractModelT: ContractModel](

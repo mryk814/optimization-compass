@@ -213,7 +213,8 @@ class KnowledgeRepository:
         placeholders = ",".join("?" for _ in method_ids)
         rows = self.fetch_all(
             f"""
-            SELECT method_id, name_ja, name_en, summary,
+            SELECT method_id, name_ja, name_en, summary, variable_types,
+                   solution_scope, optimality_certificate, exactness,
                    reference_source_ids AS source_ids
             FROM methods
             WHERE method_id IN ({placeholders})
@@ -246,7 +247,8 @@ class KnowledgeRepository:
         rows = self.fetch_all(
             """
             SELECT alternative_id, name_ja, name_en,
-                   why_before_generic_optimization, source_ids
+                   why_before_generic_optimization, preferred_approach,
+                   false_positive_warning, source_ids
             FROM alternative_solution_checks
             ORDER BY alternative_id
             """
@@ -269,6 +271,71 @@ class KnowledgeRepository:
             """,
             unique_ids,
         )
+
+    def recommendation_questions(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            """
+            SELECT question_id, sequence, question_ja, question_en, beginner_wording,
+                   answer_type, allowed_answers, mapped_feature_id, why_asked,
+                   required, confidence, source_ids
+            FROM decision_questions
+            ORDER BY sequence, question_id
+            """
+        )
+        for row in rows:
+            row["allowed_answers"] = split_ids(row["allowed_answers"])
+            row["source_ids"] = split_ids(row["source_ids"])
+            row["required"] = str(row["required"]).lower() == "yes"
+        return rows
+
+    def recommendation_rules(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            """
+            SELECT rule_id, question_id, answer_condition, action_type,
+                   action_target_type, action_target_ids, priority_effect,
+                   explanation, warnings, source_ids
+            FROM decision_rules
+            ORDER BY rule_id
+            """
+        )
+        for row in rows:
+            row["action_target_ids"] = split_ids(row["action_target_ids"])
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def recommendation_implementations(
+        self, method_ids: list[str]
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+        if not method_ids:
+            return [], []
+        placeholders = ",".join("?" for _ in method_ids)
+        mappings = self.fetch_all(
+            f"""
+            SELECT method_id, implementation_id, support_level, implementation_notes
+            FROM method_implementation_map
+            WHERE method_id IN ({placeholders})
+            ORDER BY method_id,
+              CASE support_level WHEN 'native' THEN 0 ELSE 1 END,
+              implementation_id
+            """,
+            method_ids,
+        )
+        implementation_ids = sorted({str(mapping["implementation_id"]) for mapping in mappings})
+        if not implementation_ids:
+            return [], mappings
+        implementation_placeholders = ",".join("?" for _ in implementation_ids)
+        implementations = self.fetch_all(
+            f"""
+            SELECT implementation_id, library_name, solver_name, language, license,
+                   maintenance_status, last_release, official_docs_url,
+                   official_repo_url, notes
+            FROM implementations
+            WHERE implementation_id IN ({implementation_placeholders})
+            ORDER BY implementation_id
+            """,
+            implementation_ids,
+        )
+        return implementations, mappings
 
     def verify(self) -> dict[str, Any]:
         with self.connect() as connection:

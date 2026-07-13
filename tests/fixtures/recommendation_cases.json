@@ -1,0 +1,1909 @@
+{
+  "fixture_version": "1.0.0",
+  "dataset_version": "0.2.0",
+  "cases": [
+    {
+      "case_id": "binary_linear",
+      "request": {
+        "answers": {
+          "Q01": [
+            "binary"
+          ],
+          "Q02": [
+            "explicit_algebraic"
+          ],
+          "Q03": [
+            "linear"
+          ],
+          "Q04": [
+            "linear",
+            "logical_or_combinatorial"
+          ],
+          "Q05": [
+            "unreliable_or_none"
+          ],
+          "Q06": [
+            "milliseconds_or_less"
+          ],
+          "Q07": [
+            "deterministic_reliable"
+          ],
+          "Q08": [
+            "100_to_10000"
+          ],
+          "Q09": [
+            "global_candidate_desired"
+          ],
+          "Q10": [
+            "gap_desired"
+          ],
+          "Q11": [
+            "scheduling_routing"
+          ],
+          "Q12": [
+            "one_off"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [
+          {
+            "entity_id": "ALT_SPECIALIZED",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "first_choices": [
+          {
+            "entity_id": "M_BRANCH_CUT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SEARCH",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_CDCL_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_BAYESIAN_OPT_GP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [
+          {
+            "entity_id": "M_CMA_ES",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S032",
+              "S033",
+              "S040",
+              "S058",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_SIMPLEX",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062"
+            ]
+          },
+          {
+            "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_MULTISTART",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_BARRIER_LP_QP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062"
+            ]
+          },
+          {
+            "entity_id": "M_COBYQA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_DUAL_SIMPLEX",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062"
+            ]
+          },
+          {
+            "entity_id": "M_LBFGS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S057",
+              "S065"
+            ]
+          },
+          {
+            "entity_id": "M_LBFGSB",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S057",
+              "S065"
+            ]
+          },
+          {
+            "entity_id": "M_MADS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_NEWTON_CG",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S057"
+            ]
+          },
+          {
+            "entity_id": "M_PDLP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062",
+              "S078"
+            ]
+          },
+          {
+            "entity_id": "M_PRIMAL_DUAL_CONIC",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062",
+              "S028"
+            ]
+          },
+          {
+            "entity_id": "M_SPSA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_ACTIVE_SET",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030",
+              "S064",
+              "S012",
+              "S016"
+            ]
+          },
+          {
+            "entity_id": "M_INTERIOR_POINT_NLP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030",
+              "S064"
+            ]
+          },
+          {
+            "entity_id": "M_SLSQP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030",
+              "S064",
+              "S002"
+            ]
+          }
+        ],
+        "candidate_problem_archetypes": [
+          {
+            "entity_id": "PA006",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002"
+            ]
+          },
+          {
+            "entity_id": "PA017",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S016"
+            ]
+          },
+          {
+            "entity_id": "PA014",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S035",
+              "S059",
+              "S075"
+            ]
+          },
+          {
+            "entity_id": "PA039",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S034",
+              "S035",
+              "S037",
+              "S038"
+            ]
+          }
+        ],
+        "followups": [],
+        "warnings": [
+          "1件の候補は変数encoding等が必要なため、条件付き候補へ下げました。",
+          "17件の候補を変数domain不一致として除外しました。",
+          "1件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R003",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R007",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R013",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R022",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R024",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R033",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R035",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R040",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R049",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R054",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R058",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R066",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R072",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "expensive_blackbox",
+      "request": {
+        "answers": {
+          "Q01": [
+            "continuous"
+          ],
+          "Q02": [
+            "experiment_only"
+          ],
+          "Q03": [
+            "general_nonlinear"
+          ],
+          "Q04": [
+            "bounds"
+          ],
+          "Q05": [
+            "unreliable_or_none"
+          ],
+          "Q06": [
+            "hours_or_more"
+          ],
+          "Q07": [
+            "small_noise",
+            "occasional_failure"
+          ],
+          "Q08": [
+            "10_to_100"
+          ],
+          "Q09": [
+            "global_candidate_desired"
+          ],
+          "Q10": [
+            "no_certificate_needed"
+          ],
+          "Q11": [
+            "none_known"
+          ],
+          "Q12": [
+            "parallel_evaluations"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_BAYESIAN_OPT_GP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CMA_ES",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_RANDOM_SEARCH",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_MADS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_ADMM_QP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_COBYQA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_LBFGSB",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_MULTISTART",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_PROJECTED_GRADIENT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [],
+        "candidate_problem_archetypes": [
+          {
+            "entity_id": "PA006",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002"
+            ]
+          },
+          {
+            "entity_id": "PA008",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S065"
+            ]
+          },
+          {
+            "entity_id": "PA009",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030"
+            ]
+          },
+          {
+            "entity_id": "PA007",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S019",
+              "S046"
+            ]
+          },
+          {
+            "entity_id": "PA011",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S018",
+              "S031",
+              "S060"
+            ]
+          },
+          {
+            "entity_id": "PA013",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S032",
+              "S035",
+              "S059"
+            ]
+          },
+          {
+            "entity_id": "PA014",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S035",
+              "S059",
+              "S075"
+            ]
+          },
+          {
+            "entity_id": "PA039",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S034",
+              "S035",
+              "S037",
+              "S038"
+            ]
+          }
+        ],
+        "followups": [],
+        "warnings": [
+          "専用構造なしとして暫定。modelを再点検。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R001",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R011",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R016",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R021",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R033",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R038",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R041",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R044",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R048",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R054",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R057",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R071",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R075",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "smooth_continuous",
+      "request": {
+        "answers": {
+          "Q01": [
+            "continuous"
+          ],
+          "Q02": [
+            "automatic_differentiation_graph"
+          ],
+          "Q03": [
+            "general_nonlinear"
+          ],
+          "Q04": [
+            "none"
+          ],
+          "Q05": [
+            "autodiff",
+            "jacobian_or_hvp"
+          ],
+          "Q06": [
+            "milliseconds_or_less"
+          ],
+          "Q07": [
+            "deterministic_reliable"
+          ],
+          "Q08": [
+            "100_to_10000"
+          ],
+          "Q09": [
+            "local_is_fine"
+          ],
+          "Q10": [
+            "no_certificate_needed"
+          ],
+          "Q11": [
+            "none_known"
+          ],
+          "Q12": [
+            "repeated_similar",
+            "warm_start_available"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_LBFGS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_NEWTON_CG",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_INTERIOR_POINT_NLP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_TRUST_KRYLOV",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_GAUSS_NEWTON",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_ACTIVE_SET_QP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_ADMM_QP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_BFGS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_ADAMW",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_LBFGSB",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_SPSA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CMA_ES",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [],
+        "candidate_problem_archetypes": [
+          {
+            "entity_id": "PA006",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002"
+            ]
+          },
+          {
+            "entity_id": "PA008",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S065"
+            ]
+          },
+          {
+            "entity_id": "PA009",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030"
+            ]
+          },
+          {
+            "entity_id": "PA007",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S019",
+              "S046"
+            ]
+          },
+          {
+            "entity_id": "PA013",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S032",
+              "S035",
+              "S059"
+            ]
+          },
+          {
+            "entity_id": "PA014",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S035",
+              "S059",
+              "S075"
+            ]
+          },
+          {
+            "entity_id": "PA017",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S016"
+            ]
+          },
+          {
+            "entity_id": "PA039",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S034",
+              "S035",
+              "S037",
+              "S038"
+            ]
+          }
+        ],
+        "followups": [],
+        "warnings": [
+          "専用構造なしとして暫定。modelを再点検。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R001",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R009",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R016",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R020",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R029",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R030",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R035",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R040",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R049",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R053",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R057",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R071",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R073",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R078",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "non_differentiable_conflict",
+      "request": {
+        "answers": {
+          "Q04": [
+            "none"
+          ],
+          "Q05": [
+            "autodiff",
+            "not_differentiable"
+          ],
+          "Q09": [
+            "local_is_fine"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_LBFGS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_TRUST_KRYLOV",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_ADAMW",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_GAUSS_NEWTON",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_NEWTON_CG",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [
+          {
+            "entity_id": "M_BFGS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_INTERIOR_POINT_NLP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_NEWTON",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "candidate_problem_archetypes": [],
+        "followups": [],
+        "warnings": [
+          "一部の手法に支持規則と除外規則が同時に一致しました。除外を優先しています。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R020",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R029",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R034",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R053",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "domain_incompatible",
+      "request": {
+        "answers": {
+          "Q01": [
+            "binary"
+          ],
+          "Q05": [
+            "unreliable_or_none"
+          ],
+          "Q09": [
+            "global_candidate_desired"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_BRANCH_CUT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CDCL_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_BAYESIAN_OPT_GP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [
+          {
+            "entity_id": "M_CMA_ES",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S032",
+              "S033",
+              "S040",
+              "S058",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_COBYQA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_MADS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_MULTISTART",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          }
+        ],
+        "candidate_problem_archetypes": [],
+        "followups": [],
+        "warnings": [
+          "1件の候補は変数encoding等が必要なため、条件付き候補へ下げました。",
+          "5件の候補を変数domain不一致として除外しました。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R003",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R033",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R054",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "gap_demotion",
+      "request": {
+        "answers": {
+          "Q01": [
+            "binary"
+          ],
+          "Q10": [
+            "gap_desired"
+          ],
+          "Q11": [
+            "scheduling_routing"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_BRANCH_CUT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_CDCL_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SEARCH",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [
+          {
+            "entity_id": "M_PRIMAL_DUAL_CONIC",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062",
+              "S028"
+            ]
+          },
+          {
+            "entity_id": "M_SIMPLEX",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S004",
+              "S010",
+              "S012",
+              "S013",
+              "S014",
+              "S016",
+              "S062"
+            ]
+          }
+        ],
+        "candidate_problem_archetypes": [],
+        "followups": [],
+        "warnings": [
+          "2件の候補を変数domain不一致として除外しました。",
+          "1件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R003",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R058",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R066",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "global_proof_exclusion",
+      "request": {
+        "answers": {
+          "Q01": [
+            "continuous"
+          ],
+          "Q05": [
+            "unreliable_or_none"
+          ],
+          "Q09": [
+            "global_candidate_desired"
+          ],
+          "Q10": [
+            "global_proof_required"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_BAYESIAN_OPT_GP",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [
+          {
+            "entity_id": "M_BRANCH_CUT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_PRIMAL_DUAL_CONIC",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_SPATIAL_BRANCH_BOUND",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "excluded_methods": [
+          {
+            "entity_id": "M_CMA_ES",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S032",
+              "S033",
+              "S040",
+              "S058",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_COBYQA",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          },
+          {
+            "entity_id": "M_MADS",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S018",
+              "S031",
+              "S060",
+              "S063"
+            ]
+          },
+          {
+            "entity_id": "M_MULTISTART",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S006",
+              "S007",
+              "S008",
+              "S009",
+              "S072",
+              "S073",
+              "S074"
+            ]
+          }
+        ],
+        "candidate_problem_archetypes": [
+          {
+            "entity_id": "PA006",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002"
+            ]
+          },
+          {
+            "entity_id": "PA007",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S019",
+              "S046"
+            ]
+          },
+          {
+            "entity_id": "PA008",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S002",
+              "S065"
+            ]
+          },
+          {
+            "entity_id": "PA009",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056",
+              "S017",
+              "S029",
+              "S030"
+            ]
+          }
+        ],
+        "followups": [],
+        "warnings": [
+          "5件の候補を大域証明要件との不一致で除外しました。"
+        ],
+        "trace": [
+          {
+            "rule_id": "R001",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R033",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R054",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "rule_id": "R059",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "partial_first_fallback",
+      "request": {
+        "answers": {
+          "Q01": [
+            "binary"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [
+          {
+            "entity_id": "M_BRANCH_CUT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CDCL_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          },
+          {
+            "entity_id": "M_CP_SAT",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ],
+        "conditional_choices": [],
+        "excluded_methods": [],
+        "candidate_problem_archetypes": [],
+        "followups": [],
+        "warnings": [],
+        "trace": [
+          {
+            "rule_id": "R003",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "canonical_unknown_followup",
+      "request": {
+        "answers": {
+          "Q02": [
+            "unknown"
+          ]
+        }
+      },
+      "expected": {
+        "alternatives_first": [],
+        "first_choices": [],
+        "conditional_choices": [],
+        "excluded_methods": [],
+        "candidate_problem_archetypes": [],
+        "followups": [
+          {
+            "question_id": "Q02",
+            "target_type": "alternative",
+            "target_ids": [
+              "ALT_GENERIC_OPT",
+              "ALT_ROOT",
+              "ALT_FEASIBILITY"
+            ]
+          }
+        ],
+        "warnings": [],
+        "trace": [
+          {
+            "rule_id": "R012",
+            "source_ids": [
+              "S054",
+              "S055",
+              "S056"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
