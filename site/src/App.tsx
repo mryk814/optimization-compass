@@ -8,6 +8,8 @@ import {
   useParams,
 } from "react-router-dom";
 
+import { MapPage } from "./features/map/MapPage";
+
 import "./styles.css";
 
 const primaryNavigation = [
@@ -142,15 +144,7 @@ function AppShell() {
       <main id="main-content" tabIndex={-1}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route
-            path="/map"
-            element={
-              <PurposePage
-                heading="問題構造マップ"
-                purpose="最適化問題の構造を分岐ごとにたどり、関連する手法へ進む画面です。"
-              />
-            }
-          />
+          <Route path="/map" element={<MapPage />} />
           <Route
             path="/diagnose"
             element={
