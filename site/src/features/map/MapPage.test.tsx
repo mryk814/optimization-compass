@@ -229,18 +229,68 @@ describe("MapPage", () => {
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 375 });
     renderMap();
     const tree = await loadedTree();
-    fireEvent.click(within(tree).getAllByRole("treeitem")[0]);
+    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
+    const question = within(tree).getByRole("treeitem", { name: /質問/u });
+    fireEvent.click(within(question).getByRole("button", { name: /質問 を展開/u }));
+    fireEvent.click(within(tree).getByRole("treeitem", { name: /0-1/u }));
+    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を折りたたむ/u }));
+    expect(within(tree).queryByRole("treeitem", { name: /0-1/u })).not.toBeInTheDocument();
     const before = currentSearch();
     fireEvent.click(screen.getByRole("button", { name: "詳細" }));
     expect(screen.getByTestId("map-detail-pane")).toHaveAttribute("data-active", "true");
-    fireEvent.click(screen.getByRole("button", { name: "地図" }));
     fireEvent.click(screen.getByRole("button", { name: "拡大" }));
     fireEvent.click(screen.getByRole("button", { name: "縮小" }));
     fireEvent.click(screen.getByRole("button", { name: "倍率をリセット" }));
     fireEvent.click(screen.getByRole("button", { name: "現在地へ" }));
     expect(currentSearch()).toBe(before);
+    await waitFor(() => expect(screen.getByTestId("map-tree-pane")).toHaveAttribute("data-active", "true"));
+    expect(screen.getByTestId("map-detail-pane")).toHaveAttribute("data-active", "false");
+    const restoredLeaf = await within(tree).findByRole("treeitem", { name: /0-1/u });
+    await waitFor(() => expect(restoredLeaf).toHaveFocus());
+    expect(restoredLeaf).toHaveAttribute("aria-selected", "true");
     await waitFor(() => expect(Element.prototype.scrollIntoView).toHaveBeenCalled());
   });
+
+  test.each(["broken parent", "unreachable cycle"])(
+    "keeps a %s deep link while normalizing roving focus to the visible tree",
+    async (caseName) => {
+      const fixture = mapFixture();
+      const selectedId = caseName === "broken parent" ? "orphan-selected" : "cycle-selected";
+      if (caseName === "broken parent") {
+        fixture.nodes.push(node(selectedId, "missing-parent", "孤立した選択", 0, true, "orphan detail"));
+      } else {
+        fixture.nodes.push(
+          node(selectedId, "cycle-peer", "循環した選択", 0, true, "cycle detail"),
+          node("cycle-peer", selectedId, "循環相手", 0, true, "cycle peer"),
+        );
+      }
+      vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+      const token = encodeAtlasState({
+        stateVersion: 1,
+        datasetVersion: fixture.dataset_version,
+        viewId: fixture.view_id,
+        viewVersion: fixture.version,
+        selectedNodeId: selectedId,
+        answers: {},
+      });
+      renderMap(`/map?state=${token}`);
+
+      const tree = await loadedTree();
+      expect(await screen.findByRole("heading", { level: 2, name: caseName === "broken parent" ? "孤立した選択" : "循環した選択" })).toBeVisible();
+      expect(screen.getByText(/データ診断/u)).toBeVisible();
+      const visibleItems = within(tree).getAllByRole("treeitem");
+      expect(visibleItems.filter((item) => item.tabIndex === 0)).toEqual([visibleItems[0]]);
+      expect(visibleItems.some((item) => item.tabIndex === -1)).toBe(true);
+      const before = currentSearch();
+      visibleItems[0].focus();
+      fireEvent.keyDown(visibleItems[0], { key: "ArrowDown" });
+      expect(visibleItems[1]).toHaveFocus();
+      expect(visibleItems[0]).toHaveAttribute("tabindex", "-1");
+      expect(visibleItems[1]).toHaveAttribute("tabindex", "0");
+      expect(currentSearch()).toBe(before);
+      expect(screen.getByRole("heading", { level: 2, name: caseName === "broken parent" ? "孤立した選択" : "循環した選択" })).toBeVisible();
+    },
+  );
 
   test("browser back restores the previous selection in tree, detail, and focus-current", async () => {
     renderMap();

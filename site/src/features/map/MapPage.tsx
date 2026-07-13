@@ -49,6 +49,8 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   );
   const [zoom, setZoom] = useState(100);
   const [activePane, setActivePane] = useState<"map" | "detail">("map");
+  const [focusRequest, setFocusRequest] = useState<{ nodeId: string; sequence: number }>();
+  const focusSequence = useRef(0);
   const nodeRefs = useRef(new Map<string, HTMLElement>());
 
   useEffect(() => {
@@ -61,6 +63,19 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
       return next;
     });
   }, [atlas.state.selectedNodeId, model.parentByChild]);
+
+  useEffect(() => {
+    if (!focusRequest || activePane !== "map") return;
+    const frame = requestAnimationFrame(() => {
+      const element = nodeRefs.current.get(focusRequest.nodeId);
+      element?.focus();
+      element?.scrollIntoView({ block: "center", inline: "nearest" });
+      setFocusRequest((current) =>
+        current?.sequence === focusRequest.sequence ? undefined : current,
+      );
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [activePane, expanded, focusRequest]);
 
   const toggle = (nodeId: string) => {
     setExpanded((current) => {
@@ -77,17 +92,15 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   const focusCurrent = () => {
     const selectedId = atlas.state.selectedNodeId;
     if (!selectedId) return;
+    setActivePane("map");
     setExpanded((current) => {
       const next = new Set(current);
       ancestorIds(selectedId, model.parentByChild).forEach((nodeId) => next.add(nodeId));
       return next;
     });
     setFocusedId(selectedId);
-    requestAnimationFrame(() => {
-      const element = nodeRefs.current.get(selectedId);
-      element?.focus();
-      element?.scrollIntoView({ block: "center", inline: "nearest" });
-    });
+    focusSequence.current += 1;
+    setFocusRequest({ nodeId: selectedId, sequence: focusSequence.current });
   };
 
   if (atlas.error) {

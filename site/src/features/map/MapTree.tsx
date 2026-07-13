@@ -27,6 +27,10 @@ export function MapTree({
   onFocusChange,
 }: MapTreeProps) {
   const visible = visiblePreorder(model.rootNodes, model.childrenByParent, expanded);
+  const effectiveFocusedId =
+    focusedId !== undefined && visible.some((node) => node.node_id === focusedId)
+      ? focusedId
+      : visible[0]?.node_id;
   const selectedAncestors = new Set(ancestorIds(selectedId, model.parentByChild));
 
   const focusNode = (nodeId: string) => {
@@ -105,7 +109,7 @@ export function MapTree({
             else nodeRefs.current.delete(node.node_id);
           }}
           role="treeitem"
-          tabIndex={focusedId === node.node_id ? 0 : -1}
+          tabIndex={effectiveFocusedId === node.node_id ? 0 : -1}
         >
           {hasChildren ? (
             <button
