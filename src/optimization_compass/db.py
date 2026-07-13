@@ -152,7 +152,7 @@ class KnowledgeRepository:
         rows = self.fetch_all(
             """
             SELECT question_id, sequence, question_ja, question_en, answer_type,
-                   allowed_answers, mapped_feature_id, source_ids
+                   allowed_answers, mapped_feature_id, why_asked, source_ids
             FROM decision_questions
             ORDER BY sequence, question_id
             """
@@ -162,13 +162,41 @@ class KnowledgeRepository:
             row["source_ids"] = split_ids(row["source_ids"])
         return rows
 
+    def atlas_rules(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            """
+            SELECT rule_id, question_id, answer_condition, action_target_type,
+                   action_target_ids, explanation, source_ids
+            FROM decision_rules
+            ORDER BY rule_id
+            """
+        )
+        for row in rows:
+            row["action_target_ids"] = split_ids(row["action_target_ids"])
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def atlas_feature_values(self, feature_ids: list[str]) -> list[dict[str, Any]]:
+        if not feature_ids:
+            return []
+        placeholders = ",".join("?" for _ in feature_ids)
+        return self.fetch_all(
+            f"""
+            SELECT feature_id, value_code, label_ja, label_en, sort_order
+            FROM feature_values
+            WHERE feature_id IN ({placeholders})
+            ORDER BY feature_id, sort_order, value_code
+            """,
+            feature_ids,
+        )
+
     def atlas_features(self, feature_ids: list[str]) -> list[dict[str, Any]]:
         if not feature_ids:
             return []
         placeholders = ",".join("?" for _ in feature_ids)
         rows = self.fetch_all(
             f"""
-            SELECT feature_id, name_ja, name_en, source_ids
+            SELECT feature_id, name_ja, name_en, definition, source_ids
             FROM problem_features
             WHERE feature_id IN ({placeholders})
             ORDER BY feature_id
@@ -179,10 +207,46 @@ class KnowledgeRepository:
             row["source_ids"] = split_ids(row["source_ids"])
         return rows
 
+    def atlas_methods(self, method_ids: list[str]) -> list[dict[str, Any]]:
+        if not method_ids:
+            return []
+        placeholders = ",".join("?" for _ in method_ids)
+        rows = self.fetch_all(
+            f"""
+            SELECT method_id, name_ja, name_en, summary,
+                   reference_source_ids AS source_ids
+            FROM methods
+            WHERE method_id IN ({placeholders})
+            ORDER BY method_id
+            """,
+            method_ids,
+        )
+        for row in rows:
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
+    def atlas_problems(self, problem_ids: list[str]) -> list[dict[str, Any]]:
+        if not problem_ids:
+            return []
+        placeholders = ",".join("?" for _ in problem_ids)
+        rows = self.fetch_all(
+            f"""
+            SELECT problem_id, name_ja, name_en, summary, source_ids
+            FROM problem_archetypes
+            WHERE problem_id IN ({placeholders})
+            ORDER BY problem_id
+            """,
+            problem_ids,
+        )
+        for row in rows:
+            row["source_ids"] = split_ids(row["source_ids"])
+        return rows
+
     def atlas_alternatives(self) -> list[dict[str, Any]]:
         rows = self.fetch_all(
             """
-            SELECT alternative_id, name_ja, name_en, source_ids
+            SELECT alternative_id, name_ja, name_en,
+                   why_before_generic_optimization, source_ids
             FROM alternative_solution_checks
             ORDER BY alternative_id
             """
@@ -198,7 +262,7 @@ class KnowledgeRepository:
         placeholders = ",".join("?" for _ in unique_ids)
         return self.fetch_all(
             f"""
-            SELECT source_id, title
+            SELECT source_id, title, supported_claim, url
             FROM sources
             WHERE source_id IN ({placeholders})
             ORDER BY source_id

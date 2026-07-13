@@ -59,10 +59,13 @@
 - Produces: `export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteManifest`.
 - CLI: `optimization-compass export-site-data --output site/public/data`.
 - `ViewSpec` includes `root_node_ids`; `ViewNode.answer_bindings` contains exact `{question_id, answer_value}` pairs.
+- `ViewSpec` includes title/description. Every node includes summary, display order, initial collapsed state, and emphasis. Every edge includes an explanation.
+- Answer nodes resolve related method/problem/feature/alternative IDs from matching `decision_rules`; entity records carry display label, summary, source IDs, and source URLs where applicable.
 
-- [ ] Write failing model tests for duplicate IDs, missing roots, broken parent/edge/entity references, and unknown answer bindings.
+- [ ] Write failing model tests for duplicate IDs, missing roots, broken parent/edge/entity references, unknown answer bindings, invalid display order/emphasis, and incomplete related entities.
 - [ ] Write a failing exporter golden test asserting required five branches and byte-identical repeated output.
 - [ ] Implement Pydantic validation and repository queries without exposing SQLite layout to TypeScript.
+- [ ] Export matching decision-rule targets as typed related entities so the map never derives method/problem links from node names.
 - [ ] Use latest dataset release date at UTC 00:00 for `generated_at`; never use wall-clock time.
 - [ ] Implement the CLI and generate the committed `problem-structure` artifact.
 - [ ] Run focused tests, `optimization-compass export-site-data`, and a second byte comparison.

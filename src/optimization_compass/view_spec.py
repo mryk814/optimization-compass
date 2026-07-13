@@ -4,7 +4,7 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class ContractModel(BaseModel):
@@ -26,6 +26,8 @@ class ViewEntity(ContractModel):
     entity_id: str = Field(min_length=1)
     label: str = Field(min_length=1)
     label_en: str = ""
+    summary: str
+    url: str
     source_ids: list[str] = Field(default_factory=list)
 
 
@@ -34,12 +36,16 @@ class ViewNode(ContractModel):
     node_type: str = Field(min_length=1)
     label: str = Field(min_length=1)
     label_en: str = ""
+    summary: str
+    display_order: int = Field(ge=0)
+    default_collapsed: bool
+    emphasis: Literal["primary", "normal", "muted"]
     parent_node_id: str | None = None
     question_id: str | None = None
     answer_type: Literal["single_choice", "multi_choice"] | None = None
     allowed_answers: list[str] = Field(default_factory=list)
     answer_bindings: list[AnswerBinding] = Field(default_factory=list)
-    entity_refs: list[EntityReference] = Field(default_factory=list)
+    related_entities: list[EntityReference]
     source_ids: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -51,6 +57,11 @@ class ViewNode(ContractModel):
             raise ValueError("question metadata is only valid on question nodes")
         if len(self.allowed_answers) != len(set(self.allowed_answers)):
             raise ValueError("question allowed_answers contains duplicate values")
+        related_keys = [
+            (reference.entity_type, reference.entity_id) for reference in self.related_entities
+        ]
+        if len(related_keys) != len(set(related_keys)):
+            raise ValueError(f"duplicate related entity on node: {self.node_id}")
         return self
 
 
@@ -60,17 +71,33 @@ class ViewEdge(ContractModel):
     target_node_id: str = Field(min_length=1)
     edge_type: str = Field(min_length=1)
     label: str = ""
+    explanation: str
+
+    @model_validator(mode="after")
+    def validate_hierarchy_explanation(self) -> ViewEdge:
+        if self.edge_type == "hierarchy" and not self.explanation.strip():
+            raise ValueError("hierarchy edge explanation must be non-empty")
+        return self
 
 
 class ViewSpec(ContractModel):
     version: Literal["1.0.0"] = "1.0.0"
     view_id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    description: str = Field(min_length=1)
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     root_node_ids: list[str] = Field(min_length=1)
     nodes: list[ViewNode] = Field(min_length=1)
     edges: list[ViewEdge] = Field(default_factory=list)
     entities: list[ViewEntity] = Field(default_factory=list)
+
+    @field_validator("title", "description")
+    @classmethod
+    def validate_non_blank_presentation_text(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("view title and description must be non-empty")
+        return value
 
     @model_validator(mode="after")
     def validate_references(self) -> ViewSpec:
@@ -94,7 +121,7 @@ class ViewSpec(ContractModel):
                 raise ValueError(
                     f"parent reference from {node.node_id} is missing: {node.parent_node_id}"
                 )
-            for reference in node.entity_refs:
+            for reference in node.related_entities:
                 key = (reference.entity_type, reference.entity_id)
                 if key not in entity_by_key:
                     raise ValueError(
@@ -131,8 +158,7 @@ class ViewSpec(ContractModel):
             if missing_sources:
                 raise ValueError(
                     f"entity {entity.entity_type}/{entity.entity_id} has missing source "
-                    "references: "
-                    + ", ".join(sorted(missing_sources))
+                    "references: " + ", ".join(sorted(missing_sources))
                 )
         for node in self.nodes:
             missing_sources = set(node.source_ids) - source_keys
