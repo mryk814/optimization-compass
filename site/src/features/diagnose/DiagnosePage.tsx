@@ -34,6 +34,7 @@ interface DiagnoseArtifacts {
 }
 
 const MANIFEST_VERSION = "1.0.0";
+const SUPPORTED_VIEW_VERSION = "1.0.0";
 const RECOMMENDATION_PATH = "recommendation/site-data.json";
 const VIEW_PATH = "views/problem-structure.json";
 
@@ -116,8 +117,8 @@ async function loadArtifacts(): Promise<DiagnoseArtifacts> {
   if (parsedManifest.recommendation.version !== data.contract_version) {
     throw new Error("manifest と SiteData のartifact版が一致しません。");
   }
-  if (manifestView.version !== view.version) {
-    throw new Error("manifest と ViewSpec のartifact版が一致しません。");
+  if (manifestView.version !== SUPPORTED_VIEW_VERSION || view.version !== SUPPORTED_VIEW_VERSION) {
+    throw new Error(`manifest / ViewSpec version は ${SUPPORTED_VIEW_VERSION} である必要があります。`);
   }
   return { manifest: parsedManifest, data, view };
 }

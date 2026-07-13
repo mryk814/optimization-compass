@@ -133,6 +133,20 @@ describe("DiagnosePage", () => {
     expect(screen.queryByText(rawSiteData.questions[0].question_ja)).not.toBeInTheDocument();
   });
 
+  test("rejects an unsupported ViewSpec version even when the manifest entry matches it", async () => {
+    mockArtifacts({
+      manifest: {
+        ...rawManifest,
+        views: [{ ...rawManifest.views[0], version: "9.9.9" }],
+      },
+      view: { ...rawView, version: "9.9.9" },
+    });
+    renderDiagnose();
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(/ViewSpec.*version/u);
+    expect(screen.queryByText(rawSiteData.questions[0].question_ja)).not.toBeInTheDocument();
+  });
+
   test("keeps unanswered, unknown, N/A, single, and multi answers distinct in URL state", async () => {
     renderDiagnose();
     const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
