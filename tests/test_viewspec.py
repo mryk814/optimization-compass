@@ -175,9 +175,45 @@ def test_entity_type_accepts_unknown_non_empty_strings() -> None:
     assert reference.entity_type == "future_kind"
     assert entity.entity_type == "future_kind"
     assert node.node_type == "future_kind"
+    assert EntityReference(entity_type=" future_kind ", entity_id="X02").entity_type == (
+        " future_kind "
+    )
 
     with pytest.raises(ValidationError):
         EntityReference(entity_type="", entity_id="X01")
+
+
+@pytest.mark.parametrize("entity_type", [" ", "\t", "\r\n"])
+def test_entity_reference_rejects_whitespace_only_entity_type(entity_type: str) -> None:
+    with pytest.raises(ValidationError, match="entity_type"):
+        EntityReference(entity_type=entity_type, entity_id="X01")
+
+
+@pytest.mark.parametrize("entity_type", [" ", "\t", "\r\n"])
+def test_view_entity_rejects_whitespace_only_entity_type(entity_type: str) -> None:
+    with pytest.raises(ValidationError, match="entity_type"):
+        ViewEntity(
+            entity_type=entity_type,
+            entity_id="X01",
+            label="Future",
+            summary="Future entity.",
+            url="",
+        )
+
+
+@pytest.mark.parametrize("node_type", [" ", "\t", "\r\n"])
+def test_view_node_rejects_whitespace_only_node_type(node_type: str) -> None:
+    with pytest.raises(ValidationError, match="node_type"):
+        ViewNode(
+            node_id="future:X01",
+            node_type=node_type,
+            label="Future",
+            summary="Future node.",
+            display_order=0,
+            default_collapsed=False,
+            emphasis="normal",
+            related_entities=[],
+        )
 
 
 def test_contract_models_preserve_exact_answer_bindings() -> None:

@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.site_export import export_site_data
 from optimization_compass.view_spec import SiteManifest, ViewSpec
@@ -22,6 +24,22 @@ EXPECTED_ANSWER_LABELS = {
     "answer:Q02:explicit_algebraic": "数式で表せる（explicit algebraic）",
     "answer:Q10:global_proof_required": "大域最適性の証明が必要（global proof required）",
 }
+
+
+class BlankQuestionLabelRepository(KnowledgeRepository):
+    def atlas_questions(self) -> list[dict[str, object]]:
+        questions = super().atlas_questions()
+        questions[0] = {**questions[0], "question_ja": " \t"}
+        return questions
+
+
+def test_exporter_rejects_blank_canonical_question_label(
+    tmp_path: Path, database_path: Path
+) -> None:
+    repository = BlankQuestionLabelRepository(database_path)
+
+    with pytest.raises(ValueError, match=r"question Q01 question_ja"):
+        export_site_data(tmp_path, repository)
 
 
 def test_exporter_writes_five_branch_golden_and_is_byte_identical(

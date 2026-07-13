@@ -20,6 +20,13 @@ class EntityReference(ContractModel):
     entity_type: str = Field(min_length=1)
     entity_id: str = Field(min_length=1)
 
+    @field_validator("entity_type")
+    @classmethod
+    def validate_non_blank_entity_type(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("entity_type must be non-empty")
+        return value
+
 
 class ViewEntity(ContractModel):
     entity_type: str = Field(min_length=1)
@@ -29,6 +36,13 @@ class ViewEntity(ContractModel):
     summary: str
     url: str
     source_ids: list[str] = Field(default_factory=list)
+
+    @field_validator("entity_type")
+    @classmethod
+    def validate_non_blank_entity_type(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("entity_type must be non-empty")
+        return value
 
 
 class ViewNode(ContractModel):
@@ -47,6 +61,13 @@ class ViewNode(ContractModel):
     answer_bindings: list[AnswerBinding] = Field(default_factory=list)
     related_entities: list[EntityReference]
     source_ids: list[str] = Field(default_factory=list)
+
+    @field_validator("node_type")
+    @classmethod
+    def validate_non_blank_node_type(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("node_type must be non-empty")
+        return value
 
     @model_validator(mode="after")
     def validate_question_metadata(self) -> ViewNode:

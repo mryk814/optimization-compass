@@ -278,8 +278,12 @@ def _build_problem_structure(
             ViewNode(
                 node_id=f"entity:alternative:{alternative_id}",
                 node_type="entity_reference",
-                label=_display_text(alternative.get("name_ja"), alternative_id),
-                label_en=_display_text(alternative.get("name_en"), alternative_id),
+                label=_required_display_text(
+                    alternative.get("name_ja"), f"alternative {alternative_id} name_ja"
+                ),
+                label_en=_required_display_text(
+                    alternative.get("name_en"), f"alternative {alternative_id} name_en"
+                ),
                 summary=str(alternative.get("why_before_generic_optimization") or ""),
                 display_order=display_order,
                 default_collapsed=False,
@@ -302,8 +306,12 @@ def _build_problem_structure(
                 ViewNode(
                     node_id=question_node_id,
                     node_type="question",
-                    label=_display_text(question.get("question_ja"), question_id),
-                    label_en=_display_text(question.get("question_en"), question_id),
+                    label=_required_display_text(
+                        question.get("question_ja"), f"question {question_id} question_ja"
+                    ),
+                    label_en=_required_display_text(
+                        question.get("question_en"), f"question {question_id} question_en"
+                    ),
                     summary=str(question.get("why_asked") or ""),
                     display_order=question_order,
                     default_collapsed=True,
@@ -393,8 +401,12 @@ def _build_entities(
         ViewEntity(
             entity_type="feature",
             entity_id=str(feature["feature_id"]),
-            label=_display_text(feature.get("name_ja"), str(feature["feature_id"])),
-            label_en=_display_text(feature.get("name_en"), str(feature["feature_id"])),
+            label=_required_display_text(
+                feature.get("name_ja"), f"feature {feature['feature_id']} name_ja"
+            ),
+            label_en=_required_display_text(
+                feature.get("name_en"), f"feature {feature['feature_id']} name_en"
+            ),
             summary=str(feature.get("definition") or ""),
             url="",
             source_ids=_string_list(feature["source_ids"]),
@@ -405,8 +417,12 @@ def _build_entities(
         ViewEntity(
             entity_type="method",
             entity_id=str(method["method_id"]),
-            label=_display_text(method.get("name_ja"), str(method["method_id"])),
-            label_en=_display_text(method.get("name_en"), str(method["method_id"])),
+            label=_required_display_text(
+                method.get("name_ja"), f"method {method['method_id']} name_ja"
+            ),
+            label_en=_required_display_text(
+                method.get("name_en"), f"method {method['method_id']} name_en"
+            ),
             summary=str(method.get("summary") or ""),
             url="",
             source_ids=_string_list(method["source_ids"]),
@@ -417,8 +433,12 @@ def _build_entities(
         ViewEntity(
             entity_type="problem",
             entity_id=str(problem["problem_id"]),
-            label=_display_text(problem.get("name_ja"), str(problem["problem_id"])),
-            label_en=_display_text(problem.get("name_en"), str(problem["problem_id"])),
+            label=_required_display_text(
+                problem.get("name_ja"), f"problem {problem['problem_id']} name_ja"
+            ),
+            label_en=_required_display_text(
+                problem.get("name_en"), f"problem {problem['problem_id']} name_en"
+            ),
             summary=str(problem.get("summary") or ""),
             url="",
             source_ids=_string_list(problem["source_ids"]),
@@ -429,8 +449,14 @@ def _build_entities(
         ViewEntity(
             entity_type="alternative",
             entity_id=str(alternative["alternative_id"]),
-            label=_display_text(alternative.get("name_ja"), str(alternative["alternative_id"])),
-            label_en=_display_text(alternative.get("name_en"), str(alternative["alternative_id"])),
+            label=_required_display_text(
+                alternative.get("name_ja"),
+                f"alternative {alternative['alternative_id']} name_ja",
+            ),
+            label_en=_required_display_text(
+                alternative.get("name_en"),
+                f"alternative {alternative['alternative_id']} name_en",
+            ),
             summary=str(alternative.get("why_before_generic_optimization") or ""),
             url="",
             source_ids=_string_list(alternative["source_ids"]),
@@ -441,8 +467,12 @@ def _build_entities(
         ViewEntity(
             entity_type="source",
             entity_id=str(source["source_id"]),
-            label=_display_text(source.get("title"), str(source["source_id"])),
-            label_en=_display_text(source.get("title"), str(source["source_id"])),
+            label=_required_display_text(
+                source.get("title"), f"source {source['source_id']} title"
+            ),
+            label_en=_required_display_text(
+                source.get("title"), f"source {source['source_id']} title"
+            ),
             summary=str(source.get("supported_claim") or ""),
             url=str(source.get("url") or ""),
             source_ids=[],
@@ -490,8 +520,14 @@ def _answer_labels(
     feature_value = feature_value_by_key.get((feature_id, answer_value))
     if feature_value is not None:
         return (
-            _display_text(feature_value.get("label_ja"), answer_value),
-            _display_text(feature_value.get("label_en"), answer_value),
+            _required_display_text(
+                feature_value.get("label_ja"),
+                f"feature value {feature_id}/{answer_value} label_ja",
+            ),
+            _required_display_text(
+                feature_value.get("label_en"),
+                f"feature value {feature_id}/{answer_value} label_en",
+            ),
         )
     try:
         label_ja = ANSWER_LABELS_JA[answer_value]
@@ -536,9 +572,10 @@ def _write_json(path: Path, model: ViewSpec | SiteManifest) -> None:
     path.write_text(payload + "\n", encoding="utf-8", newline="\n")
 
 
-def _display_text(value: object, fallback: str) -> str:
-    text = str(value).strip() if value is not None else ""
-    return text or fallback
+def _required_display_text(value: object, context: str) -> str:
+    if value is None or not str(value).strip():
+        raise ValueError(f"atlas export requires non-empty display metadata: {context}")
+    return str(value)
 
 
 def _string_list(value: object) -> list[str]:
