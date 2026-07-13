@@ -78,4 +78,23 @@ describe("application routes", () => {
     expect(screen.getByRole("main")).toBeVisible();
     expect(screen.getByRole("contentinfo")).toBeVisible();
   });
+
+  test.each(["#/mapping", "#/diagnose-old", "#/gallery-old"])(
+    "%s does not activate a prefix-colliding navigation item",
+    (hash) => {
+      window.location.hash = hash;
+
+      render(<App />);
+
+      expect(
+        screen.getByRole("heading", { level: 1, name: "ページが見つかりません" }),
+      ).toBeVisible();
+      expect(
+        within(screen.getByRole("navigation", { name: "主要ナビゲーション" })).queryByRole(
+          "link",
+          { current: "page" },
+        ),
+      ).not.toBeInTheDocument();
+    },
+  );
 });

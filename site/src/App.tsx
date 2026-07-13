@@ -11,12 +11,12 @@ import {
 import "./styles.css";
 
 const primaryNavigation = [
-  { label: "Atlas", to: "/", matchPrefix: "/" },
-  { label: "Map", to: "/map", matchPrefix: "/map" },
-  { label: "診断", to: "/diagnose", matchPrefix: "/diagnose" },
-  { label: "手法", to: "/methods/overview", matchPrefix: "/methods/" },
-  { label: "比較", to: "/compare/overview", matchPrefix: "/compare/" },
-  { label: "Gallery", to: "/gallery", matchPrefix: "/gallery" },
+  { label: "Atlas", to: "/", matchPath: "/", matchMode: "exact" },
+  { label: "Map", to: "/map", matchPath: "/map", matchMode: "exact" },
+  { label: "診断", to: "/diagnose", matchPath: "/diagnose", matchMode: "exact" },
+  { label: "手法", to: "/methods/overview", matchPath: "/methods", matchMode: "family" },
+  { label: "比較", to: "/compare/overview", matchPath: "/compare", matchMode: "family" },
+  { label: "Gallery", to: "/gallery", matchPath: "/gallery", matchMode: "family" },
 ] as const;
 
 type PurposePageProps = {
@@ -120,9 +120,11 @@ function AppShell() {
           <span>Optimization Atlas</span>
         </Link>
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
-          {primaryNavigation.map(({ label, to, matchPrefix }) => {
+          {primaryNavigation.map(({ label, to, matchPath, matchMode }) => {
             const isActive =
-              matchPrefix === "/" ? pathname === "/" : pathname.startsWith(matchPrefix);
+              matchMode === "exact"
+                ? pathname === matchPath
+                : pathname === matchPath || pathname.startsWith(`${matchPath}/`);
 
             return (
               <Link
