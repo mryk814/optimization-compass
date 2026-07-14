@@ -44,6 +44,13 @@ const emptyView = {
   ],
 };
 
+const releaseIdentity = {
+  schema_version: 1,
+  dataset_version: "0.3.0",
+  release_date: "2026-07-15",
+  database_sha256: "6fd8851e805ebd4b396905ca33d50b7dd292bfba7a17c02a5d3726e18f3886cc",
+};
+
 function jsonResponse(value: unknown) {
   return { ok: true, json: async () => value };
 }
@@ -103,6 +110,14 @@ describe("application routes", () => {
     expect(within(footer).getByRole("link", { name: "Content: CC BY 4.0" })).toBeVisible();
   });
 
+  test("footer renders the dataset version from the release identity", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(releaseIdentity)));
+
+    render(<App />);
+
+    expect(await screen.findByText("Dataset 0.3.0")).toBeVisible();
+  });
+
   test("primary navigation and home entries stay reachable at 375px", () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
@@ -157,14 +172,13 @@ describe("application routes", () => {
   });
 
   test("an unknown method ID uses the common Not Found page after checking Gallery", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn()
-        .mockResolvedValueOnce(jsonResponse(emptyView))
-        .mockResolvedValueOnce(
-          jsonResponse({ contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }),
-        ),
-    );
+    vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) => {
+      if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
+      if (url.endsWith("data/gallery.json")) {
+        return jsonResponse({ contract_version: "1.0.0", dataset_version: "0.3.0", cases: [] });
+      }
+      return jsonResponse(emptyView);
+    }));
     window.location.hash = "#/methods/missing";
 
     render(<App />);
@@ -182,7 +196,9 @@ describe("application routes", () => {
       { contract_version: "1.0.0", dataset_version: "0.2.0", comparisons: [] },
     ],
   ])("%s uses the common Not Found page for an unknown entity ID", async (hash, payload) => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(payload)));
+    vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) =>
+      url.endsWith("data/release.json") ? jsonResponse(releaseIdentity) : jsonResponse(payload),
+    ));
     window.location.hash = hash;
 
     render(<App />);

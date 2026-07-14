@@ -1,0 +1,362 @@
+{
+  "artifacts": {
+    "csv_directory": "optimization_method_selection_database_v0.3.0_csv",
+    "csv_zip": "optimization_method_selection_database_v0.3.0_csv.zip",
+    "database": "optimization_method_selection_database_v0.3.0.sqlite",
+    "ddl": "optimization_method_selection_database_v0.3.0_schema.sql",
+    "json": "optimization_method_selection_database_v0.3.0.json",
+    "jsonl": "optimization_method_selection_database_v0.3.0.jsonl",
+    "release_identity": "optimization_method_selection_database_v0.3.0_release.json",
+    "report": "optimization_method_selection_database_v0.3.0_report.md",
+    "site_data": "optimization_method_selection_database_v0.3.0_site-data",
+    "xlsx": "optimization_method_selection_database_v0.3.0.xlsx"
+  },
+  "base_sha256": "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13",
+  "database_sha256": "6fd8851e805ebd4b396905ca33d50b7dd292bfba7a17c02a5d3726e18f3886cc",
+  "files": {
+    "licenses/CC-BY-4.0.txt": {
+      "bytes": 695,
+      "sha256": "6c11dcd31268ad8590284799c70838fd5d72c307b5e13d2a3da7644b9391a34b"
+    },
+    "licenses/CONTENT_LICENSE.txt": {
+      "bytes": 1719,
+      "sha256": "079054b698acefafe01bed38124105fb2867c2956684d462558f6f4de1a67909"
+    },
+    "licenses/DATA_LICENSE.txt": {
+      "bytes": 1821,
+      "sha256": "e6dea495979542bd6c372c02b02c75dea995f76f641c25609e4925c42745e8d6"
+    },
+    "licenses/LICENSE.txt": {
+      "bytes": 1128,
+      "sha256": "7ae11e0c78700cc2cd6197c6447525d9b9591d6b8fd1a26923f0eb1410e5ef4c"
+    },
+    "licenses/NOTICE.txt": {
+      "bytes": 1457,
+      "sha256": "3c99945f322c33a7363cee9898dd1ee79ef144ce21baee0f9fab51bb90563d16"
+    },
+    "optimization_method_selection_database_v0.3.0.json": {
+      "bytes": 5465484,
+      "sha256": "472dc2a90a1032c86c39ca3ceabc7204e38cec9daf5d6f4f23adcbb83a3857d1"
+    },
+    "optimization_method_selection_database_v0.3.0.jsonl": {
+      "bytes": 4508894,
+      "sha256": "863092c65388779055883c39fc73670bbd130f4fdb6539a70be603ca48d5eb52"
+    },
+    "optimization_method_selection_database_v0.3.0.sqlite": {
+      "bytes": 3575808,
+      "sha256": "6fd8851e805ebd4b396905ca33d50b7dd292bfba7a17c02a5d3726e18f3886cc"
+    },
+    "optimization_method_selection_database_v0.3.0.xlsx": {
+      "bytes": 667104,
+      "sha256": "abfae91bf9b260c88f8cbd20270950576cd0db61948ea51e45edf1e0cf7c161e"
+    },
+    "optimization_method_selection_database_v0.3.0_csv.zip": {
+      "bytes": 277707,
+      "sha256": "e0d51f7a4f51c895766a0921f25ff7baaa869fb8fc5318043f89422906d26277"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/advanced_view.csv": {
+      "bytes": 195787,
+      "sha256": "6119b51b41560ba9cbb46b82009327eb969817a3c15bc39519280698376869be"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/alternative_solution_checks.csv": {
+      "bytes": 5538,
+      "sha256": "319c8c784d3de0e14e03b2903a49b9cdcddfdcce0575df1144edfe4cc1774780"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/backlog.csv": {
+      "bytes": 8305,
+      "sha256": "7dfdad849468d202dad0e13f6c611ec660eb2df8f366be0407e597179ac29a9a"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/beginner_view.csv": {
+      "bytes": 15465,
+      "sha256": "464ab69fb97f1d270c05c88796f3793a9ebde3786de2057a03204193b5eda445"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/case_alternative_map.csv": {
+      "bytes": 9389,
+      "sha256": "7fb2707b16a4938b16d260748f13154d6d4c8872b313f5818bdfe2c84aa2215b"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/case_feature_map.csv": {
+      "bytes": 50576,
+      "sha256": "71e03ab293d07b7f6996c549788a942ac924d6dd5cdfd2ad432e7ea8eca299eb"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/case_implementation_map.csv": {
+      "bytes": 11796,
+      "sha256": "2d8a34a5e2112b23ac3a1405d568db058b78c116972aee35b2291f6aa2a40e37"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/case_method_map.csv": {
+      "bytes": 20311,
+      "sha256": "7b145defb50bd19694e0d499b53a0befbb28fbe9452742b717f71aeff7f0829e"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/comparison_set_members.csv": {
+      "bytes": 523,
+      "sha256": "8e6ff1afceef3a70de86628e2251bf3b4d91be7013be0af86ce193a1346003c1"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/comparison_sets.csv": {
+      "bytes": 552,
+      "sha256": "3882cc29eb4e1fdeddd9367ca2a614888ad0a4c6094e7b2a9e388384822f441b"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/controlled_vocab.csv": {
+      "bytes": 9950,
+      "sha256": "e8c8418c7ce1499dbdf10316bd0d92ebd1551bcf3571d30aea259c6eeec30d51"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/decision_questions.csv": {
+      "bytes": 6634,
+      "sha256": "1f15fe2c9969aa06ca5d1c9a73734abf047c7c3f1ee960aba7d6151074b8e2a9"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/decision_rules.csv": {
+      "bytes": 21311,
+      "sha256": "5f62a52e2ae5bd7f928cfafbda74e31b6e50519a786814a7999060f7bfd63c80"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/demo_objectives.csv": {
+      "bytes": 811,
+      "sha256": "770b1ffd03f500ce976f246e0a1de81cc304f423efdaf4667a107044ebdd51b0"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/demo_scenarios.csv": {
+      "bytes": 1973,
+      "sha256": "16fe1230aff82911715dd7d12563946dbc5d935f927dda15ffb2cbce8982e3f5"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/diagnostics.csv": {
+      "bytes": 16175,
+      "sha256": "437dc89d3e8a82111b38768ee7fabc0b5160bc518d24ee324fc02e4c3524f028"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/evidence_links.csv": {
+      "bytes": 1110395,
+      "sha256": "4c6b6c18644c03685503c3321188fa4073e16edd93f7fb6492ec51f3723b2967"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/example_cases.csv": {
+      "bytes": 19117,
+      "sha256": "cbcddb92b0dc010d0dd066dada422a55e2b8ce66123fd123c9d1a63b9d055159"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/failure_modes.csv": {
+      "bytes": 16982,
+      "sha256": "df0863fe1ce91861306e405522c75aefd51799685c3dd286ca25c2d56df0ac4e"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/feature_values.csv": {
+      "bytes": 9617,
+      "sha256": "f918d517d9d89fd0f614a55a0d05e8c1e7d17401ddde5361fea250aa444880d4"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/glossary.csv": {
+      "bytes": 15908,
+      "sha256": "ff0e45d728af0878bbfe4b3059d610fc9683ef9b1e7ac89242a1c8e4f0fa9e7e"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/implementations.csv": {
+      "bytes": 61972,
+      "sha256": "55b0770a51077b52339eb511627e241568c492e694721d8e868b3a85736c6e0a"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/learning_edges.csv": {
+      "bytes": 717,
+      "sha256": "11e4f0ab63fa000277d2a913b73e361d7a4bf0ef2cea8fe37f54caef74bcd8da"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/method_hierarchy.csv": {
+      "bytes": 16024,
+      "sha256": "da8b86155aac02c2bfb018edd42d2073191da6d2dc18ebde89698fb39a48ae84"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/method_implementation_map.csv": {
+      "bytes": 50328,
+      "sha256": "67b4c9950245ca8252f3c95a2166a9a4faf64c12480ee32da75a8aecbc71b5b5"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/method_visualization_profiles.csv": {
+      "bytes": 1322,
+      "sha256": "e2339c5679dda3c456f81ad4a985f7c8a4567ed982abaa92041afaaefb609c36"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/methods.csv": {
+      "bytes": 157672,
+      "sha256": "2651f1669981c7aaa8b17b3d473e89af4cc921bc15b9923b9f3e6c1251abf5a2"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/model_revisions.csv": {
+      "bytes": 2382,
+      "sha256": "1a5ac073e545aa26b0c808d3b11ed178da8a915186903e5c4d6ec3602a6227ab"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/problem_alternative_map.csv": {
+      "bytes": 18343,
+      "sha256": "3a37bd634d85c8b0041e270ddd0e45c53e78ae0b6100152fcd167a07d726ed4a"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/problem_archetypes.csv": {
+      "bytes": 30487,
+      "sha256": "36e76eee4c2d4bf6fea1b999295b364076131beaaa6f4d6cb232e2fe87966d8c"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/problem_feature_map.csv": {
+      "bytes": 91168,
+      "sha256": "c71ee0528e15abc210902b49e71982392de4872e770dfbf68230f033baff3818"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/problem_features.csv": {
+      "bytes": 49536,
+      "sha256": "b2a1022f35a880035bbc151822f6ad76ba573f49d55c2bbfd0604f725cc22ceb"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/problem_method_fit.csv": {
+      "bytes": 464535,
+      "sha256": "dff10b4bafbe1783f6b2fb4b0edb12081e10c01ccf0fd04a882e7eb09d5c8fcc"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/readme.csv": {
+      "bytes": 3538,
+      "sha256": "3d9cbf86a4e08df10cad6f0e54e978185eb530e14bd2eee45d7aae1cd17d8d30"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/release_checks.csv": {
+      "bytes": 3986,
+      "sha256": "585befc0e576223edf93249b9607bb610e590109d7410ecb81bcacd216feb293"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/schema_dictionary.csv": {
+      "bytes": 96498,
+      "sha256": "31aa811b65c60e1919c1e6640b364b39e931394b66fc9be81d6ff6e6539fe28a"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/sheet_catalog.csv": {
+      "bytes": 9477,
+      "sha256": "a610974418c4e08ede5a6bd597f318d55e6cc770e3ae3657e936f543d2cd3560"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/sources.csv": {
+      "bytes": 17132,
+      "sha256": "140b20aea2d7175a3e0fa9a94ec8efc834f77feedb5ac7d4ff16eb05470944f1"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/version_history.csv": {
+      "bytes": 1263,
+      "sha256": "45c3750649db22c34ef8e2ad46e6981bbe9577cc954eaa7b5fb3a2c1a17e6876"
+    },
+    "optimization_method_selection_database_v0.3.0_csv/view_presets.csv": {
+      "bytes": 1254,
+      "sha256": "09f6f708970498747afda3d6458cceb1668b1c77c3dc462f3de44f01928777c2"
+    },
+    "optimization_method_selection_database_v0.3.0_release.json": {
+      "bytes": 177,
+      "sha256": "a58f5c30abc113438d32c0c9a0428aadc4b7091d3593e12c6aa56565f6c1644a"
+    },
+    "optimization_method_selection_database_v0.3.0_report.md": {
+      "bytes": 1372,
+      "sha256": "f3a6d09b8e3a8020e95957a0088d0706f99bd0d9966764f1b05d5777f4d068b8"
+    },
+    "optimization_method_selection_database_v0.3.0_schema.sql": {
+      "bytes": 33410,
+      "sha256": "ba0e9ff8ae57b03226cb0453f84cef3451684e7cad69dbf45c05096b3442f149"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/comparisons.json": {
+      "bytes": 1396,
+      "sha256": "247fd957fd4a1f9e6961780f40fa5947a9542839f7a29f2d681fedb66dc78173"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/content.json": {
+      "bytes": 3368,
+      "sha256": "a60047032e4db4fd4992da3a5521579a65aceed1593c17389de12013003d8982"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/gallery.json": {
+      "bytes": 6473,
+      "sha256": "a04cbffc91d8b4e314baf2f87ddb6a2c6eb9785cf6983aabb47885b1175c0851"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/manifest.json": {
+      "bytes": 1041,
+      "sha256": "21e2165493cbdef251eebec9ad116edf1fcf59697addfc134110dd8c083463c0"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/recommendation/site-data.json": {
+      "bytes": 195344,
+      "sha256": "8e695557860e9b09233b14ca24ca142f64def930513eda5d8f1ce0e33af876e2"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/release.json": {
+      "bytes": 177,
+      "sha256": "a58f5c30abc113438d32c0c9a0428aadc4b7091d3593e12c6aa56565f6c1644a"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/adam-quadratic.json": {
+      "bytes": 52573,
+      "sha256": "07d39566c4ab6846e70f03b282a6162c014ce1d165e82ca6e202ec89436a8459"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/dummy-educational.json": {
+      "bytes": 6641,
+      "sha256": "7551988c49591833074e5a2a367caa7aae98c1123633e3f3d6b207651f48c960"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/gradient_descent-quadratic.json": {
+      "bytes": 57346,
+      "sha256": "e4ea09a1e72d28076de83bb5638919d78eeda31b184e815b50978c0e30349bc4"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/index.json": {
+      "bytes": 2358,
+      "sha256": "c5819d6aaf6f6d0d79be6c0b4e4704c93e8d7e8216a32ecd9508ad92f4c90bf3"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/momentum-quadratic.json": {
+      "bytes": 52906,
+      "sha256": "43b22e5fb2d919ba209c02e44ef3f6cb99586dbead8299ec53a16db8bae8d455"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/nelder-mead-quadratic.json": {
+      "bytes": 188425,
+      "sha256": "b96e626fff15288ed8c509a4d84e837e1414182385edacfde365e49ba4f14e6c"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/traces/nelder-mead-rosenbrock.json": {
+      "bytes": 183247,
+      "sha256": "73f74ca7f34c955589ba06048eff6c8be8fc25a1bfaf2656ab510a146318a9d4"
+    },
+    "optimization_method_selection_database_v0.3.0_site-data/views/problem-structure.json": {
+      "bytes": 191920,
+      "sha256": "c34f432a95247eb1d11e5c28857200404c830a520255004494398b4e763a1277"
+    }
+  },
+  "licenses": {
+    "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors, https://github.com/mryk814/optimization-compass",
+    "code": {
+      "path": "licenses/LICENSE.txt",
+      "spdx_id": "MIT"
+    },
+    "content": {
+      "legal_code_path": "licenses/CC-BY-4.0.txt",
+      "path": "licenses/CONTENT_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "data": {
+      "legal_code_path": "licenses/CC-BY-4.0.txt",
+      "path": "licenses/DATA_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "notice_path": "licenses/NOTICE.txt"
+  },
+  "release_date": "2026-07-15",
+  "schema_version": 2,
+  "table_counts": {
+    "advanced_view": 280,
+    "alternative_solution_checks": 18,
+    "backlog": 38,
+    "beginner_view": 28,
+    "case_alternative_map": 48,
+    "case_feature_map": 280,
+    "case_implementation_map": 71,
+    "case_method_map": 84,
+    "comparison_set_members": 3,
+    "comparison_sets": 1,
+    "controlled_vocab": 129,
+    "decision_questions": 12,
+    "decision_rules": 78,
+    "demo_objectives": 2,
+    "demo_scenarios": 5,
+    "diagnostics": 42,
+    "evidence_links": 4193,
+    "example_cases": 28,
+    "failure_modes": 42,
+    "feature_values": 93,
+    "glossary": 84,
+    "implementations": 64,
+    "learning_edges": 3,
+    "method_hierarchy": 82,
+    "method_implementation_map": 163,
+    "method_visualization_profiles": 4,
+    "methods": 98,
+    "model_revisions": 7,
+    "problem_alternative_map": 96,
+    "problem_archetypes": 56,
+    "problem_feature_map": 842,
+    "problem_features": 211,
+    "problem_method_fit": 280,
+    "readme": 24,
+    "release_checks": 20,
+    "schema_dictionary": 487,
+    "sheet_catalog": 33,
+    "sources": 95,
+    "version_history": 3,
+    "view_presets": 3
+  },
+  "validation": {
+    "formats": [
+      "csv_directory",
+      "csv_zip",
+      "ddl",
+      "json",
+      "jsonl",
+      "sqlite",
+      "xlsx"
+    ],
+    "live_release_checks": "pass",
+    "round_trip": "pass"
+  },
+  "version": "0.3.0"
+}

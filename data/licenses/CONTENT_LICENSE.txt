@@ -1,0 +1,43 @@
+Optimization Compass educational content license
+=================================================
+
+Original educational content produced for Optimization Compass is licensed
+under the Creative Commons Attribution 4.0 International license (CC BY 4.0).
+
+SPDX-License-Identifier: CC-BY-4.0
+License reference: CC-BY-4.0
+Official legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Covered material
+----------------
+
+- educational Markdown under `content/`;
+- original case descriptions and learning explanations;
+- generated educational figures, AlgorithmTrace JSON, screenshots, and other
+  original learning media; and
+- original prose published through the Optimization Atlas.
+
+Source code used to generate or render this material is covered by the MIT
+license in `LICENSE`. Canonical and distributed structured data is covered by
+`DATA_LICENSE`. Where one artifact contains both structured data and original
+educational prose, CC BY 4.0 applies to both scopes.
+
+Attribution
+-----------
+
+When sharing the content or an adaptation, retain the following attribution in
+a reasonable form:
+
+  Optimization Compass educational content, Copyright 2026 TAKUYA OTANI and
+  Optimization Compass contributors, licensed under CC BY 4.0,
+  https://github.com/mryk814/optimization-compass
+
+Indicate whether you modified the material and retain a link to CC BY 4.0.
+
+Third-party boundary
+--------------------
+
+Third-party quotations, figures, logos, screenshots, trademarks, and linked
+works are not relicensed. Any such item must retain its own credit or exception
+notice, and reusers are responsible for the original terms. See `NOTICE` and
+`THIRD_PARTY_SOURCE_AUDIT.md`.

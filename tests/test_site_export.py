@@ -66,6 +66,9 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
+    assert (first_output / "release.json").read_bytes() == (
+        second_output / "release.json"
+    ).read_bytes()
     assert first_recommendation_bytes == second_recommendation_bytes
     assert first_manifest == second_manifest
     assert first_view_bytes.endswith(b"\n")
@@ -86,7 +89,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "branch:constraint-structure",
         "branch:required-outcome-guarantee",
     ]
-    assert view.generated_at.isoformat() == "2026-07-13T00:00:00+00:00"
+    assert view.generated_at.date().isoformat() == repository.latest_release()["release_date"]
     assert view.dataset_version == repository.dataset_version()
 
     roots = [nodes[node_id] for node_id in view.root_node_ids]
@@ -209,7 +212,7 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     trace = AlgorithmTrace.model_validate_json(trace_bytes)
     index = TraceIndex.model_validate_json(index_bytes)
     assert trace_bytes == canonical_trace_bytes(trace)
-    assert trace.dataset_version == repository.dataset_version() == "0.2.0"
+    assert trace.dataset_version == repository.dataset_version()
     assert trace.implementation_mapping_status == "not_applicable"
     assert trace.implementation_id is None
     assert [frame.frame_index for frame in trace.frames] == [0, 1, 2]

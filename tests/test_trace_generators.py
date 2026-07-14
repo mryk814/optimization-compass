@@ -1,3 +1,4 @@
+from optimization_compass.dataset_release import TARGET_DATASET_VERSION
 from optimization_compass.trace_models import canonical_trace_bytes
 from optimization_compass.traces import (
     generate_gradient_bundle,
@@ -7,8 +8,12 @@ from optimization_compass.traces import (
 
 
 def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
-    first = generate_nelder_mead_trace(objective_family="rosenbrock")
-    second = generate_nelder_mead_trace(objective_family="rosenbrock")
+    first = generate_nelder_mead_trace(
+        dataset_version=TARGET_DATASET_VERSION, objective_family="rosenbrock"
+    )
+    second = generate_nelder_mead_trace(
+        dataset_version=TARGET_DATASET_VERSION, objective_family="rosenbrock"
+    )
     assert canonical_trace_bytes(first) == canonical_trace_bytes(second)
     assert {frame.event_type for frame in first.frames} >= {"initialize", "order", "stop"}
     assert all(frame.points for frame in first.frames)
@@ -16,7 +21,7 @@ def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
 
 
 def test_gradient_bundle_shares_fairness_contract_and_has_three_methods() -> None:
-    bundle = generate_gradient_bundle()
+    bundle = generate_gradient_bundle(dataset_version=TARGET_DATASET_VERSION)
     assert [trace.method_id for trace in bundle.member_traces] == [
         "M_GRADIENT_DESCENT",
         "M_MOMENTUM_SGD",
@@ -30,7 +35,11 @@ def test_gradient_bundle_shares_fairness_contract_and_has_three_methods() -> Non
 
 
 def test_gradient_trace_stops_safely_when_learning_rate_diverges() -> None:
-    trace = generate_gradient_trace("gradient_descent", parameters={"learning_rate": 0.1})
+    trace = generate_gradient_trace(
+        "gradient_descent",
+        dataset_version=TARGET_DATASET_VERSION,
+        parameters={"learning_rate": 0.1},
+    )
     assert trace.terminal_status == "diverged"
     assert trace.frames[-1].event_type == "stop"
     assert trace.frames[-1].metrics[0].value < 1e12

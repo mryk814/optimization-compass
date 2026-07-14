@@ -17,12 +17,23 @@ from typing import Any, Literal
 from openpyxl import Workbook, load_workbook
 
 from optimization_compass.metadata_models import AtlasMetadataSeed
+from optimization_compass.release_identity import (
+    DatasetReleaseIdentity,
+    ReleaseIdentityError,
+    canonical_identity_json,
+    load_dataset_release_identity,
+    load_release_authority,
+    validate_release_identity,
+)
 
-BASE_DATASET_VERSION = "0.2.0"
-BASE_DATASET_SHA256 = "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13"
-RELEASE_DATE = "2026-07-13"
 DATASET_STEM = "optimization_method_selection_database_v{version}"
 ROOT = Path(__file__).parents[2]
+RELEASE_AUTHORITY_PATH = Path(__file__).parent / "resources/release-authority.json"
+RELEASE_AUTHORITY = load_release_authority(RELEASE_AUTHORITY_PATH)
+BASE_DATASET_VERSION = RELEASE_AUTHORITY.base_dataset_version
+BASE_DATASET_SHA256 = RELEASE_AUTHORITY.base_database_sha256
+TARGET_DATASET_VERSION = RELEASE_AUTHORITY.dataset_version
+RELEASE_DATE = RELEASE_AUTHORITY.release_date
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 LICENSE_BUNDLE = {
@@ -103,6 +114,8 @@ class StagedRelease:
     output_directory: Path
     database_path: Path
     manifest_path: Path
+    release_identity_path: Path
+    site_data_directory: Path
     tree_sha256: str
 
 
@@ -164,12 +177,10 @@ def tree_hash(directory: Path) -> str:
 
 
 def _validate_release_identity(version: str, release_date: str) -> None:
-    if re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version) is None:
-        raise ReleaseValidationError(f"invalid semantic dataset version: {version}")
     try:
-        datetime.strptime(release_date, "%Y-%m-%d")
-    except ValueError as error:
-        raise ReleaseValidationError(f"invalid release date: {release_date}") from error
+        validate_release_identity(version, release_date)
+    except ReleaseIdentityError as error:
+        raise ReleaseValidationError(str(error)) from error
 
 
 def _validate_output_directory(
@@ -194,7 +205,7 @@ def build_staged_release(
     *,
     migration_path: Path = DEFAULT_MIGRATION,
     seed_path: Path = DEFAULT_SEED,
-    target_version: str = BASE_DATASET_VERSION,
+    target_version: str = TARGET_DATASET_VERSION,
     release_date: str = RELEASE_DATE,
 ) -> StagedRelease:
     _validate_release_identity(target_version, release_date)
@@ -224,6 +235,8 @@ def build_staged_release(
     xlsx_path = output_directory / f"{stem}.xlsx"
     report_path = output_directory / f"{stem}_report.md"
     manifest_path = output_directory / f"{stem}_manifest.json"
+    release_identity_path = output_directory / f"{stem}_release.json"
+    site_data_directory = output_directory / f"{stem}_site-data"
 
     _write_license_bundle(output_directory / "licenses")
     _write_ddl(database_path, ddl_path)
@@ -238,6 +251,21 @@ def build_staged_release(
         version=target_version,
         release_date=release_date,
     )
+    from optimization_compass.db import KnowledgeRepository
+    from optimization_compass.site_export import export_site_data
+
+    export_site_data(site_data_directory, KnowledgeRepository(database_path))
+    release_identity = DatasetReleaseIdentity(
+        schema_version=1,
+        dataset_version=target_version,
+        release_date=release_date,
+        database_sha256=sha256_file(database_path),
+    )
+    release_identity_path.write_text(
+        canonical_identity_json(release_identity), encoding="utf-8", newline="\n"
+    )
+    if release_identity_path.read_bytes() != (site_data_directory / "release.json").read_bytes():
+        raise ReleaseValidationError("dataset and site release identities differ")
     manifest = _manifest_payload(
         output_directory,
         stem,
@@ -254,6 +282,8 @@ def build_staged_release(
         output_directory=output_directory,
         database_path=database_path,
         manifest_path=manifest_path,
+        release_identity_path=release_identity_path,
+        site_data_directory=site_data_directory,
         tree_sha256=tree_hash(output_directory),
     )
 
@@ -595,6 +625,8 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
         "csv_zip": f"{stem}_csv.zip",
         "xlsx": f"{stem}.xlsx",
         "report": f"{stem}_report.md",
+        "release_identity": f"{stem}_release.json",
+        "site_data": f"{stem}_site-data",
     }
     if manifest.get("artifacts") != expected_names:
         raise ReleaseValidationError("manifest filenames do not match versioned release contract")
@@ -631,6 +663,16 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
         raise ReleaseValidationError("sqlite release identity does not match manifest")
     if _read_report_identity(output_directory / expected_names["report"]) != expected_identity:
         raise ReleaseValidationError("report release identity does not match manifest")
+    release_identity = load_dataset_release_identity(
+        output_directory / expected_names["release_identity"]
+    )
+    if (release_identity.dataset_version, release_identity.release_date) != expected_identity:
+        raise ReleaseValidationError("release identity does not match manifest")
+    if release_identity.database_sha256 != sha256_file(database_path):
+        raise ReleaseValidationError("release identity database hash does not match sqlite")
+    _verify_site_release_tree(
+        output_directory / expected_names["site_data"], expected_identity=release_identity
+    )
     if manifest.get("database_sha256") != sha256_file(database_path):
         raise ReleaseValidationError("sqlite hash does not match manifest database hash")
     return FormatVerification(
@@ -733,21 +775,73 @@ def _read_report_identity(path: Path) -> tuple[str, str]:
     return versions[0], release_dates[0]
 
 
+def _verify_site_release_tree(
+    directory: Path, *, expected_identity: DatasetReleaseIdentity
+) -> None:
+    required_paths = {
+        "release.json",
+        "manifest.json",
+        "content.json",
+        "gallery.json",
+        "comparisons.json",
+        "recommendation/site-data.json",
+        "traces/index.json",
+    }
+    actual_paths = {path.relative_to(directory).as_posix() for path in directory.rglob("*.json")}
+    missing = sorted(required_paths - actual_paths)
+    if missing:
+        raise ReleaseValidationError(f"site release tree is missing required assets: {missing}")
+    observed_identity = load_dataset_release_identity(directory / "release.json")
+    if observed_identity != expected_identity:
+        raise ReleaseValidationError("site release identity does not match dataset release")
+    for relative in sorted(actual_paths - {"release.json"}):
+        path = directory / relative
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise ReleaseValidationError(f"site asset is not valid JSON: {relative}") from error
+        if not isinstance(payload, dict) or payload.get("dataset_version") != (
+            expected_identity.dataset_version
+        ):
+            raise ReleaseValidationError(
+                f"site asset dataset version does not match release: {relative}"
+            )
+    manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+    referenced = {str(item["path"]) for item in manifest["views"] if isinstance(item, dict)}
+    referenced.add(str(manifest["recommendation"]["path"]))
+    referenced.add(str(manifest["traces"]["path"]))
+    for relative in referenced:
+        if not (directory / relative).is_file():
+            raise ReleaseValidationError(f"site manifest references missing asset: {relative}")
+    trace_index_path = directory / str(manifest["traces"]["path"])
+    if manifest["traces"]["bytes"] != trace_index_path.stat().st_size:
+        raise ReleaseValidationError("site trace index byte count does not match manifest")
+    if manifest["traces"]["sha256"] != sha256_file(trace_index_path):
+        raise ReleaseValidationError("site trace index hash does not match manifest")
+    trace_index = json.loads(trace_index_path.read_text(encoding="utf-8"))
+    for entry in trace_index["traces"]:
+        trace_path = directory / "traces" / str(entry["path"])
+        if not trace_path.is_file():
+            raise ReleaseValidationError(f"trace index references missing asset: {entry['path']}")
+
+
 def publish_release(
     staged_directory: Path,
     data_directory: Path,
     runtime_database: Path,
     version_file: Path,
-    *,
-    version: str,
+    site_data_directory: Path,
 ) -> None:
+    verify_release_tree(staged_directory)
+    manifests = list(staged_directory.glob("*_manifest.json"))
+    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
+    version = str(manifest["version"])
     version_lines = version_file.read_text(encoding="utf-8").splitlines()
     if not version_lines:
         raise ReleaseValidationError("DATASET_VERSION is empty")
     current_version = version_lines[0]
     if version == current_version:
         raise ReleaseValidationError("publish requires a new release version")
-    verify_release_tree(staged_directory)
     recorded_hash = next(
         (line.removeprefix("sha256=") for line in version_lines if line.startswith("sha256=")), ""
     )
@@ -756,21 +850,25 @@ def publish_release(
     runtime_result = verify_database(runtime_database)
     if runtime_result.dataset_version != current_version:
         raise ReleaseValidationError("code version does not match runtime database version")
-    manifests = list(staged_directory.glob("*_manifest.json"))
-    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
-    if manifest["version"] != version:
-        raise ReleaseValidationError("manifest version does not match publish version")
     expected_database = staged_directory / f"{DATASET_STEM.format(version=version)}.sqlite"
     if not expected_database.exists():
         raise ReleaseValidationError("versioned sqlite filename does not match publish version")
+    staged_site_data = staged_directory / str(manifest["artifacts"]["site_data"])
+    staged_identity = load_dataset_release_identity(
+        staged_directory / str(manifest["artifacts"]["release_identity"])
+    )
+    if staged_identity.dataset_version != version:
+        raise ReleaseValidationError("release identity version does not match manifest")
 
     data_directory.parent.mkdir(parents=True, exist_ok=True)
+    site_data_directory.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(
         tempfile.mkdtemp(prefix="optimization-compass-publish-", dir=data_directory.parent)
     )
     data_existed = data_directory.exists()
     runtime_existed = runtime_database.exists()
     version_existed = version_file.exists()
+    site_data_existed = site_data_directory.exists()
     try:
         prepared = temporary / "prepared"
         backup = temporary / "backup"
@@ -786,6 +884,8 @@ def publish_release(
             shutil.copy2(runtime_database, backup / "knowledge.sqlite")
         if version_existed:
             shutil.copy2(version_file, backup / "DATASET_VERSION")
+        if site_data_existed:
+            shutil.copytree(site_data_directory, backup / "site-data")
         for staged_path in staged_directory.iterdir():
             target = prepared_data / staged_path.name
             if target.exists() and target.is_dir():
@@ -802,6 +902,8 @@ def publish_release(
         prepared_version.write_text(
             f"{version}\nsha256={sha256_file(prepared_runtime)}\n", encoding="utf-8"
         )
+        prepared_site_data = prepared / "site-data"
+        shutil.copytree(staged_site_data, prepared_site_data)
 
         try:
             displaced_data = temporary / "displaced-data"
@@ -810,15 +912,20 @@ def publish_release(
             _atomic_replace(prepared_data, data_directory)
             _atomic_replace(prepared_runtime, runtime_database)
             _atomic_replace(prepared_version, version_file)
+            if site_data_existed:
+                _atomic_replace(site_data_directory, temporary / "displaced-site-data")
+            _atomic_replace(prepared_site_data, site_data_directory)
         except Exception:
             _restore_publish_targets(
                 data_directory=data_directory,
                 runtime_database=runtime_database,
                 version_file=version_file,
+                site_data_directory=site_data_directory,
                 backup_directory=backup,
                 data_existed=data_existed,
                 runtime_existed=runtime_existed,
                 version_existed=version_existed,
+                site_data_existed=site_data_existed,
             )
             raise
     finally:
@@ -834,10 +941,12 @@ def _restore_publish_targets(
     data_directory: Path,
     runtime_database: Path,
     version_file: Path,
+    site_data_directory: Path,
     backup_directory: Path,
     data_existed: bool,
     runtime_existed: bool,
     version_existed: bool,
+    site_data_existed: bool,
 ) -> None:
     if data_directory.exists():
         if data_directory.is_dir():
@@ -856,6 +965,10 @@ def _restore_publish_targets(
         backup=backup_directory / "DATASET_VERSION",
         existed=version_existed,
     )
+    if site_data_directory.exists():
+        shutil.rmtree(site_data_directory)
+    if site_data_existed:
+        shutil.copytree(backup_directory / "site-data", site_data_directory)
 
 
 def _restore_file(*, target: Path, backup: Path, existed: bool) -> None:
@@ -974,7 +1087,7 @@ def _record_target_release(
             release_date,
             "Staged Optimization Atlas visualization metadata release.",
             "official documentation/repositories, original papers, trusted textbooks",
-            "Generated deterministically from the pinned v0.2.0 base.",
+            f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
     )
     revision_id = "MR_ATLAS_" + target_version.replace(".", "_")
@@ -1222,6 +1335,8 @@ def _manifest_payload(
             "csv_zip": f"{stem}_csv.zip",
             "xlsx": f"{stem}.xlsx",
             "report": f"{stem}_report.md",
+            "release_identity": f"{stem}_release.json",
+            "site_data": f"{stem}_site-data",
         },
         "files": _artifact_hashes(directory, exclude=excluded),
         "table_counts": {name: len(table.rows) for name, table in snapshot.items()},

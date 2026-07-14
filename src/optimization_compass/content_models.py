@@ -14,6 +14,7 @@ class ContentPage:
     title_ja: str
     title_en: str
     source_ids: tuple[str, ...]
+    prerequisites: tuple[str, ...]
     related_ids: tuple[str, ...]
     visualization_ids: tuple[str, ...]
     comparison_ids: tuple[str, ...]
@@ -62,6 +63,7 @@ def parse_content(path: Path) -> ContentPage:
         title_ja=_nonblank(fields["title_ja"], path),
         title_en=_nonblank(fields["title_en"], path),
         source_ids=_list(fields["source_ids"]),
+        prerequisites=_list(fields.get("prerequisites", "[]")),
         related_ids=_list(fields.get("related_ids", "[]")),
         visualization_ids=_list(fields.get("visualization_ids", "[]")),
         comparison_ids=_list(fields.get("comparison_ids", "[]")),

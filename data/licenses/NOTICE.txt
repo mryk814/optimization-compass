@@ -1,0 +1,33 @@
+Optimization Compass notices
+============================
+
+Copyright 2026 TAKUYA OTANI and Optimization Compass contributors.
+
+License map
+-----------
+
+- Software: MIT (`LICENSE`).
+- Canonical and distributed structured data: CC BY 4.0 (`DATA_LICENSE`).
+- Original educational prose, case text, generated figures, AlgorithmTrace
+  JSON, and screenshots: CC BY 4.0 (`CONTENT_LICENSE`).
+- CC BY 4.0 legal code: `CC-BY-4.0`.
+
+Third-party sources and exceptions
+----------------------------------
+
+The `sources` catalog contains bibliographic metadata, URLs, and short factual
+summaries used to identify evidence. Optimization Compass does not redistribute
+or relicense the referenced papers, books, documentation, repositories,
+standards, vendor manuals, websites, datasets, or software packages.
+
+Third-party quotations or media, if introduced, must be marked next to the
+material with the rights holder, source, applicable license or legal exception,
+and any required attribution. That item remains outside the project-wide MIT
+and CC BY 4.0 grants unless its notice expressly says otherwise.
+
+Product names, project names, company names, and logos may be trademarks of
+their respective owners. The MIT and CC BY 4.0 licenses do not grant trademark
+rights and no reference implies sponsorship or endorsement.
+
+Attribution guidance and the source audit are documented in
+`docs/licensing.md` and `THIRD_PARTY_SOURCE_AUDIT.md`.

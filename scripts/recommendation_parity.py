@@ -18,6 +18,7 @@ def main() -> None:
     args = parser.parse_args()
     payload = json.loads(args.fixture.read_text(encoding="utf-8"))
     engine = RecommendationEngine()
+    payload["dataset_version"] = engine.repository.dataset_version()
     results = []
     for case in payload["cases"]:
         request = RecommendationRequest.model_validate(case["request"])

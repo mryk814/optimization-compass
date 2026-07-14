@@ -87,9 +87,9 @@ The current source-type and field audit is recorded in
 - GitHub Pages publishes the same notices under `licenses/`; the site manifest
   declares those paths. `LicenseLinks` is the footer-ready component.
 
-The tracked v0.2.0 release predates this policy and remains immutable. The next
-published dataset release must be produced by the updated staged release path
-and pass the public release checklist.
+The tracked v0.2.0 release predates this policy and remains immutable. Dataset v0.3.0 is produced
+by the updated staged release path, bundles the declared notices, and must pass the public release
+checklist before publication.
 
 ## Contribution policy
 

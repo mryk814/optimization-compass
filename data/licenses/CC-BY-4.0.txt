@@ -1,0 +1,17 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+=======================================================================
+
+SPDX-License-Identifier: CC-BY-4.0
+
+The authoritative, unmodified legal code is published by Creative Commons at:
+
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Plain-text legal code:
+
+https://creativecommons.org/licenses/by/4.0/legalcode.txt
+
+The project applies that license through `DATA_LICENSE` and `CONTENT_LICENSE`.
+Creative Commons is not a law firm and does not provide legal services or
+legal advice. The license grants no trademark rights and provides the licensed
+material as-is, subject to the full legal code linked above.

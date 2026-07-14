@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import {
   HashRouter,
   Link,
@@ -17,6 +17,7 @@ import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { NelderMeadPage } from "./features/theater/NelderMeadPage";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
+import { loadDatasetReleaseIdentity } from "./contracts/release";
 
 import "./styles.css";
 
@@ -109,6 +110,19 @@ function HomeEntry({
 
 function AppShell() {
   const { pathname } = useLocation();
+  const [datasetVersion, setDatasetVersion] = useState<string>();
+  useEffect(() => {
+    const controller = new AbortController();
+    void loadDatasetReleaseIdentity(controller.signal).then(
+      (identity) => setDatasetVersion(identity.dataset_version),
+      (error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          setDatasetVersion(undefined);
+        }
+      },
+    );
+    return () => controller.abort();
+  }, []);
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document.getElementById("main-content")?.focus();
@@ -164,7 +178,7 @@ function AppShell() {
         </Routes>
       </main>
       <footer className="site-footer">
-        <span>Dataset 0.2.0</span>
+        <span aria-live="polite">Dataset {datasetVersion ?? "…"}</span>
         <span aria-hidden="true">·</span>
         <span>ViewSpec 1.0.0</span>
         <span aria-hidden="true">·</span>

@@ -1,0 +1,45 @@
+Optimization Compass data license
+=================================
+
+The canonical Optimization Compass knowledge database and its distributed
+data representations are licensed under the Creative Commons Attribution 4.0
+International license (CC BY 4.0).
+
+SPDX-License-Identifier: CC-BY-4.0
+License reference: CC-BY-4.0
+Official legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Covered material
+----------------
+
+- records authored for the canonical knowledge database;
+- migrations and seeds insofar as they express database content;
+- released SQLite, JSON, JSONL, CSV, ZIP, XLSX, ViewSpec, recommendation, and
+  other structured-data representations derived from those records; and
+- original factual metadata in the `sources` and evidence-link tables.
+
+Software that builds, validates, queries, or renders the data is covered by
+the MIT license in `LICENSE`. Educational prose and generated learning media
+are covered by `CONTENT_LICENSE`.
+
+Attribution
+-----------
+
+When sharing the data or an adapted database, retain the following attribution
+in a reasonable form:
+
+  Optimization Compass dataset, Copyright 2026 TAKUYA OTANI and Optimization
+  Compass contributors, licensed under CC BY 4.0,
+  https://github.com/mryk814/optimization-compass
+
+Indicate whether you modified the material and retain a link to CC BY 4.0.
+
+Third-party boundary
+--------------------
+
+This license applies only to rights held by the project contributors. Source
+titles, author or organization names, URLs, identifiers, trademarks, short
+quotations, and the third-party works referenced by the database remain the
+property of their respective rights holders. Their presence does not place the
+referenced works under CC BY 4.0. See `NOTICE` and
+`THIRD_PARTY_SOURCE_AUDIT.md`.
