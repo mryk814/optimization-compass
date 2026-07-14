@@ -7,6 +7,8 @@ import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { siteBaseUrl } from "../../data/base-url";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
+import { findEntity } from "../../contracts/entity-links";
+import { useEntityLinks } from "../../state/entity-links";
 
 type Loaded = { comparison: ComparisonSet; traces: AlgorithmTrace[] };
 
@@ -48,9 +50,11 @@ function ComparisonPlayer({ comparison, traces }: Loaded) {
 }
 
 function ComparisonMember({ trace, evaluation }: { trace: AlgorithmTrace; evaluation: number }) {
+  const links = useEntityLinks();
+  const traceEntity = links.status === "ready" ? findEntity(links.index, "trace", trace.trace_id) : undefined;
   const frame = latestFrame(trace.frames, evaluation);
   const point = frame.points.find((item) => item.point_id === "current");
-  return <article className="comparison-card"><header><h2>{trace.method_id}</h2><span>{trace.terminal_status}</span></header><p className="comparison-event">{frame.event_label_ja ?? frame.event_type} · evaluation {frame.oracle_evaluations}</p><svg className="comparison-plot" viewBox="0 0 240 150" role="img" aria-label={`${trace.method_id}の軌跡`}><rect x="0" y="0" width="240" height="150" rx="8" />{trace.frames.map((candidate, index) => { const current = candidate.points.find((item) => item.point_id === "current"); if (!current) return null; return <circle key={`${candidate.frame_index}-${index}`} cx={mapCoordinate(current.coordinates[0], -2, 2, 12, 228)} cy={mapCoordinate(current.coordinates[1], -1, 3, 138, 12)} r={candidate.frame_index === frame.frame_index ? 5 : 2.2} className={candidate.frame_index === frame.frame_index ? "plot-current" : "plot-trail"} />; })}</svg><dl className="comparison-metrics"><div><dt>f(x)</dt><dd>{frame.metrics.find((metric) => metric.metric_id === "objective")?.value.toPrecision(5)}</dd></div><div><dt>position</dt><dd>{point?.coordinates.map((value) => value.toFixed(3)).join(", ")}</dd></div></dl><Link className="text-link" to={`/traces/${trace.trace_id}`}>このTraceを単独再生</Link></article>;
+  return <article className="comparison-card"><header><h2>{trace.method_id}</h2><span>{trace.terminal_status}</span></header><p className="comparison-event">{frame.event_label_ja ?? frame.event_type} · evaluation {frame.oracle_evaluations}</p><svg className="comparison-plot" viewBox="0 0 240 150" role="img" aria-label={`${trace.method_id}の軌跡`}><rect x="0" y="0" width="240" height="150" rx="8" />{trace.frames.map((candidate, index) => { const current = candidate.points.find((item) => item.point_id === "current"); if (!current) return null; return <circle key={`${candidate.frame_index}-${index}`} cx={mapCoordinate(current.coordinates[0], -2, 2, 12, 228)} cy={mapCoordinate(current.coordinates[1], -1, 3, 138, 12)} r={candidate.frame_index === frame.frame_index ? 5 : 2.2} className={candidate.frame_index === frame.frame_index ? "plot-current" : "plot-trail"} />; })}</svg><dl className="comparison-metrics"><div><dt>f(x)</dt><dd>{frame.metrics.find((metric) => metric.metric_id === "objective")?.value.toPrecision(5)}</dd></div><div><dt>position</dt><dd>{point?.coordinates.map((value) => value.toFixed(3)).join(", ")}</dd></div></dl>{traceEntity?.canonical_url && <Link className="text-link" to={traceEntity.canonical_url}>このTraceを単独再生</Link>}</article>;
 }
 
 async function loadComparison(comparisonId: string, signal: AbortSignal): Promise<Loaded> {

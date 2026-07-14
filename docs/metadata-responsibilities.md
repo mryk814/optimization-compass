@@ -16,6 +16,12 @@ The purpose is to keep rebuild inputs auditable without creating a second runtim
 - Trace JSON owns generated frames. Frames are regenerated and are never stored in SQLite.
 - Site indexes and ViewSpec files are generated artifacts, not hand-edited authorities.
 
+`entity-links.json` is the canonical site relation index. The exporter joins released SQLite
+entities, Markdown frontmatter references, the Trace index, comparison metadata, and Gallery case
+metadata into canonical URLs, aliases, and typed relations. Site components resolve navigation
+through this index; router code must not contain per-method or per-visualization crosswalks.
+Export fails on dangling relations or duplicate canonical/alias URLs.
+
 ## Explicit states
 
 `unknown`, `not_applicable`, and `unsupported` have different meanings and must be stored

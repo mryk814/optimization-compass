@@ -1,5 +1,9 @@
 {
   "dataset_version": "0.3.0",
+  "entity_links": {
+    "path": "entity-links.json",
+    "version": "1.0.0"
+  },
   "generated_at": "2026-07-15T00:00:00Z",
   "licenses": {
     "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",

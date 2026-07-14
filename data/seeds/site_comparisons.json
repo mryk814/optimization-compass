@@ -1,7 +1,7 @@
 {
   "comparisons": [
     {
-      "comparison_id": "gradient-quadratic",
+      "comparison_id": "COMPARE_GRADIENT_FAMILY",
       "title_ja": "細長い二次関数で一次法を比べる",
       "title_en": "Gradient family on an ill-conditioned quadratic",
       "objective_id": "OBJECTIVE_QUADRATIC_2D",

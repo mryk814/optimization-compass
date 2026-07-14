@@ -2,7 +2,7 @@
   "comparisons": [
     {
       "budget": 40,
-      "comparison_id": "gradient-quadratic",
+      "comparison_id": "COMPARE_GRADIENT_FAMILY",
       "fairness_note": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
       "initial_point": [
         -1.6,

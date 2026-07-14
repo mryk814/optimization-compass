@@ -3,6 +3,8 @@ import { afterEach, describe, expect, test, vi } from "vitest";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import { decodeAtlasState, encodeAtlasState } from "../../state/atlas-state";
+import type { EntityLinkIndex, LinkedEntity } from "../../contracts/entity-links";
+import { EntityLinkProvider } from "../../state/entity-links";
 import { MethodPage } from "./MethodPage";
 
 const view = {
@@ -30,6 +32,13 @@ function node(node_id: string, display_order: number) {
 
 function Probe() { return <output data-testid="location">{useLocation().search}</output>; }
 
+function linkIndex(methodId: string, relations: LinkedEntity["relations"] = [], extras: LinkedEntity[] = []): EntityLinkIndex {
+  return {
+    contract_version: "1.0.0", dataset_version: "0.2.0", generated_at: "2026-07-13T00:00:00Z",
+    entities: [{ entity_type: "method", entity_id: methodId, label: methodId, summary: "", canonical_url: `/methods/${methodId}`, aliases: [], external_url: null, relations }, ...extras],
+  };
+}
+
 describe("MethodPage Map deep link", () => {
   afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
@@ -41,11 +50,13 @@ describe("MethodPage Map deep link", () => {
     });
     render(
       <MemoryRouter initialEntries={[`/methods/M_TARGET?keep=1&tag=a&tag=b&state=${token}`]}>
+        <EntityLinkProvider initialIndex={linkIndex("M_TARGET")}>
         <Probe />
         <Routes>
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/map" element={<p>MAP ROUTE</p>} />
         </Routes>
+        </EntityLinkProvider>
       </MemoryRouter>,
     );
 
@@ -74,11 +85,13 @@ describe("MethodPage Map deep link", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => hugeView }));
     render(
       <MemoryRouter initialEntries={["/methods/M_TARGET?keep=1"]}>
+        <EntityLinkProvider initialIndex={linkIndex("M_TARGET")}>
         <Probe />
         <Routes>
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/map" element={<p>MAP ROUTE</p>} />
         </Routes>
+        </EntityLinkProvider>
       </MemoryRouter>,
     );
 
@@ -90,30 +103,25 @@ describe("MethodPage Map deep link", () => {
   });
 
   test("uses generated Gallery relations for candidate methods outside the Map view", async () => {
-    const gallery = {
-      contract_version: "1.0.0", dataset_version: "0.2.0", cases: [{
-        case_id: "case.materials", title_ja: "材料ケース", title_en: "Materials case",
-        domain: "materials", problem_archetype_id: "PA001", feature_values: [],
-        question_answers: {}, candidate_method_ids: ["M_GALLERY"], excluded_methods: [],
-        implementation_ids: [], visualization_ids: [], comparison_ids: [], source_ids: ["S001"],
-        difficulty: "intro", status: "published", last_reviewed: "2026-07-14",
-        question: "どの候補を試すか", decision_variables: "x", objective: "min f(x)",
-        constraints: "none", map_node_id: "opaque-first", python_example: "print('ok')",
-        practical_notes: "small smoke",
-      }],
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...view, entities: [] }) }));
+    const caseEntity: LinkedEntity = {
+      entity_type: "case", entity_id: "case.materials", label: "材料ケース",
+      summary: "どの候補を試すか", canonical_url: "/gallery/case.materials", aliases: [],
+      external_url: null, relations: [],
     };
-    vi.stubGlobal(
-      "fetch",
-      vi.fn()
-        .mockResolvedValueOnce({ ok: true, json: async () => ({ ...view, entities: [] }) })
-        .mockResolvedValueOnce({ ok: true, json: async () => gallery }),
+    const index = linkIndex(
+      "M_GALLERY",
+      [{ relation_type: "case", target_type: "case", target_id: "case.materials" }],
+      [caseEntity],
     );
 
     render(
       <MemoryRouter initialEntries={["/methods/M_GALLERY"]}>
+        <EntityLinkProvider initialIndex={index}>
         <Routes>
           <Route path="/methods/:methodId" element={<MethodPage />} />
         </Routes>
+        </EntityLinkProvider>
       </MemoryRouter>,
     );
 
@@ -122,6 +130,5 @@ describe("MethodPage Map deep link", () => {
       "href",
       "/gallery/case.materials",
     );
-    expect(screen.getByText("どの候補を試すか")).toBeVisible();
   });
 });

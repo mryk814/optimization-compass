@@ -62,7 +62,7 @@
       "excluded_methods": [{"method_id": "M_CP_SAT", "reason": "実験結果を明示的な離散制約モデルとして扱えない"}],
       "implementation_ids": ["I_OPTUNA"],
       "visualization_ids": ["VIEW_NELDER_MEAD_THEATER"],
-      "comparison_ids": ["gradient-quadratic"],
+      "comparison_ids": ["COMPARE_GRADIENT_FAMILY"],
       "source_ids": ["S001", "S002"],
       "difficulty": "intermediate",
       "status": "published",
