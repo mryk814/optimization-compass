@@ -32,8 +32,13 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
         >
           ←
         </button>
-        <button onClick={playback.togglePlayback} type="button">
-          {playback.isPlaying ? "一時停止" : "再生"}
+        <button
+          disabled={playback.reducedMotion}
+          onClick={playback.togglePlayback}
+          title={playback.reducedMotion ? "OSの動きを減らす設定により自動再生は停止しています" : undefined}
+          type="button"
+        >
+          {playback.reducedMotion ? "自動再生オフ" : playback.isPlaying ? "一時停止" : "再生"}
         </button>
         <button
           aria-label="1フレーム進む"
@@ -63,6 +68,11 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
           </select>
         </label>
       </div>
+      {playback.reducedMotion && (
+        <p className="reduced-motion-notice" role="status">
+          動きを減らす設定を検出しました。矢印buttonとsliderで静的にstepできます。
+        </p>
+      )}
       <label className="playback-seek">
         <span>フレーム位置</span>
         <input

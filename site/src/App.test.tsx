@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import App from "./App";
 import type { EntityLinkIndex } from "./contracts/entity-links";
+import rawManifest from "../public/data/manifest.json";
+import rawVisualizationScenarios from "../public/data/visualization-scenarios.json";
 
 const routes = [
   ["#/", "Optimization Atlas"],
@@ -213,9 +215,14 @@ describe("application routes", () => {
       { contract_version: "1.0.0", dataset_version: "0.2.0", comparisons: [] },
     ],
   ])("%s uses the common Not Found page for an unknown entity ID", async (hash, payload) => {
-    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) =>
-      url.endsWith("data/release.json") ? jsonResponse(releaseIdentity) : jsonResponse(payload),
-    ));
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
+      if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
+      if (url.endsWith("data/manifest.json")) return jsonResponse(rawManifest);
+      if (url.endsWith("data/visualization-scenarios.json")) {
+        return jsonResponse(rawVisualizationScenarios);
+      }
+      return jsonResponse(payload);
+    }));
     window.location.hash = hash;
 
     render(<App initialEntityLinks={testLinks} />);

@@ -6658,6 +6658,11 @@
           "relation_type": "visualization",
           "target_id": "adam-quadratic",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "adam-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
       "summary": "一次・二次momentの指数移動平均で座標別stepを調整。"
@@ -8090,6 +8095,11 @@
           "relation_type": "visualization",
           "target_id": "gradient_descent-quadratic",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "gradient_descent-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
       "summary": "勾配の負方向へstepを進める最も基本的な一階法。"
@@ -8582,6 +8592,11 @@
           "relation_type": "visualization",
           "target_id": "momentum-quadratic",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "momentum-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
       "summary": "gradientの移動平均で加速・振動抑制。"
@@ -8780,7 +8795,17 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "nelder-mead-quadratic-shifted",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "nelder-mead-rosenbrock",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "nelder-mead-rosenbrock-shifted",
           "target_type": "trace"
         }
       ],
@@ -11899,7 +11924,23 @@
       "entity_id": "adam-quadratic",
       "entity_type": "trace",
       "external_url": null,
-      "label": "M_ADAM 教材Trace",
+      "label": "Adam",
+      "relations": [
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADAM",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/adam-quadratic-divergence",
+      "entity_id": "adam-quadratic-divergence",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Adam",
       "relations": [
         {
           "relation_type": "visualizes",
@@ -11931,7 +11972,23 @@
       "entity_id": "gradient_descent-quadratic",
       "entity_type": "trace",
       "external_url": null,
-      "label": "M_GRADIENT_DESCENT 教材Trace",
+      "label": "勾配降下法",
+      "relations": [
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/gradient_descent-quadratic-divergence",
+      "entity_id": "gradient_descent-quadratic-divergence",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "勾配降下法",
       "relations": [
         {
           "relation_type": "visualizes",
@@ -11947,7 +12004,23 @@
       "entity_id": "momentum-quadratic",
       "entity_type": "trace",
       "external_url": null,
-      "label": "M_MOMENTUM_SGD 教材Trace",
+      "label": "モメンタム法",
+      "relations": [
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/momentum-quadratic-divergence",
+      "entity_id": "momentum-quadratic-divergence",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "モメンタム法",
       "relations": [
         {
           "relation_type": "visualizes",
@@ -11965,7 +12038,23 @@
       "entity_id": "nelder-mead-quadratic",
       "entity_type": "trace",
       "external_url": null,
-      "label": "M_NELDER_MEAD 教材Trace",
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/nelder-mead-quadratic-shifted",
+      "entity_id": "nelder-mead-quadratic-shifted",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
       "relations": [
         {
           "relation_type": "visualizes",
@@ -11981,7 +12070,23 @@
       "entity_id": "nelder-mead-rosenbrock",
       "entity_type": "trace",
       "external_url": null,
-      "label": "M_NELDER_MEAD 教材Trace",
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/nelder-mead-rosenbrock-shifted",
+      "entity_id": "nelder-mead-rosenbrock-shifted",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
       "relations": [
         {
           "relation_type": "visualizes",

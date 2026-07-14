@@ -218,7 +218,7 @@ Each scenario declares its observable strategy:
 ### Gradient comparison
 
 - Purpose: `comparison`.
-- Problem instance: the current shared Rosenbrock instance.
+- Problem instance: the current shared ill-conditioned quadratic instance.
 - Runs: GD, Momentum, and Adam under the current authored presets.
 - Artifact: one trace per run, grouped by the comparison envelope.
 - Renderer: `continuous_trajectory` plus `generic_metric_history`.

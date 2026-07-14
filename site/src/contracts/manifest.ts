@@ -40,6 +40,7 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
+  visualization_scenarios: ManifestAsset;
   entity_links: ManifestAsset;
   licenses: SiteLicenseManifest;
 }
@@ -48,7 +49,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "licenses"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "visualization_scenarios", "entity_links", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -89,6 +90,11 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
   if (entityLinks.version !== "1.0.0") throw new Error("entity_links.version is unsupported.");
+  const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
+  exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
+  if (visualizationScenarios.version !== "1.0.0") {
+    throw new Error("visualization_scenarios.version is unsupported.");
+  }
 
   return {
     version: "1.0.0",
@@ -105,6 +111,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(traces.path, "traces.path"),
       bytes,
       sha256,
+    },
+    visualization_scenarios: {
+      version: "1.0.0",
+      path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
     },
     entity_links: {
       version: "1.0.0",

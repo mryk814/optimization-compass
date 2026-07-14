@@ -18,6 +18,7 @@ export interface PlaybackController {
   isPlaying: boolean;
   speed: PlaybackSpeed;
   direction: PlaybackDirection;
+  reducedMotion: boolean;
   play(): void;
   pause(): void;
   togglePlayback(): void;
@@ -49,6 +50,10 @@ export function usePlayback(
     [search, traceId, frames],
   );
   const [isPlaying, setIsPlaying] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(() =>
+    typeof window.matchMedia === "function"
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
   const frameIndexRef = useRef(position.frameIndex);
   frameIndexRef.current = position.frameIndex;
   const internalSearchRef = useRef<string | null>(null);
@@ -102,6 +107,19 @@ export function usePlayback(
   }, [search]);
 
   useEffect(() => {
+    if (typeof window.matchMedia !== "function") return undefined;
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion) setIsPlaying(false);
+  }, [reducedMotion]);
+
+  useEffect(() => {
     if (!isPlaying) return undefined;
     const delta = position.direction === "forward" ? 1 : -1;
     const timer = window.setInterval(() => {
@@ -125,9 +143,14 @@ export function usePlayback(
     isPlaying,
     speed: position.speed,
     direction: position.direction,
-    play: () => setIsPlaying(true),
+    reducedMotion,
+    play: () => {
+      if (!reducedMotion) setIsPlaying(true);
+    },
     pause: () => setIsPlaying(false),
-    togglePlayback: () => setIsPlaying((playing) => !playing),
+    togglePlayback: () => {
+      if (!reducedMotion) setIsPlaying((playing) => !playing);
+    },
     stepBackward,
     stepForward,
     seekToFrame,
