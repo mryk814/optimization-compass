@@ -26,6 +26,10 @@
     "path": "recommendation/site-data.json",
     "version": "1.0.0"
   },
+  "sources": {
+    "path": "sources.json",
+    "version": "1.0.0"
+  },
   "traces": {
     "bytes": 2358,
     "contract_version": "1.0.0",

@@ -234,6 +234,7 @@ def build_entity_link_index(
             str(row["source_id"]),
             str(row["title"] or row["source_id"]),
             summary=str(row["supported_claim"] or ""),
+            canonical_url=f"/sources/{row['source_id']}",
             external_url=str(row["url"] or "") or None,
         )
 

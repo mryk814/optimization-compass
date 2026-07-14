@@ -57,6 +57,7 @@ const manifest = {
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
+  sources: { version: "1.0.0", path: "sources.json" },
   traces: {
     contract_version: "1.0.0",
     index_version: "1.0.0",
@@ -120,6 +121,8 @@ describe("TraceDemoPage", () => {
       "初期状態を評価し、完全なスナップショットを作成します。",
     );
     expect(screen.getByText("M_EDUCATIONAL")).toBeVisible();
+    expect(screen.getByRole("link", { name: new RegExp(trace.source_ids[0], "u") }))
+      .toHaveAttribute("href", `/sources/${trace.source_ids[0]}`);
     expect(fetchMock).toHaveBeenCalledTimes(3);
     expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/traces\/catalog\.json$/u);
     expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);

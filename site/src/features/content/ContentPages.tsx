@@ -7,6 +7,7 @@ import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { CompiledContent } from "./CompiledContent";
+import { EvidenceLinks } from "../evidence/EvidenceLinks";
 
 export function ContentIndexPage() {
   const links = useEntityLinks();
@@ -32,7 +33,7 @@ export function ContentPage() {
   const destination = (type: "trace" | "comparison", id: string) => links.status === "ready"
     ? findEntity(links.index, type, id)?.canonical_url
     : undefined;
-  return <section className="atlas-page content-detail"><p className="eyebrow">{page?.kind ?? "Learn"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><CompiledContent page={page} /><div className="content-links"><strong>Related</strong>{page.visualization_ids.map((id) => destination("trace", id) ? <Link key={id} to={destination("trace", id)!}>{id}</Link> : null)}{page.comparison_ids.map((id) => destination("comparison", id) ? <Link key={id} to={destination("comparison", id)!}>{id}</Link> : null)}</div><small>Last reviewed {page.last_reviewed} · Sources: {page.source_ids.join(", ")}</small></>}</section>;
+  return <section className="atlas-page content-detail"><p className="eyebrow">{page?.kind ?? "Learn"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><CompiledContent page={page} /><div className="content-links"><strong>Related</strong>{page.visualization_ids.map((id) => destination("trace", id) ? <Link key={id} to={destination("trace", id)!}>{id}</Link> : null)}{page.comparison_ids.map((id) => destination("comparison", id) ? <Link key={id} to={destination("comparison", id)!}>{id}</Link> : null)}</div><small>Last reviewed {page.last_reviewed}</small><EvidenceLinks sourceIds={page.source_ids} /></>}</section>;
 }
 
 async function loadContent() { const response = await fetch(`${siteBaseUrl()}data/content.json`); if (!response.ok) throw new Error(`Content request failed (${response.status}).`); return parseContentIndex(await response.json()); }

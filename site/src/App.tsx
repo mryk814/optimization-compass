@@ -17,6 +17,7 @@ import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonP
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
+import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { resolveAlias } from "./contracts/entity-links";
@@ -31,6 +32,7 @@ const primaryNavigation = [
   { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
   { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
+  { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
 
 function HomePage() {
@@ -186,6 +188,8 @@ function AppShell() {
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
+          <Route path="/sources" element={<SourceIndexPage />} />
+          <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
           <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
           <Route path="/theater/:alias" element={<AliasRoute />} />

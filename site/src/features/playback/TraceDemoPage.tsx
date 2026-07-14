@@ -11,6 +11,7 @@ import {
 import { PlaybackControls } from "./PlaybackControls";
 import { usePlayback } from "./usePlayback";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
+import { EvidenceLinks } from "../evidence/EvidenceLinks";
 
 type LoadedTrace = { trace: AlgorithmTrace; entry: TraceIndexEntry };
 
@@ -107,7 +108,7 @@ function TracePlayer({ trace, entry }: LoadedTrace) {
       <footer className="trace-summary">
         <span>{trace.terminal_status}</span>
         <p>{trace.terminal_summary_ja}</p>
-        <small>Sources: {trace.source_ids.join(", ")}</small>
+        <EvidenceLinks sourceIds={trace.source_ids} />
       </footer>
     </article>
   );
