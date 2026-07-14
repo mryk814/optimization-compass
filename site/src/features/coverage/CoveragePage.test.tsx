@@ -16,6 +16,7 @@ describe("CoveragePage", () => {
   test("shows priority reasons and filters the full inventory", async () => {
     render(<CoveragePage />);
     expect(await screen.findByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
+    expect(screen.getByRole("region", { name: "Artifact inventory table" })).toHaveAttribute("tabindex", "0");
     expect(screen.getAllByText(/12$/u).length).toBeGreaterThan(0);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "feature_family" } });
     expect(screen.getAllByRole("row")).toHaveLength(11);
