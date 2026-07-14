@@ -185,6 +185,13 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "entity-links.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["sources"] == {
+        "path": "sources.json",
+        "version": "1.0.0",
+    }
+    source_payload = json.loads((first_output / "sources.json").read_bytes())
+    assert len(source_payload["sources"]) == 95
+    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4193
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     nelder_mead = next(
         entity
@@ -201,6 +208,12 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert ("visualization", "trace", "nelder-mead-quadratic") in relation_targets
     assert ("comparison", "comparison", "COMPARE_GRADIENT_FAMILY") in relation_targets
     assert ("evidence", "source", "S001") in relation_targets
+    source_entity = next(
+        entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "source" and entity["entity_id"] == "S001"
+    )
+    assert source_entity["canonical_url"] == "/sources/S001"
     assert manifest_payload["licenses"] == {
         "code": {"path": "licenses/LICENSE.txt", "spdx_id": "MIT"},
         "content": {"path": "licenses/CONTENT_LICENSE.txt", "spdx_id": "CC-BY-4.0"},

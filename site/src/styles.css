@@ -1147,6 +1147,112 @@ main:focus {
   text-underline-offset: 0.16em;
 }
 
+.evidence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.evidence-links a,
+.evidence-links > span {
+  border: 1px solid #c8d4cc;
+  border-radius: 999px;
+  padding: 0.28rem 0.52rem;
+  background: #f3f7f4;
+  color: #285740;
+  font-size: 0.72rem;
+  text-decoration: none;
+}
+
+.evidence-links code {
+  margin-left: 0.25rem;
+  color: #68746c;
+}
+
+.source-filters {
+  display: flex;
+  gap: 0.7rem;
+  margin: 0.8rem 0;
+}
+
+.source-filters label {
+  display: grid;
+  gap: 0.25rem;
+  color: #566159;
+  font-size: 0.72rem;
+}
+
+.source-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 0.65rem;
+}
+
+.source-list article,
+.source-metadata,
+.source-targets li {
+  border: 1px solid #d7d6ce;
+  border-radius: 0.65rem;
+  padding: 0.75rem;
+  background: #fff;
+}
+
+.source-list h2 {
+  margin: 0.25rem 0;
+  font-size: 0.98rem;
+}
+
+.source-list article > span,
+.source-list small,
+.source-targets small {
+  color: #6c756f;
+  font-size: 0.68rem;
+}
+
+.source-metadata {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.65rem;
+}
+
+.source-metadata div {
+  min-width: 0;
+}
+
+.source-metadata dt {
+  color: #6c756f;
+  font-size: 0.68rem;
+}
+
+.source-metadata dd {
+  margin: 0.12rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.source-official-link {
+  display: inline-block;
+  margin: 0.65rem 0;
+}
+
+.source-targets ul {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0;
+  list-style: none;
+}
+
+.source-targets li a,
+.source-targets li > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.source-targets p {
+  margin: 0.35rem 0;
+}
+
 @media (max-width: 40rem) {
   .site-header {
     align-items: flex-start;

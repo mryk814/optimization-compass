@@ -9,6 +9,7 @@ const manifest = {
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
+  sources: { version: "1.0.0", path: "sources.json" },
   traces: {
     contract_version: "1.0.0",
     index_version: "1.0.0",

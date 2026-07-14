@@ -1,0 +1,27 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+import { parseSiteManifest } from "../../contracts/manifest";
+import { parseSourceEvidenceIndex, type SourceEvidenceIndex, type EvidenceTarget } from "../../contracts/sources";
+import { siteBaseUrl } from "../../data/base-url";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
+
+export function SourceIndexPage() {
+  const { index, error } = useSources(); const [query, setQuery] = useState(""); const [type, setType] = useState("all");
+  const types = useMemo(() => ["all", ...new Set(index?.sources.map((source) => source.source_type) ?? [])], [index]);
+  const filtered = useMemo(() => (index?.sources ?? []).filter((source) => (type === "all" || source.source_type === type) && `${source.source_id} ${source.title} ${source.publisher}`.toLowerCase().includes(query.toLowerCase())), [index, query, type]);
+  return <section className="atlas-page source-page"><header className="atlas-page-header"><p className="eyebrow">Evidence</p><h1>根拠資料</h1><p>推薦・教材・ケース・可視化を支える公式資料と、確認日・対象をたどれます。</p></header><div className="source-filters"><label>検索<input value={query} onChange={(event) => setQuery(event.target.value)} /></label><label>種別<select value={type} onChange={(event) => setType(event.target.value)}>{types.map((item) => <option key={item} value={item}>{item === "all" ? "すべて" : item}</option>)}</select></label></div>{error && <p role="alert">{error.message}</p>}<div className="source-list">{filtered.map((source) => <article key={source.source_id}><span>{source.source_type}</span><h2><Link to={`/sources/${source.source_id}`}>{source.title}</Link></h2><p>{source.publisher}</p><small>{source.source_id} · Last verified {source.last_verified} · Targets {source.evidence_targets.length}</small></article>)}</div></section>;
+}
+
+export function SourceDetailPage() {
+  const { sourceId = "" } = useParams(); const { index, error } = useSources();
+  const [showAllTargets, setShowAllTargets] = useState(false);
+  const source = index?.sources.find((item) => item.source_id === sourceId);
+  if (index && !source) return <NotFoundPage detail={new EntityNotFoundError("Source ID", sourceId).message} />;
+  const visibleTargets = source?.evidence_targets.slice(0, showAllTargets ? undefined : 50) ?? [];
+  return <section className="atlas-page source-detail"><p className="eyebrow">Evidence source</p><h1>{source?.title ?? "根拠資料を読み込み中…"}</h1>{error && <p role="alert">{error.message}</p>}{source && <><dl className="source-metadata"><Meta label="Source ID" value={source.source_id} /><Meta label="Publisher" value={source.publisher} /><Meta label="Source type" value={source.source_type} /><Meta label="Published / released" value={source.publication_date ?? "unknown"} /><Meta label="Last verified" value={source.last_verified} /><Meta label="License" value={source.license} /><Meta label="Access" value={source.access_note} /><Meta label="Currentness" value={source.currentness_status} /></dl><p>{source.supported_claim}</p><a className="source-official-link" href={source.official_url} rel="noreferrer" target="_blank">公式資料を開く</a><section className="source-targets"><h2>Evidence targets</h2><p>{source.evidence_targets.length}件の主張・entityがこの資料を参照しています。</p><ul>{visibleTargets.map((target) => <Target key={target.evidence_link_id} target={target} />)}</ul>{source.evidence_targets.length > 50 && !showAllTargets && <button onClick={() => setShowAllTargets(true)} type="button">全{source.evidence_targets.length}件を表示</button>}</section></>}</section>;
+}
+function Meta({ label, value }: { label: string; value: string }) { return <div><dt>{label}</dt><dd>{value}</dd></div>; }
+function Target({ target }: { target: EvidenceTarget }) { const label = <><strong>{target.label}</strong><code>{target.target_table}:{target.target_id}</code></>; return <li>{target.canonical_url ? <Link to={target.canonical_url}>{label}</Link> : target.external_url ? <a href={target.external_url} rel="noreferrer" target="_blank">{label}</a> : <span>{label}</span>}<p>{target.claim_summary}</p><small>{target.supported_field} · {target.confidence} · verified {target.last_verified}</small></li>; }
+function useSources(): { index?: SourceEvidenceIndex; error?: Error } { const [index, setIndex] = useState<SourceEvidenceIndex>(); const [error, setError] = useState<Error>(); useEffect(() => { const controller = new AbortController(); void loadSources(controller.signal).then(setIndex, (caught: unknown) => { if (!controller.signal.aborted) setError(caught instanceof Error ? caught : new Error(String(caught))); }); return () => controller.abort(); }, []); return { index, error }; }
+async function loadSources(signal: AbortSignal): Promise<SourceEvidenceIndex> { const manifestResponse = await fetch(`${siteBaseUrl()}data/manifest.json`, { signal }); if (!manifestResponse.ok) throw new Error(`Manifest request failed (${manifestResponse.status}).`); const manifest = parseSiteManifest(await manifestResponse.json()); const response = await fetch(`${siteBaseUrl()}data/${manifest.sources.path}`, { signal }); if (!response.ok) throw new Error(`Source index request failed (${response.status}).`); const index = parseSourceEvidenceIndex(await response.json()); if (index.dataset_version !== manifest.dataset_version) throw new Error("Source index dataset version does not match the manifest."); return index; }

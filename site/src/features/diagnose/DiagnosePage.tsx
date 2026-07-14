@@ -18,6 +18,7 @@ import { resolveRelatedNodeId } from "../map/map-state";
 import { findEntity } from "../../contracts/entity-links";
 import { useEntityLinks } from "../../state/entity-links";
 import { updateDiagnosticAnswer } from "./diagnose-state";
+import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import {
   recommend,
   type EntityRecommendation,
@@ -147,16 +148,8 @@ function Question({
 }
 
 function SourceLinks({ sourceIds, data }: { sourceIds: readonly string[]; data: SiteData }) {
-  const sources = new Map(data.sources.map((source) => [source.source_id, source]));
-  return (
-    <span className="diagnose-sources">
-      {sourceIds.flatMap((sourceId) => {
-        const source = sources.get(sourceId);
-        const url = source ? safeHttpUrl(source.url) : undefined;
-        return url ? [<a href={url} key={sourceId} rel="noreferrer" target="_blank">根拠 {sourceId}</a>] : [];
-      })}
-    </span>
-  );
+  void data;
+  return <EvidenceLinks sourceIds={sourceIds} />;
 }
 
 function ResultCard({

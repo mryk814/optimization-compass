@@ -49,6 +49,7 @@ jobs:
           uv run optimization-compass verify-data
           uv run python scripts/verify_content.py
           uv run python scripts/verify_licensing.py
+          uv run python scripts/source_health.py --output "$RUNNER_TEMP/source-health"
           uv run python scripts/rebuild_dataset.py --stage
           git diff --exit-code -- data site/public/data src/optimization_compass/resources
       - name: Verify Python and TypeScript recommendation parity
