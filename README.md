@@ -62,6 +62,11 @@ npm run build
 
 生成物は `site/dist/` に出力されます。
 
+CIはPython・data・parity・site検証を同一commitで完了した単一の`github-pages` artifactだけを
+公開します。PRでも同じPages相当artifactを生成しますがdeployは行いません。deployment identity、
+post-deploy smoke、失敗時の復旧手順は
+[`docs/pages-deployment.md`](docs/pages-deployment.md) を参照してください。
+
 Atlas の主要な hash route は次のとおりです。
 
 - `/theater/nelder-mead`: Nelder–Mead の simplex / 候補点 / イベント再生
