@@ -1,0 +1,14 @@
+Optimization Compass notices
+
+Copyright 2026 TAKUYA OTANI and Optimization Compass contributors.
+
+Software: MIT.
+Canonical and distributed structured data: CC BY 4.0.
+Original educational prose, case text, generated figures, AlgorithmTrace JSON,
+and screenshots: CC BY 4.0.
+
+The sources catalog identifies third-party evidence using bibliographic
+metadata, URLs, and short factual summaries. It does not redistribute or
+relicense the referenced works. Product and organization names may be
+trademarks of their respective owners. No reference implies sponsorship or
+endorsement.

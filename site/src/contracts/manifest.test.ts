@@ -15,11 +15,20 @@ const manifest = {
     bytes: 475,
     sha256: "a".repeat(64),
   },
+  licenses: {
+    code: { spdx_id: "MIT", path: "licenses/LICENSE.txt" },
+    data: { spdx_id: "CC-BY-4.0", path: "licenses/DATA_LICENSE.txt" },
+    content: { spdx_id: "CC-BY-4.0", path: "licenses/CONTENT_LICENSE.txt" },
+    legal_code_path: "licenses/CC-BY-4.0.txt",
+    notice_path: "licenses/NOTICE.txt",
+    attribution: "Optimization Compass contributors",
+  },
 };
 
 describe("SiteManifest parser", () => {
   test("parses the versioned trace index asset exactly", () => {
     expect(parseSiteManifest(manifest).traces.path).toBe("traces/index.json");
+    expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
   });
 
   test("rejects missing/unknown fields and malformed trace integrity metadata", () => {
@@ -35,5 +44,9 @@ describe("SiteManifest parser", () => {
       ...manifest,
       traces: { ...manifest.traces, sha256: "bad" },
     })).toThrow(/sha256/u);
+    expect(() => parseSiteManifest({
+      ...manifest,
+      licenses: { ...manifest.licenses, code: { spdx_id: "CC-BY-4.0", path: "licenses/LICENSE.txt" } },
+    })).toThrow(/spdx/u);
   });
 });

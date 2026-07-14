@@ -232,7 +232,20 @@ authority境界は [`docs/metadata-responsibilities.md`](docs/metadata-responsib
 
 ## ライセンスについて
 
-このスターターには意図的に LICENSE を確定していません。公開前に、コードとデータを分けて決めてください。候補と注意点は [`docs/licensing.md`](docs/licensing.md) に整理しています。
+Optimization Compassは権利範囲を分けて公開しています。
+
+- Python / TypeScript / CSS / HTML / build・検証code: [MIT](LICENSE)
+- canonical databaseと配布structured data: [CC BY 4.0](DATA_LICENSE)
+- 教材Markdown、case説明、生成図、AlgorithmTrace JSON、screenshot:
+  [CC BY 4.0](CONTENT_LICENSE)
+
+CC BY 4.0の公式legal codeへの参照は [`CC-BY-4.0`](CC-BY-4.0) にあります。
+
+再配布時の帰属例、第三者source・引用・商標の例外、配布物への同梱方法は
+[`docs/licensing.md`](docs/licensing.md) と [`NOTICE`](NOTICE) を参照してください。
+`sources`が参照する論文、書籍、公式documentation、repository等そのものは、このprojectの
+licenseで再許諾されません。棚卸し結果は
+[`THIRD_PARTY_SOURCE_AUDIT.md`](THIRD_PARTY_SOURCE_AUDIT.md) にあります。
 
 ## 免責
 

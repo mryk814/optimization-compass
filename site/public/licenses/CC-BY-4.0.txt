@@ -1,0 +1,9 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+SPDX-License-Identifier: CC-BY-4.0
+Authoritative legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+Plain text: https://creativecommons.org/licenses/by/4.0/legalcode.txt
+
+The project applies this license through DATA_LICENSE.txt and
+CONTENT_LICENSE.txt. The license grants no trademark rights and is subject to
+the complete Creative Commons legal code linked above.

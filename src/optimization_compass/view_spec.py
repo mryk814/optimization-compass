@@ -212,6 +212,20 @@ class ManifestTraceAsset(ContractModel):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class ManifestLicenseAsset(ContractModel):
+    spdx_id: Literal["MIT", "CC-BY-4.0"]
+    path: str = Field(pattern=r"^licenses/[A-Z0-9._-]+\.txt$")
+
+
+class SiteLicenseManifest(ContractModel):
+    code: ManifestLicenseAsset
+    data: ManifestLicenseAsset
+    content: ManifestLicenseAsset
+    legal_code_path: str = Field(pattern=r"^licenses/CC-BY-4\.0\.txt$")
+    notice_path: str = Field(pattern=r"^licenses/NOTICE\.txt$")
+    attribution: str = Field(min_length=1)
+
+
 class SiteManifest(ContractModel):
     version: Literal["1.0.0"] = "1.0.0"
     dataset_version: str = Field(min_length=1)
@@ -219,6 +233,7 @@ class SiteManifest(ContractModel):
     views: list[ManifestView]
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
+    licenses: SiteLicenseManifest
 
 
 def _unique_by[ContractModelT: ContractModel](

@@ -63,6 +63,14 @@ const manifest = {
     bytes: indexBytes.byteLength,
     sha256: createHash("sha256").update(indexBytes).digest("hex"),
   },
+  licenses: {
+    code: { spdx_id: "MIT", path: "licenses/LICENSE.txt" },
+    data: { spdx_id: "CC-BY-4.0", path: "licenses/DATA_LICENSE.txt" },
+    content: { spdx_id: "CC-BY-4.0", path: "licenses/CONTENT_LICENSE.txt" },
+    legal_code_path: "licenses/CC-BY-4.0.txt",
+    notice_path: "licenses/NOTICE.txt",
+    attribution: "Optimization Compass contributors",
+  },
 };
 
 function jsonResponse(value: unknown) {

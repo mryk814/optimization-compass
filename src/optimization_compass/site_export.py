@@ -23,8 +23,10 @@ from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
     ManifestAsset,
+    ManifestLicenseAsset,
     ManifestTraceAsset,
     ManifestView,
+    SiteLicenseManifest,
     SiteManifest,
     ViewEdge,
     ViewEntity,
@@ -225,6 +227,17 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
+        licenses=SiteLicenseManifest(
+            code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
+            data=ManifestLicenseAsset(spdx_id="CC-BY-4.0", path="licenses/DATA_LICENSE.txt"),
+            content=ManifestLicenseAsset(spdx_id="CC-BY-4.0", path="licenses/CONTENT_LICENSE.txt"),
+            legal_code_path="licenses/CC-BY-4.0.txt",
+            notice_path="licenses/NOTICE.txt",
+            attribution=(
+                "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass "
+                "contributors"
+            ),
+        ),
     )
 
     _write_json(output_dir / "manifest.json", manifest)

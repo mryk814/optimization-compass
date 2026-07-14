@@ -107,7 +107,7 @@ def test_release_tree_rejects_self_hashed_wrong_format_identity(
 @pytest.mark.parametrize(
     ("field", "value", "message"),
     [
-        ("schema_version", 2, "manifest schema"),
+        ("schema_version", 3, "manifest schema"),
         ("version", "not-semver", "semantic dataset version"),
         ("release_date", "14/07/2026", "release date"),
     ],
