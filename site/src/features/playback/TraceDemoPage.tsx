@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { parseSiteManifest } from "../../contracts/manifest";
+import {
+  parseVisualizationScenarioIndex,
+  type VisualizationScenario,
+} from "../../contracts/visualization-scenarios";
 import {
   parseAlgorithmTrace,
   parseTraceIndex,
@@ -12,8 +16,14 @@ import { PlaybackControls } from "./PlaybackControls";
 import { usePlayback } from "./usePlayback";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
+import { NelderMeadVisualization } from "../theater/NelderMeadPage";
 
-type LoadedTrace = { trace: AlgorithmTrace; entry: TraceIndexEntry };
+type LoadedTrace = {
+  trace: AlgorithmTrace;
+  entry: TraceIndexEntry;
+  entries: TraceIndexEntry[];
+  scenario?: VisualizationScenario;
+};
 
 export function TraceDemoPage() {
   const { traceId = "" } = useParams();
@@ -45,7 +55,23 @@ export function TraceDemoPage() {
   return <TracePlayer key={loaded.trace.trace_id} {...loaded} />;
 }
 
-function TracePlayer({ trace, entry }: LoadedTrace) {
+function TracePlayer({ trace, entry, entries, scenario }: LoadedTrace) {
+  const navigate = useNavigate();
+  if (trace.profile_id === "PROFILE_NELDER_MEAD_2D" && trace.trace_id !== "dummy-educational") {
+    if (!scenario) throw new Error(`Visualization scenario is missing for ${trace.trace_id}.`);
+    return (
+      <NelderMeadVisualization
+        entries={entries}
+        onTraceChange={(traceId) => navigate(`/traces/${traceId}`)}
+        scenario={scenario}
+        trace={trace}
+      />
+    );
+  }
+  return <GenericTracePlayer entry={entry} trace={trace} />;
+}
+
+function GenericTracePlayer({ trace, entry }: Omit<LoadedTrace, "entries">) {
   const playback = usePlayback(trace.trace_id, trace.frames);
   const frame = playback.currentFrame;
   return (
@@ -121,6 +147,13 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
   if (!manifestResponse.ok) throw new Error(`Manifest request failed (${manifestResponse.status}).`);
   const manifest = parseSiteManifest(await manifestResponse.json());
 
+  const scenarioResponse = await fetch(`${baseUrl}data/${manifest.visualization_scenarios.path}`, { signal });
+  if (!scenarioResponse.ok) throw new Error(`Visualization scenario request failed (${scenarioResponse.status}).`);
+  const scenarioIndex = parseVisualizationScenarioIndex(await scenarioResponse.json());
+  if (scenarioIndex.dataset_version !== manifest.dataset_version) {
+    throw new Error("Visualization scenario dataset version does not match the manifest.");
+  }
+
   const indexResponse = await fetch(`${baseUrl}data/${manifest.traces.path}`, { signal });
   if (!indexResponse.ok) throw new Error(`Trace index request failed (${indexResponse.status}).`);
   const indexBytes = new Uint8Array(await indexResponse.arrayBuffer());
@@ -158,7 +191,17 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
       throw new Error(`AlgorithmTrace ${field} does not match its index entry.`);
     }
   }
-  return { trace, entry };
+  const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === trace.scenario_id);
+  if (trace.trace_id !== "dummy-educational") {
+    if (!scenario) throw new Error(`Visualization scenario is missing for ${trace.trace_id}.`);
+    if (!scenario.runs.some((run) => run.artifact_id === trace.trace_id)) {
+      throw new Error(`Visualization scenario does not reference ${trace.trace_id}.`);
+    }
+    if (scenario.problem_instance_id !== trace.objective_id) {
+      throw new Error(`Visualization scenario objective does not match ${trace.trace_id}.`);
+    }
+  }
+  return { trace, entry, entries: index.traces, scenario };
 }
 
 async function sha256Hex(bytes: Uint8Array): Promise<string> {

@@ -31,11 +31,11 @@
     "version": "1.0.0"
   },
   "traces": {
-    "bytes": 2358,
+    "bytes": 4210,
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "c5819d6aaf6f6d0d79be6c0b4e4704c93e8d7e8216a32ecd9508ad92f4c90bf3"
+    "sha256": "abced81d64129b4c78f3d3dfa669cd45a7e7163335e2cc4c126e726c001c4f11"
   },
   "version": "1.0.0",
   "views": [
@@ -44,5 +44,9 @@
       "version": "1.0.0",
       "view_id": "problem-structure"
     }
-  ]
+  ],
+  "visualization_scenarios": {
+    "path": "visualization-scenarios.json",
+    "version": "1.0.0"
+  }
 }

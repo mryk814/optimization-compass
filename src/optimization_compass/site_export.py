@@ -37,6 +37,18 @@ from optimization_compass.view_spec import (
     ViewNode,
     ViewSpec,
 )
+from optimization_compass.visualization_scenarios import (
+    RendererFamily,
+    VisualizationArtifact,
+    VisualizationBudget,
+    VisualizationExperiment,
+    VisualizationInitialCondition,
+    VisualizationLesson,
+    VisualizationRun,
+    VisualizationScenario,
+    VisualizationScenarioIndex,
+    VisualizationSeed,
+)
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
 VIEW_ID = "problem-structure"
@@ -47,6 +59,7 @@ ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
 COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
+VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
 
 BRANCHES: tuple[tuple[str, str, str, str, tuple[str, ...]], ...] = (
     (
@@ -250,7 +263,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    trace_asset, trace_index = _write_dummy_trace(output_dir, dataset_version=release["version"])
+    trace_asset, trace_index, generated_traces = _write_dummy_trace(
+        output_dir, dataset_version=release["version"]
+    )
+    scenario_index = _build_visualization_scenario_index(
+        generated_traces, dataset_version=release["version"]
+    )
+    _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     entity_links = build_entity_link_index(
         repository,
         dataset_version=release["version"],
@@ -273,6 +292,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
+        visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
         licenses=SiteLicenseManifest(
@@ -294,7 +314,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
 
 def _write_dummy_trace(
     output_dir: Path, *, dataset_version: str
-) -> tuple[ManifestTraceAsset, TraceIndex]:
+) -> tuple[ManifestTraceAsset, TraceIndex, list[AlgorithmTrace]]:
     frames = [
         _dummy_frame(
             frame_index=0,
@@ -419,13 +439,31 @@ def _write_dummy_trace(
             dataset_version=dataset_version,
         ),
         generate_nelder_mead_trace(
+            objective_family="quadratic",
+            initial_point=[2.4, -2.4],
+            trace_id="nelder-mead-quadratic-shifted",
+            scenario_id="SCENARIO_NM_QUADRATIC_SHIFTED",
+            dataset_version=dataset_version,
+        ),
+        generate_nelder_mead_trace(
             objective_family="rosenbrock",
             trace_id="nelder-mead-rosenbrock",
             dataset_version=dataset_version,
         ),
+        generate_nelder_mead_trace(
+            objective_family="rosenbrock",
+            initial_point=[-2.0, -1.0],
+            trace_id="nelder-mead-rosenbrock-shifted",
+            scenario_id="SCENARIO_NM_ROSENBROCK_SHIFTED",
+            dataset_version=dataset_version,
+        ),
     ]
-    generated_bundle = generate_gradient_bundle(dataset_version=dataset_version)
-    generated_traces.extend(generated_bundle.member_traces)
+    generated_bundles = [
+        generate_gradient_bundle(dataset_version=dataset_version),
+        generate_gradient_bundle(dataset_version=dataset_version, preset="divergence"),
+    ]
+    for generated_bundle in generated_bundles:
+        generated_traces.extend(generated_bundle.member_traces)
     index = index.model_copy(
         update={
             "traces": [
@@ -438,8 +476,8 @@ def _write_dummy_trace(
                         profile_id=trace.profile_id,
                         objective_id=trace.objective_id,
                         scenario_id=trace.scenario_id,
-                        title_ja=f"{trace.method_id} 教材Trace",
-                        title_en=f"{trace.method_id} educational trace",
+                        title_ja=_trace_title(trace.trace_id, locale="ja"),
+                        title_en=_trace_title(trace.trace_id, locale="en"),
                     )
                     for trace in generated_traces
                 ],
@@ -459,7 +497,135 @@ def _write_dummy_trace(
             sha256=sha256(index_bytes).hexdigest(),
         ),
         index,
+        generated_traces,
     )
+
+
+def _trace_title(trace_id: str, *, locale: str) -> str:
+    if trace_id.startswith("nelder-mead-"):
+        return "Nelder–Meadの幾何操作" if locale == "ja" else "Nelder–Mead geometric operations"
+    method = trace_id.split("-", maxsplit=1)[0]
+    labels = {
+        "gradient_descent": ("勾配降下法", "Gradient descent"),
+        "momentum": ("モメンタム法", "Momentum"),
+        "adam": ("Adam", "Adam"),
+    }
+    label = labels.get(method, (trace_id, trace_id))
+    return label[0 if locale == "ja" else 1]
+
+
+def _build_visualization_scenario_index(
+    traces: list[AlgorithmTrace], *, dataset_version: str
+) -> VisualizationScenarioIndex:
+    return VisualizationScenarioIndex(
+        contract_version="1.0.0",
+        dataset_version=dataset_version,
+        scenarios=[_visualization_scenario(trace) for trace in traces],
+    )
+
+
+def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
+    is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
+    is_divergence = trace.trace_id.endswith("-divergence")
+    point = trace.initial_state.get("point")
+    if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
+        raise ValueError(f"trace {trace.trace_id} has no numeric initial point")
+    preset_id = trace.preset.get("preset_id")
+    if not isinstance(preset_id, str) or not preset_id.strip():
+        raise ValueError(f"trace {trace.trace_id} has no parameter preset ID")
+    seed_status = trace.seed.get("status")
+    seed_value = trace.seed.get("value")
+    if seed_status not in {"fixed", "not_applicable"}:
+        raise ValueError(f"trace {trace.trace_id} has unsupported seed status")
+    if seed_value is not None and (isinstance(seed_value, bool) or not isinstance(seed_value, int)):
+        raise ValueError(f"trace {trace.trace_id} has an invalid seed value")
+    renderer_family: RendererFamily = (
+        "simplex_geometry" if is_nelder_mead else "continuous_trajectory"
+    )
+    observable_ids = (
+        ["objective_value", "simplex_vertices", "accepted_operation"]
+        if is_nelder_mead
+        else ["objective_value", "current_point", "gradient", "update_vector"]
+    )
+    purpose: Literal["mechanism", "comparison", "failure_contrast"] = (
+        "mechanism" if is_nelder_mead else "failure_contrast" if is_divergence else "comparison"
+    )
+    return VisualizationScenario(
+        contract_version="1.0.0",
+        dataset_version=trace.dataset_version,
+        scenario_id=trace.scenario_id,
+        title_ja=_trace_title(trace.trace_id, locale="ja"),
+        title_en=_trace_title(trace.trace_id, locale="en"),
+        purpose=purpose,
+        problem_definition_id="PROBLEM_CONTINUOUS_UNCONSTRAINED",
+        problem_instance_id=trace.objective_id,
+        lesson=VisualizationLesson(
+            expected_phenomenon_ja=(
+                "反射・拡大・収縮・縮小で単体が移動する"
+                if is_nelder_mead
+                else "学習率と更新則により谷での振動・発散の仕方が変わる"
+            ),
+            expected_phenomenon_en=(
+                "The simplex moves by reflection, expansion, contraction, and shrinkage"
+                if is_nelder_mead
+                else (
+                    "Learning rate and update rules change oscillation and divergence in the valley"
+                )
+            ),
+            limitations_ja=(
+                "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
+                if is_nelder_mead
+                else "同一presetの教育用比較であり、一般的な手法の優劣を示さない"
+            ),
+            limitations_en=(
+                "A deterministic two-dimensional educational run, not a general performance ranking"
+                if is_nelder_mead
+                else "An educational fixed-preset comparison, not a general method ranking"
+            ),
+        ),
+        experiment=VisualizationExperiment(
+            oracle_policy=["objective_value"]
+            if is_nelder_mead
+            else ["objective_value", "gradient"],
+            initial_condition=VisualizationInitialCondition(
+                point=[float(value) for value in point]
+            ),
+            parameter_preset_id=preset_id,
+            seed=VisualizationSeed(status=seed_status, value=seed_value),
+            budget=VisualizationBudget(metric="oracle_evaluations", value=trace.evaluation_budget),
+            stopping=_numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping"),
+            tuning_policy="fixed_preset",
+        ),
+        runs=[
+            VisualizationRun(
+                run_id=f"RUN_{trace.trace_id.upper().replace('-', '_')}",
+                method_id=trace.method_id,
+                profile_id=trace.profile_id,
+                implementation_mapping_status=trace.implementation_mapping_status,
+                implementation_id=trace.implementation_id,
+                artifact_id=trace.trace_id,
+            )
+        ],
+        artifact=VisualizationArtifact(
+            artifact_kind="executable_trace",
+            artifact_contract="AlgorithmTrace",
+            artifact_contract_version=trace.contract_version,
+            renderer_family=renderer_family,
+            renderer_contract_version="1.0.0",
+            observable_ids=observable_ids,
+        ),
+        source_ids=trace.source_ids,
+        last_verified="2026-07-15",
+    )
+
+
+def _numeric_record(value: dict[str, Any], *, owner: str) -> dict[str, bool | int | float]:
+    result: dict[str, bool | int | float] = {}
+    for key, item in value.items():
+        if not isinstance(item, (bool, int, float)):
+            raise ValueError(f"{owner}.{key} must be numeric or boolean")
+        result[key] = item
+    return result
 
 
 def _dummy_frame(

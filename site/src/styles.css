@@ -366,6 +366,253 @@
   }
 }
 
+/* Existing explanatory visualizations: simplex_geometry and continuous_trajectory. */
+.nm-page-header,
+.comparison-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.visualization-badges {
+  display: flex;
+  max-width: 22rem;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.visualization-badges span {
+  padding: 0.2rem 0.42rem;
+  border: 1px solid #b9c9be;
+  border-radius: 999px;
+  background: #eef5ef;
+  color: #315745;
+  font-size: 0.64rem;
+  font-weight: 750;
+}
+
+.visualization-switches {
+  display: flex;
+  align-items: end;
+  gap: 0.55rem;
+  margin: 0.6rem 0;
+  flex-wrap: wrap;
+}
+
+.visualization-switches label {
+  display: grid;
+  gap: 0.2rem;
+  color: #59645d;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.visualization-switches select {
+  min-height: 2.15rem;
+  padding: 0.35rem 2rem 0.35rem 0.5rem;
+  border: 1px solid #aebbb1;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: #263c30;
+  font: inherit;
+  font-size: 0.74rem;
+}
+
+.visualization-switches select:focus-visible,
+.text-alternative summary:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 2px;
+}
+
+.decision-badge {
+  padding: 0.12rem 0.38rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-weight: 750;
+}
+
+.decision-accepted { color: #245c42; }
+.decision-rejected { border-style: dashed; color: #8a3522; }
+.decision-not_applicable { color: #59645d; }
+
+.nm-layout {
+  grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.55fr);
+  margin-top: 0.65rem;
+}
+
+.explanatory-figure {
+  min-width: 0;
+  margin: 0;
+}
+
+.explanatory-figure figcaption {
+  margin-top: 0.3rem;
+  color: #647068;
+  font-size: 0.65rem;
+  line-height: 1.5;
+}
+
+.nm-plot,
+.comparison-plot,
+.objective-history svg {
+  display: block;
+  width: 100%;
+  border: 1px solid #cfd7cf;
+  border-radius: 0.55rem;
+  background: #f7f8f3;
+}
+
+.objective-background { fill: #f7f8f3; }
+.objective-contours line { stroke: #b7c5ba; stroke-width: 1; }
+.objective-contours line:nth-child(3n) { stroke: #8fa294; stroke-width: 1.3; }
+.plot-axis { stroke: #59645d; stroke-width: 1.2; }
+.plot-axis-label,
+.vector-labels text {
+  fill: #59645d;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.nm-simplex {
+  fill: #9fc2ad;
+  fill-opacity: 0.24;
+  stroke: #284f3c;
+  stroke-width: 2.2;
+}
+
+.nm-vertex circle,
+.nm-vertex rect,
+.nm-vertex polygon {
+  fill: #fff;
+  stroke: #284f3c;
+  stroke-width: 2.8;
+}
+
+.nm-vertex-worst polygon { fill: #f1d2c5; stroke: #8a3522; }
+.nm-vertex-second-worst rect { fill: #f5edcf; stroke: #725f26; }
+.nm-vertex text,
+.nm-candidate text,
+.nm-centroid text {
+  fill: #263c30;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.nm-candidate polygon {
+  fill: #fff;
+  stroke: #9a462b;
+  stroke-width: 2.8;
+}
+
+.candidate-rejected polygon { fill: #fff2ed; stroke-dasharray: 3 2; }
+.candidate-accepted polygon { fill: #f4c7ae; }
+.nm-centroid line { stroke: #1e4d69; stroke-width: 2.2; }
+.nm-operation-vector { stroke: #9a462b; stroke-width: 2.5; }
+.nm-arrow-head { fill: #9a462b; }
+.operation-expand .nm-operation-vector { stroke-width: 3.5; }
+.operation-outside_contract .nm-operation-vector { stroke-dasharray: 7 3; }
+.operation-inside_contract .nm-operation-vector { stroke-dasharray: 3 3; }
+.operation-shrink .nm-operation-vector { stroke-dasharray: 2 4; }
+
+.operation-kicker {
+  margin: 0 !important;
+  color: #8a452b !important;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.operation-reason { color: #344b3e !important; font-size: 0.82rem !important; }
+.shape-legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; }
+.shape-legend span { display: flex; align-items: center; gap: 0.35rem; color: #59645d; font-size: 0.65rem; }
+.shape-legend i { display: inline-grid; width: 0.8rem; height: 0.8rem; place-items: center; border: 2px solid #315745; font-style: normal; }
+.legend-circle { border-radius: 50%; }
+.legend-triangle { width: 0 !important; height: 0 !important; border: 0 !important; border-right: 0.45rem solid transparent !important; border-bottom: 0.75rem solid #8a3522 !important; border-left: 0.45rem solid transparent !important; }
+.legend-diamond { rotate: 45deg; border-color: #9a462b !important; }
+.legend-cross { border: 0 !important; color: #1e4d69; font-size: 1rem; font-weight: 900; }
+
+.text-alternative {
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d4d9d3;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #46534b;
+  font-size: 0.7rem;
+}
+
+.text-alternative summary { cursor: pointer; color: #315745; font-weight: 800; }
+.text-alternative p { line-height: 1.6; }
+.text-alternative ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+
+.comparison-caveat {
+  padding-left: 0.55rem;
+  border-left: 3px solid #b75c37;
+  color: #70412f !important;
+  font-weight: 700;
+}
+
+.comparison-card header > div { min-width: 0; }
+.comparison-card header small { display: block; color: #647068; font-size: 0.6rem; }
+.method-parameters { min-height: 2.4em; margin: 0.3rem 0; color: #315745; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.62rem; overflow-wrap: anywhere; }
+.plot-boundary-note { margin: 0.25rem 0; color: #8a3522; font-size: 0.65rem; font-weight: 750; }
+.comparison-plot { margin: 0; }
+.trajectory-line { stroke-width: 2.2; vector-effect: non-scaling-stroke; }
+.trajectory-0 { stroke: #2d6b50; }
+.trajectory-1 { stroke: #a85b2f; stroke-dasharray: 6 3; }
+.trajectory-2 { stroke: #315d86; stroke-dasharray: 2 3; }
+.gradient-vector { stroke: #764a89; stroke-width: 2; stroke-dasharray: 3 2; }
+.update-vector { stroke: #9a462b; stroke-width: 2.6; }
+.gradient-arrow-head { fill: #764a89; }
+.update-arrow-head { fill: #9a462b; }
+.method-marker { fill: #fff; stroke: #172d23; stroke-width: 2.2; }
+
+.objective-history {
+  margin-top: 0.75rem;
+  padding: 0.65rem;
+  border: 1px solid #d4d9d3;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.objective-history h2 { margin: 0 0 0.45rem; color: #344b3e; font-size: 0.85rem; }
+.history-series polyline { fill: none; stroke-width: 2.3; vector-effect: non-scaling-stroke; }
+.history-series text { font-size: 10px; font-weight: 800; }
+.history-0 polyline { stroke: #2d6b50; }
+.history-0 text { fill: #2d6b50; }
+.history-1 polyline { stroke: #a85b2f; stroke-dasharray: 7 3; }
+.history-1 text { fill: #8a452b; }
+.history-2 polyline { stroke: #315d86; stroke-dasharray: 2 3; }
+.history-2 text { fill: #315d86; }
+.history-cursor { stroke: #59645d; stroke-width: 1.2; stroke-dasharray: 3 3; }
+.comparison-ranking-warning { border-left: 4px solid #b75c37; font-weight: 750; }
+.reduced-motion-notice { margin: 0.45rem 0 0; color: #6b4a35; font-size: 0.68rem; font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 44rem) {
+  .nm-page-header,
+  .comparison-page-header { display: block; }
+  .visualization-badges { justify-content: flex-start; margin-top: 0.55rem; }
+  .visualization-switches { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .visualization-switches select { width: 100%; }
+  .nm-layout { grid-template-columns: minmax(0, 1fr); }
+  .comparison-grid { grid-template-columns: minmax(0, 1fr); }
+  .shape-legend { grid-template-columns: minmax(0, 1fr); }
+  .objective-history { padding: 0.45rem; }
+}
+
 .atlas-page { min-width: 0; }
 .atlas-page-header { margin-bottom: .8rem; }
 .atlas-page-header h1 { margin: .1rem 0 .35rem; font-size: clamp(1.45rem, 4vw, 2.15rem); letter-spacing: -.035em; }
@@ -465,6 +712,16 @@
   .compiled-content-layout { grid-template-columns: minmax(0, 1fr); }
   .content-toc { position: static; grid-column: 1; grid-row: 1; border: 1px solid #d7ddd5; border-radius: .35rem; }
   .markdown-body { grid-row: 2; }
+}
+
+/* Keep vertex role labels legible over contours and filled markers. */
+.nm-plot .nm-vertex text,
+.nm-plot .nm-candidate text,
+.nm-plot .nm-centroid text {
+  fill: #1f3529;
+  stroke: #fff;
+  stroke-width: 1px;
+  paint-order: stroke;
 }
 
 * {

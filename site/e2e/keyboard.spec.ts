@@ -52,4 +52,13 @@ test("playback controlsをkeyboardでstepする", async ({ page, baseURL }) => {
   await forward.focus();
   await page.keyboard.press("Enter");
   await expect(iteration).not.toHaveText(initial ?? "");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  const reducedControls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
+  await expect(reducedControls.getByRole("button", { name: "自動再生オフ" })).toBeDisabled();
+  await expect(reducedControls.getByText(/動きを減らす設定を検出しました/u)).toBeVisible();
+  await reducedControls.getByRole("button", { name: "1フレーム進む" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(reducedControls.getByLabel("iteration")).toBeVisible();
 });

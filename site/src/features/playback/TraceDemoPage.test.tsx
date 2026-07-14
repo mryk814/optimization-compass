@@ -7,6 +7,7 @@ import {
   algorithmTraceFixture,
   traceFrameFixture,
 } from "../../contracts/trace.fixtures";
+import scenarioFixture from "../../contracts/visualization-scenarios.fixture.json";
 import { TraceDemoPage } from "./TraceDemoPage";
 
 const trace = {
@@ -56,6 +57,7 @@ const manifest = {
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
+  visualization_scenarios: { version: "1.0.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
   traces: {
@@ -106,6 +108,7 @@ describe("TraceDemoPage", () => {
     vi.stubGlobal("crypto", webcrypto as Crypto);
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(jsonResponse(manifest))
+      .mockResolvedValueOnce(jsonResponse(scenarioFixture))
       .mockResolvedValueOnce(byteResponse(indexBytes))
       .mockResolvedValueOnce(jsonResponse(trace));
     vi.stubGlobal("fetch", fetchMock);
@@ -123,9 +126,10 @@ describe("TraceDemoPage", () => {
     expect(screen.getByText("M_EDUCATIONAL")).toBeVisible();
     expect(screen.getByRole("link", { name: new RegExp(trace.source_ids[0], "u") }))
       .toHaveAttribute("href", `/sources/${trace.source_ids[0]}`);
-    expect(fetchMock).toHaveBeenCalledTimes(3);
-    expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/traces\/catalog\.json$/u);
-    expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/visualization-scenarios\.json$/u);
+    expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/traces\/catalog\.json$/u);
+    expect(String(fetchMock.mock.calls[3][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
   });
 
   test("reports missing IDs and reference mismatches instead of loading a fallback", async () => {
@@ -134,6 +138,7 @@ describe("TraceDemoPage", () => {
       "fetch",
       vi.fn()
         .mockResolvedValueOnce(jsonResponse(manifest))
+        .mockResolvedValueOnce(jsonResponse(scenarioFixture))
         .mockResolvedValueOnce(byteResponse(indexBytes)),
     );
     renderPage("missing");
@@ -148,6 +153,7 @@ describe("TraceDemoPage", () => {
       "fetch",
       vi.fn()
         .mockResolvedValueOnce(jsonResponse(manifest))
+        .mockResolvedValueOnce(jsonResponse(scenarioFixture))
         .mockResolvedValueOnce(byteResponse(indexBytes))
         .mockResolvedValueOnce(jsonResponse(mismatch)),
     );
