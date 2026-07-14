@@ -10,6 +10,7 @@ import uvicorn
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import RecommendationRequest
+from optimization_compass.site_export import export_site_data
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
 
@@ -39,6 +40,15 @@ def verify_data() -> None:
     typer.echo(json.dumps(result, ensure_ascii=False, indent=2))
     if not result["ok"]:
         raise typer.Exit(code=1)
+
+
+@app.command("export-site-data")
+def export_site_data_command(
+    output: Annotated[Path, typer.Option(help="Directory for generated site data.")],
+) -> None:
+    """Export deterministic, versioned JSON for the static atlas."""
+    manifest = export_site_data(output, KnowledgeRepository())
+    typer.echo(manifest.model_dump_json(indent=2))
 
 
 @app.command()

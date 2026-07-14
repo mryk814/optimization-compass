@@ -111,4 +111,5 @@ class VerificationResult(BaseModel):
     warning_release_checks: int
     total_release_checks: int
     dataset_version: str
+    stored_status_mismatches: list[str]
     details: list[dict[str, Any]]

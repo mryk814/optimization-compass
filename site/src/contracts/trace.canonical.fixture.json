@@ -1,0 +1,69 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.2.0",
+  "data_version": "1.0.0",
+  "trace_id": "canonical-unicode",
+  "method_id": "M_CANONICAL",
+  "profile_id": "profile-canonical",
+  "objective_id": "objective-canonical",
+  "scenario_id": "scenario-canonical",
+  "generator_id": "canonical.fixture",
+  "generator_version": "1.0.0",
+  "implementation_mapping_status": "not_applicable",
+  "implementation_id": null,
+  "objective": {"family": "fixture"},
+  "preset": {},
+  "parameters": {},
+  "initial_state": {},
+  "seed": {"status": "not_applicable"},
+  "evaluation_budget": 1,
+  "stopping": {"max_evaluations": 1},
+  "environment": {"runtime": "fixture"},
+  "fairness_statement": "同じ条件を使う。",
+  "frames": [{
+    "frame_index": 0,
+    "iteration": 0,
+    "oracle_evaluations": 0,
+    "elapsed_steps": 0,
+    "elapsed_time_ms": 100.0,
+    "event_type": "fixture",
+    "decision": "not_applicable",
+    "explanation_key": "trace.fixture",
+    "event_label_ja": null,
+    "event_label_en": null,
+    "keyframe": true,
+    "points": [{
+      "point_id": "point-a",
+      "role": "candidate",
+      "coordinates": [0.0, 2.0, -0.0, 0.1, 1e-7, 1e20, 1e21],
+      "value": 100.0,
+      "label_ja": "候補",
+      "label_en": "Candidate"
+    }],
+    "vectors": [{
+      "vector_id": "vector-a",
+      "role": "movement",
+      "origin": [100.0, -0.0, 1.25, 1e-7],
+      "components": [2.0, 0.5, -3.75, 1e20],
+      "label_ja": "移動",
+      "label_en": "Movement"
+    }],
+    "metrics": [{
+      "metric_id": "metric-a",
+      "label_ja": "指標",
+      "label_en": "Metric",
+      "value": 2.0,
+      "unit": null
+    }],
+    "payload": {
+      "numbers": [0, -0.0, 2, 2.0, 0.5, 0.1, 1e-7, 9007199254740992, 1e20, 1e21],
+      "😀": "astral",
+      "": "private",
+      "あ": "hiragana"
+    }
+  }],
+  "terminal_status": "completed",
+  "terminal_summary_ja": "完了",
+  "terminal_summary_en": "Complete",
+  "source_ids": ["S001"]
+}

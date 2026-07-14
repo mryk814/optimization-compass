@@ -15,7 +15,7 @@ jobs:
         python-version: ["3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v8
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
@@ -25,3 +25,43 @@ jobs:
       - run: uv run mypy src
       - run: uv run pytest --cov=optimization_compass --cov-report=term-missing
       - run: uv run optimization-compass verify-data
+      - run: uv run python scripts/rebuild_dataset.py --stage
+      - run: git diff --exit-code -- data src/optimization_compass/resources
+
+  site:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test -- --run
+      - run: npm run build
+
+  recommendation-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: uv sync --all-extras
+      - run: npm ci
+        working-directory: site
+      - run: uv run optimization-compass export-site-data --output site/public/data
+      - run: git diff --exit-code -- site/public/data
+      - run: npm run parity
+        working-directory: site

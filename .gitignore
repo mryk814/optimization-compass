@@ -8,6 +8,8 @@ __pycache__/
 .coverage
 htmlcov/
 dist/
+site/node_modules/
+*.tsbuildinfo
 build/
 *.egg-info/
 .DS_Store

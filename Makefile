@@ -1,4 +1,4 @@
-.PHONY: install serve test lint format typecheck verify check
+.PHONY: install serve test lint format typecheck verify dataset-stage check
 
 install:
 	uv sync --all-extras
@@ -21,4 +21,7 @@ typecheck:
 verify:
 	uv run optimization-compass verify-data
 
-check: lint typecheck test verify
+dataset-stage:
+	uv run python scripts/rebuild_dataset.py --stage
+
+check: lint typecheck test verify dataset-stage

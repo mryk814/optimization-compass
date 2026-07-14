@@ -145,7 +145,7 @@ class RecommendationEngine:
         all_method_ids = list(dict.fromkeys([*method_candidates, *excluded_methods]))
         method_rows = self.repository.methods(all_method_ids)
         self._apply_variable_domain_compatibility(
-            valid_answers.get("Q01", set()),
+            self._single_answer(valid_answers, "Q01"),
             method_candidates,
             excluded_methods,
             method_rows,
@@ -153,7 +153,7 @@ class RecommendationEngine:
             request.language,
         )
         self._apply_guarantee_compatibility(
-            valid_answers.get("Q10", set()),
+            self._single_answer(valid_answers, "Q10"),
             method_candidates,
             excluded_methods,
             method_rows,
@@ -244,16 +244,15 @@ class RecommendationEngine:
 
     def _apply_variable_domain_compatibility(
         self,
-        selected_domains: set[str],
+        domain: str | None,
         method_candidates: dict[str, Candidate],
         excluded_methods: dict[str, Candidate],
         method_rows: dict[str, dict[str, Any]],
         global_warnings: list[str],
         language: str,
     ) -> None:
-        if not selected_domains or "structured_or_unknown" in selected_domains:
+        if domain is None or domain == "structured_or_unknown":
             return
-        domain = next(iter(selected_domains))
         encoded_count = 0
         excluded_count = 0
         for method_id, candidate in list(method_candidates.items()):
@@ -310,16 +309,15 @@ class RecommendationEngine:
 
     def _apply_guarantee_compatibility(
         self,
-        selected_goals: set[str],
+        goal: str | None,
         method_candidates: dict[str, Candidate],
         excluded_methods: dict[str, Candidate],
         method_rows: dict[str, dict[str, Any]],
         global_warnings: list[str],
         language: str,
     ) -> None:
-        if not selected_goals:
+        if goal is None:
             return
-        goal = next(iter(selected_goals))
         if goal not in {"gap_desired", "global_proof_required"}:
             return
 
@@ -424,23 +422,42 @@ class RecommendationEngine:
 
     def _validate_answers(
         self, answers: dict[str, list[str]], language: str
-    ) -> dict[str, set[str]]:
+    ) -> dict[str, tuple[str, ...]]:
         questions = self.repository.questions(language)
         allowed = {row["question_id"]: set(row["allowed_answers"]) for row in questions}
         unknown_question_ids = set(answers) - set(allowed)
         if unknown_question_ids:
             raise ValueError(f"unknown question IDs: {sorted(unknown_question_ids)}")
 
-        normalized: dict[str, set[str]] = {}
+        question_by_id = {str(row["question_id"]): row for row in questions}
+        normalized: dict[str, tuple[str, ...]] = {}
         for question_id, values in answers.items():
+            if not values:
+                raise ValueError(f"answers for {question_id} must be non-empty")
+            if len(values) != len(set(values)):
+                raise ValueError(f"answers for {question_id} contain duplicate values")
             invalid = set(values) - allowed[question_id]
             if invalid:
                 raise ValueError(
                     f"invalid answers for {question_id}: {sorted(invalid)}; "
                     f"allowed={sorted(allowed[question_id])}"
                 )
-            normalized[question_id] = set(values)
+            question = question_by_id[question_id]
+            if question["answer_type"] == "single_choice" and len(values) != 1:
+                raise ValueError(
+                    f"single_choice answer for {question_id} must contain exactly one value"
+                )
+            if "unknown" in values and len(values) != 1:
+                raise ValueError(f"unknown must be the sole value for {question_id}")
+            normalized[question_id] = tuple(values)
         return normalized
+
+    @staticmethod
+    def _single_answer(answers: dict[str, tuple[str, ...]], question_id: str) -> str | None:
+        values = answers.get(question_id)
+        if values is None:
+            return None
+        return values[0]
 
     @staticmethod
     def _add_candidates(

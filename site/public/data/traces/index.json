@@ -1,0 +1,17 @@
+{
+  "contract_version": "1.0.0",
+  "data_version": "1.0.0",
+  "dataset_version": "0.2.0",
+  "traces": [
+    {
+      "method_id": "M_NELDER_MEAD",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "path": "dummy-educational.json",
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "title_en": "AlgorithmTrace contract demo",
+      "title_ja": "AlgorithmTrace 契約デモ",
+      "trace_id": "dummy-educational"
+    }
+  ]
+}
