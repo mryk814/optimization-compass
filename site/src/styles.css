@@ -741,6 +741,13 @@
 .content-card:hover, .gallery-card:hover { border-color: #6c9a7f; background: #fbfdf9; }
 .content-card p, .gallery-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
 .content-card small, .gallery-card small, .content-detail > small, .gallery-detail > small { color: #59645d; font-size: .65rem; }
+.theater-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .55rem; }
+.theater-card { display: flex; min-width: 0; min-height: 10rem; padding: .7rem; border: 1px solid #d9dbd4; border-radius: .45rem; background: #fff; color: inherit; text-decoration: none; flex-direction: column; }
+.theater-card:hover { border-color: #6c9a7f; background: #fbfdf9; }
+.theater-card > span { color: #6b756e; font-size: .65rem; }
+.theater-card h2 { margin: .45rem 0 0; font-size: .95rem; }
+.theater-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
+.theater-card small { margin-top: auto; color: #285740; font-size: .68rem; font-weight: 700; }
 .content-detail, .gallery-detail { width: 100%; max-width: 52rem; min-width: 0; overflow-wrap: anywhere; }
 .compiled-content-layout { display: grid; grid-template-columns: minmax(0, 1fr) 11rem; gap: 1.2rem; align-items: start; margin-top: .9rem; }
 .content-toc { position: sticky; top: .75rem; grid-column: 2; grid-row: 1; padding: .65rem; border-left: 2px solid #d7ddd5; color: #59645d; font-size: .68rem; }

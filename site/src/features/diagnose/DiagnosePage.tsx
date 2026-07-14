@@ -19,6 +19,7 @@ import { findEntity } from "../../contracts/entity-links";
 import { useEntityLinks } from "../../state/entity-links";
 import { updateDiagnosticAnswer } from "./diagnose-state";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
+import { THEATER_ROUTES } from "../theater/theater-routes";
 import {
   recommend,
   type EntityRecommendation,
@@ -290,7 +291,7 @@ function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">
         </section>
         <aside className="diagnose-result-pane">
           <div className="diagnose-result-toolbar"><button onClick={() => navigateMap()} type="button">地図上で見る</button></div>
-          {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxを選ぶ流れを見る</strong><p>観測からsurrogateとExpected Improvementが更新される様子を固定予算で再生できます。</p><Link to="/theater/bayesian-optimization">Bayesian Optimization Theaterへ</Link></aside>}
+          {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxを選ぶ流れを見る</strong><p>観測からsurrogateとExpected Improvementが更新される様子を固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
           <Results data={data} onMethodMap={methodMap} result={result} />
         </aside>
       </div>

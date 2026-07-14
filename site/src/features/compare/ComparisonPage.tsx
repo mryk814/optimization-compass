@@ -18,6 +18,7 @@ import { useEntityLinks } from "../../state/entity-links";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
+import { comparisonRoute } from "./compare-routes";
 import {
   contourSegments,
   mapX,
@@ -68,7 +69,7 @@ export function ComparisonPage() {
       {loaded && (
         <ComparisonPlayer
           {...loaded}
-          onPresetChange={(nextId) => navigate(`/compare/${nextId}`)}
+          onPresetChange={(nextId) => navigate(comparisonRoute(nextId))}
         />
       )}
     </section>

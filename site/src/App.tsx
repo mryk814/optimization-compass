@@ -15,7 +15,11 @@ import { MethodPage } from "./features/methods/MethodPage";
 import { TraceDemoPage } from "./features/playback/TraceDemoPage";
 import { SearchTreeTheaterPage } from "./features/search-tree/SearchTreeTheaterPage";
 import { BayesianOptimizationPage } from "./features/theater/BayesianOptimizationPage";
+import { TheaterIndexPage } from "./features/theater/TheaterIndexPage";
 import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
+import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
+import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
+import { THEATER_ROUTES } from "./features/theater/theater-routes";
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
@@ -39,13 +43,6 @@ const primaryNavigation = [
 ] as const;
 
 function HomePage() {
-  const links = useEntityLinks();
-  const theater = links.status === "ready"
-    ? links.index.entities.find((entity) => entity.entity_type === "trace" && entity.aliases.some((alias) => alias.startsWith("/theater/")))
-    : undefined;
-  const comparison = links.status === "ready"
-    ? links.index.entities.find((entity) => entity.entity_type === "comparison")
-    : undefined;
   return (
     <section className="home-page">
       <header className="home-hero">
@@ -80,8 +77,8 @@ function HomePage() {
           <h2>Method Theater</h2>
           <p>アルゴリズムの一手を再生し、同じ予算で動きを比べる。</p>
           <div className="home-entry-links">
-            <Link to={theater?.canonical_url ?? "/learn"}>Theaterを開く</Link>
-            <Link to={comparison?.canonical_url ?? "/learn"}>Compare Labを開く</Link>
+            <Link to={THEATER_ROUTES.index}>Theaterを開く</Link>
+            <Link to={COMPARE_LAB_ROUTE}>Compare Labを開く</Link>
           </div>
         </article>
         <HomeEntry
@@ -136,12 +133,9 @@ function AppShell() {
     return () => controller.abort();
   }, []);
   const links = useEntityLinks();
-  const comparisonRoute = links.status === "ready"
-    ? links.index.entities.find((entity) => entity.entity_type === "comparison")?.canonical_url
-    : undefined;
   const navigation = [
     ...primaryNavigation.slice(0, 4),
-    { label: "比較", to: comparisonRoute ?? "/learn", matchPaths: ["/compare", "/theater", "/traces"] },
+    { label: "比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare", "/theater", "/traces"] },
     ...primaryNavigation.slice(4),
   ];
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -189,8 +183,10 @@ function AppShell() {
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/traces/:traceId" element={<TraceDemoPage />} />
+          <Route path={THEATER_ROUTES.index} element={<TheaterIndexPage />} />
           <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
           <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
+          <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />

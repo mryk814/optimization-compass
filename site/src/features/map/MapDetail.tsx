@@ -2,6 +2,7 @@ import { entityKey, safeHttpUrl, type MapModel, type ViewEntity } from "../../co
 import { Link } from "react-router-dom";
 import { useEntityLinks } from "../../state/entity-links";
 import { ancestorIds } from "./map-state";
+import { THEATER_ROUTES } from "../theater/theater-routes";
 
 interface MapDetailProps {
   model: MapModel;
@@ -85,7 +86,7 @@ export function MapDetail({ model, selectedId, onContinueDiagnosis }: MapDetailP
         <span>{selected.node_type}</span>
       </div>
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
-      {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to="/theater/bayesian-optimization">Bayesian Optimization Theaterへ</Link></section>}
+      {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
 
       {children.length > 0 && (
         <section className="map-detail-section">

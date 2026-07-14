@@ -58,7 +58,8 @@ Atlas の主要な hash route は次のとおりです。
 
 - `/methods/:methodId`: 説明・実装・Trace・比較・ケース・根拠を集約した手法の正規ページ
 - `/traces/:traceId`: AlgorithmTrace の共通再生ページ
-- `/compare/:comparisonId`: 同一条件比較ページ
+- `/theater`: Nelder–Mead、Search-tree、Bayesian Optimization の再生メニュー
+- `/compare`: 比較presetの一覧（個別ページは `/compare/:comparisonId`）
 - `/learn`: 手法・概念の教材一覧と検索
 - `/gallery`: 実問題ケースの一覧・診断導線・除外候補
 

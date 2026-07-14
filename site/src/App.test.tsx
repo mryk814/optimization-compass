@@ -10,6 +10,8 @@ const routes = [
   ["#/", "Optimization Atlas"],
   ["#/map", "問題構造マップ"],
   ["#/diagnose", "診断"],
+  ["#/theater", "Method Theater"],
+  ["#/compare", "Compare Lab"],
   ["#/compare/gradient-quadratic", "手法を比較する"],
   ["#/gallery", "ケースギャラリー"],
   ["#/learn", "手法・概念を学ぶ"],
@@ -105,11 +107,11 @@ describe("application routes", () => {
     );
     expect(within(entries).getByRole("link", { name: "Theaterを開く" })).toHaveAttribute(
       "href",
-      "#/traces/nelder-mead-quadratic",
+      "#/theater",
     );
     expect(within(entries).getByRole("link", { name: "Compare Labを開く" })).toHaveAttribute(
       "href",
-      "#/compare/COMPARE_GRADIENT_FAMILY",
+      "#/compare",
     );
     expect(within(entries).getByRole("link", { name: "ケースを見る" })).toHaveAttribute(
       "href",
