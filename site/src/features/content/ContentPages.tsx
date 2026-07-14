@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 import { parseContentIndex, type AtlasContentPage } from "../../contracts/atlas-content";
 import { siteBaseUrl } from "../../data/base-url";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 
 export function ContentIndexPage() {
   const [pages, setPages] = useState<AtlasContentPage[]>([]); const [query, setQuery] = useState(""); const [error, setError] = useState<Error>();
@@ -14,8 +15,9 @@ export function ContentIndexPage() {
 
 export function ContentPage() {
   const { contentId = "" } = useParams(); const [page, setPage] = useState<AtlasContentPage>(); const [error, setError] = useState<Error>();
-  useEffect(() => { void loadContent().then((index) => { const found = index.pages.find((item) => item.content_id === contentId); if (!found) throw new Error(`教材ID「${contentId}」は見つかりません。`); setPage(found); }, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, [contentId]);
+  useEffect(() => { setPage(undefined); setError(undefined); void loadContent().then((index) => { const found = index.pages.find((item) => item.content_id === contentId); if (!found) { setError(new EntityNotFoundError("教材ID", contentId)); return; } setPage(found); }, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, [contentId]);
   useEffect(() => { if (!page) return; document.title = `${page.title_ja} | Optimization Compass`; const meta = document.querySelector('meta[name="description"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" })); meta.setAttribute("content", page.summary); }, [page]);
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
   return <section className="atlas-page content-detail"><p className="eyebrow">{page?.kind ?? "Learn"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><p className="content-lead">{page.summary}</p><MarkdownBody body={page.body} /><div className="content-links"><strong>Related</strong>{page.visualization_ids.map((id) => <Link key={id} to={visualizationRoute(id)}>{id}</Link>)}{page.comparison_ids.map((id) => <Link key={id} to="/compare/gradient-quadratic">{id}</Link>)}</div><small>Last reviewed {page.last_reviewed} · Sources: {page.source_ids.join(", ")}</small></>}</section>;
 }
 

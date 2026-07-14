@@ -125,7 +125,10 @@ describe("TraceDemoPage", () => {
         .mockResolvedValueOnce(byteResponse(indexBytes)),
     );
     renderPage("missing");
-    expect(await screen.findByRole("alert")).toHaveTextContent("Trace ID");
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" }),
+    ).toBeVisible();
+    expect(screen.getByText(/Trace ID/u)).toBeVisible();
     cleanup();
 
     const mismatch = { ...trace, dataset_version: "9.9.9" };

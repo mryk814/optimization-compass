@@ -6,6 +6,7 @@ import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame } from "../..
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { siteBaseUrl } from "../../data/base-url";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 
 type Loaded = { comparison: ComparisonSet; traces: AlgorithmTrace[] };
 
@@ -15,11 +16,14 @@ export function ComparisonPage() {
   const [error, setError] = useState<Error>();
   useEffect(() => {
     const controller = new AbortController();
+    setLoaded(undefined);
+    setError(undefined);
     void loadComparison(comparisonId, controller.signal).then(setLoaded, (caught: unknown) => {
       if (!controller.signal.aborted) setError(caught instanceof Error ? caught : new Error(String(caught)));
     });
     return () => controller.abort();
   }, [comparisonId]);
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
   return <section className="atlas-page comparison-page"><header className="atlas-page-header"><p className="eyebrow">Compare Lab</p><h1>手法を比較する</h1><p>同じ目的関数・初期点・評価予算で、更新則の違いを再生します。</p></header><p className="route-parameter">Comparison ID: <strong>{comparisonId}</strong></p>{error && <p className="atlas-error" role="alert">{error.message}</p>}{!loaded && !error && <p role="status">比較条件を読み込み中…</p>}{loaded && <ComparisonPlayer {...loaded} />}</section>;
 }
 
@@ -53,9 +57,8 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
   const response = await fetch(`${siteBaseUrl()}data/comparisons.json`, { signal });
   if (!response.ok) throw new Error(`Comparison request failed (${response.status}).`);
   const index = parseComparisonIndex(await response.json());
-  const comparison = index.comparisons.find((item) => item.comparison_id === comparisonId)
-    ?? (comparisonId === "overview" ? index.comparisons[0] : undefined);
-  if (!comparison) throw new Error("比較セットがありません。");
+  const comparison = index.comparisons.find((item) => item.comparison_id === comparisonId);
+  if (!comparison) throw new EntityNotFoundError("比較ID", comparisonId);
   const traces = await Promise.all(comparison.members.map(async (member) => { const traceResponse = await fetch(`${siteBaseUrl()}data/traces/${member.trace_id}.json`, { signal }); if (!traceResponse.ok) throw new Error(`Trace request failed (${traceResponse.status}).`); return parseAlgorithmTrace(await traceResponse.json()); }));
   return { comparison, traces };
 }

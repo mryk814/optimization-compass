@@ -574,6 +574,137 @@ main:focus {
   line-height: 1.75;
 }
 
+.home-page {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.home-hero {
+  max-width: 48rem;
+}
+
+.home-hero h1 {
+  margin: 0.15rem 0 0.75rem;
+  color: #17211b;
+  font-size: clamp(2rem, 7vw, 4.25rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.home-hero > p:not(.eyebrow) {
+  max-width: 42rem;
+  margin: 0;
+  color: #4a574f;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  line-height: 1.7;
+}
+
+.home-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.home-entry-card {
+  display: flex;
+  min-width: 0;
+  min-height: 13rem;
+  padding: 0.85rem;
+  border: 1px solid #d7d6ce;
+  border-radius: 0.55rem;
+  background: #fff;
+  flex-direction: column;
+}
+
+.home-entry-card:hover {
+  border-color: #6c9a7f;
+  box-shadow: 0 0.45rem 1.3rem rgba(49, 92, 72, 0.08);
+}
+
+.home-entry-eyebrow {
+  margin: 0 0 0.8rem;
+  color: #8b4d2c;
+  font-size: 0.62rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-entry-card h2 {
+  margin: 0;
+  color: #17211b;
+  font-size: 1rem;
+}
+
+.home-entry-card > p:not(.home-entry-eyebrow) {
+  margin: 0.45rem 0 1rem;
+  color: #59645d;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.home-entry-card a {
+  margin-top: auto;
+  color: #285740;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-underline-offset: 0.2em;
+}
+
+.home-entry-links {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: auto;
+  flex-direction: column;
+}
+
+.home-entry-links a {
+  margin-top: 0;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.method-related-cases {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #d7d6ce;
+}
+
+.method-related-cases h2 {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+}
+
+.method-related-cases ul {
+  display: grid;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  gap: 0.45rem;
+  list-style: none;
+}
+
+.method-related-cases li {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.method-related-cases a {
+  color: #285740;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.method-related-cases span {
+  color: #59645d;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
 .eyebrow {
   color: #8b4d2c !important;
   font-size: 0.72rem !important;
@@ -582,7 +713,6 @@ main:focus {
   text-transform: uppercase;
 }
 
-.placeholder-note,
 .route-parameter {
   margin-top: 1.2rem !important;
   padding: 0.7rem 0.8rem;
@@ -977,6 +1107,23 @@ main:focus {
 
   main {
     padding: 0.9rem 0.7rem 1.25rem;
+  }
+
+  .home-entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-entry-card {
+    min-height: 0;
+  }
+
+  .home-entry-card > p:not(.home-entry-eyebrow) {
+    margin-bottom: 0.7rem;
+  }
+
+  .home-entry-card a,
+  .home-entry-links {
+    margin-top: 0;
   }
 
   .map-page-header {
