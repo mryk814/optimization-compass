@@ -170,8 +170,12 @@ class LearningCoverageExpectationSeed(MetadataModel):
     subject_type: Literal["method", "problem", "feature_family"]
     subject_id: NonBlank
     purpose: Literal[
-        "mechanism", "comparison", "failure_contrast", "sensitivity",
-        "application_result", "schematic",
+        "mechanism",
+        "comparison",
+        "failure_contrast",
+        "sensitivity",
+        "application_result",
+        "schematic",
     ]
     artifact_kind: Literal[
         "executable_trace", "schematic_animation", "static_diagram", "result_visualization"
