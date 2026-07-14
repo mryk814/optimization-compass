@@ -14,8 +14,9 @@ Optimization Compass は、最適化問題の特徴を質問形式で整理し�
 
 ## いま動くもの
 
-- ブラウザ診断画面: `http://127.0.0.1:8000/`
-- Optimization Atlas 静的アプリ: `http://127.0.0.1:5173/optimization-compass/`
+- canonical browser experience: [Optimization Atlas](https://mryk814.github.io/optimization-compass/)
+- Optimization Atlas ローカル静的アプリ: `http://127.0.0.1:5173/optimization-compass/`
+- FastAPI service landing: `http://127.0.0.1:8000/`
 - OpenAPI ドキュメント: `http://127.0.0.1:8000/docs`
 - REST API
 - JSON 入力対応 CLI
@@ -25,25 +26,9 @@ Optimization Compass は、最適化問題の特徴を質問形式で整理し�
 
 ## セットアップ
 
-Python 3.12 以上を想定しています。
+### Canonical browser experience: Optimization Atlas
 
-```bash
-uv sync --all-extras
-uv run optimization-compass serve
-```
-
-`uv` を使わない場合:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
-pip install -e '.[dev]'
-optimization-compass serve
-```
-
-### Optimization Atlas 静的アプリ
-
-Node.js 24 を使い、静的アプリを別プロセスで起動します。
+ブラウザで探索・診断・学習する場合はAtlasを使います。Node.js 24 で静的アプリを起動します。
 
 ```bash
 cd site
@@ -79,6 +64,27 @@ Atlas の主要な hash route は次のとおりです。
 ```bash
 uv run python scripts/verify_content.py
 ```
+
+### REST API / OpenAPI service
+
+Python 3.12 以上を想定しています。FastAPIのrootはAtlasへの移行案内で、独立した診断UIではありません。
+
+```bash
+uv sync --all-extras
+uv run optimization-compass serve
+```
+
+`uv` を使わない場合:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+pip install -e '.[dev]'
+optimization-compass serve
+```
+
+browser UI、REST API、CLIのsupport範囲は
+[`ADR 0002`](docs/adr/0002-canonical-browser-experience.md) に固定しています。
 
 ## CLI
 
@@ -156,7 +162,7 @@ src/optimization_compass/
   db.py           # SQLite read-only access
   engine.py       # deterministic recommendation engine
   models.py       # API/domain contracts
-  web.py          # dependency-free browser UI
+  web.py          # API service landing and browser migration notice
   resources/
     knowledge.sqlite
 scripts/
