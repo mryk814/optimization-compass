@@ -1,53 +1,21 @@
-name: CI
+name: Validated CI and Pages
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  test:
+  validate_pages_artifact:
+    name: Validate and build Pages artifact
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12", "3.13"]
-    steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv run ruff check .
-      - run: uv run ruff format --check .
-      - run: uv run mypy src
-      - run: uv run pytest --cov=optimization_compass --cov-report=term-missing
-      - run: uv run optimization-compass verify-data
-      - run: uv run python scripts/verify_content.py
-      - run: uv run python scripts/rebuild_dataset.py --stage
-      - run: git diff --exit-code -- data src/optimization_compass/resources
-
-  site:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: site
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-      - run: npm ci
-      - run: npm run typecheck
-      - run: npm test -- --run
-      - run: npm run build
-
-  recommendation-parity:
-    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.identity.outputs.commit_sha }}
+      dataset_version: ${{ steps.identity.outputs.dataset_version }}
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
@@ -59,10 +27,113 @@ jobs:
           node-version: "24"
           cache: npm
           cache-dependency-path: site/package-lock.json
+      - name: Install Python dependencies
+        run: uv sync --all-extras
+      - name: Install site dependencies
+        run: npm ci
+        working-directory: site
+      - name: Lint, format, and type-check Python
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src
+      - name: Run Python tests
+        run: uv run pytest --cov=optimization_compass --cov-report=term-missing
+      - name: Regenerate site data from the validated database
+        run: |
+          rm -rf site/public/data
+          uv run optimization-compass export-site-data --output site/public/data
+          git diff --exit-code -- site/public/data
+      - name: Verify data, content, licenses, and deterministic release
+        run: |
+          uv run optimization-compass verify-data
+          uv run python scripts/verify_content.py
+          uv run python scripts/verify_licensing.py
+          uv run python scripts/rebuild_dataset.py --stage
+          git diff --exit-code -- data site/public/data src/optimization_compass/resources
+      - name: Verify Python and TypeScript recommendation parity
+        run: npm run parity
+        working-directory: site
+      - name: Type-check and test the site
+        run: |
+          npm run typecheck
+          npm test -- --run
+        working-directory: site
+      - name: Build the production Pages directory
+        run: npm run build
+        working-directory: site
+      - name: Stamp deployment identity
+        id: identity
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          uv run python scripts/pages_artifact.py stamp \
+            --root site/dist \
+            --commit-sha "$COMMIT_SHA" \
+            --base-path /optimization-compass/
+          DATASET_VERSION="$(uv run python -c 'import json; print(json.load(open("site/dist/deployment.json", encoding="utf-8"))["dataset_version"])')"
+          echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
+          echo "dataset_version=$DATASET_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Verify the exact Pages directory to upload
+        env:
+          COMMIT_SHA: ${{ steps.identity.outputs.commit_sha }}
+          DATASET_VERSION: ${{ steps.identity.outputs.dataset_version }}
+        run: |
+          uv run python scripts/pages_artifact.py verify-local \
+            --root site/dist \
+            --expected-commit-sha "$COMMIT_SHA" \
+            --expected-dataset-version "$DATASET_VERSION"
+      - name: Upload the single validated Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          name: github-pages
+          path: site/dist
+          retention-days: 7
+
+  python_compatibility:
+    name: Python 3.13 compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          python-version: "3.13"
+          enable-cache: true
       - run: uv sync --all-extras
-      - run: npm ci
-        working-directory: site
-      - run: uv run optimization-compass export-site-data --output site/public/data
-      - run: git diff --exit-code -- site/public/data
-      - run: npm run parity
-        working-directory: site
+      - run: uv run pytest
+
+  deploy:
+    name: Deploy validated artifact and smoke it
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [validate_pages_artifact, python_compatibility]
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy the artifact uploaded by this workflow run
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Check out the exact deployed commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.validate_pages_artifact.outputs.commit_sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Smoke deployed routes, JSON assets, licenses, and identity
+        run: |
+          python scripts/pages_artifact.py smoke-remote \
+            --base-url "${{ steps.deployment.outputs.page_url }}" \
+            --expected-commit-sha "${{ needs.validate_pages_artifact.outputs.commit_sha }}" \
+            --expected-dataset-version "${{ needs.validate_pages_artifact.outputs.dataset_version }}" \
+            --attempts 10 \
+            --delay-seconds 6 \
+            --timeout-seconds 20

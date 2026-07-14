@@ -45,3 +45,6 @@ GitHub Pages artifact.
 - [ ] GitHub Pages was deployed from the validated artifact.
 - [ ] Post-deploy smoke checks confirm routes, data fetches, manifest identity,
       and license links.
+- [ ] Public `deployment.json` matches the validated workflow commit SHA and dataset version.
+- [ ] Pages failure and rollback follow [pages-deployment.md](pages-deployment.md); no artifact
+      from another commit or hand-built fallback is uploaded.
