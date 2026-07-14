@@ -91,7 +91,7 @@ optimization-compass serve
 ```
 
 browser UI、REST API、CLIのsupport範囲は
-[`ADR 0002`](docs/adr/0002-canonical-browser-experience.md) に固定しています。
+[`ADR 0003`](docs/adr/0003-canonical-browser-experience.md) に固定しています。
 
 ## CLI
 

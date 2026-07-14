@@ -36,7 +36,7 @@ Versioned exported SiteData     Deterministic rule engine
 Optimization Atlas is the canonical browser experience. FastAPI serves the REST API, OpenAPI, a
 health check, and a migration landing page; it does not maintain a fallback diagnosis UI. The
 support boundary, feature matrix, and copy authority are fixed in
-[`ADR 0002`](adr/0002-canonical-browser-experience.md).
+[`ADR 0003`](adr/0003-canonical-browser-experience.md).
 
 ## Why deterministic first
 
