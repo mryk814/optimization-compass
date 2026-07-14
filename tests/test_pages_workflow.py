@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 
@@ -13,8 +14,29 @@ def test_pages_has_one_validated_artifact_and_no_independent_workflow() -> None:
     assert workflow.count("actions/deploy-pages@") == 1
     assert "branches: [main]" in workflow
     assert "name: github-pages" in workflow
-    assert "needs: [validate_pages_artifact, python_compatibility]" in workflow
+    assert "needs: [validate_pages_artifact, python_compatibility, browser_e2e]" in workflow
     assert "github.event_name == 'push' && github.ref == 'refs/heads/main'" in workflow
+
+
+def test_browser_e2e_consumes_the_same_pages_artifact_before_deploy() -> None:
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert "browser_e2e:" in workflow
+    assert "needs: validate_pages_artifact" in workflow
+    assert "actions/download-artifact@v8" in workflow
+    assert "name: github-pages" in workflow
+    assert "tar -xf .pages-artifact/artifact.tar -C site/dist" in workflow
+    assert "npm run test:e2e:artifact" in workflow
+    assert "actions/upload-artifact@v7" in workflow
+    assert "if: failure()" in workflow
+
+
+def test_vitest_exclude_is_shell_safe_on_linux_and_windows() -> None:
+    package = json.loads(
+        (Path(__file__).parents[1] / "site/package.json").read_text(encoding="utf-8")
+    )
+
+    assert "--exclude=e2e/**" in package["scripts"]["test"]
 
 
 def test_validated_artifact_pipeline_contains_every_required_gate() -> None:

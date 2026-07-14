@@ -102,10 +102,51 @@ jobs:
       - run: uv sync --all-extras
       - run: uv run pytest
 
+  browser_e2e:
+    name: Browser E2E and accessibility
+    needs: validate_pages_artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install site and browser dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+        working-directory: site
+      - name: Download the validated Pages artifact from this run
+        uses: actions/download-artifact@v8
+        with:
+          name: github-pages
+          path: .pages-artifact
+      - name: Extract the exact artifact under test
+        run: |
+          rm -rf site/dist
+          mkdir -p site/dist
+          tar -xf .pages-artifact/artifact.tar -C site/dist
+          test -f site/dist/deployment.json
+      - name: Run production browser journeys and axe scans
+        run: npm run test:e2e:artifact
+        working-directory: site
+      - name: Upload browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-failure-${{ github.sha }}
+          path: |
+            site/test-results
+            site/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
+
   deploy:
     name: Deploy validated artifact and smoke it
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [validate_pages_artifact, python_compatibility]
+    needs: [validate_pages_artifact, python_compatibility, browser_e2e]
     permissions:
       contents: read
       pages: write

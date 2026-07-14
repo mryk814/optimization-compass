@@ -33,10 +33,13 @@ python scripts/pages_artifact.py verify-local \
   --expected-dataset-version <x.y.z>
 ```
 
-This seam is intentionally independent of GitHub Pages deployment so browser/E2E checks in #18
-can add a job that `needs: validate_pages_artifact`, downloads the `github-pages` artifact from the
-same workflow run, extracts its single `artifact.tar`, and verifies that exact directory instead of
-rebuilding it. Workflow structure tests keep the artifact name and single-upload contract explicit.
+The browser E2E job `needs: validate_pages_artifact`, downloads the `github-pages` artifact from
+the same workflow run, extracts its single `artifact.tar`, and verifies that exact directory instead
+of rebuilding it. The deploy job requires this browser job in addition to validation and Python
+compatibility, so a failed journey, console assertion, responsive check, or axe scan blocks
+publication. Workflow structure tests keep the artifact name and single-upload contract explicit.
+Failure evidence is retained as `playwright-failure-<commit SHA>` with screenshots, traces, console
+logs, JUnit output, and the HTML report.
 
 ## Deployment and post-deploy smoke
 

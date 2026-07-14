@@ -344,7 +344,7 @@
 
 .trace-summary small {
   margin-left: auto;
-  color: #717a74;
+  color: #59645d;
 }
 
 @media (max-width: 40rem) {
@@ -386,7 +386,7 @@
 .plot-current { fill: #b3532d; stroke: #fff; stroke-width: 2; }
 .comparison-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: .35rem; }
 .comparison-metrics div { display: grid; gap: .1rem; }
-.comparison-metrics dt { color: #89928b; }
+.comparison-metrics dt { color: #59645d; }
 .comparison-metrics dd { margin: 0; color: #263c30; font-weight: 700; overflow-wrap: anywhere; }
 .nm-contract { display: flex; gap: .45rem .8rem; flex-wrap: wrap; margin: .6rem 0; padding: .6rem .7rem; border: 1px solid #d1d5cc; border-radius: .45rem; background: #faf9f4; color: #465249; font-size: .75rem; }
 .nm-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(15rem, .65fr); gap: .65rem; }
@@ -400,7 +400,7 @@
 .nm-explanation p { margin: .45rem 0; color: #59645d; font-size: .76rem; line-height: 1.6; }
 .nm-explanation dl { margin: .7rem 0; font-size: .7rem; }
 .nm-explanation dl div { display: grid; grid-template-columns: 4.5rem 1fr; gap: .3rem; }
-.nm-explanation dt { color: #89928b; }
+.nm-explanation dt { color: #59645d; }
 .nm-explanation dd { margin: 0; overflow-wrap: anywhere; }
 .content-search, .gallery-filter { display: flex; align-items: center; gap: .45rem; margin-bottom: .65rem; color: #59645d; font-size: .75rem; }
 .content-search input, .gallery-filter select { min-height: 2rem; padding: .3rem .45rem; border: 1px solid #b8c0b9; border-radius: .3rem; background: #fff; font: inherit; }
@@ -409,16 +409,16 @@
 .content-card, .gallery-card { color: inherit; text-decoration: none; }
 .content-card:hover, .gallery-card:hover { border-color: #6c9a7f; background: #fbfdf9; }
 .content-card p, .gallery-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
-.content-card small, .gallery-card small, .content-detail > small, .gallery-detail > small { color: #7a847d; font-size: .65rem; }
-.content-detail, .gallery-detail { max-width: 52rem; }
+.content-card small, .gallery-card small, .content-detail > small, .gallery-detail > small { color: #59645d; font-size: .65rem; }
+.content-detail, .gallery-detail { width: 100%; max-width: 52rem; min-width: 0; overflow-wrap: anywhere; }
 .markdown-body { margin-top: .9rem; }
 .markdown-body h2, .gallery-section h2 { margin: 1rem 0 .3rem; color: #6b4a35; font-size: .85rem; }
 .markdown-body p, .gallery-section p { margin: .45rem 0; color: #46534b; font-size: .82rem; line-height: 1.7; }
 .markdown-body blockquote { margin: .65rem 0; padding: .45rem .6rem; border-left: 3px solid #8ead9c; background: #ecefe9; color: #34453b; font-size: .78rem; }
-.markdown-body pre, .gallery-section pre { overflow: auto; margin: .65rem 0; padding: .65rem; border-radius: .4rem; background: #1f2b25; color: #f0f5ed; font-size: .72rem; line-height: 1.5; }
+.markdown-body pre, .gallery-section pre { max-width: 100%; overflow: auto; margin: .65rem 0; padding: .65rem; border-radius: .4rem; background: #1f2b25; color: #f0f5ed; font-size: .72rem; line-height: 1.5; }
 .content-links { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin: 1rem 0 .6rem; padding-top: .6rem; border-top: 1px solid #e5e6e0; font-size: .72rem; }
 .content-links a { color: #285740; }
-.gallery-section { padding: .2rem 0 .35rem; border-top: 1px solid #e5e6e0; }
+.gallery-section { min-width: 0; padding: .2rem 0 .35rem; border-top: 1px solid #e5e6e0; }
 .gallery-section ul { margin: .35rem 0; padding-left: 1.1rem; color: #46534b; font-size: .78rem; line-height: 1.7; }
 .gallery-section h3 { margin: .65rem 0 .2rem; color: #6b4a35; font-size: .75rem; }
 
@@ -922,7 +922,13 @@ main:focus {
 }
 
 .map-tree-item-unrelated {
-  opacity: 0.48;
+  background: #f6f5f0;
+  color: #566159;
+}
+
+.map-tree-item-unrelated.map-tree-item-primary .map-tree-label {
+  color: #566159;
+  font-weight: 650;
 }
 
 .map-tree-toggle {
@@ -1092,7 +1098,7 @@ main:focus {
   gap: 0.45rem;
   padding: 0.6rem clamp(0.75rem, 3vw, 2rem);
   border-top: 1px solid #d7d6ce;
-  color: #6c756f;
+  color: #59645d;
   font-size: 0.68rem;
   flex-wrap: wrap;
 }
