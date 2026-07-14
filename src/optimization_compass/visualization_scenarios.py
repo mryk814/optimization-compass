@@ -10,7 +10,12 @@ Purpose = Literal["mechanism", "comparison", "failure_contrast", "sensitivity"]
 ArtifactKind = Literal[
     "executable_trace", "schematic_animation", "static_diagram", "result_visualization"
 ]
-RendererFamily = Literal["simplex_geometry", "continuous_trajectory", "generic_metric_history"]
+RendererFamily = Literal[
+    "simplex_geometry",
+    "continuous_trajectory",
+    "generic_metric_history",
+    "search_tree",
+]
 ParameterValue = bool | int | float
 
 

@@ -352,6 +352,13 @@ const traceEventExplanations: Readonly<Record<string, Readonly<{ ja: string; en:
 };
 
 export function traceEventExplanation(frame: TraceFrame, locale: "ja" | "en" = "ja"): string {
+  if (typeof frame.payload === "object" && frame.payload !== null && !Array.isArray(frame.payload)) {
+    const payload = frame.payload as Record<string, JsonValue>;
+    const key = locale === "ja" ? "decision_explanation_ja" : "decision_explanation_en";
+    if (payload.renderer_family === "search_tree" && typeof payload[key] === "string" && payload[key].trim()) {
+      return payload[key];
+    }
+  }
   const explanation = traceEventExplanations[frame.explanation_key];
   if (explanation) return explanation[locale];
   return locale === "ja"

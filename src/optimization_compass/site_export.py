@@ -12,6 +12,13 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
+from optimization_compass.search_tree import (
+    SearchTreeArtifact,
+    SearchTreeIndex,
+    SearchTreeIndexEntry,
+    generate_search_tree_artifact,
+    render_search_tree_svg,
+)
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -28,6 +35,7 @@ from optimization_compass.view_spec import (
     EntityReference,
     ManifestAsset,
     ManifestLicenseAsset,
+    ManifestRendererAsset,
     ManifestTraceAsset,
     ManifestView,
     SiteLicenseManifest,
@@ -263,13 +271,28 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    trace_asset, trace_index, generated_traces = _write_dummy_trace(
+    search_tree_asset, search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
         output_dir, dataset_version=release["version"]
+    )
+    trace_asset, trace_index, generated_traces = _write_dummy_trace(
+        output_dir,
+        dataset_version=release["version"],
+        additional_traces=[artifact.trace for artifact in search_tree_artifacts],
     )
     scenario_index = _build_visualization_scenario_index(
         generated_traces, dataset_version=release["version"]
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
+    search_tree_routes = {
+        entry.trace_id: f"/theater/search-tree/{entry.artifact_id}"
+        for entry in search_tree_index.artifacts
+    }
+    search_tree_sources = {
+        artifact.trace.trace_id: artifact.trace.source_ids for artifact in search_tree_artifacts
+    }
+    search_tree_views = {
+        artifact.trace.trace_id: ["VIEW_PROBLEM_STRUCTURE"] for artifact in search_tree_artifacts
+    }
     entity_links = build_entity_link_index(
         repository,
         dataset_version=release["version"],
@@ -277,6 +300,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_index=trace_index,
         content_directory=CONTENT_DIRECTORY,
         gallery_path=output_dir / "gallery.json",
+        trace_routes=search_tree_routes,
+        trace_source_ids=search_tree_sources,
+        trace_view_ids=search_tree_views,
     )
     _write_json(output_dir / "entity-links.json", entity_links)
     source_index = build_source_evidence_index(
@@ -293,6 +319,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
         visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
+        search_trees=search_tree_asset,
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
         licenses=SiteLicenseManifest(
@@ -313,7 +340,10 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
 
 
 def _write_dummy_trace(
-    output_dir: Path, *, dataset_version: str
+    output_dir: Path,
+    *,
+    dataset_version: str,
+    additional_traces: list[AlgorithmTrace] | None = None,
 ) -> tuple[ManifestTraceAsset, TraceIndex, list[AlgorithmTrace]]:
     frames = [
         _dummy_frame(
@@ -464,6 +494,7 @@ def _write_dummy_trace(
     ]
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
+    generated_traces.extend(additional_traces or [])
     index = index.model_copy(
         update={
             "traces": [
@@ -504,6 +535,10 @@ def _write_dummy_trace(
 def _trace_title(trace_id: str, *, locale: str) -> str:
     if trace_id.startswith("nelder-mead-"):
         return "Nelder–Meadの幾何操作" if locale == "ja" else "Nelder–Mead geometric operations"
+    if trace_id == "binary-knapsack-bnb-complete":
+        return "0-1 knapsack: 最適性証明" if locale == "ja" else "0-1 knapsack: optimality proof"
+    if trace_id == "binary-knapsack-bnb-budget":
+        return "0-1 knapsack: node予算で停止" if locale == "ja" else "0-1 knapsack: node budget"
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -526,10 +561,11 @@ def _build_visualization_scenario_index(
 
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
+    is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_divergence = trace.trace_id.endswith("-divergence")
-    point = trace.initial_state.get("point")
+    point = [0.0, 0.0, 0.0, 0.0] if is_search_tree else trace.initial_state.get("point")
     if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
-        raise ValueError(f"trace {trace.trace_id} has no numeric initial point")
+        raise ValueError(f"trace {trace.trace_id} has no numeric initial condition")
     preset_id = trace.preset.get("preset_id")
     if not isinstance(preset_id, str) or not preset_id.strip():
         raise ValueError(f"trace {trace.trace_id} has no parameter preset ID")
@@ -540,15 +576,25 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     if seed_value is not None and (isinstance(seed_value, bool) or not isinstance(seed_value, int)):
         raise ValueError(f"trace {trace.trace_id} has an invalid seed value")
     renderer_family: RendererFamily = (
-        "simplex_geometry" if is_nelder_mead else "continuous_trajectory"
+        "search_tree"
+        if is_search_tree
+        else "simplex_geometry"
+        if is_nelder_mead
+        else "continuous_trajectory"
     )
     observable_ids = (
-        ["objective_value", "simplex_vertices", "accepted_operation"]
+        ["search_nodes", "global_bound", "incumbent", "prune_reason"]
+        if is_search_tree
+        else ["objective_value", "simplex_vertices", "accepted_operation"]
         if is_nelder_mead
         else ["objective_value", "current_point", "gradient", "update_vector"]
     )
     purpose: Literal["mechanism", "comparison", "failure_contrast"] = (
-        "mechanism" if is_nelder_mead else "failure_contrast" if is_divergence else "comparison"
+        "failure_contrast"
+        if is_divergence or (is_search_tree and trace.terminal_status == "budget_exhausted")
+        else "mechanism"
+        if is_nelder_mead or is_search_tree
+        else "comparison"
     )
     return VisualizationScenario(
         contract_version="1.0.0",
@@ -557,35 +603,45 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         title_ja=_trace_title(trace.trace_id, locale="ja"),
         title_en=_trace_title(trace.trace_id, locale="en"),
         purpose=purpose,
-        problem_definition_id="PROBLEM_CONTINUOUS_UNCONSTRAINED",
+        problem_definition_id=(
+            "PROBLEM_BINARY_KNAPSACK" if is_search_tree else "PROBLEM_CONTINUOUS_UNCONSTRAINED"
+        ),
         problem_instance_id=trace.objective_id,
         lesson=VisualizationLesson(
             expected_phenomenon_ja=(
-                "反射・拡大・収縮・縮小で単体が移動する"
+                "枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する"
+                if is_search_tree
+                else "反射・拡大・収縮・縮小で単体が移動する"
                 if is_nelder_mead
                 else "学習率と更新則により谷での振動・発散の仕方が変わる"
             ),
             expected_phenomenon_en=(
-                "The simplex moves by reflection, expansion, contraction, and shrinkage"
+                "Observe branching, bounds, incumbent updates, and two pruning reasons"
+                if is_search_tree
+                else "The simplex moves by reflection, expansion, contraction, and shrinkage"
                 if is_nelder_mead
                 else (
                     "Learning rate and update rules change oscillation and divergence in the valley"
                 )
             ),
             limitations_ja=(
-                "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
+                "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
+                if is_search_tree
+                else "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
                 if is_nelder_mead
                 else "同一presetの教育用比較であり、一般的な手法の優劣を示さない"
             ),
             limitations_en=(
-                "A deterministic two-dimensional educational run, not a general performance ranking"
+                "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted"
+                if is_search_tree
+                else "A deterministic 2D educational run, not a general performance ranking"
                 if is_nelder_mead
                 else "An educational fixed-preset comparison, not a general method ranking"
             ),
         ),
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"]
-            if is_nelder_mead
+            if is_nelder_mead or is_search_tree
             else ["objective_value", "gradient"],
             initial_condition=VisualizationInitialCondition(
                 point=[float(value) for value in point]
@@ -593,7 +649,11 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             parameter_preset_id=preset_id,
             seed=VisualizationSeed(status=seed_status, value=seed_value),
             budget=VisualizationBudget(metric="oracle_evaluations", value=trace.evaluation_budget),
-            stopping=_numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping"),
+            stopping=(
+                {"max_nodes": trace.evaluation_budget}
+                if is_search_tree
+                else _numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping")
+            ),
             tuning_policy="fixed_preset",
         ),
         runs=[
@@ -616,6 +676,48 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         ),
         source_ids=trace.source_ids,
         last_verified="2026-07-15",
+    )
+
+
+def _write_search_tree_artifacts(
+    output_dir: Path, *, dataset_version: str
+) -> tuple[ManifestRendererAsset, SearchTreeIndex, list[SearchTreeArtifact]]:
+    artifacts = [
+        generate_search_tree_artifact(dataset_version=dataset_version),
+        generate_search_tree_artifact(dataset_version=dataset_version, node_budget=4),
+    ]
+    entries: list[SearchTreeIndexEntry] = []
+    for artifact in artifacts:
+        artifact_path = f"search-trees/{artifact.artifact_id}.json"
+        _write_json(output_dir / artifact_path, artifact)
+        fallback_path = output_dir / artifact.static_fallback.path
+        fallback_path.parent.mkdir(parents=True, exist_ok=True)
+        fallback_path.write_text(render_search_tree_svg(artifact), encoding="utf-8", newline="\n")
+        entries.append(
+            SearchTreeIndexEntry(
+                artifact_id=artifact.artifact_id,
+                path=artifact_path,
+                trace_id=artifact.trace.trace_id,
+                scenario_id=artifact.scenario_id,
+                artifact_kind=artifact.artifact_kind,
+                renderer_family=artifact.renderer_family,
+                renderer_contract_version=artifact.renderer_contract_version,
+                static_fallback_path=artifact.static_fallback.path,
+            )
+        )
+    index = SearchTreeIndex(dataset_version=dataset_version, artifacts=entries)
+    index_path = output_dir / "search-trees/index.json"
+    _write_json(index_path, index)
+    index_bytes = index_path.read_bytes()
+    return (
+        ManifestRendererAsset(
+            contract_version="1.0.0",
+            path="search-trees/index.json",
+            bytes=len(index_bytes),
+            sha256=sha256(index_bytes).hexdigest(),
+        ),
+        index,
+        artifacts,
     )
 
 

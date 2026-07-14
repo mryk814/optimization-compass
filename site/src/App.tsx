@@ -13,6 +13,7 @@ import { MapPage } from "./features/map/MapPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { MethodPage } from "./features/methods/MethodPage";
 import { TraceDemoPage } from "./features/playback/TraceDemoPage";
+import { SearchTreeTheaterPage } from "./features/search-tree/SearchTreeTheaterPage";
 import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
@@ -185,6 +186,7 @@ function AppShell() {
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/traces/:traceId" element={<TraceDemoPage />} />
+          <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />

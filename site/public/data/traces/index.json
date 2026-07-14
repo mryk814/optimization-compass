@@ -112,6 +112,26 @@
       "title_en": "Adam",
       "title_ja": "Adam",
       "trace_id": "adam-quadratic-divergence"
+    },
+    {
+      "method_id": "M_BRANCH_BOUND",
+      "objective_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "path": "binary-knapsack-bnb-complete.json",
+      "profile_id": "PROFILE_SEARCH_TREE_01",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "title_en": "0-1 knapsack: optimality proof",
+      "title_ja": "0-1 knapsack: 最適性証明",
+      "trace_id": "binary-knapsack-bnb-complete"
+    },
+    {
+      "method_id": "M_BRANCH_BOUND",
+      "objective_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "path": "binary-knapsack-bnb-budget.json",
+      "profile_id": "PROFILE_SEARCH_TREE_01",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "title_en": "0-1 knapsack: node budget",
+      "title_ja": "0-1 knapsack: node予算で停止",
+      "trace_id": "binary-knapsack-bnb-budget"
     }
   ]
 }

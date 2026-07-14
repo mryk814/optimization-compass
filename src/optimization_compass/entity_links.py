@@ -106,10 +106,16 @@ def build_entity_link_index(
     trace_index: TraceIndex,
     content_directory: Path,
     gallery_path: Path,
+    trace_routes: dict[str, str] | None = None,
+    trace_source_ids: dict[str, list[str]] | None = None,
+    trace_view_ids: dict[str, list[str]] | None = None,
 ) -> EntityLinkIndex:
     """Build the one canonical cross-artifact graph used by every site journey."""
 
     content = load_content(content_directory)
+    trace_routes = trace_routes or {}
+    trace_source_ids = trace_source_ids or {}
+    trace_view_ids = trace_view_ids or {}
     gallery = _load_gallery(gallery_path, dataset_version)
     entities: dict[tuple[EntityType, str], dict[str, Any]] = {}
     relations: defaultdict[tuple[EntityType, str], set[tuple[str, EntityType, str]]] = defaultdict(
@@ -283,7 +289,7 @@ def build_entity_link_index(
             "trace",
             entry.trace_id,
             entry.title_ja,
-            canonical_url=f"/traces/{entry.trace_id}",
+            canonical_url=trace_routes.get(entry.trace_id, f"/traces/{entry.trace_id}"),
             aliases=aliases,
         )
         connect(
@@ -294,6 +300,23 @@ def build_entity_link_index(
             entry.method_id,
             reverse_type="visualization",
         )
+        for source_id in trace_source_ids.get(entry.trace_id, []):
+            connect("trace", entry.trace_id, "evidence", "source", source_id)
+        for view_id in trace_view_ids.get(entry.trace_id, []):
+            add(
+                "view",
+                view_id,
+                "最適化問題の構造マップ" if view_id == "VIEW_PROBLEM_STRUCTURE" else view_id,
+                canonical_url="/map" if view_id == "VIEW_PROBLEM_STRUCTURE" else None,
+            )
+            connect(
+                "trace",
+                entry.trace_id,
+                "related_map",
+                "view",
+                view_id,
+                reverse_type="visualization",
+            )
 
     for case in gallery["cases"]:
         case_id = str(case["case_id"])

@@ -51,3 +51,14 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
     { animations: "disabled" },
   );
 });
+
+test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
+  await page.getByRole("link", { name: "Search-tree Theaterで再生" }).click();
+  await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
+  const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
+  await expect(page.getByRole("tree")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-search-tree");
+});

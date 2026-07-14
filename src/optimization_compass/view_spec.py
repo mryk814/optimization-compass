@@ -212,6 +212,13 @@ class ManifestTraceAsset(ContractModel):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class ManifestRendererAsset(ContractModel):
+    contract_version: Literal["1.0.0"]
+    path: str = Field(min_length=1)
+    bytes: int = Field(gt=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
 class ManifestLicenseAsset(ContractModel):
     spdx_id: Literal["MIT", "CC-BY-4.0"]
     path: str = Field(pattern=r"^licenses/[A-Z0-9._-]+\.txt$")
@@ -234,6 +241,7 @@ class SiteManifest(ContractModel):
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
     visualization_scenarios: ManifestAsset
+    search_trees: ManifestRendererAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
     licenses: SiteLicenseManifest

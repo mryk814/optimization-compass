@@ -185,6 +185,21 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
+    assert manifest_payload["search_trees"] == {
+        "contract_version": "1.0.0",
+        "path": "search-trees/index.json",
+        "bytes": len(search_tree_index_bytes),
+        "sha256": sha256(search_tree_index_bytes).hexdigest(),
+    }
+    search_tree_index = json.loads(search_tree_index_bytes)
+    assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+    }
+    for entry in search_tree_index["artifacts"]:
+        assert (first_output / entry["path"]).is_file()
+        assert (first_output / entry["static_fallback_path"]).is_file()
     assert manifest_payload["visualization_scenarios"] == {
         "path": "visualization-scenarios.json",
         "version": "1.0.0",
@@ -201,6 +216,18 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert len(source_payload["sources"]) == 95
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4193
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
+    search_trace = next(
+        entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "trace"
+        and entity["entity_id"] == "binary-knapsack-bnb-complete"
+    )
+    assert search_trace["canonical_url"] == ("/theater/search-tree/binary-knapsack-bnb-complete")
+    assert {relation["relation_type"] for relation in search_trace["relations"]} >= {
+        "evidence",
+        "related_map",
+        "visualizes",
+    }
     nelder_mead = next(
         entity
         for entity in link_payload["entities"]
@@ -268,6 +295,10 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     scenario_by_artifact = {
         run.artifact_id: scenario for scenario in scenario_index.scenarios for run in scenario.runs
     }
+    search_scenario = scenario_by_artifact["binary-knapsack-bnb-complete"]
+    assert search_scenario.purpose == "mechanism"
+    assert search_scenario.artifact.renderer_family == "search_tree"
+    assert search_scenario.problem_instance_id == "INSTANCE_BINARY_KNAPSACK_4"
     assert len(scenario_index.scenarios) == len(index.traces) - 1
     assert set(scenario_by_artifact) == {
         entry.trace_id for entry in index.traces if entry.trace_id != "dummy-educational"

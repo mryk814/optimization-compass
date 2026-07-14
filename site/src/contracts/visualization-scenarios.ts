@@ -1,6 +1,10 @@
 export type VisualizationPurpose = "mechanism" | "comparison" | "failure_contrast" | "sensitivity";
 export type VisualizationArtifactKind = "executable_trace" | "schematic_animation" | "static_diagram" | "result_visualization";
-export type RendererFamily = "simplex_geometry" | "continuous_trajectory" | "generic_metric_history";
+export type RendererFamily =
+  | "simplex_geometry"
+  | "continuous_trajectory"
+  | "generic_metric_history"
+  | "search_tree";
 
 export interface VisualizationScenario {
   contract_version: "1.0.0";
@@ -54,7 +58,12 @@ export interface VisualizationScenarioIndex {
 
 const purposes = new Set<VisualizationPurpose>(["mechanism", "comparison", "failure_contrast", "sensitivity"]);
 const artifactKinds = new Set<VisualizationArtifactKind>(["executable_trace", "schematic_animation", "static_diagram", "result_visualization"]);
-const rendererFamilies = new Set<RendererFamily>(["simplex_geometry", "continuous_trajectory", "generic_metric_history"]);
+const rendererFamilies = new Set<RendererFamily>([
+  "simplex_geometry",
+  "continuous_trajectory",
+  "generic_metric_history",
+  "search_tree",
+]);
 
 export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScenarioIndex {
   const data = record(raw, "VisualizationScenarioIndex");

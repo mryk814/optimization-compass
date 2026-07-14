@@ -46,7 +46,7 @@
       "lesson": {
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "limitations_en": "A deterministic two-dimensional educational run, not a general performance ranking",
+        "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
@@ -114,7 +114,7 @@
       "lesson": {
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "limitations_en": "A deterministic two-dimensional educational run, not a general performance ranking",
+        "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
@@ -182,7 +182,7 @@
       "lesson": {
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "limitations_en": "A deterministic two-dimensional educational run, not a general performance ranking",
+        "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
@@ -250,7 +250,7 @@
       "lesson": {
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "limitations_en": "A deterministic two-dimensional educational run, not a general performance ranking",
+        "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
@@ -693,6 +693,148 @@
       ],
       "title_en": "Adam",
       "title_ja": "Adam"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "search_nodes",
+          "global_bound",
+          "incumbent",
+          "prune_reason"
+        ],
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "search_tree"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 64
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BNB_DEPTH_FIRST_INCLUDE_FIRST",
+        "seed": {
+          "status": "fixed",
+          "value": 0
+        },
+        "stopping": {
+          "max_nodes": 64
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Observe branching, bounds, incumbent updates, and two pruning reasons",
+        "expected_phenomenon_ja": "枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する",
+        "limitations_en": "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted",
+        "limitations_ja": "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
+      },
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "binary-knapsack-bnb-complete",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BRANCH_BOUND",
+          "profile_id": "PROFILE_SEARCH_TREE_01",
+          "run_id": "RUN_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "title_en": "0-1 knapsack: optimality proof",
+      "title_ja": "0-1 knapsack: 最適性証明"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "search_nodes",
+          "global_bound",
+          "incumbent",
+          "prune_reason"
+        ],
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "search_tree"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 4
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BNB_DEPTH_FIRST_INCLUDE_FIRST",
+        "seed": {
+          "status": "fixed",
+          "value": 0
+        },
+        "stopping": {
+          "max_nodes": 4
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Observe branching, bounds, incumbent updates, and two pruning reasons",
+        "expected_phenomenon_ja": "枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する",
+        "limitations_en": "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted",
+        "limitations_ja": "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
+      },
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "binary-knapsack-bnb-budget",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BRANCH_BOUND",
+          "profile_id": "PROFILE_SEARCH_TREE_01",
+          "run_id": "RUN_BINARY_KNAPSACK_BNB_BUDGET"
+        }
+      ],
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "title_en": "0-1 knapsack: node budget",
+      "title_ja": "0-1 knapsack: node予算で停止"
     }
   ]
 }

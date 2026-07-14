@@ -77,6 +77,47 @@
       ]
     },
     {
+      "comparison_ids": [],
+      "content_id": "branch-and-bound",
+      "html": "<p>上下界を使って、改善できない離散探索の枝をまとめて除外する。</p>\n<p>Branch-and-Boundは、整数・0-1変数の候補を枝分かれさせながら、実行可能解の値（incumbent）と未探索部分のboundを比較して探索範囲を減らします。</p>\n<h2 id=\"naive-enumerationとの違い\" tabindex=\"-1\">naive enumerationとの違い</h2>\n<p>naive enumerationはすべての割当を調べます。Branch-and-Boundは、制約違反のsubtreeと、boundがincumbentを改善できないsubtreeを丸ごと探索しません。枝を調べなかった理由が証明として残る点が重要です。</p>\n<h2 id=\"best-feasible・global-bound・gap\" tabindex=\"-1\">best feasible・global bound・gap</h2>\n<ul>\n<li><p>best feasible valueは、現時点で見つかった実行可能解の値です。</p>\n</li>\n<li><p>global boundは、未探索部分が到達しうる最良値の限界です。</p>\n</li>\n<li><p>gapが0になり、未処理nodeがなくなれば最適性を証明できます。時間切れやnode予算で停止した場合、best feasibleは候補解ですが最適性は未証明です。</p>\n</li>\n</ul>\n<h2 id=\"mipとcp-satを同一視しない\" tabindex=\"-1\">MIPとCP-SATを同一視しない</h2>\n<p>MIPのBranch-and-Cutは連続緩和、cut、presolveなどを組み合わせます。CP-SATはSAT/CP由来の伝播・学習などを統合します。どちらも探索木やboundを見せられますが、内部機構やboundの意味を同一視できません。この教材は4変数knapsackの教育用Branch-and-Boundで、実solverの性能比較ではありません。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [],
+      "related_ids": [],
+      "seo_description": "上下界を使って、改善できない離散探索の枝をまとめて除外する。",
+      "seo_title": "Branch-and-Bound（分枝限定法）",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "status": "published",
+      "summary": "上下界を使って、改善できない離散探索の枝をまとめて除外する。",
+      "title_en": "Branch and Bound",
+      "title_ja": "Branch-and-Bound（分枝限定法）",
+      "toc": [
+        {
+          "heading_id": "naive-enumerationとの違い",
+          "label": "naive enumerationとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "best-feasible・global-bound・gap",
+          "label": "best feasible・global bound・gap",
+          "level": 2
+        },
+        {
+          "heading_id": "mipとcp-satを同一視しない",
+          "label": "MIPとCP-SATを同一視しない",
+          "level": 2
+        }
+      ],
+      "visualization_ids": [
+        "binary-knapsack-bnb-complete",
+        "binary-knapsack-bnb-budget"
+      ]
+    },
+    {
       "comparison_ids": [
         "COMPARE_GRADIENT_FAMILY"
       ],
