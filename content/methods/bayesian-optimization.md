@@ -38,8 +38,11 @@ last_reviewed: 2026-07-15
 | acquisition | 次の評価点を選ぶための基準 |
 | incumbent | 現時点で最良の観測値 |
 
-> [!WARNING]
-> 獲得関数の最大点は、目的関数の最適点だと確定した場所ではありません。次に情報を得る価値が高い候補です。
+::: warning
+獲得関数の最大点は、目的関数の最適点だと確定した場所ではありません。次に情報を得る価値が高い候補です。
+:::
+
+実際の更新は[Bayesian Optimization Theater](#/theater/bayesian-optimization)で確認できます。
 
 ## 向いている状況
 
