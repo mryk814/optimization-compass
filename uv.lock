@@ -702,7 +702,7 @@ requires-dist = [
     { name = "typer", specifier = ">=0.12,<1" },
     { name = "types-pygments", marker = "extra == 'dev'", specifier = ">=2.19,<3" },
     { name = "types-pyyaml", marker = "extra == 'dev'", specifier = ">=6,<7" },
-    { name = "uvicorn", extras = ["standard"], specifier = ">=0.30,<1" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.51.0,<1" },
 ]
 provides-extras = ["dev"]
 
