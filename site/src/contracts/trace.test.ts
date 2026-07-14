@@ -44,9 +44,10 @@ describe("AlgorithmTrace parser", () => {
     expect(() =>
       parseAlgorithmTrace({ ...payload, frames: [{ ...frame, payload: { bad: Infinity } }] }),
     ).toThrow(/finite/i);
-    expect(() =>
-      parseAlgorithmTrace({ ...payload, frames: [{ ...frame, payload: { too_large: 2 ** 53 } }] }),
-    ).toThrow(/safe binary64/i);
+    expect(parseAlgorithmTrace({
+      ...payload,
+      frames: [{ ...frame, payload: { large: [2 ** 53, 1e20, 1e21] } }],
+    }).frames[0].payload).toEqual({ large: [2 ** 53, 1e20, 1e21] });
     expect(() =>
       parseAlgorithmTrace({
         ...payload,
@@ -64,9 +65,9 @@ describe("AlgorithmTrace parser", () => {
   test("canonical bytes exactly match the Python authority golden", () => {
     const parsed = parseAlgorithmTrace(canonicalFixture);
     const canonical = canonicalTraceBytes(parsed);
-    expect(canonical.byteLength).toBe(1868);
+    expect(canonical.byteLength).toBe(1930);
     expect(createHash("sha256").update(canonical).digest("hex")).toBe(
-      "ea01571779b5aee0f39ad791f1b2062d4ff5fed8660160fd7da4fe84b5bc4f8b",
+      "2a4773f0c4aa877b447af95244b007f6c3a5ace76fd06c8358d504e9612b0773",
     );
   });
 

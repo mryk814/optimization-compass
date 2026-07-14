@@ -499,13 +499,7 @@ function jsonRecord(value: unknown, field: string): Record<string, JsonValue> {
 
 function jsonValue(value: unknown, field: string): JsonValue {
   if (value === null || typeof value === "string" || typeof value === "boolean") return value;
-  if (typeof value === "number") {
-    const result = finiteNumber(value, field);
-    if (Number.isInteger(result) && !Number.isSafeInteger(result)) {
-      throw new Error(`${field} contains an integer outside the safe binary64 range.`);
-    }
-    return result;
-  }
+  if (typeof value === "number") return finiteNumber(value, field);
   if (Array.isArray(value)) return value.map((item, index) => jsonValue(item, `${field}[${index}]`));
   if (typeof value === "object") {
     return Object.fromEntries(

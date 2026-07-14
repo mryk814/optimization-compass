@@ -196,10 +196,17 @@ def test_recursive_non_finite_numbers_are_rejected(replacement: dict[str, object
         TraceFrame.model_validate({**payload, **replacement})
 
 
-def test_json_integer_values_are_limited_to_the_binary64_safe_range() -> None:
+def test_json_integer_values_accept_the_full_finite_binary64_range() -> None:
     payload = frame(0).model_dump(mode="json")
-    with pytest.raises(ValidationError, match="safe binary64"):
-        TraceFrame.model_validate({**payload, "payload": {"too_large": 2**53}})
+    parsed = TraceFrame.model_validate(
+        {
+            **payload,
+            "payload": {"large": [2**53, 10**20, 10**21, 1e20, 1e21]},
+        }
+    )
+    assert parsed.payload == {"large": [2**53, 10**20, 10**21, 1e20, 1e21]}
+    with pytest.raises(ValidationError, match="finite binary64"):
+        TraceFrame.model_validate({**payload, "payload": {"too_large": 10**400}})
 
 
 def test_canonical_trace_bytes_are_deterministic_and_sorted() -> None:
@@ -213,9 +220,9 @@ def test_non_ascii_canonical_bytes_match_the_typescript_contract_fixture() -> No
     fixture_path = Path(__file__).parents[1] / "site/src/contracts/trace.canonical.fixture.json"
     parsed = AlgorithmTrace.model_validate_json(fixture_path.read_bytes())
     canonical = canonical_trace_bytes(parsed)
-    assert len(canonical) == 1868
+    assert len(canonical) == 1930
     assert sha256(canonical).hexdigest() == (
-        "ea01571779b5aee0f39ad791f1b2062d4ff5fed8660160fd7da4fe84b5bc4f8b"
+        "2a4773f0c4aa877b447af95244b007f6c3a5ace76fd06c8358d504e9612b0773"
     )
 
 

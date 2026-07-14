@@ -260,7 +260,7 @@ def _canonical_json(value: object) -> str:
     if isinstance(value, bool):
         return "true" if value else "false"
     if isinstance(value, int):
-        return str(value)
+        return _canonical_binary64(_finite_binary64(value))
     if isinstance(value, float):
         return _canonical_binary64(value)
     if isinstance(value, str):
@@ -297,6 +297,16 @@ def _canonical_binary64(value: float) -> str:
     return f"{sign}{digits[:split]}.{digits[split:]}"
 
 
+def _finite_binary64(value: int) -> float:
+    try:
+        converted = float(value)
+    except OverflowError as error:
+        raise ValueError("canonical JSON integers must fit finite binary64") from error
+    if not math.isfinite(converted):
+        raise ValueError("canonical JSON integers must fit finite binary64")
+    return converted
+
+
 def _validate_frame_progress(frames: Sequence[TraceFrame]) -> None:
     expected_indices = list(range(len(frames)))
     actual_indices = [frame.frame_index for frame in frames]
@@ -320,14 +330,14 @@ def _require_finite_json(value: object, path: str) -> None:
     if value is None or isinstance(value, (str, bool)):
         return
     if isinstance(value, int):
-        if abs(value) > MAX_SAFE_INTEGER:
-            raise ValueError(f"{path} contains an integer outside the safe binary64 range")
+        try:
+            _finite_binary64(value)
+        except ValueError as error:
+            raise ValueError(f"{path} contains a number outside finite binary64") from error
         return
     if isinstance(value, float):
         if not math.isfinite(value):
             raise ValueError(f"{path} contains a non-finite number")
-        if value.is_integer() and abs(value) > MAX_SAFE_INTEGER:
-            raise ValueError(f"{path} contains an integer outside the safe binary64 range")
         return
     if isinstance(value, list):
         for index, item in enumerate(value):
