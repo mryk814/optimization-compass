@@ -593,7 +593,10 @@ def _integrity_issues(
             severity="error",
             entity_type="scenario",
             entity_id=item,
-            detail="A derived generated scenario points to a canonical scenario missing from the database.",
+            detail=(
+                "A derived generated scenario points to a canonical scenario "
+                "missing from the database."
+            ),
         )
         for item in broken_aliases
     )
@@ -615,7 +618,10 @@ def _integrity_issues(
             severity="error",
             entity_type="comparison",
             entity_id=item,
-            detail="A derived generated comparison points to a canonical comparison missing from the database.",
+            detail=(
+                "A derived generated comparison points to a canonical comparison "
+                "missing from the database."
+            ),
         )
         for item in broken_comparison_aliases
     )

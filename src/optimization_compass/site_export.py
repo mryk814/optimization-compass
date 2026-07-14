@@ -48,7 +48,6 @@ from optimization_compass.view_spec import (
     ViewSpec,
 )
 from optimization_compass.visualization_scenarios import (
-    scenario_identity,
     RendererFamily,
     VisualizationArtifact,
     VisualizationBudget,
@@ -59,6 +58,7 @@ from optimization_compass.visualization_scenarios import (
     VisualizationScenario,
     VisualizationScenarioIndex,
     VisualizationSeed,
+    scenario_identity,
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"

@@ -45,6 +45,8 @@ def scenario_identity(scenario_id: str) -> tuple[ScenarioIdentityStatus, str | N
     if scenario_id in DERIVED_SCENARIO_BASE_IDS:
         return "derived", DERIVED_SCENARIO_BASE_IDS[scenario_id]
     return "generated_only", None
+
+
 ParameterValue = bool | int | float
 
 

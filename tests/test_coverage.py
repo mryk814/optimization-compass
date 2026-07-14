@@ -107,15 +107,9 @@ def test_generated_slices_declare_their_canonical_identity() -> None:
     scenario_index = json.loads(
         (ROOT / "site/public/data/visualization-scenarios.json").read_text(encoding="utf-8")
     )
-    derived = [
-        item
-        for item in scenario_index["scenarios"]
-        if item["identity_status"] == "derived"
-    ]
+    derived = [item for item in scenario_index["scenarios"] if item["identity_status"] == "derived"]
     generated_only = [
-        item
-        for item in scenario_index["scenarios"]
-        if item["identity_status"] == "generated_only"
+        item for item in scenario_index["scenarios"] if item["identity_status"] == "generated_only"
     ]
     assert derived
     assert generated_only
