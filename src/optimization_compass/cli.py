@@ -57,7 +57,7 @@ def serve(
     port: Annotated[int, typer.Option(min=1, max=65535)] = 8000,
     reload: Annotated[bool, typer.Option()] = False,
 ) -> None:
-    """Run the API and browser UI."""
+    """Run the REST API, OpenAPI docs, and Atlas migration landing page."""
     uvicorn.run("optimization_compass.api:app", host=host, port=port, reload=reload)
 
 
