@@ -786,6 +786,7 @@ def _verify_site_release_tree(
         "comparisons.json",
         "recommendation/site-data.json",
         "traces/index.json",
+        "search-trees/index.json",
     }
     actual_paths = {path.relative_to(directory).as_posix() for path in directory.rglob("*.json")}
     missing = sorted(required_paths - actual_paths)
@@ -810,6 +811,7 @@ def _verify_site_release_tree(
     referenced = {str(item["path"]) for item in manifest["views"] if isinstance(item, dict)}
     referenced.add(str(manifest["recommendation"]["path"]))
     referenced.add(str(manifest["traces"]["path"]))
+    referenced.add(str(manifest["search_trees"]["path"]))
     for relative in referenced:
         if not (directory / relative).is_file():
             raise ReleaseValidationError(f"site manifest references missing asset: {relative}")
@@ -818,6 +820,24 @@ def _verify_site_release_tree(
         raise ReleaseValidationError("site trace index byte count does not match manifest")
     if manifest["traces"]["sha256"] != sha256_file(trace_index_path):
         raise ReleaseValidationError("site trace index hash does not match manifest")
+    search_tree_index_path = directory / str(manifest["search_trees"]["path"])
+    if manifest["search_trees"]["bytes"] != search_tree_index_path.stat().st_size:
+        raise ReleaseValidationError("site search-tree index byte count does not match manifest")
+    if manifest["search_trees"]["sha256"] != sha256_file(search_tree_index_path):
+        raise ReleaseValidationError("site search-tree index hash does not match manifest")
+    search_tree_index = json.loads(search_tree_index_path.read_text(encoding="utf-8"))
+    for entry in search_tree_index["artifacts"]:
+        artifact_path = directory / str(entry["path"])
+        fallback_path = directory / str(entry["static_fallback_path"])
+        if not artifact_path.is_file():
+            raise ReleaseValidationError(
+                f"search-tree index references missing artifact: {entry['path']}"
+            )
+        if not fallback_path.is_file():
+            raise ReleaseValidationError(
+                "search-tree index references missing static fallback: "
+                f"{entry['static_fallback_path']}"
+            )
     trace_index = json.loads(trace_index_path.read_text(encoding="utf-8"))
     for entry in trace_index["traces"]:
         trace_path = directory / "traces" / str(entry["path"])

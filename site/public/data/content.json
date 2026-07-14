@@ -48,6 +48,30 @@
       ]
     },
     {
+      "body": "# Branch-and-Bound（分枝限定法）\n\nBranch-and-Boundは、整数・0-1変数の候補を枝分かれさせながら、実行可能解の値（incumbent）と未探索部分のboundを比較して探索範囲を減らします。\n\n## naive enumerationとの違い\n\nnaive enumerationはすべての割当を調べます。Branch-and-Boundは、制約違反のsubtreeと、boundがincumbentを改善できないsubtreeを丸ごと探索しません。枝を調べなかった理由が証明として残る点が重要です。\n\n## best feasible・global bound・gap\n\n- best feasible valueは、現時点で見つかった実行可能解の値です。\n- global boundは、未探索部分が到達しうる最良値の限界です。\n- gapが0になり、未処理nodeがなくなれば最適性を証明できます。時間切れやnode予算で停止した場合、best feasibleは候補解ですが最適性は未証明です。\n\n## MIPとCP-SATを同一視しない\n\nMIPのBranch-and-Cutは連続緩和、cut、presolveなどを組み合わせます。CP-SATはSAT/CP由来の伝播・学習などを統合します。どちらも探索木やboundを見せられますが、内部機構やboundの意味を同一視できません。この教材は4変数knapsackの教育用Branch-and-Boundで、実solverの性能比較ではありません。",
+      "comparison_ids": [],
+      "content_id": "branch-and-bound",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [],
+      "related_ids": [],
+      "seo_description": "Branch-and-Boundは、整数・0-1変数の候補を枝分かれさせながら、実行可能解の値（incumbent）と未探索部分のboundを比較して探索範囲を減らします。",
+      "seo_title": "Branch-and-Bound（分枝限定法）",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "status": "published",
+      "summary": "Branch-and-Boundは、整数・0-1変数の候補を枝分かれさせながら、実行可能解の値（incumbent）と未探索部分のboundを比較して探索範囲を減らします。",
+      "title_en": "Branch and Bound",
+      "title_ja": "Branch-and-Bound（分枝限定法）",
+      "visualization_ids": [
+        "binary-knapsack-bnb-complete",
+        "binary-knapsack-bnb-budget"
+      ]
+    },
+    {
       "body": "## 直感\n\n勾配の反対方向へ一定の学習率で進みます。",
       "comparison_ids": [
         "COMPARE_GRADIENT_FAMILY"

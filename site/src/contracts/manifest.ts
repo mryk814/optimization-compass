@@ -19,6 +19,13 @@ export interface ManifestTraceAsset {
   sha256: string;
 }
 
+export interface ManifestRendererAsset {
+  contract_version: "1.0.0";
+  path: string;
+  bytes: number;
+  sha256: string;
+}
+
 export interface ManifestLicenseAsset {
   spdx_id: "MIT" | "CC-BY-4.0";
   path: string;
@@ -40,6 +47,7 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
+  search_trees: ManifestRendererAsset;
   entity_links: ManifestAsset;
   licenses: SiteLicenseManifest;
 }
@@ -48,7 +56,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "licenses"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "search_trees", "entity_links", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -85,6 +93,17 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const sha256 = nonEmptyString(traces.sha256, "traces.sha256");
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
 
+  const searchTrees = record(data.search_trees, "search_trees");
+  exactKeys(searchTrees, ["contract_version", "path", "bytes", "sha256"], "search_trees");
+  if (searchTrees.contract_version !== "1.0.0") {
+    throw new Error("search_trees.contract_version is unsupported.");
+  }
+  const searchTreeBytes = positiveInteger(searchTrees.bytes, "search_trees.bytes");
+  const searchTreeSha256 = nonEmptyString(searchTrees.sha256, "search_trees.sha256");
+  if (!/^[0-9a-f]{64}$/u.test(searchTreeSha256)) {
+    throw new Error("search_trees.sha256 is invalid.");
+  }
+
   const licenses = parseLicenses(data.licenses);
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
@@ -105,6 +124,12 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(traces.path, "traces.path"),
       bytes,
       sha256,
+    },
+    search_trees: {
+      contract_version: "1.0.0",
+      path: safeRelativePath(searchTrees.path, "search_trees.path"),
+      bytes: searchTreeBytes,
+      sha256: searchTreeSha256,
     },
     entity_links: {
       version: "1.0.0",

@@ -11,6 +11,13 @@ from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
+from optimization_compass.search_tree import (
+    SearchTreeArtifact,
+    SearchTreeIndex,
+    SearchTreeIndexEntry,
+    generate_search_tree_artifact,
+    render_search_tree_svg,
+)
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -27,6 +34,7 @@ from optimization_compass.view_spec import (
     EntityReference,
     ManifestAsset,
     ManifestLicenseAsset,
+    ManifestRendererAsset,
     ManifestTraceAsset,
     ManifestView,
     SiteLicenseManifest,
@@ -249,7 +257,24 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    trace_asset, trace_index = _write_dummy_trace(output_dir, dataset_version=release["version"])
+    search_tree_asset, search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
+        output_dir, dataset_version=release["version"]
+    )
+    trace_asset, trace_index = _write_dummy_trace(
+        output_dir,
+        dataset_version=release["version"],
+        additional_traces=[artifact.trace for artifact in search_tree_artifacts],
+    )
+    search_tree_routes = {
+        entry.trace_id: f"/theater/search-tree/{entry.artifact_id}"
+        for entry in search_tree_index.artifacts
+    }
+    search_tree_sources = {
+        artifact.trace.trace_id: artifact.source_ids for artifact in search_tree_artifacts
+    }
+    search_tree_views = {
+        artifact.trace.trace_id: ["VIEW_PROBLEM_STRUCTURE"] for artifact in search_tree_artifacts
+    }
     entity_links = build_entity_link_index(
         repository,
         dataset_version=release["version"],
@@ -257,6 +282,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_index=trace_index,
         content_directory=CONTENT_DIRECTORY,
         gallery_path=output_dir / "gallery.json",
+        trace_routes=search_tree_routes,
+        trace_source_ids=search_tree_sources,
+        trace_view_ids=search_tree_views,
     )
     _write_json(output_dir / "entity-links.json", entity_links)
     manifest = SiteManifest(
@@ -266,6 +294,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
+        search_trees=search_tree_asset,
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         licenses=SiteLicenseManifest(
             code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
@@ -285,7 +314,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
 
 
 def _write_dummy_trace(
-    output_dir: Path, *, dataset_version: str
+    output_dir: Path, *, dataset_version: str, additional_traces: list[AlgorithmTrace] | None = None
 ) -> tuple[ManifestTraceAsset, TraceIndex]:
     frames = [
         _dummy_frame(
@@ -418,6 +447,7 @@ def _write_dummy_trace(
     ]
     generated_bundle = generate_gradient_bundle(dataset_version=dataset_version)
     generated_traces.extend(generated_bundle.member_traces)
+    generated_traces.extend(additional_traces or [])
     index = index.model_copy(
         update={
             "traces": [
@@ -438,8 +468,10 @@ def _write_dummy_trace(
             ]
         }
     )
-    for trace in generated_traces:
-        (output_dir / "traces" / f"{trace.trace_id}.json").write_bytes(canonical_trace_bytes(trace))
+    for generated_trace in generated_traces:
+        (output_dir / "traces" / f"{generated_trace.trace_id}.json").write_bytes(
+            canonical_trace_bytes(generated_trace)
+        )
     _write_json(index_path, index)
     index_bytes = index_path.read_bytes()
     return (
@@ -451,6 +483,51 @@ def _write_dummy_trace(
             sha256=sha256(index_bytes).hexdigest(),
         ),
         index,
+    )
+
+
+def _write_search_tree_artifacts(
+    output_dir: Path, *, dataset_version: str
+) -> tuple[ManifestRendererAsset, SearchTreeIndex, list[SearchTreeArtifact]]:
+    artifacts = [
+        generate_search_tree_artifact(dataset_version=dataset_version),
+        generate_search_tree_artifact(dataset_version=dataset_version, node_budget=4),
+    ]
+    entries: list[SearchTreeIndexEntry] = []
+    for artifact in artifacts:
+        artifact_path = f"search-trees/{artifact.artifact_id}.json"
+        _write_json(output_dir / artifact_path, artifact)
+        fallback_path = output_dir / artifact.static_fallback.path
+        fallback_path.parent.mkdir(parents=True, exist_ok=True)
+        fallback_path.write_text(render_search_tree_svg(artifact), encoding="utf-8", newline="\n")
+        entries.append(
+            SearchTreeIndexEntry(
+                artifact_id=artifact.artifact_id,
+                path=artifact_path,
+                trace_id=artifact.trace.trace_id,
+                scenario_id=artifact.scenario.scenario_id,
+                purpose=artifact.scenario.purpose,
+                artifact_kind=artifact.artifact_kind,
+                renderer_family=artifact.renderer_family,
+                renderer_contract_version=artifact.renderer_contract_version,
+                title_ja=artifact.scenario.title_ja,
+                title_en=artifact.scenario.title_en,
+                static_fallback_path=artifact.static_fallback.path,
+            )
+        )
+    index = SearchTreeIndex(dataset_version=dataset_version, artifacts=entries)
+    index_path = output_dir / "search-trees/index.json"
+    _write_json(index_path, index)
+    index_bytes = index_path.read_bytes()
+    return (
+        ManifestRendererAsset(
+            contract_version="1.0.0",
+            path="search-trees/index.json",
+            bytes=len(index_bytes),
+            sha256=sha256(index_bytes).hexdigest(),
+        ),
+        index,
+        artifacts,
     )
 
 

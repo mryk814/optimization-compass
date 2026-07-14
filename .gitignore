@@ -9,6 +9,10 @@ __pycache__/
 htmlcov/
 dist/
 site/node_modules/
+site/playwright-report/
+site/test-results/
+.playwright-cli/
+output/playwright/
 *.tsbuildinfo
 build/
 *.egg-info/

@@ -181,11 +181,38 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
+    assert manifest_payload["search_trees"] == {
+        "contract_version": "1.0.0",
+        "path": "search-trees/index.json",
+        "bytes": len(search_tree_index_bytes),
+        "sha256": sha256(search_tree_index_bytes).hexdigest(),
+    }
+    search_tree_index = json.loads(search_tree_index_bytes)
+    assert {item["purpose"] for item in search_tree_index["artifacts"]} == {
+        "mechanism",
+        "failure_contrast",
+    }
+    for entry in search_tree_index["artifacts"]:
+        assert (first_output / entry["path"]).is_file()
+        assert (first_output / entry["static_fallback_path"]).is_file()
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
         "version": "1.0.0",
     }
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
+    search_trace = next(
+        entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "trace"
+        and entity["entity_id"] == "binary-knapsack-bnb-complete"
+    )
+    assert search_trace["canonical_url"] == ("/theater/search-tree/binary-knapsack-bnb-complete")
+    assert {relation["relation_type"] for relation in search_trace["relations"]} >= {
+        "evidence",
+        "related_map",
+        "visualizes",
+    }
     nelder_mead = next(
         entity
         for entity in link_payload["entities"]

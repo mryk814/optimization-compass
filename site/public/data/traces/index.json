@@ -62,6 +62,26 @@
       "title_en": "M_ADAM educational trace",
       "title_ja": "M_ADAM 教材Trace",
       "trace_id": "adam-quadratic"
+    },
+    {
+      "method_id": "M_BRANCH_BOUND",
+      "objective_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "path": "binary-knapsack-bnb-complete.json",
+      "profile_id": "PROFILE_SEARCH_TREE_01",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "title_en": "M_BRANCH_BOUND educational trace",
+      "title_ja": "M_BRANCH_BOUND 教材Trace",
+      "trace_id": "binary-knapsack-bnb-complete"
+    },
+    {
+      "method_id": "M_BRANCH_BOUND",
+      "objective_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "path": "binary-knapsack-bnb-budget.json",
+      "profile_id": "PROFILE_SEARCH_TREE_01",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "title_en": "M_BRANCH_BOUND educational trace",
+      "title_ja": "M_BRANCH_BOUND 教材Trace",
+      "trace_id": "binary-knapsack-bnb-budget"
     }
   ]
 }

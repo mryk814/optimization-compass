@@ -44,7 +44,8 @@
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "binary-knapsack-bnb-complete"
       ]
     },
     {

@@ -26,12 +26,18 @@
     "path": "recommendation/site-data.json",
     "version": "1.0.0"
   },
+  "search_trees": {
+    "bytes": 1241,
+    "contract_version": "1.0.0",
+    "path": "search-trees/index.json",
+    "sha256": "dd24383682f66520ecac2f90b8e3f630fbf0ab604fd59320258490a5cbfbe613"
+  },
   "traces": {
-    "bytes": 2358,
+    "bytes": 3176,
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "c5819d6aaf6f6d0d79be6c0b4e4704c93e8d7e8216a32ecd9508ad92f4c90bf3"
+    "sha256": "b706d213ed12f4203bf095aad26125f1a6b313a51a3c1867459c1f65f8b05ab8"
   },
   "version": "1.0.0",
   "views": [

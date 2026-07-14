@@ -59,6 +59,12 @@ jobs:
           npm run typecheck
           npm test -- --run
         working-directory: site
+      - name: Install Chromium for search-tree journeys
+        run: npx playwright install --with-deps chromium
+        working-directory: site
+      - name: Test search-tree journeys at desktop and 375px
+        run: npm run test:e2e
+        working-directory: site
       - name: Build the production Pages directory
         run: npm run build
         working-directory: site

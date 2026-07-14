@@ -11,7 +11,7 @@
       "candidate_method_ids": ["M_CP_SAT", "MF_DISCRETE_EXACT"],
       "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "離散変数と大域保証の要求に合わない"}],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "binary-knapsack-bnb-complete"],
       "comparison_ids": [],
       "source_ids": ["S054", "S055"],
       "difficulty": "intro",
