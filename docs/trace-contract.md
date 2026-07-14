@@ -50,6 +50,7 @@
 - 1 traceは最大1,000 framesです。
 - canonical raw UTF-8 JSONは最大2 MiBです。圧縮後の大きさでは判定しません。
 - canonical serializationはUnicodeをそのまま使い、object keyをUnicode code point順にsortし、separatorを`,`と`:`へ固定します。Python/TypeScriptは共有fixtureでbyte lengthも一致させます。
+- JSON numberはIEEE-754 binary64の値を指数表記なしの正確な有限10進数へ展開します。`-0`は`0`、整数値のfloat（`2.0`や`1e20`を含む）は小数点なしで表します。integer fieldとJSON内のintegerは安全整数範囲（絶対値が`2^53-1`以下）に制限します。
 - list順はgeneratorが確定し、同じ入力・contract versionから同じbytesを生成します。
 - 公開traceにはwall-clock fieldを含めません。
 

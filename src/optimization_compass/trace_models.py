@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 TRACE_CONTRACT_VERSION: Literal["1.0.0"] = "1.0.0"
 MAX_TRACE_FRAMES = 1_000
 MAX_TRACE_BYTES = 2 * 1024 * 1024
+MAX_SAFE_INTEGER = 2**53 - 1
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 Slug = Annotated[str, Field(min_length=1, pattern=r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$")]
@@ -58,10 +59,10 @@ class TraceMetric(TraceModel):
 
 
 class TraceFrame(TraceModel):
-    frame_index: int = Field(ge=0)
-    iteration: int = Field(ge=0)
-    oracle_evaluations: int = Field(ge=0)
-    elapsed_steps: int = Field(ge=0)
+    frame_index: int = Field(ge=0, le=MAX_SAFE_INTEGER)
+    iteration: int = Field(ge=0, le=MAX_SAFE_INTEGER)
+    oracle_evaluations: int = Field(ge=0, le=MAX_SAFE_INTEGER)
+    elapsed_steps: int = Field(ge=0, le=MAX_SAFE_INTEGER)
     elapsed_time_ms: float = Field(ge=0)
     event_type: Slug
     decision: DecisionState
@@ -108,7 +109,7 @@ class AlgorithmTrace(TraceModel):
     parameters: dict[str, object]
     initial_state: dict[str, object]
     seed: dict[str, object]
-    evaluation_budget: int = Field(gt=0)
+    evaluation_budget: int = Field(gt=0, le=MAX_SAFE_INTEGER)
     stopping: dict[str, object]
     environment: dict[str, object]
     fairness_statement: NonBlank
@@ -202,7 +203,7 @@ class TraceBundle(TraceModel):
     objective: dict[str, object]
     initial_state: dict[str, object]
     seed: dict[str, object]
-    evaluation_budget: int = Field(gt=0)
+    evaluation_budget: int = Field(gt=0, le=MAX_SAFE_INTEGER)
     stopping: dict[str, object]
     environment: dict[str, object]
     fairness_statement: NonBlank
@@ -250,13 +251,50 @@ def canonical_trace_bytes(trace: AlgorithmTrace | TraceBundle) -> bytes:
 
 
 def _canonical_model_bytes(model: BaseModel) -> bytes:
-    return json.dumps(
-        model.model_dump(mode="json"),
-        ensure_ascii=False,
-        allow_nan=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
+    return _canonical_json(model.model_dump(mode="json")).encode("utf-8")
+
+
+def _canonical_json(value: object) -> str:
+    if value is None:
+        return "null"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, float):
+        return _canonical_binary64(value)
+    if isinstance(value, str):
+        return json.dumps(value, ensure_ascii=False)
+    if isinstance(value, list):
+        return "[" + ",".join(_canonical_json(item) for item in value) + "]"
+    if isinstance(value, dict):
+        return (
+            "{"
+            + ",".join(
+                f"{json.dumps(key, ensure_ascii=False)}:{_canonical_json(value[key])}"
+                for key in sorted(value)
+            )
+            + "}"
+        )
+    raise TypeError(f"unsupported canonical JSON value: {type(value).__name__}")
+
+
+def _canonical_binary64(value: float) -> str:
+    if not math.isfinite(value):
+        raise ValueError("canonical JSON numbers must be finite")
+    if value == 0:
+        return "0"
+    numerator, denominator = value.as_integer_ratio()
+    sign = "-" if numerator < 0 else ""
+    numerator = abs(numerator)
+    if denominator == 1:
+        return sign + str(numerator)
+    decimal_places = denominator.bit_length() - 1
+    digits = str(numerator * 5**decimal_places)
+    if len(digits) <= decimal_places:
+        digits = "0" * (decimal_places - len(digits) + 1) + digits
+    split = len(digits) - decimal_places
+    return f"{sign}{digits[:split]}.{digits[split:]}"
 
 
 def _validate_frame_progress(frames: Sequence[TraceFrame]) -> None:
@@ -282,10 +320,14 @@ def _require_finite_json(value: object, path: str) -> None:
     if value is None or isinstance(value, (str, bool)):
         return
     if isinstance(value, int):
+        if abs(value) > MAX_SAFE_INTEGER:
+            raise ValueError(f"{path} contains an integer outside the safe binary64 range")
         return
     if isinstance(value, float):
         if not math.isfinite(value):
             raise ValueError(f"{path} contains a non-finite number")
+        if value.is_integer() and abs(value) > MAX_SAFE_INTEGER:
+            raise ValueError(f"{path} contains an integer outside the safe binary64 range")
         return
     if isinstance(value, list):
         for index, item in enumerate(value):

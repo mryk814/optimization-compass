@@ -461,7 +461,7 @@ function nonNegativeNumber(value: unknown, field: string): number {
 
 function nonNegativeInteger(value: unknown, field: string): number {
   const result = nonNegativeNumber(value, field);
-  if (!Number.isInteger(result)) throw new Error(`${field} must be an integer.`);
+  if (!Number.isSafeInteger(result)) throw new Error(`${field} must be a safe integer.`);
   return result;
 }
 
@@ -499,7 +499,13 @@ function jsonRecord(value: unknown, field: string): Record<string, JsonValue> {
 
 function jsonValue(value: unknown, field: string): JsonValue {
   if (value === null || typeof value === "string" || typeof value === "boolean") return value;
-  if (typeof value === "number") return finiteNumber(value, field);
+  if (typeof value === "number") {
+    const result = finiteNumber(value, field);
+    if (Number.isInteger(result) && !Number.isSafeInteger(result)) {
+      throw new Error(`${field} contains an integer outside the safe binary64 range.`);
+    }
+    return result;
+  }
   if (Array.isArray(value)) return value.map((item, index) => jsonValue(item, `${field}[${index}]`));
   if (typeof value === "object") {
     return Object.fromEntries(
@@ -514,12 +520,46 @@ export function canonicalTraceBytes(trace: AlgorithmTrace | TraceBundle): Uint8A
 }
 
 function canonicalJson(value: JsonValue | AlgorithmTrace | TraceBundle): string {
+  if (typeof value === "number") return canonicalBinary64(value);
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   return `{${Object.entries(value)
     .sort(([left], [right]) => compareUnicodeCodePoints(left, right))
     .map(([key, item]) => `${JSON.stringify(key)}:${canonicalJson(item as JsonValue)}`)
     .join(",")}}`;
+}
+
+function canonicalBinary64(value: number): string {
+  if (!Number.isFinite(value)) throw new Error("Canonical JSON numbers must be finite.");
+  if (value === 0) return "0";
+
+  const view = new DataView(new ArrayBuffer(8));
+  view.setFloat64(0, Math.abs(value), false);
+  const bits = view.getBigUint64(0, false);
+  const exponentBits = Number((bits >> 52n) & 0x7ffn);
+  let significand = bits & ((1n << 52n) - 1n);
+  let exponent: number;
+  if (exponentBits === 0) {
+    exponent = -1074;
+  } else {
+    significand |= 1n << 52n;
+    exponent = exponentBits - 1023 - 52;
+  }
+
+  const sign = value < 0 ? "-" : "";
+  if (exponent >= 0) return sign + String(significand << BigInt(exponent));
+  let decimalPlaces = -exponent;
+  while (decimalPlaces > 0 && significand % 2n === 0n) {
+    significand /= 2n;
+    decimalPlaces -= 1;
+  }
+  if (decimalPlaces === 0) return sign + String(significand);
+  let digits = String(significand * (5n ** BigInt(decimalPlaces)));
+  if (digits.length <= decimalPlaces) {
+    digits = "0".repeat(decimalPlaces - digits.length + 1) + digits;
+  }
+  const split = digits.length - decimalPlaces;
+  return `${sign}${digits.slice(0, split)}.${digits.slice(split)}`;
 }
 
 function compareUnicodeCodePoints(left: string, right: string): number {

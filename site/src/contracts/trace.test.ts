@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { createHash } from "node:crypto";
 
 import {
   parseAlgorithmTrace,
@@ -44,6 +45,9 @@ describe("AlgorithmTrace parser", () => {
       parseAlgorithmTrace({ ...payload, frames: [{ ...frame, payload: { bad: Infinity } }] }),
     ).toThrow(/finite/i);
     expect(() =>
+      parseAlgorithmTrace({ ...payload, frames: [{ ...frame, payload: { too_large: 2 ** 53 } }] }),
+    ).toThrow(/safe binary64/i);
+    expect(() =>
       parseAlgorithmTrace({
         ...payload,
         frames: [frame, { ...frame, frame_index: 2, iteration: 1, oracle_evaluations: 1 }],
@@ -57,11 +61,13 @@ describe("AlgorithmTrace parser", () => {
     ).toThrow(/oracle_evaluations/u);
   });
 
-  test("canonical bytes use Python-compatible Unicode code-point key ordering", () => {
+  test("canonical bytes exactly match the Python authority golden", () => {
     const parsed = parseAlgorithmTrace(canonicalFixture);
-    const canonical = new TextDecoder().decode(canonicalTraceBytes(parsed));
-    expect(canonical).toContain('"あ":"hiragana","":"private","😀":"astral"');
-    expect(canonicalTraceBytes(parsed).byteLength).toBe(1096);
+    const canonical = canonicalTraceBytes(parsed);
+    expect(canonical.byteLength).toBe(1868);
+    expect(createHash("sha256").update(canonical).digest("hex")).toBe(
+      "ea01571779b5aee0f39ad791f1b2062d4ff5fed8660160fd7da4fe84b5bc4f8b",
+    );
   });
 
   test("unknown explanation keys use a deterministic common fallback", () => {

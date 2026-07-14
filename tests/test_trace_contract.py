@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -196,29 +196,27 @@ def test_recursive_non_finite_numbers_are_rejected(replacement: dict[str, object
         TraceFrame.model_validate({**payload, **replacement})
 
 
+def test_json_integer_values_are_limited_to_the_binary64_safe_range() -> None:
+    payload = frame(0).model_dump(mode="json")
+    with pytest.raises(ValidationError, match="safe binary64"):
+        TraceFrame.model_validate({**payload, "payload": {"too_large": 2**53}})
+
+
 def test_canonical_trace_bytes_are_deterministic_and_sorted() -> None:
     first = trace(frame(0, payload={"z": 1, "a": {"y": 2, "b": 3}}))
     second = trace(frame(0, payload={"a": {"b": 3, "y": 2}, "z": 1}))
     first_bytes = canonical_trace_bytes(first)
     assert first_bytes == canonical_trace_bytes(second)
-    assert (
-        first_bytes
-        == json.dumps(
-            first.model_dump(mode="json"),
-            ensure_ascii=False,
-            allow_nan=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode()
-    )
 
 
 def test_non_ascii_canonical_bytes_match_the_typescript_contract_fixture() -> None:
     fixture_path = Path(__file__).parents[1] / "site/src/contracts/trace.canonical.fixture.json"
     parsed = AlgorithmTrace.model_validate_json(fixture_path.read_bytes())
     canonical = canonical_trace_bytes(parsed)
-    assert '"あ":"hiragana","":"private","😀":"astral"'.encode() in canonical
-    assert len(canonical) == 1096
+    assert len(canonical) == 1868
+    assert sha256(canonical).hexdigest() == (
+        "ea01571779b5aee0f39ad791f1b2062d4ff5fed8660160fd7da4fe84b5bc4f8b"
+    )
 
 
 def test_frame_count_and_raw_canonical_size_limits_are_enforced() -> None:

@@ -25,17 +25,42 @@
     "iteration": 0,
     "oracle_evaluations": 0,
     "elapsed_steps": 0,
-    "elapsed_time_ms": 0.5,
+    "elapsed_time_ms": 100.0,
     "event_type": "fixture",
     "decision": "not_applicable",
     "explanation_key": "trace.fixture",
     "event_label_ja": null,
     "event_label_en": null,
     "keyframe": true,
-    "points": [],
-    "vectors": [],
-    "metrics": [],
-    "payload": {"😀": "astral", "": "private", "あ": "hiragana"}
+    "points": [{
+      "point_id": "point-a",
+      "role": "candidate",
+      "coordinates": [0.0, 2.0, -0.0, 0.1, 1e-7, 1e20, 1e21],
+      "value": 100.0,
+      "label_ja": "候補",
+      "label_en": "Candidate"
+    }],
+    "vectors": [{
+      "vector_id": "vector-a",
+      "role": "movement",
+      "origin": [100.0, -0.0, 1.25, 1e-7],
+      "components": [2.0, 0.5, -3.75, 1e20],
+      "label_ja": "移動",
+      "label_en": "Movement"
+    }],
+    "metrics": [{
+      "metric_id": "metric-a",
+      "label_ja": "指標",
+      "label_en": "Metric",
+      "value": 2.0,
+      "unit": null
+    }],
+    "payload": {
+      "numbers": [0, -0.0, 2, 2.0, 0.5, 0.1, 1e-7],
+      "😀": "astral",
+      "": "private",
+      "あ": "hiragana"
+    }
   }],
   "terminal_status": "completed",
   "terminal_summary_ja": "完了",
