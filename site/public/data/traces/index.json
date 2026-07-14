@@ -12,6 +12,56 @@
       "title_en": "AlgorithmTrace contract demo",
       "title_ja": "AlgorithmTrace 契約デモ",
       "trace_id": "dummy-educational"
+    },
+    {
+      "method_id": "M_NELDER_MEAD",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "path": "nelder-mead-quadratic.json",
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "title_en": "M_NELDER_MEAD educational trace",
+      "title_ja": "M_NELDER_MEAD 教材Trace",
+      "trace_id": "nelder-mead-quadratic"
+    },
+    {
+      "method_id": "M_NELDER_MEAD",
+      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
+      "path": "nelder-mead-rosenbrock.json",
+      "profile_id": "PROFILE_NELDER_MEAD_2D",
+      "scenario_id": "SCENARIO_NM_ROSENBROCK",
+      "title_en": "M_NELDER_MEAD educational trace",
+      "title_ja": "M_NELDER_MEAD 教材Trace",
+      "trace_id": "nelder-mead-rosenbrock"
+    },
+    {
+      "method_id": "M_GRADIENT_DESCENT",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "path": "gradient_descent-quadratic.json",
+      "profile_id": "PROFILE_GRADIENT_DESCENT_2D",
+      "scenario_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC",
+      "title_en": "M_GRADIENT_DESCENT educational trace",
+      "title_ja": "M_GRADIENT_DESCENT 教材Trace",
+      "trace_id": "gradient_descent-quadratic"
+    },
+    {
+      "method_id": "M_MOMENTUM_SGD",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "path": "momentum-quadratic.json",
+      "profile_id": "PROFILE_MOMENTUM_2D",
+      "scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "title_en": "M_MOMENTUM_SGD educational trace",
+      "title_ja": "M_MOMENTUM_SGD 教材Trace",
+      "trace_id": "momentum-quadratic"
+    },
+    {
+      "method_id": "M_ADAM",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "path": "adam-quadratic.json",
+      "profile_id": "PROFILE_ADAM_2D",
+      "scenario_id": "SCENARIO_ADAM_QUADRATIC",
+      "title_en": "M_ADAM educational trace",
+      "title_ja": "M_ADAM 教材Trace",
+      "trace_id": "adam-quadratic"
     }
   ]
 }

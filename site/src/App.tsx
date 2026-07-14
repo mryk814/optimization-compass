@@ -12,6 +12,10 @@ import { MapPage } from "./features/map/MapPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { MethodPage } from "./features/methods/MethodPage";
 import { TraceDemoPage } from "./features/playback/TraceDemoPage";
+import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
+import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
+import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { NelderMeadPage } from "./features/theater/NelderMeadPage";
 
 import "./styles.css";
 
@@ -24,12 +28,17 @@ const primaryNavigation = [
   { label: "Gallery", to: "/gallery", matchPath: "/gallery", matchMode: "family" },
 ] as const;
 
+const resolvedNavigation = primaryNavigation.map((item) =>
+  item.to === "/compare/overview" ? { ...item, to: "/compare/gradient-quadratic" } : item,
+);
+
 type PurposePageProps = {
   heading: string;
   purpose: string;
 };
 
 function PurposePage({ heading, purpose }: PurposePageProps) {
+  if (heading === "ケースギャラリー") return <GalleryPage />;
   return (
     <section className="page-panel">
       <h1>{heading}</h1>
@@ -114,7 +123,7 @@ function AppShell() {
           <span>Optimization Atlas</span>
         </Link>
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
-          {primaryNavigation.map(({ label, to, matchPath, matchMode }) => {
+          {resolvedNavigation.map(({ label, to, matchPath, matchMode }) => {
             const isActive =
               matchMode === "exact"
                 ? pathname === matchPath
@@ -140,7 +149,9 @@ function AppShell() {
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/traces/:traceId" element={<TraceDemoPage />} />
-          <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
+          <Route path="/theater/nelder-mead" element={<NelderMeadPage />} />
+          <Route path="/compare/:comparisonId" element={<CompareLabPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route
             path="/gallery"
             element={
@@ -150,7 +161,9 @@ function AppShell() {
               />
             }
           />
-          <Route path="/gallery/:caseId" element={<CasePage />} />
+          <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
+          <Route path="/learn" element={<ContentIndexPage />} />
+          <Route path="/learn/:contentId" element={<ContentPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

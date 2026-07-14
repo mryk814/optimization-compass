@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { parseViewSpec, type ViewSpec } from "../../contracts/viewspec";
 import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
@@ -68,6 +68,7 @@ export function MethodPage() {
       <p className="route-parameter">Method ID: <strong>{methodId}</strong></p>
       {error && <p role="alert">{error.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
+      {methodId === "M_NELDER_MEAD" && <Link className="text-link" to="/theater/nelder-mead">Method Theaterを開く</Link>}
     </section>
   );
 }
