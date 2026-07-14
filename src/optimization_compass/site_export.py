@@ -18,6 +18,7 @@ from optimization_compass.trace_models import (
     TraceVector,
     canonical_trace_bytes,
 )
+from optimization_compass.traces import generate_gradient_bundle, generate_nelder_mead_trace
 from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
@@ -348,6 +349,42 @@ def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> ManifestTra
     trace_path.parent.mkdir(parents=True, exist_ok=True)
     trace_path.write_bytes(canonical_trace_bytes(trace))
     index_path = output_dir / "traces/index.json"
+    generated_traces = [
+        generate_nelder_mead_trace(
+            objective_family="quadratic",
+            trace_id="nelder-mead-quadratic",
+            dataset_version=dataset_version,
+        ),
+        generate_nelder_mead_trace(
+            objective_family="rosenbrock",
+            trace_id="nelder-mead-rosenbrock",
+            dataset_version=dataset_version,
+        ),
+    ]
+    generated_bundle = generate_gradient_bundle(dataset_version=dataset_version)
+    generated_traces.extend(generated_bundle.member_traces)
+    index = index.model_copy(
+        update={
+            "traces": [
+                *index.traces,
+                *[
+                    TraceIndexEntry(
+                        trace_id=trace.trace_id,
+                        path=f"{trace.trace_id}.json",
+                        method_id=trace.method_id,
+                        profile_id=trace.profile_id,
+                        objective_id=trace.objective_id,
+                        scenario_id=trace.scenario_id,
+                        title_ja=f"{trace.method_id} 教材Trace",
+                        title_en=f"{trace.method_id} educational trace",
+                    )
+                    for trace in generated_traces
+                ],
+            ]
+        }
+    )
+    for trace in generated_traces:
+        (output_dir / "traces" / f"{trace.trace_id}.json").write_bytes(canonical_trace_bytes(trace))
     _write_json(index_path, index)
     index_bytes = index_path.read_bytes()
     return ManifestTraceAsset(

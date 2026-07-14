@@ -62,6 +62,19 @@ npm run build
 
 生成物は `site/dist/` に出力されます。
 
+Atlas の主要な hash route は次のとおりです。
+
+- `/theater/nelder-mead`: Nelder–Mead の simplex / 候補点 / イベント再生
+- `/compare/gradient-quadratic`: GD / Momentum / Adam の同一条件比較
+- `/learn`: 手法・概念の教材一覧と検索
+- `/gallery`: 実問題ケースの一覧・診断導線・除外候補
+
+教材と Atlas 用静的インデックスの整合性は次で確認できます。
+
+```bash
+uv run python scripts/verify_content.py
+```
+
 ## CLI
 
 質問一覧:

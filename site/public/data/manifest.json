@@ -6,11 +6,11 @@
     "version": "1.0.0"
   },
   "traces": {
-    "bytes": 475,
+    "bytes": 2358,
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "dd400e194cd71e390b617016d62304a9c90d0ba35b80529e5e9a602efdf7bc52"
+    "sha256": "b06d559add3f9250d9bbd89de845794801f668a64c76ef0d00da56c01ed802e7"
   },
   "version": "1.0.0",
   "views": [

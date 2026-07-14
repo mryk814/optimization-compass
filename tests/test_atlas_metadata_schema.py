@@ -41,7 +41,7 @@ def test_seed_is_explicit_and_closes_all_references() -> None:
         for profile in seed.method_visualization_profiles
     )
     assert all(profile.implementation_id is None for profile in seed.method_visualization_profiles)
-    assert len(seed.demo_scenarios) == 2
+    assert len(seed.demo_scenarios) == 5
     assert len(seed.comparison_sets) == 1
     assert len(seed.comparison_set_members) == 3
     assert seed.learning_edges
