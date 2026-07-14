@@ -12,7 +12,7 @@ from optimization_compass.models import (
     RecommendationResponse,
     VerificationResult,
 )
-from optimization_compass.web import HTML
+from optimization_compass.web import CANONICAL_ATLAS_URL, SERVICE_LANDING_HTML
 
 repository = KnowledgeRepository()
 engine = RecommendationEngine(repository)
@@ -25,8 +25,11 @@ app = FastAPI(
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
-def index() -> str:
-    return HTML
+def index() -> HTMLResponse:
+    return HTMLResponse(
+        content=SERVICE_LANDING_HTML,
+        headers={"Link": f'<{CANONICAL_ATLAS_URL}>; rel="canonical"'},
+    )
 
 
 @app.get("/healthz")

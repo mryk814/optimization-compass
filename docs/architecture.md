@@ -16,20 +16,27 @@
 ## Components
 
 ```text
-Browser / CLI / API client
-          |
-          v
-Pydantic request validation
-          |
-          v
-Deterministic rule engine
-          |
-          v
-Read-only repository layer
-          |
-          v
-Versioned SQLite knowledge base
+Browser                         CLI / API client
+   |                                  |
+   v                                  v
+Static Optimization Atlas       Pydantic request validation
+   |                                  |
+   v                                  v
+Versioned exported SiteData     Deterministic rule engine
+   |                                  |
+   +-------- shared cases ------------+
+                                      |
+                                      v
+                              Read-only repository layer
+                                      |
+                                      v
+                              Versioned SQLite knowledge base
 ```
+
+Optimization Atlas is the canonical browser experience. FastAPI serves the REST API, OpenAPI, a
+health check, and a migration landing page; it does not maintain a fallback diagnosis UI. The
+support boundary, feature matrix, and copy authority are fixed in
+[`ADR 0003`](adr/0003-canonical-browser-experience.md).
 
 ## Why deterministic first
 

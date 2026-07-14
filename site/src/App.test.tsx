@@ -145,7 +145,7 @@ describe("application routes", () => {
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
-    expect(links).toHaveLength(6);
+    expect(links).toHaveLength(7);
     links.forEach((link) => expect(link).toBeVisible());
     within(screen.getByLabelText("Atlasの主要な入口"))
       .getAllByRole("link")
@@ -206,7 +206,7 @@ describe("application routes", () => {
   });
 
   test.each([
-    ["#/learn/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", pages: [] }],
+    ["#/learn/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", pages: [] }],
     ["#/gallery/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }],
     [
       "#/compare/missing",

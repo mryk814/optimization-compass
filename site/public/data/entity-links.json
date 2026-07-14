@@ -10945,7 +10945,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S001",
       "entity_id": "S001",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
@@ -10955,7 +10955,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S002",
       "entity_id": "S002",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html",
@@ -10965,7 +10965,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S003",
       "entity_id": "S003",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html",
@@ -10975,7 +10975,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S004",
       "entity_id": "S004",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html",
@@ -10985,7 +10985,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S005",
       "entity_id": "S005",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.milp.html",
@@ -10995,7 +10995,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S006",
       "entity_id": "S006",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.differential_evolution.html",
@@ -11005,7 +11005,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S007",
       "entity_id": "S007",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.shgo.html",
@@ -11015,7 +11015,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S008",
       "entity_id": "S008",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.direct.html",
@@ -11025,7 +11025,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S009",
       "entity_id": "S009",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.dual_annealing.html",
@@ -11035,7 +11035,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S010",
       "entity_id": "S010",
       "entity_type": "source",
       "external_url": "https://www.cvxpy.org/",
@@ -11045,7 +11045,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S011",
       "entity_id": "S011",
       "entity_type": "source",
       "external_url": "https://www.cvxpy.org/tutorial/solvers/index.html",
@@ -11055,7 +11055,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S012",
       "entity_id": "S012",
       "entity_type": "source",
       "external_url": "https://osqp.org/docs/",
@@ -11065,7 +11065,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S013",
       "entity_id": "S013",
       "entity_type": "source",
       "external_url": "https://www.cvxgrp.org/scs/",
@@ -11075,7 +11075,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S014",
       "entity_id": "S014",
       "entity_type": "source",
       "external_url": "https://clarabel.org/stable/",
@@ -11085,7 +11085,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S015",
       "entity_id": "S015",
       "entity_type": "source",
       "external_url": "https://cvxopt.org/",
@@ -11095,7 +11095,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S016",
       "entity_id": "S016",
       "entity_type": "source",
       "external_url": "https://highs.dev/",
@@ -11105,7 +11105,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S017",
       "entity_id": "S017",
       "entity_type": "source",
       "external_url": "https://coin-or.github.io/Ipopt/",
@@ -11115,7 +11115,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S018",
       "entity_id": "S018",
       "entity_type": "source",
       "external_url": "https://nlopt.readthedocs.io/en/latest/",
@@ -11125,7 +11125,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S019",
       "entity_id": "S019",
       "entity_type": "source",
       "external_url": "https://petsc.org/release/overview/tao/",
@@ -11135,7 +11135,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S020",
       "entity_id": "S020",
       "entity_type": "source",
       "external_url": "https://pyomo.readthedocs.io/en/stable/",
@@ -11145,7 +11145,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S021",
       "entity_id": "S021",
       "entity_type": "source",
       "external_url": "https://www.scipopt.org/doc/html/",
@@ -11155,7 +11155,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S022",
       "entity_id": "S022",
       "entity_type": "source",
       "external_url": "https://developers.google.com/optimization/cp/cp_solver",
@@ -11165,7 +11165,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S023",
       "entity_id": "S023",
       "entity_type": "source",
       "external_url": "https://developers.google.com/optimization/routing",
@@ -11175,7 +11175,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S024",
       "entity_id": "S024",
       "entity_type": "source",
       "external_url": "https://docs.gurobi.com/projects/optimizer/en/current/",
@@ -11185,7 +11185,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S025",
       "entity_id": "S025",
       "entity_type": "source",
       "external_url": "https://www.ibm.com/docs/en/icos",
@@ -11195,7 +11195,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S026",
       "entity_id": "S026",
       "entity_type": "source",
       "external_url": "https://github.com/coin-or/Cbc",
@@ -11205,7 +11205,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S027",
       "entity_id": "S027",
       "entity_type": "source",
       "external_url": "https://www.gnu.org/software/glpk/",
@@ -11215,7 +11215,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S028",
       "entity_id": "S028",
       "entity_type": "source",
       "external_url": "https://docs.mosek.com/latest/pythonapi/index.html",
@@ -11225,7 +11225,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S029",
       "entity_id": "S029",
       "entity_type": "source",
       "external_url": "https://www.artelys.com/app/docs/knitro/",
@@ -11235,7 +11235,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S030",
       "entity_id": "S030",
       "entity_type": "source",
       "external_url": "https://ccom.ucsd.edu/~optimizers/solvers/snopt/",
@@ -11245,7 +11245,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S031",
       "entity_id": "S031",
       "entity_type": "source",
       "external_url": "https://www.gerad.ca/en/software/nomad/",
@@ -11255,7 +11255,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S032",
       "entity_id": "S032",
       "entity_type": "source",
       "external_url": "https://cma-es.github.io/apidocs-pycma/",
@@ -11265,7 +11265,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S033",
       "entity_id": "S033",
       "entity_type": "source",
       "external_url": "https://facebookresearch.github.io/nevergrad/",
@@ -11275,7 +11275,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S034",
       "entity_id": "S034",
       "entity_type": "source",
       "external_url": "https://optuna.readthedocs.io/en/stable/",
@@ -11285,7 +11285,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S035",
       "entity_id": "S035",
       "entity_type": "source",
       "external_url": "https://botorch.org/",
@@ -11295,7 +11295,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S036",
       "entity_id": "S036",
       "entity_type": "source",
       "external_url": "https://ax.dev/",
@@ -11305,7 +11305,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S037",
       "entity_id": "S037",
       "entity_type": "source",
       "external_url": "https://automl.github.io/SMAC3/latest/",
@@ -11315,7 +11315,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S038",
       "entity_id": "S038",
       "entity_type": "source",
       "external_url": "https://docs.ray.io/en/latest/tune/index.html",
@@ -11325,7 +11325,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S039",
       "entity_id": "S039",
       "entity_type": "source",
       "external_url": "https://pymoo.org/",
@@ -11335,7 +11335,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S040",
       "entity_id": "S040",
       "entity_type": "source",
       "external_url": "https://deap.readthedocs.io/en/master/",
@@ -11345,7 +11345,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S041",
       "entity_id": "S041",
       "entity_type": "source",
       "external_url": "https://ceres-solver.readthedocs.io/latest/",
@@ -11355,7 +11355,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S042",
       "entity_id": "S042",
       "entity_type": "source",
       "external_url": "https://web.casadi.org/docs/",
@@ -11365,7 +11365,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S043",
       "entity_id": "S043",
       "entity_type": "source",
       "external_url": "https://docs.acados.org/",
@@ -11375,7 +11375,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S044",
       "entity_id": "S044",
       "entity_type": "source",
       "external_url": "https://pymanopt.org/",
@@ -11385,7 +11385,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S045",
       "entity_id": "S045",
       "entity_type": "source",
       "external_url": "https://www.manopt.org/",
@@ -11395,7 +11395,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S046",
       "entity_id": "S046",
       "entity_type": "source",
       "external_url": "https://jaxopt.github.io/stable/",
@@ -11405,7 +11405,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S047",
       "entity_id": "S047",
       "entity_type": "source",
       "external_url": "https://optax.readthedocs.io/en/latest/",
@@ -11415,7 +11415,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S048",
       "entity_id": "S048",
       "entity_type": "source",
       "external_url": "https://docs.pytorch.org/docs/stable/optim.html",
@@ -11425,7 +11425,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S049",
       "entity_id": "S049",
       "entity_type": "source",
       "external_url": "https://www.tensorflow.org/api_docs/python/tf/keras/optimizers",
@@ -11435,7 +11435,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S050",
       "entity_id": "S050",
       "entity_type": "source",
       "external_url": "https://drake.mit.edu/doxygen_cxx/group__solvers.html",
@@ -11445,7 +11445,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S051",
       "entity_id": "S051",
       "entity_type": "source",
       "external_url": "https://jump.dev/JuMP.jl/stable/",
@@ -11455,7 +11455,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S052",
       "entity_id": "S052",
       "entity_type": "source",
       "external_url": "https://julianlsolvers.github.io/Optim.jl/stable/",
@@ -11465,7 +11465,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S053",
       "entity_id": "S053",
       "entity_type": "source",
       "external_url": "https://docs.minizinc.dev/en/stable/",
@@ -11475,7 +11475,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S054",
       "entity_id": "S054",
       "entity_type": "source",
       "external_url": "https://neos-guide.org/guide/types/",
@@ -11485,7 +11485,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S055",
       "entity_id": "S055",
       "entity_type": "source",
       "external_url": "https://web.stanford.edu/~boyd/cvxbook/",
@@ -11495,7 +11495,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S056",
       "entity_id": "S056",
       "entity_type": "source",
       "external_url": "https://link.springer.com/book/10.1007/978-0-387-40065-5",
@@ -11505,7 +11505,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S057",
       "entity_id": "S057",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1093/comjnl/13.3.317",
@@ -11515,7 +11515,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S058",
       "entity_id": "S058",
       "entity_type": "source",
       "external_url": "https://arxiv.org/abs/1604.00772",
@@ -11525,7 +11525,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S059",
       "entity_id": "S059",
       "entity_type": "source",
       "external_url": "https://arxiv.org/abs/1807.02811",
@@ -11535,7 +11535,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S060",
       "entity_id": "S060",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1137/040603371",
@@ -11545,7 +11545,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S061",
       "entity_id": "S061",
       "entity_type": "source",
       "external_url": "https://web.stanford.edu/~boyd/papers/admm_distr_stats.html",
@@ -11555,7 +11555,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S062",
       "entity_id": "S062",
       "entity_type": "source",
       "external_url": "https://web.stanford.edu/~boyd/papers/osqp.html",
@@ -11565,7 +11565,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S063",
       "entity_id": "S063",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1093/comjnl/7.4.308",
@@ -11575,7 +11575,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S064",
       "entity_id": "S064",
       "entity_type": "source",
       "external_url": "https://degenerateconic.com/uploads/2018/03/DFVLR_FB_88_28.pdf",
@@ -11585,7 +11585,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S065",
       "entity_id": "S065",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1137/0916069",
@@ -11595,7 +11595,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S066",
       "entity_id": "S066",
       "entity_type": "source",
       "external_url": "https://web.stanford.edu/~boyd/papers/prox_algs.html",
@@ -11605,7 +11605,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S067",
       "entity_id": "S067",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1137/080716542",
@@ -11615,7 +11615,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S068",
       "entity_id": "S068",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1109/4235.996017",
@@ -11625,7 +11625,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S069",
       "entity_id": "S069",
       "entity_type": "source",
       "external_url": "https://jmlr.org/papers/v18/16-558.html",
@@ -11635,7 +11635,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S070",
       "entity_id": "S070",
       "entity_type": "source",
       "external_url": "https://arxiv.org/abs/1412.6980",
@@ -11645,7 +11645,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S071",
       "entity_id": "S071",
       "entity_type": "source",
       "external_url": "https://press.princeton.edu/books/hardcover/9780691132983/optimization-algorithms-on-matrix-manifolds",
@@ -11655,7 +11655,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S072",
       "entity_id": "S072",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1007/s10898-018-0645-y",
@@ -11665,7 +11665,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S073",
       "entity_id": "S073",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1007/BF00941892",
@@ -11675,7 +11675,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S074",
       "entity_id": "S074",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1023/A:1008202821328",
@@ -11685,7 +11685,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S075",
       "entity_id": "S075",
       "entity_type": "source",
       "external_url": "https://proceedings.neurips.cc/paper/2012/hash/05311655a15b75fab86956663e1819cd-Abstract.html",
@@ -11695,7 +11695,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S076",
       "entity_id": "S076",
       "entity_type": "source",
       "external_url": "https://doi.org/10.1007/s12532-021-00208-8",
@@ -11705,7 +11705,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S077",
       "entity_id": "S077",
       "entity_type": "source",
       "external_url": "https://ceres-solver.readthedocs.io/latest/bibliography.html",
@@ -11715,7 +11715,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S078",
       "entity_id": "S078",
       "entity_type": "source",
       "external_url": "https://developers.google.com/optimization/lp",
@@ -11725,7 +11725,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S079",
       "entity_id": "S079",
       "entity_type": "source",
       "external_url": "https://developers.google.com/optimization/mip/mip_example",
@@ -11735,7 +11735,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S080",
       "entity_id": "S080",
       "entity_type": "source",
       "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html",
@@ -11745,7 +11745,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S081",
       "entity_id": "S081",
       "entity_type": "source",
       "external_url": "https://support.microsoft.com/en-us/office/define-and-solve-a-problem-by-using-solver-5d1a388f-079d-43ac-a7eb-f63e45925040",
@@ -11755,7 +11755,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S082",
       "entity_id": "S082",
       "entity_type": "source",
       "external_url": "https://github.com/scipy/scipy/releases",
@@ -11765,7 +11765,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S083",
       "entity_id": "S083",
       "entity_type": "source",
       "external_url": "https://github.com/ERGO-Code/HiGHS/releases",
@@ -11775,7 +11775,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S084",
       "entity_id": "S084",
       "entity_type": "source",
       "external_url": "https://github.com/osqp/OSQP",
@@ -11785,7 +11785,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S085",
       "entity_id": "S085",
       "entity_type": "source",
       "external_url": "https://github.com/osqp/osqp-python/releases",
@@ -11795,7 +11795,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S086",
       "entity_id": "S086",
       "entity_type": "source",
       "external_url": "https://github.com/cvxpy/cvxpy/releases",
@@ -11805,7 +11805,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S087",
       "entity_id": "S087",
       "entity_type": "source",
       "external_url": "https://github.com/coin-or/Ipopt/releases",
@@ -11815,7 +11815,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S088",
       "entity_id": "S088",
       "entity_type": "source",
       "external_url": "https://github.com/google/or-tools/releases",
@@ -11825,7 +11825,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S089",
       "entity_id": "S089",
       "entity_type": "source",
       "external_url": "https://github.com/scipopt/scip/releases",
@@ -11835,7 +11835,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S090",
       "entity_id": "S090",
       "entity_type": "source",
       "external_url": "https://github.com/facebookresearch/nevergrad/releases",
@@ -11845,7 +11845,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S091",
       "entity_id": "S091",
       "entity_type": "source",
       "external_url": "https://github.com/pymanopt/pymanopt/releases",
@@ -11855,7 +11855,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S092",
       "entity_id": "S092",
       "entity_type": "source",
       "external_url": "https://github.com/NicolasBoumal/manopt",
@@ -11865,7 +11865,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S093",
       "entity_id": "S093",
       "entity_type": "source",
       "external_url": "https://github.com/google/jaxopt",
@@ -11875,7 +11875,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S094",
       "entity_id": "S094",
       "entity_type": "source",
       "external_url": "https://github.com/bbopt/nomad",
@@ -11885,7 +11885,7 @@
     },
     {
       "aliases": [],
-      "canonical_url": null,
+      "canonical_url": "/sources/S095",
       "entity_id": "S095",
       "entity_type": "source",
       "external_url": "https://github.com/JuliaManifolds/Manopt.jl",

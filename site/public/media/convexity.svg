@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 320" role="img" aria-labelledby="title desc">
+  <title id="title">凸関数と弦</title>
+  <desc id="desc">上向きの放物線上の二点を直線で結び、直線が曲線より上にあることを示す。</desc>
+  <rect width="640" height="320" rx="18" fill="#f3f5ef"/>
+  <path d="M70 270 Q320 20 570 270" fill="none" stroke="#315c48" stroke-width="8"/>
+  <path d="M155 178 L485 178" fill="none" stroke="#b3532d" stroke-width="6" stroke-dasharray="12 10"/>
+  <circle cx="155" cy="178" r="9" fill="#b3532d"/>
+  <circle cx="485" cy="178" r="9" fill="#b3532d"/>
+  <text x="320" y="152" text-anchor="middle" fill="#6b4a35" font-family="sans-serif" font-size="20">line segment</text>
+  <text x="320" y="258" text-anchor="middle" fill="#315c48" font-family="sans-serif" font-size="20">convex function</text>
+</svg>
