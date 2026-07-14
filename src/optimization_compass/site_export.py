@@ -7,6 +7,16 @@ from pathlib import Path
 from typing import Any, Literal
 
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.trace_models import (
+    AlgorithmTrace,
+    TraceFrame,
+    TraceIndex,
+    TraceIndexEntry,
+    TraceMetric,
+    TracePoint,
+    TraceVector,
+    canonical_trace_bytes,
+)
 from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
@@ -212,8 +222,195 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
 
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
+    _write_dummy_trace(output_dir, dataset_version=release["version"])
     _write_json(output_dir / "manifest.json", manifest)
     return manifest
+
+
+def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> None:
+    frames = [
+        _dummy_frame(
+            frame_index=0,
+            iteration=0,
+            evaluations=3,
+            event_type="initialize",
+            decision="not_applicable",
+            label_ja="初期状態",
+            label_en="Initialize",
+            points=[
+                ("vertex-a", "頂点A", "Vertex A", (-2.5, 2.0), 30.25),
+                ("vertex-b", "頂点B", "Vertex B", (-1.7, 2.0), 25.29),
+                ("vertex-c", "頂点C", "Vertex C", (-2.5, 2.8), 41.13),
+            ],
+            best_point_id="vertex-b",
+            vector_origin=(-2.1, 2.0),
+            movement=(0.0, 0.0),
+            explanation="初期点を評価し、完全なスナップショットを記録する。",
+        ),
+        _dummy_frame(
+            frame_index=1,
+            iteration=1,
+            evaluations=4,
+            event_type="reflect",
+            decision="accepted",
+            label_ja="反射点を受理",
+            label_en="Accept reflection",
+            points=[
+                ("vertex-a", "頂点A", "Vertex A", (-2.5, 2.0), 30.25),
+                ("vertex-b", "頂点B", "Vertex B", (-1.7, 2.0), 25.29),
+                ("vertex-c", "頂点C", "Vertex C", (-2.5, 2.8), 41.13),
+                ("trial", "反射点", "Reflected point", (-1.7, 1.2), 16.97),
+            ],
+            best_point_id="trial",
+            vector_origin=(-2.1, 2.0),
+            movement=(0.4, -0.8),
+            explanation="重心から最悪点の反対側へ反射し、改善した候補を受理する。",
+        ),
+        _dummy_frame(
+            frame_index=2,
+            iteration=1,
+            evaluations=4,
+            event_type="stop",
+            decision="not_applicable",
+            label_ja="デモを終了",
+            label_en="Stop demo",
+            points=[
+                ("vertex-a", "頂点A", "Vertex A", (-2.5, 2.0), 30.25),
+                ("vertex-b", "頂点B", "Vertex B", (-1.7, 2.0), 25.29),
+                ("vertex-c", "頂点C", "Vertex C", (-1.7, 1.2), 16.97),
+            ],
+            best_point_id="vertex-c",
+            vector_origin=(-2.1, 2.0),
+            movement=(0.0, 0.0),
+            explanation="契約確認用の3フレームデモを終了する。",
+        ),
+    ]
+    trace = AlgorithmTrace(
+        contract_version="1.0.0",
+        dataset_version=dataset_version,
+        data_version="1.0.0",
+        trace_id="dummy-educational",
+        method_id="M_NELDER_MEAD",
+        profile_id="PROFILE_NELDER_MEAD_2D",
+        objective_id="OBJECTIVE_QUADRATIC_2D",
+        scenario_id="SCENARIO_NM_QUADRATIC",
+        generator_id="educational.nelder_mead.v1",
+        generator_version="1.0.0",
+        implementation_mapping_status="not_applicable",
+        implementation_id=None,
+        objective={
+            "family": "quadratic",
+            "dimensions": 2,
+            "generator_id": "objective.quadratic.v1",
+            "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},
+            "display_range": {"x": [-4.0, 4.0], "y": [-4.0, 4.0], "z": [0.0, 40.0]},
+            "display_expression": "f(x, y) = (x - 1)^2 + 2(y + 1)^2",
+            "optimum": {"point": [1.0, -1.0], "value": 0.0},
+        },
+        preset={"preset_id": "VIEW_NELDER_MEAD_THEATER"},
+        parameters={"initial_scale": 0.8, "adaptive": False},
+        initial_state={
+            "point": [-2.5, 2.0],
+            "simplex": [[-2.5, 2.0], [-1.7, 2.0], [-2.5, 2.8]],
+        },
+        seed={"status": "not_applicable", "value": None},
+        evaluation_budget=80,
+        stopping={"max_oracle_evaluations": 80, "simplex_tolerance": 0.0001},
+        environment={"runtime": "educational", "version": "1.0.0"},
+        fairness_statement="契約デモは単独再生であり、手法の優劣を比較しない。",
+        frames=frames,
+        terminal_status="completed",
+        terminal_summary_ja="3フレームの契約デモを完了しました。",
+        terminal_summary_en="The three-frame contract demo completed.",
+        source_ids=["S001", "S002"],
+    )
+    index = TraceIndex(
+        contract_version="1.0.0",
+        dataset_version=dataset_version,
+        data_version="1.0.0",
+        traces=[
+            TraceIndexEntry(
+                trace_id=trace.trace_id,
+                path="dummy-educational.json",
+                method_id=trace.method_id,
+                profile_id=trace.profile_id,
+                objective_id=trace.objective_id,
+                scenario_id=trace.scenario_id,
+                title_ja="AlgorithmTrace 契約デモ",
+                title_en="AlgorithmTrace contract demo",
+            )
+        ],
+    )
+    trace_path = output_dir / "traces/dummy-educational.json"
+    trace_path.parent.mkdir(parents=True, exist_ok=True)
+    trace_path.write_bytes(canonical_trace_bytes(trace))
+    _write_json(output_dir / "traces/index.json", index)
+
+
+def _dummy_frame(
+    *,
+    frame_index: int,
+    iteration: int,
+    evaluations: int,
+    event_type: str,
+    decision: Literal["accepted", "rejected", "not_applicable"],
+    label_ja: str,
+    label_en: str,
+    points: list[tuple[str, str, str, tuple[float, float], float]],
+    best_point_id: str,
+    vector_origin: tuple[float, float],
+    movement: tuple[float, float],
+    explanation: str,
+) -> TraceFrame:
+    return TraceFrame(
+        frame_index=frame_index,
+        iteration=iteration,
+        oracle_evaluations=evaluations,
+        elapsed_steps=frame_index,
+        elapsed_time_ms=float(frame_index * 100),
+        event_type=event_type,
+        decision=decision,
+        explanation_key=f"trace.dummy.{event_type}",
+        event_label_ja=label_ja,
+        event_label_en=label_en,
+        keyframe=True,
+        points=[
+            TracePoint(
+                point_id=point_id,
+                role="simplex-vertex" if point_id != "trial" else "trial-point",
+                coordinates=list(coordinates),
+                value=value,
+                label_ja=point_label_ja,
+                label_en=point_label_en,
+            )
+            for point_id, point_label_ja, point_label_en, coordinates, value in points
+        ],
+        vectors=[
+            TraceVector(
+                vector_id="movement",
+                role="movement",
+                origin=list(vector_origin),
+                components=list(movement),
+                label_ja="移動量",
+                label_en="Movement",
+            )
+        ],
+        metrics=[
+            TraceMetric(
+                metric_id="objective",
+                label_ja="目的関数値",
+                label_en="Objective value",
+                value=min(point[4] for point in points),
+                unit=None,
+            )
+        ],
+        payload={
+            "explanation": explanation,
+            "vertices": [point[0] for point in points if point[0] != "trial"],
+            "values": {point[0]: point[4] for point in points},
+            "best_vertex": best_point_id,
+        },
+    )
 
 
 def _build_problem_structure(

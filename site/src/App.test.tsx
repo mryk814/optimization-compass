@@ -79,6 +79,15 @@ describe("application routes", () => {
     expect(screen.getByRole("contentinfo")).toBeVisible();
   });
 
+  test("home exposes the versioned trace demo without encoding frames in the URL", () => {
+    render(<App />);
+
+    expect(screen.getByRole("link", { name: "再生デモを開く" })).toHaveAttribute(
+      "href",
+      "#/traces/dummy-educational",
+    );
+  });
+
   test.each(["#/mapping", "#/diagnose-old", "#/gallery-old"])(
     "%s does not activate a prefix-colliding navigation item",
     (hash) => {

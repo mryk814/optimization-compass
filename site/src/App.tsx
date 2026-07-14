@@ -11,6 +11,7 @@ import {
 import { MapPage } from "./features/map/MapPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { MethodPage } from "./features/methods/MethodPage";
+import { TraceDemoPage } from "./features/playback/TraceDemoPage";
 
 import "./styles.css";
 
@@ -46,6 +47,9 @@ function HomePage() {
       <p>
         問題構造からたどる地図、条件を整理する診断、手法の理解、比較、実問題の事例を一つの入口から探します。
       </p>
+      <Link className="text-link" to="/traces/dummy-educational">
+        再生デモを開く
+      </Link>
     </section>
   );
 }
@@ -135,6 +139,7 @@ function AppShell() {
           <Route path="/map" element={<MapPage />} />
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
+          <Route path="/traces/:traceId" element={<TraceDemoPage />} />
           <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
           <Route
             path="/gallery"

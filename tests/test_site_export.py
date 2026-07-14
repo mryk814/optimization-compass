@@ -7,6 +7,11 @@ import pytest
 
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.site_export import export_site_data
+from optimization_compass.trace_models import (
+    AlgorithmTrace,
+    TraceIndex,
+    canonical_trace_bytes,
+)
 from optimization_compass.view_spec import SiteManifest, ViewSpec
 
 EXPECTED_BRANCHES = [
@@ -166,3 +171,63 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "recommendation/site-data.json",
         "version": "1.0.0",
     }
+
+
+def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
+    tmp_path: Path, repository: KnowledgeRepository
+) -> None:
+    first_output = tmp_path / "first"
+    second_output = tmp_path / "second"
+    export_site_data(first_output, repository)
+    export_site_data(second_output, repository)
+
+    trace_path = Path("traces/dummy-educational.json")
+    index_path = Path("traces/index.json")
+    trace_bytes = (first_output / trace_path).read_bytes()
+    index_bytes = (first_output / index_path).read_bytes()
+    assert trace_bytes == (second_output / trace_path).read_bytes()
+    assert index_bytes == (second_output / index_path).read_bytes()
+
+    trace = AlgorithmTrace.model_validate_json(trace_bytes)
+    index = TraceIndex.model_validate_json(index_bytes)
+    assert trace_bytes == canonical_trace_bytes(trace)
+    assert trace.dataset_version == repository.dataset_version() == "0.2.0"
+    assert trace.implementation_mapping_status == "not_applicable"
+    assert trace.implementation_id is None
+    assert [frame.frame_index for frame in trace.frames] == [0, 1, 2]
+    assert [frame.oracle_evaluations for frame in trace.frames] == [3, 4, 4]
+    assert [frame.event_type for frame in trace.frames] == ["initialize", "reflect", "stop"]
+    assert index.dataset_version == trace.dataset_version
+    assert index.traces[0].trace_id == trace.trace_id
+    assert index.traces[0].path == "dummy-educational.json"
+
+    staged = json.loads(Path("data/seeds/atlas_metadata.json").read_text(encoding="utf-8"))
+    profile = next(
+        row
+        for row in staged["method_visualization_profiles"]
+        if row["profile_id"] == trace.profile_id
+    )
+    objective = next(
+        row for row in staged["demo_objectives"] if row["objective_id"] == trace.objective_id
+    )
+    scenario = next(
+        row for row in staged["demo_scenarios"] if row["scenario_id"] == trace.scenario_id
+    )
+    preset = next(
+        row for row in staged["view_presets"] if row["preset_id"] == trace.preset["preset_id"]
+    )
+    assert profile["method_id"] == trace.method_id
+    assert profile["generator_id"] == trace.generator_id
+    assert profile["implementation_status"] == trace.implementation_mapping_status
+    assert profile["implementation_id"] == trace.implementation_id
+    assert objective["generator_id"] == trace.objective["generator_id"]
+    assert scenario["method_id"] == trace.method_id
+    assert scenario["profile_id"] == trace.profile_id
+    assert scenario["objective_id"] == trace.objective_id
+    assert scenario["budget"] == trace.evaluation_budget
+    assert scenario["parameters"] == trace.parameters
+    assert scenario["stopping"] == trace.stopping
+    assert scenario["initial_point"] == trace.initial_state["point"]
+    assert {frame.event_type for frame in trace.frames} <= set(profile["event_types"])
+    assert preset["root_entity_id"] == trace.method_id
+    assert set(trace.source_ids) == set(profile["source_ids"]) | set(objective["source_ids"])
