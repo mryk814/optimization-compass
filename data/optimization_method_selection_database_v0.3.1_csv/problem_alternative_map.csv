@@ -1,0 +1,97 @@
+problem_alternative_map_id,problem_id,alternative_id,priority,sequence,rationale,source_ids,confidence,last_verified
+\SPAM0001,\SPA001,\SALT_CLOSED_FORM,\Sprecheck,\I1,\S閉形式解候補に汎用最適化を適用する前に 閉形式解 を検討。,\SS055;S056;S054,\Shigh,\S2026-07-13
+\SPAM0002,\SPA001,\SALT_SYMBOLIC,\Sprecheck,\I2,\S閉形式解候補に汎用最適化を適用する前に 記号計算 を検討。,\SS055;S056;S054,\Shigh,\S2026-07-13
+\SPAM0003,\SPA002,\SALT_LINEAR_SYSTEM,\Sprecheck,\I1,\S線形方程式に還元に汎用最適化を適用する前に 線形方程式 を検討。,\SS054;S056;S055,\Shigh,\S2026-07-13
+\SPAM0004,\SPA003,\SALT_EIGEN,\Sprecheck,\I1,\S固有値・特異値問題に汎用最適化を適用する前に 固有値・SVD を検討。,\SS054;S071;S055;S056,\Shigh,\S2026-07-13
+\SPAM0005,\SPA004,\SALT_ROOT,\Sprecheck,\I1,\S方程式の求根に汎用最適化を適用する前に 求根 を検討。,\SS080;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0006,\SPA004,\SALT_LEAST_SQUARES,\Sprecheck,\I2,\S方程式の求根に汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS080;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0007,\SPA005,\SALT_LEAST_SQUARES,\Sprecheck,\I1,\S線形最小二乗に汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS003;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0008,\SPA005,\SALT_LINEAR_SYSTEM,\Sprecheck,\I2,\S線形最小二乗に汎用最適化を適用する前に 線形方程式 を検討。,\SS003;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0009,\SPA006,\SALT_CLOSED_FORM,\Sprecheck,\I1,\S滑らかな低次元無制約に汎用最適化を適用する前に 閉形式解 を検討。,\SS002;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0010,\SPA006,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S滑らかな低次元無制約に汎用最適化を適用する前に 汎用最適化 を検討。,\SS002;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0011,\SPA007,\SALT_DECOMPOSITION,\Sprecheck,\I1,\S高次元・勾配利用可能に汎用最適化を適用する前に 分解 を検討。,\SS019;S046;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0012,\SPA007,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S高次元・勾配利用可能に汎用最適化を適用する前に 汎用最適化 を検討。,\SS019;S046;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0013,\SPA008,\SALT_PROJECTION_PROX,\Sprecheck,\I1,\S上下限制約付き滑らかに汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS002;S065;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0014,\SPA008,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S上下限制約付き滑らかに汎用最適化を適用する前に 汎用最適化 を検討。,\SS002;S065;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0015,\SPA009,\SALT_SPECIALIZED,\Sprecheck,\I1,\S一般滑らか制約付きNLPに汎用最適化を適用する前に 専用solver を検討。,\SS017;S029;S030;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0016,\SPA009,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S一般滑らか制約付きNLPに汎用最適化を適用する前に 汎用最適化 を検討。,\SS017;S029;S030;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0017,\SPA010,\SALT_PROJECTION_PROX,\Sprecheck,\I1,\S非滑らか凸複合に汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS055;S066;S067;S054;S056,\Shigh,\S2026-07-13
+\SPAM0018,\SPA011,\SALT_GENERIC_OPT,\Sprecheck,\I1,\S一般非滑らか局所に汎用最適化を適用する前に 汎用最適化 を検討。,\SS018;S031;S060;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0019,\SPA012,\SALT_SURROGATE,\Sprecheck,\I1,\S不連続決定論black-boxに汎用最適化を適用する前に surrogate を検討。,\SS031;S033;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0020,\SPA012,\SALT_SIMULATION_SEARCH,\Sprecheck,\I2,\S不連続決定論black-boxに汎用最適化を適用する前に simulation/探索 を検討。,\SS031;S033;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0021,\SPA013,\SALT_SURROGATE,\Sprecheck,\I1,\Snoiseを含むblack-boxに汎用最適化を適用する前に surrogate を検討。,\SS032;S035;S059;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0022,\SPA013,\SALT_STAT_INFERENCE,\Sprecheck,\I2,\Snoiseを含むblack-boxに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS032;S035;S059;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0023,\SPA014,\SALT_SURROGATE,\Sprecheck,\I1,\S非常に高価な低次元評価に汎用最適化を適用する前に surrogate を検討。,\SS035;S059;S075;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0024,\SPA014,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S非常に高価な低次元評価に汎用最適化を適用する前に 汎用最適化 を検討。,\SS035;S059;S075;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0025,\SPA015,\SALT_DECOMPOSITION,\Sprecheck,\I1,\S高次元black-boxに汎用最適化を適用する前に 分解 を検討。,\SS033;S035;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0026,\SPA015,\SALT_SURROGATE,\Sprecheck,\I2,\S高次元black-boxに汎用最適化を適用する前に surrogate を検討。,\SS033;S035;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0027,\SPA016,\SALT_FEASIBILITY,\Sprecheck,\I1,\S失敗・NaNを伴うsimulationに汎用最適化を適用する前に 制約充足 を検討。,\SS031;S035;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0028,\SPA016,\SALT_SURROGATE,\Sprecheck,\I2,\S失敗・NaNを伴うsimulationに汎用最適化を適用する前に surrogate を検討。,\SS031;S035;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0029,\SPA017,\SALT_SPECIALIZED,\Sprecheck,\I1,\S線形計画に汎用最適化を適用する前に 専用solver を検討。,\SS004;S016;S055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0030,\SPA017,\SALT_GRAPH,\Sprecheck,\I2,\S線形計画に汎用最適化を適用する前に グラフ専用法 を検討。,\SS004;S016;S055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0031,\SPA018,\SALT_SPECIALIZED,\Sprecheck,\I1,\S凸二次計画に汎用最適化を適用する前に 専用solver を検討。,\SS012;S016;S062;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0032,\SPA018,\SALT_PROJECTION_PROX,\Sprecheck,\I2,\S凸二次計画に汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS012;S016;S062;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0033,\SPA019,\SALT_RELAXATION,\Sprecheck,\I1,\S非凸QP/QCQPに汎用最適化を適用する前に 緩和 を検討。,\SS021;S024;S028;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0034,\SPA019,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S非凸QP/QCQPに汎用最適化を適用する前に 汎用最適化 を検討。,\SS021;S024;S028;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0035,\SPA020,\SALT_SPECIALIZED,\Sprecheck,\I1,\S二次錐計画に汎用最適化を適用する前に 専用solver を検討。,\SS010;S013;S014;S028;S055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0036,\SPA021,\SALT_RELAXATION,\Sprecheck,\I1,\S半正定値計画に汎用最適化を適用する前に 緩和 を検討。,\SS015;S028;S055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0037,\SPA021,\SALT_SPECIALIZED,\Sprecheck,\I2,\S半正定値計画に汎用最適化を適用する前に 専用solver を検討。,\SS015;S028;S055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0038,\SPA022,\SALT_SPECIALIZED,\Sprecheck,\I1,\S一般錐最適化に汎用最適化を適用する前に 専用solver を検討。,\SS010;S013;S014;S028;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0039,\SPA023,\SALT_GRAPH,\Sprecheck,\I1,\S混合整数線形計画に汎用最適化を適用する前に グラフ専用法 を検討。,\SS005;S016;S021;S024;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0040,\SPA023,\SALT_DYNAMIC_PROGRAMMING,\Sprecheck,\I2,\S混合整数線形計画に汎用最適化を適用する前に 動的計画法 を検討。,\SS005;S016;S021;S024;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0041,\SPA023,\SALT_SPECIALIZED,\Sprecheck,\I3,\S混合整数線形計画に汎用最適化を適用する前に 専用solver を検討。,\SS005;S016;S021;S024;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0042,\SPA024,\SALT_RELAXATION,\Sprecheck,\I1,\S混合整数二次計画に汎用最適化を適用する前に 緩和 を検討。,\SS021;S024;S028;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0043,\SPA024,\SALT_SPECIALIZED,\Sprecheck,\I2,\S混合整数二次計画に汎用最適化を適用する前に 専用solver を検討。,\SS021;S024;S028;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0044,\SPA025,\SALT_RELAXATION,\Sprecheck,\I1,\S混合整数非線形計画に汎用最適化を適用する前に 緩和 を検討。,\SS021;S029;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0045,\SPA025,\SALT_DECOMPOSITION,\Sprecheck,\I2,\S混合整数非線形計画に汎用最適化を適用する前に 分解 を検討。,\SS021;S029;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0046,\SPA026,\SALT_FEASIBILITY,\Sprecheck,\I1,\S制約programming型schedulingに汎用最適化を適用する前に 制約充足 を検討。,\SS022;S053;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0047,\SPA026,\SALT_DYNAMIC_PROGRAMMING,\Sprecheck,\I2,\S制約programming型schedulingに汎用最適化を適用する前に 動的計画法 を検討。,\SS022;S053;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0048,\SPA027,\SALT_FEASIBILITY,\Sprecheck,\I1,\SSAT・MaxSATに汎用最適化を適用する前に 制約充足 を検討。,\SS022;S053;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0049,\SPA027,\SALT_SPECIALIZED,\Sprecheck,\I2,\SSAT・MaxSATに汎用最適化を適用する前に 専用solver を検討。,\SS022;S053;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0050,\SPA028,\SALT_GRAPH,\Sprecheck,\I1,\Snetwork flowに汎用最適化を適用する前に グラフ専用法 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0051,\SPA029,\SALT_GRAPH,\Sprecheck,\I1,\S最短路に汎用最適化を適用する前に グラフ専用法 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0052,\SPA029,\SALT_DYNAMIC_PROGRAMMING,\Sprecheck,\I2,\S最短路に汎用最適化を適用する前に 動的計画法 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0053,\SPA030,\SALT_GRAPH,\Sprecheck,\I1,\S割当・matchingに汎用最適化を適用する前に グラフ専用法 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0054,\SPA031,\SALT_GRAPH,\Sprecheck,\I1,\S配送routingに汎用最適化を適用する前に グラフ専用法 を検討。,\SS023;S024;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0055,\SPA031,\SALT_DYNAMIC_PROGRAMMING,\Sprecheck,\I2,\S配送routingに汎用最適化を適用する前に 動的計画法 を検討。,\SS023;S024;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0056,\SPA032,\SALT_DYNAMIC_PROGRAMMING,\Sprecheck,\I1,\Sknapsack・set coverに汎用最適化を適用する前に 動的計画法 を検討。,\SS021;S022;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0057,\SPA032,\SALT_SPECIALIZED,\Sprecheck,\I2,\Sknapsack・set coverに汎用最適化を適用する前に 専用solver を検討。,\SS021;S022;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0058,\SPA033,\SALT_LEAST_SQUARES,\Sprecheck,\I1,\S非線形最小二乗に汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS003;S041;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0059,\SPA034,\SALT_LEAST_SQUARES,\Sprecheck,\I1,\S外れ値を含むrobust regressionに汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS003;S041;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0060,\SPA034,\SALT_STAT_INFERENCE,\Sprecheck,\I2,\S外れ値を含むrobust regressionに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS003;S041;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0061,\SPA035,\SALT_PROJECTION_PROX,\Sprecheck,\I1,\SL1・sparse regularizationに汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS055;S066;S067;S054;S056,\Shigh,\S2026-07-13
+\SPAM0062,\SPA036,\SALT_PROJECTION_PROX,\Sprecheck,\I1,\S単体上の最適化に汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS055;S066;S054;S056,\Shigh,\S2026-07-13
+\SPAM0063,\SPA037,\SALT_EIGEN,\Sprecheck,\I1,\SSO(3)/SE(3)上の最適化に汎用最適化を適用する前に 固有値・SVD を検討。,\SS041;S044;S071;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0064,\SPA037,\SALT_SPECIALIZED,\Sprecheck,\I2,\SSO(3)/SE(3)上の最適化に汎用最適化を適用する前に 専用solver を検討。,\SS041;S044;S071;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0065,\SPA038,\SALT_STAT_INFERENCE,\Sprecheck,\I1,\S多目的連続最適化に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS039;S068;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0066,\SPA038,\SALT_GENERIC_OPT,\Sprecheck,\I2,\S多目的連続最適化に汎用最適化を適用する前に 汎用最適化 を検討。,\SS039;S068;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0067,\SPA039,\SALT_SURROGATE,\Sprecheck,\I1,\Shyperparameter optimizationに汎用最適化を適用する前に surrogate を検討。,\SS034;S035;S037;S038;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0068,\SPA039,\SALT_STAT_INFERENCE,\Sprecheck,\I2,\Shyperparameter optimizationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS034;S035;S037;S038;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0069,\SPA040,\SALT_STAT_INFERENCE,\Sprecheck,\I1,\Sneural network学習に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS047;S048;S049;S070;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0070,\SPA040,\SALT_DECOMPOSITION,\Sprecheck,\I2,\Sneural network学習に汎用最適化を適用する前に 分解 を検討。,\SS047;S048;S049;S070;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0071,\SPA041,\SALT_DECOMPOSITION,\Sprecheck,\I1,\S大規模確率的ERMに汎用最適化を適用する前に 分解 を検討。,\SS047;S048;S049;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0072,\SPA042,\SALT_SPECIALIZED,\Sprecheck,\I1,\S最適制御に汎用最適化を適用する前に 専用solver を検討。,\SS042;S043;S076;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0073,\SPA042,\SALT_DECOMPOSITION,\Sprecheck,\I2,\S最適制御に汎用最適化を適用する前に 分解 を検討。,\SS042;S043;S076;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0074,\SPA043,\SALT_SPECIALIZED,\Sprecheck,\I1,\Smodel predictive controlに汎用最適化を適用する前に 専用solver を検討。,\SS012;S043;S076;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0075,\SPA044,\SALT_SPECIALIZED,\Sprecheck,\I1,\S軌道最適化に汎用最適化を適用する前に 専用solver を検討。,\SS042;S043;S050;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0076,\SPA045,\SALT_DECOMPOSITION,\Sprecheck,\I1,\SPDE制約付き最適化に汎用最適化を適用する前に 分解 を検討。,\SS017;S019;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0077,\SPA045,\SALT_SPECIALIZED,\Sprecheck,\I2,\SPDE制約付き最適化に汎用最適化を適用する前に 専用solver を検討。,\SS017;S019;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0078,\SPA046,\SALT_RELAXATION,\Sprecheck,\I1,\Sbilevel optimizationに汎用最適化を適用する前に 緩和 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0079,\SPA046,\SALT_DECOMPOSITION,\Sprecheck,\I2,\Sbilevel optimizationに汎用最適化を適用する前に 分解 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0080,\SPA047,\SALT_ROOT,\Sprecheck,\I1,\Sgame・equilibrium・VIに汎用最適化を適用する前に 求根 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0081,\SPA047,\SALT_SPECIALIZED,\Sprecheck,\I2,\Sgame・equilibrium・VIに汎用最適化を適用する前に 専用solver を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0082,\SPA048,\SALT_ROOT,\Sprecheck,\I1,\S相補性問題に汎用最適化を適用する前に 求根 を検討。,\SS054;S056;S055,\Shigh,\S2026-07-13
+\SPAM0083,\SPA048,\SALT_SPECIALIZED,\Sprecheck,\I2,\S相補性問題に汎用最適化を適用する前に 専用solver を検討。,\SS054;S056;S055,\Shigh,\S2026-07-13
+\SPAM0084,\SPA049,\SALT_DECOMPOSITION,\Sprecheck,\I1,\S確率計画に汎用最適化を適用する前に 分解 を検討。,\SS054;S061;S055;S056,\Shigh,\S2026-07-13
+\SPAM0085,\SPA049,\SALT_STAT_INFERENCE,\Sprecheck,\I2,\S確率計画に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS054;S061;S055;S056,\Shigh,\S2026-07-13
+\SPAM0086,\SPA050,\SALT_RELAXATION,\Sprecheck,\I1,\Srobust optimizationに汎用最適化を適用する前に 緩和 を検討。,\SS055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0087,\SPA050,\SALT_SPECIALIZED,\Sprecheck,\I2,\Srobust optimizationに汎用最適化を適用する前に 専用solver を検討。,\SS055;S054;S056,\Shigh,\S2026-07-13
+\SPAM0088,\SPA051,\SALT_DECOMPOSITION,\Sprecheck,\I1,\S分散・合意最適化に汎用最適化を適用する前に 分解 を検討。,\SS061;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0089,\SPA052,\SALT_STAT_INFERENCE,\Sprecheck,\I1,\Sonline optimizationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0090,\SPA053,\SALT_SPECIALIZED,\Sprecheck,\I1,\S反復parametric optimizationに汎用最適化を適用する前に 専用solver を検討。,\SS012;S016;S043;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0091,\SPA054,\SALT_STAT_INFERENCE,\Sprecheck,\I1,\S実験計画に汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS035;S055;S059;S054;S056,\Shigh,\S2026-07-13
+\SPAM0092,\SPA054,\SALT_SURROGATE,\Sprecheck,\I2,\S実験計画に汎用最適化を適用する前に surrogate を検討。,\SS035;S055;S059;S054;S056,\Shigh,\S2026-07-13
+\SPAM0093,\SPA055,\SALT_LEAST_SQUARES,\Sprecheck,\I1,\S逆問題に汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS003;S041;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0094,\SPA055,\SALT_PROJECTION_PROX,\Sprecheck,\I2,\S逆問題に汎用最適化を適用する前に 射影・近接作用素 を検討。,\SS003;S041;S056;S054;S055,\Shigh,\S2026-07-13
+\SPAM0095,\SPA056,\SALT_LEAST_SQUARES,\Sprecheck,\I1,\S外れ値を含むparameter estimationに汎用最適化を適用する前に 最小二乗専用法 を検討。,\SS003;S041;S054;S055;S056,\Shigh,\S2026-07-13
+\SPAM0096,\SPA056,\SALT_STAT_INFERENCE,\Sprecheck,\I2,\S外れ値を含むparameter estimationに汎用最適化を適用する前に 統計推定・Bayes推論 を検討。,\SS003;S041;S054;S055;S056,\Shigh,\S2026-07-13

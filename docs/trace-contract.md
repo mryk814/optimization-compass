@@ -1,5 +1,10 @@
 # AlgorithmTrace 1.0.0
 
+Renderer-family extensions keep this common envelope unchanged. The first extension,
+`search_tree 1.0.0`, stores a strict full-snapshot payload in each frame and is
+documented in [`search-tree-theater.md`](search-tree-theater.md). Renderer dispatch uses
+the artifact's `renderer_family` and `renderer_contract_version`, never `method_id`.
+
 `AlgorithmTrace`は、最適化アルゴリズムの教育用再生をPython generatorから静的Webアプリへ渡すためのversioned contractです。推薦エンジンが返す`RuleTrace`とは目的もschemaも別であり、相互変換しません。
 
 ## Authority and versions

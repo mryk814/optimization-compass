@@ -8,7 +8,8 @@
 - `PRAGMA foreign_key_check` が0件
 - 主キー重複が0件
 - evidence targetが解決できる
-- stored statusを信用せずliveに再計算した `CHK001`–`CHK019` にfailがない
+- stored statusを信用せずliveに再計算した `CHK001`–`CHK019` と coverage closure の
+  `CHK021` にfailがない
 - database-only検証では `CHK020=not_run` とし、全distribution/manifest/version/hashを実際に
   読み戻した `verify_release_tree` だけがartifact consistencyを成立させる
 - JSON / JSONL / CSV directory / deterministic ZIP / XLSX / SQLiteが列・主キー・行・NULL・値まで一致する

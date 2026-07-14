@@ -260,6 +260,9 @@ function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">
     atlasNavigation.navigateWithState("/map", next);
   };
   const methodMap = (methodId: string) => navigateMap(resolveRelatedNodeId(view.nodes, "method", methodId));
+  const expensiveBlackBox = Object.values(atlas.state.answers).some(
+    (answer) => answer.status === "answered" && answer.values.includes("hours_or_more"),
+  ) || result.first_choices.some((item) => item.entity_id === "M_BAYESIAN_OPT_GP");
 
   if (atlas.error) {
     return (
@@ -287,6 +290,7 @@ function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">
         </section>
         <aside className="diagnose-result-pane">
           <div className="diagnose-result-toolbar"><button onClick={() => navigateMap()} type="button">地図上で見る</button></div>
+          {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxを選ぶ流れを見る</strong><p>観測からsurrogateとExpected Improvementが更新される様子を固定予算で再生できます。</p><Link to="/theater/bayesian-optimization">Bayesian Optimization Theaterへ</Link></aside>}
           <Results data={data} onMethodMap={methodMap} result={result} />
         </aside>
       </div>

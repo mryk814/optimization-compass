@@ -1,5 +1,6 @@
 import { test, expect } from "./fixtures/test";
 import { gotoAtlasRoute } from "./helpers/navigation";
+import { expectGradientComparisonSvg, expectNelderMeadSvg } from "./helpers/visualization";
 
 function requiredBaseURL(baseURL: string | undefined): string {
   if (!baseURL) throw new Error("Playwright baseURL is required.");
@@ -11,6 +12,15 @@ test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", asy
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   const iteration = controls.getByLabel("iteration");
   await expect(controls).toBeVisible();
+  await expect(page.getByLabel("目的関数")).toHaveValue("OBJECTIVE_QUADRATIC_2D");
+  await expect(page.getByRole("combobox", { name: "初期simplex", exact: true })).toHaveValue("standard");
+  const shapeLegend = page.locator(".shape-legend");
+  await expect(shapeLegend.getByText("Best", { exact: true })).toBeVisible();
+  await expect(shapeLegend.getByText("Worst", { exact: true })).toBeVisible();
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
+  await expect(page.locator(".nm-candidate")).toBeVisible();
+  await expectNelderMeadSvg(page.getByTestId("nelder-mead-explanatory-plot"));
   const initialIteration = Number(await iteration.textContent());
 
   await controls.getByRole("button", { name: "再生", exact: true }).click();
@@ -39,6 +49,13 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/gradient-quadratic");
   const evaluation = page.getByLabel("評価回数位置");
   await expect(evaluation).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "比較preset", exact: true })).toHaveValue(
+    "COMPARE_GRADIENT_FAMILY",
+  );
+  await expect(page.getByRole("heading", { level: 2, name: "勾配降下法" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "モメンタム法" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Adam" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "目的値 vs oracle evaluations" })).toBeVisible();
   await evaluation.fill("7");
 
   const eventLines = page.locator(".comparison-event");
@@ -47,6 +64,7 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
   for (let index = 0; index < memberCount; index += 1) {
     await expect(eventLines.nth(index)).toContainText("evaluation 7");
   }
+  await expectGradientComparisonSvg(page, 7);
 
   await page.reload();
   await expect(page.getByLabel("評価回数位置")).toHaveValue("7");
@@ -60,8 +78,8 @@ test("Learn検索からmethod detailとrelated visualizationへ進む", async ({
   await page.getByRole("textbox", { name: "検索" }).fill("Nelder");
   await page.getByRole("link", { name: /Nelder–Mead単体法/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Nelder–Mead単体法" })).toBeVisible();
-  await page.getByRole("link", { name: "M_NELDER_MEAD 教材Trace" }).first().click();
+  await page.getByRole("link", { name: "Nelder–Meadの幾何操作" }).first().click();
   await expect(page).toHaveURL(/#\/traces\/nelder-mead-quadratic$/u);
-  await expect(page.getByRole("heading", { level: 1, name: "M_NELDER_MEAD 教材Trace" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Nelder–Meadの幾何操作" })).toBeVisible();
   await expect(page.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
 });

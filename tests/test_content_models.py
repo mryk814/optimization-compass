@@ -9,7 +9,7 @@ def test_initial_content_pages_compile_to_safe_accessible_html() -> None:
     root = Path(__file__).resolve().parents[1]
     pages = load_content(root / "content")
 
-    assert len(pages) == 4
+    assert len(pages) == 5
     assert len({page.content_id for page in pages}) == len(pages)
     assert all(page.html and page.toc for page in pages)
     assert all(page.source_ids for page in pages)

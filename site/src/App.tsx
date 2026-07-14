@@ -13,11 +13,14 @@ import { MapPage } from "./features/map/MapPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { MethodPage } from "./features/methods/MethodPage";
 import { TraceDemoPage } from "./features/playback/TraceDemoPage";
+import { SearchTreeTheaterPage } from "./features/search-tree/SearchTreeTheaterPage";
+import { BayesianOptimizationPage } from "./features/theater/BayesianOptimizationPage";
 import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
+import { CoveragePage } from "./features/coverage/CoveragePage";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { resolveAlias } from "./contracts/entity-links";
@@ -89,6 +92,7 @@ function HomePage() {
           linkLabel="ケースを見る"
         />
       </div>
+      <p className="home-maintainer-link"><Link to="/coverage">Atlas coverageと教材バックログを見る</Link></p>
     </section>
   );
 }
@@ -185,11 +189,14 @@ function AppShell() {
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/traces/:traceId" element={<TraceDemoPage />} />
+          <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
+          <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
           <Route path="/sources" element={<SourceIndexPage />} />
           <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
+          <Route path="/coverage" element={<CoveragePage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
           <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
           <Route path="/theater/:alias" element={<AliasRoute />} />
@@ -202,6 +209,8 @@ function AppShell() {
         <span>ViewSpec 1.0.0</span>
         <span aria-hidden="true">·</span>
         <LicenseLinks />
+        <span aria-hidden="true">·</span>
+        <Link to="/coverage">Coverage</Link>
       </footer>
     </div>
   );

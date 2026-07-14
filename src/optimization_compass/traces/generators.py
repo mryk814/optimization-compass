@@ -144,7 +144,12 @@ def generate_nelder_mead_trace(
                     "accepted",
                 )
             else:
-                event, candidate, candidate_value, decision = "shrink", None, None, "rejected"
+                event, candidate, candidate_value, decision = (
+                    "shrink",
+                    contracted,
+                    contracted_value,
+                    "rejected",
+                )
         else:
             contracted = [
                 centroid[axis] - rho * (centroid[axis] - worst[axis]) for axis in range(2)
@@ -160,7 +165,12 @@ def generate_nelder_mead_trace(
                     "accepted",
                 )
             else:
-                event, candidate, candidate_value, decision = "shrink", None, None, "rejected"
+                event, candidate, candidate_value, decision = (
+                    "shrink",
+                    contracted,
+                    contracted_value,
+                    "rejected",
+                )
         if event == "shrink":
             for index in (1, 2):
                 if evaluations >= budget:
@@ -185,6 +195,7 @@ def generate_nelder_mead_trace(
             values,
             candidate_pair,
             objective_family,
+            operation_origin=centroid,
         )
         frame_index += 1
         if _simplex_size(simplex) < 1e-4:
@@ -399,18 +410,36 @@ def generate_gradient_trace(
 
 
 def generate_gradient_bundle(
-    *, dataset_version: str, objective_family: str = "quadratic", budget: int = 40
+    *,
+    dataset_version: str,
+    objective_family: str = "quadratic",
+    budget: int = 40,
+    preset: Literal["valley", "divergence"] = "valley",
 ) -> TraceBundle:
     initial = [-1.6, 1.6]
     methods: tuple[GradientMethod, ...] = ("gradient_descent", "momentum", "adam")
+    parameters: dict[GradientMethod, dict[str, float]] = (
+        {
+            "gradient_descent": {"learning_rate": 0.012},
+            "momentum": {"learning_rate": 0.008, "momentum": 0.9},
+            "adam": {"learning_rate": 0.03, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+        }
+        if preset == "divergence"
+        else {method: {} for method in methods}
+    )
+    suffix = "" if preset == "valley" else "-divergence"
     traces = [
         generate_gradient_trace(
             method,
             objective_family=objective_family,
             initial_point=initial,
             budget=budget,
-            trace_id=f"{method}-{objective_family}",
-            scenario_id=f"SCENARIO_{method.upper()}_{objective_family.upper()}",
+            parameters=parameters[method],
+            trace_id=f"{method}-{objective_family}{suffix}",
+            scenario_id=(
+                f"SCENARIO_{method.upper()}_{objective_family.upper()}"
+                + ("" if preset == "valley" else "_DIVERGENCE")
+            ),
             dataset_version=dataset_version,
         )
         for method in methods
@@ -418,8 +447,14 @@ def generate_gradient_bundle(
     first = traces[0]
     return TraceBundle(
         contract_version="1.0.0",
-        bundle_id=f"gradient-{objective_family}",
-        comparison_id="COMPARE_GRADIENT_FAMILY",
+        bundle_id=(
+            f"gradient-{objective_family}"
+            if preset == "valley"
+            else f"gradient-{objective_family}-divergence"
+        ),
+        comparison_id=(
+            "COMPARE_GRADIENT_FAMILY" if preset == "valley" else "COMPARE_GRADIENT_DIVERGENCE"
+        ),
         dataset_version=first.dataset_version,
         data_version=first.data_version,
         objective_id=first.objective_id,
@@ -446,6 +481,7 @@ def _append_nm_frame(
     values: list[float],
     candidate: tuple[list[float], float] | None,
     family: str,
+    operation_origin: list[float] | None = None,
 ) -> None:
     labels = _EVENT_LABELS[event]
     points = [
@@ -459,6 +495,20 @@ def _append_nm_frame(
         )
         for index, (point, value) in enumerate(zip(simplex, values, strict=True))
     ]
+    ranked = sorted(zip(simplex, values, strict=True), key=lambda item: item[1])
+    centroid = operation_origin or [
+        (ranked[0][0][axis] + ranked[1][0][axis]) / 2.0 for axis in range(2)
+    ]
+    points.append(
+        TracePoint(
+            point_id="centroid",
+            role="centroid",
+            coordinates=centroid,
+            value=None,
+            label_ja="最良2点の重心",
+            label_en="Centroid of best two",
+        )
+    )
     vectors = []
     if candidate and candidate[0] is not None:
         points.append(
@@ -475,10 +525,10 @@ def _append_nm_frame(
             TraceVector(
                 vector_id="candidate-movement",
                 role="movement",
-                origin=list(simplex[2]),
-                components=[candidate[0][axis] - simplex[2][axis] for axis in range(2)],
-                label_ja="候補点への移動",
-                label_en="Move to candidate",
+                origin=centroid,
+                components=[candidate[0][axis] - centroid[axis] for axis in range(2)],
+                label_ja="重心から候補点への操作",
+                label_en="Operation from centroid to candidate",
             )
         )
     frames.append(
@@ -558,7 +608,21 @@ def _append_gradient_frame(
                     components=list(movement),
                     label_ja="更新ベクトル",
                     label_en="Update vector",
-                )
+                ),
+                *(
+                    [
+                        TraceVector(
+                            vector_id="gradient",
+                            role="gradient",
+                            origin=[point[index] - movement[index] for index in range(2)],
+                            components=list(gradient),
+                            label_ja="現在の勾配",
+                            label_en="Current gradient",
+                        )
+                    ]
+                    if gradient is not None
+                    else []
+                ),
             ],
             metrics=[
                 TraceMetric(

@@ -1,6 +1,7 @@
 import { test, expect } from "./fixtures/test";
 import { expectNoHighImpactViolations } from "./helpers/accessibility";
 import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation";
+import { expectFitsViewport, expectNelderMeadSvg } from "./helpers/visualization";
 
 function requiredBaseURL(baseURL: string | undefined): string {
   if (!baseURL) throw new Error("Playwright baseURL is required.");
@@ -44,6 +45,40 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   const initial = await iteration.textContent();
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(iteration).not.toHaveText(initial ?? "");
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-nelder-mead");
+  const plot = page.getByTestId("nelder-mead-explanatory-plot");
+  await expectNelderMeadSvg(plot);
+  await expectFitsViewport(plot, page);
+});
+
+test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
+  await page.getByRole("link", { name: "Search-tree Theaterで再生" }).click();
+  await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
+  const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
+  await expect(page.getByRole("tree")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-search-tree");
+});
+
+test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/bayesian-optimization");
+  const player = page.getByLabel(/Bayesian optimization再生領域/u);
+  await player.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByText("Frame 2/8")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-bayesian-optimization");
+});
+
+test("375px Coverageが横にはみ出さずfilterできる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/coverage");
+  await expect(page.getByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
+  await page.getByLabel("Subject").selectOption("feature_family");
+  await expect(page.getByRole("row")).toHaveCount(11);
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
 });

@@ -14,6 +14,7 @@ from optimization_compass.trace_models import (
     canonical_trace_bytes,
 )
 from optimization_compass.view_spec import SiteManifest, ViewSpec
+from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
 EXPECTED_BRANCHES = [
     "代替解法を先に確認",
@@ -63,6 +64,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     second_manifest_bytes = (second_output / "manifest.json").read_bytes()
     first_recommendation_bytes = (first_output / "recommendation/site-data.json").read_bytes()
     second_recommendation_bytes = (second_output / "recommendation/site-data.json").read_bytes()
+    first_scenario_bytes = (first_output / "visualization-scenarios.json").read_bytes()
+    second_scenario_bytes = (second_output / "visualization-scenarios.json").read_bytes()
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
@@ -70,6 +73,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         second_output / "release.json"
     ).read_bytes()
     assert first_recommendation_bytes == second_recommendation_bytes
+    assert first_scenario_bytes == second_scenario_bytes
     assert first_manifest == second_manifest
     assert first_view_bytes.endswith(b"\n")
     assert first_manifest_bytes.endswith(b"\n")
@@ -181,6 +185,19 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
+    search_tree_index = json.loads(search_tree_index_bytes)
+    assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+    }
+    for entry in search_tree_index["artifacts"]:
+        assert (first_output / entry["path"]).is_file()
+        assert (first_output / entry["static_fallback_path"]).is_file()
+    assert manifest_payload["visualization_scenarios"] == {
+        "path": "visualization-scenarios.json",
+        "version": "1.0.0",
+    }
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
         "version": "1.0.0",
@@ -193,6 +210,18 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert len(source_payload["sources"]) == 95
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4193
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
+    search_trace = next(
+        entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "trace"
+        and entity["entity_id"] == "binary-knapsack-bnb-complete"
+    )
+    assert search_trace["canonical_url"] == ("/theater/search-tree/binary-knapsack-bnb-complete")
+    assert {relation["relation_type"] for relation in search_trace["relations"]} >= {
+        "evidence",
+        "related_map",
+        "visualizes",
+    }
     nelder_mead = next(
         entity
         for entity in link_payload["entities"]
@@ -244,6 +273,9 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
 
     trace = AlgorithmTrace.model_validate_json(trace_bytes)
     index = TraceIndex.model_validate_json(index_bytes)
+    scenario_index = VisualizationScenarioIndex.model_validate_json(
+        (first_output / "visualization-scenarios.json").read_bytes()
+    )
     assert trace_bytes == canonical_trace_bytes(trace)
     assert trace.dataset_version == repository.dataset_version()
     assert trace.implementation_mapping_status == "not_applicable"
@@ -254,6 +286,55 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     assert index.dataset_version == trace.dataset_version
     assert index.traces[0].trace_id == trace.trace_id
     assert index.traces[0].path == "dummy-educational.json"
+    trace_scenarios = [
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.artifact.artifact_contract == "AlgorithmTrace"
+    ]
+    scenario_by_artifact = {
+        run.artifact_id: scenario for scenario in trace_scenarios for run in scenario.runs
+    }
+    search_scenario = scenario_by_artifact["binary-knapsack-bnb-complete"]
+    assert search_scenario.purpose == "mechanism"
+    assert search_scenario.artifact.renderer_family == "search_tree"
+    assert search_scenario.problem_instance_id == "INSTANCE_BINARY_KNAPSACK_4"
+    assert len(trace_scenarios) == len(index.traces) - 1
+    assert set(scenario_by_artifact) == {
+        entry.trace_id for entry in index.traces if entry.trace_id != "dummy-educational"
+    }
+    assert (
+        scenario_by_artifact["nelder-mead-quadratic"].artifact.renderer_family == "simplex_geometry"
+    )
+    assert (
+        scenario_by_artifact["gradient_descent-quadratic"].artifact.renderer_family
+        == "continuous_trajectory"
+    )
+    surrogate_scenarios = [
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.artifact.renderer_family == "surrogate_uncertainty"
+    ]
+    assert len(surrogate_scenarios) == 4
+    assert {scenario.purpose for scenario in surrogate_scenarios} == {"mechanism", "sensitivity"}
+    for scenario in surrogate_scenarios:
+        payload = (first_output / scenario.artifact.payload_path).read_bytes()
+        assert len(payload) == scenario.artifact.payload_bytes
+        assert sha256(payload).hexdigest() == scenario.artifact.payload_sha256
+        decoded = json.loads(payload)
+        assert "title_ja" not in decoded
+        assert "method_id" not in decoded
+        assert "evaluation_budget" not in decoded
+        assert "source_ids" not in decoded
+        assert "limitations_ja" not in decoded
+    shrink_trace = AlgorithmTrace.model_validate_json(
+        (first_output / "traces/nelder-mead-rosenbrock-shifted.json").read_bytes()
+    )
+    assert any(
+        frame.event_type == "shrink"
+        and frame.decision == "rejected"
+        and any(point.role == "trial-point" for point in frame.points)
+        for frame in shrink_trace.frames
+    )
 
     staged = json.loads(Path("data/seeds/atlas_metadata.json").read_text(encoding="utf-8"))
     profile = next(

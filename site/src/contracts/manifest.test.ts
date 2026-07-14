@@ -8,8 +8,10 @@ const manifest = {
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
+  visualization_scenarios: { version: "1.0.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
+  coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",
     index_version: "1.0.0",
@@ -30,6 +32,7 @@ const manifest = {
 describe("SiteManifest parser", () => {
   test("parses the versioned trace index asset exactly", () => {
     expect(parseSiteManifest(manifest).traces.path).toBe("traces/index.json");
+    expect(parseSiteManifest(manifest).visualization_scenarios.path).toBe("visualization-scenarios.json");
     expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
   });
 

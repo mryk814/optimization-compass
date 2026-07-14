@@ -33,8 +33,9 @@ test("回答後のDiagnoseにaxe critical/serious違反がない", async ({ page
 const staticScans = [
   { route: "/gallery/hyperparameter-search", heading: "高価な実験の設定を探す", label: "gallery-detail" },
   { route: "/learn/method.nelder-mead", heading: "Nelder–Mead単体法", label: "learn-detail" },
-  { route: "/traces/nelder-mead-quadratic", heading: "M_NELDER_MEAD 教材Trace", label: "nelder-mead" },
+  { route: "/traces/nelder-mead-quadratic", heading: "Nelder–Meadの幾何操作", label: "nelder-mead" },
   { route: "/compare/gradient-quadratic", heading: "手法を比較する", label: "gradient-compare" },
+  { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
 ];
 
