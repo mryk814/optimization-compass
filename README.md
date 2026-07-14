@@ -7,7 +7,7 @@ Optimization Compassは、「最適化したい。でも、何をどう解けば
 単一のアルゴリズムランキングを返すのではなく、次を同じknowledge baseから提供します。
 
 - 問題条件を整理する診断
-- 最適化全体を俯瞰する複数のMap
+- 最適化全体を俯瞰する目的別Map（現在はProblem Structure View）
 - 手法・概念・実装を学ぶ教材
 - アルゴリズムの動きを理解する可視化
 - 実問題から逆引きするProblem Gallery
