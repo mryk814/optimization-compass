@@ -355,24 +355,24 @@
       "sha256": "45ecb291ebe4cc17d62d2ee4048aab09db756752e1bd578eed700e8a9ba89607"
     },
     "optimization_method_selection_database_v0.3.1_site-data/visualization-scenarios.json": {
-      "bytes": 42572,
-      "sha256": "621031acecd0509cdf75233a3eeb5cf96dddb8d79e6da1a68e1799c312ff527c"
+      "bytes": 42568,
+      "sha256": "d12caa8244c7f35fd0307927d95919336f60942fda30283d5951c308e963f8a6"
     },
     "optimization_method_selection_database_v0.3.1_site-data/visualizations/bo-exploit-noiseless.json": {
-      "bytes": 110067,
-      "sha256": "797a9e2773ade0698ed1a710cc167e976eaa537ff3ff95423de010bc82dfc090"
+      "bytes": 80289,
+      "sha256": "ad1ab79fb87521638027680c605e8d5b684908e84e8845ffeee532fc537517d6"
     },
     "optimization_method_selection_database_v0.3.1_site-data/visualizations/bo-exploit-small_noise.json": {
-      "bytes": 112097,
-      "sha256": "9b17307957cd92887ff8edb36a859bb137871558409efeef6c00d797031c211a"
+      "bytes": 81046,
+      "sha256": "d6e92bb85511cfd28ac655f5cad56fe3f3f1d4821baf5eee4654b76ba164c135"
     },
     "optimization_method_selection_database_v0.3.1_site-data/visualizations/bo-explore-noiseless.json": {
-      "bytes": 109735,
-      "sha256": "ee60fc404dafbc135e58a76cb97c491854d71c0b426f2eb62c94b1856047c90f"
+      "bytes": 79786,
+      "sha256": "6e73504ccbb7180c6d9f59f3437babc6702d48502d6ddb75713d8a1673887772"
     },
     "optimization_method_selection_database_v0.3.1_site-data/visualizations/bo-explore-small_noise.json": {
-      "bytes": 112173,
-      "sha256": "50c4ae8af0f40dbccb7b76bf30d3fe4acc4cb0a83c7d368843037964d723b88c"
+      "bytes": 80144,
+      "sha256": "a5a283f9253e139548344661bb1d164082cf497d3ce3e2da4bc32d8e915077d0"
     }
   },
   "licenses": {

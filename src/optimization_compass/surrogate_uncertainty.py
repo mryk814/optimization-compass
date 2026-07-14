@@ -23,6 +23,8 @@ from optimization_compass.visualization_scenarios import (
 
 Strategy = Literal["exploit", "explore"]
 NoisePreset = Literal["noiseless", "small_noise"]
+CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
+CANONICAL_FLOAT_ZERO_TOLERANCE = 1e-9
 
 
 class RendererModel(BaseModel):
@@ -91,13 +93,28 @@ class GeneratedSurrogateScenario:
 
 
 def canonical_renderer_bytes(model: RendererModel) -> bytes:
+    payload = _canonicalize_floats(model.model_dump(mode="json"))
     value = json.dumps(
-        model.model_dump(mode="json"),
+        payload,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
     )
     return (value + "\n").encode()
+
+
+def _canonicalize_floats(value: object) -> object:
+    """Remove platform-specific libm noise before hashing renderer payloads."""
+    if isinstance(value, float):
+        if abs(value) < CANONICAL_FLOAT_ZERO_TOLERANCE:
+            return 0.0
+        normalized = float(format(value, f".{CANONICAL_FLOAT_SIGNIFICANT_DIGITS}g"))
+        return 0.0 if normalized == 0.0 else normalized
+    if isinstance(value, list):
+        return [_canonicalize_floats(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _canonicalize_floats(item) for key, item in value.items()}
+    return value
 
 
 def educational_objective(x: float) -> float:
