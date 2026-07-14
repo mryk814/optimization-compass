@@ -164,6 +164,9 @@ winner or ranking.
 | `simplex_geometry` | simplex vertices, operation, accepted/rejected candidate | mechanism, failure contrast |
 | `population_distribution` | population members, generation, fitness summaries | mechanism, sensitivity |
 | `surrogate_uncertainty` | observations, predictive summary, acquisition, selected point | mechanism, sensitivity |
+
+Issue #26 の実装・生成方法・公平性と限界は
+[`bayesian-optimization-theater.md`](bayesian-optimization-theater.md) を参照する。
 | `search_tree` | nodes, parent edges, bounds, incumbent, branch/prune reason | mechanism, failure contrast |
 | `pareto_front` | objective vectors, dominance state, selected solutions | mechanism, application result |
 | `feasible_region` | constraints, boundary/violation observations, candidates | mechanism, application result |

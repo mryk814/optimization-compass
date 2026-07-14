@@ -1102,6 +1102,43 @@ main:focus {
   text-underline-offset: 0.16em;
 }
 
+.bo-theater { max-width: 76rem; margin: 0 auto; }
+.bo-presets, .bo-contract, .bo-playback, .bo-score { display: flex; gap: .65rem; align-items: center; flex-wrap: wrap; }
+.bo-presets { margin: .75rem 0; }
+.bo-presets label { display: grid; gap: .2rem; color: #536159; font-size: .72rem; }
+.bo-presets select { min-width: 11rem; padding: .4rem; }
+.bo-player { outline: none; }
+.bo-player:focus-visible { box-shadow: 0 0 0 3px #7ba98e; border-radius: .7rem; }
+.bo-contract { justify-content: space-between; padding: .55rem .7rem; background: #eef2eb; border: 1px solid #d2d9cf; border-radius: .55rem; font-size: .72rem; }
+.bo-playback { margin: .6rem 0; }
+.bo-playback button { min-width: 2.8rem; padding: .42rem .65rem; }
+.bo-playback label { display: flex; gap: .4rem; align-items: center; }
+.bo-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); gap: .8rem; }
+.bo-figure, .bo-explanation, .bo-comparison, .bo-limitations, .bo-text-alternative, .bo-route-card { margin: 0; padding: .7rem; border: 1px solid #d4d9d1; border-radius: .65rem; background: #fff; }
+.bo-figure svg { display: block; width: 100%; height: auto; }
+.bo-figure figcaption { color: #5d665f; font-size: .7rem; }
+.bo-chart-bg { fill: #fafbf8; stroke: #d9ddd6; }
+.bo-band { fill: #b9d7c3; opacity: .48; }
+.bo-mean, .bo-truth { fill: none; stroke-width: 2.4; }
+.bo-mean { stroke: #185b3a; }
+.bo-truth { stroke: #a04c2f; stroke-dasharray: 6 5; }
+.bo-observation { fill: #151b17; stroke: #fff; stroke-width: 2; }
+.bo-next { stroke: #d58712; stroke-width: 2; stroke-dasharray: 4 3; }
+.bo-ei { stroke: #744c9c; stroke-width: 2.2; opacity: .75; }
+.bo-legend, .bo-figure text { fill: #38453d; font-size: 12px; }
+.bo-explanation h2, .bo-comparison h2, .bo-limitations h2 { margin-top: 0; font-size: 1rem; }
+.bo-explanation dl div { display: flex; justify-content: space-between; gap: .8rem; border-top: 1px solid #e5e7e2; padding: .35rem 0; }
+.bo-explanation dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+.bo-comparison { margin-top: .8rem; }
+.bo-score strong { padding: .35rem .55rem; border-radius: .35rem; background: #edf3ed; font-variant-numeric: tabular-nums; }
+.bo-comparison table { width: 100%; border-collapse: collapse; font-size: .72rem; }
+.bo-comparison th, .bo-comparison td { padding: .28rem .45rem; text-align: right; border-bottom: 1px solid #e1e4de; font-variant-numeric: tabular-nums; }
+.bo-comparison th:first-child, .bo-comparison td:first-child { text-align: left; }
+.bo-text-alternative, .bo-limitations { margin-top: .8rem; }
+.bo-route-card { margin: .5rem 0; background: #eef5ee; }
+.bo-route-card p { margin: .25rem 0; font-size: .74rem; }
+.bo-route-card a { color: #205a3a; font-weight: 700; }
+
 @media (max-width: 40rem) {
   .site-header {
     align-items: flex-start;
@@ -1184,4 +1221,10 @@ main:focus {
   .map-entity-item span {
     grid-column: 1 / -1;
   }
+
+  .bo-layout { grid-template-columns: 1fr; }
+  .bo-contract { align-items: flex-start; flex-direction: column; gap: .25rem; }
+  .bo-playback label { width: 100%; }
+  .bo-playback input[type="range"] { flex: 1; }
+  .bo-figure, .bo-explanation, .bo-comparison, .bo-limitations, .bo-text-alternative { padding: .55rem; }
 }

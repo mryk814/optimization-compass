@@ -19,6 +19,8 @@ export interface ManifestTraceAsset {
   sha256: string;
 }
 
+export type ManifestVisualizationAsset = ManifestTraceAsset;
+
 export interface ManifestLicenseAsset {
   spdx_id: "MIT" | "CC-BY-4.0";
   path: string;
@@ -40,6 +42,7 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
+  visualizations: ManifestVisualizationAsset;
   entity_links: ManifestAsset;
   licenses: SiteLicenseManifest;
 }
@@ -48,7 +51,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "licenses"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "visualizations", "entity_links", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -84,6 +87,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const bytes = positiveInteger(traces.bytes, "traces.bytes");
   const sha256 = nonEmptyString(traces.sha256, "traces.sha256");
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
+  const visualizations = parseVisualizationAsset(data.visualizations);
 
   const licenses = parseLicenses(data.licenses);
   const entityLinks = record(data.entity_links, "entity_links");
@@ -106,12 +110,27 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       bytes,
       sha256,
     },
+    visualizations,
     entity_links: {
       version: "1.0.0",
       path: safeRelativePath(entityLinks.path, "entity_links.path"),
     },
     licenses,
   };
+}
+
+function parseVisualizationAsset(value: unknown): ManifestVisualizationAsset {
+  const asset = record(value, "visualizations");
+  exactKeys(asset, ["contract_version", "index_version", "path", "bytes", "sha256"], "visualizations");
+  if (asset.contract_version !== "1.0.0" || asset.index_version !== "1.0.0") {
+    throw new Error("visualizations version is unsupported.");
+  }
+  const bytes = positiveInteger(asset.bytes, "visualizations.bytes");
+  const sha256 = nonEmptyString(asset.sha256, "visualizations.sha256");
+  if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("visualizations.sha256 is invalid.");
+  const path = safeRelativePath(asset.path, "visualizations.path");
+  if (!path.startsWith("visualizations/")) throw new Error("visualizations.path is invalid.");
+  return { contract_version: "1.0.0", index_version: "1.0.0", path, bytes, sha256 };
 }
 
 function parseLicenses(value: unknown): SiteLicenseManifest {

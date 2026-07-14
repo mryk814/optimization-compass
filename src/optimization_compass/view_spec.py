@@ -212,6 +212,14 @@ class ManifestTraceAsset(ContractModel):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class ManifestVisualizationAsset(ContractModel):
+    contract_version: Literal["1.0.0"]
+    index_version: Literal["1.0.0"]
+    path: str = Field(pattern=r"^visualizations/[a-z0-9._/-]+\.json$")
+    bytes: int = Field(gt=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
 class ManifestLicenseAsset(ContractModel):
     spdx_id: Literal["MIT", "CC-BY-4.0"]
     path: str = Field(pattern=r"^licenses/[A-Z0-9._-]+\.txt$")
@@ -233,6 +241,7 @@ class SiteManifest(ContractModel):
     views: list[ManifestView]
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
+    visualizations: ManifestVisualizationAsset
     entity_links: ManifestAsset
     licenses: SiteLicenseManifest
 

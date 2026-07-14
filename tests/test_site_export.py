@@ -181,6 +181,14 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    visualization_index_bytes = (first_output / "visualizations/index.json").read_bytes()
+    assert manifest_payload["visualizations"] == {
+        "bytes": len(visualization_index_bytes),
+        "contract_version": "1.0.0",
+        "index_version": "1.0.0",
+        "path": "visualizations/index.json",
+        "sha256": sha256(visualization_index_bytes).hexdigest(),
+    }
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
         "version": "1.0.0",

@@ -40,5 +40,12 @@
       "version": "1.0.0",
       "view_id": "problem-structure"
     }
-  ]
+  ],
+  "visualizations": {
+    "bytes": 1248,
+    "contract_version": "1.0.0",
+    "index_version": "1.0.0",
+    "path": "visualizations/index.json",
+    "sha256": "d816473114bc115ece41a29f42071bc1b45fe870f35adc2f365fe1ac121b4363"
+  }
 }

@@ -16,6 +16,13 @@ const manifest = {
     bytes: 475,
     sha256: "a".repeat(64),
   },
+  visualizations: {
+    contract_version: "1.0.0",
+    index_version: "1.0.0",
+    path: "visualizations/index.json",
+    bytes: 512,
+    sha256: "b".repeat(64),
+  },
   licenses: {
     code: { spdx_id: "MIT", path: "licenses/LICENSE.txt" },
     data: { spdx_id: "CC-BY-4.0", path: "licenses/DATA_LICENSE.txt" },
@@ -29,6 +36,7 @@ const manifest = {
 describe("SiteManifest parser", () => {
   test("parses the versioned trace index asset exactly", () => {
     expect(parseSiteManifest(manifest).traces.path).toBe("traces/index.json");
+    expect(parseSiteManifest(manifest).visualizations.path).toBe("visualizations/index.json");
     expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
   });
 

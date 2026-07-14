@@ -29,6 +29,7 @@ from optimization_compass.view_spec import (
     ManifestLicenseAsset,
     ManifestTraceAsset,
     ManifestView,
+    ManifestVisualizationAsset,
     SiteLicenseManifest,
     SiteManifest,
     ViewEdge,
@@ -36,6 +37,7 @@ from optimization_compass.view_spec import (
     ViewNode,
     ViewSpec,
 )
+from optimization_compass.visualization_scenarios import write_visualization_scenarios
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
 VIEW_ID = "problem-structure"
@@ -250,6 +252,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
     trace_asset, trace_index = _write_dummy_trace(output_dir, dataset_version=release["version"])
+    visualization_path, visualization_bytes, visualization_sha256 = write_visualization_scenarios(
+        output_dir, dataset_version=release["version"]
+    )
     entity_links = build_entity_link_index(
         repository,
         dataset_version=release["version"],
@@ -266,6 +271,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
+        visualizations=ManifestVisualizationAsset(
+            contract_version="1.0.0",
+            index_version="1.0.0",
+            path=visualization_path,
+            bytes=visualization_bytes,
+            sha256=visualization_sha256,
+        ),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         licenses=SiteLicenseManifest(
             code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
