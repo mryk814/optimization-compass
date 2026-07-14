@@ -13,7 +13,7 @@ jobs:
     name: Report broken links and stale metadata
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           python-version: "3.12"
@@ -23,7 +23,7 @@ jobs:
         run: uv run python scripts/source_health.py --check-network --output source-health-report
       - name: Upload the immutable report
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: source-health-${{ github.run_id }}
           path: source-health-report/

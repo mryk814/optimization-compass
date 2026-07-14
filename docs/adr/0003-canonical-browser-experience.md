@@ -1,4 +1,4 @@
-# ADR 0002: Optimization Atlas is the canonical browser experience
+# ADR 0003: Optimization Atlas is the canonical browser experience
 
 - Status: Accepted
 - Date: 2026-07-15

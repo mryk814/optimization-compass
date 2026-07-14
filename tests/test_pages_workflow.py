@@ -23,11 +23,11 @@ def test_browser_e2e_consumes_the_same_pages_artifact_before_deploy() -> None:
 
     assert "browser_e2e:" in workflow
     assert "needs: validate_pages_artifact" in workflow
-    assert "actions/download-artifact@v8" in workflow
+    assert "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1" in workflow
     assert "name: github-pages" in workflow
     assert "tar -xf .pages-artifact/artifact.tar -C site/dist" in workflow
     assert "npm run test:e2e:artifact" in workflow
-    assert "actions/upload-artifact@v7" in workflow
+    assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1" in workflow
     assert "if: failure()" in workflow
 
 
