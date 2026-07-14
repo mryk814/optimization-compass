@@ -1,6 +1,7 @@
 import { test, expect } from "./fixtures/test";
 import { expectNoHighImpactViolations } from "./helpers/accessibility";
 import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation";
+import { expectFitsViewport, expectNelderMeadSvg } from "./helpers/visualization";
 
 function requiredBaseURL(baseURL: string | undefined): string {
   if (!baseURL) throw new Error("Playwright baseURL is required.");
@@ -44,12 +45,12 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   const initial = await iteration.textContent();
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(iteration).not.toHaveText(initial ?? "");
+  await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-nelder-mead");
-  await expect(page.locator(".nm-theater")).toHaveScreenshot(
-    "mobile-nelder-mead-explanatory.png",
-    { animations: "disabled" },
-  );
+  const plot = page.getByTestId("nelder-mead-explanatory-plot");
+  await expectNelderMeadSvg(plot);
+  await expectFitsViewport(plot, page);
 });
 
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {

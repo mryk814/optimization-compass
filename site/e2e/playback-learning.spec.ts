@@ -1,5 +1,6 @@
 import { test, expect } from "./fixtures/test";
 import { gotoAtlasRoute } from "./helpers/navigation";
+import { expectGradientComparisonSvg, expectNelderMeadSvg } from "./helpers/visualization";
 
 function requiredBaseURL(baseURL: string | undefined): string {
   if (!baseURL) throw new Error("Playwright baseURL is required.");
@@ -19,10 +20,7 @@ test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", asy
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(page.locator(".nm-candidate")).toBeVisible();
-  await expect(page.getByTestId("nelder-mead-explanatory-plot")).toHaveScreenshot(
-    "nelder-mead-explanatory-plot.png",
-    { animations: "disabled" },
-  );
+  await expectNelderMeadSvg(page.getByTestId("nelder-mead-explanatory-plot"));
   const initialIteration = Number(await iteration.textContent());
 
   await controls.getByRole("button", { name: "再生", exact: true }).click();
@@ -66,10 +64,7 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
   for (let index = 0; index < memberCount; index += 1) {
     await expect(eventLines.nth(index)).toContainText("evaluation 7");
   }
-  await expect(page.locator(".comparison-grid")).toHaveScreenshot(
-    "gradient-comparison-grid.png",
-    { animations: "disabled" },
-  );
+  await expectGradientComparisonSvg(page, 7);
 
   await page.reload();
   await expect(page.getByLabel("評価回数位置")).toHaveValue("7");
