@@ -88,4 +88,40 @@ describe("MethodPage Map deep link", () => {
     expect(screen.getByTestId("location")).toHaveTextContent(before ?? "");
     expect(screen.queryByText("MAP ROUTE")).not.toBeInTheDocument();
   });
+
+  test("uses generated Gallery relations for candidate methods outside the Map view", async () => {
+    const gallery = {
+      contract_version: "1.0.0", dataset_version: "0.2.0", cases: [{
+        case_id: "case.materials", title_ja: "材料ケース", title_en: "Materials case",
+        domain: "materials", problem_archetype_id: "PA001", feature_values: [],
+        question_answers: {}, candidate_method_ids: ["M_GALLERY"], excluded_methods: [],
+        implementation_ids: [], visualization_ids: [], comparison_ids: [], source_ids: ["S001"],
+        difficulty: "intro", status: "published", last_reviewed: "2026-07-14",
+        question: "どの候補を試すか", decision_variables: "x", objective: "min f(x)",
+        constraints: "none", map_node_id: "opaque-first", python_example: "print('ok')",
+        practical_notes: "small smoke",
+      }],
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn()
+        .mockResolvedValueOnce({ ok: true, json: async () => ({ ...view, entities: [] }) })
+        .mockResolvedValueOnce({ ok: true, json: async () => gallery }),
+    );
+
+    render(
+      <MemoryRouter initialEntries={["/methods/M_GALLERY"]}>
+        <Routes>
+          <Route path="/methods/:methodId" element={<MethodPage />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole("heading", { level: 1, name: "M_GALLERY" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "材料ケース" })).toHaveAttribute(
+      "href",
+      "/gallery/case.materials",
+    );
+    expect(screen.getByText("どの候補を試すか")).toBeVisible();
+  });
 });

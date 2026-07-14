@@ -669,6 +669,42 @@ main:focus {
   flex-wrap: wrap;
 }
 
+.method-related-cases {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #d7d6ce;
+}
+
+.method-related-cases h2 {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+}
+
+.method-related-cases ul {
+  display: grid;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  gap: 0.45rem;
+  list-style: none;
+}
+
+.method-related-cases li {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.method-related-cases a {
+  color: #285740;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.method-related-cases span {
+  color: #59645d;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
 .eyebrow {
   color: #8b4d2c !important;
   font-size: 0.72rem !important;

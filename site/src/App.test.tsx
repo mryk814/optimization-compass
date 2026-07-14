@@ -150,8 +150,25 @@ describe("application routes", () => {
     expect(screen.getByRole("contentinfo")).toBeVisible();
   });
 
+  test("an unknown method ID uses the common Not Found page after checking Gallery", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn()
+        .mockResolvedValueOnce(jsonResponse(emptyView))
+        .mockResolvedValueOnce(
+          jsonResponse({ contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }),
+        ),
+    );
+    window.location.hash = "#/methods/missing";
+
+    render(<App />);
+
+    expect(
+      await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" }),
+    ).toBeVisible();
+  });
+
   test.each([
-    ["#/methods/missing", emptyView],
     ["#/learn/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", pages: [] }],
     ["#/gallery/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }],
     [
