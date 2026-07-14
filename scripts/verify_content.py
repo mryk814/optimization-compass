@@ -1,34 +1,146 @@
+from __future__ import annotations
+
 import json
 from pathlib import Path
+from typing import Any
 
 from optimization_compass.content_models import load_content
+from optimization_compass.db import KnowledgeRepository
+from optimization_compass.release_identity import load_dataset_release_identity
+
+MINIMUM_PUBLISHED_CONTENT_PAGES = 4
+MINIMUM_GALLERY_CASES = 4
+MINIMUM_COMPARISONS = 1
+
+
+def verify_content(root: Path) -> dict[str, int | str]:
+    data_root = root / "site/public/data"
+    identity = load_dataset_release_identity(data_root / "release.json")
+    content_index = _load_index(data_root / "content.json", "pages", identity.dataset_version)
+    gallery_index = _load_index(data_root / "gallery.json", "cases", identity.dataset_version)
+    comparison_index = _load_index(
+        data_root / "comparisons.json", "comparisons", identity.dataset_version
+    )
+    _load_payload(data_root / "recommendation/site-data.json", identity.dataset_version)
+    trace_index = _load_payload(data_root / "traces/index.json", identity.dataset_version)
+
+    source_pages = [page for page in load_content(root / "content") if page.status == "published"]
+    generated_pages = content_index["pages"]
+    source_ids = {page.content_id for page in source_pages}
+    generated_ids = _unique_ids(generated_pages, "content_id", "content pages")
+    if source_ids != generated_ids:
+        raise ValueError("generated content IDs do not match published Markdown sources")
+    _require_minimum(
+        "published content pages", len(generated_pages), MINIMUM_PUBLISHED_CONTENT_PAGES
+    )
+
+    case_ids = _unique_ids(gallery_index["cases"], "case_id", "gallery cases")
+    _require_minimum("gallery cases", len(case_ids), MINIMUM_GALLERY_CASES)
+    comparison_ids = _unique_ids(
+        comparison_index["comparisons"], "comparison_id", "comparison sets"
+    )
+    _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
+
+    repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")
+    known_sources = {
+        str(row["source_id"]) for row in repository.fetch_all("SELECT source_id FROM sources")
+    }
+    known_methods = {
+        str(row["method_id"]) for row in repository.fetch_all("SELECT method_id FROM methods")
+    }
+    known_implementations = {
+        str(row["implementation_id"])
+        for row in repository.fetch_all("SELECT implementation_id FROM implementations")
+    }
+    _unique_ids(trace_index["traces"], "trace_id", "traces")
+    known_content = generated_ids
+
+    for page in generated_pages:
+        page_id = str(page["content_id"])
+        _require_references(page_id, page.get("source_ids"), known_sources, "source")
+        _require_references(page_id, page.get("prerequisites"), known_content, "prerequisite")
+        _string_list(page.get("related_ids"), page_id)
+        _string_list(page.get("visualization_ids"), page_id)
+        _string_list(page.get("comparison_ids"), page_id)
+
+    for case in gallery_index["cases"]:
+        case_id = str(case["case_id"])
+        _require_references(case_id, case.get("source_ids"), known_sources, "source")
+        _require_references(
+            case_id, case.get("candidate_method_ids"), known_methods, "candidate method"
+        )
+        _require_references(
+            case_id, case.get("implementation_ids"), known_implementations, "implementation"
+        )
+        _require_references(case_id, case.get("comparison_ids"), comparison_ids, "comparison")
+        excluded = case.get("excluded_methods")
+        if not isinstance(excluded, list):
+            raise ValueError(f"{case_id} excluded_methods must be a list")
+        _require_references(
+            case_id,
+            [item.get("method_id") for item in excluded if isinstance(item, dict)],
+            known_methods,
+            "excluded method",
+        )
+
+    return {
+        "dataset_version": identity.dataset_version,
+        "content_pages": len(generated_pages),
+        "gallery_cases": len(case_ids),
+        "comparisons": len(comparison_ids),
+    }
 
 
 def main() -> None:
-    root = Path(__file__).resolve().parents[1]
-    pages = load_content(root / "content")
-    if len(pages) < 4:
-        raise SystemExit("at least four published content pages are required")
-    if {page.content_id for page in pages} != {
-        "method.nelder-mead",
-        "method.gradient-descent",
-        "concept.convexity",
-        "concept.derivative-free",
-    }:
-        raise SystemExit("initial content set is incomplete")
-    data_root = root / "site" / "public" / "data"
-    content_index = json.loads((data_root / "content.json").read_text(encoding="utf-8"))
-    gallery_index = json.loads((data_root / "gallery.json").read_text(encoding="utf-8"))
-    comparison_index = json.loads((data_root / "comparisons.json").read_text(encoding="utf-8"))
-    if content_index.get("dataset_version") != "0.2.0" or len(content_index.get("pages", [])) != 4:
-        raise SystemExit("published content index is out of sync")
-    if gallery_index.get("dataset_version") != "0.2.0" or len(gallery_index.get("cases", [])) != 4:
-        raise SystemExit("problem gallery must contain four cases")
-    if comparison_index.get("dataset_version") != "0.2.0" or not comparison_index.get(
-        "comparisons"
-    ):
-        raise SystemExit("comparison index is missing")
-    print(f"validated {len(pages)} content pages")
+    result = verify_content(Path(__file__).resolve().parents[1])
+    print(
+        "validated "
+        f"{result['content_pages']} content pages, "
+        f"{result['gallery_cases']} gallery cases, and "
+        f"{result['comparisons']} comparisons for dataset {result['dataset_version']}"
+    )
+
+
+def _load_index(path: Path, collection: str, version: str) -> dict[str, Any]:
+    payload = _load_payload(path, version)
+    if not isinstance(payload.get(collection), list):
+        raise ValueError(f"{path.name} field must be a list: {collection}")
+    return payload
+
+
+def _load_payload(path: Path, version: str) -> dict[str, Any]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError(f"{path.name} must contain an object")
+    if payload.get("dataset_version") != version:
+        raise ValueError(f"{path.name} dataset version does not match release identity")
+    return payload
+
+
+def _unique_ids(items: object, field: str, label: str) -> set[str]:
+    if not isinstance(items, list):
+        raise ValueError(f"{label} must be a list")
+    values = [str(item[field]) for item in items if isinstance(item, dict) and item.get(field)]
+    if len(values) != len(items) or len(values) != len(set(values)):
+        raise ValueError(f"{label} contain missing or duplicate IDs")
+    return set(values)
+
+
+def _require_minimum(label: str, observed: int, minimum: int) -> None:
+    if observed < minimum:
+        raise ValueError(f"{label} must contain at least {minimum}; observed {observed}")
+
+
+def _require_references(owner: str, values: object, known: set[str], relation: str) -> None:
+    for value in _string_list(values, owner):
+        if value not in known:
+            raise ValueError(f"{owner} references unknown {relation}: {value}")
+
+
+def _string_list(value: object, owner: str) -> list[str]:
+    if not isinstance(value, list) or any(not isinstance(item, str) or not item for item in value):
+        raise ValueError(f"{owner} relation must be a list of non-empty IDs")
+    return value
 
 
 if __name__ == "__main__":

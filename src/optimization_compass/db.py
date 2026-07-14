@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import os
 import sqlite3
 from collections.abc import Iterator, Sequence
@@ -135,6 +136,13 @@ class KnowledgeRepository:
             "SELECT version FROM version_history ORDER BY release_date DESC, version DESC LIMIT 1"
         )
         return str(row["version"]) if row else "unknown"
+
+    def database_sha256(self) -> str:
+        if self._explicit_path is not None:
+            return hashlib.sha256(self._explicit_path.read_bytes()).hexdigest()
+        resource = files("optimization_compass").joinpath("resources/knowledge.sqlite")
+        with as_file(resource) as database_path:
+            return hashlib.sha256(database_path.read_bytes()).hexdigest()
 
     def latest_release(self) -> dict[str, str]:
         row = self.fetch_one(

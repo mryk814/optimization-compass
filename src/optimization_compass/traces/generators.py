@@ -34,12 +34,12 @@ _EVENT_LABELS = {
 
 def generate_nelder_mead_trace(
     *,
+    dataset_version: str,
     objective_family: str = "quadratic",
     initial_point: Sequence[float] | None = None,
     budget: int = 80,
     trace_id: str | None = None,
     scenario_id: str | None = None,
-    dataset_version: str = "0.2.0",
 ) -> AlgorithmTrace:
     if budget < 4:
         raise ValueError("Nelder–Mead budget must allow the initial simplex and one trial")
@@ -253,13 +253,13 @@ def generate_nelder_mead_trace(
 def generate_gradient_trace(
     method: GradientMethod,
     *,
+    dataset_version: str,
     objective_family: str = "quadratic",
     initial_point: Sequence[float] | None = None,
     budget: int = 40,
     parameters: dict[str, float] | None = None,
     trace_id: str | None = None,
     scenario_id: str | None = None,
-    dataset_version: str = "0.2.0",
 ) -> AlgorithmTrace:
     if budget < 2:
         raise ValueError("gradient trace budget must be at least two")
@@ -399,7 +399,7 @@ def generate_gradient_trace(
 
 
 def generate_gradient_bundle(
-    *, objective_family: str = "quadratic", budget: int = 40, dataset_version: str = "0.2.0"
+    *, dataset_version: str, objective_family: str = "quadratic", budget: int = 40
 ) -> TraceBundle:
     initial = [-1.6, 1.6]
     methods: tuple[GradientMethod, ...] = ("gradient_descent", "momentum", "adam")

@@ -19,7 +19,7 @@ def test_site_data_is_complete_and_deterministic(repository: object) -> None:
     assert isinstance(first, SiteData)
     assert first == second
     assert first.contract_version == "1.0.0"
-    assert first.dataset_version == "0.2.0"
+    assert first.dataset_version == repository.dataset_version()
     assert len(first.questions) == 12
     assert len(first.rules) == 78
     assert first.questions[0].choices[2].value == "binary"
@@ -42,7 +42,7 @@ def test_shared_recommendation_cases_match_python_engine(
         (Path(__file__).parent / "fixtures/recommendation_cases.json").read_text(encoding="utf-8")
     )
     assert fixture["fixture_version"] == "1.0.0"
-    assert fixture["dataset_version"] == "0.2.0"
+    assert fixture["dataset_version"] == engine.repository.dataset_version()
     assert len(fixture["cases"]) == 9
     smooth = next(case for case in fixture["cases"] if case["case_id"] == "smooth_continuous")
     assert smooth["request"]["max_methods"] == 5

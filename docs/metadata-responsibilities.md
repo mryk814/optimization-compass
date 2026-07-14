@@ -31,14 +31,15 @@ keeps `implementation_id` as SQL `NULL`.
 
 ## Release discipline
 
-`scripts/rebuild_dataset.py --stage` copies the pinned release to temporary storage, applies
-the migration and seed, recomputes release checks from live rows, exports every distribution,
-round-trips every format, and rebuilds a second time to prove deterministic hashes. Stage mode
-never changes published files, the runtime database, or `DATASET_VERSION`.
+`src/optimization_compass/resources/release-authority.json` owns the target dataset version, release date, and pinned base
+identity. `scripts/rebuild_dataset.py --stage` copies that base to temporary storage, applies
+the migration and seeds, recomputes release checks from live rows, exports every distribution and
+site-data asset, round-trips every format, and rebuilds a second time to prove deterministic hashes.
+Stage mode never changes published files, the runtime database, `DATASET_VERSION`, or Pages input.
 
 Publishing is a separate atomic gate. The staged manifest schema, version, and release date are
 validated before artifact paths are resolved, then cross-checked with JSON/JSONL headers, SQLite
 version history, the report, filenames, hashes, current runtime hash, and code version. Release-tree
 verification explicitly requires the Atlas contract even when every Atlas table is absent. The data
-directory, runtime database, and version file are all prepared and backed up before the first
-replacement; any replacement failure restores all three targets.
+directory, runtime database, version file, and site data are all prepared and backed up before the
+first replacement; any replacement failure restores all four targets.

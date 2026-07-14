@@ -23,18 +23,38 @@
 uv run python scripts/rebuild_dataset.py --stage
 ```
 
-このコマンドは公開済みv0.2.0のversion/hashを確認して一時ディレクトリだけに構築します。
+target versionとrelease dateは `src/optimization_compass/resources/release-authority.json` だけで変更します。CLI引数、UI、
+validatorへversionを重複記載しません。次で2回検証済みtreeを保持できます。
+
+```bash
+uv run python scripts/rebuild_dataset.py --stage --output .release-stage
+```
+
+このコマンドは公開済みv0.2.0のversion/hashを確認してstaging領域だけに構築します。
 atlas metadata migration/seedは監査可能な入力ですが、runtime authorityはreleased SQLiteです。
-Task 11Aではpublish modeを呼び出さず、公開distributionとruntime copyを変更しません。
 新versionを構築するときは `build_staged_release(..., target_version=..., release_date=...)`
 がversion history/model revisionを含む全artifactを同じidentityで生成します。publish gateはdata
-directory、runtime DB、`DATASET_VERSION`を先に全てstage/backupし、途中の置換失敗時は3対象を
-まとめて元へ戻します。
+directory、runtime DB、`DATASET_VERSION`、site dataを先に全てstage/backupし、途中の置換失敗時は
+4対象をまとめて元へ戻します。
+
+```bash
+uv run python scripts/rebuild_dataset.py --publish --staged-directory .release-stage
+```
+
+publish後はversioned release identityと `site/public/data/release.json` がbyte単位で一致し、
+SQLite / JSON / JSONL / CSV / ZIP / XLSX / report / runtime DB / site JSONが同じdataset versionを
+持つことを確認します。
 通常の公開済みbase検証は `verify_database(..., require_atlas=False)`、staged release gateは
 `require_atlas=True` とし、Atlas tableが全て欠落してもbase datasetへ誤判定しません。
 
 authorityの境界と明示状態の意味は [metadata-responsibilities.md](metadata-responsibilities.md)
 を参照してください。
+
+## Git tag and GitHub Release
+
+repository内のatomic publishと全検証完了後にのみ `dataset-v<version>` tagをmainの検証済みcommitへ
+付けます。GitHub Releaseにはversioned SQLite、JSON、JSONL、CSV ZIP、XLSX、schema、report、
+manifest、release identityを添付し、manifestのSHA-256をchecksum authorityとして扱います。
 
 公開前の権利・配布・Pages確認は
 [public-release-checklist.md](public-release-checklist.md) を使用してください。

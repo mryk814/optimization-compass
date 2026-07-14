@@ -39,6 +39,7 @@ include = [
   "src/optimization_compass/**/*.py",
   "src/optimization_compass/resources/*.sqlite",
   "src/optimization_compass/resources/DATASET_VERSION",
+  "src/optimization_compass/resources/release-authority.json",
 ]
 
 [tool.pytest.ini_options]

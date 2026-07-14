@@ -7,7 +7,9 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any, Literal
 
+from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -39,6 +41,10 @@ VIEW_ID = "problem-structure"
 VIEW_PATH = "views/problem-structure.json"
 VIEW_TITLE = "最適化問題の構造マップ"
 VIEW_DESCRIPTION = "問題の特徴から、関連する問題型・手法・代替解法・根拠をたどるためのビュー。"
+ROOT = Path(__file__).parents[2]
+CONTENT_DIRECTORY = ROOT / "content"
+GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
+COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
 
 BRANCHES: tuple[tuple[str, str, str, str, tuple[str, ...]], ...] = (
     (
@@ -167,6 +173,12 @@ RELATED_ENTITY_TYPES = {"method", "problem", "feature", "alternative"}
 
 def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteManifest:
     release = repository.latest_release()
+    release_identity = DatasetReleaseIdentity(
+        schema_version=1,
+        dataset_version=release["version"],
+        release_date=release["release_date"],
+        database_sha256=repository.database_sha256(),
+    )
     generated_at = datetime.combine(
         date.fromisoformat(release["release_date"]), time.min, tzinfo=UTC
     )
@@ -217,6 +229,23 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     from optimization_compass.site_recommendation import build_site_data
 
     recommendation_data = build_site_data(repository)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "release.json").write_text(
+        canonical_identity_json(release_identity), encoding="utf-8", newline="\n"
+    )
+    _write_content_index(output_dir / "content.json", release["version"])
+    _write_seeded_index(
+        output_dir / "gallery.json",
+        GALLERY_SEED,
+        collection_field="cases",
+        dataset_version=release["version"],
+    )
+    _write_seeded_index(
+        output_dir / "comparisons.json",
+        COMPARISON_SEED,
+        collection_field="comparisons",
+        dataset_version=release["version"],
+    )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
     trace_asset = _write_dummy_trace(output_dir, dataset_version=release["version"])
@@ -831,10 +860,70 @@ def _stable_union(*values: list[str]) -> list[str]:
 
 def _write_json(path: Path, model: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(
-        model.model_dump(mode="json"), ensure_ascii=False, indent=2, sort_keys=True
-    )
+    value = model if isinstance(model, dict) else model.model_dump(mode="json")
+    payload = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
     path.write_text(payload + "\n", encoding="utf-8", newline="\n")
+
+
+def _write_content_index(path: Path, dataset_version: str) -> None:
+    pages = [page for page in load_content(CONTENT_DIRECTORY) if page.status == "published"]
+    _write_json(
+        path,
+        {
+            "contract_version": "1.0.0",
+            "dataset_version": dataset_version,
+            "pages": [_content_payload(page) for page in pages],
+        },
+    )
+
+
+def _content_payload(page: ContentPage) -> dict[str, Any]:
+    summary = _content_summary(page.body)
+    return {
+        "content_id": page.content_id,
+        "kind": page.kind,
+        "title_ja": page.title_ja,
+        "title_en": page.title_en,
+        "summary": summary,
+        "body": page.body,
+        "prerequisites": list(page.prerequisites),
+        "related_ids": list(page.related_ids),
+        "visualization_ids": list(page.visualization_ids),
+        "comparison_ids": list(page.comparison_ids),
+        "source_ids": list(page.source_ids),
+        "status": page.status,
+        "last_reviewed": page.last_reviewed,
+        "seo_title": page.title_ja,
+        "seo_description": summary,
+    }
+
+
+def _content_summary(body: str) -> str:
+    for line in body.splitlines():
+        stripped = line.strip()
+        if stripped and not stripped.startswith("#"):
+            return stripped
+    raise ValueError("published content body must contain summary text")
+
+
+def _write_seeded_index(
+    path: Path,
+    source: Path,
+    *,
+    collection_field: str,
+    dataset_version: str,
+) -> None:
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    if set(payload) != {collection_field} or not isinstance(payload[collection_field], list):
+        raise ValueError(f"invalid seeded site index: {source}")
+    _write_json(
+        path,
+        {
+            "contract_version": "1.0.0",
+            "dataset_version": dataset_version,
+            collection_field: payload[collection_field],
+        },
+    )
 
 
 def _required_display_text(value: object, context: str) -> str:

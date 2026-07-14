@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from optimization_compass.dataset_release import build_staged_release, verify_database
+from optimization_compass.dataset_release import RELEASE_DATE, build_staged_release, verify_database
 from optimization_compass.metadata_models import AtlasMetadataSeed
 
 ROOT = Path(__file__).parents[1]
@@ -157,7 +157,7 @@ def test_staged_database_has_atlas_checks_and_closed_learning_edges(
 
     assert [row[0] for row in check_rows] == [f"CHK{index:03d}" for index in range(1, 21)]
     assert not [row for row in check_rows if row[1] == "fail"]
-    assert {row[2] for row in check_rows} == {"2026-07-13"}
+    assert {row[2] for row in check_rows} == {RELEASE_DATE}
     assert unresolved == 0
 
 

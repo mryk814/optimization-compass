@@ -5,7 +5,7 @@ import { parseSiteData } from "./site-data";
 
 describe("SiteData boundary", () => {
   test("accepts the generated complete contract", () => {
-    const data = parseSiteData(rawSiteData, "0.2.0");
+    const data = parseSiteData(rawSiteData, rawSiteData.dataset_version);
     expect(data.questions).toHaveLength(12);
     expect(data.rules).toHaveLength(78);
     expect(data.questions[0].choices[2]).toEqual({

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-import csv
 import json
+import sqlite3
 from pathlib import Path
+
+from optimization_compass.dataset_release import TARGET_DATASET_VERSION
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_ROOT_FILES = ("LICENSE", "DATA_LICENSE", "CONTENT_LICENSE", "CC-BY-4.0", "NOTICE")
@@ -80,9 +82,13 @@ def _verify_site_distribution() -> None:
 
 
 def _verify_source_catalog() -> tuple[int, set[str]]:
-    path = ROOT / "data/optimization_method_selection_database_v0.2.0_csv/sources.csv"
-    with path.open(encoding="utf-8-sig", newline="") as handle:
-        rows = list(csv.DictReader(handle))
+    path = ROOT / f"data/optimization_method_selection_database_v{TARGET_DATASET_VERSION}.sqlite"
+    connection = sqlite3.connect(path)
+    connection.row_factory = sqlite3.Row
+    try:
+        rows = [dict(row) for row in connection.execute("SELECT * FROM sources ORDER BY source_id")]
+    finally:
+        connection.close()
     if not rows:
         raise SystemExit("source catalog is empty")
     seen_ids: set[str] = set()
