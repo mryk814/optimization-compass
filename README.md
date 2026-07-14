@@ -357,6 +357,8 @@ Qiita / Zennは根拠として使用しません。
 - canonical database and structured distributions: [CC BY 4.0](DATA_LICENSE)
 - educational content, generated diagrams, Trace JSON and screenshots: [CC BY 4.0](CONTENT_LICENSE)
 
+CC BY 4.0の公式legal codeは [`CC-BY-4.0`](CC-BY-4.0) に同梱しています。第三者sourceの棚卸し結果は [`THIRD_PARTY_SOURCE_AUDIT.md`](THIRD_PARTY_SOURCE_AUDIT.md) を参照してください。
+
 第三者の論文、ドキュメント、商標、引用、リンク先コンテンツは元の権利条件に従い、本repositoryのライセンスでは再許諾されません。詳細は [`NOTICE`](NOTICE) と [`docs/licensing.md`](docs/licensing.md) を参照してください。
 
 ## Disclaimer
