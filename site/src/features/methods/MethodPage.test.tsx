@@ -8,7 +8,10 @@ import { MethodPage } from "./MethodPage";
 const view = {
   dataset_version: "0.2.0", generated_at: "2026-07-13T00:00:00Z",
   view_id: "problem-structure", version: "1.0.0", title: "Map", description: "",
-  root_node_ids: ["opaque-later", "opaque-first"], edges: [], entities: [],
+  root_node_ids: ["opaque-later", "opaque-first"], edges: [], entities: [{
+    entity_id: "M_TARGET", entity_type: "method", label: "Target", label_en: "Target",
+    summary: "", source_ids: [], url: "",
+  }],
   nodes: [
     node("opaque-later", 2),
     node("opaque-first", 1),

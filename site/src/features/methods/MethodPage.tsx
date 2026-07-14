@@ -6,6 +6,7 @@ import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
 import { resolveRelatedNodeId } from "../map/map-state";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   return {
@@ -51,24 +52,38 @@ export function MethodPage() {
   const [error, setError] = useState<Error>();
   useEffect(() => {
     let active = true;
+    setView(undefined);
+    setError(undefined);
     const baseUrl = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
     void fetch(`${baseUrl}data/views/problem-structure.json`).then(async (response) => {
       if (!response.ok) throw new Error(`ViewSpec request failed (${response.status}).`);
-      return parseViewSpec(await response.json());
+      const next = parseViewSpec(await response.json());
+      const methodExists = next.entities.some(
+        (entity) => entity.entity_type === "method" && entity.entity_id === methodId,
+      );
+      if (!methodExists) throw new EntityNotFoundError("手法ID", methodId);
+      return next;
     }).then(
       (next) => { if (active) setView(next); },
       (caught: unknown) => { if (active) setError(caught instanceof Error ? caught : new Error(String(caught))); },
     );
     return () => { active = false; };
-  }, []);
+  }, [methodId]);
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
+  const method = view?.entities.find(
+    (entity) => entity.entity_type === "method" && entity.entity_id === methodId,
+  );
   return (
-    <section className="page-panel">
-      <h1>手法を理解する</h1>
-      <p>最適化手法の前提、直感、適用範囲を確認する画面です。</p>
+    <section className="page-panel method-detail-page">
+      <p className="eyebrow">Method</p>
+      <h1>{method?.label ?? "手法を読み込み中…"}</h1>
+      {method && <p className="content-lead">{method.summary}</p>}
+      {method?.label_en && <p lang="en">{method.label_en}</p>}
       <p className="route-parameter">Method ID: <strong>{methodId}</strong></p>
       {error && <p role="alert">{error.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
       {methodId === "M_NELDER_MEAD" && <Link className="text-link" to="/theater/nelder-mead">Method Theaterを開く</Link>}
+      {method && method.source_ids.length > 0 && <small>Sources: {method.source_ids.join(", ")}</small>}
     </section>
   );
 }
