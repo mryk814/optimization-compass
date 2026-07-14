@@ -9,6 +9,8 @@ __pycache__/
 htmlcov/
 dist/
 site/node_modules/
+site/playwright-report/
+site/test-results/
 *.tsbuildinfo
 build/
 *.egg-info/
