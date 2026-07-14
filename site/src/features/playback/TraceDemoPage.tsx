@@ -10,6 +10,7 @@ import {
 } from "../../contracts/trace";
 import { PlaybackControls } from "./PlaybackControls";
 import { usePlayback } from "./usePlayback";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 
 type LoadedTrace = { trace: AlgorithmTrace; entry: TraceIndexEntry };
 
@@ -30,6 +31,7 @@ export function TraceDemoPage() {
     return () => controller.abort();
   }, [traceId]);
 
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
   if (error) {
     return (
       <section className="trace-page">
@@ -136,7 +138,7 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
     throw new Error("Trace index dataset version does not match the manifest.");
   }
   const entry = index.traces.find((candidate) => candidate.trace_id === traceId);
-  if (!entry) throw new Error(`Trace ID「${traceId}」は公開indexに存在しません。`);
+  if (!entry) throw new EntityNotFoundError("Trace ID", traceId);
 
   const response = await fetch(`${baseUrl}data/traces/${entry.path}`, { signal });
   if (!response.ok) throw new Error(`AlgorithmTrace request failed (${response.status}).`);

@@ -5,7 +5,6 @@ import {
   Route,
   Routes,
   useLocation,
-  useParams,
 } from "react-router-dom";
 
 import { MapPage } from "./features/map/MapPage";
@@ -16,90 +15,94 @@ import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonP
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { NelderMeadPage } from "./features/theater/NelderMeadPage";
+import { NotFoundPage } from "./features/navigation/NotFoundPage";
 
 import "./styles.css";
 
 const primaryNavigation = [
-  { label: "Atlas", to: "/", matchPath: "/", matchMode: "exact" },
-  { label: "Map", to: "/map", matchPath: "/map", matchMode: "exact" },
-  { label: "診断", to: "/diagnose", matchPath: "/diagnose", matchMode: "exact" },
-  { label: "手法", to: "/methods/overview", matchPath: "/methods", matchMode: "family" },
-  { label: "比較", to: "/compare/overview", matchPath: "/compare", matchMode: "family" },
-  { label: "Gallery", to: "/gallery", matchPath: "/gallery", matchMode: "family" },
+  { label: "Atlas", to: "/", matchPaths: ["/"] },
+  { label: "Map", to: "/map", matchPaths: ["/map"] },
+  { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
+  { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  {
+    label: "比較",
+    to: "/compare/gradient-quadratic",
+    matchPaths: ["/compare", "/theater", "/traces"],
+  },
+  { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
 ] as const;
-
-const resolvedNavigation = primaryNavigation.map((item) =>
-  item.to === "/compare/overview" ? { ...item, to: "/compare/gradient-quadratic" } : item,
-);
-
-type PurposePageProps = {
-  heading: string;
-  purpose: string;
-};
-
-function PurposePage({ heading, purpose }: PurposePageProps) {
-  if (heading === "ケースギャラリー") return <GalleryPage />;
-  return (
-    <section className="page-panel">
-      <h1>{heading}</h1>
-      <p>{purpose}</p>
-      <p className="placeholder-note">この画面の機能は、次の実装スライスで追加します。</p>
-    </section>
-  );
-}
 
 function HomePage() {
   return (
-    <section className="page-panel">
-      <p className="eyebrow">Optimization Compass</p>
-      <h1>Optimization Atlas</h1>
-      <p>
-        問題構造からたどる地図、条件を整理する診断、手法の理解、比較、実問題の事例を一つの入口から探します。
-      </p>
-      <Link className="text-link" to="/traces/dummy-educational">
-        再生デモを開く
-      </Link>
+    <section className="home-page">
+      <header className="home-hero">
+        <p className="eyebrow">Optimization Compass</p>
+        <h1>Optimization Atlas</h1>
+        <p>問題の構造を整理し、手法を選び、動きと根拠まで一つの地図から確かめます。</p>
+      </header>
+      <div className="home-entry-grid" aria-label="Atlasの主要な入口">
+        <HomeEntry
+          eyebrow="Explore"
+          title="Map"
+          description="問題構造と候補手法のつながりを地図でたどる。"
+          to="/map"
+          linkLabel="地図を見る"
+        />
+        <HomeEntry
+          eyebrow="Decide"
+          title="Diagnose"
+          description="条件を順に答え、候補・除外・確認事項を整理する。"
+          to="/diagnose"
+          linkLabel="診断を始める"
+        />
+        <HomeEntry
+          eyebrow="Learn"
+          title="Methods"
+          description="手法と概念を、直感・前提・コード・根拠から学ぶ。"
+          to="/learn"
+          linkLabel="教材を探す"
+        />
+        <article className="home-entry-card">
+          <p className="home-entry-eyebrow">Watch & Compare</p>
+          <h2>Method Theater</h2>
+          <p>アルゴリズムの一手を再生し、同じ予算で動きを比べる。</p>
+          <div className="home-entry-links">
+            <Link to="/theater/nelder-mead">Theaterを開く</Link>
+            <Link to="/compare/gradient-quadratic">Compare Labを開く</Link>
+          </div>
+        </article>
+        <HomeEntry
+          eyebrow="Apply"
+          title="Problem Gallery"
+          description="実問題の目的・制約から診断と候補手法へ逆引きする。"
+          to="/gallery"
+          linkLabel="ケースを見る"
+        />
+      </div>
     </section>
   );
 }
 
-function ComparisonPage() {
-  const { comparisonId } = useParams();
-
+function HomeEntry({
+  eyebrow,
+  title,
+  description,
+  to,
+  linkLabel,
+}: {
+  eyebrow: string;
+  title: string;
+  description: string;
+  to: string;
+  linkLabel: string;
+}) {
   return (
-    <section className="page-panel">
-      <h1>手法を比較する</h1>
-      <p>同じ評価予算と条件で、複数の手法の動きを比較する画面です。</p>
-      <p className="route-parameter">
-        Comparison ID: <strong>{comparisonId}</strong>
-      </p>
-    </section>
-  );
-}
-
-function CasePage() {
-  const { caseId } = useParams();
-
-  return (
-    <section className="page-panel">
-      <h1>ケース詳細</h1>
-      <p>実問題の目的、制約、選択した手法、得られた知見を確認する画面です。</p>
-      <p className="route-parameter">
-        Case ID: <strong>{caseId}</strong>
-      </p>
-    </section>
-  );
-}
-
-function NotFoundPage() {
-  return (
-    <section className="page-panel">
-      <h1>ページが見つかりません</h1>
-      <p>指定されたアトラスの経路は存在しません。</p>
-      <Link className="text-link" to="/">
-        Atlasへ戻る
-      </Link>
-    </section>
+    <article className="home-entry-card">
+      <p className="home-entry-eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p>{description}</p>
+      <Link to={to}>{linkLabel}</Link>
+    </article>
   );
 }
 
@@ -123,11 +126,12 @@ function AppShell() {
           <span>Optimization Atlas</span>
         </Link>
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
-          {resolvedNavigation.map(({ label, to, matchPath, matchMode }) => {
-            const isActive =
-              matchMode === "exact"
+          {primaryNavigation.map(({ label, to, matchPaths }) => {
+            const isActive = matchPaths.some((matchPath) =>
+              matchPath === "/"
                 ? pathname === matchPath
-                : pathname === matchPath || pathname.startsWith(`${matchPath}/`);
+                : pathname === matchPath || pathname.startsWith(`${matchPath}/`),
+            );
 
             return (
               <Link
@@ -152,15 +156,6 @@ function AppShell() {
           <Route path="/theater/nelder-mead" element={<NelderMeadPage />} />
           <Route path="/compare/:comparisonId" element={<CompareLabPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
-          <Route
-            path="/gallery"
-            element={
-              <PurposePage
-                heading="ケースギャラリー"
-                purpose="材料、設計、運用などの実問題から、考え方と手法を逆引きする画面です。"
-              />
-            }
-          />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
           <Route path="/learn/:contentId" element={<ContentPage />} />
