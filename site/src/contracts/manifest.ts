@@ -19,11 +19,9 @@ export interface ManifestTraceAsset {
   sha256: string;
 }
 
-export interface ManifestRendererAsset {
-  contract_version: "1.0.0";
-  path: string;
-  bytes: number;
-  sha256: string;
+export interface ManifestCoverageAsset extends ManifestAsset {
+  path: "coverage.json";
+  report_path: "coverage.md";
 }
 
 export interface ManifestLicenseAsset {
@@ -48,9 +46,9 @@ export interface SiteManifest {
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
   visualization_scenarios: ManifestAsset;
-  search_trees: ManifestRendererAsset;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
+  coverage: ManifestCoverageAsset;
   licenses: SiteLicenseManifest;
 }
 
@@ -66,9 +64,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "recommendation",
       "traces",
       "visualization_scenarios",
-      "search_trees",
       "entity_links",
       "sources",
+      "coverage",
       "licenses",
     ],
     "SiteManifest",
@@ -107,17 +105,6 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const sha256 = nonEmptyString(traces.sha256, "traces.sha256");
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
 
-  const searchTrees = record(data.search_trees, "search_trees");
-  exactKeys(searchTrees, ["contract_version", "path", "bytes", "sha256"], "search_trees");
-  if (searchTrees.contract_version !== "1.0.0") {
-    throw new Error("search_trees.contract_version is unsupported.");
-  }
-  const searchTreeBytes = positiveInteger(searchTrees.bytes, "search_trees.bytes");
-  const searchTreeSha256 = nonEmptyString(searchTrees.sha256, "search_trees.sha256");
-  if (!/^[0-9a-f]{64}$/u.test(searchTreeSha256)) {
-    throw new Error("search_trees.sha256 is invalid.");
-  }
-
   const licenses = parseLicenses(data.licenses);
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
@@ -129,6 +116,12 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
   if (visualizationScenarios.version !== "1.0.0") {
     throw new Error("visualization_scenarios.version is unsupported.");
+  }
+  const coverage = record(data.coverage, "coverage");
+  exactKeys(coverage, ["version", "path", "report_path"], "coverage");
+  if (coverage.version !== "1.0.0") throw new Error("coverage.version is unsupported.");
+  if (coverage.path !== "coverage.json" || coverage.report_path !== "coverage.md") {
+    throw new Error("coverage paths are invalid.");
   }
 
   return {
@@ -151,12 +144,6 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       version: "1.0.0",
       path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
     },
-    search_trees: {
-      contract_version: "1.0.0",
-      path: safeRelativePath(searchTrees.path, "search_trees.path"),
-      bytes: searchTreeBytes,
-      sha256: searchTreeSha256,
-    },
     entity_links: {
       version: "1.0.0",
       path: safeRelativePath(entityLinks.path, "entity_links.path"),
@@ -165,6 +152,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       version: "1.0.0",
       path: safeRelativePath(sources.path, "sources.path"),
     },
+    coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
     licenses,
   };
 }

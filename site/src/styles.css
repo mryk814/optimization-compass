@@ -57,6 +57,40 @@
   .search-tree-page .playback-actions { align-items: stretch; }
 }
 
+.home-maintainer-link { margin: 1.25rem 0 0; text-align: right; }
+.coverage-page { display: grid; gap: 2rem; width: 100%; min-width: 0; max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; box-sizing: border-box; }
+.coverage-page > *, .coverage-page > section { min-width: 0; }
+.coverage-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
+.coverage-stat { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; border: 1px solid var(--border-color, #d8d8d2); border-left: .35rem solid #777; border-radius: .5rem; padding: .85rem 1rem; background: var(--surface, #fff); }
+.coverage-stat strong { font-size: 1.7rem; font-variant-numeric: tabular-nums; }
+.coverage-available { border-left-color: #287a55; }
+.coverage-partial { border-left-color: #b47816; }
+.coverage-missing { border-left-color: #ad3e3e; }
+.coverage-not_applicable { border-left-color: #6f7080; }
+.coverage-baseline { margin: -1.25rem 0 0; color: var(--muted-text, #62625e); font-size: .88rem; }
+.coverage-priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .8rem; }
+.coverage-priority-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
+.coverage-priority-grid h3 { margin: .15rem 0 .55rem; }
+.coverage-priority-grid summary, .coverage-table-wrap summary { cursor: pointer; }
+.coverage-filters { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: .85rem; }
+.coverage-filters label { display: grid; gap: .25rem; font-size: .82rem; font-weight: 700; }
+.coverage-filters select { min-width: 10rem; padding: .5rem; }
+.coverage-table-wrap { max-width: 100%; min-width: 0; overflow-x: auto; border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; }
+.coverage-table-wrap table { width: 100%; border-collapse: collapse; }
+.coverage-table-wrap th, .coverage-table-wrap td { padding: .7rem .8rem; border-bottom: 1px solid var(--border-color, #d8d8d2); text-align: left; vertical-align: top; }
+.coverage-table-wrap th span, .coverage-table-wrap th code { display: block; }
+.coverage-table-wrap details + details { margin-top: .35rem; }
+.coverage-pill { display: inline-block; border-left: .25rem solid #777; padding: .1rem .35rem; font-size: .78rem; font-weight: 700; }
+.coverage-issues { padding-left: 1.25rem; }
+.coverage-issues code, .coverage-issues strong { overflow-wrap: anywhere; word-break: break-word; }
+.muted { color: var(--muted-text, #62625e); }
+@media (max-width: 600px) {
+  .coverage-page { padding: 1.25rem .85rem 3rem; gap: 1.5rem; }
+  .coverage-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .coverage-stat { display: grid; }
+  .coverage-filters label, .coverage-filters select { width: 100%; }
+}
+
 .diagnose-page {
   padding: 1rem clamp(0.75rem, 2vw, 1.5rem) 2rem;
 }

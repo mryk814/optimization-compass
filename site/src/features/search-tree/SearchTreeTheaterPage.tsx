@@ -108,11 +108,24 @@ async function loadArtifact(artifactId: string, signal: AbortSignal): Promise<Lo
   if (scenarioIndex.dataset_version !== manifest.dataset_version) {
     throw new Error("Visualization scenario dataset version does not match the manifest.");
   }
-  const indexResponse = await fetch(`${baseUrl}data/${manifest.search_trees.path}`, { signal });
+  const canonicalScenario = scenarioIndex.scenarios.find((candidate) =>
+    candidate.runs.some((run) => run.artifact_id === artifactId),
+  );
+  if (!canonicalScenario || canonicalScenario.artifact.renderer_family !== "search_tree") {
+    throw new EntityNotFoundError("Search-tree artifact ID", artifactId);
+  }
+  const payloadResponse = await fetch(`${baseUrl}data/${canonicalScenario.artifact.payload_path}`, { signal });
+  if (!payloadResponse.ok) throw new Error(`Canonical scenario payload request failed (${payloadResponse.status}).`);
+  const payloadBytes = new Uint8Array(await payloadResponse.arrayBuffer());
+  if (payloadBytes.byteLength !== canonicalScenario.artifact.payload_bytes) {
+    throw new Error("Canonical scenario payload byte length does not match the scenario index.");
+  }
+  if (await sha256Hex(payloadBytes) !== canonicalScenario.artifact.payload_sha256) {
+    throw new Error("Canonical scenario payload SHA-256 does not match the scenario index.");
+  }
+  const indexResponse = await fetch(`${baseUrl}data/search-trees/index.json`, { signal });
   if (!indexResponse.ok) throw new Error(`Search-tree index request failed (${indexResponse.status}).`);
   const indexBytes = new Uint8Array(await indexResponse.arrayBuffer());
-  if (indexBytes.byteLength !== manifest.search_trees.bytes) throw new Error("Search-tree index byte length does not match the manifest.");
-  if (await sha256Hex(indexBytes) !== manifest.search_trees.sha256) throw new Error("Search-tree index SHA-256 does not match the manifest.");
   const index = parseSearchTreeIndex(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(indexBytes)));
   if (index.dataset_version !== manifest.dataset_version) throw new Error("Search-tree index dataset version does not match the manifest.");
   const entry = index.artifacts.find((candidate) => candidate.artifact_id === artifactId);
@@ -130,8 +143,10 @@ async function loadArtifact(artifactId: string, signal: AbortSignal): Promise<Lo
   if (artifact.trace.trace_id !== entry.trace_id || artifact.scenario_id !== entry.scenario_id) {
     throw new Error("Search-tree artifact identity does not match its index entry.");
   }
-  const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === artifact.scenario_id);
-  if (!scenario) throw new Error(`Visualization scenario is missing for ${artifact.artifact_id}.`);
+  const scenario = canonicalScenario;
+  if (scenario.scenario_id !== artifact.scenario_id) {
+    throw new Error("Visualization scenario does not match the search-tree artifact identity.");
+  }
   if (scenario.artifact.artifact_kind !== artifact.artifact_kind
       || scenario.artifact.renderer_family !== artifact.renderer_family
       || scenario.artifact.renderer_contract_version !== artifact.renderer_contract_version

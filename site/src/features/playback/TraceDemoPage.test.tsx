@@ -60,18 +60,13 @@ const manifest = {
   visualization_scenarios: { version: "1.0.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
+  coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",
     index_version: "1.0.0",
     path: "traces/catalog.json",
     bytes: indexBytes.byteLength,
     sha256: createHash("sha256").update(indexBytes).digest("hex"),
-  },
-  search_trees: {
-    contract_version: "1.0.0",
-    path: "search-trees/index.json",
-    bytes: 512,
-    sha256: "b".repeat(64),
   },
   licenses: {
     code: { spdx_id: "MIT", path: "licenses/LICENSE.txt" },

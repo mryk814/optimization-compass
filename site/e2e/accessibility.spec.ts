@@ -35,6 +35,7 @@ const staticScans = [
   { route: "/learn/method.nelder-mead", heading: "Nelder–Mead単体法", label: "learn-detail" },
   { route: "/traces/nelder-mead-quadratic", heading: "Nelder–Meadの幾何操作", label: "nelder-mead" },
   { route: "/compare/gradient-quadratic", heading: "手法を比較する", label: "gradient-compare" },
+  { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
 ];
 

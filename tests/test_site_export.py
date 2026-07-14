@@ -186,12 +186,6 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
-    assert manifest_payload["search_trees"] == {
-        "contract_version": "1.0.0",
-        "path": "search-trees/index.json",
-        "bytes": len(search_tree_index_bytes),
-        "sha256": sha256(search_tree_index_bytes).hexdigest(),
-    }
     search_tree_index = json.loads(search_tree_index_bytes)
     assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",

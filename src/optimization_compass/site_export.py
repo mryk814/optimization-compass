@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from optimization_compass.content_models import ContentPage, load_content
+from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
@@ -35,8 +36,8 @@ from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
     ManifestAsset,
+    ManifestCoverageAsset,
     ManifestLicenseAsset,
-    ManifestRendererAsset,
     ManifestTraceAsset,
     ManifestView,
     SiteLicenseManifest,
@@ -272,7 +273,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    search_tree_asset, search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
+    search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
         output_dir, dataset_version=release["version"]
     )
     trace_asset, trace_index, generated_traces = _write_dummy_trace(
@@ -315,6 +316,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         generated_at=generated_at,
     )
     _write_json(output_dir / "sources.json", source_index)
+    coverage = build_coverage_report(
+        repository,
+        output_dir,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+    )
+    write_coverage_report(coverage, output_dir / "coverage.json", output_dir / "coverage.md")
     manifest = SiteManifest(
         version=VIEW_VERSION,
         dataset_version=release["version"],
@@ -323,9 +331,11 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
         visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
-        search_trees=search_tree_asset,
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
+        coverage=ManifestCoverageAsset(
+            version="1.0.0", path="coverage.json", report_path="coverage.md"
+        ),
         licenses=SiteLicenseManifest(
             code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
             data=ManifestLicenseAsset(spdx_id="CC-BY-4.0", path="licenses/DATA_LICENSE.txt"),
@@ -695,7 +705,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
 
 def _write_search_tree_artifacts(
     output_dir: Path, *, dataset_version: str
-) -> tuple[ManifestRendererAsset, SearchTreeIndex, list[SearchTreeArtifact]]:
+) -> tuple[SearchTreeIndex, list[SearchTreeArtifact]]:
     artifacts = [
         generate_search_tree_artifact(dataset_version=dataset_version),
         generate_search_tree_artifact(dataset_version=dataset_version, node_budget=4),
@@ -722,17 +732,7 @@ def _write_search_tree_artifacts(
     index = SearchTreeIndex(dataset_version=dataset_version, artifacts=entries)
     index_path = output_dir / "search-trees/index.json"
     _write_json(index_path, index)
-    index_bytes = index_path.read_bytes()
-    return (
-        ManifestRendererAsset(
-            contract_version="1.0.0",
-            path="search-trees/index.json",
-            bytes=len(index_bytes),
-            sha256=sha256(index_bytes).hexdigest(),
-        ),
-        index,
-        artifacts,
-    )
+    return index, artifacts
 
 
 def _numeric_record(value: dict[str, Any], *, owner: str) -> dict[str, bool | int | float]:

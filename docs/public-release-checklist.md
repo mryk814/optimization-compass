@@ -34,6 +34,10 @@ GitHub Pages artifact.
 - [ ] Runtime database, dataset files, site data, manifest, and release tag use
       the same version identity.
 - [ ] `uv run python scripts/verify_content.py` passes.
+- [ ] `coverage.json` and `coverage.md` come from the same snapshot; broken references are
+      separated from unbuilt expectations.
+- [ ] Release notes use `coverage-diff` with explicit before/after snapshots, or state that no
+      baseline was supplied.
 - [ ] Site typecheck, unit tests, production build, browser journeys, and
       accessibility checks pass against the artifact being deployed.
 

@@ -165,6 +165,42 @@ class LearningEdgeSeed(MetadataModel):
         return self
 
 
+class LearningCoverageExpectationSeed(MetadataModel):
+    expectation_id: NonBlank
+    subject_type: Literal["method", "problem", "feature_family"]
+    subject_id: NonBlank
+    purpose: Literal[
+        "mechanism", "comparison", "failure_contrast", "sensitivity",
+        "application_result", "schematic",
+    ]
+    artifact_kind: Literal[
+        "executable_trace", "schematic_animation", "static_diagram", "result_visualization"
+    ]
+    renderer_family: NonBlank
+    applicability: Literal["expected", "not_applicable"]
+    rationale: NonBlank
+    source_ids: list[NonBlank] = Field(min_length=1)
+    last_verified: NonBlank
+    slice_id: NonBlank | None = None
+
+
+class LearningSlicePrioritySeed(MetadataModel):
+    slice_id: NonBlank
+    title_ja: NonBlank
+    title_en: NonBlank
+    classification_score: int = Field(ge=0, le=3)
+    classification_reason: NonBlank
+    misconception_score: int = Field(ge=0, le=3)
+    misconception_reason: NonBlank
+    visualization_score: int = Field(ge=0, le=3)
+    visualization_reason: NonBlank
+    demand_score: int = Field(ge=0, le=3)
+    demand_reason: NonBlank
+    proposed_scope: NonBlank
+    source_ids: list[NonBlank] = Field(min_length=1)
+    last_verified: NonBlank
+
+
 class AtlasMetadataSeed(MetadataModel):
     view_presets: list[ViewPresetSeed] = Field(min_length=1)
     method_visualization_profiles: list[VisualizationProfileSeed] = Field(min_length=1)
@@ -173,6 +209,8 @@ class AtlasMetadataSeed(MetadataModel):
     comparison_sets: list[ComparisonSetSeed] = Field(min_length=1)
     comparison_set_members: list[ComparisonSetMemberSeed] = Field(min_length=1)
     learning_edges: list[LearningEdgeSeed] = Field(min_length=1)
+    learning_coverage_expectations: list[LearningCoverageExpectationSeed] = Field(min_length=1)
+    learning_slice_priorities: list[LearningSlicePrioritySeed] = Field(min_length=1)
 
     @model_validator(mode="after")
     def validate_closures(self) -> AtlasMetadataSeed:
@@ -183,6 +221,8 @@ class AtlasMetadataSeed(MetadataModel):
             (self.demo_scenarios, "scenario_id"),
             (self.comparison_sets, "comparison_set_id"),
             (self.learning_edges, "edge_id"),
+            (self.learning_coverage_expectations, "expectation_id"),
+            (self.learning_slice_priorities, "slice_id"),
         )
         for rows, key in collections:
             _require_unique([str(getattr(row, key)) for row in rows], key)
@@ -220,6 +260,15 @@ class AtlasMetadataSeed(MetadataModel):
             for row in self.learning_edges
         ]
         _require_unique(edge_keys, "learning edge")
+        expectation_keys = [
+            (row.subject_type, row.subject_id, row.purpose, row.artifact_kind, row.renderer_family)
+            for row in self.learning_coverage_expectations
+        ]
+        _require_unique(expectation_keys, "learning coverage expectation")
+        slice_ids = {row.slice_id for row in self.learning_slice_priorities}
+        for expectation in self.learning_coverage_expectations:
+            if expectation.slice_id is not None and expectation.slice_id not in slice_ids:
+                raise ValueError(f"coverage slice does not resolve: {expectation.expectation_id}")
         return self
 
 

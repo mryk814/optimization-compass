@@ -35,6 +35,7 @@ BASE_DATASET_SHA256 = RELEASE_AUTHORITY.base_database_sha256
 TARGET_DATASET_VERSION = RELEASE_AUTHORITY.dataset_version
 RELEASE_DATE = RELEASE_AUTHORITY.release_date
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
+DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 LICENSE_BUNDLE = {
     "LICENSE.txt": ROOT / "LICENSE",
@@ -66,7 +67,7 @@ RELEASE_LICENSE_MANIFEST = {
     ),
 }
 BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
-ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 21))
+ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 22))
 ATLAS_TABLES = frozenset(
     {
         "view_presets",
@@ -76,6 +77,8 @@ ATLAS_TABLES = frozenset(
         "comparison_sets",
         "comparison_set_members",
         "learning_edges",
+        "learning_coverage_expectations",
+        "learning_slice_priorities",
     }
 )
 
@@ -211,7 +214,7 @@ def build_staged_release(
     _validate_release_identity(target_version, release_date)
     _validate_output_directory(
         output_directory,
-        protected_inputs=(base_database, migration_path, seed_path),
+        protected_inputs=(base_database, migration_path, DEFAULT_COVERAGE_MIGRATION, seed_path),
     )
     _verify_pinned_base(base_database)
     output_directory.mkdir(parents=True)
@@ -512,17 +515,22 @@ def compute_live_checks(
     learning_issues = _missing_table_issues(tables, {"learning_edges"})
     if not learning_issues:
         learning_issues = _learning_edge_issues(connection)
+    coverage_issues = _missing_table_issues(
+        tables, {"learning_coverage_expectations", "learning_slice_priorities"}
+    )
+    if not coverage_issues:
+        coverage_issues = _coverage_expectation_issues(connection)
     explicit_state_issues = _explicit_state_issues(connection, ATLAS_TABLES - missing_tables)
     checks.extend(
         [
             _check(
                 "CHK013",
                 "Atlas schema closure",
-                "seven atlas metadata tables",
+                "nine atlas metadata tables",
                 "critical",
                 not missing_tables,
                 f"{len(missing_tables)} missing tables",
-                "all seven normalized tables exist",
+                "all nine normalized tables exist",
                 ", ".join(sorted(missing_tables)) or "All atlas tables exist.",
                 checked_at,
             ),
@@ -602,6 +610,17 @@ def compute_live_checks(
                 expected_condition="release tree round-trip and manifest checks pass",
                 details="Only verify_release_tree may establish artifact consistency.",
                 checked_at=checked_at,
+            ),
+            _check(
+                "CHK021",
+                "Learning coverage closure",
+                "coverage expectations and priority slices",
+                "critical",
+                not coverage_issues,
+                f"{len(coverage_issues)} issues",
+                "subjects, slices, scores, and evidence resolve without inferred status",
+                ", ".join(coverage_issues[:10]) or "Coverage policy rows are closed.",
+                checked_at,
             ),
         ]
     )
@@ -786,7 +805,9 @@ def _verify_site_release_tree(
         "comparisons.json",
         "recommendation/site-data.json",
         "traces/index.json",
+        "visualization-scenarios.json",
         "search-trees/index.json",
+        "coverage.json",
     }
     actual_paths = {path.relative_to(directory).as_posix() for path in directory.rglob("*.json")}
     missing = sorted(required_paths - actual_paths)
@@ -801,8 +822,10 @@ def _verify_site_release_tree(
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:
             raise ReleaseValidationError(f"site asset is not valid JSON: {relative}") from error
-        if not isinstance(payload, dict) or payload.get("dataset_version") != (
-            expected_identity.dataset_version
+        is_embedded_visualization_payload = relative.startswith("visualizations/")
+        if not isinstance(payload, dict) or (
+            not is_embedded_visualization_payload
+            and payload.get("dataset_version") != expected_identity.dataset_version
         ):
             raise ReleaseValidationError(
                 f"site asset dataset version does not match release: {relative}"
@@ -811,7 +834,9 @@ def _verify_site_release_tree(
     referenced = {str(item["path"]) for item in manifest["views"] if isinstance(item, dict)}
     referenced.add(str(manifest["recommendation"]["path"]))
     referenced.add(str(manifest["traces"]["path"]))
-    referenced.add(str(manifest["search_trees"]["path"]))
+    referenced.add(str(manifest["visualization_scenarios"]["path"]))
+    referenced.add(str(manifest["coverage"]["path"]))
+    referenced.add(str(manifest["coverage"]["report_path"]))
     for relative in referenced:
         if not (directory / relative).is_file():
             raise ReleaseValidationError(f"site manifest references missing asset: {relative}")
@@ -820,11 +845,24 @@ def _verify_site_release_tree(
         raise ReleaseValidationError("site trace index byte count does not match manifest")
     if manifest["traces"]["sha256"] != sha256_file(trace_index_path):
         raise ReleaseValidationError("site trace index hash does not match manifest")
-    search_tree_index_path = directory / str(manifest["search_trees"]["path"])
-    if manifest["search_trees"]["bytes"] != search_tree_index_path.stat().st_size:
-        raise ReleaseValidationError("site search-tree index byte count does not match manifest")
-    if manifest["search_trees"]["sha256"] != sha256_file(search_tree_index_path):
-        raise ReleaseValidationError("site search-tree index hash does not match manifest")
+    scenario_index_path = directory / str(manifest["visualization_scenarios"]["path"])
+    scenario_index = json.loads(scenario_index_path.read_text(encoding="utf-8"))
+    for scenario in scenario_index["scenarios"]:
+        artifact = scenario["artifact"]
+        payload_path = directory / str(artifact["payload_path"])
+        if not payload_path.is_file():
+            raise ReleaseValidationError(
+                f"visualization scenario references missing payload: {artifact['payload_path']}"
+            )
+        if payload_path.stat().st_size != artifact["payload_bytes"]:
+            raise ReleaseValidationError(
+                f"visualization scenario payload byte count differs: {artifact['payload_path']}"
+            )
+        if sha256_file(payload_path) != artifact["payload_sha256"]:
+            raise ReleaseValidationError(
+                f"visualization scenario payload hash differs: {artifact['payload_path']}"
+            )
+    search_tree_index_path = directory / "search-trees/index.json"
     search_tree_index = json.loads(search_tree_index_path.read_text(encoding="utf-8"))
     for entry in search_tree_index["artifacts"]:
         artifact_path = directory / str(entry["path"])
@@ -1053,6 +1091,7 @@ def _apply_atlas_metadata(
     connection.execute("PRAGMA foreign_keys = ON")
     try:
         connection.executescript(migration_path.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_COVERAGE_MIGRATION.read_text(encoding="utf-8"))
         _insert_seed(connection, seed)
         _record_target_release(connection, target_version, release_date)
         connection.execute("DELETE FROM release_checks")
@@ -1105,7 +1144,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Staged Optimization Atlas visualization metadata release.",
+            "Staged Optimization Atlas metadata and learning coverage release.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1119,9 +1158,9 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Optimization Atlas metadata lacked normalized release ownership.",
-            "Added seven normalized atlas metadata tables and deterministic release artifacts.",
-            "Keep runtime metadata, learning edges, demos, and views auditable and reproducible.",
+            "Optimization Atlas lacked canonical learning coverage expectations.",
+            "Added nine normalized Atlas tables, including coverage expectations and priorities.",
+            "Keep learning contracts, artifacts, priorities, and release deltas auditable.",
             target_version,
             release_date,
         ),
@@ -1179,6 +1218,16 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
             {"parameters": "parameters_json"},
         ),
         ("learning_edges", list(seed.learning_edges), {"source_ids": "source_ids_json"}),
+        (
+            "learning_slice_priorities",
+            list(seed.learning_slice_priorities),
+            {"source_ids": "source_ids_json"},
+        ),
+        (
+            "learning_coverage_expectations",
+            list(seed.learning_coverage_expectations),
+            {"source_ids": "source_ids_json"},
+        ),
     )
     for table_name, models, json_columns in mappings:
         for model in models:
@@ -2072,6 +2121,57 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
                 is None
             ):
                 issues.append(edge)
+    return sorted(set(issues))
+
+
+def _coverage_expectation_issues(connection: sqlite3.Connection) -> list[str]:
+    resolvers = {
+        "method": ("methods", "method_id"),
+        "problem": ("problem_archetypes", "problem_id"),
+        "feature_family": ("problem_features", "category"),
+    }
+    slices = {
+        str(row[0]) for row in connection.execute("SELECT slice_id FROM learning_slice_priorities")
+    }
+    issues: list[str] = []
+    for row in connection.execute(
+        "SELECT expectation_id, subject_type, subject_id, applicability, rationale, "
+        "source_ids_json, slice_id FROM learning_coverage_expectations"
+    ):
+        expectation_id = str(row[0])
+        resolver = resolvers.get(str(row[1]))
+        if resolver is None:
+            issues.append(expectation_id)
+            continue
+        table, column = resolver
+        subject_exists = connection.execute(
+            f'SELECT 1 FROM "{table}" WHERE "{column}" = ? LIMIT 1', (row[2],)
+        ).fetchone()
+        source_ids = json.loads(str(row[5])) if _valid_json_container(row[5], list) else []
+        sources_close = all(
+            connection.execute("SELECT 1 FROM sources WHERE source_id = ?", (source_id,)).fetchone()
+            for source_id in source_ids
+        )
+        if (
+            subject_exists is None
+            or row[3] not in {"expected", "not_applicable"}
+            or not str(row[4]).strip()
+            or not source_ids
+            or not sources_close
+            or (row[6] is not None and str(row[6]) not in slices)
+        ):
+            issues.append(expectation_id)
+    for row in connection.execute(
+        "SELECT slice_id, classification_score, misconception_score, visualization_score, "
+        "demand_score, source_ids_json FROM learning_slice_priorities"
+    ):
+        scores = row[1:5]
+        source_ids = json.loads(str(row[5])) if _valid_json_container(row[5], list) else []
+        if (
+            any(not isinstance(score, int) or not 0 <= score <= 3 for score in scores)
+            or not source_ids
+        ):
+            issues.append(str(row[0]))
     return sorted(set(issues))
 
 

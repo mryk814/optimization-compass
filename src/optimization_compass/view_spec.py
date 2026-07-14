@@ -212,11 +212,10 @@ class ManifestTraceAsset(ContractModel):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
-class ManifestRendererAsset(ContractModel):
-    contract_version: Literal["1.0.0"]
-    path: str = Field(min_length=1)
-    bytes: int = Field(gt=0)
-    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+class ManifestCoverageAsset(ContractModel):
+    version: Literal["1.0.0"]
+    path: str = Field(pattern=r"^coverage\.json$")
+    report_path: str = Field(pattern=r"^coverage\.md$")
 
 
 class ManifestLicenseAsset(ContractModel):
@@ -241,9 +240,9 @@ class SiteManifest(ContractModel):
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
     visualization_scenarios: ManifestAsset
-    search_trees: ManifestRendererAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
+    coverage: ManifestCoverageAsset
     licenses: SiteLicenseManifest
 
 

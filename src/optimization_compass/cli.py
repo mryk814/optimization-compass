@@ -7,6 +7,7 @@ from typing import Annotated
 import typer
 import uvicorn
 
+from optimization_compass.coverage import CoverageReport, diff_coverage
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import RecommendationRequest
@@ -49,6 +50,31 @@ def export_site_data_command(
     """Export deterministic, versioned JSON for the static atlas."""
     manifest = export_site_data(output, KnowledgeRepository())
     typer.echo(manifest.model_dump_json(indent=2))
+
+
+@app.command("coverage-diff")
+def coverage_diff_command(
+    before: Annotated[Path, typer.Option(exists=True, readable=True)],
+    after: Annotated[Path, typer.Option(exists=True, readable=True)],
+    format: Annotated[str, typer.Option(help="json or markdown")] = "json",
+) -> None:
+    """Compare two explicit coverage snapshots for release notes."""
+    if format not in {"json", "markdown"}:
+        raise typer.BadParameter("format must be json or markdown")
+    delta = diff_coverage(
+        CoverageReport.model_validate_json(before.read_text(encoding="utf-8")),
+        CoverageReport.model_validate_json(after.read_text(encoding="utf-8")),
+    )
+    if format == "json":
+        typer.echo(delta.model_dump_json(indent=2))
+        return
+    typer.echo(
+        f"## Coverage delta ({delta.before_dataset_version} → {delta.after_dataset_version})\n\n"
+        f"- Available: {delta.available_delta:+d}\n"
+        f"- Added expectations: {len(delta.added_expectation_ids)}\n"
+        f"- Removed expectations: {len(delta.removed_expectation_ids)}\n"
+        f"- Status transitions: {sum(delta.transitions.values())}"
+    )
 
 
 @app.command()
