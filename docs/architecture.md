@@ -62,3 +62,11 @@ LLM がDBに存在しない手法IDを生成したり、確認なしに unknown 
 ## Scaling
 
 初期はSQLiteで十分です。書き込み・組織別データ・フィードバック蓄積が必要になった時点で、知識DBはimmutable artifactのまま維持し、ユーザーデータだけをPostgreSQL等へ分離するのが安全です。
+
+## Visualization architecture
+
+可視化は手法ごとの専用画面ではなく、problem definition、problem instance、
+scenario、run、artifact、renderer familyを分離します。authority境界、比較可能性、
+高次元の扱い、既存Traceからのmigrationは
+[`visualization-scenarios.md`](visualization-scenarios.md) と
+[`ADR 0001`](adr/0001-visualization-scenarios-and-renderers.md) を参照してください。
