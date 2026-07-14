@@ -1,27 +1,40 @@
-name: Export site data artifact
+name: Sync generated site data
 
 on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  export:
+  sync:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          persist-credentials: true
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: "3.12"
           enable-cache: true
       - run: uv sync --frozen --all-extras --all-groups
-      - run: |
-          rm -rf generated-site-data
-          uv run optimization-compass export-site-data --output generated-site-data
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: generated-site-data
-          path: generated-site-data
-          if-no-files-found: error
-          retention-days: 1
+      - name: Regenerate tracked site data
+        run: |
+          rm -rf site/public/data
+          uv run optimization-compass export-site-data --output site/public/data
+      - name: Commit generated data when changed
+        env:
+          HEAD_BRANCH: ${{ github.head_ref }}
+        run: |
+          git add site/public/data
+          if git diff --cached --quiet; then
+            echo "Generated site data is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: regenerate site data for Bayesian Optimization content"
+          git push origin "HEAD:${HEAD_BRANCH}"
