@@ -227,42 +227,42 @@
   ],
   "comparison_sets": [
     {
-      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
-      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
-      "name_ja": "Rosenbrockで一次法を比較",
-      "name_en": "Compare first-order methods on Rosenbrock",
-      "initial_point": [-1.2, 1.0],
+      "comparison_set_id": "COMPARE_GRADIENT_FAMILY",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "name_ja": "細長い谷で一次法を比較",
+      "name_en": "First-order methods in an elongated valley",
+      "initial_point": [-1.6, 1.6],
       "seed_status": "not_applicable",
       "seed_value": null,
-      "budget": 200,
-      "stopping": {"gradient_norm": 0.0001, "max_oracle_evaluations": 200},
+      "budget": 40,
+      "stopping": {"max_oracle_evaluations": 40, "objective_tolerance": 1E-06},
       "synchronization": "oracle_evaluations",
       "fairness_note": "全手法を同一の初期点・目的関数・累積oracle評価回数で比較する。",
-      "source_ids": ["S070"],
-      "last_verified": "2026-07-13"
+      "source_ids": ["S001"],
+      "last_verified": "2026-07-15"
     }
   ],
   "comparison_set_members": [
     {
-      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "comparison_set_id": "COMPARE_GRADIENT_FAMILY",
       "member_id": "gradient-descent",
       "method_id": "M_GRADIENT_DESCENT",
       "profile_id": "PROFILE_GRADIENT_DESCENT_2D",
       "label": "Gradient descent",
       "display_order": 1,
-      "parameters": {"learning_rate": 0.001}
+      "parameters": {"learning_rate": 0.003}
     },
     {
-      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "comparison_set_id": "COMPARE_GRADIENT_FAMILY",
       "member_id": "momentum",
       "method_id": "M_MOMENTUM_SGD",
       "profile_id": "PROFILE_MOMENTUM_2D",
       "label": "Momentum",
       "display_order": 2,
-      "parameters": {"learning_rate": 0.001, "momentum": 0.9}
+      "parameters": {"learning_rate": 0.003, "momentum": 0.9}
     },
     {
-      "comparison_set_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
+      "comparison_set_id": "COMPARE_GRADIENT_FAMILY",
       "member_id": "adam",
       "method_id": "M_ADAM",
       "profile_id": "PROFILE_ADAM_2D",

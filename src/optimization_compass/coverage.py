@@ -261,6 +261,8 @@ def _load_scenario_contracts(root: Path, artifacts: dict[str, Any]) -> list[dict
             contracts.append(
                 {
                     "scenario_id": scenario.scenario_id,
+                    "identity_status": scenario.identity_status,
+                    "canonical_scenario_id": scenario.canonical_scenario_id,
                     "subject_id": run.method_id,
                     "purpose": scenario.purpose,
                     "artifact_kind": scenario.artifact.artifact_kind,
@@ -539,21 +541,42 @@ def _priorities(repository: KnowledgeRepository) -> list[CoveragePriority]:
 def _integrity_issues(
     repository: KnowledgeRepository, artifacts: dict[str, Any]
 ) -> list[IntegrityIssue]:
-    generated_scenarios = {
-        str(item["scenario_id"])
-        for item in [*artifacts["traces"]["traces"], *artifacts["scenario_contracts"]]
-    }
     database_scenarios = {
         str(row["scenario_id"])
         for row in repository.fetch_all("SELECT scenario_id FROM demo_scenarios")
     }
-    generated_comparisons = {
-        str(item["comparison_id"]) for item in artifacts["comparisons"]["comparisons"]
+    scenario_contracts = artifacts["scenario_contracts"]
+    canonical_scenarios = {
+        str(item.get("canonical_scenario_id") or item["scenario_id"])
+        for item in scenario_contracts
+        if item.get("identity_status") in {"canonical", "derived"}
     }
+    broken_aliases = sorted(
+        {
+            str(item["canonical_scenario_id"])
+            for item in scenario_contracts
+            if item.get("identity_status") == "derived"
+            and item.get("canonical_scenario_id") not in database_scenarios
+        }
+    )
     database_comparisons = {
         str(row["comparison_set_id"])
         for row in repository.fetch_all("SELECT comparison_set_id FROM comparison_sets")
     }
+    comparison_records = artifacts["comparisons"]["comparisons"]
+    canonical_comparisons = {
+        str(item.get("canonical_comparison_id") or item["comparison_id"])
+        for item in comparison_records
+        if item.get("identity_status") in {"canonical", "derived"}
+    }
+    broken_comparison_aliases = sorted(
+        {
+            str(item["canonical_comparison_id"])
+            for item in comparison_records
+            if item.get("identity_status") == "derived"
+            and item.get("canonical_comparison_id") not in database_comparisons
+        }
+    )
     issues = [
         IntegrityIssue(
             code="broken_scenario_id",
@@ -562,17 +585,17 @@ def _integrity_issues(
             entity_id=item,
             detail="The canonical database scenario has no generated trace with the same ID.",
         )
-        for item in sorted(database_scenarios - generated_scenarios)
+        for item in sorted(database_scenarios - canonical_scenarios)
     ]
     issues.extend(
         IntegrityIssue(
-            code="orphan_generated_scenario",
-            severity="warning",
+            code="broken_scenario_alias",
+            severity="error",
             entity_type="scenario",
             entity_id=item,
-            detail="The generated trace scenario is not registered in the canonical database.",
+            detail="A derived generated scenario points to a canonical scenario missing from the database.",
         )
-        for item in sorted(generated_scenarios - database_scenarios)
+        for item in broken_aliases
     )
     issues.extend(
         IntegrityIssue(
@@ -584,16 +607,16 @@ def _integrity_issues(
                 "The canonical database comparison has no generated comparison with the same ID."
             ),
         )
-        for item in sorted(database_comparisons - generated_comparisons)
+        for item in sorted(database_comparisons - canonical_comparisons)
     )
     issues.extend(
         IntegrityIssue(
-            code="orphan_generated_comparison",
-            severity="warning",
+            code="broken_comparison_alias",
+            severity="error",
             entity_type="comparison",
             entity_id=item,
-            detail="The generated comparison is not registered in the canonical database.",
+            detail="A derived generated comparison points to a canonical comparison missing from the database.",
         )
-        for item in sorted(generated_comparisons - database_comparisons)
+        for item in broken_comparison_aliases
     )
     return issues

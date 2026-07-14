@@ -294,6 +294,8 @@ def generate_surrogate_scenario(
         contract_version="1.0.0",
         dataset_version=dataset_version,
         scenario_id=scenario_id,
+        identity_status="generated_only",
+        canonical_scenario_id=None,
         title_ja=f"高価な1次元black-box: {strategy} / {noise_preset}",
         title_en=f"Expensive 1D black box: {strategy} / {noise_preset}",
         purpose="sensitivity" if variant else "mechanism",

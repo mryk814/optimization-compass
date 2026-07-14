@@ -17,6 +17,34 @@ RendererFamily = Literal[
     "search_tree",
     "surrogate_uncertainty",
 ]
+ScenarioIdentityStatus = Literal["canonical", "derived", "generated_only"]
+
+CANONICAL_SCENARIO_IDS = frozenset(
+    {
+        "SCENARIO_ADAM_QUADRATIC",
+        "SCENARIO_GD_QUADRATIC",
+        "SCENARIO_MOMENTUM_QUADRATIC",
+        "SCENARIO_NM_QUADRATIC",
+        "SCENARIO_NM_ROSENBROCK",
+    }
+)
+
+DERIVED_SCENARIO_BASE_IDS = {
+    "SCENARIO_NM_QUADRATIC_SHIFTED": "SCENARIO_NM_QUADRATIC",
+    "SCENARIO_NM_ROSENBROCK_SHIFTED": "SCENARIO_NM_ROSENBROCK",
+    "SCENARIO_GRADIENT_DESCENT_QUADRATIC": "SCENARIO_GD_QUADRATIC",
+    "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE": "SCENARIO_GD_QUADRATIC",
+    "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE": "SCENARIO_MOMENTUM_QUADRATIC",
+    "SCENARIO_ADAM_QUADRATIC_DIVERGENCE": "SCENARIO_ADAM_QUADRATIC",
+}
+
+
+def scenario_identity(scenario_id: str) -> tuple[ScenarioIdentityStatus, str | None]:
+    if scenario_id in CANONICAL_SCENARIO_IDS:
+        return "canonical", scenario_id
+    if scenario_id in DERIVED_SCENARIO_BASE_IDS:
+        return "derived", DERIVED_SCENARIO_BASE_IDS[scenario_id]
+    return "generated_only", None
 ParameterValue = bool | int | float
 
 
@@ -82,6 +110,8 @@ class VisualizationScenario(TraceModel):
     contract_version: Literal["1.0.0"]
     dataset_version: NonBlank
     scenario_id: NonBlank
+    identity_status: ScenarioIdentityStatus
+    canonical_scenario_id: NonBlank | None
     title_ja: NonBlank
     title_en: NonBlank
     purpose: Purpose
@@ -96,6 +126,15 @@ class VisualizationScenario(TraceModel):
 
     @model_validator(mode="after")
     def validate_unique_ids(self) -> Self:
+        if self.identity_status == "canonical" and self.canonical_scenario_id != self.scenario_id:
+            raise ValueError("canonical scenarios must point to themselves")
+        if self.identity_status == "derived" and self.canonical_scenario_id in {
+            None,
+            self.scenario_id,
+        }:
+            raise ValueError("derived scenarios must point to a different canonical scenario")
+        if self.identity_status == "generated_only" and self.canonical_scenario_id is not None:
+            raise ValueError("generated-only scenarios cannot point to a canonical scenario")
         if len({run.run_id for run in self.runs}) != len(self.runs):
             raise ValueError("run IDs must be unique")
         if len(set(self.artifact.observable_ids)) != len(self.artifact.observable_ids):

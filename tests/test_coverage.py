@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import shutil
 from copy import deepcopy
 from pathlib import Path
 
-from optimization_compass.coverage import CoverageReport, diff_coverage
+from optimization_compass.coverage import CoverageReport, build_coverage_report, diff_coverage
+from optimization_compass.db import KnowledgeRepository
 
 ROOT = Path(__file__).parents[1]
 
@@ -45,9 +47,7 @@ def test_current_artifacts_are_partial_without_inferred_renderer_contract() -> N
 
 def test_broken_references_are_distinct_from_unbuilt_scenarios() -> None:
     report = load_report()
-    codes = {(item.code, item.entity_id) for item in report.integrity_issues}
-    assert ("broken_scenario_id", "SCENARIO_GD_QUADRATIC") in codes
-    assert ("orphan_comparison", "COMPARE_FIRST_ORDER_ROSENBROCK") in codes
+    assert report.integrity_issues == []
     discrete = next(
         item for item in report.expectations if item.expectation_id == "COV_DISCRETE_SEARCH_TREE"
     )
@@ -100,3 +100,58 @@ def test_canonical_visualization_scenarios_cover_expensive_and_discrete_slices()
     assert expectation.route_ids == [
         "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS"
     ]
+
+
+def test_generated_slices_declare_their_canonical_identity() -> None:
+    report = load_report()
+    scenario_index = json.loads(
+        (ROOT / "site/public/data/visualization-scenarios.json").read_text(encoding="utf-8")
+    )
+    derived = [
+        item
+        for item in scenario_index["scenarios"]
+        if item["identity_status"] == "derived"
+    ]
+    generated_only = [
+        item
+        for item in scenario_index["scenarios"]
+        if item["identity_status"] == "generated_only"
+    ]
+    assert derived
+    assert generated_only
+    assert all(item["canonical_scenario_id"] for item in derived)
+    assert all(item["canonical_scenario_id"] is None for item in generated_only)
+    assert report.integrity_issues == []
+
+
+def test_coverage_rejects_broken_canonical_identity_relations(tmp_path: Path) -> None:
+    artifact_root = tmp_path / "site-data"
+    shutil.copytree(ROOT / "site/public/data", artifact_root)
+    scenarios_path = artifact_root / "visualization-scenarios.json"
+    scenarios = json.loads(scenarios_path.read_text(encoding="utf-8"))
+    derived_scenario = next(
+        item for item in scenarios["scenarios"] if item["identity_status"] == "derived"
+    )
+    derived_scenario["canonical_scenario_id"] = "SCENARIO_MISSING"
+    scenarios_path.write_text(json.dumps(scenarios), encoding="utf-8")
+
+    comparisons_path = artifact_root / "comparisons.json"
+    comparisons = json.loads(comparisons_path.read_text(encoding="utf-8"))
+    derived_comparison = next(
+        item for item in comparisons["comparisons"] if item["identity_status"] == "derived"
+    )
+    derived_comparison["canonical_comparison_id"] = "COMPARE_MISSING"
+    comparisons_path.write_text(json.dumps(comparisons), encoding="utf-8")
+
+    baseline = load_report()
+    report = build_coverage_report(
+        KnowledgeRepository(),
+        artifact_root,
+        dataset_version=baseline.dataset_version,
+        generated_at=baseline.generated_at,
+    )
+
+    assert {(issue.code, issue.entity_id) for issue in report.integrity_issues} >= {
+        ("broken_scenario_alias", "SCENARIO_MISSING"),
+        ("broken_comparison_alias", "COMPARE_MISSING"),
+    }
