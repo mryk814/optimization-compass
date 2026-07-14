@@ -19,6 +19,7 @@ HASH_ROUTES = (
     "/#/diagnose",
     "/#/theater/nelder-mead",
     "/#/gallery",
+    "/#/coverage",
 )
 JSON_ASSETS = (
     "data/release.json",
@@ -28,6 +29,7 @@ JSON_ASSETS = (
     "data/gallery.json",
     "data/comparisons.json",
     "data/traces/index.json",
+    "data/coverage.json",
 )
 DEPLOYMENT_FIELDS = {
     "schema_version",
@@ -216,7 +218,9 @@ def _verify_html(index: str, base_path: str) -> list[str]:
         raise PagesArtifactError("Pages index does not contain the application root")
     parser = _AssetReferenceParser()
     parser.feed(index)
-    references = sorted(set(parser.references))
+    references = sorted(
+        {reference for reference in parser.references if not reference.startswith("data:")}
+    )
     if not references:
         raise PagesArtifactError("Pages index does not reference a built asset")
     for reference in references:

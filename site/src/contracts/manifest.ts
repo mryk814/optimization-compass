@@ -19,6 +19,11 @@ export interface ManifestTraceAsset {
   sha256: string;
 }
 
+export interface ManifestCoverageAsset extends ManifestAsset {
+  path: "coverage.json";
+  report_path: "coverage.md";
+}
+
 export interface ManifestLicenseAsset {
   spdx_id: "MIT" | "CC-BY-4.0";
   path: string;
@@ -42,6 +47,7 @@ export interface SiteManifest {
   traces: ManifestTraceAsset;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
+  coverage: ManifestCoverageAsset;
   licenses: SiteLicenseManifest;
 }
 
@@ -49,7 +55,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "sources", "licenses"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "sources", "coverage", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -93,6 +99,12 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const sources = record(data.sources, "sources");
   exactKeys(sources, ["version", "path"], "sources");
   if (sources.version !== "1.0.0") throw new Error("sources.version is unsupported.");
+  const coverage = record(data.coverage, "coverage");
+  exactKeys(coverage, ["version", "path", "report_path"], "coverage");
+  if (coverage.version !== "1.0.0") throw new Error("coverage.version is unsupported.");
+  if (coverage.path !== "coverage.json" || coverage.report_path !== "coverage.md") {
+    throw new Error("coverage paths are invalid.");
+  }
 
   return {
     version: "1.0.0",
@@ -118,6 +130,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       version: "1.0.0",
       path: safeRelativePath(sources.path, "sources.path"),
     },
+    coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
     licenses,
   };
 }

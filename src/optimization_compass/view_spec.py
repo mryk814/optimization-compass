@@ -212,6 +212,12 @@ class ManifestTraceAsset(ContractModel):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
+class ManifestCoverageAsset(ContractModel):
+    version: Literal["1.0.0"]
+    path: str = Field(pattern=r"^coverage\.json$")
+    report_path: str = Field(pattern=r"^coverage\.md$")
+
+
 class ManifestLicenseAsset(ContractModel):
     spdx_id: Literal["MIT", "CC-BY-4.0"]
     path: str = Field(pattern=r"^licenses/[A-Z0-9._-]+\.txt$")
@@ -235,6 +241,7 @@ class SiteManifest(ContractModel):
     traces: ManifestTraceAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
+    coverage: ManifestCoverageAsset
     licenses: SiteLicenseManifest
 
 

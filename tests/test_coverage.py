@@ -1,0 +1,126 @@
+from __future__ import annotations
+
+import json
+import shutil
+from copy import deepcopy
+from datetime import UTC, datetime
+from pathlib import Path
+
+from optimization_compass.coverage import CoverageReport, build_coverage_report, diff_coverage
+from optimization_compass.db import KnowledgeRepository
+
+ROOT = Path(__file__).parents[1]
+
+
+def load_report() -> CoverageReport:
+    return CoverageReport.model_validate_json(
+        (ROOT / "site/public/data/coverage.json").read_text(encoding="utf-8")
+    )
+
+
+def test_report_separates_inventory_from_expected_coverage() -> None:
+    report = load_report()
+    assert report.summary.subject_counts == {
+        "feature_family": 10,
+        "method": 98,
+        "problem": 56,
+    }
+    assert len(report.subjects) == 164
+    assert len(report.expectations) == 8
+    assert set(report.summary.status_counts) == {
+        "available",
+        "partial",
+        "missing",
+        "not_applicable",
+    }
+    assert not hasattr(report.summary, "coverage_percent")
+
+
+def test_current_artifacts_are_partial_without_inferred_renderer_contract() -> None:
+    report = load_report()
+    nelder_mead = next(
+        item for item in report.expectations if item.expectation_id == "COV_NM_MECHANISM"
+    )
+    assert nelder_mead.status == "partial"
+    assert nelder_mead.reason_codes == ["scenario_contract_incomplete"]
+    assert nelder_mead.artifact_ids == []
+
+
+def test_broken_references_are_distinct_from_unbuilt_scenarios() -> None:
+    report = load_report()
+    codes = {(item.code, item.entity_id) for item in report.integrity_issues}
+    assert ("broken_scenario_id", "SCENARIO_GD_QUADRATIC") in codes
+    assert ("orphan_comparison", "COMPARE_FIRST_ORDER_ROSENBROCK") in codes
+    discrete = next(
+        item for item in report.expectations if item.expectation_id == "COV_DISCRETE_SEARCH_TREE"
+    )
+    assert discrete.status == "missing"
+    assert discrete.reason_codes == ["scenario_not_built"]
+
+
+def test_priority_order_is_deterministic_and_ignores_popularity() -> None:
+    report = load_report()
+    assert [item.rank for item in report.priorities] == list(range(1, 6))
+    assert [(item.total, item.slice_id) for item in report.priorities] == sorted(
+        ((item.total, item.slice_id) for item in report.priorities),
+        key=lambda item: (-item[0], item[1]),
+    )
+    assert all(
+        set(item.factors) == {"classification", "misconception", "visualization", "demand"}
+        for item in report.priorities
+    )
+
+
+def test_explicit_release_delta_reports_transitions() -> None:
+    before_payload = json.loads(load_report().model_dump_json())
+    after_payload = deepcopy(before_payload)
+    after_payload["dataset_version"] = "0.4.0"
+    after_payload["expectations"][0]["status"] = "available"
+    after_payload["summary"]["status_counts"]["missing"] -= 1
+    after_payload["summary"]["status_counts"]["available"] += 1
+    delta = diff_coverage(
+        CoverageReport.model_validate_json(json.dumps(before_payload)),
+        CoverageReport.model_validate_json(json.dumps(after_payload)),
+    )
+    assert delta.available_delta == 1
+    assert sum(delta.transitions.values()) == 1
+
+
+def test_future_explicit_scenario_is_discovered_without_renderer_inference(
+    tmp_path: Path,
+) -> None:
+    artifact_root = tmp_path / "data"
+    shutil.copytree(ROOT / "site/public/data", artifact_root)
+    visualizations = artifact_root / "visualizations"
+    visualizations.mkdir()
+    (visualizations / "index.json").write_text(
+        json.dumps(
+            {
+                "dataset_version": "0.3.1",
+                "scenarios": [
+                    {
+                        "scenario_id": "SCENARIO_FUTURE_BO",
+                        "subject_id": "M_BAYESIAN_OPT_GP",
+                        "purpose": "mechanism",
+                        "artifact_kind": "executable_trace",
+                        "renderer_family": "surrogate_uncertainty",
+                        "artifact_id": "ARTIFACT_FUTURE_BO",
+                        "canonical_url": "/visualizations/future-bo",
+                        "source_ids": ["S034"],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    report = build_coverage_report(
+        KnowledgeRepository(),
+        artifact_root,
+        dataset_version="0.3.1",
+        generated_at=datetime(2026, 7, 15, tzinfo=UTC),
+    )
+    expectation = next(
+        item for item in report.expectations if item.expectation_id == "COV_EXPENSIVE_SURROGATE"
+    )
+    assert expectation.status == "available"
+    assert expectation.artifact_ids == ["ARTIFACT_FUTURE_BO"]

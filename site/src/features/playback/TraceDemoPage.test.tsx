@@ -58,6 +58,7 @@ const manifest = {
   recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
+  coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",
     index_version: "1.0.0",

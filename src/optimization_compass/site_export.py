@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from optimization_compass.content_models import ContentPage, load_content
+from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
@@ -27,6 +28,7 @@ from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
     ManifestAsset,
+    ManifestCoverageAsset,
     ManifestLicenseAsset,
     ManifestTraceAsset,
     ManifestView,
@@ -266,6 +268,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         generated_at=generated_at,
     )
     _write_json(output_dir / "sources.json", source_index)
+    coverage = build_coverage_report(
+        repository,
+        output_dir,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+    )
+    write_coverage_report(coverage, output_dir / "coverage.json", output_dir / "coverage.md")
     manifest = SiteManifest(
         version=VIEW_VERSION,
         dataset_version=release["version"],
@@ -275,6 +284,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         traces=trace_asset,
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
+        coverage=ManifestCoverageAsset(
+            version="1.0.0", path="coverage.json", report_path="coverage.md"
+        ),
         licenses=SiteLicenseManifest(
             code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
             data=ManifestLicenseAsset(spdx_id="CC-BY-4.0", path="licenses/DATA_LICENSE.txt"),

@@ -1,0 +1,25 @@
+section,item,value,notes
+\Sdesign,\Salternative_first,"\Sclosed-form, linear system, root, least squares, graph, CP, DP, inference, etc.",\S汎用最適化の前に代替解法を確認。
+\Sdesign,\Smethod_vs_implementation,\Stheoretical method and software implementation are separate,\SAPIが受け付けることと実務推奨を分離。
+\Sdesign,\Snormalized_entities,\Sproblem archetype / feature / method / implementation / fit / decision / evidence,\Smany-to-many bridgeをcanonical relationとする。
+\Sdesign,\Srecommendation_model,\Sfit_level + beginner_priority + conditions + exclusions + guarantee + confidence,\S単一総合scoreでrankingしない。
+\Sdesign,\Sunknown_policy,\Syes / no / conditional / unknown / not_applicable / implementation_dependent,\S推測でyes/noへ埋めない。
+\Squality,\Slimitations,\Srepresentative initial data; implementation details may change by version/backend,\Sunknown/implementation_dependent and last_verified are retained
+\Squality,\Svalidation,\S28 concrete scenarios + FK/vocabulary/source checks,\S30_model_revisions records schema changes from scenario validation
+\Squality,\Svalidation_policy,"\SManifest claims are backed by executable checks, including full DDL creation, row insertion, and PRAGMA foreign_key_check.",\Spass/warn/failを32_release_checksに保存。
+\Srelease,\Sv0.2.0_highlights,\SSQLite full-load validation; nullable optional foreign keys; decision target typing; current implementation metadata; Manopt.jl addition,\S詳細は32_release_checksとreportを参照。
+\Srelease,\Sversion,\S0.2.0,\Sschema/data quality release; last verified 2026-07-13
+\Sscope,\Sincluded,\S連続・凸・非凸・離散・black-box・HPO・多目的・最適制御・多様体・MLを代表的に収録,\S網羅的製品catalogではなく、選択判断に必要な代表データを優先。
+\Sscope,\Snot_in_initial_scope,\S全solver option、全benchmark、全商用license tier、全分野専用algorithm,\S19_backlog参照。
+\Ssource_policy,\Sexcluded_sources,\SQiita and Zenn,"\Snot accessed, cited, summarized, or used"
+\Ssource_policy,\Spriority,\Sofficial docs > official repos > original papers > standards > trusted textbooks,\Scurrent software facts verified against official sources where available
+\Sterminology,\Sblack_box,"\Sdimension, cost, noise, failure, parallelism, variable type, smoothness are separate",\SDFO/BO/direct search/evolutionaryを同一視しない。
+\Sterminology,\Sglobal,\Slocal / convex_global / global_candidate / global_certificate / feasible_only / pareto,\S大域探索と大域証明を分離。
+\Stitle,\Sdataset_name,\SOptimization Method Selection Database / 最適化手法選択データベース,\S検証可能な研究データ版
+\Suse_case,\Sapplication,"\Sdecision UI, search, AI retrieval, library-specific views",\SJSON/JSONL/CSV included
+\Suse_case,\Sdatabase,\Srelational migration with PK/FK bridges,\SSQL schema file included
+\Suse_case,\Sspreadsheet,\Sfilter/search/compare in Excel,\Sall tables contain stable IDs
+\Susers,\Sbeginner,"\S12 questions → first/second choice, warnings, switch conditions",\S17_beginner_view
+\Susers,\Sexpert,"\Sassumptions, guarantees, diagnostics, provenance",\Snormalized base tables
+\Susers,\Sintermediate,\Sfeature-method trade-offs and implementations,\S18_advanced_view
+\Sworkflow,\Sselection_order,\S1 alternative check; 2 model class; 3 guarantees; 4 derivative/cost/noise/scale; 5 method; 6 implementation; 7 diagnostics,\Sdo not begin from a library API menu

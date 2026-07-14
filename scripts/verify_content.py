@@ -23,6 +23,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
     )
     _load_payload(data_root / "recommendation/site-data.json", identity.dataset_version)
     trace_index = _load_payload(data_root / "traces/index.json", identity.dataset_version)
+    _load_payload(data_root / "coverage.json", identity.dataset_version)
 
     source_pages = [page for page in load_content(root / "content") if page.status == "published"]
     generated_pages = content_index["pages"]
