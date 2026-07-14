@@ -234,6 +234,7 @@ class SiteManifest(ContractModel):
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
     entity_links: ManifestAsset
+    sources: ManifestAsset
     licenses: SiteLicenseManifest
 
 

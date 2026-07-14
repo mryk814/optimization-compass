@@ -7,6 +7,7 @@ import { findEntity, relatedEntities } from "../../contracts/entity-links";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
+import { EvidenceLinks } from "../evidence/EvidenceLinks";
 
 export function ContentIndexPage() {
   const links = useEntityLinks();
@@ -32,7 +33,7 @@ export function ContentPage() {
   const destination = (type: "trace" | "comparison", id: string) => links.status === "ready"
     ? findEntity(links.index, type, id)?.canonical_url
     : undefined;
-  return <section className="atlas-page content-detail"><p className="eyebrow">{page?.kind ?? "Learn"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><p className="content-lead">{page.summary}</p><MarkdownBody body={page.body} /><div className="content-links"><strong>Related</strong>{page.visualization_ids.map((id) => destination("trace", id) ? <Link key={id} to={destination("trace", id)!}>{id}</Link> : null)}{page.comparison_ids.map((id) => destination("comparison", id) ? <Link key={id} to={destination("comparison", id)!}>{id}</Link> : null)}</div><small>Last reviewed {page.last_reviewed} · Sources: {page.source_ids.join(", ")}</small></>}</section>;
+  return <section className="atlas-page content-detail"><p className="eyebrow">{page?.kind ?? "Learn"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><p className="content-lead">{page.summary}</p><MarkdownBody body={page.body} /><div className="content-links"><strong>Related</strong>{page.visualization_ids.map((id) => destination("trace", id) ? <Link key={id} to={destination("trace", id)!}>{id}</Link> : null)}{page.comparison_ids.map((id) => destination("comparison", id) ? <Link key={id} to={destination("comparison", id)!}>{id}</Link> : null)}</div><small>Last reviewed {page.last_reviewed}</small><EvidenceLinks sourceIds={page.source_ids} /></>}</section>;
 }
 
 export function MarkdownBody({ body }: { body: string }) { const lines = body.split("\n"); let inCode = false; let code = ""; const blocks: ReactNode[] = []; lines.forEach((line, index) => { if (line.startsWith("```")) { if (inCode) blocks.push(<pre key={`code-${index}`}><code>{code}</code></pre>); inCode = !inCode; code = ""; return; } if (inCode) { code += `${line}\n`; return; } if (line.startsWith("## ")) blocks.push(<h2 key={index}>{line.slice(3)}</h2>); else if (line.startsWith("> ")) blocks.push(<blockquote key={index}>{line.slice(2)}</blockquote>); else if (line.trim()) blocks.push(<p key={index}>{line}</p>); }); return <div className="markdown-body">{blocks}</div>; }
