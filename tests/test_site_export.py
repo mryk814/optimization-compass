@@ -178,6 +178,17 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    assert manifest_payload["licenses"] == {
+        "code": {"path": "licenses/LICENSE.txt", "spdx_id": "MIT"},
+        "content": {"path": "licenses/CONTENT_LICENSE.txt", "spdx_id": "CC-BY-4.0"},
+        "data": {"path": "licenses/DATA_LICENSE.txt", "spdx_id": "CC-BY-4.0"},
+        "legal_code_path": "licenses/CC-BY-4.0.txt",
+        "notice_path": "licenses/NOTICE.txt",
+        "attribution": (
+            "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass "
+            "contributors"
+        ),
+    }
 
 
 def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(

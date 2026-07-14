@@ -1,0 +1,14 @@
+Optimization Compass original educational Markdown, case prose, generated
+figures, AlgorithmTrace JSON, screenshots, and learning media are licensed
+under Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+SPDX-License-Identifier: CC-BY-4.0
+Official legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Attribution:
+Optimization Compass educational content, Copyright 2026 TAKUYA OTANI and
+Optimization Compass contributors, licensed under CC BY 4.0,
+https://github.com/mryk814/optimization-compass
+
+Indicate modifications and retain the license link. Third-party quotations,
+figures, logos, screenshots, trademarks, and linked works are not relicensed.

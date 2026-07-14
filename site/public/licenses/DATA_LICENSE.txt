@@ -1,0 +1,15 @@
+Optimization Compass canonical and distributed structured data is licensed
+under Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+SPDX-License-Identifier: CC-BY-4.0
+Official legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Attribution:
+Optimization Compass dataset, Copyright 2026 TAKUYA OTANI and Optimization
+Compass contributors, licensed under CC BY 4.0,
+https://github.com/mryk814/optimization-compass
+
+Indicate modifications and retain the license link. This grant covers only
+rights held by project contributors. Linked papers, books, documentation,
+repositories, software, trademarks, and other third-party works retain their
+own terms and are not relicensed.

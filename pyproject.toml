@@ -9,6 +9,8 @@ description = "Traceable optimization-method guidance backed by a structured SQL
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "TAKUYA OTANI" }]
+license = "MIT"
+license-files = ["LICENSE"]
 dependencies = [
   "fastapi>=0.115,<1",
   "openpyxl>=3.1,<4",

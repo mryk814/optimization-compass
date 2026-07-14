@@ -19,6 +19,20 @@ export interface ManifestTraceAsset {
   sha256: string;
 }
 
+export interface ManifestLicenseAsset {
+  spdx_id: "MIT" | "CC-BY-4.0";
+  path: string;
+}
+
+export interface SiteLicenseManifest {
+  code: ManifestLicenseAsset;
+  data: ManifestLicenseAsset;
+  content: ManifestLicenseAsset;
+  legal_code_path: string;
+  notice_path: string;
+  attribution: string;
+}
+
 export interface SiteManifest {
   version: "1.0.0";
   dataset_version: string;
@@ -26,13 +40,14 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
+  licenses: SiteLicenseManifest;
 }
 
 export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -69,6 +84,8 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const sha256 = nonEmptyString(traces.sha256, "traces.sha256");
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
 
+  const licenses = parseLicenses(data.licenses);
+
   return {
     version: "1.0.0",
     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
@@ -85,7 +102,36 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       bytes,
       sha256,
     },
+    licenses,
   };
+}
+
+function parseLicenses(value: unknown): SiteLicenseManifest {
+  const data = record(value, "licenses");
+  exactKeys(
+    data,
+    ["code", "data", "content", "legal_code_path", "notice_path", "attribution"],
+    "licenses",
+  );
+  return {
+    code: parseLicenseAsset(data.code, "licenses.code", "MIT"),
+    data: parseLicenseAsset(data.data, "licenses.data", "CC-BY-4.0"),
+    content: parseLicenseAsset(data.content, "licenses.content", "CC-BY-4.0"),
+    legal_code_path: safeLicensePath(data.legal_code_path, "licenses.legal_code_path"),
+    notice_path: safeLicensePath(data.notice_path, "licenses.notice_path"),
+    attribution: nonEmptyString(data.attribution, "licenses.attribution"),
+  };
+}
+
+function parseLicenseAsset(
+  value: unknown,
+  field: string,
+  expectedSpdx: "MIT" | "CC-BY-4.0",
+): ManifestLicenseAsset {
+  const data = record(value, field);
+  exactKeys(data, ["spdx_id", "path"], field);
+  if (data.spdx_id !== expectedSpdx) throw new Error(`${field}.spdx_id is invalid.`);
+  return { spdx_id: expectedSpdx, path: safeLicensePath(data.path, `${field}.path`) };
 }
 
 function record(value: unknown, field: string): Record<string, unknown> {
@@ -126,6 +172,14 @@ function safeRelativePath(value: unknown, field: string): string {
   const path = nonEmptyString(value, field);
   if (!/^[a-z0-9][a-z0-9._/-]*\.json$/u.test(path) || path.includes("//") || path.split("/").includes("..")) {
     throw new Error(`${field} must be a safe relative JSON path.`);
+  }
+  return path;
+}
+
+function safeLicensePath(value: unknown, field: string): string {
+  const path = nonEmptyString(value, field);
+  if (!/^licenses\/[A-Z0-9._-]+\.txt$/u.test(path)) {
+    throw new Error(`${field} must be a safe license text path.`);
   }
   return path;
 }

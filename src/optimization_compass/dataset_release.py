@@ -25,6 +25,35 @@ DATASET_STEM = "optimization_method_selection_database_v{version}"
 ROOT = Path(__file__).parents[2]
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
+LICENSE_BUNDLE = {
+    "LICENSE.txt": ROOT / "LICENSE",
+    "DATA_LICENSE.txt": ROOT / "DATA_LICENSE",
+    "CONTENT_LICENSE.txt": ROOT / "CONTENT_LICENSE",
+    "CC-BY-4.0.txt": ROOT / "CC-BY-4.0",
+    "NOTICE.txt": ROOT / "NOTICE",
+}
+DATA_ZIP_LICENSES = ("DATA_LICENSE.txt", "CC-BY-4.0.txt", "NOTICE.txt")
+RELEASE_LICENSE_MANIFEST = {
+    "code": {
+        "spdx_id": "MIT",
+        "path": "licenses/LICENSE.txt",
+    },
+    "data": {
+        "spdx_id": "CC-BY-4.0",
+        "path": "licenses/DATA_LICENSE.txt",
+        "legal_code_path": "licenses/CC-BY-4.0.txt",
+    },
+    "content": {
+        "spdx_id": "CC-BY-4.0",
+        "path": "licenses/CONTENT_LICENSE.txt",
+        "legal_code_path": "licenses/CC-BY-4.0.txt",
+    },
+    "notice_path": "licenses/NOTICE.txt",
+    "attribution": (
+        "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass "
+        "contributors, https://github.com/mryk814/optimization-compass"
+    ),
+}
 BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
 ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 21))
 ATLAS_TABLES = frozenset(
@@ -98,6 +127,24 @@ class TableSnapshot:
 
 
 Snapshot = dict[str, TableSnapshot]
+
+
+def _write_license_bundle(destination: Path) -> None:
+    destination.mkdir()
+    for name, source in LICENSE_BUNDLE.items():
+        if not source.is_file():
+            raise ReleaseValidationError(f"required project license is missing: {source.name}")
+        shutil.copyfile(source, destination / name)
+
+
+def _verify_license_bundle(output_directory: Path, manifest: dict[str, Any]) -> None:
+    if manifest.get("licenses") != RELEASE_LICENSE_MANIFEST:
+        raise ReleaseValidationError("manifest license declarations do not match release policy")
+    license_directory = output_directory / "licenses"
+    for name, source in LICENSE_BUNDLE.items():
+        bundled = license_directory / name
+        if not bundled.is_file() or bundled.read_bytes() != source.read_bytes():
+            raise ReleaseValidationError(f"release license differs from project notice: {name}")
 
 
 def sha256_file(path: Path) -> str:
@@ -178,6 +225,7 @@ def build_staged_release(
     report_path = output_directory / f"{stem}_report.md"
     manifest_path = output_directory / f"{stem}_manifest.json"
 
+    _write_license_bundle(output_directory / "licenses")
     _write_ddl(database_path, ddl_path)
     _write_json(snapshot, json_path, version=target_version, release_date=release_date)
     _write_jsonl(snapshot, jsonl_path, version=target_version, release_date=release_date)
@@ -550,6 +598,7 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
     }
     if manifest.get("artifacts") != expected_names:
         raise ReleaseValidationError("manifest filenames do not match versioned release contract")
+    _verify_license_bundle(output_directory, manifest)
     database_path = output_directory / expected_names["database"]
     reference = read_snapshot(database_path)
     expected_identity = (version, release_date)
@@ -608,11 +657,12 @@ def _read_manifest(path: Path) -> tuple[dict[str, Any], str, str]:
         "files": dict,
         "table_counts": dict,
         "validation": dict,
+        "licenses": dict,
     }
     for field, expected_type in expected_types.items():
         if type(payload.get(field)) is not expected_type:
             raise ReleaseValidationError(f"manifest schema field is invalid: {field}")
-    if payload["schema_version"] != 1:
+    if payload["schema_version"] != 2:
         raise ReleaseValidationError("unsupported manifest schema version")
     version = payload["version"]
     release_date = payload["release_date"]
@@ -1092,6 +1142,15 @@ def _write_csv_zip(csv_directory: Path, destination: Path, *, release_date: str)
             archive.writestr(
                 info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9
             )
+        license_directory = csv_directory.parent / "licenses"
+        for name in DATA_ZIP_LICENSES:
+            path = license_directory / name
+            info = zipfile.ZipInfo(f"LICENSES/{name}", date_time=zip_time)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o100644 << 16
+            archive.writestr(
+                info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9
+            )
 
 
 def _write_xlsx(snapshot: Snapshot, destination: Path, *, release_date: str) -> None:
@@ -1127,6 +1186,7 @@ def _write_report(
         f"- Release date: `{release_date}`",
         f"- Tables: `{len(snapshot)}`",
         f"- Rows: `{sum(len(table.rows) for table in snapshot.values())}`",
+        "- Data license: `CC-BY-4.0` (`licenses/DATA_LICENSE.txt`)",
         "",
         "| Table | Rows |",
         "|---|---:|",
@@ -1148,7 +1208,7 @@ def _manifest_payload(
     manifest_name = f"{stem}_manifest.json"
     excluded = set() if include_manifest else {manifest_name}
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "version": version,
         "release_date": release_date,
         "base_sha256": BASE_DATASET_SHA256,
@@ -1165,6 +1225,7 @@ def _manifest_payload(
         },
         "files": _artifact_hashes(directory, exclude=excluded),
         "table_counts": {name: len(table.rows) for name, table in snapshot.items()},
+        "licenses": RELEASE_LICENSE_MANIFEST,
         "validation": {
             "formats": ["csv_directory", "csv_zip", "ddl", "json", "jsonl", "sqlite", "xlsx"],
             "live_release_checks": "pass",
@@ -1218,7 +1279,10 @@ def _read_csv_directory(directory: Path, reference: Snapshot) -> Snapshot:
 def _read_csv_zip(path: Path, reference: Snapshot) -> Snapshot:
     result: Snapshot = {}
     with zipfile.ZipFile(path) as archive:
-        if archive.namelist() != [f"{name}.csv" for name in reference]:
+        expected_entries = [f"{name}.csv" for name in reference] + [
+            f"LICENSES/{name}" for name in DATA_ZIP_LICENSES
+        ]
+        if archive.namelist() != expected_entries:
             raise ReleaseValidationError("csv zip entry order/content differs from table order")
         for name, table in reference.items():
             text = archive.read(f"{name}.csv").decode("utf-8")
@@ -1228,6 +1292,10 @@ def _read_csv_zip(path: Path, reference: Snapshot) -> Snapshot:
                 table.columns,
                 tuple(tuple(_decode_cell(value) for value in row) for row in rows[1:]),
             )
+        license_directory = path.parent / "licenses"
+        for name in DATA_ZIP_LICENSES:
+            if archive.read(f"LICENSES/{name}") != (license_directory / name).read_bytes():
+                raise ReleaseValidationError(f"csv zip license differs from release notice: {name}")
     return result
 
 

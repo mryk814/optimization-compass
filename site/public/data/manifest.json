@@ -1,6 +1,23 @@
 {
   "dataset_version": "0.2.0",
   "generated_at": "2026-07-13T00:00:00Z",
+  "licenses": {
+    "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
+    "code": {
+      "path": "licenses/LICENSE.txt",
+      "spdx_id": "MIT"
+    },
+    "content": {
+      "path": "licenses/CONTENT_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "data": {
+      "path": "licenses/DATA_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "legal_code_path": "licenses/CC-BY-4.0.txt",
+    "notice_path": "licenses/NOTICE.txt"
+  },
   "recommendation": {
     "path": "recommendation/site-data.json",
     "version": "1.0.0"
