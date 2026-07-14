@@ -1094,6 +1094,12 @@ main:focus {
   border-top: 1px solid #d7d6ce;
   color: #6c756f;
   font-size: 0.68rem;
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: inherit;
+  text-underline-offset: 0.16em;
 }
 
 @media (max-width: 40rem) {

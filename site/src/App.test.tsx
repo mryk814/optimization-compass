@@ -95,6 +95,12 @@ describe("application routes", () => {
       "href",
       "#/gallery",
     );
+
+    const footer = screen.getByRole("contentinfo");
+    expect(within(footer).getByRole("link", { name: "Code: MIT" }).getAttribute("href"))
+      .toMatch(/\/licenses\/LICENSE\.txt$/u);
+    expect(within(footer).getByRole("link", { name: "Data: CC BY 4.0" })).toBeVisible();
+    expect(within(footer).getByRole("link", { name: "Content: CC BY 4.0" })).toBeVisible();
   });
 
   test("primary navigation and home entries stay reachable at 375px", () => {

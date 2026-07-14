@@ -14,6 +14,7 @@ import { TraceDemoPage } from "./features/playback/TraceDemoPage";
 import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { NelderMeadPage } from "./features/theater/NelderMeadPage";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
 
@@ -166,6 +167,8 @@ function AppShell() {
         <span>Dataset 0.2.0</span>
         <span aria-hidden="true">·</span>
         <span>ViewSpec 1.0.0</span>
+        <span aria-hidden="true">·</span>
+        <LicenseLinks />
       </footer>
     </div>
   );
