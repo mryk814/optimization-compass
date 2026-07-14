@@ -9,7 +9,7 @@ import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useEntityLinks } from "../../state/entity-links";
 import { useAtlasState } from "../../state/useAtlasState";
-import { MarkdownBody } from "../content/ContentPages";
+import { CompiledContent } from "../content/CompiledContent";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { NotFoundPage } from "../navigation/NotFoundPage";
 
@@ -112,9 +112,8 @@ export function MethodPage() {
       {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
       {content && (
-        <section className="method-learning">
-          <h2>説明</h2>
-          <MarkdownBody body={content.body} />
+        <section aria-label="教材" className="method-learning">
+          <CompiledContent page={content} />
         </section>
       )}
       {groups && <MethodRelations groups={groups} />}

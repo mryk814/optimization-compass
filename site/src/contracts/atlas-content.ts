@@ -6,7 +6,8 @@ export interface AtlasContentPage {
   title_ja: string;
   title_en: string;
   summary: string;
-  body: string;
+  html: string;
+  toc: ContentHeading[];
   prerequisites: string[];
   related_ids: string[];
   visualization_ids: string[];
@@ -18,15 +19,21 @@ export interface AtlasContentPage {
   seo_description: string;
 }
 
+export interface ContentHeading {
+  heading_id: string;
+  label: string;
+  level: 2 | 3 | 4 | 5 | 6;
+}
+
 export interface AtlasContentIndex {
-  contract_version: "1.0.0";
+  contract_version: "2.0.0";
   dataset_version: string;
   pages: AtlasContentPage[];
 }
 
 export function parseContentIndex(raw: unknown): AtlasContentIndex {
   const data = record(raw, "content index");
-  if (data.contract_version !== "1.0.0") throw new Error("Unsupported content contract.");
+  if (data.contract_version !== "2.0.0") throw new Error("Unsupported content contract.");
   const pages = array(data.pages, "content pages").map((item, index) => {
     const page = record(item, `content page ${index}`);
     const kind = string(page.kind, "content kind");
@@ -34,7 +41,8 @@ export function parseContentIndex(raw: unknown): AtlasContentIndex {
     return {
       content_id: nonEmpty(page.content_id, "content_id"), kind,
       title_ja: nonEmpty(page.title_ja, "title_ja"), title_en: nonEmpty(page.title_en, "title_en"),
-      summary: string(page.summary, "summary"), body: string(page.body, "body"),
+      summary: string(page.summary, "summary"), html: nonEmpty(page.html, "html"),
+      toc: parseToc(page.toc),
       prerequisites: strings(page.prerequisites, "prerequisites"), related_ids: strings(page.related_ids, "related_ids"),
       visualization_ids: strings(page.visualization_ids, "visualization_ids"), comparison_ids: strings(page.comparison_ids, "comparison_ids"),
       source_ids: strings(page.source_ids, "source_ids"), status: contentStatus(page.status),
@@ -43,7 +51,21 @@ export function parseContentIndex(raw: unknown): AtlasContentIndex {
     } satisfies AtlasContentPage;
   });
   if (new Set(pages.map((page) => page.content_id)).size !== pages.length) throw new Error("Duplicate content ID.");
-  return { contract_version: "1.0.0", dataset_version: nonEmpty(data.dataset_version, "dataset_version"), pages };
+  return { contract_version: "2.0.0", dataset_version: nonEmpty(data.dataset_version, "dataset_version"), pages };
+}
+
+function parseHeading(value: unknown, index: number): ContentHeading {
+  const heading = record(value, `heading ${index}`);
+  const level = heading.level;
+  if (level !== 2 && level !== 3 && level !== 4 && level !== 5 && level !== 6) throw new Error(`Unsupported heading level: ${String(level)}`);
+  return { heading_id: nonEmpty(heading.heading_id, "heading_id"), label: nonEmpty(heading.label, "heading label"), level };
+}
+
+function parseToc(value: unknown): ContentHeading[] {
+  const headings = array(value, "toc").map((heading, index) => parseHeading(heading, index));
+  if (headings.length === 0) throw new Error("Content TOC must not be empty.");
+  if (new Set(headings.map((heading) => heading.heading_id)).size !== headings.length) throw new Error("Duplicate heading ID.");
+  return headings;
 }
 
 function record(value: unknown, owner: string): Record<string, unknown> {
