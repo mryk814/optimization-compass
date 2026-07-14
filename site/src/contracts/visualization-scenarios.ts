@@ -4,7 +4,8 @@ export type RendererFamily =
   | "simplex_geometry"
   | "continuous_trajectory"
   | "generic_metric_history"
-  | "search_tree";
+  | "search_tree"
+  | "surrogate_uncertainty";
 
 export interface VisualizationScenario {
   contract_version: "1.0.0";
@@ -40,11 +41,14 @@ export interface VisualizationScenario {
   }[];
   artifact: {
     artifact_kind: VisualizationArtifactKind;
-    artifact_contract: "AlgorithmTrace";
+    artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty";
     artifact_contract_version: "1.0.0";
     renderer_family: RendererFamily;
     renderer_contract_version: "1.0.0";
     observable_ids: string[];
+    payload_path: string;
+    payload_bytes: number;
+    payload_sha256: string;
   };
   source_ids: string[];
   last_verified: string;
@@ -63,6 +67,7 @@ const rendererFamilies = new Set<RendererFamily>([
   "continuous_trajectory",
   "generic_metric_history",
   "search_tree",
+  "surrogate_uncertainty",
 ]);
 
 export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScenarioIndex {
@@ -172,17 +177,20 @@ function parseRun(raw: unknown, field: string): VisualizationScenario["runs"][nu
 
 function parseArtifact(raw: unknown, field: string): VisualizationScenario["artifact"] {
   const data = record(raw, field);
-  exact(data, ["artifact_kind", "artifact_contract", "artifact_contract_version", "renderer_family", "renderer_contract_version", "observable_ids"], field);
-  if (data.artifact_contract !== "AlgorithmTrace") throw new Error(`${field}.artifact_contract is invalid.`);
+  exact(data, ["artifact_kind", "artifact_contract", "artifact_contract_version", "renderer_family", "renderer_contract_version", "observable_ids", "payload_path", "payload_bytes", "payload_sha256"], field);
+  if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty") throw new Error(`${field}.artifact_contract is invalid.`);
   version(data.artifact_contract_version, `${field}.artifact_contract_version`);
   version(data.renderer_contract_version, `${field}.renderer_contract_version`);
   return {
     artifact_kind: oneOf(data.artifact_kind, artifactKinds, `${field}.artifact_kind`),
-    artifact_contract: "AlgorithmTrace",
+    artifact_contract: data.artifact_contract,
     artifact_contract_version: "1.0.0",
     renderer_family: oneOf(data.renderer_family, rendererFamilies, `${field}.renderer_family`),
     renderer_contract_version: "1.0.0",
     observable_ids: nonEmptyTextList(data.observable_ids, `${field}.observable_ids`),
+    payload_path: payloadPath(data.payload_path, `${field}.payload_path`),
+    payload_bytes: positiveInteger(data.payload_bytes, `${field}.payload_bytes`),
+    payload_sha256: sha256(data.payload_sha256, `${field}.payload_sha256`),
   };
 }
 
@@ -223,6 +231,16 @@ function finiteNumber(value: unknown, field: string): number {
 function positiveInteger(value: unknown, field: string): number {
   if (typeof value !== "number" || !Number.isSafeInteger(value) || value <= 0) throw new Error(`${field} must be a positive integer.`);
   return value;
+}
+function payloadPath(value: unknown, field: string): string {
+  const candidate = text(value, field);
+  if (!/^(traces|visualizations)\/[a-z0-9._/-]+\.json$/u.test(candidate)) throw new Error(`${field} is invalid.`);
+  return candidate;
+}
+function sha256(value: unknown, field: string): string {
+  const candidate = text(value, field);
+  if (!/^[0-9a-f]{64}$/u.test(candidate)) throw new Error(`${field} is invalid.`);
+  return candidate;
 }
 function exact(data: Record<string, unknown>, expected: readonly string[], field: string): void {
   const keys = new Set(expected);

@@ -63,3 +63,13 @@ test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, te
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-search-tree");
 });
+
+test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/bayesian-optimization");
+  const player = page.getByLabel(/Bayesian optimization再生領域/u);
+  await player.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.getByText("Frame 2/8")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-bayesian-optimization");
+});

@@ -19,6 +19,7 @@ from optimization_compass.search_tree import (
     generate_search_tree_artifact,
     render_search_tree_svg,
 )
+from optimization_compass.surrogate_uncertainty import write_surrogate_scenarios
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -279,8 +280,11 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         dataset_version=release["version"],
         additional_traces=[artifact.trace for artifact in search_tree_artifacts],
     )
+    surrogate_scenarios = write_surrogate_scenarios(output_dir, dataset_version=release["version"])
     scenario_index = _build_visualization_scenario_index(
-        generated_traces, dataset_version=release["version"]
+        generated_traces,
+        surrogate_scenarios=surrogate_scenarios,
+        dataset_version=release["version"],
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     search_tree_routes = {
@@ -550,12 +554,18 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
 
 
 def _build_visualization_scenario_index(
-    traces: list[AlgorithmTrace], *, dataset_version: str
+    traces: list[AlgorithmTrace],
+    *,
+    surrogate_scenarios: list[VisualizationScenario],
+    dataset_version: str,
 ) -> VisualizationScenarioIndex:
     return VisualizationScenarioIndex(
         contract_version="1.0.0",
         dataset_version=dataset_version,
-        scenarios=[_visualization_scenario(trace) for trace in traces],
+        scenarios=[
+            *[_visualization_scenario(trace) for trace in traces],
+            *surrogate_scenarios,
+        ],
     )
 
 
@@ -596,6 +606,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         if is_nelder_mead or is_search_tree
         else "comparison"
     )
+    payload = canonical_trace_bytes(trace)
     return VisualizationScenario(
         contract_version="1.0.0",
         dataset_version=trace.dataset_version,
@@ -673,6 +684,9 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             renderer_family=renderer_family,
             renderer_contract_version="1.0.0",
             observable_ids=observable_ids,
+            payload_path=f"traces/{trace.trace_id}.json",
+            payload_bytes=len(payload),
+            payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
         last_verified="2026-07-15",

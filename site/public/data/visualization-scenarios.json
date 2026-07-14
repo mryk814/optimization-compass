@@ -12,6 +12,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
+        "payload_bytes": 215501,
+        "payload_path": "traces/nelder-mead-quadratic.json",
+        "payload_sha256": "9409e2defde96e3ab8dfb82b36d7039eb8de76566839cdf277861f0ffd4929be",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -80,6 +83,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
+        "payload_bytes": 210050,
+        "payload_path": "traces/nelder-mead-quadratic-shifted.json",
+        "payload_sha256": "23791b64bd167ca1360c60bfdfb0e13a68a446d0f7cf657a2c8f275695ef6b67",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -148,6 +154,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
+        "payload_bytes": 210077,
+        "payload_path": "traces/nelder-mead-rosenbrock.json",
+        "payload_sha256": "084fa33b1e9c2f9278c31da4ceb28dae64dc6ba0168e4c9abe91d91bf160b401",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -216,6 +225,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
+        "payload_bytes": 204048,
+        "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
+        "payload_sha256": "597adb4a7000e3aa4d531f8750c10133c068f866ea48aa0ee3c79ebc47703220",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -285,6 +297,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 72387,
+        "payload_path": "traces/gradient_descent-quadratic.json",
+        "payload_sha256": "5bc3054dbb346de4ddca2f5eac8e0193eca9968f335502f6613636dd24b09cc6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -355,6 +370,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 66282,
+        "payload_path": "traces/momentum-quadratic.json",
+        "payload_sha256": "6b06e4ef838be3631e915983bcd274e47723b17740a453ac21579d74c54f0731",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -425,6 +443,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 65834,
+        "payload_path": "traces/adam-quadratic.json",
+        "payload_sha256": "6a2386359b7ed245d070250a3aaf97835901eb22120df0b1db90a4134fbb4a2b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -495,6 +516,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 52977,
+        "payload_path": "traces/gradient_descent-quadratic-divergence.json",
+        "payload_sha256": "4743b4ee3629855fb910cbe1dde98ff71c58d834f7489220c5bbde8f28cfdce9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -565,6 +589,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 66225,
+        "payload_path": "traces/momentum-quadratic-divergence.json",
+        "payload_sha256": "0eddfb62ee8ab092f3ff74d9a0afd0a298ae7b9bc6c8785a5970fd6f67a58ae7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -635,6 +662,9 @@
           "gradient",
           "update_vector"
         ],
+        "payload_bytes": 65856,
+        "payload_path": "traces/adam-quadratic-divergence.json",
+        "payload_sha256": "401ea25ca6652af947ddaae37a470ce5f64348a876b21b59243d2fc07d71435b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -705,6 +735,9 @@
           "incumbent",
           "prune_reason"
         ],
+        "payload_bytes": 101833,
+        "payload_path": "traces/binary-knapsack-bnb-complete.json",
+        "payload_sha256": "1a14d9f32dc9b229564c71bbdc94c77c4fe04bb41e025a4cb61e669c5f956cdf",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
@@ -776,6 +809,9 @@
           "incumbent",
           "prune_reason"
         ],
+        "payload_bytes": 39382,
+        "payload_path": "traces/binary-knapsack-bnb-budget.json",
+        "payload_sha256": "57c9d2d96f7eb53f33f864eca8b7619c4457d628ebb4a7fef3cd2a43975ddd31",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
@@ -835,6 +871,338 @@
       ],
       "title_en": "0-1 knapsack: node budget",
       "title_ja": "0-1 knapsack: node予算で停止"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "observations",
+          "posterior_mean",
+          "posterior_uncertainty",
+          "expected_improvement",
+          "selected_candidate",
+          "incumbent_history"
+        ],
+        "payload_bytes": 110067,
+        "payload_path": "visualizations/bo-exploit-noiseless.json",
+        "payload_sha256": "797a9e2773ade0698ed1a710cc167e976eaa537ff3ff95423de010bc82dfc090",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 10
+        },
+        "initial_condition": {
+          "point": [
+            -2.6,
+            0.0,
+            2.6
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_EXPLOIT_NOISELESS",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 10
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Exploration weight or observation noise changes the selected point and uncertainty",
+        "expected_phenomenon_ja": "探索係数または観測noiseの違いで次点と不確実性表示が変わる",
+        "limitations_en": "A fixed-seed one-dimensional educational run with an RBF kernel; kernel and noise assumptions, higher dimensions, and finite budgets change behavior and do not prove global optimality",
+        "limitations_ja": "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、有限予算では挙動が変わり、大域最適性を証明しない"
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_EXPLOIT_NOISELESS_2604"
+        },
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_RANDOM_SEARCH",
+          "profile_id": "PROFILE_RANDOM_SEARCH_1D",
+          "run_id": "RUN_RANDOM_EXPLOIT_NOISELESS_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "title_en": "Expensive 1D black box: exploit / noiseless",
+      "title_ja": "高価な1次元black-box: exploit / noiseless"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "observations",
+          "posterior_mean",
+          "posterior_uncertainty",
+          "expected_improvement",
+          "selected_candidate",
+          "incumbent_history"
+        ],
+        "payload_bytes": 112097,
+        "payload_path": "visualizations/bo-exploit-small_noise.json",
+        "payload_sha256": "9b17307957cd92887ff8edb36a859bb137871558409efeef6c00d797031c211a",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 10
+        },
+        "initial_condition": {
+          "point": [
+            -2.6,
+            0.0,
+            2.6
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_EXPLOIT_SMALL_NOISE",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 10
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Exploration weight or observation noise changes the selected point and uncertainty",
+        "expected_phenomenon_ja": "探索係数または観測noiseの違いで次点と不確実性表示が変わる",
+        "limitations_en": "A fixed-seed one-dimensional educational run with an RBF kernel; kernel and noise assumptions, higher dimensions, and finite budgets change behavior and do not prove global optimality",
+        "limitations_ja": "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、有限予算では挙動が変わり、大域最適性を証明しない"
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_EXPLOIT_SMALL_NOISE_2604"
+        },
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_RANDOM_SEARCH",
+          "profile_id": "PROFILE_RANDOM_SEARCH_1D",
+          "run_id": "RUN_RANDOM_EXPLOIT_SMALL_NOISE_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "title_en": "Expensive 1D black box: exploit / small_noise",
+      "title_ja": "高価な1次元black-box: exploit / small_noise"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "observations",
+          "posterior_mean",
+          "posterior_uncertainty",
+          "expected_improvement",
+          "selected_candidate",
+          "incumbent_history"
+        ],
+        "payload_bytes": 109735,
+        "payload_path": "visualizations/bo-explore-noiseless.json",
+        "payload_sha256": "ee60fc404dafbc135e58a76cb97c491854d71c0b426f2eb62c94b1856047c90f",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 10
+        },
+        "initial_condition": {
+          "point": [
+            -2.6,
+            0.0,
+            2.6
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_EXPLORE_NOISELESS",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 10
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Update the surrogate and Expected Improvement from observations to choose the next evaluation",
+        "expected_phenomenon_ja": "観測からsurrogateとExpected Improvementを更新し、次の評価点を選ぶ",
+        "limitations_en": "A fixed-seed one-dimensional educational run with an RBF kernel; kernel and noise assumptions, higher dimensions, and finite budgets change behavior and do not prove global optimality",
+        "limitations_ja": "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、有限予算では挙動が変わり、大域最適性を証明しない"
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_EXPLORE_NOISELESS_2604"
+        },
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_RANDOM_SEARCH",
+          "profile_id": "PROFILE_RANDOM_SEARCH_1D",
+          "run_id": "RUN_RANDOM_EXPLORE_NOISELESS_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "title_en": "Expensive 1D black box: explore / noiseless",
+      "title_ja": "高価な1次元black-box: explore / noiseless"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "observations",
+          "posterior_mean",
+          "posterior_uncertainty",
+          "expected_improvement",
+          "selected_candidate",
+          "incumbent_history"
+        ],
+        "payload_bytes": 112173,
+        "payload_path": "visualizations/bo-explore-small_noise.json",
+        "payload_sha256": "50c4ae8af0f40dbccb7b76bf30d3fe4acc4cb0a83c7d368843037964d723b88c",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "contract_version": "1.0.0",
+      "dataset_version": "0.3.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 10
+        },
+        "initial_condition": {
+          "point": [
+            -2.6,
+            0.0,
+            2.6
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_EXPLORE_SMALL_NOISE",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 10
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "expected_phenomenon_en": "Exploration weight or observation noise changes the selected point and uncertainty",
+        "expected_phenomenon_ja": "探索係数または観測noiseの違いで次点と不確実性表示が変わる",
+        "limitations_en": "A fixed-seed one-dimensional educational run with an RBF kernel; kernel and noise assumptions, higher dimensions, and finite budgets change behavior and do not prove global optimality",
+        "limitations_ja": "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、有限予算では挙動が変わり、大域最適性を証明しない"
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_EXPLORE_SMALL_NOISE_2604"
+        },
+        {
+          "artifact_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_RANDOM_SEARCH",
+          "profile_id": "PROFILE_RANDOM_SEARCH_1D",
+          "run_id": "RUN_RANDOM_EXPLORE_SMALL_NOISE_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "title_en": "Expensive 1D black box: explore / small_noise",
+      "title_ja": "高価な1次元black-box: explore / small_noise"
     }
   ]
 }

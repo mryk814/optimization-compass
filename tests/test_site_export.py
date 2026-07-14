@@ -292,14 +292,19 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     assert index.dataset_version == trace.dataset_version
     assert index.traces[0].trace_id == trace.trace_id
     assert index.traces[0].path == "dummy-educational.json"
+    trace_scenarios = [
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.artifact.artifact_contract == "AlgorithmTrace"
+    ]
     scenario_by_artifact = {
-        run.artifact_id: scenario for scenario in scenario_index.scenarios for run in scenario.runs
+        run.artifact_id: scenario for scenario in trace_scenarios for run in scenario.runs
     }
     search_scenario = scenario_by_artifact["binary-knapsack-bnb-complete"]
     assert search_scenario.purpose == "mechanism"
     assert search_scenario.artifact.renderer_family == "search_tree"
     assert search_scenario.problem_instance_id == "INSTANCE_BINARY_KNAPSACK_4"
-    assert len(scenario_index.scenarios) == len(index.traces) - 1
+    assert len(trace_scenarios) == len(index.traces) - 1
     assert set(scenario_by_artifact) == {
         entry.trace_id for entry in index.traces if entry.trace_id != "dummy-educational"
     }
@@ -310,6 +315,23 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         scenario_by_artifact["gradient_descent-quadratic"].artifact.renderer_family
         == "continuous_trajectory"
     )
+    surrogate_scenarios = [
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.artifact.renderer_family == "surrogate_uncertainty"
+    ]
+    assert len(surrogate_scenarios) == 4
+    assert {scenario.purpose for scenario in surrogate_scenarios} == {"mechanism", "sensitivity"}
+    for scenario in surrogate_scenarios:
+        payload = (first_output / scenario.artifact.payload_path).read_bytes()
+        assert len(payload) == scenario.artifact.payload_bytes
+        assert sha256(payload).hexdigest() == scenario.artifact.payload_sha256
+        decoded = json.loads(payload)
+        assert "title_ja" not in decoded
+        assert "method_id" not in decoded
+        assert "evaluation_budget" not in decoded
+        assert "source_ids" not in decoded
+        assert "limitations_ja" not in decoded
     shrink_trace = AlgorithmTrace.model_validate_json(
         (first_output / "traces/nelder-mead-rosenbrock-shifted.json").read_bytes()
     )

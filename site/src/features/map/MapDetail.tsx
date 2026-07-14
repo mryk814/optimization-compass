@@ -73,6 +73,9 @@ export function MapDetail({ model, selectedId, onContinueDiagnosis }: MapDetailP
     return [source];
   });
   if (sources.length > 0) grouped.set("source", sources);
+  const hasBayesianOptimization = selected.related_entities.some(
+    (reference) => reference.entity_type === "method" && reference.entity_id === "M_BAYESIAN_OPT_GP",
+  );
 
   return (
     <article aria-live="polite" className="map-detail-card">
@@ -82,6 +85,7 @@ export function MapDetail({ model, selectedId, onContinueDiagnosis }: MapDetailP
         <span>{selected.node_type}</span>
       </div>
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
+      {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to="/theater/bayesian-optimization">Bayesian Optimization Theaterへ</Link></section>}
 
       {children.length > 0 && (
         <section className="map-detail-section">

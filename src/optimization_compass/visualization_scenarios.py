@@ -15,6 +15,7 @@ RendererFamily = Literal[
     "continuous_trajectory",
     "generic_metric_history",
     "search_tree",
+    "surrogate_uncertainty",
 ]
 ParameterValue = bool | int | float
 
@@ -67,11 +68,14 @@ class VisualizationRun(TraceModel):
 
 class VisualizationArtifact(TraceModel):
     artifact_kind: ArtifactKind
-    artifact_contract: Literal["AlgorithmTrace"]
+    artifact_contract: Literal["AlgorithmTrace", "SurrogateUncertainty"]
     artifact_contract_version: Literal["1.0.0"]
     renderer_family: RendererFamily
     renderer_contract_version: Literal["1.0.0"]
     observable_ids: list[NonBlank] = Field(min_length=1)
+    payload_path: str = Field(pattern=r"^(traces|visualizations)/[a-z0-9._/-]+\.json$")
+    payload_bytes: int = Field(gt=0)
+    payload_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
 
 class VisualizationScenario(TraceModel):

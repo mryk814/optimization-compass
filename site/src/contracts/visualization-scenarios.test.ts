@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import fixture from "./visualization-scenarios.fixture.json";
+import generated from "../../public/data/visualization-scenarios.json";
 import { parseVisualizationScenarioIndex } from "./visualization-scenarios";
 
 describe("VisualizationScenario parser", () => {
@@ -21,5 +22,16 @@ describe("VisualizationScenario parser", () => {
       }],
     })).toThrow(/renderer_family/u);
     expect(() => parseVisualizationScenarioIndex({ ...fixture, renderer_registry: {} })).toThrow(/unknown/u);
+  });
+
+  test("parses BO scenarios from the single generated scenario authority", () => {
+    const parsed = parseVisualizationScenarioIndex(generated);
+    const boScenarios = parsed.scenarios.filter(
+      (scenario) => scenario.artifact.renderer_family === "surrogate_uncertainty",
+    );
+
+    expect(boScenarios).toHaveLength(4);
+    expect(boScenarios.filter((scenario) => scenario.purpose === "mechanism")).toHaveLength(1);
+    expect(boScenarios.every((scenario) => scenario.artifact.payload_path.startsWith("visualizations/"))).toBe(true);
   });
 });
