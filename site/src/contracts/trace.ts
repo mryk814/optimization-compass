@@ -305,6 +305,50 @@ const traceEventExplanations: Readonly<Record<string, Readonly<{ ja: string; en:
     ja: "契約確認用のデモ再生を終了します。",
     en: "Finish the contract demonstration playback.",
   },
+  "trace.nelder-mead.initialize": {
+    ja: "初期simplexを評価し、3頂点の役割を決めます。",
+    en: "Evaluate the initial simplex and assign the three vertex roles.",
+  },
+  "trace.nelder-mead.order": {
+    ja: "目的関数値で頂点を並べ、best、second-worst、worstを更新します。",
+    en: "Order vertices by objective value and update best, second-worst, and worst.",
+  },
+  "trace.nelder-mead.reflect": {
+    ja: "最悪点を重心の反対側へ反射し、候補の改善を判定します。",
+    en: "Reflect the worst point across the centroid and assess the candidate.",
+  },
+  "trace.nelder-mead.expand": {
+    ja: "反射方向へさらに拡大し、より改善する候補を選びます。",
+    en: "Expand beyond the reflection and choose the better candidate.",
+  },
+  "trace.nelder-mead.outside_contract": {
+    ja: "反射点側へ外側収縮し、候補を受理できるか判定します。",
+    en: "Contract outside toward the reflected point and assess acceptance.",
+  },
+  "trace.nelder-mead.inside_contract": {
+    ja: "最悪点を重心側へ内側収縮し、改善を確認します。",
+    en: "Contract the worst point inward toward the centroid and check improvement.",
+  },
+  "trace.nelder-mead.shrink": {
+    ja: "収縮候補を却下し、bestへ向けてsimplex全体を縮小します。",
+    en: "Reject the contraction candidate and shrink the simplex toward the best point.",
+  },
+  "trace.nelder-mead.stop": {
+    ja: "収束条件または評価予算に達したため停止します。",
+    en: "Stop after reaching the convergence condition or evaluation budget.",
+  },
+  "trace.gradient_descent.initialize": {
+    ja: "共通初期点で勾配降下法を開始します。",
+    en: "Start gradient descent at the shared initial point.",
+  },
+  "trace.momentum.initialize": {
+    ja: "共通初期点でモメンタム法を開始します。",
+    en: "Start momentum at the shared initial point.",
+  },
+  "trace.adam.initialize": {
+    ja: "共通初期点でAdamを開始します。",
+    en: "Start Adam at the shared initial point.",
+  },
 };
 
 export function traceEventExplanation(frame: TraceFrame, locale: "ja" | "en" = "ja"): string {

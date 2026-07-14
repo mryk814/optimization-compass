@@ -233,6 +233,7 @@ class SiteManifest(ContractModel):
     views: list[ManifestView]
     recommendation: ManifestAsset
     traces: ManifestTraceAsset
+    visualization_scenarios: ManifestAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
     licenses: SiteLicenseManifest

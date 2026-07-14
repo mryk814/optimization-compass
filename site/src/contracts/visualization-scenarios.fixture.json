@@ -1,0 +1,51 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.2.0",
+  "scenarios": [
+    {
+      "contract_version": "1.0.0",
+      "dataset_version": "0.2.0",
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "title_ja": "二次関数で単体操作を学ぶ",
+      "title_en": "Learn simplex operations on a quadratic",
+      "purpose": "mechanism",
+      "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+      "lesson": {
+        "expected_phenomenon_ja": "反射・拡大・収縮で単体が移動する",
+        "expected_phenomenon_en": "The simplex moves by reflection, expansion, and contraction",
+        "limitations_ja": "2次元の教育用決定論的実行",
+        "limitations_en": "A deterministic two-dimensional educational run"
+      },
+      "experiment": {
+        "oracle_policy": ["objective_value"],
+        "initial_condition": {"point": [-2.5, 2.0]},
+        "parameter_preset_id": "NM_EDUCATIONAL_DEFAULT",
+        "seed": {"status": "not_applicable", "value": null},
+        "budget": {"metric": "oracle_evaluations", "value": 80},
+        "stopping": {"max_oracle_evaluations": 80, "simplex_tolerance": 0.0001},
+        "tuning_policy": "fixed_preset"
+      },
+      "runs": [
+        {
+          "run_id": "RUN_NM_QUADRATIC_DEFAULT",
+          "method_id": "M_NELDER_MEAD",
+          "profile_id": "PROFILE_NELDER_MEAD_2D",
+          "implementation_mapping_status": "not_applicable",
+          "implementation_id": null,
+          "artifact_id": "nelder-mead-quadratic"
+        }
+      ],
+      "artifact": {
+        "artifact_kind": "executable_trace",
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "renderer_family": "simplex_geometry",
+        "renderer_contract_version": "1.0.0",
+        "observable_ids": ["objective_value", "simplex_vertices", "accepted_operation"]
+      },
+      "source_ids": ["S002"],
+      "last_verified": "2026-07-15"
+    }
+  ]
+}

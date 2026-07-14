@@ -46,4 +46,8 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   await expect(iteration).not.toHaveText(initial ?? "");
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-nelder-mead");
+  await expect(page.locator(".nm-theater")).toHaveScreenshot(
+    "mobile-nelder-mead-explanatory.png",
+    { animations: "disabled" },
+  );
 });
