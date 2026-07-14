@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import json
+import shutil
 import sqlite3
 from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
-from optimization_compass.dataset_release import build_staged_release
+from optimization_compass.dataset_release import build_staged_release, verify_database
 from optimization_compass.metadata_models import AtlasMetadataSeed
 
 ROOT = Path(__file__).parents[1]
@@ -158,3 +159,87 @@ def test_staged_database_has_atlas_checks_and_closed_learning_edges(
     assert not [row for row in check_rows if row[1] == "fail"]
     assert {row[2] for row in check_rows} == {"2026-07-13"}
     assert unresolved == 0
+
+
+def test_each_atlas_live_check_detects_its_table_mutation(
+    staged_database: Path, tmp_path: Path
+) -> None:
+    mutations = {
+        "CHK014": (
+            'UPDATE view_presets SET relation_types_json = \'["x","x"]\' '
+            "WHERE preset_id = (SELECT preset_id FROM view_presets LIMIT 1)"
+        ),
+        "CHK015": (
+            "UPDATE method_visualization_profiles "
+            'SET state_fields_json = \'["x","x"]\' '
+            "WHERE profile_id = (SELECT profile_id FROM method_visualization_profiles LIMIT 1)"
+        ),
+        "CHK016": (
+            "UPDATE demo_scenarios SET budget = 0 "
+            "WHERE scenario_id = (SELECT scenario_id FROM demo_scenarios LIMIT 1)"
+        ),
+        "CHK017": (
+            "UPDATE comparison_sets SET synchronization = 'iteration' "
+            "WHERE comparison_set_id = (SELECT comparison_set_id FROM comparison_sets LIMIT 1)"
+        ),
+        "CHK018": (
+            "UPDATE learning_edges SET target_id = 'MISSING' "
+            "WHERE edge_id = (SELECT edge_id FROM learning_edges LIMIT 1)"
+        ),
+        "CHK019": (
+            "UPDATE method_visualization_profiles SET support_status = '' "
+            "WHERE profile_id = (SELECT profile_id FROM method_visualization_profiles LIMIT 1)"
+        ),
+    }
+    for check_id, sql in mutations.items():
+        mutated = tmp_path / f"{check_id}.sqlite"
+        shutil.copy2(staged_database, mutated)
+        connection = sqlite3.connect(mutated)
+        try:
+            connection.execute("PRAGMA ignore_check_constraints = ON")
+            connection.execute(sql)
+            connection.commit()
+        finally:
+            connection.close()
+
+        result = verify_database(mutated)
+
+        assert result.ok is False
+        assert check_id in {check.check_id for check in result.live_failures}
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "UPDATE learning_edges SET relation = 'invalid' WHERE rowid = 1",
+        "UPDATE learning_edges SET target_type = source_type, target_id = source_id "
+        "WHERE rowid = 1",
+        "UPDATE learning_edges SET rationale = ' ' WHERE rowid = 1",
+        "UPDATE learning_edges SET display_order = -1 WHERE rowid = 1",
+        "INSERT INTO learning_edges SELECT edge_id || '_DUP', source_type, source_id, "
+        "target_type, target_id, relation, rationale, display_order, source_ids_json, "
+        "last_verified FROM learning_edges WHERE rowid = 1",
+    ],
+)
+def test_chk018_detects_constraint_bypassed_learning_edge_semantics(
+    staged_database: Path, tmp_path: Path, mutation: str
+) -> None:
+    mutated = tmp_path / "learning-edge.sqlite"
+    shutil.copy2(staged_database, mutated)
+    connection = sqlite3.connect(mutated)
+    try:
+        connection.execute("PRAGMA foreign_keys = OFF")
+        connection.execute(
+            "CREATE TABLE learning_edges_unconstrained AS SELECT * FROM learning_edges"
+        )
+        connection.execute("DROP TABLE learning_edges")
+        connection.execute("ALTER TABLE learning_edges_unconstrained RENAME TO learning_edges")
+        connection.execute(mutation)
+        connection.commit()
+    finally:
+        connection.close()
+
+    result = verify_database(mutated)
+
+    assert result.ok is False
+    assert "CHK018" in {check.check_id for check in result.live_failures}

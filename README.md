@@ -181,7 +181,8 @@ uv run pytest
 
 stage modeは公開済みv0.2.0をhash固定のbaseとして一時領域へcopyし、atlas metadataの
 migration/seed適用、live `CHK001`–`CHK020`、全形式round-trip、2回の同一tree hashまでを
-検証します。公開distribution、runtime DB、`DATASET_VERSION`は変更しません。metadataの
+検証します（database-onlyでは`CHK020=not_run`、release tree検証完了時だけ成立）。公開
+distribution、runtime DB、`DATASET_VERSION`は変更しません。metadataの
 authority境界は [`docs/metadata-responsibilities.md`](docs/metadata-responsibilities.md) に固定しています。
 
 更新PRでは最低限、次を確認します。
@@ -189,6 +190,8 @@ authority境界は [`docs/metadata-responsibilities.md`](docs/metadata-responsib
 - `PRAGMA foreign_key_check` が 0 件
 - stored resultではなくliveに再計算した `release_checks` に `fail` がない
 - DDL / JSON / JSONL / CSV / ZIP / XLSX / SQLiteが厳密にround-tripする
+- manifest schema/version/release dateとJSON/JSONL、SQLite、report、filenameのidentityが一致する
+- staged releaseではAtlas contractを明示的に要求し、全Atlas table欠落も検出する
 - 2回のstaged rebuildでtree hashが一致する
 - 既存の golden case が意図せず変化していない
 - 変更された推薦に evidence/source がある

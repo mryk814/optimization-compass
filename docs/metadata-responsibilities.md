@@ -36,5 +36,9 @@ the migration and seed, recomputes release checks from live rows, exports every 
 round-trips every format, and rebuilds a second time to prove deterministic hashes. Stage mode
 never changes published files, the runtime database, or `DATASET_VERSION`.
 
-Publishing is a separate atomic gate. The staged manifest version, filenames, hashes, current
-runtime hash, and code version must agree before any destination is replaced.
+Publishing is a separate atomic gate. The staged manifest schema, version, and release date are
+validated before artifact paths are resolved, then cross-checked with JSON/JSONL headers, SQLite
+version history, the report, filenames, hashes, current runtime hash, and code version. Release-tree
+verification explicitly requires the Atlas contract even when every Atlas table is absent. The data
+directory, runtime database, and version file are all prepared and backed up before the first
+replacement; any replacement failure restores all three targets.

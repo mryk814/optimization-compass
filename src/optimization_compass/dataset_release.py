@@ -22,10 +22,22 @@ BASE_DATASET_VERSION = "0.2.0"
 BASE_DATASET_SHA256 = "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13"
 RELEASE_DATE = "2026-07-13"
 DATASET_STEM = "optimization_method_selection_database_v{version}"
-FIXED_ZIP_TIME = (2026, 7, 13, 0, 0, 0)
 ROOT = Path(__file__).parents[2]
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
+BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
+ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 21))
+ATLAS_TABLES = frozenset(
+    {
+        "view_presets",
+        "method_visualization_profiles",
+        "demo_objectives",
+        "demo_scenarios",
+        "comparison_sets",
+        "comparison_set_members",
+        "learning_edges",
+    }
+)
 
 
 class ReleaseValidationError(ValueError):
@@ -104,21 +116,57 @@ def tree_hash(directory: Path) -> str:
     return digest.hexdigest()
 
 
+def _validate_release_identity(version: str, release_date: str) -> None:
+    if re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version) is None:
+        raise ReleaseValidationError(f"invalid semantic dataset version: {version}")
+    try:
+        datetime.strptime(release_date, "%Y-%m-%d")
+    except ValueError as error:
+        raise ReleaseValidationError(f"invalid release date: {release_date}") from error
+
+
+def _validate_output_directory(
+    output_directory: Path,
+    *,
+    protected_inputs: tuple[Path, ...],
+) -> None:
+    output = output_directory.resolve(strict=False)
+    for input_path in protected_inputs:
+        protected = input_path.resolve(strict=False)
+        if output == protected or output in protected.parents or protected in output.parents:
+            raise ReleaseValidationError(
+                f"output directory overlaps protected input: {output} and {protected}"
+            )
+    if output_directory.exists():
+        raise ReleaseValidationError(f"output directory must not already exist: {output_directory}")
+
+
 def build_staged_release(
     base_database: Path,
     output_directory: Path,
     *,
     migration_path: Path = DEFAULT_MIGRATION,
     seed_path: Path = DEFAULT_SEED,
+    target_version: str = BASE_DATASET_VERSION,
+    release_date: str = RELEASE_DATE,
 ) -> StagedRelease:
+    _validate_release_identity(target_version, release_date)
+    _validate_output_directory(
+        output_directory,
+        protected_inputs=(base_database, migration_path, seed_path),
+    )
     _verify_pinned_base(base_database)
-    if output_directory.exists():
-        shutil.rmtree(output_directory)
     output_directory.mkdir(parents=True)
-    stem = DATASET_STEM.format(version=BASE_DATASET_VERSION)
+    stem = DATASET_STEM.format(version=target_version)
     database_path = output_directory / f"{stem}.sqlite"
     shutil.copyfile(base_database, database_path)
-    _apply_atlas_metadata(database_path, migration_path, seed_path)
+    _apply_atlas_metadata(
+        database_path,
+        migration_path,
+        seed_path,
+        target_version=target_version,
+        release_date=release_date,
+    )
     snapshot = read_snapshot(database_path)
 
     ddl_path = output_directory / f"{stem}_schema.sql"
@@ -131,23 +179,30 @@ def build_staged_release(
     manifest_path = output_directory / f"{stem}_manifest.json"
 
     _write_ddl(database_path, ddl_path)
-    _write_json(snapshot, json_path)
-    _write_jsonl(snapshot, jsonl_path)
+    _write_json(snapshot, json_path, version=target_version, release_date=release_date)
+    _write_jsonl(snapshot, jsonl_path, version=target_version, release_date=release_date)
     _write_csv_directory(snapshot, csv_directory)
-    _write_csv_zip(csv_directory, csv_zip_path)
-    _write_xlsx(snapshot, xlsx_path)
-    _write_report(snapshot, report_path)
+    _write_csv_zip(csv_directory, csv_zip_path, release_date=release_date)
+    _write_xlsx(snapshot, xlsx_path, release_date=release_date)
+    _write_report(
+        snapshot,
+        report_path,
+        version=target_version,
+        release_date=release_date,
+    )
     manifest = _manifest_payload(
         output_directory,
         stem,
         database_path,
         snapshot,
+        version=target_version,
+        release_date=release_date,
         include_manifest=False,
     )
     manifest_path.write_text(_canonical_json(manifest, pretty=True), encoding="utf-8")
     verify_release_tree(output_directory)
     return StagedRelease(
-        version=BASE_DATASET_VERSION,
+        version=target_version,
         output_directory=output_directory,
         database_path=database_path,
         manifest_path=manifest_path,
@@ -155,23 +210,35 @@ def build_staged_release(
     )
 
 
-def verify_database(path: Path) -> DatabaseVerification:
+def verify_database(path: Path, *, require_atlas: bool = False) -> DatabaseVerification:
     connection = sqlite3.connect(path)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     try:
         checked_at = _release_date(connection)
-        live = tuple(compute_live_checks(connection, checked_at))
+        live = tuple(compute_live_checks(connection, checked_at, require_atlas=require_atlas))
         stored = tuple(_stored_checks(connection))
         foreign_key_violations = len(connection.execute("PRAGMA foreign_key_check").fetchall())
         version = _dataset_version(connection)
+        tables = set(_table_names(connection))
     finally:
         connection.close()
+    atlas_context = require_atlas or bool(tables & ATLAS_TABLES)
+    expected_ids = ATLAS_CHECK_IDS if atlas_context else BASE_CHECK_IDS
     stored_by_id = {check.check_id: check for check in stored}
-    mismatches = tuple(
+    live_by_id = {check.check_id: check for check in live}
+    mismatches = [
+        *(f"missing-stored:{check_id}" for check_id in sorted(expected_ids - stored_by_id.keys())),
+        *(f"extra-stored:{check_id}" for check_id in sorted(stored_by_id.keys() - expected_ids)),
+        *(f"missing-live:{check_id}" for check_id in sorted(expected_ids - live_by_id.keys())),
+        *(f"extra-live:{check_id}" for check_id in sorted(live_by_id.keys() - expected_ids)),
+    ]
+    mismatches.extend(
         check.check_id
         for check in live
-        if check.check_id in stored_by_id and check.status != stored_by_id[check.check_id].status
+        if check.check_id in expected_ids
+        and check.check_id in stored_by_id
+        and check.status != stored_by_id[check.check_id].status
     )
     stored_failures = tuple(check for check in stored if check.status == "fail")
     live_failures = tuple(check for check in live if check.status == "fail")
@@ -183,13 +250,18 @@ def verify_database(path: Path) -> DatabaseVerification:
         foreign_key_violations=foreign_key_violations,
         stored_failures=stored_failures,
         live_failures=live_failures,
-        status_mismatches=mismatches,
+        status_mismatches=tuple(mismatches),
         checks=live,
         dataset_version=version,
     )
 
 
-def compute_live_checks(connection: sqlite3.Connection, checked_at: str) -> list[LiveCheck]:
+def compute_live_checks(
+    connection: sqlite3.Connection,
+    checked_at: str,
+    *,
+    require_atlas: bool = False,
+) -> list[LiveCheck]:
     tables = _table_names(connection)
     total_rows = sum(
         int(connection.execute(f'SELECT COUNT(*) FROM "{table}"').fetchone()[0]) for table in tables
@@ -341,25 +413,28 @@ def compute_live_checks(connection: sqlite3.Connection, checked_at: str) -> list
             checked_at,
         ),
     ]
-    if "view_presets" not in tables:
+    if not require_atlas and not set(tables) & ATLAS_TABLES:
         return checks
 
-    atlas_tables = {
-        "view_presets",
-        "method_visualization_profiles",
-        "demo_objectives",
-        "demo_scenarios",
-        "comparison_sets",
-        "comparison_set_members",
-        "learning_edges",
-    }
-    missing_tables = atlas_tables - set(tables)
-    view_issues = _view_preset_issues(connection)
-    profile_issues = _profile_objective_issues(connection)
-    scenario_issues = _scenario_issues(connection)
-    comparison_issues = _comparison_issues(connection)
-    learning_issues = _learning_edge_issues(connection)
-    explicit_state_issues = _explicit_state_issues(connection, atlas_tables - missing_tables)
+    missing_tables = ATLAS_TABLES - set(tables)
+    view_issues = (
+        _view_preset_issues(connection) if "view_presets" in tables else ["missing:view_presets"]
+    )
+    profile_issues = _missing_table_issues(
+        tables, {"method_visualization_profiles", "demo_objectives"}
+    )
+    if not profile_issues:
+        profile_issues = _profile_objective_issues(connection)
+    scenario_issues = _missing_table_issues(tables, {"demo_scenarios"})
+    if not scenario_issues:
+        scenario_issues = _scenario_issues(connection)
+    comparison_issues = _missing_table_issues(tables, {"comparison_sets", "comparison_set_members"})
+    if not comparison_issues:
+        comparison_issues = _comparison_issues(connection)
+    learning_issues = _missing_table_issues(tables, {"learning_edges"})
+    if not learning_issues:
+        learning_issues = _learning_edge_issues(connection)
+    explicit_state_issues = _explicit_state_issues(connection, ATLAS_TABLES - missing_tables)
     checks.extend(
         [
             _check(
@@ -439,16 +514,16 @@ def compute_live_checks(connection: sqlite3.Connection, checked_at: str) -> list
                 ", ".join(explicit_state_issues[:10]) or "No ambiguous blank state values.",
                 checked_at,
             ),
-            _check(
-                "CHK020",
-                "Release artifact consistency",
-                "all staged formats",
-                "critical",
-                True,
-                "verified by release-tree round trip",
-                "all formats, version, filenames, and hashes agree",
-                "The release builder verifies this check before returning.",
-                checked_at,
+            LiveCheck(
+                check_id="CHK020",
+                check_name="Release artifact consistency",
+                scope="all staged formats",
+                severity="critical",
+                status="not_run",
+                observed_value="database-only verification",
+                expected_condition="release tree round-trip and manifest checks pass",
+                details="Only verify_release_tree may establish artifact consistency.",
+                checked_at=checked_at,
             ),
         ]
     )
@@ -459,9 +534,10 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
     manifests = sorted(output_directory.glob("*_manifest.json"))
     if len(manifests) != 1:
         raise ReleaseValidationError("release tree must contain exactly one manifest")
-    manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
-    version = str(manifest.get("version"))
+    manifest, version, release_date = _read_manifest(manifests[0])
     stem = DATASET_STEM.format(version=version)
+    if manifests[0].name != f"{stem}_manifest.json":
+        raise ReleaseValidationError("manifest filename does not match release identity")
     expected_names = {
         "database": f"{stem}.sqlite",
         "ddl": f"{stem}_schema.sql",
@@ -476,6 +552,11 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
         raise ReleaseValidationError("manifest filenames do not match versioned release contract")
     database_path = output_directory / expected_names["database"]
     reference = read_snapshot(database_path)
+    expected_identity = (version, release_date)
+    if _read_json_identity(output_directory / expected_names["json"]) != expected_identity:
+        raise ReleaseValidationError("json release identity does not match manifest")
+    if _read_jsonl_identity(output_directory / expected_names["jsonl"]) != expected_identity:
+        raise ReleaseValidationError("jsonl release identity does not match manifest")
     readers: dict[str, Snapshot] = {
         "json": _read_json(output_directory / expected_names["json"]),
         "jsonl": _read_jsonl(output_directory / expected_names["jsonl"]),
@@ -494,11 +575,13 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
         raise ReleaseValidationError("manifest file hashes do not match release tree")
     if manifest.get("table_counts") != {name: len(table.rows) for name, table in reference.items()}:
         raise ReleaseValidationError("manifest table counts do not match sqlite")
-    database_result = verify_database(database_path)
+    database_result = verify_database(database_path, require_atlas=True)
     if not database_result.ok:
         raise ReleaseValidationError("staged sqlite live release checks failed")
-    if database_result.dataset_version != version:
-        raise ReleaseValidationError("sqlite version does not match manifest version")
+    if _read_database_identity(database_path) != expected_identity:
+        raise ReleaseValidationError("sqlite release identity does not match manifest")
+    if _read_report_identity(output_directory / expected_names["report"]) != expected_identity:
+        raise ReleaseValidationError("report release identity does not match manifest")
     if manifest.get("database_sha256") != sha256_file(database_path):
         raise ReleaseValidationError("sqlite hash does not match manifest database hash")
     return FormatVerification(
@@ -506,6 +589,98 @@ def verify_release_tree(output_directory: Path) -> FormatVerification:
         formats={"sqlite", "ddl", "json", "jsonl", "csv_directory", "csv_zip", "xlsx"},
         table_count=len(reference),
     )
+
+
+def _read_manifest(path: Path) -> tuple[dict[str, Any], str, str]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ReleaseValidationError("manifest is not valid JSON") from error
+    if not isinstance(payload, dict):
+        raise ReleaseValidationError("manifest schema must be an object")
+    expected_types: dict[str, type[Any]] = {
+        "schema_version": int,
+        "version": str,
+        "release_date": str,
+        "base_sha256": str,
+        "database_sha256": str,
+        "artifacts": dict,
+        "files": dict,
+        "table_counts": dict,
+        "validation": dict,
+    }
+    for field, expected_type in expected_types.items():
+        if type(payload.get(field)) is not expected_type:
+            raise ReleaseValidationError(f"manifest schema field is invalid: {field}")
+    if payload["schema_version"] != 1:
+        raise ReleaseValidationError("unsupported manifest schema version")
+    version = payload["version"]
+    release_date = payload["release_date"]
+    _validate_release_identity(version, release_date)
+    for field in ("base_sha256", "database_sha256"):
+        if re.fullmatch(r"[0-9a-f]{64}", payload[field]) is None:
+            raise ReleaseValidationError(f"manifest schema field is invalid: {field}")
+    return payload, version, release_date
+
+
+def _read_json_identity(path: Path) -> tuple[str, str]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise ReleaseValidationError("json release header is invalid") from error
+    if not isinstance(payload, dict):
+        raise ReleaseValidationError("json release header is invalid")
+    return _validated_payload_identity(payload, format_name="json")
+
+
+def _read_jsonl_identity(path: Path) -> tuple[str, str]:
+    try:
+        first_line = path.read_text(encoding="utf-8").splitlines()[0]
+        payload = json.loads(first_line)
+    except (OSError, IndexError, json.JSONDecodeError) as error:
+        raise ReleaseValidationError("jsonl release header is invalid") from error
+    if not isinstance(payload, dict) or payload.get("type") != "release":
+        raise ReleaseValidationError("jsonl release header is invalid")
+    return _validated_payload_identity(payload, format_name="jsonl")
+
+
+def _validated_payload_identity(payload: dict[str, Any], *, format_name: str) -> tuple[str, str]:
+    version = payload.get("version")
+    release_date = payload.get("release_date")
+    if not isinstance(version, str) or not isinstance(release_date, str):
+        raise ReleaseValidationError(f"{format_name} release identity is invalid")
+    _validate_release_identity(version, release_date)
+    return version, release_date
+
+
+def _read_database_identity(path: Path) -> tuple[str, str]:
+    connection = sqlite3.connect(path)
+    try:
+        row = connection.execute(
+            "SELECT version, release_date FROM version_history "
+            "ORDER BY release_date DESC, version DESC LIMIT 1"
+        ).fetchone()
+    finally:
+        connection.close()
+    if row is None:
+        raise ReleaseValidationError("sqlite release identity is missing")
+    version, release_date = str(row[0]), str(row[1])
+    _validate_release_identity(version, release_date)
+    return version, release_date
+
+
+def _read_report_identity(path: Path) -> tuple[str, str]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    versions = [
+        match.group(1) for line in lines if (match := re.fullmatch(r"- Version: `(.+)`", line))
+    ]
+    release_dates = [
+        match.group(1) for line in lines if (match := re.fullmatch(r"- Release date: `(.+)`", line))
+    ]
+    if len(versions) != 1 or len(release_dates) != 1:
+        raise ReleaseValidationError("report release identity is invalid")
+    _validate_release_identity(versions[0], release_dates[0])
+    return versions[0], release_dates[0]
 
 
 def publish_release(
@@ -516,17 +691,21 @@ def publish_release(
     *,
     version: str,
 ) -> None:
-    if version == BASE_DATASET_VERSION:
+    version_lines = version_file.read_text(encoding="utf-8").splitlines()
+    if not version_lines:
+        raise ReleaseValidationError("DATASET_VERSION is empty")
+    current_version = version_lines[0]
+    if version == current_version:
         raise ReleaseValidationError("publish requires a new release version")
     verify_release_tree(staged_directory)
-    version_lines = version_file.read_text(encoding="utf-8").splitlines()
-    if not version_lines or version_lines[0] != BASE_DATASET_VERSION:
-        raise ReleaseValidationError("code version does not match current DATASET_VERSION")
     recorded_hash = next(
         (line.removeprefix("sha256=") for line in version_lines if line.startswith("sha256=")), ""
     )
     if sha256_file(runtime_database) != recorded_hash:
         raise ReleaseValidationError("runtime hash does not match DATASET_VERSION")
+    runtime_result = verify_database(runtime_database)
+    if runtime_result.dataset_version != current_version:
+        raise ReleaseValidationError("code version does not match runtime database version")
     manifests = list(staged_directory.glob("*_manifest.json"))
     manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
     if manifest["version"] != version:
@@ -535,18 +714,30 @@ def publish_release(
     if not expected_database.exists():
         raise ReleaseValidationError("versioned sqlite filename does not match publish version")
 
-    data_directory.mkdir(parents=True, exist_ok=True)
+    data_directory.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(
         tempfile.mkdtemp(prefix="optimization-compass-publish-", dir=data_directory.parent)
     )
+    data_existed = data_directory.exists()
+    runtime_existed = runtime_database.exists()
+    version_existed = version_file.exists()
     try:
-        destination = temporary / "data"
-        if data_directory.exists():
-            shutil.copytree(data_directory, destination)
+        prepared = temporary / "prepared"
+        backup = temporary / "backup"
+        prepared.mkdir()
+        backup.mkdir()
+        prepared_data = prepared / "data"
+        if data_existed:
+            shutil.copytree(data_directory, prepared_data)
+            shutil.copytree(data_directory, backup / "data")
         else:
-            destination.mkdir()
+            prepared_data.mkdir()
+        if runtime_existed:
+            shutil.copy2(runtime_database, backup / "knowledge.sqlite")
+        if version_existed:
+            shutil.copy2(version_file, backup / "DATASET_VERSION")
         for staged_path in staged_directory.iterdir():
-            target = destination / staged_path.name
+            target = prepared_data / staged_path.name
             if target.exists() and target.is_dir():
                 shutil.rmtree(target)
             elif target.exists():
@@ -555,25 +746,73 @@ def publish_release(
                 shutil.copytree(staged_path, target)
             else:
                 shutil.copy2(staged_path, target)
-        staged_runtime = temporary / "knowledge.sqlite"
-        shutil.copy2(expected_database, staged_runtime)
-        staged_version = temporary / "DATASET_VERSION"
-        staged_version.write_text(
-            f"{version}\nsha256={sha256_file(staged_runtime)}\n", encoding="utf-8"
+        prepared_runtime = prepared / "knowledge.sqlite"
+        shutil.copy2(expected_database, prepared_runtime)
+        prepared_version = prepared / "DATASET_VERSION"
+        prepared_version.write_text(
+            f"{version}\nsha256={sha256_file(prepared_runtime)}\n", encoding="utf-8"
         )
-        backup = temporary / "data-backup"
-        if data_directory.exists():
-            data_directory.replace(backup)
+
         try:
-            destination.replace(data_directory)
+            displaced_data = temporary / "displaced-data"
+            if data_existed:
+                _atomic_replace(data_directory, displaced_data)
+            _atomic_replace(prepared_data, data_directory)
+            _atomic_replace(prepared_runtime, runtime_database)
+            _atomic_replace(prepared_version, version_file)
         except Exception:
-            if backup.exists() and not data_directory.exists():
-                backup.replace(data_directory)
+            _restore_publish_targets(
+                data_directory=data_directory,
+                runtime_database=runtime_database,
+                version_file=version_file,
+                backup_directory=backup,
+                data_existed=data_existed,
+                runtime_existed=runtime_existed,
+                version_existed=version_existed,
+            )
             raise
-        shutil.copy2(staged_runtime, runtime_database)
-        shutil.copy2(staged_version, version_file)
     finally:
         shutil.rmtree(temporary, ignore_errors=True)
+
+
+def _atomic_replace(source: Path, target: Path) -> None:
+    source.replace(target)
+
+
+def _restore_publish_targets(
+    *,
+    data_directory: Path,
+    runtime_database: Path,
+    version_file: Path,
+    backup_directory: Path,
+    data_existed: bool,
+    runtime_existed: bool,
+    version_existed: bool,
+) -> None:
+    if data_directory.exists():
+        if data_directory.is_dir():
+            shutil.rmtree(data_directory)
+        else:
+            data_directory.unlink()
+    if data_existed:
+        shutil.copytree(backup_directory / "data", data_directory)
+    _restore_file(
+        target=runtime_database,
+        backup=backup_directory / "knowledge.sqlite",
+        existed=runtime_existed,
+    )
+    _restore_file(
+        target=version_file,
+        backup=backup_directory / "DATASET_VERSION",
+        existed=version_existed,
+    )
+
+
+def _restore_file(*, target: Path, backup: Path, existed: bool) -> None:
+    if target.exists():
+        target.unlink()
+    if existed:
+        shutil.copy2(backup, target)
 
 
 def read_snapshot(database_path: Path) -> Snapshot:
@@ -617,7 +856,14 @@ def _verify_pinned_base(base_database: Path) -> None:
         raise ReleaseValidationError(f"base database version mismatch: {version}")
 
 
-def _apply_atlas_metadata(database_path: Path, migration_path: Path, seed_path: Path) -> None:
+def _apply_atlas_metadata(
+    database_path: Path,
+    migration_path: Path,
+    seed_path: Path,
+    *,
+    target_version: str,
+    release_date: str,
+) -> None:
     seed = AtlasMetadataSeed.model_validate_json(seed_path.read_text(encoding="utf-8"))
     connection = sqlite3.connect(database_path)
     connection.row_factory = sqlite3.Row
@@ -625,8 +871,9 @@ def _apply_atlas_metadata(database_path: Path, migration_path: Path, seed_path: 
     try:
         connection.executescript(migration_path.read_text(encoding="utf-8"))
         _insert_seed(connection, seed)
+        _record_target_release(connection, target_version, release_date)
         connection.execute("DELETE FROM release_checks")
-        for check in compute_live_checks(connection, RELEASE_DATE):
+        for check in compute_live_checks(connection, release_date):
             connection.execute(
                 """
                 INSERT INTO release_checks (
@@ -657,6 +904,45 @@ def _apply_atlas_metadata(database_path: Path, migration_path: Path, seed_path: 
     if not result.ok:
         failed_ids = [item.check_id for item in result.live_failures]
         raise ReleaseValidationError(f"staged database failed live checks: {failed_ids}")
+
+
+def _record_target_release(
+    connection: sqlite3.Connection,
+    target_version: str,
+    release_date: str,
+) -> None:
+    if target_version == BASE_DATASET_VERSION:
+        return
+    connection.execute(
+        """
+        INSERT INTO version_history (
+          version, release_date, status, summary, breaking_changes, source_policy, notes
+        ) VALUES (?, ?, 'staged', ?, 'none', ?, ?)
+        """,
+        (
+            target_version,
+            release_date,
+            "Staged Optimization Atlas visualization metadata release.",
+            "official documentation/repositories, original papers, trusted textbooks",
+            "Generated deterministically from the pinned v0.2.0 base.",
+        ),
+    )
+    revision_id = "MR_ATLAS_" + target_version.replace(".", "_")
+    connection.execute(
+        """
+        INSERT INTO model_revisions (
+          revision_id, trigger_case_ids, issue_found, schema_change, reason, version, date
+        ) VALUES (?, NULL, ?, ?, ?, ?, ?)
+        """,
+        (
+            revision_id,
+            "Optimization Atlas metadata lacked normalized release ownership.",
+            "Added seven normalized atlas metadata tables and deterministic release artifacts.",
+            "Keep runtime metadata, learning edges, demos, and views auditable and reproducible.",
+            target_version,
+            release_date,
+        ),
+    )
 
 
 def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> None:
@@ -743,9 +1029,16 @@ def _write_ddl(database_path: Path, destination: Path) -> None:
     destination.write_text("\n\n".join(statements) + "\n", encoding="utf-8")
 
 
-def _write_json(snapshot: Snapshot, destination: Path) -> None:
+def _write_json(
+    snapshot: Snapshot,
+    destination: Path,
+    *,
+    version: str,
+    release_date: str,
+) -> None:
     payload = {
-        "version": BASE_DATASET_VERSION,
+        "version": version,
+        "release_date": release_date,
         "schemas": _schema_payload(snapshot),
         "tables": {
             name: [_row_dict(table, row) for row in table.rows] for name, table in snapshot.items()
@@ -754,12 +1047,19 @@ def _write_json(snapshot: Snapshot, destination: Path) -> None:
     destination.write_text(_canonical_json(payload, pretty=True), encoding="utf-8")
 
 
-def _write_jsonl(snapshot: Snapshot, destination: Path) -> None:
+def _write_jsonl(
+    snapshot: Snapshot,
+    destination: Path,
+    *,
+    version: str,
+    release_date: str,
+) -> None:
     lines = [
         _canonical_json(
             {
                 "type": "release",
-                "version": BASE_DATASET_VERSION,
+                "version": version,
+                "release_date": release_date,
                 "schemas": _schema_payload(snapshot),
             }
         )
@@ -780,12 +1080,13 @@ def _write_csv_directory(snapshot: Snapshot, destination: Path) -> None:
             writer.writerows([_encode_cell(value) for value in row] for row in table.rows)
 
 
-def _write_csv_zip(csv_directory: Path, destination: Path) -> None:
+def _write_csv_zip(csv_directory: Path, destination: Path, *, release_date: str) -> None:
+    zip_time = _zip_time(release_date)
     with zipfile.ZipFile(
         destination, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
     ) as archive:
         for path in sorted(csv_directory.glob("*.csv")):
-            info = zipfile.ZipInfo(path.name, date_time=FIXED_ZIP_TIME)
+            info = zipfile.ZipInfo(path.name, date_time=zip_time)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
             archive.writestr(
@@ -793,13 +1094,13 @@ def _write_csv_zip(csv_directory: Path, destination: Path) -> None:
             )
 
 
-def _write_xlsx(snapshot: Snapshot, destination: Path) -> None:
+def _write_xlsx(snapshot: Snapshot, destination: Path, *, release_date: str) -> None:
     workbook = Workbook()
     active_sheet = workbook.active
     if active_sheet is None:
         raise ReleaseValidationError("new workbook did not create an active sheet")
     workbook.remove(active_sheet)
-    fixed = datetime(2026, 7, 13, tzinfo=UTC)
+    fixed = _release_datetime(release_date)
     workbook.properties.created = fixed
     workbook.properties.modified = fixed
     for name, table in snapshot.items():
@@ -809,15 +1110,21 @@ def _write_xlsx(snapshot: Snapshot, destination: Path) -> None:
             worksheet.append([_encode_cell(value) for value in row])
         worksheet.freeze_panes = "A2"
     workbook.save(destination)
-    _normalize_zip(destination)
+    _normalize_zip(destination, release_date=release_date)
 
 
-def _write_report(snapshot: Snapshot, destination: Path) -> None:
+def _write_report(
+    snapshot: Snapshot,
+    destination: Path,
+    *,
+    version: str,
+    release_date: str,
+) -> None:
     lines = [
         "# Optimization Method Selection Database staged report",
         "",
-        f"- Version: `{BASE_DATASET_VERSION}`",
-        f"- Release date: `{RELEASE_DATE}`",
+        f"- Version: `{version}`",
+        f"- Release date: `{release_date}`",
         f"- Tables: `{len(snapshot)}`",
         f"- Rows: `{sum(len(table.rows) for table in snapshot.values())}`",
         "",
@@ -834,13 +1141,16 @@ def _manifest_payload(
     database_path: Path,
     snapshot: Snapshot,
     *,
+    version: str,
+    release_date: str,
     include_manifest: bool,
 ) -> dict[str, Any]:
     manifest_name = f"{stem}_manifest.json"
     excluded = set() if include_manifest else {manifest_name}
     return {
-        "version": BASE_DATASET_VERSION,
-        "release_date": RELEASE_DATE,
+        "schema_version": 1,
+        "version": version,
+        "release_date": release_date,
         "base_sha256": BASE_DATASET_SHA256,
         "database_sha256": sha256_file(database_path),
         "artifacts": {
@@ -1022,7 +1332,18 @@ def _decode_cell(value: str) -> Any:
     raise ReleaseValidationError(f"invalid typed cell: {value[:20]}")
 
 
-def _normalize_zip(path: Path) -> None:
+def _release_datetime(release_date: str) -> datetime:
+    return datetime.strptime(release_date, "%Y-%m-%d").replace(tzinfo=UTC)
+
+
+def _zip_time(release_date: str) -> tuple[int, int, int, int, int, int]:
+    value = _release_datetime(release_date)
+    return (value.year, value.month, value.day, 0, 0, 0)
+
+
+def _normalize_zip(path: Path, *, release_date: str) -> None:
+    zip_time = _zip_time(release_date)
+    modified = f"{release_date}T00:00:00Z".encode()
     with zipfile.ZipFile(path, "r") as source:
         entries = [
             (name, source.read(name), source.getinfo(name).compress_type)
@@ -1034,10 +1355,10 @@ def _normalize_zip(path: Path) -> None:
             if name == "docProps/core.xml":
                 content = re.sub(
                     rb"(<dcterms:modified[^>]*>)[^<]*(</dcterms:modified>)",
-                    rb"\g<1>2026-07-13T00:00:00Z\g<2>",
+                    rb"\g<1>" + modified + rb"\g<2>",
                     content,
                 )
-            info = zipfile.ZipInfo(name, date_time=FIXED_ZIP_TIME)
+            info = zipfile.ZipInfo(name, date_time=zip_time)
             info.compress_type = compression
             info.external_attr = 0o100644 << 16
             destination.writestr(info, content, compress_type=compression, compresslevel=9)
@@ -1300,8 +1621,25 @@ def _maintenance_issues(connection: sqlite3.Connection) -> list[str]:
 
 
 def _json_array_has_duplicates(raw: str) -> bool:
-    values = json.loads(raw)
-    return len(values) != len(set(values))
+    try:
+        values = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return True
+    return not isinstance(values, list) or not values or len(values) != len(set(values))
+
+
+def _valid_json_container(
+    raw: Any, expected_type: type[object], *, non_empty: bool = False
+) -> bool:
+    try:
+        value = json.loads(str(raw))
+    except (json.JSONDecodeError, TypeError):
+        return False
+    return isinstance(value, expected_type) and (not non_empty or bool(value))
+
+
+def _missing_table_issues(tables: list[str], required: set[str]) -> list[str]:
+    return [f"missing:{table}" for table in sorted(required - set(tables))]
 
 
 def _view_preset_issues(connection: sqlite3.Connection) -> list[str]:
@@ -1318,7 +1656,11 @@ def _view_preset_issues(connection: sqlite3.Connection) -> list[str]:
         if (status == "supported") != (root_type is not None and root_id is not None):
             issues.append(str(preset_id))
         if status == "supported":
-            table, column = root_targets[str(root_type)]
+            resolver = root_targets.get(str(root_type))
+            if resolver is None:
+                issues.append(f"{preset_id}:invalid-root-type")
+                continue
+            table, column = resolver
             if (
                 connection.execute(
                     f'SELECT 1 FROM "{table}" WHERE "{column}" = ?', (root_id,)
@@ -1333,38 +1675,109 @@ def _view_preset_issues(connection: sqlite3.Connection) -> list[str]:
 
 def _profile_objective_issues(connection: sqlite3.Connection) -> list[str]:
     issues: list[str] = []
-    for profile_id, status, implementation_id, states, events in connection.execute(
-        "SELECT profile_id, implementation_status, implementation_id, "
-        "state_fields_json, event_types_json FROM method_visualization_profiles"
+    for row in connection.execute(
+        """
+        SELECT profile.profile_id, profile.support_status, profile.min_dimension,
+               profile.max_dimension, profile.generator_id,
+               profile.implementation_status, profile.implementation_id,
+               profile.state_fields_json, profile.event_types_json,
+               method.method_id, implementation.implementation_id
+        FROM method_visualization_profiles AS profile
+        LEFT JOIN methods AS method USING (method_id)
+        LEFT JOIN implementations AS implementation
+          ON profile.implementation_id = implementation.implementation_id
+        """
     ):
-        if (status == "supported") != (implementation_id is not None):
-            issues.append(str(profile_id))
-        if _json_array_has_duplicates(str(states)) or _json_array_has_duplicates(str(events)):
-            issues.append(f"{profile_id}:duplicate-json")
+        profile_id = str(row[0])
+        if row[9] is None or row[1] not in {
+            "supported",
+            "unsupported",
+            "unknown",
+            "not_applicable",
+        }:
+            issues.append(f"{profile_id}:method-or-support")
+        if int(row[2]) < 1 or int(row[3]) < int(row[2]) or not str(row[4]).strip():
+            issues.append(f"{profile_id}:dimension-or-generator")
+        if (row[5] == "supported") != (row[6] is not None and row[10] is not None):
+            issues.append(f"{profile_id}:implementation")
+        if _json_array_has_duplicates(str(row[7])) or _json_array_has_duplicates(str(row[8])):
+            issues.append(f"{profile_id}:state-or-event-json")
+    for row in connection.execute(
+        """
+        SELECT objective_id, support_status, dimensions, generator_id,
+               domain_json, display_range_json, display_expression,
+               optimum_json, source_ids_json
+        FROM demo_objectives
+        """
+    ):
+        objective_id = str(row[0])
+        valid = (
+            row[1] in {"supported", "unsupported", "unknown", "not_applicable"}
+            and int(row[2]) >= 1
+            and bool(str(row[3]).strip())
+            and _valid_json_container(row[4], dict, non_empty=True)
+            and _valid_json_container(row[5], dict, non_empty=True)
+            and bool(str(row[6]).strip())
+            and _valid_json_container(row[7], dict, non_empty=True)
+            and _valid_json_container(row[8], list, non_empty=True)
+        )
+        if not valid:
+            issues.append(f"{objective_id}:metadata")
     return issues
 
 
 def _scenario_issues(connection: sqlite3.Connection) -> list[str]:
-    return [
-        str(row[0])
-        for row in connection.execute(
-            """
-            SELECT scenario_id FROM demo_scenarios
-            WHERE (seed_status = 'fixed') <> (seed_value IS NOT NULL)
-               OR budget <= 0
-            """
+    issues: list[str] = []
+    for row in connection.execute(
+        """
+        SELECT scenario.scenario_id, scenario.seed_status, scenario.seed_value,
+               scenario.budget, scenario.initial_point_json, scenario.parameters_json,
+               scenario.stopping_json, profile.profile_id, objective.objective_id
+        FROM demo_scenarios AS scenario
+        LEFT JOIN method_visualization_profiles AS profile
+          ON scenario.method_id = profile.method_id AND scenario.profile_id = profile.profile_id
+        LEFT JOIN demo_objectives AS objective USING (objective_id)
+        """
+    ):
+        valid = (
+            row[1] in {"fixed", "not_applicable", "unknown"}
+            and ((row[1] == "fixed") == (row[2] is not None))
+            and int(row[3]) > 0
+            and _valid_json_container(row[4], list, non_empty=True)
+            and _valid_json_container(row[5], dict)
+            and _valid_json_container(row[6], dict)
+            and row[7] is not None
+            and row[8] is not None
         )
-    ]
+        if not valid:
+            issues.append(str(row[0]))
+    return issues
 
 
 def _comparison_issues(connection: sqlite3.Connection) -> list[str]:
-    issues = [
-        str(row[0])
-        for row in connection.execute(
-            "SELECT comparison_set_id FROM comparison_sets "
-            "WHERE synchronization <> 'oracle_evaluations' OR trim(fairness_note) = ''"
+    issues: list[str] = []
+    for row in connection.execute(
+        """
+        SELECT comparison.comparison_set_id, comparison.synchronization,
+               comparison.fairness_note, comparison.seed_status, comparison.seed_value,
+               comparison.budget, comparison.initial_point_json, comparison.stopping_json,
+               objective.objective_id
+        FROM comparison_sets AS comparison
+        LEFT JOIN demo_objectives AS objective USING (objective_id)
+        """
+    ):
+        valid = (
+            row[1] == "oracle_evaluations"
+            and bool(str(row[2]).strip())
+            and row[3] in {"fixed", "not_applicable", "unknown"}
+            and ((row[3] == "fixed") == (row[4] is not None))
+            and int(row[5]) > 0
+            and _valid_json_container(row[6], list, non_empty=True)
+            and _valid_json_container(row[7], dict)
+            and row[8] is not None
         )
-    ]
+        if not valid:
+            issues.append(str(row[0]))
     issues.extend(
         str(row[0])
         for row in connection.execute(
@@ -1374,6 +1787,21 @@ def _comparison_issues(connection: sqlite3.Connection) -> list[str]:
             LEFT JOIN comparison_set_members AS member USING (comparison_set_id)
             GROUP BY comparison.comparison_set_id
             HAVING COUNT(member.member_id) = 0
+            """
+        )
+    )
+    issues.extend(
+        str(row[0])
+        for row in connection.execute(
+            """
+            SELECT member.member_id
+            FROM comparison_set_members AS member
+            LEFT JOIN method_visualization_profiles AS profile
+              ON member.method_id = profile.method_id AND member.profile_id = profile.profile_id
+            WHERE profile.profile_id IS NULL
+               OR trim(member.label) = ''
+               OR member.display_order < 1
+               OR NOT json_valid(member.parameters_json)
             """
         )
     )
@@ -1389,39 +1817,95 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
         "scenario": ("demo_scenarios", "scenario_id"),
         "comparison": ("comparison_sets", "comparison_set_id"),
     }
+    allowed_relations = {"prerequisite", "next", "related", "contrast"}
     issues: list[str] = []
-    for edge_id, source_type, source_id, target_type, target_id in connection.execute(
-        "SELECT edge_id, source_type, source_id, target_type, target_id FROM learning_edges"
+    seen_semantics: set[tuple[str, str, str, str, str]] = set()
+    for (
+        edge_id,
+        source_type,
+        source_id,
+        target_type,
+        target_id,
+        relation,
+        rationale,
+        display_order,
+    ) in connection.execute(
+        "SELECT edge_id, source_type, source_id, target_type, target_id, relation, "
+        "rationale, display_order FROM learning_edges"
     ):
+        edge = str(edge_id)
+        semantics = (
+            str(source_type),
+            str(source_id),
+            str(target_type),
+            str(target_id),
+            str(relation),
+        )
+        invalid_semantics = (
+            str(relation) not in allowed_relations
+            or not str(source_id).strip()
+            or not str(target_id).strip()
+            or (source_type == target_type and source_id == target_id)
+            or not isinstance(rationale, str)
+            or not rationale.strip()
+            or not isinstance(display_order, int)
+            or isinstance(display_order, bool)
+            or display_order < 1
+            or semantics in seen_semantics
+        )
+        if invalid_semantics:
+            issues.append(edge)
+        seen_semantics.add(semantics)
         for endpoint_type, endpoint_id in ((source_type, source_id), (target_type, target_id)):
-            table, column = resolvers[str(endpoint_type)]
+            resolver = resolvers.get(str(endpoint_type))
+            if resolver is None:
+                issues.append(edge)
+                continue
+            table, column = resolver
             if (
                 connection.execute(
                     f'SELECT 1 FROM "{table}" WHERE "{column}" = ?', (endpoint_id,)
                 ).fetchone()
                 is None
             ):
-                issues.append(str(edge_id))
-    return issues
+                issues.append(edge)
+    return sorted(set(issues))
 
 
-def _explicit_state_issues(connection: sqlite3.Connection, tables: set[str]) -> list[str]:
+def _explicit_state_issues(
+    connection: sqlite3.Connection, tables: set[str] | frozenset[str]
+) -> list[str]:
     issues: list[str] = []
     state_columns = {
-        "view_presets": ["root_support_status"],
-        "method_visualization_profiles": ["support_status", "implementation_status"],
-        "demo_objectives": ["support_status"],
-        "demo_scenarios": ["seed_status"],
-        "comparison_sets": ["seed_status"],
+        "view_presets": {
+            "root_support_status": {"supported", "unsupported", "unknown", "not_applicable"}
+        },
+        "method_visualization_profiles": {
+            "support_status": {"supported", "unsupported", "unknown", "not_applicable"},
+            "implementation_status": {
+                "supported",
+                "unsupported",
+                "unknown",
+                "not_applicable",
+            },
+        },
+        "demo_objectives": {
+            "support_status": {"supported", "unsupported", "unknown", "not_applicable"}
+        },
+        "demo_scenarios": {"seed_status": {"fixed", "not_applicable", "unknown"}},
+        "comparison_sets": {"seed_status": {"fixed", "not_applicable", "unknown"}},
     }
     for table, columns in state_columns.items():
         if table not in tables:
             continue
-        for column in columns:
+        for column, allowed in columns.items():
+            placeholders = ", ".join("?" for _ in allowed)
             count = int(
                 connection.execute(
                     f'SELECT COUNT(*) FROM "{table}" '
-                    f'WHERE "{column}" IS NULL OR trim("{column}") = \'\''
+                    f'WHERE "{column}" IS NULL OR trim("{column}") = \'\' '
+                    f'OR "{column}" NOT IN ({placeholders})',
+                    tuple(sorted(allowed)),
                 ).fetchone()[0]
             )
             if count:
