@@ -12,6 +12,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
+from optimization_compass.surrogate_uncertainty import write_surrogate_scenarios
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -266,8 +267,11 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     trace_asset, trace_index, generated_traces = _write_dummy_trace(
         output_dir, dataset_version=release["version"]
     )
+    surrogate_scenarios = write_surrogate_scenarios(output_dir, dataset_version=release["version"])
     scenario_index = _build_visualization_scenario_index(
-        generated_traces, dataset_version=release["version"]
+        generated_traces,
+        surrogate_scenarios=surrogate_scenarios,
+        dataset_version=release["version"],
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     entity_links = build_entity_link_index(
@@ -515,12 +519,18 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
 
 
 def _build_visualization_scenario_index(
-    traces: list[AlgorithmTrace], *, dataset_version: str
+    traces: list[AlgorithmTrace],
+    *,
+    surrogate_scenarios: list[VisualizationScenario],
+    dataset_version: str,
 ) -> VisualizationScenarioIndex:
     return VisualizationScenarioIndex(
         contract_version="1.0.0",
         dataset_version=dataset_version,
-        scenarios=[_visualization_scenario(trace) for trace in traces],
+        scenarios=[
+            *[_visualization_scenario(trace) for trace in traces],
+            *surrogate_scenarios,
+        ],
     )
 
 
@@ -550,6 +560,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     purpose: Literal["mechanism", "comparison", "failure_contrast"] = (
         "mechanism" if is_nelder_mead else "failure_contrast" if is_divergence else "comparison"
     )
+    payload = canonical_trace_bytes(trace)
     return VisualizationScenario(
         contract_version="1.0.0",
         dataset_version=trace.dataset_version,
@@ -613,6 +624,9 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             renderer_family=renderer_family,
             renderer_contract_version="1.0.0",
             observable_ids=observable_ids,
+            payload_path=f"traces/{trace.trace_id}.json",
+            payload_bytes=len(payload),
+            payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
         last_verified="2026-07-15",

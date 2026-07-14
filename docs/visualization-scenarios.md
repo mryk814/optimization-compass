@@ -1,8 +1,9 @@
-# Visualization scenario contract proposal
+# Visualization scenario contract
 
-This document defines the minimum shared vocabulary for educational visualizations.
-It is a design contract: the current `AlgorithmTrace 1.0.0` remains the published
-execution contract until a later issue implements this envelope in generated site data.
+This document defines the shared vocabulary published in
+`site/public/data/visualization-scenarios.json`. `AlgorithmTrace 1.0.0` remains the execution
+contract for trajectory-based families; renderer-specific payloads use the same scenario envelope
+and their own exact family contract.
 
 ## Identity model
 
@@ -75,7 +76,10 @@ unknown core fields fail parsing; there is no legacy fallback.
     "artifact_contract_version": "1.0.0",
     "renderer_family": "simplex_geometry",
     "renderer_contract_version": "1.0.0",
-    "observable_ids": ["objective_value", "simplex_vertices", "accepted_operation"]
+    "observable_ids": ["objective_value", "simplex_vertices", "accepted_operation"],
+    "payload_path": "traces/nelder-mead-quadratic.json",
+    "payload_bytes": 12345,
+    "payload_sha256": "<64 lowercase hex characters>"
   },
   "source_ids": ["S001", "S070"],
   "last_verified": "2026-07-15"
@@ -174,6 +178,9 @@ winner or ranking.
 Renderer-family payloads are separately versioned discriminated unions. A new payload
 version is added only for a semantic change; adding a scenario or method does not bump
 the renderer version.
+
+Issue #26 の実装・生成方法・公平性と限界は
+[`bayesian-optimization-theater.md`](bayesian-optimization-theater.md) を参照する。
 
 ## Executable and schematic display rules
 

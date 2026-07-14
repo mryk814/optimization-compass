@@ -42,7 +42,10 @@
         "artifact_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry",
         "renderer_contract_version": "1.0.0",
-        "observable_ids": ["objective_value", "simplex_vertices", "accepted_operation"]
+        "observable_ids": ["objective_value", "simplex_vertices", "accepted_operation"],
+        "payload_path": "traces/nelder-mead-quadratic.json",
+        "payload_bytes": 123,
+        "payload_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "source_ids": ["S002"],
       "last_verified": "2026-07-15"

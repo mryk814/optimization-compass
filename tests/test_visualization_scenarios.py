@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from optimization_compass.surrogate_uncertainty import generate_surrogate_scenario
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
 FIXTURE = Path("site/src/contracts/visualization-scenarios.fixture.json")
@@ -24,3 +25,33 @@ def test_visualization_scenario_rejects_unknown_envelope_fields() -> None:
 
     with pytest.raises(ValidationError, match="extra_forbidden"):
         VisualizationScenarioIndex.model_validate(payload)
+
+
+def test_surrogate_scenario_is_deterministic_and_uses_the_shared_envelope() -> None:
+    first = generate_surrogate_scenario(
+        dataset_version="0.3.0", strategy="explore", noise_preset="noiseless"
+    )
+    second = generate_surrogate_scenario(
+        dataset_version="0.3.0", strategy="explore", noise_preset="noiseless"
+    )
+
+    assert first.payload_bytes == second.payload_bytes
+    assert first.scenario.purpose == "mechanism"
+    assert first.scenario.artifact.renderer_family == "surrogate_uncertainty"
+    assert first.scenario.artifact.payload_path == "visualizations/bo-explore-noiseless.json"
+    assert first.payload.frames[-1].oracle_evaluations == first.scenario.experiment.budget.value
+    assert len(first.payload.random_history) == first.scenario.experiment.budget.value
+
+
+def test_surrogate_variants_are_sensitivity_scenarios() -> None:
+    variants = [
+        generate_surrogate_scenario(dataset_version="0.3.0", strategy=strategy, noise_preset=noise)
+        for strategy, noise in (
+            ("exploit", "noiseless"),
+            ("exploit", "small_noise"),
+            ("explore", "small_noise"),
+        )
+    ]
+
+    assert {item.scenario.purpose for item in variants} == {"sensitivity"}
+    assert len({item.scenario.scenario_id for item in variants}) == 3
