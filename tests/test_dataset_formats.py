@@ -43,11 +43,8 @@ def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:
 
 def test_format_verifier_rejects_mutated_json(tmp_path: Path) -> None:
     release = build_staged_release(BASE_DATABASE, tmp_path / "release")
-    json_path = next(release.output_directory.glob("*.json"))
-    if json_path.name.endswith("_manifest.json"):
-        json_path = next(
-            path for path in release.output_directory.glob("*.json") if "manifest" not in path.name
-        )
+    manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
+    json_path = release.output_directory / manifest["artifacts"]["json"]
     payload = json.loads(json_path.read_text(encoding="utf-8"))
     payload["tables"]["methods"][0]["name_en"] = "tampered"
     json_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
