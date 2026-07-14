@@ -886,7 +886,7 @@ def _write_content_index(path: Path, dataset_version: str) -> None:
     _write_json(
         path,
         {
-            "contract_version": "1.0.0",
+            "contract_version": "2.0.0",
             "dataset_version": dataset_version,
             "pages": [_content_payload(page) for page in pages],
         },
@@ -894,14 +894,17 @@ def _write_content_index(path: Path, dataset_version: str) -> None:
 
 
 def _content_payload(page: ContentPage) -> dict[str, Any]:
-    summary = _content_summary(page.body)
     return {
         "content_id": page.content_id,
         "kind": page.kind,
         "title_ja": page.title_ja,
         "title_en": page.title_en,
-        "summary": summary,
-        "body": page.body,
+        "summary": page.summary,
+        "html": page.html,
+        "toc": [
+            {"heading_id": heading.heading_id, "label": heading.label, "level": heading.level}
+            for heading in page.toc
+        ],
         "prerequisites": list(page.prerequisites),
         "related_ids": list(page.related_ids),
         "visualization_ids": list(page.visualization_ids),
@@ -910,16 +913,8 @@ def _content_payload(page: ContentPage) -> dict[str, Any]:
         "status": page.status,
         "last_reviewed": page.last_reviewed,
         "seo_title": page.title_ja,
-        "seo_description": summary,
+        "seo_description": page.summary,
     }
-
-
-def _content_summary(body: str) -> str:
-    for line in body.splitlines():
-        stripped = line.strip()
-        if stripped and not stripped.startswith("#"):
-            return stripped
-    raise ValueError("published content body must contain summary text")
 
 
 def _write_seeded_index(

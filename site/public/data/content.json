@@ -1,98 +1,161 @@
 {
-  "contract_version": "1.0.0",
+  "contract_version": "2.0.0",
   "dataset_version": "0.3.0",
   "pages": [
     {
-      "body": "## 直感\n\n凸性は局所的な下り坂と大域的な最適性をつなぐ性質です。",
       "comparison_ids": [],
       "content_id": "concept.convexity",
+      "html": "<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>局所的な下り坂と大域的な最適性をつなぐ性質です。</p>\n<p>2点を結ぶ線分が関数のグラフより上にあれば、関数は凸です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mi>x</mi><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mi>&#x003B8;</mi><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mn>0</mn><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><mn>1</mn></mrow></math></div>\n<figure><img src=\"./media/convexity.svg\" alt=\"凸関数と2点を結ぶ線分の模式図\" loading=\"lazy\"><figcaption>凸関数では2点を結ぶ線分が関数のグラフより上にあります。</figcaption></figure>\n<h3 id=\"最適化での意味\" tabindex=\"-1\">最適化での意味</h3>\n<ol>\n<li><p>局所最小解は大域最小解になります。</p>\n</li>\n<li><p>強凸性など追加条件があれば、収束率も評価できます。</p>\n</li>\n<li><p>非凸問題では、初期値や探索戦略の影響を別に調べます。</p>\n</li>\n</ol>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>凸集合と凸関数は別の定義です。制約集合と目的関数の両方を確認してください。</p>\n</aside>",
       "kind": "concept",
-      "last_reviewed": "2026-07-14",
+      "last_reviewed": "2026-07-15",
       "prerequisites": [],
       "related_ids": [
         "method.gradient-descent"
       ],
-      "seo_description": "凸性は局所的な下り坂と大域的な最適性をつなぐ性質です。",
+      "seo_description": "局所的な下り坂と大域的な最適性をつなぐ性質です。",
       "seo_title": "凸性",
       "source_ids": [
         "S001"
       ],
       "status": "published",
-      "summary": "凸性は局所的な下り坂と大域的な最適性をつなぐ性質です。",
+      "summary": "局所的な下り坂と大域的な最適性をつなぐ性質です。",
       "title_en": "Convexity",
       "title_ja": "凸性",
+      "toc": [
+        {
+          "heading_id": "直感",
+          "label": "直感",
+          "level": 2
+        },
+        {
+          "heading_id": "最適化での意味",
+          "label": "最適化での意味",
+          "level": 3
+        }
+      ],
       "visualization_ids": []
     },
     {
-      "body": "## 直感\n\n微分を直接使わず、関数値の比較から探索します。",
       "comparison_ids": [],
       "content_id": "concept.derivative-free",
+      "html": "<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>微分を直接使わず、関数値の比較から探索する考え方です。</p>\n<blockquote>\n<p>微分不能という意味だけではありません。勾配が得られない、信頼できない、または取得コストが高い場合も対象です。</p>\n</blockquote>\n<h3 id=\"向いている状況\" tabindex=\"-1\">向いている状況</h3>\n<table>\n<thead>\n<tr>\n<th>状況</th>\n<th>確認すること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>実験・シミュレーション</td>\n<td>1評価の時間と並列実行数</td>\n</tr>\n<tr>\n<td>ノイズあり</td>\n<td>再評価、ロバストな比較、停止条件</td>\n</tr>\n<tr>\n<td>混合変数</td>\n<td>離散変数を扱える探索演算子</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><p>関数値だけで動く局所探索</p>\n</li>\n<li><p>集団を使う大域探索</p>\n</li>\n<li><p>代理モデルで評価点を選ぶ逐次探索</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>「導関数を使わない」は「調整不要」を意味しません。評価予算、初期設計、探索範囲を先に固定します。</p>\n</aside>\n<h2 id=\"次に見る\" tabindex=\"-1\">次に見る</h2>\n<p><a href=\"#/methods/M_NELDER_MEAD\">Nelder–Meadの教材</a>では、単体を変形する1ステップを確認できます。</p>",
       "kind": "concept",
-      "last_reviewed": "2026-07-14",
+      "last_reviewed": "2026-07-15",
       "prerequisites": [],
       "related_ids": [
         "method.nelder-mead"
       ],
-      "seo_description": "微分を直接使わず、関数値の比較から探索します。",
+      "seo_description": "微分を直接使わず、関数値の比較から探索する考え方です。",
       "seo_title": "Derivative-free optimization",
       "source_ids": [
         "S001",
         "S002"
       ],
       "status": "published",
-      "summary": "微分を直接使わず、関数値の比較から探索します。",
+      "summary": "微分を直接使わず、関数値の比較から探索する考え方です。",
       "title_en": "Derivative-free optimization",
       "title_ja": "Derivative-free optimization",
+      "toc": [
+        {
+          "heading_id": "直感",
+          "label": "直感",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている状況",
+          "label": "向いている状況",
+          "level": 3
+        },
+        {
+          "heading_id": "次に見る",
+          "label": "次に見る",
+          "level": 2
+        }
+      ],
       "visualization_ids": [
         "nelder-mead-quadratic"
       ]
     },
     {
-      "body": "## 直感\n\n勾配の反対方向へ一定の学習率で進みます。",
       "comparison_ids": [
         "COMPARE_GRADIENT_FAMILY"
       ],
       "content_id": "method.gradient-descent",
+      "html": "<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>勾配の反対方向へ進む一次法です。</p>\n<p>現在地 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub></mrow></math> から、局所的に最も下がる方向 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を選びます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>ここで <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B7;</mi></mrow></math> は学習率です。</p>\n<h3 id=\"学習率を読む\" tabindex=\"-1\">学習率を読む</h3>\n<ul>\n<li><p>小さすぎると、安全でも収束が遅くなります。</p>\n</li>\n<li><p>大きすぎると、谷を飛び越えて振動または発散します。</p>\n</li>\n<li><p>目的関数値と勾配ノルムを同じ反復軸で確認します。</p>\n</li>\n</ul>\n<aside class=\"callout callout-tip\" role=\"note\"><p class=\"callout-label\">Tip</p>\n<p>比較では初期点、停止条件、評価予算を揃えます。反復回数だけを公平性の根拠にしません。</p>\n</aside>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">])</span>\n<span class=\"n\">learning_rate</span> <span class=\"o\">=</span> <span class=\"mf\">0.1</span>\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">100</span><span class=\"p\">):</span>\n    <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">learning_rate</span> <span class=\"o\">*</span> <span class=\"n\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span></code></pre></div>\n<p>凸性との関係は<a href=\"#/learn/concept.convexity\">凸性の教材</a>で確認できます。</p>",
       "kind": "method",
-      "last_reviewed": "2026-07-14",
+      "last_reviewed": "2026-07-15",
       "prerequisites": [
         "concept.convexity"
       ],
       "related_ids": [],
-      "seo_description": "勾配の反対方向へ一定の学習率で進みます。",
+      "seo_description": "勾配の反対方向へ進む一次法です。",
       "seo_title": "Gradient Descent",
       "source_ids": [
         "S001",
         "S002"
       ],
       "status": "published",
-      "summary": "勾配の反対方向へ一定の学習率で進みます。",
+      "summary": "勾配の反対方向へ進む一次法です。",
       "title_en": "Gradient Descent",
       "title_ja": "Gradient Descent",
+      "toc": [
+        {
+          "heading_id": "直感",
+          "label": "直感",
+          "level": 2
+        },
+        {
+          "heading_id": "学習率を読む",
+          "label": "学習率を読む",
+          "level": 3
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        }
+      ],
       "visualization_ids": []
     },
     {
-      "body": "## 直感\n\n単体を変形して、目的関数の低い方向を探します。\n\n## 注意\n\n局所探索であり、高次元・制約付き・多峰性では万能ではありません。",
       "comparison_ids": [
         "COMPARE_GRADIENT_FAMILY"
       ],
       "content_id": "method.nelder-mead",
+      "html": "<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>勾配を使わず、単体を変形しながら局所探索します。</p>\n<p>目的関数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> の値だけを比べ、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi></mrow></math> 次元では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></math> 個の頂点を動かします。</p>\n<ol>\n<li><p>最悪点を重心の反対側へ<strong>反射</strong>する。</p>\n</li>\n<li><p>改善が大きければ<strong>膨張</strong>し、足りなければ<strong>収縮</strong>する。</p>\n</li>\n<li><p>どの候補も悪ければ、最良点へ単体を<strong>縮小</strong>する。</p>\n</li>\n</ol>\n<h3 id=\"1ステップの見方\" tabindex=\"-1\">1ステップの見方</h3>\n<table>\n<thead>\n<tr>\n<th>表示</th>\n<th>読み取ること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>simplex</td>\n<td>現在比較している頂点集合</td>\n</tr>\n<tr>\n<td>candidate</td>\n<td>次に採用を判定する試行点</td>\n</tr>\n<tr>\n<td>objective</td>\n<td>現在までの最良目的関数値</td>\n</tr>\n</tbody>\n</table>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>局所探索であり、高次元・制約付き・多峰性では万能ではありません。異なる初期単体でも確認してください。</p>\n</aside>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span><span class=\"n\">objective</span><span class=\"p\">,</span> <span class=\"n\">x0</span><span class=\"o\">=</span><span class=\"p\">[</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span> <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;Nelder-Mead&quot;</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">)</span></code></pre></div>\n<p>SciPyの引数と停止条件は<a href=\"https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html\" target=\"_blank\" rel=\"noopener noreferrer\">公式リファレンス</a>で確認できます。</p>",
       "kind": "method",
-      "last_reviewed": "2026-07-14",
+      "last_reviewed": "2026-07-15",
       "prerequisites": [],
       "related_ids": [
         "concept.derivative-free"
       ],
-      "seo_description": "単体を変形して、目的関数の低い方向を探します。",
+      "seo_description": "勾配を使わず、単体を変形しながら局所探索します。",
       "seo_title": "Nelder–Mead単体法",
       "source_ids": [
         "S001",
         "S002"
       ],
       "status": "published",
-      "summary": "単体を変形して、目的関数の低い方向を探します。",
+      "summary": "勾配を使わず、単体を変形しながら局所探索します。",
       "title_en": "Nelder–Mead",
       "title_ja": "Nelder–Mead単体法",
+      "toc": [
+        {
+          "heading_id": "直感",
+          "label": "直感",
+          "level": 2
+        },
+        {
+          "heading_id": "1ステップの見方",
+          "label": "1ステップの見方",
+          "level": 3
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        }
+      ],
       "visualization_ids": [
         "nelder-mead-quadratic"
       ]

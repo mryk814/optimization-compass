@@ -206,7 +206,7 @@ describe("application routes", () => {
   });
 
   test.each([
-    ["#/learn/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", pages: [] }],
+    ["#/learn/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", pages: [] }],
     ["#/gallery/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }],
     [
       "#/compare/missing",
