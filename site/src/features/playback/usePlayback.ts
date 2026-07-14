@@ -41,26 +41,44 @@ export function usePlayback(
 ): PlaybackController {
   if (frames.length === 0) throw new Error("Playback requires at least one frame.");
   const [searchParams, setSearchParams] = useSearchParams();
-  const initial = useMemo(
+  const search = searchParams.toString();
+  const position = useMemo(
     () => decodePosition(searchParams, traceId, frames),
-    // Initial URL state is intentionally decoded once. Playback owns subsequent state.
+    // URL search is a stable serialization of the current navigation entry.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [traceId, frames],
+    [search, traceId, frames],
   );
-  const [currentFrameIndex, setCurrentFrameIndex] = useState(initial.frameIndex);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeedState] = useState<PlaybackSpeed>(initial.speed);
-  const [direction, setDirection] = useState<PlaybackDirection>(initial.direction);
-  const frameIndexRef = useRef(currentFrameIndex);
-  frameIndexRef.current = currentFrameIndex;
+  const frameIndexRef = useRef(position.frameIndex);
+  frameIndexRef.current = position.frameIndex;
+  const internalSearchRef = useRef<string | null>(null);
+
+  const writePosition = useCallback(
+    (nextPosition: DecodedPosition) => {
+      const next = new URLSearchParams(searchParams);
+      next.set("trace", traceId);
+      next.set("frame", String(nextPosition.frameIndex));
+      next.delete("evaluation");
+      if (nextPosition.speed === 1) next.delete("speed");
+      else next.set("speed", String(nextPosition.speed));
+      if (nextPosition.direction === "forward") next.delete("direction");
+      else next.set("direction", nextPosition.direction);
+      const nextSearch = next.toString();
+      if (nextSearch !== search) {
+        internalSearchRef.current = nextSearch;
+        setSearchParams(next, { replace: true });
+      }
+    },
+    [search, searchParams, setSearchParams, traceId],
+  );
 
   const seekToFrame = useCallback(
     (requestedIndex: number) => {
       const nextIndex = clamp(Math.trunc(requestedIndex), 0, frames.length - 1);
       frameIndexRef.current = nextIndex;
-      setCurrentFrameIndex(nextIndex);
+      writePosition({ ...position, frameIndex: nextIndex });
     },
-    [frames.length],
+    [frames.length, position, writePosition],
   );
   const stepBackward = useCallback(() => seekToFrame(frameIndexRef.current - 1), [seekToFrame]);
   const stepForward = useCallback(() => seekToFrame(frameIndexRef.current + 1), [seekToFrame]);
@@ -72,26 +90,20 @@ export function usePlayback(
   );
   const setSpeed = useCallback((nextSpeed: PlaybackSpeed) => {
     if (!PLAYBACK_SPEEDS.includes(nextSpeed)) throw new Error(`Unsupported playback speed: ${nextSpeed}.`);
-    setSpeedState(nextSpeed);
-  }, []);
+    writePosition({ ...position, speed: nextSpeed });
+  }, [position, writePosition]);
 
   useEffect(() => {
-    const next = new URLSearchParams(searchParams);
-    next.set("trace", traceId);
-    next.set("frame", String(currentFrameIndex));
-    next.delete("evaluation");
-    if (speed === 1) next.delete("speed");
-    else next.set("speed", String(speed));
-    if (direction === "forward") next.delete("direction");
-    else next.set("direction", direction);
-    if (next.toString() !== searchParams.toString()) {
-      setSearchParams(next, { replace: true });
+    if (internalSearchRef.current === search) {
+      internalSearchRef.current = null;
+    } else {
+      setIsPlaying(false);
     }
-  }, [currentFrameIndex, direction, searchParams, setSearchParams, speed, traceId]);
+  }, [search]);
 
   useEffect(() => {
     if (!isPlaying) return undefined;
-    const delta = direction === "forward" ? 1 : -1;
+    const delta = position.direction === "forward" ? 1 : -1;
     const timer = window.setInterval(() => {
       const nextIndex = frameIndexRef.current + delta;
       if (nextIndex < 0 || nextIndex >= frames.length) {
@@ -99,20 +111,20 @@ export function usePlayback(
         return;
       }
       frameIndexRef.current = nextIndex;
-      setCurrentFrameIndex(nextIndex);
+      writePosition({ ...position, frameIndex: nextIndex });
       if (nextIndex === 0 || nextIndex === frames.length - 1) setIsPlaying(false);
-    }, BASE_FRAME_INTERVAL_MS / speed);
+    }, BASE_FRAME_INTERVAL_MS / position.speed);
     return () => window.clearInterval(timer);
-  }, [direction, frames.length, isPlaying, speed]);
+  }, [frames.length, isPlaying, position, writePosition]);
 
   return {
     traceId,
     frames,
-    currentFrameIndex,
-    currentFrame: frames[currentFrameIndex],
+    currentFrameIndex: position.frameIndex,
+    currentFrame: frames[position.frameIndex],
     isPlaying,
-    speed,
-    direction,
+    speed: position.speed,
+    direction: position.direction,
     play: () => setIsPlaying(true),
     pause: () => setIsPlaying(false),
     togglePlayback: () => setIsPlaying((playing) => !playing),
@@ -120,7 +132,10 @@ export function usePlayback(
     stepForward,
     seekToFrame,
     seekToEvaluation,
-    reverse: () => setDirection((current) => (current === "forward" ? "reverse" : "forward")),
+    reverse: () => writePosition({
+      ...position,
+      direction: position.direction === "forward" ? "reverse" : "forward",
+    }),
     setSpeed,
   };
 }

@@ -36,16 +36,21 @@ def downsample_frames(frames: Sequence[TraceFrame], limit: int) -> list[TraceFra
             candidates[((2 * slot + 1) * candidate_count) // (2 * remaining)]
             for slot in range(remaining)
         )
-    return [frames[index] for index in sorted(selected)]
+    return [
+        frames[original_index].model_copy(update={"frame_index": output_index})
+        for output_index, original_index in enumerate(sorted(selected))
+    ]
 
 
-def synchronize_bundle(bundle: TraceBundle, oracle_evaluations: int) -> dict[str, TraceFrame]:
+def synchronize_bundle(
+    bundle: TraceBundle, oracle_evaluations: int
+) -> dict[str, TraceFrame | None]:
     """Return each member's latest snapshot at a cumulative evaluation position."""
     if oracle_evaluations < 0:
         raise ValueError("oracle_evaluations must be non-negative")
-    synchronized: dict[str, TraceFrame] = {}
+    synchronized: dict[str, TraceFrame | None] = {}
     for trace in bundle.member_traces:
         values = [frame.oracle_evaluations for frame in trace.frames]
-        index = max(0, bisect_right(values, oracle_evaluations) - 1)
-        synchronized[trace.trace_id] = trace.frames[index]
+        index = bisect_right(values, oracle_evaluations) - 1
+        synchronized[trace.trace_id] = None if index < 0 else trace.frames[index]
     return synchronized

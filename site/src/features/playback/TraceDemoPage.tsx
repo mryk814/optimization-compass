@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { parseSiteManifest } from "../../contracts/manifest";
 import {
   parseAlgorithmTrace,
   parseTraceIndex,
@@ -113,9 +114,27 @@ function TracePlayer({ trace, entry }: LoadedTrace) {
 async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<LoadedTrace> {
   if (!traceId.trim()) throw new Error("Trace IDが指定されていません。");
   const baseUrl = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-  const indexResponse = await fetch(`${baseUrl}data/traces/index.json`, { signal });
+  const manifestResponse = await fetch(`${baseUrl}data/manifest.json`, { signal });
+  if (!manifestResponse.ok) throw new Error(`Manifest request failed (${manifestResponse.status}).`);
+  const manifest = parseSiteManifest(await manifestResponse.json());
+
+  const indexResponse = await fetch(`${baseUrl}data/${manifest.traces.path}`, { signal });
   if (!indexResponse.ok) throw new Error(`Trace index request failed (${indexResponse.status}).`);
-  const index = parseTraceIndex(await indexResponse.json());
+  const indexBytes = new Uint8Array(await indexResponse.arrayBuffer());
+  if (indexBytes.byteLength !== manifest.traces.bytes) {
+    throw new Error("Trace index byte length does not match the manifest.");
+  }
+  const indexHash = await sha256Hex(indexBytes);
+  if (indexHash !== manifest.traces.sha256) {
+    throw new Error("Trace index SHA-256 does not match the manifest.");
+  }
+  const index = parseTraceIndex(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(indexBytes)));
+  if (index.contract_version !== manifest.traces.index_version) {
+    throw new Error("Trace index contract version does not match the manifest.");
+  }
+  if (index.dataset_version !== manifest.dataset_version) {
+    throw new Error("Trace index dataset version does not match the manifest.");
+  }
   const entry = index.traces.find((candidate) => candidate.trace_id === traceId);
   if (!entry) throw new Error(`Trace ID「${traceId}」は公開indexに存在しません。`);
 
@@ -137,4 +156,9 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
     }
   }
   return { trace, entry };
+}
+
+async function sha256Hex(bytes: Uint8Array): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", Uint8Array.from(bytes).buffer);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }

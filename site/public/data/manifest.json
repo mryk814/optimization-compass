@@ -5,6 +5,13 @@
     "path": "recommendation/site-data.json",
     "version": "1.0.0"
   },
+  "traces": {
+    "bytes": 475,
+    "contract_version": "1.0.0",
+    "index_version": "1.0.0",
+    "path": "traces/index.json",
+    "sha256": "dd400e194cd71e390b617016d62304a9c90d0ba35b80529e5e9a602efdf7bc52"
+  },
   "version": "1.0.0",
   "views": [
     {

@@ -4,13 +4,16 @@ import {
   parseAlgorithmTrace,
   parseTraceIndex,
   parseTraceBundle,
+  canonicalTraceBytes,
   synchronizeTraceBundle,
+  traceEventExplanation,
   traceEventLabel,
 } from "./trace";
 import {
   algorithmTraceFixture as payload,
   traceFrameFixture as frame,
 } from "./trace.fixtures";
+import canonicalFixture from "./trace.canonical.fixture.json";
 
 describe("AlgorithmTrace parser", () => {
   test("accepts unknown event types and gives them a readable fallback label", () => {
@@ -28,6 +31,9 @@ describe("AlgorithmTrace parser", () => {
     expect(() =>
       parseAlgorithmTrace({ ...payload, frames: [{ ...frame, legacy_point: [] }] }),
     ).toThrow(/unknown/i);
+    const withoutVersion = { ...payload } as Record<string, unknown>;
+    delete withoutVersion.contract_version;
+    expect(() => parseAlgorithmTrace(withoutVersion)).toThrow(/contract_version/u);
   });
 
   test("rejects malformed slugs, non-finite JSON, and broken frame progression", () => {
@@ -43,6 +49,26 @@ describe("AlgorithmTrace parser", () => {
         frames: [frame, { ...frame, frame_index: 2, iteration: 1, oracle_evaluations: 1 }],
       }),
     ).toThrow(/contiguous/i);
+    expect(() =>
+      parseAlgorithmTrace({ ...payload, frames: [{ ...frame, frame_index: "0" }] }),
+    ).toThrow(/frame_index/u);
+    expect(() =>
+      parseAlgorithmTrace({ ...payload, frames: [{ ...frame, oracle_evaluations: true }] }),
+    ).toThrow(/oracle_evaluations/u);
+  });
+
+  test("canonical bytes use Python-compatible Unicode code-point key ordering", () => {
+    const parsed = parseAlgorithmTrace(canonicalFixture);
+    const canonical = new TextDecoder().decode(canonicalTraceBytes(parsed));
+    expect(canonical).toContain('"あ":"hiragana","":"private","😀":"astral"');
+    expect(canonicalTraceBytes(parsed).byteLength).toBe(1096);
+  });
+
+  test("unknown explanation keys use a deterministic common fallback", () => {
+    const parsed = parseAlgorithmTrace(payload);
+    expect(traceEventExplanation(parsed.frames[0], "ja")).toBe(
+      "説明は未登録です（trace.future-event）",
+    );
   });
 });
 
@@ -72,6 +98,9 @@ describe("TraceBundle parser", () => {
       /fairness_statement/u,
     );
     expect(() => parseTraceBundle({ ...bundle, frame_sync: true })).toThrow(/unknown/u);
+    const withoutVersion = { ...bundle } as Record<string, unknown>;
+    delete withoutVersion.contract_version;
+    expect(() => parseTraceBundle(withoutVersion)).toThrow(/contract_version/u);
   });
 
   test("synchronizes cumulative evaluations rather than frame indexes", () => {
@@ -81,11 +110,21 @@ describe("TraceBundle parser", () => {
       frames: [frame, { ...frame, frame_index: 1, iteration: 1, oracle_evaluations: 2 }],
     };
     const parsed = parseTraceBundle({ ...bundle, member_traces: [member, second] });
-    expect(
-      Object.fromEntries(
-        Object.entries(synchronizeTraceBundle(parsed, 2)).map(([key, value]) => [key, value.frame_index]),
-      ),
-    ).toEqual({ "dummy-educational": 0, "trace-b": 1 });
+    expect(Object.fromEntries(
+      Object.entries(synchronizeTraceBundle(parsed, 2)).map(([key, value]) => [key, value?.frame_index]),
+    )).toEqual({ "dummy-educational": 0, "trace-b": 1 });
+  });
+
+  test("returns null before a member has any snapshot", () => {
+    const delayed = {
+      ...member,
+      frames: [
+        { ...frame, oracle_evaluations: 3 },
+        { ...frame, frame_index: 1, iteration: 1, oracle_evaluations: 5 },
+      ],
+    };
+    const parsed = parseTraceBundle({ ...bundle, member_traces: [delayed] });
+    expect(synchronizeTraceBundle(parsed, 2)).toEqual({ "dummy-educational": null });
   });
 });
 
@@ -106,4 +145,18 @@ test("TraceIndex rejects paths that can escape the published trace directory", (
     }],
   };
   expect(() => parseTraceIndex(index)).toThrow(/safe relative/u);
+});
+
+test("TraceIndex requires its version and at least one trace", () => {
+  expect(() => parseTraceIndex({
+    dataset_version: "0.2.0",
+    data_version: "1.0.0",
+    traces: [],
+  })).toThrow(/contract_version/u);
+  expect(() => parseTraceIndex({
+    contract_version: "1.0.0",
+    dataset_version: "0.2.0",
+    data_version: "1.0.0",
+    traces: [],
+  })).toThrow(/trace/u);
 });

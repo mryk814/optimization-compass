@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from datetime import UTC, date, datetime, time
+from hashlib import sha256
 from pathlib import Path
 from typing import Any, Literal
 
@@ -21,6 +22,7 @@ from optimization_compass.view_spec import (
     AnswerBinding,
     EntityReference,
     ManifestAsset,
+    ManifestTraceAsset,
     ManifestView,
     SiteManifest,
     ViewEdge,
@@ -212,22 +214,23 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     from optimization_compass.site_recommendation import build_site_data
 
     recommendation_data = build_site_data(repository)
+    _write_json(output_dir / VIEW_PATH, view)
+    _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
+    trace_asset = _write_dummy_trace(output_dir, dataset_version=release["version"])
     manifest = SiteManifest(
         version=VIEW_VERSION,
         dataset_version=release["version"],
         generated_at=generated_at,
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
+        traces=trace_asset,
     )
 
-    _write_json(output_dir / VIEW_PATH, view)
-    _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    _write_dummy_trace(output_dir, dataset_version=release["version"])
     _write_json(output_dir / "manifest.json", manifest)
     return manifest
 
 
-def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> None:
+def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> ManifestTraceAsset:
     frames = [
         _dummy_frame(
             frame_index=0,
@@ -344,7 +347,16 @@ def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> None:
     trace_path = output_dir / "traces/dummy-educational.json"
     trace_path.parent.mkdir(parents=True, exist_ok=True)
     trace_path.write_bytes(canonical_trace_bytes(trace))
-    _write_json(output_dir / "traces/index.json", index)
+    index_path = output_dir / "traces/index.json"
+    _write_json(index_path, index)
+    index_bytes = index_path.read_bytes()
+    return ManifestTraceAsset(
+        contract_version="1.0.0",
+        index_version="1.0.0",
+        path="traces/index.json",
+        bytes=len(index_bytes),
+        sha256=sha256(index_bytes).hexdigest(),
+    )
 
 
 def _dummy_frame(

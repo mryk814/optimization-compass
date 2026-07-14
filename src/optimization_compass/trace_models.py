@@ -22,7 +22,7 @@ TerminalStatus = Literal[
 
 
 class TraceModel(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True, allow_inf_nan=False)
+    model_config = ConfigDict(extra="forbid", frozen=True, allow_inf_nan=False, strict=True)
 
 
 class TracePoint(TraceModel):
@@ -91,7 +91,7 @@ class TraceFrame(TraceModel):
 
 
 class AlgorithmTrace(TraceModel):
-    contract_version: Literal["1.0.0"] = TRACE_CONTRACT_VERSION
+    contract_version: Literal["1.0.0"]
     dataset_version: NonBlank
     data_version: NonBlank
     trace_id: NonBlank
@@ -181,7 +181,7 @@ class TraceIndexEntry(TraceModel):
 
 
 class TraceIndex(TraceModel):
-    contract_version: Literal["1.0.0"] = TRACE_CONTRACT_VERSION
+    contract_version: Literal["1.0.0"]
     dataset_version: NonBlank
     data_version: NonBlank
     traces: list[TraceIndexEntry] = Field(min_length=1)
@@ -193,7 +193,7 @@ class TraceIndex(TraceModel):
 
 
 class TraceBundle(TraceModel):
-    contract_version: Literal["1.0.0"] = TRACE_CONTRACT_VERSION
+    contract_version: Literal["1.0.0"]
     bundle_id: NonBlank
     comparison_id: NonBlank
     dataset_version: NonBlank

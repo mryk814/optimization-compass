@@ -1,18 +1,27 @@
-import { traceEventLabel, type PlaybackSpeed } from "../../contracts/trace";
+import {
+  traceEventExplanation,
+  traceEventLabel,
+  type DecisionState,
+  type PlaybackSpeed,
+} from "../../contracts/trace";
 import { PLAYBACK_SPEEDS, type PlaybackController } from "./usePlayback";
 
 export function PlaybackControls({ playback }: { playback: PlaybackController }) {
   const atStart = playback.currentFrameIndex === 0;
   const atEnd = playback.currentFrameIndex === playback.frames.length - 1;
   const eventLabel = traceEventLabel(playback.currentFrame);
+  const eventExplanation = traceEventExplanation(playback.currentFrame);
   return (
     <section className="playback-controls" aria-label="アルゴリズム再生コントロール">
       <div className="playback-status" aria-live="polite">
         <strong>{eventLabel}</strong>
         <span>
           Frame {playback.currentFrameIndex + 1}/{playback.frames.length}
+          {" · "}Iteration <output aria-label="iteration">{playback.currentFrame.iteration}</output>
           {" · "}評価 {playback.currentFrame.oracle_evaluations}
+          {" · "}判定 <output aria-label="decision">{decisionLabel(playback.currentFrame.decision)}</output>
         </span>
+        <p aria-label="イベント説明">{eventExplanation}</p>
       </div>
       <div className="playback-actions">
         <button
@@ -80,4 +89,12 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
       </label>
     </section>
   );
+}
+
+function decisionLabel(decision: DecisionState): string {
+  return {
+    accepted: "受理",
+    rejected: "却下",
+    not_applicable: "該当なし",
+  }[decision];
 }

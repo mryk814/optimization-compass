@@ -1,4 +1,5 @@
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { createHash, webcrypto } from "node:crypto";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
@@ -11,7 +12,14 @@ import { TraceDemoPage } from "./TraceDemoPage";
 const trace = {
   ...algorithmTraceFixture,
   frames: [
-    { ...traceFrameFixture, event_type: "initialize", event_label_ja: "初期状態", event_label_en: "Initialize" },
+    {
+      ...traceFrameFixture,
+      event_type: "initialize",
+      explanation_key: "trace.dummy.initialize",
+      decision: "accepted",
+      event_label_ja: "初期状態",
+      event_label_en: "Initialize",
+    },
     {
       ...traceFrameFixture,
       frame_index: 1,
@@ -41,6 +49,32 @@ const index = {
     },
   ],
 };
+const indexBytes = new TextEncoder().encode(JSON.stringify(index));
+const manifest = {
+  version: "1.0.0",
+  dataset_version: "0.2.0",
+  generated_at: "2026-07-13T00:00:00Z",
+  views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
+  recommendation: { version: "1.0.0", path: "recommendation/site-data.json" },
+  traces: {
+    contract_version: "1.0.0",
+    index_version: "1.0.0",
+    path: "traces/catalog.json",
+    bytes: indexBytes.byteLength,
+    sha256: createHash("sha256").update(indexBytes).digest("hex"),
+  },
+};
+
+function jsonResponse(value: unknown) {
+  return { ok: true, json: async () => value };
+}
+
+function byteResponse(bytes: Uint8Array) {
+  return {
+    ok: true,
+    arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+  };
+}
 
 function renderPage(traceId = "dummy-educational") {
   return render(
@@ -59,9 +93,11 @@ describe("TraceDemoPage", () => {
   });
 
   test("loads a strict index and trace into the common player", async () => {
+    vi.stubGlobal("crypto", webcrypto as Crypto);
     const fetchMock = vi.fn()
-      .mockResolvedValueOnce({ ok: true, json: async () => index })
-      .mockResolvedValueOnce({ ok: true, json: async () => trace });
+      .mockResolvedValueOnce(jsonResponse(manifest))
+      .mockResolvedValueOnce(byteResponse(indexBytes))
+      .mockResolvedValueOnce(jsonResponse(trace));
     vi.stubGlobal("fetch", fetchMock);
     renderPage();
 
@@ -69,13 +105,25 @@ describe("TraceDemoPage", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "AlgorithmTrace 契約デモ" })).toBeVisible();
     expect(screen.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
     expect(screen.getByText("初期状態")).toBeVisible();
+    expect(screen.getByLabelText("iteration")).toHaveTextContent("0");
+    expect(screen.getByLabelText("decision")).toHaveTextContent("受理");
+    expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
+      "初期状態を評価し、完全なスナップショットを作成します。",
+    );
     expect(screen.getByText("M_EDUCATIONAL")).toBeVisible();
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-    expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/traces\/catalog\.json$/u);
+    expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
   });
 
   test("reports missing IDs and reference mismatches instead of loading a fallback", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => index }));
+    vi.stubGlobal("crypto", webcrypto as Crypto);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn()
+        .mockResolvedValueOnce(jsonResponse(manifest))
+        .mockResolvedValueOnce(byteResponse(indexBytes)),
+    );
     renderPage("missing");
     expect(await screen.findByRole("alert")).toHaveTextContent("Trace ID");
     cleanup();
@@ -84,8 +132,9 @@ describe("TraceDemoPage", () => {
     vi.stubGlobal(
       "fetch",
       vi.fn()
-        .mockResolvedValueOnce({ ok: true, json: async () => index })
-        .mockResolvedValueOnce({ ok: true, json: async () => mismatch }),
+        .mockResolvedValueOnce(jsonResponse(manifest))
+        .mockResolvedValueOnce(byteResponse(indexBytes))
+        .mockResolvedValueOnce(jsonResponse(mismatch)),
     );
     renderPage();
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("dataset_version"));

@@ -1,5 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter, useLocation } from "react-router-dom";
+import { MemoryRouter, useLocation, useNavigate } from "react-router-dom";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { parseAlgorithmTrace } from "../../contracts/trace";
@@ -22,12 +22,22 @@ const parsed = parseAlgorithmTrace({
 function Harness() {
   const playback = usePlayback(parsed.trace_id, parsed.frames);
   const location = useLocation();
+  const navigate = useNavigate();
   return (
     <>
       <PlaybackControls playback={playback} />
       <output aria-label="current frame">{playback.currentFrameIndex}</output>
       <output aria-label="playing">{String(playback.isPlaying)}</output>
       <output aria-label="url">{location.search}</output>
+      <button
+        onClick={() => navigate({
+          search: "?trace=dummy-educational&frame=2&speed=2&direction=reverse&foo=external",
+        })}
+        type="button"
+      >
+        外部queryへ移動
+      </button>
+      <button onClick={() => navigate(-1)} type="button">履歴を戻る</button>
     </>
   );
 }
@@ -48,6 +58,11 @@ describe("PlaybackControls", () => {
 
   test("steps, seeks, changes speed, reverses, and stays within bounds", () => {
     renderHarness();
+    expect(screen.getByLabelText("iteration")).toHaveTextContent("0");
+    expect(screen.getByLabelText("decision")).toHaveTextContent("該当なし");
+    expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
+      "説明は未登録です（trace.future-event）",
+    );
     fireEvent.click(screen.getByRole("button", { name: "1フレーム進む" }));
     expect(screen.getByLabelText("current frame")).toHaveTextContent("1");
     fireEvent.change(screen.getByLabelText("フレーム位置"), { target: { value: "2" } });
@@ -91,5 +106,29 @@ describe("PlaybackControls", () => {
     act(() => vi.advanceTimersByTime(600));
     expect(screen.getByLabelText("current frame")).toHaveTextContent("0");
     expect(screen.getByLabelText("playing")).toHaveTextContent("false");
+  });
+
+  test("same-route query navigation and back restore paused state without history pollution", () => {
+    renderHarness("/traces/dummy?trace=dummy-educational&frame=0&foo=base");
+    fireEvent.click(screen.getByRole("button", { name: "1フレーム進む" }));
+    expect(screen.getByLabelText("current frame")).toHaveTextContent("1");
+    fireEvent.click(screen.getByRole("button", { name: "再生" }));
+    expect(screen.getByLabelText("playing")).toHaveTextContent("true");
+
+    fireEvent.click(screen.getByRole("button", { name: "外部queryへ移動" }));
+    expect(screen.getByLabelText("current frame")).toHaveTextContent("2");
+    expect(screen.getByLabelText("playing")).toHaveTextContent("false");
+    expect(screen.getByRole("combobox", { name: "再生速度" })).toHaveValue("2");
+    expect(screen.getByRole("button", { name: "順再生にする" })).toBeVisible();
+    expect(screen.getByLabelText("url")).toHaveTextContent("foo=external");
+
+    fireEvent.click(screen.getByRole("button", { name: "履歴を戻る" }));
+    expect(screen.getByLabelText("current frame")).toHaveTextContent("1");
+    expect(screen.getByRole("combobox", { name: "再生速度" })).toHaveValue("1");
+    expect(screen.getByRole("button", { name: "逆再生にする" })).toBeVisible();
+    expect(screen.getByLabelText("url")).toHaveTextContent("foo=base");
+
+    fireEvent.click(screen.getByRole("button", { name: "履歴を戻る" }));
+    expect(screen.getByLabelText("current frame")).toHaveTextContent("1");
   });
 });

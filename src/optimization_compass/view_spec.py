@@ -204,12 +204,21 @@ class ManifestAsset(ContractModel):
     path: str = Field(min_length=1)
 
 
+class ManifestTraceAsset(ContractModel):
+    contract_version: Literal["1.0.0"]
+    index_version: Literal["1.0.0"]
+    path: str = Field(min_length=1)
+    bytes: int = Field(gt=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
 class SiteManifest(ContractModel):
     version: Literal["1.0.0"] = "1.0.0"
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     views: list[ManifestView]
     recommendation: ManifestAsset
+    traces: ManifestTraceAsset
 
 
 def _unique_by[ContractModelT: ContractModel](

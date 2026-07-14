@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { parseSiteManifest, type SiteManifest } from "../../contracts/manifest";
 import { parseSiteData, type SiteData, type SiteQuestion } from "../../contracts/site-data";
 import {
   parseViewSpec,
@@ -20,20 +21,12 @@ import {
   type RecommendationResult,
 } from "./recommend";
 
-interface SiteManifest {
-  version: string;
-  dataset_version: string;
-  recommendation: { path: string; version: string };
-  views: Array<{ view_id: string; path: string; version: string }>;
-}
-
 interface DiagnoseArtifacts {
   manifest: SiteManifest;
   data: SiteData;
   view: ViewSpec;
 }
 
-const MANIFEST_VERSION = "1.0.0";
 const SUPPORTED_VIEW_VERSION = "1.0.0";
 const RECOMMENDATION_PATH = "recommendation/site-data.json";
 const VIEW_PATH = "views/problem-structure.json";
@@ -42,46 +35,6 @@ type LoadState =
   | { status: "loading" }
   | { status: "error"; error: Error }
   | ({ status: "ready" } & DiagnoseArtifacts);
-
-function manifest(value: unknown): SiteManifest {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    throw new Error("manifest がJSON objectではありません。");
-  }
-  const raw = value as Record<string, unknown>;
-  const recommendation = raw.recommendation as Record<string, unknown> | undefined;
-  if (
-    typeof raw.version !== "string" ||
-    typeof raw.dataset_version !== "string" ||
-    typeof recommendation?.path !== "string" ||
-    typeof recommendation.version !== "string" ||
-    !Array.isArray(raw.views)
-  ) {
-    throw new Error("manifest の形式が不正です。");
-  }
-  const views = raw.views.map((item) => {
-    if (typeof item !== "object" || item === null || Array.isArray(item)) {
-      throw new Error("manifest views の形式が不正です。");
-    }
-    const row = item as Record<string, unknown>;
-    if (
-      typeof row.view_id !== "string" ||
-      typeof row.path !== "string" ||
-      typeof row.version !== "string"
-    ) {
-      throw new Error("manifest view の形式が不正です。");
-    }
-    return { view_id: row.view_id, path: row.path, version: row.version };
-  });
-  if (raw.version !== MANIFEST_VERSION) {
-    throw new Error(`manifest version は ${MANIFEST_VERSION} である必要があります。`);
-  }
-  return {
-    version: raw.version,
-    dataset_version: raw.dataset_version,
-    recommendation: { path: recommendation.path, version: recommendation.version },
-    views,
-  };
-}
 
 async function json(url: string): Promise<unknown> {
   const response = await fetch(url);
@@ -96,7 +49,14 @@ async function loadArtifacts(): Promise<DiagnoseArtifacts> {
     json(`${baseUrl}data/recommendation/site-data.json`),
     json(`${baseUrl}data/views/problem-structure.json`),
   ]);
-  const parsedManifest = manifest(rawManifest);
+  let parsedManifest: SiteManifest;
+  try {
+    parsedManifest = parseSiteManifest(rawManifest);
+  } catch (caught) {
+    const detail = caught instanceof Error ? caught.message : String(caught);
+    const scope = detail.startsWith("views[") ? "manifest ViewSpec" : "manifest";
+    throw new Error(`${scope} の検証に失敗しました: ${detail}`);
+  }
   const data = parseSiteData(rawData);
   const view = parseViewSpec(rawView);
   const manifestView = parsedManifest.views.find((item) => item.view_id === view.view_id);

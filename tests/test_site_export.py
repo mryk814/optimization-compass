@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -171,6 +172,12 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "recommendation/site-data.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["traces"]["path"] == "traces/index.json"
+    assert manifest_payload["traces"]["contract_version"] == "1.0.0"
+    assert manifest_payload["traces"]["index_version"] == "1.0.0"
+    index_bytes = (first_output / "traces/index.json").read_bytes()
+    assert manifest_payload["traces"]["bytes"] == len(index_bytes)
+    assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
 
 
 def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(

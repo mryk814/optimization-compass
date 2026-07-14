@@ -200,7 +200,7 @@ export function parseAlgorithmTrace(input: unknown): AlgorithmTrace {
     terminal_summary_en: string(data.terminal_summary_en, "terminal_summary_en"),
     source_ids: uniqueStrings(data.source_ids, "source_ids"),
   };
-  const byteLength = new TextEncoder().encode(canonicalJson(parsed)).byteLength;
+  const byteLength = canonicalTraceBytes(parsed).byteLength;
   if (byteLength > MAX_TRACE_BYTES) {
     throw new Error(`AlgorithmTrace raw canonical JSON exceeds 2 MiB (${byteLength} bytes).`);
   }
@@ -227,6 +227,7 @@ export function parseTraceIndex(input: unknown): TraceIndex {
       title_ja: string(entry.title_ja, "title_ja"), title_en: string(entry.title_en, "title_en"),
     };
   });
+  if (traces.length === 0) throw new Error("TraceIndex requires at least one trace.");
   unique(traces.map((entry) => entry.trace_id), "trace_id");
   return {
     contract_version: TRACE_CONTRACT_VERSION,
@@ -271,10 +272,10 @@ export function parseTraceBundle(input: unknown): TraceBundle {
 export function synchronizeTraceBundle(
   bundle: TraceBundle,
   oracleEvaluations: number,
-): Record<string, TraceFrame> {
+): Record<string, TraceFrame | null> {
   const requested = nonNegativeInteger(oracleEvaluations, "oracleEvaluations");
   return Object.fromEntries(bundle.member_traces.map((trace) => {
-    let match = trace.frames[0];
+    let match: TraceFrame | null = null;
     for (const frame of trace.frames) {
       if (frame.oracle_evaluations > requested) break;
       match = frame;
@@ -289,6 +290,29 @@ export function traceEventLabel(frame: TraceFrame, locale: "ja" | "en" = "ja"): 
   return locale === "ja"
     ? `未定義イベント（${frame.event_type}）`
     : `Unknown event (${frame.event_type})`;
+}
+
+const traceEventExplanations: Readonly<Record<string, Readonly<{ ja: string; en: string }>>> = {
+  "trace.dummy.initialize": {
+    ja: "初期状態を評価し、完全なスナップショットを作成します。",
+    en: "Evaluate the initial state and create a complete snapshot.",
+  },
+  "trace.dummy.reflect": {
+    ja: "最悪点を重心の反対側へ反射し、改善した候補を受理します。",
+    en: "Reflect the worst point across the centroid and accept the improved candidate.",
+  },
+  "trace.dummy.stop": {
+    ja: "契約確認用のデモ再生を終了します。",
+    en: "Finish the contract demonstration playback.",
+  },
+};
+
+export function traceEventExplanation(frame: TraceFrame, locale: "ja" | "en" = "ja"): string {
+  const explanation = traceEventExplanations[frame.explanation_key];
+  if (explanation) return explanation[locale];
+  return locale === "ja"
+    ? `説明は未登録です（${frame.explanation_key}）`
+    : `No explanation registered (${frame.explanation_key})`;
 }
 
 function parseFrame(value: unknown, index: number): TraceFrame {
@@ -485,13 +509,27 @@ function jsonValue(value: unknown, field: string): JsonValue {
   throw new Error(`${field} contains a non-JSON value.`);
 }
 
-function canonicalJson(value: JsonValue | AlgorithmTrace): string {
+export function canonicalTraceBytes(trace: AlgorithmTrace | TraceBundle): Uint8Array {
+  return new TextEncoder().encode(canonicalJson(trace));
+}
+
+function canonicalJson(value: JsonValue | AlgorithmTrace | TraceBundle): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   return `{${Object.entries(value)
-    .sort(([left], [right]) => left.localeCompare(right, "en"))
+    .sort(([left], [right]) => compareUnicodeCodePoints(left, right))
     .map(([key, item]) => `${JSON.stringify(key)}:${canonicalJson(item as JsonValue)}`)
     .join(",")}}`;
+}
+
+function compareUnicodeCodePoints(left: string, right: string): number {
+  const leftPoints = Array.from(left, (character) => character.codePointAt(0)!);
+  const rightPoints = Array.from(right, (character) => character.codePointAt(0)!);
+  const length = Math.min(leftPoints.length, rightPoints.length);
+  for (let index = 0; index < length; index += 1) {
+    if (leftPoints[index] !== rightPoints[index]) return leftPoints[index] - rightPoints[index];
+  }
+  return leftPoints.length - rightPoints.length;
 }
 
 function safeRelativePath(value: unknown): string {
