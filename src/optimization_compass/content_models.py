@@ -11,13 +11,18 @@ _REQUIRED = {"content_id", "kind", "title_ja", "title_en", "source_ids", "status
 class ContentPage:
     content_id: str
     kind: str
+    method_id: str | None
     title_ja: str
     title_en: str
+    summary: str
     source_ids: tuple[str, ...]
     prerequisites: tuple[str, ...]
     related_ids: tuple[str, ...]
     visualization_ids: tuple[str, ...]
     comparison_ids: tuple[str, ...]
+    aliases: tuple[str, ...]
+    visualization_aliases: tuple[tuple[str, str], ...]
+    comparison_aliases: tuple[tuple[str, str], ...]
     status: str
     last_reviewed: str
     body: str
@@ -60,13 +65,18 @@ def parse_content(path: Path) -> ContentPage:
     return ContentPage(
         content_id=_nonblank(fields["content_id"], path),
         kind=kind,
+        method_id=_optional_nonblank(fields.get("method_id"), path),
         title_ja=_nonblank(fields["title_ja"], path),
         title_en=_nonblank(fields["title_en"], path),
+        summary=fields.get("summary", "").strip(),
         source_ids=_list(fields["source_ids"]),
         prerequisites=_list(fields.get("prerequisites", "[]")),
         related_ids=_list(fields.get("related_ids", "[]")),
         visualization_ids=_list(fields.get("visualization_ids", "[]")),
         comparison_ids=_list(fields.get("comparison_ids", "[]")),
+        aliases=_list(fields.get("aliases", "[]")),
+        visualization_aliases=_pairs(fields.get("visualization_aliases", "[]")),
+        comparison_aliases=_pairs(fields.get("comparison_aliases", "[]")),
         status=fields["status"],
         last_reviewed=_nonblank(fields["last_reviewed"], path),
         body=raw[end + 5 :].strip(),
@@ -83,3 +93,17 @@ def _nonblank(value: str, path: Path) -> str:
     if not value.strip():
         raise ValueError(f"{path}: frontmatter value must not be blank")
     return value
+
+
+def _optional_nonblank(value: str | None, path: Path) -> str | None:
+    return None if value is None else _nonblank(value, path)
+
+
+def _pairs(value: str) -> tuple[tuple[str, str], ...]:
+    pairs: list[tuple[str, str]] = []
+    for item in _list(value):
+        target_id, separator, route = item.partition("|")
+        if not separator or not target_id.strip() or not route.startswith("/"):
+            raise ValueError(f"frontmatter relation alias is invalid: {item}")
+        pairs.append((target_id.strip(), route.strip()))
+    return tuple(pairs)

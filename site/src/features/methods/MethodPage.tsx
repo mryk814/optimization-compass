@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { parseGalleryIndex, type GalleryCase } from "../../contracts/gallery";
+import { parseContentIndex, type AtlasContentPage } from "../../contracts/atlas-content";
+import { findEntity, relatedEntities, type LinkedEntity } from "../../contracts/entity-links";
 import { parseViewSpec, type ViewSpec } from "../../contracts/viewspec";
 import { siteBaseUrl } from "../../data/base-url";
 import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
+import { useEntityLinks } from "../../state/entity-links";
 import { useAtlasState } from "../../state/useAtlasState";
+import { MarkdownBody } from "../content/ContentPages";
 import { resolveRelatedNodeId } from "../map/map-state";
-import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
+import { NotFoundPage } from "../navigation/NotFoundPage";
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   return {
@@ -33,80 +36,118 @@ function MapAction({ methodId, view }: { methodId: string; view: ViewSpec }) {
   if (atlas.error) return <p role="alert">{atlas.error.message}</p>;
   return (
     <>
-      <button
-        disabled={!nodeId}
-        onClick={() => {
-          if (!nodeId) return;
-          atlasNavigation.navigateWithState("/map", { ...atlas.state, selectedNodeId: nodeId });
-        }}
-        type="button"
-      >
-        地図上で見る
-      </button>
-      {atlasNavigation.error && <p role="alert">{atlasNavigation.error.message}</p>}
+    <button
+      disabled={!nodeId}
+      onClick={() => {
+        if (nodeId) atlasNavigation.navigateWithState("/map", { ...atlas.state, selectedNodeId: nodeId });
+      }}
+      type="button"
+    >
+      地図上で見る
+    </button>
+    {atlasNavigation.error && <p role="alert">{atlasNavigation.error.message}</p>}
     </>
   );
 }
 
 export function MethodPage() {
   const { methodId = "" } = useParams();
+  const links = useEntityLinks();
   const [view, setView] = useState<ViewSpec>();
-  const [relatedCases, setRelatedCases] = useState<GalleryCase[]>([]);
-  const [error, setError] = useState<Error>();
+  const [content, setContent] = useState<AtlasContentPage>();
+  const [loadError, setLoadError] = useState<Error>();
+  const method = links.status === "ready" ? findEntity(links.index, "method", methodId) : undefined;
+  const learning = links.status === "ready" && method
+    ? relatedEntities(links.index, method, "learning")[0]
+    : undefined;
+
   useEffect(() => {
-    let active = true;
-    setView(undefined);
-    setRelatedCases([]);
-    setError(undefined);
-    void loadMethod(methodId).then(
-      (loaded) => { if (active) { setView(loaded.view); setRelatedCases(loaded.relatedCases); } },
-      (caught: unknown) => { if (active) setError(caught instanceof Error ? caught : new Error(String(caught))); },
+    const controller = new AbortController();
+    void fetch(`${siteBaseUrl()}data/views/problem-structure.json`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`ViewSpec request failed (${response.status}).`);
+        return parseViewSpec(await response.json());
+      }).then(
+      setView,
+      (caught: unknown) => {
+        if (!controller.signal.aborted) setLoadError(caught instanceof Error ? caught : new Error(String(caught)));
+      },
     );
-    return () => { active = false; };
-  }, [methodId]);
-  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
-  const method = view?.entities.find(
-    (entity) => entity.entity_type === "method" && entity.entity_id === methodId,
-  );
-  const sourceIds = method?.source_ids ?? [
-    ...new Set(relatedCases.flatMap((item) => item.source_ids)),
-  ];
+    return () => controller.abort();
+  }, []);
+  useEffect(() => {
+    if (!learning) return;
+    const controller = new AbortController();
+    void fetch(`${siteBaseUrl()}data/content.json`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Content request failed (${response.status}).`);
+        return parseContentIndex(await response.json());
+      }).then(
+        (index) => setContent(index.pages.find((page) => page.content_id === learning.entity_id)),
+        (caught: unknown) => {
+          if (!controller.signal.aborted) setLoadError(caught instanceof Error ? caught : new Error(String(caught)));
+        },
+      );
+    return () => controller.abort();
+  }, [learning]);
+
+  if (links.status === "error") return <NotFoundPage detail={links.error.message} />;
+  if (links.status === "ready" && !method) return <NotFoundPage detail={`手法ID「${methodId}」は登録されていません。`} />;
+  const groups = links.status === "ready" && method
+    ? {
+        visualizations: relatedEntities(links.index, method, "visualization"),
+        comparisons: relatedEntities(links.index, method, "comparison"),
+        implementations: relatedEntities(links.index, method, "implementation"),
+        cases: relatedEntities(links.index, method, "case"),
+        sources: relatedEntities(links.index, method, "evidence"),
+      }
+    : undefined;
+
   return (
     <section className="page-panel method-detail-page">
       <p className="eyebrow">Method</p>
-      <h1>{method?.label ?? (relatedCases.length > 0 ? methodId : "手法を読み込み中…")}</h1>
-      {method ? (
-        <p className="content-lead">{method.summary}</p>
-      ) : relatedCases.length > 0 ? (
-        <p className="content-lead">実問題の候補として掲載されている手法です。関連ケースから適用条件を確認できます。</p>
-      ) : null}
-      {method?.label_en && <p lang="en">{method.label_en}</p>}
+      <h1>{method?.label ?? "手法を読み込み中…"}</h1>
+      {method?.summary && <p className="content-lead">{method.summary}</p>}
       <p className="route-parameter">Method ID: <strong>{methodId}</strong></p>
-      {error && <p role="alert">{error.message}</p>}
+      {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
-      {methodId === "M_NELDER_MEAD" && <Link className="text-link" to="/theater/nelder-mead">Method Theaterを開く</Link>}
-      {relatedCases.length > 0 && <section className="method-related-cases"><h2>関連ケース</h2><ul>{relatedCases.map((item) => <li key={item.case_id}><Link to={`/gallery/${item.case_id}`}>{item.title_ja}</Link><span>{item.question}</span></li>)}</ul></section>}
-      {sourceIds.length > 0 && <small>Sources: {sourceIds.join(", ")}</small>}
+      {content && (
+        <section className="method-learning">
+          <h2>説明</h2>
+          <MarkdownBody body={content.body} />
+        </section>
+      )}
+      {groups && <MethodRelations groups={groups} />}
     </section>
   );
 }
 
-async function loadMethod(methodId: string): Promise<{ view: ViewSpec; relatedCases: GalleryCase[] }> {
-  const viewResponse = await fetch(`${siteBaseUrl()}data/views/problem-structure.json`);
-  if (!viewResponse.ok) throw new Error(`ViewSpec request failed (${viewResponse.status}).`);
-  const view = parseViewSpec(await viewResponse.json());
-  const methodExists = view.entities.some(
-    (entity) => entity.entity_type === "method" && entity.entity_id === methodId,
+function MethodRelations({
+  groups,
+}: {
+  groups: Record<"visualizations" | "comparisons" | "implementations" | "cases" | "sources", LinkedEntity[]>;
+}) {
+  const sections = [
+    ["visualizations", "Method Theater / Trace"],
+    ["comparisons", "比較"],
+    ["implementations", "実装"],
+    ["cases", "関連ケース"],
+    ["sources", "根拠"],
+  ] as const;
+  return (
+    <div className="method-relation-grid">
+      {sections.map(([key, title]) => groups[key].length > 0 && (
+        <section className="method-related-cases" key={key}>
+          <h2>{title}</h2>
+          <ul>{groups[key].map((entity) => <li key={`${entity.entity_type}:${entity.entity_id}`}><EntityDestination entity={entity} /></li>)}</ul>
+        </section>
+      ))}
+    </div>
   );
-  if (methodExists) return { view, relatedCases: [] };
+}
 
-  const galleryResponse = await fetch(`${siteBaseUrl()}data/gallery.json`);
-  if (!galleryResponse.ok) throw new Error(`Gallery request failed (${galleryResponse.status}).`);
-  const gallery = parseGalleryIndex(await galleryResponse.json());
-  const relatedCases = gallery.cases.filter(
-    (item) => item.candidate_method_ids.includes(methodId)
-      || item.excluded_methods.some((entry) => entry.method_id === methodId),
-  );
-  if (relatedCases.length === 0) throw new EntityNotFoundError("手法ID", methodId);
-  return { view, relatedCases };
+function EntityDestination({ entity }: { entity: LinkedEntity }) {
+  if (entity.canonical_url) return <Link to={entity.canonical_url}>{entity.label}</Link>;
+  if (entity.external_url) return <a href={entity.external_url} rel="noreferrer" target="_blank">{entity.label}</a>;
+  return <span>{entity.label}</span>;
 }

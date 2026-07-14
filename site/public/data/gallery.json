@@ -101,7 +101,7 @@
       ],
       "case_id": "hyperparameter-search",
       "comparison_ids": [
-        "gradient-quadratic"
+        "COMPARE_GRADIENT_FAMILY"
       ],
       "constraints": "実験時間、メモリ、許容する設定範囲。",
       "decision_variables": "learning rate、層数、正則化係数など。",

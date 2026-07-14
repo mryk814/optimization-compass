@@ -2,10 +2,12 @@ import { useEffect, useState, type MouseEvent } from "react";
 import {
   HashRouter,
   Link,
+  Navigate,
   Route,
   Routes,
   useLocation,
 } from "react-router-dom";
+import type { ReactNode } from "react";
 
 import { MapPage } from "./features/map/MapPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
@@ -15,9 +17,11 @@ import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonP
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
-import { NelderMeadPage } from "./features/theater/NelderMeadPage";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
+import { resolveAlias } from "./contracts/entity-links";
+import type { EntityLinkIndex } from "./contracts/entity-links";
+import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 
 import "./styles.css";
 
@@ -26,15 +30,17 @@ const primaryNavigation = [
   { label: "Map", to: "/map", matchPaths: ["/map"] },
   { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
-  {
-    label: "比較",
-    to: "/compare/gradient-quadratic",
-    matchPaths: ["/compare", "/theater", "/traces"],
-  },
   { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
 ] as const;
 
 function HomePage() {
+  const links = useEntityLinks();
+  const theater = links.status === "ready"
+    ? links.index.entities.find((entity) => entity.entity_type === "trace" && entity.aliases.some((alias) => alias.startsWith("/theater/")))
+    : undefined;
+  const comparison = links.status === "ready"
+    ? links.index.entities.find((entity) => entity.entity_type === "comparison")
+    : undefined;
   return (
     <section className="home-page">
       <header className="home-hero">
@@ -69,8 +75,8 @@ function HomePage() {
           <h2>Method Theater</h2>
           <p>アルゴリズムの一手を再生し、同じ予算で動きを比べる。</p>
           <div className="home-entry-links">
-            <Link to="/theater/nelder-mead">Theaterを開く</Link>
-            <Link to="/compare/gradient-quadratic">Compare Labを開く</Link>
+            <Link to={theater?.canonical_url ?? "/learn"}>Theaterを開く</Link>
+            <Link to={comparison?.canonical_url ?? "/learn"}>Compare Labを開く</Link>
           </div>
         </article>
         <HomeEntry
@@ -123,6 +129,15 @@ function AppShell() {
     );
     return () => controller.abort();
   }, []);
+  const links = useEntityLinks();
+  const comparisonRoute = links.status === "ready"
+    ? links.index.entities.find((entity) => entity.entity_type === "comparison")?.canonical_url
+    : undefined;
+  const navigation = [
+    ...primaryNavigation.slice(0, 4),
+    { label: "比較", to: comparisonRoute ?? "/learn", matchPaths: ["/compare", "/theater", "/traces"] },
+    ...primaryNavigation.slice(4),
+  ];
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document.getElementById("main-content")?.focus();
@@ -141,7 +156,7 @@ function AppShell() {
           <span>Optimization Atlas</span>
         </Link>
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
-          {primaryNavigation.map(({ label, to, matchPaths }) => {
+          {navigation.map(({ label, to, matchPaths }) => {
             const isActive = matchPaths.some((matchPath) =>
               matchPath === "/"
                 ? pathname === matchPath
@@ -152,7 +167,7 @@ function AppShell() {
               <Link
                 aria-current={isActive ? "page" : undefined}
                 className={isActive ? "nav-link nav-link-active" : "nav-link"}
-                key={to}
+                key={label}
                 to={to}
               >
                 {label}
@@ -168,12 +183,12 @@ function AppShell() {
           <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="/methods/:methodId" element={<MethodPage />} />
           <Route path="/traces/:traceId" element={<TraceDemoPage />} />
-          <Route path="/theater/nelder-mead" element={<NelderMeadPage />} />
-          <Route path="/compare/:comparisonId" element={<CompareLabPage />} />
+          <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
-          <Route path="/learn/:contentId" element={<ContentPage />} />
+          <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
+          <Route path="/theater/:alias" element={<AliasRoute />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
@@ -188,10 +203,30 @@ function AppShell() {
   );
 }
 
-export default function App() {
+export default function App({ initialEntityLinks }: { initialEntityLinks?: EntityLinkIndex } = {}) {
   return (
     <HashRouter>
-      <AppShell />
+      <EntityLinkProvider initialIndex={initialEntityLinks}>
+        <AppShell />
+      </EntityLinkProvider>
     </HashRouter>
   );
+}
+
+function CanonicalRoute({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+  const links = useEntityLinks();
+  const target = links.status === "ready" ? resolveAlias(links.index, pathname) : undefined;
+  return target?.canonical_url ? <Navigate replace to={target.canonical_url} /> : children;
+}
+
+function AliasRoute() {
+  const { pathname } = useLocation();
+  const links = useEntityLinks();
+  if (links.status === "loading") return <p role="status">正規URLを確認しています…</p>;
+  if (links.status === "error") return <NotFoundPage detail={links.error.message} />;
+  const target = resolveAlias(links.index, pathname);
+  return target?.canonical_url
+    ? <Navigate replace to={target.canonical_url} />
+    : <NotFoundPage detail={`登録されていないaliasです: ${pathname}`} />;
 }

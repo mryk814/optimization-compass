@@ -1,7 +1,8 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import App from "./App";
+import type { EntityLinkIndex } from "./contracts/entity-links";
 
 const routes = [
   ["#/", "Optimization Atlas"],
@@ -10,8 +11,18 @@ const routes = [
   ["#/compare/gradient-quadratic", "手法を比較する"],
   ["#/gallery", "ケースギャラリー"],
   ["#/learn", "手法・概念を学ぶ"],
-  ["#/theater/nelder-mead", "Nelder–Meadの幾何操作"],
 ] as const;
+
+const testLinks: EntityLinkIndex = {
+  contract_version: "1.0.0",
+  dataset_version: "0.2.0",
+  generated_at: "2026-07-13T00:00:00Z",
+  entities: [
+    { entity_type: "method", entity_id: "M_NELDER_MEAD", label: "Nelder–Mead", summary: "", canonical_url: "/methods/M_NELDER_MEAD", aliases: ["/learn/method.nelder-mead"], external_url: null, relations: [] },
+    { entity_type: "trace", entity_id: "nelder-mead-quadratic", label: "Nelder–Mead trace", summary: "", canonical_url: "/traces/nelder-mead-quadratic", aliases: ["/theater/nelder-mead"], external_url: null, relations: [] },
+    { entity_type: "comparison", entity_id: "COMPARE_GRADIENT_FAMILY", label: "Gradient comparison", summary: "", canonical_url: "/compare/COMPARE_GRADIENT_FAMILY", aliases: ["/compare/gradient-quadratic"], external_url: null, relations: [] },
+  ],
+};
 
 const emptyView = {
   dataset_version: "0.2.0",
@@ -68,13 +79,13 @@ describe("application routes", () => {
   test.each(routes)("%s renders %s", (hash, heading) => {
     window.location.hash = hash;
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
   test("home exposes five clear entry points and both visualization routes in one operation", () => {
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     const entries = screen.getByLabelText("Atlasの主要な入口");
     expect(within(entries).getAllByRole("article")).toHaveLength(5);
@@ -92,11 +103,11 @@ describe("application routes", () => {
     );
     expect(within(entries).getByRole("link", { name: "Theaterを開く" })).toHaveAttribute(
       "href",
-      "#/theater/nelder-mead",
+      "#/traces/nelder-mead-quadratic",
     );
     expect(within(entries).getByRole("link", { name: "Compare Labを開く" })).toHaveAttribute(
       "href",
-      "#/compare/gradient-quadratic",
+      "#/compare/COMPARE_GRADIENT_FAMILY",
     );
     expect(within(entries).getByRole("link", { name: "ケースを見る" })).toHaveAttribute(
       "href",
@@ -113,9 +124,15 @@ describe("application routes", () => {
   test("footer renders the dataset version from the release identity", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(jsonResponse(releaseIdentity)));
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     expect(await screen.findByText("Dataset 0.3.0")).toBeVisible();
+  });
+
+  test("deprecated Theater alias redirects to its generated canonical Trace URL", async () => {
+    window.location.hash = "#/theater/nelder-mead";
+    render(<App initialEntityLinks={testLinks} />);
+    await waitFor(() => expect(window.location.hash).toBe("#/traces/nelder-mead-quadratic"));
   });
 
   test("primary navigation and home entries stay reachable at 375px", () => {
@@ -124,7 +141,7 @@ describe("application routes", () => {
       value: 375,
     });
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
@@ -136,17 +153,17 @@ describe("application routes", () => {
   });
 
   test("the methods navigation opens the real learning index and stays active on method pages", () => {
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
     expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("href", "#/learn");
     cleanup();
 
     window.location.hash = "#/methods/M_NELDER_MEAD";
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
     expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("aria-current", "page");
   });
 
   test("supports keyboard focus for the skip link and primary route links", () => {
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     const skipLink = screen.getByRole("link", { name: "本文へ移動" });
     skipLink.focus();
@@ -164,7 +181,7 @@ describe("application routes", () => {
   test("unknown routes render the common Not Found page inside the shell", () => {
     window.location.hash = "#/unknown";
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     expect(screen.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toBeVisible();
     expect(screen.getByRole("main")).toBeVisible();
@@ -172,7 +189,7 @@ describe("application routes", () => {
   });
 
   test("an unknown method ID uses the common Not Found page after checking Gallery", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) => {
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) {
         return jsonResponse({ contract_version: "1.0.0", dataset_version: "0.3.0", cases: [] });
@@ -181,7 +198,7 @@ describe("application routes", () => {
     }));
     window.location.hash = "#/methods/missing";
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     expect(
       await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" }),
@@ -196,12 +213,12 @@ describe("application routes", () => {
       { contract_version: "1.0.0", dataset_version: "0.2.0", comparisons: [] },
     ],
   ])("%s uses the common Not Found page for an unknown entity ID", async (hash, payload) => {
-    vi.stubGlobal("fetch", vi.fn().mockImplementation((url: string) =>
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) =>
       url.endsWith("data/release.json") ? jsonResponse(releaseIdentity) : jsonResponse(payload),
     ));
     window.location.hash = hash;
 
-    render(<App />);
+    render(<App initialEntityLinks={testLinks} />);
 
     expect(
       await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" }),
@@ -215,7 +232,7 @@ describe("application routes", () => {
     (hash) => {
       window.location.hash = hash;
 
-      render(<App />);
+      render(<App initialEntityLinks={testLinks} />);
 
       expect(
         screen.getByRole("heading", { level: 1, name: "ページが見つかりません" }),

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { parseSiteManifest, type SiteManifest } from "../../contracts/manifest";
 import { parseSiteData, type SiteData, type SiteQuestion } from "../../contracts/site-data";
@@ -14,6 +15,8 @@ import {
 import { useAtlasState } from "../../state/useAtlasState";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { resolveRelatedNodeId } from "../map/map-state";
+import { findEntity } from "../../contracts/entity-links";
+import { useEntityLinks } from "../../state/entity-links";
 import { updateDiagnosticAnswer } from "./diagnose-state";
 import {
   recommend,
@@ -165,10 +168,14 @@ function ResultCard({
   data: SiteData;
   onMap?(methodId: string): void;
 }) {
+  const links = useEntityLinks();
+  const canonicalMethod = links.status === "ready"
+    ? findEntity(links.index, "method", item.entity_id)
+    : undefined;
   return (
     <article className="diagnose-result-card">
       <div className="diagnose-result-heading">
-        <h3>{item.name}</h3>
+        <h3>{canonicalMethod?.canonical_url ? <Link to={canonicalMethod.canonical_url}>{item.name}</Link> : item.name}</h3>
         {onMap && <button onClick={() => onMap(item.entity_id)} type="button">地図で見る</button>}
       </div>
       {item.summary && <p>{item.summary}</p>}

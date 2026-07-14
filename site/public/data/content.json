@@ -73,7 +73,9 @@
     },
     {
       "body": "## 直感\n\n単体を変形して、目的関数の低い方向を探します。\n\n## 注意\n\n局所探索であり、高次元・制約付き・多峰性では万能ではありません。",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_GRADIENT_FAMILY"
+      ],
       "content_id": "method.nelder-mead",
       "kind": "method",
       "last_reviewed": "2026-07-14",

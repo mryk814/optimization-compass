@@ -181,6 +181,26 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    assert manifest_payload["entity_links"] == {
+        "path": "entity-links.json",
+        "version": "1.0.0",
+    }
+    link_payload = json.loads((first_output / "entity-links.json").read_bytes())
+    nelder_mead = next(
+        entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "method" and entity["entity_id"] == "M_NELDER_MEAD"
+    )
+    assert nelder_mead["canonical_url"] == "/methods/M_NELDER_MEAD"
+    assert nelder_mead["aliases"] == ["/learn/method.nelder-mead"]
+    relation_targets = {
+        (relation["relation_type"], relation["target_type"], relation["target_id"])
+        for relation in nelder_mead["relations"]
+    }
+    assert ("learning", "content", "method.nelder-mead") in relation_targets
+    assert ("visualization", "trace", "nelder-mead-quadratic") in relation_targets
+    assert ("comparison", "comparison", "COMPARE_GRADIENT_FAMILY") in relation_targets
+    assert ("evidence", "source", "S001") in relation_targets
     assert manifest_payload["licenses"] == {
         "code": {"path": "licenses/LICENSE.txt", "spdx_id": "MIT"},
         "content": {"path": "licenses/CONTENT_LICENSE.txt", "spdx_id": "CC-BY-4.0"},

@@ -40,6 +40,7 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestAsset;
   traces: ManifestTraceAsset;
+  entity_links: ManifestAsset;
   licenses: SiteLicenseManifest;
 }
 
@@ -47,7 +48,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const data = record(input, "SiteManifest");
   exactKeys(
     data,
-    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "licenses"],
+    ["version", "dataset_version", "generated_at", "views", "recommendation", "traces", "entity_links", "licenses"],
     "SiteManifest",
   );
   if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
@@ -85,6 +86,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
 
   const licenses = parseLicenses(data.licenses);
+  const entityLinks = record(data.entity_links, "entity_links");
+  exactKeys(entityLinks, ["version", "path"], "entity_links");
+  if (entityLinks.version !== "1.0.0") throw new Error("entity_links.version is unsupported.");
 
   return {
     version: "1.0.0",
@@ -101,6 +105,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(traces.path, "traces.path"),
       bytes,
       sha256,
+    },
+    entity_links: {
+      version: "1.0.0",
+      path: safeRelativePath(entityLinks.path, "entity_links.path"),
     },
     licenses,
   };

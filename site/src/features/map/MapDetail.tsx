@@ -1,4 +1,6 @@
 import { entityKey, safeHttpUrl, type MapModel, type ViewEntity } from "../../contracts/viewspec";
+import { Link } from "react-router-dom";
+import { useEntityLinks } from "../../state/entity-links";
 import { ancestorIds } from "./map-state";
 
 interface MapDetailProps {
@@ -16,10 +18,16 @@ const entityTypeLabels: Record<string, string> = {
 };
 
 function EntityItem({ entity }: { entity: ViewEntity }) {
+  const links = useEntityLinks();
   const safeUrl = safeHttpUrl(entity.url);
+  const canonical = links.status === "ready"
+    ? links.index.entities.find((candidate) => candidate.entity_type === entity.entity_type && candidate.entity_id === entity.entity_id)?.canonical_url
+    : undefined;
   return (
     <li className="map-entity-item">
-      {safeUrl ? (
+      {canonical ? (
+        <Link to={canonical}>{entity.label || entity.entity_id}</Link>
+      ) : safeUrl ? (
         <a href={safeUrl} rel="noreferrer" target="_blank">{entity.label || entity.entity_id}</a>
       ) : (
         <strong>{entity.label || entity.entity_id}</strong>

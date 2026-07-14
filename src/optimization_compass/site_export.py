@@ -9,6 +9,7 @@ from typing import Any, Literal
 
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.trace_models import (
     AlgorithmTrace,
@@ -248,7 +249,16 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    trace_asset = _write_dummy_trace(output_dir, dataset_version=release["version"])
+    trace_asset, trace_index = _write_dummy_trace(output_dir, dataset_version=release["version"])
+    entity_links = build_entity_link_index(
+        repository,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        trace_index=trace_index,
+        content_directory=CONTENT_DIRECTORY,
+        gallery_path=output_dir / "gallery.json",
+    )
+    _write_json(output_dir / "entity-links.json", entity_links)
     manifest = SiteManifest(
         version=VIEW_VERSION,
         dataset_version=release["version"],
@@ -256,6 +266,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
         recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
         traces=trace_asset,
+        entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         licenses=SiteLicenseManifest(
             code=ManifestLicenseAsset(spdx_id="MIT", path="licenses/LICENSE.txt"),
             data=ManifestLicenseAsset(spdx_id="CC-BY-4.0", path="licenses/DATA_LICENSE.txt"),
@@ -273,7 +284,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     return manifest
 
 
-def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> ManifestTraceAsset:
+def _write_dummy_trace(
+    output_dir: Path, *, dataset_version: str
+) -> tuple[ManifestTraceAsset, TraceIndex]:
     frames = [
         _dummy_frame(
             frame_index=0,
@@ -429,12 +442,15 @@ def _write_dummy_trace(output_dir: Path, *, dataset_version: str) -> ManifestTra
         (output_dir / "traces" / f"{trace.trace_id}.json").write_bytes(canonical_trace_bytes(trace))
     _write_json(index_path, index)
     index_bytes = index_path.read_bytes()
-    return ManifestTraceAsset(
-        contract_version="1.0.0",
-        index_version="1.0.0",
-        path="traces/index.json",
-        bytes=len(index_bytes),
-        sha256=sha256(index_bytes).hexdigest(),
+    return (
+        ManifestTraceAsset(
+            contract_version="1.0.0",
+            index_version="1.0.0",
+            path="traces/index.json",
+            bytes=len(index_bytes),
+            sha256=sha256(index_bytes).hexdigest(),
+        ),
+        index,
     )
 
 

@@ -69,10 +69,15 @@ post-deploy smoke、失敗時の復旧手順は
 
 Atlas の主要な hash route は次のとおりです。
 
-- `/theater/nelder-mead`: Nelder–Mead の simplex / 候補点 / イベント再生
-- `/compare/gradient-quadratic`: GD / Momentum / Adam の同一条件比較
+- `/methods/:methodId`: 説明・実装・Trace・比較・ケース・根拠を集約した手法の正規ページ
+- `/traces/:traceId`: AlgorithmTrace の共通再生ページ
+- `/compare/:comparisonId`: 同一条件比較ページ
 - `/learn`: 手法・概念の教材一覧と検索
 - `/gallery`: 実問題ケースの一覧・診断導線・除外候補
+
+`site/public/data/entity-links.json` が正規 URL、alias、エンティティ間 relation の唯一の
+サイト向け index です。旧 `/theater/nelder-mead` などはこの生成 index を通して正規 URL へ
+redirect され、UI に ID 固有の route 対応表は持ちません。
 
 教材と Atlas 用静的インデックスの整合性は次で確認できます。
 
