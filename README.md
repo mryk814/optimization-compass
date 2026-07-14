@@ -51,6 +51,8 @@ CIはPython・data・parity・site検証を同一commitで完了した単一の`
 公開します。PRでも同じPages相当artifactを生成しますがdeployは行いません。deployment identity、
 post-deploy smoke、失敗時の復旧手順は
 [`docs/pages-deployment.md`](docs/pages-deployment.md) を参照してください。
+依存更新、脆弱性・lock drift検出、GitHub ActionsのSHA pin、dependency license artifactの
+運用は [`docs/dependency-maintenance.md`](docs/dependency-maintenance.md) にまとめています。
 
 Atlas の主要な hash route は次のとおりです。
 

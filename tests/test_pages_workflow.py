@@ -43,6 +43,12 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
     workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     required_commands = (
         "uv run ruff check .",
+        "uv lock --check",
+        "scripts/verify_workflow_pins.py",
+        "npm --prefix site install --package-lock-only --ignore-scripts",
+        "uv run --frozen pip-audit --skip-editable",
+        "npm --prefix site audit --audit-level=high",
+        "scripts/dependency_report.py",
         "uv run ruff format --check .",
         "uv run mypy src",
         "uv run pytest --cov=optimization_compass --cov-report=term-missing",
@@ -63,6 +69,14 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
 
     for command in required_commands:
         assert command in workflow
+
+
+def test_supply_chain_reports_are_part_of_the_validated_artifact_job() -> None:
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    assert "name: dependency-license-inventory" in workflow
+    assert "dependency-reports/dependency-licenses.json" in workflow
+    assert "if-no-files-found: error" in workflow
 
 
 def test_e2e_follow_up_can_consume_the_same_generic_artifact() -> None:

@@ -17,21 +17,43 @@ jobs:
       commit_sha: ${{ steps.identity.outputs.commit_sha }}
       dataset_version: ${{ steps.identity.outputs.dataset_version }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: "3.12"
           enable-cache: true
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "24"
           cache: npm
           cache-dependency-path: site/package-lock.json
+      - name: Verify dependency declarations and workflow pins
+        run: |
+          uv lock --check
+          uv run --frozen python scripts/verify_workflow_pins.py
+          npm --prefix site install --package-lock-only --ignore-scripts
+          git diff --exit-code -- site/package-lock.json
       - name: Install Python dependencies
-        run: uv sync --all-extras
+        run: uv sync --frozen --all-extras --all-groups
       - name: Install site dependencies
         run: npm ci
         working-directory: site
+      - name: Audit Python and npm dependencies
+        run: |
+          uv run --frozen pip-audit --skip-editable
+          npm --prefix site audit --audit-level=high
+      - name: Generate dependency license inventory
+        run: >-
+          uv run --frozen python scripts/dependency_report.py
+          --node-lock site/package-lock.json
+          --output dependency-reports/dependency-licenses.json
+      - name: Upload dependency license inventory
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dependency-license-inventory
+          path: dependency-reports/dependency-licenses.json
+          if-no-files-found: error
+          retention-days: 30
       - name: Lint, format, and type-check Python
         run: |
           uv run ruff check .
@@ -85,7 +107,7 @@ jobs:
             --expected-commit-sha "$COMMIT_SHA" \
             --expected-dataset-version "$DATASET_VERSION"
       - name: Upload the single validated Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           name: github-pages
           path: site/dist
@@ -95,13 +117,13 @@ jobs:
     name: Python 3.13 compatibility
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: "3.13"
           enable-cache: true
-      - run: uv sync --all-extras
-      - run: uv run pytest
+      - run: uv sync --frozen --all-extras --all-groups
+      - run: uv run --frozen pytest
 
   browser_e2e:
     name: Browser E2E and accessibility
@@ -162,12 +184,12 @@ jobs:
     steps:
       - name: Deploy the artifact uploaded by this workflow run
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
       - name: Check out the exact deployed commit
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ needs.validate_pages_artifact.outputs.commit_sha }}
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: "3.12"
       - name: Smoke deployed routes, JSON assets, licenses, and identity
