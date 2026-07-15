@@ -69,8 +69,10 @@ def test_schema_enforces_conditional_support_and_member_uniqueness(
                 INSERT INTO view_presets (
                   preset_id, family, name_ja, name_en, description_ja, description_en,
                   root_support_status, root_entity_type, root_entity_id, axis,
-                  relation_types_json, max_depth, source_ids_json, last_verified
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                  relation_types_json, max_depth, source_ids_json, last_verified,
+                  view_id, filter_policy_json, limitations_ja, limitations_en,
+                  focus_fallback_entity_types_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     "V_BAD",
@@ -87,6 +89,11 @@ def test_schema_enforces_conditional_support_and_member_uniqueness(
                     1,
                     '["S001"]',
                     "2026-07-13",
+                    "invalid",
+                    '{"mode":"authored_groups","groups":[{"group_id":"x","label_ja":"x","label_en":"x","feature_ids":["F_VARIABLE_DOMAIN"]}]}',
+                    "不正",
+                    "Invalid",
+                    '["feature"]',
                 ),
             )
 

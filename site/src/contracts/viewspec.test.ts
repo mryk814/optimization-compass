@@ -8,9 +8,19 @@ function rawView() {
     dataset_version: "0.2.0",
     generated_at: "2026-07-13T00:00:00Z",
     view_id: "problem-structure",
+    preset_id: "VIEW_PROBLEM_STRUCTURE",
     version: "1.0.0",
     title: "構造マップ",
     description: "説明",
+    limitations: "制限",
+    axis: "problem_structure",
+    relation_types: ["hierarchy"],
+    max_depth: 3,
+    filter_policy: {
+      mode: "authored_groups",
+      groups: [{ group_id: "root", label: "Root", label_en: "Root", question_ids: [], feature_ids: ["F1"], method_ids: [], alternative_ids: [] }],
+    },
+    focus_fallback_entity_types: ["feature"],
     root_node_ids: ["opaque-root"],
     nodes: [
       {
@@ -95,6 +105,28 @@ describe("ViewSpec runtime boundary", () => {
     const model = buildMapModel(view);
     expect(model.rootNodes).toEqual([]);
     expect(model.diagnostics).toEqual([]);
+  });
+
+  test("reports nodes beyond max depth and undeclared edge types", () => {
+    const base = rawView();
+    const root = { ...base.nodes[0], related_entities: [], source_ids: [] };
+    const view = parseViewSpec({
+      ...base,
+      max_depth: 1,
+      root_node_ids: ["root"],
+      nodes: [
+        { ...root, node_id: "root" },
+        { ...root, node_id: "child", parent_node_id: "root" },
+        { ...root, node_id: "grandchild", parent_node_id: "child" },
+      ],
+      edges: [{ edge_id: "future", edge_type: "future", source_node_id: "root", target_node_id: "child", label: "", explanation: "future" }],
+      entities: [],
+    });
+
+    expect(buildMapModel(view).diagnostics.map((item) => item.kind)).toEqual([
+      "undeclared-relation",
+      "max-depth",
+    ]);
   });
 
   test("orders roots and siblings deterministically and reports broken references and cycles", () => {

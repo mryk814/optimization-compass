@@ -13,8 +13,60 @@ class MetadataModel(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
 
+class ViewFilterGroupSeed(MetadataModel):
+    group_id: NonBlank
+    label_ja: NonBlank
+    label_en: NonBlank
+    question_ids: list[NonBlank] = Field(default_factory=list)
+    feature_ids: list[NonBlank] = Field(default_factory=list)
+    method_ids: list[NonBlank] = Field(default_factory=list)
+    alternative_ids: list[NonBlank] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def validate_selectors(self) -> ViewFilterGroupSeed:
+        selectors = [
+            *self.question_ids,
+            *self.feature_ids,
+            *self.method_ids,
+            *self.alternative_ids,
+        ]
+        if not selectors:
+            raise ValueError("view filter group requires at least one canonical selector")
+        for name, values in (
+            ("question_ids", self.question_ids),
+            ("feature_ids", self.feature_ids),
+            ("method_ids", self.method_ids),
+            ("alternative_ids", self.alternative_ids),
+        ):
+            _require_unique(values, name)
+        return self
+
+
+class ViewFilterPolicySeed(MetadataModel):
+    mode: Literal["authored_groups"]
+    groups: list[ViewFilterGroupSeed] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_groups(self) -> ViewFilterPolicySeed:
+        _require_unique([group.group_id for group in self.groups], "view filter group IDs")
+        selectors = [
+            (selector_type, selector_id)
+            for group in self.groups
+            for selector_type, selector_ids in (
+                ("question", group.question_ids),
+                ("feature", group.feature_ids),
+                ("method", group.method_ids),
+                ("alternative", group.alternative_ids),
+            )
+            for selector_id in selector_ids
+        ]
+        _require_unique(selectors, "view filter selectors")
+        return self
+
+
 class ViewPresetSeed(MetadataModel):
     preset_id: NonBlank
+    view_id: NonBlank
     family: Literal["semantic_tree", "algorithm_theater", "comparison"]
     name_ja: NonBlank
     name_en: NonBlank
@@ -26,6 +78,10 @@ class ViewPresetSeed(MetadataModel):
     axis: NonBlank
     relation_types: list[NonBlank] = Field(min_length=1)
     max_depth: int = Field(ge=1)
+    filter_policy: ViewFilterPolicySeed
+    limitations_ja: NonBlank
+    limitations_en: NonBlank
+    focus_fallback_entity_types: list[NonBlank] = Field(min_length=1)
     source_ids: list[NonBlank] = Field(min_length=1)
     last_verified: NonBlank
 
@@ -37,6 +93,7 @@ class ViewPresetSeed(MetadataModel):
                 "supported root requires both root entity fields; other states forbid them"
             )
         _require_unique(self.relation_types, "relation_types")
+        _require_unique(self.focus_fallback_entity_types, "focus_fallback_entity_types")
         _require_unique(self.source_ids, "source_ids")
         return self
 

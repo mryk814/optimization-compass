@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.dataset_release import verify_database
+from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.predicates import (
     PredicateCatalog,
     PredicateContractError,
@@ -345,6 +346,40 @@ class KnowledgeRepository:
             """,
             unique_ids,
         )
+
+    def semantic_view_presets(self) -> list[ViewPresetSeed]:
+        rows = self.fetch_all(
+            """
+            SELECT preset_id, view_id, family, name_ja, name_en,
+                   description_ja, description_en, root_support_status,
+                   root_entity_type, root_entity_id, axis, relation_types_json,
+                   max_depth, filter_policy_json, limitations_ja, limitations_en,
+                   focus_fallback_entity_types_json, source_ids_json, last_verified
+            FROM view_presets
+            WHERE family = 'semantic_tree'
+            ORDER BY rowid
+            """
+        )
+        presets: list[ViewPresetSeed] = []
+        for row in rows:
+            relation_types = json.loads(str(row.pop("relation_types_json")))
+            filter_policy = json.loads(str(row.pop("filter_policy_json")))
+            focus_fallback_entity_types = json.loads(
+                str(row.pop("focus_fallback_entity_types_json"))
+            )
+            source_ids = json.loads(str(row.pop("source_ids_json")))
+            presets.append(
+                ViewPresetSeed.model_validate(
+                    {
+                        **row,
+                        "relation_types": relation_types,
+                        "filter_policy": filter_policy,
+                        "focus_fallback_entity_types": focus_fallback_entity_types,
+                        "source_ids": source_ids,
+                    }
+                )
+            )
+        return presets
 
     def recommendation_questions(self) -> list[dict[str, Any]]:
         rows = self.fetch_all(

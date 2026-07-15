@@ -10,7 +10,10 @@ import rawSiteData from "../../../public/data/recommendation/site-data.json";
 
 const view = {
   dataset_version: "0.2.0", generated_at: "2026-07-13T00:00:00Z",
-  view_id: "problem-structure", version: "1.0.0", title: "Map", description: "",
+  view_id: "problem-structure", preset_id: "VIEW_PROBLEM_STRUCTURE", version: "1.0.0", title: "Map", description: "Map",
+  limitations: "No ranking", axis: "problem_structure", relation_types: ["hierarchy"], max_depth: 3,
+  filter_policy: { mode: "authored_groups", groups: [{ group_id: "root", label: "Root", label_en: "Root", question_ids: ["Q01"], feature_ids: [], method_ids: [], alternative_ids: [] }] },
+  focus_fallback_entity_types: ["method"],
   root_node_ids: ["opaque-later", "opaque-first"], edges: [], entities: [{
     entity_id: "M_TARGET", entity_type: "method", label: "Target", label_en: "Target",
     summary: "", source_ids: [], url: "",

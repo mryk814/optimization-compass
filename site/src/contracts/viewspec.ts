@@ -48,13 +48,35 @@ export interface ViewEntity {
   url: string;
 }
 
+export interface ViewFilterGroup {
+  group_id: string;
+  label: string;
+  label_en: string;
+  question_ids: string[];
+  feature_ids: string[];
+  method_ids: string[];
+  alternative_ids: string[];
+}
+
+export interface ViewFilterPolicy {
+  mode: "authored_groups";
+  groups: ViewFilterGroup[];
+}
+
 export interface ViewSpec {
   dataset_version: string;
   generated_at: string;
   view_id: string;
+  preset_id: string;
   version: string;
   title: string;
   description: string;
+  limitations: string;
+  axis: string;
+  relation_types: string[];
+  max_depth: number;
+  filter_policy: ViewFilterPolicy;
+  focus_fallback_entity_types: string[];
   root_node_ids: string[];
   nodes: ViewNode[];
   edges: ViewEdge[];
@@ -66,6 +88,8 @@ export type MapDiagnosticKind =
   | "missing-parent"
   | "missing-edge-node"
   | "cycle"
+  | "max-depth"
+  | "undeclared-relation"
   | "missing-entity"
   | "missing-source";
 
@@ -191,6 +215,29 @@ function parseEntity(value: unknown, index: number): ViewEntity {
   };
 }
 
+function parseFilterPolicy(value: unknown): ViewFilterPolicy {
+  const raw = record(value, "filter_policy");
+  if (raw.mode !== "authored_groups") fail("filter_policy.mode", "must be authored_groups");
+  if (!Array.isArray(raw.groups) || raw.groups.length === 0) {
+    fail("filter_policy.groups", "must be a non-empty array");
+  }
+  return {
+    mode: "authored_groups",
+    groups: raw.groups.map((value, index) => {
+      const group = record(value, `filter_policy.groups[${index}]`);
+      return {
+        group_id: string(group.group_id, `filter_policy.groups[${index}].group_id`, false),
+        label: string(group.label, `filter_policy.groups[${index}].label`, false),
+        label_en: string(group.label_en, `filter_policy.groups[${index}].label_en`, false),
+        question_ids: stringArray(group.question_ids, `filter_policy.groups[${index}].question_ids`),
+        feature_ids: stringArray(group.feature_ids, `filter_policy.groups[${index}].feature_ids`),
+        method_ids: stringArray(group.method_ids, `filter_policy.groups[${index}].method_ids`),
+        alternative_ids: stringArray(group.alternative_ids, `filter_policy.groups[${index}].alternative_ids`),
+      };
+    }),
+  };
+}
+
 function assertUnique(values: readonly string[], kind: "node" | "entity" | "edge"): void {
   const seen = new Set<string>();
   for (const value of values) {
@@ -204,13 +251,23 @@ export function parseViewSpec(value: unknown): ViewSpec {
   if (!Array.isArray(raw.nodes)) fail("nodes", "must be an array");
   if (!Array.isArray(raw.edges)) fail("edges", "must be an array");
   if (!Array.isArray(raw.entities)) fail("entities", "must be an array");
+  if (!Number.isInteger(raw.max_depth) || (raw.max_depth as number) < 1) {
+    fail("max_depth", "must be a positive integer");
+  }
   const view: ViewSpec = {
     dataset_version: string(raw.dataset_version, "dataset_version", false),
     generated_at: string(raw.generated_at, "generated_at", false),
     view_id: string(raw.view_id, "view_id", false),
+    preset_id: string(raw.preset_id, "preset_id", false),
     version: string(raw.version, "version", false),
     title: string(raw.title, "title", false),
-    description: string(raw.description, "description"),
+    description: string(raw.description, "description", false),
+    limitations: string(raw.limitations, "limitations", false),
+    axis: string(raw.axis, "axis", false),
+    relation_types: stringArray(raw.relation_types, "relation_types"),
+    max_depth: raw.max_depth as number,
+    filter_policy: parseFilterPolicy(raw.filter_policy),
+    focus_fallback_entity_types: stringArray(raw.focus_fallback_entity_types, "focus_fallback_entity_types"),
     root_node_ids: stringArray(raw.root_node_ids, "root_node_ids"),
     nodes: raw.nodes.map(parseNode),
     edges: raw.edges.map(parseEdge),
@@ -219,6 +276,7 @@ export function parseViewSpec(value: unknown): ViewSpec {
   assertUnique(view.nodes.map((node) => node.node_id), "node");
   assertUnique(view.entities.map((entity) => entity.entity_id), "entity");
   assertUnique(view.edges.map((edge) => edge.edge_id), "edge");
+  assertUnique(view.filter_policy.groups.map((group) => group.group_id), "node");
   return view;
 }
 
@@ -272,6 +330,9 @@ export function buildMapModel(view: ViewSpec): MapModel {
     if (!nodeById.has(edge.source_node_id) || !nodeById.has(edge.target_node_id)) {
       diagnostics.push({ kind: "missing-edge-node", subjectId: edge.edge_id, message: `接続 ${edge.edge_id} の端点が見つかりません。` });
     }
+    if (!view.relation_types.includes(edge.edge_type)) {
+      diagnostics.push({ kind: "undeclared-relation", subjectId: edge.edge_id, message: `接続 ${edge.edge_id} の型 ${edge.edge_type} はViewで宣言されていません。` });
+    }
   }
 
   const cycleMembers = new Set<string>();
@@ -289,6 +350,18 @@ export function buildMapModel(view: ViewSpec): MapModel {
   }
   for (const nodeId of [...cycleMembers].sort()) {
     diagnostics.push({ kind: "cycle", subjectId: nodeId, message: `親子関係に循環があります: ${nodeId}` });
+  }
+  for (const node of view.nodes) {
+    if (cycleMembers.has(node.node_id)) continue;
+    let depth = 0;
+    let current = parentByChild.get(node.node_id);
+    while (current !== undefined && depth <= view.max_depth) {
+      depth += 1;
+      current = parentByChild.get(current);
+    }
+    if (depth > view.max_depth) {
+      diagnostics.push({ kind: "max-depth", subjectId: node.node_id, message: `「${node.label || node.node_id}」は最大深度 ${view.max_depth} を超えています。` });
+    }
   }
 
   const roots = view.root_node_ids.flatMap((rootId) => {

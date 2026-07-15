@@ -2,6 +2,7 @@
   "view_presets": [
     {
       "preset_id": "VIEW_PROBLEM_STRUCTURE",
+      "view_id": "problem-structure",
       "family": "semantic_tree",
       "name_ja": "問題構造マップ",
       "name_en": "Problem structure map",
@@ -11,13 +12,118 @@
       "root_entity_type": "view_preset",
       "root_entity_id": "VIEW_PROBLEM_STRUCTURE",
       "axis": "problem_structure",
-      "relation_types": ["question", "answer", "recommendation"],
+      "relation_types": ["hierarchy"],
       "max_depth": 3,
+      "filter_policy": {
+        "mode": "authored_groups",
+        "groups": [
+          {"group_id":"alternative-first","label_ja":"代替解法を先に確認","label_en":"Check alternatives first","alternative_ids":["ALT_CLOSED_FORM","ALT_LINEAR_SYSTEM","ALT_EIGEN","ALT_LEAST_SQUARES","ALT_ROOT","ALT_FEASIBILITY","ALT_DYNAMIC_PROGRAMMING","ALT_GRAPH","ALT_SPECIALIZED","ALT_PROJECTION_PROX","ALT_STAT_INFERENCE","ALT_SIMULATION_SEARCH","ALT_SYMBOLIC","ALT_ENUMERATION","ALT_DECOMPOSITION","ALT_RELAXATION","ALT_SURROGATE","ALT_GENERIC_OPT"]},
+          {"group_id":"variable-domain","label_ja":"変数と計算資源","label_en":"Variables and compute","question_ids":["Q01","Q08","Q12"]},
+          {"group_id":"objective-information","label_ja":"目的関数と評価情報","label_en":"Objective and evaluation information","question_ids":["Q02","Q03","Q05","Q06","Q07"]},
+          {"group_id":"constraint-structure","label_ja":"制約と特殊構造","label_en":"Constraints and special structure","question_ids":["Q04","Q11"]},
+          {"group_id":"required-outcome-guarantee","label_ja":"求める解と保証","label_en":"Required outcome and guarantee","question_ids":["Q09","Q10"]}
+        ]
+      },
+      "limitations_ja": "手法の優劣を示す図ではなく、問題の記述を整理する入口です。",
+      "limitations_en": "This organizes problem descriptions; it does not rank methods.",
+      "focus_fallback_entity_types": ["feature", "method", "problem", "alternative"],
       "source_ids": ["S001"],
-      "last_verified": "2026-07-13"
+      "last_verified": "2026-07-15"
+    },
+    {
+      "preset_id": "VIEW_AVAILABLE_INFORMATION",
+      "view_id": "available-information",
+      "family": "semantic_tree",
+      "name_ja": "Oracle View",
+      "name_en": "Oracle View",
+      "description_ja": "目的値・微分・ノイズ・評価費など、solverが利用できる情報を見渡す。",
+      "description_en": "Inspect the objective, derivative, noise, and cost information available to a solver.",
+      "root_support_status": "supported",
+      "root_entity_type": "view_preset",
+      "root_entity_id": "VIEW_AVAILABLE_INFORMATION",
+      "axis": "available_information",
+      "relation_types": ["hierarchy"],
+      "max_depth": 2,
+      "filter_policy": {
+        "mode": "authored_groups",
+        "groups": [
+          {"group_id":"objective-value","label_ja":"目的値","label_en":"Objective value","feature_ids":["F_OBJECTIVE_FORM","F_EVALUATION_RELIABILITY"]},
+          {"group_id":"gradient","label_ja":"勾配","label_en":"Gradient","feature_ids":["F_DERIVATIVE_ACCESS","F_DERIVATIVE_ANALYTIC_GRADIENT","F_DERIVATIVE_AUTODIFF","F_DERIVATIVE_STOCHASTIC_GRADIENT"]},
+          {"group_id":"second-order","label_ja":"二階情報","label_en":"Second-order information","feature_ids":["F_DERIVATIVE_HESSIAN","F_DERIVATIVE_HVP"]},
+          {"group_id":"noise","label_ja":"ノイズと信頼性","label_en":"Noise and reliability","feature_ids":["F_NOISE_LEVEL","F_OBJECTIVE_NOISY","F_DERIVATIVE_NOISY"]},
+          {"group_id":"evaluation-cost","label_ja":"評価費と予算","label_en":"Evaluation cost and budget","feature_ids":["F_EVALUATION_COST","F_TIME_OBJECTIVE_SEC","F_BUDGET_MAX_EVALUATIONS","F_BUDGET_PARALLEL_EVALUATION"]}
+        ]
+      },
+      "limitations_ja": "情報が利用可能でも、精度・費用・実装品質によって実用性は変わります。",
+      "limitations_en": "Availability alone does not establish accuracy, cost, or implementation quality.",
+      "focus_fallback_entity_types": ["feature"],
+      "source_ids": ["S001", "S054"],
+      "last_verified": "2026-07-15"
+    },
+    {
+      "preset_id": "VIEW_GUARANTEE_OUTCOME",
+      "view_id": "guarantee-outcome",
+      "family": "semantic_tree",
+      "name_ja": "Guarantee View",
+      "name_en": "Guarantee View",
+      "description_ja": "実行可能解・局所解・gap・大域証明・Pareto集合という到達点の違いを整理する。",
+      "description_en": "Compare feasible, local, bounded-gap, globally certified, and Pareto outcomes.",
+      "root_support_status": "supported",
+      "root_entity_type": "view_preset",
+      "root_entity_id": "VIEW_GUARANTEE_OUTCOME",
+      "axis": "guarantee_outcome",
+      "relation_types": ["hierarchy"],
+      "max_depth": 2,
+      "filter_policy": {
+        "mode": "authored_groups",
+        "groups": [
+          {"group_id":"feasible","label_ja":"実行可能解","label_en":"Feasible solution","feature_ids":["F_GUARANTEE_FEASIBLE_ONLY","F_CONSTRAINT_ALWAYS_FEASIBLE_REQUIRED"]},
+          {"group_id":"local","label_ja":"局所解","label_en":"Local solution","feature_ids":["F_GUARANTEE_LOCAL_OK"]},
+          {"group_id":"gap-bound","label_ja":"gapと上下界","label_en":"Gap and bounds","feature_ids":["F_GUARANTEE_OPTIMALITY_GAP","F_GUARANTEE_BOUNDS"]},
+          {"group_id":"global-proof","label_ja":"大域証明","label_en":"Global certificate","feature_ids":["F_GUARANTEE_GLOBAL_CERTIFICATE","F_GUARANTEE_EXACT_REQUIRED","F_GUARANTEE_GLOBAL_DESIRED"]},
+          {"group_id":"pareto","label_ja":"複数解とPareto集合","label_en":"Multiple solutions and Pareto set","feature_ids":["F_GUARANTEE_PARETO_SET","F_GUARANTEE_MULTIPLE_SOLUTIONS"]}
+        ]
+      },
+      "limitations_ja": "保証の種類だけでは、計算時間や数値誤差、前提条件までは比較できません。",
+      "limitations_en": "Guarantee type alone does not compare runtime, numerical error, or assumptions.",
+      "focus_fallback_entity_types": ["feature"],
+      "source_ids": ["S001", "S055", "S056"],
+      "last_verified": "2026-07-15"
+    },
+    {
+      "preset_id": "VIEW_METHOD_MECHANISM",
+      "view_id": "method-mechanism",
+      "family": "semantic_tree",
+      "name_ja": "Method mechanism View",
+      "name_en": "Method mechanism View",
+      "description_ja": "更新則や探索の仕組みで代表的な最適化手法を見渡す。",
+      "description_en": "Browse representative optimization methods by update and search mechanism.",
+      "root_support_status": "supported",
+      "root_entity_type": "view_preset",
+      "root_entity_id": "VIEW_METHOD_MECHANISM",
+      "axis": "method_mechanism",
+      "relation_types": ["hierarchy"],
+      "max_depth": 2,
+      "filter_policy": {
+        "mode": "authored_groups",
+        "groups": [
+          {"group_id":"gradient","label_ja":"勾配・二階更新","label_en":"Gradient and second-order updates","method_ids":["M_GRADIENT_DESCENT","M_MOMENTUM_SGD","M_ADAM","M_BFGS","M_NEWTON"]},
+          {"group_id":"simplex","label_ja":"単体・基底更新","label_en":"Simplex and basis updates","method_ids":["M_NELDER_MEAD","M_SIMPLEX","M_DUAL_SIMPLEX"]},
+          {"group_id":"population","label_ja":"集団探索","label_en":"Population search","method_ids":["M_GENETIC_ALGORITHM","M_CMA_ES","M_DIFFERENTIAL_EVOLUTION","M_NSGA_II"]},
+          {"group_id":"surrogate","label_ja":"代理モデル探索","label_en":"Surrogate-guided search","method_ids":["M_BAYESIAN_OPT_GP"]},
+          {"group_id":"search-tree","label_ja":"探索木と枝刈り","label_en":"Search trees and pruning","method_ids":["M_BRANCH_BOUND","M_BRANCH_CUT","M_CP_SAT","M_SPATIAL_BRANCH_BOUND"]},
+          {"group_id":"decomposition","label_ja":"分解と分散更新","label_en":"Decomposition and distributed updates","method_ids":["M_ADMM","M_ADMM_QP","M_MOEA_D"]}
+        ]
+      },
+      "limitations_ja": "同じ手法が複数の仕組みを持つ場合でも、ここでは学習上の代表分類を一つ示します。",
+      "limitations_en": "Methods with several mechanisms are shown under one representative learning category.",
+      "focus_fallback_entity_types": ["method"],
+      "source_ids": ["S001", "S002"],
+      "last_verified": "2026-07-15"
     },
     {
       "preset_id": "VIEW_NELDER_MEAD_THEATER",
+      "view_id": "nelder-mead-theater",
       "family": "algorithm_theater",
       "name_ja": "Nelder–Mead劇場",
       "name_en": "Nelder–Mead theater",
@@ -29,11 +135,16 @@
       "axis": "algorithm_state",
       "relation_types": ["state", "event"],
       "max_depth": 2,
+      "filter_policy": {"mode":"authored_groups","groups":[{"group_id":"nelder-mead","label_ja":"Nelder–Mead","label_en":"Nelder–Mead","method_ids":["M_NELDER_MEAD"]}]},
+      "limitations_ja": "二次元の教育用軌跡であり、高次元での性能を保証しません。",
+      "limitations_en": "This two-dimensional educational trace does not establish high-dimensional performance.",
+      "focus_fallback_entity_types": ["method"],
       "source_ids": ["S002"],
       "last_verified": "2026-07-13"
     },
     {
       "preset_id": "VIEW_FIRST_ORDER_COMPARISON",
+      "view_id": "first-order-comparison",
       "family": "comparison",
       "name_ja": "一次法の比較",
       "name_en": "First-order comparison",
@@ -45,6 +156,10 @@
       "axis": "oracle_evaluations",
       "relation_types": ["member", "trajectory"],
       "max_depth": 2,
+      "filter_policy": {"mode":"authored_groups","groups":[{"group_id":"first-order","label_ja":"一次法","label_en":"First-order methods","method_ids":["M_GRADIENT_DESCENT","M_MOMENTUM_SGD","M_ADAM"]}]},
+      "limitations_ja": "一つの問題と予算での比較であり、一般的な順位を表しません。",
+      "limitations_en": "A comparison on one problem and budget is not a general ranking.",
+      "focus_fallback_entity_types": ["method"],
       "source_ids": ["S070"],
       "last_verified": "2026-07-13"
     }
