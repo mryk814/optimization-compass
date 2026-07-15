@@ -3,7 +3,7 @@ content_id: trust-region-newton-cg
 kind: method
 method_id: M_TRUST_NCG
 title_ja: Trust-region Newton-CG
- title_en: Trust-region Newton-CG
+title_en: Trust-region Newton-CG
 summary: 局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
 source_ids: [S002, S056]
 prerequisites: [newton-method]
