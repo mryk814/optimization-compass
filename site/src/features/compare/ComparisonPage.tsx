@@ -351,7 +351,9 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
   if (scenarioIndex.dataset_version !== manifest.dataset_version) {
     throw new Error("Visualization scenario dataset version does not match the manifest.");
   }
-  const comparison = index.comparisons.find((item) => item.comparison_id === comparisonId);
+  const comparison = index.comparisons.find(
+    (item) => item.comparison_id === comparisonId || item.aliases.includes(comparisonId),
+  );
   if (!comparison) throw new EntityNotFoundError("比較ID", comparisonId);
   const traces = await Promise.all(comparison.members.map(async (member) => {
     const traceResponse = await fetch(`${siteBaseUrl()}data/traces/${member.trace_id}.json`, { signal });

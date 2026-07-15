@@ -73,6 +73,16 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
   }
 });
 
+test("旧canonical comparison IDのdeep linkが現行の比較へ解決する", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_FIRST_ORDER_ROSENBROCK");
+
+  await expect(page.getByRole("heading", { level: 1, name: "手法を比較する" })).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "比較preset", exact: true })).toHaveValue(
+    "COMPARE_GRADIENT_FAMILY",
+  );
+  await expect(page.getByText("細長い谷で一次法を比べる", { exact: true })).toBeVisible();
+});
+
 test("Learn検索からmethod detailとrelated visualizationへ進む", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn");
   await page.getByRole("textbox", { name: "検索" }).fill("Nelder");

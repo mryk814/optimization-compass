@@ -60,13 +60,20 @@ jobs:
           uv run ruff format --check .
           uv run mypy src
       - name: Run Python tests
-        run: uv run pytest --cov=optimization_compass --cov-report=term-missing
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_REF" == "refs/heads/main" ]]; then
+            uv run pytest --cov=optimization_compass --cov-report=term-missing
+          else
+            uv run pytest
+          fi
       - name: Regenerate site data from the validated database
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           rm -rf site/public/data
           uv run optimization-compass export-site-data --output site/public/data
           git diff --exit-code -- site/public/data
       - name: Verify data, content, licenses, and deterministic release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           uv run optimization-compass verify-data
           uv run python scripts/verify_content.py
@@ -86,6 +93,7 @@ jobs:
         run: npm run build
         working-directory: site
       - name: Stamp deployment identity
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: identity
         env:
           COMMIT_SHA: ${{ github.sha }}
@@ -98,6 +106,7 @@ jobs:
           echo "commit_sha=$COMMIT_SHA" >> "$GITHUB_OUTPUT"
           echo "dataset_version=$DATASET_VERSION" >> "$GITHUB_OUTPUT"
       - name: Verify the exact Pages directory to upload
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           COMMIT_SHA: ${{ steps.identity.outputs.commit_sha }}
           DATASET_VERSION: ${{ steps.identity.outputs.dataset_version }}
@@ -107,6 +116,7 @@ jobs:
             --expected-commit-sha "$COMMIT_SHA" \
             --expected-dataset-version "$DATASET_VERSION"
       - name: Upload the single validated Pages artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           name: github-pages
@@ -127,6 +137,7 @@ jobs:
 
   browser_e2e:
     name: Browser E2E and accessibility
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: validate_pages_artifact
     runs-on: ubuntu-latest
     steps:

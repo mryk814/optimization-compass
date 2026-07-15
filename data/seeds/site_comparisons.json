@@ -2,6 +2,9 @@
   "comparisons": [
     {
       "comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "aliases": ["COMPARE_FIRST_ORDER_ROSENBROCK"],
       "preset_id": "elongated-valley",
       "title_ja": "細長い谷で一次法を比べる",
       "title_en": "First-order methods in an elongated valley",
@@ -24,6 +27,9 @@
     },
     {
       "comparison_id": "COMPARE_GRADIENT_DIVERGENCE",
+      "identity_status": "derived",
+      "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "aliases": [],
       "preset_id": "learning-rate-divergence",
       "title_ja": "学習率過大による発散を観察する",
       "title_en": "Observe divergence from an excessive learning rate",

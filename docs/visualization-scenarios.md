@@ -130,8 +130,8 @@ envelope must declare pairwise or group eligibility:
 ```json
 {
   "comparison_contract_version": "1.0.0",
-  "comparison_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
-  "scenario_ids": ["SCENARIO_GD_ROSENBROCK", "SCENARIO_MOMENTUM_ROSENBROCK"],
+  "comparison_id": "COMPARE_GRADIENT_FAMILY",
+  "scenario_ids": ["SCENARIO_GD_QUADRATIC", "SCENARIO_MOMENTUM_QUADRATIC"],
   "comparability": "directly_comparable",
   "caveat_ja": null,
   "caveat_en": null,

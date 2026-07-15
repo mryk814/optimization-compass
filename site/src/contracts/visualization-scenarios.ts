@@ -11,6 +11,8 @@ export interface VisualizationScenario {
   contract_version: "1.0.0";
   dataset_version: string;
   scenario_id: string;
+  identity_status: "canonical" | "derived" | "generated_only";
+  canonical_scenario_id: string | null;
   title_ja: string;
   title_en: string;
   purpose: VisualizationPurpose;
@@ -90,7 +92,7 @@ export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScen
 
 function parseScenario(raw: unknown, field: string): VisualizationScenario {
   const data = record(raw, field);
-  exact(data, ["contract_version", "dataset_version", "scenario_id", "title_ja", "title_en", "purpose", "problem_definition_id", "problem_instance_id", "lesson", "experiment", "runs", "artifact", "source_ids", "last_verified"], field);
+  exact(data, ["contract_version", "dataset_version", "scenario_id", "identity_status", "canonical_scenario_id", "title_ja", "title_en", "purpose", "problem_definition_id", "problem_instance_id", "lesson", "experiment", "runs", "artifact", "source_ids", "last_verified"], field);
   version(data.contract_version, `${field}.contract_version`);
   const lesson = parseLesson(data.lesson, `${field}.lesson`);
   const experiment = parseExperiment(data.experiment, `${field}.experiment`);
@@ -99,10 +101,26 @@ function parseScenario(raw: unknown, field: string): VisualizationScenario {
     throw new Error(`${field}.runs must be non-empty and unique.`);
   }
   const purpose = oneOf(data.purpose, purposes, `${field}.purpose`);
+  const identityStatus = scenarioIdentityStatus(data.identity_status, `${field}.identity_status`);
+  const scenarioId = text(data.scenario_id, `${field}.scenario_id`);
+  const canonicalScenarioId = data.canonical_scenario_id === null
+    ? null
+    : text(data.canonical_scenario_id, `${field}.canonical_scenario_id`);
+  if (identityStatus === "canonical" && canonicalScenarioId !== scenarioId) {
+    throw new Error(`${field} canonical scenario must point to itself.`);
+  }
+  if (identityStatus === "derived" && (!canonicalScenarioId || canonicalScenarioId === scenarioId)) {
+    throw new Error(`${field} derived scenario must point to a different canonical scenario.`);
+  }
+  if (identityStatus === "generated_only" && canonicalScenarioId !== null) {
+    throw new Error(`${field} generated-only scenario cannot point to a canonical scenario.`);
+  }
   return {
     contract_version: "1.0.0",
     dataset_version: text(data.dataset_version, `${field}.dataset_version`),
-    scenario_id: text(data.scenario_id, `${field}.scenario_id`),
+    scenario_id: scenarioId,
+    identity_status: identityStatus,
+    canonical_scenario_id: canonicalScenarioId,
     title_ja: text(data.title_ja, `${field}.title_ja`),
     title_en: text(data.title_en, `${field}.title_en`),
     purpose,
@@ -115,6 +133,13 @@ function parseScenario(raw: unknown, field: string): VisualizationScenario {
     source_ids: nonEmptyTextList(data.source_ids, `${field}.source_ids`),
     last_verified: text(data.last_verified, `${field}.last_verified`),
   };
+}
+
+function scenarioIdentityStatus(value: unknown, field: string): VisualizationScenario["identity_status"] {
+  if (value !== "canonical" && value !== "derived" && value !== "generated_only") {
+    throw new Error(`${field} is invalid.`);
+  }
+  return value;
 }
 
 function parseLesson(raw: unknown, field: string): VisualizationScenario["lesson"] {

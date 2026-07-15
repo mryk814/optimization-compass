@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.3.1",
+  "dataset_version": "0.3.2",
   "expectations": [
     {
       "applicability": "expected",
@@ -94,7 +94,7 @@
       "renderer_family": "first_order_trajectory_2d",
       "route_ids": [],
       "scenario_ids": [
-        "SCENARIO_GRADIENT_DESCENT_QUADRATIC",
+        "SCENARIO_GD_QUADRATIC",
         "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE"
       ],
       "slice_id": null,
@@ -205,120 +205,7 @@
     }
   ],
   "generated_at": "2026-07-15T00:00:00Z",
-  "integrity_issues": [
-    {
-      "code": "broken_scenario_id",
-      "detail": "The canonical database scenario has no generated trace with the same ID.",
-      "entity_id": "SCENARIO_GD_QUADRATIC",
-      "entity_type": "scenario",
-      "severity": "error"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_scenario",
-      "detail": "The generated trace scenario is not registered in the canonical database.",
-      "entity_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
-      "entity_type": "scenario",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_comparison",
-      "detail": "The canonical database comparison has no generated comparison with the same ID.",
-      "entity_id": "COMPARE_FIRST_ORDER_ROSENBROCK",
-      "entity_type": "comparison",
-      "severity": "error"
-    },
-    {
-      "code": "orphan_generated_comparison",
-      "detail": "The generated comparison is not registered in the canonical database.",
-      "entity_id": "COMPARE_GRADIENT_DIVERGENCE",
-      "entity_type": "comparison",
-      "severity": "warning"
-    },
-    {
-      "code": "orphan_generated_comparison",
-      "detail": "The generated comparison is not registered in the canonical database.",
-      "entity_id": "COMPARE_GRADIENT_FAMILY",
-      "entity_type": "comparison",
-      "severity": "warning"
-    }
-  ],
+  "integrity_issues": [],
   "priorities": [
     {
       "factors": {
@@ -1992,12 +1879,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "bayesian-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -2021,7 +1908,7 @@
           ]
         },
         "map": {
-          "count": 23,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2047,6 +1934,7 @@
             "S059",
             "S069",
             "S075",
+            "bayesian-optimization",
             "hyperparameter-search"
           ]
         },
@@ -3019,12 +2907,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "bayesian-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -3046,7 +2934,7 @@
           ]
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3063,6 +2951,7 @@
             "S059",
             "S069",
             "S075",
+            "bayesian-optimization",
             "hyperparameter-search"
           ]
         },

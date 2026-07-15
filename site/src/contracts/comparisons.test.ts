@@ -8,6 +8,9 @@ const payload = {
   comparisons: [
     {
       comparison_id: "COMPARE_GRADIENT_FAMILY",
+      identity_status: "canonical",
+      canonical_comparison_id: "COMPARE_GRADIENT_FAMILY",
+      aliases: [],
       preset_id: "elongated-valley",
       title_ja: "一次法の軌跡比較",
       title_en: "First-order trajectory comparison",

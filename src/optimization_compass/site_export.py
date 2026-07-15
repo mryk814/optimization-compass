@@ -58,6 +58,7 @@ from optimization_compass.visualization_scenarios import (
     VisualizationScenario,
     VisualizationScenarioIndex,
     VisualizationSeed,
+    scenario_identity,
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
@@ -509,6 +510,16 @@ def _write_dummy_trace(
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
     generated_traces.extend(additional_traces or [])
+    generated_traces = [
+        trace.model_copy(
+            update={
+                "scenario_id": {
+                    "SCENARIO_GRADIENT_DESCENT_QUADRATIC": "SCENARIO_GD_QUADRATIC",
+                }.get(trace.scenario_id, trace.scenario_id)
+            }
+        )
+        for trace in generated_traces
+    ]
     index = index.model_copy(
         update={
             "traces": [
@@ -617,10 +628,13 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         else "comparison"
     )
     payload = canonical_trace_bytes(trace)
+    identity_status, canonical_scenario_id = scenario_identity(trace.scenario_id)
     return VisualizationScenario(
         contract_version="1.0.0",
         dataset_version=trace.dataset_version,
         scenario_id=trace.scenario_id,
+        identity_status=identity_status,
+        canonical_scenario_id=canonical_scenario_id,
         title_ja=_trace_title(trace.trace_id, locale="ja"),
         title_en=_trace_title(trace.trace_id, locale="en"),
         purpose=purpose,

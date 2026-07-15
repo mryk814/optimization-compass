@@ -6,6 +6,8 @@
       "contract_version": "1.0.0",
       "dataset_version": "0.2.0",
       "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "identity_status": "canonical",
+      "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "title_ja": "二次関数で単体操作を学ぶ",
       "title_en": "Learn simplex operations on a quadratic",
       "purpose": "mechanism",

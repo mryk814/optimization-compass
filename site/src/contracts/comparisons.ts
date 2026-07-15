@@ -8,6 +8,9 @@ export interface ComparisonMember {
 
 export interface ComparisonSet {
   comparison_id: string;
+  identity_status: "canonical" | "derived";
+  canonical_comparison_id: string;
+  aliases: string[];
   preset_id: string;
   title_ja: string;
   title_en: string;
@@ -78,6 +81,9 @@ export function parseComparisonIndex(raw: unknown): ComparisonIndex {
     }
     return {
       comparison_id: nonEmpty(item.comparison_id, "comparison_id"),
+      identity_status: comparisonIdentityStatus(item.identity_status),
+      canonical_comparison_id: nonEmpty(item.canonical_comparison_id, "canonical_comparison_id"),
+      aliases: stringArray(item.aliases, "aliases"),
       preset_id: nonEmpty(item.preset_id, "preset_id"),
       title_ja: nonEmpty(item.title_ja, "title_ja"),
       title_en: nonEmpty(item.title_en, "title_en"),
@@ -142,4 +148,16 @@ function comparisonEligibility(value: unknown): ComparisonSet["comparability"] {
 function synchronization(value: unknown): "oracle_evaluations" {
   if (value !== "oracle_evaluations") throw new Error("comparison synchronization is invalid.");
   return value;
+}
+
+function comparisonIdentityStatus(value: unknown): ComparisonSet["identity_status"] {
+  if (value !== "canonical" && value !== "derived") {
+    throw new Error("comparison identity status is invalid.");
+  }
+  return value;
+}
+
+function stringArray(value: unknown, owner: string): string[] {
+  if (!Array.isArray(value)) throw new Error(`${owner} must be an array.`);
+  return value.map((item) => nonEmpty(item, owner));
 }
