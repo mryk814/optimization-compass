@@ -908,6 +908,118 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "active-set",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Active-set法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ACTIVE_SET",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "解で等号になる制約集合を推定し、そのface上の等式制約problemを解きながらactive setを追加・削除する方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "adam",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Adam",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ADAM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配の一次momentと二次momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "admm",
       "entity_type": "content",
       "external_url": null,
@@ -960,6 +1072,62 @@
         }
       ],
       "summary": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "augmented-lagrangian",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "拡張Lagrangian法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_AUGMENTED_LAGRANGIAN",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。"
     },
     {
       "aliases": [],
@@ -1218,6 +1386,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "cobyla",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "COBYLA",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_COBYLA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "目的関数と制約の値だけから局所線形modelを作り、trust-region半径内で一般不等式制約付きの局所解を探す微分不要法です。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.convexity",
       "entity_id": "concept.convexity",
       "entity_type": "content",
@@ -1328,6 +1547,57 @@
         }
       ],
       "summary": "目的値だけでなくprimal feasibility・stationarity・active constraint・停止理由を同時に追い、実行可能な連続解を求める最適化familyです。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "coordinate-descent",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "座標降下法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_COORDINATE_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "全変数を同時に動かさず、一つまたは小さなblockだけを更新して安価な部分問題を反復する大規模最適化法です。"
     },
     {
       "aliases": [],
@@ -1506,6 +1776,103 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "direct-global",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "DIRECT",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S008",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S073",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DIRECT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-annealing",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shgo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "bounded boxをhyperrectangleへ分割し、局所性定数を事前固定せずpotentially optimalな領域を選んで細分化する決定的大域探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "dual-annealing",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Dual Annealing",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S009",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DUAL_ANNEALING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-global",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shgo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "dual-simplex",
       "entity_type": "content",
       "external_url": null,
@@ -1671,6 +2038,57 @@
         }
       ],
       "summary": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "interior-point-nlp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非線形内点法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S087",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかNLPを解く方法です。"
     },
     {
       "aliases": [],
@@ -1966,6 +2384,103 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "mirror-descent",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Mirror Descent",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MIRROR_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "Euclidean距離ではなく問題に合うBregman geometryを使い、simplex・確率分布・非一様scale上で劣勾配stepを行う一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "momentum-sgd",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Momentum SGD",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adam",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        }
+      ],
+      "summary": "現在の勾配だけでなく過去の更新を速度として蓄積し、同じ方向の移動を強めて谷を横切る振動を抑える一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "multi-objective",
       "entity_type": "content",
       "external_url": null,
@@ -2114,6 +2629,164 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "pattern-search",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Pattern Search",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PATTERN_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "powell",
+          "target_type": "content"
+        }
+      ],
+      "summary": "現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "powell",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Powell方向集合法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_POWELL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "projected-gradient",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "射影勾配法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "proximal-gradient",
       "entity_type": "content",
       "external_url": null,
@@ -2156,6 +2829,154 @@
         }
       ],
       "summary": "滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "shgo",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SHGO",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S007",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S072",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SHGO",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-global",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-annealing",
+          "target_type": "content"
+        }
+      ],
+      "summary": "bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "slsqp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SLSQP",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "subgradient",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "劣勾配法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SUBGRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。"
     },
     {
       "aliases": [],
@@ -8360,13 +9181,20 @@
       "summary": "局所二次モデルを信頼できる半径内で最小化し、実測改善との比で半径を更新する手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/active-set"
+      ],
       "canonical_url": "/methods/M_ACTIVE_SET",
       "entity_id": "M_ACTIVE_SET",
       "entity_type": "method",
       "external_url": null,
       "label": "active-set NLP/QP",
       "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S012",
@@ -8394,6 +9222,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
@@ -8406,6 +9239,11 @@
           "relation_type": "implementation",
           "target_id": "I_KNITRO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "active-set",
+          "target_type": "content"
         }
       ],
       "summary": "activeと推定した制約だけで部分問題を解く。"
@@ -8467,13 +9305,20 @@
       "summary": "active制約集合を更新してQPを解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/adam"
+      ],
       "canonical_url": "/methods/M_ADAM",
       "entity_id": "M_ADAM",
       "entity_type": "method",
       "external_url": null,
       "label": "Adam",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S047",
@@ -8508,6 +9353,11 @@
           "relation_type": "implementation",
           "target_id": "I_TENSORFLOW_OPTIM",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adam",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
@@ -8693,7 +9543,9 @@
       "summary": "準定値QPをoperator splittingで反復解法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/augmented-lagrangian"
+      ],
       "canonical_url": "/methods/M_AUGMENTED_LAGRANGIAN",
       "entity_id": "M_AUGMENTED_LAGRANGIAN",
       "entity_type": "method",
@@ -8722,6 +9574,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
@@ -8734,6 +9591,11 @@
           "relation_type": "implementation",
           "target_id": "I_NLOPT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
         }
       ],
       "summary": "Lagrange項と二次penaltyを組み合わせ制約を段階的に満たす。"
@@ -9358,7 +10220,9 @@
       "summary": "search distributionの平均と共分散を適応する連続black-box法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/cobyla"
+      ],
       "canonical_url": "/methods/M_COBYLA",
       "entity_id": "M_COBYLA",
       "entity_type": "method",
@@ -9382,6 +10246,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S060",
           "target_type": "source"
         },
@@ -9399,6 +10268,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_COBYLA",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cobyla",
+          "target_type": "content"
         }
       ],
       "summary": "線形補間modelとtrust regionで非線形制約を扱うDFO。"
@@ -9445,7 +10319,9 @@
       "summary": "二次補間modelを用いる制約付きDFO。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/coordinate-descent"
+      ],
       "canonical_url": "/methods/M_COORDINATE_DESCENT",
       "entity_id": "M_COORDINATE_DESCENT",
       "entity_type": "method",
@@ -9476,6 +10352,11 @@
           "relation_type": "evidence",
           "target_id": "S067",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "coordinate-descent",
+          "target_type": "content"
         }
       ],
       "summary": "変数またはblockを一つずつ更新する。"
@@ -9681,7 +10562,9 @@
       "summary": "非負edge shortest pathまたはheuristic付き探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/direct"
+      ],
       "canonical_url": "/methods/M_DIRECT",
       "entity_id": "M_DIRECT",
       "entity_type": "method",
@@ -9710,6 +10593,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S072",
           "target_type": "source"
         },
@@ -9732,6 +10620,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_DIRECT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "direct-global",
+          "target_type": "content"
         }
       ],
       "summary": "Lipschitz定数を明示せずrectanglesを分割するbounded大域探索。"
@@ -9819,6 +10712,34 @@
         }
       ],
       "summary": "control parameterを最適化し状態を前進simulationで消去。"
+    },
+    {
+      "aliases": [
+        "/learn/dual-annealing"
+      ],
+      "canonical_url": null,
+      "entity_id": "M_DUAL_ANNEALING",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Dual Annealing",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S009",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "dual-annealing",
+          "target_type": "content"
+        }
+      ],
+      "summary": ""
     },
     {
       "aliases": [
@@ -10271,7 +11192,9 @@
       "summary": "trajectory周りに動力学・costを二次近似しRiccati再帰でupdate。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/interior-point-nlp"
+      ],
       "canonical_url": "/methods/M_INTERIOR_POINT_NLP",
       "entity_id": "M_INTERIOR_POINT_NLP",
       "entity_type": "method",
@@ -10309,6 +11232,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S087",
+          "target_type": "source"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_CASADI",
           "target_type": "implementation"
@@ -10342,6 +11270,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_TRUST_CONSTR",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
         }
       ],
       "summary": "barrierとprimal-dual KKT系で大規模疎制約NLPを解く。"
@@ -10583,7 +11516,9 @@
       "summary": "meshとpoll方向を適応させ、black-box constraintsも扱うdirect search。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/mirror-descent"
+      ],
       "canonical_url": "/methods/M_MIRROR_DESCENT",
       "entity_id": "M_MIRROR_DESCENT",
       "entity_type": "method",
@@ -10609,6 +11544,11 @@
           "relation_type": "evidence",
           "target_id": "S067",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mirror-descent",
+          "target_type": "content"
         }
       ],
       "summary": "問題幾何に適したBregman距離でgradient stepを一般化。"
@@ -10640,13 +11580,20 @@
       "summary": "多目的問題を近傍scalarized subproblemsへ分解。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/momentum-sgd"
+      ],
       "canonical_url": "/methods/M_MOMENTUM_SGD",
       "entity_id": "M_MOMENTUM_SGD",
       "entity_type": "method",
       "external_url": null,
       "label": "momentum SGD",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S047",
@@ -10660,6 +11607,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
           "target_type": "source"
         },
         {
@@ -10681,6 +11633,11 @@
           "relation_type": "implementation",
           "target_id": "I_TENSORFLOW_OPTIM",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
@@ -11220,7 +12177,9 @@
       "summary": "個体の自己bestと群bestに基づきvelocityを更新。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/pattern-search"
+      ],
       "canonical_url": "/methods/M_PATTERN_SEARCH",
       "entity_id": "M_PATTERN_SEARCH",
       "entity_type": "method",
@@ -11244,6 +12203,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S060",
           "target_type": "source"
         },
@@ -11251,6 +12215,11 @@
           "relation_type": "evidence",
           "target_id": "S063",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "pattern-search",
+          "target_type": "content"
         }
       ],
       "summary": "poll方向上の点を評価しstep sizeを調整。"
@@ -11373,7 +12342,9 @@
       "summary": "一次primal-dual更新で巨大LPをmatrix-vector中心に解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/powell"
+      ],
       "canonical_url": "/methods/M_POWELL",
       "entity_id": "M_POWELL",
       "entity_type": "method",
@@ -11414,6 +12385,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_POWELL",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "powell",
+          "target_type": "content"
         }
       ],
       "summary": "微分なしで複数方向の一次元探索を反復。"
@@ -11505,7 +12481,9 @@
       "summary": "coneのprimal-dual KKT系を解く内点法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/projected-gradient"
+      ],
       "canonical_url": "/methods/M_PROJECTED_GRADIENT",
       "entity_id": "M_PROJECTED_GRADIENT",
       "entity_type": "method",
@@ -11556,6 +12534,11 @@
           "relation_type": "implementation",
           "target_id": "I_PETSC_TAO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "projected-gradient",
+          "target_type": "content"
         }
       ],
       "summary": "gradient step後に実行可能集合へ射影する。"
@@ -11808,7 +12791,9 @@
       "summary": "mini-batch gradientでparameterを更新。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/shgo"
+      ],
       "canonical_url": "/methods/M_SHGO",
       "entity_id": "M_SHGO",
       "entity_type": "method",
@@ -11837,6 +12822,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S072",
           "target_type": "source"
         },
@@ -11854,6 +12844,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_SHGO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "shgo",
+          "target_type": "content"
         }
       ],
       "summary": "simplicial complexと局所探索で低次元bounded問題を探索。"
@@ -12001,7 +12996,9 @@
       "summary": "温度に応じて悪化移動も受理し局所解を脱出。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/slsqp"
+      ],
       "canonical_url": "/methods/M_SLSQP",
       "entity_id": "M_SLSQP",
       "entity_type": "method",
@@ -12052,6 +13049,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_SLSQP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "slsqp",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
@@ -12271,7 +13273,9 @@
       "summary": "各反復でQP近似を解く制約付きNLP法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/subgradient"
+      ],
       "canonical_url": "/methods/M_SUBGRADIENT",
       "entity_id": "M_SUBGRADIENT",
       "entity_type": "method",
@@ -12281,6 +13285,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
           "target_type": "source"
         },
         {
@@ -12297,6 +13306,11 @@
           "relation_type": "evidence",
           "target_id": "S067",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "subgradient",
+          "target_type": "content"
         }
       ],
       "summary": "非滑らか凸関数の劣勾配で更新。"
