@@ -908,6 +908,62 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "admm",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "交互方向乗数法（ADMM）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ADMM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "bayesian-optimization",
       "entity_type": "content",
       "external_url": null,
@@ -930,6 +986,62 @@
         }
       ],
       "summary": "少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "bfgs",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "BFGS法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
     },
     {
       "aliases": [],
@@ -971,6 +1083,67 @@
         }
       ],
       "summary": "上下界を使って、改善できない離散探索の枝をまとめて除外する。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "branch-and-cut",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Branch-and-Cut",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S025",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_BRANCH_CUT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。"
     },
     {
       "aliases": [],
@@ -1155,6 +1328,344 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "differential-evolution",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Differential Evolution（差分進化）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S006",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S074",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "particle-swarm",
+          "target_type": "content"
+        }
+      ],
+      "summary": "個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "dijkstra-astar",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Dijkstra法とA*探索",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DIJKSTRA_ASTAR",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        }
+      ],
+      "summary": "graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "direct-collocation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Direct Collocation",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        }
+      ],
+      "summary": "状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "dual-simplex",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Dual Simplex法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DUAL_SIMPLEX",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "dynamic-programming",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "動的計画法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DYNAMIC_PROGRAMMING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        }
+      ],
+      "summary": "状態と段階に分解し、同じ部分問題の解を再利用してBellman再帰を解くstructure-firstな厳密法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "fista",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "FISTA",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S067",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_FISTA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "genetic-algorithm",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "遺伝的アルゴリズム",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S033",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S040",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_GENETIC_ALGORITHM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "particle-swarm",
+          "target_type": "content"
+        }
+      ],
+      "summary": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "lbfgsb",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "L-BFGS-B法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_LBFGSB",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "least-squares",
       "entity_type": "content",
       "external_url": null,
@@ -1233,6 +1744,52 @@
         }
       ],
       "summary": "線形・凸二次・錐構造を保ったままmodel化し、専用solverの保証と数値情報を利用します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "mads",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Mesh Adaptive Direct Search（MADS）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S094",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        }
+      ],
+      "summary": "mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。"
     },
     {
       "aliases": [],
@@ -1356,6 +1913,190 @@
         }
       ],
       "summary": "複数の目的を単一bestへ潰さず、支配されないtrade-off集合として意思決定を支援します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "newton-method",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Newton法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "particle-swarm",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "粒子群最適化（PSO）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S033",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S040",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PARTICLE_SWARM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
+        }
+      ],
+      "summary": "各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "proximal-gradient",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "近接勾配法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PROX_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        }
+      ],
+      "summary": "滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "trust-region-newton-cg",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Trust-region Newton-CG",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_TRUST_NCG",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        }
+      ],
+      "summary": "局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。"
     },
     {
       "aliases": [],
@@ -7728,7 +8469,9 @@
       "summary": "weight decayをadaptive gradient updateから分離。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/admm"
+      ],
       "canonical_url": "/methods/M_ADMM",
       "entity_id": "M_ADMM",
       "entity_type": "method",
@@ -7737,12 +8480,22 @@
       "relations": [
         {
           "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S055",
           "target_type": "source"
         },
         {
           "relation_type": "evidence",
           "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
           "target_type": "source"
         },
         {
@@ -7759,6 +8512,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "admm",
+          "target_type": "content"
         }
       ],
       "summary": "分離可能な部分問題をdual consensusで交互更新。"
@@ -8121,7 +8879,9 @@
       "summary": "GP posteriorとacquisitionで高価な評価点を選ぶ。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/bfgs"
+      ],
       "canonical_url": "/methods/M_BFGS",
       "entity_id": "M_BFGS",
       "entity_type": "method",
@@ -8162,6 +8922,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_BFGS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bfgs",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
@@ -8255,7 +9020,9 @@
       "summary": "離散分枝とrelaxation boundで部分空間をprune。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/branch-and-cut"
+      ],
       "canonical_url": "/methods/M_BRANCH_CUT",
       "entity_id": "M_BRANCH_CUT",
       "entity_type": "method",
@@ -8361,6 +9128,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_MILP_HIGHS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
         }
       ],
       "summary": "branch-and-boundにcut生成を統合するMILP主力法。"
@@ -8713,7 +9485,9 @@
       "summary": "global constraint propagationとbranchingで有限domainを探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/differential-evolution"
+      ],
       "canonical_url": "/methods/M_DIFFERENTIAL_EVOLUTION",
       "entity_id": "M_DIFFERENTIAL_EVOLUTION",
       "entity_type": "method",
@@ -8774,12 +9548,19 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_DIFFERENTIAL_EVOLUTION",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "differential-evolution",
+          "target_type": "content"
         }
       ],
       "summary": "個体差vectorを用いて候補を変異・交叉。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/dijkstra-astar"
+      ],
       "canonical_url": "/methods/M_DIJKSTRA_ASTAR",
       "entity_id": "M_DIJKSTRA_ASTAR",
       "entity_type": "method",
@@ -8790,6 +9571,11 @@
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
         }
       ],
       "summary": "非負edge shortest pathまたはheuristic付き探索。"
@@ -8851,7 +9637,9 @@
       "summary": "Lipschitz定数を明示せずrectanglesを分割するbounded大域探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/direct-collocation"
+      ],
       "canonical_url": "/methods/M_DIRECT_COLLOCATION",
       "entity_id": "M_DIRECT_COLLOCATION",
       "entity_type": "method",
@@ -8892,6 +9680,11 @@
           "relation_type": "implementation",
           "target_id": "I_DRAKE",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "direct-collocation",
+          "target_type": "content"
         }
       ],
       "summary": "状態・controlをmesh上で変数化しdynamics defectをcollocation制約化。"
@@ -8928,7 +9721,9 @@
       "summary": "control parameterを最適化し状態を前進simulationで消去。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/dual-simplex"
+      ],
       "canonical_url": "/methods/M_DUAL_SIMPLEX",
       "entity_id": "M_DUAL_SIMPLEX",
       "entity_type": "method",
@@ -8989,12 +9784,19 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_LINPROG_HIGHS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "dual-simplex",
+          "target_type": "content"
         }
       ],
       "summary": "dual可行性を保ちながらprimal可行性を回復するLP法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/dynamic-programming"
+      ],
       "canonical_url": "/methods/M_DYNAMIC_PROGRAMMING",
       "entity_id": "M_DYNAMIC_PROGRAMMING",
       "entity_type": "method",
@@ -9005,6 +9807,11 @@
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
         }
       ],
       "summary": "状態と段階のBellman再帰で部分問題の解を再利用。"
@@ -9041,7 +9848,9 @@
       "summary": "一目的を最適化し他目的をbound制約としてsweep。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/fista"
+      ],
       "canonical_url": "/methods/M_FISTA",
       "entity_id": "M_FISTA",
       "entity_type": "method",
@@ -9067,6 +9876,11 @@
           "relation_type": "evidence",
           "target_id": "S067",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "fista",
+          "target_type": "content"
         }
       ],
       "summary": "Nesterov型加速を加えた近接勾配法。"
@@ -9123,7 +9937,9 @@
       "summary": "残差JacobianからJᵀJを用いる非線形最小二乗専用法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/genetic-algorithm"
+      ],
       "canonical_url": "/methods/M_GENETIC_ALGORITHM",
       "entity_id": "M_GENETIC_ALGORITHM",
       "entity_type": "method",
@@ -9147,6 +9963,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S058",
           "target_type": "source"
         },
@@ -9164,6 +9985,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYMOO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
         }
       ],
       "summary": "selection・crossover・mutationで符号化個体を進化。"
@@ -9477,7 +10303,9 @@
       "summary": "少数の更新vectorだけを保持する大規模向け準Newton法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/lbfgsb"
+      ],
       "canonical_url": "/methods/M_LBFGSB",
       "entity_id": "M_LBFGSB",
       "entity_type": "method",
@@ -9508,6 +10336,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_LBFGSB",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lbfgsb",
+          "target_type": "content"
         }
       ],
       "summary": "L-BFGSを上下限制約へ拡張。"
@@ -9597,7 +10430,9 @@
       "summary": "近傍moveで可行解を改善するheuristic。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/mads"
+      ],
       "canonical_url": "/methods/M_MADS",
       "entity_id": "M_MADS",
       "entity_type": "method",
@@ -9630,9 +10465,19 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S094",
+          "target_type": "source"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_NOMAD",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mads",
+          "target_type": "content"
         }
       ],
       "summary": "meshとpoll方向を適応させ、black-box constraintsも扱うdirect search。"
@@ -9987,7 +10832,9 @@
       "summary": "flow networkのtree basis構造を用いる。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/newton-method"
+      ],
       "canonical_url": "/methods/M_NEWTON",
       "entity_id": "M_NEWTON",
       "entity_type": "method",
@@ -10013,6 +10860,11 @@
           "relation_type": "implementation",
           "target_id": "I_OPTIMJL",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "newton-method",
+          "target_type": "content"
         }
       ],
       "summary": "Hessianを用いる二階局所法。良い近傍では高速。"
@@ -10215,7 +11067,9 @@
       "summary": "convex NLP情報からMILP masterへcutを追加するMINLP法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/particle-swarm"
+      ],
       "canonical_url": "/methods/M_PARTICLE_SWARM",
       "entity_id": "M_PARTICLE_SWARM",
       "entity_type": "method",
@@ -10256,6 +11110,11 @@
           "relation_type": "implementation",
           "target_id": "I_NEVERGRAD",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "particle-swarm",
+          "target_type": "content"
         }
       ],
       "summary": "個体の自己bestと群bestに基づきvelocityを更新。"
@@ -10602,7 +11461,9 @@
       "summary": "gradient step後に実行可能集合へ射影する。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/proximal-gradient"
+      ],
       "canonical_url": "/methods/M_PROX_GRADIENT",
       "entity_id": "M_PROX_GRADIENT",
       "entity_type": "method",
@@ -10633,6 +11494,11 @@
           "relation_type": "implementation",
           "target_id": "I_JAXOPT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
         }
       ],
       "summary": "滑らかな項へgradient、非滑らかな項へproxを適用。"
@@ -11464,7 +12330,9 @@
       "summary": "Krylov部分空間でtrust-region部分問題を近似する大規模法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/trust-region-newton-cg"
+      ],
       "canonical_url": "/methods/M_TRUST_NCG",
       "entity_id": "M_TRUST_NCG",
       "entity_type": "method",
@@ -11495,6 +12363,11 @@
           "relation_type": "implementation",
           "target_id": "I_PETSC_TAO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
         }
       ],
       "summary": "Newton-CGでtrust-region部分問題を解く。"
