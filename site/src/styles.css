@@ -2127,6 +2127,241 @@ main:focus {
 .bo-route-card p { margin: 0.25rem 0; font-size: 0.74rem; }
 .bo-route-card a { color: #205a3a; font-weight: 700; }
 
+.prompt-export-launcher {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.prompt-export-launcher > button,
+.prompt-export-actions button,
+.prompt-export-header button {
+  border: 1px solid #9aa79e;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  color: #173d29;
+  background: #f7faf7;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.prompt-export-launcher > button:hover,
+.prompt-export-actions button:hover,
+.prompt-export-header button:hover {
+  background: #e4eee7;
+}
+
+.prompt-export-launcher > button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.prompt-export-error {
+  margin: 0;
+  color: #9b2f2f;
+  font-size: 0.74rem;
+}
+
+.prompt-export-dialog {
+  width: min(94vw, 86rem);
+  max-width: none;
+  height: min(90vh, 58rem);
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #8f9b92;
+  border-radius: 0.8rem;
+  color: #17211b;
+  background: #f7f6f1;
+  box-shadow: 0 1.2rem 4rem rgb(18 31 23 / 32%);
+}
+
+.prompt-export-dialog::backdrop {
+  background: rgb(15 25 19 / 55%);
+}
+
+.prompt-export-shell {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.prompt-export-header,
+.prompt-export-preview-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.prompt-export-header {
+  padding: 0.8rem 1rem 0.6rem;
+  border-bottom: 1px solid #d6dbd5;
+}
+
+.prompt-export-header h2,
+.prompt-export-header p,
+.prompt-export-preview-heading h3,
+.prompt-export-preview-heading p {
+  margin: 0.15rem 0;
+}
+
+.prompt-export-privacy {
+  margin: 0;
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid #ead8a8;
+  color: #654e15;
+  background: #fff7df;
+  font-size: 0.78rem;
+}
+
+.prompt-export-layout {
+  display: grid;
+  grid-template-columns: minmax(24rem, 0.9fr) minmax(28rem, 1.1fr);
+  min-height: 0;
+}
+
+.prompt-export-form,
+.prompt-export-preview {
+  min-width: 0;
+  overflow: auto;
+  padding: 0.8rem 1rem 1rem;
+}
+
+.prompt-export-form {
+  border-right: 1px solid #d6dbd5;
+}
+
+.prompt-export-form > h3,
+.prompt-export-form > p,
+.prompt-export-unknowns h3 {
+  margin: 0.25rem 0 0.45rem;
+}
+
+.prompt-export-form > p,
+.prompt-export-preview-heading p {
+  color: #5f6b63;
+  font-size: 0.74rem;
+}
+
+.prompt-export-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.prompt-export-field {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  min-width: 0;
+  color: #4d5a52;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.prompt-export-field-wide {
+  grid-column: 1 / -1;
+}
+
+.prompt-export-field input,
+.prompt-export-field textarea,
+.prompt-export-markdown {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #b9c1bb;
+  border-radius: 0.4rem;
+  padding: 0.48rem 0.55rem;
+  color: #17211b;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.prompt-export-field textarea {
+  resize: vertical;
+}
+
+.prompt-export-presets,
+.prompt-export-unknowns {
+  margin: 0.8rem 0 0;
+  border: 1px solid #d3d8d3;
+  border-radius: 0.5rem;
+  padding: 0.65rem;
+}
+
+.prompt-export-presets legend {
+  padding: 0 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.prompt-export-presets label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.2rem 0;
+  font-size: 0.74rem;
+}
+
+.prompt-export-unknowns ul {
+  margin: 0.3rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.74rem;
+}
+
+.prompt-export-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.prompt-export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.prompt-export-actions .prompt-export-copy {
+  border-color: #376a4c;
+  color: #fff;
+  background: #2f6447;
+}
+
+.prompt-export-actions .prompt-export-copy:hover {
+  background: #245139;
+}
+
+.prompt-export-stale {
+  margin: 0;
+  border-left: 3px solid #b27716;
+  padding: 0.35rem 0.55rem;
+  color: #6b4a14;
+  background: #fff4d9;
+  font-size: 0.74rem;
+}
+
+.prompt-export-markdown {
+  flex: 1;
+  height: 100%;
+  min-height: 15rem;
+  resize: none;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  white-space: pre;
+}
+
+.prompt-export-copy-status {
+  min-height: 1.4em;
+  margin: 0;
+  color: #315e43;
+  font-size: 0.74rem;
+}
+
 @media (max-width: 40rem) {
   .site-header {
     align-items: flex-start;
@@ -2224,4 +2459,38 @@ main:focus {
   .bo-comparison,
   .bo-limitations,
   .bo-text-alternative { min-width: 0; padding: 0.55rem; }
+
+  .prompt-export-dialog {
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .prompt-export-layout {
+    grid-template-columns: 1fr;
+    overflow: auto;
+  }
+
+  .prompt-export-form,
+  .prompt-export-preview {
+    overflow: visible;
+  }
+
+  .prompt-export-form {
+    border-right: 0;
+    border-bottom: 1px solid #d6dbd5;
+  }
+
+  .prompt-export-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-export-field-wide {
+    grid-column: auto;
+  }
+
+  .prompt-export-preview {
+    min-height: 80vh;
+  }
 }

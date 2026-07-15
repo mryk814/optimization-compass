@@ -23,7 +23,7 @@ test("375px HomeとMapが横にはみ出さず操作できる", async ({ page, b
   await expectNoHighImpactViolations(page, testInfo, "mobile-map-detail");
 });
 
-test("375px DiagnoseとGallery detailの主要導線が操作できる", async ({ page, baseURL }) => {
+test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/diagnose");
   const question = page.getByRole("group", {
     name: "変数は連続・整数・0-1・カテゴリ・混合のどれですか？",
@@ -35,7 +35,10 @@ test("375px DiagnoseとGallery detailの主要導線が操作できる", async (
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
   await expect(page.getByRole("link", { name: "分類図上で見る" })).toBeVisible();
   await expect(page.getByRole("link", { name: "この特徴で診断する" })).toBeVisible();
+  await page.getByRole("button", { name: "実装用プロンプトを作る" }).click();
+  await expect(page.getByRole("dialog", { name: "実装用プロンプトを作る" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-prompt-export");
 });
 
 test("375px Theater controlsが横にはみ出さずstepできる", async ({ page, baseURL }, testInfo) => {
