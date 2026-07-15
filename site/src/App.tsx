@@ -31,6 +31,7 @@ import { resolveAlias } from "./contracts/entity-links";
 import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { PageOrientation } from "./components/PageOrientation";
+import { SafeBackButton } from "./components/SafeBackButton";
 import { SearchPage } from "./features/learning/SearchPage";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 
@@ -41,6 +42,8 @@ const primaryNavigation = [
   { label: "Map", to: "/map", matchPaths: ["/map"] },
   { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  { label: "Theater", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
+  { label: "比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
   { label: "検索", to: "/search", matchPaths: ["/search"] },
   { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
@@ -90,15 +93,20 @@ function HomePage() {
           to="/learn"
           linkLabel="教材を探す"
         />
-        <article className="home-entry-card">
-          <p className="home-entry-eyebrow">Watch & Compare</p>
-          <h2>Method Theater</h2>
-          <p>アルゴリズムの一手を再生し、同じ予算で動きを比べる。</p>
-          <div className="home-entry-links">
-            <Link to={THEATER_ROUTES.index}>Theaterを開く</Link>
-            <Link to={COMPARE_LAB_ROUTE}>Compare Labを開く</Link>
-          </div>
-        </article>
+        <HomeEntry
+          eyebrow="Watch"
+          title="Method Theater"
+          description="一つの手法の内部で、次の一手がどう決まるかを再生する。"
+          to={THEATER_ROUTES.index}
+          linkLabel="動きを見る"
+        />
+        <HomeEntry
+          eyebrow="Compare"
+          title="Compare Lab"
+          description="同じ問題・初期条件・予算で、複数手法の違いを横に並べる。"
+          to={COMPARE_LAB_ROUTE}
+          linkLabel="違いを比べる"
+        />
         <HomeEntry
           eyebrow="Apply"
           title="Problem Gallery"
@@ -126,12 +134,14 @@ function HomeEntry({
   linkLabel: string;
 }) {
   return (
-    <article className="home-entry-card">
-      <p className="home-entry-eyebrow">{eyebrow}</p>
-      <h2>{title}</h2>
-      <p>{description}</p>
-      <Link to={to}>{linkLabel}</Link>
-    </article>
+    <Link aria-label={`${title} — ${linkLabel}`} className="home-entry-link" to={to}>
+      <article className="home-entry-card">
+        <p className="home-entry-eyebrow">{eyebrow}</p>
+        <h2>{title}</h2>
+        <p>{description}</p>
+        <span className="home-entry-action">{linkLabel} →</span>
+      </article>
+    </Link>
   );
 }
 
@@ -151,11 +161,6 @@ function AppShell() {
     return () => controller.abort();
   }, []);
   const links = useEntityLinks();
-  const navigation = [
-    ...primaryNavigation.slice(0, 4),
-    { label: "比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare", "/theater", "/traces"] },
-    ...primaryNavigation.slice(4),
-  ];
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document.getElementById("main-content")?.focus();
@@ -174,7 +179,7 @@ function AppShell() {
           <span>Optimization Atlas</span>
         </Link>
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
-          {navigation.map(({ label, to, matchPaths }) => {
+          {primaryNavigation.map(({ label, to, matchPaths }) => {
             const isActive = matchPaths.some((matchPath) =>
               matchPath === "/"
                 ? pathname === matchPath
@@ -195,6 +200,7 @@ function AppShell() {
         </nav>
       </header>
       <main id="main-content" tabIndex={-1}>
+        <SafeBackButton />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/map" element={<MapPage />} />

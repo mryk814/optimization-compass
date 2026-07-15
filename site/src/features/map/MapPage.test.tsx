@@ -237,13 +237,12 @@ describe("MapPage", () => {
   test("expands three levels and selection updates detail without changing answers", async () => {
     renderMap();
     const tree = await loadedTree();
-    fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
+    fireEvent.click(within(tree).getByRole("treeitem", { name: /分岐 A/u }));
     const question = within(tree).getByRole("treeitem", { name: /質問/u });
     expect(question).toHaveAttribute("aria-level", "2");
-    fireEvent.click(within(question).getByRole("button", { name: /質問 を展開/u }));
+    fireEvent.click(question);
     const leaf = within(tree).getByRole("treeitem", { name: /0-1/u });
     expect(leaf).toHaveAttribute("aria-level", "3");
-    fireEvent.click(question);
     expect(screen.getByRole("heading", { level: 3, name: "次の項目" })).toBeVisible();
     expect(screen.getAllByText("0-1").length).toBeGreaterThan(1);
     fireEvent.click(leaf);

@@ -38,6 +38,27 @@ const SUPPORTED_VIEW_VERSION = "1.0.0";
 const RECOMMENDATION_PATH = "recommendation/site-data.json";
 const VIEW_PATH = "views/problem-structure.json";
 
+const QUESTION_TITLES: Record<string, string> = {
+  Q01: "どんなものを決めたいですか？",
+  Q02: "計算内容は数式として書けますか？",
+  Q03: "目的の形に近いものは？",
+  Q04: "守る必要がある条件は？",
+  Q05: "勾配（gradient）を使えますか？",
+  Q06: "1回の計算にどれくらいかかりますか？",
+  Q07: "計算結果は毎回同じですか？",
+  Q08: "決める変数はいくつありますか？",
+  Q09: "どの範囲で良い解を探したいですか？",
+  Q10: "最適だと証明する必要がありますか？",
+  Q11: "問題に特別な構造がありますか？",
+  Q12: "同じ問題を何度も解きますか？",
+};
+
+const QUESTION_GROUPS = [
+  { title: "まず、問題の形", from: 1, to: 4 },
+  { title: "次に、計算の性質", from: 5, to: 8 },
+  { title: "最後に、ほしい結果と使い方", from: 9, to: 12 },
+] as const;
+
 type LoadState =
   | { status: "loading" }
   | { status: "error"; error: Error }
@@ -118,10 +139,13 @@ function Question({
     answer?.status === "unknown"
       ? value === "unknown"
       : answer?.status === "answered" && answer.values.includes(value);
+  const title = QUESTION_TITLES[question.question_id] ?? question.beginner_wording;
+  const hasAnswer = answer !== undefined;
   return (
-    <fieldset className="diagnose-question">
-      <legend>{question.question_ja}</legend>
-      {question.beginner_wording !== question.question_ja && <p>{question.beginner_wording}</p>}
+    <fieldset className={hasAnswer ? "diagnose-question diagnose-question-answered" : "diagnose-question"}>
+      <legend><span aria-hidden="true">{question.sequence}</span>{title}</legend>
+      {title !== question.question_ja && <p className="diagnose-question-technical">技術的な確認: {question.question_ja}</p>}
+      {question.answer_type === "multi_choice" && <p className="diagnose-question-hint">複数選べます</p>}
       <div className="diagnose-choice-list">
         {question.choices.map((choice) => (
           <button
@@ -142,8 +166,8 @@ function Question({
         >
           該当なし
         </button>
-        <button disabled={answer === undefined} onClick={() => onChange("clear")} type="button">
-          回答をクリア
+        <button className="diagnose-clear-answer" disabled={answer === undefined} onClick={() => onChange("clear")} type="button">
+          選択解除
         </button>
       </div>
     </fieldset>
@@ -266,6 +290,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
   const expensiveBlackBox = Object.values(atlas.state.answers).some(
     (answer) => answer.status === "answered" && answer.values.includes("hours_or_more"),
   ) || result.first_choices.some((item) => item.entity_id === "M_BAYESIAN_OPT_GP");
+  const answeredCount = Object.keys(atlas.state.answers).length;
 
   if (atlas.error) {
     return (
@@ -280,15 +305,28 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
     <>
       {atlas.warnings.length > 0 && <div className="diagnose-warning-list" role="status">{atlas.warnings.map((warning) => <p key={warning}>{warning}</p>)}</div>}
       {atlasNavigation.error && <p className="diagnose-error" role="alert">{atlasNavigation.error.message}</p>}
+      <div className="diagnose-progress" role="status">
+        <strong>{answeredCount} / {data.questions.length} 回答済み</strong>
+        <span>全部答えなくても大丈夫です。分からない項目は飛ばせます。</span>
+      </div>
       <div className="diagnose-layout">
         <section className="diagnose-form" aria-label="診断条件">
-          {data.questions.map((question) => (
-            <Question
-              answer={atlas.state.answers[question.question_id]}
-              key={question.question_id}
-              onChange={(action, value) => atlas.setState((current) => updateDiagnosticAnswer(current, question.question_id, question.answer_type, action, value))}
-              question={question}
-            />
+          {QUESTION_GROUPS.map((group) => (
+            <section className="diagnose-question-group" key={group.title}>
+              <h2>{group.title}</h2>
+              <div className="diagnose-question-grid">
+                {data.questions
+                  .filter((question) => question.sequence >= group.from && question.sequence <= group.to)
+                  .map((question) => (
+                    <Question
+                      answer={atlas.state.answers[question.question_id]}
+                      key={question.question_id}
+                      onChange={(action, value) => atlas.setState((current) => updateDiagnosticAnswer(current, question.question_id, question.answer_type, action, value))}
+                      question={question}
+                    />
+                  ))}
+              </div>
+            </section>
           ))}
         </section>
         <aside className="diagnose-result-pane">
@@ -316,12 +354,12 @@ export function DiagnosePage() {
   }, []);
   return (
     <section className="diagnose-page">
-      <header className="diagnose-header"><p className="eyebrow">Offline Diagnosis</p><h1>診断</h1><p>条件を選ぶと候補と除外理由をURLだけで共有できます。</p></header>
+      <header className="diagnose-header"><p className="eyebrow">Offline Diagnosis</p><h1>診断</h1><p>答えられる範囲で条件を選ぶと、候補と避けたい手法を整理できます。</p></header>
       <PageOrientation
         limits="回答がunknownの項目は候補を狭めません。結果は登録済みのルールとデータに基づく候補であり、実験や実装の成功を保証しません。"
         next={[{ label: "Mapで問題構造を見る", to: "/map" }, { label: "実問題のGalleryを見る", to: "/gallery" }, { label: "手法の前提を読む", to: "/learn" }]}
-        purpose="問題の条件を順に整理し、候補・除外理由・追加確認を同じ状態から確認します。"
-        readingSteps={["上から答えられる条件を選びます。選択はURLに反映されます。", "候補だけでなく、条件付き候補と除外理由も読みます。", "追加確認や根拠を見てから、Map・手法ページへ進みます。"]}
+        purpose="分かる条件だけを選び、候補・避けたい手法・次に確認することを整理します。"
+        readingSteps={["3つのまとまりから、答えやすい質問だけ選びます。", "右側で候補と避けたい理由を確認します。", "必要ならMapや手法ページで前提を確かめます。"]}
       />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}

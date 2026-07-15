@@ -85,7 +85,7 @@ describe("DiagnosePage", () => {
     renderDiagnose();
 
     expect(await screen.findByRole("heading", { level: 1, name: "診断" })).toBeVisible();
-    await screen.findByText("変数は連続・整数・0-1・カテゴリ・混合のどれですか？");
+    await screen.findByText(/変数は連続・整数・0-1・カテゴリ・混合のどれですか/u);
     expect(fetch).toHaveBeenCalledTimes(3);
     expect(vi.mocked(fetch).mock.calls.map(([url]) => String(url))).toEqual(
       expect.arrayContaining([
@@ -149,7 +149,7 @@ describe("DiagnosePage", () => {
 
   test("keeps unanswered, unknown, N/A, single, and multi answers distinct in URL state", async () => {
     renderDiagnose();
-    const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
     expect(within(q1).queryByRole("button", { name: /^わからない/u })).not.toBeInTheDocument();
     fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toEqual({
@@ -161,17 +161,17 @@ describe("DiagnosePage", () => {
       status: "not_applicable",
       values: [],
     });
-    fireEvent.click(within(q1).getByRole("button", { name: "回答をクリア" }));
+    fireEvent.click(within(q1).getByRole("button", { name: "選択解除" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toBeUndefined();
 
-    const q2 = screen.getByRole("group", { name: rawSiteData.questions[1].question_ja });
+    const q2 = screen.getByRole("group", { name: /計算内容は数式として書けますか/u });
     fireEvent.click(within(q2).getByRole("button", { name: /わからない/u }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q02).toEqual({
       status: "unknown",
       values: ["unknown"],
     });
 
-    const q4 = screen.getByRole("group", { name: rawSiteData.questions[3].question_ja });
+    const q4 = screen.getByRole("group", { name: /守る必要がある条件は/u });
     fireEvent.click(within(q4).getByRole("button", { name: "上下限" }));
     fireEvent.click(within(q4).getByRole("button", { name: "線形" }));
     fireEvent.click(within(q4).getByRole("button", { name: "上下限" }));
@@ -226,7 +226,7 @@ describe("DiagnosePage", () => {
 
   test("preserves the token when navigating to Map", async () => {
     renderDiagnose("/diagnose?keep=1&tag=a&tag=b");
-    const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
     fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
     const token = tokenFromLocation();
     fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
@@ -240,7 +240,7 @@ describe("DiagnosePage", () => {
 
   test("transitions answers-only Diagnose state into a visible deterministic Map selection", async () => {
     renderDiagnose("/diagnose?keep=1", true);
-    const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
     fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
     fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
 
@@ -312,13 +312,13 @@ describe("DiagnosePage", () => {
   test("restores answers at 375px after reload without losing state", async () => {
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 375 });
     const first = renderDiagnose();
-    const q1 = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
     fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
     const token = tokenFromLocation();
     first.unmount();
 
     renderDiagnose(`/diagnose?state=${token}`);
-    const restored = await screen.findByRole("group", { name: rawSiteData.questions[0].question_ja });
+    const restored = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
     expect(within(restored).getByRole("button", { name: "0-1" })).toHaveAttribute(
       "aria-pressed",
       "true",

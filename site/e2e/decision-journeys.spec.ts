@@ -10,7 +10,7 @@ test("Diagnoseの推薦カードから対応するMap nodeへ移動する", asyn
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
   await page.getByRole("link", { name: "診断を始める" }).click();
   const firstQuestion = page.getByRole("group", {
-    name: "変数は連続・整数・0-1・カテゴリ・混合のどれですか？",
+    name: "どんなものを決めたいですか？",
   });
   await firstQuestion.getByRole("button", { name: "0-1" }).click();
 

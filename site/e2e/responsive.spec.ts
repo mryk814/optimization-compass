@@ -26,7 +26,7 @@ test("375px HomeとMapが横にはみ出さず操作できる", async ({ page, b
 test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/diagnose");
   const question = page.getByRole("group", {
-    name: "変数は連続・整数・0-1・カテゴリ・混合のどれですか？",
+    name: "どんなものを決めたいですか？",
   });
   await question.getByRole("button", { name: "0-1" }).click();
   await expect(page.getByRole("button", { name: "地図上で見る" })).toBeVisible();
