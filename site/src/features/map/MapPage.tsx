@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
+import { parseSiteManifest } from "../../contracts/manifest";
 import { buildMapModel, parseViewSpec, type MapModel, type ViewSpec } from "../../contracts/viewspec";
 import { parseSiteData, type SiteData } from "../../contracts/site-data";
-import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
+import { encodeAtlasState, type AtlasCompatibilityCatalog, type AtlasStateV1 } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
 import { PageOrientation } from "../../components/PageOrientation";
@@ -13,15 +15,19 @@ import { MapTree } from "./MapTree";
 type LoadState =
   | { status: "loading" }
   | { status: "error"; error: Error }
-  | { status: "ready"; view: ViewSpec; model: MapModel; data: SiteData };
+  | { status: "ready"; view: ViewSpec; views: ViewSpec[]; model: MapModel; data: SiteData };
 
-function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
-  const questions: AtlasCompatibilityCatalog["questions"] = Object.fromEntries(
-    view.nodes.flatMap((node) => {
-      if (!node.question_id || !node.answer_type) return [];
-      return [[node.question_id, { answerType: node.answer_type, allowedAnswers: node.allowed_answers }]];
-    }),
-  );
+function catalogFromView(view: ViewSpec, data: SiteData): AtlasCompatibilityCatalog {
+  const questions: AtlasCompatibilityCatalog["questions"] = Object.fromEntries([
+    ...data.questions.map((question) => [question.question_id, {
+      answerType: question.answer_type,
+      allowedAnswers: question.allowed_answers,
+    }] as const),
+    ...view.nodes.flatMap((node) => node.question_id && node.answer_type ? [[node.question_id, {
+      answerType: node.answer_type,
+      allowedAnswers: node.allowed_answers,
+    }] as const] : []),
+  ]);
   return {
     datasetVersion: view.dataset_version,
     viewId: view.view_id,
@@ -55,10 +61,28 @@ function MapLegend() {
   );
 }
 
-function LoadedMap({ view, model, data }: { view: ViewSpec; model: MapModel; data: SiteData }) {
-  const catalog = useMemo(() => catalogFromView(view), [view]);
+function focusInView(currentView: ViewSpec, targetView: ViewSpec, state: AtlasStateV1): string | undefined {
+  const selectedId = state.selectedNodeId;
+  if (selectedId && targetView.nodes.some((node) => node.node_id === selectedId)) return selectedId;
+  const selected = selectedId ? currentView.nodes.find((node) => node.node_id === selectedId) : undefined;
+  const references = selected?.related_entities ?? [];
+  for (const entityType of targetView.focus_fallback_entity_types) {
+    for (const reference of references.filter((item) => item.entity_type === entityType)) {
+      const match = targetView.nodes.find((node) => node.related_entities.some(
+        (item) => item.entity_type === reference.entity_type && item.entity_id === reference.entity_id,
+      ));
+      if (match) return match.node_id;
+    }
+  }
+  return targetView.root_node_ids[0];
+}
+
+function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSpec[]; model: MapModel; data: SiteData }) {
+  const catalog = useMemo(() => catalogFromView(view, data), [data, view]);
   const atlas = useAtlasState(catalog);
   const atlasNavigation = useAtlasNavigation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const answerMatchIds = useMemo(
     () => new Set(matchingBindingNodeIds(view.nodes, atlas.state)),
     [atlas.state, view.nodes],
@@ -149,6 +173,23 @@ function LoadedMap({ view, model, data }: { view: ViewSpec; model: MapModel; dat
     const next = applyAnswerBindings(atlas.state, selected.answer_bindings, catalog);
     atlasNavigation.navigateWithState("/diagnose", next);
   };
+  const switchView = (viewId: string) => {
+    const target = views.find((candidate) => candidate.view_id === viewId);
+    if (!target || target.view_id === view.view_id) return;
+    const selectedNodeId = focusInView(view, target, atlas.state);
+    const next: AtlasStateV1 = {
+      ...atlas.state,
+      datasetVersion: target.dataset_version,
+      viewId: target.view_id,
+      viewVersion: target.version,
+    };
+    if (selectedNodeId) next.selectedNodeId = selectedNodeId;
+    else delete next.selectedNodeId;
+    const params = new URLSearchParams(location.search);
+    params.set("view", target.view_id);
+    params.set("state", encodeAtlasState(next));
+    navigate({ pathname: location.pathname, search: `?${params.toString()}` });
+  };
 
   if (atlas.error) {
     return (
@@ -178,6 +219,16 @@ function LoadedMap({ view, model, data }: { view: ViewSpec; model: MapModel; dat
       )}
       {atlasNavigation.error && <p className="map-state-panel" role="alert">{atlasNavigation.error.message}</p>}
       <Diagnostics model={model} />
+      <section className="map-view-selector" aria-label="Semantic View">
+        <label htmlFor="semantic-view">View</label>
+        <select id="semantic-view" onChange={(event) => switchView(event.target.value)} value={view.view_id}>
+          {views.map((candidate, index) => <option key={`${candidate.view_id}:${index}`} value={candidate.view_id}>{candidate.title}</option>)}
+        </select>
+        <div>
+          <strong>{view.description}</strong>
+          <span>限界: {view.limitations}</span>
+        </div>
+      </section>
       <MapLegend />
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
         <button aria-pressed={activePane === "map"} onClick={() => setActivePane("map")} type="button">地図</button>
@@ -223,21 +274,41 @@ function LoadedMap({ view, model, data }: { view: ViewSpec; model: MapModel; dat
 
 export function MapPage() {
   const [loadState, setLoadState] = useState<LoadState>({ status: "loading" });
+  const location = useLocation();
+  const requestedViewId = useMemo(
+    () => new URLSearchParams(location.search).get("view") ?? "problem-structure",
+    [location.search],
+  );
 
   useEffect(() => {
     let active = true;
     const load = async () => {
       try {
         const baseUrl = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-        const [viewResponse, dataResponse] = await Promise.all([
-          fetch(`${baseUrl}data/views/problem-structure.json`),
-          fetch(`${baseUrl}data/recommendation/site-data.json`),
+        const manifestResponse = await fetch(`${baseUrl}data/manifest.json`);
+        if (!manifestResponse.ok) throw new Error(`Manifest request failed (${manifestResponse.status}).`);
+        const manifest = parseSiteManifest(await manifestResponse.json());
+        const [viewResponses, dataResponse] = await Promise.all([
+          Promise.all(manifest.views.map((item) => fetch(`${baseUrl}data/${item.path}`))),
+          fetch(`${baseUrl}data/${manifest.recommendation.path}`),
         ]);
-        if (!viewResponse.ok) throw new Error(`ViewSpec request failed (${viewResponse.status}).`);
+        const requestedIndex = Math.max(
+          0,
+          manifest.views.findIndex((item) => item.view_id === requestedViewId),
+        );
+        if (!viewResponses[requestedIndex]?.ok) {
+          throw new Error(`ViewSpec request failed (${viewResponses[requestedIndex]?.status ?? "unknown"}).`);
+        }
         if (!dataResponse.ok) throw new Error(`SiteData request failed (${dataResponse.status}).`);
-        const view = parseViewSpec(await viewResponse.json());
+        const parsedViews = await Promise.all(viewResponses.map(async (response) => (
+          response.ok ? parseViewSpec(await response.json()) : undefined
+        )));
+        const views = parsedViews.filter((candidate): candidate is ViewSpec => candidate !== undefined);
+        const expectedViewId = manifest.views[requestedIndex]?.view_id;
+        const view = views.find((candidate) => candidate.view_id === expectedViewId);
+        if (!view) throw new Error("No semantic View artifact could be loaded.");
         const data = parseSiteData(await dataResponse.json(), view.dataset_version);
-        if (active) setLoadState({ status: "ready", view, model: buildMapModel(view), data });
+        if (active) setLoadState({ status: "ready", view, views, model: buildMapModel(view), data });
       } catch (caught) {
         const error = caught instanceof Error ? caught : new Error(String(caught));
         if (active) setLoadState({ status: "error", error });
@@ -245,19 +316,19 @@ export function MapPage() {
     };
     void load();
     return () => { active = false; };
-  }, []);
+  }, [requestedViewId]);
 
   return (
     <section className="map-page">
       <header className="map-page-header">
-        <p className="eyebrow">Problem Structure</p>
-        <h1>問題構造マップ</h1>
+        <p className="eyebrow">Semantic View</p>
+        <h1>{loadState.status === "ready" ? loadState.view.title : requestedViewId === "problem-structure" ? "問題構造マップ" : "最適化マップ"}</h1>
         {loadState.status === "ready" && <p>{loadState.view.description}</p>}
       </header>
       <PageOrientation
-        limits="Mapは問題構造とcanonical entityの関係を示します。ここでの近さや強調は、手法の優劣や採用決定を意味しません。"
+        limits={loadState.status === "ready" ? loadState.view.limitations : "Viewごとの目的と限界を読み分けます。"}
         next={[{ label: "条件から候補を絞る", to: "/diagnose" }, { label: "実問題の例を見る", to: "/gallery" }, { label: "教材の接続を確認する", to: "/learn" }]}
-        purpose="問題の特徴が、どの問題型・診断質問・候補手法へつながるかを俯瞰します。"
+        purpose={loadState.status === "ready" ? loadState.view.description : "問題を複数の意味軸から俯瞰します。"}
         readingSteps={["左のrootから問題型・特徴の順にたどります。", "ノードを選ぶと、要約・質問・関連entityを右の詳細で確認できます。", "URLに保存された選択状態から、同じ地点を共有できます。"]}
       />
       {loadState.status === "loading" && <p className="map-state-panel" role="status">地図を読み込んでいます…</p>}
@@ -267,7 +338,7 @@ export function MapPage() {
           <p>{loadState.error.message}</p>
         </section>
       )}
-      {loadState.status === "ready" && <LoadedMap data={loadState.data} model={loadState.model} view={loadState.view} />}
+      {loadState.status === "ready" && <LoadedMap key={loadState.view.view_id} data={loadState.data} model={loadState.model} view={loadState.view} views={loadState.views} />}
     </section>
   );
 }
