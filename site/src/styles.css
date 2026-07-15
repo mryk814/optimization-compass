@@ -194,14 +194,48 @@ caption {
 
 .diagnose-layout {
   display: grid;
-  grid-template-columns: minmax(17rem, 0.8fr) minmax(20rem, 1.2fr);
-  gap: 0.8rem;
+  grid-template-columns: minmax(32rem, 1.15fr) minmax(22rem, 0.85fr);
+  gap: 1rem;
   align-items: start;
 }
 
 .diagnose-form,
 .diagnose-result-pane {
   min-width: 0;
+}
+
+.diagnose-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.diagnose-progress {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem 0.8rem;
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid #5f8f74;
+  background: #edf3ed;
+  color: #435148;
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+}
+
+.diagnose-progress strong {
+  color: #234737;
+}
+
+.diagnose-question-group > h2 {
+  margin: 0 0 0.45rem;
+  color: #6b4a35;
+  font-size: 0.85rem;
+}
+
+.diagnose-question-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
 }
 
 .diagnose-question,
@@ -214,10 +248,37 @@ caption {
   padding: 0.6rem;
 }
 
+.diagnose-question {
+  min-width: 0;
+  margin: 0;
+  background: #faf9f4;
+}
+
+.diagnose-question-answered {
+  border-color: #84a994;
+  background: #f5faf6;
+}
+
 .diagnose-question legend {
-  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  max-width: 100%;
+  font-size: 0.86rem;
   font-weight: 700;
   padding: 0 0.25rem;
+}
+
+.diagnose-question legend span {
+  display: inline-grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #dfe9e2;
+  color: #315c48;
+  font-size: 0.68rem;
+  place-items: center;
 }
 
 .diagnose-question p,
@@ -227,6 +288,36 @@ caption {
 .diagnose-trace h2,
 .diagnose-trace p {
   margin: 0.3rem 0;
+}
+
+.diagnose-question .diagnose-question-technical {
+  margin: 0.2rem 0 0.45rem;
+  color: #66716a;
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+
+.diagnose-question .diagnose-question-technical summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #59655e;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: #b8c2bb;
+  text-underline-offset: 0.15em;
+}
+
+.diagnose-question .diagnose-question-technical p {
+  margin: 0.3rem 0 0;
+  padding-left: 0.65rem;
+  border-left: 2px solid #d5ddd7;
+}
+
+.diagnose-question .diagnose-question-hint {
+  margin: -0.2rem 0 0.35rem;
+  color: #315c48;
+  font-size: 0.68rem;
+  font-weight: 700;
 }
 
 .diagnose-choice-list {
@@ -250,6 +341,18 @@ caption {
   border-color: #315bda;
   background: #eaf0ff;
   color: #163486;
+}
+
+.diagnose-choice-list .diagnose-clear-answer {
+  border-color: transparent;
+  background: transparent;
+  color: #657068;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.diagnose-choice-list .diagnose-clear-answer:disabled {
+  visibility: hidden;
 }
 
 .diagnose-result-toolbar {
@@ -305,17 +408,23 @@ caption {
   background: #eef3ff;
 }
 
+@media (max-width: 64rem) {
+  .diagnose-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 720px) {
   .diagnose-page {
     padding-inline: 0.6rem;
   }
 
-  .diagnose-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .diagnose-choice-list button {
     font-size: 0.74rem;
+  }
+
+  .diagnose-question-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -792,13 +901,237 @@ caption {
 
 .page-orientation {
   display: grid;
-  grid-template-columns: minmax(14rem, 1.3fr) repeat(3, minmax(10rem, 1fr));
+  grid-template-columns: minmax(13rem, 1.2fr) minmax(12rem, 1.1fr) repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
   margin: 1rem 0 1.35rem;
   padding: 0.9rem;
   border: 1px solid #cfd9d1;
   border-radius: 0.65rem;
   background: #f8faf6;
+}
+
+.problem-primer {
+  margin: 1rem 0 1.15rem;
+  overflow: hidden;
+  border: 1px solid #c7d4ca;
+  border-radius: 0.7rem;
+  background: #f8faf6;
+}
+
+.problem-primer-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.45rem;
+  border-bottom: 1px solid #dfe6df;
+  flex-wrap: wrap;
+}
+
+.problem-primer-header h2,
+.problem-primer-header p {
+  margin: 0;
+}
+
+.problem-primer-header h2 {
+  color: #183c2b;
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  letter-spacing: -0.02em;
+}
+
+.problem-primer-header > p:last-child {
+  width: 100%;
+  color: #536159;
+  font-size: 0.72rem;
+}
+
+.problem-primer-eyebrow {
+  color: #8b4d2c;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.problem-primer-main {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1.25fr);
+}
+
+.problem-primer-formula {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  padding: 0.7rem 0.9rem;
+  background: #183c2b;
+  color: #f8fbf7;
+}
+
+.problem-primer-equation math {
+  display: block;
+  margin: 0 auto;
+  color: inherit;
+  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
+}
+
+.problem-primer-formula > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0.65rem 0 0;
+  color: #e1eee5;
+  font-size: 0.76rem;
+}
+
+.problem-primer-formula > p span {
+  color: #b9d4c3;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.problem-primer-constraint-equation math {
+  color: inherit;
+  font-size: 1.08rem;
+}
+
+.problem-primer-formula small {
+  margin-top: 0.45rem;
+  color: #bed0c4;
+  font-size: 0.64rem;
+  text-align: center;
+}
+
+.problem-primer-terms {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.problem-primer-terms article {
+  display: grid;
+  grid-template-columns: minmax(3.6rem, auto) minmax(0, 1fr);
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.5rem 0.65rem;
+  border-left: 1px solid #dfe6df;
+  border-bottom: 1px solid #dfe6df;
+}
+
+.problem-primer-terms article:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.problem-primer-terms code {
+  align-self: start;
+  color: #8b4d2c;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.problem-primer-terms strong {
+  display: block;
+  color: #234737;
+  font-size: 0.78rem;
+}
+
+.problem-primer-terms p {
+  margin: 0.14rem 0 0;
+  color: #536159;
+  font-size: 0.65rem;
+  line-height: 1.42;
+}
+
+.problem-primer-types {
+  padding: 0.45rem 0.65rem 0.5rem;
+  border-top: 1px solid #dfe6df;
+  background: #eef3ed;
+}
+
+.problem-primer-types > p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem 0.7rem;
+  margin: 0 0 0.3rem;
+  color: #536159;
+  font-size: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.problem-primer-types > p strong {
+  color: #234737;
+  font-size: 0.82rem;
+}
+
+.problem-primer-types ul {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.problem-primer-types li {
+  min-width: 0;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid #d4ded6;
+  border-radius: 0.4rem;
+  background: #fff;
+}
+
+.problem-primer-types li strong,
+.problem-primer-types li span {
+  display: block;
+}
+
+.problem-primer-types li strong {
+  color: #234737;
+  font-size: 0.66rem;
+}
+
+.problem-primer-types li span {
+  margin-top: 0.15rem;
+  color: #5b675f;
+  font-size: 0.6rem;
+  line-height: 1.38;
+}
+
+@media (max-width: 54rem) {
+  .problem-primer-main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .problem-primer-types ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .problem-primer-header {
+    display: block;
+  }
+
+  .problem-primer-header h2 {
+    margin-top: 0.2rem;
+  }
+
+  .problem-primer-header > p:last-child {
+    margin-top: 0.3rem;
+  }
+
+  .problem-primer-terms,
+  .problem-primer-types ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .problem-primer-terms article,
+  .problem-primer-terms article:nth-last-child(-n + 2) {
+    border-bottom: 1px solid #dfe6df;
+  }
+
+  .problem-primer-terms article:last-child {
+    border-bottom: 0;
+  }
 }
 
 .page-orientation > section,
@@ -861,6 +1194,7 @@ caption {
 .page-orientation a {
   color: #285740;
   font-weight: 700;
+  overflow-wrap: anywhere;
   text-underline-offset: 0.18em;
 }
 
@@ -1200,6 +1534,7 @@ a {
 }
 
 main {
+  box-sizing: border-box;
   width: min(100%, 76rem);
   margin: 0 auto;
   padding: clamp(1.25rem, 4vw, 3rem) clamp(0.9rem, 4vw, 2rem);
@@ -1210,7 +1545,33 @@ main:focus {
 }
 
 .page-panel {
-  max-width: 44rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 72rem;
+  min-width: 0;
+}
+
+.page-back-row {
+  min-height: 2rem;
+  margin: -0.4rem 0 0.65rem;
+}
+
+.page-back-row button {
+  border: 0;
+  padding: 0.28rem 0.1rem;
+  background: transparent;
+  color: #365d48;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.page-back-row button:hover,
+.page-back-row button:focus-visible {
+  color: #173b29;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 .page-panel h1 {
@@ -1256,24 +1617,39 @@ main:focus {
 
 .home-entry-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.65rem;
+}
+
+.home-entry-link {
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
 }
 
 .home-entry-card {
   display: flex;
   min-width: 0;
-  min-height: 13rem;
-  padding: 0.85rem;
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 10rem;
+  padding: 1rem;
   border: 1px solid #d7d6ce;
   border-radius: 0.55rem;
   background: #fff;
   flex-direction: column;
 }
 
-.home-entry-card:hover {
+.home-entry-link:hover .home-entry-card,
+.home-entry-link:focus-visible .home-entry-card {
   border-color: #6c9a7f;
   box-shadow: 0 0.45rem 1.3rem rgba(49, 92, 72, 0.08);
+}
+
+.home-entry-link:focus-visible {
+  border-radius: 0.55rem;
+  outline: 3px solid #315bda;
+  outline-offset: 3px;
 }
 
 .home-entry-eyebrow {
@@ -1298,12 +1674,11 @@ main:focus {
   line-height: 1.6;
 }
 
-.home-entry-card a {
+.home-entry-action {
   margin-top: auto;
   color: #285740;
   font-size: 0.76rem;
   font-weight: 700;
-  text-underline-offset: 0.2em;
 }
 
 .home-entry-links {
@@ -1613,7 +1988,7 @@ main:focus {
 }
 
 .map-tree-item-muted {
-  color: #6e7771;
+  color: #566159;
 }
 
 .map-tree-item-selected {
@@ -1723,7 +2098,7 @@ main:focus {
   padding: 0.08rem 0.28rem;
   border-radius: 0.3rem;
   background: #ecece5;
-  color: #6b716d;
+  color: #525c56;
   font-size: 0.58rem;
   white-space: nowrap;
 }
@@ -2387,7 +2762,7 @@ main:focus {
     margin-bottom: 0.7rem;
   }
 
-  .home-entry-card a,
+  .home-entry-action,
   .home-entry-links {
     margin-top: 0;
   }

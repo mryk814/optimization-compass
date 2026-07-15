@@ -69,6 +69,7 @@ export function MapTree({
       case "Enter":
       case " ":
         onSelect(node.node_id);
+        if (children.length > 0 && !expanded.has(node.node_id)) onToggle(node.node_id);
         break;
       default:
         return;
@@ -101,6 +102,10 @@ export function MapTree({
       selectedId && !isRelated ? "map-tree-item-unrelated" : "",
       `map-tree-item-${node.emphasis}`,
     ].filter(Boolean).join(" ");
+    const activateNode = () => {
+      onSelect(node.node_id);
+      if (hasChildren && !isExpanded) onToggle(node.node_id);
+    };
 
     return (
       <div key={node.node_id}>
@@ -110,7 +115,7 @@ export function MapTree({
           aria-current={isCurrent ? "location" : undefined}
           aria-selected={isSelected}
           className={className}
-          onClick={() => onSelect(node.node_id)}
+          onClick={activateNode}
           onFocus={() => onFocusChange(node.node_id)}
           onKeyDown={(event) => onKeyDown(event, node)}
           ref={(element) => {

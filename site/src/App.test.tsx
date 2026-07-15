@@ -95,32 +95,32 @@ describe("application routes", () => {
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
-  test("home exposes five clear entry points and both visualization routes in one operation", () => {
+  test("home exposes six fully clickable entry cards and separates Theater from Compare", () => {
     render(<App initialEntityLinks={testLinks} />);
 
     const entries = screen.getByLabelText("Atlasの主要な入口");
-    expect(within(entries).getAllByRole("article")).toHaveLength(5);
-    expect(within(entries).getByRole("link", { name: "地図を見る" })).toHaveAttribute(
+    expect(within(entries).getAllByRole("article")).toHaveLength(6);
+    expect(within(entries).getByRole("link", { name: "Map — 地図を見る" })).toHaveAttribute(
       "href",
       "#/map",
     );
-    expect(within(entries).getByRole("link", { name: "診断を始める" })).toHaveAttribute(
+    expect(within(entries).getByRole("link", { name: "Diagnose — 診断を始める" })).toHaveAttribute(
       "href",
       "#/diagnose",
     );
-    expect(within(entries).getByRole("link", { name: "教材を探す" })).toHaveAttribute(
+    expect(within(entries).getByRole("link", { name: "Methods — 教材を探す" })).toHaveAttribute(
       "href",
       "#/learn",
     );
-    expect(within(entries).getByRole("link", { name: "Theaterを開く" })).toHaveAttribute(
+    expect(within(entries).getByRole("link", { name: "Method Theater — 動きを見る" })).toHaveAttribute(
       "href",
       "#/theater",
     );
-    expect(within(entries).getByRole("link", { name: "Compare Labを開く" })).toHaveAttribute(
+    expect(within(entries).getByRole("link", { name: "Compare Lab — 違いを比べる" })).toHaveAttribute(
       "href",
       "#/compare",
     );
-    expect(within(entries).getByRole("link", { name: "ケースを見る" })).toHaveAttribute(
+    expect(within(entries).getByRole("link", { name: "Problem Gallery — ケースを見る" })).toHaveAttribute(
       "href",
       "#/gallery",
     );
@@ -156,7 +156,7 @@ describe("application routes", () => {
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
-    expect(links).toHaveLength(8);
+    expect(links).toHaveLength(9);
     links.forEach((link) => expect(link).toBeVisible());
     within(screen.getByLabelText("Atlasの主要な入口"))
       .getAllByRole("link")
@@ -171,6 +171,22 @@ describe("application routes", () => {
     window.location.hash = "#/methods/M_NELDER_MEAD";
     render(<App initialEntityLinks={testLinks} />);
     expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("aria-current", "page");
+  });
+
+  test("keeps Theater and Compare as separate primary navigation destinations", () => {
+    render(<App initialEntityLinks={testLinks} />);
+    const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
+    expect(within(navigation).getByRole("link", { name: "Theater" })).toHaveAttribute("href", "#/theater");
+    expect(within(navigation).getByRole("link", { name: "比較" })).toHaveAttribute("href", "#/compare");
+  });
+
+  test("the back control uses a safe in-app fallback on a direct entry", () => {
+    window.history.replaceState({ idx: 0 }, "", "#/map");
+    render(<App initialEntityLinks={testLinks} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "← 戻る" }));
+
+    expect(window.location.hash).toBe("#/");
   });
 
   test("supports keyboard focus for the skip link and primary route links", () => {

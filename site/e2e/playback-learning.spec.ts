@@ -101,10 +101,10 @@ test("追加教材を検索しcanonical methodと実行例を読める", async (
 
   await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
   await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "現実の問いをモデルへ移す" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "現実の問いをmodelへ移す" })).toBeVisible();
   await expect(page.locator("pre code")).toContainText("cp_model.CpModel");
-  await expect(page.getByRole("link", { name: "Search-tree Theater" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Branch-and-Cut" })).toHaveAttribute(
     "href",
-    "#/theater/search-tree/binary-knapsack-bnb-complete",
+    "#/learn/branch-and-cut",
   );
 });
