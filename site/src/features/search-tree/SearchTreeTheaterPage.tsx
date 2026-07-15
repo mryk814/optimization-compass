@@ -18,6 +18,7 @@ import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { renderVisualizationArtifact } from "./renderer-registry";
+import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 
 type Loaded = {
   artifact: SearchTreeArtifact;
@@ -71,6 +72,7 @@ function SearchTreePlayer({ artifact, index, scenario, scenarioIndex }: Loaded) 
       <aside className="artifact-limitations" aria-label="artifactの種別と制約">
         <strong>教材としての制約</strong><p>{scenario.lesson.limitations_ja}</p>
       </aside>
+      <ScenarioLessonPanel scenario={scenario} />
       <PlaybackControls playback={playback} />
       {renderVisualizationArtifact(artifact, playback.currentFrameIndex)}
       <section className="search-tree-learning" aria-labelledby="search-tree-learning-heading">

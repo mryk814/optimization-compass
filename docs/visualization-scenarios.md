@@ -30,14 +30,14 @@ ProblemDefinition
 - `RendererFamily`: an exact parser and component for an observable geometry. It is
   selected by family metadata, not inferred from a method ID.
 
-## Minimum `VisualizationScenario 1.0.0`
+## Minimum `VisualizationScenario 1.1.0`
 
 The generated contract uses stable IDs and exact enums. Unknown contract versions and
 unknown core fields fail parsing; there is no legacy fallback.
 
 ```json
 {
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "dataset_version": "0.3.0",
   "scenario_id": "SCENARIO_NM_QUADRATIC",
   "title_ja": "二次関数で単体操作を学ぶ",
@@ -46,8 +46,44 @@ unknown core fields fail parsing; there is no legacy fallback.
   "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
   "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
   "lesson": {
+    "learning_objective": {
+      "ja": "単体の幾何操作と候補の受理判断を結び付けて読む",
+      "en": "Connect simplex geometry with candidate acceptance decisions"
+    },
+    "misconception": null,
     "expected_phenomenon_ja": "反射・拡大・収縮で単体が移動する",
     "expected_phenomenon_en": "The simplex moves by reflection, expansion, and contraction",
+    "success_signals": [{
+      "signal_id": "accepted_simplex_move",
+      "label_ja": "受理された操作で単体と最良値が更新される",
+      "label_en": "An accepted operation updates the simplex and best value",
+      "observable_ids": ["simplex_vertices", "accepted_operation", "objective_value"]
+    }],
+    "failure_signals": [],
+    "primary_observables": [
+      {"observable_id": "simplex_vertices", "label_ja": "単体の頂点", "label_en": "simplex vertices"},
+      {"observable_id": "accepted_operation", "label_ja": "受理操作", "label_en": "accepted operation"}
+    ],
+    "secondary_observables": [
+      {"observable_id": "objective_value", "label_ja": "目的関数値", "label_en": "objective value"}
+    ],
+    "narration_steps": [
+      {"milestone_id": "start", "title_ja": "初期simplexを確認", "title_en": "Inspect the initial simplex", "observable_ids": ["simplex_vertices"]},
+      {"milestone_id": "first_change", "title_ja": "最初の候補と受理判断", "title_en": "First candidate and decision", "observable_ids": ["simplex_vertices", "accepted_operation"]},
+      {"milestone_id": "pattern_visible", "title_ja": "単体の移動を追跡", "title_en": "Follow simplex motion", "observable_ids": ["simplex_vertices", "objective_value"]},
+      {"milestone_id": "termination", "title_ja": "最終simplexと終了理由", "title_en": "Final simplex and termination", "observable_ids": ["simplex_vertices", "objective_value"]}
+    ],
+    "comparison_role": "primary_example",
+    "prerequisite_concept_ids": ["CONCEPT_DERIVATIVE_FREE", "CONCEPT_SIMPLEX"],
+    "recommended_next_scenario_ids": ["SCENARIO_NM_QUADRATIC_SHIFTED"],
+    "known_reference_display": {
+      "policy": "show",
+      "note_ja": "問題instanceの既知最適点をgoal cueとして表示する",
+      "note_en": "Show the problem instance optimum as a goal cue"
+    },
+    "static_summary": {"ja": "単体、候補、受理操作、最良値を示す。", "en": "Show simplex, candidate, decision, and best value."},
+    "text_alternative": {"ja": "各frameの頂点、操作、受理結果を読む。", "en": "Report vertices, operation, and decision for each frame."},
+    "derived_media_caption": {"ja": "Nelder–Meadの単体操作", "en": "Nelder–Mead simplex operations"},
     "limitations_ja": "2次元の教育用決定論的実行",
     "limitations_en": "A deterministic two-dimensional educational run"
   },
@@ -94,9 +130,6 @@ unknown core fields fail parsing; there is no legacy fallback.
 - `comparison`: compare runs under an authored comparison contract.
 - `failure_contrast`: explain a known mismatch or failure mode.
 - `sensitivity`: vary one declared condition or hyperparameter.
-- `application_result`: explain inputs, constraints, and results of an application.
-- `schematic`: explain a concept that is not faithfully represented by an execution
-  trace.
 
 `artifact_kind` is exactly one of:
 

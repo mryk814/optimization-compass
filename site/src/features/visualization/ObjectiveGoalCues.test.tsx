@@ -10,6 +10,7 @@ describe("ObjectiveGoalCues", () => {
         bestValue={0.25}
         currentPoint={[0.5, -0.25]}
         initialPoint={[-2, 2]}
+        knownReferenceDisplay={{ policy: "show", note_ja: "既知のreferenceなし", note_en: "No known reference" }}
         objective={{ direction: "maximize", optimum: { point: [1, 1], value: 3 } }}
         terminalReason="budget reached"
       />,
@@ -25,6 +26,7 @@ describe("ObjectiveGoalCues", () => {
     render(
       <ObjectiveGoalCues
         initialPoint={[]}
+        knownReferenceDisplay={{ policy: "show_if_available", note_ja: "既知のreferenceなし", note_en: "No known reference" }}
         objective={{}}
         terminalReason="unknown"
       />,

@@ -6,8 +6,8 @@ export interface ManifestView {
   path: string;
 }
 
-export interface ManifestAsset {
-  version: "1.0.0";
+export interface ManifestAsset<Version extends string = "1.0.0"> {
+  version: Version;
   path: string;
 }
 
@@ -51,7 +51,7 @@ export interface SiteManifest {
   recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
-  visualization_scenarios: ManifestAsset;
+  visualization_scenarios: ManifestAsset<"1.1.0">;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
   coverage: ManifestCoverageAsset;
@@ -124,7 +124,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (sources.version !== "1.0.0") throw new Error("sources.version is unsupported.");
   const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
-  if (visualizationScenarios.version !== "1.0.0") {
+  if (visualizationScenarios.version !== "1.1.0") {
     throw new Error("visualization_scenarios.version is unsupported.");
   }
   const coverage = record(data.coverage, "coverage");
@@ -155,7 +155,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(problems.path, "problems.path"),
     },
     visualization_scenarios: {
-      version: "1.0.0",
+      version: "1.1.0",
       path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
     },
     entity_links: {

@@ -42,6 +42,7 @@ from optimization_compass.view_spec import (
     ManifestRecommendationAsset,
     ManifestTraceAsset,
     ManifestView,
+    ManifestVisualizationScenarioAsset,
     SiteLicenseManifest,
     SiteManifest,
     ViewEdge,
@@ -50,16 +51,21 @@ from optimization_compass.view_spec import (
     ViewSpec,
 )
 from optimization_compass.visualization_scenarios import (
+    KnownReferenceDisplay,
+    LocalizedText,
     RendererFamily,
     VisualizationArtifact,
     VisualizationBudget,
     VisualizationExperiment,
     VisualizationInitialCondition,
     VisualizationLesson,
+    VisualizationNarrationStep,
+    VisualizationObservable,
     VisualizationRun,
     VisualizationScenario,
     VisualizationScenarioIndex,
     VisualizationSeed,
+    VisualizationSignal,
     scenario_identity,
 )
 
@@ -337,7 +343,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         ),
         traces=trace_asset,
         problems=ManifestAsset(version="1.0.0", path="problems.json"),
-        visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
+        visualization_scenarios=ManifestVisualizationScenarioAsset(
+            version="1.1.0", path=VISUALIZATION_SCENARIO_PATH
+        ),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
         coverage=ManifestCoverageAsset(
@@ -580,12 +588,357 @@ def _build_visualization_scenario_index(
     dataset_version: str,
 ) -> VisualizationScenarioIndex:
     return VisualizationScenarioIndex(
-        contract_version="1.0.0",
+        contract_version="1.1.0",
         dataset_version=dataset_version,
         scenarios=[
             *[_visualization_scenario(trace) for trace in traces],
             *surrogate_scenarios,
         ],
+    )
+
+
+def _localized(ja: str, en: str) -> LocalizedText:
+    return LocalizedText(ja=ja, en=en)
+
+
+def _observable(observable_id: str, ja: str, en: str) -> VisualizationObservable:
+    return VisualizationObservable(observable_id=observable_id, label_ja=ja, label_en=en)
+
+
+def _signal(signal_id: str, ja: str, en: str, *observable_ids: str) -> VisualizationSignal:
+    return VisualizationSignal(
+        signal_id=signal_id,
+        label_ja=ja,
+        label_en=en,
+        observable_ids=list(observable_ids),
+    )
+
+
+def _step(
+    milestone_id: Literal["start", "first_change", "pattern_visible", "termination"],
+    ja: str,
+    en: str,
+    *observable_ids: str,
+) -> VisualizationNarrationStep:
+    return VisualizationNarrationStep(
+        milestone_id=milestone_id,
+        title_ja=ja,
+        title_en=en,
+        observable_ids=list(observable_ids),
+    )
+
+
+def _trace_lesson(
+    trace: AlgorithmTrace,
+    *,
+    is_divergence: bool,
+    is_nelder_mead: bool,
+    is_search_tree: bool,
+) -> VisualizationLesson:
+    if is_search_tree:
+        budget_stop = trace.terminal_status == "budget_exhausted"
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "上界とincumbentが探索範囲を狭める過程を読む",
+                "Read how bounds and the incumbent reduce the search space",
+            ),
+            misconception=(
+                _localized(
+                    "予算で止まった探索木のincumbentは最適性が証明されている",
+                    "An incumbent from a budget-stopped tree is proven optimal",
+                )
+                if budget_stop
+                else None
+            ),
+            expected_phenomenon_ja="枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する",
+            expected_phenomenon_en=(
+                "Observe branching, bounds, incumbent updates, and two pruning reasons"
+            ),
+            success_signals=[
+                _signal(
+                    "subtree_pruned",
+                    "上界または実行不可能性でsubtreeが枝刈りされる",
+                    "A subtree is pruned by its bound or infeasibility",
+                    "search_nodes",
+                    "prune_reason",
+                )
+            ],
+            failure_signals=(
+                [
+                    _signal(
+                        "proof_gap_remains",
+                        "node予算到達時に未探索nodeとbound gapが残る",
+                        "Unexplored nodes and a bound gap remain at the node budget",
+                        "search_nodes",
+                        "global_bound",
+                        "incumbent",
+                    )
+                ]
+                if budget_stop
+                else []
+            ),
+            primary_observables=[
+                _observable("search_nodes", "探索node", "search nodes"),
+                _observable("global_bound", "大域上界", "global bound"),
+                _observable("incumbent", "暫定解", "incumbent"),
+            ],
+            secondary_observables=[_observable("prune_reason", "枝刈り理由", "pruning reason")],
+            narration_steps=[
+                _step("start", "root nodeから開始", "Start from the root node", "search_nodes"),
+                _step(
+                    "first_change",
+                    "最初のbranchとbound更新",
+                    "First branch and bound update",
+                    "search_nodes",
+                    "global_bound",
+                ),
+                _step(
+                    "pattern_visible",
+                    "incumbent更新と枝刈りを比較",
+                    "Compare incumbent updates and pruning",
+                    "incumbent",
+                    "prune_reason",
+                ),
+                _step(
+                    "termination",
+                    "証明完了か予算停止かを確認",
+                    "Check whether proof completed or the budget stopped the run",
+                    "global_bound",
+                    "incumbent",
+                ),
+            ],
+            comparison_role="failure_contrast" if budget_stop else "primary_example",
+            prerequisite_concept_ids=["CONCEPT_BRANCH_AND_BOUND", "CONCEPT_INCUMBENT"],
+            recommended_next_scenario_ids=[
+                "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+                if budget_stop
+                else "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+            ],
+            known_reference_display=KnownReferenceDisplay(
+                policy="show",
+                note_ja="既知の最適値とbound gapを表示する",
+                note_en="Show the known optimum and bound gap",
+            ),
+            static_summary=_localized(
+                "探索木でnode、bound、incumbent、枝刈り理由を同時に追う。",
+                "Follow nodes, bounds, the incumbent, and pruning reasons together.",
+            ),
+            text_alternative=_localized(
+                "各milestoneで展開済みnode、global bound、incumbent、停止理由を読み上げる。",
+                "At each milestone, report explored nodes, global bound, incumbent, "
+                "and stop reason.",
+            ),
+            derived_media_caption=_localized(
+                "Branch-and-Boundの探索木: boundとincumbentによる枝刈り",
+                "Branch-and-Bound tree: pruning by bounds and the incumbent",
+            ),
+            limitations_ja=(
+                "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
+            ),
+            limitations_en=(
+                "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted"
+            ),
+        )
+
+    if is_nelder_mead:
+        shifted = trace.scenario_id.endswith("_SHIFTED")
+        base_id = trace.scenario_id.removesuffix("_SHIFTED")
+        next_id = base_id if shifted else f"{trace.scenario_id}_SHIFTED"
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "単体の幾何操作と候補の受理判断を結び付けて読む",
+                "Connect simplex geometry with candidate acceptance decisions",
+            ),
+            misconception=None,
+            expected_phenomenon_ja="反射・拡大・収縮・縮小で単体が移動する",
+            expected_phenomenon_en=(
+                "The simplex moves by reflection, expansion, contraction, and shrinkage"
+            ),
+            success_signals=[
+                _signal(
+                    "accepted_simplex_move",
+                    "受理された操作で単体と最良値が更新される",
+                    "An accepted operation updates the simplex and best value",
+                    "simplex_vertices",
+                    "accepted_operation",
+                    "objective_value",
+                )
+            ],
+            failure_signals=[],
+            primary_observables=[
+                _observable("simplex_vertices", "単体の頂点", "simplex vertices"),
+                _observable("accepted_operation", "受理操作", "accepted operation"),
+            ],
+            secondary_observables=[_observable("objective_value", "目的関数値", "objective value")],
+            narration_steps=[
+                _step(
+                    "start", "初期simplexを確認", "Inspect the initial simplex", "simplex_vertices"
+                ),
+                _step(
+                    "first_change",
+                    "最初の候補と受理判断",
+                    "First candidate and acceptance decision",
+                    "simplex_vertices",
+                    "accepted_operation",
+                ),
+                _step(
+                    "pattern_visible",
+                    "単体の移動と縮小を追跡",
+                    "Follow simplex motion and contraction",
+                    "simplex_vertices",
+                    "objective_value",
+                ),
+                _step(
+                    "termination",
+                    "最終simplexと終了理由",
+                    "Final simplex and termination reason",
+                    "simplex_vertices",
+                    "objective_value",
+                ),
+            ],
+            comparison_role="sensitivity_variant" if shifted else "primary_example",
+            prerequisite_concept_ids=["CONCEPT_DERIVATIVE_FREE", "CONCEPT_SIMPLEX"],
+            recommended_next_scenario_ids=[next_id],
+            known_reference_display=KnownReferenceDisplay(
+                policy="show",
+                note_ja="問題instanceの既知最適点をgoal cueとして表示する",
+                note_en="Show the problem instance optimum as a goal cue",
+            ),
+            static_summary=_localized(
+                "等高線上でsimplex頂点、候補点、受理操作、最良値の変化を示す。",
+                "Show simplex vertices, candidate, accepted operation, and best-value "
+                "changes on contours.",
+            ),
+            text_alternative=_localized(
+                "各frameの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
+                "Report vertex ranks, candidate, operation, decision, and best value "
+                "for each frame.",
+            ),
+            derived_media_caption=_localized(
+                "Nelder–Mead: simplexの幾何操作と受理判断",
+                "Nelder–Mead: simplex geometry and acceptance decisions",
+            ),
+            limitations_ja="2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
+            limitations_en="A deterministic 2D educational run, not a general performance ranking",
+        )
+
+    method_label = trace.method_id.removeprefix("M_").replace("_", " ").title()
+    standard_and_failure_ids = {
+        "M_GRADIENT_DESCENT": (
+            "SCENARIO_GD_QUADRATIC",
+            "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+        ),
+        "M_MOMENTUM_SGD": (
+            "SCENARIO_MOMENTUM_QUADRATIC",
+            "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+        ),
+        "M_ADAM": ("SCENARIO_ADAM_QUADRATIC", "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"),
+    }
+    standard_id, failure_id = standard_and_failure_ids[trace.method_id]
+    counterpart = standard_id if is_divergence else failure_id
+    return VisualizationLesson(
+        learning_objective=_localized(
+            "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+            "Read gradient, update vector, trajectory, and objective at the same evaluation",
+        ),
+        misconception=(
+            _localized(
+                "勾配の反対へ進めば学習率に関係なく目的値は下がり続ける",
+                "Moving against the gradient always decreases the objective regardless "
+                "of step size",
+            )
+            if is_divergence
+            else None
+        ),
+        expected_phenomenon_ja="学習率と更新則により谷での振動・発散の仕方が変わる",
+        expected_phenomenon_en=(
+            "Learning rate and update rules change oscillation and divergence in the valley"
+        ),
+        success_signals=[
+            _signal(
+                "trajectory_response_visible",
+                "gradientとupdateの向きが次の現在点へ反映される",
+                "Gradient and update directions are reflected in the next current point",
+                "current_point",
+                "gradient",
+                "update_vector",
+            )
+        ],
+        failure_signals=(
+            [
+                _signal(
+                    "objective_growth",
+                    "更新後に目的値と振幅が増大する",
+                    "Objective value and oscillation amplitude grow after updates",
+                    "objective_value",
+                    "current_point",
+                    "update_vector",
+                )
+            ]
+            if is_divergence
+            else []
+        ),
+        primary_observables=[
+            _observable("current_point", "現在点", "current point"),
+            _observable("gradient", "勾配", "gradient"),
+            _observable("update_vector", "更新vector", "update vector"),
+        ],
+        secondary_observables=[_observable("objective_value", "目的関数値", "objective value")],
+        narration_steps=[
+            _step(
+                "start",
+                "初期点と勾配を確認",
+                "Inspect initial point and gradient",
+                "current_point",
+                "gradient",
+            ),
+            _step(
+                "first_change",
+                "最初のupdateを追う",
+                "Follow the first update",
+                "gradient",
+                "update_vector",
+                "current_point",
+            ),
+            _step(
+                "pattern_visible",
+                "谷を横切る振動または発散を読む",
+                "Read cross-valley oscillation or divergence",
+                "current_point",
+                "objective_value",
+            ),
+            _step(
+                "termination",
+                "best-so-farと終了理由を確認",
+                "Check best-so-far and termination reason",
+                "current_point",
+                "objective_value",
+            ),
+        ],
+        comparison_role="failure_contrast" if is_divergence else "primary_example",
+        prerequisite_concept_ids=["CONCEPT_GRADIENT", "CONCEPT_LEARNING_RATE"],
+        recommended_next_scenario_ids=[counterpart],
+        known_reference_display=KnownReferenceDisplay(
+            policy="show",
+            note_ja="既知最適点を軌跡と同じ座標系に表示する",
+            note_en="Show the known optimum in the trajectory coordinate system",
+        ),
+        static_summary=_localized(
+            f"{method_label}の現在点、gradient、update、目的値をevaluation軸で同期する。",
+            f"Synchronize {method_label} current point, gradient, update, and objective "
+            "by evaluation.",
+        ),
+        text_alternative=_localized(
+            "各evaluationの現在点、目的値、gradient、update vector、終了状態を読む。",
+            "Report current point, objective, gradient, update vector, and status at "
+            "each evaluation.",
+        ),
+        derived_media_caption=_localized(
+            f"{method_label}: 細長い谷での更新軌跡",
+            f"{method_label}: update trajectory in an elongated valley",
+        ),
+        limitations_ja="同一presetの教育用比較であり、一般的な手法の優劣を示さない",
+        limitations_en="An educational fixed-preset comparison, not a general method ranking",
     )
 
 
@@ -629,7 +982,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     payload = canonical_trace_bytes(trace)
     identity_status, canonical_scenario_id = scenario_identity(trace.scenario_id)
     return VisualizationScenario(
-        contract_version="1.0.0",
+        contract_version="1.1.0",
         dataset_version=trace.dataset_version,
         scenario_id=trace.scenario_id,
         identity_status=identity_status,
@@ -641,37 +994,11 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             "PROBLEM_BINARY_KNAPSACK" if is_search_tree else "PROBLEM_CONTINUOUS_UNCONSTRAINED"
         ),
         problem_instance_id=trace.objective_id,
-        lesson=VisualizationLesson(
-            expected_phenomenon_ja=(
-                "枝分かれ、上界、incumbent更新、2種類の枝刈りを追跡する"
-                if is_search_tree
-                else "反射・拡大・収縮・縮小で単体が移動する"
-                if is_nelder_mead
-                else "学習率と更新則により谷での振動・発散の仕方が変わる"
-            ),
-            expected_phenomenon_en=(
-                "Observe branching, bounds, incumbent updates, and two pruning reasons"
-                if is_search_tree
-                else "The simplex moves by reflection, expansion, contraction, and shrinkage"
-                if is_nelder_mead
-                else (
-                    "Learning rate and update rules change oscillation and divergence in the valley"
-                )
-            ),
-            limitations_ja=(
-                "4変数の教育用Branch-and-Boundであり、実solverのcut生成やpresolve性能は再現しない"
-                if is_search_tree
-                else "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
-                if is_nelder_mead
-                else "同一presetの教育用比較であり、一般的な手法の優劣を示さない"
-            ),
-            limitations_en=(
-                "A four-variable educational Branch-and-Bound; solver cuts and presolve are omitted"
-                if is_search_tree
-                else "A deterministic 2D educational run, not a general performance ranking"
-                if is_nelder_mead
-                else "An educational fixed-preset comparison, not a general method ranking"
-            ),
+        lesson=_trace_lesson(
+            trace,
+            is_divergence=is_divergence,
+            is_nelder_mead=is_nelder_mead,
+            is_search_tree=is_search_tree,
         ),
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"]

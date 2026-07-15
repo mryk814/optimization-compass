@@ -19,7 +19,7 @@ Issue #26 adds an executable, fixed-seed 1D expensive black-box experiment at
 `optimization-compass export-site-data` writes four renderer payloads below `data/visualizations/`
 and registers their path, byte length, and SHA-256 in the shared
 `data/visualization-scenarios.json` authority. There is no second scenario index. The common
-`VisualizationScenario 1.0.0` envelope owns title, method/run identity, budget, sources, and
+`VisualizationScenario 1.1.0` envelope owns title, method/run identity, budget, sources, and
 limitations; the `surrogate_uncertainty 1.0.0` payload contains plot geometry and frame
 explanations only.
 

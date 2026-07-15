@@ -1,4 +1,5 @@
 import type { JsonValue } from "../../contracts/trace";
+import type { VisualizationScenario } from "../../contracts/visualization-scenarios";
 
 interface ObjectiveGoalCuesProps {
   objective: Record<string, JsonValue>;
@@ -6,6 +7,7 @@ interface ObjectiveGoalCuesProps {
   currentPoint?: readonly number[];
   bestValue?: number | null;
   terminalReason: string;
+  knownReferenceDisplay: VisualizationScenario["lesson"]["known_reference_display"];
 }
 
 export function ObjectiveGoalCues({
@@ -14,6 +16,7 @@ export function ObjectiveGoalCues({
   currentPoint,
   bestValue,
   terminalReason,
+  knownReferenceDisplay,
 }: ObjectiveGoalCuesProps) {
   const optimum = objectiveRecord(objective.optimum);
   const optimumPoint = numberList(optimum?.point);
@@ -30,11 +33,26 @@ export function ObjectiveGoalCues({
         <div><dt>初期点 / Initial</dt><dd>{formatPoint(initialPoint)}</dd></div>
         <div><dt>現在点 / Current</dt><dd>{currentPoint ? formatPoint(currentPoint) : "このframeでは未取得"}</dd></div>
         <div><dt>best-so-far</dt><dd>{bestValue === undefined || bestValue === null ? "未取得" : formatValue(bestValue)}</dd></div>
-        <div><dt>既知の最適点 / Known optimum</dt><dd>{optimumPoint && optimumValue !== undefined ? `${formatPoint(optimumPoint)} · f=${formatValue(optimumValue)}` : "既知のreferenceなし"}</dd></div>
+        <div>
+          <dt>既知の最適点 / Known optimum</dt>
+          <dd>{knownReferenceText(knownReferenceDisplay, optimumPoint, optimumValue)}</dd>
+        </div>
         <div><dt>終了理由 / Terminal</dt><dd>{terminalReason}</dd></div>
       </dl>
     </section>
   );
+}
+
+function knownReferenceText(
+  display: VisualizationScenario["lesson"]["known_reference_display"],
+  optimumPoint: number[] | undefined,
+  optimumValue: number | undefined,
+): string {
+  if (display.policy === "not_shown") return display.note_ja;
+  if (optimumPoint && optimumValue !== undefined) {
+    return `${formatPoint(optimumPoint)} · f=${formatValue(optimumValue)}`;
+  }
+  return display.note_ja;
 }
 
 function objectiveRecord(value: JsonValue | undefined): Record<string, JsonValue> | undefined {

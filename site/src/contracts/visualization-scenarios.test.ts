@@ -34,4 +34,24 @@ describe("VisualizationScenario parser", () => {
     expect(boScenarios.filter((scenario) => scenario.purpose === "mechanism")).toHaveLength(1);
     expect(boScenarios.every((scenario) => scenario.artifact.payload_path.startsWith("visualizations/"))).toBe(true);
   });
+
+  test("requires complete lessons and keeps established scenario deep links", () => {
+    const parsed = parseVisualizationScenarioIndex(generated);
+    const failureOrSensitivity = parsed.scenarios.filter(
+      (scenario) => scenario.purpose === "failure_contrast" || scenario.purpose === "sensitivity",
+    );
+
+    expect(parsed.contract_version).toBe("1.1.0");
+    expect(parsed.scenarios.every((scenario) => scenario.lesson.primary_observables.length > 0)).toBe(true);
+    expect(parsed.scenarios.every((scenario) => scenario.lesson.narration_steps[0].milestone_id === "start")).toBe(true);
+    expect(failureOrSensitivity.every((scenario) => scenario.lesson.misconception !== null)).toBe(true);
+    expect(failureOrSensitivity.every((scenario) => scenario.lesson.failure_signals.length > 0)).toBe(true);
+    expect(parsed.scenarios.find((scenario) => scenario.scenario_id === "SCENARIO_NM_QUADRATIC")?.artifact.payload_path)
+      .toBe("traces/nelder-mead-quadratic.json");
+  });
+
+  test("fails closed on the replaced 1.0.0 scenario contract", () => {
+    expect(() => parseVisualizationScenarioIndex({ ...fixture, contract_version: "1.0.0" }))
+      .toThrow(/contract_version/u);
+  });
 });

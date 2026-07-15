@@ -203,7 +203,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         assert (first_output / entry["static_fallback_path"]).is_file()
     assert manifest_payload["visualization_scenarios"] == {
         "path": "visualization-scenarios.json",
-        "version": "1.0.0",
+        "version": "1.1.0",
     }
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
