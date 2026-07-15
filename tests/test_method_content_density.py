@@ -3,7 +3,7 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-MINIMUM_PUBLISHED_METHOD_GUIDES = 26
+MINIMUM_PUBLISHED_METHOD_GUIDES = 42
 MINIMUM_SUMMARY_CHARACTERS = 35
 MINIMUM_BODY_CHARACTERS = 1_200
 MINIMUM_TOC_ENTRIES = 4
