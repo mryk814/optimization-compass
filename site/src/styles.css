@@ -1396,6 +1396,48 @@ main:focus {
   padding-left: 1.2rem;
 }
 
+.map-view-selector {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 18rem) 1fr;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  margin-bottom: 0.65rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d4d6cf;
+  border-radius: 0.5rem;
+  background: #faf9f4;
+}
+
+.map-view-selector label {
+  color: #496052;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.map-view-selector select {
+  min-height: 2.15rem;
+  border: 1px solid #aeb9b1;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: #243a2d;
+  font: inherit;
+  font-weight: 700;
+}
+
+.map-view-selector div {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+  color: #536158;
+  font-size: 0.72rem;
+}
+
+.map-view-selector strong {
+  color: #263c30;
+}
+
 .map-toolbar {
   display: flex;
   align-items: center;
@@ -2044,6 +2086,11 @@ main:focus {
 
   .map-page-header > p:not(.eyebrow) {
     width: 100%;
+  }
+
+  .map-view-selector {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
   }
 
   .map-pane-switch {

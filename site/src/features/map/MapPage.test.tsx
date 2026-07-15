@@ -5,6 +5,11 @@ import { MemoryRouter, Route, Routes, useLocation, useNavigate } from "react-rou
 import { decodeAtlasState, encodeAtlasState } from "../../state/atlas-state";
 import { MapPage } from "./MapPage";
 import rawSiteData from "../../../public/data/recommendation/site-data.json";
+import rawManifest from "../../../public/data/manifest.json";
+import rawProblemView from "../../../public/data/views/problem-structure.json";
+import rawOracleView from "../../../public/data/views/available-information.json";
+import rawGuaranteeView from "../../../public/data/views/guarantee-outcome.json";
+import rawMechanismView from "../../../public/data/views/method-mechanism.json";
 
 function siteFixture() {
   return { ...structuredClone(rawSiteData), dataset_version: "0.2.0" };
@@ -139,11 +144,19 @@ async function loadedTree() {
   return screen.findByRole("tree", { name: "最適化問題の構造" });
 }
 
+function mockFirstView(response: Partial<Response>) {
+  vi.mocked(fetch)
+    .mockResolvedValueOnce({ ok: true, json: async () => rawManifest } as Response)
+    .mockResolvedValueOnce(response as Response);
+}
+
 describe("MapPage", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (input: string) => ({
       ok: true,
-      json: async () => input.includes("recommendation/site-data.json") ? siteFixture() : mapFixture(),
+      json: async () => input.includes("manifest.json")
+        ? rawManifest
+        : input.includes("recommendation/site-data.json") ? siteFixture() : mapFixture(),
     })));
     Element.prototype.scrollIntoView = vi.fn();
   });
@@ -157,11 +170,57 @@ describe("MapPage", () => {
   test("fetches the base-aware ViewSpec and canonical predicate data", async () => {
     renderMap();
     const tree = await loadedTree();
-    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(fetch).toHaveBeenCalledTimes(6);
+    expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/data\/manifest\.json$/u));
     expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/data\/views\/problem-structure\.json$/u));
     expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/data\/recommendation\/site-data\.json$/u));
     expect(within(tree).getAllByRole("treeitem")).toHaveLength(5);
     expect(within(tree).queryByText("質問")).not.toBeInTheDocument();
+  });
+
+  test("switches semantic Views in the shared URL and restores focus through a canonical entity", async () => {
+    const viewsByPath = new Map<string, unknown>([
+      ["views/problem-structure.json", rawProblemView],
+      ["views/available-information.json", rawOracleView],
+      ["views/guarantee-outcome.json", rawGuaranteeView],
+      ["views/method-mechanism.json", rawMechanismView],
+    ]);
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (input: string) => ({
+      ok: true,
+      json: async () => {
+        if (input.includes("manifest.json")) return rawManifest;
+        if (input.includes("recommendation/site-data.json")) return rawSiteData;
+        const match = [...viewsByPath].find(([path]) => input.endsWith(path));
+        return match?.[1];
+      },
+    })));
+    const token = encodeAtlasState({
+      stateVersion: 1,
+      datasetVersion: rawProblemView.dataset_version,
+      viewId: rawProblemView.view_id,
+      viewVersion: rawProblemView.version,
+      selectedNodeId: "question:Q05",
+      answers: {},
+    });
+    renderMap(`/map?state=${token}`);
+
+    const selector = await screen.findByRole("combobox", { name: "View" });
+    fireEvent.change(selector, { target: { value: "available-information" } });
+    expect(await screen.findByRole("heading", { level: 1, name: "Oracle View" })).toBeVisible();
+
+    const params = new URLSearchParams(currentSearch());
+    expect(params.get("view")).toBe("available-information");
+    const decoded = decodeAtlasState(params.get("state")!, {
+      datasetVersion: rawOracleView.dataset_version,
+      viewId: rawOracleView.view_id,
+      viewVersion: rawOracleView.version,
+      nodeIds: new Set(rawOracleView.nodes.map((node) => node.node_id)),
+      questions: Object.fromEntries(rawSiteData.questions.map((question) => [question.question_id, {
+        answerType: question.answer_type as "single_choice" | "multi_choice",
+        allowedAnswers: question.allowed_answers,
+      }])),
+    }).state;
+    expect(decoded.selectedNodeId).toBe("entity:feature:F_DERIVATIVE_ACCESS");
   });
 
   test("explains map states and exposes root/current/detail cues", async () => {
@@ -276,7 +335,7 @@ describe("MapPage", () => {
       answer_bindings: Array<{ question_id: string; answer_value: string }>;
     };
     leaf.answer_bindings = [{ question_id: "Q01", answer_value: huge }];
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+    mockFirstView({ ok: true, json: async () => fixture });
     renderMap("/map?keep=1");
     const tree = await loadedTree();
     fireEvent.click(within(tree).getByRole("button", { name: /分岐 A を展開/u }));
@@ -375,7 +434,7 @@ describe("MapPage", () => {
           node("cycle-peer", selectedId, "循環相手", 0, true, "cycle peer"),
         );
       }
-      vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+      mockFirstView({ ok: true, json: async () => fixture });
       const token = encodeAtlasState({
         stateVersion: 1,
         datasetVersion: fixture.dataset_version,
@@ -421,18 +480,18 @@ describe("MapPage", () => {
     ["empty", { ...mapFixture(), nodes: [], edges: [], root_node_ids: [] }, "表示できる項目がありません"],
     ["malformed", { ...mapFixture(), title: null }, "地図データを読み込めませんでした"],
   ])("renders a safe %s state", async (_label, fixture, message) => {
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+    mockFirstView({ ok: true, json: async () => fixture });
     renderMap();
     expect(await screen.findByText(new RegExp(message, "u"))).toBeVisible();
   });
 
   test("renders fetch failure and malformed URL state with reset", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: false, status: 500 } as Response);
+    mockFirstView({ ok: false, status: 500 });
     const first = renderMap();
     expect(await screen.findByText("地図データを読み込めませんでした")).toBeVisible();
     first.unmount();
 
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => mapFixture() } as Response);
+    mockFirstView({ ok: true, json: async () => mapFixture() });
     renderMap("/map?state=bad");
     expect(await screen.findByText(/URL の状態を復元できません/u)).toBeVisible();
     expect(screen.getByRole("button", { name: "状態をリセット" })).toBeVisible();
@@ -442,7 +501,7 @@ describe("MapPage", () => {
     const fixture = mapFixture();
     fixture.root_node_ids = ["missing-root"];
     fixture.nodes[0].parent_node_id = "missing-parent";
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+    mockFirstView({ ok: true, json: async () => fixture });
     renderMap();
     expect(await screen.findByText(/データ診断/u)).toBeVisible();
     expect(screen.getByText(/missing-root/u)).toBeVisible();
@@ -456,7 +515,7 @@ describe("MapPage", () => {
     };
     fixture.nodes[0].related_entities = [{ entity_type: "future", entity_id: "X" }];
     fixture.entities.push(entity("X", "future", "未知の対象", "unknown summary", [], "javascript:bad"));
-    vi.mocked(fetch).mockResolvedValueOnce({ ok: true, json: async () => fixture } as Response);
+    mockFirstView({ ok: true, json: async () => fixture });
     renderMap();
     const tree = await loadedTree();
     fireEvent.click(within(tree).getAllByRole("treeitem")[0]);
