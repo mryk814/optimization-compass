@@ -1,4 +1,4 @@
-export type VisualizationPurpose = "mechanism" | "comparison" | "failure_contrast" | "sensitivity";
+export type VisualizationPurpose = "mechanism" | "comparison" | "failure_contrast" | "sensitivity" | "application_result";
 export type VisualizationComparisonRole = "primary_example" | "sensitivity_variant" | "failure_contrast" | "baseline";
 export type NarrationMilestoneId = "start" | "first_change" | "pattern_visible" | "termination";
 export type VisualizationArtifactKind = "executable_trace" | "schematic_animation" | "static_diagram" | "result_visualization";
@@ -7,7 +7,9 @@ export type RendererFamily =
   | "continuous_trajectory"
   | "generic_metric_history"
   | "search_tree"
-  | "surrogate_uncertainty";
+  | "surrogate_uncertainty"
+  | "feasible_region"
+  | "pareto_front";
 
 export interface VisualizationScenario {
   contract_version: "1.1.0";
@@ -45,7 +47,7 @@ export interface VisualizationScenario {
     limitations_en: string;
   };
   experiment: {
-    oracle_policy: ("objective_value" | "gradient")[];
+    oracle_policy: ("objective_value" | "gradient" | "constraint_value" | "constraint_jacobian" | "objective_vector")[];
     initial_condition: { point: number[] };
     parameter_preset_id: string;
     seed: { status: "fixed" | "not_applicable"; value: number | null };
@@ -63,7 +65,7 @@ export interface VisualizationScenario {
   }[];
   artifact: {
     artifact_kind: VisualizationArtifactKind;
-    artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty";
+    artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty" | "FeasibleRegion" | "ParetoFront";
     artifact_contract_version: "1.0.0";
     renderer_family: RendererFamily;
     renderer_contract_version: "1.0.0";
@@ -97,7 +99,7 @@ export interface VisualizationNarrationStep {
   observable_ids: string[];
 }
 
-const purposes = new Set<VisualizationPurpose>(["mechanism", "comparison", "failure_contrast", "sensitivity"]);
+const purposes = new Set<VisualizationPurpose>(["mechanism", "comparison", "failure_contrast", "sensitivity", "application_result"]);
 const comparisonRoles = new Set<VisualizationComparisonRole>(["primary_example", "sensitivity_variant", "failure_contrast", "baseline"]);
 const narrationMilestones = new Set<NarrationMilestoneId>(["start", "first_change", "pattern_visible", "termination"]);
 const knownReferencePolicies = new Set<VisualizationScenario["lesson"]["known_reference_display"]["policy"]>(["show", "show_if_available", "not_shown"]);
@@ -108,6 +110,8 @@ const rendererFamilies = new Set<RendererFamily>([
   "generic_metric_history",
   "search_tree",
   "surrogate_uncertainty",
+  "feasible_region",
+  "pareto_front",
 ]);
 
 export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScenarioIndex {
@@ -330,9 +334,9 @@ function parseExperiment(raw: unknown, field: string): VisualizationScenario["ex
   const stopping = parameterRecord(data.stopping, `${field}.stopping`);
   return {
     oracle_policy: nonEmptyTextList(data.oracle_policy, `${field}.oracle_policy`).map((value) => {
-      if (value !== "objective_value" && value !== "gradient") throw new Error(`${field}.oracle_policy is invalid.`);
+      if (!["objective_value", "gradient", "constraint_value", "constraint_jacobian", "objective_vector"].includes(value)) throw new Error(`${field}.oracle_policy is invalid.`);
       return value;
-    }),
+    }) as VisualizationScenario["experiment"]["oracle_policy"],
     initial_condition: { point: numberList(initial.point, `${field}.initial_condition.point`) },
     parameter_preset_id: text(data.parameter_preset_id, `${field}.parameter_preset_id`),
     seed: { status: seedStatus, value: seed.value as number | null },
@@ -363,7 +367,7 @@ function parseRun(raw: unknown, field: string): VisualizationScenario["runs"][nu
 function parseArtifact(raw: unknown, field: string): VisualizationScenario["artifact"] {
   const data = record(raw, field);
   exact(data, ["artifact_kind", "artifact_contract", "artifact_contract_version", "renderer_family", "renderer_contract_version", "observable_ids", "payload_path", "payload_bytes", "payload_sha256"], field);
-  if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty") throw new Error(`${field}.artifact_contract is invalid.`);
+  if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty" && data.artifact_contract !== "FeasibleRegion" && data.artifact_contract !== "ParetoFront") throw new Error(`${field}.artifact_contract is invalid.`);
   version(data.artifact_contract_version, `${field}.artifact_contract_version`);
   version(data.renderer_contract_version, `${field}.renderer_contract_version`);
   return {

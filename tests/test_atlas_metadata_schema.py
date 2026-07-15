@@ -31,8 +31,11 @@ def test_seed_is_explicit_and_closes_all_references() -> None:
         "comparison",
     }
     assert {profile.method_id for profile in seed.method_visualization_profiles} == {
+        "M_BFGS",
         "M_NELDER_MEAD",
         "M_GRADIENT_DESCENT",
+        "M_NSGA_II",
+        "M_SLSQP",
         "M_MOMENTUM_SGD",
         "M_ADAM",
     }
@@ -41,7 +44,7 @@ def test_seed_is_explicit_and_closes_all_references() -> None:
         for profile in seed.method_visualization_profiles
     )
     assert all(profile.implementation_id is None for profile in seed.method_visualization_profiles)
-    assert len(seed.demo_scenarios) == 5
+    assert len(seed.demo_scenarios) == 7
     assert len(seed.comparison_sets) == 1
     assert len(seed.comparison_set_members) == 3
     assert seed.learning_edges

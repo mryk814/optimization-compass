@@ -1273,7 +1273,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published typed learning relations and canonical terminology aliases.",
+            "Published constrained-continuous and multi-objective learning slices.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1287,12 +1287,15 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Learning relations and terminology variants could not drive shared navigation.",
+            "Constrained and multi-objective concepts lacked canonical executable visuals.",
             (
-                "Normalized typed learning edges and terminology aliases with provenance, "
-                "status, audience, and disambiguation metadata."
+                "Added renderer-family contracts for feasible regions and Pareto fronts, "
+                "with canonical scenarios, references, and failure contrast."
             ),
-            ("Generate learning paths, search, and cross-artifact links from canonical data."),
+            (
+                "Connect canonical problems to artifacts, routes, content, Gallery, "
+                "Map, and sources."
+            ),
             target_version,
             release_date,
         ),

@@ -13,6 +13,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.learning_graph import build_learning_graph_index
+from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
@@ -293,9 +294,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         additional_traces=[artifact.trace for artifact in search_tree_artifacts],
     )
     surrogate_scenarios = write_surrogate_scenarios(output_dir, dataset_version=release["version"])
+    learning_slice_scenarios, learning_slice_links = write_learning_slice_scenarios(
+        output_dir, dataset_version=release["version"]
+    )
     scenario_index = _build_visualization_scenario_index(
         generated_traces,
         surrogate_scenarios=surrogate_scenarios,
+        learning_slice_scenarios=learning_slice_scenarios,
         dataset_version=release["version"],
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
@@ -320,6 +325,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_routes=search_tree_routes,
         trace_source_ids=search_tree_sources,
         trace_view_ids=search_tree_views,
+        visualization_entries=learning_slice_links,
     )
     _write_json(output_dir / "entity-links.json", entity_links)
     _write_json(
@@ -335,6 +341,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         repository,
         dataset_version=release["version"],
         generated_at=generated_at,
+        generated_visualizations=learning_slice_links,
     )
     _write_json(output_dir / "sources.json", source_index)
     _write_json(
@@ -637,6 +644,7 @@ def _build_visualization_scenario_index(
     traces: list[AlgorithmTrace],
     *,
     surrogate_scenarios: list[VisualizationScenario],
+    learning_slice_scenarios: list[VisualizationScenario],
     dataset_version: str,
 ) -> VisualizationScenarioIndex:
     return VisualizationScenarioIndex(
@@ -645,6 +653,7 @@ def _build_visualization_scenario_index(
         scenarios=[
             *[_visualization_scenario(trace) for trace in traces],
             *surrogate_scenarios,
+            *learning_slice_scenarios,
         ],
     )
 

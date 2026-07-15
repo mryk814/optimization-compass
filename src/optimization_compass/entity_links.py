@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository, split_ids
+from optimization_compass.learning_slices import LearningSliceLink
 from optimization_compass.trace_models import TraceIndex
 
 EntityType = Literal[
@@ -109,6 +110,7 @@ def build_entity_link_index(
     trace_routes: dict[str, str] | None = None,
     trace_source_ids: dict[str, list[str]] | None = None,
     trace_view_ids: dict[str, list[str]] | None = None,
+    visualization_entries: list[LearningSliceLink] | None = None,
 ) -> EntityLinkIndex:
     """Build the one canonical cross-artifact graph used by every site journey."""
 
@@ -116,6 +118,7 @@ def build_entity_link_index(
     trace_routes = trace_routes or {}
     trace_source_ids = trace_source_ids or {}
     trace_view_ids = trace_view_ids or {}
+    visualization_entries = visualization_entries or []
     gallery = _load_gallery(gallery_path, dataset_version)
     entities: dict[tuple[EntityType, str], dict[str, Any]] = {}
     relations: defaultdict[tuple[EntityType, str], set[tuple[str, EntityType, str]]] = defaultdict(
@@ -312,6 +315,47 @@ def build_entity_link_index(
             connect(
                 "trace",
                 entry.trace_id,
+                "related_map",
+                "view",
+                view_id,
+                reverse_type="visualization",
+            )
+
+    for visualization_entry in visualization_entries:
+        artifact_id = visualization_entry.artifact_id
+        aliases = tuple(
+            alias
+            for page in content
+            for alias in _aliases_for(page.visualization_aliases, artifact_id)
+        )
+        add(
+            "trace",
+            artifact_id,
+            visualization_entry.label,
+            canonical_url=visualization_entry.route,
+            aliases=aliases,
+        )
+        for method_id in visualization_entry.method_ids:
+            connect(
+                "trace",
+                artifact_id,
+                "visualizes",
+                "method",
+                method_id,
+                reverse_type="visualization",
+            )
+        for source_id in visualization_entry.source_ids:
+            connect("trace", artifact_id, "evidence", "source", source_id)
+        for view_id in visualization_entry.view_ids:
+            add(
+                "view",
+                view_id,
+                "最適化問題の構造マップ" if view_id == "VIEW_PROBLEM_STRUCTURE" else view_id,
+                canonical_url="/map" if view_id == "VIEW_PROBLEM_STRUCTURE" else None,
+            )
+            connect(
+                "trace",
+                artifact_id,
                 "related_map",
                 "view",
                 view_id,

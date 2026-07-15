@@ -83,3 +83,39 @@ test("concept教材がcanonical learning graphから次の手法を表示する"
   await expect(page.getByRole("heading", { level: 3, name: "次に見る" })).toBeVisible();
   await expect(page.getByRole("link", { name: /勾配降下法|最急降下法/u })).toBeVisible();
 });
+
+test("制約付きsliceで可行性とunconstrained failureを比較できる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/learning/SCENARIO_CONSTRAINED_DISK");
+
+  await expect(page.getByRole("heading", { level: 1, name: "実行可能領域と制約を無視した失敗を比べる" })).toBeVisible();
+  await expect(page.getByText("実行Trace / Executable teaching trace")).toBeVisible();
+  await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
+  await expect(page.getByText("active constraint", { exact: true })).toBeVisible();
+
+  const slider = page.getByRole("slider", { name: /現在の反復/u });
+  await slider.press("Home");
+  await expect(page.getByText("infeasible", { exact: true })).toBeVisible();
+  await expect(page.getByText("Traceを進めて確認します。")).toBeVisible();
+});
+
+test("Pareto sliceでpreferenceに応じた点をkeyboardで選べる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC");
+
+  await expect(page.getByRole("heading", { level: 1, name: "単一bestではなくPareto frontを読む" })).toBeVisible();
+  await expect(page.getByText("実行結果 / Executable result")).toBeVisible();
+  await expect(page.getByText(/単一bestではありません/u)).toBeVisible();
+  await expect(page.getByText(/一般の非凸front/u)).toBeVisible();
+
+  const selectedF1 = page.locator("dl div").filter({ hasText: "Selected f₁" }).locator("dd");
+  const before = await selectedF1.textContent();
+  await page.getByRole("slider", { name: /f₁のweight/u }).press("ArrowRight");
+  await expect(selectedF1).not.toHaveText(before ?? "");
+});
+
+test("Galleryからcanonical constrained sliceへ移動できる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/constrained-design");
+
+  await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
+  await page.getByRole("link", { name: /制約付き最適化: feasible region/u }).click();
+  await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK$/u);
+});

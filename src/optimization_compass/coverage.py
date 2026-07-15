@@ -286,6 +286,8 @@ def _scenario_route(renderer_family: str, scenario_id: str, artifact_id: str) ->
         return "/theater/nelder-mead"
     if renderer_family == "continuous_trajectory":
         return "/compare/first-order"
+    if renderer_family in {"feasible_region", "pareto_front"}:
+        return f"/theater/learning/{scenario_id}"
     return None
 
 

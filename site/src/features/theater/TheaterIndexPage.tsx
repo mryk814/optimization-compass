@@ -25,6 +25,20 @@ const theaterEntries = [
     detail: "BO Theater",
     to: THEATER_ROUTES.bayesianOptimization,
   },
+  {
+    eyebrow: "Feasible region · executable teaching trace",
+    title: "Constrained continuous",
+    description: "目的等高線、feasible region、constraint violation、active constraintを同時に読みます。",
+    detail: "制約付き最適化のfailure contrast",
+    to: THEATER_ROUTES.constrainedContinuous,
+  },
+  {
+    eyebrow: "Pareto front · executable result",
+    title: "Multi-objective",
+    description: "dominated / non-dominatedとpreferenceで選ぶ点を、2目的空間で確認します。",
+    detail: "Pareto front learning slice",
+    to: THEATER_ROUTES.multiObjective,
+  },
 ] as const;
 
 export function TheaterIndexPage() {

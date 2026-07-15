@@ -156,7 +156,7 @@
       "conditional_methods": [{"method_id": "M_EPSILON_CONSTRAINT", "reason": "preferenceを閾値として表せ、各scalar subproblemを信頼できるsolverで解ける場合"}],
       "excluded_methods": [{"method_id": "M_WEIGHTED_SUM", "reason": "非凸frontの一部を取得できず、weightだけでtrade-off全体を代表できない"}],
       "implementation_ids": ["I_PYMOO", "I_CVXPY"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "biobjective-quadratic-pareto-front"],
       "comparison_ids": [],
       "source_ids": ["S039", "S068", "S055"],
       "difficulty": "intermediate",
@@ -301,6 +301,39 @@
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
       "python_example": "from petsc4py import PETSc\n\ntao = PETSc.TAO().create()\ntao.setType(\"nls\")\nprint(tao.getType())",
       "practical_notes": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。"
+    },
+    {
+      "case_id": "constrained-design",
+      "title_ja": "強度制約を守りながら軽量設計を探す",
+      "title_en": "Find a lightweight design under a strength constraint",
+      "domain": "engineering",
+      "problem_archetype_id": "PA009",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "quadratic"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "analytic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "nonlinear"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {"Q01": "continuous", "Q02": "explicit_algebraic", "Q03": "quadratic", "Q04": "nonlinear", "Q05": "analytic_gradient", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "under_10", "Q09": "local_is_fine", "Q10": "feasible_solution_first", "Q11": "other", "Q12": "one_off"},
+      "candidate_method_ids": ["M_SLSQP"],
+      "conditional_methods": [{"method_id": "M_INTERIOR_POINT_NLP", "reason": "大規模・疎で、barrier法とsparse derivativeを活かせる場合"}],
+      "excluded_methods": [{"method_id": "M_BFGS", "reason": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す"}],
+      "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "constrained-disk-feasible-region"],
+      "comparison_ids": [],
+      "source_ids": ["S017", "S029", "S030", "S055", "S064"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-15",
+      "question": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
+      "decision_variables": "2つの連続design parameter。",
+      "objective": "重量に対応する二次目的を最小化する。",
+      "constraints": "許容領域を表す非線形不等式とdesign bounds。",
+      "map_node_id": "answer:Q04:nonlinear",
+      "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nobjective = lambda x: float(x @ x)\nconstraint = {\"type\": \"ineq\", \"fun\": lambda x: 1.0 - (x[0]-1.0)**2 - (x[1]-1.0)**2}\nresult = minimize(objective, np.array([1.8, 1.8]), constraints=constraint, method=\"SLSQP\")\nprint(result.x, result.fun)",
+      "practical_notes": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。"
     }
   ]
 }

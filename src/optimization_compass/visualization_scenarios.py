@@ -6,7 +6,9 @@ from pydantic import Field, model_validator
 
 from optimization_compass.trace_models import NonBlank, TraceModel
 
-Purpose = Literal["mechanism", "comparison", "failure_contrast", "sensitivity"]
+Purpose = Literal[
+    "mechanism", "comparison", "failure_contrast", "sensitivity", "application_result"
+]
 ComparisonRole = Literal["primary_example", "sensitivity_variant", "failure_contrast", "baseline"]
 KnownReferenceDisplayPolicy = Literal["show", "show_if_available", "not_shown"]
 NarrationMilestoneId = Literal["start", "first_change", "pattern_visible", "termination"]
@@ -19,6 +21,8 @@ RendererFamily = Literal[
     "generic_metric_history",
     "search_tree",
     "surrogate_uncertainty",
+    "feasible_region",
+    "pareto_front",
 ]
 ScenarioIdentityStatus = Literal["canonical", "derived", "generated_only"]
 
@@ -29,6 +33,8 @@ CANONICAL_SCENARIO_IDS = frozenset(
         "SCENARIO_MOMENTUM_QUADRATIC",
         "SCENARIO_NM_QUADRATIC",
         "SCENARIO_NM_ROSENBROCK",
+        "SCENARIO_CONSTRAINED_DISK",
+        "SCENARIO_BIOBJECTIVE_QUADRATIC",
     }
 )
 
@@ -151,7 +157,15 @@ class VisualizationSeed(TraceModel):
 
 
 class VisualizationExperiment(TraceModel):
-    oracle_policy: list[Literal["objective_value", "gradient"]] = Field(min_length=1)
+    oracle_policy: list[
+        Literal[
+            "objective_value",
+            "gradient",
+            "constraint_value",
+            "constraint_jacobian",
+            "objective_vector",
+        ]
+    ] = Field(min_length=1)
     initial_condition: VisualizationInitialCondition
     parameter_preset_id: NonBlank
     seed: VisualizationSeed
@@ -171,7 +185,9 @@ class VisualizationRun(TraceModel):
 
 class VisualizationArtifact(TraceModel):
     artifact_kind: ArtifactKind
-    artifact_contract: Literal["AlgorithmTrace", "SurrogateUncertainty"]
+    artifact_contract: Literal[
+        "AlgorithmTrace", "SurrogateUncertainty", "FeasibleRegion", "ParetoFront"
+    ]
     artifact_contract_version: Literal["1.0.0"]
     renderer_family: RendererFamily
     renderer_contract_version: Literal["1.0.0"]

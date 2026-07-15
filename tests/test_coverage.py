@@ -74,7 +74,12 @@ def test_explicit_release_delta_reports_transitions() -> None:
     before_payload = json.loads(load_report().model_dump_json())
     after_payload = deepcopy(before_payload)
     after_payload["dataset_version"] = "0.4.0"
-    after_payload["expectations"][0]["status"] = "available"
+    missing = next(
+        expectation
+        for expectation in after_payload["expectations"]
+        if expectation["status"] == "missing"
+    )
+    missing["status"] = "available"
     after_payload["summary"]["status_counts"]["missing"] -= 1
     after_payload["summary"]["status_counts"]["available"] += 1
     delta = diff_coverage(
@@ -100,6 +105,22 @@ def test_canonical_visualization_scenarios_cover_expensive_and_discrete_slices()
     assert expectation.route_ids == [
         "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS"
     ]
+
+
+def test_learning_slices_close_constrained_and_multiobjective_coverage() -> None:
+    report = load_report()
+    expected = {
+        "COV_CONSTRAINED_FEASIBLE": "SCENARIO_CONSTRAINED_DISK",
+        "COV_MULTI_OBJECTIVE_PARETO": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+    }
+
+    for expectation_id, scenario_id in expected.items():
+        expectation = next(
+            item for item in report.expectations if item.expectation_id == expectation_id
+        )
+        assert expectation.status == "available"
+        assert expectation.scenario_ids == [scenario_id]
+        assert expectation.route_ids == [f"/theater/learning/{scenario_id}"]
 
 
 def test_generated_slices_declare_their_canonical_identity() -> None:

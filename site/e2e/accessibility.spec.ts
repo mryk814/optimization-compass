@@ -35,6 +35,8 @@ const staticScans = [
   { route: "/learn/method.nelder-mead", heading: "Nelder–Mead単体法", label: "learn-detail" },
   { route: "/traces/nelder-mead-quadratic", heading: "Nelder–Meadの幾何操作", label: "nelder-mead" },
   { route: "/compare/gradient-quadratic", heading: "手法を比較する", label: "gradient-compare" },
+  { route: "/theater/learning/SCENARIO_CONSTRAINED_DISK", heading: "実行可能領域と制約を無視した失敗を比べる", label: "constrained-slice" },
+  { route: "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC", heading: "単一bestではなくPareto frontを読む", label: "pareto-slice" },
   { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
 ];
