@@ -81,10 +81,14 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     view = ViewSpec.model_validate_json(first_view_bytes)
     nodes = {node.node_id: node for node in view.nodes}
     entities = {(entity.entity_type, entity.entity_id): entity for entity in view.entities}
-    assert view.title == "最適化問題の構造マップ"
-    assert view.description == (
-        "問題の特徴から、関連する問題型・手法・代替解法・根拠をたどるためのビュー。"
-    )
+    assert view.title == "問題構造マップ"
+    assert view.description == "問題の特徴から手法候補へ辿る意味階層。"
+    assert view.preset_id == "VIEW_PROBLEM_STRUCTURE"
+    assert view.axis == "problem_structure"
+    assert view.relation_types == ["hierarchy"]
+    assert view.max_depth == 3
+    assert view.limitations
+    assert view.focus_fallback_entity_types == ["feature", "method", "problem", "alternative"]
     assert [nodes[node_id].label for node_id in view.root_node_ids] == EXPECTED_BRANCHES
     assert view.root_node_ids == [
         "branch:alternative-first",
@@ -173,8 +177,28 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
             "path": "views/problem-structure.json",
             "view_id": "problem-structure",
             "version": "1.0.0",
-        }
+        },
+        {
+            "path": "views/available-information.json",
+            "view_id": "available-information",
+            "version": "1.0.0",
+        },
+        {
+            "path": "views/guarantee-outcome.json",
+            "view_id": "guarantee-outcome",
+            "version": "1.0.0",
+        },
+        {
+            "path": "views/method-mechanism.json",
+            "view_id": "method-mechanism",
+            "version": "1.0.0",
+        },
     ]
+    for item in manifest_payload["views"]:
+        semantic_view = ViewSpec.model_validate_json((first_output / item["path"]).read_bytes())
+        assert semantic_view.description
+        assert semantic_view.limitations
+        assert semantic_view.filter_policy.groups
     assert manifest_payload["recommendation"] == {
         "path": "recommendation/site-data.json",
         "version": "2.0.0",

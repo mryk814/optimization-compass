@@ -40,6 +40,7 @@ DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
 DEFAULT_PREDICATE_MIGRATION = ROOT / "data/migrations/005_atomic_predicates.sql"
 DEFAULT_PROBLEM_MIGRATION = ROOT / "data/migrations/006_problem_instances.sql"
+DEFAULT_SEMANTIC_VIEW_MIGRATION = ROOT / "data/migrations/007_semantic_view_presets.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -233,6 +234,7 @@ def build_staged_release(
             DEFAULT_COVERAGE_MIGRATION,
             DEFAULT_PREDICATE_MIGRATION,
             DEFAULT_PROBLEM_MIGRATION,
+            DEFAULT_SEMANTIC_VIEW_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1126,6 +1128,7 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_COVERAGE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_PREDICATE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_PROBLEM_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_SEMANTIC_VIEW_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -1180,7 +1183,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Staged canonical problem definitions, instances, and executable registry links.",
+            "Published preset-driven semantic Views with stable IDs and focus policy.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1194,15 +1197,12 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Optimization Atlas lacked a shared canonical problem-instance suite.",
+            "Optimization Atlas exposed only one hard-coded semantic View.",
             (
-                "Replaced demo objectives with normalized problem definitions, instances, "
-                "reference metadata, and registry links."
+                "Added public View IDs, authored filter groups, limitations, and focus "
+                "fallback policy to canonical view presets."
             ),
-            (
-                "Keep diagnosis, comparison, visualization, and learning artifacts "
-                "on one problem authority."
-            ),
+            ("Generate all semantic View artifacts from one versioned preset authority."),
             target_version,
             release_date,
         ),
@@ -1214,7 +1214,12 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
         (
             "view_presets",
             list(seed.view_presets),
-            {"relation_types": "relation_types_json", "source_ids": "source_ids_json"},
+            {
+                "relation_types": "relation_types_json",
+                "filter_policy": "filter_policy_json",
+                "focus_fallback_entity_types": "focus_fallback_entity_types_json",
+                "source_ids": "source_ids_json",
+            },
         ),
         (
             "method_visualization_profiles",
@@ -2075,10 +2080,48 @@ def _view_preset_issues(connection: sqlite3.Connection) -> list[str]:
         "method": ("methods", "method_id"),
         "view_preset": ("view_presets", "preset_id"),
     }
-    for preset_id, status, root_type, root_id, relations in connection.execute(
-        "SELECT preset_id, root_support_status, root_entity_type, root_entity_id, "
-        "relation_types_json FROM view_presets"
+    columns = {str(row[1]) for row in connection.execute('PRAGMA table_info("view_presets")')}
+    if "view_id" not in columns:
+        for preset_id, status, root_type, root_id, relations in connection.execute(
+            "SELECT preset_id, root_support_status, root_entity_type, root_entity_id, "
+            "relation_types_json FROM view_presets"
+        ):
+            if (status == "supported") != (root_type is not None and root_id is not None):
+                issues.append(str(preset_id))
+            if status == "supported":
+                resolver = root_targets.get(str(root_type))
+                if resolver is None:
+                    issues.append(f"{preset_id}:invalid-root-type")
+                else:
+                    table, column = resolver
+                    if (
+                        connection.execute(
+                            f'SELECT 1 FROM "{table}" WHERE "{column}" = ?', (root_id,)
+                        ).fetchone()
+                        is None
+                    ):
+                        issues.append(f"{preset_id}:unresolved-root")
+            if _json_array_has_duplicates(str(relations)):
+                issues.append(f"{preset_id}:duplicate-relations")
+        return issues
+    view_ids: set[str] = set()
+    for (
+        preset_id,
+        view_id,
+        status,
+        root_type,
+        root_id,
+        relations,
+        filters,
+        fallback_types,
+    ) in connection.execute(
+        "SELECT preset_id, view_id, root_support_status, root_entity_type, root_entity_id, "
+        "relation_types_json, filter_policy_json, focus_fallback_entity_types_json "
+        "FROM view_presets"
     ):
+        if str(view_id) in view_ids:
+            issues.append(f"{preset_id}:duplicate-view-id")
+        view_ids.add(str(view_id))
         if (status == "supported") != (root_type is not None and root_id is not None):
             issues.append(str(preset_id))
         if status == "supported":
@@ -2096,6 +2139,62 @@ def _view_preset_issues(connection: sqlite3.Connection) -> list[str]:
                 issues.append(f"{preset_id}:unresolved-root")
         if _json_array_has_duplicates(str(relations)):
             issues.append(f"{preset_id}:duplicate-relations")
+        if not _valid_json_container(filters, dict, non_empty=True):
+            issues.append(f"{preset_id}:invalid-filter-policy")
+        else:
+            filter_policy = json.loads(str(filters))
+            groups = filter_policy.get("groups")
+            if filter_policy.get("mode") != "authored_groups" or not isinstance(groups, list):
+                issues.append(f"{preset_id}:invalid-filter-policy")
+            else:
+                seen_groups: set[str] = set()
+                seen_selectors: set[tuple[str, str]] = set()
+                selector_tables = {
+                    "question_ids": ("decision_questions", "question_id"),
+                    "feature_ids": ("problem_features", "feature_id"),
+                    "method_ids": ("methods", "method_id"),
+                    "alternative_ids": (
+                        "alternative_solution_checks",
+                        "alternative_id",
+                    ),
+                }
+                for group in groups:
+                    if not isinstance(group, dict):
+                        issues.append(f"{preset_id}:invalid-filter-group")
+                        continue
+                    group_id = str(group.get("group_id") or "")
+                    if (
+                        not group_id.strip()
+                        or group_id in seen_groups
+                        or not str(group.get("label_ja") or "").strip()
+                        or not str(group.get("label_en") or "").strip()
+                    ):
+                        issues.append(f"{preset_id}:invalid-filter-group")
+                    seen_groups.add(group_id)
+                    selector_count = 0
+                    for key, (table, column) in selector_tables.items():
+                        values = group.get(key, [])
+                        if not isinstance(values, list) or len(values) != len(set(values)):
+                            issues.append(f"{preset_id}:invalid-filter-selectors")
+                            continue
+                        selector_count += len(values)
+                        for raw_id in values:
+                            selector = (key, str(raw_id))
+                            if selector in seen_selectors:
+                                issues.append(f"{preset_id}:duplicate-filter-selector")
+                            seen_selectors.add(selector)
+                            if (
+                                connection.execute(
+                                    f'SELECT 1 FROM "{table}" WHERE "{column}" = ?',
+                                    (raw_id,),
+                                ).fetchone()
+                                is None
+                            ):
+                                issues.append(f"{preset_id}:unresolved-filter-selector")
+                    if selector_count == 0:
+                        issues.append(f"{preset_id}:empty-filter-group")
+        if not _valid_json_container(fallback_types, list, non_empty=True):
+            issues.append(f"{preset_id}:invalid-focus-fallback")
     return issues
 
 

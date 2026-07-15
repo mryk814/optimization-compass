@@ -101,11 +101,33 @@ class ViewEdge(ContractModel):
         return self
 
 
+class ViewFilterGroup(ContractModel):
+    group_id: str = Field(min_length=1)
+    label: str = Field(min_length=1)
+    label_en: str = Field(min_length=1)
+    question_ids: list[str] = Field(default_factory=list)
+    feature_ids: list[str] = Field(default_factory=list)
+    method_ids: list[str] = Field(default_factory=list)
+    alternative_ids: list[str] = Field(default_factory=list)
+
+
+class ViewFilterPolicy(ContractModel):
+    mode: Literal["authored_groups"]
+    groups: list[ViewFilterGroup] = Field(min_length=1)
+
+
 class ViewSpec(ContractModel):
     version: Literal["1.0.0"] = "1.0.0"
     view_id: str = Field(min_length=1)
+    preset_id: str = Field(min_length=1)
     title: str = Field(min_length=1)
     description: str = Field(min_length=1)
+    limitations: str = Field(min_length=1)
+    axis: str = Field(min_length=1)
+    relation_types: list[str] = Field(min_length=1)
+    max_depth: int = Field(ge=1)
+    filter_policy: ViewFilterPolicy
+    focus_fallback_entity_types: list[str] = Field(min_length=1)
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     root_node_ids: list[str] = Field(min_length=1)
@@ -153,6 +175,10 @@ class ViewSpec(ContractModel):
         for edge in self.edges:
             if edge.source_node_id not in node_by_id or edge.target_node_id not in node_by_id:
                 raise ValueError(f"edge {edge.edge_id} has a missing node reference")
+            if edge.edge_type not in self.relation_types:
+                raise ValueError(
+                    f"edge {edge.edge_id} uses undeclared relation type: {edge.edge_type}"
+                )
 
         question_by_id: dict[str, ViewNode] = {}
         for node in self.nodes:
@@ -190,6 +216,7 @@ class ViewSpec(ContractModel):
                 )
 
         _validate_parent_cycles(self.nodes)
+        _validate_max_depth(self.nodes, self.max_depth)
         return self
 
 
@@ -289,3 +316,15 @@ def _validate_parent_cycles(nodes: list[ViewNode]) -> None:
                 raise ValueError(f"parent references contain a cycle at: {current}")
             path.add(current)
             current = parent_by_id.get(current)
+
+
+def _validate_max_depth(nodes: list[ViewNode], max_depth: int) -> None:
+    parent_by_id = {node.node_id: node.parent_node_id for node in nodes}
+    for node in nodes:
+        depth = 0
+        current = node.parent_node_id
+        while current is not None:
+            depth += 1
+            current = parent_by_id[current]
+        if depth > max_depth:
+            raise ValueError(f"node {node.node_id} exceeds max_depth {max_depth}: observed {depth}")

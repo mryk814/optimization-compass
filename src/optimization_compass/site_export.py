@@ -12,6 +12,7 @@ from optimization_compass.coverage import build_coverage_report, write_coverage_
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.search_tree import (
@@ -47,6 +48,8 @@ from optimization_compass.view_spec import (
     SiteManifest,
     ViewEdge,
     ViewEntity,
+    ViewFilterGroup,
+    ViewFilterPolicy,
     ViewNode,
     ViewSpec,
 )
@@ -70,53 +73,11 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-VIEW_ID = "problem-structure"
-VIEW_PATH = "views/problem-structure.json"
-VIEW_TITLE = "最適化問題の構造マップ"
-VIEW_DESCRIPTION = "問題の特徴から、関連する問題型・手法・代替解法・根拠をたどるためのビュー。"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
 COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
-
-BRANCHES: tuple[tuple[str, str, str, str, tuple[str, ...]], ...] = (
-    (
-        "alternative-first",
-        "代替解法を先に確認",
-        "Check alternatives first",
-        "汎用最適化を選ぶ前に、専用解法や問題の置き換えを確認する。",
-        (),
-    ),
-    (
-        "variable-domain",
-        "変数と計算資源",
-        "Variables and compute",
-        "変数型・規模・反復実行条件から、実行可能な手法の範囲を整理する。",
-        ("Q01", "Q08", "Q12"),
-    ),
-    (
-        "objective-information",
-        "目的関数と評価情報",
-        "Objective and evaluation information",
-        "目的の表現・微分・評価費・信頼性から、使える情報と探索方法を整理する。",
-        ("Q02", "Q03", "Q05", "Q06", "Q07"),
-    ),
-    (
-        "constraint-structure",
-        "制約と特殊構造",
-        "Constraints and special structure",
-        "制約の種類と利用できる特殊構造から、専用手法の候補を整理する。",
-        ("Q04", "Q11"),
-    ),
-    (
-        "required-outcome-guarantee",
-        "求める解と保証",
-        "Required outcome and guarantee",
-        "局所解・大域探索・証明の必要性から、求める結果の水準を整理する。",
-        ("Q09", "Q10"),
-    ),
-)
 
 # Keep these labels aligned with the existing browser copy contract in web.py.
 ANSWER_LABELS_JA: dict[str, str] = {
@@ -219,17 +180,35 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     questions = repository.atlas_questions()
     rules = repository.atlas_rules()
     alternatives = repository.atlas_alternatives()
+    presets = repository.semantic_view_presets()
+    if len(presets) < 4:
+        raise ValueError("site export requires at least four semantic view presets")
+    if len({preset.view_id for preset in presets}) != len(presets):
+        raise ValueError("semantic view presets contain duplicate public view IDs")
 
     question_feature_ids = {str(question["mapped_feature_id"]) for question in questions}
     target_ids = _target_ids_by_type(rules)
-    feature_ids = sorted(question_feature_ids | target_ids["feature"])
+    preset_feature_ids = {
+        feature_id
+        for preset in presets
+        for group in preset.filter_policy.groups
+        for feature_id in group.feature_ids
+    }
+    preset_method_ids = {
+        method_id
+        for preset in presets
+        for group in preset.filter_policy.groups
+        for method_id in group.method_ids
+    }
+    feature_ids = sorted(question_feature_ids | target_ids["feature"] | preset_feature_ids)
+    method_ids = sorted(target_ids["method"] | preset_method_ids)
     features = repository.atlas_features(feature_ids)
     feature_values = repository.atlas_feature_values(feature_ids)
-    methods = repository.atlas_methods(sorted(target_ids["method"]))
+    methods = repository.atlas_methods(method_ids)
     problems = repository.atlas_problems(sorted(target_ids["problem"]))
 
     _require_all_ids(features, "feature_id", feature_ids, "feature")
-    _require_all_ids(methods, "method_id", sorted(target_ids["method"]), "method")
+    _require_all_ids(methods, "method_id", method_ids, "method")
     _require_all_ids(problems, "problem_id", sorted(target_ids["problem"]), "problem")
     _require_all_ids(
         alternatives,
@@ -244,22 +223,42 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
             for row in [*questions, *rules, *features, *methods, *problems, *alternatives]
             for source_id in row["source_ids"]
         }
+        | {source_id for preset in presets for source_id in preset.source_ids}
     )
     sources = repository.atlas_sources(source_ids)
     _require_all_ids(sources, "source_id", source_ids, "source")
 
-    view = _build_problem_structure(
-        dataset_version=release["version"],
-        generated_at=generated_at,
-        questions=questions,
-        rules=rules,
-        feature_values=feature_values,
-        features=features,
-        methods=methods,
-        problems=problems,
-        alternatives=alternatives,
-        sources=sources,
-    )
+    views: list[ViewSpec] = []
+    for preset in presets:
+        if preset.view_id == "problem-structure":
+            views.append(
+                _build_problem_structure(
+                    preset=preset,
+                    questions=questions,
+                    rules=rules,
+                    feature_values=feature_values,
+                    dataset_version=release["version"],
+                    generated_at=generated_at,
+                    features=features,
+                    methods=methods,
+                    problems=problems,
+                    alternatives=alternatives,
+                    sources=sources,
+                )
+            )
+        else:
+            views.append(
+                _build_grouped_semantic_view(
+                    preset=preset,
+                    dataset_version=release["version"],
+                    generated_at=generated_at,
+                    features=features,
+                    methods=methods,
+                    problems=problems,
+                    alternatives=alternatives,
+                    sources=sources,
+                )
+            )
     from optimization_compass.site_recommendation import build_site_data
 
     recommendation_data = build_site_data(repository)
@@ -280,7 +279,8 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         collection_field="comparisons",
         dataset_version=release["version"],
     )
-    _write_json(output_dir / VIEW_PATH, view)
+    for view in views:
+        _write_json(output_dir / f"views/{view.view_id}.json", view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
     _write_json(output_dir / "problems.json", repository.problem_catalog())
     search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
@@ -306,7 +306,8 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         artifact.trace.trace_id: artifact.trace.source_ids for artifact in search_tree_artifacts
     }
     search_tree_views = {
-        artifact.trace.trace_id: ["VIEW_PROBLEM_STRUCTURE"] for artifact in search_tree_artifacts
+        artifact.trace.trace_id: ["VIEW_PROBLEM_STRUCTURE", "VIEW_METHOD_MECHANISM"]
+        for artifact in search_tree_artifacts
     }
     entity_links = build_entity_link_index(
         repository,
@@ -337,7 +338,14 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         version=VIEW_VERSION,
         dataset_version=release["version"],
         generated_at=generated_at,
-        views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
+        views=[
+            ManifestView(
+                view_id=view.view_id,
+                version=VIEW_VERSION,
+                path=f"views/{view.view_id}.json",
+            )
+            for view in views
+        ],
         recommendation=ManifestRecommendationAsset(
             version="2.0.0", path="recommendation/site-data.json"
         ),
@@ -1152,6 +1160,7 @@ def _dummy_frame(
 
 def _build_problem_structure(
     *,
+    preset: ViewPresetSeed,
     dataset_version: str,
     generated_at: datetime,
     questions: list[dict[str, Any]],
@@ -1164,7 +1173,9 @@ def _build_problem_structure(
     sources: list[dict[str, Any]],
 ) -> ViewSpec:
     question_by_id = {str(question["question_id"]): question for question in questions}
-    expected_question_ids = {question_id for _, _, _, _, ids in BRANCHES for question_id in ids}
+    expected_question_ids = {
+        question_id for group in preset.filter_policy.groups for question_id in group.question_ids
+    }
     if set(question_by_id) != expected_question_ids:
         missing = sorted(expected_question_ids - set(question_by_id))
         unexpected = sorted(set(question_by_id) - expected_question_ids)
@@ -1182,37 +1193,31 @@ def _build_problem_structure(
         (str(value["feature_id"]), str(value["value_code"])): value for value in feature_values
     }
 
-    nodes = [
+    nodes: list[ViewNode] = [
         ViewNode(
-            node_id=f"branch:{branch_id}",
+            node_id=f"branch:{group.group_id}",
             node_type="branch",
-            label=label,
-            label_en=label_en,
-            summary=summary,
+            label=group.label_ja,
+            label_en=group.label_en,
+            summary=preset.description_ja,
             display_order=display_order,
             default_collapsed=True,
             emphasis="primary",
             related_entities=[],
         )
-        for display_order, (branch_id, label, label_en, summary, _) in enumerate(BRANCHES)
+        for display_order, group in enumerate(preset.filter_policy.groups)
     ]
 
-    alternative_group_id = "feature:alternative-first"
-    nodes.append(
-        ViewNode(
-            node_id=alternative_group_id,
-            node_type="feature",
-            label="汎用最適化の前に確認する選択肢",
-            label_en="Alternatives to generic optimization",
-            summary="問題構造を活かす専用解法や別の定式化を先に確認する。",
-            display_order=0,
-            default_collapsed=True,
-            emphasis="normal",
-            parent_node_id="branch:alternative-first",
-            related_entities=[],
-        )
-    )
-    for display_order, alternative in enumerate(alternatives):
+    alternative_ids = {
+        alternative_id
+        for group in preset.filter_policy.groups
+        for alternative_id in group.alternative_ids
+    }
+    alternative_by_id = {
+        str(alternative["alternative_id"]): alternative for alternative in alternatives
+    }
+    for display_order, alternative_id in enumerate(sorted(alternative_ids)):
+        alternative = alternative_by_id[alternative_id]
         alternative_id = str(alternative["alternative_id"])
         nodes.append(
             ViewNode(
@@ -1228,7 +1233,7 @@ def _build_problem_structure(
                 display_order=display_order,
                 default_collapsed=False,
                 emphasis="muted",
-                parent_node_id=alternative_group_id,
+                parent_node_id="branch:alternative-first",
                 related_entities=[
                     EntityReference(entity_type="alternative", entity_id=alternative_id)
                 ],
@@ -1236,8 +1241,8 @@ def _build_problem_structure(
             )
         )
 
-    for branch_id, _, _, _, question_ids in BRANCHES:
-        for question_order, question_id in enumerate(question_ids):
+    for group in preset.filter_policy.groups:
+        for question_order, question_id in enumerate(group.question_ids):
             question = question_by_id[question_id]
             question_node_id = f"question:{question_id}"
             allowed_answers = _string_list(question["allowed_answers"])
@@ -1256,7 +1261,7 @@ def _build_problem_structure(
                     display_order=question_order,
                     default_collapsed=True,
                     emphasis="normal",
-                    parent_node_id=f"branch:{branch_id}",
+                    parent_node_id=f"branch:{group.group_id}",
                     question_id=question_id,
                     answer_type=_answer_type(question["answer_type"]),
                     allowed_answers=allowed_answers,
@@ -1317,12 +1322,19 @@ def _build_problem_structure(
 
     return ViewSpec(
         version=VIEW_VERSION,
-        view_id=VIEW_ID,
-        title=VIEW_TITLE,
-        description=VIEW_DESCRIPTION,
+        view_id=preset.view_id,
+        preset_id=preset.preset_id,
+        title=preset.name_ja,
+        description=preset.description_ja,
+        limitations=preset.limitations_ja,
+        axis=preset.axis,
+        relation_types=preset.relation_types,
+        max_depth=preset.max_depth,
+        filter_policy=_view_filter_policy(preset),
+        focus_fallback_entity_types=preset.focus_fallback_entity_types,
         dataset_version=dataset_version,
         generated_at=generated_at,
-        root_node_ids=[f"branch:{branch_id}" for branch_id, _, _, _, _ in BRANCHES],
+        root_node_ids=[f"branch:{group.group_id}" for group in preset.filter_policy.groups],
         nodes=nodes,
         edges=edges,
         entities=entities,
@@ -1420,6 +1432,144 @@ def _build_entities(
         for source in sources
     )
     return entities
+
+
+def _build_grouped_semantic_view(
+    *,
+    preset: ViewPresetSeed,
+    dataset_version: str,
+    generated_at: datetime,
+    features: list[dict[str, Any]],
+    methods: list[dict[str, Any]],
+    problems: list[dict[str, Any]],
+    alternatives: list[dict[str, Any]],
+    sources: list[dict[str, Any]],
+) -> ViewSpec:
+    records = {
+        "feature": {str(row["feature_id"]): row for row in features},
+        "method": {str(row["method_id"]): row for row in methods},
+        "alternative": {str(row["alternative_id"]): row for row in alternatives},
+    }
+    presentation = {
+        "feature": ("feature_id", "name_ja", "name_en", "definition"),
+        "method": ("method_id", "name_ja", "name_en", "summary"),
+        "alternative": (
+            "alternative_id",
+            "name_ja",
+            "name_en",
+            "why_before_generic_optimization",
+        ),
+    }
+    nodes: list[ViewNode] = []
+    for group_order, group in enumerate(preset.filter_policy.groups):
+        branch_id = f"branch:{group.group_id}"
+        nodes.append(
+            ViewNode(
+                node_id=branch_id,
+                node_type="branch",
+                label=group.label_ja,
+                label_en=group.label_en,
+                summary=preset.description_ja,
+                display_order=group_order,
+                default_collapsed=False,
+                emphasis="primary",
+                related_entities=[],
+                source_ids=preset.source_ids,
+            )
+        )
+        selectors = (
+            ("feature", group.feature_ids),
+            ("method", group.method_ids),
+            ("alternative", group.alternative_ids),
+        )
+        child_order = 0
+        for entity_type, entity_ids in selectors:
+            id_key, label_key, label_en_key, summary_key = presentation[entity_type]
+            for entity_id in entity_ids:
+                try:
+                    record = records[entity_type][entity_id]
+                except KeyError as error:
+                    raise ValueError(
+                        f"view {preset.view_id} references missing {entity_type}: {entity_id}"
+                    ) from error
+                nodes.append(
+                    ViewNode(
+                        node_id=f"entity:{entity_type}:{entity_id}",
+                        node_type="entity_reference",
+                        label=_required_display_text(
+                            record.get(label_key), f"{entity_type} {record[id_key]} {label_key}"
+                        ),
+                        label_en=_required_display_text(
+                            record.get(label_en_key),
+                            f"{entity_type} {record[id_key]} {label_en_key}",
+                        ),
+                        summary=str(record.get(summary_key) or ""),
+                        display_order=child_order,
+                        default_collapsed=False,
+                        emphasis="normal",
+                        parent_node_id=branch_id,
+                        related_entities=[
+                            EntityReference(entity_type=entity_type, entity_id=entity_id)
+                        ],
+                        source_ids=_string_list(record["source_ids"]),
+                    )
+                )
+                child_order += 1
+
+    edges = [
+        ViewEdge(
+            edge_id=f"hierarchy:{node.parent_node_id}:{node.node_id}",
+            source_node_id=node.parent_node_id,
+            target_node_id=node.node_id,
+            edge_type="hierarchy",
+            explanation=_hierarchy_explanation(node),
+        )
+        for node in nodes
+        if node.parent_node_id is not None
+    ]
+    return ViewSpec(
+        version=VIEW_VERSION,
+        view_id=preset.view_id,
+        preset_id=preset.preset_id,
+        title=preset.name_ja,
+        description=preset.description_ja,
+        limitations=preset.limitations_ja,
+        axis=preset.axis,
+        relation_types=preset.relation_types,
+        max_depth=preset.max_depth,
+        filter_policy=_view_filter_policy(preset),
+        focus_fallback_entity_types=preset.focus_fallback_entity_types,
+        dataset_version=dataset_version,
+        generated_at=generated_at,
+        root_node_ids=[f"branch:{group.group_id}" for group in preset.filter_policy.groups],
+        nodes=nodes,
+        edges=edges,
+        entities=_build_entities(
+            features=features,
+            methods=methods,
+            problems=problems,
+            alternatives=alternatives,
+            sources=sources,
+        ),
+    )
+
+
+def _view_filter_policy(preset: ViewPresetSeed) -> ViewFilterPolicy:
+    return ViewFilterPolicy(
+        mode=preset.filter_policy.mode,
+        groups=[
+            ViewFilterGroup(
+                group_id=group.group_id,
+                label=group.label_ja,
+                label_en=group.label_en,
+                question_ids=group.question_ids,
+                feature_ids=group.feature_ids,
+                method_ids=group.method_ids,
+                alternative_ids=group.alternative_ids,
+            )
+            for group in preset.filter_policy.groups
+        ],
+    )
 
 
 def _target_ids_by_type(

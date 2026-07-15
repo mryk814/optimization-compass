@@ -19,8 +19,28 @@ def valid_view_spec_payload() -> dict[str, object]:
     return {
         "version": "1.0.0",
         "view_id": "test-view",
+        "preset_id": "VIEW_TEST",
         "title": "Test view",
         "description": "A complete test view.",
+        "limitations": "This fixture does not rank methods.",
+        "axis": "test_axis",
+        "relation_types": ["related"],
+        "max_depth": 2,
+        "filter_policy": {
+            "mode": "authored_groups",
+            "groups": [
+                {
+                    "group_id": "test",
+                    "label": "Test",
+                    "label_en": "Test",
+                    "question_ids": ["Q01"],
+                    "feature_ids": [],
+                    "method_ids": [],
+                    "alternative_ids": [],
+                }
+            ],
+        },
+        "focus_fallback_entity_types": ["feature"],
         "dataset_version": "0.2.0",
         "generated_at": "2026-07-13T00:00:00Z",
         "root_node_ids": ["branch:test"],
@@ -246,6 +266,7 @@ def test_viewspec_accepts_complete_presentation_contract() -> None:
 
     assert view.title == "Test view"
     assert view.description == "A complete test view."
+    assert view.limitations == "This fixture does not rank methods."
     assert view.nodes[0].summary == "Groups the test nodes."
     assert view.nodes[0].display_order == 0
     assert view.nodes[0].default_collapsed is True
@@ -318,4 +339,20 @@ def test_viewspec_rejects_duplicate_related_entities_per_node() -> None:
     references.append(deepcopy(references[0]))
 
     with pytest.raises(ValidationError, match="duplicate related entity"):
+        ViewSpec.model_validate(payload)
+
+
+def test_viewspec_rejects_undeclared_relation_type() -> None:
+    payload = valid_view_spec_payload()
+    payload["relation_types"] = ["hierarchy"]
+
+    with pytest.raises(ValidationError, match="undeclared relation type"):
+        ViewSpec.model_validate(payload)
+
+
+def test_viewspec_rejects_nodes_beyond_preset_depth() -> None:
+    payload = valid_view_spec_payload()
+    payload["max_depth"] = 1
+
+    with pytest.raises(ValidationError, match="exceeds max_depth"):
         ViewSpec.model_validate(payload)
