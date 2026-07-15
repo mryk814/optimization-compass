@@ -81,7 +81,10 @@ def render_report(rows: list[DensityRow]) -> str:
             "- table of contents: at least 4 entries",
             "- at least one syntactically valid Python block",
             "",
-            "The floor prevents visibly empty pages. It is not a quality ranking and does not require every method to have visualization or comparison artifacts.",
+            (
+                "The floor prevents visibly empty pages. It is not a quality ranking and does "
+                "not require every method to have visualization or comparison artifacts."
+            ),
             "",
         ]
     )
