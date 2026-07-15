@@ -1,6 +1,8 @@
 ---
 content_id: concept.convexity
 kind: concept
+canonical_entity_type: feature
+canonical_entity_id: F_CONVEXITY
 title_ja: 凸性
 title_en: Convexity
 summary: 局所的な下り坂と大域的な最適性をつなぐ性質です。

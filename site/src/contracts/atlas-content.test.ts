@@ -6,7 +6,7 @@ const valid = {
   contract_version: "2.0.0",
   dataset_version: "0.3.0",
   pages: [{
-    content_id: "concept.example", kind: "concept", title_ja: "例", title_en: "Example",
+    content_id: "concept.example", kind: "concept", canonical_entity_type: "feature", canonical_entity_id: "F_EXAMPLE", title_ja: "例", title_en: "Example",
     summary: "Summary.", html: '<h2 id="overview" tabindex="-1">Overview</h2><p>Summary.</p>',
     toc: [{ heading_id: "overview", label: "Overview", level: 2 }], prerequisites: [], related_ids: [],
     visualization_ids: [], comparison_ids: [], source_ids: ["S001"], status: "published",

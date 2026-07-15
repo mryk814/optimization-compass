@@ -17,6 +17,8 @@ class _Frontmatter(BaseModel):
     content_id: str = Field(min_length=1)
     kind: Literal["method", "concept"]
     method_id: str | None = None
+    canonical_entity_type: Literal["method", "problem", "feature", "implementation"] | None = None
+    canonical_entity_id: str | None = None
     title_ja: str = Field(min_length=1)
     title_en: str = Field(min_length=1)
     summary: str = Field(min_length=1)
@@ -34,6 +36,7 @@ class _Frontmatter(BaseModel):
     @field_validator(
         "content_id",
         "method_id",
+        "canonical_entity_id",
         "title_ja",
         "title_en",
         "summary",
@@ -69,6 +72,10 @@ class _Frontmatter(BaseModel):
             raise ValueError("method content requires method_id")
         if self.kind == "concept" and self.method_id is not None:
             raise ValueError("concept content must not define method_id")
+        if (self.canonical_entity_type is None) != (self.canonical_entity_id is None):
+            raise ValueError("canonical content entity type and ID must be defined together")
+        if self.kind == "concept" and self.canonical_entity_id is None:
+            raise ValueError("concept content requires a canonical entity")
         return self
 
 
@@ -77,6 +84,8 @@ class ContentPage:
     content_id: str
     kind: str
     method_id: str | None
+    canonical_entity_type: str
+    canonical_entity_id: str
     title_ja: str
     title_en: str
     summary: str
@@ -133,6 +142,8 @@ def parse_content(path: Path) -> ContentPage:
         content_id=fields.content_id,
         kind=fields.kind,
         method_id=fields.method_id,
+        canonical_entity_type=fields.canonical_entity_type or "method",
+        canonical_entity_id=fields.canonical_entity_id or fields.method_id or "",
         title_ja=fields.title_ja,
         title_en=fields.title_en,
         summary=fields.summary,

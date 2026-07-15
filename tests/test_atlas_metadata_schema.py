@@ -45,6 +45,8 @@ def test_seed_is_explicit_and_closes_all_references() -> None:
     assert len(seed.comparison_sets) == 1
     assert len(seed.comparison_set_members) == 3
     assert seed.learning_edges
+    assert len(seed.learning_edges) >= 40
+    assert len(seed.terminology_aliases) >= 30
 
 
 def test_seed_rejects_duplicate_relation_values() -> None:
@@ -147,25 +149,16 @@ def test_staged_database_has_atlas_checks_and_closed_learning_edges(
         check_rows = connection.execute(
             "SELECT check_id, status, checked_at FROM release_checks ORDER BY check_id"
         ).fetchall()
-        unresolved = connection.execute(
-            """
-            SELECT COUNT(*)
-            FROM learning_edges AS edge
-            LEFT JOIN methods AS source_method
-              ON edge.source_type = 'method' AND edge.source_id = source_method.method_id
-            LEFT JOIN methods AS target_method
-              ON edge.target_type = 'method' AND edge.target_id = target_method.method_id
-            WHERE edge.source_type = 'method'
-              AND (source_method.method_id IS NULL OR target_method.method_id IS NULL)
-            """
-        ).fetchone()[0]
+        learning_count = connection.execute("SELECT COUNT(*) FROM learning_edges").fetchone()[0]
+        alias_count = connection.execute("SELECT COUNT(*) FROM terminology_aliases").fetchone()[0]
     finally:
         connection.close()
 
-    assert [row[0] for row in check_rows] == [f"CHK{index:03d}" for index in range(1, 25)]
+    assert [row[0] for row in check_rows] == [f"CHK{index:03d}" for index in range(1, 26)]
     assert not [row for row in check_rows if row[1] == "fail"]
     assert {row[2] for row in check_rows} == {RELEASE_DATE}
-    assert unresolved == 0
+    assert learning_count >= 40
+    assert alias_count >= 30
 
 
 def test_each_atlas_live_check_detects_its_table_mutation(
@@ -224,8 +217,8 @@ def test_each_atlas_live_check_detects_its_table_mutation(
         "UPDATE learning_edges SET rationale = ' ' WHERE rowid = 1",
         "UPDATE learning_edges SET display_order = -1 WHERE rowid = 1",
         "INSERT INTO learning_edges SELECT edge_id || '_DUP', source_type, source_id, "
-        "target_type, target_id, relation, rationale, display_order, source_ids_json, "
-        "last_verified FROM learning_edges WHERE rowid = 1",
+        "target_type, target_id, relation, rationale, difficulty, audience, display_order, "
+        "source_ids_json, last_verified, status FROM learning_edges WHERE rowid = 1",
     ],
 )
 def test_chk018_detects_constraint_bypassed_learning_edge_semantics(
@@ -250,3 +243,24 @@ def test_chk018_detects_constraint_bypassed_learning_edge_semantics(
 
     assert result.ok is False
     assert "CHK018" in {check.check_id for check in result.live_failures}
+
+
+def test_chk025_detects_undisambiguated_alias_collision(
+    staged_database: Path, tmp_path: Path
+) -> None:
+    mutated = tmp_path / "terminology.sqlite"
+    shutil.copy2(staged_database, mutated)
+    connection = sqlite3.connect(mutated)
+    try:
+        connection.execute(
+            "UPDATE terminology_aliases SET disambiguation_note = NULL "
+            "WHERE target_id IN ('MF_DISCRETE_EXACT', 'M_INTERIOR_POINT_NLP')"
+        )
+        connection.commit()
+    finally:
+        connection.close()
+
+    result = verify_database(mutated)
+
+    assert result.ok is False
+    assert "CHK025" in {check.check_id for check in result.live_failures}

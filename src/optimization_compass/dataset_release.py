@@ -9,6 +9,7 @@ import shutil
 import sqlite3
 import tempfile
 import zipfile
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -56,6 +57,7 @@ DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
     ROOT / "data/migrations/008_versioned_claims_and_benchmark_context.sql"
 )
 DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
+DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -89,7 +91,7 @@ RELEASE_LICENSE_MANIFEST = {
     ),
 }
 BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
-ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 25))
+ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 26))
 ATLAS_TABLES = frozenset(
     {
         "view_presets",
@@ -102,6 +104,7 @@ ATLAS_TABLES = frozenset(
         "comparison_sets",
         "comparison_set_members",
         "learning_edges",
+        "terminology_aliases",
         "learning_coverage_expectations",
         "learning_slice_priorities",
         "atomic_predicates",
@@ -567,6 +570,9 @@ def compute_live_checks(
     learning_issues = _missing_table_issues(tables, {"learning_edges"})
     if not learning_issues:
         learning_issues = _learning_edge_issues(connection)
+    terminology_issues = _missing_table_issues(tables, {"terminology_aliases"})
+    if not terminology_issues:
+        terminology_issues = _terminology_alias_issues(connection)
     coverage_issues = _missing_table_issues(
         tables, {"learning_coverage_expectations", "learning_slice_priorities"}
     )
@@ -708,6 +714,17 @@ def compute_live_checks(
                 f"{len(failure_mode_issues)} issues",
                 "12 profiles resolve triggers, symptoms, diagnostics, mitigations, and scenarios",
                 ", ".join(failure_mode_issues[:10]) or "Failure-mode relations are closed.",
+                checked_at,
+            ),
+            _check(
+                "CHK025",
+                "Terminology alias closure",
+                "terminology_aliases",
+                "high",
+                not terminology_issues,
+                f"{len(terminology_issues)} issues",
+                "targets and sources resolve; collisions are explicitly disambiguated",
+                ", ".join(terminology_issues[:10]) or "Terminology aliases are closed.",
                 checked_at,
             ),
         ]
@@ -897,6 +914,7 @@ def _verify_site_release_tree(
         "visualization-scenarios.json",
         "search-trees/index.json",
         "coverage.json",
+        "learning-graph.json",
     }
     actual_paths = {path.relative_to(directory).as_posix() for path in directory.rglob("*.json")}
     missing = sorted(required_paths - actual_paths)
@@ -1198,6 +1216,7 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_SEMANTIC_VIEW_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -1254,7 +1273,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published structured failure triggers, symptoms, diagnostics, and mitigations.",
+            "Published typed learning relations and canonical terminology aliases.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1268,12 +1287,12 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Failure modes were free text and could not drive Diagnose or shared scenarios.",
+            "Learning relations and terminology variants could not drive shared navigation.",
             (
-                "Normalized twelve failure modes into triggers, observables, diagnostics, "
-                "mitigations, affected entities, and scenario links."
+                "Normalized typed learning edges and terminology aliases with provenance, "
+                "status, audience, and disambiguation metadata."
             ),
-            ("Reuse one canonical failure relation in Diagnose, method pages, and visualizations."),
+            ("Generate learning paths, search, and cross-artifact links from canonical data."),
             target_version,
             release_date,
         ),
@@ -1326,6 +1345,18 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
             {"parameters": "parameters_json"},
         ),
         ("learning_edges", list(seed.learning_edges), {"source_ids": "source_ids_json"}),
+        (
+            "terminology_aliases",
+            list(seed.terminology_aliases),
+            {
+                "abbreviations": "abbreviations_json",
+                "synonyms": "synonyms_json",
+                "domain_terms": "domain_terms_json",
+                "misspellings": "misspellings_json",
+                "deprecated_terms": "deprecated_terms_json",
+                "source_ids": "source_ids_json",
+            },
+        ),
         (
             "learning_slice_priorities",
             list(seed.learning_slice_priorities),
@@ -2430,15 +2461,36 @@ def _comparison_issues(connection: sqlite3.Connection) -> list[str]:
 
 
 def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
+    tables = _table_names(connection)
+    columns = {str(row[1]) for row in connection.execute("PRAGMA table_info(learning_edges)")}
+    if "difficulty" not in columns:
+        return _legacy_learning_edge_issues(connection)
     resolvers = {
         "method": ("methods", "method_id"),
+        "problem": ("problem_archetypes", "problem_id"),
+        "feature": ("problem_features", "feature_id"),
+        "case": ("example_cases", "case_id"),
+        "implementation": ("implementations", "implementation_id"),
         "view_preset": ("view_presets", "preset_id"),
-        "visualization_profile": ("method_visualization_profiles", "profile_id"),
-        "objective": ("problem_instances", "problem_instance_id"),
         "scenario": ("demo_scenarios", "scenario_id"),
         "comparison": ("comparison_sets", "comparison_set_id"),
     }
-    allowed_relations = {"prerequisite", "next", "related", "contrast"}
+    allowed_relations = {
+        "prerequisite_for",
+        "next_step",
+        "contrast_with",
+        "special_case_of",
+        "generalizes",
+        "applied_in",
+        "common_misconception_for",
+        "see_visualization",
+        "see_comparison",
+        "see_case",
+        "implemented_by",
+    }
+    allowed_difficulties = {"beginner", "intermediate", "advanced", "all"}
+    allowed_audiences = {"learner", "practitioner", "researcher", "all"}
+    allowed_statuses = {"current", "deprecated", "draft"}
     issues: list[str] = []
     seen_semantics: set[tuple[str, str, str, str, str]] = set()
     for (
@@ -2449,10 +2501,16 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
         target_id,
         relation,
         rationale,
+        difficulty,
+        audience,
         display_order,
+        source_ids_json,
+        last_verified,
+        status,
     ) in connection.execute(
         "SELECT edge_id, source_type, source_id, target_type, target_id, relation, "
-        "rationale, display_order FROM learning_edges"
+        "rationale, difficulty, audience, display_order, source_ids_json, last_verified, status "
+        "FROM learning_edges"
     ):
         edge = str(edge_id)
         semantics = (
@@ -2469,9 +2527,15 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
             or (source_type == target_type and source_id == target_id)
             or not isinstance(rationale, str)
             or not rationale.strip()
+            or difficulty not in allowed_difficulties
+            or audience not in allowed_audiences
             or not isinstance(display_order, int)
             or isinstance(display_order, bool)
             or display_order < 1
+            or not _valid_json_container(source_ids_json, list)
+            or not json.loads(str(source_ids_json))
+            or not str(last_verified).strip()
+            or status not in allowed_statuses
             or semantics in seen_semantics
         )
         if invalid_semantics:
@@ -2483,6 +2547,9 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
                 issues.append(edge)
                 continue
             table, column = resolver
+            if table not in tables:
+                issues.append(edge)
+                continue
             if (
                 connection.execute(
                     f'SELECT 1 FROM "{table}" WHERE "{column}" = ?', (endpoint_id,)
@@ -2490,6 +2557,94 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
                 is None
             ):
                 issues.append(edge)
+    return sorted(set(issues))
+
+
+def _legacy_learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
+    """Validate the published 0.8 schema during the atomic 0.9 migration preflight."""
+
+    resolvers = {
+        "method": ("methods", "method_id"),
+        "view_preset": ("view_presets", "preset_id"),
+        "visualization_profile": ("method_visualization_profiles", "profile_id"),
+        "objective": ("problem_instances", "problem_instance_id"),
+        "scenario": ("demo_scenarios", "scenario_id"),
+        "comparison": ("comparison_sets", "comparison_set_id"),
+    }
+    issues: list[str] = []
+    for row in connection.execute(
+        "SELECT edge_id, source_type, source_id, target_type, target_id, relation, rationale "
+        "FROM learning_edges"
+    ):
+        if row[5] not in {"prerequisite", "next", "related", "contrast"} or not str(row[6]).strip():
+            issues.append(str(row[0]))
+        for endpoint_type, endpoint_id in ((row[1], row[2]), (row[3], row[4])):
+            resolver = resolvers.get(str(endpoint_type))
+            if (
+                resolver is None
+                or connection.execute(
+                    f'SELECT 1 FROM "{resolver[0]}" WHERE "{resolver[1]}" = ?', (endpoint_id,)
+                ).fetchone()
+                is None
+            ):
+                issues.append(str(row[0]))
+    return sorted(set(issues))
+
+
+def _terminology_alias_issues(connection: sqlite3.Connection) -> list[str]:
+    resolvers = {
+        "method": ("methods", "method_id"),
+        "problem": ("problem_archetypes", "problem_id"),
+        "feature": ("problem_features", "feature_id"),
+        "implementation": ("implementations", "implementation_id"),
+    }
+    issues: list[str] = []
+    owners: dict[str, list[tuple[str, str, str | None]]] = defaultdict(list)
+    json_columns = range(5, 10)
+    for row in connection.execute(
+        "SELECT term_id, target_type, target_id, label_ja, label_en, abbreviations_json, "
+        "synonyms_json, domain_terms_json, misspellings_json, deprecated_terms_json, "
+        "disambiguation_note, locale, rationale, source_ids_json, last_verified "
+        "FROM terminology_aliases"
+    ):
+        term_id = str(row[0])
+        resolver = resolvers.get(str(row[1]))
+        containers_valid = all(_valid_json_container(row[index], list) for index in json_columns)
+        source_ids = json.loads(str(row[13])) if _valid_json_container(row[13], list) else []
+        target_exists = (
+            resolver is not None
+            and connection.execute(
+                f'SELECT 1 FROM "{resolver[0]}" WHERE "{resolver[1]}" = ?', (row[2],)
+            ).fetchone()
+            is not None
+        )
+        sources_close = bool(source_ids) and all(
+            connection.execute("SELECT 1 FROM sources WHERE source_id = ?", (source_id,)).fetchone()
+            for source_id in source_ids
+        )
+        if (
+            not target_exists
+            or not str(row[3]).strip()
+            or not str(row[4]).strip()
+            or not containers_valid
+            or not str(row[11]).strip()
+            or not str(row[12]).strip()
+            or not sources_close
+            or not str(row[14]).strip()
+        ):
+            issues.append(term_id)
+            continue
+        terms = [str(row[3]), str(row[4])]
+        for index in json_columns:
+            terms.extend(str(value) for value in json.loads(str(row[index])))
+        unique_terms = [value.casefold().strip() for value in terms]
+        if len(unique_terms) != len(set(unique_terms)):
+            issues.append(term_id)
+        for term in (value.replace(" ", "") for value in unique_terms):
+            owners[term].append((str(row[1]), str(row[2]), row[10]))
+    for term, rows in owners.items():
+        if len({(row[0], row[1]) for row in rows}) > 1 and any(row[2] is None for row in rows):
+            issues.append(f"collision:{term}")
     return sorted(set(issues))
 
 

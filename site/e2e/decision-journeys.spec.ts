@@ -66,3 +66,20 @@ test("canonical Gallery caseで候補・条件付き・除外理由を区別で�
   await expect(page.getByRole("button", { name: "連続" })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: "残差ベクトル" })).toHaveAttribute("aria-pressed", "true");
 });
+
+test("alias検索が曖昧な略語をcanonical候補へ解決する", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/search?q=IP");
+
+  await expect(page.getByRole("heading", { level: 2, name: /整数計画/u })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: /内点法/u })).toBeVisible();
+  await expect(page.getByText(/IPはinteger programming/u)).toBeVisible();
+  await expect(page.getByText(/IPはinterior-point/u)).toBeVisible();
+});
+
+test("concept教材がcanonical learning graphから次の手法を表示する", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/concept.convexity");
+
+  await expect(page.getByRole("heading", { level: 2, name: "Learning path" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "次に見る" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /勾配降下法|最急降下法/u })).toBeVisible();
+});

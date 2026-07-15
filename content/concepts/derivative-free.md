@@ -1,6 +1,8 @@
 ---
 content_id: concept.derivative-free
 kind: concept
+canonical_entity_type: feature
+canonical_entity_id: F_DERIVATIVE_ACCESS
 title_ja: Derivative-free optimization
 title_en: Derivative-free optimization
 summary: 微分を直接使わず、関数値の比較から探索する考え方です。

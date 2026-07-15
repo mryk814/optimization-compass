@@ -3,6 +3,8 @@ export type ContentKind = "method" | "concept";
 export interface AtlasContentPage {
   content_id: string;
   kind: ContentKind;
+  canonical_entity_type: "method" | "problem" | "feature" | "implementation";
+  canonical_entity_id: string;
   title_ja: string;
   title_en: string;
   summary: string;
@@ -40,6 +42,8 @@ export function parseContentIndex(raw: unknown): AtlasContentIndex {
     if (kind !== "method" && kind !== "concept") throw new Error(`Unsupported content kind: ${kind}`);
     return {
       content_id: nonEmpty(page.content_id, "content_id"), kind,
+      canonical_entity_type: canonicalEntityType(page.canonical_entity_type),
+      canonical_entity_id: nonEmpty(page.canonical_entity_id, "canonical_entity_id"),
       title_ja: nonEmpty(page.title_ja, "title_ja"), title_en: nonEmpty(page.title_en, "title_en"),
       summary: string(page.summary, "summary"), html: nonEmpty(page.html, "html"),
       toc: parseToc(page.toc),
@@ -89,3 +93,7 @@ function strings(value: unknown, owner: string): string[] {
   return array(value, owner).map((item, index) => nonEmpty(item, `${owner}[${index}]`));
 }
 function contentStatus(value: unknown): "published" | "draft" { if (value === "published" || value === "draft") return value; throw new Error(`Unsupported content status: ${String(value)}`); }
+function canonicalEntityType(value: unknown): AtlasContentPage["canonical_entity_type"] {
+  if (value === "method" || value === "problem" || value === "feature" || value === "implementation") return value;
+  throw new Error(`Unsupported canonical entity type: ${String(value)}`);
+}

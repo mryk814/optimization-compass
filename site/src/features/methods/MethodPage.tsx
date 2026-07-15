@@ -16,6 +16,7 @@ import { resolveRelatedNodeId } from "../map/map-state";
 import { NotFoundPage } from "../navigation/NotFoundPage";
 import { PageOrientation } from "../../components/PageOrientation";
 import { MethodPredicates } from "./MethodPredicates";
+import { LearningRelations } from "../learning/LearningRelations";
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   return {
@@ -154,6 +155,7 @@ export function MethodPage() {
       {view && <MapAction methodId={methodId} view={view} />}
       {siteData && <MethodPredicates data={siteData} methodId={methodId} />}
       {failureModes.length > 0 && <MethodFailures failures={failureModes} />}
+      <LearningRelations entityId={methodId} entityType="method" />
       {content && (
         <section aria-label="教材" className="method-learning">
           <CompiledContent page={content} />
