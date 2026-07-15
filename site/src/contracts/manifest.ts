@@ -11,6 +11,11 @@ export interface ManifestAsset {
   path: string;
 }
 
+export interface ManifestRecommendationAsset {
+  version: "2.0.0";
+  path: string;
+}
+
 export interface ManifestTraceAsset {
   contract_version: typeof TRACE_CONTRACT_VERSION;
   index_version: typeof TRACE_CONTRACT_VERSION;
@@ -43,7 +48,7 @@ export interface SiteManifest {
   dataset_version: string;
   generated_at: string;
   views: ManifestView[];
-  recommendation: ManifestAsset;
+  recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
   visualization_scenarios: ManifestAsset;
   entity_links: ManifestAsset;
@@ -87,7 +92,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
 
   const recommendation = record(data.recommendation, "recommendation");
   exactKeys(recommendation, ["version", "path"], "recommendation");
-  if (recommendation.version !== "1.0.0") throw new Error("recommendation.version is unsupported.");
+  if (recommendation.version !== "2.0.0") throw new Error("recommendation.version is unsupported.");
 
   const traces = record(data.traces, "traces");
   exactKeys(
@@ -130,7 +135,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     generated_at: nonEmptyString(data.generated_at, "generated_at"),
     views,
     recommendation: {
-      version: "1.0.0",
+      version: "2.0.0",
       path: safeRelativePath(recommendation.path, "recommendation.path"),
     },
     traces: {

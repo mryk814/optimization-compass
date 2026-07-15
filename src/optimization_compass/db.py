@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import sqlite3
 from collections.abc import Iterator, Sequence
@@ -10,6 +11,13 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.dataset_release import verify_database
+from optimization_compass.predicates import (
+    PredicateCatalog,
+    PredicateContractError,
+    PredicateFact,
+    SubjectKey,
+    evaluate_eligibility,
+)
 
 
 def split_ids(value: str | None) -> list[str]:
@@ -75,7 +83,8 @@ class KnowledgeRepository:
         return rows
 
     def rules(self) -> list[dict[str, Any]]:
-        return self.fetch_all("SELECT * FROM decision_rules ORDER BY rule_id")
+        rows = self.fetch_all("SELECT * FROM decision_rules ORDER BY rule_id")
+        return self._without_retired_rule_targets(rows, normalized=False)
 
     def methods(self, method_ids: list[str]) -> dict[str, dict[str, Any]]:
         return self._fetch_by_ids("methods", "method_id", method_ids)
@@ -311,7 +320,74 @@ class KnowledgeRepository:
         for row in rows:
             row["action_target_ids"] = split_ids(row["action_target_ids"])
             row["source_ids"] = split_ids(row["source_ids"])
-        return rows
+        return self._without_retired_rule_targets(rows, normalized=True)
+
+    def predicate_catalog(self) -> PredicateCatalog:
+        predicates = self.fetch_all("SELECT * FROM atomic_predicates ORDER BY predicate_id")
+        for row in predicates:
+            row["value"] = json.loads(str(row.pop("value_json")))
+            row["source_ids"] = json.loads(str(row.pop("source_ids_json")))
+
+        policies = self.fetch_all("SELECT * FROM predicate_policies ORDER BY policy_id")
+        for row in policies:
+            expression_json = row.pop("expression_json")
+            row["expression"] = (
+                json.loads(str(expression_json)) if expression_json is not None else None
+            )
+            row["source_ids"] = json.loads(str(row.pop("source_ids_json")))
+
+        coverage = self.fetch_all(
+            "SELECT * FROM predicate_coverage ORDER BY subject_type, subject_id"
+        )
+        for row in coverage:
+            row["source_ids"] = json.loads(str(row.pop("source_ids_json")))
+
+        retirements = self.fetch_all(
+            "SELECT * FROM decision_rule_target_retirements ORDER BY retirement_id"
+        )
+        for row in retirements:
+            row["source_ids"] = json.loads(str(row.pop("source_ids_json")))
+
+        return PredicateCatalog.model_validate(
+            {
+                "predicates": predicates,
+                "policies": policies,
+                "coverage": coverage,
+                "rule_target_retirements": retirements,
+            }
+        )
+
+    def predicate_parent_map(self) -> dict[SubjectKey, SubjectKey | None]:
+        rows = self.fetch_all(
+            """
+            SELECT method_id, method_family_id
+            FROM methods
+            ORDER BY method_id
+            """
+        )
+        result: dict[SubjectKey, SubjectKey | None] = {}
+        family_ids = {str(row["method_family_id"]) for row in rows if row["method_family_id"]}
+        for family_id in family_ids:
+            result[("method_family", family_id)] = None
+        for row in rows:
+            method_id = str(row["method_id"])
+            family_id = row["method_family_id"]
+            result[("method", method_id)] = ("method_family", str(family_id)) if family_id else None
+        return result
+
+    def predicate_facts(self, answers: dict[str, tuple[str, ...]]) -> dict[str, PredicateFact]:
+        question_rows = self.fetch_all(
+            "SELECT question_id, answer_type, mapped_feature_id FROM decision_questions"
+        )
+        facts: dict[str, PredicateFact] = {}
+        for row in question_rows:
+            question_id = str(row["question_id"])
+            values = answers.get(question_id)
+            if values is None:
+                continue
+            value: object = list(values) if row["answer_type"] == "multi_choice" else values[0]
+            facts[str(row["mapped_feature_id"])] = PredicateFact(status="known", value=value)
+        return facts
 
     def recommendation_implementations(
         self, method_ids: list[str]
@@ -392,3 +468,56 @@ class KnowledgeRepository:
             f"SELECT * FROM {table} WHERE {id_column} IN ({placeholders})", unique_ids
         )
         return {str(row[id_column]): row for row in rows}
+
+    def _without_retired_rule_targets(
+        self, rows: list[dict[str, Any]], *, normalized: bool
+    ) -> list[dict[str, Any]]:
+        retirement_rows = self.fetch_all(
+            "SELECT rule_id, method_id FROM decision_rule_target_retirements"
+        )
+        retired = {(str(row["rule_id"]), str(row["method_id"])) for row in retirement_rows}
+        if not retired:
+            return rows
+        catalog = self.predicate_catalog()
+        parent_map = self.predicate_parent_map()
+        feature_by_question = {
+            str(row["question_id"]): str(row["mapped_feature_id"])
+            for row in self.fetch_all(
+                "SELECT question_id, mapped_feature_id FROM decision_questions"
+            )
+        }
+        active: list[dict[str, Any]] = []
+        for row in rows:
+            targets = (
+                [str(item) for item in row["action_target_ids"]]
+                if normalized
+                else split_ids(row.get("action_target_ids"))
+            )
+            rule_id = str(row["rule_id"])
+            retired_targets = [target for target in targets if (rule_id, target) in retired]
+            for method_id in retired_targets:
+                feature_id = feature_by_question[str(row["question_id"])]
+                result = evaluate_eligibility(
+                    catalog,
+                    {feature_id: PredicateFact(status="known", value=str(row["answer_condition"]))},
+                    subject_type="method",
+                    subject_id=method_id,
+                    parent_by_subject=parent_map,
+                )
+                if result.status != "excluded":
+                    raise PredicateContractError(
+                        f"retired target does not compile back to exclusion: {rule_id}/{method_id}"
+                    )
+            # Retired targets are removed from the legacy authority, then compiled from
+            # the validated predicate policy. Preserve order and the public rule trace.
+            compiled = set(retired_targets)
+            remaining = [
+                target
+                for target in targets
+                if (rule_id, target) not in retired or target in compiled
+            ]
+            if not remaining:
+                continue
+            row["action_target_ids"] = remaining if normalized else ";".join(remaining)
+            active.append(row)
+        return active

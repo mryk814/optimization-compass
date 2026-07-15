@@ -18,7 +18,7 @@ def test_site_data_is_complete_and_deterministic(repository: object) -> None:
 
     assert isinstance(first, SiteData)
     assert first == second
-    assert first.contract_version == "1.0.0"
+    assert first.contract_version == "2.0.0"
     assert first.dataset_version == repository.dataset_version()
     assert len(first.questions) == 12
     assert len(first.rules) == 78

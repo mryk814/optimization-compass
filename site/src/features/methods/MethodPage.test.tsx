@@ -6,6 +6,7 @@ import { decodeAtlasState, encodeAtlasState } from "../../state/atlas-state";
 import type { EntityLinkIndex, LinkedEntity } from "../../contracts/entity-links";
 import { EntityLinkProvider } from "../../state/entity-links";
 import { MethodPage } from "./MethodPage";
+import rawSiteData from "../../../public/data/recommendation/site-data.json";
 
 const view = {
   dataset_version: "0.2.0", generated_at: "2026-07-13T00:00:00Z",
@@ -30,6 +31,15 @@ function node(node_id: string, display_order: number) {
   };
 }
 
+function fetchArtifacts(currentView: typeof view) {
+  return vi.fn().mockImplementation(async (input: string) => ({
+    ok: true,
+    json: async () => input.includes("recommendation/site-data.json")
+      ? { ...structuredClone(rawSiteData), dataset_version: currentView.dataset_version }
+      : currentView,
+  }));
+}
+
 function Probe() { return <output data-testid="location">{useLocation().search}</output>; }
 
 function linkIndex(methodId: string, relations: LinkedEntity["relations"] = [], extras: LinkedEntity[] = []): EntityLinkIndex {
@@ -43,7 +53,7 @@ describe("MethodPage Map deep link", () => {
   afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
   test("uses related_entities display order with opaque node IDs and preserves answers", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => view }));
+    vi.stubGlobal("fetch", fetchArtifacts(view));
     const token = encodeAtlasState({
       stateVersion: 1, datasetVersion: "0.2.0", viewId: "problem-structure", viewVersion: "1.0.0",
       answers: { Q01: { status: "answered", values: ["binary"] } },
@@ -82,7 +92,7 @@ describe("MethodPage Map deep link", () => {
       root_node_ids: [hugeId],
       nodes: [node(hugeId, 0)],
     };
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => hugeView }));
+    vi.stubGlobal("fetch", fetchArtifacts(hugeView));
     render(
       <MemoryRouter initialEntries={["/methods/M_TARGET?keep=1"]}>
         <EntityLinkProvider initialIndex={linkIndex("M_TARGET")}>
@@ -103,7 +113,7 @@ describe("MethodPage Map deep link", () => {
   });
 
   test("uses generated Gallery relations for candidate methods outside the Map view", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...view, entities: [] }) }));
+    vi.stubGlobal("fetch", fetchArtifacts({ ...view, entities: [] }));
     const caseEntity: LinkedEntity = {
       entity_type: "case", entity_id: "case.materials", label: "材料ケース",
       summary: "どの候補を試すか", canonical_url: "/gallery/case.materials", aliases: [],

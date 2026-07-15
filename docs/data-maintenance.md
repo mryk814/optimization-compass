@@ -10,6 +10,10 @@
 - evidence targetが解決できる
 - stored statusを信用せずliveに再計算した `CHK001`–`CHK019` と coverage closure の
   `CHK021` にfailがない
+
+Atomic predicateを変更するときは、`005_atomic_predicates.sql` と
+`data/seeds/atomic_predicates.json` を同じ変更で更新します。`complete` coverageと
+rule-target retirementは、legacy rule条件からpolicy exclusionを再現できる場合だけ許可されます。
 - database-only検証では `CHK020=not_run` とし、全distribution/manifest/version/hashを実際に
   読み戻した `verify_release_tree` だけがartifact consistencyを成立させる
 - JSON / JSONL / CSV directory / deterministic ZIP / XLSX / SQLiteが列・主キー・行・NULL・値まで一致する

@@ -1,0 +1,356 @@
+{
+  "predicates": [
+    {
+      "predicate_id": "P_M_GRADIENT_DESCENT_DERIVATIVE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_GRADIENT_DESCENT",
+      "predicate_kind": "assumption",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "in",
+      "value": ["analytic_gradient", "autodiff", "numerical_difference_only", "stochastic_gradient"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.gradient_descent.derivative_access",
+      "source_ids": ["S002", "S056", "S057"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_NELDER_MEAD_SCALE_LIMIT",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_NELDER_MEAD",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_DIMENSION_CONTEXT",
+      "operator": "eq",
+      "value": "over_10000",
+      "value_type": "controlled_code",
+      "rationale_key": "method.nelder_mead.dimension_limit",
+      "source_ids": ["S002", "S018", "S031", "S060", "S063"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_BFGS_NONDIFFERENTIABLE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BFGS",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "eq",
+      "value": "not_differentiable",
+      "value_type": "controlled_code",
+      "rationale_key": "method.bfgs.requires_differentiability",
+      "source_ids": ["S002", "S056", "S057"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_BFGS_LARGE_NOISE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BFGS",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_EVALUATION_RELIABILITY",
+      "operator": "eq",
+      "value": "large_noise",
+      "value_type": "controlled_code",
+      "rationale_key": "method.bfgs.large_noise",
+      "source_ids": ["S002", "S056", "S057"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_LBFGS_DERIVATIVE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_LBFGS",
+      "predicate_kind": "assumption",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "in",
+      "value": ["analytic_gradient", "autodiff", "numerical_difference_only"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.lbfgs.derivative_access",
+      "source_ids": ["S002", "S056", "S057", "S065"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_LBFGSB_DERIVATIVE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_LBFGSB",
+      "predicate_kind": "assumption",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "in",
+      "value": ["analytic_gradient", "autodiff", "numerical_difference_only"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.lbfgsb.derivative_access",
+      "source_ids": ["S002", "S056", "S057", "S065"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_SLSQP_LARGE_NOISE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_SLSQP",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_EVALUATION_RELIABILITY",
+      "operator": "eq",
+      "value": "large_noise",
+      "value_type": "controlled_code",
+      "rationale_key": "method.slsqp.large_noise",
+      "source_ids": ["S002", "S017", "S029", "S030", "S056", "S064"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_INTERIOR_POINT_NLP_NONDIFFERENTIABLE",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_INTERIOR_POINT_NLP",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_DERIVATIVE_ACCESS",
+      "operator": "eq",
+      "value": "not_differentiable",
+      "value_type": "controlled_code",
+      "rationale_key": "method.interior_point_nlp.requires_differentiability",
+      "source_ids": ["S017", "S029", "S030", "S056", "S064"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_BRANCH_BOUND_DISCRETE_DOMAIN",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BRANCH_BOUND",
+      "predicate_kind": "assumption",
+      "feature_id": "F_VARIABLE_DOMAIN",
+      "operator": "in",
+      "value": ["integer", "binary", "mixed"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.branch_bound.discrete_domain",
+      "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"],
+      "confidence": "medium",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_BRANCH_CUT_DISCRETE_DOMAIN",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BRANCH_CUT",
+      "predicate_kind": "assumption",
+      "feature_id": "F_VARIABLE_DOMAIN",
+      "operator": "in",
+      "value": ["integer", "binary", "mixed"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.branch_cut.discrete_domain",
+      "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_CP_SAT_DISCRETE_DOMAIN",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_CP_SAT",
+      "predicate_kind": "assumption",
+      "feature_id": "F_VARIABLE_DOMAIN",
+      "operator": "in",
+      "value": ["integer", "binary", "mixed"],
+      "value_type": "controlled_code",
+      "rationale_key": "method.cp_sat.discrete_domain",
+      "source_ids": ["S022", "S053", "S079"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_BAYESIAN_OPT_GP_SCALE_LIMIT",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_BAYESIAN_OPT_GP",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_DIMENSION_CONTEXT",
+      "operator": "eq",
+      "value": "over_10000",
+      "value_type": "controlled_code",
+      "rationale_key": "method.bayesian_opt_gp.dimension_limit",
+      "source_ids": ["S034", "S035", "S036", "S037", "S038", "S059", "S069", "S075"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_CMA_ES_SCALE_LIMIT",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_CMA_ES",
+      "predicate_kind": "incompatibility",
+      "feature_id": "F_DIMENSION_CONTEXT",
+      "operator": "eq",
+      "value": "over_10000",
+      "value_type": "controlled_code",
+      "rationale_key": "method.cma_es.dimension_limit",
+      "source_ids": ["S032", "S033", "S040", "S058", "S074"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_SIMPLEX_LINEAR_FORM",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_SIMPLEX",
+      "predicate_kind": "assumption",
+      "feature_id": "F_OBJECTIVE_FORM",
+      "operator": "eq",
+      "value": "linear",
+      "value_type": "controlled_code",
+      "rationale_key": "method.simplex.linear_form",
+      "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_ACTIVE_SET_QP_QUADRATIC_FORM",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_ACTIVE_SET_QP",
+      "predicate_kind": "assumption",
+      "feature_id": "F_OBJECTIVE_FORM",
+      "operator": "eq",
+      "value": "quadratic",
+      "value_type": "controlled_code",
+      "rationale_key": "method.active_set_qp.quadratic_form",
+      "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    },
+    {
+      "predicate_id": "P_M_PRIMAL_DUAL_CONIC_CONIC_CONSTRAINT",
+      "schema_version": "1.0.0",
+      "subject_type": "method",
+      "subject_id": "M_PRIMAL_DUAL_CONIC",
+      "predicate_kind": "assumption",
+      "feature_id": "F_CONSTRAINT_CLASS",
+      "operator": "eq",
+      "value": "conic_or_psd",
+      "value_type": "controlled_code",
+      "rationale_key": "method.primal_dual_conic.conic_constraint",
+      "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S028", "S055", "S062"],
+      "confidence": "high",
+      "last_verified": "2026-07-13"
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "POL_M_GRADIENT_DESCENT_DERIVATIVE",
+      "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_GRADIENT_DESCENT", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_GRADIENT_DESCENT_DERIVATIVE"},
+      "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.gradient_descent.derivative_access", "source_ids": ["S002", "S056", "S057"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_NELDER_MEAD_INCOMPATIBILITY",
+      "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_NELDER_MEAD", "effect": "exclude",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_NELDER_MEAD_SCALE_LIMIT"},
+      "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.nelder_mead.dimension_limit", "source_ids": ["S002", "S018", "S031", "S060", "S063"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_BFGS_INCOMPATIBILITY",
+      "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_BFGS", "effect": "exclude",
+      "expression": {"kind": "any", "items": [
+        {"kind": "predicate", "predicate_id": "P_M_BFGS_NONDIFFERENTIABLE"},
+        {"kind": "predicate", "predicate_id": "P_M_BFGS_LARGE_NOISE"}
+      ]},
+      "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.bfgs.incompatibility", "source_ids": ["S002", "S056", "S057"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_LBFGS_DERIVATIVE", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_LBFGS", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_LBFGS_DERIVATIVE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.lbfgs.derivative_access", "source_ids": ["S002", "S056", "S057", "S065"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_LBFGSB_DERIVATIVE", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_LBFGSB", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_LBFGSB_DERIVATIVE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.lbfgsb.derivative_access", "source_ids": ["S002", "S056", "S057", "S065"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_SLSQP_INCOMPATIBILITY", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_SLSQP", "effect": "exclude",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_SLSQP_LARGE_NOISE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.slsqp.large_noise", "source_ids": ["S002", "S017", "S029", "S030", "S056", "S064"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_INTERIOR_POINT_NLP_INCOMPATIBILITY", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_INTERIOR_POINT_NLP", "effect": "exclude",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_INTERIOR_POINT_NLP_NONDIFFERENTIABLE"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.interior_point_nlp.requires_differentiability", "source_ids": ["S017", "S029", "S030", "S056", "S064"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_BRANCH_BOUND_DOMAIN", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_BRANCH_BOUND", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_BRANCH_BOUND_DISCRETE_DOMAIN"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.branch_bound.discrete_domain", "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"], "confidence": "medium", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_BRANCH_CUT_DOMAIN", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_BRANCH_CUT", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_BRANCH_CUT_DISCRETE_DOMAIN"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.branch_cut.discrete_domain", "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_CP_SAT_DOMAIN", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_CP_SAT", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_CP_SAT_DISCRETE_DOMAIN"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.cp_sat.discrete_domain", "source_ids": ["S022", "S053", "S079"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_BAYESIAN_OPT_GP_INCOMPATIBILITY", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_BAYESIAN_OPT_GP", "effect": "exclude",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_BAYESIAN_OPT_GP_SCALE_LIMIT"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.bayesian_opt_gp.dimension_limit", "source_ids": ["S034", "S035", "S036", "S037", "S038", "S059", "S069", "S075"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_CMA_ES_INCOMPATIBILITY", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_CMA_ES", "effect": "exclude",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_CMA_ES_SCALE_LIMIT"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.cma_es.dimension_limit", "source_ids": ["S032", "S033", "S040", "S058", "S074"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_SIMPLEX_FORM", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_SIMPLEX", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_SIMPLEX_LINEAR_FORM"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.simplex.linear_form", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_ACTIVE_SET_QP_FORM", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_ACTIVE_SET_QP", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_ACTIVE_SET_QP_QUADRATIC_FORM"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.active_set_qp.quadratic_form", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"], "confidence": "high", "last_verified": "2026-07-13"
+    },
+    {
+      "policy_id": "POL_M_PRIMAL_DUAL_CONIC_CONSTRAINT", "schema_version": "1.0.0", "subject_type": "method", "subject_id": "M_PRIMAL_DUAL_CONIC", "effect": "require",
+      "expression": {"kind": "predicate", "predicate_id": "P_M_PRIMAL_DUAL_CONIC_CONIC_CONSTRAINT"}, "inheritance_mode": "local_only", "override_action": "add", "overrides_policy_id": null,
+      "rationale_key": "method.primal_dual_conic.conic_constraint", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S028", "S055", "S062"], "confidence": "high", "last_verified": "2026-07-13"
+    }
+  ],
+  "coverage": [
+    {"subject_type": "method", "subject_id": "M_GRADIENT_DESCENT", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_NELDER_MEAD", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S018", "S031", "S060", "S063"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_BFGS", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_LBFGS", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057", "S065"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_LBFGSB", "status": "partial", "rationale": "Initial derivative assumption migrated; remaining bound and numerical assumptions await audit.", "source_ids": ["S002", "S056", "S057", "S065"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_SLSQP", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S002", "S017", "S029", "S030", "S056", "S064"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_INTERIOR_POINT_NLP", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S017", "S029", "S030", "S056", "S064"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_BRANCH_BOUND", "status": "partial", "rationale": "Initial variable-domain assumption migrated; continuous spatial variants remain to be separated.", "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_BRANCH_CUT", "status": "partial", "rationale": "Initial variable-domain assumption migrated; formulation-specific assumptions await audit.", "source_ids": ["S005", "S016", "S021", "S024", "S025", "S028"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_CP_SAT", "status": "partial", "rationale": "Initial variable-domain assumption migrated; constraint expressivity assumptions await audit.", "source_ids": ["S022", "S053", "S079"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_BAYESIAN_OPT_GP", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S034", "S035", "S036", "S037", "S038", "S059", "S069", "S075"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_CMA_ES", "status": "complete", "rationale": "Current recommendation incompatibility conditions are represented atomically.", "source_ids": ["S032", "S033", "S040", "S058", "S074"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_SIMPLEX", "status": "partial", "rationale": "Initial linear-form assumption migrated; feasibility and certificate assumptions await audit.", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_ACTIVE_SET_QP", "status": "partial", "rationale": "Initial quadratic-form assumption migrated; active-set initialization assumptions await audit.", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S055", "S062"], "last_verified": "2026-07-13"},
+    {"subject_type": "method", "subject_id": "M_PRIMAL_DUAL_CONIC", "status": "partial", "rationale": "Initial conic-form assumption migrated; cone-specific certificates await audit.", "source_ids": ["S004", "S010", "S012", "S013", "S014", "S016", "S028", "S055", "S062"], "last_verified": "2026-07-13"}
+  ],
+  "rule_target_retirements": [
+    {"retirement_id": "RTR_R034_M_BFGS", "rule_id": "R034", "method_id": "M_BFGS", "policy_id": "POL_M_BFGS_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy not-differentiable target.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R042_M_BFGS", "rule_id": "R042", "method_id": "M_BFGS", "policy_id": "POL_M_BFGS_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy large-noise target.", "source_ids": ["S002", "S056", "S057"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R042_M_SLSQP", "rule_id": "R042", "method_id": "M_SLSQP", "policy_id": "POL_M_SLSQP_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy large-noise target.", "source_ids": ["S002", "S017", "S029", "S030", "S056", "S064"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R034_M_INTERIOR_POINT_NLP", "rule_id": "R034", "method_id": "M_INTERIOR_POINT_NLP", "policy_id": "POL_M_INTERIOR_POINT_NLP_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy not-differentiable target.", "source_ids": ["S017", "S029", "S030", "S056", "S064"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R050_M_NELDER_MEAD", "rule_id": "R050", "method_id": "M_NELDER_MEAD", "policy_id": "POL_M_NELDER_MEAD_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy high-dimension target.", "source_ids": ["S002", "S018", "S031", "S060", "S063"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R050_M_BAYESIAN_OPT_GP", "rule_id": "R050", "method_id": "M_BAYESIAN_OPT_GP", "policy_id": "POL_M_BAYESIAN_OPT_GP_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy high-dimension target.", "source_ids": ["S034", "S035", "S036", "S037", "S038", "S059", "S069", "S075"], "last_verified": "2026-07-13"},
+    {"retirement_id": "RTR_R050_M_CMA_ES", "rule_id": "R050", "method_id": "M_CMA_ES", "policy_id": "POL_M_CMA_ES_INCOMPATIBILITY", "reason": "Atomic policy supersedes the legacy high-dimension target.", "source_ids": ["S032", "S033", "S040", "S058", "S074"], "last_verified": "2026-07-13"}
+  ]
+}

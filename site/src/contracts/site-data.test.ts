@@ -16,7 +16,7 @@ describe("SiteData boundary", () => {
   });
 
   test("rejects incompatible contracts and datasets", () => {
-    expect(() => parseSiteData({ contract_version: "2.0.0" })).toThrow(/contract/i);
+    expect(() => parseSiteData({ contract_version: "1.0.0" })).toThrow(/contract/i);
     expect(() => parseSiteData(rawSiteData, "9.9.9")).toThrow(/dataset mismatch/i);
   });
 

@@ -1,0 +1,18 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, test } from "vitest";
+
+import rawSiteData from "../../../public/data/recommendation/site-data.json";
+import { parseSiteData } from "../../contracts/site-data";
+import { MethodPredicates } from "./MethodPredicates";
+
+describe("MethodPredicates", () => {
+  test("renders the canonical predicate and coverage used by recommendation", () => {
+    const data = parseSiteData(rawSiteData);
+    render(<MethodPredicates data={data} methodId="M_BFGS" />);
+
+    expect(screen.getByRole("heading", { name: "機械評価できる前提" })).toBeVisible();
+    expect(screen.getByText("complete")).toBeVisible();
+    expect(screen.getAllByText(/not differentiable|微分/u).length).toBeGreaterThan(0);
+    expect(screen.getByText(/推薦で使う前提・非対応条件を移行済み/u)).toBeVisible();
+  });
+});

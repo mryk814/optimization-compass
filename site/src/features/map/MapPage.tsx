@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { buildMapModel, parseViewSpec, type MapModel, type ViewSpec } from "../../contracts/viewspec";
+import { parseSiteData, type SiteData } from "../../contracts/site-data";
 import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
@@ -12,7 +13,7 @@ import { MapTree } from "./MapTree";
 type LoadState =
   | { status: "loading" }
   | { status: "error"; error: Error }
-  | { status: "ready"; view: ViewSpec; model: MapModel };
+  | { status: "ready"; view: ViewSpec; model: MapModel; data: SiteData };
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   const questions: AtlasCompatibilityCatalog["questions"] = Object.fromEntries(
@@ -54,7 +55,7 @@ function MapLegend() {
   );
 }
 
-function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
+function LoadedMap({ view, model, data }: { view: ViewSpec; model: MapModel; data: SiteData }) {
   const catalog = useMemo(() => catalogFromView(view), [view]);
   const atlas = useAtlasState(catalog);
   const atlasNavigation = useAtlasNavigation();
@@ -209,6 +210,7 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
         </section>
         <aside className="map-detail-pane" data-active={activePane === "detail"} data-testid="map-detail-pane">
           <MapDetail
+            data={data}
             model={model}
             onContinueDiagnosis={continueDiagnosis}
             selectedId={atlas.state.selectedNodeId}
@@ -227,10 +229,15 @@ export function MapPage() {
     const load = async () => {
       try {
         const baseUrl = (import.meta as ImportMeta & { env: { BASE_URL: string } }).env.BASE_URL;
-        const response = await fetch(`${baseUrl}data/views/problem-structure.json`);
-        if (!response.ok) throw new Error(`ViewSpec request failed (${response.status}).`);
-        const view = parseViewSpec(await response.json());
-        if (active) setLoadState({ status: "ready", view, model: buildMapModel(view) });
+        const [viewResponse, dataResponse] = await Promise.all([
+          fetch(`${baseUrl}data/views/problem-structure.json`),
+          fetch(`${baseUrl}data/recommendation/site-data.json`),
+        ]);
+        if (!viewResponse.ok) throw new Error(`ViewSpec request failed (${viewResponse.status}).`);
+        if (!dataResponse.ok) throw new Error(`SiteData request failed (${dataResponse.status}).`);
+        const view = parseViewSpec(await viewResponse.json());
+        const data = parseSiteData(await dataResponse.json(), view.dataset_version);
+        if (active) setLoadState({ status: "ready", view, model: buildMapModel(view), data });
       } catch (caught) {
         const error = caught instanceof Error ? caught : new Error(String(caught));
         if (active) setLoadState({ status: "error", error });
@@ -260,7 +267,7 @@ export function MapPage() {
           <p>{loadState.error.message}</p>
         </section>
       )}
-      {loadState.status === "ready" && <LoadedMap model={loadState.model} view={loadState.view} />}
+      {loadState.status === "ready" && <LoadedMap data={loadState.data} model={loadState.model} view={loadState.view} />}
     </section>
   );
 }

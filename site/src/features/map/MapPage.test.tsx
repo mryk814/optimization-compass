@@ -4,6 +4,11 @@ import { MemoryRouter, Route, Routes, useLocation, useNavigate } from "react-rou
 
 import { decodeAtlasState, encodeAtlasState } from "../../state/atlas-state";
 import { MapPage } from "./MapPage";
+import rawSiteData from "../../../public/data/recommendation/site-data.json";
+
+function siteFixture() {
+  return { ...structuredClone(rawSiteData), dataset_version: "0.2.0" };
+}
 
 function mapFixture() {
   const nodes = [
@@ -126,7 +131,10 @@ async function loadedTree() {
 
 describe("MapPage", () => {
   beforeEach(() => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => mapFixture() }));
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (input: string) => ({
+      ok: true,
+      json: async () => input.includes("recommendation/site-data.json") ? siteFixture() : mapFixture(),
+    })));
     Element.prototype.scrollIntoView = vi.fn();
   });
 
@@ -136,11 +144,12 @@ describe("MapPage", () => {
     vi.restoreAllMocks();
   });
 
-  test("fetches only the base-aware ViewSpec and initially shows five collapsed roots", async () => {
+  test("fetches the base-aware ViewSpec and canonical predicate data", async () => {
     renderMap();
     const tree = await loadedTree();
-    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledTimes(2);
     expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/data\/views\/problem-structure\.json$/u));
+    expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/data\/recommendation\/site-data\.json$/u));
     expect(within(tree).getAllByRole("treeitem")).toHaveLength(5);
     expect(within(tree).queryByText("質問")).not.toBeInTheDocument();
   });
@@ -176,6 +185,7 @@ describe("MapPage", () => {
     expect(screen.getByText("Q01 = binary")).toBeVisible();
     expect(screen.getByText("CP-SAT")).toBeVisible();
     expect(screen.getByText("branch-and-cut")).toBeVisible();
+    expect(screen.getAllByRole("heading", { level: 2, name: "機械評価できる前提" })).toHaveLength(2);
     expect(screen.getByRole("link", { name: "根拠" })).toHaveAttribute("href", "https://example.com/source");
     expect(within(tree).getByRole("treeitem", { name: /分岐 A/u })).toHaveClass("map-tree-item-ancestor");
     expect(within(tree).getByRole("treeitem", { name: "分岐 B" })).toHaveClass("map-tree-item-unrelated");
