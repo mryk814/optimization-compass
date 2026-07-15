@@ -162,7 +162,7 @@ def test_staged_database_has_atlas_checks_and_closed_learning_edges(
     finally:
         connection.close()
 
-    assert [row[0] for row in check_rows] == [f"CHK{index:03d}" for index in range(1, 22)]
+    assert [row[0] for row in check_rows] == [f"CHK{index:03d}" for index in range(1, 24)]
     assert not [row for row in check_rows if row[1] == "fail"]
     assert {row[2] for row in check_rows} == {RELEASE_DATE}
     assert unresolved == 0

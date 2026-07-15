@@ -142,6 +142,10 @@ function ComparisonPlayer({
         <span>{comparison.objective_expression}</span>
         <span>初期点 [{comparison.initial_point.join(", ")}] · budget {comparison.budget}</span>
         <span>{comparison.comparability} · sync={comparison.synchronization}</span>
+        <span>
+          context={comparison.benchmark_context_id} · ranking=
+          {comparison.ranking_eligible ? "eligible" : "forbidden"}
+        </span>
         <p>{comparison.fairness_note}</p>
         <p className="comparison-caveat">{comparison.caveat}</p>
         <p className="comparison-caveat">{scenarios[0].lesson.limitations_ja}</p>

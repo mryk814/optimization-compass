@@ -280,6 +280,8 @@ class SiteManifest(ContractModel):
     visualization_scenarios: ManifestVisualizationScenarioAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
+    implementation_claims: ManifestAsset
+    benchmark_contexts: ManifestAsset
     coverage: ManifestCoverageAsset
     licenses: SiteLicenseManifest
 

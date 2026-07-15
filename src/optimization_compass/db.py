@@ -6,6 +6,7 @@ import os
 import sqlite3
 from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
+from datetime import date
 from importlib.resources import as_file, files
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,7 @@ from optimization_compass.problem_instances import (
     ProblemInstance,
 )
 from optimization_compass.problem_registry import get_runtime_problem, load_problem_suite
+from optimization_compass.versioned_claims import claim_freshness_report, comparison_eligibility
 
 
 def split_ids(value: str | None) -> list[str]:
@@ -143,6 +145,59 @@ class KnowledgeRepository:
         return self.fetch_one(
             "SELECT * FROM implementations WHERE implementation_id = ?", (implementation_id,)
         )
+
+    def implementation_claims(self, as_of: date | None = None) -> list[dict[str, Any]]:
+        selected_date = (as_of or date.today()).isoformat()
+        rows = self.fetch_all(
+            """
+            SELECT * FROM implementation_claims
+            WHERE valid_from <= ? AND (valid_to IS NULL OR valid_to >= ?)
+            ORDER BY subject_id, predicate, claim_id
+            """,
+            (selected_date, selected_date),
+        )
+        for row in rows:
+            row["value"] = json.loads(str(row.pop("value_json")))
+        return rows
+
+    def implementation_claim_history(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all(
+            "SELECT * FROM implementation_claims "
+            "ORDER BY subject_id, predicate, valid_from, claim_id"
+        )
+        for row in rows:
+            row["value"] = json.loads(str(row.pop("value_json")))
+        return rows
+
+    def implementation_claim_freshness(self, as_of: date) -> dict[str, Any]:
+        with self.connect() as connection:
+            return claim_freshness_report(connection, as_of=as_of)
+
+    def benchmark_contexts(self) -> list[dict[str, Any]]:
+        rows = self.fetch_all("SELECT * FROM benchmark_contexts ORDER BY category, context_id")
+        json_columns = (
+            "sparsity_json",
+            "hardware_json",
+            "runtime_json",
+            "oracle_budget_json",
+            "tolerance_json",
+            "stopping_json",
+            "initialization_json",
+            "implementation_versions_json",
+            "outcome_metrics_json",
+            "status_mapping_json",
+            "source_ids_json",
+        )
+        for row in rows:
+            for column in json_columns:
+                row[column.removesuffix("_json")] = json.loads(str(row.pop(column)))
+            row["ranking_eligibility"] = comparison_eligibility(
+                {
+                    **row,
+                    **{column: "present" for column in json_columns},
+                }
+            ).__dict__
+        return rows
 
     def method(self, method_id: str) -> dict[str, Any] | None:
         return self.fetch_one("SELECT * FROM methods WHERE method_id = ?", (method_id,))
