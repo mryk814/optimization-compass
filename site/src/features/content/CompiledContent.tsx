@@ -1,7 +1,14 @@
 import type { AtlasContentPage } from "../../contracts/atlas-content";
-import type { MouseEvent } from "react";
+import { useLayoutEffect, useRef, type MouseEvent } from "react";
 
 export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" | "toc"> }) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    contentRef.current?.querySelectorAll("pre").forEach((region) => {
+      region.tabIndex = 0;
+    });
+  }, [page.html]);
+
   const goToHeading = (headingId: string) => {
     const heading = document.getElementById(headingId);
     heading?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -27,7 +34,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
           </ol>
         </nav>
       )}
-      <div className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />
+      <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />
     </div>
   );
 }
