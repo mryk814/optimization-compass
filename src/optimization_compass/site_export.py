@@ -38,6 +38,7 @@ from optimization_compass.view_spec import (
     ManifestAsset,
     ManifestCoverageAsset,
     ManifestLicenseAsset,
+    ManifestRecommendationAsset,
     ManifestTraceAsset,
     ManifestView,
     SiteLicenseManifest,
@@ -329,7 +330,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         dataset_version=release["version"],
         generated_at=generated_at,
         views=[ManifestView(view_id=VIEW_ID, version=VIEW_VERSION, path=VIEW_PATH)],
-        recommendation=ManifestAsset(version="1.0.0", path="recommendation/site-data.json"),
+        recommendation=ManifestRecommendationAsset(
+            version="2.0.0", path="recommendation/site-data.json"
+        ),
         traces=trace_asset,
         visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),

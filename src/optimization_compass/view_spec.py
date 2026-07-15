@@ -204,6 +204,11 @@ class ManifestAsset(ContractModel):
     path: str = Field(min_length=1)
 
 
+class ManifestRecommendationAsset(ContractModel):
+    version: Literal["2.0.0"]
+    path: str = Field(min_length=1)
+
+
 class ManifestTraceAsset(ContractModel):
     contract_version: Literal["1.0.0"]
     index_version: Literal["1.0.0"]
@@ -237,7 +242,7 @@ class SiteManifest(ContractModel):
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     views: list[ManifestView]
-    recommendation: ManifestAsset
+    recommendation: ManifestRecommendationAsset
     traces: ManifestTraceAsset
     visualization_scenarios: ManifestAsset
     entity_links: ManifestAsset

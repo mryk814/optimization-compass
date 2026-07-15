@@ -32,7 +32,7 @@
 
 ## Offline parity
 
-静的アプリは `SiteData 1.0.0` を読み、Pythonと同じ評価phase、候補順、除外優先、compatibility gate、source ID、rule traceをTypeScriptで再現します。`SiteData` はSQLiteから決定的に生成され、dataset versionがViewSpecや画面状態と一致しない場合は評価を中止します。
+静的アプリは `SiteData 2.0.0` を読み、Pythonと同じ評価phase、候補順、除外優先、compatibility gate、source ID、rule traceをTypeScriptで再現します。2.0.0はatomic predicate、policy、coverage、legacy rule target retirementも含みます。`SiteData` はSQLiteから決定的に生成され、dataset versionがViewSpecや画面状態と一致しない場合は評価を中止します。
 
 共通fixtureはreal Python engineとreal TypeScript evaluatorの両方で実行し、4つの主要band、問題候補、follow-up、warning、発火rule/source IDをCIで比較します。
 

@@ -177,7 +177,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     ]
     assert manifest_payload["recommendation"] == {
         "path": "recommendation/site-data.json",
-        "version": "1.0.0",
+        "version": "2.0.0",
     }
     assert manifest_payload["traces"]["path"] == "traces/index.json"
     assert manifest_payload["traces"]["contract_version"] == "1.0.0"

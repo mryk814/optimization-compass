@@ -7,10 +7,16 @@ from pydantic import Field, field_validator, model_validator
 
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.models import EntityRecommendation, RecommendationResponse
+from optimization_compass.predicates import (
+    AtomicPredicate,
+    PredicateCoverage,
+    PredicatePolicy,
+    RuleTargetRetirement,
+)
 from optimization_compass.site_export import _answer_labels, _required_display_text
 from optimization_compass.view_spec import ContractModel
 
-SITE_DATA_VERSION: Literal["1.0.0"] = "1.0.0"
+SITE_DATA_VERSION: Literal["2.0.0"] = "2.0.0"
 
 ActionType = Literal[
     "promote_method",
@@ -142,7 +148,7 @@ class SiteSource(ContractModel):
 
 
 class SiteData(ContractModel):
-    contract_version: Literal["1.0.0"] = "1.0.0"
+    contract_version: Literal["2.0.0"] = SITE_DATA_VERSION
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     questions: list[SiteQuestion]
@@ -155,6 +161,10 @@ class SiteData(ContractModel):
     features: list[SiteFeature]
     feature_values: list[SiteFeatureValue]
     sources: list[SiteSource]
+    predicates: list[AtomicPredicate]
+    predicate_policies: list[PredicatePolicy]
+    predicate_coverage: list[PredicateCoverage]
+    rule_target_retirements: list[RuleTargetRetirement]
 
     @field_validator("questions", "rules", "methods")
     @classmethod
@@ -221,6 +231,32 @@ class SiteData(ContractModel):
             seen_mappings.add(key)
             if mapping.method_id not in methods or mapping.implementation_id not in implementations:
                 raise ValueError(f"broken method implementation mapping: {key}")
+        predicates = _unique(self.predicates, "predicate_id")
+        policies = _unique(self.predicate_policies, "policy_id")
+        _unique(self.rule_target_retirements, "retirement_id")
+        coverage_keys: set[tuple[str, str]] = set()
+        for row in self.predicate_coverage:
+            key = (row.subject_type, row.subject_id)
+            if key in coverage_keys:
+                raise ValueError(f"duplicate predicate coverage: {key}")
+            coverage_keys.add(key)
+            if row.subject_type == "method" and row.subject_id not in methods:
+                raise ValueError(f"missing predicate coverage method: {row.subject_id}")
+            _require_sources(row.source_ids, sources, row.subject_id)
+        for predicate in self.predicates:
+            if predicate.feature_id not in features:
+                raise ValueError(f"missing predicate feature: {predicate.feature_id}")
+            if predicate.subject_type == "method" and predicate.subject_id not in methods:
+                raise ValueError(f"missing predicate method: {predicate.subject_id}")
+            _require_sources(predicate.source_ids, sources, predicate.predicate_id)
+        for policy in self.predicate_policies:
+            _require_sources(policy.source_ids, sources, policy.policy_id)
+        for retirement in self.rule_target_retirements:
+            if retirement.policy_id not in policies or retirement.method_id not in methods:
+                raise ValueError(f"broken rule target retirement: {retirement.retirement_id}")
+            _require_sources(retirement.source_ids, sources, retirement.retirement_id)
+        if set(predicates) != {item.predicate_id for item in self.predicates}:
+            raise ValueError("predicate catalog IDs are inconsistent")
         return self
 
 
@@ -231,25 +267,33 @@ def build_site_data(repository: KnowledgeRepository) -> SiteData:
     )
     question_rows = repository.recommendation_questions()
     rule_rows = repository.recommendation_rules()
+    predicate_catalog = repository.predicate_catalog()
     target_ids = _targets(rule_rows)
+    predicate_method_ids = {
+        predicate.subject_id
+        for predicate in predicate_catalog.predicates
+        if predicate.subject_type == "method"
+    }
+    predicate_feature_ids = {predicate.feature_id for predicate in predicate_catalog.predicates}
     feature_ids = sorted(
-        {str(row["mapped_feature_id"]) for row in question_rows} | target_ids["feature"]
+        {str(row["mapped_feature_id"]) for row in question_rows}
+        | target_ids["feature"]
+        | predicate_feature_ids
     )
     features = repository.atlas_features(feature_ids)
     feature_values = repository.atlas_feature_values(feature_ids)
     feature_value_by_key = {
         (str(row["feature_id"]), str(row["value_code"])): row for row in feature_values
     }
-    method_rows = repository.atlas_methods(sorted(target_ids["method"]))
+    method_ids = sorted(target_ids["method"] | predicate_method_ids)
+    method_rows = repository.atlas_methods(method_ids)
     problem_rows = repository.atlas_problems(sorted(target_ids["problem"]))
     alternative_rows = [
         row
         for row in repository.atlas_alternatives()
         if str(row["alternative_id"]) in target_ids["alternative"]
     ]
-    implementations, mappings = repository.recommendation_implementations(
-        sorted(target_ids["method"])
-    )
+    implementations, mappings = repository.recommendation_implementations(method_ids)
     source_ids = sorted(
         {
             str(source_id)
@@ -262,6 +306,14 @@ def build_site_data(repository: KnowledgeRepository) -> SiteData:
                 *alternative_rows,
             ]
             for source_id in row.get("source_ids", [])
+        }
+        | {str(source_id) for item in predicate_catalog.predicates for source_id in item.source_ids}
+        | {str(source_id) for item in predicate_catalog.policies for source_id in item.source_ids}
+        | {str(source_id) for item in predicate_catalog.coverage for source_id in item.source_ids}
+        | {
+            str(source_id)
+            for item in predicate_catalog.rule_target_retirements
+            for source_id in item.source_ids
         }
     )
     sources = repository.atlas_sources(source_ids)
@@ -306,6 +358,10 @@ def build_site_data(repository: KnowledgeRepository) -> SiteData:
         features=[SiteFeature(**row) for row in features],
         feature_values=[SiteFeatureValue(**row) for row in feature_values],
         sources=[SiteSource(**row) for row in sources],
+        predicates=predicate_catalog.predicates,
+        predicate_policies=predicate_catalog.policies,
+        predicate_coverage=predicate_catalog.coverage,
+        rule_target_retirements=predicate_catalog.rule_target_retirements,
     )
 
 

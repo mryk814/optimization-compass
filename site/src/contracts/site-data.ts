@@ -50,12 +50,43 @@ export interface SiteFeatureValue {
   feature_id: string; value_code: string; label_ja: string; label_en: string; sort_order: number;
 }
 export interface SiteSource { source_id: string; title: string; supported_claim: string; url: string }
+export type PredicateSubjectType = "method" | "method_family" | "implementation";
+export type PredicateExpression =
+  | { kind: "predicate"; predicate_id: string }
+  | { kind: "all" | "any"; items: PredicateExpression[] }
+  | { kind: "not"; item: PredicateExpression }
+  | { kind: "when"; condition: PredicateExpression; then: PredicateExpression; otherwise: PredicateExpression | null };
+export interface SitePredicate {
+  predicate_id: string; schema_version: "1.0.0"; subject_type: PredicateSubjectType;
+  subject_id: string; predicate_kind: "assumption" | "capability" | "incompatibility" | "recommendation_guard";
+  feature_id: string; operator: "eq" | "neq" | "in" | "not_in" | "lt" | "lte" | "gt" | "gte" | "contains";
+  value: unknown; value_type: "controlled_code" | "number" | "string" | "boolean" | "list";
+  rationale_key: string; source_ids: string[]; confidence: "high" | "medium" | "low"; last_verified: string;
+}
+export interface SitePredicatePolicy {
+  policy_id: string; schema_version: "1.0.0"; subject_type: PredicateSubjectType;
+  subject_id: string; effect: "require" | "exclude"; expression: PredicateExpression | null;
+  inheritance_mode: "inheritable" | "local_only"; override_action: "add" | "replace" | "suppress";
+  overrides_policy_id: string | null; rationale_key: string; source_ids: string[];
+  confidence: "high" | "medium" | "low"; last_verified: string;
+}
+export interface SitePredicateCoverage {
+  subject_type: "method" | "implementation"; subject_id: string;
+  status: "complete" | "partial" | "not_started" | "not_applicable";
+  rationale: string; source_ids: string[]; last_verified: string;
+}
+export interface SiteRuleTargetRetirement {
+  retirement_id: string; rule_id: string; method_id: string; policy_id: string;
+  reason: string; source_ids: string[]; last_verified: string;
+}
 export interface SiteData {
-  contract_version: "1.0.0"; dataset_version: string; generated_at: string;
+  contract_version: "2.0.0"; dataset_version: string; generated_at: string;
   questions: SiteQuestion[]; rules: SiteRule[]; methods: SiteMethod[];
   implementations: SiteImplementation[]; method_implementation_map: SiteMethodImplementation[];
   alternatives: SiteAlternative[]; problems: SiteProblem[]; features: SiteFeature[];
   feature_values: SiteFeatureValue[]; sources: SiteSource[];
+  predicates: SitePredicate[]; predicate_policies: SitePredicatePolicy[];
+  predicate_coverage: SitePredicateCoverage[]; rule_target_retirements: SiteRuleTargetRetirement[];
 }
 
 type Row = Record<string, unknown>;
@@ -65,6 +96,7 @@ const ACTIONS = new Set<ActionType>([
 ]);
 const TARGETS = new Set<TargetType>(["method", "alternative", "problem", "feature"]);
 const PRIORITIES = new Set<Priority>(["high", "medium", "candidate", "none"]);
+const SUBJECT_TYPES = new Set<PredicateSubjectType>(["method", "method_family", "implementation"]);
 
 function row(value: unknown, owner: string): Row {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -118,10 +150,43 @@ function unique<T>(items: T[], key: (item: T) => string, owner: string): Map<str
   return result;
 }
 
+function nullableString(value: unknown, owner: string): string | null {
+  return value === null ? null : string(value, owner, true);
+}
+
+function predicateExpression(value: unknown, owner: string): PredicateExpression {
+  const item = row(value, owner);
+  const kind = string(item.kind, `${owner}.kind`, true);
+  if (kind === "predicate") {
+    exactKeys(item, ["kind", "predicate_id"], owner);
+    return { kind, predicate_id: string(item.predicate_id, `${owner}.predicate_id`, true) };
+  }
+  if (kind === "all" || kind === "any") {
+    exactKeys(item, ["kind", "items"], owner);
+    const children = rows(item.items, `${owner}.items`).map((child, index) => predicateExpression(child, `${owner}.items[${index}]`));
+    if (children.length === 0) throw new Error(`SiteData ${owner}.items must not be empty.`);
+    return { kind, items: children };
+  }
+  if (kind === "not") {
+    exactKeys(item, ["kind", "item"], owner);
+    return { kind, item: predicateExpression(item.item, `${owner}.item`) };
+  }
+  if (kind === "when") {
+    exactKeys(item, ["kind", "condition", "then", "otherwise"], owner);
+    return {
+      kind,
+      condition: predicateExpression(item.condition, `${owner}.condition`),
+      then: predicateExpression(item.then, `${owner}.then`),
+      otherwise: item.otherwise === null ? null : predicateExpression(item.otherwise, `${owner}.otherwise`),
+    };
+  }
+  throw new Error(`Unsupported predicate expression: ${kind}`);
+}
+
 export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): SiteData {
   const data = row(raw, "payload");
-  if (data.contract_version !== "1.0.0") throw new Error(`Unsupported SiteData contract: ${String(data.contract_version)}`);
-  exactKeys(data, ["contract_version", "dataset_version", "generated_at", "questions", "rules", "methods", "implementations", "method_implementation_map", "alternatives", "problems", "features", "feature_values", "sources"], "payload");
+  if (data.contract_version !== "2.0.0") throw new Error(`Unsupported SiteData contract: ${String(data.contract_version)}`);
+  exactKeys(data, ["contract_version", "dataset_version", "generated_at", "questions", "rules", "methods", "implementations", "method_implementation_map", "alternatives", "problems", "features", "feature_values", "sources", "predicates", "predicate_policies", "predicate_coverage", "rule_target_retirements"], "payload");
   const datasetVersion = string(data.dataset_version, "dataset_version", true);
   if (expectedDatasetVersion !== undefined && datasetVersion !== expectedDatasetVersion) {
     throw new Error(`SiteData dataset mismatch: expected ${expectedDatasetVersion}, got ${datasetVersion}.`);
@@ -168,6 +233,57 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
       priority_effect: priority, explanation: string(item.explanation, "rule.explanation"),
       warnings: string(item.warnings, "rule.warnings"), source_ids: strings(item.source_ids, "rule.source_ids"),
     };
+  });
+  const predicates = rows(data.predicates, "predicates").map((item): SitePredicate => {
+    exactKeys(item, ["predicate_id", "schema_version", "subject_type", "subject_id", "predicate_kind", "feature_id", "operator", "value", "value_type", "rationale_key", "source_ids", "confidence", "last_verified"], "predicate");
+    const subjectType = string(item.subject_type, "predicate.subject_type", true) as PredicateSubjectType;
+    const predicateKind = string(item.predicate_kind, "predicate.predicate_kind", true) as SitePredicate["predicate_kind"];
+    const operator = string(item.operator, "predicate.operator", true) as SitePredicate["operator"];
+    const valueType = string(item.value_type, "predicate.value_type", true) as SitePredicate["value_type"];
+    const confidence = string(item.confidence, "predicate.confidence", true) as SitePredicate["confidence"];
+    if (item.schema_version !== "1.0.0") throw new Error(`Unsupported predicate schema: ${String(item.schema_version)}`);
+    if (!SUBJECT_TYPES.has(subjectType)) throw new Error(`Unsupported predicate subject: ${subjectType}`);
+    if (!["assumption", "capability", "incompatibility", "recommendation_guard"].includes(predicateKind)) throw new Error(`Unsupported predicate kind: ${predicateKind}`);
+    if (!["eq", "neq", "in", "not_in", "lt", "lte", "gt", "gte", "contains"].includes(operator)) throw new Error(`Unsupported predicate operator: ${operator}`);
+    if (!["controlled_code", "number", "string", "boolean", "list"].includes(valueType)) throw new Error(`Unsupported predicate value type: ${valueType}`);
+    if (!["high", "medium", "low"].includes(confidence)) throw new Error(`Unsupported predicate confidence: ${confidence}`);
+    return {
+      predicate_id: string(item.predicate_id, "predicate.predicate_id", true), schema_version: "1.0.0",
+      subject_type: subjectType, subject_id: string(item.subject_id, "predicate.subject_id", true), predicate_kind: predicateKind,
+      feature_id: string(item.feature_id, "predicate.feature_id", true), operator, value: item.value, value_type: valueType,
+      rationale_key: string(item.rationale_key, "predicate.rationale_key", true), source_ids: strings(item.source_ids, "predicate.source_ids", true),
+      confidence, last_verified: string(item.last_verified, "predicate.last_verified", true),
+    };
+  });
+  const predicatePolicies = rows(data.predicate_policies, "predicate_policies").map((item): SitePredicatePolicy => {
+    exactKeys(item, ["policy_id", "schema_version", "subject_type", "subject_id", "effect", "expression", "inheritance_mode", "override_action", "overrides_policy_id", "rationale_key", "source_ids", "confidence", "last_verified"], "predicate policy");
+    const subjectType = string(item.subject_type, "policy.subject_type", true) as PredicateSubjectType;
+    const effect = string(item.effect, "policy.effect", true) as SitePredicatePolicy["effect"];
+    const inheritanceMode = string(item.inheritance_mode, "policy.inheritance_mode", true) as SitePredicatePolicy["inheritance_mode"];
+    const overrideAction = string(item.override_action, "policy.override_action", true) as SitePredicatePolicy["override_action"];
+    const confidence = string(item.confidence, "policy.confidence", true) as SitePredicatePolicy["confidence"];
+    if (item.schema_version !== "1.0.0") throw new Error(`Unsupported predicate policy schema: ${String(item.schema_version)}`);
+    if (!SUBJECT_TYPES.has(subjectType) || !["require", "exclude"].includes(effect) || !["inheritable", "local_only"].includes(inheritanceMode) || !["add", "replace", "suppress"].includes(overrideAction) || !["high", "medium", "low"].includes(confidence)) throw new Error("Unsupported predicate policy vocabulary.");
+    return {
+      policy_id: string(item.policy_id, "policy.policy_id", true), schema_version: "1.0.0", subject_type: subjectType,
+      subject_id: string(item.subject_id, "policy.subject_id", true), effect,
+      expression: item.expression === null ? null : predicateExpression(item.expression, "policy.expression"),
+      inheritance_mode: inheritanceMode, override_action: overrideAction,
+      overrides_policy_id: nullableString(item.overrides_policy_id, "policy.overrides_policy_id"),
+      rationale_key: string(item.rationale_key, "policy.rationale_key", true), source_ids: strings(item.source_ids, "policy.source_ids", true),
+      confidence, last_verified: string(item.last_verified, "policy.last_verified", true),
+    };
+  });
+  const predicateCoverage = rows(data.predicate_coverage, "predicate_coverage").map((item): SitePredicateCoverage => {
+    exactKeys(item, ["subject_type", "subject_id", "status", "rationale", "source_ids", "last_verified"], "predicate coverage");
+    const subjectType = string(item.subject_type, "coverage.subject_type", true) as SitePredicateCoverage["subject_type"];
+    const status = string(item.status, "coverage.status", true) as SitePredicateCoverage["status"];
+    if (!["method", "implementation"].includes(subjectType) || !["complete", "partial", "not_started", "not_applicable"].includes(status)) throw new Error("Unsupported predicate coverage vocabulary.");
+    return { subject_type: subjectType, subject_id: string(item.subject_id, "coverage.subject_id", true), status, rationale: string(item.rationale, "coverage.rationale", true), source_ids: strings(item.source_ids, "coverage.source_ids", true), last_verified: string(item.last_verified, "coverage.last_verified", true) };
+  });
+  const ruleTargetRetirements = rows(data.rule_target_retirements, "rule_target_retirements").map((item): SiteRuleTargetRetirement => {
+    exactKeys(item, ["retirement_id", "rule_id", "method_id", "policy_id", "reason", "source_ids", "last_verified"], "rule target retirement");
+    return { retirement_id: string(item.retirement_id, "retirement.retirement_id", true), rule_id: string(item.rule_id, "retirement.rule_id", true), method_id: string(item.method_id, "retirement.method_id", true), policy_id: string(item.policy_id, "retirement.policy_id", true), reason: string(item.reason, "retirement.reason", true), source_ids: strings(item.source_ids, "retirement.source_ids", true), last_verified: string(item.last_verified, "retirement.last_verified", true) };
   });
   const methods = rows(data.methods, "methods").map((item): SiteMethod => (exactKeys(item, ["method_id", "name_ja", "name_en", "summary", "variable_types", "solution_scope", "optimality_certificate", "exactness", "reference_source_ids"], "method"), {
     method_id: string(item.method_id, "method_id", true), name_ja: string(item.name_ja, "method.name_ja", true),
@@ -218,6 +334,9 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
   const implementationById = unique(implementations, (item) => item.implementation_id, "implementation");
   const sourceById = unique(sources, (item) => item.source_id, "source");
   unique(rules, (item) => item.rule_id, "rule");
+  const predicateById = unique(predicates, (item) => item.predicate_id, "predicate");
+  const policyById = unique(predicatePolicies, (item) => item.policy_id, "predicate policy");
+  unique(ruleTargetRetirements, (item) => item.retirement_id, "rule target retirement");
   const targets = { method: methodById, alternative: alternativeById, problem: problemById, feature: featureById };
   const requireSources = (ids: string[], owner: string) => ids.forEach((id) => { if (!sourceById.has(id)) throw new Error(`Missing source ${id} for ${owner}.`); });
   questions.forEach((question) => {
@@ -234,6 +353,25 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
   alternatives.forEach((item) => requireSources(item.source_ids, item.alternative_id));
   problems.forEach((item) => requireSources(item.source_ids, item.problem_id));
   features.forEach((item) => requireSources(item.source_ids, item.feature_id));
+  predicates.forEach((item) => {
+    if (!featureById.has(item.feature_id)) throw new Error(`Missing predicate feature: ${item.feature_id}`);
+    if (item.subject_type === "method" && !methodById.has(item.subject_id)) throw new Error(`Missing predicate method: ${item.subject_id}`);
+    requireSources(item.source_ids, item.predicate_id);
+  });
+  predicatePolicies.forEach((item) => requireSources(item.source_ids, item.policy_id));
+  const coverageKeys = new Set<string>();
+  predicateCoverage.forEach((item) => {
+    const key = `${item.subject_type}\0${item.subject_id}`;
+    if (coverageKeys.has(key)) throw new Error(`Duplicate predicate coverage: ${key}`);
+    coverageKeys.add(key);
+    if (item.subject_type === "method" && !methodById.has(item.subject_id)) throw new Error(`Missing predicate coverage method: ${item.subject_id}`);
+    requireSources(item.source_ids, item.subject_id);
+  });
+  ruleTargetRetirements.forEach((item) => {
+    if (!methodById.has(item.method_id) || !policyById.has(item.policy_id)) throw new Error(`Broken rule target retirement: ${item.retirement_id}`);
+    requireSources(item.source_ids, item.retirement_id);
+  });
+  if (predicateById.size === 0 || policyById.size === 0) throw new Error("SiteData predicate catalog must not be empty.");
   const mappingKeys = new Set<string>();
   mappings.forEach((mapping) => {
     const key = `${mapping.method_id}\0${mapping.implementation_id}`;
@@ -249,8 +387,10 @@ export function parseSiteData(raw: unknown, expectedDatasetVersion?: string): Si
     if (!featureById.has(item.feature_id)) throw new Error(`Missing feature for value: ${item.feature_id}`);
   });
   return {
-    contract_version: "1.0.0", dataset_version: datasetVersion, generated_at: generatedAt,
+    contract_version: "2.0.0", dataset_version: datasetVersion, generated_at: generatedAt,
     questions, rules, methods, implementations, method_implementation_map: mappings,
     alternatives, problems, features, feature_values: featureValues, sources,
+    predicates, predicate_policies: predicatePolicies, predicate_coverage: predicateCoverage,
+    rule_target_retirements: ruleTargetRetirements,
   };
 }

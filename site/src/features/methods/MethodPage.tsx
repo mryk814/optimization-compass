@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { parseContentIndex, type AtlasContentPage } from "../../contracts/atlas-content";
+import { parseSiteData, type SiteData } from "../../contracts/site-data";
 import { findEntity, relatedEntities, type LinkedEntity } from "../../contracts/entity-links";
 import { parseViewSpec, type ViewSpec } from "../../contracts/viewspec";
 import { siteBaseUrl } from "../../data/base-url";
@@ -13,6 +14,7 @@ import { CompiledContent } from "../content/CompiledContent";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { NotFoundPage } from "../navigation/NotFoundPage";
 import { PageOrientation } from "../../components/PageOrientation";
+import { MethodPredicates } from "./MethodPredicates";
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   return {
@@ -56,6 +58,7 @@ export function MethodPage() {
   const links = useEntityLinks();
   const [view, setView] = useState<ViewSpec>();
   const [content, setContent] = useState<AtlasContentPage>();
+  const [siteData, setSiteData] = useState<SiteData>();
   const [loadError, setLoadError] = useState<Error>();
   const method = links.status === "ready" ? findEntity(links.index, "method", methodId) : undefined;
   const learning = links.status === "ready" && method
@@ -74,6 +77,20 @@ export function MethodPage() {
         if (!controller.signal.aborted) setLoadError(caught instanceof Error ? caught : new Error(String(caught)));
       },
     );
+    return () => controller.abort();
+  }, []);
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(`${siteBaseUrl()}data/recommendation/site-data.json`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`SiteData request failed (${response.status}).`);
+        return parseSiteData(await response.json());
+      }).then(
+        setSiteData,
+        (caught: unknown) => {
+          if (!controller.signal.aborted) setLoadError(caught instanceof Error ? caught : new Error(String(caught)));
+        },
+      );
     return () => controller.abort();
   }, []);
   useEffect(() => {
@@ -118,6 +135,7 @@ export function MethodPage() {
       />
       {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
+      {siteData && <MethodPredicates data={siteData} methodId={methodId} />}
       {content && (
         <section aria-label="教材" className="method-learning">
           <CompiledContent page={content} />

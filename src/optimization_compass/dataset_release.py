@@ -17,6 +17,7 @@ from typing import Any, Literal
 from openpyxl import Workbook, load_workbook
 
 from optimization_compass.metadata_models import AtlasMetadataSeed
+from optimization_compass.predicates import PredicateCatalog
 from optimization_compass.release_identity import (
     DatasetReleaseIdentity,
     ReleaseIdentityError,
@@ -36,7 +37,9 @@ TARGET_DATASET_VERSION = RELEASE_AUTHORITY.dataset_version
 RELEASE_DATE = RELEASE_AUTHORITY.release_date
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
+DEFAULT_PREDICATE_MIGRATION = ROOT / "data/migrations/005_atomic_predicates.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
+DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 LICENSE_BUNDLE = {
     "LICENSE.txt": ROOT / "LICENSE",
     "DATA_LICENSE.txt": ROOT / "DATA_LICENSE",
@@ -79,6 +82,10 @@ ATLAS_TABLES = frozenset(
         "learning_edges",
         "learning_coverage_expectations",
         "learning_slice_priorities",
+        "atomic_predicates",
+        "predicate_policies",
+        "predicate_coverage",
+        "decision_rule_target_retirements",
     }
 )
 
@@ -214,7 +221,14 @@ def build_staged_release(
     _validate_release_identity(target_version, release_date)
     _validate_output_directory(
         output_directory,
-        protected_inputs=(base_database, migration_path, DEFAULT_COVERAGE_MIGRATION, seed_path),
+        protected_inputs=(
+            base_database,
+            migration_path,
+            DEFAULT_COVERAGE_MIGRATION,
+            DEFAULT_PREDICATE_MIGRATION,
+            seed_path,
+            DEFAULT_PREDICATE_SEED,
+        ),
     )
     _verify_pinned_base(base_database)
     output_directory.mkdir(parents=True)
@@ -526,11 +540,11 @@ def compute_live_checks(
             _check(
                 "CHK013",
                 "Atlas schema closure",
-                "nine atlas metadata tables",
+                "thirteen atlas metadata tables",
                 "critical",
                 not missing_tables,
                 f"{len(missing_tables)} missing tables",
-                "all nine normalized tables exist",
+                "all thirteen normalized tables exist",
                 ", ".join(sorted(missing_tables)) or "All atlas tables exist.",
                 checked_at,
             ),
@@ -1086,13 +1100,18 @@ def _apply_atlas_metadata(
     release_date: str,
 ) -> None:
     seed = AtlasMetadataSeed.model_validate_json(seed_path.read_text(encoding="utf-8"))
+    predicate_seed = PredicateCatalog.model_validate_json(
+        DEFAULT_PREDICATE_SEED.read_text(encoding="utf-8")
+    )
     connection = sqlite3.connect(database_path)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     try:
         connection.executescript(migration_path.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_COVERAGE_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_PREDICATE_MIGRATION.read_text(encoding="utf-8"))
         _insert_seed(connection, seed)
+        _insert_predicate_seed(connection, predicate_seed)
         _record_target_release(connection, target_version, release_date)
         connection.execute("DELETE FROM release_checks")
         for check in compute_live_checks(connection, release_date):
@@ -1144,7 +1163,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Staged Optimization Atlas metadata and learning coverage release.",
+            "Staged Optimization Atlas metadata, learning coverage, and atomic predicates.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1158,8 +1177,11 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Optimization Atlas lacked canonical learning coverage expectations.",
-            "Added nine normalized Atlas tables, including coverage expectations and priorities.",
+            "Optimization Atlas lacked canonical machine-evaluable method predicates.",
+            (
+                "Added normalized Atlas and atomic-predicate tables with explicit coverage "
+                "and rule-target retirement."
+            ),
             "Keep learning contracts, artifacts, priorities, and release deltas auditable.",
             target_version,
             release_date,
@@ -1241,6 +1263,43 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
                 f'INSERT INTO "{table_name}" ({column_sql}) VALUES ({placeholders})',
                 [values[column] for column in columns],
             )
+
+
+def _insert_predicate_seed(connection: sqlite3.Connection, seed: PredicateCatalog) -> None:
+    for predicate in seed.predicates:
+        values = predicate.model_dump(mode="json")
+        values["value_json"] = _canonical_json(values.pop("value"))
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "atomic_predicates", values)
+
+    for policy in seed.policies:
+        values = policy.model_dump(mode="json")
+        expression = values.pop("expression")
+        values["expression_json"] = _canonical_json(expression) if expression is not None else None
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "predicate_policies", values)
+
+    for coverage in seed.coverage:
+        values = coverage.model_dump(mode="json")
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "predicate_coverage", values)
+
+    for retirement in seed.rule_target_retirements:
+        values = retirement.model_dump(mode="json")
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "decision_rule_target_retirements", values)
+
+
+def _insert_mapping(
+    connection: sqlite3.Connection, table_name: str, values: dict[str, Any]
+) -> None:
+    columns = list(values)
+    placeholders = ", ".join("?" for _ in columns)
+    column_sql = ", ".join(f'"{column}"' for column in columns)
+    connection.execute(
+        f'INSERT INTO "{table_name}" ({column_sql}) VALUES ({placeholders})',
+        [values[column] for column in columns],
+    )
 
 
 def _write_ddl(database_path: Path, destination: Path) -> None:
@@ -1374,7 +1433,63 @@ def _write_report(
         "|---|---:|",
     ]
     lines.extend(f"| `{name}` | {len(table.rows)} |" for name, table in snapshot.items())
+    free_text_conditions = _free_text_only_method_conditions(snapshot)
+    affected_methods = sorted({method_id for method_id, _ in free_text_conditions})
+    lines.extend(
+        [
+            "",
+            "## Free-text-only method conditions",
+            "",
+            (
+                f"Detected `{len(free_text_conditions)}` populated condition fields across "
+                f"`{len(affected_methods)}` methods without complete atomic-predicate coverage."
+            ),
+            "",
+            "| Method | Unmigrated condition fields |",
+            "|---|---|",
+        ]
+    )
+    fields_by_method: dict[str, list[str]] = {}
+    for method_id, field_name in free_text_conditions:
+        fields_by_method.setdefault(method_id, []).append(field_name)
+    lines.extend(
+        f"| `{method_id}` | {', '.join(f'`{field}`' for field in fields_by_method[method_id])} |"
+        for method_id in affected_methods
+    )
     destination.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def _free_text_only_method_conditions(snapshot: Snapshot) -> list[tuple[str, str]]:
+    methods = snapshot.get("methods")
+    coverage = snapshot.get("predicate_coverage")
+    if methods is None or coverage is None:
+        return []
+    complete_methods: set[str] = set()
+    coverage_columns = {column.name: index for index, column in enumerate(coverage.columns)}
+    for row in coverage.rows:
+        if (
+            row[coverage_columns["subject_type"]] == "method"
+            and row[coverage_columns["status"]] == "complete"
+        ):
+            complete_methods.add(str(row[coverage_columns["subject_id"]]))
+
+    method_columns = {column.name: index for index, column in enumerate(methods.columns)}
+    condition_fields = (
+        "required_assumptions",
+        "avoid_conditions",
+        "first_choice_conditions",
+        "second_choice_conditions",
+    )
+    result: list[tuple[str, str]] = []
+    for row in methods.rows:
+        method_id = str(row[method_columns["method_id"]])
+        if method_id in complete_methods:
+            continue
+        for field_name in condition_fields:
+            value = row[method_columns[field_name]]
+            if value is not None and str(value).strip():
+                result.append((method_id, field_name))
+    return result
 
 
 def _manifest_payload(
