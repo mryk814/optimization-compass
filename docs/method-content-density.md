@@ -67,11 +67,22 @@ The tranche adds guides for BFGS, L-BFGS-B, Newton, trust-region Newton-CG, ADMM
 
 The first tranche moves the published content baseline from 12 to at least 28 pages. This is a review floor for representative coverage, not a target to give all 98 methods identical page length.
 
+## High-use method tranche
+
+Issue #92 adds guides for methods that already appear frequently in implementation libraries, comparisons, or adjacent Atlas content but lacked dedicated explanations:
+
+- Momentum SGD, Adam, coordinate descent, subgradient, and mirror descent
+- SLSQP, nonlinear interior-point, augmented Lagrangian, projected gradient, and active-set methods
+- Powell, pattern search, and COBYLA
+- SHGO, DIRECT, and dual annealing
+
+This raises the published method-guide baseline to 42. The remaining registered methods continue to retain structured summaries, predicates, implementations, relations, and sources even where a full guide has not yet been authored.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.
 
-After normalizing the original guides in #89, all 26 published method guides meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
+After #92, all 42 published method guides meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
 ## Review checklist
 
