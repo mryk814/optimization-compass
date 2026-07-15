@@ -81,6 +81,63 @@
       ]
     },
     {
+      "canonical_entity_id": "M_ADMM",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "admm",
+      "html": "<p>分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。</p>\n<h2 id=\"なぜ変数を分けるのか\" tabindex=\"-1\">なぜ変数を分けるのか</h2>\n<p>代表形は</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x0002C;</mo><mi>z</mi></mrow></msub><mspace width=\"0.278em\" /><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>A</mi><mi>x</mi><mo>&#x0002B;</mo><mi>B</mi><mi>z</mi><mo>&#x0003D;</mo><mi>c</mi></mrow></math></div>\n<p>です。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>g</mi></mrow></math> を別々に扱うため、滑らかな項、非滑らかな正則化、制約、分散データなどを異なる部分問題へ分けられます。</p>\n<p>scaled ADMMでは概ね次を繰り返します。</p>\n<ol>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math> を更新する</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math> を更新する</p>\n</li>\n<li><p>dual変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi></mrow></math> を更新する</p>\n</li>\n</ol>\n<p>各部分問題が閉形式、prox、疎な線形solveなどで解きやすいときに有効です。</p>\n<h2 id=\"収束を何で判断するか\" tabindex=\"-1\">収束を何で判断するか</h2>\n<p>目的値だけでは不十分です。</p>\n<ul>\n<li><p>primal residual: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>r</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mi>A</mi><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><mi>B</mi><msub><mi>z</mi><mi>k</mi></msub><mo>&#x02212;</mo><mi>c</mi></mrow></math></p>\n</li>\n<li><p>dual residual: <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>s</mi><mi>k</mi></msub></mrow></math>（consensus変数の変化に対応）</p>\n</li>\n<li><p>objective value</p>\n</li>\n<li><p>subproblem solve error</p>\n</li>\n<li><p>penalty parameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math></p>\n</li>\n</ul>\n<p>primal residualだけ小さくてもdual residualが大きければ、変数は制約を満たしつつまだ動いています。逆も同様です。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>ADMMの1反復が軽いとは限りません。各subproblemでfactorizationやinner optimizationを行う場合、inner solveの費用と精度も記録します。</p>\n</aside>\n<h2 id=\"pythonでl1正則化の分割を確認する\" tabindex=\"-1\">PythonでL1正則化の分割を確認する</h2>\n<p>次は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><mo>&#x02212;</mo><mi>b</mi><msup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>z</mi><msub><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>1</mn></msub></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mi>z</mi></mrow></math> の小さな例です。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">threshold</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sign</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">maximum</span><span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">abs</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"n\">threshold</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">b</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">3.0</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">0.4</span><span class=\"p\">,</span> <span class=\"mf\">1.2</span><span class=\"p\">])</span>\n<span class=\"n\">lam</span> <span class=\"o\">=</span> <span class=\"mf\">0.8</span>\n<span class=\"n\">rho</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span>\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros_like</span><span class=\"p\">(</span><span class=\"n\">b</span><span class=\"p\">)</span>\n<span class=\"n\">z</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros_like</span><span class=\"p\">(</span><span class=\"n\">b</span><span class=\"p\">)</span>\n<span class=\"n\">u</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros_like</span><span class=\"p\">(</span><span class=\"n\">b</span><span class=\"p\">)</span>\n\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">200</span><span class=\"p\">):</span>\n    <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"n\">b</span> <span class=\"o\">+</span> <span class=\"n\">rho</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">z</span> <span class=\"o\">-</span> <span class=\"n\">u</span><span class=\"p\">))</span> <span class=\"o\">/</span> <span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">+</span> <span class=\"n\">rho</span><span class=\"p\">)</span>\n    <span class=\"n\">previous_z</span> <span class=\"o\">=</span> <span class=\"n\">z</span><span class=\"o\">.</span><span class=\"n\">copy</span><span class=\"p\">()</span>\n    <span class=\"n\">z</span> <span class=\"o\">=</span> <span class=\"n\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">+</span> <span class=\"n\">u</span><span class=\"p\">,</span> <span class=\"n\">lam</span> <span class=\"o\">/</span> <span class=\"n\">rho</span><span class=\"p\">)</span>\n    <span class=\"n\">u</span> <span class=\"o\">=</span> <span class=\"n\">u</span> <span class=\"o\">+</span> <span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">z</span>\n\n    <span class=\"n\">primal</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">z</span><span class=\"p\">)</span>\n    <span class=\"n\">dual</span> <span class=\"o\">=</span> <span class=\"n\">rho</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">z</span> <span class=\"o\">-</span> <span class=\"n\">previous_z</span><span class=\"p\">)</span>\n    <span class=\"k\">if</span> <span class=\"n\">primal</span> <span class=\"o\">&lt;</span> <span class=\"mf\">1e-8</span> <span class=\"ow\">and</span> <span class=\"n\">dual</span> <span class=\"o\">&lt;</span> <span class=\"mf\">1e-8</span><span class=\"p\">:</span>\n        <span class=\"k\">break</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">z</span><span class=\"p\">,</span> <span class=\"n\">primal</span><span class=\"p\">,</span> <span class=\"n\">dual</span><span class=\"p\">)</span></code></pre></div>\n<h2 id=\"rhoを読む\" tabindex=\"-1\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math>を読む</h2>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math>は単なる学習率ではなく、consensus violationへの重みと数値conditioningへ影響します。</p>\n<ul>\n<li><p>primal residualがdual residualより極端に大きい → <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math>を上げる候補</p>\n</li>\n<li><p>dual residualが極端に大きい → <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math>を下げる候補</p>\n</li>\n<li><p>頻繁に変える → factorization再利用や理論条件への影響を確認</p>\n</li>\n</ul>\n<p>実装によってadaptive ruleが異なるため、defaultを無条件に横比較しません。</p>\n<h2 id=\"向いている-避ける条件\" tabindex=\"-1\">向いている／避ける条件</h2>\n<p>向いている:</p>\n<ul>\n<li><p>convexな分離構造</p>\n</li>\n<li><p>sparse QP、L1正則化、consensus、distributed optimization</p>\n</li>\n<li><p>proxやprojectionが安価</p>\n</li>\n<li><p>warm startを繰り返し利用したい</p>\n</li>\n</ul>\n<p>避ける／条件付き:</p>\n<ul>\n<li><p>分割後のsubproblemが元問題より難しい</p>\n</li>\n<li><p>高精度解が必要だが残差収束が非常に遅い</p>\n</li>\n<li><p>非凸ADMMを理論保証付き凸ADMMと同一視している</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi></mrow></math>やscaleにより残差が一方だけ停滞する</p>\n</li>\n</ul>\n<p>単一変数で直接prox stepを使える場合は<a href=\"#/learn/proximal-gradient\">proximal gradient</a>の方が単純なことがあります。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "proximal-gradient",
+        "fista",
+        "lp-qp-conic"
+      ],
+      "seo_description": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。",
+      "seo_title": "交互方向乗数法（ADMM）",
+      "source_ids": [
+        "S012",
+        "S055",
+        "S061",
+        "S062"
+      ],
+      "status": "published",
+      "summary": "分離しやすい部分問題を交互に解き、主残差と双対残差を減らしてconsensusを作る分割最適化法です。",
+      "title_en": "Alternating Direction Method of Multipliers",
+      "title_ja": "交互方向乗数法（ADMM）",
+      "toc": [
+        {
+          "heading_id": "なぜ変数を分けるのか",
+          "label": "なぜ変数を分けるのか",
+          "level": 2
+        },
+        {
+          "heading_id": "収束を何で判断するか",
+          "label": "収束を何で判断するか",
+          "level": 2
+        },
+        {
+          "heading_id": "pythonでl1正則化の分割を確認する",
+          "label": "PythonでL1正則化の分割を確認する",
+          "level": 2
+        },
+        {
+          "heading_id": "rhoを読む",
+          "label": "\\rhoを読む",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている-避ける条件",
+          "label": "向いている／避ける条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_BAYESIAN_OPT_GP",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -119,6 +176,63 @@
         {
           "heading_id": "比較するときの注意",
           "label": "比較するときの注意",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_BFGS",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "bfgs",
+      "html": "<p>勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。</p>\n<h2 id=\"何を更新しているか\" tabindex=\"-1\">何を更新しているか</h2>\n<p>勾配降下法が常に <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> へ進むのに対し、BFGSは正定値行列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>k</mi></msub></mrow></math> を使って方向を変形します。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>p</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mi>H</mi><mi>k</mi></msub><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>新しい点へ移動した後、</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>s</mi><mi>k</mi></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><msub><mi>x</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></p>\n</li>\n</ul>\n<p>を使って <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>k</mi></msub></mrow></math> を更新します。曲率条件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msubsup><mi>y</mi><mi>k</mi><mi>T</mi></msubsup><msub><mi>s</mi><mi>k</mi></msub><mo>&#x0003E;</mo><mn>0</mn></mrow></math> が満たされると、正定値性を保ちやすく、下り方向を作れます。</p>\n<h2 id=\"向いている問題\" tabindex=\"-1\">向いている問題</h2>\n<table>\n<thead>\n<tr>\n<th>条件</th>\n<th>理由</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>連続・滑らか</td>\n<td>勾配差を曲率情報として利用するため</td>\n</tr>\n<tr>\n<td>中小規模</td>\n<td>denseな近似行列は概ね <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy=\"false\">&#x00029;</mo></mrow></math> memoryを使うため</td>\n</tr>\n<tr>\n<td>勾配が信頼できる</td>\n<td>誤った勾配は更新行列を壊すため</td>\n</tr>\n<tr>\n<td>局所解でよい</td>\n<td>非凸問題で大域最適性を保証する手法ではないため</td>\n</tr>\n</tbody>\n</table>\n<p>高精度な局所解を少ない反復で得たいときに有力です。変数が非常に多い場合は<a href=\"#/learn/lbfgsb\">L-BFGS-B</a>などlimited-memory法を検討します。</p>\n<h2 id=\"line-searchが重要な理由\" tabindex=\"-1\">Line searchが重要な理由</h2>\n<p>BFGSの名前は更新式を表しますが、実用上はstep lengthを決めるline searchと組み合わせます。stepが大きすぎると目的値が悪化し、小さすぎると曲率情報を十分に得られません。</p>\n<p>見るべき診断値:</p>\n<ul>\n<li><p>gradient norm</p>\n</li>\n<li><p>line-search iteration数</p>\n</li>\n<li><p>function / gradient evaluation数</p>\n</li>\n<li><p>step norm</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msubsup><mi>y</mi><mi>k</mi><mi>T</mi></msubsup><msub><mi>s</mi><mi>k</mi></msub></mrow></math> が十分正か</p>\n</li>\n<li><p>objective change</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>「BFGSを使った」だけでは再現条件として不十分です。初期点、gradient実装、line-search条件、停止許容値、scalingを一緒に記録します。</p>\n</aside>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">((</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"mf\">10.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">2.0</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">),</span> <span class=\"mf\">20.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">2.0</span><span class=\"p\">)])</span>\n\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span>\n    <span class=\"n\">objective</span><span class=\"p\">,</span>\n    <span class=\"n\">x0</span><span class=\"o\">=</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">4.0</span><span class=\"p\">,</span> <span class=\"mf\">4.0</span><span class=\"p\">]),</span>\n    <span class=\"n\">jac</span><span class=\"o\">=</span><span class=\"n\">gradient</span><span class=\"p\">,</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;BFGS&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;gtol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-8</span><span class=\"p\">,</span> <span class=\"s2\">&quot;maxiter&quot;</span><span class=\"p\">:</span> <span class=\"mi\">200</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">nfev</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">njev</span><span class=\"p\">)</span></code></pre></div>\n<h2 id=\"失敗したときに確認する\" tabindex=\"-1\">失敗したときに確認する</h2>\n<ul>\n<li><p>gradient checkが有限差分と一致するか</p>\n</li>\n<li><p>変数・目的値のscaleが極端に違わないか</p>\n</li>\n<li><p>line search failureが発生していないか</p>\n</li>\n<li><p>非滑らかな分岐やclip処理が目的関数内にないか</p>\n</li>\n<li><p>異なる初期点で別の局所解へ入っていないか</p>\n</li>\n</ul>\n<p>Hessianを直接利用できる場合との違いは<a href=\"#/learn/newton-method\">Newton法</a>、局所modelを信頼できる範囲だけ使う考え方は<a href=\"#/learn/trust-region-newton-cg\">trust-region Newton-CG</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "method.gradient-descent",
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "lbfgsb",
+        "newton-method",
+        "trust-region-newton-cg"
+      ],
+      "seo_description": "勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。",
+      "seo_title": "BFGS法",
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "status": "published",
+      "summary": "勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。",
+      "title_en": "BFGS method",
+      "title_ja": "BFGS法",
+      "toc": [
+        {
+          "heading_id": "何を更新しているか",
+          "label": "何を更新しているか",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている問題",
+          "label": "向いている問題",
+          "level": 2
+        },
+        {
+          "heading_id": "line-searchが重要な理由",
+          "label": "Line searchが重要な理由",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗したときに確認する",
+          "label": "失敗したときに確認する",
           "level": 2
         }
       ],
@@ -166,6 +280,75 @@
         "binary-knapsack-bnb-complete",
         "binary-knapsack-bnb-budget"
       ]
+    },
+    {
+      "canonical_entity_id": "M_BRANCH_CUT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "branch-and-cut",
+      "html": "<p>branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。</p>\n<h2 id=\"cutは何をするか\" tabindex=\"-1\">Cutは何をするか</h2>\n<p>MILPのLP relaxationは整数条件を外すため、整数実行可能解より良すぎるfractional解を返すことがあります。cutting planeは、</p>\n<ul>\n<li><p>すべての整数実行可能解を残す</p>\n</li>\n<li><p>現在のfractional解を除外する</p>\n</li>\n</ul>\n<p>不等式を追加し、relaxationを強くします。</p>\n<p>Branch-and-Cutは、</p>\n<ol>\n<li><p>presolve</p>\n</li>\n<li><p>LP relaxation</p>\n</li>\n<li><p>cut separation</p>\n</li>\n<li><p>primal heuristic</p>\n</li>\n<li><p>branching</p>\n</li>\n<li><p>node pruning</p>\n</li>\n</ol>\n<p>を統合した現代的MILP solverの中心的枠組みです。</p>\n<h2 id=\"読むべき三つの値\" tabindex=\"-1\">読むべき三つの値</h2>\n<ul>\n<li><p><strong>incumbent / primal bound</strong>: 現在見つかっている最良整数実行可能解</p>\n</li>\n<li><p><strong>best bound / dual bound</strong>: 未探索領域から得られる可能性の限界</p>\n</li>\n<li><p><strong>gap</strong>: incumbentとboundの差</p>\n</li>\n</ul>\n<p>minimizationではbest boundがincumbentを下から追い、gapが許容値以下になれば、設定したtoleranceにおける最適性を主張できます。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>solverが<code>optimal</code>と返す場合でも、integrality tolerance、feasibility tolerance、relative / absolute gapを確認します。数学的な完全一致ではなく数値許容値付きの判定です。</p>\n</aside>\n<h2 id=\"python-milpをsolverへ渡す\" tabindex=\"-1\">Python: MILPをsolverへ渡す</h2>\n<p>次の例ではcutやbranchingを手実装せず、HiGHS backendへmodelを渡します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">Bounds</span><span class=\"p\">,</span> <span class=\"n\">LinearConstraint</span><span class=\"p\">,</span> <span class=\"n\">milp</span>\n\n<span class=\"n\">values</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">8.0</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">,</span> <span class=\"mf\">6.0</span><span class=\"p\">,</span> <span class=\"mf\">4.0</span><span class=\"p\">])</span>\n<span class=\"n\">weights</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">4.0</span><span class=\"p\">,</span> <span class=\"mf\">3.0</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">])</span>\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">milp</span><span class=\"p\">(</span>\n    <span class=\"n\">c</span><span class=\"o\">=-</span><span class=\"n\">values</span><span class=\"p\">,</span>\n    <span class=\"n\">integrality</span><span class=\"o\">=</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ones</span><span class=\"p\">(</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">)),</span>\n    <span class=\"n\">bounds</span><span class=\"o\">=</span><span class=\"n\">Bounds</span><span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros</span><span class=\"p\">(</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">)),</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ones</span><span class=\"p\">(</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">))),</span>\n    <span class=\"n\">constraints</span><span class=\"o\">=</span><span class=\"n\">LinearConstraint</span><span class=\"p\">(</span><span class=\"n\">weights</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">inf</span><span class=\"p\">,</span> <span class=\"mf\">8.0</span><span class=\"p\">),</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;time_limit&quot;</span><span class=\"p\">:</span> <span class=\"mf\">30.0</span><span class=\"p\">,</span> <span class=\"s2\">&quot;mip_rel_gap&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-6</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">message</span><span class=\"p\">)</span></code></pre></div>\n<p>実装がどのcut familyを有効にするか、どのheuristicを使うかはsolverとversionに依存します。</p>\n<h2 id=\"model品質が探索を支配する\" tabindex=\"-1\">Model品質が探索を支配する</h2>\n<p>Branch-and-Cutの性能はalgorithm parameterだけでなく定式化に強く依存します。</p>\n<p>確認項目:</p>\n<ul>\n<li><p>Big-Mが必要以上に大きくないか</p>\n</li>\n<li><p>symmetryがないか</p>\n</li>\n<li><p>variable boundsが十分tightか</p>\n</li>\n<li><p>strong formulationやvalid inequalityがあるか</p>\n</li>\n<li><p>presolveで固定できる変数があるか</p>\n</li>\n<li><p>初期incumbentをwarm startできるか</p>\n</li>\n<li><p>coefficient scaleが極端でないか</p>\n</li>\n</ul>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>root relaxation gap</p>\n</li>\n<li><p>incumbent / best bound / relative gap</p>\n</li>\n<li><p>node count</p>\n</li>\n<li><p>LP iteration数</p>\n</li>\n<li><p>cut countとcut efficacy</p>\n</li>\n<li><p>feasible solutionが最初に見つかるまでの時間</p>\n</li>\n<li><p>memory</p>\n</li>\n<li><p>presolve reduction</p>\n</li>\n<li><p>termination reason</p>\n</li>\n</ul>\n<h2 id=\"cp-satとの違い\" tabindex=\"-1\">CP-SATとの違い</h2>\n<p>Branch-and-Cutは線形緩和が強いMILPで力を発揮します。CP-SATは論理関係、reification、scheduling global constraintなどを自然に表現できる場合があります。どちらが良いかは、同じ現実問題でも定式化によって変わります。</p>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>root gapが大きいまま</p>\n</li>\n<li><p>node数が指数的に増える</p>\n</li>\n<li><p>incumbentが長時間見つからない</p>\n</li>\n<li><p>memoryがtreeで増大</p>\n</li>\n<li><p>Big-Mによる数値warning</p>\n</li>\n<li><p>symmetryで同等解を繰り返し探索</p>\n</li>\n<li><p>専用flow、matching、DP、CP構造を無視している</p>\n</li>\n</ul>\n<p>探索木の基本は<a href=\"#/learn/branch-and-bound\">Branch-and-Bound</a>、論理制約中心のmodelは<a href=\"#/learn/cp-sat\">CP-SAT</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "branch-and-bound"
+      ],
+      "related_ids": [
+        "branch-and-bound",
+        "cp-sat",
+        "lp-qp-conic"
+      ],
+      "seo_description": "branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。",
+      "seo_title": "Branch-and-Cut",
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S024",
+        "S025",
+        "S028"
+      ],
+      "status": "published",
+      "summary": "branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。",
+      "title_en": "Branch-and-Cut",
+      "title_ja": "Branch-and-Cut",
+      "toc": [
+        {
+          "heading_id": "cutは何をするか",
+          "label": "Cutは何をするか",
+          "level": 2
+        },
+        {
+          "heading_id": "読むべき三つの値",
+          "label": "読むべき三つの値",
+          "level": 2
+        },
+        {
+          "heading_id": "python-milpをsolverへ渡す",
+          "label": "Python: MILPをsolverへ渡す",
+          "level": 2
+        },
+        {
+          "heading_id": "model品質が探索を支配する",
+          "label": "Model品質が探索を支配する",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "cp-satとの違い",
+          "label": "CP-SATとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
     },
     {
       "canonical_entity_id": "M_CMA_ES",
@@ -321,6 +504,418 @@
       ]
     },
     {
+      "canonical_entity_id": "M_DIFFERENTIAL_EVOLUTION",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "differential-evolution",
+      "html": "<p>個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。</p>\n<h2 id=\"一世代で何をするか\" tabindex=\"-1\">一世代で何をするか</h2>\n<p>代表的なDE/rand/1では、target個体 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math> と異なる3個体を選び、mutant</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>r</mi><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mrow><mi>r</mi><mn>2</mn></mrow></msub><mo>&#x02212;</mo><msub><mi>x</mi><mrow><mi>r</mi><mn>3</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>を作ります。次にcrossoverでtrial個体 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mi>i</mi></msub></mrow></math> を作り、目的値が改善した方を次世代へ残します。</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>F</mi></mrow></math>: 差分の拡大率</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi><mi>R</mi></mrow></math>: crossover率</p>\n</li>\n<li><p>population size</p>\n</li>\n<li><p>strategy: base vectorと差分数の選び方</p>\n</li>\n</ul>\n<p>が探索の性格を変えます。</p>\n<h2 id=\"向いている問題\" tabindex=\"-1\">向いている問題</h2>\n<ul>\n<li><p>boundsを持つ連続black-box</p>\n</li>\n<li><p>gradientが利用できない、または不連続・多峰性</p>\n</li>\n<li><p>目的評価をpopulation単位で並列化できる</p>\n</li>\n<li><p>局所法の初期値依存を緩和したい</p>\n</li>\n<li><p>最適性証明ではなく良いglobal candidateが欲しい</p>\n</li>\n</ul>\n<p>評価が非常に高価で数十回しか呼べない場合、populationを維持するだけで予算を使い切るため、Bayesian Optimizationなどとの比較が必要です。</p>\n<h2 id=\"比較で揃える条件\" tabindex=\"-1\">比較で揃える条件</h2>\n<ul>\n<li><p>search bounds</p>\n</li>\n<li><p>population sizeと初期population</p>\n</li>\n<li><p>random seed</p>\n</li>\n<li><p>objective evaluation budget</p>\n</li>\n<li><p>constraint handling</p>\n</li>\n<li><p>polishing local searchの有無</p>\n</li>\n<li><p>stopping / stall condition</p>\n</li>\n</ul>\n<p>iteration数ではなくobjective evaluation数を主なbudgetにします。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">differential_evolution</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">rastrigin</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"mf\">10.0</span> <span class=\"o\">*</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span> <span class=\"o\">+</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sum</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">*</span> <span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"mf\">10.0</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">cos</span><span class=\"p\">(</span><span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">pi</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">)))</span>\n\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">differential_evolution</span><span class=\"p\">(</span>\n    <span class=\"n\">rastrigin</span><span class=\"p\">,</span>\n    <span class=\"n\">bounds</span><span class=\"o\">=</span><span class=\"p\">[(</span><span class=\"o\">-</span><span class=\"mf\">5.12</span><span class=\"p\">,</span> <span class=\"mf\">5.12</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"o\">-</span><span class=\"mf\">5.12</span><span class=\"p\">,</span> <span class=\"mf\">5.12</span><span class=\"p\">)],</span>\n    <span class=\"n\">strategy</span><span class=\"o\">=</span><span class=\"s2\">&quot;best1bin&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">popsize</span><span class=\"o\">=</span><span class=\"mi\">12</span><span class=\"p\">,</span>\n    <span class=\"n\">maxiter</span><span class=\"o\">=</span><span class=\"mi\">300</span><span class=\"p\">,</span>\n    <span class=\"n\">seed</span><span class=\"o\">=</span><span class=\"mi\">7</span><span class=\"p\">,</span>\n    <span class=\"n\">polish</span><span class=\"o\">=</span><span class=\"kc\">False</span><span class=\"p\">,</span>\n    <span class=\"n\">updating</span><span class=\"o\">=</span><span class=\"s2\">&quot;deferred&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">workers</span><span class=\"o\">=</span><span class=\"mi\">1</span><span class=\"p\">,</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">nfev</span><span class=\"p\">)</span></code></pre></div>\n<h2 id=\"見るべき診断値\" tabindex=\"-1\">見るべき診断値</h2>\n<ul>\n<li><p>best-so-far objective</p>\n</li>\n<li><p>population diversity</p>\n</li>\n<li><p>feasible fraction</p>\n</li>\n<li><p>bound付近への集中</p>\n</li>\n<li><p>世代あたり評価数</p>\n</li>\n<li><p>seed間の結果分散</p>\n</li>\n<li><p>stall generation数</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p><code>polish=True</code>で最後に局所法を使う実装では、最終結果はDEだけの成果ではありません。population探索とlocal refinementの評価回数を分けて記録します。</p>\n</aside>\n<h2 id=\"失敗の兆候\" tabindex=\"-1\">失敗の兆候</h2>\n<ul>\n<li><p>population diversityが早期に消える</p>\n</li>\n<li><p>全個体がboundsへ張り付く</p>\n</li>\n<li><p>評価予算に対し世代数が少なすぎる</p>\n</li>\n<li><p>penalty設計によりinfeasible個体しか生成されない</p>\n</li>\n<li><p>変数scaleが極端で差分vectorが一部座標だけ支配する</p>\n</li>\n<li><p>単一seedの成功例を一般性能として扱っている</p>\n</li>\n</ul>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "concept.derivative-free"
+      ],
+      "related_ids": [
+        "cma-es",
+        "genetic-algorithm",
+        "particle-swarm"
+      ],
+      "seo_description": "個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。",
+      "seo_title": "Differential Evolution（差分進化）",
+      "source_ids": [
+        "S006",
+        "S074"
+      ],
+      "status": "published",
+      "summary": "個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。",
+      "title_en": "Differential Evolution",
+      "title_ja": "Differential Evolution（差分進化）",
+      "toc": [
+        {
+          "heading_id": "一世代で何をするか",
+          "label": "一世代で何をするか",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている問題",
+          "label": "向いている問題",
+          "level": 2
+        },
+        {
+          "heading_id": "比較で揃える条件",
+          "label": "比較で揃える条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "見るべき診断値",
+          "label": "見るべき診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗の兆候",
+          "label": "失敗の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_DIJKSTRA_ASTAR",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "dijkstra-astar",
+      "html": "<p>graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。</p>\n<h2 id=\"dijkstra法\" tabindex=\"-1\">Dijkstra法</h2>\n<p>始点からの暫定距離が最小のnodeを取り出し、そのnodeから伸びるedgeをrelaxします。edge costが非負なら、priority queueから確定した距離は後から改善されません。</p>\n<p>確認する前提:</p>\n<ul>\n<li><p>edge weightが非負</p>\n</li>\n<li><p>costの単位と加法性が妥当</p>\n</li>\n<li><p>node / edgeが問題の状態と遷移を正しく表す</p>\n</li>\n<li><p>side constraintがpath stateへ含まれている</p>\n</li>\n</ul>\n<h2 id=\"a-探索\" tabindex=\"-1\">A*探索</h2>\n<p>A*はpriorityを</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>とします。</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>: 始点から現在nodeまでの実cost</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>: goalまでの推定cost</p>\n</li>\n</ul>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> が真の残りcostを過大評価しないadmissible heuristicなら最適性を維持できます。consistent heuristicなら再展開を抑えやすくなります。</p>\n<h2 id=\"python-dijkstra法\" tabindex=\"-1\">Python: Dijkstra法</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">heapq</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">collections.abc</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">Mapping</span>\n\n<span class=\"n\">Graph</span> <span class=\"o\">=</span> <span class=\"n\">Mapping</span><span class=\"p\">[</span><span class=\"nb\">str</span><span class=\"p\">,</span> <span class=\"nb\">list</span><span class=\"p\">[</span><span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"nb\">str</span><span class=\"p\">,</span> <span class=\"nb\">float</span><span class=\"p\">]]]</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">dijkstra</span><span class=\"p\">(</span><span class=\"n\">graph</span><span class=\"p\">:</span> <span class=\"n\">Graph</span><span class=\"p\">,</span> <span class=\"n\">start</span><span class=\"p\">:</span> <span class=\"nb\">str</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">dict</span><span class=\"p\">[</span><span class=\"nb\">str</span><span class=\"p\">,</span> <span class=\"nb\">float</span><span class=\"p\">]:</span>\n    <span class=\"n\">distance</span> <span class=\"o\">=</span> <span class=\"p\">{</span><span class=\"n\">node</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"s2\">&quot;inf&quot;</span><span class=\"p\">)</span> <span class=\"k\">for</span> <span class=\"n\">node</span> <span class=\"ow\">in</span> <span class=\"n\">graph</span><span class=\"p\">}</span>\n    <span class=\"n\">distance</span><span class=\"p\">[</span><span class=\"n\">start</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"mf\">0.0</span>\n    <span class=\"n\">queue</span> <span class=\"o\">=</span> <span class=\"p\">[(</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"n\">start</span><span class=\"p\">)]</span>\n\n    <span class=\"k\">while</span> <span class=\"n\">queue</span><span class=\"p\">:</span>\n        <span class=\"n\">current_distance</span><span class=\"p\">,</span> <span class=\"n\">node</span> <span class=\"o\">=</span> <span class=\"n\">heapq</span><span class=\"o\">.</span><span class=\"n\">heappop</span><span class=\"p\">(</span><span class=\"n\">queue</span><span class=\"p\">)</span>\n        <span class=\"k\">if</span> <span class=\"n\">current_distance</span> <span class=\"o\">!=</span> <span class=\"n\">distance</span><span class=\"p\">[</span><span class=\"n\">node</span><span class=\"p\">]:</span>\n            <span class=\"k\">continue</span>\n        <span class=\"k\">for</span> <span class=\"n\">neighbor</span><span class=\"p\">,</span> <span class=\"n\">edge_cost</span> <span class=\"ow\">in</span> <span class=\"n\">graph</span><span class=\"p\">[</span><span class=\"n\">node</span><span class=\"p\">]:</span>\n            <span class=\"k\">if</span> <span class=\"n\">edge_cost</span> <span class=\"o\">&lt;</span> <span class=\"mi\">0</span><span class=\"p\">:</span>\n                <span class=\"k\">raise</span> <span class=\"ne\">ValueError</span><span class=\"p\">(</span><span class=\"s2\">&quot;Dijkstra requires non-negative edge costs&quot;</span><span class=\"p\">)</span>\n            <span class=\"n\">candidate</span> <span class=\"o\">=</span> <span class=\"n\">current_distance</span> <span class=\"o\">+</span> <span class=\"n\">edge_cost</span>\n            <span class=\"k\">if</span> <span class=\"n\">candidate</span> <span class=\"o\">&lt;</span> <span class=\"n\">distance</span><span class=\"p\">[</span><span class=\"n\">neighbor</span><span class=\"p\">]:</span>\n                <span class=\"n\">distance</span><span class=\"p\">[</span><span class=\"n\">neighbor</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"n\">candidate</span>\n                <span class=\"n\">heapq</span><span class=\"o\">.</span><span class=\"n\">heappush</span><span class=\"p\">(</span><span class=\"n\">queue</span><span class=\"p\">,</span> <span class=\"p\">(</span><span class=\"n\">candidate</span><span class=\"p\">,</span> <span class=\"n\">neighbor</span><span class=\"p\">))</span>\n\n    <span class=\"k\">return</span> <span class=\"n\">distance</span>\n\n\n<span class=\"n\">graph</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;A&quot;</span><span class=\"p\">:</span> <span class=\"p\">[(</span><span class=\"s2\">&quot;B&quot;</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"s2\">&quot;C&quot;</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">)],</span>\n    <span class=\"s2\">&quot;B&quot;</span><span class=\"p\">:</span> <span class=\"p\">[(</span><span class=\"s2\">&quot;C&quot;</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"s2\">&quot;D&quot;</span><span class=\"p\">,</span> <span class=\"mf\">4.0</span><span class=\"p\">)],</span>\n    <span class=\"s2\">&quot;C&quot;</span><span class=\"p\">:</span> <span class=\"p\">[(</span><span class=\"s2\">&quot;D&quot;</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">)],</span>\n    <span class=\"s2\">&quot;D&quot;</span><span class=\"p\">:</span> <span class=\"p\">[],</span>\n<span class=\"p\">}</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">dijkstra</span><span class=\"p\">(</span><span class=\"n\">graph</span><span class=\"p\">,</span> <span class=\"s2\">&quot;A&quot;</span><span class=\"p\">))</span></code></pre></div>\n<h2 id=\"汎用最適化より先に確認する理由\" tabindex=\"-1\">汎用最適化より先に確認する理由</h2>\n<p>単純なshortest pathをMIPへ変換しても解けますが、専用algorithmはgraph構造を直接利用し、通常は速く、保証も明確です。</p>\n<p>ただし次のside constraintが増えると専用構造が崩れる場合があります。</p>\n<ul>\n<li><p>複数resource capacity</p>\n</li>\n<li><p>time window</p>\n</li>\n<li><p>path全体に依存する論理条件</p>\n</li>\n<li><p>pickup and delivery</p>\n</li>\n<li><p>複数車両の相互作用</p>\n</li>\n<li><p>negative edgeやcycle condition</p>\n</li>\n</ul>\n<p>この場合、state拡張DP、resource-constrained shortest path、CP-SAT、MIPなどを検討します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>expanded node数</p>\n</li>\n<li><p>relaxed edge数</p>\n</li>\n<li><p>priority queue size</p>\n</li>\n<li><p>reopened node数（A*）</p>\n</li>\n<li><p>heuristic error / consistency</p>\n</li>\n<li><p>memory</p>\n</li>\n<li><p>goal costとlower bound</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>地図上の直線距離は常に安全なheuristicとは限りません。実costが地理距離より小さくなり得るdiscountやteleport edgeがある場合、admissibilityを確認します。</p>\n</aside>\n<h2 id=\"失敗の兆候\" tabindex=\"-1\">失敗の兆候</h2>\n<ul>\n<li><p>state explosionでmemoryが増大</p>\n</li>\n<li><p>heuristicが弱くDijkstraと同程度に展開</p>\n</li>\n<li><p>heuristicが過大で最適解を失う</p>\n</li>\n<li><p>side constraintをnode stateへ入れ忘れる</p>\n</li>\n<li><p>negative edgeをDijkstraで処理する</p>\n</li>\n<li><p>path costが加法的でないのに単純edge sumへ落とす</p>\n</li>\n</ul>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "dynamic-programming"
+      ],
+      "related_ids": [
+        "dynamic-programming",
+        "cp-sat"
+      ],
+      "seo_description": "graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。",
+      "seo_title": "Dijkstra法とA*探索",
+      "source_ids": [
+        "S054"
+      ],
+      "status": "published",
+      "summary": "graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。",
+      "title_en": "Dijkstra's Algorithm and A* Search",
+      "title_ja": "Dijkstra法とA*探索",
+      "toc": [
+        {
+          "heading_id": "dijkstra法",
+          "label": "Dijkstra法",
+          "level": 2
+        },
+        {
+          "heading_id": "a-探索",
+          "label": "A*探索",
+          "level": 2
+        },
+        {
+          "heading_id": "python-dijkstra法",
+          "label": "Python: Dijkstra法",
+          "level": 2
+        },
+        {
+          "heading_id": "汎用最適化より先に確認する理由",
+          "label": "汎用最適化より先に確認する理由",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗の兆候",
+          "label": "失敗の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_DIRECT_COLLOCATION",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "direct-collocation",
+      "html": "<p>状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。</p>\n<h2 id=\"点ではなく軌道を変数にする\" tabindex=\"-1\">点ではなく軌道を変数にする</h2>\n<p>連続時間system</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mover><mrow><mi>x</mi></mrow><mo>&#x002D9;</mo></mover><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>に対し、時間点ごとのstate <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub></mrow></math> とcontrol <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mi>k</mi></msub></mrow></math> をdecision variablesとして並べます。dynamicsをcollocation formulaで離散化し、隣接点の整合性をconstraintとしてNLP solverへ渡します。</p>\n<p>これにより、</p>\n<ul>\n<li><p>initial / terminal condition</p>\n</li>\n<li><p>path constraint</p>\n</li>\n<li><p>control bounds</p>\n</li>\n<li><p>obstacle / safety constraint</p>\n</li>\n<li><p>integral cost</p>\n</li>\n</ul>\n<p>を同じmodelで扱えます。</p>\n<h2 id=\"shootingとの違い\" tabindex=\"-1\">Shootingとの違い</h2>\n<table>\n<thead>\n<tr>\n<th>観点</th>\n<th>Direct collocation</th>\n<th>Direct shooting</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>state</td>\n<td>decision variableとして保持</td>\n<td>forward simulationで消去</td>\n</tr>\n<tr>\n<td>dynamics</td>\n<td>defect constraint</td>\n<td>rollout</td>\n</tr>\n<tr>\n<td>sparsity</td>\n<td>banded / sparse</td>\n<td>sensitivityが長時間伝播</td>\n</tr>\n<tr>\n<td>unstable dynamics</td>\n<td>比較的扱いやすい</td>\n<td>rolloutが発散しやすい</td>\n</tr>\n<tr>\n<td>variable数</td>\n<td>多い</td>\n<td>少ない</td>\n</tr>\n</tbody>\n</table>\n<p>長いhorizonや不安定systemではcollocationの疎構造が有利な場合があります。一方、meshとdiscretizationを設計する必要があります。</p>\n<h2 id=\"教育用の直接transcription例\" tabindex=\"-1\">教育用の直接transcription例</h2>\n<p>次はsingle-integrator <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><mi>&#x00394;</mi><mi>t</mi><mspace width=\"0.167em\" /><msub><mi>u</mi><mi>k</mi></msub></mrow></math> をEuler defectで表す最小例です。厳密には高次collocationではなく、direct transcriptionの入口です。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n<span class=\"n\">steps</span> <span class=\"o\">=</span> <span class=\"mi\">20</span>\n<span class=\"n\">dt</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span> <span class=\"o\">/</span> <span class=\"n\">steps</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">unpack</span><span class=\"p\">(</span><span class=\"n\">vector</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">]:</span>\n    <span class=\"n\">state</span> <span class=\"o\">=</span> <span class=\"n\">vector</span><span class=\"p\">[:</span> <span class=\"n\">steps</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">]</span>\n    <span class=\"n\">control</span> <span class=\"o\">=</span> <span class=\"n\">vector</span><span class=\"p\">[</span><span class=\"n\">steps</span> <span class=\"o\">+</span> <span class=\"mi\">1</span> <span class=\"p\">:]</span>\n    <span class=\"k\">return</span> <span class=\"n\">state</span><span class=\"p\">,</span> <span class=\"n\">control</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">vector</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"n\">_</span><span class=\"p\">,</span> <span class=\"n\">control</span> <span class=\"o\">=</span> <span class=\"n\">unpack</span><span class=\"p\">(</span><span class=\"n\">vector</span><span class=\"p\">)</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"n\">dt</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sum</span><span class=\"p\">(</span><span class=\"n\">control</span> <span class=\"o\">*</span> <span class=\"n\">control</span><span class=\"p\">))</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">equality_constraints</span><span class=\"p\">(</span><span class=\"n\">vector</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"n\">state</span><span class=\"p\">,</span> <span class=\"n\">control</span> <span class=\"o\">=</span> <span class=\"n\">unpack</span><span class=\"p\">(</span><span class=\"n\">vector</span><span class=\"p\">)</span>\n    <span class=\"n\">dynamics</span> <span class=\"o\">=</span> <span class=\"n\">state</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">:]</span> <span class=\"o\">-</span> <span class=\"n\">state</span><span class=\"p\">[:</span><span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">dt</span> <span class=\"o\">*</span> <span class=\"n\">control</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">concatenate</span><span class=\"p\">(([</span><span class=\"n\">state</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]],</span> <span class=\"n\">dynamics</span><span class=\"p\">,</span> <span class=\"p\">[</span><span class=\"n\">state</span><span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">]))</span>\n\n\n<span class=\"n\">initial</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">concatenate</span><span class=\"p\">((</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linspace</span><span class=\"p\">(</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"n\">steps</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">),</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ones</span><span class=\"p\">(</span><span class=\"n\">steps</span><span class=\"p\">)))</span>\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span>\n    <span class=\"n\">objective</span><span class=\"p\">,</span>\n    <span class=\"n\">initial</span><span class=\"p\">,</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;SLSQP&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">constraints</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;type&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;eq&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;fun&quot;</span><span class=\"p\">:</span> <span class=\"n\">equality_constraints</span><span class=\"p\">},</span>\n    <span class=\"n\">bounds</span><span class=\"o\">=</span><span class=\"p\">[(</span><span class=\"kc\">None</span><span class=\"p\">,</span> <span class=\"kc\">None</span><span class=\"p\">)]</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">steps</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">)</span> <span class=\"o\">+</span> <span class=\"p\">[(</span><span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">)]</span> <span class=\"o\">*</span> <span class=\"n\">steps</span><span class=\"p\">,</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;ftol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-10</span><span class=\"p\">,</span> <span class=\"s2\">&quot;maxiter&quot;</span><span class=\"p\">:</span> <span class=\"mi\">500</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n\n<span class=\"n\">state</span><span class=\"p\">,</span> <span class=\"n\">control</span> <span class=\"o\">=</span> <span class=\"n\">unpack</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">objective</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">),</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">equality_constraints</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">)))</span></code></pre></div>\n<h2 id=\"何を可視化するか\" tabindex=\"-1\">何を可視化するか</h2>\n<p>軌道を位置だけで見せるとsolver状態が分かりません。次を同期表示します。</p>\n<ul>\n<li><p>physical trajectory</p>\n</li>\n<li><p>state history</p>\n</li>\n<li><p>control history</p>\n</li>\n<li><p>dynamics defect</p>\n</li>\n<li><p>path constraint violation</p>\n</li>\n<li><p>objective accumulation</p>\n</li>\n<li><p>active bounds</p>\n</li>\n<li><p>mesh point / refinement</p>\n</li>\n<li><p>KKT residualとtermination reason</p>\n</li>\n</ul>\n<h2 id=\"mesh-refinement\" tabindex=\"-1\">Mesh refinement</h2>\n<p>meshが粗いと、離散NLPでは可行でも連続systemへ戻すとconstraintを破ることがあります。</p>\n<p>確認手順:</p>\n<ol>\n<li><p>mesh上のdefectを確認</p>\n</li>\n<li><p>得られたcontrolで高精度simulation</p>\n</li>\n<li><p>mesh間でobjectiveとtrajectoryを比較</p>\n</li>\n<li><p>誤差が大きい区間をrefine</p>\n</li>\n<li><p>warm startして再solve</p>\n</li>\n</ol>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>NLP solverの<code>success</code>は、連続時間問題の正しさを直接保証しません。discretization error、model mismatch、simulation validationを別に確認します。</p>\n</aside>\n<h2 id=\"向いている-避ける条件\" tabindex=\"-1\">向いている／避ける条件</h2>\n<p>向いている:</p>\n<ul>\n<li><p>known dynamicsを持つtrajectory optimization</p>\n</li>\n<li><p>path / boundary constraintが多い</p>\n</li>\n<li><p>sparse derivativeを利用できる</p>\n</li>\n<li><p>warm startを使うMPC</p>\n</li>\n<li><p>stateとcontrolの全履歴を説明したい</p>\n</li>\n</ul>\n<p>避ける／条件付き:</p>\n<ul>\n<li><p>dynamicsが未同定または強くstochastic</p>\n</li>\n<li><p>discontinuous eventをmeshへ明示していない</p>\n</li>\n<li><p>derivativeやscalingが不正確</p>\n</li>\n<li><p>meshが粗くsolutionがgrid依存</p>\n</li>\n<li><p>real-time deadlineにsolver時間が合わない</p>\n</li>\n</ul>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "constrained-continuous"
+      ],
+      "related_ids": [
+        "constrained-continuous",
+        "least-squares"
+      ],
+      "seo_description": "状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。",
+      "seo_title": "Direct Collocation",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。",
+      "title_en": "Direct Collocation",
+      "title_ja": "Direct Collocation",
+      "toc": [
+        {
+          "heading_id": "点ではなく軌道を変数にする",
+          "label": "点ではなく軌道を変数にする",
+          "level": 2
+        },
+        {
+          "heading_id": "shootingとの違い",
+          "label": "Shootingとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "教育用の直接transcription例",
+          "label": "教育用の直接transcription例",
+          "level": 2
+        },
+        {
+          "heading_id": "何を可視化するか",
+          "label": "何を可視化するか",
+          "level": 2
+        },
+        {
+          "heading_id": "mesh-refinement",
+          "label": "Mesh refinement",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている-避ける条件",
+          "label": "向いている／避ける条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_DUAL_SIMPLEX",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "dual-simplex",
+      "html": "<p>dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。</p>\n<h2 id=\"primal-simplexとの対比\" tabindex=\"-1\">Primal simplexとの対比</h2>\n<p>LPを標準形で考えると、</p>\n<ul>\n<li><p>primal simplex: primal feasibleなbasisを保ち、objectiveを改善する</p>\n</li>\n<li><p>dual simplex: dual feasibleなbasisを保ち、primal feasibilityを回復する</p>\n</li>\n</ul>\n<p>という見方ができます。</p>\n<p>制約の追加、bound変更、MIP nodeでのbranchingなどにより、以前のbasisがdual feasibleだがprimal infeasibleになる状況ではdual simplexが自然です。</p>\n<h2 id=\"どこで使われるか\" tabindex=\"-1\">どこで使われるか</h2>\n<ul>\n<li><p>MILPの各nodeでLP relaxationを再最適化</p>\n</li>\n<li><p>既存LPへ制約やcutを追加</p>\n</li>\n<li><p>scenarioやparameter変更後のre-optimization</p>\n</li>\n<li><p>presolve後に得られたbasisの利用</p>\n</li>\n<li><p>sparseな大規模LP</p>\n</li>\n</ul>\n<p>ユーザーがalgorithmを直接選ばなくても、LP/MIP solverが内部で自動選択する場合があります。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">linprog</span>\n\n<span class=\"n\">c</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">0.5</span><span class=\"p\">])</span>\n<span class=\"n\">a_ub</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span>\n    <span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">],</span>\n    <span class=\"p\">[</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span>\n<span class=\"p\">])</span>\n<span class=\"n\">b_ub</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">4.0</span><span class=\"p\">])</span>\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">linprog</span><span class=\"p\">(</span>\n    <span class=\"n\">c</span><span class=\"p\">,</span>\n    <span class=\"n\">A_ub</span><span class=\"o\">=</span><span class=\"n\">a_ub</span><span class=\"p\">,</span>\n    <span class=\"n\">b_ub</span><span class=\"o\">=</span><span class=\"n\">b_ub</span><span class=\"p\">,</span>\n    <span class=\"n\">bounds</span><span class=\"o\">=</span><span class=\"p\">[(</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"kc\">None</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"kc\">None</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"kc\">None</span><span class=\"p\">)],</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;highs-ds&quot;</span><span class=\"p\">,</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">message</span><span class=\"p\">)</span></code></pre></div>\n<p><code>highs-ds</code>はHiGHSのdual simplex solverを指定します。実装version、presolve、scaling、toleranceは結果の診断に含めます。</p>\n<h2 id=\"結果を読む\" tabindex=\"-1\">結果を読む</h2>\n<ul>\n<li><p>primal feasibility residual</p>\n</li>\n<li><p>dual feasibility residual</p>\n</li>\n<li><p>objective value</p>\n</li>\n<li><p>basis status</p>\n</li>\n<li><p>simplex iteration数</p>\n</li>\n<li><p>degeneracy / stalling</p>\n</li>\n<li><p>presolve reduction</p>\n</li>\n<li><p>infeasible / unbounded status</p>\n</li>\n<li><p>numerical warning</p>\n</li>\n</ul>\n<p>LPの<code>infeasible</code>と<code>unbounded</code>は別の状態です。modeling error、単位、bounds、signを確認し、solver statusを単に「失敗」とまとめません。</p>\n<h2 id=\"degeneracy\" tabindex=\"-1\">Degeneracy</h2>\n<p>複数のbasisが同じvertexを表すdegeneracyでは、pivotしてもobjectiveが変わらないことがあります。anti-cycling、pricing、perturbationなどは実装依存です。</p>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>simplex iteration数をinterior-point iteration数と直接比較しません。一反復の計算内容、factorization、crossover、warm startの有無が異なります。</p>\n</aside>\n<h2 id=\"向いている-避ける条件\" tabindex=\"-1\">向いている／避ける条件</h2>\n<p>向いている:</p>\n<ul>\n<li><p>LP構造が明示される</p>\n</li>\n<li><p>basis warm startが有効</p>\n</li>\n<li><p>制約追加後の再最適化</p>\n</li>\n<li><p>MIP node LP</p>\n</li>\n<li><p>exactなblack-box探索ではなく係数modelを解く</p>\n</li>\n</ul>\n<p>避ける／切り替える:</p>\n<ul>\n<li><p>nonlinear / nonconvexな関係を無理にLP化</p>\n</li>\n<li><p>coefficient scaleが極端</p>\n</li>\n<li><p>denseな巨大LPでbarrier法が適する</p>\n</li>\n<li><p>black-box objective</p>\n</li>\n<li><p>integer条件をLP解だけで満たしたと誤解</p>\n</li>\n</ul>\n<p>LP/QP/conic全体の位置付けは<a href=\"#/learn/lp-qp-conic\">LP・QP・錐最適化</a>、MILP内での利用は<a href=\"#/learn/branch-and-cut\">Branch-and-Cut</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "lp-qp-conic"
+      ],
+      "related_ids": [
+        "lp-qp-conic",
+        "branch-and-cut"
+      ],
+      "seo_description": "dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。",
+      "seo_title": "Dual Simplex法",
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055"
+      ],
+      "status": "published",
+      "summary": "dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。",
+      "title_en": "Dual Simplex Method",
+      "title_ja": "Dual Simplex法",
+      "toc": [
+        {
+          "heading_id": "primal-simplexとの対比",
+          "label": "Primal simplexとの対比",
+          "level": 2
+        },
+        {
+          "heading_id": "どこで使われるか",
+          "label": "どこで使われるか",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "結果を読む",
+          "label": "結果を読む",
+          "level": 2
+        },
+        {
+          "heading_id": "degeneracy",
+          "label": "Degeneracy",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている-避ける条件",
+          "label": "向いている／避ける条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_DYNAMIC_PROGRAMMING",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "dynamic-programming",
+      "html": "<p>状態と段階に分解し、同じ部分問題の解を再利用してBellman再帰を解くstructure-firstな厳密法です。</p>\n<h2 id=\"最適化問題を状態へ変える\" tabindex=\"-1\">最適化問題を状態へ変える</h2>\n<p>DPでは、意思決定の履歴をすべて保持せず、将来に必要な情報だけをstateへまとめます。代表的な再帰は</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>V</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>s</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mo>min</mo><mi>a</mi></msub><mrow><mo stretchy=\"true\" fence=\"true\" form=\"prefix\">&#x0007B;</mo><msub><mi>c</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>s</mi><mo>&#x0002C;</mo><mi>a</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><msub><mi>V</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>T</mi><mo stretchy=\"false\">&#x00028;</mo><mi>s</mi><mo>&#x0002C;</mo><mi>a</mi><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"true\" fence=\"true\" form=\"postfix\">&#x0007D;</mo></mrow></mrow></math></div>\n<p>です。</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math>: 現在state</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>a</mi></mrow></math>: action</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi><mo stretchy=\"false\">&#x00028;</mo><mi>s</mi><mo>&#x0002C;</mo><mi>a</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>: 次state</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>V</mi><mi>t</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>s</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>: そのstate以降の最適value</p>\n</li>\n</ul>\n<p>重要なのは、stateが「過去の全履歴を忘れても将来を正しく評価できる十分な情報」になっていることです。</p>\n<h2 id=\"向いている構造\" tabindex=\"-1\">向いている構造</h2>\n<ul>\n<li><p>knapsack</p>\n</li>\n<li><p>shortest path</p>\n</li>\n<li><p>sequence alignment</p>\n</li>\n<li><p>lot sizing</p>\n</li>\n<li><p>finite-horizon control</p>\n</li>\n<li><p>resource allocation</p>\n</li>\n<li><p>small state-space scheduling</p>\n</li>\n</ul>\n<p>汎用MIPへ書ける問題でも、stateとtransitionが小さければDPの方が速く、厳密保証も説明しやすいことがあります。</p>\n<h2 id=\"python-0-1-knapsack\" tabindex=\"-1\">Python: 0-1 knapsack</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">dataclasses</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">dataclass</span>\n\n\n<span class=\"nd\">@dataclass</span><span class=\"p\">(</span><span class=\"n\">frozen</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">)</span>\n<span class=\"k\">class</span><span class=\"w\"> </span><span class=\"nc\">Item</span><span class=\"p\">:</span>\n    <span class=\"n\">value</span><span class=\"p\">:</span> <span class=\"nb\">int</span>\n    <span class=\"n\">weight</span><span class=\"p\">:</span> <span class=\"nb\">int</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">knapsack</span><span class=\"p\">(</span><span class=\"n\">items</span><span class=\"p\">:</span> <span class=\"nb\">list</span><span class=\"p\">[</span><span class=\"n\">Item</span><span class=\"p\">],</span> <span class=\"n\">capacity</span><span class=\"p\">:</span> <span class=\"nb\">int</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">int</span><span class=\"p\">:</span>\n    <span class=\"n\">best</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">capacity</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">)</span>\n    <span class=\"k\">for</span> <span class=\"n\">item</span> <span class=\"ow\">in</span> <span class=\"n\">items</span><span class=\"p\">:</span>\n        <span class=\"k\">for</span> <span class=\"n\">remaining</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"n\">capacity</span><span class=\"p\">,</span> <span class=\"n\">item</span><span class=\"o\">.</span><span class=\"n\">weight</span> <span class=\"o\">-</span> <span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">):</span>\n            <span class=\"n\">best</span><span class=\"p\">[</span><span class=\"n\">remaining</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"nb\">max</span><span class=\"p\">(</span>\n                <span class=\"n\">best</span><span class=\"p\">[</span><span class=\"n\">remaining</span><span class=\"p\">],</span>\n                <span class=\"n\">best</span><span class=\"p\">[</span><span class=\"n\">remaining</span> <span class=\"o\">-</span> <span class=\"n\">item</span><span class=\"o\">.</span><span class=\"n\">weight</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"n\">item</span><span class=\"o\">.</span><span class=\"n\">value</span><span class=\"p\">,</span>\n            <span class=\"p\">)</span>\n    <span class=\"k\">return</span> <span class=\"n\">best</span><span class=\"p\">[</span><span class=\"n\">capacity</span><span class=\"p\">]</span>\n\n\n<span class=\"n\">items</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"n\">Item</span><span class=\"p\">(</span><span class=\"mi\">8</span><span class=\"p\">,</span> <span class=\"mi\">4</span><span class=\"p\">),</span> <span class=\"n\">Item</span><span class=\"p\">(</span><span class=\"mi\">5</span><span class=\"p\">,</span> <span class=\"mi\">3</span><span class=\"p\">),</span> <span class=\"n\">Item</span><span class=\"p\">(</span><span class=\"mi\">6</span><span class=\"p\">,</span> <span class=\"mi\">5</span><span class=\"p\">),</span> <span class=\"n\">Item</span><span class=\"p\">(</span><span class=\"mi\">4</span><span class=\"p\">,</span> <span class=\"mi\">2</span><span class=\"p\">)]</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">knapsack</span><span class=\"p\">(</span><span class=\"n\">items</span><span class=\"p\">,</span> <span class=\"n\">capacity</span><span class=\"o\">=</span><span class=\"mi\">8</span><span class=\"p\">))</span></code></pre></div>\n<p>capacityを後ろから更新することで、同じitemを一度だけ使う0-1条件を保っています。</p>\n<h2 id=\"計算量を読む\" tabindex=\"-1\">計算量を読む</h2>\n<p>DPが厳密でも、常に高速とは限りません。</p>\n<ul>\n<li><p>state数</p>\n</li>\n<li><p>action数</p>\n</li>\n<li><p>transition数</p>\n</li>\n<li><p>horizon</p>\n</li>\n<li><p>memory</p>\n</li>\n<li><p>value rangeによるpseudo-polynomial性</p>\n</li>\n</ul>\n<p>を確認します。knapsackの <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mi>n</mi><mi>C</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> はcapacity <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi></mrow></math> の数値に依存し、input bit長に対する純粋な多項式時間とは限りません。</p>\n<h2 id=\"state-explosion\" tabindex=\"-1\">State explosion</h2>\n<p>stateへ多くの履歴を入れるほど正確になりますが、tableが指数的に増える場合があります。</p>\n<p>対策候補:</p>\n<ul>\n<li><p>dominanceによるstate pruning</p>\n</li>\n<li><p>sparse dictionary</p>\n</li>\n<li><p>rolling array</p>\n</li>\n<li><p>approximation / discretization</p>\n</li>\n<li><p>decomposition</p>\n</li>\n<li><p>A*やlabel-setting</p>\n</li>\n<li><p>MIP / CP-SATへの切替</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>stateを小さくするために必要情報を落とすと、異なる履歴を誤って同一stateとして扱います。Markov性または最適部分構造を確認します。</p>\n</aside>\n<h2 id=\"結果の保証\" tabindex=\"-1\">結果の保証</h2>\n<p>全state・transitionを正しく評価し再帰を完了すれば、定義した離散modelに対する厳密解を得られます。ただし、連続量の離散化誤差やmodel simplificationは別問題です。</p>\n<p>最短路への特殊化は<a href=\"#/learn/dijkstra-astar\">Dijkstra / A*</a>、一般の論理制約が増えた場合は<a href=\"#/learn/cp-sat\">CP-SAT</a>も比較します。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [],
+      "related_ids": [
+        "dijkstra-astar",
+        "cp-sat",
+        "branch-and-bound"
+      ],
+      "seo_description": "状態と段階に分解し、同じ部分問題の解を再利用してBellman再帰を解くstructure-firstな厳密法です。",
+      "seo_title": "動的計画法",
+      "source_ids": [
+        "S054"
+      ],
+      "status": "published",
+      "summary": "状態と段階に分解し、同じ部分問題の解を再利用してBellman再帰を解くstructure-firstな厳密法です。",
+      "title_en": "Dynamic Programming",
+      "title_ja": "動的計画法",
+      "toc": [
+        {
+          "heading_id": "最適化問題を状態へ変える",
+          "label": "最適化問題を状態へ変える",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている構造",
+          "label": "向いている構造",
+          "level": 2
+        },
+        {
+          "heading_id": "python-0-1-knapsack",
+          "label": "Python: 0-1 knapsack",
+          "level": 2
+        },
+        {
+          "heading_id": "計算量を読む",
+          "label": "計算量を読む",
+          "level": 2
+        },
+        {
+          "heading_id": "state-explosion",
+          "label": "State explosion",
+          "level": 2
+        },
+        {
+          "heading_id": "結果の保証",
+          "label": "結果の保証",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_FISTA",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "fista",
+      "html": "<p>近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。</p>\n<h2 id=\"加速の仕組み\" tabindex=\"-1\">加速の仕組み</h2>\n<p>basic proximal gradientは現在点からgradient + prox stepを行います。FISTAは過去の移動を使った外挿点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>k</mi></msub></mrow></math> からstepを行います。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mo>prox</mo><mrow><mi>&#x003B7;</mi><mi>g</mi></mrow></msub><mrow><mo stretchy=\"true\" fence=\"true\" form=\"prefix\">&#x00028;</mo><msub><mi>y</mi><mi>k</mi></msub><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>y</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"true\" fence=\"true\" form=\"postfix\">&#x00029;</mo></mrow></mrow></math></div>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>t</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><mfrac><mrow><mn>1</mn><mo>&#x0002B;</mo><msqrt><mrow><mn>1</mn><mo>&#x0002B;</mo><mn>4</mn><msubsup><mi>t</mi><mi>k</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><mrow><mn>2</mn></mrow></mfrac></mrow></math></div>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>y</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0002B;</mo><mfrac><mrow><msub><mi>t</mi><mi>k</mi></msub><mo>&#x02212;</mo><mn>1</mn></mrow><mrow><msub><mi>t</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub></mrow></mfrac><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>凸条件下では、basic法の代表的な <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>k</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> に対し、FISTAは目的gapについて <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002F;</mo><msup><mi>k</mi><mn>2</mn></msup><mo stretchy=\"false\">&#x00029;</mo></mrow></math> のrateを持ちます。</p>\n<h2 id=\"速い-が単調とは限らない\" tabindex=\"-1\">「速い」が単調とは限らない</h2>\n<p>外挿により目的値が一時的に増えたり、解の周囲で振動したりすることがあります。次を分けて見ます。</p>\n<ul>\n<li><p>best-so-far objective</p>\n</li>\n<li><p>current objective</p>\n</li>\n<li><p>proximal-gradient mapping</p>\n</li>\n<li><p>iterate difference</p>\n</li>\n<li><p>support / active setの変化</p>\n</li>\n<li><p>restart回数</p>\n</li>\n</ul>\n<p>monotone variantやadaptive restartを使うと実務上安定する場合がありますが、variantと条件を記録します。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">threshold</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sign</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">maximum</span><span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">abs</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"n\">threshold</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">rng</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">default_rng</span><span class=\"p\">(</span><span class=\"mi\">11</span><span class=\"p\">)</span>\n<span class=\"n\">a</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"p\">(</span><span class=\"mi\">60</span><span class=\"p\">,</span> <span class=\"mi\">12</span><span class=\"p\">))</span>\n<span class=\"n\">true_x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros</span><span class=\"p\">(</span><span class=\"mi\">12</span><span class=\"p\">)</span>\n<span class=\"n\">true_x</span><span class=\"p\">[[</span><span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"mi\">5</span><span class=\"p\">,</span> <span class=\"mi\">9</span><span class=\"p\">]]</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"mf\">1.2</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">0.8</span><span class=\"p\">]</span>\n<span class=\"n\">b</span> <span class=\"o\">=</span> <span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">true_x</span> <span class=\"o\">+</span> <span class=\"mf\">0.05</span> <span class=\"o\">*</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"mi\">60</span><span class=\"p\">)</span>\n<span class=\"n\">lam</span> <span class=\"o\">=</span> <span class=\"mf\">0.08</span>\n<span class=\"n\">step</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span> <span class=\"o\">/</span> <span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"p\">,</span> <span class=\"nb\">ord</span><span class=\"o\">=</span><span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros</span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"o\">.</span><span class=\"n\">shape</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">])</span>\n<span class=\"n\">y</span> <span class=\"o\">=</span> <span class=\"n\">x</span><span class=\"o\">.</span><span class=\"n\">copy</span><span class=\"p\">()</span>\n<span class=\"n\">t</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span>\n\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">1500</span><span class=\"p\">):</span>\n    <span class=\"n\">gradient</span> <span class=\"o\">=</span> <span class=\"n\">a</span><span class=\"o\">.</span><span class=\"n\">T</span> <span class=\"o\">@</span> <span class=\"p\">(</span><span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">y</span> <span class=\"o\">-</span> <span class=\"n\">b</span><span class=\"p\">)</span>\n    <span class=\"n\">next_x</span> <span class=\"o\">=</span> <span class=\"n\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">y</span> <span class=\"o\">-</span> <span class=\"n\">step</span> <span class=\"o\">*</span> <span class=\"n\">gradient</span><span class=\"p\">,</span> <span class=\"n\">step</span> <span class=\"o\">*</span> <span class=\"n\">lam</span><span class=\"p\">)</span>\n    <span class=\"n\">next_t</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">+</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sqrt</span><span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">+</span> <span class=\"mf\">4.0</span> <span class=\"o\">*</span> <span class=\"n\">t</span> <span class=\"o\">*</span> <span class=\"n\">t</span><span class=\"p\">))</span> <span class=\"o\">/</span> <span class=\"mf\">2.0</span>\n    <span class=\"n\">next_y</span> <span class=\"o\">=</span> <span class=\"n\">next_x</span> <span class=\"o\">+</span> <span class=\"p\">((</span><span class=\"n\">t</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span> <span class=\"o\">/</span> <span class=\"n\">next_t</span><span class=\"p\">)</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">next_x</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">)</span>\n\n    <span class=\"k\">if</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">next_x</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">)</span> <span class=\"o\">&lt;</span> <span class=\"mf\">1e-10</span><span class=\"p\">:</span>\n        <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">next_x</span>\n        <span class=\"k\">break</span>\n    <span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">y</span><span class=\"p\">,</span> <span class=\"n\">t</span> <span class=\"o\">=</span> <span class=\"n\">next_x</span><span class=\"p\">,</span> <span class=\"n\">next_y</span><span class=\"p\">,</span> <span class=\"n\">next_t</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span></code></pre></div>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>convexなsmooth + proximable構造</p>\n</li>\n<li><p>L1など非滑らか正則化</p>\n</li>\n<li><p>gradientとproxが安価</p>\n</li>\n<li><p>高精度より中程度の精度を多数反復で得たい</p>\n</li>\n<li><p>basic proximal gradientが安定だが遅い</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>objectiveが大きく振動する → restartやmonotone variant</p>\n</li>\n<li><p>supportが何度も入れ替わる → step、scaling、regularizationを確認</p>\n</li>\n<li><p>backtrackingが毎回縮む → gradientのLipschitz modelが悪い</p>\n</li>\n<li><p>proxが支配的 → decompositionや専用solverを検討</p>\n</li>\n<li><p>非凸問題へ理論rateをそのまま適用している → 適用範囲を明示</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>FISTAという名前だけでは、backtracking、restart、monotonicity、停止条件が分かりません。比較時はvariantを明記します。</p>\n</aside>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "proximal-gradient"
+      ],
+      "related_ids": [
+        "proximal-gradient",
+        "admm"
+      ],
+      "seo_description": "近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。",
+      "seo_title": "FISTA",
+      "source_ids": [
+        "S055",
+        "S066",
+        "S067"
+      ],
+      "status": "published",
+      "summary": "近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。",
+      "title_en": "Fast Iterative Shrinkage-Thresholding Algorithm",
+      "title_ja": "FISTA",
+      "toc": [
+        {
+          "heading_id": "加速の仕組み",
+          "label": "加速の仕組み",
+          "level": 2
+        },
+        {
+          "heading_id": "速い-が単調とは限らない",
+          "label": "「速い」が単調とは限らない",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_GENETIC_ALGORITHM",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "genetic-algorithm",
+      "html": "<p>個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。</p>\n<h2 id=\"ga-は一つの固定algorithmではない\" tabindex=\"-1\">「GA」は一つの固定algorithmではない</h2>\n<p>性能を決める主要要素は、</p>\n<ul>\n<li><p>genotype / phenotypeの表現</p>\n</li>\n<li><p>初期population</p>\n</li>\n<li><p>fitnessと制約違反の扱い</p>\n</li>\n<li><p>parent selection</p>\n</li>\n<li><p>crossover</p>\n</li>\n<li><p>mutation</p>\n</li>\n<li><p>elitism</p>\n</li>\n<li><p>diversity維持</p>\n</li>\n</ul>\n<p>です。同じ「遺伝的アルゴリズム」という名前でも、表現とoperatorが違えば別の探索器と考えた方が安全です。</p>\n<h2 id=\"表現が最重要\" tabindex=\"-1\">表現が最重要</h2>\n<p>たとえばscheduleを単純なbit列にすると、多くの個体が実行不能になる場合があります。次の選択肢を比較します。</p>\n<ul>\n<li><p>常に可行となるencoding</p>\n</li>\n<li><p>repair operator</p>\n</li>\n<li><p>penalty</p>\n</li>\n<li><p>feasibility-first selection</p>\n</li>\n<li><p>decoderでphenotypeへ変換</p>\n</li>\n</ul>\n<p>operatorが問題構造を壊さないことが、汎用parameter調整より重要な場合があります。</p>\n<h2 id=\"python-小さなbinary選択\" tabindex=\"-1\">Python: 小さなbinary選択</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">random</span>\n\n<span class=\"n\">VALUES</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"mi\">8</span><span class=\"p\">,</span> <span class=\"mi\">5</span><span class=\"p\">,</span> <span class=\"mi\">6</span><span class=\"p\">,</span> <span class=\"mi\">4</span><span class=\"p\">,</span> <span class=\"mi\">7</span><span class=\"p\">,</span> <span class=\"mi\">3</span><span class=\"p\">]</span>\n<span class=\"n\">WEIGHTS</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"mi\">4</span><span class=\"p\">,</span> <span class=\"mi\">3</span><span class=\"p\">,</span> <span class=\"mi\">5</span><span class=\"p\">,</span> <span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"mi\">6</span><span class=\"p\">,</span> <span class=\"mi\">1</span><span class=\"p\">]</span>\n<span class=\"n\">CAPACITY</span> <span class=\"o\">=</span> <span class=\"mi\">12</span>\n<span class=\"n\">POPULATION_SIZE</span> <span class=\"o\">=</span> <span class=\"mi\">30</span>\n<span class=\"n\">MUTATION_RATE</span> <span class=\"o\">=</span> <span class=\"mf\">0.05</span>\n<span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">seed</span><span class=\"p\">(</span><span class=\"mi\">4</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">score</span><span class=\"p\">(</span><span class=\"n\">bits</span><span class=\"p\">:</span> <span class=\"nb\">list</span><span class=\"p\">[</span><span class=\"nb\">int</span><span class=\"p\">])</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"n\">total_weight</span> <span class=\"o\">=</span> <span class=\"nb\">sum</span><span class=\"p\">(</span><span class=\"n\">w</span> <span class=\"o\">*</span> <span class=\"n\">bit</span> <span class=\"k\">for</span> <span class=\"n\">w</span><span class=\"p\">,</span> <span class=\"n\">bit</span> <span class=\"ow\">in</span> <span class=\"nb\">zip</span><span class=\"p\">(</span><span class=\"n\">WEIGHTS</span><span class=\"p\">,</span> <span class=\"n\">bits</span><span class=\"p\">,</span> <span class=\"n\">strict</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">))</span>\n    <span class=\"n\">total_value</span> <span class=\"o\">=</span> <span class=\"nb\">sum</span><span class=\"p\">(</span><span class=\"n\">v</span> <span class=\"o\">*</span> <span class=\"n\">bit</span> <span class=\"k\">for</span> <span class=\"n\">v</span><span class=\"p\">,</span> <span class=\"n\">bit</span> <span class=\"ow\">in</span> <span class=\"nb\">zip</span><span class=\"p\">(</span><span class=\"n\">VALUES</span><span class=\"p\">,</span> <span class=\"n\">bits</span><span class=\"p\">,</span> <span class=\"n\">strict</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">))</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"n\">total_value</span> <span class=\"k\">if</span> <span class=\"n\">total_weight</span> <span class=\"o\">&lt;=</span> <span class=\"n\">CAPACITY</span> <span class=\"k\">else</span> <span class=\"n\">total_value</span> <span class=\"o\">-</span> <span class=\"mi\">20</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">total_weight</span> <span class=\"o\">-</span> <span class=\"n\">CAPACITY</span><span class=\"p\">))</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">mutate</span><span class=\"p\">(</span><span class=\"n\">bits</span><span class=\"p\">:</span> <span class=\"nb\">list</span><span class=\"p\">[</span><span class=\"nb\">int</span><span class=\"p\">])</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">list</span><span class=\"p\">[</span><span class=\"nb\">int</span><span class=\"p\">]:</span>\n    <span class=\"k\">return</span> <span class=\"p\">[</span><span class=\"mi\">1</span> <span class=\"o\">-</span> <span class=\"n\">bit</span> <span class=\"k\">if</span> <span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"p\">()</span> <span class=\"o\">&lt;</span> <span class=\"n\">MUTATION_RATE</span> <span class=\"k\">else</span> <span class=\"n\">bit</span> <span class=\"k\">for</span> <span class=\"n\">bit</span> <span class=\"ow\">in</span> <span class=\"n\">bits</span><span class=\"p\">]</span>\n\n\n<span class=\"n\">population</span> <span class=\"o\">=</span> <span class=\"p\">[</span>\n    <span class=\"p\">[</span><span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">randint</span><span class=\"p\">(</span><span class=\"mi\">0</span><span class=\"p\">,</span> <span class=\"mi\">1</span><span class=\"p\">)</span> <span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"n\">VALUES</span><span class=\"p\">]</span>\n    <span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"n\">POPULATION_SIZE</span><span class=\"p\">)</span>\n<span class=\"p\">]</span>\n\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">150</span><span class=\"p\">):</span>\n    <span class=\"n\">ranked</span> <span class=\"o\">=</span> <span class=\"nb\">sorted</span><span class=\"p\">(</span><span class=\"n\">population</span><span class=\"p\">,</span> <span class=\"n\">key</span><span class=\"o\">=</span><span class=\"n\">score</span><span class=\"p\">,</span> <span class=\"n\">reverse</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">)</span>\n    <span class=\"n\">next_population</span> <span class=\"o\">=</span> <span class=\"n\">ranked</span><span class=\"p\">[:</span><span class=\"mi\">4</span><span class=\"p\">]</span>\n    <span class=\"k\">while</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">next_population</span><span class=\"p\">)</span> <span class=\"o\">&lt;</span> <span class=\"n\">POPULATION_SIZE</span><span class=\"p\">:</span>\n        <span class=\"n\">parent_a</span><span class=\"p\">,</span> <span class=\"n\">parent_b</span> <span class=\"o\">=</span> <span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">sample</span><span class=\"p\">(</span><span class=\"n\">ranked</span><span class=\"p\">[:</span><span class=\"mi\">15</span><span class=\"p\">],</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n        <span class=\"n\">cut</span> <span class=\"o\">=</span> <span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">randrange</span><span class=\"p\">(</span><span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">VALUES</span><span class=\"p\">))</span>\n        <span class=\"n\">child</span> <span class=\"o\">=</span> <span class=\"n\">parent_a</span><span class=\"p\">[:</span><span class=\"n\">cut</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"n\">parent_b</span><span class=\"p\">[</span><span class=\"n\">cut</span><span class=\"p\">:]</span>\n        <span class=\"n\">next_population</span><span class=\"o\">.</span><span class=\"n\">append</span><span class=\"p\">(</span><span class=\"n\">mutate</span><span class=\"p\">(</span><span class=\"n\">child</span><span class=\"p\">))</span>\n    <span class=\"n\">population</span> <span class=\"o\">=</span> <span class=\"n\">next_population</span>\n\n<span class=\"n\">best</span> <span class=\"o\">=</span> <span class=\"nb\">max</span><span class=\"p\">(</span><span class=\"n\">population</span><span class=\"p\">,</span> <span class=\"n\">key</span><span class=\"o\">=</span><span class=\"n\">score</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">best</span><span class=\"p\">,</span> <span class=\"n\">score</span><span class=\"p\">(</span><span class=\"n\">best</span><span class=\"p\">))</span></code></pre></div>\n<p>この例は教育用です。実務では、penaltyに依存した「高得点だがinfeasible」な解を最終出力しないよう、可行性を別に検証します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>best / median fitness</p>\n</li>\n<li><p>feasible fraction</p>\n</li>\n<li><p>unique individual数</p>\n</li>\n<li><p>genotype diversity</p>\n</li>\n<li><p>elite占有率</p>\n</li>\n<li><p>mutationによる改善率</p>\n</li>\n<li><p>seed間の分散</p>\n</li>\n<li><p>evaluation budget</p>\n</li>\n</ul>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>離散・カテゴリ・混合変数を自然にencodingできる</p>\n</li>\n<li><p>differentiabilityを期待できない</p>\n</li>\n<li><p>evaluationを並列化できる</p>\n</li>\n<li><p>近傍が複雑で複数basinを探索したい</p>\n</li>\n<li><p>最適性証明より良い候補集合が重要</p>\n</li>\n</ul>\n<h2 id=\"失敗・避ける条件\" tabindex=\"-1\">失敗・避ける条件</h2>\n<ul>\n<li><p>premature convergenceでpopulationが同一化</p>\n</li>\n<li><p>crossoverが可行構造を破壊</p>\n</li>\n<li><p>penalty scaleがobjectiveを圧倒、または弱すぎる</p>\n</li>\n<li><p>評価が高価すぎてpopulationを維持できない</p>\n</li>\n<li><p>専用DP、flow、matching、CP-SATで強い構造を使える</p>\n</li>\n<li><p>単一seed・単一parameter設定だけで優劣を断定</p>\n</li>\n</ul>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>GAを使う前に、問題固有の近傍探索、dynamic programming、constraint programmingで構造を直接使えないか確認します。</p>\n</aside>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "concept.derivative-free"
+      ],
+      "related_ids": [
+        "cma-es",
+        "differential-evolution",
+        "particle-swarm"
+      ],
+      "seo_description": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。",
+      "seo_title": "遺伝的アルゴリズム",
+      "source_ids": [
+        "S033",
+        "S040",
+        "S054"
+      ],
+      "status": "published",
+      "summary": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。",
+      "title_en": "Genetic Algorithm",
+      "title_ja": "遺伝的アルゴリズム",
+      "toc": [
+        {
+          "heading_id": "ga-は一つの固定algorithmではない",
+          "label": "「GA」は一つの固定algorithmではない",
+          "level": 2
+        },
+        {
+          "heading_id": "表現が最重要",
+          "label": "表現が最重要",
+          "level": 2
+        },
+        {
+          "heading_id": "python-小さなbinary選択",
+          "label": "Python: 小さなbinary選択",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・避ける条件",
+          "label": "失敗・避ける条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_GRADIENT_DESCENT",
       "canonical_entity_type": "method",
       "comparison_ids": [
@@ -358,6 +953,62 @@
         {
           "heading_id": "python",
           "label": "Python",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_LBFGSB",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "lbfgsb",
+      "html": "<p>少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。</p>\n<h2 id=\"bfgsとの違い\" tabindex=\"-1\">BFGSとの違い</h2>\n<p>通常のBFGSはdenseな逆Hessian近似を保持するため、変数数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi></mrow></math> に対して概ね <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy=\"false\">&#x00029;</mo></mrow></math> のmemoryを使います。L-BFGSは直近 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi></mrow></math> 回の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>s</mi><mi>k</mi></msub></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>k</mi></msub></mrow></math> だけを保存し、行列を明示せずtwo-loop recursionで方向を計算します。</p>\n<p>L-BFGS-Bはさらに各変数のbounds</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>l</mi><mi>i</mi></msub><mo>&#x02264;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02264;</mo><msub><mi>u</mi><mi>i</mi></msub></mrow></math></div>\n<p>をnativeに扱います。一般の等式・不等式制約を扱う手法ではありません。</p>\n<h2 id=\"向いている問題\" tabindex=\"-1\">向いている問題</h2>\n<ul>\n<li><p>数千〜数百万変数の滑らかな目的関数</p>\n</li>\n<li><p>gradientまたはautomatic differentiationが利用できる</p>\n</li>\n<li><p>制約が主に単純な上下限</p>\n</li>\n<li><p>dense Hessianを保存できない</p>\n</li>\n<li><p>局所解で十分、または凸性により局所解が大域解になる</p>\n</li>\n</ul>\n<p>boundsを付ければ物理的に意味のない値を防げますが、変数間の関係を表す一般制約の代わりにはなりません。</p>\n<h2 id=\"境界上の停止を読む\" tabindex=\"-1\">境界上の停止を読む</h2>\n<p>境界に張り付いた変数では、通常のgradient normだけを見ると「勾配が残っている」と見える場合があります。重要なのは、実行可能方向へ射影したgradientやKKT条件です。</p>\n<p>確認する値:</p>\n<ul>\n<li><p>projected gradient norm</p>\n</li>\n<li><p>active boundの数</p>\n</li>\n<li><p>function / gradient evaluation数</p>\n</li>\n<li><p>line-search status</p>\n</li>\n<li><p>step norm</p>\n</li>\n<li><p>memory parameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi></mrow></math></p>\n</li>\n</ul>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>境界上で解が止まること自体は失敗ではありません。目的関数が境界の外側へ改善する方向を示していても、その方向が禁止されていれば境界点が最適になり得ます。</p>\n</aside>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">((</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">3.0</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"mf\">4.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">3.0</span><span class=\"p\">),</span> <span class=\"mf\">8.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">1.0</span><span class=\"p\">)])</span>\n\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span>\n    <span class=\"n\">objective</span><span class=\"p\">,</span>\n    <span class=\"n\">x0</span><span class=\"o\">=</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">]),</span>\n    <span class=\"n\">jac</span><span class=\"o\">=</span><span class=\"n\">gradient</span><span class=\"p\">,</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;L-BFGS-B&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">bounds</span><span class=\"o\">=</span><span class=\"p\">[(</span><span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"o\">-</span><span class=\"mf\">3.0</span><span class=\"p\">,</span> <span class=\"mf\">3.0</span><span class=\"p\">)],</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;ftol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-12</span><span class=\"p\">,</span> <span class=\"s2\">&quot;gtol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-8</span><span class=\"p\">,</span> <span class=\"s2\">&quot;maxiter&quot;</span><span class=\"p\">:</span> <span class=\"mi\">300</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">message</span><span class=\"p\">)</span></code></pre></div>\n<p>この例では無制約最適点の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mn>3</mn></mrow></math> が上限2を超えるため、制約付き解は境界へ移ります。</p>\n<h2 id=\"避ける-切り替える条件\" tabindex=\"-1\">避ける／切り替える条件</h2>\n<ul>\n<li><p>nonlinear equalityやcoupled inequalityが重要 → SLSQP、interior-pointなど</p>\n</li>\n<li><p>目的関数が不連続・強いnoiseを含む → derivative-free法を検討</p>\n</li>\n<li><p>gradientが誤っている → 先にgradient check</p>\n</li>\n<li><p>line searchが何度も失敗 → scaling、非滑らかさ、NaN領域を確認</p>\n</li>\n<li><p>boundsだけではmodelの実行可能性を表現できない → 制約付きmodelへ移行</p>\n</li>\n</ul>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "bfgs"
+      ],
+      "related_ids": [
+        "bfgs",
+        "newton-method",
+        "trust-region-newton-cg"
+      ],
+      "seo_description": "少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。",
+      "seo_title": "L-BFGS-B法",
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "status": "published",
+      "summary": "少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。",
+      "title_en": "L-BFGS-B",
+      "title_ja": "L-BFGS-B法",
+      "toc": [
+        {
+          "heading_id": "bfgsとの違い",
+          "label": "BFGSとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている問題",
+          "label": "向いている問題",
+          "level": 2
+        },
+        {
+          "heading_id": "境界上の停止を読む",
+          "label": "境界上の停止を読む",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "避ける-切り替える条件",
+          "label": "避ける／切り替える条件",
           "level": 2
         }
       ],
@@ -462,6 +1113,66 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "M_MADS",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "mads",
+      "html": "<p>mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。</p>\n<h2 id=\"searchとpoll\" tabindex=\"-1\">SearchとPoll</h2>\n<p>MADSは候補点を評価する処理を大きく二つに分けます。</p>\n<ul>\n<li><p><strong>Search step</strong>: surrogate、heuristic、履歴などを使って任意の有限個の候補を試す</p>\n</li>\n<li><p><strong>Poll step</strong>: incumbent近傍で、理論条件を満たす方向集合を評価する</p>\n</li>\n</ul>\n<p>改善点が見つかればmeshを維持または拡大し、見つからなければmesh sizeを縮小します。Searchは性能改善に使えますが、局所収束理論の中心はPollです。</p>\n<h2 id=\"nelder-meadとの違い\" tabindex=\"-1\">Nelder–Meadとの違い</h2>\n<p>どちらもgradientを使わない局所法ですが、MADSは単体geometryではなくmeshとpoll directionsを管理します。black-box constraint、評価失敗、非滑らかさを扱う実装もあります。</p>\n<table>\n<thead>\n<tr>\n<th>観点</th>\n<th>MADS</th>\n<th>Nelder–Mead</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>状態</td>\n<td>mesh、poll directions、incumbent</td>\n<td>simplex頂点</td>\n</tr>\n<tr>\n<td>制約</td>\n<td>progressive barrier等の変種</td>\n<td>標準形は一般制約をnativeに扱わない</td>\n</tr>\n<tr>\n<td>診断</td>\n<td>mesh size、poll success、constraint violation</td>\n<td>simplex diameter、operation</td>\n</tr>\n<tr>\n<td>理論</td>\n<td>仮定下のClarke stationarity型</td>\n<td>一般多次元では限定的</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"教育用の制御loop\" tabindex=\"-1\">教育用の制御loop</h2>\n<p>次はAPIではなく、状態遷移を示すsyntactically validな骨格です。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">collections.abc</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">Callable</span><span class=\"p\">,</span> <span class=\"n\">Iterable</span>\n\n<span class=\"n\">Point</span> <span class=\"o\">=</span> <span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"nb\">float</span><span class=\"p\">,</span> <span class=\"o\">...</span><span class=\"p\">]</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">mads_loop</span><span class=\"p\">(</span>\n    <span class=\"n\">evaluate</span><span class=\"p\">:</span> <span class=\"n\">Callable</span><span class=\"p\">[[</span><span class=\"n\">Point</span><span class=\"p\">],</span> <span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"nb\">float</span><span class=\"p\">,</span> <span class=\"nb\">float</span><span class=\"p\">]],</span>\n    <span class=\"n\">initial</span><span class=\"p\">:</span> <span class=\"n\">Point</span><span class=\"p\">,</span>\n    <span class=\"n\">poll_points</span><span class=\"p\">:</span> <span class=\"n\">Callable</span><span class=\"p\">[[</span><span class=\"n\">Point</span><span class=\"p\">,</span> <span class=\"nb\">float</span><span class=\"p\">],</span> <span class=\"n\">Iterable</span><span class=\"p\">[</span><span class=\"n\">Point</span><span class=\"p\">]],</span>\n    <span class=\"n\">minimum_mesh</span><span class=\"p\">:</span> <span class=\"nb\">float</span> <span class=\"o\">=</span> <span class=\"mf\">1e-5</span><span class=\"p\">,</span>\n<span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">Point</span><span class=\"p\">:</span>\n    <span class=\"n\">incumbent</span> <span class=\"o\">=</span> <span class=\"n\">initial</span>\n    <span class=\"n\">best_value</span><span class=\"p\">,</span> <span class=\"n\">best_violation</span> <span class=\"o\">=</span> <span class=\"n\">evaluate</span><span class=\"p\">(</span><span class=\"n\">incumbent</span><span class=\"p\">)</span>\n    <span class=\"n\">mesh</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span>\n\n    <span class=\"k\">while</span> <span class=\"n\">mesh</span> <span class=\"o\">&gt;</span> <span class=\"n\">minimum_mesh</span><span class=\"p\">:</span>\n        <span class=\"n\">improved</span> <span class=\"o\">=</span> <span class=\"kc\">False</span>\n        <span class=\"k\">for</span> <span class=\"n\">candidate</span> <span class=\"ow\">in</span> <span class=\"n\">poll_points</span><span class=\"p\">(</span><span class=\"n\">incumbent</span><span class=\"p\">,</span> <span class=\"n\">mesh</span><span class=\"p\">):</span>\n            <span class=\"n\">value</span><span class=\"p\">,</span> <span class=\"n\">violation</span> <span class=\"o\">=</span> <span class=\"n\">evaluate</span><span class=\"p\">(</span><span class=\"n\">candidate</span><span class=\"p\">)</span>\n            <span class=\"n\">better</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"n\">violation</span><span class=\"p\">,</span> <span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">&lt;</span> <span class=\"p\">(</span><span class=\"n\">best_violation</span><span class=\"p\">,</span> <span class=\"n\">best_value</span><span class=\"p\">)</span>\n            <span class=\"k\">if</span> <span class=\"n\">better</span><span class=\"p\">:</span>\n                <span class=\"n\">incumbent</span> <span class=\"o\">=</span> <span class=\"n\">candidate</span>\n                <span class=\"n\">best_value</span> <span class=\"o\">=</span> <span class=\"n\">value</span>\n                <span class=\"n\">best_violation</span> <span class=\"o\">=</span> <span class=\"n\">violation</span>\n                <span class=\"n\">improved</span> <span class=\"o\">=</span> <span class=\"kc\">True</span>\n                <span class=\"k\">break</span>\n        <span class=\"n\">mesh</span> <span class=\"o\">=</span> <span class=\"n\">mesh</span> <span class=\"o\">*</span> <span class=\"mf\">2.0</span> <span class=\"k\">if</span> <span class=\"n\">improved</span> <span class=\"k\">else</span> <span class=\"n\">mesh</span> <span class=\"o\">*</span> <span class=\"mf\">0.5</span>\n\n    <span class=\"k\">return</span> <span class=\"n\">incumbent</span></code></pre></div>\n<p>実際のMADSでは、方向集合のdense性、mesh / poll sizeの関係、barrier rule、opportunistic evaluationなどを実装が管理します。</p>\n<h2 id=\"見るべき診断値\" tabindex=\"-1\">見るべき診断値</h2>\n<ul>\n<li><p>objective evaluation数</p>\n</li>\n<li><p>feasible / infeasible evaluation数</p>\n</li>\n<li><p>incumbent objective</p>\n</li>\n<li><p>constraint violation</p>\n</li>\n<li><p>mesh size / poll size</p>\n</li>\n<li><p>successful poll率</p>\n</li>\n<li><p>failed evaluation数</p>\n</li>\n<li><p>cache hit</p>\n</li>\n<li><p>stopping reason</p>\n</li>\n</ul>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>低〜中次元のblack-box</p>\n</li>\n<li><p>gradientがない、信用できない、またはsimulationが分岐する</p>\n</li>\n<li><p>black-box constraintや評価失敗がある</p>\n</li>\n<li><p>局所改善とstationarityの目安が欲しい</p>\n</li>\n<li><p>parallel pollを利用できる</p>\n</li>\n</ul>\n<h2 id=\"避ける-切り替える条件\" tabindex=\"-1\">避ける／切り替える条件</h2>\n<ul>\n<li><p>高次元でpoll点数が予算を圧迫</p>\n</li>\n<li><p>1評価が非常に高価でsurrogate利用が必要</p>\n</li>\n<li><p>noise floorよりmeshを細かくしても意味がない</p>\n</li>\n<li><p>global optimumや厳密gapが必要</p>\n</li>\n<li><p>discrete / categorical変数を無理に連続meshへ埋め込む</p>\n</li>\n<li><p>variable scalingが悪く一部方向だけ変化する</p>\n</li>\n</ul>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>停止時のmeshが小さいことは、大域最適性の証明ではありません。初期点、評価予算、constraint handling、noise levelを併記します。</p>\n</aside>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "concept.derivative-free"
+      ],
+      "related_ids": [
+        "method.nelder-mead",
+        "differential-evolution"
+      ],
+      "seo_description": "mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。",
+      "seo_title": "Mesh Adaptive Direct Search（MADS）",
+      "source_ids": [
+        "S031",
+        "S060",
+        "S094"
+      ],
+      "status": "published",
+      "summary": "mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。",
+      "title_en": "Mesh Adaptive Direct Search",
+      "title_ja": "Mesh Adaptive Direct Search（MADS）",
+      "toc": [
+        {
+          "heading_id": "searchとpoll",
+          "label": "SearchとPoll",
+          "level": 2
+        },
+        {
+          "heading_id": "nelder-meadとの違い",
+          "label": "Nelder–Meadとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "教育用の制御loop",
+          "label": "教育用の制御loop",
+          "level": 2
+        },
+        {
+          "heading_id": "見るべき診断値",
+          "label": "見るべき診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "避ける-切り替える条件",
+          "label": "避ける／切り替える条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_NSGA_II",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -555,6 +1266,232 @@
       "visualization_ids": [
         "nelder-mead-quadratic"
       ]
+    },
+    {
+      "canonical_entity_id": "M_NEWTON",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "newton-method",
+      "html": "<p>勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。</p>\n<h2 id=\"一手の意味\" tabindex=\"-1\">一手の意味</h2>\n<p>現在点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub></mrow></math> の近くで目的関数を二次近似すると、</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><mi>p</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02248;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><msup><mo stretchy=\"false\">&#x00029;</mo><mi>T</mi></msup><mi>p</mi><mo>&#x0002B;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><msup><mi>p</mi><mi>T</mi></msup><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mi>p</mi></mrow></math></div>\n<p>です。このmodelの停留条件からNewton step</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><msub><mi>p</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mo>&#x02212;</mo><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>を解き、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>p</mi><mi>k</mi></msub></mrow></math> と更新します。</p>\n<p>最適点の十分近くでHessianが正定値なら非常に速く収束できます。しかし、遠い初期点、非凸領域、不定Hessianでは、そのままのstepが下り方向にならないことがあります。</p>\n<h2 id=\"必要な情報と計算費\" tabindex=\"-1\">必要な情報と計算費</h2>\n<table>\n<thead>\n<tr>\n<th>項目</th>\n<th>確認点</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>gradient</td>\n<td>analytic、automatic differentiation、検証済み数値微分か</td>\n</tr>\n<tr>\n<td>Hessian</td>\n<td>明示行列、sparse構造、Hessian-vector積のどれか</td>\n</tr>\n<tr>\n<td>linear solve</td>\n<td>factorizationの時間とmemory</td>\n</tr>\n<tr>\n<td>globalization</td>\n<td>line searchまたはtrust regionを使うか</td>\n</tr>\n<tr>\n<td>stopping</td>\n<td>gradient norm、step norm、目的値変化</td>\n</tr>\n</tbody>\n</table>\n<p>Hessianを作る費用だけでなく、線形方程式を解く費用も支配的になります。大規模問題ではNewton-CGやtrust-region Krylov法のようにHessian-vector積を使う変種が有力です。</p>\n<h2 id=\"pythonで更新則を確認する\" tabindex=\"-1\">Pythonで更新則を確認する</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">),</span> <span class=\"mf\">8.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">2.0</span><span class=\"p\">)])</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">hessian</span><span class=\"p\">(</span><span class=\"n\">_</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([[</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">],</span> <span class=\"p\">[</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">8.0</span><span class=\"p\">]])</span>\n\n\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">5.0</span><span class=\"p\">,</span> <span class=\"mf\">3.0</span><span class=\"p\">])</span>\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">10</span><span class=\"p\">):</span>\n    <span class=\"n\">g</span> <span class=\"o\">=</span> <span class=\"n\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span>\n    <span class=\"k\">if</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">g</span><span class=\"p\">)</span> <span class=\"o\">&lt;</span> <span class=\"mf\">1e-10</span><span class=\"p\">:</span>\n        <span class=\"k\">break</span>\n    <span class=\"n\">step</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">solve</span><span class=\"p\">(</span><span class=\"n\">hessian</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">),</span> <span class=\"o\">-</span><span class=\"n\">g</span><span class=\"p\">)</span>\n    <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">x</span> <span class=\"o\">+</span> <span class=\"n\">step</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span></code></pre></div>\n<p>この例は正定値二次関数なのでfull Newton stepが安全です。一般の非線形・非凸問題では、この短い実装だけをそのまま使わず、line searchやtrust regionを追加します。</p>\n<h2 id=\"失敗と切替判断\" tabindex=\"-1\">失敗と切替判断</h2>\n<ul>\n<li><p>Hessianが不定で目的値が上がる → modified Newtonまたはtrust region</p>\n</li>\n<li><p>factorizationが重い → Newton-CG、L-BFGS、sparse solver</p>\n</li>\n<li><p>gradient/Hessian checkが合わない → 微分実装を修正</p>\n</li>\n<li><p>stepが巨大 → scaling、damping、trust radiusを確認</p>\n</li>\n<li><p>saddle point付近で停止 → second-order情報やnegative curvatureを確認</p>\n</li>\n<li><p>noiseや不連続が強い → 二階modelの前提を再検討</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>Newton法の速い局所収束は、大域最適性の証明ではありません。非凸問題では初期点を変え、得られた解とHessianの固有値、制約条件を確認します。</p>\n</aside>\n<p>Hessianを近似する方法は<a href=\"#/learn/bfgs\">BFGS</a>、局所modelを信頼できる範囲だけで使う方法は<a href=\"#/learn/trust-region-newton-cg\">trust-region Newton-CG</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "method.gradient-descent",
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "bfgs",
+        "lbfgsb",
+        "trust-region-newton-cg"
+      ],
+      "seo_description": "勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。",
+      "seo_title": "Newton法",
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。",
+      "title_en": "Newton's method",
+      "title_ja": "Newton法",
+      "toc": [
+        {
+          "heading_id": "一手の意味",
+          "label": "一手の意味",
+          "level": 2
+        },
+        {
+          "heading_id": "必要な情報と計算費",
+          "label": "必要な情報と計算費",
+          "level": 2
+        },
+        {
+          "heading_id": "pythonで更新則を確認する",
+          "label": "Pythonで更新則を確認する",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗と切替判断",
+          "label": "失敗と切替判断",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_PARTICLE_SWARM",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "particle-swarm",
+      "html": "<p>各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。</p>\n<h2 id=\"一手の構造\" tabindex=\"-1\">一手の構造</h2>\n<p>粒子 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> の位置 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math> と速度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>v</mi><mi>i</mi></msub></mrow></math> を、概ね</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>&#x02190;</mo><mi>&#x003C9;</mi><msub><mi>v</mi><mi>i</mi></msub><mo>&#x0002B;</mo><msub><mi>c</mi><mn>1</mn></msub><msub><mi>r</mi><mn>1</mn></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>p</mi><mi>i</mi></msub><mo>&#x02212;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><msub><mi>c</mi><mn>2</mn></msub><msub><mi>r</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00028;</mo><mi>g</mi><mo>&#x02212;</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02190;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0002B;</mo><msub><mi>v</mi><mi>i</mi></msub></mrow></math></div>\n<p>で更新します。</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow></math>: その粒子が見つけたpersonal best</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>g</mi></mrow></math>: swarmまたはneighborhoodのbest</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C9;</mi></mrow></math>: inertia</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>c</mi><mn>2</mn></msub></mrow></math>: personal / social attraction</p>\n</li>\n</ul>\n<p>探索と収束のバランスは、係数だけでなくtopology、velocity clamp、bound handlingにも依存します。</p>\n<h2 id=\"直感的な読み方\" tabindex=\"-1\">直感的な読み方</h2>\n<ul>\n<li><p>粒子が広く散る: explorationが残っている</p>\n</li>\n<li><p>best周辺へ一斉に集まる: exploitationが強い</p>\n</li>\n<li><p>同じ方向へ高速で飛び続ける: velocityやscaleが不適切</p>\n</li>\n<li><p>多峰性なのに一群へ早期集中: premature convergenceの可能性</p>\n</li>\n</ul>\n<p>群のbestだけでなく、粒子間距離や座標ごとの分散を表示すると状態を読みやすくなります。</p>\n<h2 id=\"python-教育用pso\" tabindex=\"-1\">Python: 教育用PSO</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">points</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sum</span><span class=\"p\">(</span><span class=\"n\">points</span> <span class=\"o\">*</span> <span class=\"n\">points</span><span class=\"p\">,</span> <span class=\"n\">axis</span><span class=\"o\">=</span><span class=\"mi\">1</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">rng</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">default_rng</span><span class=\"p\">(</span><span class=\"mi\">5</span><span class=\"p\">)</span>\n<span class=\"n\">particle_count</span> <span class=\"o\">=</span> <span class=\"mi\">30</span>\n<span class=\"n\">dimension</span> <span class=\"o\">=</span> <span class=\"mi\">2</span>\n<span class=\"n\">lower</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">full</span><span class=\"p\">(</span><span class=\"n\">dimension</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">5.0</span><span class=\"p\">)</span>\n<span class=\"n\">upper</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">full</span><span class=\"p\">(</span><span class=\"n\">dimension</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">)</span>\n<span class=\"n\">position</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">uniform</span><span class=\"p\">(</span><span class=\"n\">lower</span><span class=\"p\">,</span> <span class=\"n\">upper</span><span class=\"p\">,</span> <span class=\"n\">size</span><span class=\"o\">=</span><span class=\"p\">(</span><span class=\"n\">particle_count</span><span class=\"p\">,</span> <span class=\"n\">dimension</span><span class=\"p\">))</span>\n<span class=\"n\">velocity</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros_like</span><span class=\"p\">(</span><span class=\"n\">position</span><span class=\"p\">)</span>\n<span class=\"n\">personal_best</span> <span class=\"o\">=</span> <span class=\"n\">position</span><span class=\"o\">.</span><span class=\"n\">copy</span><span class=\"p\">()</span>\n<span class=\"n\">personal_value</span> <span class=\"o\">=</span> <span class=\"n\">objective</span><span class=\"p\">(</span><span class=\"n\">personal_best</span><span class=\"p\">)</span>\n\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">200</span><span class=\"p\">):</span>\n    <span class=\"n\">global_best</span> <span class=\"o\">=</span> <span class=\"n\">personal_best</span><span class=\"p\">[</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">argmin</span><span class=\"p\">(</span><span class=\"n\">personal_value</span><span class=\"p\">)]</span>\n    <span class=\"n\">r1</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"n\">position</span><span class=\"o\">.</span><span class=\"n\">shape</span><span class=\"p\">)</span>\n    <span class=\"n\">r2</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"n\">position</span><span class=\"o\">.</span><span class=\"n\">shape</span><span class=\"p\">)</span>\n    <span class=\"n\">velocity</span> <span class=\"o\">=</span> <span class=\"p\">(</span>\n        <span class=\"mf\">0.7</span> <span class=\"o\">*</span> <span class=\"n\">velocity</span>\n        <span class=\"o\">+</span> <span class=\"mf\">1.4</span> <span class=\"o\">*</span> <span class=\"n\">r1</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">personal_best</span> <span class=\"o\">-</span> <span class=\"n\">position</span><span class=\"p\">)</span>\n        <span class=\"o\">+</span> <span class=\"mf\">1.4</span> <span class=\"o\">*</span> <span class=\"n\">r2</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">global_best</span> <span class=\"o\">-</span> <span class=\"n\">position</span><span class=\"p\">)</span>\n    <span class=\"p\">)</span>\n    <span class=\"n\">position</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">clip</span><span class=\"p\">(</span><span class=\"n\">position</span> <span class=\"o\">+</span> <span class=\"n\">velocity</span><span class=\"p\">,</span> <span class=\"n\">lower</span><span class=\"p\">,</span> <span class=\"n\">upper</span><span class=\"p\">)</span>\n    <span class=\"n\">value</span> <span class=\"o\">=</span> <span class=\"n\">objective</span><span class=\"p\">(</span><span class=\"n\">position</span><span class=\"p\">)</span>\n    <span class=\"n\">improved</span> <span class=\"o\">=</span> <span class=\"n\">value</span> <span class=\"o\">&lt;</span> <span class=\"n\">personal_value</span>\n    <span class=\"n\">personal_best</span><span class=\"p\">[</span><span class=\"n\">improved</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"n\">position</span><span class=\"p\">[</span><span class=\"n\">improved</span><span class=\"p\">]</span>\n    <span class=\"n\">personal_value</span><span class=\"p\">[</span><span class=\"n\">improved</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"n\">value</span><span class=\"p\">[</span><span class=\"n\">improved</span><span class=\"p\">]</span>\n\n<span class=\"n\">best</span> <span class=\"o\">=</span> <span class=\"n\">personal_best</span><span class=\"p\">[</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">argmin</span><span class=\"p\">(</span><span class=\"n\">personal_value</span><span class=\"p\">)]</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">best</span><span class=\"p\">,</span> <span class=\"n\">personal_value</span><span class=\"o\">.</span><span class=\"n\">min</span><span class=\"p\">())</span></code></pre></div>\n<p>この例はglobal-best topologyです。局所neighborhood topologyでは情報伝播が遅くなり、多様性を保ちやすい場合があります。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>global best / median objective</p>\n</li>\n<li><p>position diversity</p>\n</li>\n<li><p>velocity norm</p>\n</li>\n<li><p>boundary hit率</p>\n</li>\n<li><p>personal bestの更新数</p>\n</li>\n<li><p>feasible fraction</p>\n</li>\n<li><p>seed間の結果分散</p>\n</li>\n<li><p>evaluation budget</p>\n</li>\n</ul>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>bounded continuous black-box</p>\n</li>\n<li><p>gradientが得られない</p>\n</li>\n<li><p>evaluationを並列化できる</p>\n</li>\n<li><p>moderate dimension</p>\n</li>\n<li><p>滑らかさに依存しないglobal candidate探索</p>\n</li>\n</ul>\n<h2 id=\"避ける-修正する条件\" tabindex=\"-1\">避ける／修正する条件</h2>\n<ul>\n<li><p>変数scaleが揃っていない</p>\n</li>\n<li><p>boundでclipされた粒子が多数停止する</p>\n</li>\n<li><p>1評価が極端に高価でswarmを維持できない</p>\n</li>\n<li><p>discrete encodingが速度の意味を失わせる</p>\n</li>\n<li><p>global bestへ早期集中して多様性が消える</p>\n</li>\n<li><p>最適性gapやcertificateが必要</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>PSOの「群が一点へ集まった」は収束診断の一部であり、その点が大域最適解だという証明ではありません。</p>\n</aside>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "concept.derivative-free"
+      ],
+      "related_ids": [
+        "cma-es",
+        "differential-evolution",
+        "genetic-algorithm"
+      ],
+      "seo_description": "各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。",
+      "seo_title": "粒子群最適化（PSO）",
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "status": "published",
+      "summary": "各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。",
+      "title_en": "Particle Swarm Optimization",
+      "title_ja": "粒子群最適化（PSO）",
+      "toc": [
+        {
+          "heading_id": "一手の構造",
+          "label": "一手の構造",
+          "level": 2
+        },
+        {
+          "heading_id": "直感的な読み方",
+          "label": "直感的な読み方",
+          "level": 2
+        },
+        {
+          "heading_id": "python-教育用pso",
+          "label": "Python: 教育用PSO",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "避ける-修正する条件",
+          "label": "避ける／修正する条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_PROX_GRADIENT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "proximal-gradient",
+      "html": "<p>滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。</p>\n<h2 id=\"対象となる形\" tabindex=\"-1\">対象となる形</h2>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>x</mi></msub><mspace width=\"0.278em\" /><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>ここで、</p>\n<ul>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> は微分可能でgradientが利用できる</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>g</mi></mrow></math> は非滑らかでもよいがproximal operatorを計算できる</p>\n</li>\n</ul>\n<p>とします。更新は</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mo>prox</mo><mrow><mi>&#x003B7;</mi><mi>g</mi></mrow></msub><mrow><mo stretchy=\"true\" fence=\"true\" form=\"prefix\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"true\" fence=\"true\" form=\"postfix\">&#x00029;</mo></mrow></mrow></math></div>\n<p>です。</p>\n<p>まず滑らかな項を下げるgradient stepを行い、その後に正則化や単純制約をproxで反映します。</p>\n<h2 id=\"proxは何をしているか\" tabindex=\"-1\">Proxは何をしているか</h2>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>prox</mo><mrow><mi>&#x003B7;</mi><mi>g</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>v</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>\\arg</mi><msub><mo>min</mo><mi>x</mi></msub><mrow><mo stretchy=\"true\" fence=\"true\" form=\"prefix\">&#x00028;</mo><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn><mi>&#x003B7;</mi></mrow></mfrac><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><mo>&#x02212;</mo><mi>v</mi><msup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn></msup><mo stretchy=\"true\" fence=\"true\" form=\"postfix\">&#x00029;</mo></mrow></mrow></math></div>\n<p>L1正則化ならsoft-thresholding、box制約なら区間へのprojectionになります。難しい非滑らか項を持っていても、proxが簡単なら汎用NLPへ無理に平滑化せず構造を使えます。</p>\n<h2 id=\"step-sizeと停止\" tabindex=\"-1\">Step sizeと停止</h2>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> のgradientが <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>L</mi></mrow></math>-Lipschitzなら、基本的な固定stepは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B7;</mi><mo>&#x02264;</mo><mn>1</mn><mo>&#x0002F;</mo><mi>L</mi></mrow></math> が目安です。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>L</mi></mrow></math>が不明ならbacktrackingを使います。</p>\n<p>確認する値:</p>\n<ul>\n<li><p>objective value</p>\n</li>\n<li><p>proximal-gradient mapping norm</p>\n</li>\n<li><p>step size</p>\n</li>\n<li><p>sparsity / active set</p>\n</li>\n<li><p>function / gradient / prox evaluation数</p>\n</li>\n<li><p>validation metric（統計推定の場合）</p>\n</li>\n</ul>\n<p>目的値変化だけで止めると、flatな領域で最適性が弱いまま停止する場合があります。</p>\n<h2 id=\"python-lasso\" tabindex=\"-1\">Python: Lasso</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">threshold</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sign</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">*</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">maximum</span><span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">abs</span><span class=\"p\">(</span><span class=\"n\">value</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"n\">threshold</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">rng</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">default_rng</span><span class=\"p\">(</span><span class=\"mi\">7</span><span class=\"p\">)</span>\n<span class=\"n\">a</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"p\">(</span><span class=\"mi\">40</span><span class=\"p\">,</span> <span class=\"mi\">8</span><span class=\"p\">))</span>\n<span class=\"n\">true_x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">1.5</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">0.7</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">])</span>\n<span class=\"n\">b</span> <span class=\"o\">=</span> <span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">true_x</span> <span class=\"o\">+</span> <span class=\"mf\">0.05</span> <span class=\"o\">*</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"mi\">40</span><span class=\"p\">)</span>\n<span class=\"n\">lam</span> <span class=\"o\">=</span> <span class=\"mf\">0.1</span>\n\n<span class=\"n\">lipschitz</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"p\">,</span> <span class=\"nb\">ord</span><span class=\"o\">=</span><span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span>\n<span class=\"n\">step</span> <span class=\"o\">=</span> <span class=\"mf\">1.0</span> <span class=\"o\">/</span> <span class=\"n\">lipschitz</span>\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros</span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"o\">.</span><span class=\"n\">shape</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">])</span>\n\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">2000</span><span class=\"p\">):</span>\n    <span class=\"n\">gradient</span> <span class=\"o\">=</span> <span class=\"n\">a</span><span class=\"o\">.</span><span class=\"n\">T</span> <span class=\"o\">@</span> <span class=\"p\">(</span><span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">b</span><span class=\"p\">)</span>\n    <span class=\"n\">next_x</span> <span class=\"o\">=</span> <span class=\"n\">soft_threshold</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">step</span> <span class=\"o\">*</span> <span class=\"n\">gradient</span><span class=\"p\">,</span> <span class=\"n\">step</span> <span class=\"o\">*</span> <span class=\"n\">lam</span><span class=\"p\">)</span>\n    <span class=\"k\">if</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">next_x</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">)</span> <span class=\"o\">&lt;</span> <span class=\"mf\">1e-10</span><span class=\"p\">:</span>\n        <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">next_x</span>\n        <span class=\"k\">break</span>\n    <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">next_x</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span></code></pre></div>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>smooth loss + L1、group penalty、indicator constraintなど</p>\n</li>\n<li><p>sparse・大規模で、一反復を安価にしたい</p>\n</li>\n<li><p>gradientとproxを別々に実装できる</p>\n</li>\n<li><p>exactなHessian solveより多数の軽い反復が適する</p>\n</li>\n</ul>\n<h2 id=\"避ける-切り替える条件\" tabindex=\"-1\">避ける／切り替える条件</h2>\n<ul>\n<li><p>prox自体が高価な最適化問題になる</p>\n</li>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> が非滑らか、またはgradientが強いnoiseを含む</p>\n</li>\n<li><p>変数scaleにより単一step sizeが極端に保守的</p>\n</li>\n<li><p>強いcoupling constraintを単純projectionで表せない</p>\n</li>\n<li><p>basic法の収束が遅い → <a href=\"#/learn/fista\">FISTA</a>、restart、preconditioningを検討</p>\n</li>\n</ul>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>FISTAの反復数が少なくても、必ずしも実時間が短いとは限りません。gradientとproxの実コスト、restart、停止条件を揃えて比較します。</p>\n</aside>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "method.gradient-descent",
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "fista",
+        "admm"
+      ],
+      "seo_description": "滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。",
+      "seo_title": "近接勾配法",
+      "source_ids": [
+        "S055",
+        "S066"
+      ],
+      "status": "published",
+      "summary": "滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。",
+      "title_en": "Proximal gradient method",
+      "title_ja": "近接勾配法",
+      "toc": [
+        {
+          "heading_id": "対象となる形",
+          "label": "対象となる形",
+          "level": 2
+        },
+        {
+          "heading_id": "proxは何をしているか",
+          "label": "Proxは何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "step-sizeと停止",
+          "label": "Step sizeと停止",
+          "level": 2
+        },
+        {
+          "heading_id": "python-lasso",
+          "label": "Python: Lasso",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "避ける-切り替える条件",
+          "label": "避ける／切り替える条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_TRUST_NCG",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "trust-region-newton-cg",
+      "html": "<p>局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。</p>\n<h2 id=\"trust-regionの考え方\" tabindex=\"-1\">Trust regionの考え方</h2>\n<p>Newton stepを無条件に採用せず、現在点の周囲</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>p</mi><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mo>&#x02264;</mo><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math></div>\n<p>で二次modelを最小化します。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math> は「このmodelをどこまで信用するか」を表す半径です。</p>\n<p>試行stepの後、実際の改善とmodelが予測した改善の比</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>&#x003C1;</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>p</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow><mrow><msub><mi>m</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><msub><mi>m</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>p</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></mfrac></mrow></math></div>\n<p>を見ます。予測がよく当たればstepを採用して半径を広げ、外れれば棄却して半径を縮めます。</p>\n<h2 id=\"newton-cgで何を省いているか\" tabindex=\"-1\">Newton-CGで何を省いているか</h2>\n<p>Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-region部分問題を近似します。必要なのはHessian-vector積 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mo>&#x02207;</mo><mn>2</mn></msup><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mi>v</mi></mrow></math> で、巨大なHessian行列を明示しなくても動かせます。</p>\n<p>向いている条件:</p>\n<ul>\n<li><p>連続・滑らかな問題</p>\n</li>\n<li><p>gradientとHessian-vector積が利用可能</p>\n</li>\n<li><p>dense Hessianを保存できない</p>\n</li>\n<li><p>line search Newtonが不安定</p>\n</li>\n<li><p>negative curvatureも検出しながら進みたい</p>\n</li>\n</ul>\n<h2 id=\"見るべき診断値\" tabindex=\"-1\">見るべき診断値</h2>\n<ul>\n<li><p>gradient norm</p>\n</li>\n<li><p>trust radius <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p>actual / predicted reduction ratio <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p>accepted / rejected step数</p>\n</li>\n<li><p>inner CG iteration数</p>\n</li>\n<li><p>negative-curvatureまたはboundary termination</p>\n</li>\n<li><p>function / gradient / HVP evaluation数</p>\n</li>\n</ul>\n<p>半径が縮み続ける場合、微分が誤っている、modelが不連続を跨いでいる、scaleが悪い、または目的関数評価にnoiseがある可能性があります。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">((</span><span class=\"mf\">1.0</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">])</span> <span class=\"o\">**</span> <span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"mf\">20.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">gradient</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span>\n        <span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"mf\">80.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">),</span>\n        <span class=\"mf\">40.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">),</span>\n    <span class=\"p\">])</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">hessian_product</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">vector</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"n\">hessian</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span>\n        <span class=\"p\">[</span><span class=\"mf\">2.0</span> <span class=\"o\">-</span> <span class=\"mf\">80.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">240.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">80.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]],</span>\n        <span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mf\">80.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">],</span> <span class=\"mf\">40.0</span><span class=\"p\">],</span>\n    <span class=\"p\">])</span>\n    <span class=\"k\">return</span> <span class=\"n\">hessian</span> <span class=\"o\">@</span> <span class=\"n\">vector</span>\n\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span>\n    <span class=\"n\">objective</span><span class=\"p\">,</span>\n    <span class=\"n\">x0</span><span class=\"o\">=</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"o\">-</span><span class=\"mf\">1.2</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">]),</span>\n    <span class=\"n\">jac</span><span class=\"o\">=</span><span class=\"n\">gradient</span><span class=\"p\">,</span>\n    <span class=\"n\">hessp</span><span class=\"o\">=</span><span class=\"n\">hessian_product</span><span class=\"p\">,</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;trust-ncg&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;gtol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-8</span><span class=\"p\">,</span> <span class=\"s2\">&quot;maxiter&quot;</span><span class=\"p\">:</span> <span class=\"mi\">300</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">message</span><span class=\"p\">)</span></code></pre></div>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>反復回数だけでBFGSと比較しません。HVP、gradient、目的関数の各評価費を分け、同じ停止条件と初期点で比較します。</p>\n</aside>\n<h2 id=\"避ける条件\" tabindex=\"-1\">避ける条件</h2>\n<ul>\n<li><p>目的関数が不連続または強いnoiseを含む</p>\n</li>\n<li><p>gradient / HVPを信頼できない</p>\n</li>\n<li><p>1回のHVPが目的評価より極端に高価</p>\n</li>\n<li><p>単純なboundsだけでL-BFGS-Bが十分</p>\n</li>\n<li><p>一般制約が中心で、制約付きtrust-region実装を用意していない</p>\n</li>\n</ul>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [
+        "newton-method"
+      ],
+      "related_ids": [
+        "newton-method",
+        "bfgs",
+        "least-squares"
+      ],
+      "seo_description": "局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。",
+      "seo_title": "Trust-region Newton-CG",
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。",
+      "title_en": "Trust-region Newton-CG",
+      "title_ja": "Trust-region Newton-CG",
+      "toc": [
+        {
+          "heading_id": "trust-regionの考え方",
+          "label": "Trust regionの考え方",
+          "level": 2
+        },
+        {
+          "heading_id": "newton-cgで何を省いているか",
+          "label": "Newton-CGで何を省いているか",
+          "level": 2
+        },
+        {
+          "heading_id": "見るべき診断値",
+          "label": "見るべき診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "避ける条件",
+          "label": "避ける条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
     }
   ]
 }
