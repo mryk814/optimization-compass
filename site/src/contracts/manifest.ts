@@ -57,6 +57,9 @@ export interface SiteManifest {
   implementation_claims: ManifestAsset;
   benchmark_contexts: ManifestAsset;
   failure_modes: ManifestAsset;
+  search_index: ManifestAsset;
+  retrieval_documents: ManifestAsset;
+  search_benchmark: ManifestAsset;
   coverage: ManifestCoverageAsset;
   licenses: SiteLicenseManifest;
 }
@@ -79,6 +82,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "implementation_claims",
       "benchmark_contexts",
       "failure_modes",
+      "search_index",
+      "retrieval_documents",
+      "search_benchmark",
       "coverage",
       "licenses",
     ],
@@ -141,6 +147,15 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const failureModes = record(data.failure_modes, "failure_modes");
   exactKeys(failureModes, ["version", "path"], "failure_modes");
   if (failureModes.version !== "1.0.0") throw new Error("failure_modes.version is unsupported.");
+  const searchIndex = record(data.search_index, "search_index");
+  exactKeys(searchIndex, ["version", "path"], "search_index");
+  if (searchIndex.version !== "1.0.0") throw new Error("search_index.version is unsupported.");
+  const retrievalDocuments = record(data.retrieval_documents, "retrieval_documents");
+  exactKeys(retrievalDocuments, ["version", "path"], "retrieval_documents");
+  if (retrievalDocuments.version !== "1.0.0") throw new Error("retrieval_documents.version is unsupported.");
+  const searchBenchmark = record(data.search_benchmark, "search_benchmark");
+  exactKeys(searchBenchmark, ["version", "path"], "search_benchmark");
+  if (searchBenchmark.version !== "1.0.0") throw new Error("search_benchmark.version is unsupported.");
   const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
   if (visualizationScenarios.version !== "1.1.0") {
@@ -196,6 +211,18 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     failure_modes: {
       version: "1.0.0",
       path: safeRelativePath(failureModes.path, "failure_modes.path"),
+    },
+    search_index: {
+      version: "1.0.0",
+      path: safeRelativePath(searchIndex.path, "search_index.path"),
+    },
+    retrieval_documents: {
+      version: "1.0.0",
+      path: safeRelativePath(retrievalDocuments.path, "retrieval_documents.path"),
+    },
+    search_benchmark: {
+      version: "1.0.0",
+      path: safeRelativePath(searchBenchmark.path, "search_benchmark.path"),
     },
     coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
     licenses,

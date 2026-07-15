@@ -32,7 +32,7 @@ import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { PageOrientation } from "./components/PageOrientation";
 import { SafeBackButton } from "./components/SafeBackButton";
-import { SearchPage } from "./features/learning/SearchPage";
+import { SearchPage } from "./features/search/SearchPage";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 
 import "./styles.css";

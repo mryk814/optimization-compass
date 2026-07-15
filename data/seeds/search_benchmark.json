@@ -1,0 +1,81 @@
+{
+  "contract_version": "1.0.0",
+  "queries": [
+    {
+      "query_id": "canonical-method-ja",
+      "category": "canonical_term",
+      "query": "Nelder–Mead",
+      "entity_types": ["method"],
+      "expected_document_ids": ["method:M_NELDER_MEAD"]
+    },
+    {
+      "query_id": "alias-bo",
+      "category": "alias_abbreviation",
+      "query": "BO",
+      "entity_types": ["method"],
+      "expected_document_ids": ["method:M_BAYESIAN_OPT_GP"]
+    },
+    {
+      "query_id": "mixed-cp-sat",
+      "category": "mixed_language",
+      "query": "CP-SAT 論理制約",
+      "entity_types": ["method"],
+      "expected_document_ids": ["method:M_CP_SAT"]
+    },
+    {
+      "query_id": "routing-natural-language",
+      "category": "natural_language_problem",
+      "query": "配送順を決めたい",
+      "entity_types": ["case", "problem"],
+      "expected_document_ids": ["problem:PA031"]
+    },
+    {
+      "query_id": "expensive-no-gradient",
+      "category": "natural_language_problem",
+      "query": "勾配なし 高価な実験",
+      "entity_types": ["case", "method"],
+      "expected_document_ids": ["case:hyperparameter-search", "method:M_BAYESIAN_OPT_GP", "method:MF_DFO_LOCAL"]
+    },
+    {
+      "query_id": "constrained-continuous",
+      "category": "natural_language_problem",
+      "query": "制約違反しない連続最適化",
+      "entity_types": ["method"],
+      "expected_document_ids": ["method:MF_CONSTRAINED_NLP"]
+    },
+    {
+      "query_id": "convexity-concept",
+      "category": "concept",
+      "query": "凸性とは",
+      "entity_types": ["content", "glossary"],
+      "expected_document_ids": ["content:concept.convexity"]
+    },
+    {
+      "query_id": "implementation",
+      "category": "implementation",
+      "query": "OR-Tools CP-SAT",
+      "entity_types": ["implementation"],
+      "expected_document_ids": ["implementation:I_ORTOOLS_CPSAT"]
+    },
+    {
+      "query_id": "visual-comparison",
+      "category": "comparison_visualization",
+      "query": "細長い谷 一次法 比較",
+      "entity_types": ["comparison", "trace"],
+      "expected_document_ids": ["comparison:COMPARE_GRADIENT_FAMILY"]
+    },
+    {
+      "query_id": "evidence-source",
+      "category": "evidence",
+      "query": "SciPy Optimization documentation",
+      "entity_types": ["source"],
+      "expected_document_ids": ["source:S001"]
+    },
+    {
+      "query_id": "zero-result",
+      "category": "zero_result",
+      "query": "zzqv-9917",
+      "expected_document_ids": []
+    }
+  ]
+}

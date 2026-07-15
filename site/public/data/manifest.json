@@ -47,6 +47,18 @@
     "path": "recommendation/site-data.json",
     "version": "2.0.0"
   },
+  "retrieval_documents": {
+    "path": "retrieval-documents.json",
+    "version": "1.0.0"
+  },
+  "search_benchmark": {
+    "path": "search-benchmark.json",
+    "version": "1.0.0"
+  },
+  "search_index": {
+    "path": "search-index.json",
+    "version": "1.0.0"
+  },
   "sources": {
     "path": "sources.json",
     "version": "1.0.0"

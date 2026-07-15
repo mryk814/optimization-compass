@@ -38,6 +38,7 @@ const staticScans = [
   { route: "/theater/learning/SCENARIO_CONSTRAINED_DISK", heading: "実行可能領域と制約を無視した失敗を比べる", label: "constrained-slice" },
   { route: "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC", heading: "単一bestではなくPareto frontを読む", label: "pareto-slice" },
   { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
+  { route: "/search?q=BO&type=method", heading: "Atlas全体から探す", label: "global-search" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
 ];
 
@@ -45,6 +46,9 @@ for (const scan of staticScans) {
   test(`${scan.label}にaxe critical/serious違反がない`, async ({ page, baseURL }, testInfo) => {
     await gotoAtlasRoute(page, requiredBaseURL(baseURL), scan.route);
     await page.getByRole("heading", { level: 1, name: scan.heading }).waitFor();
+    if (scan.label === "learn-detail") {
+      await page.getByRole("heading", { level: 2, name: "Learning path" }).waitFor();
+    }
     if (scan.label === "nelder-mead" || scan.label === "gradient-compare") {
       await page.getByRole("region", { name: "アルゴリズム再生コントロール" }).waitFor();
     }

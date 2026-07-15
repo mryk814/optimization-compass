@@ -17,6 +17,11 @@ from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
+from optimization_compass.search_index import (
+    build_search_artifacts,
+    evaluate_search_benchmark,
+    load_benchmark_cases,
+)
 from optimization_compass.search_tree import (
     SearchTreeArtifact,
     SearchTreeIndex,
@@ -79,6 +84,7 @@ ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
 COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
+SEARCH_BENCHMARK_SEED = ROOT / "data/seeds/search_benchmark.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
 
 # Keep these labels aligned with the existing browser copy contract in web.py.
@@ -328,15 +334,13 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         visualization_entries=learning_slice_links,
     )
     _write_json(output_dir / "entity-links.json", entity_links)
-    _write_json(
-        output_dir / "learning-graph.json",
-        build_learning_graph_index(
-            repository,
-            dataset_version=release["version"],
-            entity_links=entity_links,
-            trace_index=trace_index,
-        ),
+    learning_graph = build_learning_graph_index(
+        repository,
+        dataset_version=release["version"],
+        entity_links=entity_links,
+        trace_index=trace_index,
     )
+    _write_json(output_dir / "learning-graph.json", learning_graph)
     source_index = build_source_evidence_index(
         repository,
         dataset_version=release["version"],
@@ -344,6 +348,24 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         generated_visualizations=learning_slice_links,
     )
     _write_json(output_dir / "sources.json", source_index)
+    search_index, retrieval_documents = build_search_artifacts(
+        repository,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        entity_links=entity_links,
+        learning_graph=learning_graph,
+        content_index=json.loads((output_dir / "content.json").read_text(encoding="utf-8")),
+        gallery_index=json.loads((output_dir / "gallery.json").read_text(encoding="utf-8")),
+        comparison_index=json.loads((output_dir / "comparisons.json").read_text(encoding="utf-8")),
+        scenario_index=scenario_index.model_dump(mode="json"),
+        source_index=source_index.model_dump(mode="json"),
+    )
+    _write_json(output_dir / "search-index.json", search_index)
+    _write_json(output_dir / "retrieval-documents.json", retrieval_documents)
+    _write_json(
+        output_dir / "search-benchmark.json",
+        evaluate_search_benchmark(search_index, load_benchmark_cases(SEARCH_BENCHMARK_SEED)),
+    )
     _write_json(
         output_dir / "implementation-claims.json",
         {
@@ -407,6 +429,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
         failure_modes=ManifestAsset(version="1.0.0", path="failure-modes.json"),
+        search_index=ManifestAsset(version="1.0.0", path="search-index.json"),
+        retrieval_documents=ManifestAsset(version="1.0.0", path="retrieval-documents.json"),
+        search_benchmark=ManifestAsset(version="1.0.0", path="search-benchmark.json"),
         coverage=ManifestCoverageAsset(
             version="1.0.0", path="coverage.json", report_path="coverage.md"
         ),

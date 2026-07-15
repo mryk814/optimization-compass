@@ -20,6 +20,7 @@ HASH_ROUTES = (
     "/#/theater/nelder-mead",
     "/#/gallery",
     "/#/coverage",
+    "/#/search?q=BO&type=method",
 )
 JSON_ASSETS = (
     "data/release.json",
@@ -30,6 +31,9 @@ JSON_ASSETS = (
     "data/comparisons.json",
     "data/traces/index.json",
     "data/coverage.json",
+    "data/search-index.json",
+    "data/retrieval-documents.json",
+    "data/search-benchmark.json",
 )
 DEPLOYMENT_FIELDS = {
     "schema_version",

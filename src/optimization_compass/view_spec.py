@@ -283,6 +283,9 @@ class SiteManifest(ContractModel):
     implementation_claims: ManifestAsset
     benchmark_contexts: ManifestAsset
     failure_modes: ManifestAsset
+    search_index: ManifestAsset
+    retrieval_documents: ManifestAsset
+    search_benchmark: ManifestAsset
     coverage: ManifestCoverageAsset
     licenses: SiteLicenseManifest
 
