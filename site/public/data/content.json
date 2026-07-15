@@ -78,6 +78,48 @@
     },
     {
       "comparison_ids": [],
+      "content_id": "bayesian-optimization",
+      "html": "<p>少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。</p>\n<h2 id=\"何を繰り返しているか\" tabindex=\"-1\">何を繰り返しているか</h2>\n<ol>\n<li><p>いくつかの点で高価な目的関数を評価する。</p>\n</li>\n<li><p>観測結果から、目的関数の予測と不確実性を表す代理モデルを更新する。</p>\n</li>\n<li><p>獲得関数を使い、次に評価する点を選ぶ。</p>\n</li>\n<li><p>評価予算または停止条件まで繰り返す。</p>\n</li>\n</ol>\n<p>代理モデルの平均は目的関数そのものではありません。不確実性が大きい場所を調べる<strong>探索</strong>と、良い値が期待できる場所を調べる<strong>活用</strong>のバランスを取ります。</p>\n<h2 id=\"画面の読み方\" tabindex=\"-1\">画面の読み方</h2>\n<table>\n<thead>\n<tr>\n<th>表示</th>\n<th>読み取ること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>observed points</td>\n<td>実際に評価した入力と結果</td>\n</tr>\n<tr>\n<td>surrogate mean</td>\n<td>現在の代理モデルが予測する平均</td>\n</tr>\n<tr>\n<td>uncertainty</td>\n<td>まだ分かっていない範囲</td>\n</tr>\n<tr>\n<td>acquisition</td>\n<td>次の評価点を選ぶための基準</td>\n</tr>\n<tr>\n<td>incumbent</td>\n<td>現時点で最良の観測値</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>[!WARNING]\n獲得関数の最大点は、目的関数の最適点だと確定した場所ではありません。次に情報を得る価値が高い候補です。</p>\n</blockquote>\n<h2 id=\"向いている状況\" tabindex=\"-1\">向いている状況</h2>\n<ul>\n<li><p>1回の実験やsimulationが高価</p>\n</li>\n<li><p>評価回数に厳しい上限がある</p>\n</li>\n<li><p>勾配を直接利用できない</p>\n</li>\n<li><p>hyperparameterや設計変数を少ない試行で改善したい</p>\n</li>\n</ul>\n<p>高次元、強いカテゴリ構造、頻繁な評価失敗、非定常な目的関数では、kernel、encoding、failure handling、search spaceの設計を別に確認します。</p>\n<h2 id=\"比較するときの注意\" tabindex=\"-1\">比較するときの注意</h2>\n<p>Random Searchなどと比較する場合は、少なくとも次を揃えます。</p>\n<ul>\n<li><p>initial design</p>\n</li>\n<li><p>random seed</p>\n</li>\n<li><p>objective evaluation budget</p>\n</li>\n<li><p>noise handling</p>\n</li>\n<li><p>search bounds</p>\n</li>\n<li><p>stopping condition</p>\n</li>\n</ul>\n<p>単一のtrajectoryだけで一般的な優劣を判断せず、複数seedと問題instanceで確認します。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-15",
+      "prerequisites": [],
+      "related_ids": [],
+      "seo_description": "少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。",
+      "seo_title": "ベイズ最適化",
+      "source_ids": [
+        "S034",
+        "S035"
+      ],
+      "status": "published",
+      "summary": "少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。",
+      "title_en": "Bayesian Optimization",
+      "title_ja": "ベイズ最適化",
+      "toc": [
+        {
+          "heading_id": "何を繰り返しているか",
+          "label": "何を繰り返しているか",
+          "level": 2
+        },
+        {
+          "heading_id": "画面の読み方",
+          "label": "画面の読み方",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている状況",
+          "label": "向いている状況",
+          "level": 2
+        },
+        {
+          "heading_id": "比較するときの注意",
+          "label": "比較するときの注意",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "comparison_ids": [],
       "content_id": "branch-and-bound",
       "html": "<p>上下界を使って、改善できない離散探索の枝をまとめて除外する。</p>\n<p>Branch-and-Boundは、整数・0-1変数の候補を枝分かれさせながら、実行可能解の値（incumbent）と未探索部分のboundを比較して探索範囲を減らします。</p>\n<h2 id=\"naive-enumerationとの違い\" tabindex=\"-1\">naive enumerationとの違い</h2>\n<p>naive enumerationはすべての割当を調べます。Branch-and-Boundは、制約違反のsubtreeと、boundがincumbentを改善できないsubtreeを丸ごと探索しません。枝を調べなかった理由が証明として残る点が重要です。</p>\n<h2 id=\"best-feasible・global-bound・gap\" tabindex=\"-1\">best feasible・global bound・gap</h2>\n<ul>\n<li><p>best feasible valueは、現時点で見つかった実行可能解の値です。</p>\n</li>\n<li><p>global boundは、未探索部分が到達しうる最良値の限界です。</p>\n</li>\n<li><p>gapが0になり、未処理nodeがなくなれば最適性を証明できます。時間切れやnode予算で停止した場合、best feasibleは候補解ですが最適性は未証明です。</p>\n</li>\n</ul>\n<h2 id=\"mipとcp-satを同一視しない\" tabindex=\"-1\">MIPとCP-SATを同一視しない</h2>\n<p>MIPのBranch-and-Cutは連続緩和、cut、presolveなどを組み合わせます。CP-SATはSAT/CP由来の伝播・学習などを統合します。どちらも探索木やboundを見せられますが、内部機構やboundの意味を同一視できません。この教材は4変数knapsackの教育用Branch-and-Boundで、実solverの性能比較ではありません。</p>",
       "kind": "method",

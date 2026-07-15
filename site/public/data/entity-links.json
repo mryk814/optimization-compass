@@ -251,6 +251,32 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "bayesian-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "ベイズ最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": "少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "branch-and-bound",
       "entity_type": "content",
       "external_url": null,
@@ -7065,7 +7091,9 @@
       "summary": "確率的摂動と局所最適化を交互に行う。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/bayesian-optimization"
+      ],
       "canonical_url": "/methods/M_BAYESIAN_OPT_GP",
       "entity_id": "M_BAYESIAN_OPT_GP",
       "entity_type": "method",
@@ -7136,6 +7164,11 @@
           "relation_type": "implementation",
           "target_id": "I_RAY_TUNE",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
         }
       ],
       "summary": "GP posteriorとacquisitionで高価な評価点を選ぶ。"

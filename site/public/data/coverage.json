@@ -1879,12 +1879,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "bayesian-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -1908,7 +1908,7 @@
           ]
         },
         "map": {
-          "count": 23,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1934,6 +1934,7 @@
             "S059",
             "S069",
             "S075",
+            "bayesian-optimization",
             "hyperparameter-search"
           ]
         },
@@ -2906,12 +2907,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "bayesian-optimization"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -2933,7 +2934,7 @@
           ]
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2950,6 +2951,7 @@
             "S059",
             "S069",
             "S075",
+            "bayesian-optimization",
             "hyperparameter-search"
           ]
         },
