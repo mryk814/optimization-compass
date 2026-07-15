@@ -80,7 +80,7 @@ result = minimize(
 print(result.success, result.x, result.fun, result.nfev, result.message)
 ```
 
-`xatol`はgeometry、`fatol`は目的値差の停止条件です。両方が小さくても大域最適性は証明されません。
+`xatol`はgeometry、`fatol`は目的値差の停止条件です。両方が小さくても大域最適性は証明されません。optionとboundsの具体的な挙動は[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html)で利用versionに対応する説明を確認します。
 
 ## 初期単体とscaling
 
