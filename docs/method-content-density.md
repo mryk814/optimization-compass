@@ -65,6 +65,8 @@ Issue #87 raises coverage across:
 
 The tranche adds guides for BFGS, L-BFGS-B, Newton, trust-region Newton-CG, ADMM, proximal gradient, FISTA, differential evolution, genetic algorithms, particle swarm optimization, MADS, dynamic programming, Dijkstra / A*, branch-and-cut, dual simplex, and direct collocation.
 
+The first tranche moves the published content baseline from 12 to at least 28 pages. This is a review floor for representative coverage, not a target to give all 98 methods identical page length.
+
 ## Review checklist
 
 - The first paragraph exactly matches frontmatter `summary`.
