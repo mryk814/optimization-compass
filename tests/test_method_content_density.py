@@ -3,48 +3,34 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-EXPANDED_METHOD_CONTENT_IDS = {
-    "admm",
-    "bfgs",
-    "branch-and-cut",
-    "differential-evolution",
-    "dijkstra-astar",
-    "direct-collocation",
-    "dual-simplex",
-    "dynamic-programming",
-    "fista",
-    "genetic-algorithm",
-    "lbfgsb",
-    "mads",
-    "newton-method",
-    "particle-swarm",
-    "proximal-gradient",
-    "trust-region-newton-cg",
-}
+MINIMUM_PUBLISHED_METHOD_GUIDES = 26
+MINIMUM_SUMMARY_CHARACTERS = 35
+MINIMUM_BODY_CHARACTERS = 1_200
+MINIMUM_TOC_ENTRIES = 4
 
 
-def test_major_method_families_have_dense_published_guides() -> None:
+def test_all_published_method_guides_meet_the_explanation_floor() -> None:
     root = Path(__file__).resolve().parents[1]
-    pages = {page.content_id: page for page in load_content(root / "content")}
+    method_pages = [
+        page
+        for page in load_content(root / "content")
+        if page.status == "published" and page.kind == "method"
+    ]
 
-    assert len(pages) >= 28
-    assert pages.keys() >= EXPANDED_METHOD_CONTENT_IDS
+    assert len(method_pages) >= MINIMUM_PUBLISHED_METHOD_GUIDES
 
-    for content_id in sorted(EXPANDED_METHOD_CONTENT_IDS):
-        page = pages[content_id]
-        assert page.status == "published"
-        assert page.kind == "method"
+    for page in sorted(method_pages, key=lambda item: item.content_id):
         assert page.method_id
-        assert len(page.summary) >= 35
-        assert len(page.body) >= 1_200
+        assert len(page.summary) >= MINIMUM_SUMMARY_CHARACTERS
+        assert len(page.body) >= MINIMUM_BODY_CHARACTERS
         assert page.source_ids
-        assert len(page.toc) >= 4
+        assert len(page.toc) >= MINIMUM_TOC_ENTRIES
 
         python_blocks = re.findall(
             r"^```python\n(.*?)^```$",
             page.body,
             re.MULTILINE | re.DOTALL,
         )
-        assert python_blocks, f"{content_id} must include a copyable Python example"
+        assert python_blocks, f"{page.content_id} must include a copyable Python example"
         for index, block in enumerate(python_blocks, start=1):
-            compile(block, f"{content_id}:python:{index}", "exec")
+            compile(block, f"{page.content_id}:python:{index}", "exec")
