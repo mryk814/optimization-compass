@@ -29,4 +29,16 @@ describe("CompiledContent", () => {
     expect(focus).toHaveBeenCalledWith({ preventScroll: true });
     expect(screen.getByText("Compiled body.")).toBeVisible();
   });
+
+  it("makes generated scrollable code regions keyboard focusable", () => {
+    render(<CompiledContent page={{
+      html: "<pre><code>print('hello')</code></pre>",
+      toc: [],
+    }} />);
+
+    const region = screen.getByText("print('hello')").closest("pre");
+    expect(region).toHaveAttribute("tabindex", "0");
+    region?.focus();
+    expect(region).toHaveFocus();
+  });
 });
