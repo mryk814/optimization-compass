@@ -1672,6 +1672,40 @@ main:focus {
   color: #8d3c27;
 }
 
+.visualization-goal-cues,
+.bo-goal-cues {
+  margin: 0.65rem 0;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid #cbd8cf;
+  border-radius: 0.55rem;
+  background: #f5faf6;
+}
+
+.visualization-goal-cues h2 {
+  margin: 0 0 0.35rem;
+  color: #285740;
+  font-size: 0.82rem;
+}
+
+.visualization-goal-cues dl,
+.bo-goal-cues dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.4rem 0.8rem;
+  margin: 0;
+}
+
+.visualization-goal-cues dt,
+.bo-goal-cues dt { color: #68736c; font-size: 0.65rem; }
+.visualization-goal-cues dd,
+.bo-goal-cues dd { margin: 0.1rem 0 0; font-size: 0.74rem; font-weight: 700; overflow-wrap: anywhere; }
+.visualization-goal-cues small { color: #68736c; font-weight: 400; }
+.nm-initial-marker { fill: #285740; stroke: #fff; stroke-width: 2; }
+.nm-initial-marker text, .nm-optimum-marker text { fill: #285740; stroke: none; font-size: 10px; }
+.nm-optimum-marker { stroke: #b75c37; stroke-width: 2; fill: none; }
+.nm-optimum-marker text { fill: #b75c37; }
+.plot-range-label { fill: #68736c; font-size: 8px; }
+
 @media (max-width: 40rem) {
   .map-legend ul { display: grid; grid-template-columns: minmax(0, 1fr); }
   .map-toolbar { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.1rem; }

@@ -7,6 +7,7 @@ def objective_spec(family: str) -> dict[str, object]:
     if family == "quadratic":
         return {
             "family": "quadratic",
+            "direction": "minimize",
             "dimensions": 2,
             "generator_id": "objective.quadratic.v1",
             "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},
@@ -18,6 +19,7 @@ def objective_spec(family: str) -> dict[str, object]:
     if family == "rosenbrock":
         return {
             "family": "rosenbrock",
+            "direction": "minimize",
             "dimensions": 2,
             "generator_id": "objective.rosenbrock.v1",
             "domain": {"x": [-2.0, 2.0], "y": [-1.0, 3.0]},

@@ -12,6 +12,7 @@ import {
 } from "../visualization/objectivePlot";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
+import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 
 interface NelderMeadVisualizationProps {
   trace: AlgorithmTrace;
@@ -47,6 +48,10 @@ export function NelderMeadVisualization({
     if (next) onTraceChange(next.trace_id);
   };
   const explanation = operationExplanation(frame);
+  const bestSoFar = trace.frames
+    .flatMap((candidateFrame) => candidateFrame.points.map((point) => point.value))
+    .filter((value): value is number => value !== null)
+    .reduce((best, value) => Math.min(best, value), Number.POSITIVE_INFINITY);
 
   return (
     <article className="atlas-page nm-theater">
@@ -94,6 +99,13 @@ export function NelderMeadVisualization({
         <span className={`decision-badge decision-${frame.decision}`}>{decisionLabel(frame)}</span>
         <span>best f = {objectiveMetric(frame)}</span>
       </section>
+      <ObjectiveGoalCues
+        bestValue={Number.isFinite(bestSoFar) ? bestSoFar : null}
+        currentPoint={vertices[0]?.point.coordinates}
+        initialPoint={initialPointArray(trace)}
+        objective={trace.objective}
+        terminalReason={trace.terminal_summary_ja}
+      />
       <PlaybackControls playback={playback} />
 
       <div className="nm-layout">
@@ -118,6 +130,10 @@ export function NelderMeadVisualization({
             <line className="plot-axis" x1={plot.left} x2={plot.left} y1={plot.top} y2={plot.bottom} />
             <text className="plot-axis-label" x={plot.right - 4} y={plot.bottom - 7}>x</text>
             <text className="plot-axis-label" x={plot.left + 7} y={plot.top + 12}>y</text>
+            <text className="plot-range-label" x={plot.left} y={plot.bottom + 17}>x [{spec.bounds.xMin}, {spec.bounds.xMax}]</text>
+            <text className="plot-range-label" x={plot.right - 70} y={plot.top + 12}>minimize</text>
+            <InitialMarker point={initialPointArray(trace)} bounds={spec.bounds} />
+            {knownOptimum(trace.objective) && <KnownOptimumMarker point={knownOptimum(trace.objective)!} bounds={spec.bounds} />}
             <polygon
               className="nm-simplex"
               points={vertices.map(({ point }) => pointCoordinates(point, spec.bounds)).join(" ")}
@@ -237,6 +253,18 @@ function CentroidMarker({ point, bounds }: { point: TracePoint; bounds: PlotBoun
   );
 }
 
+function InitialMarker({ point, bounds }: { point: readonly number[]; bounds: PlotBounds }) {
+  const x = mapX(point[0], bounds, plot.left, plot.right);
+  const y = mapY(point[1], bounds, plot.top, plot.bottom);
+  return <g className="nm-initial-marker"><circle cx={x} cy={y} r="7" /><text x={x + 9} y={y - 8}>start</text></g>;
+}
+
+function KnownOptimumMarker({ point, bounds }: { point: readonly number[]; bounds: PlotBounds }) {
+  const x = mapX(point[0], bounds, plot.left, plot.right);
+  const y = mapY(point[1], bounds, plot.top, plot.bottom);
+  return <g className="nm-optimum-marker"><line x1={x - 8} x2={x + 8} y1={y} y2={y} /><line x1={x} x2={x} y1={y - 8} y2={y + 8} /><text x={x + 9} y={y + 13}>optimum</text></g>;
+}
+
 function rankedVertices(frame: TraceFrame): RankedVertex[] {
   const vertices = frame.points.filter(
     (point): point is TracePoint & { value: number } =>
@@ -317,8 +345,20 @@ function objectiveMetric(frame: TraceFrame): string {
 }
 
 function initialPoint(trace: AlgorithmTrace): string {
+  const point = initialPointArray(trace);
+  return point.length ? `[${point.join(", ")}]` : "n/a";
+}
+
+function initialPointArray(trace: AlgorithmTrace): number[] {
   const point = trace.initial_state.point;
-  return Array.isArray(point) ? `[${point.join(", ")}]` : "n/a";
+  return Array.isArray(point) && point.every((value): value is number => typeof value === "number") ? point : [];
+}
+
+function knownOptimum(objective: AlgorithmTrace["objective"]): number[] | undefined {
+  const optimum = objective.optimum;
+  if (typeof optimum !== "object" || optimum === null || Array.isArray(optimum)) return undefined;
+  const point = optimum.point;
+  return Array.isArray(point) && point.every((value): value is number => typeof value === "number") ? point : undefined;
 }
 
 function parameters(values: AlgorithmTrace["parameters"]): string {

@@ -28,6 +28,8 @@ describe("BayesianOptimizationPage", () => {
     renderPage();
     expect(await screen.findByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
     expect(await screen.findByText(/Expected Improvementで次点選択/u)).toBeVisible();
+    expect(await screen.findByText(/方向 \/ Direction: minimize/u)).toBeVisible();
+    expect(screen.getByText("このpayloadには既知referenceなし")).toBeVisible();
     expect(screen.getByRole("img", { name: /surrogate平均/u })).toBeVisible();
     expect(screen.getByRole("table", { name: /best-so-far/u })).toBeVisible();
     const player = screen.getByLabelText(/左右矢印で移動/u);
