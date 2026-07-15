@@ -1,0 +1,61 @@
+{
+  "coverage": {
+    "path": "coverage.json",
+    "report_path": "coverage.md",
+    "version": "1.0.0"
+  },
+  "dataset_version": "0.5.0",
+  "entity_links": {
+    "path": "entity-links.json",
+    "version": "1.0.0"
+  },
+  "generated_at": "2026-07-15T00:00:00Z",
+  "licenses": {
+    "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
+    "code": {
+      "path": "licenses/LICENSE.txt",
+      "spdx_id": "MIT"
+    },
+    "content": {
+      "path": "licenses/CONTENT_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "data": {
+      "path": "licenses/DATA_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "legal_code_path": "licenses/CC-BY-4.0.txt",
+    "notice_path": "licenses/NOTICE.txt"
+  },
+  "problems": {
+    "path": "problems.json",
+    "version": "1.0.0"
+  },
+  "recommendation": {
+    "path": "recommendation/site-data.json",
+    "version": "2.0.0"
+  },
+  "sources": {
+    "path": "sources.json",
+    "version": "1.0.0"
+  },
+  "traces": {
+    "bytes": 5015,
+    "contract_version": "1.0.0",
+    "index_version": "1.0.0",
+    "path": "traces/index.json",
+    "sha256": "1b96466e05c71cfb094e5776479109a2f299b644dd43bf4f09f5b894d6652676"
+  },
+  "version": "1.0.0",
+  "views": [
+    {
+      "path": "views/problem-structure.json",
+      "version": "1.0.0",
+      "view_id": "problem-structure"
+    }
+  ],
+  "visualization_scenarios": {
+    "path": "visualization-scenarios.json",
+    "version": "1.0.0"
+  }
+}

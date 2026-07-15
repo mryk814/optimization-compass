@@ -1,0 +1,16 @@
+subject_type,subject_id,status,rationale,source_ids_json,last_verified
+\Smethod,\SM_ACTIVE_SET_QP,\Spartial,\SInitial quadratic-form assumption migrated; active-set initialization assumptions await audit.,"\S[""S004"",""S010"",""S012"",""S013"",""S014"",""S016"",""S055"",""S062""]",\S2026-07-13
+\Smethod,\SM_BAYESIAN_OPT_GP,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S034"",""S035"",""S036"",""S037"",""S038"",""S059"",""S069"",""S075""]",\S2026-07-13
+\Smethod,\SM_BFGS,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S002"",""S056"",""S057""]",\S2026-07-13
+\Smethod,\SM_BRANCH_BOUND,\Spartial,\SInitial variable-domain assumption migrated; continuous spatial variants remain to be separated.,"\S[""S005"",""S016"",""S021"",""S024"",""S025"",""S028""]",\S2026-07-13
+\Smethod,\SM_BRANCH_CUT,\Spartial,\SInitial variable-domain assumption migrated; formulation-specific assumptions await audit.,"\S[""S005"",""S016"",""S021"",""S024"",""S025"",""S028""]",\S2026-07-13
+\Smethod,\SM_CMA_ES,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S032"",""S033"",""S040"",""S058"",""S074""]",\S2026-07-13
+\Smethod,\SM_CP_SAT,\Spartial,\SInitial variable-domain assumption migrated; constraint expressivity assumptions await audit.,"\S[""S022"",""S053"",""S079""]",\S2026-07-13
+\Smethod,\SM_GRADIENT_DESCENT,\Spartial,\SInitial derivative assumption migrated; remaining numerical assumptions await audit.,"\S[""S002"",""S056"",""S057""]",\S2026-07-13
+\Smethod,\SM_INTERIOR_POINT_NLP,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S017"",""S029"",""S030"",""S056"",""S064""]",\S2026-07-13
+\Smethod,\SM_LBFGS,\Spartial,\SInitial derivative assumption migrated; remaining numerical assumptions await audit.,"\S[""S002"",""S056"",""S057"",""S065""]",\S2026-07-13
+\Smethod,\SM_LBFGSB,\Spartial,\SInitial derivative assumption migrated; remaining bound and numerical assumptions await audit.,"\S[""S002"",""S056"",""S057"",""S065""]",\S2026-07-13
+\Smethod,\SM_NELDER_MEAD,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S002"",""S018"",""S031"",""S060"",""S063""]",\S2026-07-13
+\Smethod,\SM_PRIMAL_DUAL_CONIC,\Spartial,\SInitial conic-form assumption migrated; cone-specific certificates await audit.,"\S[""S004"",""S010"",""S012"",""S013"",""S014"",""S016"",""S028"",""S055"",""S062""]",\S2026-07-13
+\Smethod,\SM_SIMPLEX,\Spartial,\SInitial linear-form assumption migrated; feasibility and certificate assumptions await audit.,"\S[""S004"",""S010"",""S012"",""S013"",""S014"",""S016"",""S055"",""S062""]",\S2026-07-13
+\Smethod,\SM_SLSQP,\Scomplete,\SCurrent recommendation incompatibility conditions are represented atomically.,"\S[""S002"",""S017"",""S029"",""S030"",""S056"",""S064""]",\S2026-07-13

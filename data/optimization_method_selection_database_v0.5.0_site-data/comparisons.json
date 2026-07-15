@@ -1,0 +1,124 @@
+{
+  "comparisons": [
+    {
+      "aliases": [
+        "COMPARE_FIRST_ORDER_ROSENBROCK"
+      ],
+      "artifact_kind": "executable_trace",
+      "budget": 40,
+      "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "caveat": "勾配と目的関数の計算費は同一と仮定した教材比較です。実装や問題が変わると比較可能性も変わります。",
+      "comparability": "comparable_with_caveat",
+      "comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "fairness_note": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
+      "identity_status": "canonical",
+      "initial_point": [
+        -1.6,
+        1.6
+      ],
+      "members": [
+        {
+          "label_en": "Gradient Descent",
+          "label_ja": "勾配降下法",
+          "method_id": "M_GRADIENT_DESCENT",
+          "parameters": {
+            "learning_rate": 0.003
+          },
+          "trace_id": "gradient_descent-quadratic"
+        },
+        {
+          "label_en": "Momentum",
+          "label_ja": "モメンタム法",
+          "method_id": "M_MOMENTUM_SGD",
+          "parameters": {
+            "learning_rate": 0.003,
+            "momentum": 0.9
+          },
+          "trace_id": "momentum-quadratic"
+        },
+        {
+          "label_en": "Adam",
+          "label_ja": "Adam",
+          "method_id": "M_ADAM",
+          "parameters": {
+            "beta1": 0.9,
+            "beta2": 0.999,
+            "learning_rate": 0.03
+          },
+          "trace_id": "adam-quadratic"
+        }
+      ],
+      "objective_expression": "f(x, y) = 100x² + y²",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "preset_id": "elongated-valley",
+      "renderer_families": [
+        "continuous_trajectory",
+        "generic_metric_history"
+      ],
+      "stopping": "objective < 1e-6 or budget exhausted",
+      "synchronization": "oracle_evaluations",
+      "title_en": "First-order methods in an elongated valley",
+      "title_ja": "細長い谷で一次法を比べる"
+    },
+    {
+      "aliases": [],
+      "artifact_kind": "executable_trace",
+      "budget": 40,
+      "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
+      "caveat": "発散を説明するfailure contrastであり、手法の一般的な順位付けには使用できません。",
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_GRADIENT_DIVERGENCE",
+      "fairness_note": "同じ初期点・目的関数・oracle evaluation budgetで、意図的に攻めた固定parameterを比較します。",
+      "identity_status": "derived",
+      "initial_point": [
+        -1.6,
+        1.6
+      ],
+      "members": [
+        {
+          "label_en": "Gradient Descent",
+          "label_ja": "勾配降下法",
+          "method_id": "M_GRADIENT_DESCENT",
+          "parameters": {
+            "learning_rate": 0.012
+          },
+          "trace_id": "gradient_descent-quadratic-divergence"
+        },
+        {
+          "label_en": "Momentum",
+          "label_ja": "モメンタム法",
+          "method_id": "M_MOMENTUM_SGD",
+          "parameters": {
+            "learning_rate": 0.008,
+            "momentum": 0.9
+          },
+          "trace_id": "momentum-quadratic-divergence"
+        },
+        {
+          "label_en": "Adam",
+          "label_ja": "Adam",
+          "method_id": "M_ADAM",
+          "parameters": {
+            "beta1": 0.9,
+            "beta2": 0.999,
+            "learning_rate": 0.03
+          },
+          "trace_id": "adam-quadratic-divergence"
+        }
+      ],
+      "objective_expression": "f(x, y) = 100x² + y²",
+      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "preset_id": "learning-rate-divergence",
+      "renderer_families": [
+        "continuous_trajectory",
+        "generic_metric_history"
+      ],
+      "stopping": "objective < 1e-6, divergence guard, or budget exhausted",
+      "synchronization": "oracle_evaluations",
+      "title_en": "Observe divergence from an excessive learning rate",
+      "title_ja": "学習率過大による発散を観察する"
+    }
+  ],
+  "contract_version": "1.0.0",
+  "dataset_version": "0.5.0"
+}

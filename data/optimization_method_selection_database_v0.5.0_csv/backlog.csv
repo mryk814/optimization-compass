@@ -1,0 +1,39 @@
+backlog_id,area,priority,issue,proposed_action,acceptance_criteria,dependencies,status,target_version,owner,source_ids,notes,created_date
+\SB001,\Ssoftware_metadata,\Scritical,\SNOMAD・Manopt等のexact license fileを一次資料で再確認,\Sofficial repository license fileをversion pinして記録,\Slicense fieldにSPDX idとcommit/dateが入る,\S,\Sdone,\S0.2.0,\Sunassigned,\SS092;S094,\SExact licenses verified for Manopt MATLAB and NOMAD from official repositories.,\S2026-07-13
+\SB002,\Ssoftware_metadata,\Scritical,\S全63実装のcurrent release version/date自動検証,\Sofficial release/APIから定期取得するpipeline,\Sversion drift reportが生成される,\S,\Sin_progress,\S0.3+,\Sunassigned,\S,\Sv0.2.0 refreshed high-usage/open-source implementations; remaining unknown release fields stay explicit.,\S2026-07-13
+\SB003,\Ssoftware_metadata,\Shigh,\Ssolver option default値のversion別snapshot,\S重要optionのみofficial docsから構造化,\Sversioned option tableが追加される,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB004,\Ssoftware_metadata,\Shigh,\SOS/architecture/GPU対応のCI確認,\Sofficial wheel/binary/build matrixを取得,\Ssupported platform matrixがversion付き,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB005,\Smethods,\Shigh,\SBARON・ANTIGONE等global NLP commercial solver追加,\Sofficial manualでproblem class/証明範囲調査,\Sglobal solver rowsとfit追加,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB006,\Smethods,\Shigh,\SBonmin/Couenne等open-source MINLP実装の現状確認,\Smaintenance/license/releaseを公式repoで確認,\Scurrentness付きimplementation rows,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB007,\Smethods,\Smedium,\SECOS等cone solverの現行性・deprecated context追加,\Sofficial sourcesでstatus確認,\Sconic implementation coverage改善,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB008,\Sproblem_classes,\Shigh,\Sstochastic programming専用method/solver拡充,\SBenders、progressive hedging、SDDPを追加,\Sscenario/decomposition fit 30件以上,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB009,\Sproblem_classes,\Shigh,\Srobust/DRO formulation taxonomy拡充,\Suncertainty set、Wasserstein等を分離,\Sfeature/valueとsolver mapping追加,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB010,\Sproblem_classes,\Shigh,\Sbilevel optimization taxonomy拡充,\SKKT reformulation、implicit differentiation、global bilevelを分離,\SPA046が複数archetypeへ正規化,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB011,\Sproblem_classes,\Smedium,\SVI/equilibrium/complementarity実装追加,\SPATH等official docs調査,\Sspecialized solver mappings追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB012,\Sproblem_classes,\Smedium,\SPDE-constrained frameworks追加,\Sdolfin-adjoint、TAO等official docs調査,\Sadjoint/mesh diagnostic拡充,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB013,\Sproblem_classes,\Smedium,\Soptimal experimental design専用cone/greedy法追加,\SD/A/E-optimalityを分離,\SPA054 fitとcases追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB014,\Sproblem_classes,\Smedium,\Ssafe Bayesian optimization追加,\Ssafety constraint/acquisitionを別family化,\Sfailure-aware/safe rules追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB015,\Sproblem_classes,\Smedium,\Smulti-fidelity BO/Hyperband taxonomy分離,\Sfidelity modelとschedulerを別entity化,\Sresource allocation relations追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB016,\Sproblem_classes,\Smedium,\Smixed/categorical DFO method追加,\SMADS categorical・evolutionary encodingを整理,\Svariable support fit改善,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB017,\Sproblem_classes,\Smedium,\Sapproximation algorithm保証taxonomy追加,\STSP/set cover等のapprox ratioを構造化,\Sapproximation_guarantee fields追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB018,\Smethods,\Smedium,\Sstochastic second-order/variance reduction追加,\SSVRG/SAGA/Shampoo/K-FAC等一次資料調査,\SML family拡充,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB019,\Smethods,\Smedium,\Sonline convex optimization/regret table追加,\Smirror descent/FTRL/ONSの保証を構造化,\Sonline view追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB020,\Smethods,\Smedium,\Sfederated optimization実装・通信model追加,\SFedAvg等をmethod/implementation分離,\Scommunication diagnostics追加,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB021,\Sdata_model,\Shigh,\Smethod assumptionを原子feature predicateへ正規化,\Srequired_conditionsをexpression ASTへ移行,\Srule engineで機械評価可能,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB022,\Sdata_model,\Shigh,\Sversioned source claim tableとsupersession追加,\Sclaim validity intervalとreplaced_byを追加,\Shistorical reproducibility確保,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB023,\Sdata_model,\Shigh,\Simplementation option table正規化,\Soption name/type/default/version/impactを別table化,\SAPI-specific view生成可能,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB024,\Sdata_model,\Smedium,\Slicense/use conditionをlegal metadataへ分離,\SSPDX、commercial tiers、academic condition、jurisdiction notes,\Slicense filterが可能,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB025,\Sdata_model,\Smedium,\Sbenchmark context schema追加,\Shardware、instance distribution、budget、toleranceを必須化,\S文脈なしrankingを防止,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB026,\Sdata_model,\Smedium,\Sdynamic dimension/budget thresholds,\Smethod × cost × dimensionのpiecewise rules,\Sfixed low/high label依存を削減,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB027,\Svalidation,\Scritical,\Sforeign-key・vocabulary・source link CI,\SJSON Schema/SQL constraints/test suiteを作成,\S全releaseで0 error,\S,\Sdone,\S0.2.0,\Sunassigned,\S,\SExecutable SQLite full-load and integrity checks added to release_checks.,\S2026-07-13
+\SB028,\Svalidation,\Shigh,\S公式API smoke tests,\S代表callをpinned environmentsで実行,\Sstatus/options differencesが検知される,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB029,\Svalidation,\Shigh,\S20+ scenario regression testsのrule engine化,\Sexpected first/second/avoidをassert,\Sschema/rule変更のregressionを検知,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB030,\Svalidation,\Smedium,\Scross-solver numerical test set,\SLP/QP/NLP/MIP/LSの小規模instances,\Sresidual/status mappingを比較,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB031,\Sviews,\Smedium,\SSciPy-only executable recipes追加,\Sproblem→function→method→options examples,\Scopyable examplesとtests,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB032,\Sviews,\Smedium,\SPython OSS-only / commercial / GPU views追加,\Slicense・backend filtersから自動生成,\Sfiltersでview再生成,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB033,\Sviews,\Smedium,\SExcel GUI diagnostic form追加,\S12質問からrule結果を表示,\Smacroなしでも候補2件とwarning表示,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB034,\Sgovernance,\Shigh,\Squarterly maintenance cadenceとowner assignment,\Srelease/source review checklist,\Slast_verified期限超過alert,\S,\Sopen,\S0.2+,\Sunassigned,\S,\S,\S2026-07-13
+\SB035,\Sgovernance,\Smedium,\Scommunity contribution schema・review policy,\Spull request templateとevidence requirements,\S未確認情報がconfidence付きで追加可能,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB036,\Slocalization,\Slow,\S日本語表示名・専門用語review,\S分野専門家による用語統一,\SglossaryとUI表記の差異解消,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB037,\Sinteroperability,\Smedium,\SJSON SchemaとOpenAPI出力,\S型・enum・FKをmachine schemaへ,\Sweb app/AI retrievalでvalidation可能,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
+\SB038,\Sinteroperability,\Smedium,\SRDF/knowledge graph export,\Sentity/relation/source provenanceをRDF化,\SSPARQLで階層・根拠検索可能,\S,\Sopen,\Sfuture,\Sunassigned,\S,\S,\S2026-07-13
