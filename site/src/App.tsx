@@ -31,6 +31,7 @@ import { resolveAlias } from "./contracts/entity-links";
 import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { PageOrientation } from "./components/PageOrientation";
+import { SearchPage } from "./features/learning/SearchPage";
 
 import "./styles.css";
 
@@ -39,6 +40,7 @@ const primaryNavigation = [
   { label: "Map", to: "/map", matchPaths: ["/map"] },
   { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  { label: "検索", to: "/search", matchPaths: ["/search"] },
   { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
@@ -210,6 +212,7 @@ function AppShell() {
           <Route path="/coverage" element={<CoveragePage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
           <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/theater/:alias" element={<AliasRoute />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

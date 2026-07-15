@@ -12,6 +12,7 @@ from optimization_compass.coverage import build_coverage_report, write_coverage_
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.learning_graph import build_learning_graph_index
 from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
@@ -321,6 +322,15 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_view_ids=search_tree_views,
     )
     _write_json(output_dir / "entity-links.json", entity_links)
+    _write_json(
+        output_dir / "learning-graph.json",
+        build_learning_graph_index(
+            repository,
+            dataset_version=release["version"],
+            entity_links=entity_links,
+            trace_index=trace_index,
+        ),
+    )
     source_index = build_source_evidence_index(
         repository,
         dataset_version=release["version"],
@@ -1711,6 +1721,8 @@ def _content_payload(page: ContentPage) -> dict[str, Any]:
     return {
         "content_id": page.content_id,
         "kind": page.kind,
+        "canonical_entity_type": page.canonical_entity_type,
+        "canonical_entity_id": page.canonical_entity_id,
         "title_ja": page.title_ja,
         "title_en": page.title_en,
         "summary": page.summary,

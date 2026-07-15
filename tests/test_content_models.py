@@ -151,6 +151,8 @@ def _write_page(tmp_path: Path, body: str, *, extra: str = "") -> Path:
         """---
 content_id: concept.example
 kind: concept
+canonical_entity_type: feature
+canonical_entity_id: F_CONVEXITY
 title_ja: Example
 title_en: Example
 summary: Summary.

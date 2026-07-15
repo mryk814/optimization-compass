@@ -186,23 +186,84 @@ class ComparisonSetMemberSeed(MetadataModel):
 class LearningEdgeSeed(MetadataModel):
     edge_id: NonBlank
     source_type: Literal[
-        "method", "view_preset", "visualization_profile", "objective", "scenario", "comparison"
+        "method",
+        "problem",
+        "feature",
+        "case",
+        "implementation",
+        "scenario",
+        "comparison",
+        "view_preset",
     ]
     source_id: NonBlank
     target_type: Literal[
-        "method", "view_preset", "visualization_profile", "objective", "scenario", "comparison"
+        "method",
+        "problem",
+        "feature",
+        "case",
+        "implementation",
+        "scenario",
+        "comparison",
+        "view_preset",
     ]
     target_id: NonBlank
-    relation: Literal["prerequisite", "next", "related", "contrast"]
+    relation: Literal[
+        "prerequisite_for",
+        "next_step",
+        "contrast_with",
+        "special_case_of",
+        "generalizes",
+        "applied_in",
+        "common_misconception_for",
+        "see_visualization",
+        "see_comparison",
+        "see_case",
+        "implemented_by",
+    ]
     rationale: NonBlank
+    difficulty: Literal["beginner", "intermediate", "advanced", "all"]
+    audience: Literal["learner", "practitioner", "researcher", "all"]
     display_order: int = Field(ge=1)
     source_ids: list[NonBlank] = Field(min_length=1)
     last_verified: NonBlank
+    status: Literal["current", "deprecated", "draft"]
 
     @model_validator(mode="after")
     def reject_self_edge(self) -> LearningEdgeSeed:
         if (self.source_type, self.source_id) == (self.target_type, self.target_id):
             raise ValueError("learning edge cannot reference itself")
+        return self
+
+
+class TerminologyAliasSeed(MetadataModel):
+    term_id: NonBlank
+    target_type: Literal["method", "problem", "feature", "implementation"]
+    target_id: NonBlank
+    label_ja: NonBlank
+    label_en: NonBlank
+    abbreviations: list[NonBlank] = Field(default_factory=list)
+    synonyms: list[NonBlank] = Field(default_factory=list)
+    domain_terms: list[NonBlank] = Field(default_factory=list)
+    misspellings: list[NonBlank] = Field(default_factory=list)
+    deprecated_terms: list[NonBlank] = Field(default_factory=list)
+    disambiguation_note: NonBlank | None = None
+    locale: NonBlank
+    rationale: NonBlank
+    source_ids: list[NonBlank] = Field(min_length=1)
+    last_verified: NonBlank
+
+    @model_validator(mode="after")
+    def validate_terms(self) -> TerminologyAliasSeed:
+        groups = (
+            self.abbreviations,
+            self.synonyms,
+            self.domain_terms,
+            self.misspellings,
+            self.deprecated_terms,
+        )
+        normalized = [value.casefold().strip() for group in groups for value in group]
+        if len(normalized) != len(set(normalized)):
+            raise ValueError("terminology terms must be unique within a canonical entity")
         return self
 
 
@@ -253,6 +314,7 @@ class AtlasMetadataSeed(MetadataModel):
     comparison_sets: list[ComparisonSetSeed] = Field(min_length=1)
     comparison_set_members: list[ComparisonSetMemberSeed] = Field(min_length=1)
     learning_edges: list[LearningEdgeSeed] = Field(min_length=1)
+    terminology_aliases: list[TerminologyAliasSeed] = Field(min_length=30)
     learning_coverage_expectations: list[LearningCoverageExpectationSeed] = Field(min_length=1)
     learning_slice_priorities: list[LearningSlicePrioritySeed] = Field(min_length=1)
 
@@ -264,6 +326,7 @@ class AtlasMetadataSeed(MetadataModel):
             (self.demo_scenarios, "scenario_id"),
             (self.comparison_sets, "comparison_set_id"),
             (self.learning_edges, "edge_id"),
+            (self.terminology_aliases, "term_id"),
             (self.learning_coverage_expectations, "expectation_id"),
             (self.learning_slice_priorities, "slice_id"),
         )
@@ -300,6 +363,31 @@ class AtlasMetadataSeed(MetadataModel):
             for row in self.learning_edges
         ]
         _require_unique(edge_keys, "learning edge")
+        alias_targets = [(row.target_type, row.target_id) for row in self.terminology_aliases]
+        _require_unique(alias_targets, "terminology alias target")
+        owners: dict[str, list[TerminologyAliasSeed]] = {}
+        for row in self.terminology_aliases:
+            terms = [
+                row.label_ja,
+                row.label_en,
+                *row.abbreviations,
+                *row.synonyms,
+                *row.domain_terms,
+                *row.misspellings,
+                *row.deprecated_terms,
+            ]
+            for term in terms:
+                owners.setdefault(term.casefold().replace(" ", ""), []).append(row)
+        ambiguous = [
+            term
+            for term, rows in owners.items()
+            if len({(row.target_type, row.target_id) for row in rows}) > 1
+            and any(row.disambiguation_note is None for row in rows)
+        ]
+        if ambiguous:
+            raise ValueError(
+                "ambiguous terminology requires disambiguation: " + ", ".join(sorted(ambiguous))
+            )
         expectation_keys = [
             (row.subject_type, row.subject_id, row.purpose, row.artifact_kind, row.renderer_family)
             for row in self.learning_coverage_expectations

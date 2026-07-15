@@ -156,7 +156,7 @@ describe("application routes", () => {
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
-    expect(links).toHaveLength(7);
+    expect(links).toHaveLength(8);
     links.forEach((link) => expect(link).toBeVisible());
     within(screen.getByLabelText("Atlasの主要な入口"))
       .getAllByRole("link")
