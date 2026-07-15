@@ -86,11 +86,20 @@ test("375px Coverageが横にはみ出さずfilterできる", async ({ page, bas
   await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
 });
 
+test("375px Global Searchが横にはみ出さずfilterできる", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/search?q=BO&type=method");
+  await expect(page.getByRole("heading", { name: /ベイズ最適化/u })).toBeVisible();
+  await page.getByRole("combobox", { name: "検索の目的" }).selectOption("understand_method");
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-global-search");
+});
+
 test("375px 追加教材のtableとcodeがpage全体をはみ出さない", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/cp-sat");
   await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
   await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
   await expect(page.locator("table")).toBeVisible();
   await expect(page.locator("pre code")).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "Learning path" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });

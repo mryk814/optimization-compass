@@ -249,6 +249,21 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "failure-modes.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
+    assert manifest_payload["retrieval_documents"] == {
+        "path": "retrieval-documents.json",
+        "version": "1.0.0",
+    }
+    assert manifest_payload["search_benchmark"] == {
+        "path": "search-benchmark.json",
+        "version": "1.0.0",
+    }
+    assert (first_output / "search-index.json").read_bytes() == (
+        second_output / "search-index.json"
+    ).read_bytes()
+    assert (first_output / "retrieval-documents.json").read_bytes() == (
+        second_output / "retrieval-documents.json"
+    ).read_bytes()
     claim_payload = json.loads((first_output / "implementation-claims.json").read_bytes())
     assert len(claim_payload["claims"]) == 64 * 7 + 1
     assert claim_payload["freshness"]["claim_count"] == 64 * 7

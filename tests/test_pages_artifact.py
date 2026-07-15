@@ -13,7 +13,15 @@ DATASET_VERSION = "0.3.0"
 DATABASE_SHA256 = "b" * 64
 ROOT = Path(__file__).parents[1]
 SCRIPT = ROOT / "scripts/pages_artifact.py"
-HASH_ROUTES = ("/", "/#/map", "/#/diagnose", "/#/theater/nelder-mead", "/#/gallery", "/#/coverage")
+HASH_ROUTES = (
+    "/",
+    "/#/map",
+    "/#/diagnose",
+    "/#/theater/nelder-mead",
+    "/#/gallery",
+    "/#/coverage",
+    "/#/search?q=BO&type=method",
+)
 JSON_ASSETS = (
     "data/release.json",
     "data/manifest.json",
@@ -23,6 +31,9 @@ JSON_ASSETS = (
     "data/comparisons.json",
     "data/traces/index.json",
     "data/coverage.json",
+    "data/search-index.json",
+    "data/retrieval-documents.json",
+    "data/search-benchmark.json",
 )
 
 
