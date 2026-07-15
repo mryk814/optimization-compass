@@ -26,7 +26,7 @@
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 83 | 3111 | 12 | 1 | pass |
 | `mads` | `M_MADS` | 65 | 2400 | 6 | 1 | pass |
 | `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 2340 | 7 | 1 | pass |
-| `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 2151 | 6 | 1 | pass |
+| `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 2289 | 6 | 1 | pass |
 | `multi-objective` | `M_NSGA_II` | 76 | 3102 | 9 | 1 | pass |
 | `newton-method` | `M_NEWTON` | 40 | 1795 | 4 | 1 | pass |
 | `particle-swarm` | `M_PARTICLE_SWARM` | 56 | 2283 | 6 | 1 | pass |
