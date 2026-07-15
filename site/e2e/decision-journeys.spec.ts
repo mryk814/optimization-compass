@@ -50,3 +50,19 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
   await expect(page.getByRole("heading", { level: 1, name: /Nelder[–-]Mead/u })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toHaveCount(0);
 });
+
+test("canonical Gallery caseで候補・条件付き・除外理由を区別できる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC013");
+
+  await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "候補手法" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "条件付き" })).toBeVisible();
+  await expect(page.getByText(/初期値が十分よく/u)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "避ける" })).toBeVisible();
+  await expect(page.getByText(/残差とJacobianの構造を捨て/u)).toBeVisible();
+  await expect(page.locator("pre code")).toContainText("least_squares");
+
+  await page.getByRole("link", { name: "この特徴で診断する" }).click();
+  await expect(page.getByRole("button", { name: "連続" })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "残差ベクトル" })).toHaveAttribute("aria-pressed", "true");
+});

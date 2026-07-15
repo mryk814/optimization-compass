@@ -4,6 +4,552 @@
   "entities": [
     {
       "aliases": [],
+      "canonical_url": "/gallery/EC013",
+      "entity_id": "EC013",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "観測データから非線形model parameterを推定する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:jacobian",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:sum_of_squares",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_LM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA033",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC017",
+      "entity_id": "EC017",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "costと性能のPareto trade-offを探索する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_WEIGHTED_SUM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:multiobjective",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:pareto_set",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC019",
+      "entity_id": "EC019",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "時間窓付き配送routeを10分以内に組む",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BRANCH_CUT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:discrete",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:feasible_only",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:graph",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_GUROBI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_ROUTING",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA031",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC020",
+      "entity_id": "EC020",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "非線形動力学を含む軌道を最適化する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MULTIPLE_SHOOTING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:dynamics",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:automatic_differentiation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:trajectory",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CASADI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_DRAKE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA042",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "非線形動力学とpath constraintを守る軌道を設計したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC025",
+      "entity_id": "EC025",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "100Hzで反復MPCのQPを解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ACTIVE_SET_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:dynamics",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:analytic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:quadratic",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:trajectory",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA043",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC026",
+      "entity_id": "EC026",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "PDE制約付き大規模設計をmatrix-freeで解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NEWTON_CG",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_TRUST_KRYLOV",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:implicit",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:hessian_vector_product",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:very_expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PETSC_TAO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA045",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/budget-allocation",
       "entity_id": "budget-allocation",
       "entity_type": "case",
@@ -12,12 +558,12 @@
       "relations": [
         {
           "relation_type": "candidate_method",
-          "target_id": "MF_DISCRETE_EXACT",
+          "target_id": "M_CP_SAT",
           "target_type": "method"
         },
         {
-          "relation_type": "candidate_method",
-          "target_id": "M_CP_SAT",
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
         },
         {
@@ -77,14 +623,14 @@
           "target_type": "method"
         },
         {
-          "relation_type": "candidate_method",
-          "target_id": "M_NELDER_MEAD",
-          "target_type": "method"
-        },
-        {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
         },
         {
           "relation_type": "evidence",
@@ -138,7 +684,7 @@
           "target_type": "method"
         },
         {
-          "relation_type": "candidate_method",
+          "relation_type": "conditional_method",
           "target_id": "M_SLSQP",
           "target_type": "method"
         },
@@ -190,12 +736,12 @@
       "relations": [
         {
           "relation_type": "candidate_method",
-          "target_id": "MF_DISCRETE_EXACT",
+          "target_id": "M_CP_SAT",
           "target_type": "method"
         },
         {
-          "relation_type": "candidate_method",
-          "target_id": "M_CP_SAT",
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
         },
         {
@@ -6906,6 +7452,11 @@
       "label": "active-set QP",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S004",
           "target_type": "source"
@@ -7094,6 +7645,11 @@
       "external_url": null,
       "label": "operator-splitting QP",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S004",
@@ -7447,6 +8003,11 @@
       "label": "BFGS法",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -7565,6 +8126,11 @@
       "external_url": null,
       "label": "branch-and-cut",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC019",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S005",
@@ -7918,6 +8484,11 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "EC019",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "budget-allocation",
           "target_type": "case"
         },
@@ -8013,6 +8584,16 @@
       "external_url": null,
       "label": "差分進化",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S006",
@@ -8141,6 +8722,11 @@
       "external_url": null,
       "label": "direct collocation",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S042",
@@ -8296,6 +8882,11 @@
       "label": "ε-constraint法",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC017",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S039",
           "target_type": "source"
@@ -8352,6 +8943,11 @@
       "external_url": null,
       "label": "Gauss–Newton法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC013",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S002",
@@ -8786,6 +9382,11 @@
       "label": "Levenberg–Marquardt法",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC013",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -8831,6 +9432,11 @@
       "external_url": null,
       "label": "組合せlocal search",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC019",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S023",
@@ -9012,6 +9618,11 @@
       "label": "multiple shooting",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S042",
           "target_type": "source"
@@ -9115,6 +9726,11 @@
       "external_url": null,
       "label": "Nelder–Mead単体法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC013",
+          "target_type": "case"
+        },
         {
           "relation_type": "case",
           "target_id": "budget-allocation",
@@ -9269,6 +9885,11 @@
       "label": "Newton-CG法",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -9327,6 +9948,11 @@
       "external_url": null,
       "label": "NSGA-II",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC017",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S039",
@@ -10644,6 +11270,11 @@
       "label": "trust-krylov",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -10781,6 +11412,11 @@
       "external_url": null,
       "label": "重み付き和scalarization",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC017",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S039",
@@ -11117,7 +11753,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "配送routing",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC019",
+          "target_type": "case"
+        }
+      ],
       "summary": "配送routing。変数=graph、目的=discrete、制約=combinatorial。"
     },
     {
@@ -11137,7 +11779,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "非線形最小二乗",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC013",
+          "target_type": "case"
+        }
+      ],
       "summary": "非線形最小二乗。変数=continuous、目的=sum_of_squares、制約=bounds。"
     },
     {
@@ -11187,7 +11835,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "多目的連続最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC017",
+          "target_type": "case"
+        }
+      ],
       "summary": "多目的連続最適化。変数=continuous、目的=multiobjective、制約=bounds。"
     },
     {
@@ -11227,7 +11881,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "最適制御",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        }
+      ],
       "summary": "最適制御。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
     },
     {
@@ -11237,7 +11897,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "model predictive control",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        }
+      ],
       "summary": "model predictive control。変数=trajectory、目的=quadratic、制約=dynamics。"
     },
     {
@@ -11257,7 +11923,13 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "PDE制約付き最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        }
+      ],
       "summary": "PDE制約付き最適化。変数=continuous、目的=general_nonlinear、制約=implicit。"
     },
     {

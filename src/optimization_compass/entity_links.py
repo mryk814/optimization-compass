@@ -342,6 +342,15 @@ def build_entity_link_index(
             connect(
                 "case", case_id, "candidate_method", "method", str(method_id), reverse_type="case"
             )
+        for conditional in case["conditional_methods"]:
+            connect(
+                "case",
+                case_id,
+                "conditional_method",
+                "method",
+                str(conditional["method_id"]),
+                reverse_type="case",
+            )
         for excluded in case["excluded_methods"]:
             connect(
                 "case",
