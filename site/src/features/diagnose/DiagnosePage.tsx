@@ -14,6 +14,7 @@ import {
 } from "../../state/atlas-state";
 import { useAtlasState } from "../../state/useAtlasState";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
+import { PageOrientation } from "../../components/PageOrientation";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { findEntity } from "../../contracts/entity-links";
 import { useEntityLinks } from "../../state/entity-links";
@@ -312,6 +313,12 @@ export function DiagnosePage() {
   return (
     <section className="diagnose-page">
       <header className="diagnose-header"><p className="eyebrow">Offline Diagnosis</p><h1>診断</h1><p>条件を選ぶと候補と除外理由をURLだけで共有できます。</p></header>
+      <PageOrientation
+        limits="回答がunknownの項目は候補を狭めません。結果は登録済みのルールとデータに基づく候補であり、実験や実装の成功を保証しません。"
+        next={[{ label: "Mapで問題構造を見る", to: "/map" }, { label: "実問題のGalleryを見る", to: "/gallery" }, { label: "手法の前提を読む", to: "/learn" }]}
+        purpose="問題の条件を順に整理し、候補・除外理由・追加確認を同じ状態から確認します。"
+        readingSteps={["上から答えられる条件を選びます。選択はURLに反映されます。", "候補だけでなく、条件付き候補と除外理由も読みます。", "追加確認や根拠を見てから、Map・手法ページへ進みます。"]}
+      />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}
       {loadState.status === "ready" && <LoadedDiagnose data={loadState.data} view={loadState.view} />}

@@ -19,6 +19,7 @@ import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { comparisonRoute } from "./compare-routes";
+import { PageOrientation } from "../../components/PageOrientation";
 import {
   contourSegments,
   mapX,
@@ -64,6 +65,12 @@ export function ComparisonPage() {
           <p>同じ等高線とoracle evaluation軸で、更新方向と目的値の推移を同期します。</p>
         </div>
       </header>
+      <PageOrientation
+        limits="表示される差はこのcomparison presetの条件・seed・budgetに限ったものです。グラフの見た目だけで手法の一般的な優劣は判断しません。"
+        next={[{ label: "別の比較presetを選ぶ", to: "/compare" }, { label: "手法の前提を読む", to: "/learn" }, { label: "実行Traceを見る", to: "/theater" }]}
+        purpose="同じ実験条件にそろえた複数手法の軌跡と目的値を、同じ再生位置で読みます。"
+        readingSteps={["presetと比較条件を確認します。", "再生を進め、更新方向と目的値の変化を同じevaluation数で比べます。", "差が出た理由は、各手法の教材・前提・Traceへ戻って確認します。"]}
+      />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {!loaded && !error && <p role="status">比較条件を読み込み中…</p>}
       {loaded && (
