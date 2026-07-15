@@ -17,6 +17,7 @@ import { usePlayback } from "./usePlayback";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { NelderMeadVisualization } from "../theater/NelderMeadPage";
+import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 
 type LoadedTrace = {
   trace: AlgorithmTrace;
@@ -68,10 +69,10 @@ function TracePlayer({ trace, entry, entries, scenario }: LoadedTrace) {
       />
     );
   }
-  return <GenericTracePlayer entry={entry} trace={trace} />;
+  return <GenericTracePlayer entry={entry} scenario={scenario} trace={trace} />;
 }
 
-function GenericTracePlayer({ trace, entry }: Omit<LoadedTrace, "entries">) {
+function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entries">) {
   const playback = usePlayback(trace.trace_id, trace.frames);
   const frame = playback.currentFrame;
   return (
@@ -88,6 +89,7 @@ function GenericTracePlayer({ trace, entry }: Omit<LoadedTrace, "entries">) {
           <div><dt>Dataset</dt><dd>{trace.dataset_version}</dd></div>
         </dl>
       </header>
+      {scenario && <ScenarioLessonPanel scenario={scenario} />}
       <PlaybackControls playback={playback} />
       <div className="trace-snapshot" aria-label="現在の完全スナップショット">
         <section>

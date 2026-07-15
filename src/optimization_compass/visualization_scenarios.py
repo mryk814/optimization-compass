@@ -7,6 +7,9 @@ from pydantic import Field, model_validator
 from optimization_compass.trace_models import NonBlank, TraceModel
 
 Purpose = Literal["mechanism", "comparison", "failure_contrast", "sensitivity"]
+ComparisonRole = Literal["primary_example", "sensitivity_variant", "failure_contrast", "baseline"]
+KnownReferenceDisplayPolicy = Literal["show", "show_if_available", "not_shown"]
+NarrationMilestoneId = Literal["start", "first_change", "pattern_visible", "termination"]
 ArtifactKind = Literal[
     "executable_trace", "schematic_animation", "static_diagram", "result_visualization"
 ]
@@ -50,11 +53,81 @@ def scenario_identity(scenario_id: str) -> tuple[ScenarioIdentityStatus, str | N
 ParameterValue = bool | int | float
 
 
+class LocalizedText(TraceModel):
+    ja: NonBlank
+    en: NonBlank
+
+
+class VisualizationObservable(TraceModel):
+    observable_id: NonBlank
+    label_ja: NonBlank
+    label_en: NonBlank
+
+
+class VisualizationSignal(TraceModel):
+    signal_id: NonBlank
+    label_ja: NonBlank
+    label_en: NonBlank
+    observable_ids: list[NonBlank] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_observables(self) -> Self:
+        if len(set(self.observable_ids)) != len(self.observable_ids):
+            raise ValueError("signal observable IDs must be unique")
+        return self
+
+
+class VisualizationNarrationStep(TraceModel):
+    milestone_id: NarrationMilestoneId
+    title_ja: NonBlank
+    title_en: NonBlank
+    observable_ids: list[NonBlank] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_observables(self) -> Self:
+        if len(set(self.observable_ids)) != len(self.observable_ids):
+            raise ValueError("narration observable IDs must be unique")
+        return self
+
+
+class KnownReferenceDisplay(TraceModel):
+    policy: KnownReferenceDisplayPolicy
+    note_ja: NonBlank
+    note_en: NonBlank
+
+
 class VisualizationLesson(TraceModel):
+    learning_objective: LocalizedText
+    misconception: LocalizedText | None
     expected_phenomenon_ja: NonBlank
     expected_phenomenon_en: NonBlank
+    success_signals: list[VisualizationSignal] = Field(min_length=1)
+    failure_signals: list[VisualizationSignal]
+    primary_observables: list[VisualizationObservable] = Field(min_length=1)
+    secondary_observables: list[VisualizationObservable]
+    narration_steps: list[VisualizationNarrationStep] = Field(min_length=3)
+    comparison_role: ComparisonRole
+    prerequisite_concept_ids: list[NonBlank]
+    recommended_next_scenario_ids: list[NonBlank]
+    known_reference_display: KnownReferenceDisplay
+    static_summary: LocalizedText
+    text_alternative: LocalizedText
+    derived_media_caption: LocalizedText
     limitations_ja: NonBlank
     limitations_en: NonBlank
+
+    @model_validator(mode="after")
+    def validate_unique_ids(self) -> Self:
+        signal_ids = [signal.signal_id for signal in [*self.success_signals, *self.failure_signals]]
+        if len(set(signal_ids)) != len(signal_ids):
+            raise ValueError("lesson signal IDs must be unique")
+        for label, values in (
+            ("prerequisite concept", self.prerequisite_concept_ids),
+            ("recommended scenario", self.recommended_next_scenario_ids),
+        ):
+            if len(set(values)) != len(values):
+                raise ValueError(f"{label} IDs must be unique")
+        return self
 
 
 class VisualizationInitialCondition(TraceModel):
@@ -109,7 +182,7 @@ class VisualizationArtifact(TraceModel):
 
 
 class VisualizationScenario(TraceModel):
-    contract_version: Literal["1.0.0"]
+    contract_version: Literal["1.1.0"]
     dataset_version: NonBlank
     scenario_id: NonBlank
     identity_status: ScenarioIdentityStatus
@@ -141,11 +214,43 @@ class VisualizationScenario(TraceModel):
             raise ValueError("run IDs must be unique")
         if len(set(self.artifact.observable_ids)) != len(self.artifact.observable_ids):
             raise ValueError("observable IDs must be unique")
+        lesson_observables = [
+            *self.lesson.primary_observables,
+            *self.lesson.secondary_observables,
+        ]
+        lesson_observable_ids = [item.observable_id for item in lesson_observables]
+        if len(set(lesson_observable_ids)) != len(lesson_observable_ids):
+            raise ValueError("lesson observable IDs must be unique")
+        if not set(lesson_observable_ids).issubset(self.artifact.observable_ids):
+            raise ValueError("lesson observables must be provided by the artifact")
+        signal_observable_ids = {
+            observable_id
+            for signal in [*self.lesson.success_signals, *self.lesson.failure_signals]
+            for observable_id in signal.observable_ids
+        }
+        if not signal_observable_ids.issubset(lesson_observable_ids):
+            raise ValueError("signal observables must be declared by the lesson")
+        milestone_ids = [step.milestone_id for step in self.lesson.narration_steps]
+        if len(set(milestone_ids)) != len(milestone_ids):
+            raise ValueError("narration milestone IDs must be unique")
+        if milestone_ids[0] != "start" or milestone_ids[-1] != "termination":
+            raise ValueError("narration must start at start and end at termination")
+        if any(
+            not set(step.observable_ids).issubset(lesson_observable_ids)
+            for step in self.lesson.narration_steps
+        ):
+            raise ValueError("narration observables must be declared by the lesson")
+        if self.purpose in {"failure_contrast", "sensitivity"} and (
+            self.lesson.misconception is None or not self.lesson.failure_signals
+        ):
+            raise ValueError(
+                "failure and sensitivity scenarios require a misconception and failure signals"
+            )
         return self
 
 
 class VisualizationScenarioIndex(TraceModel):
-    contract_version: Literal["1.0.0"]
+    contract_version: Literal["1.1.0"]
     dataset_version: NonBlank
     scenarios: list[VisualizationScenario] = Field(min_length=1)
 
@@ -155,4 +260,12 @@ class VisualizationScenarioIndex(TraceModel):
             raise ValueError("scenario IDs must be unique")
         if any(scenario.dataset_version != self.dataset_version for scenario in self.scenarios):
             raise ValueError("scenario dataset version must match the index")
+        scenario_ids = {scenario.scenario_id for scenario in self.scenarios}
+        recommended_ids = {
+            recommended_id
+            for scenario in self.scenarios
+            for recommended_id in scenario.lesson.recommended_next_scenario_ids
+        }
+        if not recommended_ids.issubset(scenario_ids):
+            raise ValueError("recommended scenarios must exist in the index")
         return self

@@ -12,14 +12,19 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.visualization_scenarios import (
+    KnownReferenceDisplay,
+    LocalizedText,
     VisualizationArtifact,
     VisualizationBudget,
     VisualizationExperiment,
     VisualizationInitialCondition,
     VisualizationLesson,
+    VisualizationNarrationStep,
+    VisualizationObservable,
     VisualizationRun,
     VisualizationScenario,
     VisualizationSeed,
+    VisualizationSignal,
 )
 
 Strategy = Literal["exploit", "explore"]
@@ -311,7 +316,7 @@ def generate_surrogate_scenario(
     initial_design = [item.x for item in payload.frames[0].observations]
     variant = strategy != "explore" or noise_preset != "noiseless"
     scenario = VisualizationScenario(
-        contract_version="1.0.0",
+        contract_version="1.1.0",
         dataset_version=dataset_version,
         scenario_id=scenario_id,
         identity_status="generated_only",
@@ -322,6 +327,20 @@ def generate_surrogate_scenario(
         problem_definition_id="PROBLEM_EXPENSIVE_BLACK_BOX_1D",
         problem_instance_id="OBJECTIVE_EDUCATIONAL_WAVY_1D",
         lesson=VisualizationLesson(
+            learning_objective=LocalizedText(
+                ja="観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+                en="Read how observations update the surrogate and acquisition to select "
+                "the next point",
+            ),
+            misconception=(
+                LocalizedText(
+                    ja="探索係数や観測noiseを変えても次の評価点と不確実性は同じになる",
+                    en="Changing exploration weight or observation noise leaves the next "
+                    "point and uncertainty unchanged",
+                )
+                if variant
+                else None
+            ),
             expected_phenomenon_ja=(
                 "観測からsurrogateとExpected Improvementを更新し、次の評価点を選ぶ"
                 if not variant
@@ -333,6 +352,126 @@ def generate_surrogate_scenario(
                 if not variant
                 else "Exploration weight or observation noise changes the selected point "
                 "and uncertainty"
+            ),
+            success_signals=[
+                VisualizationSignal(
+                    signal_id="candidate_selected_from_acquisition",
+                    label_ja="acquisitionの山から次の評価点が選ばれる",
+                    label_en="The next evaluation is selected from an acquisition peak",
+                    observable_ids=[
+                        "expected_improvement",
+                        "selected_candidate",
+                        "posterior_uncertainty",
+                    ],
+                )
+            ],
+            failure_signals=(
+                [
+                    VisualizationSignal(
+                        signal_id="variant_changes_decision",
+                        label_ja="baselineと異なる候補点または不確実性になる",
+                        label_en="Candidate or uncertainty differs from the baseline",
+                        observable_ids=[
+                            "posterior_uncertainty",
+                            "expected_improvement",
+                            "selected_candidate",
+                        ],
+                    )
+                ]
+                if variant
+                else []
+            ),
+            primary_observables=[
+                VisualizationObservable(
+                    observable_id="observations", label_ja="観測点", label_en="observations"
+                ),
+                VisualizationObservable(
+                    observable_id="posterior_mean",
+                    label_ja="surrogate平均",
+                    label_en="posterior mean",
+                ),
+                VisualizationObservable(
+                    observable_id="posterior_uncertainty",
+                    label_ja="予測不確実性",
+                    label_en="posterior uncertainty",
+                ),
+                VisualizationObservable(
+                    observable_id="expected_improvement",
+                    label_ja="Expected Improvement",
+                    label_en="Expected Improvement",
+                ),
+                VisualizationObservable(
+                    observable_id="selected_candidate",
+                    label_ja="次候補",
+                    label_en="selected candidate",
+                ),
+            ],
+            secondary_observables=[
+                VisualizationObservable(
+                    observable_id="incumbent_history",
+                    label_ja="best-so-far履歴",
+                    label_en="incumbent history",
+                )
+            ],
+            narration_steps=[
+                VisualizationNarrationStep(
+                    milestone_id="start",
+                    title_ja="初期観測を確認",
+                    title_en="Inspect the initial observations",
+                    observable_ids=["observations"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="first_change",
+                    title_ja="最初のsurrogate更新と次点選択",
+                    title_en="First surrogate update and candidate selection",
+                    observable_ids=[
+                        "posterior_mean",
+                        "posterior_uncertainty",
+                        "expected_improvement",
+                        "selected_candidate",
+                    ],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="観測追加で不確実性が変わる",
+                    title_en="Uncertainty changes as observations are added",
+                    observable_ids=["observations", "posterior_uncertainty"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="termination",
+                    title_ja="評価予算到達時のincumbentを確認",
+                    title_en="Inspect the incumbent at the evaluation budget",
+                    observable_ids=["incumbent_history"],
+                ),
+            ],
+            comparison_role="sensitivity_variant" if variant else "primary_example",
+            prerequisite_concept_ids=[
+                "CONCEPT_SURROGATE_MODEL",
+                "CONCEPT_ACQUISITION_FUNCTION",
+            ],
+            recommended_next_scenario_ids=[
+                "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+                if variant
+                else "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+            ],
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja="optimizerが参照しない真の目的関数は教材用overlayとしてのみ表示する",
+                note_en="Show the optimizer-hidden true objective only as an educational overlay",
+            ),
+            static_summary=LocalizedText(
+                ja="観測、surrogate平均、不確実性、Expected Improvement、次候補を同じframeで示す。",
+                en="Show observations, surrogate mean, uncertainty, Expected Improvement, "
+                "and next candidate in one frame.",
+            ),
+            text_alternative=LocalizedText(
+                ja="各評価で観測点、incumbent、次候補、acquisition、不確実性を読み上げる。",
+                en="At each evaluation, report observations, incumbent, next candidate, "
+                "acquisition, and uncertainty.",
+            ),
+            derived_media_caption=LocalizedText(
+                ja=f"Bayesian Optimization: {strategy} / {noise_preset}でのsurrogate更新",
+                en=f"Bayesian Optimization: surrogate updates for {strategy} / {noise_preset}",
             ),
             limitations_ja=(
                 "固定seed・1次元・RBF kernelの教育用run。kernel/noise仮定、高次元化、"

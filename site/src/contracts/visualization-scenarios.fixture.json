@@ -1,9 +1,9 @@
 {
-  "contract_version": "1.0.0",
+  "contract_version": "1.1.0",
   "dataset_version": "0.2.0",
   "scenarios": [
     {
-      "contract_version": "1.0.0",
+      "contract_version": "1.1.0",
       "dataset_version": "0.2.0",
       "scenario_id": "SCENARIO_NM_QUADRATIC",
       "identity_status": "canonical",
@@ -14,8 +14,46 @@
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
       "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "lesson": {
+        "learning_objective": {
+          "ja": "単体の幾何操作と候補の受理判断を結び付けて読む",
+          "en": "Connect simplex geometry with candidate acceptance decisions"
+        },
+        "misconception": null,
         "expected_phenomenon_ja": "反射・拡大・収縮で単体が移動する",
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, and contraction",
+        "success_signals": [
+          {
+            "signal_id": "accepted_simplex_move",
+            "label_ja": "受理操作で単体が更新される",
+            "label_en": "An accepted operation updates the simplex",
+            "observable_ids": ["simplex_vertices", "accepted_operation", "objective_value"]
+          }
+        ],
+        "failure_signals": [],
+        "primary_observables": [
+          {"observable_id": "simplex_vertices", "label_ja": "単体の頂点", "label_en": "simplex vertices"},
+          {"observable_id": "accepted_operation", "label_ja": "受理操作", "label_en": "accepted operation"}
+        ],
+        "secondary_observables": [
+          {"observable_id": "objective_value", "label_ja": "目的関数値", "label_en": "objective value"}
+        ],
+        "narration_steps": [
+          {"milestone_id": "start", "title_ja": "初期simplex", "title_en": "Initial simplex", "observable_ids": ["simplex_vertices"]},
+          {"milestone_id": "first_change", "title_ja": "最初の受理判断", "title_en": "First decision", "observable_ids": ["simplex_vertices", "accepted_operation"]},
+          {"milestone_id": "pattern_visible", "title_ja": "単体の移動", "title_en": "Simplex movement", "observable_ids": ["simplex_vertices", "objective_value"]},
+          {"milestone_id": "termination", "title_ja": "終了", "title_en": "Termination", "observable_ids": ["simplex_vertices", "objective_value"]}
+        ],
+        "comparison_role": "primary_example",
+        "prerequisite_concept_ids": ["CONCEPT_SIMPLEX"],
+        "recommended_next_scenario_ids": ["SCENARIO_NM_QUADRATIC"],
+        "known_reference_display": {
+          "policy": "show",
+          "note_ja": "既知最適点を表示する",
+          "note_en": "Show the known optimum"
+        },
+        "static_summary": {"ja": "単体と候補を表示する。", "en": "Show simplex and candidate."},
+        "text_alternative": {"ja": "頂点と操作を読む。", "en": "Report vertices and operation."},
+        "derived_media_caption": {"ja": "Nelder–Meadの単体操作", "en": "Nelder–Mead simplex operations"},
         "limitations_ja": "2次元の教育用決定論的実行",
         "limitations_en": "A deterministic two-dimensional educational run"
       },

@@ -21,6 +21,7 @@ import { usePlayback } from "../playback/usePlayback";
 import { comparisonRoute } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
+import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import {
   contourSegments,
   mapX,
@@ -145,6 +146,7 @@ function ComparisonPlayer({
         <p className="comparison-caveat">{comparison.caveat}</p>
         <p className="comparison-caveat">{scenarios[0].lesson.limitations_ja}</p>
       </section>
+      <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <div className="comparison-grid">
         {traces.map((trace, index) => (
@@ -154,6 +156,7 @@ function ComparisonPlayer({
             contours={contours}
             evaluation={evaluation}
             markerIndex={index}
+            scenario={scenarios[index]}
             spec={spec}
             trace={trace}
           />
@@ -178,6 +181,7 @@ function ComparisonMemberCard({
   markerIndex,
   spec,
   contours,
+  scenario,
 }: {
   trace: AlgorithmTrace;
   comparisonMember: ComparisonMember;
@@ -185,6 +189,7 @@ function ComparisonMemberCard({
   markerIndex: number;
   spec: ObjectivePlotSpec;
   contours: ReturnType<typeof contourSegments>;
+  scenario: VisualizationScenario;
 }) {
   const links = useEntityLinks();
   const traceEntity = links.status === "ready" ? findEntity(links.index, "trace", trace.trace_id) : undefined;
@@ -264,6 +269,7 @@ function ComparisonMemberCard({
         bestValue={bestSoFarValue(trace.frames, evaluation)}
         currentPoint={point?.coordinates}
         initialPoint={initialPoint(trace)}
+        knownReferenceDisplay={scenario.lesson.known_reference_display}
         objective={trace.objective}
         terminalReason={trace.terminal_summary_ja}
       />

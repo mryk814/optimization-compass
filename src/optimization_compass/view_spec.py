@@ -204,6 +204,11 @@ class ManifestAsset(ContractModel):
     path: str = Field(min_length=1)
 
 
+class ManifestVisualizationScenarioAsset(ContractModel):
+    version: Literal["1.1.0"]
+    path: str = Field(pattern=r"^visualization-scenarios\.json$")
+
+
 class ManifestRecommendationAsset(ContractModel):
     version: Literal["2.0.0"]
     path: str = Field(min_length=1)
@@ -245,7 +250,7 @@ class SiteManifest(ContractModel):
     recommendation: ManifestRecommendationAsset
     traces: ManifestTraceAsset
     problems: ManifestAsset
-    visualization_scenarios: ManifestAsset
+    visualization_scenarios: ManifestVisualizationScenarioAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
     coverage: ManifestCoverageAsset

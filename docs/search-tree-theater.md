@@ -22,7 +22,7 @@ The site manifest owns the search-tree index path, byte count, and SHA-256. Pyth
 TypeScript parsers reject unknown core fields, unknown renderer versions, inconsistent
 gap values, broken node references, and trace/artifact identity mismatches.
 `data/visualization-scenarios.json` is the single scenario authority. The page resolves
-the artifact's `scenario_id` against that shared `VisualizationScenario 1.0.0` envelope
+the artifact's `scenario_id` against that shared `VisualizationScenario 1.1.0` envelope
 before rendering.
 
 ## Deterministic experiment

@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = "http://127.0.0.1:4173/optimization-compass/";
+const previewPort = Number(process.env.PLAYWRIGHT_PORT ?? "4173");
+const baseURL = `http://127.0.0.1:${previewPort}/optimization-compass/`;
 const mobileSpec = /responsive\.spec\.ts/u;
 
 export default defineConfig({
@@ -27,7 +28,7 @@ export default defineConfig({
     video: "off",
   },
   webServer: {
-    command: "npm run preview:e2e",
+    command: `npm exec vite -- preview --host 127.0.0.1 --port ${previewPort} --strictPort`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

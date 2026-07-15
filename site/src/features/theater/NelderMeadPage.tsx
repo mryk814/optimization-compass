@@ -13,6 +13,7 @@ import {
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
+import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 
 interface NelderMeadVisualizationProps {
   trace: AlgorithmTrace;
@@ -93,6 +94,7 @@ export function NelderMeadVisualization({
         </label>
       </section>
 
+      <ScenarioLessonPanel scenario={scenario} />
       <section className="nm-contract" aria-label="現在の操作">
         <strong>{frame.event_label_ja} / {frame.event_label_en}</strong>
         <span>iteration {frame.iteration} · evaluations {frame.oracle_evaluations}</span>
@@ -103,6 +105,7 @@ export function NelderMeadVisualization({
         bestValue={Number.isFinite(bestSoFar) ? bestSoFar : null}
         currentPoint={vertices[0]?.point.coordinates}
         initialPoint={initialPointArray(trace)}
+        knownReferenceDisplay={scenario.lesson.known_reference_display}
         objective={trace.objective}
         terminalReason={trace.terminal_summary_ja}
       />
