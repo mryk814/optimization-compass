@@ -93,3 +93,18 @@ test("Learn検索からmethod detailとrelated visualizationへ進む", async ({
   await expect(page.getByRole("heading", { level: 1, name: "Nelder–Meadの幾何操作" })).toBeVisible();
   await expect(page.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
 });
+
+test("追加教材を検索しcanonical methodと実行例を読める", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn");
+  await page.getByRole("textbox", { name: "検索" }).fill("CP-SAT");
+  await page.getByRole("link", { name: /CP-SATと制約プログラミング/u }).click();
+
+  await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "現実の問いをモデルへ移す" })).toBeVisible();
+  await expect(page.locator("pre code")).toContainText("cp_model.CpModel");
+  await expect(page.getByRole("link", { name: "Search-tree Theater" })).toHaveAttribute(
+    "href",
+    "#/theater/search-tree/binary-knapsack-bnb-complete",
+  );
+});

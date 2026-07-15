@@ -82,3 +82,12 @@ test("375px Coverageが横にはみ出さずfilterできる", async ({ page, bas
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
 });
+
+test("375px 追加教材のtableとcodeがpage全体をはみ出さない", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/learn/cp-sat");
+  await expect(page.getByRole("heading", { level: 1, name: "CP-SAT" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
+  await expect(page.locator("table")).toBeVisible();
+  await expect(page.locator("pre code")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});

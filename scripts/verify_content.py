@@ -8,7 +8,7 @@ from optimization_compass.content_models import load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.release_identity import load_dataset_release_identity
 
-MINIMUM_PUBLISHED_CONTENT_PAGES = 4
+MINIMUM_PUBLISHED_CONTENT_PAGES = 12
 MINIMUM_GALLERY_CASES = 4
 MINIMUM_COMPARISONS = 1
 
