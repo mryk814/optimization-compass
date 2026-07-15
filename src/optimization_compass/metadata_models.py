@@ -101,7 +101,12 @@ class ViewPresetSeed(MetadataModel):
 class VisualizationProfileSeed(MetadataModel):
     profile_id: NonBlank
     method_id: NonBlank
-    family: Literal["simplex_2d", "first_order_trajectory_2d"]
+    family: Literal[
+        "simplex_2d",
+        "first_order_trajectory_2d",
+        "feasible_region",
+        "pareto_front",
+    ]
     support_status: SupportStatus
     min_dimension: int = Field(ge=1)
     max_dimension: int = Field(ge=1)

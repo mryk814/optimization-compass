@@ -270,7 +270,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
     assert len(source_payload["sources"]) == 95
-    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4193
+    assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4202
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     search_trace = next(
         entity
@@ -284,6 +284,35 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "related_map",
         "visualizes",
     }
+    learning_slices = {
+        entity["entity_id"]: entity
+        for entity in link_payload["entities"]
+        if entity["entity_type"] == "trace"
+        and entity["entity_id"]
+        in {"constrained-disk-feasible-region", "biobjective-quadratic-pareto-front"}
+    }
+    assert {
+        artifact_id: artifact["canonical_url"] for artifact_id, artifact in learning_slices.items()
+    } == {
+        "constrained-disk-feasible-region": ("/theater/learning/SCENARIO_CONSTRAINED_DISK"),
+        "biobjective-quadratic-pareto-front": ("/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC"),
+    }
+    assert all(
+        {relation["relation_type"] for relation in artifact["relations"]}
+        >= {"evidence", "related_map", "visualizes"}
+        for artifact in learning_slices.values()
+    )
+    source_by_id = {source["source_id"]: source for source in source_payload["sources"]}
+    assert any(
+        target["target_id"] == "constrained-disk-feasible-region"
+        and target["canonical_url"] == "/theater/learning/SCENARIO_CONSTRAINED_DISK"
+        for target in source_by_id["S017"]["evidence_targets"]
+    )
+    assert any(
+        target["target_id"] == "biobjective-quadratic-pareto-front"
+        and target["canonical_url"] == "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC"
+        for target in source_by_id["S039"]["evidence_targets"]
+    )
     nelder_mead = next(
         entity
         for entity in link_payload["entities"]

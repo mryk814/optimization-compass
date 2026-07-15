@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.learning_slices import LearningSliceLink
 
 SOURCE_FRESHNESS_DAYS: dict[str, int] = {
     "official_documentation": 90,
@@ -100,6 +101,7 @@ def build_source_evidence_index(
     *,
     dataset_version: str,
     generated_at: datetime,
+    generated_visualizations: list[LearningSliceLink] | None = None,
 ) -> SourceEvidenceIndex:
     descriptors = _target_descriptors(repository)
     targets_by_source: defaultdict[str, list[EvidenceTarget]] = defaultdict(list)
@@ -122,6 +124,24 @@ def build_source_evidence_index(
                 last_verified=date.fromisoformat(str(row["last_verified"])),
             )
         )
+
+    for visualization in generated_visualizations or []:
+        for source_id in visualization.source_ids:
+            targets_by_source[source_id].append(
+                EvidenceTarget(
+                    evidence_link_id=f"GENERATED_VIS_{visualization.artifact_id}_{source_id}",
+                    target_table="visualization_artifacts",
+                    target_id=visualization.artifact_id,
+                    target_type="visualization",
+                    label=visualization.label,
+                    canonical_url=visualization.route,
+                    supported_field="artifact",
+                    claim_summary="Canonical scenarioとrenderer artifactを支える資料です。",
+                    evidence_role="supporting_or_primary",
+                    confidence="high",
+                    last_verified=visualization.last_verified,
+                )
+            )
 
     sources = []
     for row in repository.fetch_all("SELECT * FROM sources ORDER BY source_id"):

@@ -224,6 +224,51 @@
       "event_types": ["initialize", "step", "stop"],
       "source_ids": ["S070"],
       "last_verified": "2026-07-13"
+    },
+    {
+      "profile_id": "PROFILE_SLSQP_FEASIBLE_REGION",
+      "method_id": "M_SLSQP",
+      "family": "feasible_region",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.constrained_disk.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["position", "objective", "constraint_value", "violation", "active_constraint"],
+      "event_types": ["initialize", "restore_feasibility", "step", "activate_constraint", "stop"],
+      "source_ids": ["S017", "S029", "S030", "S064"],
+      "last_verified": "2026-07-15"
+    },
+    {
+      "profile_id": "PROFILE_BFGS_FEASIBLE_CONTRAST",
+      "method_id": "M_BFGS",
+      "family": "feasible_region",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.unconstrained_failure.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["position", "objective", "constraint_value", "violation"],
+      "event_types": ["initialize", "step", "constraint_violation", "stop"],
+      "source_ids": ["S001", "S055", "S056"],
+      "last_verified": "2026-07-15"
+    },
+    {
+      "profile_id": "PROFILE_NSGA_II_PARETO_FRONT",
+      "method_id": "M_NSGA_II",
+      "family": "pareto_front",
+      "support_status": "supported",
+      "min_dimension": 2,
+      "max_dimension": 2,
+      "generator_id": "educational.biobjective_grid.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["decision", "objective_vector", "dominance", "preference_weight"],
+      "event_types": ["evaluate", "classify_dominance", "select_preference", "stop"],
+      "source_ids": ["S039", "S068"],
+      "last_verified": "2026-07-15"
     }
   ],
   "demo_scenarios": [
@@ -306,6 +351,38 @@
       "budget": 40,
       "source_ids": ["S001"],
       "last_verified": "2026-07-14"
+    },
+    {
+      "scenario_id": "SCENARIO_CONSTRAINED_DISK",
+      "method_id": "M_SLSQP",
+      "profile_id": "PROFILE_SLSQP_FEASIBLE_REGION",
+      "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",
+      "name_ja": "実行可能領域と制約を無視した失敗を比べる",
+      "name_en": "Compare a feasible path with an unconstrained failure",
+      "initial_point": [1.8, 1.8],
+      "parameters": {"teaching_trace": true, "failure_contrast": "M_BFGS"},
+      "stopping": {"constraint_tolerance": 1E-09, "objective_tolerance": 1E-09},
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 12,
+      "source_ids": ["S017", "S029", "S030", "S055", "S056", "S064"],
+      "last_verified": "2026-07-15"
+    },
+    {
+      "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "method_id": "M_NSGA_II",
+      "profile_id": "PROFILE_NSGA_II_PARETO_FRONT",
+      "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+      "name_ja": "単一bestではなくPareto frontを読む",
+      "name_en": "Read a Pareto front instead of one best value",
+      "initial_point": [1.0, 1.0],
+      "parameters": {"grid_points_per_axis": 9, "preference_weights": [0.2, 0.5, 0.8]},
+      "stopping": {"grid_complete": true},
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 81,
+      "source_ids": ["S039", "S055", "S068"],
+      "last_verified": "2026-07-15"
     }
   ],
   "comparison_sets": [
@@ -396,7 +473,10 @@
     {"edge_id":"LEARN_CMA_IMPL","source_type":"method","source_id":"M_CMA_ES","target_type":"implementation","target_id":"I_PYCMA","relation":"implemented_by","rationale":"CMA-ESのPython実装へ接続する。","difficulty":"beginner","audience":"practitioner","display_order":39,"source_ids":["S032","S058"],"last_verified":"2026-07-15","status":"current"},
     {"edge_id":"LEARN_SLSQP_IMPL","source_type":"method","source_id":"M_SLSQP","target_type":"implementation","target_id":"I_SCIPY_SLSQP","relation":"implemented_by","rationale":"SciPy SLSQPへ接続する。","difficulty":"beginner","audience":"practitioner","display_order":40,"source_ids":["S001","S064"],"last_verified":"2026-07-15","status":"current"},
     {"edge_id":"LEARN_LP_IMPL","source_type":"method","source_id":"MF_LP_QP_CONIC","target_type":"implementation","target_id":"I_CVXPY","relation":"implemented_by","rationale":"LP・QP・錐modelを表現するCVXPYへ接続する。","difficulty":"beginner","audience":"practitioner","display_order":41,"source_ids":["S010","S011"],"last_verified":"2026-07-15","status":"current"},
-    {"edge_id":"LEARN_MAP_GD","source_type":"method","source_id":"M_GRADIENT_DESCENT","target_type":"view_preset","target_id":"VIEW_METHOD_MECHANISM","relation":"see_visualization","rationale":"Method mechanism Viewで必要情報を横断する。","difficulty":"beginner","audience":"learner","display_order":42,"source_ids":["S001"],"last_verified":"2026-07-15","status":"current"}
+    {"edge_id":"LEARN_MAP_GD","source_type":"method","source_id":"M_GRADIENT_DESCENT","target_type":"view_preset","target_id":"VIEW_METHOD_MECHANISM","relation":"see_visualization","rationale":"Method mechanism Viewで必要情報を横断する。","difficulty":"beginner","audience":"learner","display_order":42,"source_ids":["S001"],"last_verified":"2026-07-15","status":"current"},
+    {"edge_id":"LEARN_SLSQP_VIS","source_type":"method","source_id":"M_SLSQP","target_type":"scenario","target_id":"SCENARIO_CONSTRAINED_DISK","relation":"see_visualization","rationale":"feasible region、violation、active constraintとfailure contrastを確認する。","difficulty":"intermediate","audience":"learner","display_order":43,"source_ids":["S017","S029","S064"],"last_verified":"2026-07-15","status":"current"},
+    {"edge_id":"LEARN_NSGA_VIS","source_type":"method","source_id":"M_NSGA_II","target_type":"scenario","target_id":"SCENARIO_BIOBJECTIVE_QUADRATIC","relation":"see_visualization","rationale":"dominated点、Pareto front、preference選択を確認する。","difficulty":"beginner","audience":"learner","display_order":44,"source_ids":["S039","S068"],"last_verified":"2026-07-15","status":"current"},
+    {"edge_id":"LEARN_SLSQP_CASE","source_type":"method","source_id":"M_SLSQP","target_type":"case","target_id":"EC028","relation":"see_case","rationale":"非線形constraintを持つGallery caseで適用条件を確認する。","difficulty":"intermediate","audience":"practitioner","display_order":45,"source_ids":["S017","S029","S064"],"last_verified":"2026-07-15","status":"current"}
   ],
   "terminology_aliases": [
     {"term_id":"TERM_INTEGER_PROGRAMMING","target_type":"method","target_id":"MF_DISCRETE_EXACT","label_ja":"整数計画","label_en":"Integer programming","abbreviations":["IP","MIP"],"synonyms":["混合整数計画","mixed-integer programming"],"domain_terms":["混合整数最適化"],"misspellings":["mixed integer programing"],"deprecated_terms":[],"disambiguation_note":"IPはinteger programming。内点法は別候補。","locale":"ja-JP,en","rationale":"整数・混合整数の表記をfamilyへ解決する。","source_ids":["S079"],"last_verified":"2026-07-15"},

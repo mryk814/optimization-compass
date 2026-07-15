@@ -86,6 +86,9 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
       .map((reference) => reference.entity_id),
   );
   if (selected.node_id.startsWith("method:")) methodIds.add(selected.node_id.slice("method:".length));
+  const learningSliceLinks: { label: string; to: string }[] = [];
+  if (methodIds.has("M_SLSQP")) learningSliceLinks.push({ label: "feasible regionで制約違反を見る", to: THEATER_ROUTES.constrainedContinuous });
+  if (methodIds.has("M_NSGA_II") || methodIds.has("M_WEIGHTED_SUM")) learningSliceLinks.push({ label: "Pareto frontでtrade-offを見る", to: THEATER_ROUTES.multiObjective });
 
   return (
     <article aria-live="polite" className="map-detail-card">
@@ -97,6 +100,7 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
       {[...methodIds].map((methodId) => <MethodPredicates data={data} key={methodId} methodId={methodId} />)}
       {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
+      {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>Learning slice</strong><p>canonical problemとrenderer familyで可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}
 
       {children.length > 0 && (
         <section className="map-detail-section">

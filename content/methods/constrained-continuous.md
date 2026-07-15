@@ -8,10 +8,10 @@ summary: 目的値だけでなく実行可能性・active constraint・停止理
 source_ids: [S017, S029, S030, S055]
 prerequisites: [concept.convexity]
 related_ids: [concept.convexity, lp-qp-conic]
-visualization_ids: []
+visualization_ids: [constrained-disk-feasible-region]
 comparison_ids: []
 aliases: [/learn/constrained-continuous]
-visualization_aliases: []
+visualization_aliases: [constrained-disk-feasible-region|/theater/constrained-continuous]
 comparison_aliases: []
 status: published
 last_reviewed: 2026-07-15

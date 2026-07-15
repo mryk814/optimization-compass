@@ -32,6 +32,7 @@ import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { PageOrientation } from "./components/PageOrientation";
 import { SearchPage } from "./features/learning/SearchPage";
+import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 
 import "./styles.css";
 
@@ -203,6 +204,7 @@ function AppShell() {
           <Route path={THEATER_ROUTES.index} element={<TheaterIndexPage />} />
           <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
           <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
+          <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
           <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />

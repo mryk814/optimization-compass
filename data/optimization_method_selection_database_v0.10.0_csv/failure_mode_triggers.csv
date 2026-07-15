@@ -1,0 +1,13 @@
+trigger_id,failure_mode_id,predicate_id,feature_id,operator,value_json,rationale
+\STRIGGER_FM003,\SFM003,\SP_M_BFGS_LARGE_NOISE,\N,\Seq,"\S""large_noise""",\SCanonical condition for FM003.
+\STRIGGER_FM007,\SFM007,\N,\SF_DIMENSION_CONTEXT,\Seq,"\S""huge_sparse_or_distributed""",\SCanonical condition for FM007.
+\STRIGGER_FM009,\SFM009,\N,\SF_DIMENSION_CONTEXT,\Seq,"\S""over_10000""",\SCanonical condition for FM009.
+\STRIGGER_FM011,\SFM011,\N,\SF_CONSTRAINT_CLASS,\Seq,"\S""nonlinear""",\SCanonical condition for FM011.
+\STRIGGER_FM014,\SFM014,\N,\SF_CONSTRAINT_CLASS,\Seq,"\S""implicit_or_failure""",\SCanonical condition for FM014.
+\STRIGGER_FM015,\SFM015,\N,\SF_CONSTRAINT_CLASS,\Seq,"\S""nonlinear""",\SCanonical condition for FM015.
+\STRIGGER_FM016,\SFM016,\N,\SF_GUARANTEE_GLOBAL_CERTIFICATE,\Seq,"\S""multiple_distinct_solutions""",\SCanonical condition for FM016.
+\STRIGGER_FM022,\SFM022,\SP_M_NELDER_MEAD_SCALE_LIMIT,\N,\Seq,"\S""over_10000""",\SCanonical condition for FM022.
+\STRIGGER_FM024,\SFM024,\N,\SF_EVALUATION_RELIABILITY,\Seq,"\S""large_noise""",\SCanonical condition for FM024.
+\STRIGGER_FM025,\SFM025,\N,\SF_GUARANTEE_GLOBAL_CERTIFICATE,\Seq,"\S""approximation_guarantee""",\SCanonical condition for FM025.
+\STRIGGER_FM033,\SFM033,\SP_M_BAYESIAN_OPT_GP_SCALE_LIMIT,\N,\Seq,"\S""over_10000""",\SCanonical condition for FM033.
+\STRIGGER_FM037,\SFM037,\SP_M_CMA_ES_SCALE_LIMIT,\N,\Seq,"\S""over_10000""",\SCanonical condition for FM037.
