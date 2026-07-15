@@ -12,9 +12,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 215501,
+        "payload_bytes": 215524,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "bbac03e26b53eae725d328fc631c9b26632dcd62053ebfcc5a362ef7913a845a",
+        "payload_sha256": "c4797cf0b4ac1bf5b6def7415b2fb98b1cf5dbc8c9cdf1c6700bdea3c9c30e29",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -85,9 +85,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 210050,
+        "payload_bytes": 210073,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "c2f48359cfb96b593dada3b405020b6dd91880f70d102ae8ea48f08fd616238d",
+        "payload_sha256": "4590d46069e1490878fd2ccecb8dc5d48d6d567186794fb61f1da5a5af0f097b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -158,9 +158,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 210077,
+        "payload_bytes": 210100,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "1339db659f4dfb71d0aeeed66c4024e55d1d3f203c06adbc94d619a714d209bf",
+        "payload_sha256": "acf2458b2429a0d6c881e653bdabc5d82fedf6470d3ce58092c15f99b6f14a5f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -231,9 +231,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 204048,
+        "payload_bytes": 204071,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "cde44b74852a58f863e4797a2e78599634732ce08bae654f18f306bb6791151f",
+        "payload_sha256": "397b35035bcfd1ad18649df5ff58e27af075a6fd2196e13c90ddbc8179258512",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -305,9 +305,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 72373,
+        "payload_bytes": 72396,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "e5e6b214569bb633b3d6f8605045b1f0f501db9d2433e06cbcde1b44a7d1ef35",
+        "payload_sha256": "22dae1ba12313c2401f40007e7dad13c04a568213acf74a254154d6b5d9f8ed2",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -380,9 +380,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 66282,
+        "payload_bytes": 66305,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "7c703f37945abc868bdaecc8ae9a3189779efec5cf1551633306e3b0697a6200",
+        "payload_sha256": "2105ac69f9ee121188c7ffb91695210e9bfaa874dd8c7190f2cc44de6d5503d6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -455,9 +455,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 65834,
+        "payload_bytes": 65857,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "a2b42ea7afe4ab964f521697349deee64e342db617b70df251fcf2721aa4d201",
+        "payload_sha256": "a93672815f5ea06ee8d69bd68afc065d779b6a90dfcf4048a2bdbf098c4cc0ce",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -530,9 +530,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 52977,
+        "payload_bytes": 53000,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "df1415c93325aae15c074204365d36934bc8f6caa5cc2aa3a29c8ad6197a98d7",
+        "payload_sha256": "43aed7ea5888abf120d492d66fc98273e736d36a1daeb57cf61391a9ae9e563c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -605,9 +605,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 66225,
+        "payload_bytes": 66248,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "5dc0ce6a5f56c38734e35a465631a88d6259edca0eccbd9e4cc2f2ce103bffce",
+        "payload_sha256": "92fa2b1a44d451b554493fbce9f88e8e517ede9c93d2779ddc5fae0b72f7778d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
@@ -680,9 +680,9 @@
           "gradient",
           "update_vector"
         ],
-        "payload_bytes": 65856,
+        "payload_bytes": 65879,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "549793c25d61e5d2f274ebb7d233feef88926d26a1cd7800959a4485144b0995",
+        "payload_sha256": "3bdba4f45ff4c5fd03bd238129d5ac58ac205bb9d9133d43fb480439e2e5184a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },

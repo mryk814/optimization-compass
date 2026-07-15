@@ -432,6 +432,7 @@ def _write_dummy_trace(
         implementation_id=None,
         objective={
             "family": "quadratic",
+            "direction": "minimize",
             "dimensions": 2,
             "generator_id": "objective.quadratic.v1",
             "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},

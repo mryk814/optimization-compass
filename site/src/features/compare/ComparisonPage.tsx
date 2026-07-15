@@ -20,6 +20,7 @@ import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { comparisonRoute } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
+import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import {
   contourSegments,
   mapX,
@@ -259,6 +260,13 @@ function ComparisonMemberCard({
         <div><dt>f(x)</dt><dd>{frame ? objectiveMetric(frame) : "未評価"}</dd></div>
         <div><dt>position</dt><dd>{point ? point.coordinates.map((value) => value.toFixed(3)).join(", ") : "未評価"}</dd></div>
       </dl>
+      <ObjectiveGoalCues
+        bestValue={bestSoFarValue(trace.frames, evaluation)}
+        currentPoint={point?.coordinates}
+        initialPoint={initialPoint(trace)}
+        objective={trace.objective}
+        terminalReason={trace.terminal_summary_ja}
+      />
       {traceEntity?.canonical_url && <Link className="text-link" to={traceEntity.canonical_url}>このTraceを単独再生</Link>}
     </article>
   );
@@ -392,6 +400,19 @@ function objectiveValue(frame: TraceFrame): number {
 
 function objectiveMetric(frame: TraceFrame): string {
   return objectiveValue(frame).toPrecision(5);
+}
+
+function initialPoint(trace: AlgorithmTrace): number[] {
+  const point = trace.initial_state.point;
+  return Array.isArray(point) && point.every((value): value is number => typeof value === "number") ? point : [];
+}
+
+function bestSoFarValue(frames: readonly TraceFrame[], evaluation: number): number | null {
+  const values = frames
+    .filter((frame) => frame.oracle_evaluations <= evaluation)
+    .flatMap((frame) => frame.points.map((point) => point.value))
+    .filter((value): value is number => value !== null);
+  return values.length ? Math.min(...values) : null;
 }
 
 function parameterText(parameters: Record<string, number>): string {
