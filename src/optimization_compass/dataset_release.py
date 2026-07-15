@@ -18,6 +18,7 @@ from openpyxl import Workbook, load_workbook
 
 from optimization_compass.metadata_models import AtlasMetadataSeed
 from optimization_compass.predicates import PredicateCatalog
+from optimization_compass.problem_instances import ProblemSuiteSeed
 from optimization_compass.release_identity import (
     DatasetReleaseIdentity,
     ReleaseIdentityError,
@@ -38,8 +39,10 @@ RELEASE_DATE = RELEASE_AUTHORITY.release_date
 DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
 DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
 DEFAULT_PREDICATE_MIGRATION = ROOT / "data/migrations/005_atomic_predicates.sql"
+DEFAULT_PROBLEM_MIGRATION = ROOT / "data/migrations/006_problem_instances.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
+DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 LICENSE_BUNDLE = {
     "LICENSE.txt": ROOT / "LICENSE",
     "DATA_LICENSE.txt": ROOT / "DATA_LICENSE",
@@ -75,7 +78,10 @@ ATLAS_TABLES = frozenset(
     {
         "view_presets",
         "method_visualization_profiles",
-        "demo_objectives",
+        "problem_definitions",
+        "problem_definition_archetypes",
+        "problem_definition_features",
+        "problem_instances",
         "demo_scenarios",
         "comparison_sets",
         "comparison_set_members",
@@ -226,8 +232,10 @@ def build_staged_release(
             migration_path,
             DEFAULT_COVERAGE_MIGRATION,
             DEFAULT_PREDICATE_MIGRATION,
+            DEFAULT_PROBLEM_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
+            DEFAULT_PROBLEM_SEED,
         ),
     )
     _verify_pinned_base(base_database)
@@ -516,14 +524,16 @@ def compute_live_checks(
         _view_preset_issues(connection) if "view_presets" in tables else ["missing:view_presets"]
     )
     profile_issues = _missing_table_issues(
-        tables, {"method_visualization_profiles", "demo_objectives"}
+        tables, {"method_visualization_profiles", "problem_definitions", "problem_instances"}
     )
     if not profile_issues:
         profile_issues = _profile_objective_issues(connection)
-    scenario_issues = _missing_table_issues(tables, {"demo_scenarios"})
+    scenario_issues = _missing_table_issues(tables, {"demo_scenarios", "problem_instances"})
     if not scenario_issues:
         scenario_issues = _scenario_issues(connection)
-    comparison_issues = _missing_table_issues(tables, {"comparison_sets", "comparison_set_members"})
+    comparison_issues = _missing_table_issues(
+        tables, {"comparison_sets", "comparison_set_members", "problem_instances"}
+    )
     if not comparison_issues:
         comparison_issues = _comparison_issues(connection)
     learning_issues = _missing_table_issues(tables, {"learning_edges"})
@@ -540,11 +550,11 @@ def compute_live_checks(
             _check(
                 "CHK013",
                 "Atlas schema closure",
-                "thirteen atlas metadata tables",
+                f"{len(ATLAS_TABLES)} atlas metadata tables",
                 "critical",
                 not missing_tables,
                 f"{len(missing_tables)} missing tables",
-                "all thirteen normalized tables exist",
+                f"all {len(ATLAS_TABLES)} normalized tables exist",
                 ", ".join(sorted(missing_tables)) or "All atlas tables exist.",
                 checked_at,
             ),
@@ -561,13 +571,13 @@ def compute_live_checks(
             ),
             _check(
                 "CHK015",
-                "Visualization/objective closure",
-                "profiles + objectives",
+                "Visualization/problem closure",
+                "profiles + problem definitions + instances",
                 "critical",
                 not profile_issues,
                 f"{len(profile_issues)} issues",
                 "generators, dimensions, implementations, and JSON are closed",
-                ", ".join(profile_issues[:10]) or "Profiles and objectives are closed.",
+                ", ".join(profile_issues[:10]) or "Profiles and problems are closed.",
                 checked_at,
             ),
             _check(
@@ -818,6 +828,7 @@ def _verify_site_release_tree(
         "gallery.json",
         "comparisons.json",
         "recommendation/site-data.json",
+        "problems.json",
         "traces/index.json",
         "visualization-scenarios.json",
         "search-trees/index.json",
@@ -848,6 +859,7 @@ def _verify_site_release_tree(
     referenced = {str(item["path"]) for item in manifest["views"] if isinstance(item, dict)}
     referenced.add(str(manifest["recommendation"]["path"]))
     referenced.add(str(manifest["traces"]["path"]))
+    referenced.add(str(manifest["problems"]["path"]))
     referenced.add(str(manifest["visualization_scenarios"]["path"]))
     referenced.add(str(manifest["coverage"]["path"]))
     referenced.add(str(manifest["coverage"]["report_path"]))
@@ -1103,6 +1115,9 @@ def _apply_atlas_metadata(
     predicate_seed = PredicateCatalog.model_validate_json(
         DEFAULT_PREDICATE_SEED.read_text(encoding="utf-8")
     )
+    problem_seed = ProblemSuiteSeed.model_validate_json(
+        DEFAULT_PROBLEM_SEED.read_text(encoding="utf-8")
+    )
     connection = sqlite3.connect(database_path)
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
@@ -1110,6 +1125,8 @@ def _apply_atlas_metadata(
         connection.executescript(migration_path.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_COVERAGE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_PREDICATE_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_PROBLEM_MIGRATION.read_text(encoding="utf-8"))
+        _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
         _record_target_release(connection, target_version, release_date)
@@ -1163,7 +1180,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Staged Optimization Atlas metadata, learning coverage, and atomic predicates.",
+            "Staged canonical problem definitions, instances, and executable registry links.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1177,12 +1194,15 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Optimization Atlas lacked canonical machine-evaluable method predicates.",
+            "Optimization Atlas lacked a shared canonical problem-instance suite.",
             (
-                "Added normalized Atlas and atomic-predicate tables with explicit coverage "
-                "and rule-target retirement."
+                "Replaced demo objectives with normalized problem definitions, instances, "
+                "reference metadata, and registry links."
             ),
-            "Keep learning contracts, artifacts, priorities, and release deltas auditable.",
+            (
+                "Keep diagnosis, comparison, visualization, and learning artifacts "
+                "on one problem authority."
+            ),
             target_version,
             release_date,
         ),
@@ -1202,16 +1222,6 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
             {
                 "state_fields": "state_fields_json",
                 "event_types": "event_types_json",
-                "source_ids": "source_ids_json",
-            },
-        ),
-        (
-            "demo_objectives",
-            list(seed.demo_objectives),
-            {
-                "domain": "domain_json",
-                "display_range": "display_range_json",
-                "optimum": "optimum_json",
                 "source_ids": "source_ids_json",
             },
         ),
@@ -1263,6 +1273,55 @@ def _insert_seed(connection: sqlite3.Connection, seed: AtlasMetadataSeed) -> Non
                 f'INSERT INTO "{table_name}" ({column_sql}) VALUES ({placeholders})',
                 [values[column] for column in columns],
             )
+
+
+def _insert_problem_seed(connection: sqlite3.Connection, seed: ProblemSuiteSeed) -> None:
+    for definition in seed.definitions:
+        values = definition.model_dump(mode="json")
+        related_problem_ids = values.pop("related_problem_ids")
+        feature_ids = values.pop("feature_ids")
+        values["available_oracles_json"] = _canonical_json(values.pop("available_oracles"))
+        values["dimensionality_policy_json"] = _canonical_json(values.pop("dimensionality_policy"))
+        values["related_problem_ids_json"] = _canonical_json(related_problem_ids)
+        values["feature_ids_json"] = _canonical_json(feature_ids)
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "problem_definitions", values)
+        for problem_id in related_problem_ids:
+            _insert_mapping(
+                connection,
+                "problem_definition_archetypes",
+                {
+                    "problem_definition_id": definition.problem_definition_id,
+                    "problem_id": problem_id,
+                },
+            )
+        for feature_id in feature_ids:
+            _insert_mapping(
+                connection,
+                "problem_definition_features",
+                {
+                    "problem_definition_id": definition.problem_definition_id,
+                    "feature_id": feature_id,
+                },
+            )
+
+    for instance in seed.instances:
+        values = instance.model_dump(mode="json")
+        for source_name in (
+            "parameters",
+            "bounds",
+            "constraints",
+            "initialization_candidates",
+            "display",
+            "intended_phenomena",
+        ):
+            values[f"{source_name}_json"] = _canonical_json(values.pop(source_name))
+        reference = values.pop("known_reference")
+        values["known_reference_json"] = (
+            _canonical_json(reference) if reference is not None else None
+        )
+        values["source_ids_json"] = _canonical_json(values.pop("source_ids"))
+        _insert_mapping(connection, "problem_instances", values)
 
 
 def _insert_predicate_seed(connection: sqlite3.Connection, seed: PredicateCatalog) -> None:
@@ -2071,25 +2130,50 @@ def _profile_objective_issues(connection: sqlite3.Connection) -> list[str]:
             issues.append(f"{profile_id}:state-or-event-json")
     for row in connection.execute(
         """
-        SELECT objective_id, support_status, dimensions, generator_id,
-               domain_json, display_range_json, display_expression,
-               optimum_json, source_ids_json
-        FROM demo_objectives
+        SELECT problem_definition_id, objective_direction, available_oracles_json,
+               dimensionality_policy_json, related_problem_ids_json, feature_ids_json,
+               source_ids_json
+        FROM problem_definitions
         """
     ):
-        objective_id = str(row[0])
         valid = (
-            row[1] in {"supported", "unsupported", "unknown", "not_applicable"}
-            and int(row[2]) >= 1
-            and bool(str(row[3]).strip())
-            and _valid_json_container(row[4], dict, non_empty=True)
-            and _valid_json_container(row[5], dict, non_empty=True)
-            and bool(str(row[6]).strip())
-            and _valid_json_container(row[7], dict, non_empty=True)
-            and _valid_json_container(row[8], list, non_empty=True)
+            row[1] in {"minimize", "maximize", "multiobjective"}
+            and _valid_json_container(row[2], list, non_empty=True)
+            and _valid_json_container(row[3], dict, non_empty=True)
+            and _valid_json_container(row[4], list, non_empty=True)
+            and _valid_json_container(row[5], list, non_empty=True)
+            and _valid_json_container(row[6], list, non_empty=True)
         )
         if not valid:
-            issues.append(f"{objective_id}:metadata")
+            issues.append(f"{row[0]}:definition-metadata")
+    for row in connection.execute(
+        """
+        SELECT problem_instance_id, registry_key, dimension, parameters_json,
+               bounds_json, constraints_json, initialization_candidates_json,
+               seed_status, seed_value, known_reference_status, known_reference_json,
+               display_json, intended_phenomena_json, source_ids_json
+        FROM problem_instances
+        """
+    ):
+        reference_required = row[9] in {"known_exact", "known_reference", "best_known"}
+        valid = (
+            bool(str(row[1]).strip())
+            and int(row[2]) >= 1
+            and _valid_json_container(row[3], dict, non_empty=True)
+            and _valid_json_container(row[4], dict, non_empty=True)
+            and _valid_json_container(row[5], list)
+            and _valid_json_container(row[6], list, non_empty=True)
+            and row[7] in {"fixed", "not_applicable", "unknown"}
+            and ((row[7] == "fixed") == (row[8] is not None))
+            and row[9]
+            in {"known_exact", "known_reference", "best_known", "unknown", "not_meaningful"}
+            and (reference_required == (row[10] is not None))
+            and _valid_json_container(row[11], dict, non_empty=True)
+            and _valid_json_container(row[12], list, non_empty=True)
+            and _valid_json_container(row[13], list, non_empty=True)
+        )
+        if not valid:
+            issues.append(f"{row[0]}:instance-metadata")
     return issues
 
 
@@ -2099,11 +2183,11 @@ def _scenario_issues(connection: sqlite3.Connection) -> list[str]:
         """
         SELECT scenario.scenario_id, scenario.seed_status, scenario.seed_value,
                scenario.budget, scenario.initial_point_json, scenario.parameters_json,
-               scenario.stopping_json, profile.profile_id, objective.objective_id
+               scenario.stopping_json, profile.profile_id, instance.problem_instance_id
         FROM demo_scenarios AS scenario
         LEFT JOIN method_visualization_profiles AS profile
           ON scenario.method_id = profile.method_id AND scenario.profile_id = profile.profile_id
-        LEFT JOIN demo_objectives AS objective USING (objective_id)
+        LEFT JOIN problem_instances AS instance USING (problem_instance_id)
         """
     ):
         valid = (
@@ -2128,9 +2212,9 @@ def _comparison_issues(connection: sqlite3.Connection) -> list[str]:
         SELECT comparison.comparison_set_id, comparison.synchronization,
                comparison.fairness_note, comparison.seed_status, comparison.seed_value,
                comparison.budget, comparison.initial_point_json, comparison.stopping_json,
-               objective.objective_id
+               instance.problem_instance_id
         FROM comparison_sets AS comparison
-        LEFT JOIN demo_objectives AS objective USING (objective_id)
+        LEFT JOIN problem_instances AS instance USING (problem_instance_id)
         """
     ):
         valid = (
@@ -2180,7 +2264,7 @@ def _learning_edge_issues(connection: sqlite3.Connection) -> list[str]:
         "method": ("methods", "method_id"),
         "view_preset": ("view_presets", "preset_id"),
         "visualization_profile": ("method_visualization_profiles", "profile_id"),
-        "objective": ("demo_objectives", "objective_id"),
+        "objective": ("problem_instances", "problem_instance_id"),
         "scenario": ("demo_scenarios", "scenario_id"),
         "comparison": ("comparison_sets", "comparison_set_id"),
     }
@@ -2307,8 +2391,16 @@ def _explicit_state_issues(
                 "not_applicable",
             },
         },
-        "demo_objectives": {
-            "support_status": {"supported", "unsupported", "unknown", "not_applicable"}
+        "problem_definitions": {"objective_direction": {"minimize", "maximize", "multiobjective"}},
+        "problem_instances": {
+            "seed_status": {"fixed", "not_applicable", "unknown"},
+            "known_reference_status": {
+                "known_exact",
+                "known_reference",
+                "best_known",
+                "unknown",
+                "not_meaningful",
+            },
         },
         "demo_scenarios": {"seed_status": {"fixed", "not_applicable", "unknown"}},
         "comparison_sets": {"seed_status": {"fixed", "not_applicable", "unknown"}},

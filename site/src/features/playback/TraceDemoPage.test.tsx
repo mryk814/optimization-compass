@@ -57,6 +57,7 @@ const manifest = {
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "2.0.0", path: "recommendation/site-data.json" },
+  problems: { version: "1.0.0", path: "problems.json" },
   visualization_scenarios: { version: "1.0.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },

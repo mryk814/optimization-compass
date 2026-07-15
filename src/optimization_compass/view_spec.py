@@ -244,6 +244,7 @@ class SiteManifest(ContractModel):
     views: list[ManifestView]
     recommendation: ManifestRecommendationAsset
     traces: ManifestTraceAsset
+    problems: ManifestAsset
     visualization_scenarios: ManifestAsset
     entity_links: ManifestAsset
     sources: ManifestAsset

@@ -111,44 +111,12 @@
       "last_verified": "2026-07-13"
     }
   ],
-  "demo_objectives": [
-    {
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
-      "name_ja": "二次関数",
-      "name_en": "Quadratic bowl",
-      "family": "quadratic",
-      "support_status": "supported",
-      "dimensions": 2,
-      "generator_id": "objective.quadratic.v1",
-      "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},
-      "display_range": {"x": [-4.0, 4.0], "y": [-4.0, 4.0], "z": [0.0, 40.0]},
-      "display_expression": "f(x, y) = (x - 1)^2 + 2(y + 1)^2",
-      "optimum": {"point": [1.0, -1.0], "value": 0.0},
-      "source_ids": ["S001"],
-      "last_verified": "2026-07-13"
-    },
-    {
-      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
-      "name_ja": "Rosenbrock関数",
-      "name_en": "Rosenbrock function",
-      "family": "rosenbrock",
-      "support_status": "supported",
-      "dimensions": 2,
-      "generator_id": "objective.rosenbrock.v1",
-      "domain": {"x": [-2.0, 2.0], "y": [-1.0, 3.0]},
-      "display_range": {"x": [-2.0, 2.0], "y": [-1.0, 3.0], "z": [0.0, 2500.0]},
-      "display_expression": "f(x, y) = (1 - x)^2 + 100(y - x^2)^2",
-      "optimum": {"point": [1.0, 1.0], "value": 0.0},
-      "source_ids": ["S001"],
-      "last_verified": "2026-07-13"
-    }
-  ],
   "demo_scenarios": [
     {
       "scenario_id": "SCENARIO_NM_QUADRATIC",
       "method_id": "M_NELDER_MEAD",
       "profile_id": "PROFILE_NELDER_MEAD_2D",
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "name_ja": "二次関数で単体操作を学ぶ",
       "name_en": "Learn simplex operations on a quadratic",
       "initial_point": [-2.5, 2.0],
@@ -164,7 +132,7 @@
       "scenario_id": "SCENARIO_NM_ROSENBROCK",
       "method_id": "M_NELDER_MEAD",
       "profile_id": "PROFILE_NELDER_MEAD_2D",
-      "objective_id": "OBJECTIVE_ROSENBROCK_2D",
+      "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
       "name_ja": "Rosenbrock谷で単体を追う",
       "name_en": "Follow a simplex through the Rosenbrock valley",
       "initial_point": [-1.2, 1.0],
@@ -180,7 +148,7 @@
       "scenario_id": "SCENARIO_GD_QUADRATIC",
       "method_id": "M_GRADIENT_DESCENT",
       "profile_id": "PROFILE_GRADIENT_DESCENT_2D",
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "name_ja": "細長い二次関数で勾配降下を学ぶ",
       "name_en": "Learn gradient descent on an ill-conditioned quadratic",
       "initial_point": [-1.6, 1.6],
@@ -196,7 +164,7 @@
       "scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "method_id": "M_MOMENTUM_SGD",
       "profile_id": "PROFILE_MOMENTUM_2D",
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "name_ja": "慣性付き勾配法を学ぶ",
       "name_en": "Learn momentum on an ill-conditioned quadratic",
       "initial_point": [-1.6, 1.6],
@@ -212,7 +180,7 @@
       "scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "method_id": "M_ADAM",
       "profile_id": "PROFILE_ADAM_2D",
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "name_ja": "Adamの適応的更新を学ぶ",
       "name_en": "Learn Adam on an ill-conditioned quadratic",
       "initial_point": [-1.6, 1.6],
@@ -228,7 +196,7 @@
   "comparison_sets": [
     {
       "comparison_set_id": "COMPARE_GRADIENT_FAMILY",
-      "objective_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "name_ja": "細長い谷で一次法を比較",
       "name_en": "First-order methods in an elongated valley",
       "initial_point": [-1.6, 1.6],

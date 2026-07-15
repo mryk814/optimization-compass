@@ -35,7 +35,7 @@ def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:
         "sqlite",
         "xlsx",
     }
-    assert verification.table_count == 46
+    assert verification.table_count == 49
     database_verification = verify_database(release.database_path)
     check_020 = next(check for check in database_verification.checks if check.check_id == "CHK020")
     assert check_020.status == "not_run"

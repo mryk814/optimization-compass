@@ -185,6 +185,13 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     index_bytes = (first_output / "traces/index.json").read_bytes()
     assert manifest_payload["traces"]["bytes"] == len(index_bytes)
     assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+    assert manifest_payload["problems"] == {
+        "path": "problems.json",
+        "version": "1.0.0",
+    }
+    problem_catalog = json.loads((first_output / "problems.json").read_bytes())
+    assert len(problem_catalog["definitions"]) == 9
+    assert len(problem_catalog["instances"]) == 10
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
     search_tree_index = json.loads(search_tree_index_bytes)
     assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
@@ -342,8 +349,13 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         for row in staged["method_visualization_profiles"]
         if row["profile_id"] == trace.profile_id
     )
+    problem_suite = json.loads(
+        Path("src/optimization_compass/resources/problem-suite.json").read_text(encoding="utf-8")
+    )
     objective = next(
-        row for row in staged["demo_objectives"] if row["objective_id"] == trace.objective_id
+        row
+        for row in problem_suite["instances"]
+        if row["problem_instance_id"] == trace.objective_id
     )
     scenario = next(
         row for row in staged["demo_scenarios"] if row["scenario_id"] == trace.scenario_id
@@ -355,10 +367,10 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     assert profile["generator_id"] == trace.generator_id
     assert profile["implementation_status"] == trace.implementation_mapping_status
     assert profile["implementation_id"] == trace.implementation_id
-    assert objective["generator_id"] == trace.objective["generator_id"]
+    assert objective["registry_key"] == trace.objective["generator_id"]
     assert scenario["method_id"] == trace.method_id
     assert scenario["profile_id"] == trace.profile_id
-    assert scenario["objective_id"] == trace.objective_id
+    assert scenario["problem_instance_id"] == trace.objective_id
     assert scenario["budget"] == trace.evaluation_budget
     assert scenario["parameters"] == trace.parameters
     assert scenario["stopping"] == trace.stopping
