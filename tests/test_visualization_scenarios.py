@@ -16,7 +16,7 @@ FIXTURE = Path("site/src/contracts/visualization-scenarios.fixture.json")
 def test_shared_visualization_scenario_fixture_is_valid() -> None:
     index = VisualizationScenarioIndex.model_validate_json(FIXTURE.read_bytes())
 
-    assert index.contract_version == "1.1.0"
+    assert index.contract_version == "1.2.0"
     assert index.scenarios[0].artifact.renderer_family == "simplex_geometry"
     assert index.scenarios[0].lesson.limitations_ja == "2次元の教育用決定論的実行"
     assert index.scenarios[0].lesson.primary_observables
@@ -107,6 +107,13 @@ def test_generated_lessons_cover_observables_signals_and_derived_text() -> None:
         [step.milestone_id for step in scenario.lesson.narration_steps]
         == ["start", "first_change", "pattern_visible", "termination"]
         for scenario in generated.scenarios
+    )
+    guided = [scenario for scenario in generated.scenarios if scenario.guided_story is not None]
+    assert [scenario.scenario_id for scenario in guided] == ["SCENARIO_NM_QUADRATIC"]
+    story = guided[0].guided_story
+    assert story is not None
+    assert [step.frame_index for step in story.steps] == sorted(
+        step.frame_index for step in story.steps
     )
     failure_or_sensitivity = [
         scenario

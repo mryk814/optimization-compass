@@ -30,14 +30,14 @@ ProblemDefinition
 - `RendererFamily`: an exact parser and component for an observable geometry. It is
   selected by family metadata, not inferred from a method ID.
 
-## Minimum `VisualizationScenario 1.1.0`
+## Minimum `VisualizationScenario 1.2.0`
 
 The generated contract uses stable IDs and exact enums. Unknown contract versions and
 unknown core fields fail parsing; there is no legacy fallback.
 
 ```json
 {
-  "contract_version": "1.1.0",
+  "contract_version": "1.2.0",
   "dataset_version": "0.3.0",
   "scenario_id": "SCENARIO_NM_QUADRATIC",
   "title_ja": "二次関数で単体操作を学ぶ",
@@ -87,6 +87,22 @@ unknown core fields fail parsing; there is no legacy fallback.
     "limitations_ja": "2次元の教育用決定論的実行",
     "limitations_en": "A deterministic two-dimensional educational run"
   },
+  "guided_story": {
+    "story_version": "1.0.0",
+    "introduction": {"ja": "4つのcueで単体操作を追う。", "en": "Follow four simplex-operation cues."},
+    "steps": [{
+      "milestone_id": "start",
+      "annotation": {"ja": "初期simplexを見る。", "en": "Inspect the initial simplex."},
+      "frame_index": 0,
+      "auto_pause": true,
+      "focus_target": "simplex_vertices",
+      "viewport_preset": "overview",
+      "camera_preset": null,
+      "playback_speed": 1,
+      "visible_layers": ["objective_value", "simplex_vertices"]
+    }],
+    "summary": {"ja": "候補生成と受理判断で進む。", "en": "Advance through proposals and decisions."}
+  },
   "experiment": {
     "oracle_policy": ["objective_value"],
     "initial_condition": {"point": [-2.5, 2.0]},
@@ -121,6 +137,12 @@ unknown core fields fail parsing; there is no legacy fallback.
   "last_verified": "2026-07-15"
 }
 ```
+
+`guided_story` is nullable while a renderer family has no authored story. When present, it is the
+renderer-independent control contract: exact frame, focus observable, visible observable layers,
+viewport/camera preset, speed, and auto-pause are data rather than page conditionals. The story
+milestones must already exist in `lesson.narration_steps`; focus and layer IDs must be supplied by
+the artifact. The first pilot is `SCENARIO_NM_QUADRATIC`.
 
 ### Required enums
 

@@ -1,5 +1,5 @@
 {
-  "contract_version": "1.1.0",
+  "contract_version": "1.2.0",
   "dataset_version": "0.10.0",
   "scenarios": [
     {
@@ -19,7 +19,7 @@
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -45,6 +45,89 @@
           "simplex_tolerance": 0.0001
         },
         "tuning_policy": "fixed_preset"
+      },
+      "guided_story": {
+        "introduction": {
+          "en": "Follow four cues from the initial simplex to the terminal decision.",
+          "ja": "4つのcueで、初期simplexから終了判断までを順に追います。"
+        },
+        "steps": [
+          {
+            "annotation": {
+              "en": "First locate the three vertices and identify best and worst.",
+              "ja": "3頂点の位置とbest / worstの役割を先に確認します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "simplex_vertices",
+            "frame_index": 0,
+            "milestone_id": "start",
+            "playback_speed": 1.0,
+            "viewport_preset": "overview",
+            "visible_layers": [
+              "objective_value",
+              "simplex_vertices"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Move the worst point across the centroid and inspect the decision.",
+              "ja": "worstを重心の反対側へ動かし、候補を受理する根拠を見ます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "accepted_operation",
+            "frame_index": 2,
+            "milestone_id": "first_change",
+            "playback_speed": 0.5,
+            "viewport_preset": "decision",
+            "visible_layers": [
+              "objective_value",
+              "simplex_vertices",
+              "accepted_operation"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Connect an accepted operation to the updated simplex and best value.",
+              "ja": "受理された操作でsimplexと最良値がどう更新されるかを結び付けます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "simplex_vertices",
+            "frame_index": 4,
+            "milestone_id": "pattern_visible",
+            "playback_speed": 1.0,
+            "viewport_preset": "trajectory",
+            "visible_layers": [
+              "objective_value",
+              "simplex_vertices",
+              "accepted_operation"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Inspect the final simplex and stop reason without generalizing performance.",
+              "ja": "最終simplexの大きさと終了理由を確認し、一般的性能の証明ではないと切り分けます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "objective_value",
+            "frame_index": 81,
+            "milestone_id": "termination",
+            "playback_speed": 0.5,
+            "viewport_preset": "terminal",
+            "visible_layers": [
+              "objective_value",
+              "simplex_vertices"
+            ]
+          }
+        ],
+        "story_version": "1.0.0",
+        "summary": {
+          "en": "Nelder–Mead advances through simplex proposals and decisions, not gradients.",
+          "ja": "Nelder–Meadは勾配ではなく、simplexの候補生成と受理判断で探索を進めます。"
+        }
       },
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
@@ -191,7 +274,7 @@
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -218,6 +301,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -363,7 +447,7 @@
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -390,6 +474,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -535,7 +620,7 @@
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -562,6 +647,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -708,7 +794,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -736,6 +822,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -889,7 +976,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -917,6 +1004,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1070,7 +1158,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -1098,6 +1186,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1251,7 +1340,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -1279,6 +1368,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1446,7 +1536,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -1474,6 +1564,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1641,7 +1732,7 @@
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -1669,6 +1760,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1836,7 +1928,7 @@
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -1864,6 +1956,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2015,7 +2108,7 @@
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -2043,6 +2136,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2210,7 +2304,7 @@
         "renderer_family": "surrogate_uncertainty"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -2237,6 +2331,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2424,7 +2519,7 @@
         "renderer_family": "surrogate_uncertainty"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -2451,6 +2546,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2638,7 +2734,7 @@
         "renderer_family": "surrogate_uncertainty"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -2665,6 +2761,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2838,7 +2935,7 @@
         "renderer_family": "surrogate_uncertainty"
       },
       "canonical_scenario_id": null,
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -2865,6 +2962,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -3051,7 +3149,7 @@
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -3081,6 +3179,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -3262,7 +3361,7 @@
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
-      "contract_version": "1.1.0",
+      "contract_version": "1.2.0",
       "dataset_version": "0.10.0",
       "experiment": {
         "budget": {
@@ -3288,6 +3387,7 @@
         },
         "tuning_policy": "fixed_preset"
       },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {

@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { AlgorithmTrace, TraceFrame, TraceIndexEntry, TracePoint } from "../../contracts/trace";
-import type { VisualizationScenario } from "../../contracts/visualization-scenarios";
+import type { GuidedStoryStep, VisualizationScenario } from "../../contracts/visualization-scenarios";
 import {
   contourSegments,
   mapX,
@@ -14,6 +14,7 @@ import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 
 interface NelderMeadVisualizationProps {
   trace: AlgorithmTrace;
@@ -33,6 +34,7 @@ export function NelderMeadVisualization({
   onTraceChange,
 }: NelderMeadVisualizationProps) {
   const playback = usePlayback(trace.trace_id, trace.frames);
+  const [guidedStep, setGuidedStep] = useState<GuidedStoryStep | null>(null);
   const frame = playback.currentFrame;
   const spec = useMemo(() => objectivePlotSpec(trace.objective), [trace.objective]);
   const contours = useMemo(() => contourSegments(spec), [spec]);
@@ -49,6 +51,7 @@ export function NelderMeadVisualization({
     if (next) onTraceChange(next.trace_id);
   };
   const explanation = operationExplanation(frame);
+  const visibleLayers = new Set(guidedStep?.visible_layers ?? scenario.artifact.observable_ids);
   const bestSoFar = trace.frames
     .flatMap((candidateFrame) => candidateFrame.points.map((point) => point.value))
     .filter((value): value is number => value !== null)
@@ -95,6 +98,12 @@ export function NelderMeadVisualization({
       </section>
 
       <ScenarioLessonPanel scenario={scenario} />
+      <GuidedStoryPanel
+        activeStep={guidedStep}
+        onStepChange={setGuidedStep}
+        playback={playback}
+        scenario={scenario}
+      />
       <section className="nm-contract" aria-label="現在の操作">
         <strong>{frame.event_label_ja} / {frame.event_label_en}</strong>
         <span>iteration {frame.iteration} · evaluations {frame.oracle_evaluations}</span>
@@ -114,7 +123,9 @@ export function NelderMeadVisualization({
       <div className="nm-layout">
         <figure className="explanatory-figure">
           <svg
-            className={`nm-plot operation-${frame.event_type}`}
+            className={`nm-plot operation-${frame.event_type}${guidedStep ? " guided-active" : ""}`}
+            data-guided-focus={guidedStep?.focus_target}
+            data-viewport-preset={guidedStep?.viewport_preset}
             viewBox="0 0 560 360"
             role="img"
             aria-labelledby="nm-plot-title nm-plot-description"
@@ -128,7 +139,7 @@ export function NelderMeadVisualization({
               </marker>
             </defs>
             <rect className="objective-background" x="0" y="0" width="560" height="360" rx="12" />
-            <ContourLayer bounds={spec.bounds} contours={contours} />
+            {visibleLayers.has("objective_value") && <ContourLayer bounds={spec.bounds} contours={contours} />}
             <line className="plot-axis" x1={plot.left} x2={plot.right} y1={plot.bottom} y2={plot.bottom} />
             <line className="plot-axis" x1={plot.left} x2={plot.left} y1={plot.top} y2={plot.bottom} />
             <text className="plot-axis-label" x={plot.right - 4} y={plot.bottom - 7}>x</text>
@@ -137,11 +148,11 @@ export function NelderMeadVisualization({
             <text className="plot-range-label" x={plot.right - 70} y={plot.top + 12}>minimize</text>
             <InitialMarker point={initialPointArray(trace)} bounds={spec.bounds} />
             {knownOptimum(trace.objective) && <KnownOptimumMarker point={knownOptimum(trace.objective)!} bounds={spec.bounds} />}
-            <polygon
+            {visibleLayers.has("simplex_vertices") && <polygon
               className="nm-simplex"
               points={vertices.map(({ point }) => pointCoordinates(point, spec.bounds)).join(" ")}
-            />
-            {operationVector && (
+            />}
+            {visibleLayers.has("accepted_operation") && operationVector && (
               <line
                 className="nm-operation-vector"
                 markerEnd="url(#nm-arrow)"
@@ -151,11 +162,11 @@ export function NelderMeadVisualization({
                 y2={mapY(operationVector.origin[1] + operationVector.components[1], spec.bounds, plot.top, plot.bottom)}
               />
             )}
-            {vertices.map((vertex) => (
+            {visibleLayers.has("simplex_vertices") && vertices.map((vertex) => (
               <VertexMarker key={vertex.point.point_id} vertex={vertex} bounds={spec.bounds} />
             ))}
-            {centroid && <CentroidMarker point={centroid} bounds={spec.bounds} />}
-            {candidate && <CandidateMarker point={candidate} bounds={spec.bounds} accepted={frame.decision === "accepted"} />}
+            {visibleLayers.has("accepted_operation") && centroid && <CentroidMarker point={centroid} bounds={spec.bounds} />}
+            {visibleLayers.has("accepted_operation") && candidate && <CandidateMarker point={candidate} bounds={spec.bounds} accepted={frame.decision === "accepted"} />}
           </svg>
           <figcaption>
             objective metadataの表示範囲 x=[{spec.bounds.xMin}, {spec.bounds.xMax}], y=[{spec.bounds.yMin}, {spec.bounds.yMax}] から等高線を生成。

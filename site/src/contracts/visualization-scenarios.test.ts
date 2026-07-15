@@ -41,7 +41,7 @@ describe("VisualizationScenario parser", () => {
       (scenario) => scenario.purpose === "failure_contrast" || scenario.purpose === "sensitivity",
     );
 
-    expect(parsed.contract_version).toBe("1.1.0");
+    expect(parsed.contract_version).toBe("1.2.0");
     expect(parsed.scenarios.every((scenario) => scenario.lesson.primary_observables.length > 0)).toBe(true);
     expect(parsed.scenarios.every((scenario) => scenario.lesson.narration_steps[0].milestone_id === "start")).toBe(true);
     expect(failureOrSensitivity.every((scenario) => scenario.lesson.misconception !== null)).toBe(true);

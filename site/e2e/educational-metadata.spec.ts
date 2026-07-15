@@ -36,3 +36,21 @@ test("all current renderer families consume the shared educational metadata", as
   await expect(page.getByText(/optimizerが参照しない真の目的関数/u)).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("bo-lesson-panel.png"), fullPage: true });
 });
+
+test("Nelder-Mead guided story applies the authored frame, speed, and focus cue", async ({
+  page,
+  baseURL,
+}) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/nelder-mead");
+
+  await page.getByRole("button", { name: /最初の候補と受理判断/u }).click();
+
+  await expect(page).toHaveURL(/frame=2&speed=0\.5/u);
+  await expect(page.getByText(/worstを重心の反対側へ動かし/u)).toBeVisible();
+  await expect(page.getByLabel("再生速度")).toHaveValue("0.5");
+  await expect(page.getByLabel("フレーム位置")).toHaveValue("2");
+  await expect(page.getByTestId("nelder-mead-explanatory-plot")).toHaveAttribute(
+    "data-guided-focus",
+    "accepted_operation",
+  );
+});
