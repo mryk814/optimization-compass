@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { parseCoverageReport, type CoverageReport, type CoverageStatus, type SubjectType } from "../../contracts/coverage";
 import { parseSiteManifest } from "../../contracts/manifest";
 import { siteBaseUrl } from "../../data/base-url";
+import { PageOrientation } from "../../components/PageOrientation";
 
 type LoadState = { status: "loading" } | { status: "error"; message: string } | { status: "ready"; report: CoverageReport };
 const statusLabels: Record<CoverageStatus, string> = { available: "利用可能", partial: "一部接続", missing: "未構築", not_applicable: "適用外" };
@@ -34,6 +35,7 @@ function CoverageView({ report, subjectType, status, family, setSubjectType, set
   });
   return <section className="coverage-page">
     <header className="page-heading"><p className="eyebrow">Maintainer view</p><h1>Atlas Coverage</h1><p>教材の深さを一律にせず、期待する学習成果と実在する成果物を分けて監査します。</p></header>
+    <PageOrientation limits="Coverageは学習contractの接続状態を監査します。page数やcoverage scoreだけで、教材の質や手法の優劣を判断しません。" next={[{ label: "教材の進捗を見る", to: "/learn" }, { label: "Galleryのケースを見る", to: "/gallery" }, { label: "根拠資料を確認する", to: "/sources" }]} purpose="各method・problem・feature familyに、Map・診断・教材・可視化・根拠などがどこまで接続しているかを確認します。" readingSteps={["status countsで全体の接続状態を見ます。", "Priority slicesで次に補う学習成果を確認します。", "Artifact inventoryをfilterし、欠けた接続と理由を追います。"]} />
     <div className="coverage-status-grid" aria-label="期待成果物のステータス">{Object.entries(report.summary.status_counts).map(([key, count]) => <article key={key} className={`coverage-stat coverage-${key}`}><strong>{count}</strong><span>{statusLabels[key as CoverageStatus]}</span></article>)}</div>
     <p className="coverage-baseline">Release delta: baseline未指定。初回スナップショットでは差分を推測しません。</p>
     <section aria-labelledby="priority-title"><h2 id="priority-title">Priority slices</h2><div className="coverage-priority-grid">{report.priorities.map((item) => <article key={item.slice_id}><p className="eyebrow">#{item.rank} · {item.total}/12</p><h3>{item.title_ja}</h3><p>{item.proposed_scope}</p><details><summary>優先理由</summary><ul>{Object.entries(item.factors).map(([name, factor]) => <li key={name}><strong>{name} {factor.score}/3:</strong> {factor.reason}</li>)}</ul></details></article>)}</div></section>

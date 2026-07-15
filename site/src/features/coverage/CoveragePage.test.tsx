@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import rawCoverage from "../../../public/data/coverage.json";
 import rawManifest from "../../../public/data/manifest.json";
@@ -14,7 +15,7 @@ describe("CoveragePage", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   test("shows priority reasons and filters the full inventory", async () => {
-    render(<CoveragePage />);
+    render(<MemoryRouter><CoveragePage /></MemoryRouter>);
     expect(await screen.findByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
     expect(screen.getByRole("region", { name: "Artifact inventory table" })).toHaveAttribute("tabindex", "0");
     expect(screen.getAllByText(/12$/u).length).toBeGreaterThan(0);

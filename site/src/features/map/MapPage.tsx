@@ -4,6 +4,7 @@ import { buildMapModel, parseViewSpec, type MapModel, type ViewSpec } from "../.
 import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
+import { PageOrientation } from "../../components/PageOrientation";
 import { MapDetail } from "./MapDetail";
 import { ancestorIds, applyAnswerBindings, matchingBindingNodeIds } from "./map-state";
 import { MapTree } from "./MapTree";
@@ -228,6 +229,12 @@ export function MapPage() {
         <h1>問題構造マップ</h1>
         {loadState.status === "ready" && <p>{loadState.view.description}</p>}
       </header>
+      <PageOrientation
+        limits="Mapは問題構造とcanonical entityの関係を示します。ここでの近さや強調は、手法の優劣や採用決定を意味しません。"
+        next={[{ label: "条件から候補を絞る", to: "/diagnose" }, { label: "実問題の例を見る", to: "/gallery" }, { label: "教材の接続を確認する", to: "/learn" }]}
+        purpose="問題の特徴が、どの問題型・診断質問・候補手法へつながるかを俯瞰します。"
+        readingSteps={["左のrootから問題型・特徴の順にたどります。", "ノードを選ぶと、要約・質問・関連entityを右の詳細で確認できます。", "URLに保存された選択状態から、同じ地点を共有できます。"]}
+      />
       {loadState.status === "loading" && <p className="map-state-panel" role="status">地図を読み込んでいます…</p>}
       {loadState.status === "error" && (
         <section className="map-state-panel" role="alert">

@@ -30,6 +30,7 @@ import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { resolveAlias } from "./contracts/entity-links";
 import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
+import { PageOrientation } from "./components/PageOrientation";
 
 import "./styles.css";
 
@@ -50,6 +51,20 @@ function HomePage() {
         <h1>Optimization Atlas</h1>
         <p>問題の構造を整理し、手法を選び、動きと根拠まで一つの地図から確かめます。</p>
       </header>
+      <PageOrientation
+        limits="Atlasは構造化データと固定された教材・可視化をつなぐ入口です。個別の実験結果や最終判断そのものではありません。"
+        next={[
+          { label: "問題構造をたどる", to: "/map" },
+          { label: "条件から診断する", to: "/diagnose" },
+          { label: "教材を読む", to: "/learn" },
+        ]}
+        purpose="問題を分類し、候補手法・教材・実行Trace・根拠へ迷わず進むための入口です。"
+        readingSteps={[
+          "まず目的に近い入口（Explore / Decide / Learn / Apply）を選びます。",
+          "条件が整理できていなければDiagnose、構造から考えたければMapを開きます。",
+          "動きや根拠を確認するときはTheater・Compare・Sourcesへ進みます。",
+        ]}
+      />
       <div className="home-entry-grid" aria-label="Atlasの主要な入口">
         <HomeEntry
           eyebrow="Explore"

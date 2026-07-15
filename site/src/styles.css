@@ -7,6 +7,34 @@
   text-rendering: optimizeLegibility;
 }
 
+body {
+  margin: 0;
+  min-width: 20rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+code,
+pre {
+  font-size: 0.875rem;
+}
+
+table {
+  line-height: 1.5;
+}
+
+caption {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
 .search-tree-page {
   --search-accent: #285740;
   --search-focus: #174c85;
@@ -701,6 +729,109 @@
 .atlas-page-header { margin-bottom: .8rem; }
 .atlas-page-header h1 { margin: .1rem 0 .35rem; font-size: clamp(1.45rem, 4vw, 2.15rem); letter-spacing: -.035em; }
 .atlas-page-header p:not(.eyebrow), .content-lead { max-width: 48rem; margin: 0; color: #59645d; font-size: .82rem; line-height: 1.6; }
+
+.page-orientation {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1.3fr) repeat(3, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.35rem;
+  padding: 0.9rem;
+  border: 1px solid #cfd9d1;
+  border-radius: 0.65rem;
+  background: #f8faf6;
+}
+
+.page-orientation > section,
+.page-orientation > nav {
+  min-width: 0;
+  padding: 0.1rem 0.7rem;
+}
+
+.page-orientation > * + * {
+  border-left: 1px solid #dfe6df;
+}
+
+.page-orientation-purpose {
+  padding-left: 0.1rem !important;
+}
+
+.page-orientation-eyebrow {
+  margin: 0 0 0.25rem;
+  color: #8b4d2c;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.page-orientation h2,
+.page-orientation h3 {
+  margin: 0 0 0.35rem;
+  color: #234737;
+}
+
+.page-orientation h2 {
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.page-orientation h3 {
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
+}
+
+.page-orientation p,
+.page-orientation ol,
+.page-orientation ul {
+  margin: 0;
+  color: #46534b;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+.page-orientation ol,
+.page-orientation ul {
+  padding-left: 1.1rem;
+}
+
+.page-orientation li + li {
+  margin-top: 0.25rem;
+}
+
+.page-orientation a {
+  color: #285740;
+  font-weight: 700;
+  text-underline-offset: 0.18em;
+}
+
+@media (max-width: 54rem) {
+  .page-orientation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-orientation > * + * {
+    border-left: 0;
+  }
+
+  .page-orientation > *:nth-child(n + 3) {
+    padding-top: 0.65rem;
+    border-top: 1px solid #dfe6df;
+  }
+}
+
+@media (max-width: 40rem) {
+  .page-orientation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+    margin-top: 0.8rem;
+    padding: 0.75rem;
+  }
+
+  .page-orientation > *:nth-child(n + 2) {
+    padding-top: 0.65rem;
+    border-top: 1px solid #dfe6df;
+  }
+}
 .atlas-error { padding: .65rem .75rem; border: 1px solid #d8b7a9; border-radius: .45rem; color: #8a2b1c; background: #fff4f0; }
 .atlas-note, .comparison-contract { margin: .7rem 0 0; padding: .65rem .75rem; border: 1px solid #d1d5cc; border-radius: .45rem; background: #faf9f4; color: #465249; font-size: .75rem; }
 .comparison-contract { display: flex; gap: .4rem .8rem; flex-wrap: wrap; }
