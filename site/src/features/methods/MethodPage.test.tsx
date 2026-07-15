@@ -39,6 +39,8 @@ function fetchArtifacts(currentView: typeof view) {
     ok: true,
     json: async () => input.includes("recommendation/site-data.json")
       ? { ...structuredClone(rawSiteData), dataset_version: currentView.dataset_version }
+      : input.includes("failure-modes.json")
+        ? { contract_version: "1.0.0", dataset_version: currentView.dataset_version, failure_modes: [] }
       : currentView,
   }));
 }
@@ -143,5 +145,39 @@ describe("MethodPage Map deep link", () => {
       "href",
       "/gallery/case.materials",
     );
+  });
+
+  test("shows symptoms, checks, and mitigations from the canonical failure artifact", async () => {
+    const failures = {
+      contract_version: "1.0.0", dataset_version: "0.2.0", failure_modes: [{
+        failure_mode_id: "FM_TEST", name_ja: "発散", name_en: "Divergence",
+        failure_scope: "method_theory", severity: "high", recoverability: "recoverable",
+        confidence: "high", source_ids: ["S1"], scenario_ids: [],
+        symptoms: [{ description: "目的値が増加する", observable_id: "objective_value", non_visual_state: null }],
+        diagnostics: [{ diagnostic_id: "D1", check_text: "step履歴を確認" }],
+        mitigations: [{ action: "stepを下げる", applicability: "発散時", tradeoff: "収束が遅くなる" }],
+        affected_entities: [{ entity_type: "method", entity_id: "M_TARGET", specificity: "theoretical" }],
+      }],
+    };
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (input: string) => ({
+      ok: true,
+      json: async () => input.includes("failure-modes.json")
+        ? failures
+        : input.includes("recommendation/site-data.json")
+          ? { ...structuredClone(rawSiteData), dataset_version: "0.2.0" }
+          : view,
+    })));
+    render(
+      <MemoryRouter initialEntries={["/methods/M_TARGET"]}>
+        <EntityLinkProvider initialIndex={linkIndex("M_TARGET")}>
+          <Routes><Route path="/methods/:methodId" element={<MethodPage />} /></Routes>
+        </EntityLinkProvider>
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByRole("heading", { name: "症状・確認・対処" })).toBeVisible();
+    expect(screen.getByText("目的値が増加する")).toBeVisible();
+    expect(screen.getByText("step履歴を確認")).toBeVisible();
+    expect(screen.getByText("stepを下げる")).toBeVisible();
   });
 });

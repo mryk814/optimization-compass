@@ -350,6 +350,14 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
             },
         },
     )
+    _write_json(
+        output_dir / "failure-modes.json",
+        {
+            "contract_version": "1.0.0",
+            "dataset_version": release["version"],
+            "failure_modes": repository.structured_failure_modes(),
+        },
+    )
     coverage = build_coverage_report(
         repository,
         output_dir,
@@ -381,6 +389,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
+        failure_modes=ManifestAsset(version="1.0.0", path="failure-modes.json"),
         coverage=ManifestCoverageAsset(
             version="1.0.0", path="coverage.json", report_path="coverage.md"
         ),

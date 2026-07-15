@@ -245,6 +245,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "benchmark-contexts.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["failure_modes"] == {
+        "path": "failure-modes.json",
+        "version": "1.0.0",
+    }
     claim_payload = json.loads((first_output / "implementation-claims.json").read_bytes())
     assert len(claim_payload["claims"]) == 64 * 7 + 1
     assert claim_payload["freshness"]["claim_count"] == 64 * 7
@@ -260,6 +264,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert all(
         item["ranking_eligibility"]["ranking_eligible"] for item in context_payload["contexts"]
     )
+    failure_payload = json.loads((first_output / "failure-modes.json").read_bytes())
+    assert len(failure_payload["failure_modes"]) == 12
+    assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
+    assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
     assert len(source_payload["sources"]) == 95
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4193

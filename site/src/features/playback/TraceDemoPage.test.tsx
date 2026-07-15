@@ -63,6 +63,7 @@ const manifest = {
   sources: { version: "1.0.0", path: "sources.json" },
   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
   benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
+  failure_modes: { version: "1.0.0", path: "failure-modes.json" },
   coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",

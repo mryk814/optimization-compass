@@ -9,7 +9,8 @@
 - 主キー重複が0件
 - evidence targetが解決できる
 - stored statusを信用せずliveに再計算した `CHK001`–`CHK019`、coverage closureの
-  `CHK021`、claim/context closureの `CHK022`–`CHK023` にfailがない
+  `CHK021`、claim/context closureの `CHK022`–`CHK023`、failure relation closureの
+  `CHK024` にfailがない
 
 Atomic predicateを変更するときは、`005_atomic_predicates.sql` と
 `data/seeds/atomic_predicates.json` を同じ変更で更新します。`complete` coverageと

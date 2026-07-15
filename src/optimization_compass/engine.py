@@ -160,6 +160,13 @@ class RecommendationEngine:
             global_warnings,
             request.language,
         )
+        self._apply_failure_guidance(
+            valid_answers,
+            method_candidates,
+            excluded_methods,
+            global_warnings,
+            request.language,
+        )
 
         conflicting = set(method_candidates) & set(excluded_methods)
         if conflicting:
@@ -241,6 +248,51 @@ class RecommendationEngine:
                 "optimality, or commercial terms."
             ),
         )
+
+    def _apply_failure_guidance(
+        self,
+        answers: dict[str, tuple[str, ...]],
+        method_candidates: dict[str, Candidate],
+        excluded_methods: dict[str, Candidate],
+        global_warnings: list[str],
+        language: str,
+    ) -> None:
+        question_features = {
+            str(row["question_id"]): str(row["mapped_feature_id"])
+            for row in self.repository.recommendation_questions()
+        }
+        feature_answers = {
+            question_features[question_id]: set(values)
+            for question_id, values in answers.items()
+            if question_id in question_features
+        }
+        guidance = self.repository.failure_guidance(
+            list(dict.fromkeys([*method_candidates, *excluded_methods])), feature_answers
+        )
+        for item in guidance:
+            candidate = method_candidates.get(item.method_id)
+            if candidate is None:
+                continue
+            warning = item.warning if language == "ja" else f"{item.failure_mode_id}: {item.name}"
+            if item.disposition == "exclude":
+                method_candidates.pop(item.method_id)
+                excluded = excluded_methods.setdefault(item.method_id, Candidate(item.method_id))
+                excluded.absorb(candidate)
+                excluded.add_rule("high", item.name, warning, list(item.source_ids))
+            else:
+                if warning not in candidate.warnings:
+                    candidate.warnings.append(warning)
+                for source_id in item.source_ids:
+                    if source_id not in candidate.source_ids:
+                        candidate.source_ids.append(source_id)
+        if guidance:
+            message = (
+                f"{len(guidance)}件のfailure modeを回答条件と照合しました。"
+                if language == "ja"
+                else f"Matched {len(guidance)} failure modes against the supplied context."
+            )
+            if message not in global_warnings:
+                global_warnings.append(message)
 
     def _apply_variable_domain_compatibility(
         self,

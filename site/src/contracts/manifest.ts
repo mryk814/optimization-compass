@@ -56,6 +56,7 @@ export interface SiteManifest {
   sources: ManifestAsset;
   implementation_claims: ManifestAsset;
   benchmark_contexts: ManifestAsset;
+  failure_modes: ManifestAsset;
   coverage: ManifestCoverageAsset;
   licenses: SiteLicenseManifest;
 }
@@ -77,6 +78,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "sources",
       "implementation_claims",
       "benchmark_contexts",
+      "failure_modes",
       "coverage",
       "licenses",
     ],
@@ -136,6 +138,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (benchmarkContexts.version !== "1.0.0") {
     throw new Error("benchmark_contexts.version is unsupported.");
   }
+  const failureModes = record(data.failure_modes, "failure_modes");
+  exactKeys(failureModes, ["version", "path"], "failure_modes");
+  if (failureModes.version !== "1.0.0") throw new Error("failure_modes.version is unsupported.");
   const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
   if (visualizationScenarios.version !== "1.1.0") {
@@ -187,6 +192,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     benchmark_contexts: {
       version: "1.0.0",
       path: safeRelativePath(benchmarkContexts.path, "benchmark_contexts.path"),
+    },
+    failure_modes: {
+      version: "1.0.0",
+      path: safeRelativePath(failureModes.path, "failure_modes.path"),
     },
     coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
     licenses,
