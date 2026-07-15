@@ -86,13 +86,18 @@ export function MapTree({
     const isExpanded = expanded.has(node.node_id);
     const isSelected = node.node_id === selectedId;
     const isAncestor = selectedAncestors.has(node.node_id);
+    const isRoot = node.parent_node_id === null;
+    const isCurrent = node.node_id === focusedId;
+    const isRelatedCandidate = answerMatchIds.has(node.node_id);
     const nodeAncestors = ancestorIds(node.node_id, model.parentByChild);
     const isRelated = isSelected || isAncestor || (selectedId !== undefined && nodeAncestors.includes(selectedId));
     const className = [
       "map-tree-item",
+      isRoot ? "map-tree-item-root" : "",
+      isCurrent ? "map-tree-item-current" : "",
       isSelected ? "map-tree-item-selected" : "",
       isAncestor ? "map-tree-item-ancestor" : "",
-      answerMatchIds.has(node.node_id) ? "map-tree-item-answer-match" : "",
+      isRelatedCandidate ? "map-tree-item-answer-match" : "",
       selectedId && !isRelated ? "map-tree-item-unrelated" : "",
       `map-tree-item-${node.emphasis}`,
     ].filter(Boolean).join(" ");
@@ -102,6 +107,7 @@ export function MapTree({
         <div
           aria-expanded={hasChildren ? isExpanded : undefined}
           aria-level={level}
+          aria-current={isCurrent ? "location" : undefined}
           aria-selected={isSelected}
           className={className}
           onClick={() => onSelect(node.node_id)}
@@ -113,6 +119,7 @@ export function MapTree({
           }}
           role="treeitem"
           tabIndex={effectiveFocusedId === node.node_id ? 0 : -1}
+          title={node.summary || node.label || node.node_id}
         >
           {hasChildren ? (
             <button
