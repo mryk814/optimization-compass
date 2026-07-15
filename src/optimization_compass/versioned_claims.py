@@ -120,9 +120,7 @@ def insert_versioned_claims_and_contexts(
     )
 
 
-def claims_at(
-    connection: sqlite3.Connection, subject_id: str, as_of: date
-) -> list[dict[str, Any]]:
+def claims_at(connection: sqlite3.Connection, subject_id: str, as_of: date) -> list[dict[str, Any]]:
     rows = connection.execute(
         """
         SELECT * FROM implementation_claims

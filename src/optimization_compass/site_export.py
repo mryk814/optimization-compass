@@ -379,9 +379,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         ),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
-        implementation_claims=ManifestAsset(
-            version="1.0.0", path="implementation-claims.json"
-        ),
+        implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
         coverage=ManifestCoverageAsset(
             version="1.0.0", path="coverage.json", report_path="coverage.md"

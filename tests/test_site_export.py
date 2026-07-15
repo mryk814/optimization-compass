@@ -250,11 +250,15 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert claim_payload["freshness"]["claim_count"] == 64 * 7
     context_payload = json.loads((first_output / "benchmark-contexts.json").read_bytes())
     assert {item["category"] for item in context_payload["contexts"]} == {
-        "LP", "QP", "NLP", "MIP", "DFO", "BO"
+        "LP",
+        "QP",
+        "NLP",
+        "MIP",
+        "DFO",
+        "BO",
     }
     assert all(
-        item["ranking_eligibility"]["ranking_eligible"]
-        for item in context_payload["contexts"]
+        item["ranking_eligibility"]["ranking_eligible"] for item in context_payload["contexts"]
     )
     source_payload = json.loads((first_output / "sources.json").read_bytes())
     assert len(source_payload["sources"]) == 95

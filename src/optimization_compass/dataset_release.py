@@ -2562,9 +2562,7 @@ def _explicit_state_issues(
     return issues
 
 
-def _versioned_claim_issues(
-    connection: sqlite3.Connection, tables: list[str]
-) -> list[str]:
+def _versioned_claim_issues(connection: sqlite3.Connection, tables: list[str]) -> list[str]:
     if "implementation_claims" not in tables:
         return ["missing:implementation_claims"]
     issues: list[str] = []
@@ -2615,9 +2613,7 @@ def _versioned_claim_issues(
     return issues
 
 
-def _benchmark_context_issues(
-    connection: sqlite3.Connection, tables: list[str]
-) -> list[str]:
+def _benchmark_context_issues(connection: sqlite3.Connection, tables: list[str]) -> list[str]:
     if "benchmark_contexts" not in tables:
         return ["missing:benchmark_contexts"]
     issues: list[str] = []

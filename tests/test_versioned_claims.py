@@ -64,9 +64,7 @@ def test_superseded_release_is_reproducible_as_of_date(connection: sqlite3.Conne
     current = claims_at(connection, "I_SCIPY_LINPROG_HIGHS", date(2026, 7, 15))
 
     old_release = next(claim for claim in old if claim["predicate"] == "current_release")
-    current_release = next(
-        claim for claim in current if claim["predicate"] == "current_release"
-    )
+    current_release = next(claim for claim in current if claim["predicate"] == "current_release")
     assert old_release["verification_status"] == "superseded"
     assert old_release["replaced_by"] == current_release["claim_id"]
     assert old_release["value_json"] != current_release["value_json"]
@@ -77,10 +75,13 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     contexts = connection.execute("SELECT * FROM benchmark_contexts ORDER BY category").fetchall()
     assert {row["category"] for row in contexts} == {"LP", "QP", "NLP", "MIP", "DFO", "BO"}
     assert all(comparison_eligibility(dict(row)).ranking_eligible for row in contexts)
-    assert connection.execute(
-        "SELECT benchmark_context_id FROM comparison_sets WHERE comparison_set_id = ?",
-        ("COMPARE_GRADIENT_FAMILY",),
-    ).fetchone()[0] == "BENCH_QP"
+    assert (
+        connection.execute(
+            "SELECT benchmark_context_id FROM comparison_sets WHERE comparison_set_id = ?",
+            ("COMPARE_GRADIENT_FAMILY",),
+        ).fetchone()[0]
+        == "BENCH_QP"
+    )
     assert verify_database(
         Path(connection.execute("PRAGMA database_list").fetchone()[2]), require_atlas=True
     ).ok
