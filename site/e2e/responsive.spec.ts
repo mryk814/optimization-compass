@@ -26,9 +26,9 @@ test("375px HomeとMapが横にはみ出さず操作できる", async ({ page, b
 test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/diagnose");
   const question = page.getByRole("group", {
-    name: "どんなものを決めたいですか？",
+    name: "x（決めるもの）はどの種類ですか？",
   });
-  await question.getByRole("button", { name: "0-1" }).click();
+  await question.getByRole("button", { name: /^0-1/u }).click();
   await expect(page.getByRole("button", { name: "地図上で見る" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 

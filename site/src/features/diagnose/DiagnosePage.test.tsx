@@ -149,9 +149,9 @@ describe("DiagnosePage", () => {
 
   test("keeps unanswered, unknown, N/A, single, and multi answers distinct in URL state", async () => {
     renderDiagnose();
-    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
+    const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
     expect(within(q1).queryByRole("button", { name: /^わからない/u })).not.toBeInTheDocument();
-    fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
+    fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toEqual({
       status: "answered",
       values: ["binary"],
@@ -164,22 +164,22 @@ describe("DiagnosePage", () => {
     fireEvent.click(within(q1).getByRole("button", { name: "選択解除" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toBeUndefined();
 
-    const q2 = screen.getByRole("group", { name: /計算内容は数式として書けますか/u });
-    fireEvent.click(within(q2).getByRole("button", { name: /わからない/u }));
+    const q2 = screen.getByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u });
+    fireEvent.click(within(q2).getByRole("button", { name: /まだ分からない/u }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q02).toEqual({
       status: "unknown",
       values: ["unknown"],
     });
 
-    const q4 = screen.getByRole("group", { name: /守る必要がある条件は/u });
-    fireEvent.click(within(q4).getByRole("button", { name: "上下限" }));
-    fireEvent.click(within(q4).getByRole("button", { name: "線形" }));
-    fireEvent.click(within(q4).getByRole("button", { name: "上下限" }));
+    const q4 = screen.getByRole("group", { name: /守る条件（制約）はありますか/u });
+    fireEvent.click(within(q4).getByRole("button", { name: "各xの上下限" }));
+    fireEvent.click(within(q4).getByRole("button", { name: "直線的な条件" }));
+    fireEvent.click(within(q4).getByRole("button", { name: "各xの上下限" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q04).toEqual({
       status: "answered",
       values: ["linear"],
     });
-    fireEvent.click(within(q4).getByRole("button", { name: "線形" }));
+    fireEvent.click(within(q4).getByRole("button", { name: "直線的な条件" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q04).toBeUndefined();
   });
 
@@ -226,8 +226,8 @@ describe("DiagnosePage", () => {
 
   test("preserves the token when navigating to Map", async () => {
     renderDiagnose("/diagnose?keep=1&tag=a&tag=b");
-    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
-    fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
+    const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
     const token = tokenFromLocation();
     fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
     await waitFor(() => expect(screen.getByText("MAP ROUTE")).toBeVisible());
@@ -240,8 +240,8 @@ describe("DiagnosePage", () => {
 
   test("transitions answers-only Diagnose state into a visible deterministic Map selection", async () => {
     renderDiagnose("/diagnose?keep=1", true);
-    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
-    fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
+    const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
     fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
 
     const tree = await screen.findByRole("tree", { name: "最適化問題の構造" });
@@ -312,14 +312,14 @@ describe("DiagnosePage", () => {
   test("restores answers at 375px after reload without losing state", async () => {
     Object.defineProperty(window, "innerWidth", { configurable: true, value: 375 });
     const first = renderDiagnose();
-    const q1 = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
-    fireEvent.click(within(q1).getByRole("button", { name: "0-1" }));
+    const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
     const token = tokenFromLocation();
     first.unmount();
 
     renderDiagnose(`/diagnose?state=${token}`);
-    const restored = await screen.findByRole("group", { name: /どんなものを決めたいですか/u });
-    expect(within(restored).getByRole("button", { name: "0-1" })).toHaveAttribute(
+    const restored = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    expect(within(restored).getByRole("button", { name: /^0-1/u })).toHaveAttribute(
       "aria-pressed",
       "true",
     );

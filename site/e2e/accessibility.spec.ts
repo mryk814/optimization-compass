@@ -24,9 +24,9 @@ test("選択後のMapにaxe critical/serious違反がない", async ({ page, bas
 test("回答後のDiagnoseにaxe critical/serious違反がない", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/diagnose");
   const question = page.getByRole("group", {
-    name: "どんなものを決めたいですか？",
+    name: "x（決めるもの）はどの種類ですか？",
   });
-  await question.getByRole("button", { name: "0-1" }).click();
+  await question.getByRole("button", { name: /^0-1/u }).click();
   await expectNoHighImpactViolations(page, testInfo, "diagnose-answered");
 });
 

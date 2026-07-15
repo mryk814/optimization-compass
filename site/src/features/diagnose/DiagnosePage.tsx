@@ -14,7 +14,11 @@ import {
 } from "../../state/atlas-state";
 import { useAtlasState } from "../../state/useAtlasState";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
-import { PageOrientation } from "../../components/PageOrientation";
+import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
+import {
+  DIAGNOSIS_QUESTION_TITLES,
+  diagnosisChoiceLabel,
+} from "../../content/optimization-language";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { findEntity } from "../../contracts/entity-links";
 import { useEntityLinks } from "../../state/entity-links";
@@ -37,21 +41,6 @@ interface DiagnoseArtifacts {
 const SUPPORTED_VIEW_VERSION = "1.0.0";
 const RECOMMENDATION_PATH = "recommendation/site-data.json";
 const VIEW_PATH = "views/problem-structure.json";
-
-const QUESTION_TITLES: Record<string, string> = {
-  Q01: "どんなものを決めたいですか？",
-  Q02: "計算内容は数式として書けますか？",
-  Q03: "目的の形に近いものは？",
-  Q04: "守る必要がある条件は？",
-  Q05: "勾配（gradient）を使えますか？",
-  Q06: "1回の計算にどれくらいかかりますか？",
-  Q07: "計算結果は毎回同じですか？",
-  Q08: "決める変数はいくつありますか？",
-  Q09: "どの範囲で良い解を探したいですか？",
-  Q10: "最適だと証明する必要がありますか？",
-  Q11: "問題に特別な構造がありますか？",
-  Q12: "同じ問題を何度も解きますか？",
-};
 
 const QUESTION_GROUPS = [
   { title: "まず、問題の形", from: 1, to: 4 },
@@ -139,12 +128,17 @@ function Question({
     answer?.status === "unknown"
       ? value === "unknown"
       : answer?.status === "answered" && answer.values.includes(value);
-  const title = QUESTION_TITLES[question.question_id] ?? question.beginner_wording;
+  const title = DIAGNOSIS_QUESTION_TITLES[question.question_id] ?? question.beginner_wording;
   const hasAnswer = answer !== undefined;
   return (
     <fieldset className={hasAnswer ? "diagnose-question diagnose-question-answered" : "diagnose-question"}>
       <legend><span aria-hidden="true">{question.sequence}</span>{title}</legend>
-      {title !== question.question_ja && <p className="diagnose-question-technical">技術的な確認: {question.question_ja}</p>}
+      {title !== question.question_ja && (
+        <details className="diagnose-question-technical">
+          <summary>技術用語で確認</summary>
+          <p>{question.question_ja}</p>
+        </details>
+      )}
       {question.answer_type === "multi_choice" && <p className="diagnose-question-hint">複数選べます</p>}
       <div className="diagnose-choice-list">
         {question.choices.map((choice) => (
@@ -154,9 +148,10 @@ function Question({
             onClick={() =>
               onChange(question.answer_type === "multi_choice" ? "toggle" : "set", choice.value)
             }
+            title={choice.label_ja}
             type="button"
           >
-            {choice.label_ja}
+            <span>{diagnosisChoiceLabel(question.question_id, choice.value, choice.label_ja)}</span>
           </button>
         ))}
         <button
@@ -355,12 +350,7 @@ export function DiagnosePage() {
   return (
     <section className="diagnose-page">
       <header className="diagnose-header"><p className="eyebrow">Offline Diagnosis</p><h1>診断</h1><p>答えられる範囲で条件を選ぶと、候補と避けたい手法を整理できます。</p></header>
-      <PageOrientation
-        limits="回答がunknownの項目は候補を狭めません。結果は登録済みのルールとデータに基づく候補であり、実験や実装の成功を保証しません。"
-        next={[{ label: "Mapで問題構造を見る", to: "/map" }, { label: "実問題のGalleryを見る", to: "/gallery" }, { label: "手法の前提を読む", to: "/learn" }]}
-        purpose="分かる条件だけを選び、候補・避けたい手法・次に確認することを整理します。"
-        readingSteps={["3つのまとまりから、答えやすい質問だけ選びます。", "右側で候補と避けたい理由を確認します。", "必要ならMapや手法ページで前提を確かめます。"]}
-      />
+      <OptimizationProblemPrimer />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}
       {loadState.status === "ready" && <LoadedDiagnose data={loadState.data} manifest={loadState.manifest} view={loadState.view} />}
