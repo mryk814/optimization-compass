@@ -621,10 +621,11 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC019",
             "budget-allocation",
             "hyperparameter-search",
             "shift-scheduling"
@@ -641,7 +642,7 @@
           ]
         },
         "map": {
-          "count": 16,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -649,6 +650,7 @@
             "/methods/M_CDCL_SAT",
             "/methods/M_CP_SAT",
             "/methods/M_CP_SEARCH",
+            "EC019",
             "I_MINIZINC",
             "I_ORTOOLS_CPSAT",
             "I_ORTOOLS_ROUTING",
@@ -719,10 +721,11 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC013",
             "budget-allocation",
             "hyperparameter-search",
             "portfolio-allocation"
@@ -743,7 +746,7 @@
           ]
         },
         "map": {
-          "count": 32,
+          "count": 33,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -756,6 +759,7 @@
             "/methods/M_POWELL",
             "/methods/M_SPSA",
             "COMPARE_GRADIENT_FAMILY",
+            "EC013",
             "I_NLOPT",
             "I_NOMAD",
             "I_OPTIMJL",
@@ -846,10 +850,11 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC019",
             "budget-allocation",
             "shift-scheduling"
           ]
@@ -877,7 +882,7 @@
           ]
         },
         "map": {
-          "count": 34,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -886,6 +891,7 @@
             "/methods/M_BRANCH_CUT",
             "/methods/M_OUTER_APPROX_MINLP",
             "/methods/M_SPATIAL_BRANCH_BOUND",
+            "EC019",
             "I_CBC",
             "I_CPLEX",
             "I_CVXPY",
@@ -1079,12 +1085,13 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 7,
@@ -1101,7 +1108,7 @@
           ]
         },
         "map": {
-          "count": 24,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1112,6 +1119,8 @@
             "/methods/M_MULTISTART",
             "/methods/M_SHGO",
             "/methods/M_SIMULATED_ANNEALING",
+            "EC025",
+            "EC026",
             "I_NEVERGRAD",
             "I_NLOPT",
             "I_SCIPY_BASINHOPPING",
@@ -1192,12 +1201,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC019"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -1208,7 +1217,7 @@
           ]
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1218,6 +1227,7 @@
             "/methods/M_HUNGARIAN",
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
             "/methods/M_NETWORK_SIMPLEX",
+            "EC019",
             "I_ORTOOLS_ROUTING",
             "S023",
             "S054"
@@ -1274,10 +1284,11 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC025",
             "portfolio-allocation"
           ]
         },
@@ -1305,7 +1316,7 @@
           ]
         },
         "map": {
-          "count": 36,
+          "count": 37,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1317,6 +1328,7 @@
             "/methods/M_PDLP",
             "/methods/M_PRIMAL_DUAL_CONIC",
             "/methods/M_SIMPLEX",
+            "EC025",
             "I_ACADOS",
             "I_CLARABEL",
             "I_CPLEX",
@@ -1498,12 +1510,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -1515,7 +1527,7 @@
           ]
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1525,6 +1537,7 @@
             "/methods/M_NSGA_II",
             "/methods/M_NSGA_III",
             "/methods/M_WEIGHTED_SUM",
+            "EC017",
             "I_DEAP",
             "I_PYMOO",
             "S039",
@@ -1585,12 +1598,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -1603,7 +1616,7 @@
           ]
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1612,6 +1625,7 @@
             "/methods/M_DIRECT_SHOOTING",
             "/methods/M_ILQR_DDP",
             "/methods/M_MULTIPLE_SHOOTING",
+            "EC020",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -1674,10 +1688,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC020",
+            "EC026",
             "shift-scheduling"
           ]
         },
@@ -1697,7 +1713,7 @@
           ]
         },
         "map": {
-          "count": 26,
+          "count": 28,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1710,6 +1726,8 @@
             "/methods/M_NEWTON_CG",
             "/methods/M_NLCG",
             "COMPARE_GRADIENT_FAMILY",
+            "EC020",
+            "EC026",
             "I_EXCEL_SOLVER",
             "I_JAXOPT",
             "I_NLOPT",
@@ -2022,12 +2040,13 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 7,
@@ -2044,7 +2063,7 @@
           ]
         },
         "map": {
-          "count": 18,
+          "count": 20,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2054,6 +2073,8 @@
             "/methods/M_TRUST_EXACT",
             "/methods/M_TRUST_KRYLOV",
             "/methods/M_TRUST_NCG",
+            "EC013",
+            "EC026",
             "I_CERES",
             "I_JAXOPT",
             "I_OPTIMJL",
@@ -2210,12 +2231,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -2226,11 +2247,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ACTIVE_SET_QP",
+            "EC025",
             "S004",
             "S010",
             "S012",
@@ -2551,12 +2573,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -2569,11 +2591,12 @@
           ]
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADMM_QP",
+            "EC025",
             "I_ACADOS",
             "I_CVXPY",
             "I_OSQP",
@@ -3033,12 +3056,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -3050,11 +3073,12 @@
           ]
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BFGS",
+            "EC020",
             "I_OPTIMJL",
             "I_SCIPY_BFGS",
             "S002",
@@ -3213,12 +3237,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC019"
+          ]
         },
         "implementation": {
           "count": 13,
@@ -3241,11 +3265,12 @@
           ]
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BRANCH_CUT",
+            "EC019",
             "I_CBC",
             "I_CPLEX",
             "I_CVXPY",
@@ -3818,10 +3843,11 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC019",
             "budget-allocation",
             "hyperparameter-search",
             "shift-scheduling"
@@ -3837,11 +3863,12 @@
           ]
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_CP_SAT",
+            "EC019",
             "I_MINIZINC",
             "I_ORTOOLS_CPSAT",
             "S022",
@@ -3989,12 +4016,13 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -4006,11 +4034,13 @@
           ]
         },
         "map": {
-          "count": 10,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "EC025",
+            "EC026",
             "I_NEVERGRAD",
             "I_SCIPY_DIFFERENTIAL_EVOLUTION",
             "S006",
@@ -4237,12 +4267,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -4254,11 +4284,12 @@
           ]
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIRECT_COLLOCATION",
+            "EC020",
             "I_CASADI",
             "I_DRAKE",
             "S042",
@@ -4560,12 +4591,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -4576,11 +4607,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_EPSILON_CONSTRAINT",
+            "EC017",
             "S039",
             "S055",
             "S068"
@@ -4714,12 +4746,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -4732,11 +4764,12 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_GAUSS_NEWTON",
+            "EC013",
             "I_CERES",
             "I_JAXOPT",
             "I_SCIPY_LEAST_SQUARES_TRF",
@@ -5484,12 +5517,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -5501,11 +5534,12 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_LEVENBERG_MARQUARDT",
+            "EC013",
             "I_CERES",
             "I_SCIPY_LEAST_SQUARES_LM",
             "S002",
@@ -5567,12 +5601,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC019"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -5583,11 +5617,12 @@
           ]
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
+            "EC019",
             "I_ORTOOLS_ROUTING",
             "S023",
             "S054"
@@ -5967,12 +6002,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -5985,11 +6020,12 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MULTIPLE_SHOOTING",
+            "EC020",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -6139,10 +6175,11 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC013",
             "budget-allocation",
             "hyperparameter-search",
             "portfolio-allocation"
@@ -6159,12 +6196,13 @@
           ]
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NELDER_MEAD",
             "COMPARE_GRADIENT_FAMILY",
+            "EC013",
             "I_NLOPT",
             "I_OPTIMJL",
             "I_SCIPY_NELDER_MEAD",
@@ -6393,12 +6431,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -6409,11 +6447,12 @@
           ]
         },
         "map": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NEWTON_CG",
+            "EC026",
             "I_PETSC_TAO",
             "S002",
             "S056",
@@ -6550,12 +6589,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -6567,11 +6606,12 @@
           ]
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NSGA_II",
+            "EC017",
             "I_DEAP",
             "I_PYMOO",
             "S039",
@@ -8786,12 +8826,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -8804,11 +8844,12 @@
           ]
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_TRUST_KRYLOV",
+            "EC026",
             "I_CERES",
             "I_SCIPY_LEAST_SQUARES_TRF",
             "I_SCIPY_TRUST_CONSTR",
@@ -9038,12 +9079,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -9054,11 +9095,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_WEIGHTED_SUM",
+            "EC017",
             "S039",
             "S055",
             "S068"
@@ -11302,12 +11344,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC019"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11318,10 +11360,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC019",
             "None"
           ]
         },
@@ -11446,12 +11489,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11462,10 +11505,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC013",
             "None"
           ]
         },
@@ -11808,12 +11852,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11824,10 +11868,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC017",
             "None"
           ]
         },
@@ -12102,12 +12147,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12118,10 +12163,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC020",
             "None"
           ]
         },
@@ -12175,12 +12221,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12191,10 +12237,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC025",
             "None"
           ]
         },
@@ -12321,12 +12368,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12337,10 +12384,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC026",
             "None"
           ]
         },
@@ -13187,12 +13235,17 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13273,12 +13326,17 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13358,12 +13416,17 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13519,12 +13582,17 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13673,12 +13741,17 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13927,10 +14000,16 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 4,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC013",
+            "EC017",
+            "EC019",
+            "EC020",
+            "EC025",
+            "EC026",
             "budget-allocation",
             "hyperparameter-search",
             "portfolio-allocation",

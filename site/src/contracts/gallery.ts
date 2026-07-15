@@ -1,7 +1,8 @@
 export interface GalleryCase {
   case_id: string; title_ja: string; title_en: string; domain: string; problem_archetype_id: string;
   feature_values: { feature_id: string; value: string }[]; question_answers: Record<string, string>;
-  candidate_method_ids: string[]; excluded_methods: { method_id: string; reason: string }[]; implementation_ids: string[];
+  candidate_method_ids: string[]; conditional_methods: { method_id: string; reason: string }[];
+  excluded_methods: { method_id: string; reason: string }[]; implementation_ids: string[];
   visualization_ids: string[]; comparison_ids: string[]; source_ids: string[]; difficulty: "intro" | "intermediate";
   status: "published" | "draft"; last_reviewed: string; question: string; decision_variables: string;
   objective: string; constraints: string; map_node_id: string; python_example: string; practical_notes: string;
@@ -20,6 +21,7 @@ export function parseGalleryIndex(raw: unknown): GalleryIndex {
       domain: nonEmpty(item.domain, "domain"), problem_archetype_id: nonEmpty(item.problem_archetype_id, "problem_archetype_id"),
       feature_values: array(item.feature_values, "feature_values").map((value) => { const row = object(value, "feature value"); return { feature_id: nonEmpty(row.feature_id, "feature_id"), value: nonEmpty(row.value, "value") }; }),
       question_answers: record(item.question_answers, "question_answers"), candidate_method_ids: strings(item.candidate_method_ids, "candidate_method_ids"),
+      conditional_methods: methodReasons(item.conditional_methods, "conditional_methods"),
       excluded_methods: array(item.excluded_methods, "excluded_methods").map((value) => { const row = object(value, "excluded method"); return { method_id: nonEmpty(row.method_id, "method_id"), reason: nonEmpty(row.reason, "reason") }; }),
       implementation_ids: strings(item.implementation_ids, "implementation_ids"), visualization_ids: strings(item.visualization_ids, "visualization_ids"), comparison_ids: strings(item.comparison_ids, "comparison_ids"), source_ids: strings(item.source_ids, "source_ids"),
       difficulty, status: contentStatus(item.status), last_reviewed: nonEmpty(item.last_reviewed, "last_reviewed"), question: nonEmpty(item.question, "question"), decision_variables: nonEmpty(item.decision_variables, "decision_variables"), objective: nonEmpty(item.objective, "objective"), constraints: nonEmpty(item.constraints, "constraints"), map_node_id: nonEmpty(item.map_node_id, "map_node_id"), python_example: nonEmpty(item.python_example, "python_example"), practical_notes: nonEmpty(item.practical_notes, "practical_notes"),
@@ -34,4 +36,5 @@ function array(value: unknown, owner: string): unknown[] { if (!Array.isArray(va
 function string(value: unknown, owner: string): string { if (typeof value !== "string") throw new Error(`${owner} must be a string.`); return value; }
 function nonEmpty(value: unknown, owner: string): string { const result = string(value, owner); if (!result.trim()) throw new Error(`${owner} must not be blank.`); return result; }
 function strings(value: unknown, owner: string): string[] { return array(value, owner).map((item, index) => nonEmpty(item, `${owner}[${index}]`)); }
+function methodReasons(value: unknown, owner: string): { method_id: string; reason: string }[] { return array(value, owner).map((item) => { const row = object(item, owner); return { method_id: nonEmpty(row.method_id, `${owner}.method_id`), reason: nonEmpty(row.reason, `${owner}.reason`) }; }); }
 function contentStatus(value: unknown): "published" | "draft" { if (value === "published" || value === "draft") return value; throw new Error(`Unsupported gallery status: ${String(value)}`); }

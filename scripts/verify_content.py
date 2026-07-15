@@ -9,7 +9,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.release_identity import load_dataset_release_identity
 
 MINIMUM_PUBLISHED_CONTENT_PAGES = 12
-MINIMUM_GALLERY_CASES = 4
+MINIMUM_GALLERY_CASES = 10
 MINIMUM_COMPARISONS = 1
 
 
@@ -53,6 +53,25 @@ def verify_content(root: Path) -> dict[str, int | str]:
         str(row["implementation_id"])
         for row in repository.fetch_all("SELECT implementation_id FROM implementations")
     }
+    known_problems = {
+        str(row["problem_id"])
+        for row in repository.fetch_all("SELECT problem_id FROM problem_archetypes")
+    }
+    canonical_cases = {
+        str(row["case_id"]): str(row["problem_id"])
+        for row in repository.fetch_all("SELECT case_id, problem_id FROM example_cases")
+    }
+    feature_values = {
+        (str(row["feature_id"]), str(row["value_code"]))
+        for row in repository.fetch_all("SELECT feature_id, value_code FROM feature_values")
+    }
+    questions = {
+        str(row["question_id"]): (
+            str(row["mapped_feature_id"]),
+            set(row["allowed_answers"]),
+        )
+        for row in repository.recommendation_questions()
+    }
     _unique_ids(trace_index["traces"], "trace_id", "traces")
     known_content = generated_ids
 
@@ -66,6 +85,11 @@ def verify_content(root: Path) -> dict[str, int | str]:
 
     for case in gallery_index["cases"]:
         case_id = str(case["case_id"])
+        problem_id = str(case["problem_archetype_id"])
+        if problem_id not in known_problems:
+            raise ValueError(f"{case_id} references unknown problem: {problem_id}")
+        if case_id.startswith("EC") and canonical_cases.get(case_id) != problem_id:
+            raise ValueError(f"{case_id} does not match its canonical example/problem row")
         _require_references(case_id, case.get("source_ids"), known_sources, "source")
         _require_references(
             case_id, case.get("candidate_method_ids"), known_methods, "candidate method"
@@ -73,16 +97,52 @@ def verify_content(root: Path) -> dict[str, int | str]:
         _require_references(
             case_id, case.get("implementation_ids"), known_implementations, "implementation"
         )
+        conditional = _method_reasons(case_id, case.get("conditional_methods"), "conditional")
+        _require_references(
+            case_id,
+            [item["method_id"] for item in conditional],
+            known_methods,
+            "conditional method",
+        )
         _require_references(case_id, case.get("comparison_ids"), comparison_ids, "comparison")
         excluded = case.get("excluded_methods")
-        if not isinstance(excluded, list):
-            raise ValueError(f"{case_id} excluded_methods must be a list")
+        excluded = _method_reasons(case_id, excluded, "excluded")
         _require_references(
             case_id,
             [item.get("method_id") for item in excluded if isinstance(item, dict)],
             known_methods,
             "excluded method",
         )
+        candidate_ids = set(_string_list(case.get("candidate_method_ids"), case_id))
+        conditional_ids = {item["method_id"] for item in conditional}
+        excluded_ids = {item["method_id"] for item in excluded}
+        if (
+            candidate_ids & conditional_ids
+            or candidate_ids & excluded_ids
+            or conditional_ids & excluded_ids
+        ):
+            raise ValueError(f"{case_id} method dispositions must not overlap")
+        answers = case.get("question_answers")
+        if not isinstance(answers, dict):
+            raise ValueError(f"{case_id} question_answers must be an object")
+        for question_id, answer in answers.items():
+            if question_id not in questions or answer not in questions[question_id][1]:
+                raise ValueError(f"{case_id} has invalid answer: {question_id}={answer}")
+        if case_id.startswith("EC") and set(answers) != set(questions):
+            raise ValueError(f"{case_id} must answer every Diagnose question")
+        valid_nodes = {f"answer:{question_id}:{answer}" for question_id, answer in answers.items()}
+        if case.get("map_node_id") not in valid_nodes:
+            raise ValueError(f"{case_id} map_node_id is not backed by its question answers")
+        for feature in case.get("feature_values", []):
+            if (
+                not isinstance(feature, dict)
+                or (str(feature.get("feature_id")), str(feature.get("value"))) not in feature_values
+            ):
+                raise ValueError(f"{case_id} references unknown feature value: {feature}")
+        example = case.get("python_example")
+        if not isinstance(example, str) or not example.strip():
+            raise ValueError(f"{case_id} python_example must not be blank")
+        compile(example, f"gallery:{case_id}", "exec")
 
     return {
         "dataset_version": identity.dataset_version,
@@ -142,6 +202,26 @@ def _string_list(value: object, owner: str) -> list[str]:
     if not isinstance(value, list) or any(not isinstance(item, str) or not item for item in value):
         raise ValueError(f"{owner} relation must be a list of non-empty IDs")
     return value
+
+
+def _method_reasons(owner: str, value: object, disposition: str) -> list[dict[str, str]]:
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"{owner} {disposition}_methods must be a non-empty list")
+    result = []
+    for item in value:
+        if not isinstance(item, dict):
+            raise ValueError(f"{owner} {disposition} method must be an object")
+        method_id = item.get("method_id")
+        reason = item.get("reason")
+        if (
+            not isinstance(method_id, str)
+            or not method_id
+            or not isinstance(reason, str)
+            or not reason
+        ):
+            raise ValueError(f"{owner} {disposition} method requires method_id and reason")
+        result.append({"method_id": method_id, "reason": reason})
+    return result
 
 
 if __name__ == "__main__":

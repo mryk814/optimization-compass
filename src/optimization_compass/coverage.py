@@ -381,6 +381,10 @@ def _build_inventory(
     for case in artifacts["gallery"]["cases"]:
         for method_id in case.get("candidate_method_ids", []):
             link_targets[("method", str(method_id))]["gallery"].add(str(case["case_id"]))
+        for conditional in case.get("conditional_methods", []):
+            link_targets[("method", str(conditional["method_id"]))]["gallery"].add(
+                str(case["case_id"])
+            )
         for feature_id in case.get("feature_values", []):
             if isinstance(feature_id, dict) and "feature_id" in feature_id:
                 link_targets[("feature", str(feature_id["feature_id"]))]["gallery"].add(
