@@ -983,9 +983,19 @@
           "relation_type": "explains",
           "target_id": "M_BAYESIAN_OPT_GP",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
         }
       ],
-      "summary": "少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。"
+      "summary": "高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
     },
     {
       "aliases": [],
@@ -1072,6 +1082,21 @@
           "target_type": "method"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "binary-knapsack-bnb-budget",
           "target_type": "trace"
@@ -1082,7 +1107,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "上下界を使って、改善できない離散探索の枝をまとめて除外する。"
+      "summary": "問題を部分空間へ分枝し、incumbentとrelaxation boundを比較して改善不能なsubtreeを証拠付きで除外する厳密探索法です。"
     },
     {
       "aliases": [],
@@ -1175,11 +1200,21 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "particle-swarm",
           "target_type": "content"
         }
       ],
-      "summary": "関数値の順位から探索分布の平均・step size・共分散を更新する連続black-box最適化です。"
+      "summary": "関数値の順位から探索分布の平均・global step size・共分散を更新し、連続black-boxの有望な方向とscaleを学ぶpopulation法です。"
     },
     {
       "aliases": [],
@@ -1273,6 +1308,16 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "lp-qp-conic",
           "target_type": "content"
         },
@@ -1282,7 +1327,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "目的値だけでなく実行可能性・active constraint・停止理由を同時に追う連続最適化です。"
+      "summary": "目的値だけでなくprimal feasibility・stationarity・active constraint・停止理由を同時に追い、実行可能な連続解を求める最適化familyです。"
     },
     {
       "aliases": [],
@@ -1313,6 +1358,16 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "binary-knapsack-bnb-budget",
           "target_type": "trace"
@@ -1323,7 +1378,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "論理・整数・組合せ制約を伝播と探索で扱い、実行可能性と目的値を同時に詰める方法です。"
+      "summary": "Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索で扱い、実行可能解・bound・停止statusを追う離散最適化法です。"
     },
     {
       "aliases": [],
@@ -1690,9 +1745,14 @@
           "relation_type": "related_content",
           "target_id": "method.gradient-descent",
           "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
         }
       ],
-      "summary": "観測値とmodel予測の残差を直接組み立て、その二乗和を局所的に減らす方法です。"
+      "summary": "観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。"
     },
     {
       "aliases": [],
@@ -1734,6 +1794,11 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.convexity",
           "target_type": "content"
         },
@@ -1741,9 +1806,14 @@
           "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
         }
       ],
-      "summary": "線形・凸二次・錐構造を保ったままmodel化し、専用solverの保証と数値情報を利用します。"
+      "summary": "線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。"
     },
     {
       "aliases": [],
@@ -1797,7 +1867,7 @@
       "entity_id": "method.gradient-descent",
       "entity_type": "content",
       "external_url": null,
-      "label": "Gradient Descent",
+      "label": "勾配降下法",
       "relations": [
         {
           "relation_type": "comparison",
@@ -1821,11 +1891,26 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
           "target_type": "content"
         }
       ],
-      "summary": "勾配の反対方向へ進む一次法です。"
+      "summary": "現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。"
     },
     {
       "aliases": [],
@@ -1861,12 +1946,22 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "nelder-mead-quadratic",
           "target_type": "trace"
         }
       ],
-      "summary": "勾配を使わず、単体を変形しながら局所探索します。"
+      "summary": "勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。"
     },
     {
       "aliases": [],
@@ -1907,12 +2002,17 @@
           "target_type": "content"
         },
         {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "biobjective-quadratic-pareto-front",
           "target_type": "trace"
         }
       ],
-      "summary": "複数の目的を単一bestへ潰さず、支配されないtrade-off集合として意思決定を支援します。"
+      "summary": "複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。"
     },
     {
       "aliases": [],

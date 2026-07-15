@@ -4,10 +4,10 @@ kind: method
 method_id: M_BAYESIAN_OPT_GP
 title_ja: ベイズ最適化
 title_en: Bayesian Optimization
-summary: 少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。
+summary: 高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
 source_ids: [S034, S035]
 prerequisites: []
-related_ids: []
+related_ids: [differential-evolution, cma-es]
 visualization_ids: []
 comparison_ids: []
 aliases: [/learn/bayesian-optimization]
@@ -17,51 +17,132 @@ status: published
 last_reviewed: 2026-07-15
 ---
 
-少ない評価回数で有望な点を選ぶため、代理モデルと獲得関数を使う逐次最適化です。
+高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
 
-## 何を繰り返しているか
+## 一巡で何をしているか
 
-1. いくつかの点で高価な目的関数を評価する。
-2. 観測結果から、目的関数の予測と不確実性を表す代理モデルを更新する。
-3. 獲得関数を使い、次に評価する点を選ぶ。
-4. 評価予算または停止条件まで繰り返す。
+1. 初期点で目的関数を評価する
+2. 観測 $(x_i,y_i)$ からsurrogate posteriorを更新する
+3. acquisitionをsearch space上で最適化する
+4. 選んだ点を実際に評価する
+5. budgetまたは停止条件まで繰り返す
 
-代理モデルの平均は目的関数そのものではありません。不確実性が大きい場所を調べる**探索**と、良い値が期待できる場所を調べる**活用**のバランスを取ります。
+Gaussian-process BOでは、各入力に予測平均 $\mu(x)$ と標準偏差 $\sigma(x)$ を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。
+
+## Acquisitionの意味
+
+代表例:
+
+- expected improvement
+- probability of improvement
+- lower / upper confidence bound
+- Thompson sampling
+- knowledge gradient系
+
+minimizationのlower confidence boundなら、概念的には
+
+$$
+a(x)=\mu(x)-\beta\sigma(x)
+$$
+
+が小さい点を選びます。平均が良い場所を調べる**活用**と、不確実性が大きい場所を調べる**探索**を一つのcriterionへまとめます。
+
+::: warning
+acquisitionの最良点は、目的関数の最適点だと証明された場所ではありません。「次に評価する価値が高い」とmodelが判断した候補です。
+:::
 
 ## 画面の読み方
 
-| 表示 | 読み取ること |
+[Bayesian Optimization Theater](#/theater/bayesian-optimization)では、次を混同しないようにします。
+
+| 表示 | 意味 |
 |---|---|
-| observed points | 実際に評価した入力と結果 |
-| surrogate mean | 現在の代理モデルが予測する平均 |
-| uncertainty | まだ分かっていない範囲 |
-| acquisition | 次の評価点を選ぶための基準 |
-| incumbent | 現時点で最良の観測値 |
+| observed points | 実際に高価な関数を評価した結果 |
+| true objective | 教育用scenarioでだけ既知の関数 |
+| surrogate mean | 現在の代理モデルの予測 |
+| uncertainty | surrogate model上の不確実性 |
+| acquisition | 次点を選ぶ基準 |
+| incumbent | 観測済みのbest-so-far |
+| next point | 次に実評価する候補 |
 
-::: warning
-獲得関数の最大点は、目的関数の最適点だと確定した場所ではありません。次に情報を得る価値が高い候補です。
-:::
+実務ではtrue objective curveは見えません。見えるのは観測とmodelだけです。
 
-実際の更新は[Bayesian Optimization Theater](#/theater/bayesian-optimization)で確認できます。
+## Python: 小さな1次元surrogate loop
 
-## 向いている状況
+```python
+import numpy as np
 
-- 1回の実験やsimulationが高価
-- 評価回数に厳しい上限がある
-- 勾配を直接利用できない
-- hyperparameterや設計変数を少ない試行で改善したい
 
-高次元、強いカテゴリ構造、頻繁な評価失敗、非定常な目的関数では、kernel、encoding、failure handling、search spaceの設計を別に確認します。
+def objective(x: np.ndarray) -> np.ndarray:
+    return (x - 0.25) ** 2 + 0.1 * np.sin(12.0 * x)
 
-## 比較するときの注意
 
-Random Searchなどと比較する場合は、少なくとも次を揃えます。
+def rbf_kernel(left: np.ndarray, right: np.ndarray, length_scale: float) -> np.ndarray:
+    squared_distance = (left[:, None] - right[None, :]) ** 2
+    return np.exp(-0.5 * squared_distance / length_scale**2)
 
-- initial design
-- random seed
-- objective evaluation budget
-- noise handling
-- search bounds
-- stopping condition
 
-単一のtrajectoryだけで一般的な優劣を判断せず、複数seedと問題instanceで確認します。
+observed_x = np.array([-1.0, 0.8])
+observed_y = objective(observed_x)
+grid = np.linspace(-1.0, 1.0, 401)
+
+for _ in range(12):
+    kernel = rbf_kernel(observed_x, observed_x, 0.25) + 1e-6 * np.eye(len(observed_x))
+    cross = rbf_kernel(grid, observed_x, 0.25)
+    weights = np.linalg.solve(kernel, observed_y)
+    mean = cross @ weights
+    solved = np.linalg.solve(kernel, cross.T)
+    variance = np.maximum(1.0 - np.sum(cross * solved.T, axis=1), 1e-12)
+    acquisition = mean - 1.5 * np.sqrt(variance)
+
+    next_x = grid[np.argmin(acquisition)]
+    observed_x = np.append(observed_x, next_x)
+    observed_y = np.append(observed_y, objective(np.array([next_x]))[0])
+
+best_index = np.argmin(observed_y)
+print(observed_x[best_index], observed_y[best_index])
+```
+
+これはzero-mean、fixed kernel、noiselessに近い教育例です。実務ではmean function、kernel hyperparameter、noise、numerical stability、acquisition optimizerを明示します。
+
+## 向いている条件
+
+- 1評価が数分〜数日かかるsimulationや実験
+- 評価回数が数十〜数百程度に制限される
+- 低〜中次元のsearch space
+- 過去観測を次点選択へ活用したい
+- gradientを直接得られない
+- observation noiseや失敗をmodel化できる
+
+## 条件付き／避ける条件
+
+- 評価が安価で大量並列可能 → random / population searchが単純な場合
+- 極端な高次元 → kernelやacquisition最適化が難しい
+- conditional / categorical space → encodingやspecialized surrogateが必要
+- nonstationary objective → fixed kernelが過去を誤解する
+- evaluation failureを欠損として無視 → feasibility modelが必要
+- model uncertaintyを実世界の安全保証と誤認
+
+## 診断値
+
+- best-so-far vs objective evaluation数
+- surrogate predictive error
+- uncertainty calibration
+- acquisition value
+- repeated / near-duplicate proposal
+- failed trial数
+- model fitting timeとacquisition optimization time
+- seed / initial design間の分散
+
+## 公平な比較
+
+Random Search、Differential Evolution、CMA-ESなどと比較する場合は、
+
+- 同じproblem instanceとbounds
+- 同じinitial designまたはそのcost
+- 同じobjective evaluation budget
+- 同じnoise / failure handling
+- 複数seed
+- wall-clock overheadも別に記録
+
+を揃えます。単一trajectoryの勝敗を一般的なrankingにはしません。
