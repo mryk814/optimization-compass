@@ -26,6 +26,7 @@ import {
   type EntityRecommendation,
   type RecommendationResult,
 } from "./recommend";
+import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
 
 interface DiagnoseArtifacts {
   manifest: SiteManifest;
@@ -249,7 +250,7 @@ function Results({
   );
 }
 
-function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">) {
+function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
   const catalog = useMemo(() => catalogFromArtifacts(data, view), [data, view]);
   const atlas = useAtlasState(catalog);
   const atlasNavigation = useAtlasNavigation();
@@ -291,7 +292,10 @@ function LoadedDiagnose({ data, view }: Pick<DiagnoseArtifacts, "data" | "view">
           ))}
         </section>
         <aside className="diagnose-result-pane">
-          <div className="diagnose-result-toolbar"><button onClick={() => navigateMap()} type="button">地図上で見る</button></div>
+          <div className="diagnose-result-toolbar">
+            <button onClick={() => navigateMap()} type="button">地図上で見る</button>
+            <PromptExportLauncher source={{ kind: "diagnose", state: atlas.state, result, manifest, data }} />
+          </div>
           {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxを選ぶ流れを見る</strong><p>観測からsurrogateとExpected Improvementが更新される様子を固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
           <Results data={data} onMethodMap={methodMap} result={result} />
         </aside>
@@ -321,7 +325,7 @@ export function DiagnosePage() {
       />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}
-      {loadState.status === "ready" && <LoadedDiagnose data={loadState.data} view={loadState.view} />}
+      {loadState.status === "ready" && <LoadedDiagnose data={loadState.data} manifest={loadState.manifest} view={loadState.view} />}
     </section>
   );
 }
