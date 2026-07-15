@@ -54,6 +54,8 @@ export interface SiteManifest {
   visualization_scenarios: ManifestAsset<"1.1.0">;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
+  implementation_claims: ManifestAsset;
+  benchmark_contexts: ManifestAsset;
   coverage: ManifestCoverageAsset;
   licenses: SiteLicenseManifest;
 }
@@ -73,6 +75,8 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "visualization_scenarios",
       "entity_links",
       "sources",
+      "implementation_claims",
+      "benchmark_contexts",
       "coverage",
       "licenses",
     ],
@@ -122,6 +126,16 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const sources = record(data.sources, "sources");
   exactKeys(sources, ["version", "path"], "sources");
   if (sources.version !== "1.0.0") throw new Error("sources.version is unsupported.");
+  const implementationClaims = record(data.implementation_claims, "implementation_claims");
+  exactKeys(implementationClaims, ["version", "path"], "implementation_claims");
+  if (implementationClaims.version !== "1.0.0") {
+    throw new Error("implementation_claims.version is unsupported.");
+  }
+  const benchmarkContexts = record(data.benchmark_contexts, "benchmark_contexts");
+  exactKeys(benchmarkContexts, ["version", "path"], "benchmark_contexts");
+  if (benchmarkContexts.version !== "1.0.0") {
+    throw new Error("benchmark_contexts.version is unsupported.");
+  }
   const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
   if (visualizationScenarios.version !== "1.1.0") {
@@ -165,6 +179,14 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     sources: {
       version: "1.0.0",
       path: safeRelativePath(sources.path, "sources.path"),
+    },
+    implementation_claims: {
+      version: "1.0.0",
+      path: safeRelativePath(implementationClaims.path, "implementation_claims.path"),
+    },
+    benchmark_contexts: {
+      version: "1.0.0",
+      path: safeRelativePath(benchmarkContexts.path, "benchmark_contexts.path"),
     },
     coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
     licenses,

@@ -27,6 +27,10 @@ from optimization_compass.release_identity import (
     load_release_authority,
     validate_release_identity,
 )
+from optimization_compass.versioned_claims import (
+    HIGH_USAGE_IMPLEMENTATION_IDS,
+    insert_versioned_claims_and_contexts,
+)
 
 DATASET_STEM = "optimization_method_selection_database_v{version}"
 ROOT = Path(__file__).parents[2]
@@ -41,6 +45,9 @@ DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
 DEFAULT_PREDICATE_MIGRATION = ROOT / "data/migrations/005_atomic_predicates.sql"
 DEFAULT_PROBLEM_MIGRATION = ROOT / "data/migrations/006_problem_instances.sql"
 DEFAULT_SEMANTIC_VIEW_MIGRATION = ROOT / "data/migrations/007_semantic_view_presets.sql"
+DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
+    ROOT / "data/migrations/008_versioned_claims_and_benchmark_context.sql"
+)
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -74,7 +81,7 @@ RELEASE_LICENSE_MANIFEST = {
     ),
 }
 BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
-ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 22))
+ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 24))
 ATLAS_TABLES = frozenset(
     {
         "view_presets",
@@ -93,6 +100,8 @@ ATLAS_TABLES = frozenset(
         "predicate_policies",
         "predicate_coverage",
         "decision_rule_target_retirements",
+        "implementation_claims",
+        "benchmark_contexts",
     }
 )
 
@@ -235,6 +244,7 @@ def build_staged_release(
             DEFAULT_PREDICATE_MIGRATION,
             DEFAULT_PROBLEM_MIGRATION,
             DEFAULT_SEMANTIC_VIEW_MIGRATION,
+            DEFAULT_VERSIONED_CLAIMS_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -547,6 +557,8 @@ def compute_live_checks(
     if not coverage_issues:
         coverage_issues = _coverage_expectation_issues(connection)
     explicit_state_issues = _explicit_state_issues(connection, ATLAS_TABLES - missing_tables)
+    claim_issues = _versioned_claim_issues(connection, tables)
+    benchmark_issues = _benchmark_context_issues(connection, tables)
     checks.extend(
         [
             _check(
@@ -646,6 +658,28 @@ def compute_live_checks(
                 f"{len(coverage_issues)} issues",
                 "subjects, slices, scores, and evidence resolve without inferred status",
                 ", ".join(coverage_issues[:10]) or "Coverage policy rows are closed.",
+                checked_at,
+            ),
+            _check(
+                "CHK022",
+                "Versioned implementation claim closure",
+                "implementation_claims",
+                "critical",
+                not claim_issues,
+                f"{len(claim_issues)} issues",
+                "every implementation/predicate has one explicit active claim and history resolves",
+                ", ".join(claim_issues[:10]) or "Claim ledger and supersession are closed.",
+                checked_at,
+            ),
+            _check(
+                "CHK023",
+                "Benchmark context completeness",
+                "benchmark_contexts + comparison_sets",
+                "critical",
+                not benchmark_issues,
+                f"{len(benchmark_issues)} issues",
+                "LP/QP/NLP/MIP/DFO/BO fixtures are complete and comparisons reference context",
+                ", ".join(benchmark_issues[:10]) or "Benchmark contexts are complete.",
                 checked_at,
             ),
         ]
@@ -863,6 +897,10 @@ def _verify_site_release_tree(
     referenced.add(str(manifest["traces"]["path"]))
     referenced.add(str(manifest["problems"]["path"]))
     referenced.add(str(manifest["visualization_scenarios"]["path"]))
+    referenced.add(str(manifest["entity_links"]["path"]))
+    referenced.add(str(manifest["sources"]["path"]))
+    referenced.add(str(manifest["implementation_claims"]["path"]))
+    referenced.add(str(manifest["benchmark_contexts"]["path"]))
     referenced.add(str(manifest["coverage"]["path"]))
     referenced.add(str(manifest["coverage"]["report_path"]))
     for relative in referenced:
@@ -1129,9 +1167,11 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_PREDICATE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_PROBLEM_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_SEMANTIC_VIEW_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
+        insert_versioned_claims_and_contexts(connection, release_date=release_date)
         _record_target_release(connection, target_version, release_date)
         connection.execute("DELETE FROM release_checks")
         for check in compute_live_checks(connection, release_date):
@@ -1183,7 +1223,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published preset-driven semantic Views with stable IDs and focus policy.",
+            "Published versioned implementation claims and complete benchmark contexts.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1197,12 +1237,12 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Optimization Atlas exposed only one hard-coded semantic View.",
+            "Volatile implementation facts and comparison assumptions lacked history.",
             (
-                "Added public View IDs, authored filter groups, limitations, and focus "
-                "fallback policy to canonical view presets."
+                "Added a superseding implementation claim ledger and normalized benchmark "
+                "context contract."
             ),
-            ("Generate all semantic View artifacts from one versioned preset authority."),
+            ("Prevent context-free performance ranking and preserve historical claims."),
             target_version,
             release_date,
         ),
@@ -2519,4 +2559,85 @@ def _explicit_state_issues(
             )
             if count:
                 issues.append(f"{table}.{column}:{count}")
+    return issues
+
+
+def _versioned_claim_issues(
+    connection: sqlite3.Connection, tables: list[str]
+) -> list[str]:
+    if "implementation_claims" not in tables:
+        return ["missing:implementation_claims"]
+    issues: list[str] = []
+    implementation_count = int(
+        connection.execute("SELECT COUNT(*) FROM implementations").fetchone()[0]
+    )
+    active_count = int(
+        connection.execute(
+            "SELECT COUNT(*) FROM implementation_claims WHERE valid_to IS NULL"
+        ).fetchone()[0]
+    )
+    expected = implementation_count * 7
+    if active_count != expected:
+        issues.append(f"active-claim-count:{active_count}/{expected}")
+    duplicates = connection.execute(
+        """
+        SELECT subject_id, predicate FROM implementation_claims
+        WHERE valid_to IS NULL GROUP BY subject_id, predicate HAVING COUNT(*) <> 1
+        """
+    ).fetchall()
+    issues.extend(f"active-duplicate:{row[0]}:{row[1]}" for row in duplicates)
+    broken_replacements = int(
+        connection.execute(
+            """
+            SELECT COUNT(*) FROM implementation_claims AS old
+            LEFT JOIN implementation_claims AS new ON new.claim_id = old.replaced_by
+            WHERE old.verification_status = 'superseded'
+              AND (new.claim_id IS NULL OR old.valid_to IS NULL OR new.valid_from <= old.valid_to)
+            """
+        ).fetchone()[0]
+    )
+    if broken_replacements:
+        issues.append(f"broken-supersession:{broken_replacements}")
+    placeholders = ",".join("?" for _ in HIGH_USAGE_IMPLEMENTATION_IDS)
+    high_usage_total = len(HIGH_USAGE_IMPLEMENTATION_IDS)
+    high_usage_covered = int(
+        connection.execute(
+            f"""
+            SELECT COUNT(*) FROM implementation_claims
+            WHERE subject_id IN ({placeholders}) AND predicate = 'current_release'
+              AND valid_to IS NULL AND value_status = 'verified'
+            """,
+            tuple(sorted(HIGH_USAGE_IMPLEMENTATION_IDS)),
+        ).fetchone()[0]
+    )
+    if high_usage_total and (100 * high_usage_covered / high_usage_total) < 80:
+        issues.append(f"high-usage-release-coverage:{high_usage_covered}/{high_usage_total}")
+    return issues
+
+
+def _benchmark_context_issues(
+    connection: sqlite3.Connection, tables: list[str]
+) -> list[str]:
+    if "benchmark_contexts" not in tables:
+        return ["missing:benchmark_contexts"]
+    issues: list[str] = []
+    categories = {
+        str(row[0]) for row in connection.execute("SELECT category FROM benchmark_contexts")
+    }
+    missing = {"LP", "QP", "NLP", "MIP", "DFO", "BO"} - categories
+    issues.extend(f"missing-category:{category}" for category in sorted(missing))
+    contextless = connection.execute(
+        "SELECT comparison_set_id FROM comparison_sets WHERE benchmark_context_id IS NULL"
+    ).fetchall()
+    issues.extend(f"contextless-comparison:{row[0]}" for row in contextless)
+    blank_json = connection.execute(
+        """
+        SELECT context_id FROM benchmark_contexts
+        WHERE json_array_length(source_ids_json) = 0
+           OR json_array_length(outcome_metrics_json) = 0
+           OR status_mapping_json = '{}'
+           OR implementation_versions_json = '{}'
+        """
+    ).fetchall()
+    issues.extend(f"incomplete-context:{row[0]}" for row in blank_json)
     return issues

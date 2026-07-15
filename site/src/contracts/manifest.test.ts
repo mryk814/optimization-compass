@@ -12,6 +12,8 @@ const manifest = {
   visualization_scenarios: { version: "1.1.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
+  implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
+  benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
   coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",
@@ -35,6 +37,7 @@ describe("SiteManifest parser", () => {
     expect(parseSiteManifest(manifest).traces.path).toBe("traces/index.json");
     expect(parseSiteManifest(manifest).problems.path).toBe("problems.json");
     expect(parseSiteManifest(manifest).visualization_scenarios.path).toBe("visualization-scenarios.json");
+    expect(parseSiteManifest(manifest).benchmark_contexts.path).toBe("benchmark-contexts.json");
     expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
   });
 

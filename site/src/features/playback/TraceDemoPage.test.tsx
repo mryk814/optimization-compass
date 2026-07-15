@@ -61,6 +61,8 @@ const manifest = {
   visualization_scenarios: { version: "1.1.0", path: "visualization-scenarios.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
+  implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
+  benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
   coverage: { version: "1.0.0", path: "coverage.json", report_path: "coverage.md" },
   traces: {
     contract_version: "1.0.0",

@@ -10,6 +10,8 @@ export interface ComparisonSet {
   comparison_id: string;
   identity_status: "canonical" | "derived";
   canonical_comparison_id: string;
+  benchmark_context_id: string;
+  ranking_eligible: boolean;
   aliases: string[];
   preset_id: string;
   title_ja: string;
@@ -83,6 +85,8 @@ export function parseComparisonIndex(raw: unknown): ComparisonIndex {
       comparison_id: nonEmpty(item.comparison_id, "comparison_id"),
       identity_status: comparisonIdentityStatus(item.identity_status),
       canonical_comparison_id: nonEmpty(item.canonical_comparison_id, "canonical_comparison_id"),
+      benchmark_context_id: nonEmpty(item.benchmark_context_id, "benchmark_context_id"),
+      ranking_eligible: boolean(item.ranking_eligible, "ranking_eligible"),
       aliases: stringArray(item.aliases, "aliases"),
       preset_id: nonEmpty(item.preset_id, "preset_id"),
       title_ja: nonEmpty(item.title_ja, "title_ja"),
@@ -129,6 +133,10 @@ function number(value: unknown, owner: string): number {
   if (typeof value !== "number" || !Number.isFinite(value)) {
     throw new Error(`${owner} must be finite.`);
   }
+  return value;
+}
+function boolean(value: unknown, owner: string): boolean {
+  if (typeof value !== "boolean") throw new Error(`${owner} must be boolean.`);
   return value;
 }
 function numericRecord(value: unknown, owner: string): Record<string, number> {

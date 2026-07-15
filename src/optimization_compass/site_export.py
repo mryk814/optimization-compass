@@ -327,6 +327,29 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         generated_at=generated_at,
     )
     _write_json(output_dir / "sources.json", source_index)
+    _write_json(
+        output_dir / "implementation-claims.json",
+        {
+            "contract_version": "1.0.0",
+            "dataset_version": release["version"],
+            "claims": repository.implementation_claim_history(),
+            "freshness": repository.implementation_claim_freshness(
+                date.fromisoformat(release["release_date"])
+            ),
+        },
+    )
+    _write_json(
+        output_dir / "benchmark-contexts.json",
+        {
+            "contract_version": "1.0.0",
+            "dataset_version": release["version"],
+            "contexts": repository.benchmark_contexts(),
+            "ranking_policy": {
+                "context_required": True,
+                "missing_context_action": "ranking_forbidden",
+            },
+        },
+    )
     coverage = build_coverage_report(
         repository,
         output_dir,
@@ -356,6 +379,10 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         ),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
+        implementation_claims=ManifestAsset(
+            version="1.0.0", path="implementation-claims.json"
+        ),
+        benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
         coverage=ManifestCoverageAsset(
             version="1.0.0", path="coverage.json", report_path="coverage.md"
         ),

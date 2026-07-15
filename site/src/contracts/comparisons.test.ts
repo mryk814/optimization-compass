@@ -10,6 +10,8 @@ const payload = {
       comparison_id: "COMPARE_GRADIENT_FAMILY",
       identity_status: "canonical",
       canonical_comparison_id: "COMPARE_GRADIENT_FAMILY",
+      benchmark_context_id: "BENCH_QP",
+      ranking_eligible: true,
       aliases: [],
       preset_id: "elongated-valley",
       title_ja: "一次法の軌跡比較",
@@ -47,6 +49,14 @@ describe("explanatory comparison contract", () => {
       "generic_metric_history",
     ]);
     expect(parsed.comparisons[0].members[0].label_ja).toBe("勾配降下法");
+    expect(parsed.comparisons[0].benchmark_context_id).toBe("BENCH_QP");
+  });
+
+  test("rejects context-free ranking", () => {
+    expect(() => parseComparisonIndex({
+      ...payload,
+      comparisons: [{ ...payload.comparisons[0], benchmark_context_id: "" }],
+    })).toThrow(/benchmark_context_id/u);
   });
 
   test("rejects an undeclared renderer family", () => {
