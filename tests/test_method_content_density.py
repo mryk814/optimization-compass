@@ -3,7 +3,6 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-
 EXPANDED_METHOD_CONTENT_IDS = {
     "admm",
     "bfgs",
@@ -29,7 +28,7 @@ def test_major_method_families_have_dense_published_guides() -> None:
     pages = {page.content_id: page for page in load_content(root / "content")}
 
     assert len(pages) >= 28
-    assert EXPANDED_METHOD_CONTENT_IDS <= pages.keys()
+    assert pages.keys() >= EXPANDED_METHOD_CONTENT_IDS
 
     for content_id in sorted(EXPANDED_METHOD_CONTENT_IDS):
         page = pages[content_id]
