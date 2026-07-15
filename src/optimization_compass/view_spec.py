@@ -282,6 +282,7 @@ class SiteManifest(ContractModel):
     sources: ManifestAsset
     implementation_claims: ManifestAsset
     benchmark_contexts: ManifestAsset
+    failure_modes: ManifestAsset
     coverage: ManifestCoverageAsset
     licenses: SiteLicenseManifest
 

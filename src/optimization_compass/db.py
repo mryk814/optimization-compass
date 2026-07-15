@@ -12,6 +12,11 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.dataset_release import verify_database
+from optimization_compass.failure_modes import (
+    FailureGuidance,
+    export_failure_modes,
+    failure_guidance,
+)
 from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.predicates import (
     PredicateCatalog,
@@ -198,6 +203,16 @@ class KnowledgeRepository:
                 }
             ).__dict__
         return rows
+
+    def failure_guidance(
+        self, method_ids: list[str], feature_answers: dict[str, set[str]]
+    ) -> list[FailureGuidance]:
+        with self.connect() as connection:
+            return failure_guidance(connection, method_ids, feature_answers)
+
+    def structured_failure_modes(self) -> list[dict[str, Any]]:
+        with self.connect() as connection:
+            return export_failure_modes(connection)
 
     def method(self, method_id: str) -> dict[str, Any] | None:
         return self.fetch_one("SELECT * FROM methods WHERE method_id = ?", (method_id,))

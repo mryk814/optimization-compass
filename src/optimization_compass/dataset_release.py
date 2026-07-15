@@ -16,6 +16,13 @@ from typing import Any, Literal
 
 from openpyxl import Workbook, load_workbook
 
+from optimization_compass.failure_modes import (
+    OBSERVABLE_IDS,
+    insert_structured_failure_modes,
+)
+from optimization_compass.failure_modes import (
+    SCENARIOS as FAILURE_SCENARIOS,
+)
 from optimization_compass.metadata_models import AtlasMetadataSeed
 from optimization_compass.predicates import PredicateCatalog
 from optimization_compass.problem_instances import ProblemSuiteSeed
@@ -48,6 +55,7 @@ DEFAULT_SEMANTIC_VIEW_MIGRATION = ROOT / "data/migrations/007_semantic_view_pres
 DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
     ROOT / "data/migrations/008_versioned_claims_and_benchmark_context.sql"
 )
+DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -81,7 +89,7 @@ RELEASE_LICENSE_MANIFEST = {
     ),
 }
 BASE_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 13))
-ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 24))
+ATLAS_CHECK_IDS = frozenset(f"CHK{index:03d}" for index in range(1, 25))
 ATLAS_TABLES = frozenset(
     {
         "view_presets",
@@ -102,6 +110,13 @@ ATLAS_TABLES = frozenset(
         "decision_rule_target_retirements",
         "implementation_claims",
         "benchmark_contexts",
+        "failure_mode_profiles",
+        "failure_mode_triggers",
+        "failure_mode_symptoms",
+        "failure_mode_diagnostics",
+        "failure_mode_mitigations",
+        "failure_mode_affected_entities",
+        "failure_mode_scenarios",
     }
 )
 
@@ -245,6 +260,7 @@ def build_staged_release(
             DEFAULT_PROBLEM_MIGRATION,
             DEFAULT_SEMANTIC_VIEW_MIGRATION,
             DEFAULT_VERSIONED_CLAIMS_MIGRATION,
+            DEFAULT_FAILURE_MODE_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -559,6 +575,7 @@ def compute_live_checks(
     explicit_state_issues = _explicit_state_issues(connection, ATLAS_TABLES - missing_tables)
     claim_issues = _versioned_claim_issues(connection, tables)
     benchmark_issues = _benchmark_context_issues(connection, tables)
+    failure_mode_issues = _structured_failure_mode_issues(connection, tables)
     checks.extend(
         [
             _check(
@@ -680,6 +697,17 @@ def compute_live_checks(
                 f"{len(benchmark_issues)} issues",
                 "LP/QP/NLP/MIP/DFO/BO fixtures are complete and comparisons reference context",
                 ", ".join(benchmark_issues[:10]) or "Benchmark contexts are complete.",
+                checked_at,
+            ),
+            _check(
+                "CHK024",
+                "Structured failure-mode closure",
+                "failure mode profiles and relations",
+                "critical",
+                not failure_mode_issues,
+                f"{len(failure_mode_issues)} issues",
+                "12 profiles resolve triggers, symptoms, diagnostics, mitigations, and scenarios",
+                ", ".join(failure_mode_issues[:10]) or "Failure-mode relations are closed.",
                 checked_at,
             ),
         ]
@@ -901,6 +929,7 @@ def _verify_site_release_tree(
     referenced.add(str(manifest["sources"]["path"]))
     referenced.add(str(manifest["implementation_claims"]["path"]))
     referenced.add(str(manifest["benchmark_contexts"]["path"]))
+    referenced.add(str(manifest["failure_modes"]["path"]))
     referenced.add(str(manifest["coverage"]["path"]))
     referenced.add(str(manifest["coverage"]["report_path"]))
     for relative in referenced:
@@ -1168,10 +1197,12 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_PROBLEM_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_SEMANTIC_VIEW_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
         insert_versioned_claims_and_contexts(connection, release_date=release_date)
+        insert_structured_failure_modes(connection, release_date=release_date)
         _record_target_release(connection, target_version, release_date)
         connection.execute("DELETE FROM release_checks")
         for check in compute_live_checks(connection, release_date):
@@ -1223,7 +1254,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published versioned implementation claims and complete benchmark contexts.",
+            "Published structured failure triggers, symptoms, diagnostics, and mitigations.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1237,12 +1268,12 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Volatile implementation facts and comparison assumptions lacked history.",
+            "Failure modes were free text and could not drive Diagnose or shared scenarios.",
             (
-                "Added a superseding implementation claim ledger and normalized benchmark "
-                "context contract."
+                "Normalized twelve failure modes into triggers, observables, diagnostics, "
+                "mitigations, affected entities, and scenario links."
             ),
-            ("Prevent context-free performance ranking and preserve historical claims."),
+            ("Reuse one canonical failure relation in Diagnose, method pages, and visualizations."),
             target_version,
             release_date,
         ),
@@ -2636,4 +2667,98 @@ def _benchmark_context_issues(connection: sqlite3.Connection, tables: list[str])
         """
     ).fetchall()
     issues.extend(f"incomplete-context:{row[0]}" for row in blank_json)
+    return issues
+
+
+def _structured_failure_mode_issues(connection: sqlite3.Connection, tables: list[str]) -> list[str]:
+    required = {
+        "failure_mode_profiles",
+        "failure_mode_triggers",
+        "failure_mode_symptoms",
+        "failure_mode_diagnostics",
+        "failure_mode_mitigations",
+        "failure_mode_affected_entities",
+        "failure_mode_scenarios",
+    }
+    missing = required - set(tables)
+    if missing:
+        return [f"missing:{table}" for table in sorted(missing)]
+    issues: list[str] = []
+    profile_count = int(
+        connection.execute("SELECT COUNT(*) FROM failure_mode_profiles").fetchone()[0]
+    )
+    if profile_count < 12:
+        issues.append(f"profile-count:{profile_count}/12")
+    for table in (
+        "failure_mode_triggers",
+        "failure_mode_symptoms",
+        "failure_mode_diagnostics",
+        "failure_mode_mitigations",
+        "failure_mode_affected_entities",
+    ):
+        absent = connection.execute(
+            f"""SELECT profile.failure_mode_id FROM failure_mode_profiles AS profile
+                LEFT JOIN {table} AS child USING (failure_mode_id)
+                GROUP BY profile.failure_mode_id HAVING COUNT(child.failure_mode_id) = 0"""
+        ).fetchall()
+        issues.extend(f"missing-{table}:{row[0]}" for row in absent)
+    unresolved_methods = connection.execute(
+        """SELECT affected.failure_mode_id, affected.entity_id
+           FROM failure_mode_affected_entities AS affected
+           LEFT JOIN methods ON affected.entity_type = 'method'
+             AND methods.method_id = affected.entity_id
+           WHERE affected.entity_type = 'method' AND methods.method_id IS NULL"""
+    ).fetchall()
+    issues.extend(f"missing-method:{row[0]}:{row[1]}" for row in unresolved_methods)
+    unresolved_implementations = connection.execute(
+        """SELECT affected.failure_mode_id, affected.entity_id
+           FROM failure_mode_affected_entities AS affected
+           LEFT JOIN implementations ON affected.entity_type = 'implementation'
+             AND implementations.implementation_id = affected.entity_id
+           WHERE affected.entity_type = 'implementation'
+             AND implementations.implementation_id IS NULL"""
+    ).fetchall()
+    issues.extend(f"missing-implementation:{row[0]}:{row[1]}" for row in unresolved_implementations)
+    unresolved_features = connection.execute(
+        """SELECT affected.failure_mode_id, affected.entity_id
+           FROM failure_mode_affected_entities AS affected
+           LEFT JOIN problem_features ON affected.entity_type = 'feature'
+             AND problem_features.feature_id = affected.entity_id
+           WHERE affected.entity_type = 'feature' AND problem_features.feature_id IS NULL"""
+    ).fetchall()
+    issues.extend(f"missing-feature:{row[0]}:{row[1]}" for row in unresolved_features)
+    unresolved_sources = connection.execute(
+        """SELECT profile.failure_mode_id, source.value
+           FROM failure_mode_profiles AS profile, json_each(profile.source_ids_json) AS source
+           LEFT JOIN sources ON sources.source_id = source.value
+           WHERE sources.source_id IS NULL"""
+    ).fetchall()
+    issues.extend(f"missing-source:{row[0]}:{row[1]}" for row in unresolved_sources)
+    observable_rows = connection.execute(
+        "SELECT failure_mode_id, observable_id FROM failure_mode_symptoms "
+        "WHERE observable_id IS NOT NULL"
+    ).fetchall()
+    issues.extend(
+        f"unknown-observable:{row[0]}:{row[1]}"
+        for row in observable_rows
+        if str(row[1]) not in OBSERVABLE_IDS
+    )
+    scenario_rows = connection.execute(
+        "SELECT failure_mode_id, scenario_id FROM failure_mode_scenarios"
+    ).fetchall()
+    if len(scenario_rows) < 4:
+        issues.append(f"failure-scenario-count:{len(scenario_rows)}/4")
+    expected_scenarios = set(FAILURE_SCENARIOS.values())
+    issues.extend(
+        f"unknown-scenario:{row[0]}:{row[1]}"
+        for row in scenario_rows
+        if str(row[1]) not in expected_scenarios
+    )
+    misclassified = connection.execute(
+        """SELECT affected.failure_mode_id FROM failure_mode_affected_entities AS affected
+           JOIN failure_mode_profiles AS profile USING (failure_mode_id)
+           WHERE profile.failure_scope = 'implementation_specific'
+             AND affected.specificity <> 'implementation_only'"""
+    ).fetchall()
+    issues.extend(f"implementation-scope-leak:{row[0]}" for row in misclassified)
     return issues

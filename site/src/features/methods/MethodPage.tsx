@@ -5,6 +5,7 @@ import { parseContentIndex, type AtlasContentPage } from "../../contracts/atlas-
 import { parseSiteData, type SiteData } from "../../contracts/site-data";
 import { findEntity, relatedEntities, type LinkedEntity } from "../../contracts/entity-links";
 import { parseViewSpec, type ViewSpec } from "../../contracts/viewspec";
+import { parseFailureModeIndex, type FailureModeRecord } from "../../contracts/failure-modes";
 import { siteBaseUrl } from "../../data/base-url";
 import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
@@ -59,6 +60,7 @@ export function MethodPage() {
   const [view, setView] = useState<ViewSpec>();
   const [content, setContent] = useState<AtlasContentPage>();
   const [siteData, setSiteData] = useState<SiteData>();
+  const [failureModes, setFailureModes] = useState<FailureModeRecord[]>([]);
   const [loadError, setLoadError] = useState<Error>();
   const method = links.status === "ready" ? findEntity(links.index, "method", methodId) : undefined;
   const learning = links.status === "ready" && method
@@ -79,6 +81,21 @@ export function MethodPage() {
     );
     return () => controller.abort();
   }, []);
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(`${siteBaseUrl()}data/failure-modes.json`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Failure modes request failed (${response.status}).`);
+        return parseFailureModeIndex(await response.json());
+      }).then(
+        (index) => setFailureModes(index.failure_modes.filter((failure) =>
+          failure.affected_entities.some((entity) => entity.entity_type === "method" && entity.entity_id === methodId))),
+        (caught: unknown) => {
+          if (!controller.signal.aborted) setLoadError(caught instanceof Error ? caught : new Error(String(caught)));
+        },
+      );
+    return () => controller.abort();
+  }, [methodId]);
   useEffect(() => {
     const controller = new AbortController();
     void fetch(`${siteBaseUrl()}data/recommendation/site-data.json`, { signal: controller.signal })
@@ -136,12 +153,32 @@ export function MethodPage() {
       {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
       {siteData && <MethodPredicates data={siteData} methodId={methodId} />}
+      {failureModes.length > 0 && <MethodFailures failures={failureModes} />}
       {content && (
         <section aria-label="教材" className="method-learning">
           <CompiledContent page={content} />
         </section>
       )}
       {groups && <MethodRelations groups={groups} />}
+    </section>
+  );
+}
+
+function MethodFailures({ failures }: { failures: FailureModeRecord[] }) {
+  return (
+    <section aria-label="症状・確認・対処" className="method-failures">
+      <h2>症状・確認・対処</h2>
+      {failures.map((failure) => (
+        <article key={failure.failure_mode_id}>
+          <h3>{failure.name_ja} <small>{failure.name_en}</small></h3>
+          <p>{failure.failure_scope} · {failure.severity} · {failure.recoverability}</p>
+          <dl>
+            <dt>症状</dt><dd>{failure.symptoms.map((item) => item.description).join(" / ")}</dd>
+            <dt>確認</dt><dd>{failure.diagnostics.map((item) => item.check_text).join(" / ")}</dd>
+            <dt>対処</dt><dd>{failure.mitigations.map((item) => item.action).join(" / ")}</dd>
+          </dl>
+        </article>
+      ))}
     </section>
   );
 }
