@@ -5,18 +5,21 @@ import pytest
 from optimization_compass.content_models import load_content, parse_content
 
 
-def test_initial_content_pages_compile_to_safe_accessible_html() -> None:
+def test_published_content_pages_compile_to_safe_accessible_html() -> None:
     root = Path(__file__).resolve().parents[1]
     pages = load_content(root / "content")
+    page_ids = {page.content_id for page in pages}
 
-    assert {page.content_id for page in pages} == {
-        "bayesian-optimization",
-        "branch-and-bound",
+    assert len(pages) >= 6
+    assert {
         "concept.convexity",
         "concept.derivative-free",
         "method.gradient-descent",
         "method.nelder-mead",
-    }
+        "branch-and-bound",
+        "bayesian-optimization",
+    } <= page_ids
+    assert len(page_ids) == len(pages)
     assert all(page.html and page.toc for page in pages)
     assert all(page.source_ids for page in pages)
     combined = "\n".join(page.html for page in pages)
