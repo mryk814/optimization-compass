@@ -145,6 +145,17 @@ describe("MapPage", () => {
     expect(within(tree).queryByText("質問")).not.toBeInTheDocument();
   });
 
+  test("explains map states and exposes root/current/detail cues", async () => {
+    renderMap();
+    const tree = await loadedTree();
+    expect(screen.getByRole("heading", { level: 2, name: "地図の読み方" })).toBeVisible();
+    expect(screen.getByText(/zoomは文字倍率です/u)).toBeVisible();
+    const root = within(tree).getAllByRole("treeitem")[0];
+    expect(root).toHaveClass("map-tree-item-root");
+    expect(root).toHaveAttribute("title", "root A");
+    expect(root).toHaveAttribute("aria-current", "location");
+  });
+
   test("expands three levels and selection updates detail without changing answers", async () => {
     renderMap();
     const tree = await loadedTree();

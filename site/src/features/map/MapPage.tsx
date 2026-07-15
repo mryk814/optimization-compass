@@ -40,6 +40,20 @@ function Diagnostics({ model }: { model: MapModel }) {
   );
 }
 
+function MapLegend() {
+  return (
+    <section aria-label="地図の読み方" className="map-legend">
+      <h2>地図の読み方</h2>
+      <ul>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-root" />root: 問題構造の入口</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-current" />現在地: キーボードや「現在地へ」の焦点</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-selected" />選択経路: 詳細パネルに表示中の項目と親</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-related" />関連候補: 診断回答に一致する候補</li>
+      </ul>
+    </section>
+  );
+}
+
 function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
   const catalog = useMemo(() => catalogFromView(view), [view]);
   const atlas = useAtlasState(catalog);
@@ -163,6 +177,7 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
       )}
       {atlasNavigation.error && <p className="map-state-panel" role="alert">{atlasNavigation.error.message}</p>}
       <Diagnostics model={model} />
+      <MapLegend />
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
         <button aria-pressed={activePane === "map"} onClick={() => setActivePane("map")} type="button">地図</button>
         <button aria-pressed={activePane === "detail"} onClick={() => setActivePane("detail")} type="button">詳細</button>
@@ -174,6 +189,9 @@ function LoadedMap({ view, model }: { view: ViewSpec; model: MapModel }) {
         <button aria-label="倍率をリセット" onClick={() => setZoom(100)} type="button">100%</button>
         <button disabled={!atlas.state.selectedNodeId} onClick={focusCurrent} type="button">現在地へ</button>
       </div>
+      <p className="map-view-help" role="note">
+        zoomは文字倍率です。地図ペインは横・縦にスクロールでき、選択中の項目へは「現在地へ」で戻れます。ノードにカーソルを置くと概要を確認できます。
+      </p>
       <div className="map-workspace">
         <section className="map-tree-pane" data-active={activePane === "map"} data-testid="map-tree-pane">
           <MapTree

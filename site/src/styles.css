@@ -1418,6 +1418,16 @@ main:focus {
   background: #f0f2ec;
 }
 
+.map-tree-item-root {
+  border-left: 3px solid #6b4a35;
+  font-weight: 760;
+}
+
+.map-tree-item-current {
+  outline: 2px dashed #315bda;
+  outline-offset: -2px;
+}
+
 .map-tree-item-primary .map-tree-label {
   color: #224333;
   font-weight: 780;
@@ -1447,6 +1457,58 @@ main:focus {
 .map-tree-item-unrelated.map-tree-item-primary .map-tree-label {
   color: #566159;
   font-weight: 650;
+}
+
+.map-legend {
+  margin-bottom: 0.55rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #d4d6cf;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #46534b;
+  font-size: 0.7rem;
+}
+
+.map-legend h2 {
+  margin: 0 0 0.35rem;
+  color: #6b4a35;
+  font-size: 0.72rem;
+}
+
+.map-legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.map-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.map-legend-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid #aeb8ae;
+  border-radius: 0.18rem;
+  background: #f6f5f0;
+}
+
+.map-legend-swatch-root { border-left: 3px solid #6b4a35; }
+.map-legend-swatch-current { outline: 2px dashed #315bda; outline-offset: -2px; }
+.map-legend-swatch-selected { border-color: #3e7358; background: #dcebe1; }
+.map-legend-swatch-related { box-shadow: inset 3px 0 #315bda; background: #eef3ff; }
+
+.map-view-help {
+  margin: 0 0 0.5rem;
+  color: #68736c;
+  font-size: 0.68rem;
+  line-height: 1.5;
 }
 
 .map-tree-toggle {
@@ -1608,6 +1670,21 @@ main:focus {
 
 .map-reference-warning {
   color: #8d3c27;
+}
+
+@media (max-width: 40rem) {
+  .map-legend ul { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .map-toolbar { justify-content: flex-start; overflow-x: auto; padding-bottom: 0.1rem; }
+  .map-toolbar button { flex: 0 0 auto; }
+  .map-workspace { display: block; }
+  .map-pane-switch { display: flex; gap: 0.3rem; margin-bottom: 0.45rem; }
+  .map-pane-switch button { min-height: 2rem; padding: 0.32rem 0.6rem; font-size: 0.72rem; }
+  .map-pane-switch button[aria-pressed="true"] { border-color: #3e7358; background: #dcebe1; }
+  .map-tree-pane, .map-detail-pane { max-height: min(62vh, 34rem); }
+  .map-tree-pane[data-active="false"], .map-detail-pane[data-active="false"] { display: none; }
+  .map-detail-pane { padding: 0.7rem; }
+  .map-entity-item { grid-template-columns: minmax(6rem, auto) 1fr; }
+  .map-entity-item code { grid-column: 1 / -1; }
 }
 
 .site-footer {
