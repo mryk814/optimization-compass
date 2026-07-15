@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pytest
@@ -10,7 +11,7 @@ def test_published_content_pages_compile_to_safe_accessible_html() -> None:
     pages = load_content(root / "content")
     page_ids = {page.content_id for page in pages}
 
-    assert len(pages) >= 6
+    assert len(pages) >= 12
     assert {
         "concept.convexity",
         "concept.derivative-free",
@@ -18,6 +19,12 @@ def test_published_content_pages_compile_to_safe_accessible_html() -> None:
         "method.nelder-mead",
         "branch-and-bound",
         "bayesian-optimization",
+        "cp-sat",
+        "least-squares",
+        "lp-qp-conic",
+        "constrained-continuous",
+        "multi-objective",
+        "cma-es",
     } <= page_ids
     assert len(page_ids) == len(pages)
     assert all(page.html and page.toc for page in pages)
@@ -32,6 +39,27 @@ def test_published_content_pages_compile_to_safe_accessible_html() -> None:
     assert "<figure>" in combined
     assert 'rel="noopener noreferrer"' in combined
     assert "<script" not in combined
+
+
+def test_promoted_method_pages_have_syntax_valid_copyable_examples() -> None:
+    root = Path(__file__).resolve().parents[1]
+    promoted_ids = {
+        "cp-sat",
+        "least-squares",
+        "lp-qp-conic",
+        "constrained-continuous",
+        "multi-objective",
+        "cma-es",
+    }
+    pages = {page.content_id: page for page in load_content(root / "content")}
+
+    for content_id in promoted_ids:
+        blocks = re.findall(
+            r"^```python\n(.*?)^```$", pages[content_id].body, re.MULTILINE | re.DOTALL
+        )
+        assert blocks, f"{content_id} must provide a copyable Python example"
+        for index, block in enumerate(blocks, start=1):
+            compile(block, f"{content_id}:python:{index}", "exec")
 
 
 def test_markdown_pipeline_compiles_supported_constructs(tmp_path: Path) -> None:

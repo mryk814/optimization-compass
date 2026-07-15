@@ -317,6 +317,42 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "cma-es",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "CMA-ES",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S032",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_CMA_ES",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.derivative-free",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "関数値の順位から探索分布の平均・step size・共分散を更新する連続black-box最適化です。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.convexity",
       "entity_id": "concept.convexity",
       "entity_type": "content",
@@ -366,6 +402,175 @@
         }
       ],
       "summary": "微分を直接使わず、関数値の比較から探索する考え方です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "constrained-continuous",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約付き連続最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_CONSTRAINED_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "目的値だけでなく実行可能性・active constraint・停止理由を同時に追う連続最適化です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "cp-sat",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "CP-SATと制約プログラミング",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "論理・整数・組合せ制約を伝播と探索で扱い、実行可能性と目的値を同時に詰める方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "least-squares",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非線形最小二乗とLevenberg–Marquardt法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        }
+      ],
+      "summary": "観測値とmodel予測の残差を直接組み立て、その二乗和を局所的に減らす方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "lp-qp-conic",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "LP・QP・錐最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        }
+      ],
+      "summary": "線形・凸二次・錐構造を保ったままmodel化し、専用solverの保証と数値情報を利用します。"
     },
     {
       "aliases": [],
@@ -443,6 +648,47 @@
         }
       ],
       "summary": "勾配を使わず、単体を変形しながら局所探索します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "multi-objective",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "多目的最適化とPareto front",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        }
+      ],
+      "summary": "複数の目的を単一bestへ潰さず、支配されないtrade-off集合として意思決定を支援します。"
     },
     {
       "aliases": [],
@@ -6072,7 +6318,9 @@
       "summary": "滑らかな項と非滑らかな正則化・制約の分離構造、近接作用素、射影、分解を利用する手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/constrained-continuous"
+      ],
       "canonical_url": "/methods/MF_CONSTRAINED_NLP",
       "entity_id": "MF_CONSTRAINED_NLP",
       "entity_type": "method",
@@ -6096,6 +6344,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
@@ -6103,6 +6356,11 @@
           "relation_type": "evidence",
           "target_id": "S064",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
         }
       ],
       "summary": "等式・不等式・上下限を伴う滑らかな連続非線形問題をKKT条件、SQP、内点法等で解く手法群。"
@@ -6314,7 +6572,9 @@
       "summary": "最短路、flow、matching、段階構造などの特殊構造を利用する専用アルゴリズム群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/lp-qp-conic"
+      ],
       "canonical_url": "/methods/MF_LP_QP_CONIC",
       "entity_id": "MF_LP_QP_CONIC",
       "entity_type": "method",
@@ -6365,6 +6625,11 @@
           "relation_type": "evidence",
           "target_id": "S062",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
         }
       ],
       "summary": "LP、凸QP、SOCP、SDP等の凸構造を利用し、simplex、barrier、operator splitting等で解く手法群。"
@@ -7466,7 +7731,9 @@
       "summary": "conflictからclauseを学習してBoolean satisfiabilityを探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/cma-es"
+      ],
       "canonical_url": "/methods/M_CMA_ES",
       "entity_id": "M_CMA_ES",
       "entity_type": "method",
@@ -7507,6 +7774,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYCMA",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cma-es",
+          "target_type": "content"
         }
       ],
       "summary": "search distributionの平均と共分散を適応する連続black-box法。"
@@ -7635,7 +7907,9 @@
       "summary": "変数またはblockを一つずつ更新する。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/cp-sat"
+      ],
       "canonical_url": "/methods/M_CP_SAT",
       "entity_id": "M_CP_SAT",
       "entity_type": "method",
@@ -7681,6 +7955,21 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_CPSAT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
         }
       ],
       "summary": "整数・Boolean制約をSAT learningとLP等を組み合わせて解く。"
@@ -8487,7 +8776,9 @@
       "summary": "L-BFGSを上下限制約へ拡張。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/least-squares"
+      ],
       "canonical_url": "/methods/M_LEVENBERG_MARQUARDT",
       "entity_id": "M_LEVENBERG_MARQUARDT",
       "entity_type": "method",
@@ -8523,6 +8814,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_LEAST_SQUARES_LM",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "least-squares",
+          "target_type": "content"
         }
       ],
       "summary": "Gauss–Newtonにdampingを加えた非線形最小二乗法。"
@@ -9022,7 +9318,9 @@
       "summary": "過去の方向を共役化し、低memoryで滑らかな無制約問題を解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/multi-objective"
+      ],
       "canonical_url": "/methods/M_NSGA_II",
       "entity_id": "M_NSGA_II",
       "entity_type": "method",
@@ -9032,6 +9330,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
           "target_type": "source"
         },
         {
@@ -9048,6 +9351,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYMOO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multi-objective",
+          "target_type": "content"
         }
       ],
       "summary": "非支配sortingとcrowding distanceでPareto populationを進化。"
