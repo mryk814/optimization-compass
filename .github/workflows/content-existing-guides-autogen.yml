@@ -36,12 +36,16 @@ jobs:
         run: |
           rm -rf site/public/data
           uv run optimization-compass export-site-data --output site/public/data
-      - name: Validate normalized method guides
+      - name: Lint and format-check Python
         run: |
           uv run ruff check .
           uv run ruff format --check .
-          uv run python scripts/verify_content.py
-          uv run pytest tests/test_content_models.py tests/test_method_content_density.py
+      - name: Validate content schema and canonical references
+        run: uv run python scripts/verify_content.py
+      - name: Validate the method-density contract
+        run: uv run pytest tests/test_content_models.py tests/test_method_content_density.py
+      - name: Validate the site
+        run: |
           npm --prefix site run typecheck
           npm --prefix site test -- --run
           npm --prefix site run build
