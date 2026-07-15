@@ -50,6 +50,7 @@ export interface SiteManifest {
   views: ManifestView[];
   recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
+  problems: ManifestAsset;
   visualization_scenarios: ManifestAsset;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
@@ -68,6 +69,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "views",
       "recommendation",
       "traces",
+      "problems",
       "visualization_scenarios",
       "entity_links",
       "sources",
@@ -111,6 +113,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (!/^[0-9a-f]{64}$/u.test(sha256)) throw new Error("traces.sha256 is invalid.");
 
   const licenses = parseLicenses(data.licenses);
+  const problems = record(data.problems, "problems");
+  exactKeys(problems, ["version", "path"], "problems");
+  if (problems.version !== "1.0.0") throw new Error("problems.version is unsupported.");
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
   if (entityLinks.version !== "1.0.0") throw new Error("entity_links.version is unsupported.");
@@ -144,6 +149,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(traces.path, "traces.path"),
       bytes,
       sha256,
+    },
+    problems: {
+      version: "1.0.0",
+      path: safeRelativePath(problems.path, "problems.path"),
     },
     visualization_scenarios: {
       version: "1.0.0",

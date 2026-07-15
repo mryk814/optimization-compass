@@ -2,7 +2,7 @@
   "artifact_id": "binary-knapsack-bnb-budget",
   "artifact_kind": "executable_trace",
   "contract_version": "1.0.0",
-  "dataset_version": "0.4.0",
+  "dataset_version": "0.5.1",
   "renderer_contract_version": "1.0.0",
   "renderer_family": "search_tree",
   "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
@@ -15,7 +15,7 @@
   "trace": {
     "contract_version": "1.0.0",
     "data_version": "1.0.0",
-    "dataset_version": "0.4.0",
+    "dataset_version": "0.5.1",
     "environment": {
       "runtime": "deterministic_educational_generator",
       "version": "1.0.0"
@@ -2085,10 +2085,48 @@
     },
     "method_id": "M_BRANCH_BOUND",
     "objective": {
-      "constraint": "4A + 3B + 2D + 3C <= 7",
-      "expression": "9A + 6B + 4D + 5C",
-      "sense": "maximize",
-      "variable_domain": "binary"
+      "dimensions": 4,
+      "direction": "maximize",
+      "display_expression": "max 9A+6B+4D+5C; 4A+3B+2D+3C≤7",
+      "display_range": {
+        "bound": [
+          0,
+          17
+        ],
+        "depth": [
+          0,
+          4
+        ],
+        "objective": [
+          0,
+          15
+        ]
+      },
+      "domain": {
+        "variables": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "family": "binary_knapsack",
+      "generator_id": "problem.knapsack.binary.v1",
+      "known_reference_status": "known_exact",
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4"
     },
     "objective_id": "INSTANCE_BINARY_KNAPSACK_4",
     "parameters": {

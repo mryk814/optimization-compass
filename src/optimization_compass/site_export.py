@@ -12,6 +12,7 @@ from optimization_compass.coverage import build_coverage_report, write_coverage_
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.search_tree import (
     SearchTreeArtifact,
@@ -275,6 +276,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     _write_json(output_dir / VIEW_PATH, view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
+    _write_json(output_dir / "problems.json", repository.problem_catalog())
     search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
         output_dir, dataset_version=release["version"]
     )
@@ -334,6 +336,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
             version="2.0.0", path="recommendation/site-data.json"
         ),
         traces=trace_asset,
+        problems=ManifestAsset(version="1.0.0", path="problems.json"),
         visualization_scenarios=ManifestAsset(version="1.0.0", path=VISUALIZATION_SCENARIO_PATH),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
@@ -363,6 +366,7 @@ def _write_dummy_trace(
     dataset_version: str,
     additional_traces: list[AlgorithmTrace] | None = None,
 ) -> tuple[ManifestTraceAsset, TraceIndex, list[AlgorithmTrace]]:
+    dummy_problem = get_runtime_problem("OBJECTIVE_QUADRATIC_2D")
     frames = [
         _dummy_frame(
             frame_index=0,
@@ -433,16 +437,7 @@ def _write_dummy_trace(
         generator_version="1.0.0",
         implementation_mapping_status="not_applicable",
         implementation_id=None,
-        objective={
-            "family": "quadratic",
-            "direction": "minimize",
-            "dimensions": 2,
-            "generator_id": "objective.quadratic.v1",
-            "domain": {"x": [-4.0, 4.0], "y": [-4.0, 4.0]},
-            "display_range": {"x": [-4.0, 4.0], "y": [-4.0, 4.0], "z": [0.0, 40.0]},
-            "display_expression": "f(x, y) = (x - 1)^2 + 2(y + 1)^2",
-            "optimum": {"point": [1.0, -1.0], "value": 0.0},
-        },
+        objective=dummy_problem.trace_objective(),
         preset={"preset_id": "VIEW_NELDER_MEAD_THEATER"},
         parameters={"initial_scale": 0.8, "adaptive": False},
         initial_state={
@@ -458,7 +453,7 @@ def _write_dummy_trace(
         terminal_status="completed",
         terminal_summary_ja="3フレームの契約デモを完了しました。",
         terminal_summary_en="The three-frame contract demo completed.",
-        source_ids=["S001", "S002"],
+        source_ids=sorted({"S002", *dummy_problem.instance.source_ids}),
     )
     index = TraceIndex(
         contract_version="1.0.0",
@@ -483,24 +478,24 @@ def _write_dummy_trace(
     index_path = output_dir / "traces/index.json"
     generated_traces = [
         generate_nelder_mead_trace(
-            objective_family="quadratic",
+            problem_instance_id="OBJECTIVE_QUADRATIC_2D",
             trace_id="nelder-mead-quadratic",
             dataset_version=dataset_version,
         ),
         generate_nelder_mead_trace(
-            objective_family="quadratic",
+            problem_instance_id="OBJECTIVE_QUADRATIC_2D",
             initial_point=[2.4, -2.4],
             trace_id="nelder-mead-quadratic-shifted",
             scenario_id="SCENARIO_NM_QUADRATIC_SHIFTED",
             dataset_version=dataset_version,
         ),
         generate_nelder_mead_trace(
-            objective_family="rosenbrock",
+            problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
             trace_id="nelder-mead-rosenbrock",
             dataset_version=dataset_version,
         ),
         generate_nelder_mead_trace(
-            objective_family="rosenbrock",
+            problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
             initial_point=[-2.0, -1.0],
             trace_id="nelder-mead-rosenbrock-shifted",
             scenario_id="SCENARIO_NM_ROSENBROCK_SHIFTED",

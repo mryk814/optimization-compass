@@ -71,27 +71,11 @@ class VisualizationProfileSeed(MetadataModel):
         return self
 
 
-class DemoObjectiveSeed(MetadataModel):
-    objective_id: NonBlank
-    name_ja: NonBlank
-    name_en: NonBlank
-    family: Literal["quadratic", "rosenbrock"]
-    support_status: SupportStatus
-    dimensions: int = Field(ge=1)
-    generator_id: NonBlank
-    domain: dict[str, object]
-    display_range: dict[str, object]
-    display_expression: NonBlank
-    optimum: dict[str, object]
-    source_ids: list[NonBlank] = Field(min_length=1)
-    last_verified: NonBlank
-
-
 class DemoScenarioSeed(MetadataModel):
     scenario_id: NonBlank
     method_id: NonBlank
     profile_id: NonBlank
-    objective_id: NonBlank
+    problem_instance_id: NonBlank
     name_ja: NonBlank
     name_en: NonBlank
     initial_point: list[float] = Field(min_length=1)
@@ -112,7 +96,7 @@ class DemoScenarioSeed(MetadataModel):
 
 class ComparisonSetSeed(MetadataModel):
     comparison_set_id: NonBlank
-    objective_id: NonBlank
+    problem_instance_id: NonBlank
     name_ja: NonBlank
     name_en: NonBlank
     initial_point: list[float] = Field(min_length=1)
@@ -208,7 +192,6 @@ class LearningSlicePrioritySeed(MetadataModel):
 class AtlasMetadataSeed(MetadataModel):
     view_presets: list[ViewPresetSeed] = Field(min_length=1)
     method_visualization_profiles: list[VisualizationProfileSeed] = Field(min_length=1)
-    demo_objectives: list[DemoObjectiveSeed] = Field(min_length=1)
     demo_scenarios: list[DemoScenarioSeed] = Field(min_length=1)
     comparison_sets: list[ComparisonSetSeed] = Field(min_length=1)
     comparison_set_members: list[ComparisonSetMemberSeed] = Field(min_length=1)
@@ -221,7 +204,6 @@ class AtlasMetadataSeed(MetadataModel):
         collections = (
             (self.view_presets, "preset_id"),
             (self.method_visualization_profiles, "profile_id"),
-            (self.demo_objectives, "objective_id"),
             (self.demo_scenarios, "scenario_id"),
             (self.comparison_sets, "comparison_set_id"),
             (self.learning_edges, "edge_id"),
@@ -232,13 +214,10 @@ class AtlasMetadataSeed(MetadataModel):
             _require_unique([str(getattr(row, key)) for row in rows], key)
 
         profiles = {(row.method_id, row.profile_id) for row in self.method_visualization_profiles}
-        objectives = {row.objective_id for row in self.demo_objectives}
         comparisons = {row.comparison_set_id for row in self.comparison_sets}
         for scenario in self.demo_scenarios:
             if (scenario.method_id, scenario.profile_id) not in profiles:
                 raise ValueError(f"scenario profile does not resolve: {scenario.scenario_id}")
-            if scenario.objective_id not in objectives:
-                raise ValueError(f"scenario objective does not resolve: {scenario.scenario_id}")
         member_keys: set[tuple[str, str]] = set()
         member_orders: set[tuple[str, int]] = set()
         member_methods: set[tuple[str, str]] = set()

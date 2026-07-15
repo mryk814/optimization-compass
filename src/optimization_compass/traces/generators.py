@@ -4,6 +4,7 @@ import math
 from collections.abc import Sequence
 from typing import Literal, cast
 
+from optimization_compass.problem_registry import RuntimeProblem, get_runtime_problem
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     DecisionState,
@@ -14,8 +15,6 @@ from optimization_compass.trace_models import (
     TracePoint,
     TraceVector,
 )
-
-from .objectives import objective_gradient, objective_spec, objective_value
 
 GradientMethod = Literal["gradient_descent", "momentum", "adam"]
 
@@ -35,7 +34,7 @@ _EVENT_LABELS = {
 def generate_nelder_mead_trace(
     *,
     dataset_version: str,
-    objective_family: str = "quadratic",
+    problem_instance_id: str = "OBJECTIVE_QUADRATIC_2D",
     initial_point: Sequence[float] | None = None,
     budget: int = 80,
     trace_id: str | None = None,
@@ -43,13 +42,15 @@ def generate_nelder_mead_trace(
 ) -> AlgorithmTrace:
     if budget < 4:
         raise ValueError("Nelder–Mead budget must allow the initial simplex and one trial")
-    objective = objective_spec(objective_family)
+    problem = get_runtime_problem(problem_instance_id)
+    objective = problem.trace_objective()
+    objective_family = problem.definition.mathematical_family
     initial = list(
-        initial_point or ([-1.5, 1.5] if objective_family == "rosenbrock" else [-2.5, 2.0])
+        initial_point or _initial_point(problem, "simplex_default", fallback=[-2.5, 2.0])
     )
     scale = 0.8
     simplex = [initial[:], [initial[0] + scale, initial[1]], [initial[0], initial[1] + scale]]
-    values = [objective_value(objective_family, point) for point in simplex]
+    values = [_scalar_value(problem, point) for point in simplex]
     frames: list[TraceFrame] = []
     evaluations = 3
     _append_nm_frame(
@@ -90,7 +91,7 @@ def generate_nelder_mead_trace(
         centroid = [(simplex[0][axis] + simplex[1][axis]) / 2.0 for axis in range(2)]
         worst = simplex[2]
         reflected = [centroid[axis] + alpha * (centroid[axis] - worst[axis]) for axis in range(2)]
-        reflected_value = objective_value(objective_family, reflected)
+        reflected_value = _scalar_value(problem, reflected)
         evaluations += 1
         if evaluations >= budget:
             simplex[2], values[2] = reflected, reflected_value
@@ -112,7 +113,7 @@ def generate_nelder_mead_trace(
             expanded = [
                 centroid[axis] + gamma * (reflected[axis] - centroid[axis]) for axis in range(2)
             ]
-            expanded_value = objective_value(objective_family, expanded)
+            expanded_value = _scalar_value(problem, expanded)
             evaluations += 1
             if expanded_value < reflected_value:
                 simplex[2], values[2] = expanded, expanded_value
@@ -133,7 +134,7 @@ def generate_nelder_mead_trace(
             contracted = [
                 centroid[axis] + rho * (reflected[axis] - centroid[axis]) for axis in range(2)
             ]
-            contracted_value = objective_value(objective_family, contracted)
+            contracted_value = _scalar_value(problem, contracted)
             evaluations += 1
             if contracted_value <= reflected_value:
                 simplex[2], values[2] = contracted, contracted_value
@@ -154,7 +155,7 @@ def generate_nelder_mead_trace(
             contracted = [
                 centroid[axis] - rho * (centroid[axis] - worst[axis]) for axis in range(2)
             ]
-            contracted_value = objective_value(objective_family, contracted)
+            contracted_value = _scalar_value(problem, contracted)
             evaluations += 1
             if contracted_value < values[2]:
                 simplex[2], values[2] = contracted, contracted_value
@@ -179,7 +180,7 @@ def generate_nelder_mead_trace(
                     simplex[0][axis] + sigma * (simplex[index][axis] - simplex[0][axis])
                     for axis in range(2)
                 ]
-                values[index] = objective_value(objective_family, simplex[index])
+                values[index] = _scalar_value(problem, simplex[index])
                 evaluations += 1
         candidate_pair = (
             None if candidate is None or candidate_value is None else (candidate, candidate_value)
@@ -222,7 +223,7 @@ def generate_nelder_mead_trace(
         trace_id=trace_id or f"nelder-mead-{objective_family}",
         method_id="M_NELDER_MEAD",
         profile_id="PROFILE_NELDER_MEAD_2D",
-        objective_id=f"OBJECTIVE_{objective_family.upper()}_2D",
+        objective_id=problem_instance_id,
         scenario_id=scenario_id or f"SCENARIO_NM_{objective_family.upper()}",
         generator_id="educational.nelder_mead.v1",
         generator_version="1.0.0",
@@ -265,7 +266,7 @@ def generate_gradient_trace(
     method: GradientMethod,
     *,
     dataset_version: str,
-    objective_family: str = "quadratic",
+    problem_instance_id: str = "OBJECTIVE_QUADRATIC_2D",
     initial_point: Sequence[float] | None = None,
     budget: int = 40,
     parameters: dict[str, float] | None = None,
@@ -280,10 +281,14 @@ def generate_gradient_trace(
         "adam": {"learning_rate": 0.03, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
     }
     params = {**defaults[method], **(parameters or {})}
-    objective = objective_spec(objective_family)
-    point = list(initial_point or [-1.6, 1.6])
+    problem = get_runtime_problem(problem_instance_id)
+    objective = problem.trace_objective()
+    objective_family = problem.definition.mathematical_family
+    point = list(
+        initial_point or _initial_point(problem, "first_order_default", fallback=[-1.6, 1.6])
+    )
     frames: list[TraceFrame] = []
-    value = objective_value(objective_family, point)
+    value = _scalar_value(problem, point)
     _append_gradient_frame(
         frames, 0, 0, 1, "initialize", point, [0.0, 0.0], value, method, objective_family
     )
@@ -293,7 +298,7 @@ def generate_gradient_trace(
     terminal_status: TerminalStatus = "budget_exhausted"
     for iteration in range(1, budget):
         previous_point, previous_value = point[:], value
-        gradient = objective_gradient(objective_family, point)
+        gradient = problem.objective_gradient(point)
         if method == "gradient_descent":
             movement = [-params["learning_rate"] * value_component for value_component in gradient]
         elif method == "momentum":
@@ -325,7 +330,7 @@ def generate_gradient_trace(
                 for index in range(2)
             ]
         point = [point[index] + movement[index] for index in range(2)]
-        value = objective_value(objective_family, point)
+        value = _scalar_value(problem, point)
         if (
             not all(math.isfinite(item) for item in (*gradient, *movement, *point, value))
             or value > 1e12
@@ -378,7 +383,7 @@ def generate_gradient_trace(
         trace_id=trace_id or f"{method}-{objective_family}",
         method_id=method_id,
         profile_id=profile_id,
-        objective_id=f"OBJECTIVE_{objective_family.upper()}_2D",
+        objective_id=problem_instance_id,
         scenario_id=scenario_id
         or {
             "gradient_descent": "SCENARIO_GD",
@@ -393,7 +398,12 @@ def generate_gradient_trace(
         objective=objective,
         preset={"preset_id": "VIEW_FIRST_ORDER_COMPARISON"},
         parameters={key: cast(object, value) for key, value in params.items()},
-        initial_state={"point": list(initial_point or [-1.6, 1.6])},
+        initial_state={
+            "point": list(
+                initial_point
+                or _initial_point(problem, "first_order_default", fallback=[-1.6, 1.6])
+            )
+        },
         seed={"status": "not_applicable", "value": None},
         evaluation_budget=budget,
         stopping={"max_oracle_evaluations": budget, "objective_tolerance": 1e-6},
@@ -412,11 +422,13 @@ def generate_gradient_trace(
 def generate_gradient_bundle(
     *,
     dataset_version: str,
-    objective_family: str = "quadratic",
+    problem_instance_id: str = "OBJECTIVE_QUADRATIC_2D",
     budget: int = 40,
     preset: Literal["valley", "divergence"] = "valley",
 ) -> TraceBundle:
-    initial = [-1.6, 1.6]
+    problem = get_runtime_problem(problem_instance_id)
+    problem_family = problem.definition.mathematical_family
+    initial = _initial_point(problem, "first_order_default", fallback=[-1.6, 1.6])
     methods: tuple[GradientMethod, ...] = ("gradient_descent", "momentum", "adam")
     parameters: dict[GradientMethod, dict[str, float]] = (
         {
@@ -431,13 +443,13 @@ def generate_gradient_bundle(
     traces = [
         generate_gradient_trace(
             method,
-            objective_family=objective_family,
+            problem_instance_id=problem_instance_id,
             initial_point=initial,
             budget=budget,
             parameters=parameters[method],
-            trace_id=f"{method}-{objective_family}{suffix}",
+            trace_id=f"{method}-{problem_family}{suffix}",
             scenario_id=(
-                f"SCENARIO_{method.upper()}_{objective_family.upper()}"
+                f"SCENARIO_{method.upper()}_{problem_family.upper()}"
                 + ("" if preset == "valley" else "_DIVERGENCE")
             ),
             dataset_version=dataset_version,
@@ -448,9 +460,9 @@ def generate_gradient_bundle(
     return TraceBundle(
         contract_version="1.0.0",
         bundle_id=(
-            f"gradient-{objective_family}"
+            f"gradient-{problem_family}"
             if preset == "valley"
-            else f"gradient-{objective_family}-divergence"
+            else f"gradient-{problem_family}-divergence"
         ),
         comparison_id=(
             "COMPARE_GRADIENT_FAMILY" if preset == "valley" else "COMPARE_GRADIENT_DIVERGENCE"
@@ -468,6 +480,26 @@ def generate_gradient_bundle(
         member_traces=traces,
         synchronization="oracle_evaluations",
     )
+
+
+def _initial_point(
+    problem: RuntimeProblem, candidate_id: str, *, fallback: list[float]
+) -> list[float]:
+    for candidate in problem.instance.initialization_candidates:
+        if candidate.get("candidate_id") == candidate_id:
+            point = candidate.get("point")
+            if isinstance(point, list) and all(isinstance(value, int | float) for value in point):
+                return [float(value) for value in point]
+    return fallback
+
+
+def _scalar_value(problem: RuntimeProblem, point: Sequence[float]) -> float:
+    value = problem.objective_value(point)
+    if isinstance(value, tuple):
+        raise ValueError(
+            f"trace generator requires a scalar objective: {problem.instance.problem_instance_id}"
+        )
+    return value
 
 
 def _append_nm_frame(

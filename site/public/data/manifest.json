@@ -4,7 +4,7 @@
     "report_path": "coverage.md",
     "version": "1.0.0"
   },
-  "dataset_version": "0.4.0",
+  "dataset_version": "0.5.1",
   "entity_links": {
     "path": "entity-links.json",
     "version": "1.0.0"
@@ -27,6 +27,10 @@
     "legal_code_path": "licenses/CC-BY-4.0.txt",
     "notice_path": "licenses/NOTICE.txt"
   },
+  "problems": {
+    "path": "problems.json",
+    "version": "1.0.0"
+  },
   "recommendation": {
     "path": "recommendation/site-data.json",
     "version": "2.0.0"
@@ -40,7 +44,7 @@
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "c689bd53acbe4cf105d9db58ca4ce5445668415579a722bd3409826b45ba91f6"
+    "sha256": "ade93a9929433c6aecfbb7a840e9905926a7d4ebe2c86ed3262ac16bb4fb2cf3"
   },
   "version": "1.0.0",
   "views": [

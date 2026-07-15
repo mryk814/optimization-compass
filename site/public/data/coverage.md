@@ -1,6 +1,6 @@
 # Atlas learning coverage
 
-- Dataset: `0.4.0`
+- Dataset: `0.5.1`
 - Generated: `2026-07-15T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 

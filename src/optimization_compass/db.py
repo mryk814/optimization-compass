@@ -18,6 +18,12 @@ from optimization_compass.predicates import (
     SubjectKey,
     evaluate_eligibility,
 )
+from optimization_compass.problem_instances import (
+    ProblemCatalog,
+    ProblemDefinition,
+    ProblemInstance,
+)
+from optimization_compass.problem_registry import get_runtime_problem, load_problem_suite
 
 
 def split_ids(value: str | None) -> list[str]:
@@ -166,6 +172,55 @@ class KnowledgeRepository:
         if row is None:
             raise ValueError("version_history has no dated release")
         return {"version": str(row["version"]), "release_date": str(row["release_date"])}
+
+    def problem_catalog(self) -> ProblemCatalog:
+        definitions = [
+            ProblemDefinition(
+                **_decode_json_columns(
+                    row,
+                    {
+                        "available_oracles_json": "available_oracles",
+                        "dimensionality_policy_json": "dimensionality_policy",
+                        "related_problem_ids_json": "related_problem_ids",
+                        "feature_ids_json": "feature_ids",
+                        "source_ids_json": "source_ids",
+                    },
+                )
+            )
+            for row in self.fetch_all(
+                "SELECT * FROM problem_definitions ORDER BY problem_definition_id"
+            )
+        ]
+        instances = [
+            ProblemInstance(
+                **_decode_json_columns(
+                    row,
+                    {
+                        "parameters_json": "parameters",
+                        "bounds_json": "bounds",
+                        "constraints_json": "constraints",
+                        "initialization_candidates_json": "initialization_candidates",
+                        "known_reference_json": "known_reference",
+                        "display_json": "display",
+                        "intended_phenomena_json": "intended_phenomena",
+                        "source_ids_json": "source_ids",
+                    },
+                )
+            )
+            for row in self.fetch_all(
+                "SELECT * FROM problem_instances ORDER BY problem_instance_id"
+            )
+        ]
+        canonical = load_problem_suite()
+        if definitions != sorted(
+            canonical.definitions, key=lambda item: item.problem_definition_id
+        ) or instances != sorted(canonical.instances, key=lambda item: item.problem_instance_id):
+            raise ValueError("SQLite problem catalog differs from the versioned problem-suite seed")
+        for instance in instances:
+            get_runtime_problem(instance.problem_instance_id)
+        return ProblemCatalog(
+            dataset_version=self.dataset_version(), definitions=definitions, instances=instances
+        )
 
     def atlas_questions(self) -> list[dict[str, Any]]:
         rows = self.fetch_all(
@@ -521,3 +576,11 @@ class KnowledgeRepository:
             row["action_target_ids"] = remaining if normalized else ";".join(remaining)
             active.append(row)
         return active
+
+
+def _decode_json_columns(row: dict[str, Any], columns: dict[str, str]) -> dict[str, Any]:
+    values = dict(row)
+    for source, target in columns.items():
+        raw = values.pop(source)
+        values[target] = json.loads(str(raw)) if raw is not None else None
+    return values

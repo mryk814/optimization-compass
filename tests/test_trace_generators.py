@@ -9,10 +9,12 @@ from optimization_compass.traces import (
 
 def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
     first = generate_nelder_mead_trace(
-        dataset_version=TARGET_DATASET_VERSION, objective_family="rosenbrock"
+        dataset_version=TARGET_DATASET_VERSION,
+        problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
     )
     second = generate_nelder_mead_trace(
-        dataset_version=TARGET_DATASET_VERSION, objective_family="rosenbrock"
+        dataset_version=TARGET_DATASET_VERSION,
+        problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
     )
     assert canonical_trace_bytes(first) == canonical_trace_bytes(second)
     assert {frame.event_type for frame in first.frames} >= {"initialize", "order", "stop"}
@@ -30,7 +32,7 @@ def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
 def test_nelder_mead_rejected_candidate_is_preserved_for_shrink_explanation() -> None:
     trace = generate_nelder_mead_trace(
         dataset_version=TARGET_DATASET_VERSION,
-        objective_family="rosenbrock",
+        problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
         initial_point=[-2.0, -1.0],
     )
     rejected = [frame for frame in trace.frames if frame.decision == "rejected"]

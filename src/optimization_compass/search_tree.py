@@ -6,6 +6,7 @@ from typing import Annotated, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.trace_models import AlgorithmTrace, TraceFrame, TraceMetric
 
 SEARCH_TREE_CONTRACT_VERSION: Literal["1.0.0"] = "1.0.0"
@@ -203,14 +204,25 @@ class _Node:
     prune_explanation_en: str | None = None
 
 
-_ITEMS = (
-    _Item("A", 4, 9),
-    _Item("B", 3, 6),
-    _Item("D", 2, 4),
-    _Item("C", 3, 5),
+_PROBLEM = get_runtime_problem("INSTANCE_BINARY_KNAPSACK_4")
+_RAW_ITEMS = _PROBLEM.instance.parameters["items"]
+if not isinstance(_RAW_ITEMS, list):
+    raise ValueError("knapsack registry items must be a list")
+
+
+def _metadata_int(value: object) -> int:
+    if not isinstance(value, int):
+        raise ValueError("knapsack registry integer metadata is invalid")
+    return value
+
+
+_ITEMS = tuple(
+    _Item(str(item["item_id"]), _metadata_int(item["weight"]), _metadata_int(item["value"]))
+    for item in _RAW_ITEMS
+    if isinstance(item, dict)
 )
-_CAPACITY = 7
-_SOURCE_IDS = ["S021", "S022", "S079"]
+_CAPACITY = _metadata_int(_PROBLEM.instance.parameters["capacity"])
+_SOURCE_IDS = list(_PROBLEM.instance.source_ids)
 
 
 def generate_search_tree_artifact(
@@ -530,12 +542,7 @@ def generate_search_tree_artifact(
         generator_version="1.0.0",
         implementation_mapping_status="not_applicable",
         implementation_id=None,
-        objective={
-            "sense": "maximize",
-            "expression": "9A + 6B + 4D + 5C",
-            "constraint": "4A + 3B + 2D + 3C <= 7",
-            "variable_domain": "binary",
-        },
+        objective=_PROBLEM.trace_objective(),
         preset={
             "preset_id": "BNB_DEPTH_FIRST_INCLUDE_FIRST",
             "strategy": "depth_first_include_first",

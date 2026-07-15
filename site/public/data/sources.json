@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.4.0",
+  "dataset_version": "0.5.1",
   "freshness_policy": [
     {
       "max_age_days": 90,

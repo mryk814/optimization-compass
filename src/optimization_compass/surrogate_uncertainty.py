@@ -10,6 +10,7 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.visualization_scenarios import (
     VisualizationArtifact,
     VisualizationBudget,
@@ -25,6 +26,7 @@ Strategy = Literal["exploit", "explore"]
 NoisePreset = Literal["noiseless", "small_noise"]
 CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
 CANONICAL_FLOAT_ZERO_TOLERANCE = 1e-9
+_PROBLEM = get_runtime_problem("OBJECTIVE_EDUCATIONAL_WAVY_1D")
 
 
 class RendererModel(BaseModel):
@@ -117,8 +119,11 @@ def _canonicalize_floats(value: object) -> object:
     return value
 
 
-def educational_objective(x: float) -> float:
-    return 0.16 * (x - 1.7) ** 2 + 0.45 * math.sin(2.2 * x) + 0.12 * math.sin(5.3 * x)
+def _truth(x: float) -> float:
+    value = _PROBLEM.objective_value([x])
+    if isinstance(value, tuple):
+        raise ValueError("surrogate lesson requires a scalar objective")
+    return value
 
 
 def _solve_cholesky(matrix: list[list[float]], vector: list[float]) -> list[float]:
@@ -181,31 +186,43 @@ def _expected_improvement(mean: float, sigma: float, incumbent: float, xi: float
 
 
 def _build_payload(*, strategy: Strategy, noise_preset: NoisePreset) -> SurrogateUncertaintyPayload:
-    seed = 2604
+    seed = _PROBLEM.instance.seed_value
+    if seed is None:
+        raise ValueError("surrogate problem requires a fixed seed")
+    bounds = _PROBLEM.instance.bounds.get("x")
+    if not isinstance(bounds, list) or len(bounds) != 2:
+        raise ValueError("surrogate problem requires one-dimensional bounds")
+    lower, upper = (float(bounds[0]), float(bounds[1]))
+    noise_presets = _PROBLEM.instance.parameters.get("noise_presets")
+    if not isinstance(noise_presets, dict):
+        raise ValueError("surrogate problem requires noise presets")
     rng = random.Random(seed + (17 if noise_preset == "small_noise" else 0))
-    noise_std = 0.08 if noise_preset == "small_noise" else 0.0
+    noise_std = float(noise_presets[noise_preset])
     xi = 0.18 if strategy == "explore" else 0.0
     budget = 10
-    initial_design = [-2.6, 0.0, 2.6]
-    grid = [round(-3.0 + index * 0.075, 6) for index in range(81)]
+    initial = _PROBLEM.instance.initialization_candidates[0].get("point")
+    if not isinstance(initial, list):
+        raise ValueError("surrogate problem requires an initial design")
+    initial_design = [float(value) for value in initial]
+    grid = [round(lower + index * (upper - lower) / 80.0, 6) for index in range(81)]
     random_rng = random.Random(seed)
     random_noise_rng = random.Random(seed + 991 + (17 if noise_preset == "small_noise" else 0))
     random_xs = [
         *initial_design,
-        *[random_rng.uniform(-3.0, 3.0) for _ in range(budget - len(initial_design))],
+        *[random_rng.uniform(lower, upper) for _ in range(budget - len(initial_design))],
     ]
     random_history = [
         Observation(
             x=x,
-            value=educational_objective(x),
-            observed_value=educational_objective(x)
+            value=_truth(x),
+            observed_value=_truth(x)
             + (random_noise_rng.gauss(0.0, noise_std) if noise_std else 0.0),
         )
         for x in random_xs
     ]
 
     def observe(x: float) -> Observation:
-        truth = educational_objective(x)
+        truth = _truth(x)
         measured = truth + (rng.gauss(0.0, noise_std) if noise_std else 0.0)
         return Observation(x=x, value=truth, observed_value=measured)
 
@@ -218,7 +235,7 @@ def _build_payload(*, strategy: Strategy, noise_preset: NoisePreset) -> Surrogat
         points = [
             PredictivePoint(
                 x=x,
-                true_value=educational_objective(x),
+                true_value=_truth(x),
                 mean=mean,
                 lower=mean - 1.96 * sigma,
                 upper=mean + 1.96 * sigma,
@@ -269,8 +286,8 @@ def _build_payload(*, strategy: Strategy, noise_preset: NoisePreset) -> Surrogat
         noise_preset=noise_preset,
         noise_std=noise_std,
         exploration_xi=xi,
-        domain=[-3.0, 3.0],
-        objective_expression="0.16(x-1.7)^2 + 0.45 sin(2.2x) + 0.12 sin(5.3x)",
+        domain=[lower, upper],
+        objective_expression=str(_PROBLEM.instance.display["expression"]),
         truth_disclosure_ja=(
             "破線の真の目的関数は教材用の答え合わせです。"
             "optimizerは観測点以外の真値を参照しません。"
@@ -283,6 +300,9 @@ def _build_payload(*, strategy: Strategy, noise_preset: NoisePreset) -> Surrogat
 def generate_surrogate_scenario(
     *, dataset_version: str, strategy: Strategy, noise_preset: NoisePreset
 ) -> GeneratedSurrogateScenario:
+    seed_value = _PROBLEM.instance.seed_value
+    if seed_value is None:
+        raise ValueError("surrogate problem requires a fixed seed")
     payload = _build_payload(strategy=strategy, noise_preset=noise_preset)
     payload_bytes = canonical_renderer_bytes(payload)
     stem = f"bo-{strategy}-{noise_preset}"
@@ -328,14 +348,14 @@ def generate_surrogate_scenario(
             oracle_policy=["objective_value"],
             initial_condition=VisualizationInitialCondition(point=initial_design),
             parameter_preset_id=f"BO_{strategy.upper()}_{noise_preset.upper()}",
-            seed=VisualizationSeed(status="fixed", value=2604),
+            seed=VisualizationSeed(status="fixed", value=seed_value),
             budget=VisualizationBudget(metric="oracle_evaluations", value=budget),
             stopping={"max_oracle_evaluations": budget},
             tuning_policy="fixed_preset",
         ),
         runs=[
             VisualizationRun(
-                run_id=f"RUN_BO_{strategy.upper()}_{noise_preset.upper()}_2604",
+                run_id=f"RUN_BO_{strategy.upper()}_{noise_preset.upper()}_{seed_value}",
                 method_id="M_BAYESIAN_OPT_GP",
                 profile_id="PROFILE_BAYESIAN_OPT_GP_1D",
                 implementation_mapping_status="not_applicable",
@@ -343,7 +363,7 @@ def generate_surrogate_scenario(
                 artifact_id=f"ARTIFACT_{stem.upper().replace('-', '_')}",
             ),
             VisualizationRun(
-                run_id=f"RUN_RANDOM_{strategy.upper()}_{noise_preset.upper()}_2604",
+                run_id=f"RUN_RANDOM_{strategy.upper()}_{noise_preset.upper()}_{seed_value}",
                 method_id="M_RANDOM_SEARCH",
                 profile_id="PROFILE_RANDOM_SEARCH_1D",
                 implementation_mapping_status="not_applicable",
