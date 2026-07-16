@@ -21,15 +21,23 @@ def test_pages_has_one_validated_artifact_and_no_independent_workflow() -> None:
 
 
 def test_browser_e2e_consumes_the_same_pages_artifact_before_deploy() -> None:
-    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(
+        encoding="utf-8"
+    )
 
     assert "browser_e2e:" in workflow
     assert "needs: validate_pages_artifact" in workflow
-    assert "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1" in workflow
+    assert (
+        "actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1"
+        in workflow
+    )
     assert "name: github-pages" in workflow
     assert "tar -xf .pages-artifact/artifact.tar -C site/dist" in workflow
     assert "npm run test:e2e:artifact" in workflow
-    assert "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1" in workflow
+    assert (
+        "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1"
+        in workflow
+    )
     assert "if: failure()" in workflow
 
 
@@ -42,7 +50,9 @@ def test_vitest_exclude_is_shell_safe_on_linux_and_windows() -> None:
 
 
 def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
-    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(
+        encoding="utf-8"
+    )
     required_commands = (
         "uv run ruff check .",
         "uv lock --check",
@@ -84,7 +94,9 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
 
 
 def test_supply_chain_reports_are_part_of_the_validated_artifact_job() -> None:
-    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(
+        encoding="utf-8"
+    )
 
     assert "name: dependency-license-inventory" in workflow
     assert "dependency-reports/dependency-licenses.json" in workflow
