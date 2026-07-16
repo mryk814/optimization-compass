@@ -20,7 +20,7 @@ describe("PageOrientation", () => {
     expect(screen.getByRole("complementary", { name: "このページの使い方" })).toBeVisible();
     const summary = screen.getByText("このページの見方");
     expect(summary).toBeVisible();
-    expect(screen.getByRole("heading", { name: "このページで分かること" })).not.toBeVisible();
+    expect(screen.getByRole("heading", { name: "このページで分かること", hidden: true })).not.toBeVisible();
 
     fireEvent.click(summary);
 
