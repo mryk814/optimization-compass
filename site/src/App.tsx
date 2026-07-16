@@ -9,31 +9,32 @@ import {
 } from "react-router-dom";
 import type { ReactNode } from "react";
 
-import { MapPage } from "./features/map/MapPage";
+import { PageOrientation } from "./components/PageOrientation";
+import { SafeBackButton } from "./components/SafeBackButton";
+import { resolveAlias } from "./contracts/entity-links";
+import type { EntityLinkIndex } from "./contracts/entity-links";
+import { loadDatasetReleaseIdentity } from "./contracts/release";
+import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
+import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
+import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
+import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
+import { CoveragePage } from "./features/coverage/CoveragePage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
+import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
+import { FailureModePage } from "./features/failures/FailureModePage";
+import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
+import { LicenseLinks } from "./features/licensing/LicenseLinks";
+import { MapPage } from "./features/map/MapPage";
 import { MethodPage } from "./features/methods/MethodPage";
+import { NotFoundPage } from "./features/navigation/NotFoundPage";
 import { TraceDemoPage } from "./features/playback/TraceDemoPage";
+import { SearchPage } from "./features/search/SearchPage";
 import { SearchTreeTheaterPage } from "./features/search-tree/SearchTreeTheaterPage";
 import { BayesianOptimizationPage } from "./features/theater/BayesianOptimizationPage";
 import { TheaterIndexPage } from "./features/theater/TheaterIndexPage";
-import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
-import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
-import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
 import { THEATER_ROUTES } from "./features/theater/theater-routes";
-import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
-import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
-import { LicenseLinks } from "./features/licensing/LicenseLinks";
-import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
-import { CoveragePage } from "./features/coverage/CoveragePage";
-import { NotFoundPage } from "./features/navigation/NotFoundPage";
-import { loadDatasetReleaseIdentity } from "./contracts/release";
-import { resolveAlias } from "./contracts/entity-links";
-import type { EntityLinkIndex } from "./contracts/entity-links";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
-import { PageOrientation } from "./components/PageOrientation";
-import { SafeBackButton } from "./components/SafeBackButton";
-import { SearchPage } from "./features/search/SearchPage";
-import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { JourneyNavigation } from "./state/journey-navigation";
 
 import "./styles.css";
@@ -223,6 +224,7 @@ function AppShell() {
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
+          <Route path="/failures" element={<FailureModePage />} />
           <Route path="/sources" element={<SourceIndexPage />} />
           <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           <Route path="/coverage" element={<CoveragePage />} />

@@ -90,10 +90,11 @@ jobs:
       - name: Verify Python and TypeScript recommendation parity
         run: npm run parity
         working-directory: site
-      - name: Type-check and test the site
-        run: |
-          npm run typecheck
-          npm test -- --run
+      - name: Type-check the site
+        run: npm run typecheck
+        working-directory: site
+      - name: Test the site
+        run: npm test -- --run
         working-directory: site
       - name: Build the production Pages directory
         run: npm run build
