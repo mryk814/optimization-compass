@@ -438,7 +438,7 @@ def _constrained_scenario(
         ),
     ]
     return VisualizationScenario(
-        contract_version="1.1.0",
+        contract_version="1.2.0",
         dataset_version=dataset_version,
         scenario_id=CONSTRAINED_SCENARIO_ID,
         identity_status="canonical",
@@ -613,7 +613,7 @@ def _pareto_scenario(
         ),
     ]
     return VisualizationScenario(
-        contract_version="1.1.0",
+        contract_version="1.2.0",
         dataset_version=dataset_version,
         scenario_id=PARETO_SCENARIO_ID,
         identity_status="canonical",

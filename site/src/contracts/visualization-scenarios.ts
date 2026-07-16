@@ -11,8 +11,10 @@ export type RendererFamily =
   | "feasible_region"
   | "pareto_front";
 
+export type GuidedPlaybackSpeed = 0.25 | 0.5 | 1 | 2 | 4;
+
 export interface VisualizationScenario {
-  contract_version: "1.1.0";
+  contract_version: "1.2.0";
   dataset_version: string;
   scenario_id: string;
   identity_status: "canonical" | "derived" | "generated_only";
@@ -46,6 +48,7 @@ export interface VisualizationScenario {
     limitations_ja: string;
     limitations_en: string;
   };
+  guided_story: GuidedStory | null;
   experiment: {
     oracle_policy: ("objective_value" | "gradient" | "constraint_value" | "constraint_jacobian" | "objective_vector")[];
     initial_condition: { point: number[] };
@@ -79,7 +82,7 @@ export interface VisualizationScenario {
 }
 
 export interface VisualizationScenarioIndex {
-  contract_version: "1.1.0";
+  contract_version: "1.2.0";
   dataset_version: string;
   scenarios: VisualizationScenario[];
 }
@@ -98,6 +101,23 @@ export interface VisualizationNarrationStep {
   title_en: string;
   observable_ids: string[];
 }
+export interface GuidedStoryStep {
+  milestone_id: NarrationMilestoneId;
+  annotation: LocalizedText;
+  frame_index: number;
+  auto_pause: boolean;
+  focus_target: string;
+  viewport_preset: string;
+  camera_preset: string | null;
+  playback_speed: GuidedPlaybackSpeed;
+  visible_layers: string[];
+}
+export interface GuidedStory {
+  story_version: "1.0.0";
+  introduction: LocalizedText;
+  steps: GuidedStoryStep[];
+  summary: LocalizedText;
+}
 
 const purposes = new Set<VisualizationPurpose>(["mechanism", "comparison", "failure_contrast", "sensitivity", "application_result"]);
 const comparisonRoles = new Set<VisualizationComparisonRole>(["primary_example", "sensitivity_variant", "failure_contrast", "baseline"]);
@@ -113,6 +133,7 @@ const rendererFamilies = new Set<RendererFamily>([
   "feasible_region",
   "pareto_front",
 ]);
+const guidedPlaybackSpeeds = new Set<GuidedPlaybackSpeed>([0.25, 0.5, 1, 2, 4]);
 
 export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScenarioIndex {
   const data = record(raw, "VisualizationScenarioIndex");
@@ -133,12 +154,12 @@ export function parseVisualizationScenarioIndex(raw: unknown): VisualizationScen
   if (scenarios.some((item) => item.lesson.recommended_next_scenario_ids.some((id) => !scenarioIds.has(id)))) {
     throw new Error("recommended scenarios must exist in the index.");
   }
-  return { contract_version: "1.1.0", dataset_version: datasetVersion, scenarios };
+  return { contract_version: "1.2.0", dataset_version: datasetVersion, scenarios };
 }
 
 function parseScenario(raw: unknown, field: string): VisualizationScenario {
   const data = record(raw, field);
-  exact(data, ["contract_version", "dataset_version", "scenario_id", "identity_status", "canonical_scenario_id", "title_ja", "title_en", "purpose", "problem_definition_id", "problem_instance_id", "lesson", "experiment", "runs", "artifact", "source_ids", "last_verified"], field);
+  exact(data, ["contract_version", "dataset_version", "scenario_id", "identity_status", "canonical_scenario_id", "title_ja", "title_en", "purpose", "problem_definition_id", "problem_instance_id", "lesson", "guided_story", "experiment", "runs", "artifact", "source_ids", "last_verified"], field);
   scenarioVersion(data.contract_version, `${field}.contract_version`);
   const lesson = parseLesson(data.lesson, `${field}.lesson`);
   const experiment = parseExperiment(data.experiment, `${field}.experiment`);
@@ -162,6 +183,9 @@ function parseScenario(raw: unknown, field: string): VisualizationScenario {
     throw new Error(`${field} generated-only scenario cannot point to a canonical scenario.`);
   }
   const artifact = parseArtifact(data.artifact, `${field}.artifact`);
+  const guidedStory = data.guided_story === null
+    ? null
+    : parseGuidedStory(data.guided_story, `${field}.guided_story`);
   const lessonObservableIds = new Set([
     ...lesson.primary_observables,
     ...lesson.secondary_observables,
@@ -177,12 +201,24 @@ function parseScenario(raw: unknown, field: string): VisualizationScenario {
   if (lesson.narration_steps.some((step) => step.observable_ids.some((id) => !lessonObservableIds.has(id)))) {
     throw new Error(`${field}.lesson narration observables must be declared by the lesson.`);
   }
+  if (guidedStory) {
+    const narrationIds = new Set(lesson.narration_steps.map((step) => step.milestone_id));
+    if (guidedStory.steps.some((step) => !narrationIds.has(step.milestone_id))) {
+      throw new Error(`${field}.guided_story milestones must be declared by the lesson.`);
+    }
+    if (guidedStory.steps.some((step) => !artifact.observable_ids.includes(step.focus_target))) {
+      throw new Error(`${field}.guided_story focus targets must be artifact observables.`);
+    }
+    if (guidedStory.steps.some((step) => step.visible_layers.some((id) => !artifact.observable_ids.includes(id)))) {
+      throw new Error(`${field}.guided_story layers must be artifact observables.`);
+    }
+  }
   if ((purpose === "failure_contrast" || purpose === "sensitivity")
       && (!lesson.misconception || lesson.failure_signals.length === 0)) {
     throw new Error(`${field}.lesson requires misconception and failure signals.`);
   }
   return {
-    contract_version: "1.1.0",
+    contract_version: "1.2.0",
     dataset_version: text(data.dataset_version, `${field}.dataset_version`),
     scenario_id: scenarioId,
     identity_status: identityStatus,
@@ -193,6 +229,7 @@ function parseScenario(raw: unknown, field: string): VisualizationScenario {
     problem_definition_id: text(data.problem_definition_id, `${field}.problem_definition_id`),
     problem_instance_id: text(data.problem_instance_id, `${field}.problem_instance_id`),
     lesson,
+    guided_story: guidedStory,
     experiment,
     runs,
     artifact,
@@ -317,6 +354,56 @@ function parseNarrationStep(raw: unknown, field: string): VisualizationNarration
   };
 }
 
+function parseGuidedStory(raw: unknown, field: string): GuidedStory {
+  const data = record(raw, field);
+  exact(data, ["story_version", "introduction", "steps", "summary"], field);
+  if (data.story_version !== "1.0.0") throw new Error(`${field}.story_version is unsupported.`);
+  const steps = list(data.steps, `${field}.steps`)
+    .map((item, index) => parseGuidedStoryStep(item, `${field}.steps[${index}]`));
+  if (steps.length < 3
+      || steps[0].milestone_id !== "start"
+      || steps.at(-1)?.milestone_id !== "termination"
+      || new Set(steps.map((step) => step.milestone_id)).size !== steps.length) {
+    throw new Error(`${field}.steps must use unique canonical milestones from start to termination.`);
+  }
+  return {
+    story_version: "1.0.0",
+    introduction: parseLocalizedText(data.introduction, `${field}.introduction`),
+    steps,
+    summary: parseLocalizedText(data.summary, `${field}.summary`),
+  };
+}
+
+function parseGuidedStoryStep(raw: unknown, field: string): GuidedStoryStep {
+  const data = record(raw, field);
+  exact(data, [
+    "milestone_id", "annotation", "frame_index", "auto_pause", "focus_target",
+    "viewport_preset", "camera_preset", "playback_speed", "visible_layers",
+  ], field);
+  const visibleLayers = nonEmptyTextList(data.visible_layers, `${field}.visible_layers`);
+  if (new Set(visibleLayers).size !== visibleLayers.length) {
+    throw new Error(`${field}.visible_layers must be unique.`);
+  }
+  if (typeof data.auto_pause !== "boolean") throw new Error(`${field}.auto_pause must be boolean.`);
+  if (data.camera_preset !== null && typeof data.camera_preset !== "string") {
+    throw new Error(`${field}.camera_preset is invalid.`);
+  }
+  if (data.camera_preset !== null && !data.camera_preset.trim()) {
+    throw new Error(`${field}.camera_preset must be non-empty.`);
+  }
+  return {
+    milestone_id: oneOf(data.milestone_id, narrationMilestones, `${field}.milestone_id`),
+    annotation: parseLocalizedText(data.annotation, `${field}.annotation`),
+    frame_index: nonNegativeInteger(data.frame_index, `${field}.frame_index`),
+    auto_pause: data.auto_pause,
+    focus_target: text(data.focus_target, `${field}.focus_target`),
+    viewport_preset: text(data.viewport_preset, `${field}.viewport_preset`),
+    camera_preset: data.camera_preset,
+    playback_speed: oneOfNumber(data.playback_speed, guidedPlaybackSpeeds, `${field}.playback_speed`),
+    visible_layers: visibleLayers,
+  };
+}
+
 function parseExperiment(raw: unknown, field: string): VisualizationScenario["experiment"] {
   const data = record(raw, field);
   exact(data, ["oracle_policy", "initial_condition", "parameter_preset_id", "seed", "budget", "stopping", "tuning_policy"], field);
@@ -424,6 +511,10 @@ function positiveInteger(value: unknown, field: string): number {
   if (typeof value !== "number" || !Number.isSafeInteger(value) || value <= 0) throw new Error(`${field} must be a positive integer.`);
   return value;
 }
+function nonNegativeInteger(value: unknown, field: string): number {
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 0) throw new Error(`${field} must be a non-negative integer.`);
+  return value;
+}
 function payloadPath(value: unknown, field: string): string {
   const candidate = text(value, field);
   if (!/^(traces|visualizations)\/[a-z0-9._/-]+\.json$/u.test(candidate)) throw new Error(`${field} is invalid.`);
@@ -444,11 +535,15 @@ function exact(data: Record<string, unknown>, expected: readonly string[], field
 function version(value: unknown, field: string): asserts value is "1.0.0" {
   if (value !== "1.0.0") throw new Error(`${field} is unsupported.`);
 }
-function scenarioVersion(value: unknown, field: string): asserts value is "1.1.0" {
-  if (value !== "1.1.0") throw new Error(`${field} is unsupported.`);
+function scenarioVersion(value: unknown, field: string): asserts value is "1.2.0" {
+  if (value !== "1.2.0") throw new Error(`${field} is unsupported.`);
 }
 function oneOf<T extends string>(value: unknown, values: ReadonlySet<T>, field: string): T {
   if (typeof value !== "string" || !values.has(value as T)) throw new Error(`${field} is invalid.`);
+  return value as T;
+}
+function oneOfNumber<T extends number>(value: unknown, values: ReadonlySet<T>, field: string): T {
+  if (typeof value !== "number" || !values.has(value as T)) throw new Error(`${field} is invalid.`);
   return value as T;
 }
 function invalid(field: string): never {

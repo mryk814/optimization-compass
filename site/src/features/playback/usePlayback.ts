@@ -25,6 +25,7 @@ export interface PlaybackController {
   stepBackward(): void;
   stepForward(): void;
   seekToFrame(frameIndex: number): void;
+  seekToFrameAtSpeed(frameIndex: number, speed: PlaybackSpeed): void;
   seekToEvaluation(oracleEvaluations: number): void;
   reverse(): void;
   setSpeed(speed: PlaybackSpeed): void;
@@ -82,6 +83,15 @@ export function usePlayback(
       const nextIndex = clamp(Math.trunc(requestedIndex), 0, frames.length - 1);
       frameIndexRef.current = nextIndex;
       writePosition({ ...position, frameIndex: nextIndex });
+    },
+    [frames.length, position, writePosition],
+  );
+  const seekToFrameAtSpeed = useCallback(
+    (requestedIndex: number, nextSpeed: PlaybackSpeed) => {
+      if (!PLAYBACK_SPEEDS.includes(nextSpeed)) throw new Error(`Unsupported playback speed: ${nextSpeed}.`);
+      const nextIndex = clamp(Math.trunc(requestedIndex), 0, frames.length - 1);
+      frameIndexRef.current = nextIndex;
+      writePosition({ ...position, frameIndex: nextIndex, speed: nextSpeed });
     },
     [frames.length, position, writePosition],
   );
@@ -154,6 +164,7 @@ export function usePlayback(
     stepBackward,
     stepForward,
     seekToFrame,
+    seekToFrameAtSpeed,
     seekToEvaluation,
     reverse: () => writePosition({
       ...position,

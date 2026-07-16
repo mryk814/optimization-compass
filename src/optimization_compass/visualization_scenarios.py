@@ -57,6 +57,7 @@ def scenario_identity(scenario_id: str) -> tuple[ScenarioIdentityStatus, str | N
 
 
 ParameterValue = bool | int | float
+GuidedPlaybackSpeed = float
 
 
 class LocalizedText(TraceModel):
@@ -93,6 +94,42 @@ class VisualizationNarrationStep(TraceModel):
     def validate_observables(self) -> Self:
         if len(set(self.observable_ids)) != len(self.observable_ids):
             raise ValueError("narration observable IDs must be unique")
+        return self
+
+
+class GuidedStoryStep(TraceModel):
+    milestone_id: NarrationMilestoneId
+    annotation: LocalizedText
+    frame_index: int = Field(ge=0)
+    auto_pause: bool
+    focus_target: NonBlank
+    viewport_preset: NonBlank
+    camera_preset: NonBlank | None
+    playback_speed: GuidedPlaybackSpeed
+    visible_layers: list[NonBlank] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_layers(self) -> Self:
+        if self.playback_speed not in {0.25, 0.5, 1.0, 2.0, 4.0}:
+            raise ValueError("guided story playback speed is unsupported")
+        if len(set(self.visible_layers)) != len(self.visible_layers):
+            raise ValueError("guided story visible layers must be unique")
+        return self
+
+
+class GuidedStory(TraceModel):
+    story_version: Literal["1.0.0"]
+    introduction: LocalizedText
+    steps: list[GuidedStoryStep] = Field(min_length=3)
+    summary: LocalizedText
+
+    @model_validator(mode="after")
+    def validate_steps(self) -> Self:
+        milestones = [step.milestone_id for step in self.steps]
+        if len(set(milestones)) != len(milestones):
+            raise ValueError("guided story milestone IDs must be unique")
+        if milestones[0] != "start" or milestones[-1] != "termination":
+            raise ValueError("guided story must start at start and end at termination")
         return self
 
 
@@ -198,7 +235,7 @@ class VisualizationArtifact(TraceModel):
 
 
 class VisualizationScenario(TraceModel):
-    contract_version: Literal["1.1.0"]
+    contract_version: Literal["1.2.0"]
     dataset_version: NonBlank
     scenario_id: NonBlank
     identity_status: ScenarioIdentityStatus
@@ -209,6 +246,7 @@ class VisualizationScenario(TraceModel):
     problem_definition_id: NonBlank
     problem_instance_id: NonBlank
     lesson: VisualizationLesson
+    guided_story: GuidedStory | None = None
     experiment: VisualizationExperiment
     runs: list[VisualizationRun] = Field(min_length=1)
     artifact: VisualizationArtifact
@@ -256,6 +294,16 @@ class VisualizationScenario(TraceModel):
             for step in self.lesson.narration_steps
         ):
             raise ValueError("narration observables must be declared by the lesson")
+        if self.guided_story is not None:
+            narration_ids = set(milestone_ids)
+            artifact_observables = set(self.artifact.observable_ids)
+            for step in self.guided_story.steps:
+                if step.milestone_id not in narration_ids:
+                    raise ValueError("guided story milestones must be declared by the lesson")
+                if step.focus_target not in artifact_observables:
+                    raise ValueError("guided story focus target must be an artifact observable")
+                if not set(step.visible_layers).issubset(artifact_observables):
+                    raise ValueError("guided story layers must be artifact observables")
         if self.purpose in {"failure_contrast", "sensitivity"} and (
             self.lesson.misconception is None or not self.lesson.failure_signals
         ):
@@ -266,7 +314,7 @@ class VisualizationScenario(TraceModel):
 
 
 class VisualizationScenarioIndex(TraceModel):
-    contract_version: Literal["1.1.0"]
+    contract_version: Literal["1.2.0"]
     dataset_version: NonBlank
     scenarios: list[VisualizationScenario] = Field(min_length=1)
 

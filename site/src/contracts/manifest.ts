@@ -51,7 +51,7 @@ export interface SiteManifest {
   recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
-  visualization_scenarios: ManifestAsset<"1.1.0">;
+  visualization_scenarios: ManifestAsset<"1.2.0">;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
   implementation_claims: ManifestAsset;
@@ -158,7 +158,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (searchBenchmark.version !== "1.0.0") throw new Error("search_benchmark.version is unsupported.");
   const visualizationScenarios = record(data.visualization_scenarios, "visualization_scenarios");
   exactKeys(visualizationScenarios, ["version", "path"], "visualization_scenarios");
-  if (visualizationScenarios.version !== "1.1.0") {
+  if (visualizationScenarios.version !== "1.2.0") {
     throw new Error("visualization_scenarios.version is unsupported.");
   }
   const coverage = record(data.coverage, "coverage");
@@ -189,7 +189,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(problems.path, "problems.path"),
     },
     visualization_scenarios: {
-      version: "1.1.0",
+      version: "1.2.0",
       path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
     },
     entity_links: {

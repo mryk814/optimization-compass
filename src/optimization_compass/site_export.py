@@ -61,6 +61,8 @@ from optimization_compass.view_spec import (
     ViewSpec,
 )
 from optimization_compass.visualization_scenarios import (
+    GuidedStory,
+    GuidedStoryStep,
     KnownReferenceDisplay,
     LocalizedText,
     RendererFamily,
@@ -422,7 +424,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         traces=trace_asset,
         problems=ManifestAsset(version="1.0.0", path="problems.json"),
         visualization_scenarios=ManifestVisualizationScenarioAsset(
-            version="1.1.0", path=VISUALIZATION_SCENARIO_PATH
+            version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
         ),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
@@ -673,7 +675,7 @@ def _build_visualization_scenario_index(
     dataset_version: str,
 ) -> VisualizationScenarioIndex:
     return VisualizationScenarioIndex(
-        contract_version="1.1.0",
+        contract_version="1.2.0",
         dataset_version=dataset_version,
         scenarios=[
             *[_visualization_scenario(trace) for trace in traces],
@@ -711,6 +713,105 @@ def _step(
         title_ja=ja,
         title_en=en,
         observable_ids=list(observable_ids),
+    )
+
+
+def _nelder_mead_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
+    if trace.scenario_id != "SCENARIO_NM_QUADRATIC":
+        return None
+    final_index = len(trace.frames) - 1
+    first_change = next(
+        (
+            frame.frame_index
+            for frame in trace.frames
+            if frame.event_type not in {"initialize", "order"}
+        ),
+        min(1, final_index),
+    )
+    pattern_index = next(
+        (
+            frame.frame_index
+            for frame in trace.frames[first_change + 1 :]
+            if frame.decision == "accepted"
+        ),
+        max(first_change, round(final_index * 0.55)),
+    )
+    return GuidedStory(
+        story_version="1.0.0",
+        introduction=_localized(
+            "4つのcueで、初期simplexから終了判断までを順に追います。",
+            "Follow four cues from the initial simplex to the terminal decision.",
+        ),
+        steps=[
+            GuidedStoryStep(
+                milestone_id="start",
+                annotation=_localized(
+                    "3頂点の位置とbest / worstの役割を先に確認します。",
+                    "First locate the three vertices and identify best and worst.",
+                ),
+                frame_index=0,
+                auto_pause=True,
+                focus_target="simplex_vertices",
+                viewport_preset="overview",
+                camera_preset=None,
+                playback_speed=1.0,
+                visible_layers=["objective_value", "simplex_vertices"],
+            ),
+            GuidedStoryStep(
+                milestone_id="first_change",
+                annotation=_localized(
+                    "worstを重心の反対側へ動かし、候補を受理する根拠を見ます。",
+                    "Move the worst point across the centroid and inspect the decision.",
+                ),
+                frame_index=first_change,
+                auto_pause=True,
+                focus_target="accepted_operation",
+                viewport_preset="decision",
+                camera_preset=None,
+                playback_speed=0.5,
+                visible_layers=[
+                    "objective_value",
+                    "simplex_vertices",
+                    "accepted_operation",
+                ],
+            ),
+            GuidedStoryStep(
+                milestone_id="pattern_visible",
+                annotation=_localized(
+                    "受理された操作でsimplexと最良値がどう更新されるかを結び付けます。",
+                    "Connect an accepted operation to the updated simplex and best value.",
+                ),
+                frame_index=pattern_index,
+                auto_pause=True,
+                focus_target="simplex_vertices",
+                viewport_preset="trajectory",
+                camera_preset=None,
+                playback_speed=1.0,
+                visible_layers=[
+                    "objective_value",
+                    "simplex_vertices",
+                    "accepted_operation",
+                ],
+            ),
+            GuidedStoryStep(
+                milestone_id="termination",
+                annotation=_localized(
+                    "最終simplexの大きさと終了理由を確認し、一般的性能の証明ではないと切り分けます。",
+                    "Inspect the final simplex and stop reason without generalizing performance.",
+                ),
+                frame_index=final_index,
+                auto_pause=True,
+                focus_target="objective_value",
+                viewport_preset="terminal",
+                camera_preset=None,
+                playback_speed=0.5,
+                visible_layers=["objective_value", "simplex_vertices"],
+            ),
+        ],
+        summary=_localized(
+            "Nelder–Meadは勾配ではなく、simplexの候補生成と受理判断で探索を進めます。",
+            "Nelder–Mead advances through simplex proposals and decisions, not gradients.",
+        ),
     )
 
 
@@ -1068,7 +1169,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     payload = canonical_trace_bytes(trace)
     identity_status, canonical_scenario_id = scenario_identity(trace.scenario_id)
     return VisualizationScenario(
-        contract_version="1.1.0",
+        contract_version="1.2.0",
         dataset_version=trace.dataset_version,
         scenario_id=trace.scenario_id,
         identity_status=identity_status,
@@ -1086,6 +1187,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             is_nelder_mead=is_nelder_mead,
             is_search_tree=is_search_tree,
         ),
+        guided_story=_nelder_mead_guided_story(trace),
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"]
             if is_nelder_mead or is_search_tree

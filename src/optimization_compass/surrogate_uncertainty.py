@@ -316,7 +316,7 @@ def generate_surrogate_scenario(
     initial_design = [item.x for item in payload.frames[0].observations]
     variant = strategy != "explore" or noise_preset != "noiseless"
     scenario = VisualizationScenario(
-        contract_version="1.1.0",
+        contract_version="1.2.0",
         dataset_version=dataset_version,
         scenario_id=scenario_id,
         identity_status="generated_only",

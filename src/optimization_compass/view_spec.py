@@ -232,7 +232,7 @@ class ManifestAsset(ContractModel):
 
 
 class ManifestVisualizationScenarioAsset(ContractModel):
-    version: Literal["1.1.0"]
+    version: Literal["1.2.0"]
     path: str = Field(pattern=r"^visualization-scenarios\.json$")
 
 
