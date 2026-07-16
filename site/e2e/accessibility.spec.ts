@@ -38,6 +38,7 @@ const staticScans = [
   { route: "/theater/learning/SCENARIO_CONSTRAINED_DISK", heading: "実行可能領域と制約を無視した失敗を比べる", label: "constrained-slice" },
   { route: "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC", heading: "単一bestではなくPareto frontを読む", label: "pareto-slice" },
   { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
+  { route: "/failures", heading: "失敗の兆候から探す", label: "failure-discovery" },
   { route: "/search?q=BO&type=method", heading: "Atlas全体から探す", label: "global-search" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
 ];
