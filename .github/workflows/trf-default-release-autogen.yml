@@ -136,9 +136,6 @@ jobs:
               'tests/test_source_health.py': [
                   ('len(report.links) == 95', 'len(report.links) == 96'),
               ],
-              'tests/fixtures/recommendation_cases.json': [
-                  ('"dataset_version": "0.10.0"', '"dataset_version": "0.11.0"'),
-              ],
           }
           for name, changes in replacements.items():
               path = Path(name)
@@ -146,6 +143,15 @@ jobs:
               for old, new in changes:
                   value = value.replace(old, new, 1)
               path.write_text(value, encoding='utf-8')
+
+          fixture = Path('tests/fixtures/recommendation_cases.json')
+          fixture.write_text(
+              fixture.read_text(encoding='utf-8').replace(
+                  '"dataset_version": "0.10.0"',
+                  '"dataset_version": "0.11.0"',
+              ),
+              encoding='utf-8',
+          )
 
           density_doc = Path('docs/method-content-density.md')
           text = density_doc.read_text(encoding='utf-8')
@@ -197,6 +203,7 @@ jobs:
       - name: Commit generated release and remove temporary files
         run: |
           rm -f docs/trf-pytest-diagnostics.txt
+          rm -f docs/trf-final-diagnostics.txt
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm -f .github/workflows/trf-default-release-autogen.yml
