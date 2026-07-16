@@ -156,6 +156,7 @@ The same canonical export rebuilds search and retrieval documents, so added expl
 
 - The first paragraph exactly matches frontmatter `summary`.
 - `method_id` and every `source_id` resolve to canonical data.
+- Each source directly supports the page claim; an adjacent method's paper is not used as a substitute merely because it is in the same family.
 - Local and global claims are distinguished.
 - Heuristic results are not described as certificates.
 - Method theory and implementation behavior are not conflated.
