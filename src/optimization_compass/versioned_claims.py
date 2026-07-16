@@ -107,6 +107,7 @@ def insert_versioned_claims_and_contexts(
             )
 
     _insert_historical_release_fixture(connection)
+    _insert_scipy_default_method_claims(connection, release_date=release_date)
     for context in _benchmark_context_fixtures(connection, release_date):
         columns = list(context)
         connection.execute(
@@ -156,6 +157,68 @@ def claim_freshness_report(connection: sqlite3.Connection, *, as_of: date) -> di
         ),
         "claims": claims,
     }
+
+
+def _insert_scipy_default_method_claims(
+    connection: sqlite3.Connection, *, release_date: str
+) -> None:
+    implementation = connection.execute(
+        "SELECT last_release, confidence FROM implementations WHERE implementation_id = ?",
+        ("I_SCIPY_LEAST_SQUARES_TRF",),
+    ).fetchone()
+    if implementation is None:
+        raise ValueError("SciPy TRF implementation is missing")
+    product_version = str(implementation["last_release"] or "SciPy version not recorded")
+    confidence = str(implementation["confidence"] or "unverified")
+    claims = (
+        (
+            "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_METHOD_SELECTION",
+            "default_method_selection",
+            {
+                "api": "scipy.optimize.least_squares",
+                "condition": "method is omitted",
+                "selected_method": "trf",
+                "user_override": "method",
+                "interpretation": "library default; not a context-free performance ranking",
+            },
+            "S003",
+        ),
+        (
+            "CLAIM_SCIPY_CURVE_FIT_TRF_CONDITIONAL_DEFAULT",
+            "conditional_default_method",
+            {
+                "api": "scipy.optimize.curve_fit",
+                "condition": "bounds are provided and method is omitted",
+                "selected_method": "trf",
+                "otherwise": "lm for unconstrained problems",
+                "user_override": "method",
+                "interpretation": "bounds-dependent API default",
+            },
+            "S097",
+        ),
+    )
+    for claim_id, predicate, value, source_id in claims:
+        connection.execute(
+            """
+            INSERT INTO implementation_claims (
+              claim_id, subject_id, predicate, value_json, value_status, valid_from,
+              valid_to, replaced_by, source_id, source_date, last_verified, confidence,
+              verification_status, product_version, commit_sha, release_tag
+            ) VALUES (?, 'I_SCIPY_LEAST_SQUARES_TRF', ?, ?, 'verified', ?, NULL, NULL,
+                      ?, ?, ?, ?, 'verified', ?, NULL, 'v1.18.0')
+            """,
+            (
+                claim_id,
+                predicate,
+                _json(value),
+                release_date,
+                source_id,
+                release_date,
+                release_date,
+                confidence,
+                product_version,
+            ),
+        )
 
 
 def _insert_historical_release_fixture(connection: sqlite3.Connection) -> None:
