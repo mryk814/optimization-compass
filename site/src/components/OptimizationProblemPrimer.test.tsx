@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 
 import { OptimizationProblemPrimer } from "./OptimizationProblemPrimer";
@@ -8,21 +8,30 @@ describe("OptimizationProblemPrimer", () => {
     render(<OptimizationProblemPrimer />);
 
     expect(screen.getByRole("heading", { name: "まず、現実の問題をこの形に置きます" })).toBeVisible();
-    expect(screen.getByLabelText("xがXに属する範囲でf(x)を最小化する")).toBeVisible();
+    expect(screen.getByLabelText(/xがXに属する範囲でf\(x\)を最小化/u)).toBeVisible();
     expect(screen.getByText("決めるもの")).toBeVisible();
-    expect(screen.getByText("比べるもの")).toBeVisible();
+    expect(screen.getByText(/良くしたいもの/u)).toBeVisible();
     expect(screen.getByText("守る条件")).toBeVisible();
-    expect(screen.getByText("選べる範囲")).toBeVisible();
+    expect(screen.getByText(/選べる範囲/u)).toBeVisible();
   });
 
   test("defines continuous, discrete, categorical, and mixed variables", () => {
     const { container } = render(<OptimizationProblemPrimer />);
     const primer = within(container);
 
-    expect(primer.getByText(/飛び飛びの候補から選ぶ総称/u)).toBeVisible();
-    expect(primer.getByText("連続 (continuous)")).toBeVisible();
-    expect(primer.getByText("整数・0-1")).toBeVisible();
-    expect(primer.getByText("カテゴリ (categorical)")).toBeVisible();
-    expect(primer.getByText("混合 (mixed)")).toBeVisible();
+    fireEvent.click(primer.getByText("用語をもう少し正確に見る"));
+    expect(primer.getByText(/二つの候補の間の値も選べる/u)).toBeVisible();
+    expect(primer.getByText(/Continuous variable/u)).toBeVisible();
+    expect(primer.getByText(/Integer variable/u)).toBeVisible();
+    expect(primer.getByText(/Categorical variable/u)).toBeVisible();
+    expect(primer.getByText(/Permutation variable/u)).toBeVisible();
+  });
+
+  test("substitutes a case's variables, objective, domain, and constraints", () => {
+    render(<OptimizationProblemPrimer caseFormulation={{ decisionVariables: "配合率", variableDomain: "連続", objective: "誤差を最小化", constraints: "合計100%" }} />);
+    expect(screen.getByRole("heading", { name: "このケースを定式化すると" })).toBeVisible();
+    expect(screen.getByText("配合率")).toBeVisible();
+    expect(screen.getByText("誤差を最小化")).toBeVisible();
+    expect(screen.getByText("合計100%")).toBeVisible();
   });
 });

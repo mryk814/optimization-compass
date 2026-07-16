@@ -5,6 +5,7 @@ import { ancestorIds } from "./map-state";
 import { THEATER_ROUTES } from "../theater/theater-routes";
 import type { SiteData } from "../../contracts/site-data";
 import { MethodPredicates } from "../methods/MethodPredicates";
+import { CanonicalTermReferences } from "../../components/OptimizationProblemPrimer";
 
 interface MapDetailProps {
   model: MapModel;
@@ -98,6 +99,7 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
         <span>{selected.node_type}</span>
       </div>
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
+      <CanonicalTermReferences questionIds={selected.answer_bindings.map((binding) => binding.question_id)} />
       {[...methodIds].map((methodId) => <MethodPredicates data={data} key={methodId} methodId={methodId} />)}
       {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
       {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>Learning slice</strong><p>canonical problemとrenderer familyで可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}

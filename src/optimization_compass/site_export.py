@@ -13,6 +13,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.derived_media import write_derived_media
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.formulation_primer import build_formulation_primer_index
 from optimization_compass.learning_graph import build_learning_graph_index
 from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
@@ -85,13 +86,14 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-SITE_MANIFEST_VERSION: Literal["1.2.0"] = "1.2.0"
+SITE_MANIFEST_VERSION: Literal["1.3.0"] = "1.3.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
 COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
 SEARCH_BENCHMARK_SEED = ROOT / "data/seeds/search_benchmark.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
+FORMULATION_PRIMER_TERMS_SEED = ROOT / "data/seeds/formulation_primer_terms.json"
 
 # Keep these labels aligned with the existing browser copy contract in web.py.
 ANSWER_LABELS_JA: dict[str, str] = {
@@ -350,6 +352,15 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         },
     )
     _write_json(output_dir / "learning-journeys.json", learning_journeys)
+    formulation_primer = build_formulation_primer_index(
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        glossary_rows=[
+            *repository.fetch_all("SELECT * FROM glossary ORDER BY term_id"),
+            *json.loads(FORMULATION_PRIMER_TERMS_SEED.read_text(encoding="utf-8"))["terms"],
+        ],
+    )
+    _write_json(output_dir / "formulation-primer.json", formulation_primer)
     media_scenario = next(
         scenario
         for scenario in scenario_index.scenarios
@@ -479,6 +490,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         traces=trace_asset,
         problems=ManifestAsset(version="1.0.0", path="problems.json"),
         learning_journeys=ManifestAsset(version="1.0.0", path="learning-journeys.json"),
+        formulation_primer=ManifestAsset(version="1.0.0", path="formulation-primer.json"),
         visualization_scenarios=ManifestVisualizationScenarioAsset(
             version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
         ),

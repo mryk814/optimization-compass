@@ -1,59 +1,105 @@
+import rawPrimer from "../../public/data/formulation-primer.json";
 import {
-  OPTIMIZATION_TERMS,
-  VARIABLE_TYPE_DEFINITIONS,
-} from "../content/optimization-language";
+  parseFormulationPrimerIndex,
+  type PrimerTerm,
+} from "../contracts/formulation-primer";
 
-export function OptimizationProblemPrimer() {
+export interface CaseFormulation {
+  decisionVariables: string;
+  variableDomain: string;
+  objective: string;
+  constraints: string;
+}
+
+export const formulationPrimer = parseFormulationPrimerIndex(rawPrimer);
+const termById = new Map(formulationPrimer.terms.map((term) => [term.term_id, term]));
+
+export function termsForQuestion(questionId: string): PrimerTerm[] {
+  const ids = formulationPrimer.diagnosis_mappings.find(
+    (mapping) => mapping.question_id === questionId,
+  )?.term_ids ?? [];
+  return ids.flatMap((id) => termById.get(id) ?? []);
+}
+
+export function diagnosisFieldCue(questionId: string): string | undefined {
+  return formulationPrimer.diagnosis_mappings.find(
+    (mapping) => mapping.question_id === questionId,
+  )?.cue_ja;
+}
+
+export function OptimizationProblemPrimer({
+  caseFormulation,
+}: {
+  caseFormulation?: CaseFormulation;
+}) {
+  const formulaFields = formulationPrimer.fields.slice(0, 4);
+  const caseValues: Record<string, string | undefined> = {
+    decision_variables: caseFormulation?.decisionVariables,
+    variable_domain: caseFormulation?.variableDomain,
+    objective: caseFormulation?.objective,
+    constraints: caseFormulation?.constraints,
+  };
   return (
     <section aria-labelledby="optimization-problem-primer-title" className="problem-primer">
       <header className="problem-primer-header">
         <p className="problem-primer-eyebrow">Formulation / 共通のものさし</p>
-        <h2 id="optimization-problem-primer-title">まず、現実の問題をこの形に置きます</h2>
-        <p>このAtlasでは、手法を選ぶ前に「何を決め、何を良くし、何を守るか」をそろえます。</p>
+        <h2 id="optimization-problem-primer-title">
+          {caseFormulation ? "このケースを定式化すると" : "まず、現実の問題をこの形に置きます"}
+        </h2>
+        <p>何を決め、何を良くし、何を守るかをそろえてから手法を選びます。</p>
       </header>
 
       <div className="problem-primer-main">
         <div className="problem-primer-formula">
-          <div
-            aria-label="xがXに属する範囲でf(x)を最小化する"
-            className="problem-primer-equation"
-            role="img"
-            dangerouslySetInnerHTML={{
-              __html: '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munder><mo>minimize</mo><mrow><mi>x</mi><mo>∈</mo><mi>X</mi></mrow></munder><mspace width="0.8em"/><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></math>',
-            }}
-          />
-          <p>
-            <span>subject to</span>
-            <span
-              aria-label="g i (x)は0以下、h j (x)は0に等しい"
-              className="problem-primer-constraint-equation"
-              role="img"
-              dangerouslySetInnerHTML={{
-                __html: '<math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>≤</mo><mn>0</mn><mo>,</mo><mspace width="0.45em"/><msub><mi>h</mi><mi>j</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>0</mn></mrow></math>',
-              }}
-            />
-          </p>
-          <small>最大化は、f(x)の符号を反転すると最小化として読めます。</small>
+          <div aria-label={formulationPrimer.formula_aria_label_ja} className="problem-primer-equation" role="img">
+            <span>minimize</span><strong>f(x)</strong><small>x ∈ X</small>
+          </div>
+          <p><span>subject to</span><strong>gᵢ(x) ≤ 0　hⱼ(x) = 0</strong></p>
+          <small>最大化（maximize）は目的の向きを明記します。</small>
         </div>
 
         <div className="problem-primer-terms">
-          {OPTIMIZATION_TERMS.map((term) => (
-            <article key={term.symbol}>
-              <code>{term.symbol}</code>
-              <div><strong>{term.title}</strong><p>{term.description}</p></div>
+          {formulaFields.map((field) => (
+            <article key={field.field_id}>
+              <code>{field.symbol}</code>
+              <div>
+                <strong>{field.label_ja} <small>({field.label_en})</small></strong>
+                <p>{caseValues[field.field_id] ?? field.beginner_description}</p>
+              </div>
             </article>
           ))}
         </div>
       </div>
 
-      <div className="problem-primer-types">
-        <p><strong>xの種類</strong><span>離散 (discrete) は飛び飛びの候補から選ぶ総称で、整数・0-1・カテゴリを含みます。</span></p>
-        <ul>
-          {VARIABLE_TYPE_DEFINITIONS.map((item) => (
-            <li key={item.title}><strong>{item.title}</strong><span>{item.description}</span></li>
-          ))}
-        </ul>
-      </div>
+      <details className="problem-primer-glossary">
+        <summary>用語をもう少し正確に見る</summary>
+        {formulationPrimer.terminology_groups.map((group) => (
+          <section key={group.group_id}>
+            <h3>{group.title_ja}</h3>
+            <dl>
+              {group.term_ids.map((termId) => termById.get(termId)).filter((term): term is PrimerTerm => term !== undefined).map((term) => (
+                <div id={`term-${term.term_id}`} key={term.term_id}>
+                  <dt>{term.term_ja} <small>({term.term_en})</small></dt>
+                  <dd>{term.definition}<span>混同注意: {term.common_confusion}</span></dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        ))}
+      </details>
     </section>
+  );
+}
+
+export function CanonicalTermReferences({ questionIds }: { questionIds: string[] }) {
+  const terms = [...new Map(
+    questionIds.flatMap(termsForQuestion).map((term) => [term.term_id, term]),
+  ).values()];
+  if (terms.length === 0) return null;
+  return (
+    <details className="canonical-term-references">
+      <summary>この項目の言葉を確認</summary>
+      <dl>{terms.map((term) => <div key={term.term_id}><dt>{term.term_ja} <small>({term.term_en})</small></dt><dd>{term.definition}</dd></div>)}</dl>
+    </details>
   );
 }

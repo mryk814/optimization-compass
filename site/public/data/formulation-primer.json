@@ -1,0 +1,456 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.10.0",
+  "diagnosis_mappings": [
+    {
+      "cue_ja": "x ∈ X：決める値の種類",
+      "field_id": "variable_domain",
+      "question_id": "Q01",
+      "term_ids": [
+        "G087",
+        "G090",
+        "G091",
+        "G092",
+        "G093"
+      ]
+    },
+    {
+      "cue_ja": "oracle(x)：結果の計算方法",
+      "field_id": "evaluation_oracle",
+      "question_id": "Q02",
+      "term_ids": [
+        "G098",
+        "G033"
+      ]
+    },
+    {
+      "cue_ja": "f(x)：良くしたい値の形",
+      "field_id": "objective",
+      "question_id": "Q03",
+      "term_ids": [
+        "G086",
+        "G099",
+        "G077"
+      ]
+    },
+    {
+      "cue_ja": "g(x), h(x)：守る条件",
+      "field_id": "constraints",
+      "question_id": "Q04",
+      "term_ids": [
+        "G088",
+        "G016"
+      ]
+    },
+    {
+      "cue_ja": "oracle(x)：微分できる対象と情報",
+      "field_id": "evaluation_oracle",
+      "question_id": "Q05",
+      "term_ids": [
+        "G097",
+        "G034"
+      ]
+    },
+    {
+      "cue_ja": "oracle(x)：1回の評価費用",
+      "field_id": "evaluation_oracle",
+      "question_id": "Q06",
+      "term_ids": [
+        "G103",
+        "G041"
+      ]
+    },
+    {
+      "cue_ja": "oracle(x)：同じxでのばらつき",
+      "field_id": "evaluation_oracle",
+      "question_id": "Q07",
+      "term_ids": [
+        "G039",
+        "G098"
+      ]
+    },
+    {
+      "cue_ja": "x：決める値の数",
+      "field_id": "decision_variables",
+      "question_id": "Q08",
+      "term_ids": [
+        "G085"
+      ]
+    },
+    {
+      "cue_ja": "goal：局所か大域か",
+      "field_id": "search_goal",
+      "question_id": "Q09",
+      "term_ids": [
+        "G009",
+        "G010"
+      ]
+    },
+    {
+      "cue_ja": "goal：必要な保証",
+      "field_id": "search_goal",
+      "question_id": "Q10",
+      "term_ids": [
+        "G012",
+        "G102"
+      ]
+    },
+    {
+      "cue_ja": "X：利用できる問題構造",
+      "field_id": "variable_domain",
+      "question_id": "Q11",
+      "term_ids": [
+        "G087"
+      ]
+    },
+    {
+      "cue_ja": "context：解く頻度と計算環境",
+      "field_id": "use_context",
+      "question_id": "Q12",
+      "term_ids": [
+        "G041",
+        "G043",
+        "G044"
+      ]
+    }
+  ],
+  "fields": [
+    {
+      "beginner_description": "手法が探す答え。温度・個数・材料の並びなどです。",
+      "field_id": "decision_variables",
+      "label_en": "Decision variables",
+      "label_ja": "決めるもの",
+      "symbol": "x",
+      "term_ids": [
+        "G085"
+      ]
+    },
+    {
+      "beginner_description": "xが取り得る値の種類と範囲です。",
+      "field_id": "variable_domain",
+      "label_en": "Variable domain",
+      "label_ja": "選べる範囲",
+      "symbol": "x ∈ X",
+      "term_ids": [
+        "G087"
+      ]
+    },
+    {
+      "beginner_description": "費用・誤差・時間など、小さくまたは大きくしたい値です。",
+      "field_id": "objective",
+      "label_en": "Objective",
+      "label_ja": "良くしたいもの",
+      "symbol": "f(x)",
+      "term_ids": [
+        "G086",
+        "G100",
+        "G101"
+      ]
+    },
+    {
+      "beginner_description": "上限・品質・収支など、答えが満たす必要のある条件です。",
+      "field_id": "constraints",
+      "label_en": "Constraints",
+      "label_ja": "守る条件",
+      "symbol": "g(x), h(x)",
+      "term_ids": [
+        "G088",
+        "G016",
+        "G089"
+      ]
+    },
+    {
+      "beginner_description": "式・simulation・実験など、xを試して目的と制約を知る方法です。",
+      "field_id": "evaluation_oracle",
+      "label_en": "Evaluation oracle",
+      "label_ja": "試した結果の得方",
+      "symbol": "oracle(x)",
+      "term_ids": [
+        "G098",
+        "G103"
+      ]
+    },
+    {
+      "beginner_description": "局所解でよいか、大域候補や証明まで必要かを決めます。",
+      "field_id": "search_goal",
+      "label_en": "Search goal",
+      "label_ja": "どこまで探すか",
+      "symbol": "goal",
+      "term_ids": [
+        "G009",
+        "G010",
+        "G012"
+      ]
+    },
+    {
+      "beginner_description": "一度だけか、繰り返すか、並列計算できるかという運用条件です。",
+      "field_id": "use_context",
+      "label_en": "Use context",
+      "label_ja": "解き方の条件",
+      "symbol": "context",
+      "term_ids": [
+        "G041",
+        "G043",
+        "G044"
+      ]
+    }
+  ],
+  "formula_aria_label_ja": "xがXに属する範囲でf(x)を最小化し、g_i(x)が0以下、h_j(x)が0に等しい制約を守る",
+  "generated_at": "2026-07-15T00:00:00Z",
+  "terminology_groups": [
+    {
+      "group_id": "variable_domains",
+      "term_ids": [
+        "G090",
+        "G091",
+        "G092",
+        "G093",
+        "G094",
+        "G095",
+        "G096"
+      ],
+      "title_ja": "xの種類（variable domain）"
+    },
+    {
+      "group_id": "evaluation",
+      "term_ids": [
+        "G097",
+        "G034",
+        "G033",
+        "G098",
+        "G103",
+        "G039",
+        "G041"
+      ],
+      "title_ja": "評価の性質（evaluation）"
+    },
+    {
+      "group_id": "objectives_and_guarantees",
+      "term_ids": [
+        "G099",
+        "G077",
+        "G100",
+        "G101",
+        "G016",
+        "G089",
+        "G009",
+        "G010",
+        "G012",
+        "G102"
+      ],
+      "title_ja": "目的と保証（objective / guarantee）"
+    }
+  ],
+  "terms": [
+    {
+      "common_confusion": "非凸で大域解とは限らない。",
+      "definition": "近傍内でより良い可行解がない解。",
+      "term_en": "Local optimum",
+      "term_id": "G009",
+      "term_ja": "局所解"
+    },
+    {
+      "common_confusion": "global searchの出力が自動的に大域解ではない。",
+      "definition": "全可行領域で最良の解。",
+      "term_en": "Global optimum",
+      "term_id": "G010",
+      "term_ja": "大域解"
+    },
+    {
+      "common_confusion": "局所KKTは非凸大域証明ではない。",
+      "definition": "dual bound、gap、KKT/convexity等で最適性を裏付ける量。",
+      "term_en": "Optimality certificate",
+      "term_id": "G012",
+      "term_ja": "最適性証明"
+    },
+    {
+      "common_confusion": "solver success flagだけで判定しない。",
+      "definition": "全制約を許容差内で満たす解。",
+      "term_en": "Feasible solution",
+      "term_id": "G016",
+      "term_ja": "可行解"
+    },
+    {
+      "common_confusion": "単一problem classではない。",
+      "definition": "内部式を十分利用せず評価interfaceから最適化する総称。",
+      "term_en": "Black-box optimization",
+      "term_id": "G033",
+      "term_ja": "black-box最適化"
+    },
+    {
+      "common_confusion": "Bayesian optimizationだけを指さない。",
+      "definition": "明示的derivativeを使わない最適化。",
+      "term_en": "Derivative-free optimization",
+      "term_id": "G034",
+      "term_ja": "derivative-free optimization"
+    },
+    {
+      "common_confusion": "deterministicな数値誤差/timeoutと分ける。",
+      "definition": "同一点でも評価値が変動する性質。",
+      "term_en": "Evaluation noise",
+      "term_id": "G039",
+      "term_ja": "noise"
+    },
+    {
+      "common_confusion": "iteration limitとは別。",
+      "definition": "実評価回数・時間・resourceの上限。",
+      "term_en": "Evaluation budget",
+      "term_id": "G041",
+      "term_ja": "evaluation budget"
+    },
+    {
+      "common_confusion": "CPU time/評価回数と別。",
+      "definition": "parallelismや待ち時間を含む実経過時間。",
+      "term_en": "Wall-clock time",
+      "term_id": "G043",
+      "term_ja": "wall-clock time"
+    },
+    {
+      "common_confusion": "problem変化で逆効果もある。",
+      "definition": "前回解・basis・factorization・stateを初期化に再利用。",
+      "term_en": "Warm start",
+      "term_id": "G044",
+      "term_ja": "warm start"
+    },
+    {
+      "common_confusion": "weight付き和一回だけでは集合を表さない。",
+      "definition": "複数目的のPareto trade-offを扱う。",
+      "term_en": "Multi-objective optimization",
+      "term_id": "G077",
+      "term_ja": "multiobjective optimization"
+    },
+    {
+      "common_confusion": "入力dataや固定parameterではなく、optimizerが選ぶ量を指す。",
+      "definition": "最適化手法が候補を探索し値を決める変数。通常xで表す。",
+      "term_en": "Decision variable",
+      "term_id": "G085",
+      "term_ja": "意思決定変数"
+    },
+    {
+      "common_confusion": "目的の方向、単位、複数目的かどうかを省略しない。",
+      "definition": "意思決定変数xから計算し、最小化または最大化する量。通常f(x)で表す。",
+      "term_en": "Objective function",
+      "term_id": "G086",
+      "term_ja": "目的関数"
+    },
+    {
+      "common_confusion": "関数fの連続性ではなく、まずxが取り得る値の種類を指す。",
+      "definition": "意思決定変数xが取り得る値の種類と範囲。通常Xで表す。",
+      "term_en": "Variable domain",
+      "term_id": "G087",
+      "term_ja": "変数領域"
+    },
+    {
+      "common_confusion": "単なる希望ではなく、候補解が満たすべき条件として判定できる形にする。",
+      "definition": "候補解に許される条件。不等式g_i(x)≤0や等式h_j(x)=0などで表す。",
+      "term_en": "Constraint",
+      "term_id": "G088",
+      "term_ja": "制約"
+    },
+    {
+      "common_confusion": "目的値が悪い候補とは別で、一つでも制約を満たさない候補を指す。",
+      "definition": "一つ以上の制約を許容差内で満たさない候補または状態。",
+      "term_en": "Infeasible",
+      "term_id": "G089",
+      "term_ja": "実行不可能"
+    },
+    {
+      "common_confusion": "目的関数が連続という意味ではなく、xの候補に途中の実数値があること。",
+      "definition": "範囲内の実数値を取り、二つの候補の間の値も選べる変数。",
+      "term_en": "Continuous variable",
+      "term_id": "G090",
+      "term_ja": "連続変数"
+    },
+    {
+      "common_confusion": "整数を実数として解いて丸めるだけでは制約や最適性を保てない場合がある。",
+      "definition": "個数など整数値だけを候補とする離散変数。",
+      "term_en": "Integer variable",
+      "term_id": "G091",
+      "term_ja": "整数変数"
+    },
+    {
+      "common_confusion": "0と1の数値的な距離より、採用・不採用という論理を表す。",
+      "definition": "0または1の二値だけを取る離散変数。",
+      "term_en": "Binary variable",
+      "term_id": "G092",
+      "term_ja": "二値変数"
+    },
+    {
+      "common_confusion": "A=1、B=2のように符号化しても大小や距離が生じるとは限らない。",
+      "definition": "材料種や方式名など、有限のラベル集合から選ぶ離散変数。",
+      "term_en": "Categorical variable",
+      "term_id": "G093",
+      "term_ja": "カテゴリ変数"
+    },
+    {
+      "common_confusion": "各要素を独立なカテゴリとして扱うと重複禁止や順序構造を失う。",
+      "definition": "要素の重複しない並び順を候補とする構造化離散変数。",
+      "term_en": "Permutation variable",
+      "term_id": "G094",
+      "term_ja": "順列変数"
+    },
+    {
+      "common_confusion": "固定graph上の連続parameterと、graph構造自体を選ぶ問題を区別する。",
+      "definition": "node、edge、接続関係などgraph構造を候補とする変数。",
+      "term_en": "Graph variable",
+      "term_id": "G095",
+      "term_ja": "グラフ変数"
+    },
+    {
+      "common_confusion": "各時刻を独立に決めず、dynamicsや滑らかさで結ばれた系列として扱う。",
+      "definition": "時間や経路に沿うstate・controlの系列全体を候補とする変数。",
+      "term_en": "Trajectory variable",
+      "term_id": "G096",
+      "term_ja": "軌道変数"
+    },
+    {
+      "common_confusion": "xが連続変数であることと、fやgがxについて微分可能であることは別。",
+      "definition": "目的関数または制約関数が意思決定変数xについて導関数を持つ性質。",
+      "term_en": "Differentiable",
+      "term_id": "G097",
+      "term_ja": "微分可能"
+    },
+    {
+      "common_confusion": "内部式が見えるかどうかと、評価値・微分・失敗を返せるかを分けて記述する。",
+      "definition": "候補xを渡すと目的値、制約値、微分情報などを返す評価interface。",
+      "term_en": "Evaluation oracle",
+      "term_id": "G098",
+      "term_ja": "評価オラクル"
+    },
+    {
+      "common_confusion": "複数指標を事前に一つのscalarへ統合した場合との違いを明示する。",
+      "definition": "最適化対象となる目的関数が一つの問題。",
+      "term_en": "Single-objective optimization",
+      "term_id": "G099",
+      "term_ja": "単目的最適化"
+    },
+    {
+      "common_confusion": "売上など増やしたい量を誤ってそのまま最小化しない。",
+      "definition": "目的関数f(x)をできるだけ小さくする方向の最適化。",
+      "term_en": "Minimization",
+      "term_id": "G100",
+      "term_ja": "最小化"
+    },
+    {
+      "common_confusion": "実装上-f(x)を最小化する場合も、利用者向けには元の目的方向を明示する。",
+      "definition": "目的関数f(x)をできるだけ大きくする方向の最適化。",
+      "term_en": "Maximization",
+      "term_id": "G101",
+      "term_ja": "最大化"
+    },
+    {
+      "common_confusion": "収束したという表示だけでは、大域最適性や誤差範囲の保証にならない。",
+      "definition": "仮定の下で解品質、可行性、収束、近似比などについて成立する主張。",
+      "term_en": "Algorithmic guarantee",
+      "term_id": "G102",
+      "term_ja": "アルゴリズム保証"
+    },
+    {
+      "common_confusion": "一反復の回数ではなく、一つのxを評価する時間・費用・resourceを測る。",
+      "definition": "一つの候補xについて目的値や制約値を得るために必要な時間・金銭・resource。",
+      "term_en": "Evaluation cost",
+      "term_id": "G103",
+      "term_ja": "評価費用"
+    }
+  ]
+}

@@ -1095,11 +1095,29 @@ caption {
   color: #f8fbf7;
 }
 
-.problem-primer-equation math {
-  display: block;
-  margin: 0 auto;
-  color: inherit;
-  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
+.problem-primer-equation {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: end;
+  justify-content: center;
+  gap: 0.1rem 0.65rem;
+}
+
+.problem-primer-equation span {
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.problem-primer-equation strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 3.2vw, 2.45rem);
+  font-weight: 500;
+}
+
+.problem-primer-equation small {
+  grid-column: 1 / -1;
+  margin: 0;
 }
 
 .problem-primer-formula > p {
@@ -1118,9 +1136,10 @@ caption {
   letter-spacing: 0.04em;
 }
 
-.problem-primer-constraint-equation math {
-  color: inherit;
+.problem-primer-formula > p strong {
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 1.08rem;
+  font-weight: 500;
 }
 
 .problem-primer-formula small {
@@ -1163,6 +1182,12 @@ caption {
   font-size: 0.78rem;
 }
 
+.problem-primer-terms strong small {
+  color: #66716a;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
 .problem-primer-terms p {
   margin: 0.14rem 0 0;
   color: #536159;
@@ -1170,37 +1195,35 @@ caption {
   line-height: 1.42;
 }
 
-.problem-primer-types {
+.problem-primer-glossary {
   padding: 0.45rem 0.65rem 0.5rem;
   border-top: 1px solid #dfe6df;
   background: #eef3ed;
 }
 
-.problem-primer-types > p {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem 0.7rem;
-  margin: 0 0 0.3rem;
-  color: #536159;
+.problem-primer-glossary > summary,
+.canonical-term-references > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #315c48;
   font-size: 0.7rem;
-  flex-wrap: wrap;
+  font-weight: 750;
 }
 
-.problem-primer-types > p strong {
+.problem-primer-glossary h3 {
+  margin: 0.65rem 0 0.3rem;
   color: #234737;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
 }
 
-.problem-primer-types ul {
+.problem-primer-glossary dl {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.35rem;
   margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
-.problem-primer-types li {
+.problem-primer-glossary dl > div {
   min-width: 0;
   padding: 0.3rem 0.45rem;
   border: 1px solid #d4ded6;
@@ -1208,21 +1231,53 @@ caption {
   background: #fff;
 }
 
-.problem-primer-types li strong,
-.problem-primer-types li span {
-  display: block;
-}
-
-.problem-primer-types li strong {
+.problem-primer-glossary dt,
+.canonical-term-references dt {
   color: #234737;
   font-size: 0.66rem;
+  font-weight: 750;
 }
 
-.problem-primer-types li span {
+.problem-primer-glossary dd,
+.canonical-term-references dd {
   margin-top: 0.15rem;
   color: #5b675f;
-  font-size: 0.6rem;
-  line-height: 1.38;
+  font-size: 0.62rem;
+  line-height: 1.45;
+}
+
+.problem-primer-glossary dd {
+  margin-left: 0;
+}
+
+.problem-primer-glossary dd span {
+  display: block;
+  margin-top: 0.15rem;
+  color: #7b5d4b;
+}
+
+.canonical-term-references {
+  margin: 0.65rem 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid #dfe6df;
+}
+
+.canonical-term-references dl {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0;
+}
+
+.canonical-term-references dd {
+  margin-left: 0;
+}
+
+.diagnose-formulation-cue {
+  display: block;
+  margin: 0.1rem 0 0.35rem;
+  color: #8b4d2c;
+  font-size: 0.64rem;
+  font-weight: 750;
 }
 
 @media (max-width: 54rem) {
@@ -1230,7 +1285,7 @@ caption {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .problem-primer-types ul {
+  .problem-primer-glossary dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1249,7 +1304,7 @@ caption {
   }
 
   .problem-primer-terms,
-  .problem-primer-types ul {
+  .problem-primer-glossary dl {
     grid-template-columns: minmax(0, 1fr);
   }
 
