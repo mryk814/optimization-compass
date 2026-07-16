@@ -44,13 +44,14 @@ export interface SiteLicenseManifest {
 }
 
 export interface SiteManifest {
-  version: "1.1.0";
+  version: "1.2.0";
   dataset_version: string;
   generated_at: string;
   views: ManifestView[];
   recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
+  learning_journeys: ManifestAsset;
   visualization_scenarios: ManifestAsset<"1.2.0">;
   derived_media: ManifestAsset<"1.1.0">;
   entity_links: ManifestAsset;
@@ -77,6 +78,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "recommendation",
       "traces",
       "problems",
+      "learning_journeys",
       "visualization_scenarios",
       "derived_media",
       "entity_links",
@@ -92,7 +94,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     ],
     "SiteManifest",
   );
-  if (data.version !== "1.1.0") throw new Error("Unsupported SiteManifest version.");
+  if (data.version !== "1.2.0") throw new Error("Unsupported SiteManifest version.");
 
   const views = array(data.views, "views").map((value, index): ManifestView => {
     const view = record(value, `views[${index}]`);
@@ -130,6 +132,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const problems = record(data.problems, "problems");
   exactKeys(problems, ["version", "path"], "problems");
   if (problems.version !== "1.0.0") throw new Error("problems.version is unsupported.");
+  const learningJourneys = record(data.learning_journeys, "learning_journeys");
+  exactKeys(learningJourneys, ["version", "path"], "learning_journeys");
+  if (learningJourneys.version !== "1.0.0") throw new Error("learning_journeys.version is unsupported.");
   const entityLinks = record(data.entity_links, "entity_links");
   exactKeys(entityLinks, ["version", "path"], "entity_links");
   if (entityLinks.version !== "1.0.0") throw new Error("entity_links.version is unsupported.");
@@ -176,7 +181,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   }
 
   return {
-    version: "1.1.0",
+    version: "1.2.0",
     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
     generated_at: nonEmptyString(data.generated_at, "generated_at"),
     views,
@@ -194,6 +199,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     problems: {
       version: "1.0.0",
       path: safeRelativePath(problems.path, "problems.path"),
+    },
+    learning_journeys: {
+      version: "1.0.0",
+      path: safeRelativePath(learningJourneys.path, "learning_journeys.path"),
     },
     visualization_scenarios: {
       version: "1.2.0",

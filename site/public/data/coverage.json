@@ -424,6 +424,14 @@
             "I_SCS"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 25,
           "reason_codes": [],
@@ -546,6 +554,14 @@
             "I_SCIPY_TRUST_CONSTR",
             "I_SNOPT"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 43,
@@ -687,6 +703,14 @@
             "I_ORTOOLS_ROUTING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 17,
           "reason_codes": [],
@@ -797,6 +821,14 @@
             "I_SCIPY_NELDER_MEAD",
             "I_SCIPY_POWELL"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 41,
@@ -946,6 +978,14 @@
             "I_SCIPY_MILP_HIGHS"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 41,
           "reason_codes": [],
@@ -1080,6 +1120,14 @@
             "I_PYMOO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 17,
           "reason_codes": [],
@@ -1190,6 +1238,14 @@
             "I_SCIPY_DUAL_ANNEALING",
             "I_SCIPY_SHGO"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 33,
@@ -1310,6 +1366,14 @@
             "I_ORTOOLS_ROUTING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 12,
           "reason_codes": [],
@@ -1411,6 +1475,14 @@
             "I_SCIPY_LINPROG_HIGHS",
             "I_SCS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 38,
@@ -1542,6 +1614,14 @@
             "I_PYMANOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -1626,6 +1706,14 @@
             "I_DEAP",
             "I_PYMOO"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 17,
@@ -1720,6 +1808,14 @@
             "I_CASADI",
             "I_DRAKE"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 15,
@@ -1827,8 +1923,16 @@
             "I_SCIPY_LBFGSB"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 36,
+          "count": 37,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1840,6 +1944,7 @@
             "/methods/M_NEWTON",
             "/methods/M_NEWTON_CG",
             "/methods/M_NLCG",
+            "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "EC020",
             "EC026",
@@ -1958,8 +2063,16 @@
             "I_TENSORFLOW_OPTIM"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 22,
+          "count": 23,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1968,6 +2081,7 @@
             "/methods/M_ADAMW",
             "/methods/M_MOMENTUM_SGD",
             "/methods/M_SGD",
+            "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
@@ -2070,8 +2184,16 @@
             "I_SMAC3"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 27,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2083,6 +2205,14 @@
             "/methods/M_SMAC_RF",
             "/methods/M_TPE",
             "/methods/M_TURBO_SAASBO",
+            "ARTIFACT_BO_EXPLOIT_NOISELESS",
+            "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+            "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLORE_NOISELESS",
+            "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+            "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
             "I_AX",
             "I_BOTORCH",
             "I_NEVERGRAD",
@@ -2205,6 +2335,14 @@
             "I_SCIPY_TRUST_CONSTR"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 23,
           "reason_codes": [],
@@ -2307,6 +2445,14 @@
             "I_KNITRO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 12,
           "reason_codes": [],
@@ -2390,6 +2536,14 @@
           ]
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -2489,12 +2643,21 @@
             "I_TENSORFLOW_OPTIM"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADAM",
+            "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
@@ -2576,6 +2739,14 @@
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -2660,6 +2831,14 @@
           "target_ids": [
             "I_SCS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -2748,6 +2927,14 @@
             "I_CVXPY",
             "I_OSQP"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 13,
@@ -2844,6 +3031,14 @@
             "I_NLOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -2937,6 +3132,14 @@
             "I_MOSEK",
             "I_SCIPY_LINPROG_HIGHS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 18,
@@ -3035,6 +3238,14 @@
             "I_SCIPY_BASINHOPPING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 13,
           "reason_codes": [],
@@ -3130,12 +3341,24 @@
             "I_RAY_TUNE"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 15,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BAYESIAN_OPT_GP",
+            "ARTIFACT_BO_EXPLOIT_NOISELESS",
+            "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+            "ARTIFACT_BO_EXPLORE_NOISELESS",
+            "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
             "I_AX",
             "I_BOTORCH",
             "I_OPTUNA",
@@ -3238,6 +3461,14 @@
             "I_SCIPY_BFGS"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -3327,6 +3558,14 @@
             "I_KNITRO",
             "I_SCIPY_MILP_HIGHS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 15,
@@ -3433,6 +3672,14 @@
             "I_SCIPY_MILP_HIGHS"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 22,
           "reason_codes": [],
@@ -3536,6 +3783,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -3618,6 +3873,14 @@
             "I_ORTOOLS_CPSAT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 5,
           "reason_codes": [],
@@ -3694,6 +3957,14 @@
             "I_NEVERGRAD",
             "I_PYCMA"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -3786,6 +4057,14 @@
             "I_SCIPY_COBYLA"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -3871,6 +4150,14 @@
             "I_SCIPY_COBYQA"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -3948,6 +4235,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -4039,6 +4334,14 @@
             "I_MINIZINC",
             "I_ORTOOLS_CPSAT"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 13,
@@ -4132,6 +4435,14 @@
             "I_ORTOOLS_ROUTING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 5,
           "reason_codes": [],
@@ -4210,6 +4521,14 @@
             "I_NEVERGRAD",
             "I_SCIPY_DIFFERENTIAL_EVOLUTION"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 13,
@@ -4302,6 +4621,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 3,
           "reason_codes": [],
@@ -4375,6 +4702,14 @@
             "I_NLOPT",
             "I_SCIPY_DIRECT"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 12,
@@ -4466,6 +4801,14 @@
             "I_DRAKE"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -4541,6 +4884,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -4628,6 +4979,14 @@
             "I_ORTOOLS_GLOP",
             "I_SCIPY_LINPROG_HIGHS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 13,
@@ -4720,6 +5079,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 3,
           "reason_codes": [],
@@ -4786,6 +5153,14 @@
           ]
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -4864,6 +5239,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -4952,6 +5335,14 @@
             "I_SCIPY_LEAST_SQUARES_TRF"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -5039,6 +5430,14 @@
             "I_PYMOO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -5125,12 +5524,21 @@
             "I_EXCEL_SOLVER"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_GRADIENT_DESCENT",
+            "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "I_EXCEL_SOLVER",
             "S001",
@@ -5210,6 +5618,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -5282,6 +5698,14 @@
             "I_OPTUNA",
             "I_RAY_TUNE"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 12,
@@ -5372,6 +5796,14 @@
             "I_ACADOS"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 6,
           "reason_codes": [],
@@ -5457,6 +5889,14 @@
             "I_PYOMO",
             "I_SCIPY_TRUST_CONSTR"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 16,
@@ -5560,6 +6000,14 @@
             "I_PYTORCH_OPTIM"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -5649,6 +6097,14 @@
             "I_SCIPY_LBFGSB"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -5731,6 +6187,14 @@
             "I_CERES",
             "I_SCIPY_LEAST_SQUARES_LM"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -5815,6 +6279,14 @@
             "I_ORTOOLS_ROUTING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 5,
           "reason_codes": [],
@@ -5891,6 +6363,14 @@
           "target_ids": [
             "I_NOMAD"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -5979,6 +6459,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 6,
           "reason_codes": [],
@@ -6057,6 +6545,14 @@
           "target_ids": [
             "I_PYMOO"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 5,
@@ -6137,12 +6633,21 @@
             "I_TENSORFLOW_OPTIM"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MOMENTUM_SGD",
+            "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
@@ -6227,6 +6732,14 @@
             "I_DRAKE"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -6308,6 +6821,14 @@
           "target_ids": [
             "I_SCIPY_BASINHOPPING"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 10,
@@ -6402,6 +6923,14 @@
             "I_OPTIMJL",
             "I_SCIPY_NELDER_MEAD"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 21,
@@ -6504,6 +7033,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -6575,6 +7112,14 @@
           "target_ids": [
             "I_OPTIMJL"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 6,
@@ -6655,6 +7200,14 @@
             "I_PETSC_TAO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -6731,6 +7284,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -6816,6 +7377,14 @@
             "I_PYMOO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -6899,6 +7468,14 @@
             "I_PYMOO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 5,
           "reason_codes": [],
@@ -6975,6 +7552,14 @@
             "I_PYOMO",
             "I_SCIP"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 12,
@@ -7066,6 +7651,14 @@
             "I_NEVERGRAD"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -7142,6 +7735,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -7232,6 +7833,14 @@
             "I_RAY_TUNE"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -7318,6 +7927,14 @@
           "target_ids": [
             "I_ORTOOLS_PDLP"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 11,
@@ -7410,6 +8027,14 @@
             "I_SCIPY_POWELL"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -7498,6 +8123,14 @@
             "I_MOSEK",
             "I_SCS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 16,
@@ -7597,6 +8230,14 @@
             "I_PETSC_TAO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 11,
           "reason_codes": [],
@@ -7684,6 +8325,14 @@
             "I_JAXOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -7768,12 +8417,24 @@
             "I_SMAC3"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
-          "count": 14,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_RANDOM_SEARCH",
+            "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+            "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
             "I_AX",
             "I_NEVERGRAD",
             "I_OPTUNA",
@@ -7868,6 +8529,14 @@
             "I_PYMANOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -7949,6 +8618,14 @@
             "I_PYMANOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -8029,6 +8706,14 @@
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 8,
@@ -8114,6 +8799,14 @@
           "target_ids": [
             "I_SCIPY_SHGO"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 11,
@@ -8209,6 +8902,14 @@
             "I_ORTOOLS_GLOP",
             "I_SCIPY_LINPROG_HIGHS"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 17,
@@ -8306,6 +9007,14 @@
             "I_SCIPY_DUAL_ANNEALING"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -8391,6 +9100,14 @@
           "target_ids": [
             "I_SCIPY_SLSQP"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 12,
@@ -8482,6 +9199,14 @@
             "I_SMAC3"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 10,
           "reason_codes": [],
@@ -8571,6 +9296,14 @@
             "I_SCIP"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 9,
           "reason_codes": [],
@@ -8648,6 +9381,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -8743,6 +9484,14 @@
             "I_SNOPT"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 11,
           "reason_codes": [],
@@ -8822,6 +9571,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -8909,6 +9666,14 @@
           "target_ids": [
             "I_OPTUNA"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 11,
@@ -9000,6 +9765,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 4,
           "reason_codes": [],
@@ -9077,6 +9850,14 @@
             "I_SCIPY_LEAST_SQUARES_TRF",
             "I_SCIPY_TRUST_CONSTR"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 9,
@@ -9163,6 +9944,14 @@
             "I_PETSC_TAO"
           ]
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 7,
           "reason_codes": [],
@@ -9242,6 +10031,14 @@
             "I_AX",
             "I_BOTORCH"
           ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "map": {
           "count": 11,
@@ -9331,6 +10128,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 6,
           "reason_codes": [],
@@ -9402,6 +10207,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -9481,6 +10294,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -9546,6 +10367,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -9625,6 +10454,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -9690,6 +10527,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -9770,6 +10615,15 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "budget-allocation",
+            "shift-scheduling"
+          ]
+        },
         "map": {
           "count": 3,
           "reason_codes": [],
@@ -9842,6 +10696,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -9922,6 +10784,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -9995,6 +10865,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "constrained-design"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -10064,6 +10942,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -10144,6 +11030,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10210,6 +11104,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -10289,6 +11191,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10355,6 +11265,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -10436,6 +11354,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10508,6 +11434,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10573,6 +11507,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -10654,6 +11596,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10727,6 +11677,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10793,6 +11751,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -10875,6 +11841,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -10941,6 +11915,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11022,6 +12004,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -11089,6 +12079,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11169,6 +12167,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -11234,6 +12240,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11313,6 +12327,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -11378,6 +12400,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11456,6 +12486,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -11520,6 +12558,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11598,6 +12644,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC019"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -11664,6 +12718,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11743,6 +12805,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -11816,6 +12886,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -11881,6 +12959,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -11961,6 +13047,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -12026,6 +13120,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12106,6 +13208,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -12172,6 +13282,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12254,6 +13372,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -12321,6 +13447,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12401,6 +13535,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -12475,6 +13617,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC025"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -12542,6 +13692,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12622,6 +13780,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC026"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -12696,6 +13862,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -12760,6 +13934,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12839,6 +14021,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -12904,6 +14094,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -12983,6 +14181,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -13047,6 +14253,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -13125,6 +14339,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "portfolio-allocation"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -13190,6 +14412,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -13270,6 +14500,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -13343,6 +14581,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "hyperparameter-search"
+          ]
+        },
         "map": {
           "count": 2,
           "reason_codes": [],
@@ -13410,6 +14656,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -13488,6 +14742,14 @@
           ]
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -13587,6 +14849,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 13,
           "reason_codes": [],
@@ -13678,6 +14948,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 12,
           "reason_codes": [],
@@ -13755,6 +15033,14 @@
           "target_ids": []
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -13845,6 +15131,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 8,
           "reason_codes": [],
@@ -13926,6 +15220,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -13998,6 +15300,14 @@
           ]
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -14103,6 +15413,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 12,
           "reason_codes": [],
@@ -14186,6 +15504,14 @@
           "state": "absent",
           "target_ids": []
         },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
         "map": {
           "count": 1,
           "reason_codes": [],
@@ -14262,6 +15588,14 @@
           ]
         },
         "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"

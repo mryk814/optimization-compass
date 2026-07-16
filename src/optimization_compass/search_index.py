@@ -30,8 +30,10 @@ SearchEntityType = Literal[
     "feature_value",
     "glossary",
     "implementation",
+    "journey",
     "method",
     "problem",
+    "scenario",
     "source",
     "trace",
     "view",
@@ -55,8 +57,10 @@ INTENT_BY_TYPE: dict[SearchEntityType, tuple[SearchIntent, ...]] = {
     "feature_value": ("classify_problem",),
     "glossary": ("understand_method", "classify_problem"),
     "implementation": ("find_implementation",),
+    "journey": ("find_case", "understand_method", "compare_visualize"),
     "method": ("understand_method",),
     "problem": ("classify_problem",),
+    "scenario": ("compare_visualize", "understand_method"),
     "source": ("check_evidence",),
     "trace": ("compare_visualize", "understand_method"),
     "view": ("classify_problem", "compare_visualize"),
@@ -264,14 +268,16 @@ def search_documents(
         "problem": 1,
         "case": 2,
         "implementation": 3,
-        "content": 4,
-        "glossary": 5,
-        "comparison": 6,
-        "trace": 7,
-        "source": 8,
-        "feature": 9,
-        "feature_value": 10,
-        "view": 11,
+        "journey": 4,
+        "content": 5,
+        "glossary": 6,
+        "comparison": 7,
+        "scenario": 8,
+        "trace": 9,
+        "source": 10,
+        "feature": 11,
+        "feature_value": 12,
+        "view": 13,
     }
     document_type = {document.document_id: document.entity_type for document in index.documents}
     return sorted(
@@ -682,6 +688,7 @@ def _artifact_metadata(
         }
         for run in scenario["runs"]:
             result[("trace", str(run["artifact_id"]))] = item
+        result[("scenario", str(scenario["scenario_id"]))] = item
     for source in source_index["sources"]:
         result[("source", str(source["source_id"]))] = {
             "title_ja": source["title"],

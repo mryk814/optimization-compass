@@ -32,7 +32,7 @@ export interface CoverageReport {
 
 const statuses = ["available", "partial", "missing", "not_applicable"] as const;
 const subjectTypes = ["method", "problem", "feature_family"] as const;
-const dimensions = ["map", "recommendation", "content", "visualization", "comparison", "gallery", "implementation", "source"] as const;
+const dimensions = ["map", "recommendation", "content", "visualization", "comparison", "gallery", "implementation", "journey", "source"] as const;
 
 export function parseCoverageReport(input: unknown): CoverageReport {
   const data = object(input, "coverage");

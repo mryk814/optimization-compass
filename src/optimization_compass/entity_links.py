@@ -10,8 +10,13 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.db import KnowledgeRepository, split_ids
+from optimization_compass.learning_journeys import LearningJourneyIndex
 from optimization_compass.learning_slices import LearningSliceLink
 from optimization_compass.trace_models import TraceIndex
+from optimization_compass.visualization_scenarios import (
+    VisualizationScenario,
+    VisualizationScenarioIndex,
+)
 
 EntityType = Literal[
     "case",
@@ -20,8 +25,10 @@ EntityType = Literal[
     "feature",
     "feature_value",
     "implementation",
+    "journey",
     "method",
     "problem",
+    "scenario",
     "source",
     "trace",
     "view",
@@ -107,6 +114,9 @@ def build_entity_link_index(
     trace_index: TraceIndex,
     content_directory: Path,
     gallery_path: Path,
+    comparison_path: Path,
+    scenario_index: VisualizationScenarioIndex,
+    learning_journeys: LearningJourneyIndex,
     trace_routes: dict[str, str] | None = None,
     trace_source_ids: dict[str, list[str]] | None = None,
     trace_view_ids: dict[str, list[str]] | None = None,
@@ -120,6 +130,7 @@ def build_entity_link_index(
     trace_view_ids = trace_view_ids or {}
     visualization_entries = visualization_entries or []
     gallery = _load_gallery(gallery_path, dataset_version)
+    comparisons = _load_comparisons(comparison_path, dataset_version)
     entities: dict[tuple[EntityType, str], dict[str, Any]] = {}
     relations: defaultdict[tuple[EntityType, str], set[tuple[str, EntityType, str]]] = defaultdict(
         set
@@ -362,6 +373,68 @@ def build_entity_link_index(
                 reverse_type="visualization",
             )
 
+    for scenario in scenario_index.scenarios:
+        add(
+            "scenario",
+            scenario.scenario_id,
+            scenario.title_ja,
+            summary=scenario.lesson.learning_objective.ja,
+        )
+        for run_index, run in enumerate(scenario.runs):
+            add(
+                "trace",
+                run.artifact_id,
+                scenario.title_ja,
+                canonical_url=(
+                    _scenario_route(scenario, run.artifact_id) if run_index == 0 else None
+                ),
+            )
+            connect(
+                "scenario",
+                scenario.scenario_id,
+                "artifact",
+                "trace",
+                run.artifact_id,
+                reverse_type="scenario",
+            )
+            connect(
+                "trace",
+                run.artifact_id,
+                "visualizes",
+                "method",
+                run.method_id,
+                reverse_type="visualization",
+            )
+        for source_id in scenario.source_ids:
+            connect("scenario", scenario.scenario_id, "evidence", "source", source_id)
+
+    for comparison in comparisons["comparisons"]:
+        comparison_id = str(comparison["comparison_id"])
+        add(
+            "comparison",
+            comparison_id,
+            str(comparison["title_ja"]),
+            summary=str(comparison["fairness_note"]),
+            canonical_url=f"/compare/{comparison_id}",
+            aliases=tuple(f"/compare/{alias}" for alias in comparison.get("aliases", [])),
+        )
+        for member in comparison["members"]:
+            connect(
+                "comparison",
+                comparison_id,
+                "member_method",
+                "method",
+                str(member["method_id"]),
+                reverse_type="comparison",
+            )
+            connect(
+                "comparison",
+                comparison_id,
+                "member_trace",
+                "trace",
+                str(member["trace_id"]),
+                reverse_type="comparison",
+            )
     for case in gallery["cases"]:
         case_id = str(case["case_id"])
         add(
@@ -424,6 +497,66 @@ def build_entity_link_index(
         for source_id in case["source_ids"]:
             connect("case", case_id, "evidence", "source", str(source_id))
 
+    for journey in learning_journeys.journeys:
+        add(
+            "journey",
+            journey.journey_id,
+            journey.title_ja,
+            summary=journey.learning_objective,
+        )
+        connect(
+            "journey",
+            journey.journey_id,
+            "case",
+            "case",
+            journey.case_id,
+            reverse_type="learning_journey",
+        )
+        connect(
+            "journey",
+            journey.journey_id,
+            "problem",
+            "problem",
+            journey.problem_archetype_id,
+            reverse_type="learning_journey",
+        )
+        for scenario_reference in journey.scenarios:
+            connect(
+                "journey",
+                journey.journey_id,
+                scenario_reference.role,
+                "scenario",
+                scenario_reference.scenario_id,
+                reverse_type="learning_journey",
+            )
+        for comparison_reference in journey.comparisons:
+            connect(
+                "journey",
+                journey.journey_id,
+                "comparison",
+                "comparison",
+                comparison_reference.comparison_id,
+                reverse_type="learning_journey",
+            )
+        for method_id in journey.candidate_method_ids:
+            connect("journey", journey.journey_id, "candidate_method", "method", method_id)
+        for method_id in journey.conditional_method_ids:
+            connect("journey", journey.journey_id, "conditional_method", "method", method_id)
+        for method_id in journey.excluded_method_ids:
+            connect("journey", journey.journey_id, "excluded_method", "method", method_id)
+        for implementation_id in journey.implementation_ids:
+            connect(
+                "journey",
+                journey.journey_id,
+                "implementation",
+                "implementation",
+                implementation_id,
+            )
+        for content_id in journey.content_ids:
+            connect("journey", journey.journey_id, "learning", "content", content_id)
+        for source_id in journey.source_ids:
+            connect("journey", journey.journey_id, "evidence", "source", source_id)
+
     linked_entities = []
     for key in sorted(entities):
         data = entities[key]
@@ -473,6 +606,33 @@ def _load_gallery(path: Path, dataset_version: str) -> dict[str, Any]:
     if not isinstance(payload.get("cases"), list):
         raise ValueError("gallery cases must be a list")
     return payload
+
+
+def _load_comparisons(path: Path, dataset_version: str) -> dict[str, Any]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(raw, dict):
+        raise ValueError("comparison index must be an object")
+    payload: dict[str, Any] = raw
+    if payload.get("contract_version") != "1.0.0":
+        raise ValueError("unsupported comparison contract version")
+    if payload.get("dataset_version") != dataset_version:
+        raise ValueError("comparison dataset version does not match the release")
+    if not isinstance(payload.get("comparisons"), list):
+        raise ValueError("comparisons must be a list")
+    return payload
+
+
+def _scenario_route(scenario: VisualizationScenario, artifact_id: str) -> str:
+    renderer = scenario.artifact.renderer_family
+    if renderer == "search_tree":
+        return f"/theater/search-tree/{artifact_id}"
+    if renderer == "surrogate_uncertainty":
+        return f"/theater/bayesian-optimization/{scenario.scenario_id}"
+    if renderer == "simplex_geometry":
+        return "/theater/nelder-mead"
+    if renderer in {"feasible_region", "pareto_front"}:
+        return f"/theater/learning/{scenario.scenario_id}"
+    return f"/traces/{artifact_id}"
 
 
 def _validate_route(value: str) -> None:

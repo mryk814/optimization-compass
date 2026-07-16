@@ -14,6 +14,7 @@ from optimization_compass.derived_media import write_derived_media
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.learning_graph import build_learning_graph_index
+from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
 from optimization_compass.problem_registry import get_runtime_problem
@@ -84,7 +85,7 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-SITE_MANIFEST_VERSION: Literal["1.1.0"] = "1.1.0"
+SITE_MANIFEST_VERSION: Literal["1.2.0"] = "1.2.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
@@ -315,6 +316,40 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         dataset_version=release["version"],
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
+    gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))
+    comparison_index = json.loads((output_dir / "comparisons.json").read_text(encoding="utf-8"))
+    content_pages = load_content(CONTENT_DIRECTORY)
+    learning_journeys = build_learning_journey_index(
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        gallery_index=gallery_index,
+        scenario_index=scenario_index,
+        comparison_index=comparison_index,
+        content_pages=content_pages,
+        inventories={
+            "case": {str(item["case_id"]) for item in gallery_index["cases"]},
+            "problem": {
+                str(item["problem_id"])
+                for item in repository.fetch_all("SELECT problem_id FROM problem_archetypes")
+            },
+            "scenario": {item.scenario_id for item in scenario_index.scenarios},
+            "comparison": {str(item["comparison_id"]) for item in comparison_index["comparisons"]},
+            "method": {
+                str(item["method_id"])
+                for item in repository.fetch_all("SELECT method_id FROM methods")
+            },
+            "implementation": {
+                str(item["implementation_id"])
+                for item in repository.fetch_all("SELECT implementation_id FROM implementations")
+            },
+            "content": {page.content_id for page in content_pages},
+            "source": {
+                str(item["source_id"])
+                for item in repository.fetch_all("SELECT source_id FROM sources")
+            },
+        },
+    )
+    _write_json(output_dir / "learning-journeys.json", learning_journeys)
     media_scenario = next(
         scenario
         for scenario in scenario_index.scenarios
@@ -347,6 +382,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_index=trace_index,
         content_directory=CONTENT_DIRECTORY,
         gallery_path=output_dir / "gallery.json",
+        comparison_path=output_dir / "comparisons.json",
+        scenario_index=scenario_index,
+        learning_journeys=learning_journeys,
         trace_routes=search_tree_routes,
         trace_source_ids=search_tree_sources,
         trace_view_ids=search_tree_views,
@@ -440,6 +478,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         ),
         traces=trace_asset,
         problems=ManifestAsset(version="1.0.0", path="problems.json"),
+        learning_journeys=ManifestAsset(version="1.0.0", path="learning-journeys.json"),
         visualization_scenarios=ManifestVisualizationScenarioAsset(
             version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
         ),

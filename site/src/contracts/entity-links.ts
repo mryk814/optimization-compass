@@ -5,8 +5,10 @@ export type EntityType =
   | "feature"
   | "feature_value"
   | "implementation"
+  | "journey"
   | "method"
   | "problem"
+  | "scenario"
   | "source"
   | "trace"
   | "view";
@@ -37,7 +39,7 @@ export interface EntityLinkIndex {
 
 const ENTITY_TYPES = new Set<EntityType>([
   "case", "comparison", "content", "feature", "feature_value", "implementation",
-  "method", "problem", "source", "trace", "view",
+  "journey", "method", "problem", "scenario", "source", "trace", "view",
 ]);
 
 export function parseEntityLinkIndex(raw: unknown): EntityLinkIndex {
