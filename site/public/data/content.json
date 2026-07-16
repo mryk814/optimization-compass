@@ -81,6 +81,74 @@
       ]
     },
     {
+      "canonical_entity_id": "M_ACTIVE_SET_QP",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "active-set-qp",
+      "html": "<p>凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。</p>\n<h2 id=\"working-setとは何か\" tabindex=\"-1\">Working setとは何か</h2>\n<p>凸QPの標準形</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>x</mi></msub><mspace width=\"0.278em\" /><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><msup><mi>x</mi><mi>T</mi></msup><mi>P</mi><mi>x</mi><mo>&#x0002B;</mo><msup><mi>q</mi><mi>T</mi></msup><mi>x</mi><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>A</mi><mi>x</mi><mo>&#x02264;</mo><mi>b</mi></mrow></math></div>\n<p>を考えます（<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>P</mi><mi>&#x02AB0;</mi><mn>0</mn></mrow></math>）。最適解では、不等式制約の一部だけが等号 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>A</mi><mi>i</mi></msub><mi>x</mi><mo>&#x0003D;</mo><msub><mi>b</mi><mi>i</mi></msub></mrow></math> で成立し、残りは余裕を持ちます。active-set QPは、現時点で等号になっていると推定した制約の集合をworking set <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></math> として扱い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></math>を等式制約とみなした等式制約付きQPを解きます。得られた候補点でKKT条件（stationarity、multiplier符号、feasibility、complementarity）を確認し、</p>\n<ul>\n<li><p>満たされない不等式制約があればworking setへ追加する</p>\n</li>\n<li><p>multiplierの符号が不適切な制約があればworking setから外す</p>\n</li>\n</ul>\n<p>を繰り返し、working setが安定するまで進みます。simplex法が頂点（basis）を辿るのと似た発想で、QPでは頂点でなく「有効な等式面」を辿ると考えると直感がつかみやすくなります。</p>\n<h2 id=\"等式制約qpを繰り返し解く仕組み\" tabindex=\"-1\">等式制約QPを繰り返し解く仕組み</h2>\n<p>working set <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></math> を固定した1反復では、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>A</mi><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></msub><mi>x</mi><mo>&#x0003D;</mo><msub><mi>b</mi><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></msub></mrow></math> の下で<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mstyle displaystyle=\"false\" scriptlevel=\"0\"><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><msup><mi>x</mi><mi>T</mi></msup><mi>P</mi><mi>x</mi><mo>&#x0002B;</mo><msup><mi>q</mi><mi>T</mi></msup><mi>x</mi></mrow></math>を最小化する等式制約QPを解きます。これはKKT系</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo>&#x0005B;</mo><mtable><mtr><mtd><mi>P</mi></mtd><mtd><msubsup><mi>A</mi><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow><mi>T</mi></msubsup></mtd></mtr><mtr><mtd><msub><mi>A</mi><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></msub></mtd><mtd><mn>0</mn></mtd></mtr></mtable><mo>&#x0005D;</mo><mo>&#x0005B;</mo><mtable><mtr><mtd><mi>x</mi></mtd></mtr><mtr><mtd><mi>&#x003BB;</mi></mtd></mtr></mtable><mo>&#x0005D;</mo><mo>&#x0003D;</mo><mo>&#x0005B;</mo><mtable><mtr><mtd><mo>&#x02212;</mo><mi>q</mi></mtd></mtr><mtr><mtd><msub><mi>b</mi><mrow><msub><mi>W</mi><mi>k</mi></msub></mrow></msub></mtd></mtr></mtable><mo>&#x0005D;</mo></mrow></math></div>\n<p>を解くことに帰着します。得られた解方向が現在のworking setの範囲内で実行可能なら、そのままstepを取ります。途中でinactiveな制約に触れる（blocking constraint）場合は、そこで止めてその制約をworking setへ加えます。この「1反復＝1つの等式制約QPを解く」という構造が、<a href=\"#/learn/active-set\">一般NLPのactive-set法</a>にも共通する骨格ですが、QP専用の実装ではKKT行列がQPの係数だけで決まるため、factorizationの更新（rank-1更新やSchur補行列の利用など）に特化しやすい点が異なります。</p>\n<h2 id=\"simplex法のqp版という直感とmpcでの再解\" tabindex=\"-1\">Simplex法のQP版という直感とMPCでの再解</h2>\n<p>LPのsimplex法は頂点から頂点へbasisを更新しながら進みますが、active-set QPはworking setという「等号制約の組」を更新しながら進むという意味で、simplex法のQP版とみなせます。この類似性から、前回のworking setを初期値として使うwarm startが自然に働きます。特に、</p>\n<ul>\n<li><p>model predictive control（MPC）で毎周期わずかに変わるQPを再解する</p>\n</li>\n<li><p>sequential quadratic programmingのsubproblemを繰り返し解く</p>\n</li>\n<li><p>boundが少しずつ変わるportfolio再最適化</p>\n</li>\n</ul>\n<p>のように「直前の解に近いQPを何度も解く」場面では、working setがほとんど変わらないため少ない反復で収束しやすくなります。一方、制約数が多い問題では、正しいworking setに到達するまでの反復数が組合せ的に増える場合があり、大規模疎QPではoperator-splitting型やbarrier型のほうが安定することがあります。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<table>\n<thead>\n<tr>\n<th>条件</th>\n<th>理由</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>凸QP（<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>P</mi><mi>&#x02AB0;</mi><mn>0</mn></mrow></math>）として明示できる</td>\n<td>KKT系の対称性・factorization更新がこの構造に依存するため</td>\n</tr>\n<tr>\n<td>小中規模、またはworking setの変化が小さいMPC的な再解</td>\n<td>working setの探索回数が少なく済むため</td>\n</tr>\n<tr>\n<td>warm startできる近接問題を繰り返し解く</td>\n<td>前回のworking setをそのまま初期値にできるため</td>\n</tr>\n<tr>\n<td>高精度なbasisやactive constraint情報が必要</td>\n<td>等式制約QPを厳密に解くため中間状態の解釈がしやすいため</td>\n</tr>\n</tbody>\n</table>\n<p>制約数が多くworking setが反復ごとに大きく変わる問題や、非凸QPを凸として誤って扱っている場合は避けます。そうした場合は<a href=\"#/learn/admm-qp\">operator-splitting QP</a>や<a href=\"#/learn/barrier-lp-qp\">primal-dual barrier法</a>を検討します。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<p>次はactive-set QPの考え方を教育用に近似した例です。2変数QPに対し、候補となるworking set（制約なし・各不等式制約を等号にした場合）を列挙してKKT系を解き、実行可能な候補の中から目的値が最良のものを選びます。実際のactive-set solverはworking setを1反復ごとに少しずつ更新するのに対し、この例は候補を総当たりする教育的な近似です。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">itertools</span>\n<span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n<span class=\"n\">p</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([[</span><span class=\"mf\">4.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span> <span class=\"p\">[</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">]])</span>\n<span class=\"n\">q</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">])</span>\n<span class=\"c1\"># 不等式制約 a_ub @ x &lt;= b_ub</span>\n<span class=\"n\">a_ub</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span>\n    <span class=\"p\">[</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">],</span>\n    <span class=\"p\">[</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span>\n    <span class=\"p\">[</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span>\n<span class=\"p\">])</span>\n<span class=\"n\">b_ub</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">1.5</span><span class=\"p\">])</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">objective</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"mf\">0.5</span> <span class=\"o\">*</span> <span class=\"n\">x</span> <span class=\"o\">@</span> <span class=\"n\">p</span> <span class=\"o\">@</span> <span class=\"n\">x</span> <span class=\"o\">+</span> <span class=\"n\">q</span> <span class=\"o\">@</span> <span class=\"n\">x</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">solve_equality_qp</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">:</span> <span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"nb\">int</span><span class=\"p\">,</span> <span class=\"o\">...</span><span class=\"p\">])</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span> <span class=\"o\">|</span> <span class=\"kc\">None</span><span class=\"p\">:</span>\n    <span class=\"k\">if</span> <span class=\"ow\">not</span> <span class=\"n\">active</span><span class=\"p\">:</span>\n        <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">solve</span><span class=\"p\">(</span><span class=\"n\">p</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"n\">q</span><span class=\"p\">)</span>\n    <span class=\"n\">a_active</span> <span class=\"o\">=</span> <span class=\"n\">a_ub</span><span class=\"p\">[</span><span class=\"nb\">list</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">)]</span>\n    <span class=\"n\">kkt</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">zeros</span><span class=\"p\">((</span><span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">),</span> <span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">)))</span>\n    <span class=\"n\">kkt</span><span class=\"p\">[:</span><span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"p\">:</span><span class=\"mi\">2</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"n\">p</span>\n    <span class=\"n\">kkt</span><span class=\"p\">[:</span><span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"mi\">2</span><span class=\"p\">:]</span> <span class=\"o\">=</span> <span class=\"n\">a_active</span><span class=\"o\">.</span><span class=\"n\">T</span>\n    <span class=\"n\">kkt</span><span class=\"p\">[</span><span class=\"mi\">2</span><span class=\"p\">:,</span> <span class=\"p\">:</span><span class=\"mi\">2</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"n\">a_active</span>\n    <span class=\"n\">rhs</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">concatenate</span><span class=\"p\">([</span><span class=\"o\">-</span><span class=\"n\">q</span><span class=\"p\">,</span> <span class=\"n\">b_ub</span><span class=\"p\">[</span><span class=\"nb\">list</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">)]])</span>\n    <span class=\"k\">try</span><span class=\"p\">:</span>\n        <span class=\"n\">solution</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">solve</span><span class=\"p\">(</span><span class=\"n\">kkt</span><span class=\"p\">,</span> <span class=\"n\">rhs</span><span class=\"p\">)</span>\n    <span class=\"k\">except</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">LinAlgError</span><span class=\"p\">:</span>\n        <span class=\"k\">return</span> <span class=\"kc\">None</span>\n    <span class=\"k\">return</span> <span class=\"n\">solution</span><span class=\"p\">[:</span><span class=\"mi\">2</span><span class=\"p\">]</span>\n\n\n<span class=\"n\">best_x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span> <span class=\"o\">|</span> <span class=\"kc\">None</span> <span class=\"o\">=</span> <span class=\"kc\">None</span>\n<span class=\"n\">best_value</span> <span class=\"o\">=</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"s2\">&quot;inf&quot;</span><span class=\"p\">)</span>\n<span class=\"k\">for</span> <span class=\"n\">size</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">a_ub</span><span class=\"p\">)</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">):</span>\n    <span class=\"k\">for</span> <span class=\"n\">active</span> <span class=\"ow\">in</span> <span class=\"n\">itertools</span><span class=\"o\">.</span><span class=\"n\">combinations</span><span class=\"p\">(</span><span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">a_ub</span><span class=\"p\">)),</span> <span class=\"n\">size</span><span class=\"p\">):</span>\n        <span class=\"n\">candidate</span> <span class=\"o\">=</span> <span class=\"n\">solve_equality_qp</span><span class=\"p\">(</span><span class=\"n\">active</span><span class=\"p\">)</span>\n        <span class=\"k\">if</span> <span class=\"n\">candidate</span> <span class=\"ow\">is</span> <span class=\"kc\">None</span><span class=\"p\">:</span>\n            <span class=\"k\">continue</span>\n        <span class=\"k\">if</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">all</span><span class=\"p\">(</span><span class=\"n\">a_ub</span> <span class=\"o\">@</span> <span class=\"n\">candidate</span> <span class=\"o\">&lt;=</span> <span class=\"n\">b_ub</span> <span class=\"o\">+</span> <span class=\"mf\">1e-9</span><span class=\"p\">):</span>\n            <span class=\"n\">value</span> <span class=\"o\">=</span> <span class=\"n\">objective</span><span class=\"p\">(</span><span class=\"n\">candidate</span><span class=\"p\">)</span>\n            <span class=\"k\">if</span> <span class=\"n\">value</span> <span class=\"o\">&lt;</span> <span class=\"n\">best_value</span><span class=\"p\">:</span>\n                <span class=\"n\">best_value</span> <span class=\"o\">=</span> <span class=\"n\">value</span>\n                <span class=\"n\">best_x</span> <span class=\"o\">=</span> <span class=\"n\">candidate</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">best_x</span><span class=\"p\">,</span> <span class=\"n\">best_value</span><span class=\"p\">)</span></code></pre></div>\n<p>working setの候補を総当たりで列挙しているため、制約数が増えると組合せが急増します。実務ではOSQPなどのQP solverがworking setを賢く逐次更新します。利用versionのAPIやdefault parameterは<a href=\"https://osqp.org/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OSQP公式ドキュメント</a>や<a href=\"https://highs.dev/\" target=\"_blank\" rel=\"noopener noreferrer\">HiGHSドキュメント</a>で確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>working set size（active constraint数）</p>\n</li>\n<li><p>added / removed constraints</p>\n</li>\n<li><p>等式制約QP solveのstatus</p>\n</li>\n<li><p>primal / dual residual</p>\n</li>\n<li><p>multiplier sign violation</p>\n</li>\n<li><p>step lengthとblocking constraint</p>\n</li>\n<li><p>degeneracy</p>\n</li>\n<li><p>iteration数</p>\n</li>\n<li><p>warm-start reuse</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>working setが安定せず追加・削除を繰り返す（cycling）</p>\n</li>\n<li><p>degeneracyでmultiplierの符号判定が不安定</p>\n</li>\n<li><p>制約数が多くfactorization更新のcostが支配的になる</p>\n</li>\n<li><p>非凸QP（<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>P</mi></mrow></math>が不定）をそのまま扱っている</p>\n</li>\n<li><p>infeasibleまたはunboundedの証明を目的値だけで見落とす</p>\n</li>\n</ul>\n<p>一般の非線形制約に対するactive-set法との違いは<a href=\"#/learn/active-set\">Active-set法</a>、同じ凸QPをfactorization再利用の反復法で解く考え方は<a href=\"#/learn/admm-qp\">operator-splitting QP</a>、barrier型との対比は<a href=\"#/learn/barrier-lp-qp\">primal-dual barrier法</a>、LP・QP・conic全体の位置付けは<a href=\"#/learn/lp-qp-conic\">LP・QP・錐最適化</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "active-set",
+        "admm-qp",
+        "barrier-lp-qp",
+        "lp-qp-conic"
+      ],
+      "seo_description": "凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。",
+      "seo_title": "Active-set QP",
+      "source_ids": [
+        "S012",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。",
+      "title_en": "Active-Set QP",
+      "title_ja": "Active-set QP",
+      "toc": [
+        {
+          "heading_id": "working-setとは何か",
+          "label": "Working setとは何か",
+          "level": 2
+        },
+        {
+          "heading_id": "等式制約qpを繰り返し解く仕組み",
+          "label": "等式制約QPを繰り返し解く仕組み",
+          "level": 2
+        },
+        {
+          "heading_id": "simplex法のqp版という直感とmpcでの再解",
+          "label": "Simplex法のQP版という直感とMPCでの再解",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_ACTIVE_SET",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -2654,6 +2722,70 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "MF_MANIFOLD",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.manifold",
+      "html": "<p>変数の制約が球面、直交行列、固定rank行列、回転群などの多様体構造そのものであるとき、Riemann勾配法とRiemann trust-region法を条件に応じて選び分けるための入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>制約を「守るべき不等式・等式の集合」としてではなく、解空間そのものの形（多様体）として扱い、常にその形の上に留まりながら一歩を作ること</strong>です。球面上のベクトル、正規直交な行列、固定rankの行列などは、一般的な不等式・等式制約としても書けますが、そう書くと反復のたびに制約違反を修正する手間が生まれます。多様体として扱えば、接空間への射影とretractionという2つの操作だけで、常に可行な点の上を動けます。</p>\n<ul>\n<li><p>見ているもの: Euclid勾配（またはHessian）、現在点における接空間、多様体上の距離や曲率</p>\n</li>\n<li><p>動かすもの: 多様体上の現在点</p>\n</li>\n<li><p>前進の判断: Riemann gradient normの低下、目的値の低下、retraction後も多様体条件を満たしていること</p>\n</li>\n<li><p>主な弱点: 多様体ごとに接空間射影とretractionの実装が必要になること、chartの特異点、初期点への依存</p>\n</li>\n</ul>\n<p>「多様体として解くことが常に制約付きNLPより優れている」という順位ではありません。制約が幾何構造と一致するときに得られる可行性の単純さと、幾何演算を自分で用意する実装コストを交換しています。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>制約が既知の多様体に一致するか（球面、直交行列、固定rank、回転群など）</td>\n<td>一致しないなら、このfamilyを第一候補にしない</td>\n</tr>\n<tr>\n<td>Euclid勾配（または対応する微分情報）が得られるか</td>\n<td>接空間へ射影する元になるため</td>\n</tr>\n<tr>\n<td>多様体ツール（接空間射影・retraction・Riemann Hessian）がライブラリにあるか</td>\n<td>自作の幾何演算は誤りやすく、既存実装の利用が安全なため</td>\n</tr>\n<tr>\n<td>追加の一般制約が混ざっていないか</td>\n<td>多様体構造だけで表現しきれない制約がある場合は別のfamilyを検討する</td>\n</tr>\n<tr>\n<td>二階情報（Riemann Hessian）が必要な精度か</td>\n<td>一次法で十分か、trust-regionによる高精度化が要るかが変わる</td>\n</tr>\n</tbody>\n</table>\n<p>制約が多様体と厳密には一致せず、線形・非線形の不等式や等式が中心の場合は、<a href=\"#/learn/family.constrained-nlp\">制約付きNLPの選び分け</a>のほうが素直な入口です。多様体構造に加えて追加の一般制約が残る場合も同様に、そちらを優先候補として検討します。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>単純な一次法の入口</td>\n<td><a href=\"#/learn/riemannian-gradient\">Riemann勾配法</a></td>\n<td>多様体構造が既知で、Euclid勾配が得られ、まず動く実装を作りたい</td>\n<td>局所解近傍で収束が遅い、鞍点付近で長く停滞する</td>\n</tr>\n<tr>\n<td>二階情報で高精度化・鞍点脱出</td>\n<td><a href=\"#/learn/riemannian-trust-region\">Riemann trust-region法</a></td>\n<td>Riemann Hessianまたはそのvector積が得られ、頑健な局所収束が必要</td>\n<td>Riemann Hessianの入手性が悪い、部分問題のコストが支配的</td>\n</tr>\n<tr>\n<td>一般制約として解く選択肢</td>\n<td><a href=\"#/learn/family.constrained-nlp\">制約付きNLPの選び分け</a></td>\n<td>制約が多様体に一致しない、または追加の一般制約が中心</td>\n<td>常時可行性の単純さより、既存の制約付きsolverの使いやすさを優先したいとき</td>\n</tr>\n</tbody>\n</table>\n<p>これは一般性能rankingではありません。同じproblem instance、初期点、勾配の入手経路、tolerance、budgetで比較します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>うまく進んでいるときは、次の観測が揃います。</p>\n<ul>\n<li><p>Riemannian gradient normが一貫して小さくなる</p>\n</li>\n<li><p>retraction後の点が多様体条件（norm、直交性など）からほとんどずれない</p>\n</li>\n<li><p>異なる初期点でも同程度の解へ到達する</p>\n</li>\n<li><p>Riemann trust-regionではactual / predicted reduction比が安定する</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>Riemann gradient検査（有限差分との一致確認）が合わない → 接空間射影の実装を見直す</p>\n</li>\n<li><p>retraction error が反復とともに大きくなる → retractionの定義または数値精度を見直す</p>\n</li>\n<li><p>chartの特異点付近でstepが不安定になる → 別のchartまたはparameterizationを検討する</p>\n</li>\n<li><p>一次法が停滞し続ける → <a href=\"#/learn/riemannian-trust-region\">Riemann trust-region法</a>への切り替えを検討する</p>\n</li>\n<li><p>多様体構造だけでは表現できない制約が増えてきた → <a href=\"#/learn/family.constrained-nlp\">制約付きNLPの選び分け</a>を検討する</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>実装比較では、iteration数だけでなくretraction回数や評価回数も記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">experiment</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-manifold-objective&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;manifold&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;sphere&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_point_seed&quot;</span><span class=\"p\">:</span> <span class=\"mi\">0</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;gradient_source&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;euclidean-gradient-projected&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">500</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;gradient_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">500</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;riemannian_gradient_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-6</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;riemannian-gradient-descent&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;riemannian-trust-region&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">experiment</span><span class=\"p\">[</span><span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<h2 id=\"コラム-なぜ制約が-消える-のか\" tabindex=\"-1\">コラム: なぜ制約が「消える」のか</h2>\n<p>多様体最適化が可行性を単純にする理由は、変数を多様体上の点として直接表現し、更新のたびにretractionで多様体上へ戻すためです。一般制約付き最適化では、反復点が制約境界からはみ出さないように射影やbarrier項、Lagrange乗数を管理する必要がありますが、多様体表現ではその管理が「接空間からの写像」という1つの操作に集約されます。</p>\n<p>ただしこれは制約が消えるわけではなく、制約が幾何構造として暗黙に埋め込まれているということです。多様体の選び方自体を間違えると（例えば本来は固定rankでない行列にrank制約を課すなど）、解けるはずの解が最初から排除されてしまいます。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>一般の滑らかな局所最適化全体を見渡すには<a href=\"#/learn/family.smooth-local\">滑らかな局所最適化の選び分け</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "riemannian-gradient",
+        "riemannian-trust-region",
+        "family.smooth-local"
+      ],
+      "seo_description": "変数の制約が球面、直交行列、固定rank行列、回転群などの多様体構造そのものであるとき、Riemann勾配法とRiemann trust-region法を条件に応じて選び分けるための入口です。",
+      "seo_title": "Riemann多様体最適化の選び分け",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "status": "published",
+      "summary": "変数の制約が球面、直交行列、固定rank行列、回転群などの多様体構造そのものであるとき、Riemann勾配法とRiemann trust-region法を条件に応じて選び分けるための入口です。",
+      "title_en": "Choosing a Riemannian Manifold Method",
+      "title_ja": "Riemann多様体最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-なぜ制約が-消える-のか",
+          "label": "コラム: なぜ制約が「消える」のか",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "MF_MULTI_OBJECTIVE",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -2708,6 +2840,72 @@
         {
           "heading_id": "コラム-hypervolumeは何を測っているのか",
           "label": "コラム: hypervolumeは何を測っているのか",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_OPTIMAL_CONTROL",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.optimal-control",
+      "html": "<p>時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>dynamicsという時間方向の構造を明示的に使い、trajectoryとcontrolを一度に、または段階的に改善すること</strong>です。</p>\n<ul>\n<li><p>見ているもの: dynamics model、state / controlのtrajectory、cost、path / boundary制約</p>\n</li>\n<li><p>動かすもの: control列（と、定式化によってはstate列そのもの）</p>\n</li>\n<li><p>前進の判断: dynamics defectの縮小、costの低下、path制約充足の維持</p>\n</li>\n<li><p>主な弱点: dynamics modelとdiscretizationの誤差、初期軌道の推測への依存、path制約の扱いにくさ</p>\n</li>\n</ul>\n<p>「どの手法が常に優れているか」という順位ではありません。変数として何を持つか、制約をどこで扱うか、real-time性をどこまで必要とするかを交換しています。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>dynamicsの滑らかさ・微分可能性</td>\n<td>線形化やTaylor展開に基づく手法（collocation、iLQR/DDP）を使えるか</td>\n</tr>\n<tr>\n<td>horizonの長さ</td>\n<td>長いほどsingle shootingの感度が爆発しやすく、segment分割やcollocationが有利になりやすい</td>\n</tr>\n<tr>\n<td>path制約の量</td>\n<td>密ならNLPとして明示的に扱うdirect法、少なければRiccati再帰系も候補になる</td>\n</tr>\n<tr>\n<td>リアルタイム性（MPC用途か設計時最適化か）</td>\n<td>MPCではwarm startやfeedback gainが実用上重要になる</td>\n</tr>\n<tr>\n<td>初期軌道の推測が用意できるか</td>\n<td>推測が悪いと、どの手法でもsolverが可行点や良い局所解に届きにくい</td>\n</tr>\n</tbody>\n</table>\n<p>これらの確認は、モデルの品質そのものを保証しません。dynamics modelの妥当性と離散化の粗さは、常に個別に検証が必要です。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>変数が少ないシンプルな出発点</td>\n<td><a href=\"#/learn/direct-shooting\">Direct Shooting</a></td>\n<td>horizonが短くdynamicsが安定、変数数を減らしたい</td>\n<td>rolloutの感度が大きく、gradientが極端になる</td>\n</tr>\n<tr>\n<td>感度爆発を抑えるsegment分割</td>\n<td><a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a></td>\n<td>horizonが中〜長、不安定・非線形dynamics、積分を並列化できる</td>\n<td>continuity制約のdefectが停滞、mesh依存が大きい</td>\n</tr>\n<tr>\n<td>path制約が密な同時最適化</td>\n<td><a href=\"#/learn/direct-collocation\">Direct Collocation</a></td>\n<td>path / boundary制約が多い、疎な構造をsolverに使わせたい</td>\n<td>mesh refinementで解が大きく変わる、meshが粗い</td>\n</tr>\n<tr>\n<td>高速なlocal refinementとfeedback則</td>\n<td><a href=\"#/learn/ilqr-ddp\">iLQR / DDP</a></td>\n<td>dynamicsが滑らか、real-time MPCでfeedback gainが欲しい</td>\n<td>一般path制約が本質、backward passのregularizationで解消しない不安定さ</td>\n</tr>\n</tbody>\n</table>\n<p>これは一般性能rankingではありません。同じdynamics model、horizon、初期軌道、離散化の粗さ、停止条件で比較します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>うまく進んでいるときは、離散化上の指標と実際のsimulationの両方が改善します。</p>\n<ul>\n<li><p>defect_norm（dynamics整合性の残差）が反復とともに縮小する</p>\n</li>\n<li><p>path / boundary制約のconstraint_violationが停止許容値内に収まる</p>\n</li>\n<li><p>segment分割やmeshを変えても解やcostが大きく変わらない</p>\n</li>\n<li><p>forward rolloutが安定し、発散しない</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>defectが反復を重ねても縮小しない → 初期軌道、線形化、regularizationを見直す</p>\n</li>\n<li><p>rolloutが発散する → single shootingからmultiple shootingや別の離散化へ</p>\n</li>\n<li><p>mesh / segment分割を変えると解が大きく変化する → refinementやより疎な定式化を検討する</p>\n</li>\n<li><p>一般path制約の違反が残り続ける → Riccati再帰系からdirect collocationのようなNLP定式化へ</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>比較ではhorizonや初期軌道を揃えず、離散化の粗さだけを変えるといった曖昧な条件にしません。少なくとも次を固定して記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">experiment</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;dynamics_model&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-continuous-time-system&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;horizon_length&quot;</span><span class=\"p\">:</span> <span class=\"mf\">2.0</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_trajectory_guess&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-warm-start&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;discretization_step&quot;</span><span class=\"p\">:</span> <span class=\"mf\">0.05</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;path_constraint_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-6</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;direct-shooting&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;multiple-shooting&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;direct-collocation&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;ilqr-ddp&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">experiment</span><span class=\"p\">[</span><span class=\"s2\">&quot;discretization_step&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<h2 id=\"コラム-離散化が解けたことは連続時間の保証ではない\" tabindex=\"-1\">コラム: 離散化が解けたことは連続時間の保証ではない</h2>\n<p>direct shooting、multiple shooting、direct collocation、iLQR/DDPのいずれも、実際に扱っているのはdynamicsを離散化した近似問題です。solverが「成功」を報告しても、それは離散化されたNLPやLQR部分問題が収束したことを意味するにとどまり、元の連続時間dynamicsを厳密に満たす保証ではありません。</p>\n<p>離散化解を連続時間の解として無条件に扱わないために、得られたcontrolを高精度なsimulationへ通して軌道を再確認し、離散化を細かくしたときに解やcostが安定するかを確認します。mesh依存やstep size依存が大きい場合、その解は離散化のartifactを含んでいる可能性があります。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>変数を減らして単純に始めたい場合は<a href=\"#/learn/direct-shooting\">Direct Shooting</a>、感度爆発を抑えたい場合は<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、path制約を密に扱いたい場合は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>、real-time MPCでfeedback則が欲しい場合は<a href=\"#/learn/ilqr-ddp\">iLQR / DDP</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "direct-shooting",
+        "multiple-shooting",
+        "direct-collocation",
+        "ilqr-ddp"
+      ],
+      "seo_description": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。",
+      "seo_title": "最適制御・軌道最適化の選び分け",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。",
+      "title_en": "Choosing a Trajectory Optimization Method",
+      "title_ja": "最適制御・軌道最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-離散化が解けたことは連続時間の保証ではない",
+          "label": "コラム: 離散化が解けたことは連続時間の保証ではない",
           "level": 2
         },
         {
@@ -3285,6 +3483,72 @@
         {
           "heading_id": "コラム-optimizerではなくresource-allocator",
           "label": "コラム: optimizerではなくresource allocator",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_ILQR_DDP",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "ilqr-ddp",
+      "html": "<p>現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。</p>\n<h2 id=\"backward-passとforward-passで何をしているか\" tabindex=\"-1\">backward passとforward passで何をしているか</h2>\n<p>現在の候補軌道 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mover><mrow><mi>x</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mover><mrow><mi>u</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub></mrow></math> の周りで、dynamics</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>を1次または2次までTaylor展開し、costも2次近似します。backward passでは、終端から時刻を遡りながら価値関数の局所2次modelを更新し、各時刻でLQR部分問題を解いて、</p>\n<ul>\n<li><p>feedforward項 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>k</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p>feedback gain <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>K</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n</ul>\n<p>を求めます。forward passでは、実際のdynamicsに沿って</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>u</mi><mi>k</mi></msub><mo>&#x0003D;</mo><msub><mover><mrow><mi>u</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub><mo>&#x0002B;</mo><mi>&#x003B1;</mi><msub><mi>k</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>K</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><msub><mover><mrow><mi>x</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>でcontrolを計算し、軌道を再simulationします。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B1;</mi></mrow></math>はline searchのstep lengthで、costが改善しない場合は縮小して再試行します。改善した軌道を次の反復の<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mover><mrow><mi>x</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mover><mrow><mi>u</mi></mrow><mo stretchy=\"true\">&#x000AF;</mo></mover><mi>k</mi></msub></mrow></math>として、backward / forward passを繰り返します。</p>\n<h2 id=\"ilqrとddpの違い\" tabindex=\"-1\">iLQRとDDPの違い</h2>\n<p>iLQR（iterative LQR）は、dynamicsのTaylor展開を1次項までとし、2次のdynamics項を無視します。これはGauss-Newton近似に相当し、2階微分（Hessian）の計算を避けられる代わりに、非線形性が強いdynamicsでは価値関数の近似精度が落ちます。</p>\n<p>DDP（differential dynamic programming）は、dynamicsの2次項（stateとcontrolに関するHessian-vector積相当の項）まで価値関数の展開に含めます。これにより局所的な近似精度は上がりますが、2階微分の計算とその評価costが必要になります。どちらも共通してbackward / forward passのRiccati再帰という骨格を持ち、iLQRはDDPの1次近似版として位置づけられます。</p>\n<h2 id=\"direct法-shooting-collocation-との違い\" tabindex=\"-1\">direct法（shooting/collocation）との違い</h2>\n<p><a href=\"#/learn/direct-shooting\">Direct Shooting</a>や<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、<a href=\"#/learn/direct-collocation\">Direct Collocation</a>は、離散化した軌道問題をひとつのNLPとして汎用solver（SQPやinterior-point法）に渡します。これに対しiLQR/DDPは、時間方向の構造を<a href=\"#/learn/dynamic-programming\">動的計画法</a>と同じ発想で使い、horizon全体のNLPを解く代わりに、時刻ごとの小さなLQR部分問題をbackwardに解いていきます。</p>\n<p>この違いから、iLQR/DDPは反復のたびにfeedback gain <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>K</mi><mi>k</mi></msub></mrow></math>が副産物として得られ、real-time MPCでの再planningに使いやすいという利点があります。一方で、一般のpath制約や不等式制約をRiccati再帰へ組み込むのは、direct法がNLP solverの制約処理をそのまま使えるのに比べて弱点になりがちです。多くの実装は無制約または簡単なbox制約までを標準としており、一般制約を厳密に扱いたい場合はdirect collocationのような定式化を検討します。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>dynamicsが滑らかで微分可能（1次または2次の微分が計算できる）</p>\n</li>\n<li><p>高速なlocal trajectory refinementが必要（real-time MPCでの再planningなど）</p>\n</li>\n<li><p>良い初期軌道の推測を用意できる</p>\n</li>\n<li><p>feedback則（<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>K</mi><mi>k</mi></msub></mrow></math>）を制御則としてそのまま使いたい</p>\n</li>\n</ul>\n<p>避ける／切り替える条件:</p>\n<ul>\n<li><p>dynamicsが未同定、または強くstochasticでmodel mismatchが大きい</p>\n</li>\n<li><p>不連続なevent（衝突、切り替えなど）をmeshやhybrid構造で明示していない</p>\n</li>\n<li><p>一般のpath制約や不等式制約が本質的で、Riccati再帰では扱いにくい</p>\n</li>\n<li><p>real-time deadlineに対してbackward / forward passの計算時間が合わない</p>\n</li>\n</ul>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<p>Riccati型のbackward passは2階微分の扱いも含めて実装が細かく、numpy/scipyだけで忠実に再現すると本質を見誤りやすい手法です。ここでは反復の骨格だけを教育用pseudocodeで示します。</p>\n<div class=\"code-block\"><span class=\"code-language\">text</span><pre><code class=\"language-text\">initialize trajectory: xbar[0..N], ubar[0..N-1]\n\nrepeat until cost_change is small or budget exhausted:\n    # backward pass\n    Vx, Vxx = terminal_cost_gradient_hessian(xbar[N])\n    for k = N-1 down to 0:\n        Ak, Bk = linearize_dynamics(xbar[k], ubar[k])\n        lx, lu, lxx, luu, lux = quadratic_cost_expansion(xbar[k], ubar[k])\n        Qx, Qu, Qxx, Quu, Qux = expand_value_function(\n            Ak, Bk, lx, lu, lxx, luu, lux, Vx, Vxx\n        )  # DDP adds second-order dynamics terms here; iLQR omits them\n        Kk, kk = solve_local_lqr(Quu, Qux, Qu)\n        Vx, Vxx = update_value_function(Qx, Qxx, Kk, kk, Qu, Quu, Qux)\n        store(Kk, kk)\n\n    # forward pass with line search on alpha\n    for alpha in candidate_step_lengths:\n        x_new, u_new = rollout(xbar, ubar, K, k, alpha)\n        if cost(x_new, u_new) &lt; cost(xbar, ubar):\n            xbar, ubar = x_new, u_new\n            break</code></pre></div>\n<p>実際の数値実装は<a href=\"https://web.casadi.org/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">CasADi</a>や<a href=\"https://docs.acados.org/\" target=\"_blank\" rel=\"noopener noreferrer\">acados</a>、<a href=\"https://drake.mit.edu/doxygen_cxx/group__solvers.html\" target=\"_blank\" rel=\"noopener noreferrer\">Drake MathematicalProgram</a>などがiLQR/DDP系のsolverや自動微分によるlinearizationを提供しています。利用versionのAPI、regularizationの入れ方、line-search戦略は公式referenceで確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>defect_norm（forward rollout後のdynamics整合性）</p>\n</li>\n<li><p>constraint_violation</p>\n</li>\n<li><p>KKT residual（制約付き変種を使う場合）</p>\n</li>\n<li><p>mesh_error（離散化を変えたときの解の変化）</p>\n</li>\n<li><p>rollout_stability</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>forward passのrolloutが発散し、line searchでcostが改善しない</p>\n</li>\n<li><p>backward passで<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>Q</mi><mrow><mi>u</mi><mi>u</mi></mrow></msub></mrow></math>が正定値でなくなり、regularizationを強めても解消しない</p>\n</li>\n<li><p>反復を重ねてもdefectやcostの変化が停滞する</p>\n</li>\n<li><p>離散化の時間刻みを変えると解やcostが大きく変わる</p>\n</li>\n<li><p>一般path制約の違反が反復後も残り続ける</p>\n</li>\n</ul>\n<p>segment分割で感度を抑える定式化は<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、path制約を密に扱いたい場合は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>、時間構造を使う考え方の原型は<a href=\"#/learn/dynamic-programming\">動的計画法</a>、軌道最適化手法全体の選び分けは<a href=\"#/learn/family.optimal-control\">最適制御・軌道最適化の選び分け</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "multiple-shooting",
+        "direct-collocation",
+        "dynamic-programming",
+        "family.optimal-control"
+      ],
+      "seo_description": "現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。",
+      "seo_title": "iLQR / DDP",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。",
+      "title_en": "Iterative LQR / Differential Dynamic Programming",
+      "title_ja": "iLQR / DDP",
+      "toc": [
+        {
+          "heading_id": "backward-passとforward-passで何をしているか",
+          "label": "backward passとforward passで何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "ilqrとddpの違い",
+          "label": "iLQRとDDPの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "direct法-shooting-collocation-との違い",
+          "label": "direct法（shooting/collocation）との違い",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
           "level": 2
         }
       ],
@@ -4719,6 +4983,69 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "M_PBT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "pbt",
+      "html": "<p>学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。</p>\n<h2 id=\"何を並走させているか\" tabindex=\"-1\">何を並走させているか</h2>\n<p>PBTは複数のworkerを同時に学習させます。各workerは自分のweightとhyperparameterを持ち、一定間隔（stepやepoch）ごとにvalidation metricで成績を評価されます。random searchやHyperbandのように、1つのworkerが最初から最後まで固定のhyperparameterで学習を続けるわけではありません。populationとして並走させ、途中経過を互いに比較しながら学習を進めます。</p>\n<h2 id=\"exploitとexploreが何をしているか\" tabindex=\"-1\">exploitとexploreが何をしているか</h2>\n<p>評価のたびに、成績が悪いworkerは次の2つの操作を受けます。</p>\n<ul>\n<li><p><strong>exploit</strong>: 成績が良いworkerのweight（および必要ならoptimizer state）をコピーする</p>\n</li>\n<li><p><strong>explore</strong>: コピーしたhyperparameterに摂動を加える、またはsearch spaceから再sampleする</p>\n</li>\n</ul>\n<p>学習を中断せずにこの継承と摂動を繰り返すため、1つのworkerの系譜（lineage）は、学習の前半と後半で異なるhyperparameterを経験します。つまりPBTが探索しているのは、固定のhyperparameter setではなく、学習の進行に応じてhyperparameterを変化させる<strong>schedule</strong>です。</p>\n<h2 id=\"通常のhpoと結果の解釈が違う点\" tabindex=\"-1\">通常のHPOと結果の解釈が違う点</h2>\n<p>random searchやHyperbandは、1つのtrialに1つの固定hyperparameter setを割り当て、「このconfigurationがどれだけ良いか」を比較します。PBTの結果はこれとは性質が異なります。最終的に残ったworkerの成績は、ある1つのhyperparameter setの成績ではなく、途中で何度も継承・摂動を経た系譜全体が生んだ結果です。そのため「良いhyperparameterが見つかった」と言うより、「良いhyperparameter scheduleを持つ系譜が見つかった」と解釈するほうが正確です。</p>\n<p>この違いは再現性にも影響します。最終hyperparameterだけを記録しても、そこに至った系譜（いつ、誰から、どのweightとhyperparameterを継承したか）を再現できなければ、同じ結果を再現できません。実務ではpopulation全体の履歴（exploit元、explore後の値、評価時点のmetric）を記録します。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>長時間の学習で、learning rateやregularizationなどのhyperparameterを学習の進行に応じて変化させる価値がある</p>\n</li>\n<li><p>populationを同時に走らせるだけの並列resourceがある</p>\n</li>\n<li><p>validation metricを一定間隔で安価に計算できる</p>\n</li>\n<li><p>workerの間でweightを転用できる（同一architecture）</p>\n</li>\n</ul>\n<p>避ける／切り替える条件:</p>\n<ul>\n<li><p>評価や学習が安価で、大量trialを単純に並列実行できる → <a href=\"#/learn/random-search\">Random Search</a>や<a href=\"#/learn/hyperband-asha\">Hyperband / ASHA</a>で十分な場合</p>\n</li>\n<li><p>populationを同時に走らせる並列resourceがない</p>\n</li>\n<li><p>固定configの比較として単純な再現性・監査性を優先したい</p>\n</li>\n<li><p>weightの継承が意味を持たない設定（architecture自体を探索するなど）</p>\n</li>\n</ul>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">text</span><pre><code class=\"language-text\">population = [make_worker(sample_hyperparameters()) for _ in range(population_size)]\n\nfor step in range(total_steps):\n    for worker in population:\n        worker.train_one_interval()\n\n    if step % eval_interval == 0:\n        scores = {w.id: w.evaluate_validation_metric() for w in population}\n        ranked = rank_workers_by_score(scores)\n\n        for worker in ranked.bottom(fraction=exploit_fraction):\n            source = ranked.sample_from_top(fraction=exploit_fraction)\n            worker.copy_weights_and_state_from(source)\n            worker.hyperparameters = perturb(source.hyperparameters)\n\n        log_lineage(step, ranked, exploit_fraction)\n\nbest_worker = select_best_by_final_validation_metric(population)</code></pre></div>\n<p>継承・摂動・再評価をこの粒度でnumpy/scipyだけで忠実に再現するのは実務の実装（checkpointの保存・restore、分散worker管理）を省略しすぎるため、教育用のpseudocodeにとどめます。実装は<a href=\"https://docs.ray.io/en/latest/tune/index.html\" target=\"_blank\" rel=\"noopener noreferrer\">Ray Tune</a>のPopulationBasedTrainingの公式referenceで、利用versionに対応するAPIとcheckpoint挙動を確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>best-so-far（系譜全体での最良validation metric）</p>\n</li>\n<li><p>population内のhyperparameter分散（多様性が早期に失われていないか）</p>\n</li>\n<li><p>exploit発生頻度と、exploit元・exploit先の系譜記録</p>\n</li>\n<li><p>explore後のhyperparameterが実際に成績を改善したか</p>\n</li>\n<li><p>worker間のidle time・resource利用率</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>populationが早期に同じhyperparameterへ収束し、多様性を失う（population collapse）</p>\n</li>\n<li><p>exploitが頻発しすぎて学習が不安定になる</p>\n</li>\n<li><p>explore時の摂動が大きすぎてweightの継承価値を壊す</p>\n</li>\n<li><p>validation metricがnoiseに支配され、誤ったworkerをexploitしてしまう</p>\n</li>\n<li><p>系譜の記録が不完全で、最終結果を再現できない</p>\n</li>\n</ul>\n<p>途中成績で候補を打ち切りbudgetを再配分する考え方は<a href=\"#/learn/hyperband-asha\">Hyperband / ASHA</a>、何も仮定しないbaselineは<a href=\"#/learn/random-search\">Random Search</a>で確認できます。高価なblack-box評価全体の選び分けは<a href=\"#/learn/family.expensive-black-box\">高価なblack-box・HPOの選び分け</a>にまとめています。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "hyperband-asha",
+        "random-search",
+        "family.expensive-black-box"
+      ],
+      "seo_description": "学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。",
+      "seo_title": "Population Based Training",
+      "source_ids": [
+        "S038",
+        "S069"
+      ],
+      "status": "published",
+      "summary": "学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。",
+      "title_en": "Population-Based Training",
+      "title_ja": "Population Based Training",
+      "toc": [
+        {
+          "heading_id": "何を並走させているか",
+          "label": "何を並走させているか",
+          "level": 2
+        },
+        {
+          "heading_id": "exploitとexploreが何をしているか",
+          "label": "exploitとexploreが何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "通常のhpoと結果の解釈が違う点",
+          "label": "通常のHPOと結果の解釈が違う点",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_PDLP",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -4845,6 +5172,79 @@
         {
           "heading_id": "避ける-切り替える条件",
           "label": "避ける／切り替える条件",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_PRIMAL_DUAL_CONIC",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "primal-dual-conic",
+      "html": "<p>LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。</p>\n<h2 id=\"coneで表現できる凸問題の広さ\" tabindex=\"-1\">Coneで表現できる凸問題の広さ</h2>\n<p><a href=\"#/learn/barrier-lp-qp\">LP/QP専用のbarrier法</a>は非負orthant <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02265;</mo><mn>0</mn></mrow></math> を対象にしますが、primal-dual錐内点法はより一般のconic標準形</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>x</mi></msub><mspace width=\"0.278em\" /><msup><mi>c</mi><mi>T</mi></msup><mi>x</mi><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>A</mi><mi>x</mi><mo>&#x0002B;</mo><mi>s</mi><mo>&#x0003D;</mo><mi>b</mi><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><mtext>&#x000A0;</mtext><mi>s</mi><mo>&#x02208;</mo><mi>K</mi></mrow></math></div>\n<p>を扱います。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi></mrow></math>を非負orthant、second-order cone、positive semidefinite coneなどの組み合わせにすると、次のような一見異なる問題を同じ枠組みで表現できます。</p>\n<ul>\n<li><p>normやrobust制約（second-order cone）</p>\n</li>\n<li><p>行列の固有値やtraceに関する制約（semidefinite cone）</p>\n</li>\n<li><p>LP・凸QP（非負orthantとその上の二次項）</p>\n</li>\n</ul>\n<p>「凸性を持つ問題をどこまでconeとして書けるか」というmodeling上の表現力が、この手法群の中心的な価値です。</p>\n<h2 id=\"primal-dual-kkt系を同時に更新する仕組み\" tabindex=\"-1\">Primal-dual KKT系を同時に更新する仕組み</h2>\n<p>各反復では、primal変数<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>、dual変数<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi></mrow></math>、slack変数<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math>を同時に更新するNewton方程式を、barrier parameterを下げながら解きます。<a href=\"#/learn/barrier-lp-qp\">LP/QP barrier法</a>と同じく中心pathに沿って進みますが、complementarity条件がcone <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi></mrow></math>上のbarrier関数（対数障壁の一般化）に応じた形になる点が異なります。反復ごとにprimal feasibility residual、dual feasibility residual、duality gapが得られるため、停止判定や精度の確認がしやすいことが特徴です。</p>\n<h2 id=\"self-dual-embeddingとinfeasibility証明\" tabindex=\"-1\">Self-dual embeddingとinfeasibility証明</h2>\n<p>conic solverの多くは、self-dual embeddingという技法で元の問題を拡張した自己双対問題に埋め込みます。この embeddingを解くと、元の問題がinfeasibleかunboundedかを目的値だけに頼らず、certificateとして得られる場合があります。これは「解が見つからなかった」ことと「問題自体に解が存在しない」ことを区別したい場面で重要です。</p>\n<h2 id=\"modeling層とsolver層を分ける\" tabindex=\"-1\">Modeling層とsolver層を分ける</h2>\n<p>実務では、CVXPY（<a href=\"https://www.cvxpy.org/\" target=\"_blank\" rel=\"noopener noreferrer\">S010</a>）のようなmodeling層が、norm、固有値、robust制約などを人が読みやすい形式で受け取り、conic標準形へ変換（canonicalization）してからsolver層へ渡します。solver層にはClarabel、SCS、MOSEKなど複数の実装があり、</p>\n<ul>\n<li><p>得意とするcone（LP・QPのみか、semidefiniteまで扱うか）</p>\n</li>\n<li><p>収束の速さと精度のtrade-off</p>\n</li>\n<li><p>warm startやsparsity対応の有無</p>\n</li>\n</ul>\n<p>が異なります。modeling層とsolver層は役割が別であり、どちらのversionを使ったかを区別して記録する必要があります。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<table>\n<thead>\n<tr>\n<th>条件</th>\n<th>理由</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>norm・固有値・robust制約などconic標準形で表現できる</td>\n<td>この手法の適用範囲がconeの表現力に依存するため</td>\n</tr>\n<tr>\n<td>primal/dual・duality gap・infeasibility certificateが重要</td>\n<td>primal-dual KKT系を同時に解くことでこれらが得られるため</td>\n</tr>\n<tr>\n<td>modeling層で問題を組み、backend solverへ任せたい</td>\n<td>CVXPY等がcanonicalizationとsolver呼び出しを分離しているため</td>\n</tr>\n<tr>\n<td>高精度な解や証明が必要</td>\n<td>barrier型内点法は反復ごとにfeasibilityとgapを追えるため</td>\n</tr>\n</tbody>\n</table>\n<p>modeling層に収まらない非凸な制約や、black-boxな評価しかできない目的関数には向きません。そうした場合は非線形内点法や大域探索を検討します。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<p>conic内点法はCVXPYやClarabelなどの専用実装が担うため、numpyでKKT系を忠実に再現するのは無理があります。ここではmodelingからsolveまでの流れを教育用pseudocodeで示します。</p>\n<div class=\"code-block\"><span class=\"code-language\">text</span><pre><code class=\"language-text\"># 1. modeling層: 人が読みやすい形式で問題を書く\nminimize     c^T x\nsubject to   ||A x - b||_2 &lt;= t        # second-order cone制約\n             X &gt;&gt; 0                     # semidefinite制約（該当する場合）\n             linear equality/inequality\n\n# 2. modeling層がconic標準形へ変換する（canonicalization）\nminimize     c&#39;^T x&#39;\nsubject to   A&#39; x&#39; + s = b&#39;\n             s in K = K_1 x K_2 x ... （non-negative, second-order, semidefiniteの直積）\n\n# 3. solver層（例: Clarabel, SCS, MOSEK）がprimal-dual内点法を実行する\nfor mu in decreasing_sequence:\n    solve Newton system for (x, y, s) at barrier parameter mu\n    check primal_residual, dual_residual, duality_gap\n    if converged or infeasibility_certificate_found:\n        break\n\n# 4. modeling層が solver層の結果を元の変数へ戻す</code></pre></div>\n<p>実装は<a href=\"https://www.cvxpy.org/\" target=\"_blank\" rel=\"noopener noreferrer\">CVXPYの公式ドキュメント</a>でconic標準形への変換方法を、solverの反復挙動やoptionは<a href=\"https://clarabel.org/stable/\" target=\"_blank\" rel=\"noopener noreferrer\">Clarabelの公式ドキュメント</a>で確認します。利用versionによってdefault parameterやbackendの対応coneが異なるため、必ず該当versionのreferenceを参照します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>primal feasibility residual</p>\n</li>\n<li><p>dual feasibility residual</p>\n</li>\n<li><p>duality gap（absolute / relative）</p>\n</li>\n<li><p>barrier parameter</p>\n</li>\n<li><p>complementarity</p>\n</li>\n<li><p>infeasibility certificateの有無</p>\n</li>\n<li><p>iteration数とNewton system solveのcondition</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>barrier parameterを下げてもduality gapが縮まらない</p>\n</li>\n<li><p>infeasible/unboundedの証明が返るのに目的値だけで成功と誤判定する</p>\n</li>\n<li><p>coneの選び方が問題の凸構造を正しく表現できていない</p>\n</li>\n<li><p>係数のscaleが極端でNewton system solveにnumerical warningが出る</p>\n</li>\n<li><p>modeling層のcanonicalizationがsolverの対応coneと合わない</p>\n</li>\n</ul>\n<p>LP/QP専用のbarrier法との対比は<a href=\"#/learn/barrier-lp-qp\">Primal-dual barrier法（LP/QP）</a>、conic問題を含むLP・QP・conic全体の位置付けは<a href=\"#/learn/lp-qp-conic\">LP・QP・錐最適化</a>、非線形制約への一般化は<a href=\"#/learn/interior-point-nlp\">非線形内点法</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [
+        "concept.convexity"
+      ],
+      "related_ids": [
+        "barrier-lp-qp",
+        "lp-qp-conic",
+        "interior-point-nlp"
+      ],
+      "seo_description": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。",
+      "seo_title": "Primal-dual錐内点法",
+      "source_ids": [
+        "S013",
+        "S014",
+        "S028",
+        "S010",
+        "S055"
+      ],
+      "status": "published",
+      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。",
+      "title_en": "Primal-Dual Conic Interior-Point",
+      "title_ja": "Primal-dual錐内点法",
+      "toc": [
+        {
+          "heading_id": "coneで表現できる凸問題の広さ",
+          "label": "Coneで表現できる凸問題の広さ",
+          "level": 2
+        },
+        {
+          "heading_id": "primal-dual-kkt系を同時に更新する仕組み",
+          "label": "Primal-dual KKT系を同時に更新する仕組み",
+          "level": 2
+        },
+        {
+          "heading_id": "self-dual-embeddingとinfeasibility証明",
+          "label": "Self-dual embeddingとinfeasibility証明",
+          "level": 2
+        },
+        {
+          "heading_id": "modeling層とsolver層を分ける",
+          "label": "Modeling層とsolver層を分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
           "level": 2
         }
       ],
@@ -5084,6 +5484,142 @@
         {
           "heading_id": "並列性と履歴を使わないことの意味",
           "label": "並列性と履歴を使わないことの意味",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_RIEMANNIAN_GRADIENT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "riemannian-gradient",
+      "html": "<p>変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。</p>\n<h2 id=\"何を-制約-とみなさないか\" tabindex=\"-1\">何を「制約」とみなさないか</h2>\n<p>球面上のベクトル、正規直交な行列、固定rankの行列などは、不等式や等式制約の集合としても表現できます。しかしRiemann勾配法は、それらを制約付き問題としてではなく、解空間そのものが持つ幾何構造（多様体）として扱います。球面上の点は常に「半径1の球面上」にあり、正規直交行列は常に「直交行列の集合上」にあります。この見方に立つと、探索の各stepは多様体の外へ出ることがなく、制約違反という概念自体が消えます。</p>\n<h2 id=\"3つの操作で進む仕組み\" tabindex=\"-1\">3つの操作で進む仕組み</h2>\n<p>Riemann勾配法の1 stepは、次の3つの操作でできています。</p>\n<ol>\n<li><p>通常のEuclid勾配 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を計算する</p>\n</li>\n<li><p>それを現在点における接空間へ射影し、Riemann勾配を作る</p>\n</li>\n<li><p>接空間上でstepを取り、retractionという操作で多様体上の点に戻す</p>\n</li>\n</ol>\n<p>接空間は、現在点で多様体を局所的に近似する平坦な空間です。Euclid勾配をそのまま使うと接空間からはみ出す成分が混ざるため、射影して多様体に沿う成分だけを残します。retractionは、接空間上の移動先を多様体上の近い点へ写す操作で、球面なら「移動後にnormで割って半径1へ戻す」という単純な形を取れることもあります。</p>\n<h2 id=\"定番例としてのrayleigh商最小化\" tabindex=\"-1\">定番例としてのRayleigh商最小化</h2>\n<p>対称行列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi></mrow></math> に対して、単位球面 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mo>&#x0003D;</mo><mn>1</mn></mrow></math> 上で</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msup><mi>x</mi><mrow><mo>&#x022A4;</mo></mrow></msup><mi>A</mi><mi>x</mi></mrow></math></div>\n<p>を最小化する問題は、Riemann勾配法の定番の教材です。この問題の解は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi></mrow></math> の最小固有値に対応する固有ベクトルであり、制約なしの固有値問題として知られています。球面という単純な多様体の上で、勾配射影とretractionの動きを直接確認できるため、より複雑なStiefel多様体やGrassmann多様体、SO(3)へ進む前の足がかりになります。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<table>\n<thead>\n<tr>\n<th>条件</th>\n<th>理由</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>変数が既知の多様体構造を持つ（球面、直交行列、固定rank行列、回転群など）</td>\n<td>接空間射影とretractionが定義できるため</td>\n</tr>\n<tr>\n<td>常に可行な点だけを維持したい</td>\n<td>多様体上に留まる限り制約違反が起こらないため</td>\n</tr>\n<tr>\n<td>Euclid勾配または対応する勾配情報が得られる</td>\n<td>接空間への射影の元になるため</td>\n</tr>\n<tr>\n<td>座標の冗長性を減らしたい</td>\n<td>多様体表現がparameterの余分な自由度を除くため</td>\n</tr>\n</tbody>\n</table>\n<p>一般の不等式・等式制約が主体で、変数が既知の多様体に一致しない場合は、<a href=\"#/learn/family.constrained-nlp\">制約付きNLPの選び分け</a>のほうが素直な入口です。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">rayleigh</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">a</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">@</span> <span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">x</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">egrad</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">a</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"n\">a</span> <span class=\"o\">@</span> <span class=\"n\">x</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">tangent_projection</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">,</span> <span class=\"n\">v</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">v</span> <span class=\"o\">-</span> <span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">@</span> <span class=\"n\">v</span><span class=\"p\">)</span> <span class=\"o\">*</span> <span class=\"n\">x</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">retract</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"n\">x</span> <span class=\"o\">/</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">rng</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">random</span><span class=\"o\">.</span><span class=\"n\">default_rng</span><span class=\"p\">(</span><span class=\"mi\">0</span><span class=\"p\">)</span>\n<span class=\"n\">n</span> <span class=\"o\">=</span> <span class=\"mi\">6</span>\n<span class=\"n\">m</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"p\">(</span><span class=\"n\">n</span><span class=\"p\">,</span> <span class=\"n\">n</span><span class=\"p\">))</span>\n<span class=\"n\">a</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"n\">m</span> <span class=\"o\">+</span> <span class=\"n\">m</span><span class=\"o\">.</span><span class=\"n\">T</span><span class=\"p\">)</span> <span class=\"o\">/</span> <span class=\"mf\">2.0</span>\n\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">rng</span><span class=\"o\">.</span><span class=\"n\">normal</span><span class=\"p\">(</span><span class=\"n\">size</span><span class=\"o\">=</span><span class=\"n\">n</span><span class=\"p\">)</span>\n<span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">retract</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">)</span>\n\n<span class=\"n\">step_size</span> <span class=\"o\">=</span> <span class=\"mf\">0.05</span>\n<span class=\"k\">for</span> <span class=\"n\">_</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"mi\">500</span><span class=\"p\">):</span>\n    <span class=\"n\">grad_euclid</span> <span class=\"o\">=</span> <span class=\"n\">egrad</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">a</span><span class=\"p\">)</span>\n    <span class=\"n\">grad_riemann</span> <span class=\"o\">=</span> <span class=\"n\">tangent_projection</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">grad_euclid</span><span class=\"p\">)</span>\n    <span class=\"n\">x</span> <span class=\"o\">=</span> <span class=\"n\">retract</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">step_size</span> <span class=\"o\">*</span> <span class=\"n\">grad_riemann</span><span class=\"p\">)</span>\n\n<span class=\"n\">eigvals</span><span class=\"p\">,</span> <span class=\"n\">eigvecs</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">eigh</span><span class=\"p\">(</span><span class=\"n\">a</span><span class=\"p\">)</span>\n<span class=\"n\">min_eigval</span> <span class=\"o\">=</span> <span class=\"n\">eigvals</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span>\n<span class=\"n\">min_eigvec</span> <span class=\"o\">=</span> <span class=\"n\">eigvecs</span><span class=\"p\">[:,</span> <span class=\"mi\">0</span><span class=\"p\">]</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">rayleigh</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">a</span><span class=\"p\">),</span> <span class=\"n\">min_eigval</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"nb\">min</span><span class=\"p\">(</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"n\">min_eigvec</span><span class=\"p\">),</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">linalg</span><span class=\"o\">.</span><span class=\"n\">norm</span><span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">+</span> <span class=\"n\">min_eigvec</span><span class=\"p\">)))</span></code></pre></div>\n<p><code>rayleigh(x, a)</code>は<code>np.linalg.eigh</code>から得た最小固有値へ近づき、<code>x</code>は符号の自由度を除いて最小固有ベクトルへ近づきます。より一般の多様体（Stiefel、Grassmann、SO(3)など）を扱う場合は、接空間射影とretractionの実装を自作するよりも<a href=\"https://pymanopt.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Pymanopt</a>や<a href=\"https://www.manopt.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Manopt</a>の公式referenceで利用versionに対応する多様体クラスを確認するほうが安全です。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>Riemannian gradient norm</p>\n</li>\n<li><p>retraction error（retraction後に多様体制約からどれだけずれるか）</p>\n</li>\n<li><p>orthogonality error（直交系多様体の場合）</p>\n</li>\n<li><p>objective change</p>\n</li>\n<li><p>step norm</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>勾配射影が接空間の定義と一致しているかの検算が合わない</p>\n</li>\n<li><p>retraction後の点が多様体条件（norm、直交性など）から外れていく</p>\n</li>\n<li><p>chart依存の特異点付近でstepが不安定になる</p>\n</li>\n<li><p>初期点によって収束先が大きく変わる</p>\n</li>\n<li><p>停滞から抜け出せず高精度化が必要になる</p>\n</li>\n</ul>\n<p>より頑健な局所収束や鞍点脱出が必要な場合は<a href=\"#/learn/riemannian-trust-region\">Riemann trust-region法</a>、多様体手法全体の選び分けは<a href=\"#/learn/family.manifold\">Riemann多様体最適化の選び分け</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [
+        "method.gradient-descent"
+      ],
+      "related_ids": [
+        "riemannian-trust-region",
+        "family.manifold",
+        "family.smooth-local"
+      ],
+      "seo_description": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。",
+      "seo_title": "Riemann勾配法",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "status": "published",
+      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。",
+      "title_en": "Riemannian Gradient Descent",
+      "title_ja": "Riemann勾配法",
+      "toc": [
+        {
+          "heading_id": "何を-制約-とみなさないか",
+          "label": "何を「制約」とみなさないか",
+          "level": 2
+        },
+        {
+          "heading_id": "3つの操作で進む仕組み",
+          "label": "3つの操作で進む仕組み",
+          "level": 2
+        },
+        {
+          "heading_id": "定番例としてのrayleigh商最小化",
+          "label": "定番例としてのRayleigh商最小化",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_RIEMANNIAN_TRUST_REGION",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "riemannian-trust-region",
+      "html": "<p>接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。</p>\n<h2 id=\"euclid版trust-regionとの対応\" tabindex=\"-1\">Euclid版trust-regionとの対応</h2>\n<p><a href=\"#/learn/trust-region-newton-cg\">Trust-region Newton-CG</a>は、現在点まわりの二次modelをEuclid空間上のtrust radius <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math> の内側だけで信用し、truncated CGで近似解を求めます。Riemann trust-region法はこの考え方を多様体上へそのまま持ち込みます。二次modelを作る場となる空間が、Euclid空間ではなく現在点の接空間に置き換わる点だけが違います。接空間は局所的に平坦なので、Euclid版の部分問題の解法や採用判定の枠組みをほぼそのまま流用できます。</p>\n<h2 id=\"接空間上で何を解いているか\" tabindex=\"-1\">接空間上で何を解いているか</h2>\n<p>各stepでは、Riemann勾配とRiemann Hessian（接空間上の二次形式）を使って部分問題</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>p</mi><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mo>&#x02264;</mo><msub><mi>&#x00394;</mi><mi>k</mi></msub><mo>&#x0002C;</mo><mspace width=\"0.167em\" /><mi>p</mi><mo>&#x02208;</mo><msub><mi>T</mi><mi>x</mi></msub><mi>M</mi></mrow></msub><mspace width=\"0.278em\" /><msub><mi>m</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>p</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>をtruncated CGで近似的に解きます。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>T</mi><mi>x</mi></msub><mi>M</mi></mrow></math> は現在点<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>における接空間です。得られた候補stepをretractionで多様体上の点へ写し、実際の目的値の改善と modelが予測した改善の比 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>k</mi></msub></mrow></math> を見て採用・棄却とtrust radiusの更新を判断します。この流れはEuclid版trust-regionの判定ロジックと同じで、幾何の分だけ「二次modelを作る場所」と「stepを多様体へ戻す操作」が追加されています。</p>\n<h2 id=\"riemann-hessianの入手性という課題\" tabindex=\"-1\">Riemann Hessianの入手性という課題</h2>\n<p>Riemann Hessianは、Euclid Hessianを接空間へ射影し、さらに多様体の曲率に由来する補正項を加えて得られます。この補正項は多様体ごとに異なる幾何量で、Euclid Hessianをそのまま接空間へ落とすだけでは正しいRiemann Hessian-vector積になりません。多くの実務ではこの計算を手で導出せず、Pymanopt（S044）やManopt（S045）が提供する自動微分ベースのRiemann Hessian近似を利用します。</p>\n<h2 id=\"一次法から乗り換える理由\" tabindex=\"-1\">一次法から乗り換える理由</h2>\n<p><a href=\"#/learn/riemannian-gradient\">Riemann勾配法</a>は実装が単純で初期の収束が速いことがありますが、局所解付近での収束が遅くなったり、鞍点付近で長く停滞したりすることがあります。Riemann trust-region法は二次情報を使うため、良い近傍では収束が速く、また負の曲率方向を検出しやすいという性質から、鞍点からの脱出にも使われます。一次法で目的値の減少が長時間止まったときに、高精度化の手段として検討する位置づけです。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>変数が既知の多様体構造を持つ（球面、Stiefel、Grassmann、SO(3)など）</p>\n</li>\n<li><p>Riemann勾配に加えてRiemann Hessianまたはそのvector積が利用できる</p>\n</li>\n<li><p>Riemann勾配法が停滞し、局所解近傍での高精度化や鞍点脱出が必要</p>\n</li>\n<li><p>多様体上での頑健な大域化（trust radiusによる棄却）を使いたい</p>\n</li>\n</ul>\n<p>Hessian情報が得られない、または多様体構造自体が本質でない場合は、<a href=\"#/learn/riemannian-gradient\">Riemann勾配法</a>や<a href=\"#/learn/family.manifold\">Riemann多様体最適化の選び分け</a>から検討します。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<p>多様体上のRiemann Hessianとtruncated CGを自作でnumpy/scipyだけで忠実に再現するのは無理があるため、ここでは教育用のpseudocodeで流れだけを示します。</p>\n<div class=\"code-block\"><span class=\"code-language\">text</span><pre><code class=\"language-text\">initialize x on manifold M, trust_radius Delta\nloop until stopping criterion:\n    grad = riemannian_gradient(x)          # tangent-space gradient at x\n    if norm(grad) &lt; grad_tolerance:\n        break\n    # truncated CG on the tangent-space quadratic model\n    p = truncated_cg_subproblem(\n        gradient=grad,\n        hessian_vector_product=riemannian_hvp_at(x),\n        trust_radius=Delta,\n    )\n    x_trial = retract(x, p)\n    rho = (cost(x) - cost(x_trial)) / model_reduction(p)\n    if rho &gt; accept_threshold:\n        x = x_trial\n    Delta = update_trust_radius(Delta, rho)</code></pre></div>\n<p><code>riemannian_gradient</code>、<code>riemannian_hvp_at</code>、<code>retract</code>は多様体ごとに異なる幾何演算です。実装は自作せず、<a href=\"https://pymanopt.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Pymanopt</a>の公式referenceでtrust-region solverの利用versionに対応する説明を確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>Riemannian gradient norm</p>\n</li>\n<li><p>trust radius <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p>actual / predicted reduction ratio <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>k</mi></msub></mrow></math></p>\n</li>\n<li><p>inner truncated CG iteration数</p>\n</li>\n<li><p>retraction error</p>\n</li>\n<li><p>accepted / rejected step数</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>Riemann gradient検査（有限差分との一致確認）が合わない</p>\n</li>\n<li><p>retraction後に多様体制約からのずれが大きい</p>\n</li>\n<li><p>chart依存の特異点付近でstepの挙動が不安定になる</p>\n</li>\n<li><p>trust radiusが縮み続け候補stepがほぼ採用されない</p>\n</li>\n<li><p>Riemann Hessian近似の質がsolverによって大きく違う</p>\n</li>\n</ul>\n<p>一次法から始めたいときは<a href=\"#/learn/riemannian-gradient\">Riemann勾配法</a>、多様体手法全体の選び分けは<a href=\"#/learn/family.manifold\">Riemann多様体最適化の選び分け</a>を確認します。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "riemannian-gradient",
+        "trust-region-newton-cg",
+        "family.manifold",
+        "family.trust-region"
+      ],
+      "seo_description": "接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。",
+      "seo_title": "Riemann trust-region法",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "status": "published",
+      "summary": "接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。",
+      "title_en": "Riemannian Trust-Region",
+      "title_ja": "Riemann trust-region法",
+      "toc": [
+        {
+          "heading_id": "euclid版trust-regionとの対応",
+          "label": "Euclid版trust-regionとの対応",
+          "level": 2
+        },
+        {
+          "heading_id": "接空間上で何を解いているか",
+          "label": "接空間上で何を解いているか",
+          "level": 2
+        },
+        {
+          "heading_id": "riemann-hessianの入手性という課題",
+          "label": "Riemann Hessianの入手性という課題",
+          "level": 2
+        },
+        {
+          "heading_id": "一次法から乗り換える理由",
+          "label": "一次法から乗り換える理由",
           "level": 2
         },
         {
@@ -5437,6 +5973,75 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "M_SPATIAL_BRANCH_BOUND",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "spatial-branch-and-bound",
+      "html": "<p>非凸MINLPの大域最適化のため、整数変数だけでなく連続変数の区間でも分岐し、各領域で凸緩和から下界を作りながら木を刈り込む厳密探索法です。</p>\n<h2 id=\"何を分岐しているか\" tabindex=\"-1\">何を分岐しているか</h2>\n<p><a href=\"#/learn/branch-and-bound\">整数B&amp;B</a>は、整数変数の値を固定・分割することでnodeを作ります。空間branch-and-boundはこれに加えて、非凸な非線形項を含む連続変数の<strong>区間</strong>でも分岐します。たとえば非凸項 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mi>y</mi></mrow></math>（双線形項）を含む問題では、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>の区間を<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><msub><mi>x</mi><mi>L</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>U</mi></msub><mo stretchy=\"false\">]</mo></mrow></math>から<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><msub><mi>x</mi><mi>L</mi></msub><mo>&#x0002C;</mo><mi>m</mi><mo stretchy=\"false\">]</mo></mrow></math>と<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><mi>m</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>U</mi></msub><mo stretchy=\"false\">]</mo></mrow></math>に分割し、それぞれの部分区間で問題を扱います。分岐対象が「整数の値」ではなく「連続変数の存在範囲」であることが、空間branch-and-boundという名前の由来です。</p>\n<h2 id=\"各領域で下界をどう作るか\" tabindex=\"-1\">各領域で下界をどう作るか</h2>\n<p>分岐で得られた各区間では、非凸な非線形項をconvex relaxationに置き換えて下界を計算します。代表的な考え方がMcCormick包絡で、双線形項 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mi>y</mi></mrow></math> を区間<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><msub><mi>x</mi><mi>L</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>U</mi></msub><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><msub><mi>y</mi><mi>L</mi></msub><mo>&#x0002C;</mo><msub><mi>y</mi><mi>U</mi></msub><mo stretchy=\"false\">]</mo></mrow></math>上で凸・凹な線形不等式の組で挟み、線形または凸な緩和問題に置き換えます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>w</mi><mo>&#x02265;</mo><msub><mi>x</mi><mi>L</mi></msub><mi>y</mi><mo>&#x0002B;</mo><mi>x</mi><msub><mi>y</mi><mi>L</mi></msub><mo>&#x02212;</mo><msub><mi>x</mi><mi>L</mi></msub><msub><mi>y</mi><mi>L</mi></msub><mo>&#x0002C;</mo><mspace width=\"2em\" /><mi>w</mi><mo>&#x02265;</mo><msub><mi>x</mi><mi>U</mi></msub><mi>y</mi><mo>&#x0002B;</mo><mi>x</mi><msub><mi>y</mi><mi>U</mi></msub><mo>&#x02212;</mo><msub><mi>x</mi><mi>U</mi></msub><msub><mi>y</mi><mi>U</mi></msub></mrow></math></div>\n<p>のような不等式で<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x02248;</mo><mi>x</mi><mi>y</mi></mrow></math>を近似すると、region上の緩和問題（LPまたは凸QP）を解くだけで、元の非凸問題の下界が得られます。区間が狭いほどこの緩和はきつくなり、下界と実行可能解（incumbent）の差（gap）が小さくなります。</p>\n<h2 id=\"整数b-bとの対比とbound-gapによる大域性の証明\" tabindex=\"-1\">整数B&amp;Bとの対比とbound gapによる大域性の証明</h2>\n<p>整数B&amp;Bは離散変数の値を固定していくため、最終的に整数割当が尽きれば探索が完了します。空間branch-and-boundは連続区間を扱うため、区間をどこまでも細分できてしまい、有限回で「尽きる」とは限りません。そのため、大域最適性は「探索を終えた」ことではなく、</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>global&#x000A0;bound</mtext><mo>&#x02264;</mo><mtext>incumbent</mtext><mo>&#x02264;</mo><mtext>global&#x000A0;bound</mtext><mo>&#x0002B;</mo><mtext>gap&#x000A0;tolerance</mtext></mrow></math></div>\n<p>という<strong>bound gapが許容範囲に収まったこと</strong>で証明します。緩和が緩ければ下界が悪化し、逆に緩和がきつければ計算costが増えるという trade-off があり、区間を狭めるほど緩和の質は上がりますが、木のnode数も増えます。</p>\n<h2 id=\"木が爆発する限界\" tabindex=\"-1\">木が爆発する限界</h2>\n<p>McCormick包絡などの緩和は、変数次元が増えるほど、また非凸性が強い（非線形項が多い、非単調な関数を含む）ほど緩みやすくなります。緩和が緩いと、ある区間の下界がincumbentを超えられず枝刈りできないため、さらに細かく分岐する必要が生まれます。この結果、次元数や非凸項の数に対して木が指数的に増える場合があります。実務では<a href=\"https://www.scipopt.org/doc/html/\" target=\"_blank\" rel=\"noopener noreferrer\">SCIP</a>のようなオープンソースsolverや、<a href=\"https://docs.gurobi.com/projects/optimizer/en/current/\" target=\"_blank\" rel=\"noopener noreferrer\">Gurobi</a>、<a href=\"https://www.ibm.com/docs/en/icos\" target=\"_blank\" rel=\"noopener noreferrer\">CPLEX</a>などの商用solverが、変数選択・区間分割の戦略、cut、presolveを組み合わせて木の増大を抑えています。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>非凸MINLPで大域最適性の証明（gap付きのcertificate）が必要</p>\n</li>\n<li><p>非線形項がMcCormick包絡などの凸緩和で扱える構造を持つ</p>\n</li>\n<li><p>変数次元や非凸項の数が、solverが現実的な時間で扱える範囲に収まる</p>\n</li>\n<li><p>black-boxではなく、緩和に使える関数の代数的な形が分かっている</p>\n</li>\n</ul>\n<p>noiseを含むblack-box評価しかできない問題や、緩和のしようがない極端な非凸性を持つ問題では、gapを閉じるまでの木が非現実的に大きくなることがあります。そうした場合はheuristicや<a href=\"#/learn/outer-approximation-minlp\">Outer Approximation</a>（対象がconvex MINLPの場合）を検討します。</p>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<p>次は1変数の非凸関数に対する区間分割branch-and-boundの教育用ループです。各区間の下界を「区間端点での関数値の最小値」という単純な近似で代用しています。実際のMcCormick包絡のような凸下界ではありませんが、「区間を分割し、下界でincumbentを超えられない区間を刈る」という骨格を示します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">dataclasses</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">dataclass</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">nonconvex_objective</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"o\">**</span><span class=\"mi\">2</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">+</span> <span class=\"mf\">0.5</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">interval_lower_bound</span><span class=\"p\">(</span><span class=\"n\">lower</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">,</span> <span class=\"n\">upper</span><span class=\"p\">:</span> <span class=\"nb\">float</span><span class=\"p\">,</span> <span class=\"n\">n_probe</span><span class=\"p\">:</span> <span class=\"nb\">int</span> <span class=\"o\">=</span> <span class=\"mi\">5</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"c1\"># 区間内をprobeして最小値を下界の代用とする教育用の簡略化。</span>\n    <span class=\"c1\"># 実務ではMcCormick包絡など凸緩和で真の下界を作る。</span>\n    <span class=\"n\">step</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"n\">upper</span> <span class=\"o\">-</span> <span class=\"n\">lower</span><span class=\"p\">)</span> <span class=\"o\">/</span> <span class=\"p\">(</span><span class=\"n\">n_probe</span> <span class=\"o\">-</span> <span class=\"mi\">1</span><span class=\"p\">)</span> <span class=\"k\">if</span> <span class=\"n\">n_probe</span> <span class=\"o\">&gt;</span> <span class=\"mi\">1</span> <span class=\"k\">else</span> <span class=\"mf\">0.0</span>\n    <span class=\"n\">values</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"n\">nonconvex_objective</span><span class=\"p\">(</span><span class=\"n\">lower</span> <span class=\"o\">+</span> <span class=\"n\">i</span> <span class=\"o\">*</span> <span class=\"n\">step</span><span class=\"p\">)</span> <span class=\"k\">for</span> <span class=\"n\">i</span> <span class=\"ow\">in</span> <span class=\"nb\">range</span><span class=\"p\">(</span><span class=\"n\">n_probe</span><span class=\"p\">)]</span>\n    <span class=\"k\">return</span> <span class=\"nb\">min</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">)</span>\n\n\n<span class=\"nd\">@dataclass</span>\n<span class=\"k\">class</span><span class=\"w\"> </span><span class=\"nc\">Region</span><span class=\"p\">:</span>\n    <span class=\"n\">lower</span><span class=\"p\">:</span> <span class=\"nb\">float</span>\n    <span class=\"n\">upper</span><span class=\"p\">:</span> <span class=\"nb\">float</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">spatial_branch_and_bound</span><span class=\"p\">(</span>\n    <span class=\"n\">domain</span><span class=\"p\">:</span> <span class=\"n\">Region</span><span class=\"p\">,</span> <span class=\"n\">tol</span><span class=\"p\">:</span> <span class=\"nb\">float</span> <span class=\"o\">=</span> <span class=\"mf\">1e-3</span><span class=\"p\">,</span> <span class=\"n\">max_nodes</span><span class=\"p\">:</span> <span class=\"nb\">int</span> <span class=\"o\">=</span> <span class=\"mi\">200</span>\n<span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">tuple</span><span class=\"p\">[</span><span class=\"nb\">float</span><span class=\"p\">,</span> <span class=\"nb\">float</span><span class=\"p\">]:</span>\n    <span class=\"n\">pending</span> <span class=\"o\">=</span> <span class=\"p\">[</span><span class=\"n\">domain</span><span class=\"p\">]</span>\n    <span class=\"n\">best_value</span> <span class=\"o\">=</span> <span class=\"n\">nonconvex_objective</span><span class=\"p\">(</span><span class=\"n\">domain</span><span class=\"o\">.</span><span class=\"n\">lower</span><span class=\"p\">)</span>\n    <span class=\"n\">nodes_explored</span> <span class=\"o\">=</span> <span class=\"mi\">0</span>\n\n    <span class=\"k\">while</span> <span class=\"n\">pending</span> <span class=\"ow\">and</span> <span class=\"n\">nodes_explored</span> <span class=\"o\">&lt;</span> <span class=\"n\">max_nodes</span><span class=\"p\">:</span>\n        <span class=\"n\">region</span> <span class=\"o\">=</span> <span class=\"n\">pending</span><span class=\"o\">.</span><span class=\"n\">pop</span><span class=\"p\">()</span>\n        <span class=\"n\">nodes_explored</span> <span class=\"o\">+=</span> <span class=\"mi\">1</span>\n        <span class=\"n\">bound</span> <span class=\"o\">=</span> <span class=\"n\">interval_lower_bound</span><span class=\"p\">(</span><span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">lower</span><span class=\"p\">,</span> <span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">upper</span><span class=\"p\">)</span>\n\n        <span class=\"k\">if</span> <span class=\"n\">bound</span> <span class=\"o\">&gt;=</span> <span class=\"n\">best_value</span> <span class=\"o\">-</span> <span class=\"n\">tol</span><span class=\"p\">:</span>\n            <span class=\"k\">continue</span>  <span class=\"c1\"># この区間はincumbentを改善できないため枝刈り</span>\n\n        <span class=\"n\">midpoint</span> <span class=\"o\">=</span> <span class=\"mf\">0.5</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">lower</span> <span class=\"o\">+</span> <span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">upper</span><span class=\"p\">)</span>\n        <span class=\"n\">best_value</span> <span class=\"o\">=</span> <span class=\"nb\">min</span><span class=\"p\">(</span>\n            <span class=\"n\">best_value</span><span class=\"p\">,</span> <span class=\"n\">nonconvex_objective</span><span class=\"p\">(</span><span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">lower</span><span class=\"p\">),</span> <span class=\"n\">nonconvex_objective</span><span class=\"p\">(</span><span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">upper</span><span class=\"p\">)</span>\n        <span class=\"p\">)</span>\n\n        <span class=\"k\">if</span> <span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">upper</span> <span class=\"o\">-</span> <span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">lower</span> <span class=\"o\">&gt;</span> <span class=\"n\">tol</span><span class=\"p\">:</span>\n            <span class=\"n\">pending</span><span class=\"o\">.</span><span class=\"n\">append</span><span class=\"p\">(</span><span class=\"n\">Region</span><span class=\"p\">(</span><span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">lower</span><span class=\"p\">,</span> <span class=\"n\">midpoint</span><span class=\"p\">))</span>\n            <span class=\"n\">pending</span><span class=\"o\">.</span><span class=\"n\">append</span><span class=\"p\">(</span><span class=\"n\">Region</span><span class=\"p\">(</span><span class=\"n\">midpoint</span><span class=\"p\">,</span> <span class=\"n\">region</span><span class=\"o\">.</span><span class=\"n\">upper</span><span class=\"p\">))</span>\n\n    <span class=\"k\">return</span> <span class=\"n\">best_value</span><span class=\"p\">,</span> <span class=\"n\">nodes_explored</span>\n\n\n<span class=\"n\">best</span><span class=\"p\">,</span> <span class=\"n\">nodes</span> <span class=\"o\">=</span> <span class=\"n\">spatial_branch_and_bound</span><span class=\"p\">(</span><span class=\"n\">Region</span><span class=\"p\">(</span><span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">))</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">best</span><span class=\"p\">,</span> <span class=\"n\">nodes</span><span class=\"p\">)</span></code></pre></div>\n<p><code>interval_lower_bound</code>は真の凸緩和ではなくprobeによる近似であり、大域最適性の証明にはなりません。実務でMcCormick包絡や凸緩和solverを組み込む場合は、<a href=\"https://www.scipopt.org/doc/html/\" target=\"_blank\" rel=\"noopener noreferrer\">SCIP</a>や<a href=\"https://docs.gurobi.com/projects/optimizer/en/current/\" target=\"_blank\" rel=\"noopener noreferrer\">Gurobi</a>などの公式ドキュメントで対応する非線形項の種類とrelaxationの設定を確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>incumbent / global bound / relative and absolute gap</p>\n</li>\n<li><p>node数、open node数</p>\n</li>\n<li><p>root relaxationのgap</p>\n</li>\n<li><p>区間の最小幅（分岐の細かさ）</p>\n</li>\n<li><p>prune理由別のnode数</p>\n</li>\n<li><p>memory</p>\n</li>\n<li><p>termination reason（gap達成、time limit、node limit）</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>緩和が緩くroot bound gapが大きい</p>\n</li>\n<li><p>木のnode数が次元・非凸項の増加に対して急増する</p>\n</li>\n<li><p>長時間incumbentが得られない</p>\n</li>\n<li><p>区間分割が特定の変数だけで進み他の非凸項の緩和が改善しない</p>\n</li>\n<li><p>black-boxや不連続な評価をそのまま緩和しようとしている</p>\n</li>\n</ul>\n<p>整数変数のみを分岐する基本形は<a href=\"#/learn/branch-and-bound\">Branch-and-Bound</a>、convex MINLPで整数と連続を分離して解く方式は<a href=\"#/learn/outer-approximation-minlp\">MINLPのOuter Approximation</a>、離散・組合せ最適化全体の選び分けは<a href=\"#/learn/family.discrete-structure\">離散・組合せ最適化の選び分け</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "branch-and-bound",
+        "outer-approximation-minlp",
+        "family.discrete-structure"
+      ],
+      "seo_description": "非凸MINLPの大域最適化のため、整数変数だけでなく連続変数の区間でも分岐し、各領域で凸緩和から下界を作りながら木を刈り込む厳密探索法です。",
+      "seo_title": "空間branch-and-bound",
+      "source_ids": [
+        "S021",
+        "S024",
+        "S025"
+      ],
+      "status": "published",
+      "summary": "非凸MINLPの大域最適化のため、整数変数だけでなく連続変数の区間でも分岐し、各領域で凸緩和から下界を作りながら木を刈り込む厳密探索法です。",
+      "title_en": "Spatial Branch and Bound",
+      "title_ja": "空間branch-and-bound",
+      "toc": [
+        {
+          "heading_id": "何を分岐しているか",
+          "label": "何を分岐しているか",
+          "level": 2
+        },
+        {
+          "heading_id": "各領域で下界をどう作るか",
+          "label": "各領域で下界をどう作るか",
+          "level": 2
+        },
+        {
+          "heading_id": "整数b-bとの対比とbound-gapによる大域性の証明",
+          "label": "整数B&Bとの対比とbound gapによる大域性の証明",
+          "level": 2
+        },
+        {
+          "heading_id": "木が爆発する限界",
+          "label": "木が爆発する限界",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_SPSA",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -5692,6 +6297,70 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "M_TRUST_EXACT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "trust-exact",
+      "html": "<p>trust-region部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。</p>\n<h2 id=\"部分問題を厳密に解くとは何をすることか\" tabindex=\"-1\">部分問題を厳密に解くとは何をすることか</h2>\n<p>trust-region法は各反復で局所二次modelを作り、信頼半径 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math> の内側だけで最小化します。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>p</mi></msub><mspace width=\"0.278em\" /><msubsup><mi>g</mi><mi>k</mi><mi>T</mi></msubsup><mi>p</mi><mo>&#x0002B;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn></mrow></mfrac><msup><mi>p</mi><mi>T</mi></msup><msub><mi>H</mi><mi>k</mi></msub><mi>p</mi><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mo>&#x02016;</mo><mi>p</mi><mo>&#x02016;</mo><mo>&#x02264;</mo><msub><mi>&#x00394;</mi><mi>k</mi></msub></mrow></math></div>\n<p>この部分問題の最適解は、ある <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi><mo>&#x02265;</mo><mn>0</mn></mrow></math> を使って <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><msub><mi>H</mi><mi>k</mi></msub><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mi>I</mi><mo stretchy=\"false\">&#x00029;</mo><mi>p</mi><mo>&#x0003D;</mo><mo>&#x02212;</mo><msub><mi>g</mi><mi>k</mi></msub></mrow></math> を満たし、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math> と半径境界の関係を表す secular equation を同時に満たすことが知られています。厳密trust-region法は、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>k</mi></msub></mrow></math> の固有値分解や行列分解を使ってこの <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math> を反復的に絞り込み、部分問題をほぼ厳密な精度で解きます。CGのように打ち切るのではなく、1回の部分問題解法自体に複数回の内部反復を使う点が特徴です。</p>\n<h2 id=\"cg打ち切り版との使い分け\" tabindex=\"-1\">CG打ち切り版との使い分け</h2>\n<p><a href=\"#/learn/trust-region-newton-cg\">Trust-region Newton-CG</a>や<a href=\"#/learn/trust-krylov\">Trust-krylov</a>は、Hessian-vector積だけからCGやKrylov部分空間で部分問題を近似し、途中で打ち切ることで1反復あたりのcostを抑えます。厳密trust-region法はこれと逆の設計で、dense Hessianを固有値分解できる規模を前提に、部分問題の質を優先します。</p>\n<p>その結果、外側の反復数は少なくなりやすい一方、1反復あたりのcostは固有値分解や分解の<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy=\"false\">&#x00029;</mo></mrow></math>相当のcostを含み重くなります。dense Hessianを保持でき、中小規模の問題であれば、反復数の少なさが総costで有利になる場合があります。</p>\n<h2 id=\"negative-curvatureをどう扱うか\" tabindex=\"-1\">negative curvatureをどう扱うか</h2>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>k</mi></msub></mrow></math> が不定で負の固有値を持つ場合、部分問題の解は負の曲率を持つ固有vector方向へ向かい、信頼半径の境界上に置かれます。厳密trust-region法は固有値分解を通じてこの方向を正確に特定できるため、負の曲率を無視したり、CGの打ち切り位置に依存して曖昧に扱ったりすることを避けられます。不定Hessianを含む非凸問題で、大域化の挙動を精密に制御したい場合に適しています。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>dense Hessianを保持し固有値分解できる中小規模の問題</p>\n</li>\n<li><p>Hessianとgradientをanalyticまたはautodiffでprecisionよく評価できる</p>\n</li>\n<li><p>Hessianが不定になり得て、負の曲率方向を正確に扱いたい</p>\n</li>\n<li><p>反復数を減らし、各反復の部分問題品質を優先したい</p>\n</li>\n</ul>\n<p>避ける／切り替える条件:</p>\n<ul>\n<li><p>変数数が大きくdense Hessianの保持・分解が非現実的 → <a href=\"#/learn/trust-krylov\">Trust-krylov</a>や<a href=\"#/learn/trust-region-newton-cg\">Trust-region Newton-CG</a></p>\n</li>\n<li><p>Hessianが得られない、またはnoiseに支配される → <a href=\"#/learn/bfgs\">BFGS</a>などの準Newton法</p>\n</li>\n<li><p>1反復の部分問題solveより目的評価そのものが支配的に高価</p>\n</li>\n</ul>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">scipy.optimize</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">minimize</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">rosenbrock</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"nb\">float</span><span class=\"p\">:</span>\n    <span class=\"k\">return</span> <span class=\"nb\">float</span><span class=\"p\">(</span><span class=\"mf\">100.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">**</span> <span class=\"mi\">2</span> <span class=\"o\">+</span> <span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">])</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">rosenbrock_grad</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"n\">dx0</span> <span class=\"o\">=</span> <span class=\"o\">-</span><span class=\"mf\">400.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"mf\">2.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"mf\">1.0</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">])</span>\n    <span class=\"n\">dx1</span> <span class=\"o\">=</span> <span class=\"mf\">200.0</span> <span class=\"o\">*</span> <span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">-</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span><span class=\"p\">)</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"n\">dx0</span><span class=\"p\">,</span> <span class=\"n\">dx1</span><span class=\"p\">])</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">rosenbrock_hess</span><span class=\"p\">(</span><span class=\"n\">x</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"n\">h00</span> <span class=\"o\">=</span> <span class=\"mf\">1200.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span> <span class=\"o\">**</span> <span class=\"mi\">2</span> <span class=\"o\">-</span> <span class=\"mf\">400.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span> <span class=\"o\">+</span> <span class=\"mf\">2.0</span>\n    <span class=\"n\">h01</span> <span class=\"o\">=</span> <span class=\"o\">-</span><span class=\"mf\">400.0</span> <span class=\"o\">*</span> <span class=\"n\">x</span><span class=\"p\">[</span><span class=\"mi\">0</span><span class=\"p\">]</span>\n    <span class=\"n\">h11</span> <span class=\"o\">=</span> <span class=\"mf\">200.0</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([[</span><span class=\"n\">h00</span><span class=\"p\">,</span> <span class=\"n\">h01</span><span class=\"p\">],</span> <span class=\"p\">[</span><span class=\"n\">h01</span><span class=\"p\">,</span> <span class=\"n\">h11</span><span class=\"p\">]])</span>\n\n\n<span class=\"n\">result</span> <span class=\"o\">=</span> <span class=\"n\">minimize</span><span class=\"p\">(</span>\n    <span class=\"n\">rosenbrock</span><span class=\"p\">,</span>\n    <span class=\"n\">x0</span><span class=\"o\">=</span><span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"o\">-</span><span class=\"mf\">1.2</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">]),</span>\n    <span class=\"n\">jac</span><span class=\"o\">=</span><span class=\"n\">rosenbrock_grad</span><span class=\"p\">,</span>\n    <span class=\"n\">hess</span><span class=\"o\">=</span><span class=\"n\">rosenbrock_hess</span><span class=\"p\">,</span>\n    <span class=\"n\">method</span><span class=\"o\">=</span><span class=\"s2\">&quot;trust-exact&quot;</span><span class=\"p\">,</span>\n    <span class=\"n\">options</span><span class=\"o\">=</span><span class=\"p\">{</span><span class=\"s2\">&quot;gtol&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-8</span><span class=\"p\">},</span>\n<span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">success</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">x</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">fun</span><span class=\"p\">,</span> <span class=\"n\">result</span><span class=\"o\">.</span><span class=\"n\">nit</span><span class=\"p\">)</span></code></pre></div>\n<p><code>method=&quot;trust-exact&quot;</code>は<code>hess</code>を必須とします。<code>hess</code>を渡さないとSciPyはエラーで停止するため、Hessianを解析的に書けない、または安価に評価できない問題では別の手法を検討します。利用versionに対応する挙動は<a href=\"https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html\" target=\"_blank\" rel=\"noopener noreferrer\">scipy.optimize.minimize</a>の公式referenceで確認します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>gradient norm</p>\n</li>\n<li><p>trust radius</p>\n</li>\n<li><p>actual / predicted reduction比</p>\n</li>\n<li><p>rejected step数</p>\n</li>\n<li><p>部分問題内部でのlambda探索（固有値分解ベースの内部反復）の回数</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>trust radiusが縮小し続ける</p>\n</li>\n<li><p>actual / predicted reduction比が改善しない</p>\n</li>\n<li><p>変数数の増加でdense Hessianの保持や分解が遅い、またはmemoryを圧迫する</p>\n</li>\n<li><p>Hessianが疎・構造化されており、dense分解が本来不要なcostを払っている</p>\n</li>\n<li><p>有限差分によるgradient / Hessian checkと解析式が一致しない</p>\n</li>\n</ul>\n<p>負の曲率をCGの打ち切り位置に依存させたくない場合はこの手法、Hessian-vector積だけで大規模問題を扱いたい場合は<a href=\"#/learn/trust-region-newton-cg\">Trust-region Newton-CG</a>や<a href=\"#/learn/trust-krylov\">Trust-krylov</a>を検討します。Hessianを使わない探索方向の作り方は<a href=\"#/learn/newton-method\">Newton法</a>、trust-region法全体の選び分けは<a href=\"#/learn/family.trust-region\">信頼領域法の選び分け</a>で確認できます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "trust-region-newton-cg",
+        "trust-krylov",
+        "newton-method",
+        "family.trust-region"
+      ],
+      "seo_description": "trust-region部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。",
+      "seo_title": "厳密trust-region Newton法",
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "trust-region部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。",
+      "title_en": "Nearly Exact Trust-Region",
+      "title_ja": "厳密trust-region Newton法",
+      "toc": [
+        {
+          "heading_id": "部分問題を厳密に解くとは何をすることか",
+          "label": "部分問題を厳密に解くとは何をすることか",
+          "level": 2
+        },
+        {
+          "heading_id": "cg打ち切り版との使い分け",
+          "label": "CG打ち切り版との使い分け",
+          "level": 2
+        },
+        {
+          "heading_id": "negative-curvatureをどう扱うか",
+          "label": "negative curvatureをどう扱うか",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_TRUST_KRYLOV",
       "canonical_entity_type": "method",
       "comparison_ids": [],
@@ -5889,6 +6558,70 @@
         {
           "heading_id": "次に読む",
           "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "M_TURBO_SAASBO",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "turbo-saasbo",
+      "html": "<p>標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。</p>\n<h2 id=\"高次元で標準的なgp-boが苦しむ理由\" tabindex=\"-1\">高次元で標準的なGP-BOが苦しむ理由</h2>\n<p><a href=\"#/learn/bayesian-optimization\">Bayesian Optimization</a>は、観測全体からsurrogate（多くはGaussian process）を作り、acquisitionを最大化する点を次に評価します。次元が増えると、この枠組みは複数の点で不利になります。</p>\n<ul>\n<li><p>search space全体を覆うsurrogateの信頼性が下がる（同じ観測数でも次元あたりの情報密度が下がるため）</p>\n</li>\n<li><p>acquisition自体が高次元関数になり、その大域最適化が難しくなる</p>\n</li>\n<li><p>標準的なBOはhypercubeの境界付近にsampleが集中しやすく、中心付近の探索が薄くなりやすい</p>\n</li>\n</ul>\n<p>これらは「BOが原理的に使えない」ことを意味しません。global surrogateとglobal acquisition最適化という設計が、次元とともに難しくなるということです。TuRBOとSAASBOは、この難しさに対する異なる緩和策です。</p>\n<h2 id=\"turboが何をしているか\" tabindex=\"-1\">TuRBOが何をしているか</h2>\n<p>TuRBOは、探索全体を1つのglobal surrogateに任せるのではなく、現在の最良点周辺に<strong>trust region</strong>（box領域）を持ち、その内側だけでBOを回します。</p>\n<ul>\n<li><p>trust region内の観測だけでlocal surrogateとacquisitionを扱う</p>\n</li>\n<li><p>連続して改善が続けば（success）trust regionを拡大する</p>\n</li>\n<li><p>連続して改善が止まれば（failure）trust regionを縮小する</p>\n</li>\n<li><p>trust regionが十分小さくなったら、その領域を放棄し新しい位置から再始動する</p>\n</li>\n</ul>\n<p>局所化することでsurrogateとacquisition最適化の対象領域を絞り、高次元でも扱いやすい規模に保ちます。一方で、trust regionの外側にある大域的に有望な領域を見逃す可能性は残ります。</p>\n<h2 id=\"saasboが何をしているか\" tabindex=\"-1\">SAASBOが何をしているか</h2>\n<p>SAASBOは、探索空間の次元は多くても<strong>実際に目的関数へ効く次元は少数</strong>という仮定を、GPのkernelに直接組み込みます。各次元のlengthscale（またはその逆数）に強いsparsity-inducing prior（horseshoe priorなど）を与え、full Bayesian推論でposteriorを求めます。関係の薄い次元は事後的にlengthscaleが大きく（＝影響が小さく）推定され、有効な次元だけがsurrogateの予測に強く寄与するようになります。</p>\n<p>TuRBOが探索領域を局所化するのに対し、SAASBOはsurrogateの構造そのものに次元選択的な仮定を入れる点が異なります。両者は排他的ではなく、局所trust regionとsparse priorを組み合わせる実装もあります。</p>\n<h2 id=\"向いている条件\" tabindex=\"-1\">向いている条件</h2>\n<ul>\n<li><p>search spaceの形式次元は高いが、実際に効く次元が少ない、または局所探索で十分と考えられる</p>\n</li>\n<li><p>1評価が高価で、budgetが数十〜数百回程度に限られる</p>\n</li>\n<li><p>変数が主に連続で、標準的なGP-BOがacquisition最適化や境界集中で苦戦している</p>\n</li>\n</ul>\n<p>避ける／切り替える条件:</p>\n<ul>\n<li><p>有効次元が実質的に全次元に近く、sparsityの仮定（SAASBO）が成立しない</p>\n</li>\n<li><p>大域的に離れた複数の有望領域があり、単一のtrust region（TuRBO）では取りこぼす</p>\n</li>\n<li><p>評価が安価で大量並列に実行できる → <a href=\"#/learn/random-search\">Random Search</a>や進化的手法のほうが単純な場合</p>\n</li>\n<li><p>categorical / conditionalな空間が中心 → <a href=\"#/learn/smac\">SMAC</a>のようなtree-based surrogateを検討</p>\n</li>\n</ul>\n<h2 id=\"python\" tabindex=\"-1\">Python</h2>\n<div class=\"code-block\"><span class=\"code-language\">text</span><pre><code class=\"language-text\">trust_region_length = initial_length\nsuccess_count = 0\nfailure_count = 0\n\nfor iteration in range(max_iterations):\n    candidates = sample_within_box(best_point, trust_region_length)\n    local_model = fit_local_surrogate(observed_x, observed_y, box=candidates.box)\n    next_x = maximize_acquisition(local_model, candidates)\n    next_y = evaluate_expensive_objective(next_x)\n\n    if next_y improves_on best_observed_y:\n        success_count += 1\n        failure_count = 0\n    else:\n        success_count = 0\n        failure_count += 1\n\n    if success_count &gt;= success_threshold:\n        trust_region_length = expand(trust_region_length)\n    if failure_count &gt;= failure_threshold:\n        trust_region_length = shrink(trust_region_length)\n\n    if trust_region_length &lt; min_length:\n        best_point = restart_from_new_region()\n        trust_region_length = initial_length\n\n    record(next_x, next_y)</code></pre></div>\n<p>TuRBOとSAASBOの実装、および両者を組み合わせたacquisition最適化・sparse GPの具体的な挙動は、<a href=\"https://botorch.org/\" target=\"_blank\" rel=\"noopener noreferrer\">BoTorch</a>と<a href=\"https://ax.dev/\" target=\"_blank\" rel=\"noopener noreferrer\">Ax</a>の公式referenceで利用versionに対応する説明を確認します。標準的なBOの背景は<a href=\"https://arxiv.org/abs/1807.02811\" target=\"_blank\" rel=\"noopener noreferrer\">A Tutorial on Bayesian Optimization</a>で確認できます。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<ul>\n<li><p>best-so-far</p>\n</li>\n<li><p>trust regionの長さ（TuRBO、拡大・縮小の推移）</p>\n</li>\n<li><p>連続success / failure回数</p>\n</li>\n<li><p>次元ごとのlengthscaleまたはinclusion probability（SAASBO、有効次元の推定）</p>\n</li>\n<li><p>surrogateのcalibrationとcross-validation error</p>\n</li>\n<li><p>restart回数と各restart後の改善量</p>\n</li>\n</ul>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>trust regionが縮小と即restartを繰り返し、best-so-farが進まない</p>\n</li>\n<li><p>SAASBOのlengthscaleがほぼ全次元で同程度になり、sparsityの仮定が支持されない</p>\n</li>\n<li><p>acquisitionが依然としてtrust region内の境界付近にsampleを集中させる</p>\n</li>\n<li><p>複数の初期点・restartで到達する最良値が大きくばらつく</p>\n</li>\n<li><p>surrogateのcross-validation errorが高い、またはuncertaintyが未校正</p>\n</li>\n</ul>\n<p>局所trust regionを使わない標準的なBOは<a href=\"#/learn/bayesian-optimization\">Bayesian Optimization</a>、categorical・条件付き空間を扱うtree-based surrogateは<a href=\"#/learn/smac\">SMAC</a>で確認できます。高価なblack-box全体の選び分けは<a href=\"#/learn/family.expensive-black-box\">高価なblack-box・HPOの選び分け</a>にまとめています。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "bayesian-optimization",
+        "smac",
+        "family.expensive-black-box"
+      ],
+      "seo_description": "標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。",
+      "seo_title": "高次元Bayesian最適化（TuRBO / SAASBO）",
+      "source_ids": [
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "status": "published",
+      "summary": "標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。",
+      "title_en": "TuRBO / SAASBO",
+      "title_ja": "高次元Bayesian最適化（TuRBO / SAASBO）",
+      "toc": [
+        {
+          "heading_id": "高次元で標準的なgp-boが苦しむ理由",
+          "label": "高次元で標準的なGP-BOが苦しむ理由",
+          "level": 2
+        },
+        {
+          "heading_id": "turboが何をしているか",
+          "label": "TuRBOが何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "saasboが何をしているか",
+          "label": "SAASBOが何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "向いている条件",
+          "label": "向いている条件",
+          "level": 2
+        },
+        {
+          "heading_id": "python",
+          "label": "Python",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
           "level": 2
         }
       ],
