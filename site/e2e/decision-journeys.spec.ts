@@ -76,8 +76,8 @@ test("global検索が略語・自然文・URL filterを横断する", async ({ p
 
   const input = page.getByRole("searchbox", { name: "検索" });
   await input.fill("配送順を決めたい");
-  await page.getByText("手法 99", { exact: true }).click();
-  await page.getByText("問題 56", { exact: true }).click();
+  await page.getByText(/^手法 \d+$/u).click();
+  await page.getByText(/^問題 \d+$/u).click();
   await expect(page.getByRole("checkbox", { name: /手法/u })).not.toBeChecked();
   await expect(page.getByRole("checkbox", { name: /問題/u })).toBeChecked();
   await expect(page.getByRole("heading", { level: 2, name: "配送・経路最適化" })).toBeVisible();
