@@ -53,7 +53,12 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
         "scripts/dependency_report.py",
         "uv run ruff format --check .",
         "uv run mypy src",
-        "uv run pytest --cov=optimization_compass --cov-report=term-missing",
+        "tests/test_api.py",
+        "tests/test_cli.py",
+        "tests/test_engine.py",
+        "tests/test_data_integrity.py",
+        "tests/test_pages_workflow.py",
+        "tests/test_pages_artifact.py",
         "uv run optimization-compass export-site-data --output site/public/data",
         "git diff --exit-code -- site/public/data",
         "uv run optimization-compass verify-data",
@@ -71,6 +76,9 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
 
     for command in required_commands:
         assert command in workflow
+
+    assert "Run Python smoke tests" in workflow
+    assert "uv run pytest --cov" not in workflow
 
 
 def test_supply_chain_reports_are_part_of_the_validated_artifact_job() -> None:

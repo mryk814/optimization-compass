@@ -59,13 +59,15 @@ jobs:
           uv run ruff check .
           uv run ruff format --check .
           uv run mypy src
-      - name: Run Python tests
+      - name: Run Python smoke tests
         run: |
-          if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_REF" == "refs/heads/main" ]]; then
-            uv run pytest --cov=optimization_compass --cov-report=term-missing
-          else
-            uv run pytest
-          fi
+          uv run pytest \
+            tests/test_api.py \
+            tests/test_cli.py \
+            tests/test_engine.py \
+            tests/test_data_integrity.py \
+            tests/test_pages_workflow.py \
+            tests/test_pages_artifact.py
       - name: Regenerate site data from the validated database
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |

@@ -287,12 +287,16 @@ Python:
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy src
-uv run pytest --cov=optimization_compass --cov-report=term-missing
+uv run pytest tests/test_api.py tests/test_cli.py tests/test_engine.py \
+  tests/test_data_integrity.py tests/test_pages_workflow.py tests/test_pages_artifact.py
 uv run optimization-compass verify-data
 uv run python scripts/verify_content.py
 uv run python scripts/verify_licensing.py
 uv run python scripts/rebuild_dataset.py --stage
 ```
+
+CIは上記の代表smokeだけを実行します。DBリリースの破損・復旧ケースまで含む完全回帰は、
+必要な変更時に `uv run pytest` で手動実行します。
 
 Site:
 
