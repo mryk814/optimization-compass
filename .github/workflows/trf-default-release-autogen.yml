@@ -28,75 +28,70 @@ jobs:
           node-version: '24'
           cache: npm
           cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
       - name: Wire migration and release authority
         run: |
           python - <<'PY'
           from pathlib import Path
           import json
-          import re
 
           dataset = Path('src/optimization_compass/dataset_release.py')
           text = dataset.read_text(encoding='utf-8')
-
-          learning_constant = 'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
-          trf_constant = 'DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"'
-          if trf_constant not in text:
-              if learning_constant not in text:
-                  raise SystemExit('learning graph migration constant not found')
-              text = text.replace(learning_constant, learning_constant + '\n' + trf_constant, 1)
-
-          protected_anchor = '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
-          protected_insert = (
-              '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
-              '            DEFAULT_LEARNING_GRAPH_MIGRATION,\n'
-              '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n'
-          )
+          learning = 'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
+          trf = 'DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"'
+          if trf not in text:
+              text = text.replace(learning, learning + '\n' + trf, 1)
           if '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n' not in text:
-              if protected_anchor not in text:
-                  raise SystemExit('protected-input anchor not found')
-              text = text.replace(protected_anchor, protected_insert, 1)
-
-          apply_anchor = '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
-          apply_insert = apply_anchor + '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))\n'
+              text = text.replace(
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n',
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
+                  '            DEFAULT_LEARNING_GRAPH_MIGRATION,\n'
+                  '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n',
+                  1,
+              )
           if 'connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION' not in text:
-              if apply_anchor not in text:
-                  raise SystemExit('migration application anchor not found')
-              text = text.replace(apply_anchor, apply_insert, 1)
-
+              anchor = '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
+              text = text.replace(
+                  anchor,
+                  anchor + '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))\n',
+                  1,
+              )
           text = text.replace(
               '"Published constrained-continuous and multi-objective learning slices."',
               '"Published canonical Trust Region Reflective defaults and guidance."',
               1,
           )
-          old_revision = re.compile(
-              r'            "Constrained and multi-objective concepts lacked canonical executable visuals\.".*?'
-              r'            target_version,\n            release_date,',
-              re.DOTALL,
+          text = text.replace(
+              '"Constrained and multi-objective concepts lacked canonical executable visuals."',
+              '"A widely used SciPy default was represented only through broad adjacent methods."',
+              1,
           )
-          replacement = '''            "A widely used SciPy default was represented only through broad adjacent methods.",
-            (
-                "Added a canonical Trust Region Reflective method, primary source, "
-                "implementation mapping, and API-default metadata."
-            ),
-            (
-                "Separate library default behavior from method recommendation priority, "
-                "and connect the dedicated beginner guide to generated search and retrieval."
-            ),
-            target_version,
-            release_date,'''
-          text, count = old_revision.subn(replacement, text, count=1)
-          if count != 1 and 'A widely used SciPy default was represented' not in text:
-              raise SystemExit('model revision block not found')
+          text = text.replace(
+              '"Added renderer-family contracts for feasible regions and Pareto fronts, "\n'
+              '                "with canonical scenarios, references, and failure contrast."',
+              '"Added a canonical Trust Region Reflective method, primary source, "\n'
+              '                "implementation mapping, and API-default metadata."',
+              1,
+          )
+          text = text.replace(
+              '"Connect canonical problems to artifacts, routes, content, Gallery, "\n'
+              '                "Map, and sources."',
+              '"Separate library default behavior from method recommendation priority, "\n'
+              '                "and connect the dedicated guide to generated search and retrieval."',
+              1,
+          )
           dataset.write_text(text, encoding='utf-8')
 
           claims = Path('src/optimization_compass/versioned_claims.py')
           text = claims.read_text(encoding='utf-8')
-          if 'I_SCIPY_LEAST_SQUARES_TRF' not in text.split('HIGH_USAGE_IMPLEMENTATION_IDS', 1)[1].split('\n\n', 1)[0]:
-              text = text.replace(
-                  'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})',
-                  'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"})',
-                  1,
-              )
+          text = text.replace(
+              'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})',
+              'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"})',
+              1,
+          )
           claims.write_text(text, encoding='utf-8')
 
           authority = Path('src/optimization_compass/resources/release-authority.json')
@@ -107,12 +102,11 @@ jobs:
 
           least_squares = Path('content/methods/least-squares.md')
           text = least_squares.read_text(encoding='utf-8')
-          if 'trust-region-reflective]' not in text.split('\n', 20)[0:20]:
-              text = text.replace(
-                  'related_ids: [method.gradient-descent, trust-region-newton-cg]',
-                  'related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]',
-                  1,
-              )
+          text = text.replace(
+              'related_ids: [method.gradient-descent, trust-region-newton-cg]',
+              'related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]',
+              1,
+          )
           text = text.replace(
               '- bounds中心・大規模 → trust-region reflective',
               '- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)',
@@ -130,21 +124,19 @@ jobs:
 
           density_doc = Path('docs/method-content-density.md')
           text = density_doc.read_text(encoding='utf-8')
-          addition = (
-              '## Default-method pilot\n\n'
-              'Issue #111 adds a dedicated Trust Region Reflective guide because it is selected implicitly by '
-              'a high-use SciPy API. This raises the current published method-guide baseline to 67 while keeping '
-              'library defaults separate from recommendation priority.\n\n'
-          )
           if '## Default-method pilot' not in text:
-              text = text.replace('## Audit report\n', addition + '## Audit report\n', 1)
+              text = text.replace(
+                  '## Audit report\n',
+                  '## Default-method pilot\n\n'
+                  'Issue #111 adds a dedicated Trust Region Reflective guide because it is selected implicitly by '
+                  'a high-use SciPy API. This raises the current published method-guide baseline to 67 while keeping '
+                  'library defaults separate from recommendation priority.\n\n'
+                  '## Audit report\n',
+                  1,
+              )
           density_doc.write_text(text, encoding='utf-8')
           PY
           uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests/test_trust_region_reflective.py tests/test_method_content_density.py
-      - name: Install dependencies
-        run: |
-          uv sync --frozen --all-extras --all-groups
-          npm ci --prefix site
       - name: Build deterministic dataset 0.11.0
         run: |
           rm -rf .release-stage
