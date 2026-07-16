@@ -135,6 +135,18 @@ SET
   last_verified = '2026-07-16'
 WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF';
 
+UPDATE evidence_links
+SET
+  source_id = 'S003',
+  target_id = 'MIM_SCIPY_TRF',
+  supported_field = 'support_level;method_selector;implementation_notes',
+  claim_summary = 'SciPy exposes native Trust Region Reflective nonlinear least squares and selects trf by default for least_squares.',
+  evidence_role = 'direct',
+  confidence = 'high',
+  last_verified = '2026-07-16'
+WHERE target_table = 'method_implementation_map'
+  AND target_id IN ('MIM00011', 'MIM00012');
+
 DELETE FROM method_implementation_map
 WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF';
 
