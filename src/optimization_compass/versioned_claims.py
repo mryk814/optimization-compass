@@ -16,8 +16,10 @@ CLAIM_PREDICATES: tuple[tuple[str, str], ...] = (
     ("important_option_defaults", "major_options"),
 )
 
-# High usage means currently exposed by the published Gallery, not raw method-map fan-out.
-HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})
+# High usage means currently exposed by the published Gallery or selected implicitly by a common API.
+HIGH_USAGE_IMPLEMENTATION_IDS = frozenset(
+    {"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"}
+)
 
 
 @dataclass(frozen=True)
@@ -106,6 +108,7 @@ def insert_versioned_claims_and_contexts(
                 ),
             )
 
+    _insert_scipy_default_claims(connection, release_date)
     _insert_historical_release_fixture(connection)
     for context in _benchmark_context_fixtures(connection, release_date):
         columns = list(context)
@@ -156,6 +159,64 @@ def claim_freshness_report(connection: sqlite3.Connection, *, as_of: date) -> di
         ),
         "claims": claims,
     }
+
+
+def _insert_scipy_default_claims(connection: sqlite3.Connection, release_date: str) -> None:
+    implementation = connection.execute(
+        """
+        SELECT last_release, confidence
+        FROM implementations
+        WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+        """
+    ).fetchone()
+    if implementation is None:
+        raise ValueError("SciPy TRF implementation fixture is missing")
+    product_version = str(implementation["last_release"] or "unknown")
+    confidence = str(implementation["confidence"] or "unverified")
+    claims = (
+        (
+            "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
+            {
+                "api": "scipy.optimize.least_squares",
+                "condition": "method omitted",
+                "selected_method": "trf",
+                "scope": "nonlinear least squares with or without bounds",
+                "user_override": "method",
+            },
+        ),
+        (
+            "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
+            {
+                "api": "scipy.optimize.curve_fit",
+                "condition": "bounds provided and method omitted",
+                "selected_method": "trf",
+                "fallback_without_bounds": "lm",
+                "user_override": "method",
+            },
+        ),
+    )
+    for claim_id, value in claims:
+        connection.execute(
+            """
+            INSERT INTO implementation_claims (
+              claim_id, subject_id, predicate, value_json, value_status, valid_from,
+              valid_to, replaced_by, source_id, source_date, last_verified, confidence,
+              verification_status, product_version, commit_sha, release_tag
+            ) VALUES (
+              ?, 'I_SCIPY_LEAST_SQUARES_TRF', 'important_option_defaults', ?, 'verified', ?,
+              NULL, NULL, 'S003', ?, ?, ?, 'verified', ?, NULL, NULL
+            )
+            """,
+            (
+                claim_id,
+                _json(value),
+                release_date,
+                release_date,
+                release_date,
+                confidence,
+                product_version,
+            ),
+        )
 
 
 def _insert_historical_release_fixture(connection: sqlite3.Connection) -> None:
