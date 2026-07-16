@@ -1375,6 +1375,28 @@ caption {
 .comparison-metrics dd { margin: 0; color: #263c30; font-weight: 700; overflow-wrap: anywhere; }
 .nm-contract { display: flex; gap: .45rem .8rem; flex-wrap: wrap; margin: .6rem 0; padding: .6rem .7rem; border: 1px solid #d1d5cc; border-radius: .45rem; background: #faf9f4; color: #465249; font-size: .75rem; }
 .nm-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(15rem, .65fr); gap: .65rem; }
+.linked-surface-card { margin-top: .75rem; padding: .75rem; border: 1px solid #d3dbd4; border-radius: .65rem; background: #fff; }
+.linked-surface-card > header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, .38fr); align-items: end; gap: 1rem; }
+.linked-surface-card h2 { margin: .1rem 0 .2rem; font-size: 1rem; }
+.linked-surface-card header p:not(.eyebrow) { max-width: 48rem; margin: 0; color: #59645d; font-size: .75rem; }
+.surface-camera-control { display: grid; gap: .25rem; color: #465249; font-size: .7rem; font-weight: 750; }
+.surface-camera-control span { display: flex; justify-content: space-between; gap: .5rem; }
+.surface-camera-control output { color: #285740; font-variant-numeric: tabular-nums; }
+.surface-camera-control input { width: 100%; accent-color: #315c48; }
+.linked-surface-figure { min-width: 0; margin: .6rem 0 0; }
+.linked-surface-figure svg { display: block; width: 100%; max-height: 30rem; border: 1px solid #d7ded7; border-radius: .55rem; background: #f5f7f2; }
+.surface-background { fill: #f5f7f2; }
+.surface-mesh polyline { fill: none; stroke: #b7c7bc; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.surface-mesh polyline:nth-child(4n) { stroke: #8ca393; stroke-width: 1.35; }
+.surface-trajectory { fill: none; stroke: #a14929; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.surface-trajectory-points g { cursor: pointer; outline: none; }
+.surface-trajectory-points circle { fill: #8f3f24; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.surface-trajectory-points .is-future circle { fill: #f5f7f2; stroke: #8f9d94; stroke-dasharray: 2 2; }
+.surface-trajectory-points .is-current circle { fill: #d66738; stroke: #263c30; stroke-width: 3; }
+.surface-trajectory-points g:focus-visible circle { stroke: #e2a677; stroke-width: 5; }
+.surface-axis-labels text { fill: #405248; font-size: 11px; font-weight: 800; text-anchor: middle; }
+.linked-surface-figure figcaption { display: flex; justify-content: space-between; gap: .75rem; margin-top: .3rem; color: #68736c; font-size: .66rem; line-height: 1.45; }
+.linked-surface-figure figcaption strong { color: #33483d; font-variant-numeric: tabular-nums; }
 .nm-plot { width: 100%; border: 1px solid #d9dbd4; border-radius: .55rem; background: #f3f5ef; }
 .nm-grid { stroke: #dbe2d8; stroke-width: 1; }
 .nm-simplex { fill: #99bea9; fill-opacity: .35; stroke: #315c48; stroke-width: 2; }
@@ -1571,6 +1593,10 @@ caption {
 @media (max-width: 44rem) {
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }
   .nm-layout { grid-template-columns: minmax(0, 1fr); }
+  .linked-surface-card { padding: .6rem; }
+  .linked-surface-card > header { grid-template-columns: minmax(0, 1fr); }
+  .linked-surface-figure svg { max-height: none; }
+  .linked-surface-figure figcaption { align-items: flex-start; flex-direction: column; gap: .2rem; }
   .content-search, .gallery-filter { align-items: flex-start; flex-direction: column; }
   .content-search input { width: 100%; }
   .compiled-content-layout { grid-template-columns: minmax(0, 1fr); }

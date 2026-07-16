@@ -93,3 +93,31 @@ test("derived thumbnail and static formats are discoverable from the scenario", 
     /media\/scenario-nm-quadratic\/static\.svg/u,
   );
 });
+
+test("Nelder-Mead and Gradient share their trace frame with the linked 3D surface", async ({
+  page,
+  baseURL,
+}) => {
+  const base = requiredBaseURL(baseURL);
+  await gotoAtlasRoute(page, base, "/traces/nelder-mead-quadratic");
+
+  const nelderMeadSurface = page.getByTestId("linked-objective-surface");
+  await expect(nelderMeadSurface).toHaveAttribute("data-current-frame", "0");
+  await nelderMeadSurface.getByRole("button", { name: "frame 2へ移動" }).click();
+  await expect(page).toHaveURL(/frame=1/u);
+  await expect(nelderMeadSurface).toHaveAttribute("data-current-frame", "1");
+  await expect(page.getByText(/Projection: orthographic/u)).toBeVisible();
+
+  await gotoAtlasRoute(page, base, "/traces/gradient_descent-quadratic");
+  const gradientSurface = page.getByTestId("linked-objective-surface");
+  await expect(gradientSurface).toBeVisible();
+  await gradientSurface.getByRole("button", { name: "frame 2へ移動" }).click();
+  await expect(page.getByLabel("フレーム位置")).toHaveValue("1");
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  const widths = await page.evaluate(() => ({
+    client: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(widths.scroll).toBeLessThanOrEqual(widths.client + 1);
+});
