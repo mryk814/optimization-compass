@@ -6,6 +6,10 @@ Optimization Compassは、「最適化したい。でも、何をどう解けば
 構造化された問題・手法・実装・根拠データから整理するオープンソースプロジェクトです。
 単一の万能rankingではなく、**何を試すか、なぜ除外するか、何を確認するか**を示します。
 
+公開Atlasは**日本語を説明の主言語とし、英語の正式用語も見える・探せる**教材です。
+`title_en`や英語aliasは用語・検索metadataであり、英語版記事の完備を意味しません。詳細は
+[`ADR 0013`](docs/adr/0013-japanese-first-language-strategy.md)を参照してください。
+
 **公開Atlas:** https://mryk814.github.io/optimization-compass/
 
 ## まず試す

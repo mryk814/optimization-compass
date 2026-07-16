@@ -46,6 +46,7 @@ function CoverageView({ report, journeys, subjectType, status, family, setSubjec
   return <section className="coverage-page">
     <header className="page-heading"><p className="eyebrow">Maintainer view</p><h1>Atlas Coverage</h1><p>教材の深さを一律にせず、期待する学習成果と実在する成果物を分けて監査します。</p></header>
     <PageOrientation limits="Coverageは学習contractの接続状態を監査します。page数やcoverage scoreだけで、教材の質や手法の優劣を判断しません。" next={[{ label: "教材の進捗を見る", to: "/learn" }, { label: "Galleryのケースを見る", to: "/gallery" }, { label: "根拠資料を確認する", to: "/sources" }]} purpose="各method・problem・feature familyに、Map・診断・教材・可視化・根拠などがどこまで接続しているかを確認します。" readingSteps={["status countsで全体の接続状態を見ます。", "Priority slicesで次に補う学習成果を確認します。", "Artifact inventoryをfilterし、欠けた接続と理由を追います。"]} />
+    <p className="coverage-language-note"><strong>言語Coverage:</strong> 現在は日本語の説明を基準に監査します。英語の正式用語やaliasは検索metadataで、英語版の完備を意味しません。</p>
     <JourneyCompleteness journeys={journeys} />
     <div className="coverage-status-grid" aria-label="期待成果物のステータス">{Object.entries(report.summary.status_counts).map(([key, count]) => <article key={key} className={`coverage-stat coverage-${key}`}><strong>{count}</strong><span>{statusLabels[key as CoverageStatus]}</span></article>)}</div>
     <p className="coverage-baseline">Release delta: baseline未指定。初回スナップショットでは差分を推測しません。</p>

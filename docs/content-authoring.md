@@ -29,6 +29,30 @@ last_reviewed: 2026-07-15
 ---
 ```
 
+## Language and publication
+
+The public Atlas is Japanese-first and English-term-aware. The authoritative decision is
+[ADR 0013](adr/0013-japanese-first-language-strategy.md).
+
+| Field or surface | Language responsibility | Requirement for `published` |
+|---|---|---|
+| `title_ja` | Japanese public title | Required and complete |
+| `summary` | Japanese card, search-result, and SEO explanation | Required; must match the first body paragraph |
+| Markdown body | Japanese explanatory prose | Required and understandable without an English article |
+| `title_en` | Canonical English term and retrieval metadata | Required by the current schema; not a translated article |
+| aliases and abbreviations | Japanese/English terminology used for retrieval and routing | Add reviewed terms only; they do not satisfy prose completeness |
+| code, formulas, product/API names, source titles | Authoritative original notation | Preserve spelling; do not translate identifiers |
+
+`status: published` therefore means that the Japanese learning surface is publishable. It does not
+claim that a full English version exists. Do not add silent machine-translated prose or treat an English
+title/alias as a locale fallback. The current search index intentionally combines Japanese prose with
+English canonical terms, aliases, and abbreviations; this is cross-language retrieval, not locale
+selection.
+
+UI instructions and generated explanatory text follow the same boundary: their canonical authoring
+input supplies Japanese prose, and generators do not translate it. Stable IDs, URL identifiers, schema
+keys, and API fields remain unlocalized.
+
 ## Body style
 
 Prose style — sentence tone, terminology spelling, and canonical section headings — is

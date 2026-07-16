@@ -20,6 +20,23 @@
 - **Engine**: 決定規則の評価、出力契約、トレース
 - **UX/API**: 質問表現、画面、API
 
+## 言語と公開
+
+公開Atlasは日本語を説明の主言語とし、canonicalな英語用語も見える・検索できる
+**Japanese-first, English-term-aware** 方針です。詳細は
+[`ADR 0013`](docs/adr/0013-japanese-first-language-strategy.md)に従ってください。
+
+- `published`教材は、`title_ja`、`summary`、本文だけで日本語の説明が完結している必要があります。
+- `title_en`、英語alias、略語は正式用語と検索のmetadataです。英語版記事の代わりではありません。
+- 手法名、製品/API名、code、数式、source titleは正しい原表記を保ちます。stable ID、URL identifier、
+  schema key、API fieldは翻訳しません。
+- 未レビューの機械翻訳を、執筆済みの翻訳やlocale fallbackとして追加しません。
+- 現在の検索は日本語の語句と英語の正式名・alias・略語を同じ生成indexから探します。これは
+  locale切替や英語記事の存在を保証するものではありません。
+
+日本語以外の完全な公開surfaceを作る場合は、URL、翻訳field、review provenance、欠落表示、
+言語別Coverageをまとめて設計するi18n projectとして提案してください。
+
 ## Data PR に必要なもの
 
 1. 変更対象ID

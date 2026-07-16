@@ -50,3 +50,15 @@ optimization-compass coverage-diff --before old-coverage.json --after new-covera
 
 The diff reports status transitions, added/removed expectations, subject inventory deltas, and
 the available-count delta.
+
+## Language scope
+
+Current Coverage audits the Japanese primary-language learning contract. A subject needs complete
+Japanese explanatory copy where its learning surface requires prose. `title_en`, English aliases, and
+abbreviations are terminology and retrieval metadata; they do not make a Japanese learning asset
+bilingual and do not satisfy a missing explanation.
+
+Optional translated fragments neither raise nor lower the current status. `coverage.json` does not add
+locale fields for this policy. Per-language completeness requires a separately versioned contract when a
+future full-i18n initiative defines an additional publication surface, review responsibility, and
+missing-translation behavior. See [ADR 0013](adr/0013-japanese-first-language-strategy.md).
