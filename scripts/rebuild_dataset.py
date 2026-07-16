@@ -5,6 +5,8 @@ import json
 import tempfile
 from pathlib import Path
 
+from sync_readme_facts import render_readme_from_release
+
 from optimization_compass.dataset_release import (
     BASE_DATASET_VERSION,
     RELEASE_AUTHORITY,
@@ -17,6 +19,7 @@ BASE_DATABASE = ROOT / f"data/optimization_method_selection_database_v{BASE_DATA
 RUNTIME_DATABASE = ROOT / "src/optimization_compass/resources/knowledge.sqlite"
 VERSION_FILE = ROOT / "src/optimization_compass/resources/DATASET_VERSION"
 SITE_DATA_DIRECTORY = ROOT / "site/public/data"
+README_PATH = ROOT / "README.md"
 
 
 def stage(output_directory: Path | None = None) -> dict[str, object]:
@@ -64,6 +67,8 @@ def main() -> None:
         RUNTIME_DATABASE,
         VERSION_FILE,
         SITE_DATA_DIRECTORY,
+        README_PATH,
+        render_readme_from_release(README_PATH, args.staged_directory),
     )
     print(json.dumps({"mode": "publish", "version": RELEASE_AUTHORITY.dataset_version}, indent=2))
 

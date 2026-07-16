@@ -32,12 +32,31 @@ class ReleaseFacts:
     evidence_link_count: int
 
 
-def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
-    authority_path = root / RELEASE_AUTHORITY_PATH.relative_to(ROOT)
-    authority = _load_json(authority_path)
-    version = _require_string(authority, "dataset_version", authority_path)
-    release_date = _require_string(authority, "release_date", authority_path)
-    report_path = root / "data" / f"optimization_method_selection_database_v{version}_report.md"
+def load_release_facts(root: Path = ROOT, *, release_directory: Path | None = None) -> ReleaseFacts:
+    if release_directory is None:
+        authority_path = root / RELEASE_AUTHORITY_PATH.relative_to(ROOT)
+        authority = _load_json(authority_path)
+        version = _require_string(authority, "dataset_version", authority_path)
+        release_date = _require_string(authority, "release_date", authority_path)
+        report_path = root / "data" / f"optimization_method_selection_database_v{version}_report.md"
+    else:
+        manifest_path = _one_release_manifest(release_directory)
+        manifest = _load_json(manifest_path)
+        version = _require_string(manifest, "version", manifest_path)
+        artifacts = manifest.get("artifacts")
+        if not isinstance(artifacts, dict):
+            raise ReadmeFactsError(f"{manifest_path} field artifacts must be an object")
+        report_path = release_directory / _require_string(artifacts, "report", manifest_path)
+        identity_path = release_directory / _require_string(
+            artifacts, "release_identity", manifest_path
+        )
+        identity = _load_json(identity_path)
+        identity_version = _require_string(identity, "dataset_version", identity_path)
+        if identity_version != version:
+            raise ReadmeFactsError(
+                f"release identity version {identity_version} does not match manifest {version}"
+            )
+        release_date = _require_string(identity, "release_date", identity_path)
     report = report_path.read_text(encoding="utf-8")
 
     header = _parse_report_header(report, report_path)
@@ -94,12 +113,18 @@ def render_release_facts(facts: ReleaseFacts) -> str:
     )
 
 
-def update_readme(*, root: Path = ROOT, check: bool = False) -> bool:
+def update_readme(
+    *,
+    root: Path = ROOT,
+    check: bool = False,
+    release_directory: Path | None = None,
+) -> bool:
     readme_path = root / README_PATH.relative_to(ROOT)
     current = readme_path.read_text(encoding="utf-8")
-    facts = load_release_facts(root)
-    expected = replace_generated_block(current, render_release_facts(facts))
-    _reject_stale_dataset_versions(expected, facts.version)
+    expected = render_updated_readme(
+        current,
+        load_release_facts(root, release_directory=release_directory),
+    )
 
     if current == expected:
         return False
@@ -109,6 +134,19 @@ def update_readme(*, root: Path = ROOT, check: bool = False) -> bool:
         )
     readme_path.write_text(expected, encoding="utf-8", newline="\n")
     return True
+
+
+def render_updated_readme(readme: str, facts: ReleaseFacts) -> str:
+    expected = replace_generated_block(readme, render_release_facts(facts))
+    _reject_stale_dataset_versions(expected, facts.version)
+    return expected
+
+
+def render_readme_from_release(readme_path: Path, release_directory: Path) -> str:
+    return render_updated_readme(
+        readme_path.read_text(encoding="utf-8"),
+        load_release_facts(release_directory=release_directory),
+    )
 
 
 def replace_generated_block(readme: str, block: str) -> str:
@@ -154,6 +192,15 @@ def _load_json(path: Path) -> dict[str, object]:
     return payload
 
 
+def _one_release_manifest(release_directory: Path) -> Path:
+    manifests = sorted(release_directory.glob("*_manifest.json"))
+    if len(manifests) != 1:
+        raise ReadmeFactsError(
+            f"{release_directory} must contain exactly one release manifest; found {len(manifests)}"
+        )
+    return manifests[0]
+
+
 def _require_string(payload: dict[str, object], field: str, path: Path) -> str:
     value = payload.get(field)
     if not isinstance(value, str) or not value:
@@ -196,8 +243,23 @@ def _reject_stale_dataset_versions(readme: str, current_version: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Synchronize README release identity and counts.")
     parser.add_argument("--check", action="store_true", help="Fail instead of updating README.")
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=ROOT,
+        help="Repository root containing README and release authority.",
+    )
+    parser.add_argument(
+        "--release-directory",
+        type=Path,
+        help="Generate from a validated staged release instead of repository distributions.",
+    )
     args = parser.parse_args()
-    changed = update_readme(check=args.check)
+    changed = update_readme(
+        root=args.root,
+        check=args.check,
+        release_directory=args.release_directory,
+    )
     if args.check:
         print("README release facts are current")
     elif changed:
