@@ -11,12 +11,14 @@ import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useEntityLinks } from "../../state/entity-links";
 import { useAtlasState } from "../../state/useAtlasState";
+import { PageOrientation } from "../../components/PageOrientation";
 import { CompiledContent } from "../content/CompiledContent";
+import { LearningRelations } from "../learning/LearningRelations";
 import { resolveRelatedNodeId } from "../map/map-state";
 import { NotFoundPage } from "../navigation/NotFoundPage";
-import { PageOrientation } from "../../components/PageOrientation";
 import { MethodPredicates } from "./MethodPredicates";
-import { LearningRelations } from "../learning/LearningRelations";
+
+import "./MethodPage.css";
 
 function catalogFromView(view: ViewSpec): AtlasCompatibilityCatalog {
   return {
@@ -153,16 +155,52 @@ export function MethodPage() {
       />
       {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
-      {siteData && <MethodPredicates data={siteData} methodId={methodId} />}
-      {failureModes.length > 0 && <MethodFailures failures={failureModes} />}
-      <LearningRelations entityId={methodId} entityType="method" />
       {content && (
         <section aria-label="教材" className="method-learning">
           <CompiledContent page={content} />
         </section>
       )}
+      {links.status === "ready" && method && !learning && (
+        <p className="method-content-unavailable">
+          この手法の詳細教材は準備中です。登録済みの関係と、利用可能な構造化データは下の詳細から確認できます。
+        </p>
+      )}
+      <LearningRelations entityId={methodId} entityType="method" />
       {groups && <MethodRelations groups={groups} />}
+      <MethodTechnicalDetails data={siteData} failures={failureModes} methodId={methodId} />
     </section>
+  );
+}
+
+function MethodTechnicalDetails({
+  data,
+  failures,
+  methodId,
+}: {
+  data: SiteData | undefined;
+  failures: FailureModeRecord[];
+  methodId: string;
+}) {
+  const hasPredicates = data?.predicates.some(
+    (predicate) => predicate.subject_type === "method" && predicate.subject_id === methodId,
+  ) ?? false;
+  if (!hasPredicates && failures.length === 0) return null;
+  const summaryParts = [
+    hasPredicates ? "適用前提" : null,
+    failures.length > 0 ? `症状・確認・対処 ${failures.length}件` : null,
+  ].filter((item): item is string => Boolean(item));
+
+  return (
+    <details className="method-technical-details">
+      <summary>
+        <span>構造化データとトラブルシューティング</span>
+        <small>{summaryParts.join(" · ")}</small>
+      </summary>
+      <div className="method-technical-content">
+        {data && hasPredicates && <MethodPredicates data={data} methodId={methodId} />}
+        {failures.length > 0 && <MethodFailures failures={failures} />}
+      </div>
+    </details>
   );
 }
 
