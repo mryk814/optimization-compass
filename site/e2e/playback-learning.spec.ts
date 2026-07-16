@@ -12,7 +12,7 @@ test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", asy
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   const iteration = controls.getByLabel("iteration");
   await expect(controls).toBeVisible();
-  await expect(page.getByLabel("目的関数")).toHaveValue("OBJECTIVE_QUADRATIC_2D");
+  await expect(page.getByLabel("目的関数", { exact: true })).toHaveValue("OBJECTIVE_QUADRATIC_2D");
   await expect(page.getByRole("combobox", { name: "初期simplex", exact: true })).toHaveValue("standard");
   const shapeLegend = page.locator(".shape-legend");
   await expect(shapeLegend.getByText("Best", { exact: true })).toBeVisible();
