@@ -58,6 +58,7 @@ DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
 )
 DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
 DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
+DEFAULT_DEFAULT_METHOD_MIGRATION = ROOT / "data/migrations/011_default_method_trf.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -264,6 +265,8 @@ def build_staged_release(
             DEFAULT_SEMANTIC_VIEW_MIGRATION,
             DEFAULT_VERSIONED_CLAIMS_MIGRATION,
             DEFAULT_FAILURE_MODE_MIGRATION,
+            DEFAULT_LEARNING_GRAPH_MIGRATION,
+            DEFAULT_DEFAULT_METHOD_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1217,6 +1220,7 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_DEFAULT_METHOD_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -2763,7 +2767,7 @@ def _versioned_claim_issues(connection: sqlite3.Connection, tables: list[str]) -
             "SELECT COUNT(*) FROM implementation_claims WHERE valid_to IS NULL"
         ).fetchone()[0]
     )
-    expected = implementation_count * 7
+    expected = implementation_count * 7 + 2
     if active_count != expected:
         issues.append(f"active-claim-count:{active_count}/{expected}")
     duplicates = connection.execute(
