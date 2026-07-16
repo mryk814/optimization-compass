@@ -32,6 +32,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes ffmpeg
+      - name: Install project dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
       - name: Wire the v0.11 migration and release notes
         run: |
           python - <<'PY'
@@ -82,7 +86,9 @@ jobs:
               ),
           )
           for old, new in replacements:
-              if text.count(old) != 1:
+              count = text.count(old)
+              print(f'replacement count={count}: {old.splitlines()[0]}')
+              if count != 1:
                   raise SystemExit(f'dataset_release.py replacement did not match exactly once: {old!r}')
               text = text.replace(old, new, 1)
           path.write_text(text, encoding='utf-8')
@@ -95,18 +101,14 @@ jobs:
               if docs_text.count(marker) != 1:
                   raise SystemExit('method-content-density audit marker is missing or duplicated')
               docs_text = docs_text.replace(marker, section + marker, 1)
-              docs_text = docs_text.replace(
-                  'After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides;',
-                  'After the TRF pilot, all 67 published method guides must meet the Level 2 floor. This does not imply that all 99 registered methods have full guides;',
-                  1,
-              )
+              old_floor = 'After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides;'
+              new_floor = 'After the TRF pilot, all 67 published method guides must meet the Level 2 floor. This does not imply that all 99 registered methods have full guides;'
+              if docs_text.count(old_floor) != 1:
+                  raise SystemExit('method-content-density floor sentence did not match')
+              docs_text = docs_text.replace(old_floor, new_floor, 1)
               docs.write_text(docs_text, encoding='utf-8')
           PY
           uv run ruff format src/optimization_compass/dataset_release.py
-      - name: Install project dependencies
-        run: |
-          uv sync --frozen --all-extras --all-groups
-          npm ci --prefix site
       - name: Stage and publish dataset v0.11.0
         run: |
           rm -rf .staged-trf-release
