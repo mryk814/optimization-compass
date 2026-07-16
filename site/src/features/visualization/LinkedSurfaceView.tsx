@@ -69,15 +69,15 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
 
       <figure className="linked-surface-figure">
         <svg
+          aria-describedby="linked-surface-description"
+          aria-label="3D探索軌跡"
           data-current-frame={currentFrameIndex}
           data-testid="linked-objective-surface"
-          role="img"
+          role="group"
           viewBox="0 0 600 330"
-          aria-labelledby="linked-surface-title linked-surface-description"
         >
-          <title id="linked-surface-title">{spec.expression}の3D surfaceと探索軌跡</title>
           <desc id="linked-surface-description">
-            直交投影した目的関数surface。高さはlog1pで正規化。{pointLabel}。軌跡上の点を選ぶと同じTraceのframeへ移動します。
+            {spec.expression}を直交投影したsurface。高さはlog1pで正規化。{pointLabel}。軌跡上の点を選ぶと同じTraceのframeへ移動します。
           </desc>
           <rect className="surface-background" height="330" rx="12" width="600" />
           <g className="surface-mesh" aria-hidden="true">
