@@ -185,7 +185,20 @@ jobs:
           uv run ruff format --check .
           uv run mypy src
       - name: Run full Python tests
-        run: uv run pytest
+        id: pytest
+        continue-on-error: true
+        run: uv run pytest --maxfail=20 -q > trf-pytest-output.txt 2>&1
+      - name: Upload pytest diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: trf-pytest-output
+          path: trf-pytest-output.txt
+          if-no-files-found: error
+          retention-days: 1
+      - name: Require successful Python tests
+        if: steps.pytest.outcome != 'success'
+        run: exit 1
       - name: Validate data, content, and licensing
         run: |
           uv run optimization-compass verify-data
