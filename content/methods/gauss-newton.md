@@ -5,7 +5,7 @@ method_id: M_GAUSS_NEWTON
 title_ja: Gauss–Newton法
 title_en: Gauss-Newton Method
 summary: 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
-source_ids: [S002, S003, S041, S056]
+source_ids: [S003, S041, S056]
 related_ids: [least-squares, newton-method, trust-region-newton-cg]
 status: published
 last_reviewed: 2026-07-16

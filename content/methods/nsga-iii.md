@@ -5,7 +5,7 @@ method_id: M_NSGA_III
 title_ja: NSGA-III
 title_en: NSGA-III
 summary: 多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。
-source_ids: [S039, S068]
+source_ids: [S039]
 related_ids: [multi-objective, epsilon-constraint]
 status: published
 last_reviewed: 2026-07-16

@@ -5,7 +5,7 @@ method_id: M_BUNDLE
 title_ja: Bundle法
 title_en: Bundle Method
 summary: 非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。
-source_ids: [S055, S056, S066]
+source_ids: [S055, S056]
 related_ids: [family.composite-convex, subgradient, proximal-gradient]
 status: published
 last_reviewed: 2026-07-16

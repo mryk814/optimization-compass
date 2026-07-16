@@ -5,7 +5,7 @@ method_id: M_MOEA_D
 title_ja: MOEA/D
 title_en: Multi-Objective Evolutionary Algorithm Based on Decomposition
 summary: 多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。
-source_ids: [S039, S068]
+source_ids: [S039]
 related_ids: [multi-objective, epsilon-constraint, nsga-iii]
 status: published
 last_reviewed: 2026-07-16

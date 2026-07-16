@@ -5,7 +5,7 @@ method_id: M_NLCG
 title_ja: 非線形共役勾配法
 title_en: Nonlinear Conjugate Gradient
 summary: 現在の勾配だけでなく直前までの探索方向も再利用し、少ないmemoryで大規模な滑らかな無制約問題を解く局所法です。
-source_ids: [S002, S056, S057]
+source_ids: [S002, S056]
 related_ids: [family.smooth-local, method.gradient-descent, bfgs]
 status: published
 last_reviewed: 2026-07-16

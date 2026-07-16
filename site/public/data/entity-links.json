@@ -1449,11 +1449,6 @@
           "target_type": "source"
         },
         {
-          "relation_type": "evidence",
-          "target_id": "S066",
-          "target_type": "source"
-        },
-        {
           "relation_type": "explains",
           "target_id": "M_BUNDLE",
           "target_type": "method"
@@ -2186,11 +2181,6 @@
           "target_type": "source"
         },
         {
-          "relation_type": "evidence",
-          "target_id": "S068",
-          "target_type": "source"
-        },
-        {
           "relation_type": "explains",
           "target_id": "M_EPSILON_CONSTRAINT",
           "target_type": "method"
@@ -2807,11 +2797,6 @@
       "relations": [
         {
           "relation_type": "evidence",
-          "target_id": "S002",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S003",
           "target_type": "source"
         },
@@ -3347,11 +3332,6 @@
           "target_type": "source"
         },
         {
-          "relation_type": "evidence",
-          "target_id": "S068",
-          "target_type": "source"
-        },
-        {
           "relation_type": "explains",
           "target_id": "M_MOEA_D",
           "target_type": "method"
@@ -3495,11 +3475,6 @@
           "target_type": "source"
         },
         {
-          "relation_type": "evidence",
-          "target_id": "S057",
-          "target_type": "source"
-        },
-        {
           "relation_type": "explains",
           "target_id": "M_NEWTON_CG",
           "target_type": "method"
@@ -3592,11 +3567,6 @@
           "target_type": "source"
         },
         {
-          "relation_type": "evidence",
-          "target_id": "S057",
-          "target_type": "source"
-        },
-        {
           "relation_type": "explains",
           "target_id": "M_NLCG",
           "target_type": "method"
@@ -3630,11 +3600,6 @@
         {
           "relation_type": "evidence",
           "target_id": "S039",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
-          "target_id": "S068",
           "target_type": "source"
         },
         {
@@ -4177,11 +4142,6 @@
         {
           "relation_type": "evidence",
           "target_id": "S002",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
-          "target_id": "S003",
           "target_type": "source"
         },
         {

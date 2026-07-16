@@ -748,8 +748,7 @@
       "seo_title": "Bundle法",
       "source_ids": [
         "S055",
-        "S056",
-        "S066"
+        "S056"
       ],
       "status": "published",
       "summary": "非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。",
@@ -1725,8 +1724,7 @@
       "seo_title": "ε-constraint法",
       "source_ids": [
         "S039",
-        "S055",
-        "S068"
+        "S055"
       ],
       "status": "published",
       "summary": "一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらPareto候補を集める方法です。",
@@ -2392,7 +2390,6 @@
       "seo_description": "非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。",
       "seo_title": "Gauss–Newton法",
       "source_ids": [
-        "S002",
         "S003",
         "S041",
         "S056"
@@ -3054,8 +3051,7 @@
       "seo_description": "多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。",
       "seo_title": "MOEA/D",
       "source_ids": [
-        "S039",
-        "S068"
+        "S039"
       ],
       "status": "published",
       "summary": "多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。",
@@ -3324,8 +3320,7 @@
       "seo_title": "Newton-CG法",
       "source_ids": [
         "S002",
-        "S056",
-        "S057"
+        "S056"
       ],
       "status": "published",
       "summary": "Hessian全体を保持せずHessian-vector積と共役勾配法でNewton方向を近似し、滑らかな大規模問題へ二階情報を使う局所法です。",
@@ -3439,8 +3434,7 @@
       "seo_title": "非線形共役勾配法",
       "source_ids": [
         "S002",
-        "S056",
-        "S057"
+        "S056"
       ],
       "status": "published",
       "summary": "現在の勾配だけでなく直前までの探索方向も再利用し、少ないmemoryで大規模な滑らかな無制約問題を解く局所法です。",
@@ -3501,8 +3495,7 @@
       "seo_description": "多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。",
       "seo_title": "NSGA-III",
       "source_ids": [
-        "S039",
-        "S068"
+        "S039"
       ],
       "status": "published",
       "summary": "多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。",
@@ -4250,7 +4243,6 @@
       "seo_title": "Trust-region Krylov法",
       "source_ids": [
         "S002",
-        "S003",
         "S056"
       ],
       "status": "published",

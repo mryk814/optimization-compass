@@ -5,7 +5,7 @@ method_id: M_NEWTON_CG
 title_ja: Newton-CG法
 title_en: Newton Conjugate Gradient
 summary: Hessian全体を保持せずHessian-vector積と共役勾配法でNewton方向を近似し、滑らかな大規模問題へ二階情報を使う局所法です。
-source_ids: [S002, S056, S057]
+source_ids: [S002, S056]
 related_ids: [family.smooth-local, newton-method, trust-region-newton-cg]
 status: published
 last_reviewed: 2026-07-16

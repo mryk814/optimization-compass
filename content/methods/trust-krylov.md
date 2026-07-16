@@ -5,7 +5,7 @@ method_id: M_TRUST_KRYLOV
 title_ja: Trust-region Krylov法
 title_en: Trust-Region Krylov
 summary: Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。
-source_ids: [S002, S003, S056]
+source_ids: [S002, S056]
 related_ids: [family.smooth-local, newton-cg, trust-region-newton-cg]
 status: published
 last_reviewed: 2026-07-16

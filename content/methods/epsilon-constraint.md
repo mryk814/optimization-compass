@@ -5,7 +5,7 @@ method_id: M_EPSILON_CONSTRAINT
 title_ja: ε-constraint法
 title_en: Epsilon-Constraint Method
 summary: 一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらPareto候補を集める方法です。
-source_ids: [S039, S055, S068]
+source_ids: [S039, S055]
 related_ids: [multi-objective]
 status: published
 last_reviewed: 2026-07-16
