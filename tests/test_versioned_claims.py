@@ -60,9 +60,30 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
     assert len(freshness["claims"]) == active_claims
 
 
-def test_scipy_trf_default_selection_claims_are_scoped_and_versioned(
+def test_scipy_trf_has_one_canonical_method_and_scoped_default_claims(
     connection: sqlite3.Connection,
 ) -> None:
+    method = connection.execute(
+        "SELECT method_family_id, parent_method_id FROM methods WHERE method_id = ?",
+        ("M_TRUST_REGION_REFLECTIVE",),
+    ).fetchone()
+    mappings = connection.execute(
+        "SELECT method_id FROM method_implementation_map WHERE implementation_id = ?",
+        ("I_SCIPY_LEAST_SQUARES_TRF",),
+    ).fetchall()
+    supported = connection.execute(
+        "SELECT supported_method_ids FROM implementations WHERE implementation_id = ?",
+        ("I_SCIPY_LEAST_SQUARES_TRF",),
+    ).fetchone()
+
+    assert method is not None
+    assert (method["method_family_id"], method["parent_method_id"]) == (
+        "MF_TRUST_REGION",
+        "MF_TRUST_REGION",
+    )
+    assert [row["method_id"] for row in mappings] == ["M_TRUST_REGION_REFLECTIVE"]
+    assert supported["supported_method_ids"] == "M_TRUST_REGION_REFLECTIVE"
+
     claims = claims_at(connection, "I_SCIPY_LEAST_SQUARES_TRF", date(2026, 7, 16))
     by_predicate = {claim["predicate"]: claim for claim in claims}
 
