@@ -1,0 +1,705 @@
+## ruff-check
+```text
+All checks passed!
+
+exit_status=0
+```
+
+## ruff-format
+```text
+82 files already formatted
+
+exit_status=0
+```
+
+## mypy
+```text
+Success: no issues found in 36 source files
+
+exit_status=0
+```
+
+## pytest
+```text
+................................F.....................................F. [ 28%]
+.............F.......................................................... [ 57%]
+.......F..........F
+=================================== FAILURES ===================================
+____________ test_report_separates_inventory_from_expected_coverage ____________
+
+    def test_report_separates_inventory_from_expected_coverage() -> None:
+        report = load_report()
+>       assert report.summary.subject_counts == {
+            "feature_family": 10,
+            "method": 98,
+            "problem": 56,
+        }
+E       AssertionError: assert {'feature_fam...'problem': 56} == {'feature_fam...'problem': 56}
+E         
+E         Omitting 2 identical items, use -vv to show
+E         Differing items:
+E         {'method': 99} != {'method': 98}
+E         
+E         Full diff:
+E           {
+E               'feature_family': 10,
+E         -     'method': 98,
+E         ?                ^
+E         +     'method': 99,
+E         ?                ^
+E               'problem': 56,
+E           }
+
+tests/test_coverage.py:22: AssertionError
+__________________ test_exported_media_manifest_matches_files __________________
+
+    def test_exported_media_manifest_matches_files() -> None:
+        root = Path("site/public/data")
+        manifest = DerivedMediaManifest.model_validate_json((root / "media/manifest.json").read_bytes())
+    
+>       assert manifest.dataset_version == "0.10.0"
+E       AssertionError: assert '0.11.0' == '0.10.0'
+E         
+E         - 0.10.0
+E         ?    ^
+E         + 0.11.0
+E         ?    ^
+
+tests/test_derived_media.py:79: AssertionError
+______ test_source_evidence_index_exports_every_source_and_canonical_link ______
+
+repository = <optimization_compass.db.KnowledgeRepository object at 0x7f9a5dcd4500>
+
+    def test_source_evidence_index_exports_every_source_and_canonical_link(
+        repository: KnowledgeRepository,
+    ) -> None:
+        index = build_source_evidence_index(
+            repository,
+            dataset_version=repository.dataset_version(),
+            generated_at=datetime(2026, 7, 13, tzinfo=UTC),
+        )
+    
+>       assert len(index.sources) == 95
+E       AssertionError: assert 97 == 95
+E        +  where 97 = len([SourceRecord(source_id='S001', source_type='official_documentation', title='SciPy Optimization and root finding', pub...'非凸二次計画問題', evidence_role='supporting_or_primary', confidence='high', last_verified=datetime.date(2026, 7, 13))]), ...])
+E        +    where [SourceRecord(source_id='S001', source_type='official_documentation', title='SciPy Optimization and root finding', pub...'非凸二次計画問題', evidence_role='supporting_or_primary', confidence='high', last_verified=datetime.date(2026, 7, 13))]), ...] = SourceEvidenceIndex(contract_version='1.0.0', dataset_version='0.11.0', generated_at=datetime.datetime(2026, 7, 13, 0,...and bounds-dependent defaults', source_quality='primary', currentness_status='verified_current', evidence_targets=[])]).sources
+
+tests/test_evidence.py:25: AssertionError
+________ test_repository_release_authority_is_the_target_version_source ________
+
+    def test_repository_release_authority_is_the_target_version_source() -> None:
+        authority = load_release_authority(RELEASE_AUTHORITY_PATH)
+    
+        assert authority == RELEASE_AUTHORITY
+>       assert authority.dataset_version == "0.10.0"
+E       AssertionError: assert '0.11.0' == '0.10.0'
+E         
+E         - 0.10.0
+E         ?    ^
+E         + 0.11.0
+E         ?    ^
+
+tests/test_release_identity.py:22: AssertionError
+________ test_exporter_writes_five_branch_golden_and_is_byte_identical _________
+
+tmp_path = PosixPath('/tmp/pytest-of-runner/pytest-0/test_exporter_writes_five_bran0')
+repository = <optimization_compass.db.KnowledgeRepository object at 0x7f9a5f7e7bf0>
+
+    def test_exporter_writes_five_branch_golden_and_is_byte_identical(
+        tmp_path: Path, repository: KnowledgeRepository
+    ) -> None:
+        first_output = tmp_path / "first"
+        second_output = tmp_path / "second"
+    
+        first_manifest = export_site_data(first_output, repository)
+        second_manifest = export_site_data(second_output, repository)
+    
+        first_view_bytes = (first_output / "views/problem-structure.json").read_bytes()
+        second_view_bytes = (second_output / "views/problem-structure.json").read_bytes()
+        first_manifest_bytes = (first_output / "manifest.json").read_bytes()
+        second_manifest_bytes = (second_output / "manifest.json").read_bytes()
+        first_recommendation_bytes = (first_output / "recommendation/site-data.json").read_bytes()
+        second_recommendation_bytes = (second_output / "recommendation/site-data.json").read_bytes()
+        first_scenario_bytes = (first_output / "visualization-scenarios.json").read_bytes()
+        second_scenario_bytes = (second_output / "visualization-scenarios.json").read_bytes()
+    
+        assert first_view_bytes == second_view_bytes
+        assert first_manifest_bytes == second_manifest_bytes
+        assert (first_output / "release.json").read_bytes() == (
+            second_output / "release.json"
+        ).read_bytes()
+        assert first_recommendation_bytes == second_recommendation_bytes
+        assert first_scenario_bytes == second_scenario_bytes
+        assert first_manifest == second_manifest
+        assert first_view_bytes.endswith(b"\n")
+        assert first_manifest_bytes.endswith(b"\n")
+    
+        view = ViewSpec.model_validate_json(first_view_bytes)
+        nodes = {node.node_id: node for node in view.nodes}
+        entities = {(entity.entity_type, entity.entity_id): entity for entity in view.entities}
+        assert view.title == "問題構造マップ"
+        assert view.description == "問題の特徴から手法候補へ辿る意味階層。"
+        assert view.preset_id == "VIEW_PROBLEM_STRUCTURE"
+        assert view.axis == "problem_structure"
+        assert view.relation_types == ["hierarchy"]
+        assert view.max_depth == 3
+        assert view.limitations
+        assert view.focus_fallback_entity_types == ["feature", "method", "problem", "alternative"]
+        assert [nodes[node_id].label for node_id in view.root_node_ids] == EXPECTED_BRANCHES
+        assert view.root_node_ids == [
+            "branch:alternative-first",
+            "branch:variable-domain",
+            "branch:objective-information",
+            "branch:constraint-structure",
+            "branch:required-outcome-guarantee",
+        ]
+        assert view.generated_at.date().isoformat() == repository.latest_release()["release_date"]
+        assert view.dataset_version == repository.dataset_version()
+    
+        roots = [nodes[node_id] for node_id in view.root_node_ids]
+        assert [node.display_order for node in roots] == list(range(5))
+        assert all(node.summary for node in roots)
+        assert all(node.default_collapsed for node in roots)
+        assert {node.emphasis for node in roots} == {"primary"}
+    
+        question_nodes = [node for node in view.nodes if node.node_type == "question"]
+        assert {node.question_id for node in question_nodes} == {
+            f"Q{number:02d}" for number in range(1, 13)
+        }
+        assert {node.answer_type for node in question_nodes} == {
+            "single_choice",
+            "multi_choice",
+        }
+        assert all(node.allowed_answers for node in question_nodes)
+        assert all(node.summary for node in question_nodes)
+        assert all(node.default_collapsed for node in question_nodes)
+        assert {node.emphasis for node in question_nodes} == {"normal"}
+        assert nodes["question:Q01"].summary == (
+            "変数型は利用できるsolver familyを最初に大きく分ける。"
+        )
+        assert [
+            nodes[node_id].display_order for node_id in ["question:Q01", "question:Q08", "question:Q12"]
+        ] == [0, 1, 2]
+    
+        for node_id, label in EXPECTED_ANSWER_LABELS.items():
+            assert nodes[node_id].label == label
+        assert nodes["answer:Q02:explicit_algebraic"].label_en == "explicit algebraic"
+        assert nodes["answer:Q10:global_proof_required"].label_en == "global proof required"
+    
+        q01_binary = nodes["answer:Q01:binary"]
+        q01_continuous = nodes["answer:Q01:continuous"]
+        q02_explicit = nodes["answer:Q02:explicit_algebraic"]
+        assert q01_binary.default_collapsed is False
+        assert q01_binary.emphasis == "normal"
+        assert q01_binary.display_order == 2
+        assert q01_binary.summary == "Boolean/0-1構造をnativeに扱う。"
+        assert {("method", "M_BRANCH_CUT"), ("method", "M_CP_SAT")} <= {
+            (reference.entity_type, reference.entity_id) for reference in q01_binary.related_entities
+        }
+        assert ("problem", "PA006") in {
+            (reference.entity_type, reference.entity_id)
+            for reference in q01_continuous.related_entities
+        }
+        assert ("alternative", "ALT_SPECIALIZED") in {
+            (reference.entity_type, reference.entity_id) for reference in q02_explicit.related_entities
+        }
+        assert q01_binary.source_ids == ["S054", "S055", "S056"]
+    
+        alternative = nodes["entity:alternative:ALT_SPECIALIZED"]
+        assert alternative.summary == "保証・数値性・速度"
+        assert alternative.default_collapsed is False
+        assert alternative.emphasis == "muted"
+        assert [
+            (reference.entity_type, reference.entity_id) for reference in alternative.related_entities
+        ] == [("alternative", "ALT_SPECIALIZED")]
+    
+        assert all(edge.explanation for edge in view.edges if edge.edge_type == "hierarchy")
+        assert "entity_refs" not in view.model_dump(mode="json")["nodes"][0]
+        assert entities[("method", "M_BRANCH_CUT")].summary
+        assert entities[("problem", "PA006")].summary
+        assert entities[("feature", "F_VARIABLE_DOMAIN")].summary
+        assert entities[("alternative", "ALT_SPECIALIZED")].summary
+        assert entities[("source", "S054")].url.startswith("https://")
+    
+        bindings = [binding for node in view.nodes for binding in node.answer_bindings]
+        assert ("Q01", "continuous") in {
+            (binding.question_id, binding.answer_value) for binding in bindings
+        }
+    
+        manifest_payload = json.loads(first_manifest_bytes)
+        SiteManifest.model_validate(manifest_payload)
+        assert manifest_payload["views"] == [
+            {
+                "path": "views/problem-structure.json",
+                "view_id": "problem-structure",
+                "version": "1.0.0",
+            },
+            {
+                "path": "views/available-information.json",
+                "view_id": "available-information",
+                "version": "1.0.0",
+            },
+            {
+                "path": "views/guarantee-outcome.json",
+                "view_id": "guarantee-outcome",
+                "version": "1.0.0",
+            },
+            {
+                "path": "views/method-mechanism.json",
+                "view_id": "method-mechanism",
+                "version": "1.0.0",
+            },
+        ]
+        for item in manifest_payload["views"]:
+            semantic_view = ViewSpec.model_validate_json((first_output / item["path"]).read_bytes())
+            assert semantic_view.description
+            assert semantic_view.limitations
+            assert semantic_view.filter_policy.groups
+        assert manifest_payload["recommendation"] == {
+            "path": "recommendation/site-data.json",
+            "version": "2.0.0",
+        }
+        assert manifest_payload["traces"]["path"] == "traces/index.json"
+        assert manifest_payload["traces"]["contract_version"] == "1.0.0"
+        assert manifest_payload["traces"]["index_version"] == "1.0.0"
+        index_bytes = (first_output / "traces/index.json").read_bytes()
+        assert manifest_payload["traces"]["bytes"] == len(index_bytes)
+        assert manifest_payload["traces"]["sha256"] == sha256(index_bytes).hexdigest()
+        assert manifest_payload["problems"] == {
+            "path": "problems.json",
+            "version": "1.0.0",
+        }
+        problem_catalog = json.loads((first_output / "problems.json").read_bytes())
+        assert len(problem_catalog["definitions"]) == 9
+        assert len(problem_catalog["instances"]) == 10
+        search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
+        search_tree_index = json.loads(search_tree_index_bytes)
+        assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        }
+        for entry in search_tree_index["artifacts"]:
+            assert (first_output / entry["path"]).is_file()
+            assert (first_output / entry["static_fallback_path"]).is_file()
+        assert manifest_payload["visualization_scenarios"] == {
+            "path": "visualization-scenarios.json",
+            "version": "1.2.0",
+        }
+        assert manifest_payload["derived_media"] == {
+            "path": "media/manifest.json",
+            "version": "1.1.0",
+        }
+        first_media_bytes = (first_output / "media/manifest.json").read_bytes()
+        assert first_media_bytes == (second_output / "media/manifest.json").read_bytes()
+        media_manifest = json.loads(first_media_bytes)
+        for entry in media_manifest["entries"]:
+            for file in entry["files"]:
+                content = (first_output / file["path"]).read_bytes()
+                assert content == (second_output / file["path"]).read_bytes()
+                assert file["bytes"] == len(content)
+                assert file["sha256"] == sha256(content).hexdigest()
+            for key in ("captions", "transcript"):
+                text_asset = entry[key]
+                content = (first_output / text_asset["path"]).read_bytes()
+                assert content == (second_output / text_asset["path"]).read_bytes()
+                assert text_asset["bytes"] == len(content)
+                assert text_asset["sha256"] == sha256(content).hexdigest()
+        assert manifest_payload["entity_links"] == {
+            "path": "entity-links.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["sources"] == {
+            "path": "sources.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["implementation_claims"] == {
+            "path": "implementation-claims.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["benchmark_contexts"] == {
+            "path": "benchmark-contexts.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["failure_modes"] == {
+            "path": "failure-modes.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
+        assert manifest_payload["retrieval_documents"] == {
+            "path": "retrieval-documents.json",
+            "version": "1.0.0",
+        }
+        assert manifest_payload["search_benchmark"] == {
+            "path": "search-benchmark.json",
+            "version": "1.0.0",
+        }
+        assert (first_output / "search-index.json").read_bytes() == (
+            second_output / "search-index.json"
+        ).read_bytes()
+        assert (first_output / "retrieval-documents.json").read_bytes() == (
+            second_output / "retrieval-documents.json"
+        ).read_bytes()
+        claim_payload = json.loads((first_output / "implementation-claims.json").read_bytes())
+>       assert len(claim_payload["claims"]) == 64 * 7 + 1
+E       AssertionError: assert 451 == ((64 * 7) + 1)
+E        +  where 451 = len([{'claim_id': 'CLAIM_ACADOS_CURRENT_RELEASE', 'commit_sha': None, 'confidence': 'high', 'last_verified': '2026-07-13',...LAIM_ACADOS_PLATFORM_ARCHITECTURE', 'commit_sha': None, 'confidence': 'high', 'last_verified': '2026-07-13', ...}, ...])
+
+tests/test_site_export.py:287: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_atlas_metadata_schema.py: 9 warnings
+tests/test_dataset_formats.py: 13 warnings
+tests/test_dataset_release.py: 10 warnings
+tests/test_licensing.py: 1 warning
+tests/test_problem_instances.py: 1 warning
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/openpyxl/workbook/child.py:99: UserWarning: Title is more than 31 characters. Some applications may not be able to read the file
+    warnings.warn("Title is more than 31 characters. Some applications may not be able to read the file")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_coverage.py::test_report_separates_inventory_from_expected_coverage - AssertionError: assert {'feature_fam...'problem': 56} == {'feature_fam...'problem': 56}
+  
+  Omitting 2 identical items, use -vv to show
+  Differing items:
+  {'method': 99} != {'method': 98}
+  
+  Full diff:
+    {
+        'feature_family': 10,
+  -     'method': 98,
+  ?                ^
+  +     'method': 99,
+  ?                ^
+        'problem': 56,
+    }
+FAILED tests/test_derived_media.py::test_exported_media_manifest_matches_files - AssertionError: assert '0.11.0' == '0.10.0'
+  
+  - 0.10.0
+  ?    ^
+  + 0.11.0
+  ?    ^
+FAILED tests/test_evidence.py::test_source_evidence_index_exports_every_source_and_canonical_link - AssertionError: assert 97 == 95
+ +  where 97 = len([SourceRecord(source_id='S001', source_type='official_documentation', title='SciPy Optimization and root finding', pub...'非凸二次計画問題', evidence_role='supporting_or_primary', confidence='high', last_verified=datetime.date(2026, 7, 13))]), ...])
+ +    where [SourceRecord(source_id='S001', source_type='official_documentation', title='SciPy Optimization and root finding', pub...'非凸二次計画問題', evidence_role='supporting_or_primary', confidence='high', last_verified=datetime.date(2026, 7, 13))]), ...] = SourceEvidenceIndex(contract_version='1.0.0', dataset_version='0.11.0', generated_at=datetime.datetime(2026, 7, 13, 0,...and bounds-dependent defaults', source_quality='primary', currentness_status='verified_current', evidence_targets=[])]).sources
+FAILED tests/test_release_identity.py::test_repository_release_authority_is_the_target_version_source - AssertionError: assert '0.11.0' == '0.10.0'
+  
+  - 0.10.0
+  ?    ^
+  + 0.11.0
+  ?    ^
+FAILED tests/test_site_export.py::test_exporter_writes_five_branch_golden_and_is_byte_identical - AssertionError: assert 451 == ((64 * 7) + 1)
+ +  where 451 = len([{'claim_id': 'CLAIM_ACADOS_CURRENT_RELEASE', 'commit_sha': None, 'confidence': 'high', 'last_verified': '2026-07-13',...LAIM_ACADOS_PLATFORM_ARCHITECTURE', 'commit_sha': None, 'confidence': 'high', 'last_verified': '2026-07-13', ...}, ...])
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 5 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+exit_status=1
+```
+
+## verify-data
+```text
+{
+  "ok": true,
+  "foreign_key_violations": 0,
+  "failed_release_checks": 0,
+  "warning_release_checks": 1,
+  "total_release_checks": 25,
+  "dataset_version": "0.11.0",
+  "stored_status_mismatches": [],
+  "details": [
+    {
+      "check_id": "CHK001",
+      "check_name": "SQL DDL creation",
+      "scope": "all tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "ok",
+      "expected_condition": "PRAGMA integrity_check is ok",
+      "details": "Schema and b-trees are readable.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK002",
+      "check_name": "SQLite full data load",
+      "scope": "all base/derived tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "8,960 rows present",
+      "expected_condition": "all tables are readable and contain released rows",
+      "details": "Counted directly from SQLite.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK003",
+      "check_name": "Foreign-key integrity",
+      "scope": "all declared foreign keys",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 violations",
+      "expected_condition": "PRAGMA foreign_key_check returns zero rows",
+      "details": "Computed live; stored status is not trusted.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK004",
+      "check_name": "Primary-key uniqueness",
+      "scope": "all tables with declared PK",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 duplicates",
+      "expected_condition": "zero duplicate primary-key tuples",
+      "details": "All declared primary keys are unique.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK005",
+      "check_name": "Source reference integrity",
+      "scope": "all source reference fields",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved source IDs",
+      "expected_condition": "every referenced source ID exists",
+      "details": "Semicolon and JSON source lists included.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK006",
+      "check_name": "Evidence target integrity",
+      "scope": "evidence_links",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved targets",
+      "expected_condition": "every target_table/target_id pair resolves",
+      "details": "Polymorphic evidence targets resolve.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK007",
+      "check_name": "Decision action target typing",
+      "scope": "decision_rules",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved IDs",
+      "expected_condition": "every action target resolves under its declared type",
+      "details": "Decision target interpretation is explicit.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK008",
+      "check_name": "Optional foreign-key null semantics",
+      "scope": "declared foreign keys",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 blank-string foreign keys",
+      "expected_condition": "absent optional references use SQL NULL",
+      "details": "No blank foreign-key values.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK009",
+      "check_name": "Objective-form enum normalization",
+      "scope": "feature_values + case_feature_map",
+      "severity": "medium",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "no free-text discrete objective form remains",
+      "details": "Objective-form values are canonical.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK010",
+      "check_name": "Implementation release coverage",
+      "scope": "implementations",
+      "severity": "medium",
+      "status": "warn",
+      "observed_value": "39/64 have non-unknown release metadata",
+      "expected_condition": "unknown remains explicit and tracked",
+      "details": "Coverage is advisory and therefore warning when incomplete.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK011",
+      "check_name": "License verification",
+      "scope": "Manopt MATLAB and NOMAD",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 mismatches",
+      "expected_condition": "exact license family is recorded",
+      "details": "License families match the released assertions.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK012",
+      "check_name": "Maintenance-status risk",
+      "scope": "JAXopt",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 mismatches",
+      "expected_condition": "JAXopt legacy status and release are explicit",
+      "details": "Maintenance risk is explicit.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK013",
+      "check_name": "Atlas schema closure",
+      "scope": "26 atlas metadata tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 missing tables",
+      "expected_condition": "all 26 normalized tables exist",
+      "details": "All atlas tables exist.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK014",
+      "check_name": "View preset constraints",
+      "scope": "view_presets",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "root condition and relation lists are explicit",
+      "details": "Preset roots and relations are valid.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK015",
+      "check_name": "Visualization/problem closure",
+      "scope": "profiles + problem definitions + instances",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "generators, dimensions, implementations, and JSON are closed",
+      "details": "Profiles and problems are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK016",
+      "check_name": "Demo scenario closure",
+      "scope": "demo_scenarios",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "scenario references and seed semantics resolve",
+      "details": "Scenarios are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK017",
+      "check_name": "Comparison fairness closure",
+      "scope": "comparison sets and members",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "members are normalized and synchronize by oracle evaluations",
+      "details": "Comparison membership is normalized.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK018",
+      "check_name": "Learning edge closure",
+      "scope": "learning_edges",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "typed endpoints resolve without self or duplicate edges",
+      "details": "Learning endpoints resolve.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK019",
+      "check_name": "Explicit state semantics",
+      "scope": "atlas metadata",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 ambiguous values",
+      "expected_condition": "unknown, not_applicable, and unsupported are explicit; blanks are forbidden",
+      "details": "No ambiguous blank state values.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK020",
+      "check_name": "Release artifact consistency",
+      "scope": "all staged formats",
+      "severity": "critical",
+      "status": "not_run",
+      "observed_value": "database-only verification",
+      "expected_condition": "release tree round-trip and manifest checks pass",
+      "details": "Only verify_release_tree may establish artifact consistency.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK021",
+      "check_name": "Learning coverage closure",
+      "scope": "coverage expectations and priority slices",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "subjects, slices, scores, and evidence resolve without inferred status",
+      "details": "Coverage policy rows are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK022",
+      "check_name": "Versioned implementation claim closure",
+      "scope": "implementation_claims",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "every implementation/predicate has one explicit active claim and history resolves",
+      "details": "Claim ledger and supersession are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK023",
+      "check_name": "Benchmark context completeness",
+      "scope": "benchmark_contexts + comparison_sets",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "LP/QP/NLP/MIP/DFO/BO fixtures are complete and comparisons reference context",
+      "details": "Benchmark contexts are complete.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK024",
+      "check_name": "Structured failure-mode closure",
+      "scope": "failure mode profiles and relations",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "12 profiles resolve triggers, symptoms, diagnostics, mitigations, and scenarios",
+      "details": "Failure-mode relations are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK025",
+      "check_name": "Terminology alias closure",
+      "scope": "terminology_aliases",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "targets and sources resolve; collisions are explicitly disambiguated",
+      "details": "Terminology aliases are closed.",
+      "checked_at": "2026-07-16"
+    }
+  ]
+}
+
+exit_status=0
+```
+
+## verify-content
+```text
+validated 69 content pages, 11 gallery cases, and 2 comparisons for dataset 0.11.0
+
+exit_status=0
+```
+
+## verify-licensing
+```text
+validated license notices, Pages paths, and 97 source records across 6 source types
+
+exit_status=0
+```
+
