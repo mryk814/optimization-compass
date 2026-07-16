@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
@@ -9,6 +11,7 @@ from optimization_compass.entity_links import (
     EntityLinkIndex,
     EntityRelation,
     LinkedEntity,
+    _load_gallery,
 )
 
 
@@ -60,3 +63,25 @@ def test_relation_index_rejects_dangling_relations() -> None:
                 )
             ],
         )
+
+
+def test_gallery_loader_requires_v2_candidate_reasons_and_limitations(tmp_path: Path) -> None:
+    path = tmp_path / "gallery.json"
+    payload = {
+        "contract_version": "2.0.0",
+        "dataset_version": "1.0.0",
+        "cases": [
+            {
+                "candidate_methods": [{"method_id": "M_ONE", "reason": "理由"}],
+                "limitations": ["限界"],
+            }
+        ],
+    }
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+    assert _load_gallery(path, "1.0.0") == payload
+
+    payload["contract_version"] = "1.0.0"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="unsupported gallery contract version"):
+        _load_gallery(path, "1.0.0")

@@ -481,9 +481,14 @@ def build_entity_link_index(
         for feature in case["feature_values"]:
             feature_value_id = f"{feature['feature_id']}:{feature['value']}"
             connect("case", case_id, "feature_value", "feature_value", feature_value_id)
-        for method_id in case["candidate_method_ids"]:
+        for candidate in case["candidate_methods"]:
             connect(
-                "case", case_id, "candidate_method", "method", str(method_id), reverse_type="case"
+                "case",
+                case_id,
+                "candidate_method",
+                "method",
+                str(candidate["method_id"]),
+                reverse_type="case",
             )
         for conditional in case["conditional_methods"]:
             connect(
@@ -625,12 +630,36 @@ def _load_gallery(path: Path, dataset_version: str) -> dict[str, Any]:
     if not isinstance(raw, dict):
         raise ValueError("gallery index must be an object")
     payload: dict[str, Any] = raw
-    if payload.get("contract_version") != "1.0.0":
+    if payload.get("contract_version") != "2.0.0":
         raise ValueError("unsupported gallery contract version")
     if payload.get("dataset_version") != dataset_version:
         raise ValueError("gallery dataset version does not match the release")
     if not isinstance(payload.get("cases"), list):
         raise ValueError("gallery cases must be a list")
+    for case in payload["cases"]:
+        if not isinstance(case, dict):
+            raise ValueError("gallery case must be an object")
+        if "candidate_method_ids" in case:
+            raise ValueError("gallery candidate_method_ids has been replaced by candidate_methods")
+        candidates = case.get("candidate_methods")
+        if not isinstance(candidates, list) or not candidates:
+            raise ValueError("gallery candidate_methods must be a non-empty list")
+        if any(
+            not isinstance(candidate, dict)
+            or not isinstance(candidate.get("method_id"), str)
+            or not candidate["method_id"].strip()
+            or not isinstance(candidate.get("reason"), str)
+            or not candidate["reason"].strip()
+            for candidate in candidates
+        ):
+            raise ValueError("gallery candidate method requires method_id and reason")
+        limitations = case.get("limitations")
+        if (
+            not isinstance(limitations, list)
+            or not limitations
+            or any(not isinstance(item, str) or not item.strip() for item in limitations)
+        ):
+            raise ValueError("gallery limitations must be a non-empty string list")
     return payload
 
 

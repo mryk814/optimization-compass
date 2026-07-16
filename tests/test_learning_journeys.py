@@ -1,18 +1,33 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
+from optimization_compass.content_models import load_content
+from optimization_compass.evidence import SourceEvidenceIndex
+from optimization_compass.learning_journey_policy import LearningJourneyAssetPolicyIndex
 from optimization_compass.learning_journeys import (
     LearningJourneyIndex,
+    _classify_orphan_assets,
+    _comparison_issues,
+    _reject_broken_routes_for_otherwise_complete_journey,
+    _reject_error_orphans,
+    _route_is_reachable,
+    _source_review_issues,
     validate_learning_journey_references,
 )
+from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
 ROOT = Path(__file__).parents[1]
 FIXTURE = ROOT / "site/public/data/learning-journeys.json"
+SCENARIO_FIXTURE = ROOT / "site/public/data/visualization-scenarios.json"
+COMPARISON_FIXTURE = ROOT / "site/public/data/comparisons.json"
+GALLERY_FIXTURE = ROOT / "site/public/data/gallery.json"
+SOURCE_FIXTURE = ROOT / "site/public/data/sources.json"
 
 
 def load_index() -> LearningJourneyIndex:
@@ -28,17 +43,81 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert pilot.formulation.variable_domain_summary == "continuous"
     assert [item.scenario_id for item in pilot.scenarios] == ["SCENARIO_CONSTRAINED_DISK"]
     assert pilot.scenarios[0].canonical_url == "/theater/learning/SCENARIO_CONSTRAINED_DISK"
-    assert pilot.status == "complete"
-    assert pilot.completion_reasons == []
+    assert pilot.status == "partial"
+    assert pilot.completion_reasons == ["missing_failure_or_sensitivity_scenario"]
+    assessment = next(item for item in index.assessments if item.journey_id == "constrained-design")
+    assert assessment.missing_dimensions == ["alternate_scenario"]
+    assert assessment.dimensions["canonical_comparison"].state == "complete"
 
 
-def test_index_reports_orphan_scenarios_and_comparisons() -> None:
+def test_index_reports_summary_and_explicit_orphan_policies() -> None:
     index = load_index()
 
-    assert index.orphan_scenario_ids
-    assert set(index.orphan_comparison_ids).issubset(
-        {"COMPARE_GRADIENT_FAMILY", "COMPARE_GRADIENT_DIVERGENCE"}
+    assert index.summary.target_complete_journeys == 5
+    assert index.summary.total_journeys == len(index.journeys)
+    assert sum(index.summary.status_counts.values()) == len(index.journeys)
+    assert {item.policy for item in index.orphan_assets} == {"warning"}
+    assert any(
+        item.asset_type == "scenario" and item.policy == "warning" for item in index.orphan_assets
     )
+    assert any(
+        item.asset_type == "comparison" and item.policy == "warning" for item in index.orphan_assets
+    )
+    assert any(item.asset_type == "visualization_artifact" for item in index.orphan_assets)
+    assert any(item.asset_type == "content" for item in index.orphan_assets)
+
+
+def test_explicit_policy_marks_an_orphan_as_intentionally_standalone() -> None:
+    index = load_index()
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    comparisons = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
+    linked_scenarios = {
+        reference.scenario_id for journey in index.journeys for reference in journey.scenarios
+    }
+    standalone_id = next(
+        scenario.scenario_id
+        for scenario in scenarios.scenarios
+        if scenario.scenario_id not in linked_scenarios
+    )
+    policy = LearningJourneyAssetPolicyIndex.model_validate(
+        {
+            "contract_version": "1.0.0",
+            "assets": [
+                {
+                    "asset_type": "scenario",
+                    "asset_id": standalone_id,
+                    "policy": "standalone",
+                    "reason": "intentionally_standalone_demo",
+                }
+            ],
+        }
+    )
+    classified = _classify_orphan_assets(
+        scenario_index=scenarios,
+        comparison_index=comparisons,
+        linked_scenarios=linked_scenarios,
+        linked_comparisons={
+            reference.comparison_id
+            for journey in index.journeys
+            for reference in journey.comparisons
+        },
+        content_pages=load_content(ROOT / "content"),
+        linked_content={item for journey in index.journeys for item in journey.content_ids},
+        asset_policy=policy,
+    )
+
+    standalone = next(
+        item
+        for item in classified
+        if item.asset_type == "scenario" and item.asset_id == standalone_id
+    )
+    assert standalone.policy == "standalone"
+    assert standalone.reason_code == "intentionally_standalone_demo"
+
+    with pytest.raises(ValueError, match=f"scenario:{standalone_id}"):
+        _reject_error_orphans([standalone.model_copy(update={"policy": "error"})])
 
 
 def test_index_rejects_duplicate_and_cross_version_journeys() -> None:
@@ -94,3 +173,122 @@ def test_index_rejects_missing_and_circular_relations() -> None:
     payload["journeys"][1]["prerequisite_journey_ids"] = [first_id]
     with pytest.raises(ValidationError, match="circular journey prerequisite"):
         LearningJourneyIndex.model_validate(payload)
+
+
+def test_index_rejects_complete_journey_with_missing_dimension() -> None:
+    payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    journey = next(
+        item for item in payload["journeys"] if item["journey_id"] == "constrained-design"
+    )
+    assessment = next(
+        item for item in payload["assessments"] if item["journey_id"] == "constrained-design"
+    )
+    journey["status"] = "complete"
+    journey["completion_reasons"] = []
+    assessment["status"] = "complete"
+
+    with pytest.raises(ValidationError, match="cannot have missing dimensions"):
+        LearningJourneyIndex.model_validate(payload)
+
+
+def test_completeness_checks_comparison_contract_and_real_route_targets() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "constrained-design")
+    comparison_payload = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
+    comparisons = {item["comparison_id"]: item for item in comparison_payload["comparisons"]}
+    assert _comparison_issues(journey, comparisons_by_id=comparisons) == []
+
+    broken = json.loads(json.dumps(comparisons["COMPARE_CONSTRAINED_FAILURE"]))
+    broken["fixed_factors"] = []
+    broken["case_id"] = "other-case"
+    issues = _comparison_issues(
+        journey,
+        comparisons_by_id={"COMPARE_CONSTRAINED_FAILURE": broken},
+    )
+    assert issues == ["comparison_contract_incomplete", "comparison_wrong_journey"]
+
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    scenario_by_id = {item.scenario_id: item for item in scenarios.scenarios}
+    inventories = {
+        "method": {
+            *journey.candidate_method_ids,
+            *journey.conditional_method_ids,
+            *journey.excluded_method_ids,
+        },
+        "source": set(journey.source_ids),
+    }
+    assert _route_is_reachable(
+        journey.scenarios[0].canonical_url,
+        journey=journey,
+        scenarios_by_id=scenario_by_id,
+        comparisons_by_id=comparisons,
+        inventories=inventories,
+    )
+    assert not _route_is_reachable(
+        "/methods/M_MISSING",
+        journey=journey,
+        scenarios_by_id=scenario_by_id,
+        comparisons_by_id=comparisons,
+        inventories=inventories,
+    )
+
+
+def test_public_otherwise_complete_journey_rejects_a_broken_route() -> None:
+    with pytest.raises(ValueError, match="public complete journey pilot has broken routes"):
+        _reject_broken_routes_for_otherwise_complete_journey(
+            journey_id="pilot",
+            broken_routes=["/compare/missing"],
+            non_route_missing=[],
+            reference_issues={},
+        )
+
+    _reject_broken_routes_for_otherwise_complete_journey(
+        journey_id="partial",
+        broken_routes=["/compare/missing"],
+        non_route_missing=["canonical_comparison"],
+        reference_issues={},
+    )
+
+
+def test_source_review_uses_surface_sources_and_type_specific_freshness() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "constrained-design")
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    comparisons_payload = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
+    gallery_payload = json.loads(GALLERY_FIXTURE.read_text(encoding="utf-8"))
+    source_index = SourceEvidenceIndex.model_validate_json(
+        SOURCE_FIXTURE.read_text(encoding="utf-8")
+    )
+    case = next(item for item in gallery_payload["cases"] if item["case_id"] == journey.case_id)
+    kwargs = {
+        "case": case,
+        "scenarios_by_id": {item.scenario_id: item for item in scenarios.scenarios},
+        "comparisons_by_id": {
+            item["comparison_id"]: item for item in comparisons_payload["comparisons"]
+        },
+        "content_pages": load_content(ROOT / "content"),
+        "generated_at": index.generated_at,
+    }
+
+    assert _source_review_issues(journey, source_index=source_index, **kwargs) == []
+
+    stale_source_id = journey.source_ids[0]
+    stale_index = source_index.model_copy(
+        update={
+            "sources": [
+                source.model_copy(update={"last_verified": date(2000, 1, 1)})
+                if source.source_id == stale_source_id
+                else source
+                for source in source_index.sources
+            ]
+        }
+    )
+    assert "stale_source" in _source_review_issues(
+        journey,
+        source_index=stale_index,
+        **kwargs,
+    )

@@ -18,6 +18,8 @@ def verify_content(root: Path) -> dict[str, int | str]:
     identity = load_dataset_release_identity(data_root / "release.json")
     content_index = _load_index(data_root / "content.json", "pages", identity.dataset_version)
     gallery_index = _load_index(data_root / "gallery.json", "cases", identity.dataset_version)
+    if gallery_index.get("contract_version") != "2.0.0":
+        raise ValueError("gallery.json must use contract version 2.0.0")
     comparison_index = _load_index(
         data_root / "comparisons.json", "comparisons", identity.dataset_version
     )
@@ -85,14 +87,22 @@ def verify_content(root: Path) -> dict[str, int | str]:
 
     for case in gallery_index["cases"]:
         case_id = str(case["case_id"])
+        if "candidate_method_ids" in case:
+            raise ValueError(
+                f"{case_id} candidate_method_ids has been replaced by candidate_methods"
+            )
         problem_id = str(case["problem_archetype_id"])
         if problem_id not in known_problems:
             raise ValueError(f"{case_id} references unknown problem: {problem_id}")
         if case_id.startswith("EC") and canonical_cases.get(case_id) != problem_id:
             raise ValueError(f"{case_id} does not match its canonical example/problem row")
         _require_references(case_id, case.get("source_ids"), known_sources, "source")
+        candidates = _method_reasons(case_id, case.get("candidate_methods"), "candidate")
         _require_references(
-            case_id, case.get("candidate_method_ids"), known_methods, "candidate method"
+            case_id,
+            [item["method_id"] for item in candidates],
+            known_methods,
+            "candidate method",
         )
         _require_references(
             case_id, case.get("implementation_ids"), known_implementations, "implementation"
@@ -113,7 +123,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
             known_methods,
             "excluded method",
         )
-        candidate_ids = set(_string_list(case.get("candidate_method_ids"), case_id))
+        candidate_ids = {item["method_id"] for item in candidates}
         conditional_ids = {item["method_id"] for item in conditional}
         excluded_ids = {item["method_id"] for item in excluded}
         if (
@@ -143,6 +153,9 @@ def verify_content(root: Path) -> dict[str, int | str]:
         if not isinstance(example, str) or not example.strip():
             raise ValueError(f"{case_id} python_example must not be blank")
         compile(example, f"gallery:{case_id}", "exec")
+        limitations = _string_list(case.get("limitations"), case_id)
+        if not limitations:
+            raise ValueError(f"{case_id} limitations must be a non-empty list")
 
     return {
         "dataset_version": identity.dataset_version,

@@ -221,11 +221,13 @@ Confirm that the following IDs already exist:
 ### Required semantics
 
 - Candidate, conditional, and excluded method sets must not overlap.
-- Every conditional or excluded method needs a concrete reason.
+- Every candidate, conditional, and excluded method needs a concrete reason.
 - `map_node_id` must be backed by the case's question answers.
 - Canonical `EC...` cases must match their database example-case/problem relation.
 - The Python example must be nonblank and syntactically compilable.
-- Practical notes must expose modeling assumptions, uncertainty, or operational limitations.
+- `limitations` must explicitly bound what the fixed educational case does not establish.
+- Practical notes must state the checks needed when applying the case in practice; they do not replace
+  `limitations`.
 - Do not imply that the example's fixed educational run guarantees performance on the real problem.
 
 ### Suggested workflow

@@ -170,3 +170,35 @@ def test_coverage_rejects_broken_canonical_identity_relations(tmp_path: Path) ->
         ("broken_scenario_alias", "SCENARIO_MISSING"),
         ("broken_comparison_alias", "COMPARE_MISSING"),
     }
+
+
+def test_gallery_candidate_objects_restore_method_coverage_without_reverse_links(
+    tmp_path: Path,
+) -> None:
+    artifact_root = tmp_path / "site-data"
+    shutil.copytree(ROOT / "site/public/data", artifact_root)
+    links_path = artifact_root / "entity-links.json"
+    links = json.loads(links_path.read_text(encoding="utf-8"))
+    cp_sat = next(
+        item
+        for item in links["entities"]
+        if item["entity_type"] == "method" and item["entity_id"] == "M_CP_SAT"
+    )
+    cp_sat["relations"] = [
+        relation for relation in cp_sat["relations"] if relation["target_type"] != "case"
+    ]
+    links_path.write_text(json.dumps(links), encoding="utf-8")
+
+    baseline = load_report()
+    report = build_coverage_report(
+        KnowledgeRepository(),
+        artifact_root,
+        dataset_version=baseline.dataset_version,
+        generated_at=baseline.generated_at,
+    )
+    subject = next(item for item in report.subjects if item.subject_id == "M_CP_SAT")
+
+    assert set(subject.dimensions["gallery"].target_ids) >= {
+        "budget-allocation",
+        "shift-scheduling",
+    }

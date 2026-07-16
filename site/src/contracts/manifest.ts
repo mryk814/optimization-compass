@@ -51,7 +51,7 @@ export interface SiteManifest {
   recommendation: ManifestRecommendationAsset;
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
-  learning_journeys: ManifestAsset;
+  learning_journeys: ManifestAsset<"1.1.0">;
   formulation_primer: ManifestAsset;
   visualization_scenarios: ManifestAsset<"1.2.0">;
   derived_media: ManifestAsset<"1.1.0">;
@@ -136,7 +136,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (problems.version !== "1.0.0") throw new Error("problems.version is unsupported.");
   const learningJourneys = record(data.learning_journeys, "learning_journeys");
   exactKeys(learningJourneys, ["version", "path"], "learning_journeys");
-  if (learningJourneys.version !== "1.0.0") throw new Error("learning_journeys.version is unsupported.");
+  if (learningJourneys.version !== "1.1.0") throw new Error("learning_journeys.version is unsupported.");
   const formulationPrimer = record(data.formulation_primer, "formulation_primer");
   exactKeys(formulationPrimer, ["version", "path"], "formulation_primer");
   if (formulationPrimer.version !== "1.0.0") throw new Error("formulation_primer.version is unsupported.");
@@ -206,7 +206,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(problems.path, "problems.path"),
     },
     learning_journeys: {
-      version: "1.0.0",
+      version: "1.1.0",
       path: safeRelativePath(learningJourneys.path, "learning_journeys.path"),
     },
     formulation_primer: {

@@ -1,8 +1,11 @@
 {
   "cases": [
     {
-      "candidate_method_ids": [
-        "M_CP_SAT"
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "予算・選択・相互排他を離散制約として直接表し、可行性と最適性gapを確認できるため"
+        }
       ],
       "case_id": "budget-allocation",
       "comparison_ids": [],
@@ -32,6 +35,9 @@
         "I_ORTOOLS_CPSAT"
       ],
       "last_reviewed": "2026-07-14",
+      "limitations": [
+        "固定した期待効果を前提とする教材modelであり、施策間の相互作用や将来の効果変動は別途検証が必要です。"
+      ],
       "map_node_id": "answer:Q01:binary",
       "objective": "期待効果の合計を最大化する。",
       "practical_notes": "実測効果の不確実性と、予算制約の単位を分けて確認します。",
@@ -54,8 +60,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_CP_SAT"
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "資格・休憩・連続勤務などの論理制約を直接表し、必要人数を満たす割当を探索できるため"
+        }
       ],
       "case_id": "shift-scheduling",
       "comparison_ids": [],
@@ -85,6 +94,9 @@
         "I_ORTOOLS_CPSAT"
       ],
       "last_reviewed": "2026-07-14",
+      "limitations": [
+        "固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"
+      ],
       "map_node_id": "answer:Q01:binary",
       "objective": "希望違反と偏りのペナルティを最小化する。",
       "practical_notes": "hard constraintとsoft constraintを最初に分離します。",
@@ -106,8 +118,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_BAYESIAN_OPT_GP"
+      "candidate_methods": [
+        {
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "reason": "高価なblack-box評価をsurrogateで近似し、少ない試行から次の設定を選べるため"
+        }
       ],
       "case_id": "hyperparameter-search",
       "comparison_ids": [
@@ -139,6 +154,9 @@
         "I_OPTUNA"
       ],
       "last_reviewed": "2026-07-14",
+      "limitations": [
+        "固定した探索範囲とevaluation budgetでの結果であり、別datasetやmodelでの優位性は保証しません。"
+      ],
       "map_node_id": "answer:Q01:continuous",
       "objective": "検証損失または実験スコアを最小化する。",
       "practical_notes": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。",
@@ -160,8 +178,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "MF_LP_QP_CONIC"
+      "candidate_methods": [
+        {
+          "method_id": "MF_LP_QP_CONIC",
+          "reason": "二次riskと線形の配分制約を凸modelとして明示し、大域解を確認できるため"
+        }
       ],
       "case_id": "portfolio-allocation",
       "comparison_ids": [],
@@ -191,6 +212,9 @@
         "I_CVXPY"
       ],
       "last_reviewed": "2026-07-14",
+      "limitations": [
+        "期待収益と共分散の推定に依存し、取引costや将来分布の変化を保証範囲に含めません。"
+      ],
       "map_node_id": "answer:Q01:continuous",
       "objective": "期待収益とリスクのトレードオフを最小化する。",
       "practical_notes": "過去データの不確実性と、実運用での取引コストを別に検証します。",
@@ -212,8 +236,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_LEVENBERG_MARQUARDT"
+      "candidate_methods": [
+        {
+          "method_id": "M_LEVENBERG_MARQUARDT",
+          "reason": "残差vectorとJacobianを使い、非線形最小二乗の局所stepを安定化できるため"
+        }
       ],
       "case_id": "EC013",
       "comparison_ids": [],
@@ -264,6 +291,9 @@
         "I_CERES"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
+      ],
       "map_node_id": "answer:Q11:least_squares",
       "objective": "100個の観測残差の二乗和を最小化する。",
       "practical_notes": "rank、残差scale、外れ値、初期値依存性を確認し、二乗和だけでparameterの一意性を断定しません。",
@@ -296,8 +326,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_NSGA_II"
+      "candidate_methods": [
+        {
+          "method_id": "M_NSGA_II",
+          "reason": "微分なしの2目的simulationを並列評価し、weightを固定せず近似Pareto集合を探索できるため"
+        }
       ],
       "case_id": "EC017",
       "comparison_ids": [
@@ -350,6 +383,9 @@
         "I_CVXPY"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"
+      ],
       "map_node_id": "answer:Q03:multiobjective",
       "objective": "costと性能lossの2目的を同時に最小化する。",
       "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
@@ -384,8 +420,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_LOCAL_SEARCH_COMBINATORIAL"
+      "candidate_methods": [
+        {
+          "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "reason": "1000 stopsと10分のdeadlineで、最適性証明より早い良質可行routeを優先できるため"
+        }
       ],
       "case_id": "EC019",
       "comparison_ids": [],
@@ -436,6 +475,9 @@
         "I_GUROBI"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "deadline停止時の解は品質gapが未証明で、交通・service timeの変動もこの固定例には含みません。"
+      ],
       "map_node_id": "answer:Q11:scheduling_routing",
       "objective": "総移動時間と遅延penaltyを小さくする。",
       "practical_notes": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。",
@@ -469,8 +511,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_DIRECT_COLLOCATION"
+      "candidate_methods": [
+        {
+          "method_id": "M_DIRECT_COLLOCATION",
+          "reason": "state・control・dynamics defectを疎な非線形programへ同時に転写できるため"
+        }
       ],
       "case_id": "EC020",
       "comparison_ids": [],
@@ -522,6 +567,9 @@
         "I_DRAKE"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "離散mesh上のfeasibilityであり、連続時間の安全性や動力学modelの正確さは保証しません。"
+      ],
       "map_node_id": "answer:Q11:optimal_control",
       "objective": "tracking error、control effort、所要時間を最小化する。",
       "practical_notes": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。",
@@ -555,8 +603,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_ADMM_QP"
+      "candidate_methods": [
+        {
+          "method_id": "M_ADMM_QP",
+          "reason": "同じ凸QP構造でwarm startとfactorization再利用を行い、反復solveを短縮できるため"
+        }
       ],
       "case_id": "EC025",
       "comparison_ids": [],
@@ -607,6 +658,9 @@
         "I_ACADOS"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "平均solve時間だけでは100Hzを保証できず、worst-case latencyとcold startを実機で検証する必要があります。"
+      ],
       "map_node_id": "answer:Q12:online_or_realtime",
       "objective": "tracking errorとcontrol effortの凸二次costを最小化する。",
       "practical_notes": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。",
@@ -640,8 +694,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_NEWTON_CG"
+      "candidate_methods": [
+        {
+          "method_id": "M_NEWTON_CG",
+          "reason": "Hessian-vector積を使って巨大なHessianを保持せず、局所Newton stepを計算できるため"
+        }
       ],
       "case_id": "EC026",
       "comparison_ids": [],
@@ -692,6 +749,9 @@
         "I_IPOPT"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "結果は離散PDE・inner tolerance・preconditionerに依存し、連続modelでの最適性は保証しません。"
+      ],
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
       "objective": "PDE solutionから計算する性能指標とregularizationを最小化する。",
       "practical_notes": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。",
@@ -725,8 +785,11 @@
       ]
     },
     {
-      "candidate_method_ids": [
-        "M_SLSQP"
+      "candidate_methods": [
+        {
+          "method_id": "M_SLSQP",
+          "reason": "少数の連続変数と滑らかな非線形constraintを、解析勾配付きで同時に扱えるため"
+        }
       ],
       "case_id": "constrained-design",
       "comparison_ids": [
@@ -779,6 +842,9 @@
         "I_IPOPT"
       ],
       "last_reviewed": "2026-07-15",
+      "limitations": [
+        "2変数の教材modelで得た可行性は、実設計の強度modelや安全余裕を保証しません。"
+      ],
       "map_node_id": "answer:Q04:nonlinear",
       "objective": "重量に対応する二次目的を最小化する。",
       "practical_notes": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
@@ -815,6 +881,6 @@
       ]
     }
   ],
-  "contract_version": "1.0.0",
+  "contract_version": "2.0.0",
   "dataset_version": "0.11.0"
 }
