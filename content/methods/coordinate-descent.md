@@ -10,7 +10,7 @@ prerequisites: [method.gradient-descent]
 related_ids: [proximal-gradient, fista, least-squares]
 aliases: [/learn/coordinate-descent]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 全変数を同時に動かさず、一つまたは小さなblockだけを更新して安価な部分問題を反復する大規模最適化法です。
@@ -25,7 +25,7 @@ $$
 
 という1次元部分問題を解きます。更新順はcyclic、random、greedy、block単位などがあります。
 
-Lassoのように各座標更新がsoft-thresholdingで閉形式になる問題では、汎用gradient法より構造を直接使えます。
+Lassoのように各座標更新がsoft-thresholdingで閉形式になる問題では、汎用勾配法より構造を直接使えます。
 
 ## Python: Lassoのcoordinate update
 
@@ -82,7 +82,7 @@ print(x)
 - cache / sparse operation time
 - stopping tolerance
 
-座標ごとの更新が小さくても、full gradientやduality gapが大きければ収束していません。
+座標ごとの更新が小さくても、全体の勾配やduality gapが大きければ収束していません。
 
 ## 向いている条件
 

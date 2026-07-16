@@ -14,7 +14,7 @@ aliases: [/learn/cma-es]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 関数値の順位から探索分布の平均・global step size・共分散を更新し、連続black-boxの有望な方向とscaleを学ぶpopulation法です。
@@ -128,15 +128,15 @@ noiseによりrankingが入れ替わる場合、
 ## 向いている条件
 
 - 連続・非凸・black-box
-- gradientがない、信用できない、または不連続がある
+- 勾配がない、信用できない、または不連続がある
 - moderate dimension
 - population evaluationを並列化できる
-- local gradient法の初期値依存を緩和したい
+- 局所的な勾配法の初期値依存を緩和したい
 - 最適性certificateより良いcandidateが必要
 
 ## Alternative-first
 
-- gradientが信頼できる → BFGS / L-BFGS-B
+- 勾配が信頼できる → BFGS / L-BFGS-B
 - 残差Jacobianがある → nonlinear least squares
 - 1評価が極端に高価 → Bayesian Optimization
 - 離散・論理変数 → CP-SAT / MIP / GA encoding
