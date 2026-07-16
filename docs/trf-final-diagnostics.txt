@@ -1,0 +1,2409 @@
+# Final TRF validation diagnostics
+
+## uv run ruff check .
+```text
+All checks passed!
+exit_code=0
+```
+
+## uv run ruff format --check .
+```text
+83 files already formatted
+exit_code=0
+```
+
+## uv run mypy src
+```text
+Success: no issues found in 36 source files
+exit_code=0
+```
+
+## uv run pytest --maxfail=20 -q
+```text
+........................................................................ [ 28%]
+........................................................................ [ 57%]
+......................F................................................. [ 85%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_____________ test_shared_recommendation_cases_match_python_engine _____________
+
+engine = <optimization_compass.engine.RecommendationEngine object at 0x7ff25075ad20>
+
+    def test_shared_recommendation_cases_match_python_engine(
+        engine: RecommendationEngine,
+    ) -> None:
+        fixture = json.loads(
+            (Path(__file__).parent / "fixtures/recommendation_cases.json").read_text(encoding="utf-8")
+        )
+        assert fixture["fixture_version"] == "1.0.0"
+        assert fixture["dataset_version"] == engine.repository.dataset_version()
+        assert len(fixture["cases"]) == 9
+        smooth = next(case for case in fixture["cases"] if case["case_id"] == "smooth_continuous")
+        assert smooth["request"]["max_methods"] == 5
+        assert smooth["request"]["max_implementations_per_method"] == 4
+        assert "implementation_ids" in smooth["expected"]["first_choices"][0]
+        assert "reasons" in smooth["expected"]["first_choices"][0]
+        assert "warnings" in smooth["expected"]["first_choices"][0]
+        assert len(smooth["expected"]["first_choices"]) == 5
+        smooth_first = {choice["entity_id"]: choice for choice in smooth["expected"]["first_choices"]}
+        assert smooth_first["M_LBFGS"]["implementation_ids"] == [
+            "I_NLOPT",
+            "I_OPTIMJL",
+            "I_PETSC_TAO",
+            "I_PYTORCH_OPTIM",
+        ]
+        assert smooth_first["M_INTERIOR_POINT_NLP"]["implementation_ids"] == [
+            "I_CASADI",
+            "I_DRAKE",
+            "I_IPOPT",
+            "I_KNITRO",
+        ]
+        for case in fixture["cases"]:
+            result = engine.recommend(RecommendationRequest.model_validate(case["request"]))
+>           assert recommendation_projection(result) == case["expected"], case["case_id"]
+E           AssertionError: binary_linear
+E           assert {'alternative....}, ...], ...} == {'alternative....}, ...], ...}
+E             
+E             Omitting 10 identical items, use -vv to show
+E             Differing items:
+E             {'dataset_version': '0.11.0'} != {'dataset_version': '0.10.0'}
+E             
+E             Full diff:
+E               {
+E                   'alternatives_first': [
+E                       {
+E                           'entity_id': 'ALT_SPECIALIZED',
+E                           'name': '専用solver',
+E                           'priority_band': 'alternative',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '係数・制約構造を専用solverへ渡せる可能性が高い。',
+E                               '構造専用solver',
+E                           ],
+E                           'warnings': [
+E                               '専用構造が近似的な場合は還元誤差・制約を確認。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                   ],
+E                   'first_choices': [
+E                       {
+E                           'entity_id': 'M_BRANCH_CUT',
+E                           'name': 'branch-and-cut',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 3,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'Boolean/0-1構造をnativeに扱う。',
+E                               'logical/global constraintをnativeに表現。',
+E                               'bound/gapを返すexact/convex solverを優先。',
+E                           ],
+E                           'warnings': [
+E                               '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_CBC',
+E                               'I_CPLEX',
+E                               'I_DRAKE',
+E                               'I_GLPK',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_CP_SAT',
+E                           'name': 'CP-SAT',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 3,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'Boolean/0-1構造をnativeに扱う。',
+E                               'logical/global constraintをnativeに表現。',
+E                               'global constraints/近傍構造を利用。',
+E                           ],
+E                           'warnings': [
+E                               '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_ORTOOLS_CPSAT',
+E                               'I_MINIZINC',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_CP_SEARCH',
+E                           'name': 'constraint programming search',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'logical/global constraintをnativeに表現。',
+E                               'global constraints/近傍構造を利用。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_ORTOOLS_ROUTING',
+E                               'I_MINIZINC',
+E                           ],
+E                       },
+E                   ],
+E                   'conditional_choices': [
+E                       {
+E                           'entity_id': 'M_CDCL_SAT',
+E                           'name': 'CDCL SAT',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'Boolean/0-1構造をnativeに扱う。',
+E                           ],
+E                           'warnings': [
+E                               '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_ORTOOLS_CPSAT',
+E                               'I_MINIZINC',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_BAYESIAN_OPT_GP',
+E                           'name': 'Gaussian process Bayesian optimization',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 2,
+E                           'reasons': [
+E                               '微分不要法へ。評価費と次元で分岐。',
+E                               '証明なしのglobal candidate探索。',
+E                           ],
+E                           'warnings': [
+E                               '変数domainを直接扱わず、encoding・relaxation・wrapperが必要です。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_AX',
+E                               'I_BOTORCH',
+E                               'I_OPTUNA',
+E                               'I_RAY_TUNE',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_LOCAL_SEARCH_COMBINATORIAL',
+E                           'name': '組合せlocal search',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               'global constraints/近傍構造を利用。',
+E                           ],
+E                           'warnings': [
+E                               'この手法単独では一般に最適性gapや上下界を返しません。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_ORTOOLS_ROUTING',
+E                           ],
+E                       },
+E                   ],
+E                   'excluded_methods': [
+E                       {
+E                           'entity_id': 'M_CMA_ES',
+E                           'name': 'CMA-ES',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 4,
+E                           'high_priority_rule_count': 3,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '微分不要法へ。評価費と次元で分岐。',
+E                               '多評価型探索もbudget内に入り得る。',
+E                               '証明なしのglobal candidate探索。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '局所解で十分なら無駄な大域探索をしない。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S032',
+E                               'S033',
+E                               'S040',
+E                               'S058',
+E                               'S074',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_SIMPLEX',
+E                           'name': 'primal simplex法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 3,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'LP専用法を第一候補。',
+E                               'bound/gapを返すexact/convex solverを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '一般NLPへ渡すと構造と証明を失う。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S010',
+E                               'S012',
+E                               'S013',
+E                               'S014',
+E                               'S016',
+E                               'S062',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_DIFFERENTIAL_EVOLUTION',
+E                           'name': '差分進化',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '多評価型探索もbudget内に入り得る。',
+E                               '証明なしのglobal candidate探索。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;bounds) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '局所解で十分なら無駄な大域探索をしない。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S006',
+E                               'S007',
+E                               'S008',
+E                               'S009',
+E                               'S072',
+E                               'S073',
+E                               'S074',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_MULTISTART',
+E                           'name': 'multi-start局所最適化',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '多評価型探索もbudget内に入り得る。',
+E                               '証明なしのglobal candidate探索。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;bounds) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '局所解で十分なら無駄な大域探索をしない。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S006',
+E                               'S007',
+E                               'S008',
+E                               'S009',
+E                               'S072',
+E                               'S073',
+E                               'S074',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_BARRIER_LP_QP',
+E                           'name': 'primal-dual barrier法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'LP専用法を第一候補。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '一般NLPへ渡すと構造と証明を失う。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S010',
+E                               'S012',
+E                               'S013',
+E                               'S014',
+E                               'S016',
+E                               'S062',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_COBYQA',
+E                           'name': 'COBYQA',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '微分不要法へ。評価費と次元で分岐。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S018',
+E                               'S031',
+E                               'S060',
+E                               'S063',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_DUAL_SIMPLEX',
+E                           'name': 'dual simplex法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'LP専用法を第一候補。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '一般NLPへ渡すと構造と証明を失う。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S010',
+E                               'S012',
+E                               'S013',
+E                               'S014',
+E                               'S016',
+E                               'S062',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_LBFGS',
+E                           'name': 'L-BFGS法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S057',
+E                               'S065',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_LBFGSB',
+E                           'name': 'L-BFGS-B法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S057',
+E                               'S065',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_MADS',
+E                           'name': 'mesh adaptive direct search',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '微分不要法へ。評価費と次元で分岐。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S018',
+E                               'S031',
+E                               'S060',
+E                               'S063',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_NEWTON_CG',
+E                           'name': 'Newton-CG法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S057',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_PDLP',
+E                           'name': 'primal-dual hybrid gradient for LP',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'LP専用法を第一候補。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '一般NLPへ渡すと構造と証明を失う。',
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S010',
+E                               'S012',
+E                               'S013',
+E                               'S014',
+E                               'S016',
+E                               'S062',
+E                               'S078',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_PRIMAL_DUAL_CONIC',
+E                           'name': 'primal-dual錐内点法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'bound/gapを返すexact/convex solverを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S010',
+E                               'S012',
+E                               'S013',
+E                               'S014',
+E                               'S016',
+E                               'S062',
+E                               'S028',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_SPSA',
+E                           'name': '同時摂動確率近似',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+E                               'が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S018',
+E                               'S031',
+E                               'S060',
+E                               'S063',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_ACTIVE_SET',
+E                           'name': 'active-set NLP/QP',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '一般NLPならnative linear constraints、線形目的ならLPへ。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S017',
+E                               'S029',
+E                               'S030',
+E                               'S064',
+E                               'S012',
+E                               'S016',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_INTERIOR_POINT_NLP',
+E                           'name': 'NLP内点法',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '一般NLPならnative linear constraints、線形目的ならLPへ。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S017',
+E                               'S029',
+E                               'S030',
+E                               'S064',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_SLSQP',
+E                           'name': 'SLSQP',
+E                           'priority_band': 'excluded',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '一般NLPならnative linear constraints、線形目的ならLPへ。',
+E                               '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+E                           ],
+E                           'warnings': [
+E                               '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S017',
+E                               'S029',
+E                               'S030',
+E                               'S064',
+E                               'S002',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                   ],
+E                   'candidate_problem_archetypes': [
+E                       {
+E                           'entity_id': 'PA006',
+E                           'name': '滑らかな低次元無制約',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                               'setup costとsolve costを合わせて選ぶ。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA017',
+E                           'name': '線形計画',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                               'setup costとsolve costを合わせて選ぶ。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S016',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA014',
+E                           'name': '非常に高価な低次元評価',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S035',
+E                               'S059',
+E                               'S075',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA039',
+E                           'name': 'hyperparameter optimization',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'setup costとsolve costを合わせて選ぶ。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S034',
+E                               'S035',
+E                               'S037',
+E                               'S038',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                   ],
+E                   'followups': [],
+E                   'warnings': [
+E                       '1件の候補は変数encoding等が必要なため、条件付き候補へ下げました。',
+E                       '17件の候補を変数domain不一致として除外しました。',
+E                       '1件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。',
+E                   ],
+E                   'trace': [
+E                       {
+E                           'rule_id': 'R003',
+E                           'question_id': 'Q01',
+E                           'matched_answer': 'binary',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_CP_SAT',
+E                               'M_BRANCH_CUT',
+E                               'M_CDCL_SAT',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'Boolean/0-1構造をnativeに扱う。',
+E                           'warnings': '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R007',
+E                           'question_id': 'Q02',
+E                           'matched_answer': 'explicit_algebraic',
+E                           'action_type': 'recommend_alternative',
+E                           'action_target_type': 'alternative',
+E                           'action_target_ids': [
+E                               'ALT_SPECIALIZED',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': '係数・制約構造を専用solverへ渡せる可能性が高い。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R013',
+E                           'question_id': 'Q03',
+E                           'matched_answer': 'linear',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_DUAL_SIMPLEX',
+E                               'M_SIMPLEX',
+E                               'M_BARRIER_LP_QP',
+E                               'M_PDLP',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'LP専用法を第一候補。',
+E                           'warnings': '一般NLPへ渡すと構造と証明を失う。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R022',
+E                           'question_id': 'Q04',
+E                           'matched_answer': 'linear',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_SLSQP',
+E                               'M_INTERIOR_POINT_NLP',
+E                               'M_ACTIVE_SET',
+E                           ],
+E                           'priority_effect': 'medium',
+E                           'explanation': '一般NLPならnative linear constraints、線形目的ならLPへ。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R024',
+E                           'question_id': 'Q04',
+E                           'matched_answer': 'logical_or_combinatorial',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_CP_SAT',
+E                               'M_CP_SEARCH',
+E                               'M_BRANCH_CUT',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'logical/global constraintをnativeに表現。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R033',
+E                           'question_id': 'Q05',
+E                           'matched_answer': 'unreliable_or_none',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_MADS',
+E                               'M_COBYQA',
+E                               'M_CMA_ES',
+E                               'M_BAYESIAN_OPT_GP',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': '微分不要法へ。評価費と次元で分岐。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R035',
+E                           'question_id': 'Q06',
+E                           'matched_answer': 'milliseconds_or_less',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_MULTISTART',
+E                               'M_DIFFERENTIAL_EVOLUTION',
+E                               'M_CMA_ES',
+E                           ],
+E                           'priority_effect': 'medium',
+E                           'explanation': '多評価型探索もbudget内に入り得る。',
+E                           'warnings': '局所解で十分なら無駄な大域探索をしない。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R040',
+E                           'question_id': 'Q07',
+E                           'matched_answer': 'deterministic_reliable',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA014',
+E                               'PA017',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': 'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R049',
+E                           'question_id': 'Q08',
+E                           'matched_answer': '100_to_10000',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_LBFGS',
+E                               'M_LBFGSB',
+E                               'M_NEWTON_CG',
+E                               'M_SPSA',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'low-memory/HVP/stochastic estimationを優先。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R054',
+E                           'question_id': 'Q09',
+E                           'matched_answer': 'global_candidate_desired',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_MULTISTART',
+E                               'M_DIFFERENTIAL_EVOLUTION',
+E                               'M_CMA_ES',
+E                               'M_BAYESIAN_OPT_GP',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': '証明なしのglobal candidate探索。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R058',
+E                           'question_id': 'Q10',
+E                           'matched_answer': 'gap_desired',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_BRANCH_CUT',
+E                               'M_PRIMAL_DUAL_CONIC',
+E                               'M_SIMPLEX',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'bound/gapを返すexact/convex solverを優先。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R066',
+E                           'question_id': 'Q11',
+E                           'matched_answer': 'scheduling_routing',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_CP_SAT',
+E                               'M_CP_SEARCH',
+E                               'M_LOCAL_SEARCH_COMBINATORIAL',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'global constraints/近傍構造を利用。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R072',
+E                           'question_id': 'Q12',
+E                           'matched_answer': 'one_off',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA017',
+E                               'PA039',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': 'setup costとsolve costを合わせて選ぶ。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                   ],
+E                   'answered_question_count': 12,
+E             -     'dataset_version': '0.10.0',
+E             ?                            ^
+E             +     'dataset_version': '0.11.0',
+E             ?                            ^
+E                   'disclaimer': '候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。',
+E               }
+
+tests/test_site_recommendation.py:69: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_atlas_metadata_schema.py: 9 warnings
+tests/test_dataset_formats.py: 13 warnings
+tests/test_dataset_release.py: 10 warnings
+tests/test_licensing.py: 1 warning
+tests/test_problem_instances.py: 1 warning
+tests/test_trust_region_reflective.py: 1 warning
+tests/test_versioned_claims.py: 3 warnings
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/openpyxl/workbook/child.py:99: UserWarning: Title is more than 31 characters. Some applications may not be able to read the file
+    warnings.warn("Title is more than 31 characters. Some applications may not be able to read the file")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_site_recommendation.py::test_shared_recommendation_cases_match_python_engine - AssertionError: binary_linear
+assert {'alternative....}, ...], ...} == {'alternative....}, ...], ...}
+  
+  Omitting 10 identical items, use -vv to show
+  Differing items:
+  {'dataset_version': '0.11.0'} != {'dataset_version': '0.10.0'}
+  
+  Full diff:
+    {
+        'alternatives_first': [
+            {
+                'entity_id': 'ALT_SPECIALIZED',
+                'name': '専用solver',
+                'priority_band': 'alternative',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '係数・制約構造を専用solverへ渡せる可能性が高い。',
+                    '構造専用solver',
+                ],
+                'warnings': [
+                    '専用構造が近似的な場合は還元誤差・制約を確認。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [],
+            },
+        ],
+        'first_choices': [
+            {
+                'entity_id': 'M_BRANCH_CUT',
+                'name': 'branch-and-cut',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 3,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'Boolean/0-1構造をnativeに扱う。',
+                    'logical/global constraintをnativeに表現。',
+                    'bound/gapを返すexact/convex solverを優先。',
+                ],
+                'warnings': [
+                    '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_CBC',
+                    'I_CPLEX',
+                    'I_DRAKE',
+                    'I_GLPK',
+                ],
+            },
+            {
+                'entity_id': 'M_CP_SAT',
+                'name': 'CP-SAT',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 3,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'Boolean/0-1構造をnativeに扱う。',
+                    'logical/global constraintをnativeに表現。',
+                    'global constraints/近傍構造を利用。',
+                ],
+                'warnings': [
+                    '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_ORTOOLS_CPSAT',
+                    'I_MINIZINC',
+                ],
+            },
+            {
+                'entity_id': 'M_CP_SEARCH',
+                'name': 'constraint programming search',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'logical/global constraintをnativeに表現。',
+                    'global constraints/近傍構造を利用。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_ORTOOLS_ROUTING',
+                    'I_MINIZINC',
+                ],
+            },
+        ],
+        'conditional_choices': [
+            {
+                'entity_id': 'M_CDCL_SAT',
+                'name': 'CDCL SAT',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'Boolean/0-1構造をnativeに扱う。',
+                ],
+                'warnings': [
+                    '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_ORTOOLS_CPSAT',
+                    'I_MINIZINC',
+                ],
+            },
+            {
+                'entity_id': 'M_BAYESIAN_OPT_GP',
+                'name': 'Gaussian process Bayesian optimization',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 2,
+                'reasons': [
+                    '微分不要法へ。評価費と次元で分岐。',
+                    '証明なしのglobal candidate探索。',
+                ],
+                'warnings': [
+                    '変数domainを直接扱わず、encoding・relaxation・wrapperが必要です。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_AX',
+                    'I_BOTORCH',
+                    'I_OPTUNA',
+                    'I_RAY_TUNE',
+                ],
+            },
+            {
+                'entity_id': 'M_LOCAL_SEARCH_COMBINATORIAL',
+                'name': '組合せlocal search',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    'global constraints/近傍構造を利用。',
+                ],
+                'warnings': [
+                    'この手法単独では一般に最適性gapや上下界を返しません。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_ORTOOLS_ROUTING',
+                ],
+            },
+        ],
+        'excluded_methods': [
+            {
+                'entity_id': 'M_CMA_ES',
+                'name': 'CMA-ES',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 4,
+                'high_priority_rule_count': 3,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '微分不要法へ。評価費と次元で分岐。',
+                    '多評価型探索もbudget内に入り得る。',
+                    '証明なしのglobal candidate探索。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '局所解で十分なら無駄な大域探索をしない。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S032',
+                    'S033',
+                    'S040',
+                    'S058',
+                    'S074',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_SIMPLEX',
+                'name': 'primal simplex法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 3,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'LP専用法を第一候補。',
+                    'bound/gapを返すexact/convex solverを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '一般NLPへ渡すと構造と証明を失う。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S010',
+                    'S012',
+                    'S013',
+                    'S014',
+                    'S016',
+                    'S062',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_DIFFERENTIAL_EVOLUTION',
+                'name': '差分進化',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '多評価型探索もbudget内に入り得る。',
+                    '証明なしのglobal candidate探索。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;bounds) が一致しません。',
+                ],
+                'warnings': [
+                    '局所解で十分なら無駄な大域探索をしない。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S006',
+                    'S007',
+                    'S008',
+                    'S009',
+                    'S072',
+                    'S073',
+                    'S074',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_MULTISTART',
+                'name': 'multi-start局所最適化',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '多評価型探索もbudget内に入り得る。',
+                    '証明なしのglobal candidate探索。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;bounds) が一致しません。',
+                ],
+                'warnings': [
+                    '局所解で十分なら無駄な大域探索をしない。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S006',
+                    'S007',
+                    'S008',
+                    'S009',
+                    'S072',
+                    'S073',
+                    'S074',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_BARRIER_LP_QP',
+                'name': 'primal-dual barrier法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'LP専用法を第一候補。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '一般NLPへ渡すと構造と証明を失う。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S010',
+                    'S012',
+                    'S013',
+                    'S014',
+                    'S016',
+                    'S062',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_COBYQA',
+                'name': 'COBYQA',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '微分不要法へ。評価費と次元で分岐。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S018',
+                    'S031',
+                    'S060',
+                    'S063',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_DUAL_SIMPLEX',
+                'name': 'dual simplex法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'LP専用法を第一候補。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '一般NLPへ渡すと構造と証明を失う。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S010',
+                    'S012',
+                    'S013',
+                    'S014',
+                    'S016',
+                    'S062',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_LBFGS',
+                'name': 'L-BFGS法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'low-memory/HVP/stochastic estimationを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S057',
+                    'S065',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_LBFGSB',
+                'name': 'L-BFGS-B法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'low-memory/HVP/stochastic estimationを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S057',
+                    'S065',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_MADS',
+                'name': 'mesh adaptive direct search',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '微分不要法へ。評価費と次元で分岐。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S018',
+                    'S031',
+                    'S060',
+                    'S063',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_NEWTON_CG',
+                'name': 'Newton-CG法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'low-memory/HVP/stochastic estimationを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S057',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_PDLP',
+                'name': 'primal-dual hybrid gradient for LP',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'LP専用法を第一候補。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '一般NLPへ渡すと構造と証明を失う。',
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S010',
+                    'S012',
+                    'S013',
+                    'S014',
+                    'S016',
+                    'S062',
+                    'S078',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_PRIMAL_DUAL_CONIC',
+                'name': 'primal-dual錐内点法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'bound/gapを返すexact/convex solverを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;cone_variables) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S010',
+                    'S012',
+                    'S013',
+                    'S014',
+                    'S016',
+                    'S062',
+                    'S028',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_SPSA',
+                'name': '同時摂動確率近似',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'low-memory/HVP/stochastic estimationを優先。',
+                    '回答された変数domain (binary) と手法の対応 (continuous;bounds_by_variant) '
+                    'が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S018',
+                    'S031',
+                    'S060',
+                    'S063',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_ACTIVE_SET',
+                'name': 'active-set NLP/QP',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '一般NLPならnative linear constraints、線形目的ならLPへ。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S017',
+                    'S029',
+                    'S030',
+                    'S064',
+                    'S012',
+                    'S016',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_INTERIOR_POINT_NLP',
+                'name': 'NLP内点法',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '一般NLPならnative linear constraints、線形目的ならLPへ。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S017',
+                    'S029',
+                    'S030',
+                    'S064',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_SLSQP',
+                'name': 'SLSQP',
+                'priority_band': 'excluded',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '一般NLPならnative linear constraints、線形目的ならLPへ。',
+                    '回答された変数domain (binary) と手法の対応 (continuous) が一致しません。',
+                ],
+                'warnings': [
+                    '変数変換を行う場合は、可行性・距離・保証が変わらないか確認してください。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S017',
+                    'S029',
+                    'S030',
+                    'S064',
+                    'S002',
+                ],
+                'implementation_ids': [],
+            },
+        ],
+        'candidate_problem_archetypes': [
+            {
+                'entity_id': 'PA006',
+                'name': '滑らかな低次元無制約',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                    'setup costとsolve costを合わせて選ぶ。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA017',
+                'name': '線形計画',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                    'setup costとsolve costを合わせて選ぶ。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S016',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA014',
+                'name': '非常に高価な低次元評価',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S035',
+                    'S059',
+                    'S075',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA039',
+                'name': 'hyperparameter optimization',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'setup costとsolve costを合わせて選ぶ。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S034',
+                    'S035',
+                    'S037',
+                    'S038',
+                ],
+                'implementation_ids': [],
+            },
+        ],
+        'followups': [],
+        'warnings': [
+            '1件の候補は変数encoding等が必要なため、条件付き候補へ下げました。',
+            '17件の候補を変数domain不一致として除外しました。',
+            '1件の候補はgap・上下界を一般に返さないため、条件付きへ下げました。',
+        ],
+        'trace': [
+            {
+                'rule_id': 'R003',
+                'question_id': 'Q01',
+                'matched_answer': 'binary',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_CP_SAT',
+                    'M_BRANCH_CUT',
+                    'M_CDCL_SAT',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'Boolean/0-1構造をnativeに扱う。',
+                'warnings': '論理構造が強ければCP-SAT/SAT、線形緩和が強ければMILP。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R007',
+                'question_id': 'Q02',
+                'matched_answer': 'explicit_algebraic',
+                'action_type': 'recommend_alternative',
+                'action_target_type': 'alternative',
+                'action_target_ids': [
+                    'ALT_SPECIALIZED',
+                ],
+                'priority_effect': 'high',
+                'explanation': '係数・制約構造を専用solverへ渡せる可能性が高い。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R013',
+                'question_id': 'Q03',
+                'matched_answer': 'linear',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_DUAL_SIMPLEX',
+                    'M_SIMPLEX',
+                    'M_BARRIER_LP_QP',
+                    'M_PDLP',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'LP専用法を第一候補。',
+                'warnings': '一般NLPへ渡すと構造と証明を失う。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R022',
+                'question_id': 'Q04',
+                'matched_answer': 'linear',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_SLSQP',
+                    'M_INTERIOR_POINT_NLP',
+                    'M_ACTIVE_SET',
+                ],
+                'priority_effect': 'medium',
+                'explanation': '一般NLPならnative linear constraints、線形目的ならLPへ。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R024',
+                'question_id': 'Q04',
+                'matched_answer': 'logical_or_combinatorial',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_CP_SAT',
+                    'M_CP_SEARCH',
+                    'M_BRANCH_CUT',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'logical/global constraintをnativeに表現。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R033',
+                'question_id': 'Q05',
+                'matched_answer': 'unreliable_or_none',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_MADS',
+                    'M_COBYQA',
+                    'M_CMA_ES',
+                    'M_BAYESIAN_OPT_GP',
+                ],
+                'priority_effect': 'high',
+                'explanation': '微分不要法へ。評価費と次元で分岐。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R035',
+                'question_id': 'Q06',
+                'matched_answer': 'milliseconds_or_less',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_MULTISTART',
+                    'M_DIFFERENTIAL_EVOLUTION',
+                    'M_CMA_ES',
+                ],
+                'priority_effect': 'medium',
+                'explanation': '多評価型探索もbudget内に入り得る。',
+                'warnings': '局所解で十分なら無駄な大域探索をしない。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R040',
+                'question_id': 'Q07',
+                'matched_answer': 'deterministic_reliable',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA014',
+                    'PA017',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': 'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R049',
+                'question_id': 'Q08',
+                'matched_answer': '100_to_10000',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_LBFGS',
+                    'M_LBFGSB',
+                    'M_NEWTON_CG',
+                    'M_SPSA',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'low-memory/HVP/stochastic estimationを優先。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R054',
+                'question_id': 'Q09',
+                'matched_answer': 'global_candidate_desired',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_MULTISTART',
+                    'M_DIFFERENTIAL_EVOLUTION',
+                    'M_CMA_ES',
+                    'M_BAYESIAN_OPT_GP',
+                ],
+                'priority_effect': 'high',
+                'explanation': '証明なしのglobal candidate探索。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R058',
+                'question_id': 'Q10',
+                'matched_answer': 'gap_desired',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_BRANCH_CUT',
+                    'M_PRIMAL_DUAL_CONIC',
+                    'M_SIMPLEX',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'bound/gapを返すexact/convex solverを優先。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R066',
+                'question_id': 'Q11',
+                'matched_answer': 'scheduling_routing',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_CP_SAT',
+                    'M_CP_SEARCH',
+                    'M_LOCAL_SEARCH_COMBINATORIAL',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'global constraints/近傍構造を利用。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R072',
+                'question_id': 'Q12',
+                'matched_answer': 'one_off',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA017',
+                    'PA039',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': 'setup costとsolve costを合わせて選ぶ。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+        ],
+        'answered_question_count': 12,
+  -     'dataset_version': '0.10.0',
+  ?                            ^
+  +     'dataset_version': '0.11.0',
+  ?                            ^
+        'disclaimer': '候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。',
+    }
+exit_code=1
+```
+
+## uv run optimization-compass verify-data
+```text
+{
+  "ok": true,
+  "foreign_key_violations": 0,
+  "failed_release_checks": 0,
+  "warning_release_checks": 1,
+  "total_release_checks": 25,
+  "dataset_version": "0.11.0",
+  "stored_status_mismatches": [],
+  "details": [
+    {
+      "check_id": "CHK001",
+      "check_name": "SQL DDL creation",
+      "scope": "all tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "ok",
+      "expected_condition": "PRAGMA integrity_check is ok",
+      "details": "Schema and b-trees are readable.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK002",
+      "check_name": "SQLite full data load",
+      "scope": "all base/derived tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "8,957 rows present",
+      "expected_condition": "all tables are readable and contain released rows",
+      "details": "Counted directly from SQLite.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK003",
+      "check_name": "Foreign-key integrity",
+      "scope": "all declared foreign keys",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 violations",
+      "expected_condition": "PRAGMA foreign_key_check returns zero rows",
+      "details": "Computed live; stored status is not trusted.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK004",
+      "check_name": "Primary-key uniqueness",
+      "scope": "all tables with declared PK",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 duplicates",
+      "expected_condition": "zero duplicate primary-key tuples",
+      "details": "All declared primary keys are unique.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK005",
+      "check_name": "Source reference integrity",
+      "scope": "all source reference fields",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved source IDs",
+      "expected_condition": "every referenced source ID exists",
+      "details": "Semicolon and JSON source lists included.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK006",
+      "check_name": "Evidence target integrity",
+      "scope": "evidence_links",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved targets",
+      "expected_condition": "every target_table/target_id pair resolves",
+      "details": "Polymorphic evidence targets resolve.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK007",
+      "check_name": "Decision action target typing",
+      "scope": "decision_rules",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 unresolved IDs",
+      "expected_condition": "every action target resolves under its declared type",
+      "details": "Decision target interpretation is explicit.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK008",
+      "check_name": "Optional foreign-key null semantics",
+      "scope": "declared foreign keys",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 blank-string foreign keys",
+      "expected_condition": "absent optional references use SQL NULL",
+      "details": "No blank foreign-key values.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK009",
+      "check_name": "Objective-form enum normalization",
+      "scope": "feature_values + case_feature_map",
+      "severity": "medium",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "no free-text discrete objective form remains",
+      "details": "Objective-form values are canonical.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK010",
+      "check_name": "Implementation release coverage",
+      "scope": "implementations",
+      "severity": "medium",
+      "status": "warn",
+      "observed_value": "39/64 have non-unknown release metadata",
+      "expected_condition": "unknown remains explicit and tracked",
+      "details": "Coverage is advisory and therefore warning when incomplete.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK011",
+      "check_name": "License verification",
+      "scope": "Manopt MATLAB and NOMAD",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 mismatches",
+      "expected_condition": "exact license family is recorded",
+      "details": "License families match the released assertions.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK012",
+      "check_name": "Maintenance-status risk",
+      "scope": "JAXopt",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 mismatches",
+      "expected_condition": "JAXopt legacy status and release are explicit",
+      "details": "Maintenance risk is explicit.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK013",
+      "check_name": "Atlas schema closure",
+      "scope": "26 atlas metadata tables",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 missing tables",
+      "expected_condition": "all 26 normalized tables exist",
+      "details": "All atlas tables exist.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK014",
+      "check_name": "View preset constraints",
+      "scope": "view_presets",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "root condition and relation lists are explicit",
+      "details": "Preset roots and relations are valid.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK015",
+      "check_name": "Visualization/problem closure",
+      "scope": "profiles + problem definitions + instances",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "generators, dimensions, implementations, and JSON are closed",
+      "details": "Profiles and problems are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK016",
+      "check_name": "Demo scenario closure",
+      "scope": "demo_scenarios",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "scenario references and seed semantics resolve",
+      "details": "Scenarios are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK017",
+      "check_name": "Comparison fairness closure",
+      "scope": "comparison sets and members",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "members are normalized and synchronize by oracle evaluations",
+      "details": "Comparison membership is normalized.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK018",
+      "check_name": "Learning edge closure",
+      "scope": "learning_edges",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "typed endpoints resolve without self or duplicate edges",
+      "details": "Learning endpoints resolve.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK019",
+      "check_name": "Explicit state semantics",
+      "scope": "atlas metadata",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 ambiguous values",
+      "expected_condition": "unknown, not_applicable, and unsupported are explicit; blanks are forbidden",
+      "details": "No ambiguous blank state values.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK020",
+      "check_name": "Release artifact consistency",
+      "scope": "all staged formats",
+      "severity": "critical",
+      "status": "not_run",
+      "observed_value": "database-only verification",
+      "expected_condition": "release tree round-trip and manifest checks pass",
+      "details": "Only verify_release_tree may establish artifact consistency.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK021",
+      "check_name": "Learning coverage closure",
+      "scope": "coverage expectations and priority slices",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "subjects, slices, scores, and evidence resolve without inferred status",
+      "details": "Coverage policy rows are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK022",
+      "check_name": "Versioned implementation claim closure",
+      "scope": "implementation_claims",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "every implementation/predicate has one explicit active claim and history resolves",
+      "details": "Claim ledger and supersession are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK023",
+      "check_name": "Benchmark context completeness",
+      "scope": "benchmark_contexts + comparison_sets",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "LP/QP/NLP/MIP/DFO/BO fixtures are complete and comparisons reference context",
+      "details": "Benchmark contexts are complete.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK024",
+      "check_name": "Structured failure-mode closure",
+      "scope": "failure mode profiles and relations",
+      "severity": "critical",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "12 profiles resolve triggers, symptoms, diagnostics, mitigations, and scenarios",
+      "details": "Failure-mode relations are closed.",
+      "checked_at": "2026-07-16"
+    },
+    {
+      "check_id": "CHK025",
+      "check_name": "Terminology alias closure",
+      "scope": "terminology_aliases",
+      "severity": "high",
+      "status": "pass",
+      "observed_value": "0 issues",
+      "expected_condition": "targets and sources resolve; collisions are explicitly disambiguated",
+      "details": "Terminology aliases are closed.",
+      "checked_at": "2026-07-16"
+    }
+  ]
+}
+exit_code=0
+```

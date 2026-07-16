@@ -1,0 +1,1514 @@
+........................................................................ [ 28%]
+........................................................................ [ 57%]
+......................F................................................. [ 85%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+_____________ test_shared_recommendation_cases_match_python_engine _____________
+
+engine = <optimization_compass.engine.RecommendationEngine object at 0x7f477c779ee0>
+
+    def test_shared_recommendation_cases_match_python_engine(
+        engine: RecommendationEngine,
+    ) -> None:
+        fixture = json.loads(
+            (Path(__file__).parent / "fixtures/recommendation_cases.json").read_text(encoding="utf-8")
+        )
+        assert fixture["fixture_version"] == "1.0.0"
+        assert fixture["dataset_version"] == engine.repository.dataset_version()
+        assert len(fixture["cases"]) == 9
+        smooth = next(case for case in fixture["cases"] if case["case_id"] == "smooth_continuous")
+        assert smooth["request"]["max_methods"] == 5
+        assert smooth["request"]["max_implementations_per_method"] == 4
+        assert "implementation_ids" in smooth["expected"]["first_choices"][0]
+        assert "reasons" in smooth["expected"]["first_choices"][0]
+        assert "warnings" in smooth["expected"]["first_choices"][0]
+        assert len(smooth["expected"]["first_choices"]) == 5
+        smooth_first = {choice["entity_id"]: choice for choice in smooth["expected"]["first_choices"]}
+        assert smooth_first["M_LBFGS"]["implementation_ids"] == [
+            "I_NLOPT",
+            "I_OPTIMJL",
+            "I_PETSC_TAO",
+            "I_PYTORCH_OPTIM",
+        ]
+        assert smooth_first["M_INTERIOR_POINT_NLP"]["implementation_ids"] == [
+            "I_CASADI",
+            "I_DRAKE",
+            "I_IPOPT",
+            "I_KNITRO",
+        ]
+        for case in fixture["cases"]:
+            result = engine.recommend(RecommendationRequest.model_validate(case["request"]))
+>           assert recommendation_projection(result) == case["expected"], case["case_id"]
+E           AssertionError: smooth_continuous
+E           assert {'alternative...ods': [], ...} == {'alternative...ods': [], ...}
+E             
+E             Omitting 10 identical items, use -vv to show
+E             Differing items:
+E             {'first_choices': [{'entity_id': 'M_LBFGS', 'name': 'L-BFGS法', 'priority_band': 'first_choice', 'supporting_rule_count...ity_id': 'M_GAUSS_NEWTON', 'name': 'Gauss–Newton法', 'priority_band': 'first_choice', 'supporting_rule_count': 2, ...}]} != {'first_choices': [{'entity_id': 'M_LBFGS', 'name': 'L-BFGS法', 'priority_band': 'first_choice', 'supporting_rule_count...ity_id': 'M_GAUSS_NEWTON', 'name': 'Gauss–Newton法', 'priority_band': 'first_choice', 'supporting_rule_count': 2, ...}]}
+E             
+E             Full diff:
+E               {
+E                   'alternatives_first': [],
+E                   'first_choices': [
+E                       {
+E                           'entity_id': 'M_LBFGS',
+E                           'name': 'L-BFGS法',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 6,
+E                           'high_priority_rule_count': 5,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               'ADにより高品質derivativeを利用。',
+E                               '滑らかなら無制約局所法。',
+E                               'ADでdimension scalingを改善。',
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                               '高速な局所法を優先。',
+E                               'warm start、factorization、parameterized modelを利用。',
+E                           ],
+E                           'warnings': [
+E                               '分岐・custom op・停止判定でgradientが壊れないか検査。',
+E                               'gradient checkとnondifferentiable op確認。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_NLOPT',
+E                               'I_OPTIMJL',
+E                               'I_PETSC_TAO',
+E                               'I_PYTORCH_OPTIM',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_NEWTON_CG',
+E                           'name': 'Newton-CG法',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 4,
+E                           'high_priority_rule_count': 4,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'ADにより高品質derivativeを利用。',
+E                               'ADでdimension scalingを改善。',
+E                               '構造化二階近似・Krylov法が有力。',
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                           ],
+E                           'warnings': [
+E                               '分岐・custom op・停止判定でgradientが壊れないか検査。',
+E                               'gradient checkとnondifferentiable op確認。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_PETSC_TAO',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_INTERIOR_POINT_NLP',
+E                           'name': 'NLP内点法',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 4,
+E                           'high_priority_rule_count': 3,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               'ADにより高品質derivativeを利用。',
+E                               '高速な局所法を優先。',
+E                               'warm start、factorization、parameterized modelを利用。',
+E                               '前解・basis・stateを再利用。',
+E                           ],
+E                           'warnings': [
+E                               '分岐・custom op・停止判定でgradientが壊れないか検査。',
+E                               'problem変化が大きいとstale warm startになり得る。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_CASADI',
+E                               'I_DRAKE',
+E                               'I_IPOPT',
+E                               'I_KNITRO',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_TRUST_KRYLOV',
+E                           'name': 'trust-krylov',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 3,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '滑らかなら無制約局所法。',
+E                               'ADでdimension scalingを改善。',
+E                               '構造化二階近似・Krylov法が有力。',
+E                           ],
+E                           'warnings': [
+E                               'gradient checkとnondifferentiable op確認。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_CERES',
+E             -                 'I_SCIPY_LEAST_SQUARES_TRF',
+E                               'I_SCIPY_TRUST_CONSTR',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_GAUSS_NEWTON',
+E                           'name': 'Gauss–Newton法',
+E                           'priority_band': 'first_choice',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 2,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '構造化二階近似・Krylov法が有力。',
+E                               '高速な局所法を優先。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_CERES',
+E             -                 'I_SCIPY_LEAST_SQUARES_TRF',
+E                               'I_JAXOPT',
+E                           ],
+E                       },
+E                   ],
+E                   'conditional_choices': [
+E                       {
+E                           'entity_id': 'M_ACTIVE_SET_QP',
+E                           'name': 'active-set QP',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               'warm start、factorization、parameterized modelを利用。',
+E                               '前解・basis・stateを再利用。',
+E                           ],
+E                           'warnings': [
+E                               'problem変化が大きいとstale warm startになり得る。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'M_ADMM_QP',
+E                           'name': 'operator-splitting QP',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               'warm start、factorization、parameterized modelを利用。',
+E                               '前解・basis・stateを再利用。',
+E                           ],
+E                           'warnings': [
+E                               'problem変化が大きいとstale warm startになり得る。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_ACADOS',
+E                               'I_OSQP',
+E                               'I_CVXPY',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_BFGS',
+E                           'name': 'BFGS法',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 1,
+E                           'reasons': [
+E                               '滑らかなら無制約局所法。',
+E                               '高速な局所法を優先。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_OPTIMJL',
+E                               'I_SCIPY_BFGS',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_ADAMW',
+E                           'name': 'AdamW',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'ADでdimension scalingを改善。',
+E                           ],
+E                           'warnings': [
+E                               'gradient checkとnondifferentiable op確認。',
+E                           ],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_OPTAX',
+E                               'I_PYTORCH_OPTIM',
+E                               'I_TENSORFLOW_OPTIM',
+E                           ],
+E                       },
+E                       {
+E                           'entity_id': 'M_LBFGSB',
+E                           'name': 'L-BFGS-B法',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 1,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'low-memory/HVP/stochastic estimationを優先。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                           'implementation_ids': [
+E                               'I_SCIPY_LBFGSB',
+E                           ],
+E                       },
+E                   ],
+E                   'excluded_methods': [],
+E                   'candidate_problem_archetypes': [
+E                       {
+E                           'entity_id': 'PA006',
+E                           'name': '滑らかな低次元無制約',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 4,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '連続最適化familyを候補にする。',
+E                               '滑らかさ・制約・微分・local/globalで分岐。',
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                               '局所・heuristic・statistical methodも候補。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA008',
+E                           'name': '上下限制約付き滑らか',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '連続最適化familyを候補にする。',
+E                               '滑らかさ・制約・微分・local/globalで分岐。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S002',
+E                               'S065',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA009',
+E                           'name': '一般滑らか制約付きNLP',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 2,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '連続最適化familyを候補にする。',
+E                               '滑らかさ・制約・微分・local/globalで分岐。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S017',
+E                               'S029',
+E                               'S030',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA007',
+E                           'name': '高次元・勾配利用可能',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '連続最適化familyを候補にする。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S019',
+E                               'S046',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA013',
+E                           'name': 'noiseを含むblack-box',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '局所・heuristic・statistical methodも候補。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S032',
+E                               'S035',
+E                               'S059',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA014',
+E                           'name': '非常に高価な低次元評価',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S035',
+E                               'S059',
+E                               'S075',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA017',
+E                           'name': '線形計画',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S004',
+E                               'S016',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                       {
+E                           'entity_id': 'PA039',
+E                           'name': 'hyperparameter optimization',
+E                           'priority_band': 'conditional',
+E                           'supporting_rule_count': 1,
+E                           'high_priority_rule_count': 0,
+E                           'medium_priority_rule_count': 0,
+E                           'reasons': [
+E                               '局所・heuristic・statistical methodも候補。',
+E                           ],
+E                           'warnings': [],
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                               'S034',
+E                               'S035',
+E                               'S037',
+E                               'S038',
+E                           ],
+E                           'implementation_ids': [],
+E                       },
+E                   ],
+E                   'followups': [],
+E                   'warnings': [
+E                       '専用構造なしとして暫定。modelを再点検。',
+E                   ],
+E                   'trace': [
+E                       {
+E                           'rule_id': 'R001',
+E                           'question_id': 'Q01',
+E                           'matched_answer': 'continuous',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA007',
+E                               'PA008',
+E                               'PA009',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': '連続最適化familyを候補にする。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R009',
+E                           'question_id': 'Q02',
+E                           'matched_answer': 'automatic_differentiation_graph',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_LBFGS',
+E                               'M_NEWTON_CG',
+E                               'M_INTERIOR_POINT_NLP',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'ADにより高品質derivativeを利用。',
+E                           'warnings': '分岐・custom op・停止判定でgradientが壊れないか検査。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R016',
+E                           'question_id': 'Q03',
+E                           'matched_answer': 'general_nonlinear',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA008',
+E                               'PA009',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': '滑らかさ・制約・微分・local/globalで分岐。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R020',
+E                           'question_id': 'Q04',
+E                           'matched_answer': 'none',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_BFGS',
+E                               'M_LBFGS',
+E                               'M_TRUST_KRYLOV',
+E                           ],
+E                           'priority_effect': 'medium',
+E                           'explanation': '滑らかなら無制約局所法。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R029',
+E                           'question_id': 'Q05',
+E                           'matched_answer': 'autodiff',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_LBFGS',
+E                               'M_NEWTON_CG',
+E                               'M_TRUST_KRYLOV',
+E                               'M_ADAMW',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'ADでdimension scalingを改善。',
+E                           'warnings': 'gradient checkとnondifferentiable op確認。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R030',
+E                           'question_id': 'Q05',
+E                           'matched_answer': 'jacobian_or_hvp',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_GAUSS_NEWTON',
+E                               'M_TRUST_KRYLOV',
+E                               'M_NEWTON_CG',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': '構造化二階近似・Krylov法が有力。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R035',
+E                           'question_id': 'Q06',
+E                           'matched_answer': 'milliseconds_or_less',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_MULTISTART',
+E                               'M_DIFFERENTIAL_EVOLUTION',
+E                               'M_CMA_ES',
+E                           ],
+E                           'priority_effect': 'medium',
+E                           'explanation': '多評価型探索もbudget内に入り得る。',
+E                           'warnings': '局所解で十分なら無駄な大域探索をしない。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R040',
+E                           'question_id': 'Q07',
+E                           'matched_answer': 'deterministic_reliable',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA014',
+E                               'PA017',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': 'deterministic停止基準とfinite differenceが比較的使いやすい。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R049',
+E                           'question_id': 'Q08',
+E                           'matched_answer': '100_to_10000',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_LBFGS',
+E                               'M_LBFGSB',
+E                               'M_NEWTON_CG',
+E                               'M_SPSA',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'low-memory/HVP/stochastic estimationを優先。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R053',
+E                           'question_id': 'Q09',
+E                           'matched_answer': 'local_is_fine',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_BFGS',
+E                               'M_LBFGS',
+E                               'M_INTERIOR_POINT_NLP',
+E                               'M_GAUSS_NEWTON',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': '高速な局所法を優先。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R057',
+E                           'question_id': 'Q10',
+E                           'matched_answer': 'no_certificate_needed',
+E                           'action_type': 'include_problem',
+E                           'action_target_type': 'problem',
+E                           'action_target_ids': [
+E                               'PA006',
+E                               'PA013',
+E                               'PA039',
+E                           ],
+E                           'priority_effect': 'candidate',
+E                           'explanation': '局所・heuristic・statistical methodも候補。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R071',
+E                           'question_id': 'Q11',
+E                           'matched_answer': 'none_known',
+E                           'action_type': 'warn',
+E                           'action_target_type': 'alternative',
+E                           'action_target_ids': [
+E                               'ALT_GENERIC_OPT',
+E                           ],
+E                           'priority_effect': 'none',
+E                           'explanation': '専用構造なしとして暫定。modelを再点検。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R073',
+E                           'question_id': 'Q12',
+E                           'matched_answer': 'repeated_similar',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_ADMM_QP',
+E                               'M_ACTIVE_SET_QP',
+E                               'M_LBFGS',
+E                               'M_INTERIOR_POINT_NLP',
+E                           ],
+E                           'priority_effect': 'high',
+E                           'explanation': 'warm start、factorization、parameterized modelを利用。',
+E                           'warnings': '',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                       {
+E                           'rule_id': 'R078',
+E                           'question_id': 'Q12',
+E                           'matched_answer': 'warm_start_available',
+E                           'action_type': 'promote_method',
+E                           'action_target_type': 'method',
+E                           'action_target_ids': [
+E                               'M_ACTIVE_SET_QP',
+E                               'M_ADMM_QP',
+E                               'M_DUAL_SIMPLEX',
+E                               'M_INTERIOR_POINT_NLP',
+E                           ],
+E                           'priority_effect': 'medium',
+E                           'explanation': '前解・basis・stateを再利用。',
+E                           'warnings': 'problem変化が大きいとstale warm startになり得る。',
+E                           'source_ids': [
+E                               'S054',
+E                               'S055',
+E                               'S056',
+E                           ],
+E                       },
+E                   ],
+E                   'answered_question_count': 12,
+E                   'dataset_version': '0.11.0',
+E                   'disclaimer': '候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。',
+E               }
+
+tests/test_site_recommendation.py:69: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_atlas_metadata_schema.py: 9 warnings
+tests/test_dataset_formats.py: 13 warnings
+tests/test_dataset_release.py: 10 warnings
+tests/test_licensing.py: 1 warning
+tests/test_problem_instances.py: 1 warning
+tests/test_trust_region_reflective.py: 1 warning
+tests/test_versioned_claims.py: 3 warnings
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/openpyxl/workbook/child.py:99: UserWarning: Title is more than 31 characters. Some applications may not be able to read the file
+    warnings.warn("Title is more than 31 characters. Some applications may not be able to read the file")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_site_recommendation.py::test_shared_recommendation_cases_match_python_engine - AssertionError: smooth_continuous
+assert {'alternative...ods': [], ...} == {'alternative...ods': [], ...}
+  
+  Omitting 10 identical items, use -vv to show
+  Differing items:
+  {'first_choices': [{'entity_id': 'M_LBFGS', 'name': 'L-BFGS法', 'priority_band': 'first_choice', 'supporting_rule_count...ity_id': 'M_GAUSS_NEWTON', 'name': 'Gauss–Newton法', 'priority_band': 'first_choice', 'supporting_rule_count': 2, ...}]} != {'first_choices': [{'entity_id': 'M_LBFGS', 'name': 'L-BFGS法', 'priority_band': 'first_choice', 'supporting_rule_count...ity_id': 'M_GAUSS_NEWTON', 'name': 'Gauss–Newton法', 'priority_band': 'first_choice', 'supporting_rule_count': 2, ...}]}
+  
+  Full diff:
+    {
+        'alternatives_first': [],
+        'first_choices': [
+            {
+                'entity_id': 'M_LBFGS',
+                'name': 'L-BFGS法',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 6,
+                'high_priority_rule_count': 5,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    'ADにより高品質derivativeを利用。',
+                    '滑らかなら無制約局所法。',
+                    'ADでdimension scalingを改善。',
+                    'low-memory/HVP/stochastic estimationを優先。',
+                    '高速な局所法を優先。',
+                    'warm start、factorization、parameterized modelを利用。',
+                ],
+                'warnings': [
+                    '分岐・custom op・停止判定でgradientが壊れないか検査。',
+                    'gradient checkとnondifferentiable op確認。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_NLOPT',
+                    'I_OPTIMJL',
+                    'I_PETSC_TAO',
+                    'I_PYTORCH_OPTIM',
+                ],
+            },
+            {
+                'entity_id': 'M_NEWTON_CG',
+                'name': 'Newton-CG法',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 4,
+                'high_priority_rule_count': 4,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'ADにより高品質derivativeを利用。',
+                    'ADでdimension scalingを改善。',
+                    '構造化二階近似・Krylov法が有力。',
+                    'low-memory/HVP/stochastic estimationを優先。',
+                ],
+                'warnings': [
+                    '分岐・custom op・停止判定でgradientが壊れないか検査。',
+                    'gradient checkとnondifferentiable op確認。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_PETSC_TAO',
+                ],
+            },
+            {
+                'entity_id': 'M_INTERIOR_POINT_NLP',
+                'name': 'NLP内点法',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 4,
+                'high_priority_rule_count': 3,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    'ADにより高品質derivativeを利用。',
+                    '高速な局所法を優先。',
+                    'warm start、factorization、parameterized modelを利用。',
+                    '前解・basis・stateを再利用。',
+                ],
+                'warnings': [
+                    '分岐・custom op・停止判定でgradientが壊れないか検査。',
+                    'problem変化が大きいとstale warm startになり得る。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_CASADI',
+                    'I_DRAKE',
+                    'I_IPOPT',
+                    'I_KNITRO',
+                ],
+            },
+            {
+                'entity_id': 'M_TRUST_KRYLOV',
+                'name': 'trust-krylov',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 3,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '滑らかなら無制約局所法。',
+                    'ADでdimension scalingを改善。',
+                    '構造化二階近似・Krylov法が有力。',
+                ],
+                'warnings': [
+                    'gradient checkとnondifferentiable op確認。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_CERES',
+  -                 'I_SCIPY_LEAST_SQUARES_TRF',
+                    'I_SCIPY_TRUST_CONSTR',
+                ],
+            },
+            {
+                'entity_id': 'M_GAUSS_NEWTON',
+                'name': 'Gauss–Newton法',
+                'priority_band': 'first_choice',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 2,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '構造化二階近似・Krylov法が有力。',
+                    '高速な局所法を優先。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_CERES',
+  -                 'I_SCIPY_LEAST_SQUARES_TRF',
+                    'I_JAXOPT',
+                ],
+            },
+        ],
+        'conditional_choices': [
+            {
+                'entity_id': 'M_ACTIVE_SET_QP',
+                'name': 'active-set QP',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    'warm start、factorization、parameterized modelを利用。',
+                    '前解・basis・stateを再利用。',
+                ],
+                'warnings': [
+                    'problem変化が大きいとstale warm startになり得る。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'M_ADMM_QP',
+                'name': 'operator-splitting QP',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    'warm start、factorization、parameterized modelを利用。',
+                    '前解・basis・stateを再利用。',
+                ],
+                'warnings': [
+                    'problem変化が大きいとstale warm startになり得る。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_ACADOS',
+                    'I_OSQP',
+                    'I_CVXPY',
+                ],
+            },
+            {
+                'entity_id': 'M_BFGS',
+                'name': 'BFGS法',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 1,
+                'reasons': [
+                    '滑らかなら無制約局所法。',
+                    '高速な局所法を優先。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_OPTIMJL',
+                    'I_SCIPY_BFGS',
+                ],
+            },
+            {
+                'entity_id': 'M_ADAMW',
+                'name': 'AdamW',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'ADでdimension scalingを改善。',
+                ],
+                'warnings': [
+                    'gradient checkとnondifferentiable op確認。',
+                ],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_OPTAX',
+                    'I_PYTORCH_OPTIM',
+                    'I_TENSORFLOW_OPTIM',
+                ],
+            },
+            {
+                'entity_id': 'M_LBFGSB',
+                'name': 'L-BFGS-B法',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 1,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'low-memory/HVP/stochastic estimationを優先。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+                'implementation_ids': [
+                    'I_SCIPY_LBFGSB',
+                ],
+            },
+        ],
+        'excluded_methods': [],
+        'candidate_problem_archetypes': [
+            {
+                'entity_id': 'PA006',
+                'name': '滑らかな低次元無制約',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 4,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '連続最適化familyを候補にする。',
+                    '滑らかさ・制約・微分・local/globalで分岐。',
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                    '局所・heuristic・statistical methodも候補。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA008',
+                'name': '上下限制約付き滑らか',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '連続最適化familyを候補にする。',
+                    '滑らかさ・制約・微分・local/globalで分岐。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S002',
+                    'S065',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA009',
+                'name': '一般滑らか制約付きNLP',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 2,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '連続最適化familyを候補にする。',
+                    '滑らかさ・制約・微分・local/globalで分岐。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S017',
+                    'S029',
+                    'S030',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA007',
+                'name': '高次元・勾配利用可能',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '連続最適化familyを候補にする。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S019',
+                    'S046',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA013',
+                'name': 'noiseを含むblack-box',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '局所・heuristic・statistical methodも候補。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S032',
+                    'S035',
+                    'S059',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA014',
+                'name': '非常に高価な低次元評価',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S035',
+                    'S059',
+                    'S075',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA017',
+                'name': '線形計画',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S004',
+                    'S016',
+                ],
+                'implementation_ids': [],
+            },
+            {
+                'entity_id': 'PA039',
+                'name': 'hyperparameter optimization',
+                'priority_band': 'conditional',
+                'supporting_rule_count': 1,
+                'high_priority_rule_count': 0,
+                'medium_priority_rule_count': 0,
+                'reasons': [
+                    '局所・heuristic・statistical methodも候補。',
+                ],
+                'warnings': [],
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                    'S034',
+                    'S035',
+                    'S037',
+                    'S038',
+                ],
+                'implementation_ids': [],
+            },
+        ],
+        'followups': [],
+        'warnings': [
+            '専用構造なしとして暫定。modelを再点検。',
+        ],
+        'trace': [
+            {
+                'rule_id': 'R001',
+                'question_id': 'Q01',
+                'matched_answer': 'continuous',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA007',
+                    'PA008',
+                    'PA009',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': '連続最適化familyを候補にする。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R009',
+                'question_id': 'Q02',
+                'matched_answer': 'automatic_differentiation_graph',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_LBFGS',
+                    'M_NEWTON_CG',
+                    'M_INTERIOR_POINT_NLP',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'ADにより高品質derivativeを利用。',
+                'warnings': '分岐・custom op・停止判定でgradientが壊れないか検査。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R016',
+                'question_id': 'Q03',
+                'matched_answer': 'general_nonlinear',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA008',
+                    'PA009',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': '滑らかさ・制約・微分・local/globalで分岐。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R020',
+                'question_id': 'Q04',
+                'matched_answer': 'none',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_BFGS',
+                    'M_LBFGS',
+                    'M_TRUST_KRYLOV',
+                ],
+                'priority_effect': 'medium',
+                'explanation': '滑らかなら無制約局所法。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R029',
+                'question_id': 'Q05',
+                'matched_answer': 'autodiff',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_LBFGS',
+                    'M_NEWTON_CG',
+                    'M_TRUST_KRYLOV',
+                    'M_ADAMW',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'ADでdimension scalingを改善。',
+                'warnings': 'gradient checkとnondifferentiable op確認。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R030',
+                'question_id': 'Q05',
+                'matched_answer': 'jacobian_or_hvp',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_GAUSS_NEWTON',
+                    'M_TRUST_KRYLOV',
+                    'M_NEWTON_CG',
+                ],
+                'priority_effect': 'high',
+                'explanation': '構造化二階近似・Krylov法が有力。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R035',
+                'question_id': 'Q06',
+                'matched_answer': 'milliseconds_or_less',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_MULTISTART',
+                    'M_DIFFERENTIAL_EVOLUTION',
+                    'M_CMA_ES',
+                ],
+                'priority_effect': 'medium',
+                'explanation': '多評価型探索もbudget内に入り得る。',
+                'warnings': '局所解で十分なら無駄な大域探索をしない。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R040',
+                'question_id': 'Q07',
+                'matched_answer': 'deterministic_reliable',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA014',
+                    'PA017',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': 'deterministic停止基準とfinite differenceが比較的使いやすい。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R049',
+                'question_id': 'Q08',
+                'matched_answer': '100_to_10000',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_LBFGS',
+                    'M_LBFGSB',
+                    'M_NEWTON_CG',
+                    'M_SPSA',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'low-memory/HVP/stochastic estimationを優先。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R053',
+                'question_id': 'Q09',
+                'matched_answer': 'local_is_fine',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_BFGS',
+                    'M_LBFGS',
+                    'M_INTERIOR_POINT_NLP',
+                    'M_GAUSS_NEWTON',
+                ],
+                'priority_effect': 'high',
+                'explanation': '高速な局所法を優先。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R057',
+                'question_id': 'Q10',
+                'matched_answer': 'no_certificate_needed',
+                'action_type': 'include_problem',
+                'action_target_type': 'problem',
+                'action_target_ids': [
+                    'PA006',
+                    'PA013',
+                    'PA039',
+                ],
+                'priority_effect': 'candidate',
+                'explanation': '局所・heuristic・statistical methodも候補。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R071',
+                'question_id': 'Q11',
+                'matched_answer': 'none_known',
+                'action_type': 'warn',
+                'action_target_type': 'alternative',
+                'action_target_ids': [
+                    'ALT_GENERIC_OPT',
+                ],
+                'priority_effect': 'none',
+                'explanation': '専用構造なしとして暫定。modelを再点検。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R073',
+                'question_id': 'Q12',
+                'matched_answer': 'repeated_similar',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_ADMM_QP',
+                    'M_ACTIVE_SET_QP',
+                    'M_LBFGS',
+                    'M_INTERIOR_POINT_NLP',
+                ],
+                'priority_effect': 'high',
+                'explanation': 'warm start、factorization、parameterized modelを利用。',
+                'warnings': '',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+            {
+                'rule_id': 'R078',
+                'question_id': 'Q12',
+                'matched_answer': 'warm_start_available',
+                'action_type': 'promote_method',
+                'action_target_type': 'method',
+                'action_target_ids': [
+                    'M_ACTIVE_SET_QP',
+                    'M_ADMM_QP',
+                    'M_DUAL_SIMPLEX',
+                    'M_INTERIOR_POINT_NLP',
+                ],
+                'priority_effect': 'medium',
+                'explanation': '前解・basis・stateを再利用。',
+                'warnings': 'problem変化が大きいとstale warm startになり得る。',
+                'source_ids': [
+                    'S054',
+                    'S055',
+                    'S056',
+                ],
+            },
+        ],
+        'answered_question_count': 12,
+        'dataset_version': '0.11.0',
+        'disclaimer': '候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。',
+    }

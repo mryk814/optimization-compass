@@ -1,0 +1,96 @@
+................................F....................................... [ 28%]
+........................................................................ [ 57%]
+......................F..F.............................................. [ 85%]
+....................................                                     [100%]
+=================================== FAILURES ===================================
+____________ test_report_separates_inventory_from_expected_coverage ____________
+
+    def test_report_separates_inventory_from_expected_coverage() -> None:
+        report = load_report()
+        assert report.summary.subject_counts == {
+            "feature_family": 10,
+            "method": 99,
+            "problem": 56,
+        }
+>       assert len(report.subjects) == 164
+E       AssertionError: assert 165 == 164
+E        +  where 165 = len([CoverageSubject(subject_type='method', subject_id='MF_COMPOSITE_CONVEX', label='Convex composite and proximal optimiz...lization': InventoryDimension(state='absent', count=0, target_ids=[], reason_codes=['no_inventory_connection'])}), ...])
+E        +    where [CoverageSubject(subject_type='method', subject_id='MF_COMPOSITE_CONVEX', label='Convex composite and proximal optimiz...lization': InventoryDimension(state='absent', count=0, target_ids=[], reason_codes=['no_inventory_connection'])}), ...] = CoverageReport(contract_version='1.0.0', dataset_version='0.11.0', generated_at=datetime.datetime(2026, 7, 16, 0, 0, t...NTROL と PA042/PA044 を generic_metric_history で結ぶ。', source_ids=['S042', 'S043', 'S050', 'S076'])], integrity_issues=[]).subjects
+
+tests/test_coverage.py:27: AssertionError
+_____________ test_shared_recommendation_cases_match_python_engine _____________
+
+engine = <optimization_compass.engine.RecommendationEngine object at 0x7f32ee1f2030>
+
+    def test_shared_recommendation_cases_match_python_engine(
+        engine: RecommendationEngine,
+    ) -> None:
+        fixture = json.loads(
+            (Path(__file__).parent / "fixtures/recommendation_cases.json").read_text(encoding="utf-8")
+        )
+        assert fixture["fixture_version"] == "1.0.0"
+>       assert fixture["dataset_version"] == engine.repository.dataset_version()
+E       AssertionError: assert '0.10.0' == '0.11.0'
+E         
+E         - 0.11.0
+E         ?    ^
+E         + 0.10.0
+E         ?    ^
+
+tests/test_site_recommendation.py:45: AssertionError
+___________ test_transient_network_result_is_not_reported_as_broken ____________
+
+repository = <optimization_compass.db.KnowledgeRepository object at 0x7f32f482e5d0>
+
+    def test_transient_network_result_is_not_reported_as_broken(
+        repository: KnowledgeRepository,
+    ) -> None:
+        def checker(source_id: str, url: str) -> LinkCheck:
+            return LinkCheck(
+                source_id=source_id,
+                requested_url=url,
+                final_url=None,
+                http_status=503,
+                status="transient",
+                attempts=3,
+                detail="transient HTTP 503",
+            )
+    
+        report = build_source_health_report(
+            repository, as_of=date(2026, 7, 15), check_network=True, checker=checker
+        )
+>       assert len(report.links) == 95
+E       AssertionError: assert 96 == 95
+E        +  where 96 = len([LinkCheck(source_id='S001', requested_url='https://docs.scipy.org/doc/scipy/reference/optimize.html', final_url=None,...al_evolution.html', final_url=None, http_status=503, status='transient', attempts=3, detail='transient HTTP 503'), ...])
+E        +    where [LinkCheck(source_id='S001', requested_url='https://docs.scipy.org/doc/scipy/reference/optimize.html', final_url=None,...al_evolution.html', final_url=None, http_status=503, status='transient', attempts=3, detail='transient HTTP 503'), ...] = SourceHealthReport(schema_version=1, generated_on=datetime.date(2026, 7, 15), network_checked=True, freshness_policy_d...SORFLOW_OPTIM', stale_fields=['last_release'], last_verified=datetime.date(2026, 7, 13), age_days=2, max_age_days=90)]).links
+
+tests/test_source_health.py:59: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_atlas_metadata_schema.py: 9 warnings
+tests/test_dataset_formats.py: 13 warnings
+tests/test_dataset_release.py: 10 warnings
+tests/test_licensing.py: 1 warning
+tests/test_problem_instances.py: 1 warning
+tests/test_trust_region_reflective.py: 1 warning
+tests/test_versioned_claims.py: 3 warnings
+  /home/runner/work/optimization-compass/optimization-compass/.venv/lib/python3.12/site-packages/openpyxl/workbook/child.py:99: UserWarning: Title is more than 31 characters. Some applications may not be able to read the file
+    warnings.warn("Title is more than 31 characters. Some applications may not be able to read the file")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_coverage.py::test_report_separates_inventory_from_expected_coverage - AssertionError: assert 165 == 164
+ +  where 165 = len([CoverageSubject(subject_type='method', subject_id='MF_COMPOSITE_CONVEX', label='Convex composite and proximal optimiz...lization': InventoryDimension(state='absent', count=0, target_ids=[], reason_codes=['no_inventory_connection'])}), ...])
+ +    where [CoverageSubject(subject_type='method', subject_id='MF_COMPOSITE_CONVEX', label='Convex composite and proximal optimiz...lization': InventoryDimension(state='absent', count=0, target_ids=[], reason_codes=['no_inventory_connection'])}), ...] = CoverageReport(contract_version='1.0.0', dataset_version='0.11.0', generated_at=datetime.datetime(2026, 7, 16, 0, 0, t...NTROL と PA042/PA044 を generic_metric_history で結ぶ。', source_ids=['S042', 'S043', 'S050', 'S076'])], integrity_issues=[]).subjects
+FAILED tests/test_site_recommendation.py::test_shared_recommendation_cases_match_python_engine - AssertionError: assert '0.10.0' == '0.11.0'
+  
+  - 0.11.0
+  ?    ^
+  + 0.10.0
+  ?    ^
+FAILED tests/test_source_health.py::test_transient_network_result_is_not_reported_as_broken - AssertionError: assert 96 == 95
+ +  where 96 = len([LinkCheck(source_id='S001', requested_url='https://docs.scipy.org/doc/scipy/reference/optimize.html', final_url=None,...al_evolution.html', final_url=None, http_status=503, status='transient', attempts=3, detail='transient HTTP 503'), ...])
+ +    where [LinkCheck(source_id='S001', requested_url='https://docs.scipy.org/doc/scipy/reference/optimize.html', final_url=None,...al_evolution.html', final_url=None, http_status=503, status='transient', attempts=3, detail='transient HTTP 503'), ...] = SourceHealthReport(schema_version=1, generated_on=datetime.date(2026, 7, 15), network_checked=True, freshness_policy_d...SORFLOW_OPTIM', stale_fields=['last_release'], last_verified=datetime.date(2026, 7, 13), age_days=2, max_age_days=90)]).links
