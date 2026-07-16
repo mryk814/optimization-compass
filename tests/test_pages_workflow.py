@@ -14,7 +14,9 @@ def test_pages_has_one_validated_artifact_and_no_independent_workflow() -> None:
     assert workflow.count("actions/deploy-pages@") == 1
     assert "branches: [main]" in workflow
     assert "name: github-pages" in workflow
-    assert "needs: [validate_pages_artifact, python_compatibility, browser_e2e]" in workflow
+    assert "needs: [validate_pages_artifact, browser_e2e]" in workflow
+    assert "python_compatibility:" not in workflow
+    assert 'python-version: "3.13"' not in workflow
     assert "github.event_name == 'push' && github.ref == 'refs/heads/main'" in workflow
 
 

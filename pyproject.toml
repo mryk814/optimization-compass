@@ -7,7 +7,7 @@ name = "optimization-compass"
 version = "0.1.0"
 description = "Traceable optimization-method guidance backed by a structured SQLite knowledge base"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 authors = [{ name = "TAKUYA OTANI" }]
 license = "MIT"
 license-files = ["LICENSE"]

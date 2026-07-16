@@ -123,18 +123,6 @@ jobs:
           path: site/dist
           retention-days: 7
 
-  python_compatibility:
-    name: Python 3.13 compatibility
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-        with:
-          python-version: "3.13"
-          enable-cache: true
-      - run: uv sync --frozen --all-extras --all-groups
-      - run: uv run --frozen pytest
-
   browser_e2e:
     name: Browser E2E and accessibility
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -180,7 +168,7 @@ jobs:
   deploy:
     name: Deploy validated artifact and smoke it
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [validate_pages_artifact, python_compatibility, browser_e2e]
+    needs: [validate_pages_artifact, browser_e2e]
     permissions:
       contents: read
       pages: write
