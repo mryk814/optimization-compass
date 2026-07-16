@@ -21,11 +21,11 @@ def finalize_dataset_release() -> None:
     path = ROOT / "src/optimization_compass/dataset_release.py"
     text = path.read_text(encoding="utf-8")
     learning = (
-        'DEFAULT_LEARNING_GRAPH_MIGRATION = '
+        "DEFAULT_LEARNING_GRAPH_MIGRATION = "
         'ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
     )
     trf = (
-        'DEFAULT_TRF_DEFAULTS_MIGRATION = '
+        "DEFAULT_TRF_DEFAULTS_MIGRATION = "
         'ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"'
     )
     if trf not in text:
@@ -46,11 +46,11 @@ def finalize_dataset_release() -> None:
         raise SystemExit("protected migration inputs were not in the expected state")
 
     execution = (
-        '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text('
+        "        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text("
         'encoding="utf-8"))\n'
     )
     trf_execution = (
-        '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text('
+        "        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text("
         'encoding="utf-8"))\n'
     )
     if trf_execution not in text:
@@ -96,8 +96,7 @@ def finalize_authority_and_content() -> None:
     text = least_squares.read_text(encoding="utf-8")
     text = text.replace(
         "related_ids: [method.gradient-descent, trust-region-newton-cg]",
-        "related_ids: [method.gradient-descent, trust-region-newton-cg, "
-        "trust-region-reflective]",
+        "related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]",
         1,
     )
     text = text.replace(
@@ -119,8 +118,7 @@ def finalize_authority_and_content() -> None:
             "Issue #111 adds a dedicated Trust Region Reflective guide because it is "
             "selected implicitly by a high-use SciPy API. This raises the published "
             "method-guide baseline to 67 while keeping library defaults separate from "
-            "recommendation priority.\n\n"
-            + marker,
+            "recommendation priority.\n\n" + marker,
             1,
         )
     density_doc.write_text(text, encoding="utf-8")
@@ -140,6 +138,22 @@ def finalize_test_goldens() -> None:
         ],
         "tests/test_site_export.py": [
             ('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96'),
+        ],
+        "site/src/contracts/learning-slices.test.ts": [
+            (
+                'expect(feasible.dataset_version).toBe("0.10.0")',
+                'expect(feasible.dataset_version).toBe("0.11.0")',
+            ),
+            (
+                'expect(pareto.dataset_version).toBe("0.10.0")',
+                'expect(pareto.dataset_version).toBe("0.11.0")',
+            ),
+        ],
+        "site/src/contracts/coverage.test.ts": [
+            (
+                "expect(report.subjects).toHaveLength(164)",
+                "expect(report.subjects).toHaveLength(165)",
+            ),
         ],
     }
     for relative, changes in replacements.items():
