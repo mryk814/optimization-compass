@@ -21,6 +21,7 @@
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_CERES",
         "implementation:I_SCIPY_LEAST_SQUARES_LM",
+        "journey:EC013",
         "method:M_GAUSS_NEWTON",
         "method:M_LEVENBERG_MARQUARDT",
         "method:M_NELDER_MEAD",
@@ -52,6 +53,7 @@
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_CVXPY",
         "implementation:I_PYMOO",
+        "journey:EC017",
         "method:M_EPSILON_CONSTRAINT",
         "method:M_NSGA_II",
         "method:M_WEIGHTED_SUM",
@@ -86,6 +88,7 @@
         "feature_value:F_VARIABLE_DOMAIN:graph",
         "implementation:I_GUROBI",
         "implementation:I_ORTOOLS_ROUTING",
+        "journey:EC019",
         "method:M_BRANCH_CUT",
         "method:M_CP_SAT",
         "method:M_LOCAL_SEARCH_COMBINATORIAL",
@@ -120,6 +123,7 @@
         "implementation:I_ACADOS",
         "implementation:I_CASADI",
         "implementation:I_DRAKE",
+        "journey:EC020",
         "method:M_BFGS",
         "method:M_DIRECT_COLLOCATION",
         "method:M_MULTIPLE_SHOOTING",
@@ -153,6 +157,7 @@
         "feature_value:F_VARIABLE_DOMAIN:trajectory",
         "implementation:I_ACADOS",
         "implementation:I_OSQP",
+        "journey:EC025",
         "method:M_ACTIVE_SET_QP",
         "method:M_ADMM_QP",
         "method:M_DIFFERENTIAL_EVOLUTION",
@@ -186,6 +191,7 @@
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_IPOPT",
         "implementation:I_PETSC_TAO",
+        "journey:EC026",
         "method:M_DIFFERENTIAL_EVOLUTION",
         "method:M_NEWTON_CG",
         "method:M_TRUST_KRYLOV",
@@ -213,6 +219,7 @@
       "relation_context": [
         "feature_value:F_VARIABLE_DOMAIN:binary",
         "implementation:I_ORTOOLS_CPSAT",
+        "journey:budget-allocation",
         "method:MF_DISCRETE_EXACT",
         "method:M_CP_SAT",
         "method:M_NELDER_MEAD",
@@ -245,6 +252,7 @@
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_IPOPT",
         "implementation:I_SCIPY_SLSQP",
+        "journey:constrained-design",
         "method:M_BFGS",
         "method:M_INTERIOR_POINT_NLP",
         "method:M_SLSQP",
@@ -278,6 +286,7 @@
         "comparison:COMPARE_GRADIENT_FAMILY",
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_OPTUNA",
+        "journey:hyperparameter-search",
         "method:M_BAYESIAN_OPT_GP",
         "method:M_CP_SAT",
         "method:M_NELDER_MEAD",
@@ -303,6 +312,7 @@
       "relation_context": [
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_CVXPY",
+        "journey:portfolio-allocation",
         "method:MF_LP_QP_CONIC",
         "method:M_NELDER_MEAD",
         "method:M_SLSQP",
@@ -328,6 +338,7 @@
       "relation_context": [
         "feature_value:F_VARIABLE_DOMAIN:binary",
         "implementation:I_ORTOOLS_CPSAT",
+        "journey:shift-scheduling",
         "method:MF_DISCRETE_EXACT",
         "method:M_CP_SAT",
         "method:M_GRADIENT_DESCENT",
@@ -346,11 +357,38 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "comparison:COMPARE_GRADIENT_DIVERGENCE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "comparison:COMPARE_GRADIENT_DIVERGENCE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_ADAM",
+        "method:M_GRADIENT_DESCENT",
+        "method:M_MOMENTUM_SGD",
+        "trace:adam-quadratic-divergence",
+        "trace:gradient_descent-quadratic-divergence",
+        "trace:momentum-quadratic-divergence"
+      ],
+      "source_ids": [],
+      "text": "同じ初期点・目的関数・oracle evaluation budgetで、意図的に攻めた固定parameterを比較します。",
+      "title": "学習率過大による発散を観察する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "comparison:COMPARE_GRADIENT_FAMILY:overview",
       "dataset_version": "0.10.0",
       "document_id": "comparison:COMPARE_GRADIENT_FAMILY",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "journey:hyperparameter-search",
+        "method:M_ADAM",
+        "method:M_GRADIENT_DESCENT",
+        "method:M_MOMENTUM_SGD",
+        "trace:adam-quadratic",
+        "trace:gradient_descent-quadratic",
+        "trace:momentum-quadratic"
+      ],
       "source_ids": [],
       "text": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
       "title": "細長い谷で一次法を比べる"
@@ -18809,6 +18847,316 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC013:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC013",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC013",
+        "content:gauss-newton",
+        "content:least-squares",
+        "implementation:I_CERES",
+        "implementation:I_SCIPY_LEAST_SQUARES_LM",
+        "method:M_GAUSS_NEWTON",
+        "method:M_LEVENBERG_MARQUARDT",
+        "method:M_NELDER_MEAD",
+        "problem:PA033",
+        "source:S003",
+        "source:S041"
+      ],
+      "source_ids": [
+        "S003",
+        "S041"
+      ],
+      "text": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
+      "title": "観測データから非線形model parameterを推定する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC017:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC017",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC017",
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "implementation:I_CVXPY",
+        "implementation:I_PYMOO",
+        "method:M_EPSILON_CONSTRAINT",
+        "method:M_NSGA_II",
+        "method:M_WEIGHTED_SUM",
+        "problem:PA038",
+        "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
+      "title": "costと性能のPareto trade-offを探索する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC019:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC019",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC019",
+        "content:cp-sat",
+        "implementation:I_GUROBI",
+        "implementation:I_ORTOOLS_ROUTING",
+        "method:M_BRANCH_CUT",
+        "method:M_CP_SAT",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "problem:PA031",
+        "source:S023",
+        "source:S024",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S024",
+        "S054"
+      ],
+      "text": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
+      "title": "時間窓付き配送routeを10分以内に組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC020:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC020",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC020",
+        "content:direct-collocation",
+        "implementation:I_ACADOS",
+        "implementation:I_CASADI",
+        "implementation:I_DRAKE",
+        "method:M_BFGS",
+        "method:M_DIRECT_COLLOCATION",
+        "method:M_MULTIPLE_SHOOTING",
+        "problem:PA042",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "非線形動力学とpath constraintを守る軌道を設計したい。",
+      "title": "非線形動力学を含む軌道を最適化する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC025:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC025",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC025",
+        "implementation:I_ACADOS",
+        "implementation:I_OSQP",
+        "method:M_ACTIVE_SET_QP",
+        "method:M_ADMM_QP",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "problem:PA043",
+        "source:S012",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S012",
+        "S043",
+        "S076"
+      ],
+      "text": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
+      "title": "100Hzで反復MPCのQPを解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC026:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:EC026",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC026",
+        "content:newton-cg",
+        "content:trust-krylov",
+        "implementation:I_IPOPT",
+        "implementation:I_PETSC_TAO",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "method:M_NEWTON_CG",
+        "method:M_TRUST_KRYLOV",
+        "problem:PA045",
+        "source:S017",
+        "source:S019",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S019",
+        "S056"
+      ],
+      "text": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。",
+      "title": "PDE制約付き大規模設計をmatrix-freeで解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:budget-allocation:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:budget-allocation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:budget-allocation",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "implementation:I_ORTOOLS_CPSAT",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_NELDER_MEAD",
+        "problem:PA006",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S054",
+        "source:S055"
+      ],
+      "source_ids": [
+        "S054",
+        "S055"
+      ],
+      "text": "複数施策に予算を配分し、効果を最大化したい。",
+      "title": "限られた予算を施策へ配分する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:constrained-design:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:constrained-design",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:constrained-design",
+        "content:interior-point-nlp",
+        "content:slsqp",
+        "implementation:I_IPOPT",
+        "implementation:I_SCIPY_SLSQP",
+        "method:M_BFGS",
+        "method:M_INTERIOR_POINT_NLP",
+        "method:M_SLSQP",
+        "problem:PA009",
+        "scenario:SCENARIO_CONSTRAINED_DISK",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S064"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S064"
+      ],
+      "text": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
+      "title": "強度制約を守りながら軽量設計を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:hyperparameter-search:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:hyperparameter-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:hyperparameter-search",
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bayesian-optimization",
+        "content:method.nelder-mead",
+        "implementation:I_OPTUNA",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_CP_SAT",
+        "method:M_NELDER_MEAD",
+        "problem:PA055",
+        "source:S001",
+        "source:S002"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "時間のかかる実験を少ない回数で改善したい。",
+      "title": "高価な実験の設定を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:portfolio-allocation:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:portfolio-allocation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:portfolio-allocation",
+        "content:lp-qp-conic",
+        "content:slsqp",
+        "implementation:I_CVXPY",
+        "method:MF_LP_QP_CONIC",
+        "method:M_NELDER_MEAD",
+        "method:M_SLSQP",
+        "problem:PA052",
+        "source:S001",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S001",
+        "S054"
+      ],
+      "text": "リスクを抑えながら期待収益と運用制約を両立したい。",
+      "title": "ポートフォリオの配分を決める"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:shift-scheduling:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "journey:shift-scheduling",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:shift-scheduling",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "implementation:I_ORTOOLS_CPSAT",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA006",
+        "source:S054",
+        "source:S055"
+      ],
+      "source_ids": [
+        "S054",
+        "S055"
+      ],
+      "text": "必要人数を満たしながら、希望と公平性を反映したい。",
+      "title": "スタッフのシフトを組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "method:MF_COMPOSITE_CONVEX:overview",
       "dataset_version": "0.10.0",
       "document_id": "method:MF_COMPOSITE_CONVEX",
@@ -19269,6 +19617,7 @@
       "document_id": "method:M_ADAM",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:adam",
         "implementation:I_OPTAX",
@@ -19504,7 +19853,11 @@
         "source:S038",
         "source:S059",
         "source:S069",
-        "source:S075"
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLOIT_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
       ],
       "source_ids": [
         "S034",
@@ -20118,6 +20471,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:shift-scheduling",
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:method.gradient-descent",
         "implementation:I_EXCEL_SOLVER",
@@ -20420,6 +20774,7 @@
       "document_id": "method:M_MOMENTUM_SGD",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:momentum-sgd",
         "implementation:I_OPTAX",
@@ -20959,7 +21314,11 @@
         "source:S038",
         "source:S059",
         "source:S069",
-        "source:S075"
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+        "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE"
       ],
       "source_ids": [
         "S034",
@@ -21553,7 +21912,9 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:budget-allocation",
-        "case:shift-scheduling"
+        "case:shift-scheduling",
+        "journey:budget-allocation",
+        "journey:shift-scheduling"
       ],
       "source_ids": [
         "S002",
@@ -21601,7 +21962,8 @@
       "document_id": "problem:PA009",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:constrained-design"
+        "case:constrained-design",
+        "journey:constrained-design"
       ],
       "source_ids": [
         "S017",
@@ -21948,7 +22310,8 @@
       "document_id": "problem:PA031",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC019"
+        "case:EC019",
+        "journey:EC019"
       ],
       "source_ids": [
         "S023",
@@ -21980,7 +22343,8 @@
       "document_id": "problem:PA033",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC013"
+        "case:EC013",
+        "journey:EC013"
       ],
       "source_ids": [
         "S003",
@@ -22059,7 +22423,8 @@
       "document_id": "problem:PA038",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC017"
+        "case:EC017",
+        "journey:EC017"
       ],
       "source_ids": [
         "S039",
@@ -22126,7 +22491,8 @@
       "document_id": "problem:PA042",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC020"
+        "case:EC020",
+        "journey:EC020"
       ],
       "source_ids": [
         "S042",
@@ -22144,7 +22510,8 @@
       "document_id": "problem:PA043",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC025"
+        "case:EC025",
+        "journey:EC025"
       ],
       "source_ids": [
         "S012",
@@ -22178,7 +22545,8 @@
       "document_id": "problem:PA045",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:EC026"
+        "case:EC026",
+        "journey:EC026"
       ],
       "source_ids": [
         "S017",
@@ -22283,7 +22651,8 @@
       "document_id": "problem:PA052",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:portfolio-allocation"
+        "case:portfolio-allocation",
+        "journey:portfolio-allocation"
       ],
       "source_ids": [
         "S054"
@@ -22331,7 +22700,8 @@
       "document_id": "problem:PA055",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:hyperparameter-search"
+        "case:hyperparameter-search",
+        "journey:hyperparameter-search"
       ],
       "source_ids": [
         "S003",
@@ -22355,6 +22725,377 @@
       ],
       "text": "外れ値を含むparameter estimation。変数=continuous、目的=sum_of_squares、制約=bounds。",
       "title": "外れ値を含むparameter estimation"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_ADAM_QUADRATIC:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_ADAM_QUADRATIC",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:adam-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "Adam"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:adam-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "Adam"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S021",
+        "source:S022",
+        "source:S079",
+        "trace:binary-knapsack-bnb-budget"
+      ],
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "text": "上界とincumbentが探索範囲を狭める過程を読む",
+      "title": "0-1 knapsack: node予算で停止"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:budget-allocation",
+        "source:S021",
+        "source:S022",
+        "source:S079",
+        "trace:binary-knapsack-bnb-complete"
+      ],
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "text": "上界とincumbentが探索範囲を狭める過程を読む",
+      "title": "0-1 knapsack: 最適性証明"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:EC017",
+        "source:S039",
+        "source:S055",
+        "source:S068",
+        "trace:biobjective-quadratic-pareto-front"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "支配関係とpreferenceを分けて意思決定する",
+      "title": "単一bestではなくPareto frontを読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLOIT_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+        "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_CONSTRAINED_DISK:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_CONSTRAINED_DISK",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:constrained-design",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S056",
+        "source:S064",
+        "trace:constrained-disk-feasible-region"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "text": "目的値と実行可能性を別々に読む",
+      "title": "実行可能領域と制約を無視した失敗を比べる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_GD_QUADRATIC:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_GD_QUADRATIC",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:gradient_descent-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "勾配降下法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:gradient_descent-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "勾配降下法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:momentum-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "モメンタム法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:momentum-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "勾配、更新vector、軌跡、目的値を同じevaluationで読む",
+      "title": "モメンタム法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_NM_QUADRATIC:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_NM_QUADRATIC",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "単体の幾何操作と候補の受理判断を結び付けて読む",
+      "title": "Nelder–Meadの幾何操作"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_NM_QUADRATIC_SHIFTED:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-quadratic-shifted"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "単体の幾何操作と候補の受理判断を結び付けて読む",
+      "title": "Nelder–Meadの幾何操作"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_NM_ROSENBROCK:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_NM_ROSENBROCK",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-rosenbrock"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "単体の幾何操作と候補の受理判断を結び付けて読む",
+      "title": "Nelder–Meadの幾何操作"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-rosenbrock-shifted"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "単体の幾何操作と候補の受理判断を結び付けて読む",
+      "title": "Nelder–Meadの幾何操作"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -23689,12 +24430,166 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLOIT_NOISELESS:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLOIT_NOISELESS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_RANDOM_SEARCH",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_RANDOM_SEARCH",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: exploit / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLORE_NOISELESS:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_RANDOM_SEARCH",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / noiseless"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_RANDOM_SEARCH",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
+      "title": "高価な1次元black-box: explore / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "trace:adam-quadratic-divergence:overview",
       "dataset_version": "0.10.0",
       "document_id": "trace:adam-quadratic-divergence",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_ADAM"
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "method:M_ADAM",
+        "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
       ],
       "source_ids": [
         "S001",
@@ -23711,7 +24606,9 @@
       "document_id": "trace:adam-quadratic",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_ADAM"
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "method:M_ADAM",
+        "scenario:SCENARIO_ADAM_QUADRATIC"
       ],
       "source_ids": [
         "S001",
@@ -23729,6 +24626,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "method:M_BRANCH_BOUND",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
         "source:S021",
         "source:S022",
         "source:S079",
@@ -23752,6 +24650,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "method:M_BRANCH_BOUND",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
         "source:S021",
         "source:S022",
         "source:S079",
@@ -23776,6 +24675,7 @@
       "relation_context": [
         "method:M_NSGA_II",
         "method:M_WEIGHTED_SUM",
+        "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
         "source:S039",
         "source:S055",
         "source:S068",
@@ -23800,6 +24700,7 @@
       "relation_context": [
         "method:M_BFGS",
         "method:M_SLSQP",
+        "scenario:SCENARIO_CONSTRAINED_DISK",
         "source:S017",
         "source:S029",
         "source:S030",
@@ -23828,7 +24729,9 @@
       "document_id": "trace:gradient_descent-quadratic-divergence",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_GRADIENT_DESCENT"
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE"
       ],
       "source_ids": [
         "S001",
@@ -23845,7 +24748,9 @@
       "document_id": "trace:gradient_descent-quadratic",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_GRADIENT_DESCENT"
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_GD_QUADRATIC"
       ],
       "source_ids": [
         "S001",
@@ -23862,7 +24767,9 @@
       "document_id": "trace:momentum-quadratic-divergence",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_MOMENTUM_SGD"
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "method:M_MOMENTUM_SGD",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE"
       ],
       "source_ids": [
         "S001",
@@ -23879,7 +24786,9 @@
       "document_id": "trace:momentum-quadratic",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_MOMENTUM_SGD"
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "method:M_MOMENTUM_SGD",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC"
       ],
       "source_ids": [
         "S001",
@@ -23896,7 +24805,8 @@
       "document_id": "trace:nelder-mead-quadratic-shifted",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_NELDER_MEAD"
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_NM_QUADRATIC_SHIFTED"
       ],
       "source_ids": [
         "S001",
@@ -23913,7 +24823,8 @@
       "document_id": "trace:nelder-mead-quadratic",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_NELDER_MEAD"
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_NM_QUADRATIC"
       ],
       "source_ids": [
         "S001",
@@ -23930,7 +24841,8 @@
       "document_id": "trace:nelder-mead-rosenbrock-shifted",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_NELDER_MEAD"
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED"
       ],
       "source_ids": [
         "S001",
@@ -23947,7 +24859,8 @@
       "document_id": "trace:nelder-mead-rosenbrock",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "method:M_NELDER_MEAD"
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_NM_ROSENBROCK"
       ],
       "source_ids": [
         "S001",

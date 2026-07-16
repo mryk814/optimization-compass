@@ -76,6 +76,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "EC013",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA033",
           "target_type": "problem"
@@ -165,6 +170,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYMOO",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC017",
+          "target_type": "journey"
         },
         {
           "relation_type": "problem",
@@ -263,6 +273,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "EC019",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA031",
           "target_type": "problem"
@@ -359,6 +374,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA042",
           "target_type": "problem"
@@ -448,6 +468,11 @@
           "relation_type": "implementation",
           "target_id": "I_OSQP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC025",
+          "target_type": "journey"
         },
         {
           "relation_type": "problem",
@@ -541,6 +566,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA045",
           "target_type": "problem"
@@ -595,6 +625,11 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_CPSAT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
         },
         {
           "relation_type": "problem",
@@ -703,6 +738,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "constrained-design",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA009",
           "target_type": "problem"
@@ -769,6 +809,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA055",
           "target_type": "problem"
@@ -823,6 +868,11 @@
           "relation_type": "implementation",
           "target_id": "I_CVXPY",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-allocation",
+          "target_type": "journey"
         },
         {
           "relation_type": "problem",
@@ -881,6 +931,11 @@
           "target_type": "implementation"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA006",
           "target_type": "problem"
@@ -894,7 +949,49 @@
       "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_GRADIENT_DIVERGENCE",
+      "entity_id": "COMPARE_GRADIENT_DIVERGENCE",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "学習率過大による発散を観察する",
+      "relations": [
+        {
+          "relation_type": "member_method",
+          "target_id": "M_ADAM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "adam-quadratic-divergence",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "gradient_descent-quadratic-divergence",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "momentum-quadratic-divergence",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "同じ初期点・目的関数・oracle evaluation budgetで、意図的に攻めた固定parameterを比較します。"
+    },
+    {
       "aliases": [
+        "/compare/COMPARE_FIRST_ORDER_ROSENBROCK",
         "/compare/gradient-quadratic"
       ],
       "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
@@ -902,7 +999,43 @@
       "entity_type": "comparison",
       "external_url": null,
       "label": "COMPARE_GRADIENT_FAMILY",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_ADAM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "adam-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "gradient_descent-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "momentum-quadratic",
+          "target_type": "trace"
+        }
+      ],
       "summary": ""
     },
     {
@@ -9810,6 +9943,757 @@
       "summary": ""
     },
     {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC013",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "観測データから非線形model parameterを推定する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC013",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_LM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA033",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC017",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "costと性能のPareto trade-offを探索する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC017",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_WEIGHTED_SUM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC019",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "時間窓付き配送routeを10分以内に組む",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC019",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BRANCH_CUT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_GUROBI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_ROUTING",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA031",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC020",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "非線形動力学を含む軌道を最適化する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MULTIPLE_SHOOTING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CASADI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_DRAKE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA042",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "非線形動力学とpath constraintを守る軌道を設計したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC025",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "100Hzで反復MPCのQPを解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ACTIVE_SET_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA043",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC026",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "PDE制約付き大規模設計をmatrix-freeで解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NEWTON_CG",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_TRUST_KRYLOV",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PETSC_TAO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "trust-krylov",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA045",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "budget-allocation",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "限られた予算を施策へ配分する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "budget-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA006",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "複数施策に予算を配分し、効果を最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "constrained-design",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "強度制約を守りながら軽量設計を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "constrained-design",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_SLSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_CONSTRAINED_DISK",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA009",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "hyperparameter-search",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "高価な実験の設定を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA055",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "時間のかかる実験を少ない回数で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "portfolio-allocation",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "ポートフォリオの配分を決める",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA052",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "リスクを抑えながら期待収益と運用制約を両立したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "shift-scheduling",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "スタッフのシフトを組む",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "shift-scheduling",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA006",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+    },
+    {
       "aliases": [
         "/learn/family.composite-convex"
       ],
@@ -10590,6 +11474,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -11129,6 +12018,26 @@
           "relation_type": "learning",
           "target_id": "bayesian-optimization",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
         }
       ],
       "summary": "GP posteriorとacquisitionで高価な評価点を選ぶ。"
@@ -12365,6 +13274,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -12936,6 +13850,11 @@
       "external_url": null,
       "label": "momentum SGD",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
@@ -14038,6 +14957,26 @@
           "relation_type": "implementation",
           "target_id": "I_SMAC3",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+          "target_type": "trace"
         }
       ],
       "summary": "search spaceから独立にsamplingするbaseline。"
@@ -15051,6 +15990,16 @@
           "relation_type": "case",
           "target_id": "shift-scheduling",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
         }
       ],
       "summary": "滑らかな低次元無制約。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
@@ -15087,6 +16036,11 @@
           "relation_type": "case",
           "target_id": "constrained-design",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "constrained-design",
+          "target_type": "journey"
         }
       ],
       "summary": "一般滑らか制約付きNLP。変数=continuous、目的=general_nonlinear、制約=mixed。"
@@ -15313,6 +16267,11 @@
           "relation_type": "case",
           "target_id": "EC019",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC019",
+          "target_type": "journey"
         }
       ],
       "summary": "配送routing。変数=graph、目的=discrete、制約=combinatorial。"
@@ -15339,6 +16298,11 @@
           "relation_type": "case",
           "target_id": "EC013",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC013",
+          "target_type": "journey"
         }
       ],
       "summary": "非線形最小二乗。変数=continuous、目的=sum_of_squares、制約=bounds。"
@@ -15395,6 +16359,11 @@
           "relation_type": "case",
           "target_id": "EC017",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC017",
+          "target_type": "journey"
         }
       ],
       "summary": "多目的連続最適化。変数=continuous、目的=multiobjective、制約=bounds。"
@@ -15441,6 +16410,11 @@
           "relation_type": "case",
           "target_id": "EC020",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
         }
       ],
       "summary": "最適制御。変数=trajectory、目的=general_nonlinear、制約=dynamics。"
@@ -15457,6 +16431,11 @@
           "relation_type": "case",
           "target_id": "EC025",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC025",
+          "target_type": "journey"
         }
       ],
       "summary": "model predictive control。変数=trajectory、目的=quadratic、制約=dynamics。"
@@ -15483,6 +16462,11 @@
           "relation_type": "case",
           "target_id": "EC026",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
         }
       ],
       "summary": "PDE制約付き最適化。変数=continuous、目的=general_nonlinear、制約=implicit。"
@@ -15559,6 +16543,11 @@
           "relation_type": "case",
           "target_id": "portfolio-allocation",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-allocation",
+          "target_type": "journey"
         }
       ],
       "summary": "online optimization。変数=continuous、目的=general_nonlinear、制約=bounds。"
@@ -15595,6 +16584,11 @@
           "relation_type": "case",
           "target_id": "hyperparameter-search",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
         }
       ],
       "summary": "逆問題。変数=continuous、目的=sum_of_squares、制約=mixed。"
@@ -15608,6 +16602,564 @@
       "label": "外れ値を含むparameter estimation",
       "relations": [],
       "summary": "外れ値を含むparameter estimation。変数=continuous、目的=sum_of_squares、制約=bounds。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ADAM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Adam",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "adam-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Adam",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "adam-quadratic-divergence",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "0-1 knapsack: node予算で停止",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        }
+      ],
+      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "0-1 knapsack: 最適性証明",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "上界とincumbentが探索範囲を狭める過程を読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "単一bestではなくPareto frontを読む",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "biobjective-quadratic-pareto-front",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC017",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "支配関係とpreferenceを分けて意思決定する"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / noiseless",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        }
+      ],
+      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / small_noise",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        }
+      ],
+      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / noiseless",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        }
+      ],
+      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / small_noise",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        }
+      ],
+      "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_CONSTRAINED_DISK",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "実行可能領域と制約を無視した失敗を比べる",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "constrained-design",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "目的値と実行可能性を別々に読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_GD_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "勾配降下法",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "gradient_descent-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "勾配降下法",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "gradient_descent-quadratic-divergence",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "モメンタム法",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "momentum-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "モメンタム法",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "momentum-quadratic-divergence",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "nelder-mead-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "nelder-mead-quadratic-shifted",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_ROSENBROCK",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "nelder-mead-rosenbrock",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Nelder–Meadの幾何操作",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "nelder-mead-rosenbrock-shifted",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        }
+      ],
+      "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
     },
     {
       "aliases": [],
@@ -16561,12 +18113,190 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / noiseless",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / noiseless",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / small_noise",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: exploit / small_noise",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / noiseless",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / noiseless",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / small_noise",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "高価な1次元black-box: explore / small_noise",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/adam-quadratic",
       "entity_id": "adam-quadratic",
       "entity_type": "trace",
       "external_url": null,
       "label": "Adam",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_ADAM_QUADRATIC",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_ADAM",
@@ -16583,6 +18313,16 @@
       "external_url": null,
       "label": "Adam",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_ADAM",
@@ -16623,6 +18363,11 @@
           "relation_type": "related_map",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
         },
         {
           "relation_type": "visualizes",
@@ -16666,6 +18411,11 @@
           "target_type": "view"
         },
         {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_BRANCH_BOUND",
           "target_type": "method"
@@ -16707,6 +18457,11 @@
           "relation_type": "related_map",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "scenario"
         },
         {
           "relation_type": "visualizes",
@@ -16772,6 +18527,11 @@
           "target_type": "view"
         },
         {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_CONSTRAINED_DISK",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_BFGS",
           "target_type": "method"
@@ -16809,6 +18569,16 @@
       "label": "勾配降下法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_GD_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_GRADIENT_DESCENT",
           "target_type": "method"
@@ -16824,6 +18594,16 @@
       "external_url": null,
       "label": "勾配降下法",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_GRADIENT_DESCENT",
@@ -16841,6 +18621,16 @@
       "label": "モメンタム法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_MOMENTUM_SGD",
           "target_type": "method"
@@ -16856,6 +18646,16 @@
       "external_url": null,
       "label": "モメンタム法",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_MOMENTUM_SGD",
@@ -16875,6 +18675,11 @@
       "label": "Nelder–Meadの幾何操作",
       "relations": [
         {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_NM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
@@ -16890,6 +18695,11 @@
       "external_url": null,
       "label": "Nelder–Meadの幾何操作",
       "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_NELDER_MEAD",
@@ -16907,6 +18717,11 @@
       "label": "Nelder–Meadの幾何操作",
       "relations": [
         {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_NM_ROSENBROCK",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "visualizes",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
@@ -16922,6 +18737,11 @@
       "external_url": null,
       "label": "Nelder–Meadの幾何操作",
       "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+          "target_type": "scenario"
+        },
         {
           "relation_type": "visualizes",
           "target_id": "M_NELDER_MEAD",

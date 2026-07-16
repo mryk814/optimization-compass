@@ -22,6 +22,7 @@ DIMENSIONS = (
     "comparison",
     "gallery",
     "implementation",
+    "journey",
     "source",
 )
 
@@ -331,6 +332,7 @@ def _build_inventory(
         "comparison": "comparison",
         "case": "gallery",
         "implementation": "implementation",
+        "journey": "journey",
         "source": "source",
     }
     for entity in links:
