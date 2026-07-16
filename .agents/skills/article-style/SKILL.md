@@ -28,7 +28,9 @@ description: Optimization Compassの教材記事（content/methods, content/conc
 に従い、**日本語を説明の主言語とし、英語の正式用語も見える・探せる**形で執筆する。
 
 - `status: published`の記事は、`title_ja`、`summary`、本文だけで日本語の説明を完結させる。
-- `title_en`、英語alias、略語は正式用語・検索metadataであり、英語版記事として扱わない。
+- `title_en`、英語の用語alias・略語は正式用語・検索metadataであり、英語版記事として扱わない。
+- frontmatterの`aliases`、`visualization_aliases`、`comparison_aliases`はURL route専用であり、
+  用語・同義語・略語を入れない。
 - 手法名、製品/API名、code、数式、source titleは正しい原表記を保つ。
 - stable ID、URL identifier、schema key、API fieldは翻訳しない。
 - 未レビューの機械翻訳を、執筆済みの翻訳や欠落localeのfallbackとして追加しない。

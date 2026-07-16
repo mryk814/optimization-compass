@@ -27,11 +27,13 @@
 [`ADR 0013`](docs/adr/0013-japanese-first-language-strategy.md)に従ってください。
 
 - `published`教材は、`title_ja`、`summary`、本文だけで日本語の説明が完結している必要があります。
-- `title_en`、英語alias、略語は正式用語と検索のmetadataです。英語版記事の代わりではありません。
+- `title_en`、英語の用語alias・略語は正式用語と検索のmetadataです。英語版記事の代わりではありません。
+- content frontmatterの`aliases`、`visualization_aliases`、`comparison_aliases`はURL route専用です。
+  検索語や略語を入れません。
 - 手法名、製品/API名、code、数式、source titleは正しい原表記を保ちます。stable ID、URL identifier、
   schema key、API fieldは翻訳しません。
 - 未レビューの機械翻訳を、執筆済みの翻訳やlocale fallbackとして追加しません。
-- 現在の検索は日本語の語句と英語の正式名・alias・略語を同じ生成indexから探します。これは
+- 現在の検索は日本語の語句と英語の正式名・canonicalな用語alias・略語を同じ生成indexから探します。これは
   locale切替や英語記事の存在を保証するものではありません。
 
 日本語以外の完全な公開surfaceを作る場合は、URL、翻訳field、review provenance、欠落表示、

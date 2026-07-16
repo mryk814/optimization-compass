@@ -54,8 +54,8 @@ the available-count delta.
 ## Language scope
 
 Current Coverage audits the Japanese primary-language learning contract. A subject needs complete
-Japanese explanatory copy where its learning surface requires prose. `title_en`, English aliases, and
-abbreviations are terminology and retrieval metadata; they do not make a Japanese learning asset
+Japanese explanatory copy where its learning surface requires prose. `title_en`, English terminology
+aliases, and abbreviations are retrieval metadata; they do not make a Japanese learning asset
 bilingual and do not satisfy a missing explanation.
 
 Optional translated fragments neither raise nor lower the current status. `coverage.json` does not add

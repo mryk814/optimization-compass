@@ -8,8 +8,9 @@
 ## Context
 
 Optimization Compass explains optimization mainly in Japanese while retaining English method names,
-technical terms, aliases, source titles, stable IDs, and fields such as `title_en`. This combination is
-useful for readers who learn in Japanese and later search papers, documentation, or APIs in English.
+technical terms, terminology aliases, source titles, stable IDs, and fields such as `title_en`. This
+combination is useful for readers who learn in Japanese and later search papers, documentation, or APIs
+in English.
 
 The product has not previously stated whether those English fields are terminology metadata or a promise
 of a complete English edition. Treating them as an implicit bilingual promise would make publication and
@@ -35,17 +36,22 @@ For a Markdown lesson with `status: published`:
 - `title_ja`, `summary`, and the article body must provide a complete Japanese explanation;
 - required relations, sources, review metadata, and ordinary content validation must pass;
 - `title_en` must identify the canonical English term, but it is terminology and retrieval metadata;
-- `title_en`, English aliases, or abbreviations do not constitute a translated article.
+- `title_en`, English terminology aliases, or abbreviations do not constitute a translated article.
 
 Other public surfaces follow the same rule: Japanese owns explanatory copy and task instructions;
 English fields identify canonical terminology where their existing contracts require them. A Gallery,
 comparison, scenario, or Coverage row is not bilingual merely because it contains `title_en`.
 
-### Search and aliases
+### Search and terminology aliases
 
 The existing generated lexical search remains one cross-language index. It can match Japanese titles and
-prose together with English titles, aliases, abbreviations, canonical names, and related terms. Search
-results may therefore be found with either language, while their explanatory summary remains Japanese.
+prose together with English titles, canonical `terminology_aliases` records, abbreviations, canonical
+names, and related terms. Search results may therefore be found with either language, while their
+explanatory summary remains Japanese.
+
+Content frontmatter fields named `aliases`, `visualization_aliases`, and `comparison_aliases` are a
+different contract: they contain alternate URL routes. They do not author terminology, synonyms, or
+lexical-search terms.
 
 This behavior is terminology-aware retrieval, not a locale switch and not proof that an English article
 exists. Search metadata continues to be generated from canonical inputs; a second hand-maintained English
@@ -64,9 +70,9 @@ choice, but it must not be presented as an English fallback.
 ### Coverage semantics
 
 Current Coverage measures the completeness of the Japanese primary-language learning contract and its
-artifact connections. `title_en`, aliases, and optional translated fragments neither satisfy nor reduce a
-Coverage status. Current `coverage.json` and learning-journey contracts do not gain locale fields as part
-of this decision.
+artifact connections. `title_en`, terminology aliases, and optional translated fragments neither satisfy
+nor reduce a Coverage status. Current `coverage.json` and learning-journey contracts do not gain locale
+fields as part of this decision.
 
 Per-language completeness becomes a separate versioned Coverage concern only when the project commits to
 a full additional-language publication surface.
