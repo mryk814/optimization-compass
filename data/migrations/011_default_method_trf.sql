@@ -134,6 +134,13 @@ INSERT INTO method_hierarchy (
   'S003;S096', 'high', '2026-07-16'
 );
 
+UPDATE evidence_links
+SET target_id = 'MIM_TRF_SCIPY',
+    claim_summary = 'SciPy least_squares provides the native Trust Region Reflective implementation.',
+    last_verified = '2026-07-16'
+WHERE target_table = 'method_implementation_map'
+  AND target_id IN ('MIM00011', 'MIM00012');
+
 DELETE FROM method_implementation_map
 WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF';
 
