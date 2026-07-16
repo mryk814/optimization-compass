@@ -4,14 +4,14 @@ kind: method
 method_id: M_SPSA
 title_ja: SPSA（同時摂動確率近似）
 title_en: Simultaneous Perturbation Stochastic Approximation
-summary: 全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元gradientを確率的に推定する局所法です。
+summary: 全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元勾配を確率的に推定する局所法です。
 source_ids: [S018, S056]
 related_ids: [family.local-dfo, method.gradient-descent]
 status: published
 last_reviewed: 2026-07-16
 ---
 
-全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元gradientを確率的に推定する局所法です。
+全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元勾配を確率的に推定する局所法です。
 
 ## 30秒でつかむ
 
@@ -22,7 +22,7 @@ last_reviewed: 2026-07-16
 - 前進の判断: noisyなbest-so-farと平均的な改善
 - 恐れていること: 推定variance、step scheduleの不適合、制約違反
 
-一回のgradient推定に必要な評価数が次元へ直接比例しにくい点が強みですが、推定方向は強く揺れます。
+一回の勾配推定に必要な評価数が次元へ直接比例しにくい点が強みですが、推定方向は強く揺れます。
 
 ## まず確認すること
 
@@ -44,7 +44,7 @@ $$
 y_+ = f(x_k+c_k\Delta_k),\qquad y_- = f(x_k-c_k\Delta_k)
 $$
 
-各成分のgradient推定は概ね次です。
+各成分の勾配推定は概ね次です。
 
 $$
 \hat g_{k,i}=\frac{y_+-y_-}{2c_k\Delta_{k,i}}
@@ -58,7 +58,7 @@ $$
 
 - 高次元で関数値だけ得られる
 - 評価noiseがあり、座標差分を大量に取れない
-- 1 gradient推定あたりの評価数を抑えたい
+- 1回の勾配推定あたりの評価数を抑えたい
 - 粗い局所改善を多数stepで積み上げられる
 
 避ける条件:
@@ -88,7 +88,7 @@ $$
 - 少数評価しか使えない → Bayesian Optimizationへ
 - gradient oracleを追加できる → stochastic gradient methodへ
 
-## Python例
+## Python
 
 ```python
 import numpy as np
@@ -114,7 +114,7 @@ for iteration in range(1, 101):
 print(x[:3], objective(x))
 ```
 
-## コラム: 2評価でgradientが正確になるわけではない
+## コラム: 2評価で勾配が正確になるわけではない
 
 SPSAは評価数を抑える代わりにvarianceを受け入れます。単一stepの方向を精密に解釈するより、複数step・複数seed・移動平均で傾向を見ます。
 

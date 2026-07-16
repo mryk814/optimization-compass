@@ -83,7 +83,7 @@ $$
 - intermediate metricが利用可能 → Hyperband / ASHAとの組合せを検討
 - 多数並列でsuggestionが似る → asynchronous policyやrandom fractionを見直す
 
-## Python例
+## Python
 
 ```python
 import optuna

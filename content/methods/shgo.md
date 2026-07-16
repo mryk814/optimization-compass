@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [direct-global, dual-annealing, differential-evolution]
 aliases: [/learn/shgo]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。
@@ -92,7 +92,7 @@ local minima数が増え続ける場合、sample densityが不足しているか
 - bounded low-dimensional problem
 - multimodalなcontinuous objective
 - 複数local minimaを列挙したい
-- gradientがなくてもlocal solverを組み合わせられる
+- 勾配がなくてもlocal solverを組み合わせられる
 - deterministicに近いstructured samplingを使いたい
 
 ## 避ける／切り替える条件
