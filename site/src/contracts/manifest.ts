@@ -44,7 +44,7 @@ export interface SiteLicenseManifest {
 }
 
 export interface SiteManifest {
-  version: "1.0.0";
+  version: "1.1.0";
   dataset_version: string;
   generated_at: string;
   views: ManifestView[];
@@ -52,6 +52,7 @@ export interface SiteManifest {
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
   visualization_scenarios: ManifestAsset<"1.2.0">;
+  derived_media: ManifestAsset;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
   implementation_claims: ManifestAsset;
@@ -77,6 +78,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "traces",
       "problems",
       "visualization_scenarios",
+      "derived_media",
       "entity_links",
       "sources",
       "implementation_claims",
@@ -90,7 +92,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     ],
     "SiteManifest",
   );
-  if (data.version !== "1.0.0") throw new Error("Unsupported SiteManifest version.");
+  if (data.version !== "1.1.0") throw new Error("Unsupported SiteManifest version.");
 
   const views = array(data.views, "views").map((value, index): ManifestView => {
     const view = record(value, `views[${index}]`);
@@ -161,6 +163,11 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   if (visualizationScenarios.version !== "1.2.0") {
     throw new Error("visualization_scenarios.version is unsupported.");
   }
+  const derivedMedia = record(data.derived_media, "derived_media");
+  exactKeys(derivedMedia, ["version", "path"], "derived_media");
+  if (derivedMedia.version !== "1.0.0" || derivedMedia.path !== "media/manifest.json") {
+    throw new Error("derived_media is unsupported.");
+  }
   const coverage = record(data.coverage, "coverage");
   exactKeys(coverage, ["version", "path", "report_path"], "coverage");
   if (coverage.version !== "1.0.0") throw new Error("coverage.version is unsupported.");
@@ -169,7 +176,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   }
 
   return {
-    version: "1.0.0",
+    version: "1.1.0",
     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
     generated_at: nonEmptyString(data.generated_at, "generated_at"),
     views,
@@ -191,6 +198,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     visualization_scenarios: {
       version: "1.2.0",
       path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
+    },
+    derived_media: {
+      version: "1.0.0",
+      path: safeRelativePath(derivedMedia.path, "derived_media.path"),
     },
     entity_links: {
       version: "1.0.0",

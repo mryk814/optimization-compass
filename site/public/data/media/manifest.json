@@ -1,0 +1,68 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.10.0",
+  "entries": [
+    {
+      "alt_en": "Report vertex ranks, candidate, operation, decision, and best value for each frame.",
+      "alt_ja": "各frameの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
+      "artifact_contract": "AlgorithmTrace",
+      "artifact_contract_version": "1.0.0",
+      "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
+      "camera_preset": null,
+      "caption_en": "Nelder–Mead: simplex geometry and acceptance decisions",
+      "caption_ja": "Nelder–Mead: simplexの幾何操作と受理判断",
+      "dataset_version": "0.10.0",
+      "files": [
+        {
+          "bytes": 3610,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 675,
+          "media_kind": "static_svg",
+          "media_type": "image/svg+xml",
+          "path": "media/scenario-nm-quadratic/static.svg",
+          "sha256": "1555b61acd925c519b35d9f341f23a9dac0108d966562ff7deb887221f525ede",
+          "width": 1200
+        },
+        {
+          "bytes": 10289,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 675,
+          "media_kind": "static_png",
+          "media_type": "image/png",
+          "path": "media/scenario-nm-quadratic/static.png",
+          "sha256": "6e7008e612da77fa054403c2e4bbc3f88ac33c9c074f244eff456c4b7f629827",
+          "width": 1200
+        },
+        {
+          "bytes": 3893,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 338,
+          "media_kind": "thumbnail",
+          "media_type": "image/png",
+          "path": "media/scenario-nm-quadratic/thumbnail.png",
+          "sha256": "e9c575b038c52aa401482efac022aa1802f003810276e4cb6737f94e86587008",
+          "width": 600
+        }
+      ],
+      "frame_index": 81,
+      "license_spdx_id": "CC-BY-4.0",
+      "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
+      "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
+      "media_id": "nelder-mead-quadratic-static",
+      "narration_version": "1.0.0",
+      "renderer_contract_version": "1.0.0",
+      "renderer_family": "simplex_geometry",
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "source_artifact_path": "traces/nelder-mead-quadratic.json",
+      "source_artifact_sha256": "3b29d0a8edf7bdd3a081b9397914273b64651b86237c4cd1048dcd309096ef96",
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "viewport_preset": "terminal"
+    }
+  ]
+}

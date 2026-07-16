@@ -3,6 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { parseSiteManifest } from "../../contracts/manifest";
 import {
+  parseDerivedMediaManifest,
+  type DerivedMediaEntry,
+} from "../../contracts/derived-media";
+import {
   parseVisualizationScenarioIndex,
   type GuidedStoryStep,
   type VisualizationScenario,
@@ -26,6 +30,7 @@ type LoadedTrace = {
   entry: TraceIndexEntry;
   entries: TraceIndexEntry[];
   scenario?: VisualizationScenario;
+  derivedMedia?: DerivedMediaEntry;
 };
 
 export function TraceDemoPage() {
@@ -58,7 +63,7 @@ export function TraceDemoPage() {
   return <TracePlayer key={loaded.trace.trace_id} {...loaded} />;
 }
 
-function TracePlayer({ trace, entry, entries, scenario }: LoadedTrace) {
+function TracePlayer({ trace, entry, entries, scenario, derivedMedia }: LoadedTrace) {
   const navigate = useNavigate();
   if (trace.profile_id === "PROFILE_NELDER_MEAD_2D" && trace.trace_id !== "dummy-educational") {
     if (!scenario) throw new Error(`Visualization scenario is missing for ${trace.trace_id}.`);
@@ -67,6 +72,7 @@ function TracePlayer({ trace, entry, entries, scenario }: LoadedTrace) {
         entries={entries}
         onTraceChange={(traceId) => navigate(`/traces/${traceId}`)}
         scenario={scenario}
+        derivedMedia={derivedMedia}
         trace={trace}
       />
     );
@@ -173,6 +179,12 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
   if (scenarioIndex.dataset_version !== manifest.dataset_version) {
     throw new Error("Visualization scenario dataset version does not match the manifest.");
   }
+  const mediaResponse = await fetch(`${baseUrl}data/${manifest.derived_media.path}`, { signal });
+  if (!mediaResponse.ok) throw new Error(`Derived media request failed (${mediaResponse.status}).`);
+  const mediaManifest = parseDerivedMediaManifest(await mediaResponse.json());
+  if (mediaManifest.dataset_version !== manifest.dataset_version) {
+    throw new Error("Derived media dataset version does not match the manifest.");
+  }
 
   const indexResponse = await fetch(`${baseUrl}data/${manifest.traces.path}`, { signal });
   if (!indexResponse.ok) throw new Error(`Trace index request failed (${indexResponse.status}).`);
@@ -212,6 +224,7 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
     }
   }
   const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === trace.scenario_id);
+  const derivedMedia = mediaManifest.entries.find((candidate) => candidate.scenario_id === trace.scenario_id);
   if (trace.trace_id !== "dummy-educational") {
     if (!scenario) throw new Error(`Visualization scenario is missing for ${trace.trace_id}.`);
     if (!scenario.runs.some((run) => run.artifact_id === trace.trace_id)) {
@@ -220,8 +233,16 @@ async function loadIndexedTrace(traceId: string, signal: AbortSignal): Promise<L
     if (scenario.problem_instance_id !== trace.objective_id) {
       throw new Error(`Visualization scenario objective does not match ${trace.trace_id}.`);
     }
+    if (derivedMedia && (
+      derivedMedia.source_artifact_path !== scenario.artifact.payload_path
+      || derivedMedia.source_artifact_sha256 !== scenario.artifact.payload_sha256
+      || derivedMedia.renderer_family !== scenario.artifact.renderer_family
+      || derivedMedia.renderer_contract_version !== scenario.artifact.renderer_contract_version
+    )) {
+      throw new Error("Derived media provenance does not match the visualization scenario.");
+    }
   }
-  return { trace, entry, entries: index.traces, scenario };
+  return { trace, entry, entries: index.traces, scenario, derivedMedia };
 }
 
 async function sha256Hex(bytes: Uint8Array): Promise<string> {
