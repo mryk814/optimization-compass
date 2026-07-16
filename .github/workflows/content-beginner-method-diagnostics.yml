@@ -1,20 +1,23 @@
 name: Diagnose second beginner method tranche
 
 on:
-  push:
-    branches: [content/beginner-method-tranche-2]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
 
 jobs:
   diagnose:
-    if: github.actor != 'github-actions[bot]'
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'content/beginner-method-tranche-2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: content/beginner-method-tranche-2
+          ref: ${{ github.head_ref }}
           fetch-depth: 0
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
@@ -33,5 +36,5 @@ jobs:
           git add docs/pytest-diagnostics.txt
           git rm .github/workflows/content-beginner-method-diagnostics.yml
           git commit -m 'chore: capture content tranche pytest diagnostics'
-          git push origin HEAD:content/beginner-method-tranche-2
+          git push origin HEAD:${{ github.head_ref }}
           exit "$STATUS"
