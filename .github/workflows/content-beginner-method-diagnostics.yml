@@ -25,12 +25,46 @@ jobs:
           enable-cache: true
       - name: Install dependencies
         run: uv sync --frozen --all-extras --all-groups
-      - name: Capture the first failing test
+      - name: Capture failing test files in parallel
         run: |
           set +e
-          uv run pytest --maxfail=1 -q > docs/pytest-diagnostics.txt 2>&1
-          STATUS=$?
+          rm -rf /tmp/pytest-files
+          mkdir -p /tmp/pytest-files
+
+          run_file() {
+            FILE="$1"
+            SAFE_NAME="${FILE//\//_}"
+            timeout 600 uv run pytest -q "$FILE" > "/tmp/pytest-files/${SAFE_NAME}.log" 2>&1
+            echo "$?" > "/tmp/pytest-files/${SAFE_NAME}.status"
+          }
+          export -f run_file
+
+          find tests -name 'test_*.py' -print0 \
+            | xargs -0 -n1 -P4 bash -c 'run_file "$1"' _
+
+          STATUS=0
+          {
+            echo '# Full-suite test-file diagnostics'
+            echo
+            for STATUS_FILE in /tmp/pytest-files/*.status; do
+              FILE_STATUS="$(cat "$STATUS_FILE")"
+              LOG_FILE="${STATUS_FILE%.status}.log"
+              if [[ "$FILE_STATUS" != '0' ]]; then
+                STATUS=1
+                echo "## $(basename "$LOG_FILE" .log)"
+                echo
+                echo '```text'
+                cat "$LOG_FILE"
+                echo '```'
+                echo
+              fi
+            done
+            if [[ "$STATUS" == '0' ]]; then
+              echo 'All test files passed when executed independently.'
+            fi
+          } > docs/pytest-diagnostics.txt
           set -e
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/pytest-diagnostics.txt
