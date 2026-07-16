@@ -5,10 +5,10 @@ const basePath = "/optimization-compass/";
 
 test("0-1 Gallery caseから決定的search-treeをkeyboardで再生できる", async ({ page }) => {
   await page.goto(`${basePath}#/gallery/budget-allocation`);
-  const theaterLink = page.getByRole("link", { name: "Search-tree Theaterで再生" });
+  const theaterLink = page.getByRole("link", { name: /固定した1 runを追う/u });
   await expect(theaterLink).toBeVisible();
   await theaterLink.click();
-  await expect(page).toHaveURL(/#\/theater\/search-tree\/binary-knapsack-bnb-complete$/u);
+  await expect(page).toHaveURL(/#\/theater\/search-tree\/binary-knapsack-bnb-complete\?state=/u);
   await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
   await expect(page.getByText("実行Trace / Executable")).toBeVisible();
   await expect(page.getByLabel("Best feasible")).toBeVisible();

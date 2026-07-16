@@ -46,7 +46,7 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
   await page.goBack();
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
   await page.getByRole("link", { name: "Nelder–Mead単体法" }).click();
-  await expect(page).toHaveURL(/#\/methods\/M_NELDER_MEAD$/u);
+  await expect(page).toHaveURL(/#\/methods\/M_NELDER_MEAD\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: /Nelder[–-]Mead/u })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toHaveCount(0);
 });
@@ -136,7 +136,7 @@ test("Galleryからcanonical constrained sliceへ移動できる", async ({ page
   await theaterJourney.focus();
   await expect(theaterJourney).toBeFocused();
   await theaterJourney.press("Enter");
-  await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK$/u);
+  await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK\?state=/u);
 });
 
 test("Galleryからcanonical comparisonへ移動できる", async ({ page, baseURL }) => {
@@ -145,5 +145,5 @@ test("Galleryからcanonical comparisonへ移動できる", async ({ page, baseU
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
   await expect(page.getByText("primary Theater 未接続")).toBeVisible();
   await page.getByRole("link", { name: /固定条件と変えた条件を比べる/u }).click();
-  await expect(page).toHaveURL(/#\/compare\/COMPARE_GRADIENT_FAMILY$/u);
+  await expect(page).toHaveURL(/#\/compare\/COMPARE_GRADIENT_FAMILY\?state=/u);
 });
