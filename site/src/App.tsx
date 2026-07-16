@@ -38,14 +38,14 @@ import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage"
 import "./styles.css";
 
 const primaryNavigation = [
-  { label: "Atlas", to: "/", matchPaths: ["/"] },
-  { label: "Map", to: "/map", matchPaths: ["/map"] },
+  { label: "ホーム", to: "/", matchPaths: ["/"] },
+  { label: "地図", to: "/map", matchPaths: ["/map"] },
   { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
-  { label: "Theater", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
+  { label: "再生", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
   { label: "比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
   { label: "検索", to: "/search", matchPaths: ["/search"] },
-  { label: "Gallery", to: "/gallery", matchPaths: ["/gallery"] },
+  { label: "事例", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
 

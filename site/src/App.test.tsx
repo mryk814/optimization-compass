@@ -176,7 +176,7 @@ describe("application routes", () => {
   test("keeps Theater and Compare as separate primary navigation destinations", () => {
     render(<App initialEntityLinks={testLinks} />);
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
-    expect(within(navigation).getByRole("link", { name: "Theater" })).toHaveAttribute("href", "#/theater");
+    expect(within(navigation).getByRole("link", { name: "再生" })).toHaveAttribute("href", "#/theater");
     expect(within(navigation).getByRole("link", { name: "比較" })).toHaveAttribute("href", "#/compare");
   });
 

@@ -20,7 +20,7 @@ test("skip linkとprimary navigationをkeyboardだけで操作する", async ({ 
   await expect(page.getByRole("link", { name: "Optimization Atlas ホーム" })).toBeFocused();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Map", exact: true })).toBeFocused();
+  await expect(page.getByRole("link", { name: "地図", exact: true })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("tree", { name: "最適化問題の構造" })).toBeVisible();
 });
