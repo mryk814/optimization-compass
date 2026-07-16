@@ -3,7 +3,7 @@ content_id: basin-hopping
 kind: method
 method_id: M_BASIN_HOPPING
 title_ja: Basin Hopping
- title_en: Basin Hopping
+title_en: Basin Hopping
 summary: ランダムな大きな移動と局所最適化を交互に行い、一つの初期点では届きにくい複数の谷を渡り歩く確率的大域探索です。
 source_ids: [S001, S002, S056]
 related_ids: [family.global-search, dual-annealing, differential-evolution]
