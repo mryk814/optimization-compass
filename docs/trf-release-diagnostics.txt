@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+  File "/home/runner/work/optimization-compass/optimization-compass/src/optimization_compass/dataset_release.py", line 282, in build_staged_release
+    _apply_atlas_metadata(
+  File "/home/runner/work/optimization-compass/optimization-compass/src/optimization_compass/dataset_release.py", line 1225, in _apply_atlas_metadata
+    connection.executescript(DEFAULT_TRF_MIGRATION.read_text(encoding="utf-8"))
+sqlite3.IntegrityError: FOREIGN KEY constraint failed
