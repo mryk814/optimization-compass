@@ -1,0 +1,131 @@
+name: Finalize canonical TRF release
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'data/trf-default-method'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
+      - name: Align release goldens and release notes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              'tests/test_coverage.py': (
+                  ('        "method": 98,', '        "method": 99,'),
+                  ('    assert len(report.subjects) == 164', '    assert len(report.subjects) == 165'),
+              ),
+              'tests/test_derived_media.py': (
+                  ('    assert manifest.dataset_version == "0.10.0"', '    assert manifest.dataset_version == "0.11.0"'),
+              ),
+              'tests/test_evidence.py': (
+                  ('    assert len(index.sources) == 95', '    assert len(index.sources) == 97'),
+              ),
+              'tests/test_release_identity.py': (
+                  ('    assert authority.dataset_version == "0.10.0"', '    assert authority.dataset_version == "0.11.0"'),
+              ),
+              'tests/test_site_export.py': (
+                  ('    assert len(claim_payload["claims"]) == 64 * 7 + 1', '    assert len(claim_payload["claims"]) == 64 * 7 + 3'),
+              ),
+              'src/optimization_compass/dataset_release.py': (
+                  (
+                      '            "Published constrained-continuous and multi-objective learning slices.",',
+                      '            "Published canonical Trust Region Reflective data and versioned default-method claims.",',
+                  ),
+                  (
+                      '            "Constrained and multi-objective concepts lacked canonical executable visuals.",',
+                      '            "SciPy Trust Region Reflective lacked a canonical method and scoped default-selection claims.",',
+                  ),
+                  (
+                      '                "Added renderer-family contracts for feasible regions and Pareto fronts, "\n'
+                      '                "with canonical scenarios, references, and failure contrast."',
+                      '                "Added a canonical TRF method, one-to-one implementation relation, direct sources, "\n'
+                      '                "and API-scoped default-selection predicates."',
+                  ),
+                  (
+                      '                "Connect canonical problems to artifacts, routes, content, Gallery, "\n'
+                      '                "Map, and sources."',
+                      '                "Explain a high-use implicit library choice without converting a library default "\n'
+                      '                "into a context-free recommendation ranking."',
+                  ),
+              ),
+          }
+
+          for name, file_replacements in replacements.items():
+              path = Path(name)
+              text = path.read_text(encoding='utf-8')
+              for old, new in file_replacements:
+                  if text.count(old) != 1:
+                      raise SystemExit(f'{name}: expected fragment exactly once: {old[:100]!r}')
+                  text = text.replace(old, new, 1)
+              path.write_text(text, encoding='utf-8')
+          PY
+          uv run ruff format src/optimization_compass/dataset_release.py tests
+          rm -f docs/trf-validation-diagnostics.txt docs/trf-finalize-diagnostics.txt
+      - name: Rebuild, publish, and validate v0.11.0
+        run: |
+          set +e
+          {
+            rm -rf /tmp/trf-release
+            uv run python scripts/rebuild_dataset.py --stage --output /tmp/trf-release
+            uv run python scripts/rebuild_dataset.py --publish --staged-directory /tmp/trf-release
+            uv run python scripts/method_content_density_report.py
+            uv run ruff check .
+            uv run ruff format --check .
+            uv run mypy src
+            uv run pytest
+            uv run optimization-compass verify-data
+            uv run python scripts/verify_content.py
+            uv run python scripts/verify_licensing.py
+            npm --prefix site run parity
+            npm --prefix site run typecheck
+            npm --prefix site test -- --run
+            npm --prefix site run build
+          } > docs/trf-finalize-diagnostics.txt 2>&1
+          STATUS=$?
+          set -e
+
+          if [[ "$STATUS" != '0' ]]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add src tests docs/trf-finalize-diagnostics.txt
+            git rm .github/workflows/trf-finalize.yml
+            git commit -m 'chore: capture final TRF validation diagnostics'
+            git push origin HEAD:${{ github.head_ref }}
+            exit "$STATUS"
+          fi
+
+          rm docs/trf-finalize-diagnostics.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data content docs src tests site/public/data
+          git rm .github/workflows/trf-finalize.yml
+          git commit -m 'chore: publish dataset v0.11.0 with canonical TRF'
+          git push origin HEAD:${{ github.head_ref }}
