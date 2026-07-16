@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { parseSiteManifest } from "../../contracts/manifest";
 import {
   parseVisualizationScenarioIndex,
+  type GuidedStoryStep,
   type VisualizationScenario,
 } from "../../contracts/visualization-scenarios";
 import {
@@ -18,6 +19,7 @@ import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { NelderMeadVisualization } from "../theater/NelderMeadPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 
 type LoadedTrace = {
   trace: AlgorithmTrace;
@@ -74,7 +76,10 @@ function TracePlayer({ trace, entry, entries, scenario }: LoadedTrace) {
 
 function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entries">) {
   const playback = usePlayback(trace.trace_id, trace.frames);
+  const [guidedStep, setGuidedStep] = useState<GuidedStoryStep | null>(null);
   const frame = playback.currentFrame;
+  const visibleLayers = new Set(guidedStep?.visible_layers ?? scenario?.artifact.observable_ids ?? []);
+  const showAll = guidedStep === null;
   return (
     <article className="trace-page">
       <header className="trace-header">
@@ -89,10 +94,23 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
           <div><dt>Dataset</dt><dd>{trace.dataset_version}</dd></div>
         </dl>
       </header>
-      {scenario && <ScenarioLessonPanel scenario={scenario} />}
+      {scenario && <>
+        <ScenarioLessonPanel scenario={scenario} />
+        <GuidedStoryPanel
+          activeStep={guidedStep}
+          onStepChange={setGuidedStep}
+          playback={playback}
+          scenario={scenario}
+        />
+      </>}
       <PlaybackControls playback={playback} />
-      <div className="trace-snapshot" aria-label="現在の完全スナップショット">
-        <section>
+      <div
+        className="trace-snapshot"
+        aria-label="現在の完全スナップショット"
+        data-guided-focus={guidedStep?.focus_target}
+        data-viewport-preset={guidedStep?.viewport_preset}
+      >
+        {(showAll || visibleLayers.has("current_point")) && <section>
           <h2>Points</h2>
           {frame.points.length === 0 ? <p>点データなし</p> : (
             <ul>
@@ -105,8 +123,8 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
               ))}
             </ul>
           )}
-        </section>
-        <section>
+        </section>}
+        {(showAll || visibleLayers.has("gradient") || visibleLayers.has("update_vector")) && <section>
           <h2>Vectors</h2>
           {frame.vectors.length === 0 ? <p>ベクトルなし</p> : (
             <ul>
@@ -118,8 +136,8 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
               ))}
             </ul>
           )}
-        </section>
-        <section>
+        </section>}
+        {(showAll || visibleLayers.has("objective_value")) && <section>
           <h2>Metrics</h2>
           {frame.metrics.length === 0 ? <p>指標なし</p> : (
             <ul>
@@ -131,7 +149,7 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
               ))}
             </ul>
           )}
-        </section>
+        </section>}
       </div>
       <footer className="trace-summary">
         <span>{trace.terminal_status}</span>

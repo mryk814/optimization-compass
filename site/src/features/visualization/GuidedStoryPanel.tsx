@@ -1,14 +1,21 @@
 import { useEffect, useRef } from "react";
 
 import type {
+  GuidedPlaybackSpeed,
   GuidedStoryStep,
   VisualizationScenario,
 } from "../../contracts/visualization-scenarios";
-import type { PlaybackController } from "../playback/usePlayback";
+
+export interface GuidedPlaybackController {
+  currentFrameIndex: number;
+  isPlaying: boolean;
+  pause(): void;
+  seekToFrameAtSpeed(frameIndex: number, speed: GuidedPlaybackSpeed): void;
+}
 
 interface GuidedStoryPanelProps {
   scenario: VisualizationScenario;
-  playback: PlaybackController;
+  playback: GuidedPlaybackController;
   activeStep: GuidedStoryStep | null;
   onStepChange(step: GuidedStoryStep): void;
 }

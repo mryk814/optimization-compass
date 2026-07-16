@@ -144,6 +144,18 @@ viewport/camera preset, speed, and auto-pause are data rather than page conditio
 milestones must already exist in `lesson.narration_steps`; focus and layer IDs must be supplied by
 the artifact. The first pilot is `SCENARIO_NM_QUADRATIC`.
 
+The same contract is now executable in four renderer families:
+
+| Renderer family | Guided scenario | Player |
+|---|---|---|
+| `simplex_geometry` | `SCENARIO_NM_QUADRATIC` | Nelder–Mead Theater |
+| `continuous_trajectory` | `SCENARIO_GD_QUADRATIC` | AlgorithmTrace player |
+| `search_tree` | `SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE` | Search-tree Theater |
+| `surrogate_uncertainty` | `SCENARIO_BO_1D_EXPLORE_NOISELESS` | Bayesian Optimization Theater |
+
+Each player applies authored frame, speed, focus, and visible-layer values. Scenarios without a
+guided story keep their existing Explore controls and do not display an empty guided shell.
+
 ### Required enums
 
 `purpose` is exactly one of:

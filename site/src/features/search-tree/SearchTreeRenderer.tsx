@@ -12,7 +12,16 @@ const stateLabels: Record<SearchTreeNode["state"], string> = {
   optimal: "最適解",
 };
 
-export function SearchTreeRenderer({ payload }: { payload: SearchTreeFramePayload }) {
+export function SearchTreeRenderer({
+  payload,
+  visibleLayers,
+  focusTarget,
+}: {
+  payload: SearchTreeFramePayload;
+  visibleLayers?: readonly string[];
+  focusTarget?: string;
+}) {
+  const visible = new Set(visibleLayers ?? ["search_nodes", "global_bound", "incumbent", "prune_reason"]);
   const [focusedNodeId, setFocusedNodeId] = useState(payload.active_node_id ?? payload.nodes[0].node_id);
   const itemRefs = useRef(new Map<string, HTMLLIElement>());
   const orderedNodes = useMemo(
@@ -62,23 +71,27 @@ export function SearchTreeRenderer({ payload }: { payload: SearchTreeFramePayloa
     );
   };
   return (
-    <section className="search-tree-renderer" aria-labelledby="search-tree-heading">
+    <section
+      className="search-tree-renderer"
+      aria-labelledby="search-tree-heading"
+      data-guided-focus={focusTarget}
+    >
       <h2 id="search-tree-heading">探索木</h2>
       <dl className="search-tree-metrics" aria-label="探索の現在値">
-        <Metric label="Best feasible" value={payload.best_feasible_value ?? "未発見"} />
-        <Metric label="Global bound" value={payload.global_bound.toFixed(2)} />
-        <Metric label="Gap" value={payload.absolute_gap === null ? "—" : `${payload.absolute_gap.toFixed(2)} (${((payload.relative_gap ?? 0) * 100).toFixed(1)}%)`} />
-        <Metric label="Nodes" value={`${payload.progress.explored_nodes} explored · ${payload.progress.open_nodes} open`} />
+        {visible.has("incumbent") && <Metric label="Best feasible" value={payload.best_feasible_value ?? "未発見"} />}
+        {visible.has("global_bound") && <Metric label="Global bound" value={payload.global_bound.toFixed(2)} />}
+        {visible.has("global_bound") && <Metric label="Gap" value={payload.absolute_gap === null ? "—" : `${payload.absolute_gap.toFixed(2)} (${((payload.relative_gap ?? 0) * 100).toFixed(1)}%)`} />}
+        {visible.has("search_nodes") && <Metric label="Nodes" value={`${payload.progress.explored_nodes} explored · ${payload.progress.open_nodes} open`} />}
       </dl>
-      <p className="search-tree-decision" aria-live="polite">{payload.decision_explanation_ja}</p>
+      {visible.has("prune_reason") && <p className="search-tree-decision" aria-live="polite">{payload.decision_explanation_ja}</p>}
       <p className={`search-tree-terminal search-tree-terminal-${payload.terminal_state}`}>
         {terminalLabel(payload.terminal_state)}
       </p>
-      <div className="search-tree-viewport">
+      {visible.has("search_nodes") && <div className="search-tree-viewport">
         <ul aria-label="0-1 knapsackの探索木。上下矢印でnode移動、左右矢印で親子移動。" className="search-tree" role="tree">
           {roots.map(renderNode)}
         </ul>
-      </div>
+      </div>}
       <details className="search-tree-text-summary" open>
         <summary>Textual tree summary</summary>
         <ol>

@@ -10,12 +10,15 @@ import {
 } from "../../contracts/surrogate-uncertainty";
 import {
   parseVisualizationScenarioIndex,
+  type GuidedPlaybackSpeed,
+  type GuidedStoryStep,
   type VisualizationScenario,
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
 
 type Strategy = "exploit" | "explore";
 type NoisePreset = "noiseless" | "small_noise";
@@ -140,6 +143,8 @@ function Theater({
   const links = useEntityLinks();
   const [frameIndex, setFrameIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [speed, setSpeed] = useState<GuidedPlaybackSpeed>(1);
+  const [guidedStep, setGuidedStep] = useState<GuidedStoryStep | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const frame = payload.frames[frameIndex];
   useEffect(() => {
@@ -153,10 +158,10 @@ function Theater({
           }
           return current + 1;
         }),
-      850,
+      850 / speed,
     );
     return () => window.clearInterval(timer);
-  }, [playing, payload.frames.length]);
+  }, [playing, payload.frames.length, speed]);
   const move = (delta: number) => {
     setPlaying(false);
     setFrameIndex((current) =>
@@ -194,6 +199,17 @@ function Theater({
       ? findEntity(links.index, "method", "M_RANDOM_SEARCH")
       : undefined;
   const budget = scenario.experiment.budget.value;
+  const guidedPlayback: GuidedPlaybackController = {
+    currentFrameIndex: frameIndex,
+    isPlaying: playing,
+    pause: () => setPlaying(false),
+    seekToFrameAtSpeed: (nextFrameIndex, nextSpeed) => {
+      setPlaying(false);
+      setSpeed(nextSpeed);
+      setFrameIndex(Math.max(0, Math.min(payload.frames.length - 1, nextFrameIndex)));
+    },
+  };
+  const visibleLayers = new Set(guidedStep?.visible_layers ?? scenario.artifact.observable_ids);
   return (
     <div
       ref={root}
@@ -219,6 +235,12 @@ function Theater({
         </span>
       </section>
       <ScenarioLessonPanel scenario={scenario} />
+      <GuidedStoryPanel
+        activeStep={guidedStep}
+        onStepChange={setGuidedStep}
+        playback={guidedPlayback}
+        scenario={scenario}
+      />
       <section className="bo-goal-cues" aria-label="BOの目標と現在値">
         <dl>
           <div>
@@ -281,11 +303,15 @@ function Theater({
           />
         </label>
         <span aria-live="polite">
-          Frame {frameIndex + 1}/{payload.frames.length}
+          Frame {frameIndex + 1}/{payload.frames.length} · {speed}×
         </span>
       </div>
-      <div className="bo-layout">
-        <SurrogatePlot frame={frame} />
+      <div
+        className="bo-layout"
+        data-guided-focus={guidedStep?.focus_target}
+        data-viewport-preset={guidedStep?.viewport_preset}
+      >
+        <SurrogatePlot frame={frame} visibleLayers={visibleLayers} />
         <aside className="bo-explanation">
           <h2>なぜこの点？</h2>
           <p aria-live="polite">{frame.explanation_ja}</p>
@@ -315,12 +341,12 @@ function Theater({
           <p className="atlas-note">{payload.truth_disclosure_ja}</p>
         </aside>
       </div>
-      <Comparison
+      {visibleLayers.has("incumbent_history") && <Comparison
         boHistory={boHistory}
         randomHistory={randomHistory}
         count={frame.oracle_evaluations}
         budget={budget}
-      />
+      />}
       <details className="bo-text-alternative">
         <summary>図のテキスト代替</summary>
         <p>
@@ -369,7 +395,13 @@ function Theater({
   );
 }
 
-function SurrogatePlot({ frame }: { frame: SurrogateFrame }) {
+function SurrogatePlot({
+  frame,
+  visibleLayers,
+}: {
+  frame: SurrogateFrame;
+  visibleLayers: ReadonlySet<string>;
+}) {
   const points = frame.predictive_summary;
   const minY = Math.min(
     ...points.flatMap((point) => [point.lower, point.true_value]),
@@ -418,10 +450,10 @@ function SurrogatePlot({ frame }: { frame: SurrogateFrame }) {
           height="338"
           rx="12"
         />
-        <path className="bo-band" d={band} />
+        {visibleLayers.has("posterior_uncertainty") && <path className="bo-band" d={band} />}
         <path className="bo-truth" d={line((point) => point.true_value)} />
-        <path className="bo-mean" d={line((point) => point.mean)} />
-        {frame.observations.map((point, index) => (
+        {visibleLayers.has("posterior_mean") && <path className="bo-mean" d={line((point) => point.mean)} />}
+        {visibleLayers.has("observations") && frame.observations.map((point, index) => (
           <circle
             className="bo-observation"
             key={`${point.x}:${index}`}
@@ -430,7 +462,7 @@ function SurrogatePlot({ frame }: { frame: SurrogateFrame }) {
             r="5"
           />
         ))}
-        {frame.selected_point !== null && (
+        {visibleLayers.has("selected_candidate") && frame.selected_point !== null && (
           <line
             className="bo-next"
             x1={x(frame.selected_point)}
@@ -439,7 +471,7 @@ function SurrogatePlot({ frame }: { frame: SurrogateFrame }) {
             y2="362"
           />
         )}
-        {points.map((point) => (
+        {visibleLayers.has("expected_improvement") && points.map((point) => (
           <line
             className="bo-ei"
             key={point.x}

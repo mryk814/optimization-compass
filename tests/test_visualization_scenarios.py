@@ -109,12 +109,18 @@ def test_generated_lessons_cover_observables_signals_and_derived_text() -> None:
         for scenario in generated.scenarios
     )
     guided = [scenario for scenario in generated.scenarios if scenario.guided_story is not None]
-    assert [scenario.scenario_id for scenario in guided] == ["SCENARIO_NM_QUADRATIC"]
-    story = guided[0].guided_story
-    assert story is not None
-    assert [step.frame_index for step in story.steps] == sorted(
-        step.frame_index for step in story.steps
-    )
+    assert {scenario.artifact.renderer_family for scenario in guided} == {
+        "simplex_geometry",
+        "continuous_trajectory",
+        "search_tree",
+        "surrogate_uncertainty",
+    }
+    for scenario in guided:
+        story = scenario.guided_story
+        assert story is not None
+        assert [step.frame_index for step in story.steps] == sorted(
+            step.frame_index for step in story.steps
+        )
     failure_or_sensitivity = [
         scenario
         for scenario in generated.scenarios
