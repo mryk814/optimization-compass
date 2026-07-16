@@ -12,7 +12,7 @@ const routes = [
   ["#/diagnose", "診断"],
   ["#/theater", "Method Theater"],
   ["#/compare", "Compare Lab"],
-  ["#/compare/gradient-quadratic", "手法を比較する"],
+  ["#/compare/gradient-quadratic", "比較条件を読み込み中"],
   ["#/gallery", "ケースギャラリー"],
   ["#/learn", "手法・概念を学ぶ"],
 ] as const;
@@ -237,7 +237,7 @@ describe("application routes", () => {
     ["#/gallery/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }],
     [
       "#/compare/missing",
-      { contract_version: "1.0.0", dataset_version: "0.2.0", comparisons: [] },
+      { contract_version: "2.0.0", dataset_version: "0.2.0", comparisons: [] },
     ],
   ])("%s uses the common Not Found page for an unknown entity ID", async (hash, payload) => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {

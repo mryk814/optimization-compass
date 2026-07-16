@@ -56,6 +56,17 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   await expectFitsViewport(plot, page);
 });
 
+test("375px Compare Labで比較条件と非trajectory結果を読める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
+  await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "違うもの / Changed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "見る指標 / Metrics" })).toBeVisible();
+  await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Case: 強度制約/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-compare-feasible-region");
+});
+
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
   await page.getByRole("link", { name: "Search-tree Theaterで再生" }).click();

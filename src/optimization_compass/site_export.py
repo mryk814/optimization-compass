@@ -7,6 +7,7 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any, Literal
 
+from optimization_compass.comparisons import load_comparison_seed
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
@@ -289,11 +290,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         collection_field="cases",
         dataset_version=release["version"],
     )
-    _write_seeded_index(
+    _write_json(
         output_dir / "comparisons.json",
-        COMPARISON_SEED,
-        collection_field="comparisons",
-        dataset_version=release["version"],
+        load_comparison_seed(COMPARISON_SEED, release["version"]),
     )
     for view in views:
         _write_json(output_dir / f"views/{view.view_id}.json", view)

@@ -61,10 +61,13 @@
       ],
       "canonical_url": "/gallery/EC017",
       "case_id": "EC017",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PARETO_PREFERENCE",
+          "comparison_id": "COMPARE_PARETO_PREFERENCE"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_EPSILON_CONSTRAINT"
       ],
@@ -112,7 +115,7 @@
         "S055",
         "S068"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
       "title_en": "Explore a cost-performance Pareto trade-off",
       "title_ja": "costと性能のPareto trade-offを探索する"
@@ -391,10 +394,13 @@
       ],
       "canonical_url": "/gallery/constrained-design",
       "case_id": "constrained-design",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_CONSTRAINED_FAILURE",
+          "comparison_id": "COMPARE_CONSTRAINED_FAILURE"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -444,7 +450,7 @@
         "S055",
         "S064"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"

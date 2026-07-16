@@ -7,6 +7,7 @@ import {
   type ComparisonSet,
 } from "../../contracts/comparisons";
 import { findEntity } from "../../contracts/entity-links";
+import { parseLearningSliceArtifact, type LearningSliceArtifact } from "../../contracts/learning-slices";
 import { parseSiteManifest } from "../../contracts/manifest";
 import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame } from "../../contracts/trace";
 import {
@@ -20,6 +21,8 @@ import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { comparisonRoute } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
+import { EvidenceLinks } from "../evidence/EvidenceLinks";
+import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import {
@@ -31,12 +34,19 @@ import {
   type ObjectivePlotSpec,
 } from "../visualization/objectivePlot";
 
-type Loaded = {
+type LoadedBase = {
   comparison: ComparisonSet;
   comparisons: ComparisonSet[];
+};
+type Loaded = LoadedBase & ({
+  renderer: "trajectory";
   traces: AlgorithmTrace[];
   scenarios: VisualizationScenario[];
-};
+} | {
+  renderer: "learning-slice";
+  artifact: LearningSliceArtifact;
+  scenario: VisualizationScenario;
+});
 
 const trajectoryPlot = { left: 18, right: 282, top: 16, bottom: 176 } as const;
 const historyPlot = { left: 46, right: 714, top: 22, bottom: 190 } as const;
@@ -62,39 +72,94 @@ export function ComparisonPage() {
     <section className="atlas-page comparison-page">
       <header className="atlas-page-header comparison-page-header">
         <div>
-          <p className="eyebrow">Compare Lab · executable_trace</p>
-          <h1>手法を比較する</h1>
-          <p>同じ等高線とoracle evaluation軸で、更新方向と目的値の推移を同期します。</p>
+          <p className="eyebrow">Compare Lab · fair case-bound comparison</p>
+          <h1>{loaded?.comparison.title_ja ?? "比較条件を読み込み中"}</h1>
+          <p>{loaded?.comparison.comparison_question ?? "何を固定し、何だけを変えた比較かを確認します。"}</p>
         </div>
       </header>
       <PageOrientation
-        limits="表示される差はこのcomparison presetの条件・seed・budgetに限ったものです。グラフの見た目だけで手法の一般的な優劣は判断しません。"
-        next={[{ label: "別の比較presetを選ぶ", to: "/compare" }, { label: "手法の前提を読む", to: "/learn" }, { label: "実行Traceを見る", to: "/theater" }]}
-        purpose="同じ実験条件にそろえた複数手法の軌跡と目的値を、同じ再生位置で読みます。"
-        readingSteps={["presetと比較条件を確認します。", "再生を進め、更新方向と目的値の変化を同じevaluation数で比べます。", "差が出た理由は、各手法の教材・前提・Traceへ戻って確認します。"]}
+        limits="表示される差はこのcase・instance・seed・budgetに限ります。ranking eligibilityがあっても普遍的な手法順位ではありません。"
+        next={[{ label: "別の比較を選ぶ", to: "/compare" }, { label: "Caseへ戻る", to: loaded ? `/gallery/${loaded.comparison.case_id}` : "/gallery" }, { label: "1 runをTheaterで見る", to: "/theater" }]}
+        purpose="同じもの・違うもの・見る指標を先に固定し、公平に解釈できる範囲だけを比較します。"
+        readingSteps={["比較questionとcaseの定式化を確認します。", "fixed / changed / metricsとbudget alignmentを確認します。", "rendererで差を読み、単独run・Case・手法へ戻って理由を確かめます。"]}
       />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {!loaded && !error && <p role="status">比較条件を読み込み中…</p>}
-      {loaded && (
-        <ComparisonPlayer
-          {...loaded}
-          onPresetChange={(nextId) => navigate(comparisonRoute(nextId))}
-        />
-      )}
+      {loaded && <ComparisonExperience loaded={loaded} onPresetChange={(nextId) => navigate(comparisonRoute(nextId))} />}
     </section>
   );
 }
 
-function ComparisonPlayer({
-  comparison,
-  comparisons,
-  traces,
-  scenarios,
-  onPresetChange,
-}: Loaded & { onPresetChange(comparisonId: string): void }) {
+function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPresetChange(comparisonId: string): void }) {
+  const { comparison, comparisons } = loaded;
+  const links = useEntityLinks();
+  const entity = (type: "case" | "method" | "scenario" | "trace", id: string) => (
+    links.status === "ready" ? findEntity(links.index, type, id) : undefined
+  );
+  return (
+    <>
+      <section className="visualization-switches comparison-switches" aria-label="比較preset">
+        <label>
+          <span>比較question / Comparison</span>
+          <select aria-label="比較preset" onChange={(event) => onPresetChange(event.target.value)} value={comparison.comparison_id}>
+            {comparisons.map((item) => <option key={item.comparison_id} value={item.comparison_id}>{item.title_ja}</option>)}
+          </select>
+        </label>
+      </section>
+      <div className="visualization-badges comparison-artifact-badges" aria-label="比較artifact情報">
+        <span>{comparison.mode}</span>
+        <span>{[...new Set(comparison.members.map((member) => member.artifact.renderer_family))].join(" + ")}</span>
+        <span>{comparison.identity_status} · {comparison.comparability}</span>
+      </div>
+      <ComparisonContract comparison={comparison} />
+      {loaded.renderer === "trajectory"
+        ? <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+        : <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />}
+      <section className="comparison-return-links" aria-label="比較の関連導線">
+        <h2>同じcontextから確認する</h2>
+        <Link to={comparison.canonical_url}>この比較の共有URL</Link>
+        <Link to={entity("case", comparison.case_id)?.canonical_url ?? `/gallery/${comparison.case_id}`}>Case: {entity("case", comparison.case_id)?.label ?? comparison.case_id}</Link>
+        {[...new Map(comparison.members.map((member) => [member.scenario_id, member])).values()].map((member) => {
+          const scenario = entity("scenario", member.scenario_id);
+          const theaterUrl = scenario?.canonical_url ?? entity("trace", member.artifact.artifact_id)?.canonical_url;
+          return theaterUrl ? <Link key={member.scenario_id} to={theaterUrl}>Theater: {scenario?.label ?? member.label_ja}</Link> : null;
+        })}
+        {[...new Set(comparison.members.map((member) => member.method_id))].map((id) => (
+          <Link key={id} to={entity("method", id)?.canonical_url ?? `/methods/${id}`}>手法: {entity("method", id)?.label ?? id}</Link>
+        ))}
+      </section>
+      <EvidenceLinks sourceIds={comparison.source_ids} />
+    </>
+  );
+}
+
+function ComparisonContract({ comparison }: { comparison: ComparisonSet }) {
+  return (
+    <section className="comparison-contract-v2" aria-label="比較条件">
+      <header><span>{comparison.mode}</span><h2>{comparison.comparison_question}</h2><p>{comparison.formulation_summary}</p></header>
+      <div className="comparison-factor-grid">
+        <article><h3>同じもの / Fixed</h3><ul>{comparison.fixed_factors.map((factor) => <li key={factor}>{factor}</li>)}</ul></article>
+        <article><h3>違うもの / Changed</h3><ul>{comparison.changed_factors.map((factor) => <li key={factor}>{factor}</li>)}</ul></article>
+        <article><h3>見る指標 / Metrics</h3><ul>{comparison.metrics.map((metric) => <li key={metric.metric_id}><strong>{metric.label_ja}</strong> · {metric.direction} · {metric.unit}</li>)}</ul></article>
+      </div>
+      <dl className="comparison-policy-grid">
+        <div><dt>Budget / sync</dt><dd>{comparison.budget.metric} = {comparison.budget.value}</dd></div>
+        <div><dt>Seed</dt><dd>{comparison.seed_policy}</dd></div>
+        <div><dt>Stopping</dt><dd>{comparison.stopping_policy}</dd></div>
+        <div><dt>Tuning</dt><dd>{comparison.tuning_policy}</dd></div>
+        <div><dt>Ranking</dt><dd>{comparison.ranking_eligible ? "eligible in this context" : "forbidden"}</dd></div>
+        <div><dt>Benchmark context</dt><dd>{comparison.benchmark_context_id}</dd></div>
+      </dl>
+      <p className="comparison-fairness"><strong>Fairness</strong> {comparison.fairness_note}</p>
+      <p className="comparison-caveat">{comparison.caveat}</p>
+    </section>
+  );
+}
+
+function TrajectoryComparison({ comparison, traces, scenarios }: { comparison: ComparisonSet; traces: AlgorithmTrace[]; scenarios: VisualizationScenario[] }) {
   const timeline = useMemo(() => {
     const template = traces[0].frames[0];
-    return Array.from({ length: comparison.budget + 1 }, (_, evaluation) => ({
+    return Array.from({ length: comparison.budget.value + 1 }, (_, evaluation) => ({
       ...template,
       frame_index: evaluation,
       iteration: evaluation,
@@ -110,53 +175,15 @@ function ComparisonPlayer({
   const evaluation = playback.currentFrame.oracle_evaluations;
   const spec = useMemo(() => objectivePlotSpec(traces[0].objective), [traces]);
   const contours = useMemo(() => contourSegments(spec, 22, 18), [spec]);
-  const artifactKind = scenarios[0].artifact.artifact_kind;
   return (
     <>
-      <section className="visualization-switches comparison-switches" aria-label="比較preset">
-        <label>
-          <span>現象preset / Phenomenon</span>
-          <select
-            aria-label="比較preset"
-            onChange={(event) => onPresetChange(event.target.value)}
-            value={comparison.comparison_id}
-          >
-            {comparisons.map((item) => (
-              <option key={item.comparison_id} value={item.comparison_id}>
-                {item.preset_id === "elongated-valley"
-                  ? "細長い谷の振動 / Valley oscillation"
-                  : "学習率過大の発散 / Divergence"}
-              </option>
-            ))}
-          </select>
-        </label>
-      </section>
-      <div className="visualization-badges comparison-artifact-badges" aria-label="比較artifact情報">
-        <span>AlgorithmTrace 1.0.0</span>
-        <span>{artifactKind}</span>
-        <span>{comparison.renderer_families.join(" + ")} 1.0.0</span>
-      </div>
-      <section className="comparison-contract" aria-label="比較条件">
-        <strong>{comparison.title_ja}</strong>
-        <span>{comparison.title_en}</span>
-        <span>{comparison.objective_expression}</span>
-        <span>初期点 [{comparison.initial_point.join(", ")}] · budget {comparison.budget}</span>
-        <span>{comparison.comparability} · sync={comparison.synchronization}</span>
-        <span>
-          context={comparison.benchmark_context_id} · ranking=
-          {comparison.ranking_eligible ? "eligible" : "forbidden"}
-        </span>
-        <p>{comparison.fairness_note}</p>
-        <p className="comparison-caveat">{comparison.caveat}</p>
-        <p className="comparison-caveat">{scenarios[0].lesson.limitations_ja}</p>
-      </section>
       <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <div className="comparison-grid">
         {traces.map((trace, index) => (
           <ComparisonMemberCard
             key={trace.trace_id}
-            comparisonMember={comparison.members.find((member) => member.trace_id === trace.trace_id)!}
+            comparisonMember={comparison.members.find((member) => member.artifact.artifact_id === trace.trace_id)!}
             contours={contours}
             evaluation={evaluation}
             markerIndex={index}
@@ -175,6 +202,21 @@ function ComparisonPlayer({
         この比較で一般的な優劣は断定できません。初期条件、parameter、oracle費用、停止条件が変われば挙動と比較可能性も変わります。
       </p>
     </>
+  );
+}
+
+function ScenarioComparison({ artifact, comparison, scenario }: { artifact: LearningSliceArtifact; comparison: ComparisonSet; scenario: VisualizationScenario }) {
+  return (
+    <section className="scenario-comparison" aria-labelledby="scenario-comparison-title">
+      <header><h2 id="scenario-comparison-title">{scenario.lesson.learning_objective.ja}</h2><p>{scenario.lesson.text_alternative.ja}</p></header>
+      <LearningSliceRenderer artifact={artifact} />
+      <div className="comparison-scenario-members">
+        {comparison.members.map((member) => <article key={member.member_id}><span>{member.role}</span><h3>{member.label_ja}</h3><p>{parameterText(member.parameters)}</p></article>)}
+      </div>
+      <ScenarioLessonPanel scenario={scenario} />
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+    </section>
   );
 }
 
@@ -323,7 +365,7 @@ function ObjectiveHistory({
 }) {
   const values = traces.flatMap((trace) => trace.frames.map((frame) => Math.log10(objectiveValue(frame) + 1)));
   const maximum = Math.max(...values, 1);
-  const x = (value: number) => historyPlot.left + (value / comparison.budget) * (historyPlot.right - historyPlot.left);
+  const x = (value: number) => historyPlot.left + (value / comparison.budget.value) * (historyPlot.right - historyPlot.left);
   const y = (value: number) => historyPlot.bottom - (Math.log10(value + 1) / maximum) * (historyPlot.bottom - historyPlot.top);
   return (
     <figure className="objective-history explanatory-figure">
@@ -335,7 +377,7 @@ function ObjectiveHistory({
         <line className="history-cursor" x1={x(evaluation)} x2={x(evaluation)} y1={historyPlot.top} y2={historyPlot.bottom} />
         {traces.map((trace, index) => {
           const visible = trace.frames.filter((frame) => frame.oracle_evaluations <= evaluation);
-          const member = comparison.members.find((candidate) => candidate.trace_id === trace.trace_id)!;
+          const member = comparison.members.find((candidate) => candidate.artifact.artifact_id === trace.trace_id)!;
           return (
             <g key={trace.trace_id} className={`history-series history-${index}`}>
               <polyline points={visible.map((frame) => `${x(frame.oracle_evaluations)},${y(objectiveValue(frame))}`).join(" ")} />
@@ -351,7 +393,7 @@ function ObjectiveHistory({
         <summary>同期値のtext alternative</summary>
         <ul>
           {traces.map((trace) => {
-            const member = comparison.members.find((candidate) => candidate.trace_id === trace.trace_id)!;
+            const member = comparison.members.find((candidate) => candidate.artifact.artifact_id === trace.trace_id)!;
             const frame = latestFrame(trace.frames, evaluation);
             return <li key={trace.trace_id}><strong>{member.label_ja} / {member.label_en}</strong>: evaluation {frame?.oracle_evaluations ?? 0}, f={frame ? objectiveMetric(frame) : "未評価"}, status={trace.terminal_status}</li>;
           })}
@@ -380,19 +422,45 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     (item) => item.comparison_id === comparisonId || item.aliases.includes(comparisonId),
   );
   if (!comparison) throw new EntityNotFoundError("比較ID", comparisonId);
-  const traces = await Promise.all(comparison.members.map(async (member) => {
-    const traceResponse = await fetch(`${siteBaseUrl()}data/traces/${member.trace_id}.json`, { signal });
-    if (!traceResponse.ok) throw new Error(`Trace request failed (${traceResponse.status}).`);
-    return parseAlgorithmTrace(await traceResponse.json());
-  }));
-  const scenarios = traces.map((trace) => {
-    const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === trace.scenario_id);
-    if (!scenario || !scenario.runs.some((run) => run.artifact_id === trace.trace_id)) {
-      throw new Error(`Visualization scenario is missing for ${trace.trace_id}.`);
-    }
-    return scenario;
-  });
-  return { comparison, comparisons: index.comparisons, traces, scenarios };
+  const family = comparison.members[0].artifact.renderer_family;
+  if (family === "continuous_trajectory") {
+    const traces = await Promise.all(comparison.members.map(async (member) => {
+      const traceResponse = await fetch(`${siteBaseUrl()}data/${member.artifact.payload_path}`, { signal });
+      if (!traceResponse.ok) throw new Error(`Trace request failed (${traceResponse.status}).`);
+      const trace = parseAlgorithmTrace(await traceResponse.json());
+      if (trace.trace_id !== member.artifact.artifact_id || trace.scenario_id !== member.scenario_id) {
+        throw new Error(`Trace identity differs from comparison member ${member.member_id}.`);
+      }
+      return trace;
+    }));
+    const scenarios = comparison.members.map((member) => {
+      const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === member.scenario_id);
+      if (!scenario || !scenario.runs.some((run) => run.artifact_id === member.artifact.artifact_id)) {
+        throw new Error(`Visualization scenario is missing for ${member.artifact.artifact_id}.`);
+      }
+      return scenario;
+    });
+    return { comparison, comparisons: index.comparisons, renderer: "trajectory", traces, scenarios };
+  }
+  if (family !== "feasible_region" && family !== "pareto_front") {
+    throw new Error(`Comparison renderer is not implemented: ${family}.`);
+  }
+  const scenarioId = comparison.members[0].scenario_id;
+  const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === scenarioId);
+  if (!scenario || comparison.members.some((member) => member.scenario_id !== scenarioId)) {
+    throw new Error("Scenario comparison members must share one canonical scenario.");
+  }
+  const artifactDescriptor = comparison.members[0].artifact;
+  if (comparison.members.some((member) => member.artifact.payload_path !== artifactDescriptor.payload_path)) {
+    throw new Error("Scenario comparison members must share one canonical artifact.");
+  }
+  const artifactResponse = await fetch(`${siteBaseUrl()}data/${artifactDescriptor.payload_path}`, { signal });
+  if (!artifactResponse.ok) throw new Error(`Comparison artifact request failed (${artifactResponse.status}).`);
+  const artifact = parseLearningSliceArtifact(await artifactResponse.json());
+  if (artifact.artifact_id !== artifactDescriptor.artifact_id || artifact.renderer_family !== family) {
+    throw new Error("Comparison artifact identity differs from its contract.");
+  }
+  return { comparison, comparisons: index.comparisons, renderer: "learning-slice", artifact, scenario };
 }
 
 function latestFrame(frames: readonly TraceFrame[], evaluation: number): TraceFrame | undefined {
@@ -425,7 +493,7 @@ function bestSoFarValue(frames: readonly TraceFrame[], evaluation: number): numb
   return values.length ? Math.min(...values) : null;
 }
 
-function parameterText(parameters: Record<string, number>): string {
+function parameterText(parameters: Record<string, string | number | boolean>): string {
   return Object.entries(parameters).map(([key, value]) => `${key}=${value}`).join(" · ");
 }
 
