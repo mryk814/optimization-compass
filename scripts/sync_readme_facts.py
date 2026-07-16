@@ -155,7 +155,11 @@ def _parse_report_header(report: str, path: Path) -> dict[str, str | int]:
 def _parse_report_table_counts(report: str) -> dict[str, int]:
     return {
         table: _parse_int(count)
-        for table, count in re.findall(r"^\| `([^`]+)` \| ([0-9,]+) \|$", report, re.MULTILINE)
+        for table, count in re.findall(
+            r"^\| `([^`]+)` \| ([0-9,]+) \|$",
+            report,
+            re.MULTILINE,
+        )
     }
 
 
