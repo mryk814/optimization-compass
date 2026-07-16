@@ -1,0 +1,99 @@
+name: Publish canonical TRF release
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'data/trf-default-method'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
+      - name: Describe the v0.11.0 release accurately
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/optimization_compass/dataset_release.py')
+          text = path.read_text(encoding='utf-8')
+          replacements = (
+              (
+                  '            "Published constrained-continuous and multi-objective learning slices.",\n',
+                  '            "Published canonical Trust Region Reflective data and versioned default-method claims.",\n',
+              ),
+              (
+                  '            "Constrained and multi-objective concepts lacked canonical executable visuals.",\n',
+                  '            "SciPy Trust Region Reflective lacked a canonical method and scoped default-selection claims.",\n',
+              ),
+              (
+                  '                "Added renderer-family contracts for feasible regions and Pareto fronts, "\n'
+                  '                "with canonical scenarios, references, and failure contrast."\n',
+                  '                "Added a canonical TRF method, one-to-one implementation relation, direct sources, "\n'
+                  '                "and API-scoped default-selection predicates."\n',
+              ),
+              (
+                  '                "Connect canonical problems to artifacts, routes, content, Gallery, "\n'
+                  '                "Map, and sources."\n',
+                  '                "Explain a high-use implicit library choice without converting a library default "\n'
+                  '                "into a context-free recommendation ranking."\n',
+              ),
+          )
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'expected release-description fragment exactly once: {old[:100]!r}')
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+          uv run ruff format src/optimization_compass/dataset_release.py
+      - name: Stage and publish dataset v0.11.0
+        run: |
+          rm -rf /tmp/trf-release
+          uv run python scripts/rebuild_dataset.py --stage --output /tmp/trf-release
+          uv run python scripts/rebuild_dataset.py --publish --staged-directory /tmp/trf-release
+          uv run python scripts/method_content_density_report.py
+      - name: Validate Python, data, content, and licensing
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src
+          uv run pytest
+          uv run optimization-compass verify-data
+          uv run python scripts/verify_content.py
+          uv run python scripts/verify_licensing.py
+      - name: Validate frontend and production build
+        run: |
+          npm --prefix site run parity
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run
+          npm --prefix site run build
+      - name: Commit the validated release and remove temporary workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data content docs src tests site/public/data
+          git rm .github/workflows/trf-release-publish.yml
+          git commit -m 'chore: publish dataset v0.11.0 with canonical TRF'
+          git push origin HEAD:${{ github.head_ref }}
