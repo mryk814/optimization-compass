@@ -35,18 +35,18 @@ python scripts/pages_artifact.py verify-local \
 
 The browser E2E job `needs: validate_pages_artifact`, downloads the `github-pages` artifact from
 the same workflow run, extracts its single `artifact.tar`, and verifies that exact directory instead
-of rebuilding it. The deploy job requires this browser job in addition to validation and Python
-compatibility, so a failed journey, console assertion, responsive check, or axe scan blocks
-publication. Workflow structure tests keep the artifact name and single-upload contract explicit.
+of rebuilding it. The deploy job requires this browser job in addition to validation, so a failed
+journey, console assertion, responsive check, or axe scan blocks publication. Workflow structure
+tests keep the artifact name and single-upload contract explicit.
 Failure evidence is retained as `playwright-failure-<commit SHA>` with screenshots, traces, console
 logs, JUnit output, and the HTML report.
 
 ## Deployment and post-deploy smoke
 
-Only a push to `main` may enter `deploy`. It requires both the validated artifact job and the
-Python 3.13 compatibility job. `actions/deploy-pages` consumes the `github-pages` artifact from the
-same workflow run; it never checks out and rebuilds another directory. Deployment and smoke share
-the `github-pages` concurrency lock, so a later deployment cannot replace the site during smoke.
+Only a push to `main` may enter `deploy`. It requires the validated artifact job and the Browser E2E
+job. `actions/deploy-pages` consumes the `github-pages` artifact from the same workflow run; it never
+checks out and rebuilds another directory. Deployment and smoke share the `github-pages` concurrency
+lock, so a later deployment cannot replace the site during smoke.
 
 After deployment, `scripts/pages_artifact.py smoke-remote` retries propagation and requires the
 public `deployment.json` to match the validated commit SHA and dataset version. It checks these
@@ -78,7 +78,7 @@ route rendering. #18 owns browser-level route semantics and accessibility agains
 
 ## Failure and rollback
 
-- Validation, regeneration, parity, compatibility, build, or local artifact failure: `deploy` is
+- Validation, regeneration, parity, build, or local artifact failure: `deploy` is
   skipped. The last successful Pages deployment remains active.
 - Artifact upload or Pages deployment failure: no unvalidated fallback is uploaded. Inspect the
   failed run, fix the source, and let the complete pipeline create a new artifact.

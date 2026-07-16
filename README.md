@@ -232,7 +232,7 @@ npm run test:e2e
 
 ### REST API / CLI
 
-Python 3.12以上を使用します。
+Python 3.12系を使用します。
 
 ```bash
 uv sync --all-extras

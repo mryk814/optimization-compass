@@ -1,8 +1,8 @@
 # Dependency and supply-chain maintenance
 
 Optimization Compass has one validated CI and Pages workflow. Dependency updates do not bypass it:
-Python tests, Python 3.13 compatibility, site tests, recommendation parity, the production build,
-dataset checks, and the Pages artifact gate all run on Dependabot pull requests.
+Python 3.12 tests, site tests, recommendation parity, the production build, dataset checks, and the
+Pages artifact gate all run on Dependabot pull requests.
 
 ## Automated updates
 
@@ -62,7 +62,7 @@ These settings cannot be committed as files. A repository administrator must con
    - enable private vulnerability reporting.
 2. **Settings → Rules → Rulesets** for the default branch
    - require pull requests before merging;
-   - require the `Validate and build Pages artifact` and `Python 3.13 compatibility` status checks;
+   - require the `Validate and build Pages artifact` status check;
    - require branches to be up to date before merging;
    - prevent bypass except for documented emergency recovery.
 3. Keep Actions permissions at **read repository contents** by default. The deploy job alone receives
