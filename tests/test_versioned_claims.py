@@ -68,7 +68,7 @@ def test_scipy_trf_defaults_are_separate_versioned_claims(
         SELECT claim_id, value_json, value_status, source_id, product_version
         FROM implementation_claims
         WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
-          AND predicate = 'important_option_defaults'
+          AND predicate LIKE 'default_method_%'
           AND claim_id LIKE '%DEFAULT_%'
         ORDER BY claim_id
         """

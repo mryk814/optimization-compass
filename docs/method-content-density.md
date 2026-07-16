@@ -144,11 +144,17 @@ These guides are the first individual-method tranche to require the beginner-fir
 
 This raises the published method-guide baseline to 66. It still does not require every registered method to have the same amount of prose or a visualization.
 
+## Default-method pilot
+
+Issue #111 adds Trust Region Reflective as the 99th canonical method and the 67th published method guide. The guide is prioritized because SciPy selects TRF implicitly in common least-squares calls, not because a library default is a universal recommendation.
+
+The pilot also establishes a versioned default-method audit in [`library-defaults.md`](library-defaults.md). It records the API, selection condition, override, fallback, version, and source separately from problem-level recommendation data.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.
 
-After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
+After the TRF pilot, all 67 published method guides must meet the Level 2 floor. This does not imply that all 99 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
 The same canonical export rebuilds search and retrieval documents, so added explanations become available through human search and future external retrieval without a second hand-maintained corpus. `search-index.json` uses deterministic compact JSON serialization to preserve its 2 MiB browser asset budget without removing searchable fields; human-oriented generated reports remain pretty-printed.
 

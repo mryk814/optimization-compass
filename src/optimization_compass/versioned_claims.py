@@ -176,6 +176,7 @@ def _insert_scipy_default_claims(connection: sqlite3.Connection, release_date: s
     claims = (
         (
             "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
+            "default_method_least_squares",
             {
                 "api": "scipy.optimize.least_squares",
                 "condition": "method omitted",
@@ -186,6 +187,7 @@ def _insert_scipy_default_claims(connection: sqlite3.Connection, release_date: s
         ),
         (
             "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
+            "default_method_curve_fit_bounds",
             {
                 "api": "scipy.optimize.curve_fit",
                 "condition": "bounds provided and method omitted",
@@ -195,7 +197,7 @@ def _insert_scipy_default_claims(connection: sqlite3.Connection, release_date: s
             },
         ),
     )
-    for claim_id, value in claims:
+    for claim_id, predicate, value in claims:
         connection.execute(
             """
             INSERT INTO implementation_claims (
@@ -203,12 +205,13 @@ def _insert_scipy_default_claims(connection: sqlite3.Connection, release_date: s
               valid_to, replaced_by, source_id, source_date, last_verified, confidence,
               verification_status, product_version, commit_sha, release_tag
             ) VALUES (
-              ?, 'I_SCIPY_LEAST_SQUARES_TRF', 'important_option_defaults', ?, 'verified', ?,
+              ?, 'I_SCIPY_LEAST_SQUARES_TRF', ?, ?, 'verified', ?,
               NULL, NULL, 'S003', ?, ?, ?, 'verified', ?, NULL, NULL
             )
             """,
             (
                 claim_id,
+                predicate,
                 _json(value),
                 release_date,
                 release_date,

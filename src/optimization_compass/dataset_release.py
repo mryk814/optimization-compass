@@ -58,6 +58,8 @@ DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
 )
 DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
 DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
+DEFAULT_TRF_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective.sql"
+DEFAULT_DEFAULT_CLAIMS_MIGRATION = ROOT / "data/migrations/012_default_method_claims.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -264,6 +266,9 @@ def build_staged_release(
             DEFAULT_SEMANTIC_VIEW_MIGRATION,
             DEFAULT_VERSIONED_CLAIMS_MIGRATION,
             DEFAULT_FAILURE_MODE_MIGRATION,
+            DEFAULT_LEARNING_GRAPH_MIGRATION,
+            DEFAULT_TRF_MIGRATION,
+            DEFAULT_DEFAULT_CLAIMS_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1217,6 +1222,8 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_TRF_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_DEFAULT_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -1273,7 +1280,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published constrained-continuous and multi-objective learning slices.",
+            "Added canonical Trust Region Reflective guidance and SciPy default-method claims.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1287,14 +1294,14 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Constrained and multi-objective concepts lacked canonical executable visuals.",
+            "A common implicit SciPy least-squares default lacked a canonical method identity.",
             (
-                "Added renderer-family contracts for feasible regions and Pareto fronts, "
-                "with canonical scenarios, references, and failure contrast."
+                "Added M_TRUST_REGION_REFLECTIVE, its primary source, hierarchy, aliases, "
+                "implementation mapping, and typed versioned default claims."
             ),
             (
-                "Connect canonical problems to artifacts, routes, content, Gallery, "
-                "Map, and sources."
+                "Make an implicit default inspectable and distinct from Gauss-Newton, "
+                "Levenberg-Marquardt, and generic trust-region methods."
             ),
             target_version,
             release_date,
@@ -2763,7 +2770,7 @@ def _versioned_claim_issues(connection: sqlite3.Connection, tables: list[str]) -
             "SELECT COUNT(*) FROM implementation_claims WHERE valid_to IS NULL"
         ).fetchone()[0]
     )
-    expected = implementation_count * 7
+    expected = implementation_count * 7 + 2
     if active_count != expected:
         issues.append(f"active-claim-count:{active_count}/{expected}")
     duplicates = connection.execute(
