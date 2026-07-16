@@ -10,11 +10,11 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("375px HomeとMapが横にはみ出さず操作できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
-  await expect(page.getByRole("link", { name: "地図を見る" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "問題構造Map" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-home");
 
-  await page.getByRole("link", { name: "地図を見る" }).click();
+  await page.getByRole("link", { name: "問題構造Map" }).click();
   const tree = page.getByRole("tree", { name: "最適化問題の構造" });
   await tree.getByRole("treeitem").first().click();
   await page.getByRole("button", { name: "詳細" }).click();
@@ -59,9 +59,16 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
 
 test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  await expect(page.getByText("18 / 18 scenarios")).toBeVisible();
+  const scenarioCount = page.getByText(/^\d+ \/ \d+ scenarios$/u);
+  await expect(scenarioCount).toBeVisible();
+  await expect(scenarioCount).toHaveText(/^([1-9]\d*) \/ \1 scenarios$/u);
+  const initialCount = await scenarioCount.textContent();
+  const countMatch = initialCount?.match(/^(\d+) \/ \1 scenarios$/u);
+  const total = countMatch?.[1];
+  if (!total) throw new Error(`Unexpected scenario count: ${initialCount ?? "missing"}.`);
+
   await page.getByLabel("問題domain").selectOption("discrete");
-  await expect(page.getByText("2 / 18 scenarios")).toBeVisible();
+  await expect(scenarioCount).toHaveText(`2 / ${total} scenarios`);
   await expect(page.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");

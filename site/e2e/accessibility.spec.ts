@@ -9,7 +9,10 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("Homeにaxe critical/serious違反がない", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
-  await page.getByRole("heading", { level: 1, name: "Optimization Atlas" }).waitFor();
+  await page.getByRole("heading", {
+    level: 1,
+    name: "最適化したい。でも、何をどう解けばいい？",
+  }).waitFor();
   await expectNoHighImpactViolations(page, testInfo, "home");
 });
 

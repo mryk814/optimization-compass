@@ -9,11 +9,12 @@ import {
 } from "react-router-dom";
 import type { ReactNode } from "react";
 
-import { PageOrientation } from "./components/PageOrientation";
 import { SafeBackButton } from "./components/SafeBackButton";
-import { resolveAlias } from "./contracts/entity-links";
-import type { EntityLinkIndex } from "./contracts/entity-links";
+import { findEntity, resolveAlias, type EntityLinkIndex } from "./contracts/entity-links";
+import { parseGalleryIndex } from "./contracts/gallery";
+import { parseLearningJourneyIndex } from "./contracts/learning-journeys";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
+import { siteBaseUrl } from "./data/base-url";
 import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
 import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
 import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
@@ -23,6 +24,7 @@ import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
 import { FailureModePage } from "./features/failures/FailureModePage";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { MapPage } from "./features/map/MapPage";
@@ -38,6 +40,7 @@ import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { JourneyNavigation } from "./state/journey-navigation";
 
 import "./styles.css";
+import "./home.css";
 
 const primaryNavigation = [
   { label: "ホーム", to: "/", matchPaths: ["/"] },
@@ -51,99 +54,136 @@ const primaryNavigation = [
   { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
 
+const secondaryHomeLinks = [
+  { label: "問題構造Map", to: "/map" },
+  { label: "手法・概念を学ぶ", to: "/learn" },
+  { label: "動きを見る", to: THEATER_ROUTES.index },
+  { label: "条件を揃えて比べる", to: COMPARE_LAB_ROUTE },
+  { label: "横断検索", to: "/search" },
+  { label: "根拠を確認", to: "/sources" },
+] as const;
+
 function HomePage() {
+  const links = useEntityLinks();
+  const [featuredCase, setFeaturedCase] = useState<FeaturedCase | null>();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void loadFeaturedCase(controller.signal).then(
+      (item) => setFeaturedCase(item),
+      (error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          setFeaturedCase(null);
+        }
+      },
+    );
+    return () => controller.abort();
+  }, []);
+
+  const methodLabel = (methodId: string) => (
+    links.status === "ready"
+      ? findEntity(links.index, "method", methodId)?.label ?? methodId
+      : methodId
+  );
+  const candidate = featuredCase?.item.candidate_methods[0];
+  const excluded = featuredCase?.item.excluded_methods[0];
+
   return (
     <section className="home-page">
       <header className="home-hero">
         <p className="eyebrow">Optimization Compass</p>
-        <h1>Optimization Atlas</h1>
-        <p>問題の構造を整理し、手法を選び、動きと根拠まで一つの地図から確かめます。</p>
+        <h1>最適化したい。でも、何をどう解けばいい？</h1>
+        <p>
+          現実の問いを定式化し、候補だけでなく除外理由・失敗の兆候・根拠まで辿るAtlasです。
+        </p>
+        <div className="home-primary-actions" aria-label="最初の選択">
+          <Link className="home-primary-action" to="/diagnose">条件から診断する</Link>
+          <Link className="home-secondary-action" to="/gallery">実例から探す</Link>
+        </div>
       </header>
-      <PageOrientation
-        limits="Atlasは構造化データと固定された教材・可視化をつなぐ入口です。個別の実験結果や最終判断そのものではありません。"
-        next={[
-          { label: "問題構造をたどる", to: "/map" },
-          { label: "条件から診断する", to: "/diagnose" },
-          { label: "教材を読む", to: "/learn" },
-        ]}
-        purpose="問題を分類し、候補手法・教材・実行Trace・根拠へ迷わず進むための入口です。"
-        readingSteps={[
-          "まず目的に近い入口（Explore / Decide / Learn / Apply）を選びます。",
-          "条件が整理できていなければDiagnose、構造から考えたければMapを開きます。",
-          "動きや根拠を確認するときはTheater・Compare・Sourcesへ進みます。",
-        ]}
-      />
-      <div className="home-entry-grid" aria-label="Atlasの主要な入口">
-        <HomeEntry
-          eyebrow="Explore"
-          title="Map"
-          description="問題構造と候補手法のつながりを地図でたどる。"
-          to="/map"
-          linkLabel="地図を見る"
-        />
-        <HomeEntry
-          eyebrow="Decide"
-          title="Diagnose"
-          description="条件を順に答え、候補・除外・確認事項を整理する。"
-          to="/diagnose"
-          linkLabel="診断を始める"
-        />
-        <HomeEntry
-          eyebrow="Learn"
-          title="Methods"
-          description="手法と概念を、直感・前提・コード・根拠から学ぶ。"
-          to="/learn"
-          linkLabel="教材を探す"
-        />
-        <HomeEntry
-          eyebrow="Watch"
-          title="Method Theater"
-          description="一つの手法の内部で、次の一手がどう決まるかを再生する。"
-          to={THEATER_ROUTES.index}
-          linkLabel="動きを見る"
-        />
-        <HomeEntry
-          eyebrow="Compare"
-          title="Compare Lab"
-          description="同じ問題・初期条件・予算で、複数手法の違いを横に並べる。"
-          to={COMPARE_LAB_ROUTE}
-          linkLabel="違いを比べる"
-        />
-        <HomeEntry
-          eyebrow="Apply"
-          title="Problem Gallery"
-          description="実問題の目的・制約から診断と候補手法へ逆引きする。"
-          to="/gallery"
-          linkLabel="ケースを見る"
-        />
-      </div>
-      <p className="home-maintainer-link"><Link to="/coverage">Atlas coverageと教材バックログを見る</Link></p>
+
+      <section aria-labelledby="home-case-title" className="home-case-preview" aria-live="polite">
+        {featuredCase === undefined && (
+          <div className="home-case-loading" role="status">
+            <p className="eyebrow">Case preview</p>
+            <h2 id="home-case-title">実問題を読み込んでいます</h2>
+          </div>
+        )}
+        {featuredCase === null && (
+          <div className="home-case-loading">
+            <p className="eyebrow">Problem first</p>
+            <h2 id="home-case-title">問いを、変数・目的・制約へ分解する</h2>
+            <p>Galleryでは、Caseごとに候補・条件付き候補・除外理由を同じ形式で確認できます。</p>
+            <Link className="text-link" to="/gallery">Case一覧を開く →</Link>
+          </div>
+        )}
+        {featuredCase && (
+          <>
+            <header className="home-case-header">
+              <div>
+                <p className="eyebrow">Case preview · {featuredCase.item.domain}</p>
+                <h2 id="home-case-title">{featuredCase.item.title_ja}</h2>
+                <p className="home-case-question">{featuredCase.item.question}</p>
+              </div>
+              <Link className="home-case-link" to={featuredCase.canonicalUrl}>
+                このCaseを辿る →
+              </Link>
+            </header>
+
+            <dl className="home-case-formulation">
+              <div><dt>変数</dt><dd>{featuredCase.item.decision_variables}</dd></div>
+              <div><dt>目的</dt><dd>{featuredCase.item.objective}</dd></div>
+              <div><dt>制約</dt><dd>{featuredCase.item.constraints}</dd></div>
+            </dl>
+
+            <div className="home-case-dispositions">
+              <article className="home-disposition-candidate">
+                <span>候補</span>
+                <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
+                <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う主要候補です。"}</p>
+              </article>
+              <article className="home-disposition-excluded">
+                <span>選ばない理由</span>
+                <strong>{excluded ? methodLabel(excluded.method_id) : "前提違反を確認"}</strong>
+                <p>{excluded?.reason ?? "候補だけでなく、適用を避ける条件も明示します。"}</p>
+              </article>
+            </div>
+          </>
+        )}
+      </section>
+
+      <nav aria-label="Atlasのその他の入口" className="home-secondary-nav">
+        <p>必要になったら</p>
+        <div>
+          {secondaryHomeLinks.map((item) => (
+            <Link key={item.to} to={item.to}>{item.label}</Link>
+          ))}
+        </div>
+      </nav>
+
+      <p className="home-scope-note">
+        Theater・Compareは、接続済みの固定Caseと条件で提供します。一般的な手法順位を示すものではありません。
+        <Link to="/coverage"> Coverageを見る</Link>
+      </p>
     </section>
   );
 }
 
-function HomeEntry({
-  eyebrow,
-  title,
-  description,
-  to,
-  linkLabel,
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-  to: string;
-  linkLabel: string;
-}) {
-  return (
-    <Link aria-label={`${title} — ${linkLabel}`} className="home-entry-link" to={to}>
-      <article className="home-entry-card">
-        <p className="home-entry-eyebrow">{eyebrow}</p>
-        <h2>{title}</h2>
-        <p>{description}</p>
-        <span className="home-entry-action">{linkLabel} →</span>
-      </article>
-    </Link>
+async function loadFeaturedCase(signal: AbortSignal): Promise<FeaturedCase | null> {
+  const base = siteBaseUrl();
+  const [galleryResponse, journeyResponse] = await Promise.all([
+    fetch(`${base}data/gallery.json`, { signal }),
+    fetch(`${base}data/learning-journeys.json`, { signal }),
+  ]);
+  if (!galleryResponse.ok) {
+    throw new Error(`Gallery request failed (${galleryResponse.status}).`);
+  }
+  if (!journeyResponse.ok) {
+    throw new Error(`Learning journey request failed (${journeyResponse.status}).`);
+  }
+  return selectFeaturedCase(
+    parseGalleryIndex(await galleryResponse.json()),
+    parseLearningJourneyIndex(await journeyResponse.json()),
   );
 }
 

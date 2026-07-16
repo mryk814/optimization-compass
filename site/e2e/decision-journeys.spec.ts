@@ -6,9 +6,36 @@ function requiredBaseURL(baseURL: string | undefined): string {
   return baseURL;
 }
 
+test("Homeが実Caseを先に見せてTheaterとCompareまで進める", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
+
+  await expect(
+    page.getByRole("heading", { level: 1, name: "最適化したい。でも、何をどう解けばいい？" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "条件から診断する" })).toBeVisible();
+  await expect(page.getByText("選ばない理由")).toBeVisible();
+
+  const casePreview = page.locator(".home-case-preview");
+  const caseTitle = casePreview.getByRole("heading", { level: 2 });
+  const title = await caseTitle.textContent();
+  await casePreview.getByRole("link", { name: "このCaseを辿る →" }).click();
+
+  await expect(page).toHaveURL(/#\/gallery\//u);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(title ?? "");
+
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await expect(page).toHaveURL(/#\/theater\//u);
+  await page.waitForLoadState("networkidle");
+
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(title ?? "");
+  await page.getByRole("link", { name: /固定条件と変えた条件を比べる/u }).click();
+  await expect(page).toHaveURL(/#\/compare\//u);
+});
+
 test("Diagnoseの推薦カードから対応するMap nodeへ移動する", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
-  await page.getByRole("link", { name: "診断を始める" }).click();
+  await page.getByRole("link", { name: "条件から診断する" }).click();
   const firstQuestion = page.getByRole("group", {
     name: "x（決めるもの）はどの種類ですか？",
   });
