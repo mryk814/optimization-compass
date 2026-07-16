@@ -80,7 +80,7 @@ def test_scipy_trf_has_one_canonical_method_and_scoped_default_claims(
         SELECT DISTINCT target_id FROM evidence_links
         WHERE target_table = 'method_implementation_map'
           AND target_id IN ('MIM00011', 'MIM00012', 'MIM_TRF_SCIPY')
-        """
+        """,
     ).fetchall()
 
     assert method is not None
