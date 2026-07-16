@@ -162,8 +162,8 @@ npm --prefix site run build
 ## License
 
 - code・build tooling: [MIT](LICENSE)
-- canonical/distributed structured data: [CC BY 4.0](DATA_LICENSE)
-- educational content・generated diagrams・Trace・screenshots: [CC BY 4.0](CONTENT_LICENSE)
+- canonical/distributed structured data: [CC-BY-4.0](DATA_LICENSE)
+- educational content・generated diagrams・Trace・screenshots: [CC-BY-4.0](CONTENT_LICENSE)
 
 第三者sourceは元の権利条件に従います。詳細は [`NOTICE`](NOTICE)、
 [`docs/licensing.md`](docs/licensing.md)、[`THIRD_PARTY_SOURCE_AUDIT.md`](THIRD_PARTY_SOURCE_AUDIT.md) を参照してください。
