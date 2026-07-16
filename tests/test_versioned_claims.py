@@ -75,6 +75,13 @@ def test_scipy_trf_has_one_canonical_method_and_scoped_default_claims(
         "SELECT supported_method_ids FROM implementations WHERE implementation_id = ?",
         ("I_SCIPY_LEAST_SQUARES_TRF",),
     ).fetchone()
+    evidence_targets = connection.execute(
+        """
+        SELECT DISTINCT target_id FROM evidence_links
+        WHERE target_table = 'method_implementation_map'
+          AND target_id IN ('MIM00011', 'MIM00012', 'MIM_TRF_SCIPY')
+        """
+    ).fetchall()
 
     assert method is not None
     assert (method["method_family_id"], method["parent_method_id"]) == (
@@ -83,6 +90,7 @@ def test_scipy_trf_has_one_canonical_method_and_scoped_default_claims(
     )
     assert [row["method_id"] for row in mappings] == ["M_TRUST_REGION_REFLECTIVE"]
     assert supported["supported_method_ids"] == "M_TRUST_REGION_REFLECTIVE"
+    assert [row["target_id"] for row in evidence_targets] == ["MIM_TRF_SCIPY"]
 
     claims = claims_at(connection, "I_SCIPY_LEAST_SQUARES_TRF", date(2026, 7, 16))
     by_predicate = {claim["predicate"]: claim for claim in claims}
