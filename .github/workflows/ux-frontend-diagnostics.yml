@@ -1,0 +1,58 @@
+name: Diagnose collapsed guide frontend
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'ux/collapse-page-guides'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: npm ci --prefix site
+      - name: Capture typecheck and test output
+        run: |
+          set +e
+          npm --prefix site run typecheck > /tmp/typecheck.log 2>&1
+          TYPECHECK_STATUS=$?
+          npm --prefix site test -- --run > /tmp/tests.log 2>&1
+          TEST_STATUS=$?
+          set -e
+          {
+            echo '# Frontend diagnostics'
+            echo
+            echo '## Typecheck'
+            echo '```text'
+            cat /tmp/typecheck.log
+            echo '```'
+            echo
+            echo '## Tests'
+            echo '```text'
+            cat /tmp/tests.log
+            echo '```'
+          } > docs/frontend-diagnostics.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/frontend-diagnostics.txt
+          git rm .github/workflows/ux-frontend-diagnostics.yml
+          git commit -m 'chore: capture collapsed guide frontend diagnostics'
+          git push origin HEAD:${{ github.head_ref }}
+          if [[ "$TYPECHECK_STATUS" != '0' || "$TEST_STATUS" != '0' ]]; then
+            exit 1
+          fi
