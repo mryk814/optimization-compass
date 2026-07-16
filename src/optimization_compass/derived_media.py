@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 import math
-import shutil
 import struct
-import subprocess
-import tempfile
 import zlib
 from collections.abc import Sequence
 from functools import lru_cache
 from hashlib import sha256
 from html import escape
+from importlib.resources import files
 from pathlib import Path
 from typing import Literal
 
@@ -27,6 +25,11 @@ FRAME_DURATION_SECONDS = 0.6
 ANIMATION_SAMPLE_COUNT = 10
 ANIMATION_WIDTH = 640
 ANIMATION_HEIGHT = 360
+CANONICAL_ANIMATION_INPUT_SHA256 = (
+    "a7b05770ed0c7c4f68cfaf584e900129ef949da5f22bd6cc45248bdb5759a6f0"
+)
+CANONICAL_GIF_RESOURCE = "nelder-mead-quadratic-animation.gif"
+CANONICAL_WEBM_RESOURCE = "nelder-mead-quadratic-animation.webm"
 
 
 class DerivedMediaFile(TraceModel):
@@ -273,84 +276,44 @@ def _render_animation(
 
 @lru_cache(maxsize=4)
 def _encode_animation(rendered_frames: tuple[bytes, ...]) -> tuple[bytes, bytes]:
-    ffmpeg = shutil.which("ffmpeg")
-    if ffmpeg is None:
-        raise RuntimeError("ffmpeg is required to generate GIF and WebM derived media")
-    with tempfile.TemporaryDirectory(prefix="optimization-compass-media-") as temporary:
-        frame_dir = Path(temporary)
-        for sequence_index, content in enumerate(rendered_frames):
-            (frame_dir / f"frame-{sequence_index:04d}.png").write_bytes(content)
-
-        gif_path = frame_dir / "animation.gif"
-        webm_path = frame_dir / "animation.webm"
-        common = [
-            ffmpeg,
-            "-hide_banner",
-            "-loglevel",
-            "error",
-            "-fflags",
-            "+bitexact",
-            "-framerate",
-            str(1 / FRAME_DURATION_SECONDS),
-            "-i",
-            str(frame_dir / "frame-%04d.png"),
-            "-an",
-            "-map_metadata",
-            "-1",
-        ]
-        _run_ffmpeg(
-            [
-                *common,
-                "-filter_complex",
-                "split[a][b];[a]palettegen=stats_mode=diff[p];"
-                "[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle",
-                "-loop",
-                "0",
-                "-flags:v",
-                "+bitexact",
-                str(gif_path),
-            ]
+    input_hash = sha256()
+    for content in rendered_frames:
+        scanlines = _png_scanlines(content)
+        input_hash.update(len(scanlines).to_bytes(8, "big"))
+        input_hash.update(scanlines)
+    fingerprint = input_hash.hexdigest()
+    if fingerprint != CANONICAL_ANIMATION_INPUT_SHA256:
+        raise RuntimeError(
+            "canonical derived media is stale for the rendered animation frames: "
+            f"expected {CANONICAL_ANIMATION_INPUT_SHA256}, got {fingerprint}"
         )
-        _run_ffmpeg(
-            [
-                *common,
-                "-c:v",
-                "libvpx-vp9",
-                "-pix_fmt",
-                "yuv420p",
-                "-b:v",
-                "0",
-                "-crf",
-                "34",
-                "-deadline",
-                "good",
-                "-cpu-used",
-                "4",
-                "-threads",
-                "1",
-                "-row-mt",
-                "0",
-                "-flags:v",
-                "+bitexact",
-                "-fflags",
-                "+bitexact",
-                "-metadata",
-                "creation_time=1970-01-01T00:00:00Z",
-                "-metadata",
-                "encoder=",
-                "-write_crc32",
-                "0",
-                str(webm_path),
-            ]
-        )
-        return gif_path.read_bytes(), webm_path.read_bytes()
+    resource_root = files("optimization_compass.resources").joinpath("derived_media")
+    return (
+        resource_root.joinpath(CANONICAL_GIF_RESOURCE).read_bytes(),
+        resource_root.joinpath(CANONICAL_WEBM_RESOURCE).read_bytes(),
+    )
 
 
-def _run_ffmpeg(command: list[str]) -> None:
-    result = subprocess.run(command, capture_output=True, check=False)
-    if result.returncode != 0:
-        error = result.stderr.decode("utf-8", errors="replace").strip()
-        raise RuntimeError(f"ffmpeg derived-media export failed: {error}")
+def _png_scanlines(content: bytes) -> bytes:
+    if not content.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError("canonical animation input is not a PNG")
+    position = 8
+    compressed = bytearray()
+    while position < len(content):
+        length = struct.unpack(">I", content[position : position + 4])[0]
+        kind = content[position + 4 : position + 8]
+        payload_start = position + 8
+        payload_end = payload_start + length
+        if payload_end + 4 > len(content):
+            raise ValueError("canonical animation PNG is truncated")
+        if kind == b"IDAT":
+            compressed.extend(content[payload_start:payload_end])
+        position = payload_end + 4
+        if kind == b"IEND":
+            break
+    if not compressed:
+        raise ValueError("canonical animation PNG has no IDAT payload")
+    return zlib.decompress(compressed)
 
 
 def _render_captions(animation_frames: list[TraceFrame]) -> bytes:

@@ -60,6 +60,18 @@ def test_derived_media_is_deterministic_and_provenance_complete(tmp_path: Path) 
     assert "frame 1" in (first_dir / entry.transcript.path).read_text(encoding="utf-8")
 
 
+def test_canonical_animation_is_packaged_with_the_python_distribution() -> None:
+    from importlib.resources import files
+
+    media = files("optimization_compass.resources").joinpath("derived_media")
+    assert media.joinpath("nelder-mead-quadratic-animation.gif").read_bytes().startswith(b"GIF89a")
+    assert (
+        media.joinpath("nelder-mead-quadratic-animation.webm")
+        .read_bytes()
+        .startswith(b"\x1aE\xdf\xa3")
+    )
+
+
 def test_exported_media_manifest_matches_files() -> None:
     root = Path("site/public/data")
     manifest = DerivedMediaManifest.model_validate_json((root / "media/manifest.json").read_bytes())
