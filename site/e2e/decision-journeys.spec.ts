@@ -34,7 +34,7 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
   await page.getByRole("link", { name: /高価な実験の設定を探す/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
 
-  await page.getByRole("link", { name: "分類図上で見る" }).click();
+  await page.getByRole("link", { name: "問題構造Mapで位置を確認" }).click();
   await expect(page.getByRole("heading", { level: 2, name: "連続" })).toBeVisible();
   await expect(page.locator('[role="treeitem"][aria-selected="true"]')).toContainText("連続");
 
@@ -55,7 +55,8 @@ test("canonical Gallery caseで候補・条件付き・除外理由を区別で�
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC013");
 
   await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "候補手法" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "候補・条件付き・除外を理由で分ける" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "候補" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "条件付き" })).toBeVisible();
   await expect(page.getByText(/初期値が十分よく/u)).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "避ける" })).toBeVisible();
@@ -130,6 +131,19 @@ test("Galleryからcanonical constrained sliceへ移動できる", async ({ page
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/constrained-design");
 
   await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
-  await page.getByRole("link", { name: /制約付き最適化: feasible region/u }).click();
+  await expect(page.getByText("canonical Compare 未接続")).toBeVisible();
+  const theaterJourney = page.getByRole("link", { name: /固定した1 runを追う/u });
+  await theaterJourney.focus();
+  await expect(theaterJourney).toBeFocused();
+  await theaterJourney.press("Enter");
   await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK$/u);
+});
+
+test("Galleryからcanonical comparisonへ移動できる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
+
+  await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
+  await expect(page.getByText("primary Theater 未接続")).toBeVisible();
+  await page.getByRole("link", { name: /固定条件と変えた条件を比べる/u }).click();
+  await expect(page).toHaveURL(/#\/compare\/COMPARE_GRADIENT_FAMILY$/u);
 });
