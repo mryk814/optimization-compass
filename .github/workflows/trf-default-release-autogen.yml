@@ -86,8 +86,7 @@ jobs:
           dataset.write_text(text, encoding='utf-8')
 
           claims = Path('src/optimization_compass/versioned_claims.py')
-          text = claims.read_text(encoding='utf-8')
-          text = text.replace(
+          text = claims.read_text(encoding='utf-8').replace(
               'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})',
               'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"})',
               1,
@@ -115,12 +114,23 @@ jobs:
           least_squares.write_text(text, encoding='utf-8')
 
           density_test = Path('tests/test_method_content_density.py')
-          text = density_test.read_text(encoding='utf-8').replace(
-              'MINIMUM_PUBLISHED_METHOD_GUIDES = 66',
-              'MINIMUM_PUBLISHED_METHOD_GUIDES = 67',
-              1,
-          )
-          density_test.write_text(text, encoding='utf-8')
+          density_test.write_text(density_test.read_text(encoding='utf-8').replace(
+              'MINIMUM_PUBLISHED_METHOD_GUIDES = 66', 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67', 1
+          ), encoding='utf-8')
+
+          replacements = {
+              'tests/test_coverage.py': [('"method": 98', '"method": 99')],
+              'tests/test_derived_media.py': [('manifest.dataset_version == "0.10.0"', 'manifest.dataset_version == "0.11.0"')],
+              'tests/test_evidence.py': [('len(index.sources) == 95', 'len(index.sources) == 96')],
+              'tests/test_release_identity.py': [('authority.dataset_version == "0.10.0"', 'authority.dataset_version == "0.11.0"')],
+              'tests/test_site_export.py': [('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96')],
+          }
+          for name, changes in replacements.items():
+              path = Path(name)
+              value = path.read_text(encoding='utf-8')
+              for old, new in changes:
+                  value = value.replace(old, new, 1)
+              path.write_text(value, encoding='utf-8')
 
           density_doc = Path('docs/method-content-density.md')
           text = density_doc.read_text(encoding='utf-8')
@@ -136,7 +146,7 @@ jobs:
               )
           density_doc.write_text(text, encoding='utf-8')
           PY
-          uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests/test_trust_region_reflective.py tests/test_method_content_density.py
+          uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests/test_trust_region_reflective.py tests/test_method_content_density.py tests/test_coverage.py tests/test_derived_media.py tests/test_evidence.py tests/test_release_identity.py tests/test_site_export.py
       - name: Build deterministic dataset 0.11.0
         run: |
           rm -rf .release-stage
@@ -151,9 +161,9 @@ jobs:
         run: |
           uv run ruff check .
           uv run ruff format --check .
-          uv run mypy src tests
+          uv run mypy src
           uv run pytest
-          uv run python scripts/verify_release_bundle.py
+          uv run optimization-compass verify-data
       - name: Validate the site
         run: |
           npm --prefix site run typecheck
