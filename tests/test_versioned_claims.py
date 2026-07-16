@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 from collections.abc import Iterator
 from datetime import date
@@ -42,7 +43,7 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
     ).fetchone()[0]
 
     assert implementation_count == 64
-    assert active_claims == implementation_count * 7
+    assert active_claims == implementation_count * 7 + 2
     assert unknowns > 0
     placeholders = ",".join("?" for _ in HIGH_USAGE_IMPLEMENTATION_IDS)
     verified_high_usage = connection.execute(
@@ -54,14 +55,52 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
         tuple(sorted(HIGH_USAGE_IMPLEMENTATION_IDS)),
     ).fetchone()[0]
     assert verified_high_usage / len(HIGH_USAGE_IMPLEMENTATION_IDS) >= 0.8
-    freshness = claim_freshness_report(connection, as_of=date(2026, 7, 15))
+    freshness = claim_freshness_report(connection, as_of=date(2026, 7, 16))
     assert freshness["claim_count"] == active_claims
     assert len(freshness["claims"]) == active_claims
 
 
+def test_scipy_trf_defaults_are_separate_versioned_claims(
+    connection: sqlite3.Connection,
+) -> None:
+    rows = connection.execute(
+        """
+        SELECT claim_id, value_json, value_status, source_id, product_version
+        FROM implementation_claims
+        WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+          AND predicate = 'important_option_defaults'
+          AND claim_id LIKE '%DEFAULT_%'
+        ORDER BY claim_id
+        """
+    ).fetchall()
+
+    assert len(rows) == 2
+    values = {row["claim_id"]: json.loads(row["value_json"]) for row in rows}
+    least_squares = values["CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES"]
+    curve_fit = values["CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS"]
+
+    assert least_squares == {
+        "api": "scipy.optimize.least_squares",
+        "condition": "method omitted",
+        "scope": "nonlinear least squares with or without bounds",
+        "selected_method": "trf",
+        "user_override": "method",
+    }
+    assert curve_fit == {
+        "api": "scipy.optimize.curve_fit",
+        "condition": "bounds provided and method omitted",
+        "fallback_without_bounds": "lm",
+        "selected_method": "trf",
+        "user_override": "method",
+    }
+    assert all(row["value_status"] == "verified" for row in rows)
+    assert all(row["source_id"] == "S003" for row in rows)
+    assert all(row["product_version"] for row in rows)
+
+
 def test_superseded_release_is_reproducible_as_of_date(connection: sqlite3.Connection) -> None:
     old = claims_at(connection, "I_SCIPY_LINPROG_HIGHS", date(2025, 6, 1))
-    current = claims_at(connection, "I_SCIPY_LINPROG_HIGHS", date(2026, 7, 15))
+    current = claims_at(connection, "I_SCIPY_LINPROG_HIGHS", date(2026, 7, 16))
 
     old_release = next(claim for claim in old if claim["predicate"] == "current_release")
     current_release = next(claim for claim in current if claim["predicate"] == "current_release")
