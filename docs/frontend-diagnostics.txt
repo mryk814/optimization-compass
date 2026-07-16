@@ -1,0 +1,134 @@
+# Frontend diagnostics
+
+## Typecheck
+```text
+
+> optimization-compass-site@0.1.0 typecheck
+> tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit
+
+src/features/methods/MethodPage.order.test.tsx(55,48): error TS2322: Type '"learning"' is not assignable to type 'EntityType'.
+src/features/methods/MethodPage.order.test.tsx(58,7): error TS2322: Type '"learning"' is not assignable to type 'EntityType'.
+```
+
+## Tests
+```text
+
+> optimization-compass-site@0.1.0 test
+> vitest --exclude=e2e/** --run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.10 [39m[90m/home/runner/work/optimization-compass/optimization-compass/site[39m
+
+ [32m✓[39m src/state/atlas-state.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [31m❯[39m src/features/map/MapPage.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2351[2mms[22m[39m
+     [33m[2m✓[22m[39m fetches the base-aware ViewSpec and canonical predicate data [33m 382[2mms[22m[39m
+     [32m✓[39m switches semantic Views in the shared URL and restores focus through a canonical entity[32m 209[2mms[22m[39m
+     [32m✓[39m explains map states and exposes root/current/detail cues[32m 95[2mms[22m[39m
+[31m     [31m×[31m expands three levels and selection updates detail without changing answers[39m[33m 328[2mms[22m[39m
+     [32m✓[39m applies leaf bindings only through the explicit diagnosis action[32m 163[2mms[22m[39m
+     [32m✓[39m highlights every node whose exact bindings match Diagnose answers[32m 131[2mms[22m[39m
+     [32m✓[39m shows a recoverable error when the explicit Map CTA cannot encode state[32m 126[2mms[22m[39m
+     [32m✓[39m implements visible-tree keyboard movement without selecting on focus[32m 143[2mms[22m[39m
+     [32m✓[39m restores deep links, expands ancestors, warns and canonicalizes stale tokens[32m 86[2mms[22m[39m
+     [32m✓[39m mobile pane, zoom, and focus-current preserve the AtlasState token[32m 224[2mms[22m[39m
+     [32m✓[39m keeps a broken parent deep link while normalizing roving focus to the visible tree[32m 65[2mms[22m[39m
+     [32m✓[39m keeps a unreachable cycle deep link while normalizing roving focus to the visible tree[32m 62[2mms[22m[39m
+     [32m✓[39m browser back restores the previous selection in tree, detail, and focus-current[32m 161[2mms[22m[39m
+     [32m✓[39m renders a safe empty state[32m 25[2mms[22m[39m
+     [32m✓[39m renders a safe malformed state[32m 12[2mms[22m[39m
+     [32m✓[39m renders fetch failure and malformed URL state with reset[32m 37[2mms[22m[39m
+     [32m✓[39m keeps broken roots and references visible as diagnostics without recursing[32m 32[2mms[22m[39m
+     [32m✓[39m renders unknown entity types generically and unsafe URLs as text[32m 65[2mms[22m[39m
+ [32m✓[39m src/App.test.tsx [2m([22m[2m24 tests[22m[2m)[22m[33m 1450[2mms[22m[39m
+     [33m[2m✓[22m[39m #/ renders Optimization Atlas [33m 350[2mms[22m[39m
+ [32m✓[39m src/features/diagnose/DiagnosePage.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 3689[2mms[22m[39m
+     [33m[2m✓[22m[39m loads only manifest, SiteData, and ViewSpec without API or SQLite requests [33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps unanswered, unknown, N/A, single, and multi answers distinct in URL state [33m 726[2mms[22m[39m
+     [33m[2m✓[22m[39m renders all result bands, implementations, problems, follow-ups, trace, and safe sources [33m 1072[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves the token when navigating to Map [33m 316[2mms[22m[39m
+     [33m[2m✓[22m[39m transitions answers-only Diagnose state into a visible deterministic Map selection [33m 441[2mms[22m[39m
+ [32m✓[39m src/features/methods/MethodPage.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 506[2mms[22m[39m
+ [32m✓[39m src/features/playback/TraceDemoPage.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 349[2mms[22m[39m
+     [33m[2m✓[22m[39m loads a strict index and trace into the common player [33m 312[2mms[22m[39m
+ [32m✓[39m src/contracts/trace.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/contracts/viewspec.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/features/playback/PlaybackControls.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 487[2mms[22m[39m
+ [32m✓[39m src/features/prompt-export/implementation-prompt.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/features/map/map-state.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [2m[90m↓[39m[22m src/features/diagnose/recommend.parity.test.ts [2m([22m[2m1 test[22m[2m | [22m[33m1 skipped[39m[2m)[22m
+ [32m✓[39m src/features/prompt-export/PromptExportDialog.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 649[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps direct Markdown edits until explicit regeneration and copies the visible text [33m 550[2mms[22m[39m
+ [32m✓[39m src/state/useAtlasState.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/features/prompt-export/PromptExportLauncher.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 542[2mms[22m[39m
+     [33m[2m✓[22m[39m opens a prefilled Gallery pack without sending user data and restores trigger focus [33m 492[2mms[22m[39m
+ [32m✓[39m src/contracts/manifest.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/contracts/visualization-scenarios.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/features/methods/MethodPage.order.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 369[2mms[22m[39m
+     [33m[2m✓[22m[39m places authored guidance before collapsed machine-oriented detail [33m 368[2mms[22m[39m
+ [32m✓[39m src/features/visualization/LinkedSurfaceView.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 256[2mms[22m[39m
+ [32m✓[39m src/contracts/site-data.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m src/features/theater/BayesianOptimizationPage.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 624[2mms[22m[39m
+     [33m[2m✓[22m[39m renders the generated trace, rationale, equal-budget table, and keyboard playback [33m 449[2mms[22m[39m
+ [32m✓[39m src/features/evidence/SourcePages.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 435[2mms[22m[39m
+     [33m[2m✓[22m[39m lists source title and verification date [33m 336[2mms[22m[39m
+ [32m✓[39m src/features/diagnose/recommend.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m src/contracts/comparisons.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/features/learning-slices/renderers.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 447[2mms[22m[39m
+ [32m✓[39m src/features/diagnose/diagnose-state.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/contracts/problems.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/contracts/search-tree.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m src/features/search/SearchPage.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 825[2mms[22m[39m
+     [33m[2m✓[22m[39m resolves an English alias and explains why it matched [33m 461[2mms[22m[39m
+ [32m✓[39m src/contracts/sources.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/features/prompt-export/support-data.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/contracts/learning-slices.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/features/content/CompiledContent.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 234[2mms[22m[39m
+ [32m✓[39m src/features/search-tree/SearchTreeRenderer.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m shows bounds, prune explanations, textual summary, and keyboard tree navigation [33m 329[2mms[22m[39m
+ [32m✓[39m src/contracts/atlas-content.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/components/PageOrientation.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 275[2mms[22m[39m
+ [32m✓[39m src/features/visualization/objectivePlot.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/features/visualization/ObjectiveGoalCues.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m src/features/visualization/GuidedStoryPanel.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 229[2mms[22m[39m
+ [32m✓[39m src/components/OptimizationProblemPrimer.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 343[2mms[22m[39m
+ [32m✓[39m src/features/coverage/CoveragePage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 695[2mms[22m[39m
+     [33m[2m✓[22m[39m shows priority reasons and filters the full inventory [33m 693[2mms[22m[39m
+ [32m✓[39m src/contracts/derived-media.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/state/atlas-navigation.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m src/contracts/entity-links.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/contracts/search-index.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m src/features/visualization/ScenarioLessonPanel.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 243[2mms[22m[39m
+ [32m✓[39m src/features/compare/CompareLabIndexPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 286[2mms[22m[39m
+ [32m✓[39m src/contracts/gallery.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/contracts/surrogate-uncertainty.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/features/methods/MethodPredicates.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 241[2mms[22m[39m
+ [32m✓[39m src/contracts/learning-graph.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m src/features/theater/TheaterIndexPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 328[2mms[22m[39m
+     [33m[2m✓[22m[39m offers each visualization family before entering an individual run [33m 323[2mms[22m[39m
+ [32m✓[39m src/contracts/coverage.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/contracts/release.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m src/features/gallery/GalleryPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/contracts/failure-modes.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/features/map/MapPage.test.tsx[2m > [22mMapPage[2m > [22mexpands three levels and selection updates detail without changing answers
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'length')[39m
+[90m [2m❯[22m prepareComputedStyleDeclaration node_modules/jsdom/lib/jsdom/living/css/helpers/computed-style.js:[2m57:29[22m[39m
+[90m [2m❯[22m getComputedStyleDeclaration node_modules/jsdom/lib/jsdom/living/css/helpers/computed-style.js:[2m42:23[22m[39m
+[90m [2m❯[22m window.getComputedStyle node_modules/jsdom/lib/jsdom/browser/Window.js:[2m872:36[22m[39m
+[90m [2m❯[22m isInaccessible node_modules/@testing-library/dom/dist/role-helpers.js:[2m67:14[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/role-helpers.js:[2m169:31[22m[39m
+[90m [2m❯[22m getRoles node_modules/@testing-library/dom/dist/role-helpers.js:[2m168:32[22m[39m
+[90m [2m❯[22m prettyRoles node_modules/@testing-library/dom/dist/role-helpers.js:[2m191:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/queries/role.js:[2m228:43[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m54 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (56)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m227 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (229)[39m
+[2m   Start at [22m 04:07:33
+[2m   Duration [22m 30.85s[2m (transform 3.23s, setup 4.48s, import 7.81s, tests 17.12s, environment 51.33s)[22m
+
+```
