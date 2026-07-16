@@ -1,0 +1,253 @@
+.home-page {
+  display: grid;
+  width: min(72rem, 100%);
+  gap: 1.5rem;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem) 4rem;
+  box-sizing: border-box;
+}
+
+.home-hero {
+  max-width: 54rem;
+}
+
+.home-hero h1 {
+  max-width: 18ch;
+  margin: 0.2rem 0 0.65rem;
+  font-size: clamp(2rem, 6vw, 4.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+.home-hero > p:not(.eyebrow) {
+  max-width: 46rem;
+  margin: 0;
+  color: #46554c;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+}
+
+.home-primary-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.home-primary-action,
+.home-secondary-action,
+.home-case-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.15rem 1.15rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-primary-action {
+  border: 1px solid #214e39;
+  color: #fff;
+  background: #214e39;
+}
+
+.home-secondary-action,
+.home-case-link {
+  border: 1px solid #819287;
+  color: #214e39;
+  background: #fff;
+}
+
+.home-primary-action:focus-visible,
+.home-secondary-action:focus-visible,
+.home-case-link:focus-visible,
+.home-secondary-nav a:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 3px;
+}
+
+.home-case-preview {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  border: 1px solid #aebdb3;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 0.75rem 2.5rem rgb(37 66 49 / 8%);
+}
+
+.home-case-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.home-case-header > div {
+  min-width: 0;
+}
+
+.home-case-header h2,
+.home-case-loading h2 {
+  margin: 0.15rem 0 0.35rem;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.2;
+}
+
+.home-case-question {
+  max-width: 50rem;
+  margin: 0;
+  color: #33493e;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.home-case-link {
+  flex: 0 0 auto;
+}
+
+.home-case-formulation {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.home-case-formulation div {
+  min-width: 0;
+  padding: 0.75rem;
+  border-left: 3px solid #75917f;
+  background: #f3f6f2;
+}
+
+.home-case-formulation dt {
+  color: #5c695f;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.home-case-formulation dd {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.home-case-dispositions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.home-case-dispositions article {
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 0.65rem;
+}
+
+.home-case-dispositions article > span {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.home-case-dispositions strong {
+  display: block;
+  margin-top: 0.15rem;
+  overflow-wrap: anywhere;
+}
+
+.home-case-dispositions p {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+}
+
+.home-disposition-candidate {
+  border: 1px solid #96b4a2;
+  background: #edf7f0;
+}
+
+.home-disposition-candidate > span {
+  color: #246143;
+}
+
+.home-disposition-excluded {
+  border: 1px solid #d8ad9e;
+  background: #fff3ef;
+}
+
+.home-disposition-excluded > span {
+  color: #8a3522;
+}
+
+.home-case-loading {
+  min-height: 8rem;
+}
+
+.home-secondary-nav {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  align-items: baseline;
+  padding-block: 0.35rem;
+  border-block: 1px solid #d8d8d1;
+}
+
+.home-secondary-nav > p {
+  color: #59645d;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.home-secondary-nav > div {
+  display: flex;
+  gap: 0.35rem 1rem;
+  flex-wrap: wrap;
+}
+
+.home-secondary-nav a,
+.home-scope-note a {
+  color: #285740;
+  font-weight: 750;
+  text-underline-offset: 0.18em;
+}
+
+.home-scope-note {
+  max-width: 58rem;
+  margin: 0;
+  color: #5d675f;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 44rem) {
+  .home-page {
+    gap: 1.1rem;
+    padding-inline: 0.85rem;
+  }
+
+  .home-hero h1 {
+    max-width: none;
+  }
+
+  .home-primary-actions,
+  .home-primary-action,
+  .home-secondary-action,
+  .home-case-link {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .home-case-header,
+  .home-secondary-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-case-formulation,
+  .home-case-dispositions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
