@@ -113,17 +113,32 @@ jobs:
           )
           least_squares.write_text(text, encoding='utf-8')
 
-          density_test = Path('tests/test_method_content_density.py')
-          density_test.write_text(density_test.read_text(encoding='utf-8').replace(
-              'MINIMUM_PUBLISHED_METHOD_GUIDES = 66', 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67', 1
-          ), encoding='utf-8')
-
           replacements = {
-              'tests/test_coverage.py': [('"method": 98', '"method": 99')],
-              'tests/test_derived_media.py': [('manifest.dataset_version == "0.10.0"', 'manifest.dataset_version == "0.11.0"')],
-              'tests/test_evidence.py': [('len(index.sources) == 95', 'len(index.sources) == 96')],
-              'tests/test_release_identity.py': [('authority.dataset_version == "0.10.0"', 'authority.dataset_version == "0.11.0"')],
-              'tests/test_site_export.py': [('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96')],
+              'tests/test_method_content_density.py': [
+                  ('MINIMUM_PUBLISHED_METHOD_GUIDES = 66', 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67'),
+              ],
+              'tests/test_coverage.py': [
+                  ('"method": 98', '"method": 99'),
+                  ('len(report.subjects) == 164', 'len(report.subjects) == 165'),
+              ],
+              'tests/test_derived_media.py': [
+                  ('manifest.dataset_version == "0.10.0"', 'manifest.dataset_version == "0.11.0"'),
+              ],
+              'tests/test_evidence.py': [
+                  ('len(index.sources) == 95', 'len(index.sources) == 96'),
+              ],
+              'tests/test_release_identity.py': [
+                  ('authority.dataset_version == "0.10.0"', 'authority.dataset_version == "0.11.0"'),
+              ],
+              'tests/test_site_export.py': [
+                  ('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96'),
+              ],
+              'tests/test_source_health.py': [
+                  ('len(report.links) == 95', 'len(report.links) == 96'),
+              ],
+              'tests/fixtures/recommendation_cases.json': [
+                  ('"dataset_version": "0.10.0"', '"dataset_version": "0.11.0"'),
+              ],
           }
           for name, changes in replacements.items():
               path = Path(name)
@@ -146,7 +161,17 @@ jobs:
               )
           density_doc.write_text(text, encoding='utf-8')
           PY
-          uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests/test_trust_region_reflective.py tests/test_method_content_density.py tests/test_coverage.py tests/test_derived_media.py tests/test_evidence.py tests/test_release_identity.py tests/test_site_export.py
+          uv run ruff format \
+            src/optimization_compass/dataset_release.py \
+            src/optimization_compass/versioned_claims.py \
+            tests/test_trust_region_reflective.py \
+            tests/test_method_content_density.py \
+            tests/test_coverage.py \
+            tests/test_derived_media.py \
+            tests/test_evidence.py \
+            tests/test_release_identity.py \
+            tests/test_site_export.py \
+            tests/test_source_health.py
       - name: Build deterministic dataset 0.11.0
         run: |
           rm -rf .release-stage
@@ -169,11 +194,13 @@ jobs:
           npm --prefix site run typecheck
           npm --prefix site test -- --run
           npm --prefix site run build
-      - name: Commit generated release and remove temporary workflow
+      - name: Commit generated release and remove temporary files
         run: |
+          rm -f docs/trf-pytest-diagnostics.txt
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data content docs site/public/data src tests
-          git rm .github/workflows/trf-default-release-autogen.yml
+          git rm -f .github/workflows/trf-default-release-autogen.yml
+          git rm -f .github/workflows/trf-fixture-version.yml || true
+          git add -A data content docs site/public/data src tests .github/workflows
           git commit -m 'data: publish Trust Region Reflective dataset 0.11.0'
           git push origin HEAD:${{ github.head_ref }}
