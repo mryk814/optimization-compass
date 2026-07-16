@@ -10,6 +10,7 @@ from typing import Any, Literal
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.derived_media import write_static_media
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.learning_graph import build_learning_graph_index
@@ -46,6 +47,7 @@ from optimization_compass.view_spec import (
     EntityReference,
     ManifestAsset,
     ManifestCoverageAsset,
+    ManifestDerivedMediaAsset,
     ManifestLicenseAsset,
     ManifestRecommendationAsset,
     ManifestTraceAsset,
@@ -82,6 +84,7 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
+SITE_MANIFEST_VERSION: Literal["1.1.0"] = "1.1.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
@@ -312,6 +315,20 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         dataset_version=release["version"],
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
+    media_scenario = next(
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.scenario_id == "SCENARIO_NM_QUADRATIC"
+    )
+    media_trace = next(
+        trace for trace in generated_traces if trace.scenario_id == media_scenario.scenario_id
+    )
+    derived_media = write_static_media(
+        output_dir,
+        scenario=media_scenario,
+        trace=media_trace,
+    )
+    _write_json(output_dir / "media/manifest.json", derived_media)
     search_tree_routes = {
         entry.trace_id: f"/theater/search-tree/{entry.artifact_id}"
         for entry in search_tree_index.artifacts
@@ -407,7 +424,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     )
     write_coverage_report(coverage, output_dir / "coverage.json", output_dir / "coverage.md")
     manifest = SiteManifest(
-        version=VIEW_VERSION,
+        version=SITE_MANIFEST_VERSION,
         dataset_version=release["version"],
         generated_at=generated_at,
         views=[
@@ -426,6 +443,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         visualization_scenarios=ManifestVisualizationScenarioAsset(
             version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
         ),
+        derived_media=ManifestDerivedMediaAsset(version="1.0.0", path="media/manifest.json"),
         entity_links=ManifestAsset(version="1.0.0", path="entity-links.json"),
         sources=ManifestAsset(version="1.0.0", path="sources.json"),
         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),

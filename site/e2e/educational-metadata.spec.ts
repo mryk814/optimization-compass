@@ -74,3 +74,22 @@ test("guided stories drive four renderer families from one contract", async ({ p
   await expect(page.locator(".bo-layout")).toHaveAttribute("data-guided-focus", "selected_candidate");
   await expect(page.getByText(/Frame 2\/8 · 0\.5×/u)).toBeVisible();
 });
+
+test("derived thumbnail and static formats are discoverable from the scenario", async ({
+  page,
+  baseURL,
+}) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/traces/nelder-mead-quadratic");
+
+  const thumbnail = page.getByRole("img", { name: /各frameの頂点順位/u });
+  await expect(thumbnail).toBeVisible();
+  await expect(thumbnail).toHaveAttribute("src", /media\/scenario-nm-quadratic\/thumbnail\.png/u);
+  await expect(page.getByRole("link", { name: "PNGを開く" })).toHaveAttribute(
+    "href",
+    /media\/scenario-nm-quadratic\/static\.png/u,
+  );
+  await expect(page.getByRole("link", { name: "SVGを開く" })).toHaveAttribute(
+    "href",
+    /media\/scenario-nm-quadratic\/static\.svg/u,
+  );
+});

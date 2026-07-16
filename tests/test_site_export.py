@@ -229,6 +229,19 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "visualization-scenarios.json",
         "version": "1.2.0",
     }
+    assert manifest_payload["derived_media"] == {
+        "path": "media/manifest.json",
+        "version": "1.0.0",
+    }
+    first_media_bytes = (first_output / "media/manifest.json").read_bytes()
+    assert first_media_bytes == (second_output / "media/manifest.json").read_bytes()
+    media_manifest = json.loads(first_media_bytes)
+    for entry in media_manifest["entries"]:
+        for file in entry["files"]:
+            content = (first_output / file["path"]).read_bytes()
+            assert content == (second_output / file["path"]).read_bytes()
+            assert file["bytes"] == len(content)
+            assert file["sha256"] == sha256(content).hexdigest()
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
         "version": "1.0.0",

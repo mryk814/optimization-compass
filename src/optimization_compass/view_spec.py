@@ -236,6 +236,11 @@ class ManifestVisualizationScenarioAsset(ContractModel):
     path: str = Field(pattern=r"^visualization-scenarios\.json$")
 
 
+class ManifestDerivedMediaAsset(ContractModel):
+    version: Literal["1.0.0"]
+    path: str = Field(pattern=r"^media/manifest\.json$")
+
+
 class ManifestRecommendationAsset(ContractModel):
     version: Literal["2.0.0"]
     path: str = Field(min_length=1)
@@ -270,7 +275,7 @@ class SiteLicenseManifest(ContractModel):
 
 
 class SiteManifest(ContractModel):
-    version: Literal["1.0.0"] = "1.0.0"
+    version: Literal["1.1.0"] = "1.1.0"
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     views: list[ManifestView]
@@ -278,6 +283,7 @@ class SiteManifest(ContractModel):
     traces: ManifestTraceAsset
     problems: ManifestAsset
     visualization_scenarios: ManifestVisualizationScenarioAsset
+    derived_media: ManifestDerivedMediaAsset
     entity_links: ManifestAsset
     sources: ManifestAsset
     implementation_claims: ManifestAsset

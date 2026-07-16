@@ -8,6 +8,7 @@ import {
   traceFrameFixture,
 } from "../../contracts/trace.fixtures";
 import scenarioFixture from "../../contracts/visualization-scenarios.fixture.json";
+import generatedMedia from "../../../public/data/media/manifest.json";
 import { TraceDemoPage } from "./TraceDemoPage";
 
 const trace = {
@@ -51,14 +52,20 @@ const index = {
   ],
 };
 const indexBytes = new TextEncoder().encode(JSON.stringify(index));
+const mediaManifest = {
+  ...generatedMedia,
+  dataset_version: "0.2.0",
+  entries: generatedMedia.entries.map((entry) => ({ ...entry, dataset_version: "0.2.0" })),
+};
 const manifest = {
-  version: "1.0.0",
+  version: "1.1.0",
   dataset_version: "0.2.0",
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "2.0.0", path: "recommendation/site-data.json" },
   problems: { version: "1.0.0", path: "problems.json" },
   visualization_scenarios: { version: "1.2.0", path: "visualization-scenarios.json" },
+  derived_media: { version: "1.0.0", path: "media/manifest.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
@@ -117,6 +124,7 @@ describe("TraceDemoPage", () => {
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(jsonResponse(manifest))
       .mockResolvedValueOnce(jsonResponse(scenarioFixture))
+      .mockResolvedValueOnce(jsonResponse(mediaManifest))
       .mockResolvedValueOnce(byteResponse(indexBytes))
       .mockResolvedValueOnce(jsonResponse(trace));
     vi.stubGlobal("fetch", fetchMock);
@@ -134,10 +142,11 @@ describe("TraceDemoPage", () => {
     expect(screen.getByText("M_EDUCATIONAL")).toBeVisible();
     expect(screen.getByRole("link", { name: new RegExp(trace.source_ids[0], "u") }))
       .toHaveAttribute("href", `/sources/${trace.source_ids[0]}`);
-    expect(fetchMock).toHaveBeenCalledTimes(4);
+    expect(fetchMock).toHaveBeenCalledTimes(5);
     expect(String(fetchMock.mock.calls[1][0])).toMatch(/data\/visualization-scenarios\.json$/u);
-    expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/traces\/catalog\.json$/u);
-    expect(String(fetchMock.mock.calls[3][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
+    expect(String(fetchMock.mock.calls[2][0])).toMatch(/data\/media\/manifest\.json$/u);
+    expect(String(fetchMock.mock.calls[3][0])).toMatch(/data\/traces\/catalog\.json$/u);
+    expect(String(fetchMock.mock.calls[4][0])).toMatch(/data\/traces\/dummy-educational\.json$/u);
   });
 
   test("reports missing IDs and reference mismatches instead of loading a fallback", async () => {
@@ -147,6 +156,7 @@ describe("TraceDemoPage", () => {
       vi.fn()
         .mockResolvedValueOnce(jsonResponse(manifest))
         .mockResolvedValueOnce(jsonResponse(scenarioFixture))
+        .mockResolvedValueOnce(jsonResponse(mediaManifest))
         .mockResolvedValueOnce(byteResponse(indexBytes)),
     );
     renderPage("missing");
@@ -162,6 +172,7 @@ describe("TraceDemoPage", () => {
       vi.fn()
         .mockResolvedValueOnce(jsonResponse(manifest))
         .mockResolvedValueOnce(jsonResponse(scenarioFixture))
+        .mockResolvedValueOnce(jsonResponse(mediaManifest))
         .mockResolvedValueOnce(byteResponse(indexBytes))
         .mockResolvedValueOnce(jsonResponse(mismatch)),
     );

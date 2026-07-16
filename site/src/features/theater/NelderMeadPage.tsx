@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import type { AlgorithmTrace, TraceFrame, TraceIndexEntry, TracePoint } from "../../contracts/trace";
+import type { DerivedMediaEntry } from "../../contracts/derived-media";
 import type { GuidedStoryStep, VisualizationScenario } from "../../contracts/visualization-scenarios";
+import { siteBaseUrl } from "../../data/base-url";
 import {
   contourSegments,
   mapX,
@@ -21,6 +23,7 @@ interface NelderMeadVisualizationProps {
   scenario: VisualizationScenario;
   entries: readonly TraceIndexEntry[];
   onTraceChange(traceId: string): void;
+  derivedMedia?: DerivedMediaEntry;
 }
 
 type RankedVertex = { point: TracePoint; rank: "best" | "second-worst" | "worst" };
@@ -31,6 +34,7 @@ export function NelderMeadVisualization({
   trace,
   scenario,
   entries,
+  derivedMedia,
   onTraceChange,
 }: NelderMeadVisualizationProps) {
   const playback = usePlayback(trace.trace_id, trace.frames);
@@ -56,6 +60,9 @@ export function NelderMeadVisualization({
     .flatMap((candidateFrame) => candidateFrame.points.map((point) => point.value))
     .filter((value): value is number => value !== null)
     .reduce((best, value) => Math.min(best, value), Number.POSITIVE_INFINITY);
+  const thumbnail = derivedMedia?.files.find((file) => file.media_kind === "thumbnail");
+  const staticPng = derivedMedia?.files.find((file) => file.media_kind === "static_png");
+  const staticSvg = derivedMedia?.files.find((file) => file.media_kind === "static_svg");
 
   return (
     <article className="atlas-page nm-theater">
@@ -194,6 +201,28 @@ export function NelderMeadVisualization({
           <Link className="text-link" to={`/methods/${trace.method_id}`}>手法ページへ</Link>
         </aside>
       </div>
+
+      {derivedMedia && thumbnail && (
+        <section className="derived-media-card" aria-labelledby="derived-media-heading">
+          <img
+            alt={derivedMedia.alt_ja}
+            height={thumbnail.height}
+            src={`${siteBaseUrl()}data/${thumbnail.path}`}
+            width={thumbnail.width}
+          />
+          <div>
+            <p className="eyebrow">Derived media · deterministic</p>
+            <h2 id="derived-media-heading">再利用できる静止画</h2>
+            <p>{derivedMedia.caption_ja}</p>
+            <p className="atlas-note">frame {derivedMedia.frame_index + 1} · {derivedMedia.viewport_preset} · {derivedMedia.license_spdx_id}</p>
+            <div className="derived-media-links">
+              {staticPng && <a href={`${siteBaseUrl()}data/${staticPng.path}`}>PNGを開く</a>}
+              {staticSvg && <a href={`${siteBaseUrl()}data/${staticSvg.path}`}>SVGを開く</a>}
+            </div>
+            <small>{derivedMedia.attribution}</small>
+          </div>
+        </section>
+      )}
 
       <details className="text-alternative" open>
         <summary>静的summary / Text alternative</summary>
