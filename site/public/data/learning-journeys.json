@@ -1,5 +1,1487 @@
 {
-  "contract_version": "1.0.0",
+  "assessments": [
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC013",
+            "/methods/M_GAUSS_NEWTON",
+            "/methods/M_LEVENBERG_MARQUARDT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S003",
+            "/sources/S041",
+            "/sources/S056"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC013"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CERES",
+            "I_SCIPY_LEAST_SQUARES_LM"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_GAUSS_NEWTON",
+            "M_LEVENBERG_MARQUARDT",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC013",
+            "/methods/M_GAUSS_NEWTON",
+            "/methods/M_LEVENBERG_MARQUARDT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S003",
+            "/sources/S041",
+            "/sources/S056"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S003",
+            "S041",
+            "S056"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "gauss-newton",
+            "least-squares"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC013",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC017",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/methods/M_WEIGHTED_SUM",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC017"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CVXPY",
+            "I_PYMOO"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_EPSILON_CONSTRAINT",
+            "M_NSGA_II",
+            "M_WEIGHTED_SUM"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC017",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/methods/M_WEIGHTED_SUM",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S039",
+            "S055",
+            "S068"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "epsilon-constraint",
+            "multi-objective"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC017",
+      "missing_dimensions": [
+        "alternate_scenario"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC019",
+            "/methods/M_BRANCH_CUT",
+            "/methods/M_CP_SAT",
+            "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S024",
+            "/sources/S053",
+            "/sources/S054"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC019"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_GUROBI",
+            "I_ORTOOLS_ROUTING"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BRANCH_CUT",
+            "M_CP_SAT",
+            "M_LOCAL_SEARCH_COMBINATORIAL"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC019",
+            "/methods/M_BRANCH_CUT",
+            "/methods/M_CP_SAT",
+            "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S024",
+            "/sources/S053",
+            "/sources/S054"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S022",
+            "S023",
+            "S024",
+            "S053",
+            "S054"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "local-search-combinatorial"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC019",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC020",
+            "/methods/M_BFGS",
+            "/methods/M_DIRECT_COLLOCATION",
+            "/methods/M_MULTIPLE_SHOOTING",
+            "/sources/S042",
+            "/sources/S043",
+            "/sources/S050",
+            "/sources/S076"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC020"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ACADOS",
+            "I_CASADI",
+            "I_DRAKE"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_DIRECT_COLLOCATION",
+            "M_MULTIPLE_SHOOTING"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC020",
+            "/methods/M_BFGS",
+            "/methods/M_DIRECT_COLLOCATION",
+            "/methods/M_MULTIPLE_SHOOTING",
+            "/sources/S042",
+            "/sources/S043",
+            "/sources/S050",
+            "/sources/S076"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S042",
+            "S043",
+            "S050",
+            "S076"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "direct-collocation",
+            "multiple-shooting"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC020",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC025",
+            "/methods/M_ACTIVE_SET_QP",
+            "/methods/M_ADMM_QP",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S016",
+            "/sources/S043",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S062",
+            "/sources/S076"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC025"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ACADOS",
+            "I_OSQP"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_ACTIVE_SET_QP",
+            "M_ADMM_QP",
+            "M_DIFFERENTIAL_EVOLUTION"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC025",
+            "/methods/M_ACTIVE_SET_QP",
+            "/methods/M_ADMM_QP",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S016",
+            "/sources/S043",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S062",
+            "/sources/S076"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S010",
+            "S012",
+            "S016",
+            "S043",
+            "S055",
+            "S056",
+            "S062",
+            "S076"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "active-set-qp",
+            "admm-qp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC025",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC026",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_NEWTON_CG",
+            "/methods/M_TRUST_KRYLOV",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S019",
+            "/sources/S056"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC026"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_IPOPT",
+            "I_PETSC_TAO"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_DIFFERENTIAL_EVOLUTION",
+            "M_NEWTON_CG",
+            "M_TRUST_KRYLOV"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC026",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_NEWTON_CG",
+            "/methods/M_TRUST_KRYLOV",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S019",
+            "/sources/S056"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S017",
+            "S019",
+            "S056"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "newton-cg",
+            "trust-krylov"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC026",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/budget-allocation",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "budget-allocation"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/budget-allocation",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S055",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "budget-allocation",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "cross_surface_links",
+        "source_review"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_CONSTRAINED_FAILURE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_CONSTRAINED_DISK_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/constrained-design",
+            "/theater/learning/SCENARIO_CONSTRAINED_DISK",
+            "/compare/COMPARE_CONSTRAINED_FAILURE",
+            "/methods/M_BFGS",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S030",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "constrained-design"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_IPOPT",
+            "I_SCIPY_SLSQP"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_INTERIOR_POINT_NLP",
+            "M_SLSQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_CONSTRAINED_DISK"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/constrained-design",
+            "/theater/learning/SCENARIO_CONSTRAINED_DISK",
+            "/compare/COMPARE_CONSTRAINED_FAILURE",
+            "/methods/M_BFGS",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S030",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S002",
+            "S017",
+            "S029",
+            "S030",
+            "S055",
+            "S056",
+            "S064",
+            "S087"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_CONSTRAINED_DISK"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "interior-point-nlp",
+            "slsqp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "constrained-design",
+      "missing_dimensions": [
+        "alternate_scenario"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_GRADIENT_FAMILY"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/hyperparameter-search",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S034",
+            "/sources/S035"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "hyperparameter-search"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_OPTUNA"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_CP_SAT",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/hyperparameter-search",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S034",
+            "/sources/S035"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S001",
+            "S002",
+            "S034",
+            "S035"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "method.nelder-mead"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "hyperparameter-search",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/portfolio-allocation",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_SLSQP",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "portfolio-allocation"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CVXPY"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_LP_QP_CONIC",
+            "M_NELDER_MEAD",
+            "M_SLSQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/portfolio-allocation",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_SLSQP",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S001",
+            "S002",
+            "S004",
+            "S010",
+            "S012",
+            "S014",
+            "S054",
+            "S055",
+            "S056",
+            "S064"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "lp-qp-conic",
+            "slsqp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "portfolio-allocation",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/shift-scheduling",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "shift-scheduling"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/shift-scheduling",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S055",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "shift-scheduling",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    }
+  ],
+  "contract_version": "1.1.0",
   "dataset_version": "0.11.0",
   "generated_at": "2026-07-16T00:00:00Z",
   "journeys": [
@@ -11,8 +1493,14 @@
       "case_id": "EC013",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_GAUSS_NEWTON"
@@ -40,7 +1528,7 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA033",
@@ -48,7 +1536,8 @@
       "scenarios": [],
       "source_ids": [
         "S003",
-        "S041"
+        "S041",
+        "S056"
       ],
       "status": "partial",
       "takeaway": "rank、残差scale、外れ値、初期値依存性を確認し、二乗和だけでparameterの一意性を断定しません。",
@@ -67,7 +1556,9 @@
           "comparison_id": "COMPARE_PARETO_PREFERENCE"
         }
       ],
-      "completion_reasons": [],
+      "completion_reasons": [
+        "missing_failure_or_sensitivity_scenario"
+      ],
       "conditional_method_ids": [
         "M_EPSILON_CONSTRAINT"
       ],
@@ -94,7 +1585,7 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA038",
@@ -115,7 +1606,7 @@
         "S055",
         "S068"
       ],
-      "status": "complete",
+      "status": "partial",
       "takeaway": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
       "title_en": "Explore a cost-performance Pareto trade-off",
       "title_ja": "costと性能のPareto trade-offを探索する"
@@ -128,8 +1619,14 @@
       "case_id": "EC019",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_CP_SAT"
@@ -157,15 +1654,17 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "deadline停止時の解は品質gapが未証明で、交通・service timeの変動もこの固定例には含みません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA031",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
+        "S022",
         "S023",
         "S024",
+        "S053",
         "S054"
       ],
       "status": "partial",
@@ -181,8 +1680,14 @@
       "case_id": "EC020",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_MULTIPLE_SHOOTING"
@@ -211,7 +1716,7 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "非線形動力学とpath constraintを守る軌道を設計したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "離散mesh上のfeasibilityであり、連続時間の安全性や動力学modelの正確さは保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA042",
@@ -220,6 +1725,7 @@
       "source_ids": [
         "S042",
         "S043",
+        "S050",
         "S076"
       ],
       "status": "partial",
@@ -235,13 +1741,20 @@
       "case_id": "EC025",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_ACTIVE_SET_QP"
       ],
       "content_ids": [
+        "active-set-qp",
         "admm-qp"
       ],
       "dataset_version": "0.11.0",
@@ -263,15 +1776,20 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "平均solve時間だけでは100Hzを保証できず、worst-case latencyとcold startを実機で検証する必要があります。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA043",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
+        "S010",
         "S012",
+        "S016",
         "S043",
+        "S055",
+        "S056",
+        "S062",
         "S076"
       ],
       "status": "partial",
@@ -287,8 +1805,14 @@
       "case_id": "EC026",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_TRUST_KRYLOV"
@@ -316,13 +1840,14 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "結果は離散PDE・inner tolerance・preconditionerに依存し、連続modelでの最適性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA045",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
+        "S002",
         "S017",
         "S019",
         "S056"
@@ -340,7 +1865,10 @@
       "case_id": "budget-allocation",
       "comparisons": [],
       "completion_reasons": [
-        "missing_comparison"
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario"
       ],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
@@ -367,7 +1895,7 @@
       "last_reviewed": "2026-07-14",
       "learning_objective": "複数施策に予算を配分し、効果を最大化したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "固定した期待効果を前提とする教材modelであり、施策間の相互作用や将来の効果変動は別途検証が必要です。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA006",
@@ -384,8 +1912,15 @@
         }
       ],
       "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
         "S054",
-        "S055"
+        "S055",
+        "S079"
       ],
       "status": "partial",
       "takeaway": "実測効果の不確実性と、予算制約の単位を分けて確認します。",
@@ -404,7 +1939,9 @@
           "comparison_id": "COMPARE_CONSTRAINED_FAILURE"
         }
       ],
-      "completion_reasons": [],
+      "completion_reasons": [
+        "missing_failure_or_sensitivity_scenario"
+      ],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -431,7 +1968,7 @@
       "last_reviewed": "2026-07-15",
       "learning_objective": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "2変数の教材modelで得た可行性は、実設計の強度modelや安全余裕を保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA009",
@@ -448,13 +1985,16 @@
         }
       ],
       "source_ids": [
+        "S002",
         "S017",
         "S029",
         "S030",
         "S055",
-        "S064"
+        "S056",
+        "S064",
+        "S087"
       ],
-      "status": "complete",
+      "status": "partial",
       "takeaway": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"
@@ -472,7 +2012,12 @@
         }
       ],
       "completion_reasons": [
-        "missing_primary_scenario"
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_NELDER_MEAD"
@@ -499,7 +2044,7 @@
       "last_reviewed": "2026-07-14",
       "learning_objective": "時間のかかる実験を少ない回数で改善したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "固定した探索範囲とevaluation budgetでの結果であり、別datasetやmodelでの優位性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA055",
@@ -507,7 +2052,9 @@
       "scenarios": [],
       "source_ids": [
         "S001",
-        "S002"
+        "S002",
+        "S034",
+        "S035"
       ],
       "status": "partial",
       "takeaway": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。",
@@ -522,8 +2069,14 @@
       "case_id": "portfolio-allocation",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_SLSQP"
@@ -550,7 +2103,7 @@
       "last_reviewed": "2026-07-14",
       "learning_objective": "リスクを抑えながら期待収益と運用制約を両立したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "期待収益と共分散の推定に依存し、取引costや将来分布の変化を保証範囲に含めません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA052",
@@ -558,7 +2111,15 @@
       "scenarios": [],
       "source_ids": [
         "S001",
-        "S054"
+        "S002",
+        "S004",
+        "S010",
+        "S012",
+        "S014",
+        "S054",
+        "S055",
+        "S056",
+        "S064"
       ],
       "status": "partial",
       "takeaway": "過去データの不確実性と、実運用での取引コストを別に検証します。",
@@ -573,8 +2134,14 @@
       "case_id": "shift-scheduling",
       "comparisons": [],
       "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
         "missing_primary_scenario",
-        "missing_comparison"
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
@@ -601,15 +2168,22 @@
       "last_reviewed": "2026-07-14",
       "learning_objective": "必要人数を満たしながら、希望と公平性を反映したい。",
       "limitations": [
-        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+        "固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA006",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
         "S054",
-        "S055"
+        "S055",
+        "S079"
       ],
       "status": "partial",
       "takeaway": "hard constraintとsoft constraintを最初に分離します。",
@@ -617,24 +2191,736 @@
       "title_ja": "スタッフのシフトを組む"
     }
   ],
-  "orphan_comparison_ids": [
-    "COMPARE_GRADIENT_DIVERGENCE"
+  "orphan_assets": [
+    {
+      "asset_id": "COMPARE_GRADIENT_DIVERGENCE",
+      "asset_type": "comparison",
+      "policy": "warning",
+      "reason_code": "comparison_without_journey"
+    },
+    {
+      "asset_id": "active-set",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "adam",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "adamw",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "admm",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "augmented-lagrangian",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "barrier-lp-qp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "basin-hopping",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "bfgs",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "branch-and-bound",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "branch-and-cut",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "bundle-method",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "cdcl-sat",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "cma-es",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "cobyla",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "cobyqa",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.convexity",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.derivative-free",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "constrained-continuous",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "coordinate-descent",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "cp-search",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "differential-evolution",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "dijkstra-astar",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "direct-global",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "direct-shooting",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "dual-annealing",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "dual-simplex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "dynamic-programming",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.composite-convex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.constrained-nlp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.constraint-programming",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.evolutionary",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.expensive-black-box",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.global-search",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.graph-dp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.local-dfo",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.manifold",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.multi-objective",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.optimal-control",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.smooth-local",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.stochastic-ml",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "family.trust-region",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "fista",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "genetic-algorithm",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "hungarian-algorithm",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "hyperband-asha",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "ilqr-ddp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "lbfgs",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "lbfgsb",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "mads",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "method.gradient-descent",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "mirror-descent",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "moead",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "momentum-sgd",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "multi-start",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "network-simplex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "newton-method",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "nonlinear-cg",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "nsga-iii",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "outer-approximation-minlp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "particle-swarm",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "pattern-search",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "pbt",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "pdlp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "powell",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "primal-dual-conic",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "primal-simplex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "projected-gradient",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "proximal-gradient",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "random-search",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "riemannian-gradient",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "riemannian-trust-region",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "sgd",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "shgo",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "simulated-annealing",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "smac",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "spatial-branch-and-bound",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "spsa",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "sqp",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "subgradient",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "tpe",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "trust-exact",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "trust-region-newton-cg",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "trust-region-reflective",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "turbo-saasbo",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "weighted-sum",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_ADAM_QUADRATIC",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_GD_QUADRATIC",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_NM_QUADRATIC",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_NM_ROSENBROCK",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "adam-quadratic",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "adam-quadratic-divergence",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "binary-knapsack-bnb-budget",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "gradient_descent-quadratic",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "gradient_descent-quadratic-divergence",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "momentum-quadratic",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "momentum-quadratic-divergence",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "nelder-mead-quadratic",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "nelder-mead-quadratic-shifted",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "nelder-mead-rosenbrock",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
+      "asset_id": "nelder-mead-rosenbrock-shifted",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    }
   ],
-  "orphan_scenario_ids": [
-    "SCENARIO_ADAM_QUADRATIC",
-    "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
-    "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
-    "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
-    "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
-    "SCENARIO_BO_1D_EXPLORE_NOISELESS",
-    "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
-    "SCENARIO_GD_QUADRATIC",
-    "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
-    "SCENARIO_MOMENTUM_QUADRATIC",
-    "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
-    "SCENARIO_NM_QUADRATIC",
-    "SCENARIO_NM_QUADRATIC_SHIFTED",
-    "SCENARIO_NM_ROSENBROCK",
-    "SCENARIO_NM_ROSENBROCK_SHIFTED"
-  ]
+  "summary": {
+    "milestone_status": "not_met",
+    "status_counts": {
+      "complete": 0,
+      "draft": 0,
+      "partial": 11
+    },
+    "target_complete_journeys": 5,
+    "total_journeys": 11
+  }
 }

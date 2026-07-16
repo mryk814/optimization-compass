@@ -254,6 +254,26 @@ caption {
 .home-maintainer-link { margin: 1.25rem 0 0; text-align: right; }
 .coverage-page { display: grid; gap: 2rem; width: 100%; min-width: 0; max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; box-sizing: border-box; }
 .coverage-page > *, .coverage-page > section { min-width: 0; }
+.journey-coverage { display: grid; gap: .85rem; padding: 1rem; border: 1px solid var(--border-color, #d8d8d2); border-radius: .75rem; background: var(--surface, #fff); }
+.journey-coverage-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.journey-coverage-heading h2 { margin: .1rem 0 0; }
+.journey-milestone { flex: none; border-radius: 999px; padding: .35rem .7rem; font-variant-numeric: tabular-nums; background: #f0ede4; }
+.journey-met { color: #175f40; background: #e2f2e9; }
+.journey-not_met { color: #7b510a; background: #f7ecd4; }
+.journey-status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
+.journey-status-grid article { display: flex; align-items: baseline; justify-content: space-between; padding: .55rem .7rem; border-radius: .45rem; background: #f7f6f1; }
+.journey-status-grid strong { font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+.journey-complete { border-left-color: #287a55; }
+.journey-partial { border-left-color: #b47816; }
+.journey-draft { border-left-color: #6f7080; }
+.journey-coverage .coverage-table-wrap th:first-child { min-width: 13rem; }
+.journey-coverage .coverage-table-wrap ul { margin: .4rem 0 0; padding-left: 1.15rem; }
+.journey-orphans { margin: 0; color: var(--muted-text, #62625e); font-size: .86rem; }
+.journey-orphans summary { cursor: pointer; }
+.journey-orphans ul { margin: .65rem 0 0; padding-left: 1.2rem; }
+.journey-orphans li + li { margin-top: .3rem; }
+.journey-warning { border-left-color: #b47816; }
+.journey-standalone { border-left-color: #6f7080; }
 .coverage-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
 .coverage-stat { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; border: 1px solid var(--border-color, #d8d8d2); border-left: .35rem solid #777; border-radius: .5rem; padding: .85rem 1rem; background: var(--surface, #fff); }
 .coverage-stat strong { font-size: 1.7rem; font-variant-numeric: tabular-nums; }
@@ -281,6 +301,8 @@ caption {
 @media (max-width: 600px) {
   .coverage-page { padding: 1.25rem .85rem 3rem; gap: 1.5rem; }
   .coverage-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .journey-coverage-heading { align-items: start; flex-direction: column; }
+  .journey-status-grid { grid-template-columns: 1fr; }
   .coverage-stat { display: grid; }
   .coverage-filters label, .coverage-filters select { width: 100%; }
 }

@@ -16,6 +16,7 @@ from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
 from optimization_compass.formulation_primer import build_formulation_primer_index
 from optimization_compass.learning_graph import build_learning_graph_index
+from optimization_compass.learning_journey_policy import load_learning_journey_asset_policy
 from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
@@ -51,6 +52,7 @@ from optimization_compass.view_spec import (
     ManifestAsset,
     ManifestCoverageAsset,
     ManifestDerivedMediaAsset,
+    ManifestLearningJourneyAsset,
     ManifestLicenseAsset,
     ManifestRecommendationAsset,
     ManifestTraceAsset,
@@ -95,6 +97,7 @@ COMPARISON_SEED = ROOT / "data/seeds/site_comparisons.json"
 SEARCH_BENCHMARK_SEED = ROOT / "data/seeds/search_benchmark.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
 FORMULATION_PRIMER_TERMS_SEED = ROOT / "data/seeds/formulation_primer_terms.json"
+LEARNING_JOURNEY_ASSET_POLICY_SEED = ROOT / "data/seeds/learning_journey_asset_policy.json"
 
 # Keep these labels aligned with the existing browser copy contract in web.py.
 ANSWER_LABELS_JA: dict[str, str] = {
@@ -288,6 +291,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         output_dir / "gallery.json",
         GALLERY_SEED,
         collection_field="cases",
+        contract_version="2.0.0",
         dataset_version=release["version"],
     )
     _write_json(
@@ -320,6 +324,43 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))
     comparison_index = json.loads((output_dir / "comparisons.json").read_text(encoding="utf-8"))
     content_pages = load_content(CONTENT_DIRECTORY)
+    journey_inventories = {
+        "case": {str(item["case_id"]) for item in gallery_index["cases"]},
+        "problem": {
+            str(item["problem_id"])
+            for item in repository.fetch_all("SELECT problem_id FROM problem_archetypes")
+        },
+        "scenario": {item.scenario_id for item in scenario_index.scenarios},
+        "comparison": {str(item["comparison_id"]) for item in comparison_index["comparisons"]},
+        "method": {
+            str(item["method_id"]) for item in repository.fetch_all("SELECT method_id FROM methods")
+        },
+        "implementation": {
+            str(item["implementation_id"])
+            for item in repository.fetch_all("SELECT implementation_id FROM implementations")
+        },
+        "content": {page.content_id for page in content_pages},
+        "source": {
+            str(item["source_id"]) for item in repository.fetch_all("SELECT source_id FROM sources")
+        },
+    }
+    asset_policy = load_learning_journey_asset_policy(
+        LEARNING_JOURNEY_ASSET_POLICY_SEED,
+        inventories={
+            "scenario": journey_inventories["scenario"],
+            "comparison": journey_inventories["comparison"],
+            "visualization_artifact": {
+                run.artifact_id for scenario in scenario_index.scenarios for run in scenario.runs
+            },
+            "content": journey_inventories["content"],
+        },
+    )
+    source_index = build_source_evidence_index(
+        repository,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        generated_visualizations=learning_slice_links,
+    )
     learning_journeys = build_learning_journey_index(
         dataset_version=release["version"],
         generated_at=generated_at,
@@ -327,28 +368,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         scenario_index=scenario_index,
         comparison_index=comparison_index,
         content_pages=content_pages,
-        inventories={
-            "case": {str(item["case_id"]) for item in gallery_index["cases"]},
-            "problem": {
-                str(item["problem_id"])
-                for item in repository.fetch_all("SELECT problem_id FROM problem_archetypes")
-            },
-            "scenario": {item.scenario_id for item in scenario_index.scenarios},
-            "comparison": {str(item["comparison_id"]) for item in comparison_index["comparisons"]},
-            "method": {
-                str(item["method_id"])
-                for item in repository.fetch_all("SELECT method_id FROM methods")
-            },
-            "implementation": {
-                str(item["implementation_id"])
-                for item in repository.fetch_all("SELECT implementation_id FROM implementations")
-            },
-            "content": {page.content_id for page in content_pages},
-            "source": {
-                str(item["source_id"])
-                for item in repository.fetch_all("SELECT source_id FROM sources")
-            },
-        },
+        source_index=source_index,
+        asset_policy=asset_policy,
+        inventories=journey_inventories,
     )
     _write_json(output_dir / "learning-journeys.json", learning_journeys)
     formulation_primer = build_formulation_primer_index(
@@ -408,12 +430,6 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         trace_index=trace_index,
     )
     _write_json(output_dir / "learning-graph.json", learning_graph)
-    source_index = build_source_evidence_index(
-        repository,
-        dataset_version=release["version"],
-        generated_at=generated_at,
-        generated_visualizations=learning_slice_links,
-    )
     _write_json(output_dir / "sources.json", source_index)
     search_index, retrieval_documents = build_search_artifacts(
         repository,
@@ -488,7 +504,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         ),
         traces=trace_asset,
         problems=ManifestAsset(version="1.0.0", path="problems.json"),
-        learning_journeys=ManifestAsset(version="1.0.0", path="learning-journeys.json"),
+        learning_journeys=ManifestLearningJourneyAsset(
+            version="1.1.0", path="learning-journeys.json"
+        ),
         formulation_primer=ManifestAsset(version="1.0.0", path="formulation-primer.json"),
         visualization_scenarios=ManifestVisualizationScenarioAsset(
             version="1.2.0", path=VISUALIZATION_SCENARIO_PATH
@@ -2102,6 +2120,7 @@ def _write_seeded_index(
     source: Path,
     *,
     collection_field: str,
+    contract_version: str,
     dataset_version: str,
 ) -> None:
     payload = json.loads(source.read_text(encoding="utf-8"))
@@ -2110,7 +2129,7 @@ def _write_seeded_index(
     _write_json(
         path,
         {
-            "contract_version": "1.0.0",
+            "contract_version": contract_version,
             "dataset_version": dataset_version,
             collection_field: payload[collection_field],
         },

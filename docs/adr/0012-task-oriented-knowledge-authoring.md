@@ -335,7 +335,7 @@ A proposed machine-readable result:
       "code": "gallery.unknown_method",
       "status": "fail",
       "path": "data/seeds/site_gallery.json",
-      "pointer": "/cases/4/candidate_method_ids/0",
+      "pointer": "/cases/4/candidate_methods/0/method_id",
       "entity_id": "example-case",
       "message": "unknown method M_EXAMPLE",
       "next_action": "add or correct the canonical method ID; do not edit generated gallery.json"

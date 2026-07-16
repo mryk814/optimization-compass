@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, datetime
-from typing import Literal
+from typing import Literal, cast
 from urllib.parse import urlparse
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -19,6 +19,30 @@ SOURCE_FRESHNESS_DAYS: dict[str, int] = {
     "original_paper": 730,
     "textbook": 730,
     "university_material": 730,
+}
+
+SourceType = Literal[
+    "official_documentation",
+    "official_issue",
+    "official_repository",
+    "original_paper",
+    "standard",
+    "textbook",
+    "university_material",
+    "vendor_manual",
+]
+SourceQuality = Literal["high", "primary", "supporting"]
+SourceCurrentness = Literal["historical_primary", "not_time_sensitive", "verified_current"]
+
+EXPECTED_CURRENTNESS_BY_SOURCE_TYPE: dict[str, SourceCurrentness] = {
+    "official_documentation": "verified_current",
+    "official_issue": "verified_current",
+    "official_repository": "verified_current",
+    "vendor_manual": "verified_current",
+    "standard": "verified_current",
+    "original_paper": "historical_primary",
+    "textbook": "not_time_sensitive",
+    "university_material": "verified_current",
 }
 
 
@@ -48,7 +72,7 @@ class EvidenceTarget(EvidenceModel):
 
 class SourceRecord(EvidenceModel):
     source_id: str = Field(min_length=1)
-    source_type: str = Field(min_length=1)
+    source_type: SourceType
     title: str = Field(min_length=1)
     publisher: str = Field(min_length=1)
     publication_date: str | None = None
@@ -57,8 +81,8 @@ class SourceRecord(EvidenceModel):
     license: Literal["unknown"] = "unknown"
     access_note: str = Field(min_length=1)
     supported_claim: str
-    source_quality: str
-    currentness_status: str
+    source_quality: SourceQuality
+    currentness_status: SourceCurrentness
     evidence_targets: list[EvidenceTarget]
 
     @field_validator("official_url")
@@ -149,7 +173,7 @@ def build_source_evidence_index(
         sources.append(
             SourceRecord(
                 source_id=str(row["source_id"]),
-                source_type=str(row["source_type"]),
+                source_type=cast(SourceType, str(row["source_type"])),
                 title=str(row["title"]),
                 publisher=str(row["author_or_organization"] or "unknown"),
                 publication_date=str(row["publication_date"]) or None,
@@ -157,8 +181,8 @@ def build_source_evidence_index(
                 official_url=str(row["url"]),
                 access_note=notes or "公開条件・再利用条件は公式公開元で確認してください。",
                 supported_claim=str(row["supported_claim"] or ""),
-                source_quality=str(row["source_quality"] or ""),
-                currentness_status=str(row["currentness_status"] or ""),
+                source_quality=cast(SourceQuality, str(row["source_quality"] or "")),
+                currentness_status=cast(SourceCurrentness, str(row["currentness_status"] or "")),
                 evidence_targets=targets_by_source[str(row["source_id"])],
             )
         )

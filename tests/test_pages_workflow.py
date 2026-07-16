@@ -3,6 +3,20 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+PR_AND_MAIN_CONDITION = (
+    "github.event_name == 'pull_request' || "
+    "(github.event_name == 'push' && github.ref == 'refs/heads/main')"
+)
+MAIN_ONLY_CONDITION = "github.event_name == 'push' && github.ref == 'refs/heads/main'"
+
+
+def _workflow_step(workflow: str, name: str) -> str:
+    marker = f"      - name: {name}\n"
+    start = workflow.index(marker)
+    next_step = workflow.find("\n      - name: ", start + len(marker))
+    end = next_step if next_step != -1 else len(workflow)
+    return workflow[start:end]
+
 
 def test_pages_has_one_validated_artifact_and_no_independent_workflow() -> None:
     root = Path(__file__).parents[1]
@@ -59,6 +73,8 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
         "tests/test_data_integrity.py",
         "tests/test_pages_workflow.py",
         "tests/test_pages_artifact.py",
+        "tests/test_readme_release_facts.py",
+        "uv run python scripts/sync_readme_facts.py --check",
         "uv run optimization-compass export-site-data --output site/public/data",
         "git diff --exit-code -- site/public/data",
         "uv run optimization-compass verify-data",
@@ -79,6 +95,47 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
 
     assert "Run Python smoke tests" in workflow
     assert "uv run pytest --cov" not in workflow
+
+
+def test_pull_requests_reject_stale_generated_site_data_and_release_drift() -> None:
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    regeneration = _workflow_step(workflow, "Regenerate site data from the validated database")
+    assert f"if: {PR_AND_MAIN_CONDITION}" in regeneration
+    assert "rm -rf site/public/data" in regeneration
+    assert "uv run optimization-compass export-site-data --output site/public/data" in regeneration
+    assert "git diff --exit-code -- site/public/data" in regeneration
+
+    deterministic_release = _workflow_step(
+        workflow, "Verify data, content, licenses, and deterministic release"
+    )
+    assert f"if: {PR_AND_MAIN_CONDITION}" in deterministic_release
+    assert "uv run optimization-compass verify-data" in deterministic_release
+    assert "uv run python scripts/verify_content.py" in deterministic_release
+    assert "uv run python scripts/verify_licensing.py" in deterministic_release
+    assert "uv run python scripts/rebuild_dataset.py --stage" in deterministic_release
+    assert (
+        "git diff --exit-code -- data site/public/data src/optimization_compass/resources"
+        in deterministic_release
+    )
+
+
+def test_publication_and_deployment_steps_remain_main_only() -> None:
+    workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+
+    for step_name in (
+        "Stamp deployment identity",
+        "Verify the exact Pages directory to upload",
+        "Upload the single validated Pages artifact",
+    ):
+        step = _workflow_step(workflow, step_name)
+        assert f"if: {MAIN_ONLY_CONDITION}" in step
+
+    browser_job = workflow[workflow.index("  browser_e2e:\n") : workflow.index("  deploy:\n")]
+    assert f"if: {MAIN_ONLY_CONDITION}" in browser_job
+
+    deploy_job = workflow[workflow.index("  deploy:\n") :]
+    assert f"if: {MAIN_ONLY_CONDITION}" in deploy_job
 
 
 def test_supply_chain_reports_are_part_of_the_validated_artifact_job() -> None:

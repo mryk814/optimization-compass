@@ -112,8 +112,11 @@ test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async (
 test("375px Coverageが横にはみ出さずfilterできる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/coverage");
   await expect(page.getByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Learning journey completeness" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Learning journey completeness table" })).toBeVisible();
+  await expect(page.getByText(/^\d+\/5 complete$/u)).toBeVisible();
   await page.getByLabel("Subject").selectOption("feature_family");
-  await expect(page.getByRole("row")).toHaveCount(11);
+  await expect(page.getByRole("region", { name: "Artifact inventory table" }).getByRole("row")).toHaveCount(11);
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
 });

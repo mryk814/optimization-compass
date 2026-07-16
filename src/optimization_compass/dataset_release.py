@@ -1005,6 +1005,8 @@ def publish_release(
     runtime_database: Path,
     version_file: Path,
     site_data_directory: Path,
+    readme_path: Path,
+    readme_content: str,
 ) -> None:
     verify_release_tree(staged_directory)
     manifests = list(staged_directory.glob("*_manifest.json"))
@@ -1043,6 +1045,7 @@ def publish_release(
     runtime_existed = runtime_database.exists()
     version_existed = version_file.exists()
     site_data_existed = site_data_directory.exists()
+    readme_existed = readme_path.exists()
     try:
         prepared = temporary / "prepared"
         backup = temporary / "backup"
@@ -1060,6 +1063,8 @@ def publish_release(
             shutil.copy2(version_file, backup / "DATASET_VERSION")
         if site_data_existed:
             shutil.copytree(site_data_directory, backup / "site-data")
+        if readme_existed:
+            shutil.copy2(readme_path, backup / "README.md")
         for staged_path in staged_directory.iterdir():
             target = prepared_data / staged_path.name
             if target.exists() and target.is_dir():
@@ -1078,6 +1083,8 @@ def publish_release(
         )
         prepared_site_data = prepared / "site-data"
         shutil.copytree(staged_site_data, prepared_site_data)
+        prepared_readme = prepared / "README.md"
+        prepared_readme.write_text(readme_content, encoding="utf-8", newline="\n")
 
         try:
             displaced_data = temporary / "displaced-data"
@@ -1089,17 +1096,20 @@ def publish_release(
             if site_data_existed:
                 _atomic_replace(site_data_directory, temporary / "displaced-site-data")
             _atomic_replace(prepared_site_data, site_data_directory)
+            _atomic_replace(prepared_readme, readme_path)
         except Exception:
             _restore_publish_targets(
                 data_directory=data_directory,
                 runtime_database=runtime_database,
                 version_file=version_file,
                 site_data_directory=site_data_directory,
+                readme_path=readme_path,
                 backup_directory=backup,
                 data_existed=data_existed,
                 runtime_existed=runtime_existed,
                 version_existed=version_existed,
                 site_data_existed=site_data_existed,
+                readme_existed=readme_existed,
             )
             raise
     finally:
@@ -1116,11 +1126,13 @@ def _restore_publish_targets(
     runtime_database: Path,
     version_file: Path,
     site_data_directory: Path,
+    readme_path: Path,
     backup_directory: Path,
     data_existed: bool,
     runtime_existed: bool,
     version_existed: bool,
     site_data_existed: bool,
+    readme_existed: bool,
 ) -> None:
     if data_directory.exists():
         if data_directory.is_dir():
@@ -1143,6 +1155,11 @@ def _restore_publish_targets(
         shutil.rmtree(site_data_directory)
     if site_data_existed:
         shutil.copytree(backup_directory / "site-data", site_data_directory)
+    _restore_file(
+        target=readme_path,
+        backup=backup_directory / "README.md",
+        existed=readme_existed,
+    )
 
 
 def _restore_file(*, target: Path, backup: Path, existed: bool) -> None:

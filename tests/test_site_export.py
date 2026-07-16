@@ -254,7 +254,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     }
     assert manifest_payload["learning_journeys"] == {
         "path": "learning-journeys.json",
-        "version": "1.0.0",
+        "version": "1.1.0",
     }
     assert (first_output / "learning-journeys.json").read_bytes() == (
         second_output / "learning-journeys.json"

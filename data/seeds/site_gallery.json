@@ -8,7 +8,7 @@
       "problem_archetype_id": "PA006",
       "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"}],
       "question_answers": {"Q01": "binary"},
-      "candidate_method_ids": ["M_CP_SAT"],
+      "candidate_methods": [{"method_id": "M_CP_SAT", "reason": "予算・選択・相互排他を離散制約として直接表し、可行性と最適性gapを確認できるため"}],
       "conditional_methods": [{"method_id": "MF_DISCRETE_EXACT", "reason": "線形緩和が強い小規模modelならMIP familyも比較する"}],
       "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "離散変数と大域保証の要求に合わない"}],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
@@ -24,7 +24,8 @@
       "constraints": "予算上限、最低実施数、相互排他条件。",
       "map_node_id": "answer:Q01:binary",
       "python_example": "from ortools.linear_solver import pywraplp\nsolver = pywraplp.Solver.CreateSolver(\"SCIP\")",
-      "practical_notes": "実測効果の不確実性と、予算制約の単位を分けて確認します。"
+      "practical_notes": "実測効果の不確実性と、予算制約の単位を分けて確認します。",
+      "limitations": ["固定した期待効果を前提とする教材modelであり、施策間の相互作用や将来の効果変動は別途検証が必要です。"]
     },
     {
       "case_id": "shift-scheduling",
@@ -34,7 +35,7 @@
       "problem_archetype_id": "PA006",
       "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"}],
       "question_answers": {"Q01": "binary"},
-      "candidate_method_ids": ["M_CP_SAT"],
+      "candidate_methods": [{"method_id": "M_CP_SAT", "reason": "資格・休憩・連続勤務などの論理制約を直接表し、必要人数を満たす割当を探索できるため"}],
       "conditional_methods": [{"method_id": "MF_DISCRETE_EXACT", "reason": "線形割当として十分に表せる場合はMIPも候補になる"}],
       "excluded_methods": [{"method_id": "M_GRADIENT_DESCENT", "reason": "シフト割当は離散・論理制約が中心"}],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
@@ -50,7 +51,8 @@
       "constraints": "資格、休憩、連続勤務、必要人数。",
       "map_node_id": "answer:Q01:binary",
       "python_example": "from ortools.sat.python import cp_model\nmodel = cp_model.CpModel()",
-      "practical_notes": "hard constraintとsoft constraintを最初に分離します。"
+      "practical_notes": "hard constraintとsoft constraintを最初に分離します。",
+      "limitations": ["固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"]
     },
     {
       "case_id": "hyperparameter-search",
@@ -60,7 +62,7 @@
       "problem_archetype_id": "PA055",
       "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"}],
       "question_answers": {"Q01": "continuous"},
-      "candidate_method_ids": ["M_BAYESIAN_OPT_GP"],
+      "candidate_methods": [{"method_id": "M_BAYESIAN_OPT_GP", "reason": "高価なblack-box評価をsurrogateで近似し、少ない試行から次の設定を選べるため"}],
       "conditional_methods": [{"method_id": "M_NELDER_MEAD", "reason": "低次元・低noiseで局所探索を許容する場合に比較する"}],
       "excluded_methods": [{"method_id": "M_CP_SAT", "reason": "実験結果を明示的な離散制約モデルとして扱えない"}],
       "implementation_ids": ["I_OPTUNA"],
@@ -76,7 +78,8 @@
       "constraints": "実験時間、メモリ、許容する設定範囲。",
       "map_node_id": "answer:Q01:continuous",
       "python_example": "import optuna\nstudy = optuna.create_study(direction=\"minimize\")",
-      "practical_notes": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。"
+      "practical_notes": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。",
+      "limitations": ["固定した探索範囲とevaluation budgetでの結果であり、別datasetやmodelでの優位性は保証しません。"]
     },
     {
       "case_id": "portfolio-allocation",
@@ -86,7 +89,7 @@
       "problem_archetype_id": "PA052",
       "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"}],
       "question_answers": {"Q01": "continuous"},
-      "candidate_method_ids": ["MF_LP_QP_CONIC"],
+      "candidate_methods": [{"method_id": "MF_LP_QP_CONIC", "reason": "二次riskと線形の配分制約を凸modelとして明示し、大域解を確認できるため"}],
       "conditional_methods": [{"method_id": "M_SLSQP", "reason": "非線形制約を追加し凸modelでなくなる場合に検討する"}],
       "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "共分散構造と制約を明示的に活かしにくい"}],
       "implementation_ids": ["I_CVXPY"],
@@ -102,7 +105,8 @@
       "constraints": "比率の上下限、合計1、集中投資上限。",
       "map_node_id": "answer:Q01:continuous",
       "python_example": "import cvxpy as cp\nw = cp.Variable(n)\nproblem = cp.Problem(cp.Minimize(risk), constraints)",
-      "practical_notes": "過去データの不確実性と、実運用での取引コストを別に検証します。"
+      "practical_notes": "過去データの不確実性と、実運用での取引コストを別に検証します。",
+      "limitations": ["期待収益と共分散の推定に依存し、取引costや将来分布の変化を保証範囲に含めません。"]
     },
     {
       "case_id": "EC013",
@@ -119,7 +123,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
       "question_answers": {"Q01": "continuous", "Q02": "residual_vector", "Q03": "sum_of_squares", "Q04": "bounds", "Q05": "jacobian_or_hvp", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "10_to_100", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "least_squares", "Q12": "one_off"},
-      "candidate_method_ids": ["M_LEVENBERG_MARQUARDT"],
+      "candidate_methods": [{"method_id": "M_LEVENBERG_MARQUARDT", "reason": "残差vectorとJacobianを使い、非線形最小二乗の局所stepを安定化できるため"}],
       "conditional_methods": [{"method_id": "M_GAUSS_NEWTON", "reason": "初期値が十分よく、Jacobianのrankと局所二次近似を信頼できる場合"}],
       "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "残差とJacobianの構造を捨て、診断可能性と評価効率を落とす"}],
       "implementation_ids": ["I_SCIPY_LEAST_SQUARES_LM", "I_CERES"],
@@ -135,7 +139,8 @@
       "constraints": "parameter boundsと、物理的に許される範囲。",
       "map_node_id": "answer:Q11:least_squares",
       "python_example": "import numpy as np\nfrom scipy.optimize import least_squares\n\nx = np.array([0.0, 1.0, 2.0])\ny = np.array([1.0, 2.8, 5.1])\nresidual = lambda p: p[0] * x + p[1] - y\nresult = least_squares(residual, x0=np.array([1.0, 0.0]))\nprint(result.x, result.cost)",
-      "practical_notes": "rank、残差scale、外れ値、初期値依存性を確認し、二乗和だけでparameterの一意性を断定しません。"
+      "practical_notes": "rank、残差scale、外れ値、初期値依存性を確認し、二乗和だけでparameterの一意性を断定しません。",
+      "limitations": ["局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"]
     },
     {
       "case_id": "EC017",
@@ -152,7 +157,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "pareto_set"}
       ],
       "question_answers": {"Q01": "continuous", "Q02": "simulation_only", "Q03": "multiobjective", "Q04": "bounds", "Q05": "unreliable_or_none", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "10_to_100", "Q09": "multiple_distinct_solutions", "Q10": "no_certificate_needed", "Q11": "other", "Q12": "parallel_evaluations"},
-      "candidate_method_ids": ["M_NSGA_II"],
+      "candidate_methods": [{"method_id": "M_NSGA_II", "reason": "微分なしの2目的simulationを並列評価し、weightを固定せず近似Pareto集合を探索できるため"}],
       "conditional_methods": [{"method_id": "M_EPSILON_CONSTRAINT", "reason": "preferenceを閾値として表せ、各scalar subproblemを信頼できるsolverで解ける場合"}],
       "excluded_methods": [{"method_id": "M_WEIGHTED_SUM", "reason": "非凸frontの一部を取得できず、weightだけでtrade-off全体を代表できない"}],
       "implementation_ids": ["I_PYMOO", "I_CVXPY"],
@@ -168,7 +173,8 @@
       "constraints": "設計boundsと安全上のfeasibility条件。",
       "map_node_id": "answer:Q03:multiobjective",
       "python_example": "from pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.optimize import minimize\nfrom pymoo.problems import get_problem\n\nresult = minimize(get_problem(\"zdt1\"), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F)",
-      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。"
+      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
+      "limitations": ["有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"]
     },
     {
       "case_id": "EC019",
@@ -185,7 +191,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "feasible_only"}
       ],
       "question_answers": {"Q01": "structured_or_unknown", "Q02": "explicit_algebraic", "Q03": "equation_or_feasibility", "Q04": "logical_or_combinatorial", "Q05": "not_differentiable", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "over_10000", "Q09": "global_candidate_desired", "Q10": "feasible_solution_first", "Q11": "scheduling_routing", "Q12": "one_off"},
-      "candidate_method_ids": ["M_LOCAL_SEARCH_COMBINATORIAL"],
+      "candidate_methods": [{"method_id": "M_LOCAL_SEARCH_COMBINATORIAL", "reason": "1000 stopsと10分のdeadlineで、最適性証明より早い良質可行routeを優先できるため"}],
       "conditional_methods": [{"method_id": "M_CP_SAT", "reason": "instanceが小さく、論理制約と時間窓をCP modelへ自然に書ける場合"}],
       "excluded_methods": [{"method_id": "M_BRANCH_CUT", "reason": "1000 stopsと短いdeadlineでは最適性証明より早い良質可行解を優先する"}],
       "implementation_ids": ["I_ORTOOLS_ROUTING", "I_GUROBI"],
@@ -201,7 +207,8 @@
       "constraints": "車両容量、時間窓、勤務時間、各stopの一度だけの訪問。",
       "map_node_id": "answer:Q11:scheduling_routing",
       "python_example": "from ortools.constraint_solver import pywrapcp\n\nmanager = pywrapcp.RoutingIndexManager(4, 1, 0)\nrouting = pywrapcp.RoutingModel(manager)\nprint(routing.Size())",
-      "practical_notes": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。"
+      "practical_notes": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。",
+      "limitations": ["deadline停止時の解は品質gapが未証明で、交通・service timeの変動もこの固定例には含みません。"]
     },
     {
       "case_id": "EC020",
@@ -218,7 +225,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
       "question_answers": {"Q01": "structured_or_unknown", "Q02": "automatic_differentiation_graph", "Q03": "general_nonlinear", "Q04": "dynamics_or_manifold", "Q05": "autodiff", "Q06": "minutes", "Q07": "deterministic_reliable", "Q08": "100_to_10000", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "optimal_control", "Q12": "one_off"},
-      "candidate_method_ids": ["M_DIRECT_COLLOCATION"],
+      "candidate_methods": [{"method_id": "M_DIRECT_COLLOCATION", "reason": "state・control・dynamics defectを疎な非線形programへ同時に転写できるため"}],
       "conditional_methods": [{"method_id": "M_MULTIPLE_SHOOTING", "reason": "長horizonでsingle shootingが不安定だが、区間積分を活用したい場合"}],
       "excluded_methods": [{"method_id": "M_BFGS", "reason": "trajectory、dynamics defect、sparsityをflat vectorのblack-box objectiveへ隠す"}],
       "implementation_ids": ["I_CASADI", "I_ACADOS", "I_DRAKE"],
@@ -234,7 +241,8 @@
       "constraints": "離散化したdynamics、state/control bounds、obstacleと終端条件。",
       "map_node_id": "answer:Q11:optimal_control",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
-      "practical_notes": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。"
+      "practical_notes": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。",
+      "limitations": ["離散mesh上のfeasibilityであり、連続時間の安全性や動力学modelの正確さは保証しません。"]
     },
     {
       "case_id": "EC025",
@@ -251,7 +259,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
       "question_answers": {"Q01": "structured_or_unknown", "Q02": "explicit_algebraic", "Q03": "quadratic", "Q04": "dynamics_or_manifold", "Q05": "analytic_gradient", "Q06": "milliseconds_or_less", "Q07": "deterministic_reliable", "Q08": "100_to_10000", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "optimal_control", "Q12": "online_or_realtime"},
-      "candidate_method_ids": ["M_ADMM_QP"],
+      "candidate_methods": [{"method_id": "M_ADMM_QP", "reason": "同じ凸QP構造でwarm startとfactorization再利用を行い、反復solveを短縮できるため"}],
       "conditional_methods": [{"method_id": "M_ACTIVE_SET_QP", "reason": "active setがstep間で安定し、warm startと小規模dense構造を活かせる場合"}],
       "excluded_methods": [{"method_id": "M_DIFFERENTIAL_EVOLUTION", "reason": "population評価では100Hz deadline、warm start、残差監視を満たしにくい"}],
       "implementation_ids": ["I_OSQP", "I_ACADOS"],
@@ -267,7 +275,8 @@
       "constraints": "線形化dynamics、input/state bounds、初期state。",
       "map_node_id": "answer:Q12:online_or_realtime",
       "python_example": "import numpy as np\nimport osqp\nfrom scipy import sparse\n\nproblem = osqp.OSQP()\nproblem.setup(P=sparse.eye(2, format=\"csc\"), q=np.array([-1.0, -1.0]), A=sparse.eye(2, format=\"csc\"), l=np.zeros(2), u=np.ones(2), verbose=False)\nprint(problem.solve().x)",
-      "practical_notes": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。"
+      "practical_notes": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。",
+      "limitations": ["平均solve時間だけでは100Hzを保証できず、worst-case latencyとcold startを実機で検証する必要があります。"]
     },
     {
       "case_id": "EC026",
@@ -284,7 +293,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
       "question_answers": {"Q01": "continuous", "Q02": "simulation_only", "Q03": "general_nonlinear", "Q04": "implicit_or_failure", "Q05": "jacobian_or_hvp", "Q06": "hours_or_more", "Q07": "timeout_possible", "Q08": "huge_sparse_or_distributed", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "other", "Q12": "distributed"},
-      "candidate_method_ids": ["M_NEWTON_CG"],
+      "candidate_methods": [{"method_id": "M_NEWTON_CG", "reason": "Hessian-vector積を使って巨大なHessianを保持せず、局所Newton stepを計算できるため"}],
       "conditional_methods": [{"method_id": "M_TRUST_KRYLOV", "reason": "Hessian-vector積を使え、Newton stepの信頼領域制御が必要な場合"}],
       "excluded_methods": [{"method_id": "M_DIFFERENTIAL_EVOLUTION", "reason": "数百万自由度と高価なPDE solveにpopulation評価budgetが合わない"}],
       "implementation_ids": ["I_PETSC_TAO", "I_IPOPT"],
@@ -300,7 +309,8 @@
       "constraints": "PDE residual、境界条件、design bounds、solver failure。",
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
       "python_example": "from petsc4py import PETSc\n\ntao = PETSc.TAO().create()\ntao.setType(\"nls\")\nprint(tao.getType())",
-      "practical_notes": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。"
+      "practical_notes": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。",
+      "limitations": ["結果は離散PDE・inner tolerance・preconditionerに依存し、連続modelでの最適性は保証しません。"]
     },
     {
       "case_id": "constrained-design",
@@ -317,7 +327,7 @@
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
       "question_answers": {"Q01": "continuous", "Q02": "explicit_algebraic", "Q03": "quadratic", "Q04": "nonlinear", "Q05": "analytic_gradient", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "under_10", "Q09": "local_is_fine", "Q10": "feasible_solution_first", "Q11": "other", "Q12": "one_off"},
-      "candidate_method_ids": ["M_SLSQP"],
+      "candidate_methods": [{"method_id": "M_SLSQP", "reason": "少数の連続変数と滑らかな非線形constraintを、解析勾配付きで同時に扱えるため"}],
       "conditional_methods": [{"method_id": "M_INTERIOR_POINT_NLP", "reason": "大規模・疎で、barrier法とsparse derivativeを活かせる場合"}],
       "excluded_methods": [{"method_id": "M_BFGS", "reason": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す"}],
       "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
@@ -333,7 +343,8 @@
       "constraints": "許容領域を表す非線形不等式とdesign bounds。",
       "map_node_id": "answer:Q04:nonlinear",
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nobjective = lambda x: float(x @ x)\nconstraint = {\"type\": \"ineq\", \"fun\": lambda x: 1.0 - (x[0]-1.0)**2 - (x[1]-1.0)**2}\nresult = minimize(objective, np.array([1.8, 1.8]), constraints=constraint, method=\"SLSQP\")\nprint(result.x, result.fun)",
-      "practical_notes": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。"
+      "practical_notes": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
+      "limitations": ["2変数の教材modelで得た可行性は、実設計の強度modelや安全余裕を保証しません。"]
     }
   ]
 }

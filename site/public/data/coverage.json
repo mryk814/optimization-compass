@@ -945,14 +945,15 @@
           "target_ids": []
         },
         "content": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "branch-and-bound",
             "branch-and-cut",
             "family.discrete-structure",
-            "outer-approximation-minlp"
+            "outer-approximation-minlp",
+            "spatial-branch-and-bound"
           ]
         },
         "gallery": {
@@ -996,7 +997,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 41,
+          "count": 42,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1040,7 +1041,8 @@
             "budget-allocation",
             "family.discrete-structure",
             "outer-approximation-minlp",
-            "shift-scheduling"
+            "shift-scheduling",
+            "spatial-branch-and-bound"
           ]
         },
         "recommendation": {
@@ -1459,15 +1461,17 @@
           "target_ids": []
         },
         "content": {
-          "count": 6,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "active-set-qp",
             "admm-qp",
             "barrier-lp-qp",
             "dual-simplex",
             "lp-qp-conic",
             "pdlp",
+            "primal-dual-conic",
             "primal-simplex"
           ]
         },
@@ -1512,7 +1516,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1552,12 +1556,14 @@
             "S056",
             "S062",
             "S078",
+            "active-set-qp",
             "admm-qp",
             "barrier-lp-qp",
             "dual-simplex",
             "lp-qp-conic",
             "pdlp",
             "portfolio-allocation",
+            "primal-dual-conic",
             "primal-simplex"
           ]
         },
@@ -1622,12 +1628,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "family.manifold",
+            "riemannian-gradient",
+            "riemannian-trust-region"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -1656,7 +1664,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1668,7 +1676,10 @@
             "I_PYMANOPT",
             "S044",
             "S045",
-            "S071"
+            "S071",
+            "family.manifold",
+            "riemannian-gradient",
+            "riemannian-trust-region"
           ]
         },
         "recommendation": {
@@ -1821,12 +1832,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 3,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "direct-collocation",
             "direct-shooting",
+            "family.optimal-control",
+            "ilqr-ddp",
             "multiple-shooting"
           ]
         },
@@ -1857,7 +1870,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1876,6 +1889,8 @@
             "S076",
             "direct-collocation",
             "direct-shooting",
+            "family.optimal-control",
+            "ilqr-ddp",
             "multiple-shooting"
           ]
         },
@@ -2199,16 +2214,18 @@
           "target_ids": []
         },
         "content": {
-          "count": 6,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bayesian-optimization",
             "family.expensive-black-box",
             "hyperband-asha",
+            "pbt",
             "random-search",
             "smac",
-            "tpe"
+            "tpe",
+            "turbo-saasbo"
           ]
         },
         "gallery": {
@@ -2241,7 +2258,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 37,
+          "count": 39,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2279,9 +2296,11 @@
             "family.expensive-black-box",
             "hyperband-asha",
             "hyperparameter-search",
+            "pbt",
             "random-search",
             "smac",
-            "tpe"
+            "tpe",
+            "turbo-saasbo"
           ]
         },
         "recommendation": {
@@ -2352,13 +2371,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "family.trust-region",
             "gauss-newton",
             "least-squares",
+            "trust-exact",
             "trust-krylov",
             "trust-region-newton-cg",
             "trust-region-reflective"
@@ -2396,7 +2416,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 27,
+          "count": 28,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2424,6 +2444,7 @@
             "family.trust-region",
             "gauss-newton",
             "least-squares",
+            "trust-exact",
             "trust-krylov",
             "trust-region-newton-cg",
             "trust-region-reflective"
@@ -2577,12 +2598,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "active-set-qp"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -2609,7 +2630,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2622,7 +2643,9 @@
             "S014",
             "S016",
             "S055",
-            "S062"
+            "S056",
+            "S062",
+            "active-set-qp"
           ]
         },
         "recommendation": {
@@ -2636,7 +2659,7 @@
           ]
         },
         "source": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2647,6 +2670,7 @@
             "S014",
             "S016",
             "S055",
+            "S056",
             "S062"
           ]
         },
@@ -5836,12 +5860,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "ilqr-ddp"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -5868,7 +5892,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5877,7 +5901,8 @@
             "S042",
             "S043",
             "S050",
-            "S076"
+            "S076",
+            "ilqr-ddp"
           ]
         },
         "recommendation": {
@@ -7879,12 +7904,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "pbt"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -7911,7 +7936,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7924,7 +7949,8 @@
             "S038",
             "S059",
             "S069",
-            "S075"
+            "S075",
+            "pbt"
           ]
         },
         "recommendation": {
@@ -8166,12 +8192,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "primal-dual-conic"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -8203,7 +8229,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8222,7 +8248,8 @@
             "S016",
             "S028",
             "S055",
-            "S062"
+            "S062",
+            "primal-dual-conic"
           ]
         },
         "recommendation": {
@@ -8575,12 +8602,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "riemannian-gradient"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -8609,7 +8636,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8619,7 +8646,8 @@
             "I_PYMANOPT",
             "S044",
             "S045",
-            "S071"
+            "S071",
+            "riemannian-gradient"
           ]
         },
         "recommendation": {
@@ -8664,12 +8692,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "riemannian-trust-region"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -8698,7 +8726,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8708,7 +8736,8 @@
             "I_PYMANOPT",
             "S044",
             "S045",
-            "S071"
+            "S071",
+            "riemannian-trust-region"
           ]
         },
         "recommendation": {
@@ -9348,12 +9377,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "spatial-branch-and-bound"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -9381,7 +9410,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9393,7 +9422,8 @@
             "S021",
             "S024",
             "S025",
-            "S028"
+            "S028",
+            "spatial-branch-and-bound"
           ]
         },
         "recommendation": {
@@ -9819,12 +9849,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "trust-exact"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -9851,14 +9881,15 @@
           "target_ids": []
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_TRUST_EXACT",
             "S002",
             "S003",
-            "S056"
+            "S056",
+            "trust-exact"
           ]
         },
         "recommendation": {
@@ -10167,12 +10198,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "turbo-saasbo"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -10200,7 +10231,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10214,7 +10245,8 @@
             "S038",
             "S059",
             "S069",
-            "S075"
+            "S075",
+            "turbo-saasbo"
           ]
         },
         "recommendation": {
