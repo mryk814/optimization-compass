@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 import math
+import shutil
 import struct
+import subprocess
+import tempfile
 import zlib
+from collections.abc import Sequence
+from functools import lru_cache
 from hashlib import sha256
 from html import escape
 from pathlib import Path
@@ -10,7 +15,7 @@ from typing import Literal
 
 from pydantic import Field
 
-from optimization_compass.trace_models import AlgorithmTrace, TraceModel
+from optimization_compass.trace_models import AlgorithmTrace, TraceFrame, TraceModel
 from optimization_compass.visualization_scenarios import VisualizationScenario
 
 MEDIA_ATTRIBUTION = (
@@ -18,6 +23,10 @@ MEDIA_ATTRIBUTION = (
 )
 MediaKind = Literal["thumbnail", "static_png", "static_svg", "animated_gif", "webm"]
 MediaType = Literal["image/png", "image/svg+xml", "image/gif", "video/webm"]
+FRAME_DURATION_SECONDS = 0.6
+ANIMATION_SAMPLE_COUNT = 10
+ANIMATION_WIDTH = 640
+ANIMATION_HEIGHT = 360
 
 
 class DerivedMediaFile(TraceModel):
@@ -28,6 +37,13 @@ class DerivedMediaFile(TraceModel):
     height: int = Field(gt=0)
     frame_index: int = Field(ge=0)
     duration_seconds: float | None = Field(default=None, gt=0)
+    bytes: int = Field(gt=0)
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+
+
+class DerivedMediaTextAsset(TraceModel):
+    media_type: Literal["text/vtt", "text/plain"]
+    path: str = Field(pattern=r"^media/[a-z0-9._/-]+\.(vtt|txt)$")
     bytes: int = Field(gt=0)
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
 
@@ -43,6 +59,8 @@ class DerivedMediaEntry(TraceModel):
     source_artifact_path: str = Field(min_length=1)
     source_artifact_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     frame_index: int = Field(ge=0)
+    animation_frame_indices: list[int] = Field(min_length=2)
+    frame_duration_seconds: float = Field(gt=0)
     viewport_preset: str = Field(min_length=1)
     camera_preset: str | None
     narration_version: str | None
@@ -55,16 +73,18 @@ class DerivedMediaEntry(TraceModel):
     caption_en: str = Field(min_length=1)
     license_spdx_id: Literal["CC-BY-4.0"]
     attribution: str = Field(min_length=1)
+    captions: DerivedMediaTextAsset
+    transcript: DerivedMediaTextAsset
     files: list[DerivedMediaFile] = Field(min_length=1)
 
 
 class DerivedMediaManifest(TraceModel):
-    contract_version: Literal["1.0.0"]
+    contract_version: Literal["1.1.0"]
     dataset_version: str = Field(min_length=1)
     entries: list[DerivedMediaEntry] = Field(min_length=1)
 
 
-def write_static_media(
+def write_derived_media(
     output_dir: Path,
     *,
     scenario: VisualizationScenario,
@@ -82,7 +102,7 @@ def write_static_media(
     if frame_index >= len(trace.frames):
         raise ValueError("guided terminal frame is outside the trace")
     bounds = _plot_bounds(trace)
-    trajectory = _best_trajectory(trace)
+    trajectory = _best_trajectory(trace.frames)
     simplex = [
         point.coordinates
         for point in trace.frames[frame_index].points
@@ -97,10 +117,37 @@ def write_static_media(
     svg_bytes = _render_svg(scenario, bounds, trajectory, simplex)
     png_bytes = _render_png(1200, 675, bounds, trajectory, simplex)
     thumbnail_bytes = _render_png(600, 338, bounds, trajectory, simplex)
+    sampled_indices = {
+        round(index * (len(trace.frames) - 1) / (ANIMATION_SAMPLE_COUNT - 1))
+        for index in range(ANIMATION_SAMPLE_COUNT)
+    }
+    authored_indices = {step.frame_index for step in scenario.guided_story.steps}
+    animation_frames = [trace.frames[index] for index in sorted(sampled_indices | authored_indices)]
+    animation_indices = [frame.frame_index for frame in animation_frames]
+    gif_bytes, webm_bytes = _render_animation(trace, bounds, animation_frames)
+    captions_bytes = _render_captions(animation_frames)
+    transcript_bytes = _render_transcript(animation_frames)
+    duration = len(animation_frames) * FRAME_DURATION_SECONDS
     assets: list[tuple[MediaKind, MediaType, str, bytes, int, int]] = [
         ("static_svg", "image/svg+xml", f"media/{slug}/static.svg", svg_bytes, 1200, 675),
         ("static_png", "image/png", f"media/{slug}/static.png", png_bytes, 1200, 675),
         ("thumbnail", "image/png", f"media/{slug}/thumbnail.png", thumbnail_bytes, 600, 338),
+        (
+            "animated_gif",
+            "image/gif",
+            f"media/{slug}/animation.gif",
+            gif_bytes,
+            ANIMATION_WIDTH,
+            ANIMATION_HEIGHT,
+        ),
+        (
+            "webm",
+            "video/webm",
+            f"media/{slug}/animation.webm",
+            webm_bytes,
+            ANIMATION_WIDTH,
+            ANIMATION_HEIGHT,
+        ),
     ]
     files: list[DerivedMediaFile] = []
     for media_kind, media_type, relative_path, content, width, height in assets:
@@ -114,12 +161,25 @@ def write_static_media(
                 width=width,
                 height=height,
                 frame_index=frame_index,
+                duration_seconds=(duration if media_kind in {"animated_gif", "webm"} else None),
                 bytes=len(content),
                 sha256=sha256(content).hexdigest(),
             )
         )
+    captions = _write_text_asset(
+        output_dir,
+        relative_path=f"media/{slug}/captions.vtt",
+        media_type="text/vtt",
+        content=captions_bytes,
+    )
+    transcript = _write_text_asset(
+        output_dir,
+        relative_path=f"media/{slug}/transcript.txt",
+        media_type="text/plain",
+        content=transcript_bytes,
+    )
     entry = DerivedMediaEntry(
-        media_id="nelder-mead-quadratic-static",
+        media_id="nelder-mead-quadratic-derived",
         scenario_id=scenario.scenario_id,
         dataset_version=scenario.dataset_version,
         artifact_contract=scenario.artifact.artifact_contract,
@@ -129,6 +189,8 @@ def write_static_media(
         source_artifact_path=scenario.artifact.payload_path,
         source_artifact_sha256=scenario.artifact.payload_sha256,
         frame_index=frame_index,
+        animation_frame_indices=animation_indices,
+        frame_duration_seconds=FRAME_DURATION_SECONDS,
         viewport_preset=terminal_step.viewport_preset,
         camera_preset=terminal_step.camera_preset,
         narration_version=scenario.guided_story.story_version,
@@ -141,10 +203,12 @@ def write_static_media(
         caption_en=scenario.lesson.derived_media_caption.en,
         license_spdx_id="CC-BY-4.0",
         attribution=MEDIA_ATTRIBUTION,
+        captions=captions,
+        transcript=transcript,
         files=files,
     )
     return DerivedMediaManifest(
-        contract_version="1.0.0",
+        contract_version="1.1.0",
         dataset_version=scenario.dataset_version,
         entries=[entry],
     )
@@ -169,9 +233,9 @@ def _range_pair(value: object) -> tuple[float, float]:
     return float(value[0]), float(value[1])
 
 
-def _best_trajectory(trace: AlgorithmTrace) -> list[list[float]]:
+def _best_trajectory(frames: Sequence[TraceFrame], *, minimum_points: int = 2) -> list[list[float]]:
     trajectory: list[list[float]] = []
-    for frame in trace.frames:
+    for frame in frames:
         vertices = [
             point
             for point in frame.points
@@ -179,9 +243,168 @@ def _best_trajectory(trace: AlgorithmTrace) -> list[list[float]]:
         ]
         if vertices:
             trajectory.append(min(vertices, key=lambda point: point.value or 0.0).coordinates)
-    if len(trajectory) < 2:
-        raise ValueError("static media requires a trajectory with at least two points")
+    if len(trajectory) < minimum_points:
+        raise ValueError(f"derived media requires at least {minimum_points} trajectory points")
     return trajectory
+
+
+def _render_animation(
+    trace: AlgorithmTrace,
+    bounds: tuple[float, float, float, float],
+    animation_frames: list[TraceFrame],
+) -> tuple[bytes, bytes]:
+    rendered_frames: list[bytes] = []
+    for frame in animation_frames:
+        simplex = [point.coordinates for point in frame.points if point.role == "simplex-vertex"]
+        if len(simplex) != 3:
+            raise ValueError("Nelder-Mead animation requires three simplex vertices per frame")
+        trajectory = _best_trajectory(trace.frames[: frame.frame_index + 1], minimum_points=1)
+        rendered_frames.append(
+            _render_png(
+                ANIMATION_WIDTH,
+                ANIMATION_HEIGHT,
+                bounds,
+                trajectory,
+                simplex,
+            )
+        )
+    return _encode_animation(tuple(rendered_frames))
+
+
+@lru_cache(maxsize=4)
+def _encode_animation(rendered_frames: tuple[bytes, ...]) -> tuple[bytes, bytes]:
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        raise RuntimeError("ffmpeg is required to generate GIF and WebM derived media")
+    with tempfile.TemporaryDirectory(prefix="optimization-compass-media-") as temporary:
+        frame_dir = Path(temporary)
+        for sequence_index, content in enumerate(rendered_frames):
+            (frame_dir / f"frame-{sequence_index:04d}.png").write_bytes(content)
+
+        gif_path = frame_dir / "animation.gif"
+        webm_path = frame_dir / "animation.webm"
+        common = [
+            ffmpeg,
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-fflags",
+            "+bitexact",
+            "-framerate",
+            str(1 / FRAME_DURATION_SECONDS),
+            "-i",
+            str(frame_dir / "frame-%04d.png"),
+            "-an",
+            "-map_metadata",
+            "-1",
+        ]
+        _run_ffmpeg(
+            [
+                *common,
+                "-filter_complex",
+                "split[a][b];[a]palettegen=stats_mode=diff[p];"
+                "[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle",
+                "-loop",
+                "0",
+                "-flags:v",
+                "+bitexact",
+                str(gif_path),
+            ]
+        )
+        _run_ffmpeg(
+            [
+                *common,
+                "-c:v",
+                "libvpx-vp9",
+                "-pix_fmt",
+                "yuv420p",
+                "-b:v",
+                "0",
+                "-crf",
+                "34",
+                "-deadline",
+                "good",
+                "-cpu-used",
+                "4",
+                "-threads",
+                "1",
+                "-row-mt",
+                "0",
+                "-flags:v",
+                "+bitexact",
+                "-fflags",
+                "+bitexact",
+                "-metadata",
+                "creation_time=1970-01-01T00:00:00Z",
+                "-metadata",
+                "encoder=",
+                "-write_crc32",
+                "0",
+                str(webm_path),
+            ]
+        )
+        return gif_path.read_bytes(), webm_path.read_bytes()
+
+
+def _run_ffmpeg(command: list[str]) -> None:
+    result = subprocess.run(command, capture_output=True, check=False)
+    if result.returncode != 0:
+        error = result.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"ffmpeg derived-media export failed: {error}")
+
+
+def _render_captions(animation_frames: list[TraceFrame]) -> bytes:
+    cues = ["WEBVTT", ""]
+    for index, frame in enumerate(animation_frames):
+        start = index * FRAME_DURATION_SECONDS
+        end = (index + 1) * FRAME_DURATION_SECONDS
+        cues.extend(
+            [
+                str(index + 1),
+                f"{_vtt_time(start)} --> {_vtt_time(end)}",
+                f"{frame.event_label_ja or frame.event_type}",
+                f"{frame.event_label_en or frame.event_type}",
+                "",
+            ]
+        )
+    return ("\n".join(cues).rstrip() + "\n").encode("utf-8")
+
+
+def _render_transcript(animation_frames: list[TraceFrame]) -> bytes:
+    lines = ["Nelder-Mead guided animation transcript / 日英対訳", ""]
+    for index, frame in enumerate(animation_frames):
+        timestamp = _vtt_time(index * FRAME_DURATION_SECONDS)
+        lines.append(
+            f"[{timestamp}] frame {frame.frame_index + 1} · "
+            f"{frame.event_label_ja or frame.event_type} / "
+            f"{frame.event_label_en or frame.event_type}"
+        )
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
+def _vtt_time(seconds: float) -> str:
+    milliseconds = round(seconds * 1000)
+    hours, remainder = divmod(milliseconds, 3_600_000)
+    minutes, remainder = divmod(remainder, 60_000)
+    whole_seconds, milliseconds = divmod(remainder, 1000)
+    return f"{hours:02d}:{minutes:02d}:{whole_seconds:02d}.{milliseconds:03d}"
+
+
+def _write_text_asset(
+    output_dir: Path,
+    *,
+    relative_path: str,
+    media_type: Literal["text/vtt", "text/plain"],
+    content: bytes,
+) -> DerivedMediaTextAsset:
+    path = output_dir / relative_path
+    path.write_bytes(content)
+    return DerivedMediaTextAsset(
+        media_type=media_type,
+        path=relative_path,
+        bytes=len(content),
+        sha256=sha256(content).hexdigest(),
+    )
 
 
 def _render_svg(

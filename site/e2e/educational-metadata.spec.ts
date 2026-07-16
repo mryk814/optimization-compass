@@ -81,9 +81,11 @@ test("derived thumbnail and static formats are discoverable from the scenario", 
 }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/traces/nelder-mead-quadratic");
 
-  const thumbnail = page.getByRole("img", { name: /各frameの頂点順位/u });
-  await expect(thumbnail).toBeVisible();
-  await expect(thumbnail).toHaveAttribute("src", /media\/scenario-nm-quadratic\/thumbnail\.png/u);
+  const video = page.getByLabel(/各frameの頂点順位/u);
+  await expect(video).toBeVisible();
+  await expect(video).toHaveAttribute("poster", /media\/scenario-nm-quadratic\/thumbnail\.png/u);
+  await expect(video.locator("source")).toHaveAttribute("src", /media\/scenario-nm-quadratic\/animation\.webm/u);
+  await expect(video.locator("track")).toHaveAttribute("src", /media\/scenario-nm-quadratic\/captions\.vtt/u);
   await expect(page.getByRole("link", { name: "PNGを開く" })).toHaveAttribute(
     "href",
     /media\/scenario-nm-quadratic\/static\.png/u,
@@ -92,6 +94,9 @@ test("derived thumbnail and static formats are discoverable from the scenario", 
     "href",
     /media\/scenario-nm-quadratic\/static\.svg/u,
   );
+  await expect(page.getByRole("link", { name: "GIFを開く" })).toHaveAttribute("href", /animation\.gif/u);
+  await expect(page.getByRole("link", { name: "WebMを開く" })).toHaveAttribute("href", /animation\.webm/u);
+  await expect(page.getByRole("link", { name: "Transcriptを開く" })).toHaveAttribute("href", /transcript\.txt/u);
 });
 
 test("Nelder-Mead and Gradient share their trace frame with the linked 3D surface", async ({

@@ -65,7 +65,7 @@ const manifest = {
   recommendation: { version: "2.0.0", path: "recommendation/site-data.json" },
   problems: { version: "1.0.0", path: "problems.json" },
   visualization_scenarios: { version: "1.2.0", path: "visualization-scenarios.json" },
-  derived_media: { version: "1.0.0", path: "media/manifest.json" },
+  derived_media: { version: "1.1.0", path: "media/manifest.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
   sources: { version: "1.0.0", path: "sources.json" },
   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },

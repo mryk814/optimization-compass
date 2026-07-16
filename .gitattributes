@@ -1,1 +1,4 @@
 site/public/data/**/*.json text eol=lf
+site/public/data/media/**/*.svg text eol=lf
+site/public/data/media/**/*.vtt text eol=lf
+site/public/data/media/**/*.txt text eol=lf

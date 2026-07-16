@@ -237,7 +237,7 @@ class ManifestVisualizationScenarioAsset(ContractModel):
 
 
 class ManifestDerivedMediaAsset(ContractModel):
-    version: Literal["1.0.0"]
+    version: Literal["1.1.0"]
     path: str = Field(pattern=r"^media/manifest\.json$")
 
 
