@@ -113,11 +113,17 @@ test("Pareto sliceでpreferenceに応じた点をkeyboardで選べる", async ({
   await expect(page.getByText("実行結果 / Executable result")).toBeVisible();
   await expect(page.getByText(/単一bestではありません/u)).toBeVisible();
   await expect(page.getByText(/一般の非凸front/u)).toBeVisible();
+  await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
+  await expect(page.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
+  await expect(page.getByText(/9×9 gridから得たsampled teaching lens/u)).toBeVisible();
 
   const selectedF1 = page.locator("dl div").filter({ hasText: "Selected f₁" }).locator("dd");
   const before = await selectedF1.textContent();
   await page.getByRole("slider", { name: /f₁のweight/u }).press("ArrowRight");
   await expect(selectedF1).not.toHaveText(before ?? "");
+  const camera = page.getByRole("slider", { name: "3目的表示のカメラ方位" });
+  await camera.press("ArrowRight");
+  await expect(page.locator(".triobjective-lens output")).toHaveText("320°");
 });
 
 test("Galleryからcanonical constrained sliceへ移動できる", async ({ page, baseURL }) => {

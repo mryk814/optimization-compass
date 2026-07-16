@@ -4,6 +4,7 @@ import { describe, expect, test } from "vitest";
 import paretoPayload from "../../../public/data/visualizations/biobjective-quadratic-pareto-front.json";
 import feasiblePayload from "../../../public/data/visualizations/constrained-disk-feasible-region.json";
 import { parseLearningSliceArtifact } from "../../contracts/learning-slices";
+import { projectTriObjective } from "./renderers";
 import { LearningSliceRenderer } from "./renderer-registry";
 
 describe("learning-slice renderer registry", () => {
@@ -27,11 +28,22 @@ describe("learning-slice renderer registry", () => {
 
     expect(screen.getByRole("heading", { name: /単一bestではなく/u })).toBeVisible();
     expect(screen.getByText(/Weighted sumの注意/u)).toBeVisible();
+    expect(screen.getByRole("heading", { name: /3目的のtrade-off/u })).toBeVisible();
+    expect(screen.getByTestId("triobjective-scatter")).toBeVisible();
+    expect(screen.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
+    expect(screen.getByText(/sampled teaching lens/u)).toBeInTheDocument();
     const before = screen.getByText("Selected f₁").nextElementSibling?.textContent;
 
     fireEvent.change(screen.getByRole("slider", { name: /f₁のweight/u }), {
       target: { value: "80" },
     });
     expect(screen.getByText("Selected f₁").nextElementSibling?.textContent).not.toBe(before);
+  });
+
+  test("rotates the tri-objective projection without changing objective data", () => {
+    const first = projectTriObjective([1, 2, 3], [8, 8, 8], 315);
+    const rotated = projectTriObjective([1, 2, 3], [8, 8, 8], 405);
+    expect(first.x).not.toBe(rotated.x);
+    expect(Number.isFinite(first.y)).toBe(true);
   });
 });

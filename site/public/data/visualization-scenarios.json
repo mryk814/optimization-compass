@@ -3599,7 +3599,7 @@
     {
       "artifact": {
         "artifact_contract": "ParetoFront",
-        "artifact_contract_version": "1.0.0",
+        "artifact_contract_version": "1.1.0",
         "artifact_kind": "result_visualization",
         "observable_ids": [
           "dominated_points",
@@ -3607,10 +3607,10 @@
           "preference_selection",
           "ideal_nadir"
         ],
-        "payload_bytes": 10894,
+        "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "83faf486b6f68c3df1c4b303733215f7c3353b42ff02c89a8849574d7d5fc020",
-        "renderer_contract_version": "1.0.0",
+        "payload_sha256": "65dec58484d1b88bd4fa5bea59211a09d305b5fcdceae859c04055c6f3eb5354",
+        "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",

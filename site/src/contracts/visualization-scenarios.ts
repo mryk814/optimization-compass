@@ -69,9 +69,9 @@ export interface VisualizationScenario {
   artifact: {
     artifact_kind: VisualizationArtifactKind;
     artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty" | "FeasibleRegion" | "ParetoFront";
-    artifact_contract_version: "1.0.0";
+    artifact_contract_version: "1.0.0" | "1.1.0";
     renderer_family: RendererFamily;
-    renderer_contract_version: "1.0.0";
+    renderer_contract_version: "1.0.0" | "1.1.0";
     observable_ids: string[];
     payload_path: string;
     payload_bytes: number;
@@ -455,14 +455,14 @@ function parseArtifact(raw: unknown, field: string): VisualizationScenario["arti
   const data = record(raw, field);
   exact(data, ["artifact_kind", "artifact_contract", "artifact_contract_version", "renderer_family", "renderer_contract_version", "observable_ids", "payload_path", "payload_bytes", "payload_sha256"], field);
   if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty" && data.artifact_contract !== "FeasibleRegion" && data.artifact_contract !== "ParetoFront") throw new Error(`${field}.artifact_contract is invalid.`);
-  version(data.artifact_contract_version, `${field}.artifact_contract_version`);
-  version(data.renderer_contract_version, `${field}.renderer_contract_version`);
+  const artifactContractVersion = contractVersion(data.artifact_contract_version, `${field}.artifact_contract_version`);
+  const rendererContractVersion = contractVersion(data.renderer_contract_version, `${field}.renderer_contract_version`);
   return {
     artifact_kind: oneOf(data.artifact_kind, artifactKinds, `${field}.artifact_kind`),
     artifact_contract: data.artifact_contract,
-    artifact_contract_version: "1.0.0",
+    artifact_contract_version: artifactContractVersion,
     renderer_family: oneOf(data.renderer_family, rendererFamilies, `${field}.renderer_family`),
-    renderer_contract_version: "1.0.0",
+    renderer_contract_version: rendererContractVersion,
     observable_ids: nonEmptyTextList(data.observable_ids, `${field}.observable_ids`),
     payload_path: payloadPath(data.payload_path, `${field}.payload_path`),
     payload_bytes: positiveInteger(data.payload_bytes, `${field}.payload_bytes`),
@@ -532,8 +532,9 @@ function exact(data: Record<string, unknown>, expected: readonly string[], field
   if (unknown.length) throw new Error(`${field} has unknown fields: ${unknown.join(", ")}.`);
   if (missing.length) throw new Error(`${field} is missing fields: ${missing.join(", ")}.`);
 }
-function version(value: unknown, field: string): asserts value is "1.0.0" {
-  if (value !== "1.0.0") throw new Error(`${field} is unsupported.`);
+function contractVersion(value: unknown, field: string): "1.0.0" | "1.1.0" {
+  if (value !== "1.0.0" && value !== "1.1.0") throw new Error(`${field} is unsupported.`);
+  return value;
 }
 function scenarioVersion(value: unknown, field: string): asserts value is "1.2.0" {
   if (value !== "1.2.0") throw new Error(`${field} is unsupported.`);

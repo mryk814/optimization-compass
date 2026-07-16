@@ -132,8 +132,35 @@ class PreferenceSelection(TraceModel):
     objectives: tuple[float, float]
 
 
-class ParetoFrontArtifact(TraceModel):
+class TriObjectivePoint(TraceModel):
+    point_id: NonBlank
+    decision: tuple[float, float]
+    objectives: tuple[float, float, float]
+    dominated: bool
+
+
+class TriObjectiveReference(TraceModel):
+    ideal: tuple[float, float, float]
+    nadir: tuple[float, float, float]
+    ideal_is_feasible: bool
+    status: Literal["sampled_grid"]
+
+
+class TriObjectiveLens(TraceModel):
     contract_version: Literal["1.0.0"] = "1.0.0"
+    derivation_status: Literal["sampled_teaching_extension"]
+    objective_directions: tuple[Literal["minimize"], Literal["minimize"], Literal["minimize"]]
+    axis_labels: tuple[NonBlank, NonBlank, NonBlank]
+    objective_expressions: tuple[NonBlank, NonBlank, NonBlank]
+    points: list[TriObjectivePoint] = Field(min_length=10)
+    pareto_front: list[TriObjectivePoint] = Field(min_length=5)
+    reference: TriObjectiveReference
+    text_alternative_ja: NonBlank
+    limitations_ja: NonBlank
+
+
+class ParetoFrontArtifact(TraceModel):
+    contract_version: Literal["1.1.0"] = "1.1.0"
     dataset_version: NonBlank
     artifact_id: Literal["biobjective-quadratic-pareto-front"]
     artifact_kind: Literal["result_visualization"]
@@ -147,6 +174,7 @@ class ParetoFrontArtifact(TraceModel):
     pareto_front: list[ObjectivePoint] = Field(min_length=5)
     preference_selections: list[PreferenceSelection] = Field(min_length=3)
     reference: ParetoReference
+    triobjective_lens: TriObjectiveLens
     weighted_sum_limitation_ja: NonBlank
     text_alternative_ja: NonBlank
     source_ids: list[NonBlank] = Field(min_length=1)
@@ -158,6 +186,10 @@ class ParetoFrontArtifact(TraceModel):
             raise ValueError("Pareto front cannot contain dominated points")
         if not any(point.dominated for point in self.points):
             raise ValueError("Pareto artifact must include dominated contrast points")
+        if any(point.dominated for point in self.triobjective_lens.pareto_front):
+            raise ValueError("tri-objective sampled front cannot contain dominated points")
+        if not any(point.dominated for point in self.triobjective_lens.points):
+            raise ValueError("tri-objective lens must include dominated contrast points")
         return self
 
 
@@ -325,6 +357,29 @@ def generate_pareto_front_artifact(dataset_version: str) -> ParetoFrontArtifact:
                 objectives=(float(objectives[0]), float(objectives[1])),
             )
         )
+    tri_points = [
+        TriObjectivePoint(
+            point_id=point.point_id,
+            decision=point.decision,
+            objectives=(
+                point.objectives[0],
+                point.objectives[1],
+                (point.decision[0] - 2.0) ** 2 + point.decision[1] ** 2,
+            ),
+            dominated=False,
+        )
+        for point in points
+    ]
+    tri_classified = [
+        point.model_copy(update={"dominated": _is_dominated_three(point, tri_points)})
+        for point in tri_points
+    ]
+    tri_front = [point for point in tri_classified if not point.dominated]
+    tri_nadir = (
+        max(point.objectives[0] for point in tri_front),
+        max(point.objectives[1] for point in tri_front),
+        max(point.objectives[2] for point in tri_front),
+    )
     return ParetoFrontArtifact(
         dataset_version=dataset_version,
         artifact_id=PARETO_ARTIFACT_ID,
@@ -340,6 +395,36 @@ def generate_pareto_front_artifact(dataset_version: str) -> ParetoFrontArtifact:
         preference_selections=selections,
         reference=ParetoReference(
             ideal=(0.0, 0.0), nadir=(8.0, 8.0), ideal_is_feasible=False, status="known_exact"
+        ),
+        triobjective_lens=TriObjectiveLens(
+            derivation_status="sampled_teaching_extension",
+            objective_directions=("minimize", "minimize", "minimize"),
+            axis_labels=(
+                "f₁: originからの距離²",
+                "f₂: (2,2)からの距離²",
+                "f₃: (2,0)からの距離²",
+            ),
+            objective_expressions=(
+                "f₁=x²+y²",
+                "f₂=(x−2)²+(y−2)²",
+                "f₃=(x−2)²+y²",
+            ),
+            points=tri_classified,
+            pareto_front=tri_front,
+            reference=TriObjectiveReference(
+                ideal=(0.0, 0.0, 0.0),
+                nadir=tri_nadir,
+                ideal_is_feasible=False,
+                status="sampled_grid",
+            ),
+            text_alternative_ja=(
+                "3つの二次目的を最小化する同じ81点を目的空間に表示します。"
+                "橙の点はpreferenceで選んだ点で、2D投影とparallel coordinatesでも同じ点です。"
+            ),
+            limitations_ja=(
+                "9×9 gridから得たsampled teaching lensです。連続問題の真の3目的Pareto frontや"
+                "その曲面形状を保証するものではありません。"
+            ),
         ),
         weighted_sum_limitation_ja=(
             "この教材のfrontは凸なのでweighted sumでたどれます。一般の非凸frontでは、"
@@ -361,6 +446,15 @@ def _is_dominated(candidate: ObjectivePoint, points: list[ObjectivePoint]) -> bo
         for point in points
         if point.point_id != candidate.point_id
         for p1, p2 in [point.objectives]
+    )
+
+
+def _is_dominated_three(candidate: TriObjectivePoint, points: list[TriObjectivePoint]) -> bool:
+    return any(
+        all(value <= candidate.objectives[index] for index, value in enumerate(point.objectives))
+        and any(value < candidate.objectives[index] for index, value in enumerate(point.objectives))
+        for point in points
+        if point.point_id != candidate.point_id
     )
 
 
@@ -728,9 +822,9 @@ def _pareto_scenario(
         artifact=VisualizationArtifact(
             artifact_kind="result_visualization",
             artifact_contract="ParetoFront",
-            artifact_contract_version="1.0.0",
+            artifact_contract_version="1.1.0",
             renderer_family="pareto_front",
-            renderer_contract_version="1.0.0",
+            renderer_contract_version="1.1.0",
             observable_ids=[item.observable_id for item in observables],
             payload_path=path,
             payload_bytes=size,
