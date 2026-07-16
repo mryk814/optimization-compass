@@ -1093,6 +1093,249 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:admm-qp:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "凸QPを固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。",
+      "title": "Operator-splitting QP（ADMM型）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "次は箱型制約QP min x 1 2 x T P x + q T x subject to l ≤ x ≤ u をADMM型反復で解く教育用の例です。 P + ρ I のCholesky因数分解を1回だけ計算し、反復全体で使い回します。 python import numpy as np def solve_box_qp_admm ( p : np . ndarray , q : np . ndarray , lower : np . ndarray , upper : np . ndarray , rho : float = 1.0 , n_iter : int = 200 , ) -> tuple [ np . ndarray , np . ndarray , float , float ]: n = q . shape [ 0 ] factor = np . linalg . cholesky ( p + rho * np . eye ( n )) # 反復間で使い回す x = np . zeros ( n ) z = np . zeros ( n ) y = np . zeros ( n ) for _ in range ( n_iter ): rhs = - q + rho * ( z - y ) w = np . linalg . solve ( factor , rhs ) x = np . linalg . solve ( factor . T , w ) z_prev = z z = np . clip ( x + y , lower , upper ) y = y + x - z primal_residual = float ( np . linalg . norm ( x - z )) dual_residual = float ( rho * np . linalg . norm ( z - z_prev )) return x , z , primal_residual , dual_residual p = np . array ([[ 4.0 , 1.0 ], [ 1.0 , 2.0 ]]) q = np . array ([ 1.0 , 1.0 ]) lower = np . array ([ - 1.0 , - 1.0 ]) upper = np . array ([ 1.0 , 1.0 ]) x , z , primal_residual , dual_residual = solve_box_qp_admm ( p , q , lower , upper ) print ( x , z , primal_residual , dual_residual , 0.5 * x @ p @ x + q @ x ) より一般の A x を含む形や、conic制約、成熟したwarm start・presolveを使う場合は OSQP公式ドキュメント を確認します。利用versionのAPI・default parameterは公式referenceで確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:一般admmとどう違うか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "ADMM は f と g の分け方を問題ごとに設計する汎用framework ですが、QP専用solverは分割構造をあらかじめ固定します。代表形は min x 1 2 x T P x + q T x subject to l ≤ A x ≤ u で、 P ⪰ 0 なら凸QPです。OSQPはこの形をそのまま受け取り、 x と補助変数 z = A x を分けて交互に更新します。設計上の自由度を減らす代わりに、同じKKT行列を反復全体で固定して使えるようにしています。",
+      "title": "一般ADMMとどう違うか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:中精度で十分な場合と高精度が必要な場合",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "operator splittingは1反復が軽く、warm startや同じ問題構造の逐次再解（model predictive control、portfolio rebalancingの定期再最適化など）に強い一方、高精度な最適解へ収束させるには反復数がかさむことがあります。厳密なbasisやcertificate、高いduality gap精度が要る場合は primal-dual barrier法 など別方式を検討します。逆に、同じ疎構造のQPを繰り返し中精度で解くならfactorization再利用の利点が大きくなります。",
+      "title": "中精度で十分な場合と高精度が必要な場合"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "条件 理由 凸QP（ P ⪰ 0 ）として明示できる 分割構造がQPの標準形に依存するため 疎な係数行列 factorizationとmatrix-vector積を軽くできるため 同じ構造のQPを繰り返し解く KKT行列とfactorizationを使い回せるため 中精度で運用上十分 primal/dual residualの収束が漸近的なため",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:因数分解を1回で使い回す仕組み",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "各反復は次を繰り返します。 x を更新する線形系を解く（KKT行列は ρ を固定する限り不変） z を [ l , u ] へprojectionする dual変数を更新する P 、 A 、penalty parameter ρ が固定なら、KKT行列は反復間で変わりません。そのため最初の反復で1度だけfactorization（Cholesky や L D L T ）を計算し、以降の反復では前進後退代入だけで済ませられます。これがinterior-point法のように反復ごとに行列を作り直す方式との大きな違いです。",
+      "title": "因数分解を1回で使い回す仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "primal residualとdual residualが片方だけ停滞する infeasibleまたはunboundedの証明が返る 係数のscaleが桁違いで数値warningが出る 同じ精度要求に対し反復数が増え続ける 非凸な P を凸QPとして与えてしまっている 分割構造を自分で設計したい場合は ADMM 、単一のproxで済む問題は 近接勾配法 、LP・QP・conic全体の位置付けは LP・QP・錐最適化 で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "primal residual（ ‖ A x − z ‖ 相当） dual residual objective value ρ （penalty parameter）とscaling iteration数 factorization再利用回数",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:admm-qp:避ける-切り替える条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:admm-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:admm",
+        "content:concept.convexity",
+        "content:lp-qp-conic",
+        "content:proximal-gradient",
+        "method:M_ADMM_QP",
+        "source:S010",
+        "source:S012",
+        "source:S055",
+        "source:S062"
+      ],
+      "source_ids": [
+        "S010",
+        "S012",
+        "S055",
+        "S062"
+      ],
+      "text": "非凸QPを凸として誤って扱っている ρ やscalingが悪く残差が一方だけ停滞する 高精度なcertificateやexact basisが必要 制約や目的が線形・二次形式に収まらないnonlinear構造",
+      "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:admm:overview",
       "dataset_version": "0.11.0",
       "document_id": "content:admm",
@@ -1467,6 +1710,258 @@
       ],
       "text": "penaltyだけ増えconstraintが減らない multiplierが発散 inner solve failureを無視してouter update constraint scaleが極端に違う infeasible model non-smooth constraintをsmooth inner solverへ渡す terminationがinner objectiveだけ Warning constraint residualが小さくてもstationarityが悪ければ局所最適条件を満たしていません。objective、feasibility、stationarityを別々に報告します。",
       "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:newton-stepで何を解いているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "各反復では、primal変数 x 、dual変数 y 、slack/dual変数 s を同時に更新するNewton方程式を解きます。線形化されたKKT systemは対称かつ疎になることが多く、 μ を下げながらcomplementarity x T s を0へ近づけます。QPでも同様に、目的関数の二次項を含めたKKT systemを同じ枠組みで扱います。反復ごとにこの線形系を作り直して解く点が、 operator-splitting QP のようにfactorizationを固定して使い回す方式との違いです。",
+      "title": "Newton stepで何を解いているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "不等式制約をlog barrierへ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。",
+      "title": "Primal-dual barrier法（LP/QP）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "python import numpy as np from scipy.optimize import linprog cost = np . array ([ - 3.0 , - 2.0 ]) a_ub = np . array ([ [ 1.0 , 1.0 ], [ 2.0 , 1.0 ], ]) b_ub = np . array ([ 4.0 , 5.0 ]) result = linprog ( cost , A_ub = a_ub , b_ub = b_ub , bounds = [( 0.0 , None ), ( 0.0 , None )], method = \"highs-ipm\" , ) print ( result . success , result . x , - result . fun , result . status , result . message ) method=\"highs-ipm\" はHiGHSのinterior-point solverを明示的に指定します。同じ問題を method=\"highs-ds\" （dual simplex）と比べる場合、iteration数だけでなく1反復あたりのfactorization費用を含めて比較します。solverが持つcrossoverの有無やdefault parameterは利用versionの 公式SciPyリファレンス や HiGHSドキュメント で確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:simplexとの違いを何で見分けるか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "primal/dual simplexは頂点（basis）を辿って移動しますが、barrier法は多面体の内部を進み、頂点上のbasisを直接維持しません。 反復回数は問題規模にほぼ依存しにくい一方、1反復あたりのNewton system solveは重くなり得ます barrier法は明示的なbasisを返さないため、basisが必要な後続処理（sensitivity解析やwarm restartなど）にはcrossoverでbasic solutionへ変換する工程が使われる場合があります 停止判定はprimal/dual feasibility residualとduality gapで行い、simplexのようなreduced costの符号条件とは異なります 一般の非線形制約を持つ問題でのbarrier法の考え方は 非線形内点法 で扱っており、この記事はLP/QPという凸で構造化された場合に限定します。",
+      "title": "Simplexとの違いを何で見分けるか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:中心pathとは何か",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "LP標準形 min x c T x subject to A x = b , x ≥ 0 を考えると、barrier法は非負制約をlog barrierで置き換えます。 min x c T x − μ ∑ i log x i subject to A x = b μ > 0 を固定した解の集合を μ → 0 へ動かした軌跡が中心pathです。各 μ での最適性条件（KKT条件にcomplementarity x i s i = μ を加えたもの）を満たす点を追いながら、 μ を段階的に小さくしていきます。",
+      "title": "中心pathとは何か"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "条件 理由 LP/QP/conic構造が明示できる 中心pathの議論がこれらの標準形に依存するため 大規模・疎な問題 疎なKKT systemのfactorizationを利用できるため 明確なduality gapで停止判定したい primal/dual feasibilityとgapが直接得られるため basisを必ずしも必要としない barrier法自体はbasisを維持しないため",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "μ を下げてもduality gapが縮まらない KKT systemのfactorizationがmemoryを圧迫する coefficient scaleが桁違いでnumerical warningが出る infeasibleまたはunboundedの状態を目的値だけで見落とす crossover後のbasisが数値的に不安定 LP basisを保った再最適化は Primal Simplex と Dual Simplex 、非線形制約への一般化は 非線形内点法 、LP・QP・conic全体の位置付けは LP・QP・錐最適化 で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "primal feasibility residual dual feasibility residual duality gap（absolute / relative） barrier parameter μ complementarity（ x T s ） KKT system condition crossoverの有無とcost",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:barrier-lp-qp:避ける-切り替える条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:barrier-lp-qp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:dual-simplex",
+        "content:interior-point-nlp",
+        "content:lp-qp-conic",
+        "content:primal-simplex",
+        "method:M_BARRIER_LP_QP",
+        "source:S004",
+        "source:S016",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S055",
+        "S056"
+      ],
+      "text": "basisやwarm startによる再最適化を頻繁に行いたい（ primal simplex や dual simplex が候補） 制約や目的が非線形で、LP/QP標準形に収まらない coefficient scaleが極端で数値warningが出る crossoverのcostが許容できないほど大きい",
+      "title": "避ける／切り替える条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -2628,6 +3123,182 @@
       ],
       "text": "向きやすい条件: 凸だが非滑らかな目的関数 関数値と劣勾配oracleがある 単純なsubgradient法より安定した進行が必要 dual decompositionなどcutに意味がある 避ける条件: 非凸でcutがglobal lower modelにならない proxを閉形式で計算できる単純構造 bundle部分問題が元問題並みに重い 離散変数や強いnoiseを未model化",
       "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "conflictからclauseを学習してBoolean satisfiabilityを探索します。",
+      "title": "CDCL SAT"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "python from __future__ import annotations Clause = list [ int ] Formula = list [ Clause ] def unit_propagate ( formula : Formula , assignment : dict [ int , bool ]) -> bool : changed = True while changed : changed = False for clause in formula : literals = [ lit for lit in clause if assignment . get ( abs ( lit )) is None or ( lit > 0 ) == assignment [ abs ( lit )] ] if not literals : return False if len ( literals ) == 1 and abs ( literals [ 0 ]) not in assignment : lit = literals [ 0 ] assignment [ abs ( lit )] = lit > 0 changed = True return True def dpll ( formula : Formula , assignment : dict [ int , bool ], variables : list [ int ] ) -> dict [ int , bool ] | None : local = dict ( assignment ) if not unit_propagate ( formula , local ): return None unassigned = [ v for v in variables if v not in local ] if not unassigned : return local var = unassigned [ 0 ] for value in ( True , False ): local [ var ] = value result = dpll ( formula , local , variables ) if result is not None : return result del local [ var ] return None formula : Formula = [[ 1 , 2 ], [ - 1 , 3 ], [ - 2 , - 3 ], [ 1 , - 3 ]] solution = dpll ( formula , {}, [ 1 , 2 , 3 ]) print ( solution ) このコードはunit propagationと分岐だけを持つ教育用DPLLで、衝突分析と学習節を持つ本物のCDCLの簡略版です。実運用の学習節・非時系列バックトラック・restart戦略を持つsolverは OR-Tools CP-SAT や MiniZinc 経由のSAT backendで、利用versionの説明を確認します。 Note DPLLは分岐と単純なバックトラックだけで、CDCLの核心である学習節と非時系列バックトラックを持ちません。この違いは、衝突を何度も同じ原因で繰り返すかどうかに現れます。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:satとunsatはどちらも証明か",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "SATと判定された場合、実際に見つかった割当がそのまま「すべての節を満たす」ことの証明になります。UNSATと判定された場合も、学習節の導出を遡ると空節（矛盾）に至るresolution過程が証明になります。この意味で、CDCL SATは可否を確率的に推定するのではなく、可否そのものを証明する手法です。目的関数を直接最小化する手法ではないため、最適化に使う場合はSATを繰り返し呼び出して解を改良する制約を追加していくか、重み付き節を扱うMaxSATのような拡張へ切り替えます。",
+      "title": "SATとUNSATはどちらも証明か"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:何を割り当てているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "CDCL SATは、Boolean変数の集合に真偽値を割り当てて、CNF（連言標準形）で書かれた節の集合をすべて満たすかどうかを判定します。単純な全列挙と違い、各stepでunit propagationを行います。ある節でリテラルが1つを除いてすべて偽になっていれば、残る1つのリテラルの値は強制されます。これを繰り返して割当を広げ、決定変数の追加（分岐）が必要になった箇所だけ探索を分けます。",
+      "title": "何を割り当てているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "変数がBoolean、またはBoolean encodingへ落とせる有限domain 論理制約（含意、排他、含意連鎖）が中心 可行性の有無自体が知りたい、またはUNSATの証明が必要 最適化よりも充足可能性判定が主目的 本質的に連続で滑らかな問題や、実数精度を整数・Boolean scaleへ表せない問題では、CDCL SATを第一候補にしません。最適化そのものが目的なら CP-SAT のようにCDCLと線形緩和・探索を統合したsolverを検討します。",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "conflict数やbranch数が増え続けて収束しない domainが縮まらず、propagationがほぼ機能していない 整数・Boolean scaleが過大でencodingが巨大になる symmetryにより等価な割当を繰り返し探索する UNKNOWN （打ち切り）を UNSAT と誤読する 最適化の枠組みごと必要なら CP-SAT 、単純な列挙の比較対象としては Branch-and-Bound 、離散最適化全体の選び分けは 離散・組合せ最適化の選び分け で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:衝突から何を学ぶか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "propagationの結果、ある節のリテラルがすべて偽になると衝突（conflict）が起きます。CDCLはここで単純に1手戻るのではなく、衝突へ至った決定と含意の関係をresolutionで遡り、衝突の原因を表す新しい節（学習節）を導出します。学習節を元の節集合へ追加すると、同じ原因による衝突を将来skipできます。また、学習節から衝突と無関係な決定levelへ直接戻る非時系列バックトラック（non-chronological backtracking）ができるため、直前の1手だけを戻す探索より無駄な再探索を避けやすくなります。",
+      "title": "衝突から何を学ぶか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cdcl-sat:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cdcl-sat",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "method:M_CDCL_SAT",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "conflicts branches propagations best_bound（最適化拡張時） feasible_solutions",
+      "title": "診断値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3984,6 +4655,182 @@
         "S053"
       ],
       "text": "status objective / best bound / gap conflicts branches propagations restarts wall time first feasibleまでの時間 solution count presolve reduction random seed / worker count 並列worker数を変えると探索順と再現性が変わる場合があります。",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:domainをどう削っているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "制約プログラミング探索では、各変数が取り得る値の集合（domain）を明示的に持ちます。各制約は「この制約を満たせない値をdomainから消してよいか」を判定するpropagatorとして働き、矛盾なく消せる値を繰り返し取り除きます。domainがすべて単一値になれば解、どこかのdomainが空になれば矛盾です。全変数のdomainを縮められなくなった時点で、1つの変数を選んで値を仮決定し（branching）、再びpropagationへ戻ります。",
+      "title": "domainをどう削っているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:global-constraintの宣言力",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "alldifferent（全変数が異なる値を取る）やcumulative（資源使用量が容量を超えない）のようなglobal constraintは、同じ条件を等号・不等号の組み合わせへ分解するより強い伝播を行えます。alldifferentは、単なるペアごとの不等号制約の集合として書くよりも、ある値を1つの変数が確定した時点で他の変数のdomainから即座にその値を除去でき、矛盾をより早く検出します。global constraintの選び方は、モデルの読みやすさだけでなく、伝播の強さそのものを左右します。",
+      "title": "global constraintの宣言力"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "global constraint propagationとbranchingで有限domainを探索します。",
+      "title": "制約プログラミング探索"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "python from __future__ import annotations Domains = dict [ str , list [ int ]] def forward_check ( domains : Domains , var : str , value : int ) -> Domains | None : reduced = { name : list ( values ) for name , values in domains . items ()} reduced [ var ] = [ value ] for other in reduced : if other == var : continue reduced [ other ] = [ v for v in reduced [ other ] if v != value ] if not reduced [ other ]: return None return reduced def backtrack ( domains : Domains , order : list [ str ]) -> dict [ str , int ] | None : if not order : return { name : values [ 0 ] for name , values in domains . items ()} var , rest = order [ 0 ], order [ 1 :] for value in domains [ var ]: reduced = forward_check ( domains , var , value ) if reduced is not None : result = backtrack ( reduced , rest ) if result is not None : return result return None variables = [ \"a\" , \"b\" , \"c\" , \"d\" ] domains : Domains = { name : [ 0 , 1 , 2 , 3 ] for name in variables } solution = backtrack ( domains , variables ) print ( solution ) forward_check は、1つの変数へ値を仮決定するたびに他の変数のdomainからその値を除くalldifferentの簡易版propagationです。空になったdomainがあれば即座に打ち切ります。実務のglobal constraint propagatorやbranching戦略は、利用するsolver（ OR-Tools CP-SAT や MiniZinc 経由のbackend）の公式referenceで、利用versionの説明を確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:伝播の強さと分岐戦略の関係",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "伝播が強いほどdomainは早く縮みますが、伝播だけで解に至らない問題も多く、分岐戦略（どの変数を先に決めるか、どの値から試すか）が探索木の大きさを左右します。伝播が弱い制約表現では分岐の負担が増え、逆に高コストな強い伝播を使うと1 nodeあたりの計算が重くなります。目的関数がある場合は、見つかった解の目的値より良い値を要求する新しいbound制約を都度追加し、伝播と探索を反復して最適解へ絞り込みます。モデリング言語（ MiniZinc など）はモデルの記述とsolverの探索戦略を分離しており、同じモデルを異なるsolver backendで実行できます。",
+      "title": "伝播の強さと分岐戦略の関係"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "変数が有限domainの整数・Boolean alldifferent、cumulative、no-overlapなどglobal constraintで問題が自然に書ける scheduling・割当・pathのようなfeasibility中心の問題 目的関数があっても、bound制約の反復で最適化を扱える規模 本質的に連続で滑らかな問題や、実数精度を整数scaleで表せない問題では、このアプローチを第一候補にしません。",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "conflict数やbranch数が増え続けて収束しない propagationを重ねてもdomainがほとんど縮まらない 整数scaleが過大で、変数のdomainが不必要に大きい symmetryにより等価な部分木を繰り返し探索する 一部制約だけ強い伝播を持つglobal constraintへ書き換えられていない CDCLの学習節と非時系列バックトラックとの違いは CDCL SAT 、propagationと探索を統合した実装は CP-SAT 、制約プログラミング・SAT全体の選び分けは 制約プログラミング・SATの選び分け で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "conflicts branches propagations best_bound（最適化時） feasible_solutions",
       "title": "診断値"
     },
     {
@@ -5975,6 +6822,190 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:30秒でつかむ",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "このfamilyの気持ちは、 変数が取り得る値の範囲（domain）を制約から論理的に削り、削り切れなかった部分だけ分岐して探すこと です。 見ているもの: 各変数のdomain、制約の伝播結果、衝突（conflict） 動かすもの: domainの縮小と、分岐による探索木の分割 前進の判断: domainが縮む、conflictの原因が学習節として再利用できる、実行可能解が見つかる 主な弱点: 伝播が弱い制約表現では爆発しやすい、連続・滑らかな構造の利用は弱い 「CP-SATが常に最良」という順位ではありません。可否・組合せ構造・論理制約が主役の問題で、伝播の強さと探索・学習の仕組みが噛み合うかを条件で判断します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "domain propagation、learning、searchを用いて論理・組合せ制約の可行性と最適化を扱う手法群の入口です。",
+      "title": "制約プログラミング・SATの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:うまくいったサインと切替サイン",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "うまく進んでいるときは、探索が進むほど手がかりが増えます。 domainが分岐のたびに目に見えて縮む conflict/branchあたりのpropagationが多く、探索木が浅い 学習節（CDCL/CP-SATの内部）が同種の衝突を再発させない best boundとincumbentのgapが縮む 切替サイン: conflict/node数が増え続けて収束しない → 伝播・分岐戦略・model表現を見直す domainが縮まらない → global constraintの選び方やencodingを見直す 整数scaleが過大 → 単位・離散化を見直す、またはMILP系へ切り替える 本質的に連続・滑らかな構造が支配的 → NLP/QP系のfamilyへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:まず確認すること",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "確認項目 選択への影響 変数のdomain 有限domainか、Boolean/整数へ意味のあるencodingができるか 制約の種類 論理・global constraintが中心か、線形整数構造が強いか 最適化か充足か 目的関数の有無、bound反復で十分な規模か 証明の必要性 feasibility/infeasibilityの証明そのものが成果物か 整数化の妥当性 実数精度を整数・Booleanのscaleへ落として意味が保たれるか 論理・scheduling・resource制約が中心ならこのfamilyを第一候補にしますが、整数線形構造（線形目的関数と線形不等式）が強い問題は、MILP系のBranch-and-Cutのような手法とも比較する価値があります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:コラム-可否判定と最適化はどう繋がるか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "SATやCPの探索は、もともと「制約をすべて満たせるか」という可否判定として発展しました。最適化は、見つけた解より良い値を要求するbound制約を追加してSAT/CPを繰り返し呼ぶことで扱えます。CP-SATのような実装は、この反復とlinear relaxationやcutを内部で統合しており、単純な繰り返し呼び出しより効率的です。MaxSATのように、制約の一部を重み付きで緩めて最適化そのものを目的関数化する拡張もあります。",
+      "title": "コラム: 可否判定と最適化はどう繋がるか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:小さな比較の型",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "比較ではsolution qualityだけでなく、time limit・seed・worker数を揃えます。 python experiment = { \"problem_instance\" : \"same-finite-domain-model\" , \"domain_representation\" : \"boolean-or-integer\" , \"time_limit_seconds\" : 60 , \"random_seed\" : 7 , \"worker_count\" : 1 , \"methods\" : [ \"cp-sat\" , \"cp-search\" , \"cdcl-sat\" ], } assert experiment [ \"time_limit_seconds\" ] > 0",
+      "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:条件付きの選び分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "役割 手法 優先しやすい条件 切り替えを考える条件 伝播・学習・探索を統合した既定候補 CP-SAT 論理・scheduling・assignment制約が中心で、最適化と証明の両方が欲しい 整数線形構造が強く、専用MILP solverの方が緩和が強い domain縮小の仕組みを学ぶ入口 制約プログラミング探索 global constraintで問題を書きたい、propagationと分岐の関係を理解したい 大規模化して自作の伝播では収束しない Boolean充足可能性そのものが焦点 CDCL SAT 論理制約中心で、可否そのものやUNSAT証明が目的 最適化そのものが目的で、目的関数を直接扱いたい 整数線形構造が強い場合の代替 Branch and Cut 線形目的関数と線形不等式が中心で、強い連続緩和が使える 論理・scheduling制約が支配的でLP緩和が弱い これは一般性能rankingではありません。同じmodel、time limit、hardware、seed、worker数で比較します。",
+      "title": "条件付きの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.constraint-programming:次に読む",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.constraint-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:cp-search",
+        "content:family.discrete-structure",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "離散最適化全体でgraphや動的計画法との比較を知りたい場合は 離散・組合せ最適化の選び分け へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:family.discrete-structure:30秒でつかむ",
       "dataset_version": "0.11.0",
       "document_id": "content:family.discrete-structure",
@@ -6242,6 +7273,246 @@
         "S079"
       ],
       "text": "論理・resource制約が中心なら CP-SAT 、線形modelとgapが重要なら Branch-and-Cut 、専用構造があるなら Dynamic Programming と Dijkstra / A* を確認します。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:30秒でつかむ",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "このfamilyの気持ちは、 一点ではなく候補の集団を持ち、選択・変異・組み替え、または探索分布そのものの更新によって、微分なしで良い候補を増やしていくこと です。個々の候補は目的関数値の順位や適応度だけで比較され、勾配は使いません。 見ているもの: 各候補のfunction evaluation結果、集団内の順位や適応度 動かすもの: 候補の集団、または集団を生成する確率分布のparameter 前進の判断: best-so-farの改善、集団の多様性が保たれていること 主な弱点: 大量のfunction evaluationを要すること、保証がないこと、変数表現とoperatorのparameterに依存すること 「進化計算が微分不要問題で常に上位」という順位ではありません。微分を使わずに済む代わりに、評価回数と表現設計の手間を引き受けています。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "個体群を選択・変異・交叉・共分散適応などで更新しながら評価予算を使って改善する進化計算・population探索手法を条件に応じて選び分けるための入口です。",
+      "title": "進化計算・population探索の選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:うまくいったサインと切替サイン",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "うまく進んでいるときは、次の観測が揃います。 best-so-farの値が評価回数とともに継続的に改善する population diversityが極端に潰れない feasible fractionが十分に保たれる（制約がある場合） 異なるseedでも同程度の解に到達する 切替サイン: 多様性崩壊（diversity loss）が起き、best-so-farが早期に停滞する → operatorやparameterを見直す、または再起動を導入する 可行個体がほとんど生成されない → penalty/repair/encodingの設計を見直す 評価回数が予算に対して大きくなりすぎる → 評価が高価ならfamily.expensive-black-boxのsurrogate系へ切り替える 問題が実は滑らかで勾配が得られる → family.smooth-localの局所法の方が少ない評価回数で済む場合がある",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:まず確認すること",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "確認項目 選択への影響 評価回数の予算 予算が小さいなら、このfamilyより高価なblack-box向けfamilyを検討する 変数が連続か離散・順列構造か 連続ならCMA-ES/DEが標準的な出発点、離散・順列ならGA系のencodingが本質になる bounds・制約の扱い方 penalty、repair、feasibility ruleのどれで可行性を保つかを事前に決める必要がある 並列評価が可能か 集団単位の評価は並列化しやすく、予算あたりの実時間を短縮できる 乱数seedの管理 同じ設定でも実行ごとに結果が変わるため、複数seedでの評価が前提になる 1回の評価コスト 評価が非常に高価な場合はsurrogateを使うBayesian Optimization系へ切り替える判断が必要 変数の表現（encoding）と、そこに対応するoperator（変異・交叉・共分散更新）の整合性が、このfamily全体で最も重要な設計判断です。表現を変えるとoperatorの意味も変わるため、既存のoperatorをそのまま流用できるとは限りません。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:コラム-なぜ表現とoperatorの整合が最優先なのか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "進化計算の理論的な収束性は多くの場合弱く、実務上の性能は表現（encoding）とoperator（変異・交叉・共分散更新）の組み合わせに強く依存します。連続変数をそのまま実数vectorとして扱うCMA-ESやDEは、encodingとoperatorが自然に対応しますが、離散・順列構造（巡回路や割り当てなど）を実数vectorへ無理に写像すると、変異や交叉が意味のある近傍を作らなくなることがあります。 このため、GA系を離散問題へ適用するときは、まずどのencodingを使うかを決め、それに対応するcrossoverとmutationが「近い個体を近い評価値に写像するか」を確認します。この対応が崩れている場合、population sizeや評価回数を増やしても改善は得られません。",
+      "title": "コラム: なぜ表現とoperatorの整合が最優先なのか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:小さな比較の型",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "実装比較では評価回数、population size、seed数を揃えて記録します。 python experiment = { \"problem_instance\" : \"same-bounded-objective\" , \"population_size\" : 40 , \"evaluation_budget\" : 20000 , \"seeds\" : [ 0 , 1 , 2 , 3 , 4 ], \"encoding\" : \"real-vector\" , \"methods\" : [ \"cma-es\" , \"differential-evolution\" , \"particle-swarm\" ], } assert experiment [ \"evaluation_budget\" ] > 0",
+      "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:条件付きの選び分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "役割 手法 優先しやすい条件 切り替えを考える条件 連続空間の標準的な出発点 CMA-ES 連続変数で、有望な方向とscaleを分布として学びたい 変数次元が非常に大きく共分散推定が重い、離散変数が中心 離散・順列構造の表現設計 遺伝的アルゴリズム 離散・組合せ・混合空間で、encodingとoperatorを問題に合わせたい 表現設計が難しく収束が安定しない 群知能による連続探索 Particle Swarm 連続black-boxで、個体と群のbest経験を使った単純な更新則を試したい 早期収束が起きやすい問題で多様性を保てない 差分vectorによる連続探索 Differential Evolution bounded連続空間で、少ないparameterで頑健な探索をしたい 次元が高く差分vectorの多様性が不足する これは一般性能rankingではありません。同じproblem instance、population size、評価予算、seed数で比較します。",
+      "title": "条件付きの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.evolutionary:次に読む",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.evolutionary",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:differential-evolution",
+        "content:family.global-search",
+        "content:genetic-algorithm",
+        "content:particle-swarm",
+        "method:MF_EVOLUTIONARY",
+        "source:S032",
+        "source:S033",
+        "source:S040",
+        "source:S058",
+        "source:S074"
+      ],
+      "source_ids": [
+        "S032",
+        "S033",
+        "S040",
+        "S058",
+        "S074"
+      ],
+      "text": "多峰性・大域探索全体の文脈で位置づけたい場合は 大域探索・多峰性問題の選び分け へ進みます。",
       "title": "次に読む"
     },
     {
@@ -6823,6 +8094,182 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:30秒でつかむ",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "このfamilyの気持ちは、 問題がshortest path、flow、matching、段階的なDP構造のいずれかに一致するなら、汎用の最適化solverへ持ち込む前に、その構造を直接利用する専用法をまず確認すること です。 見ているもの: node、edge、state、段階、optimal substructureの有無 動かすもの: path、flow、matching、DPのstate遷移 前進の判断: 距離やcostの確定、flowの改善、stateの縮約、部分問題の再利用 主な弱点: 構造が崩れると適用不能、state空間の爆発 これは一般性能rankingではありません。専用法が使える構造を持つ問題では、汎用最適化より高速かつ強い保証が得られる場合が多いという役割の違いを示します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "問題が既知のgraph・DP構造に一致するかを確認し、一致するなら汎用最適化より先に専用法を検討するための入口です。",
+      "title": "Graph専用法・動的計画法の選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:うまくいったサインと切替サイン",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "うまく専用構造を利用できているときは、次のような値が安定して観測できます。 states・edges・labelsの数が問題規模に対して現実的な範囲に収まっている memory使用量が想定内で推移している optimality condition（最短路の確定、flowの被約費用条件、matchingの完全性など）が満たされている 切替サイン: state数やnode/edge数が指数的またはmemory上限を超えて増大する side constraintsが増え、専用構造（network、二部matching、Bellman再帰）の前提が崩れる 厳密な保証よりも早い可行解が優先される状況に変わる、またはその逆 専用法の実装や近傍設計が問題の複雑さに対して過度に手間がかかる",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:まず確認すること",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "確認項目 選択への影響 最適部分構造の有無 部分問題の最適解を組み合わせて全体の最適解が作れるか 状態空間の大きさ DPのstateが現実的なmemoryに収まるか side constraintsの有無 構造を壊す追加制約（複数resource、time window、論理条件など）がないか graph表現への対応 問題をnode/edgeやflow networkとして素直に表現できるか 必要な保証 厳密解・多項式時間の保証が必要か、早い可行解でよいか これらを確認した結果、構造が崩れている、またはstate空間が巨大すぎると分かった場合は、MILP・CP-SATなど汎用の離散最適化へ進みます。判断の入口は 離散・組合せ最適化の選び分け にまとめています。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:コラム-専用法と汎用最適化は競合しない",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "Graph専用法やDPは、問題が持つ構造をそのまま利用するため、同じ問題を汎用のLP/MILPへ変換して解くよりも高速で、保証も明確になりやすい手法です。しかし、これは専用法が汎用最適化より常に優れているという意味ではありません。専用法は、想定した構造（network、二部matching、Bellman再帰など）から外れた瞬間に前提が崩れ、適用できなくなります。 実務では、まず問題の構造を確認し、専用法が使える範囲を見極めたうえで、side constraintsが加わった部分だけを汎用solverで扱う、という組み合わせもよく使われます。構造を壊さない範囲で専用法を使い、壊れた部分だけ汎用化するという判断が、この family全体の軸になります。",
+      "title": "コラム: 専用法と汎用最適化は競合しない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:小さな比較の型",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "専用法を選ぶ前に、問題の構造と必要な成果物を記録します。 python problem_brief = { \"graph_structure\" : [ \"shortest_path\" , \"min_cost_flow\" , \"bipartite_matching\" ], \"optimal_substructure\" : True , \"state_dimension_estimate\" : \"small\" , \"side_constraints_present\" : False , \"required_output\" : \"exact-optimal-with-guarantee\" , \"candidate_methods\" : [ \"dynamic-programming\" , \"dijkstra-astar\" , \"network-simplex\" , ], } assert problem_brief [ \"state_dimension_estimate\" ] in { \"small\" , \"moderate\" , \"large\" }",
+      "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:条件付きの選び分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "役割 手法 優先しやすい条件 切り替えを考える条件 段階的な部分問題の再利用 動的計画法 optimal substructureがあり、stateを小さく定義できる state数・memoryが爆発する 最短路の専用探索 Dijkstra / A* shortest path、非負edge、admissible heuristicが使える side constraintsが増え専用構造が崩れる 二部matchingの専用解法 Hungarian Algorithm 割当問題が二部完全matchingとして表現できる side constraintsで完全matchingの前提が崩れる flow networkの専用simplex Network Simplex法 最小費用流のnetwork構造（node-arc接続行列）を保っている side constraintsで専用構造が崩れる 早い良質可行解が必要な大規模問題 組合せlocal search 巨大routing/scheduling、証明より運用解を優先 大域最適性の証明やgapの保証が必須になる 同じ問題規模でも、構造を保ったまま解けるか、side constraintsで崩れているかによって適した手法は変わります。",
+      "title": "条件付きの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.graph-dp:次に読む",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.graph-dp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "content:hungarian-algorithm",
+        "content:local-search-combinatorial",
+        "content:network-simplex",
+        "method:MF_GRAPH_DP",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "構造が崩れてMILP・CP-SATなど汎用の離散最適化を検討する場合は 離散・組合せ最適化の選び分け へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:family.local-dfo:30秒でつかむ",
       "dataset_version": "0.11.0",
       "document_id": "content:family.local-dfo",
@@ -7058,6 +8505,198 @@
         "S063"
       ],
       "text": "評価が高価なら 高価なblack-box探索の選び分け 、複数basinを広く探すなら 大域探索の選び分け へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:30秒でつかむ",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "このfamilyの気持ちは、 「1つの最適解」を求めるのではなく、目的間のtrade-offを表すPareto frontを近似すること、またはその代表点を得ること です。ある解が他のどの解にも支配されない（dominateされない）とき、その解はPareto最適候補として扱われます。 見ているもの: 複数目的の値、解同士のdomination関係 動かすもの: 単一solverへの重みやscalarization、または集団全体の分布 前進の判断: Pareto frontの近似がどれだけ広く、均等にcoverされているか 主な弱点: 目的のscaleやmetricへの依存、目的数が増えると探索・可視化が難しくなること 「多目的手法がscalarizationより常に優れている」という順位ではありません。事前の選好情報の有無と、目的数、front全体の品質評価の手間を交換しています。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、単一の最適解ではなくPareto解集合の近似を得るための多目的最適化手法を条件に応じて選び分ける入口です。",
+      "title": "多目的最適化の選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:うまくいったサインと切替サイン",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "うまく進んでいるときは、次の観測が揃います。 hypervolumeが評価回数とともに改善し、停滞しない spacingやepsilon indicatorが極端な偏りを示さない feasible fractionが十分に保たれる（制約がある場合） 得られた解集合が意思決定に使える程度に多様である 切替サイン: Pareto coverageが不足し、frontの一部しか得られない → population sizeやscalarizationの重み・閾値の刻みを見直す 解が両極端に偏り、trade-off候補として使えない → weighted-sumの非凸front限界を疑い、population系へ切り替える 目的数が増えてcrowding distanceベースの多様性維持が効かない → NSGA-IIIやMOEA/Dへ切り替える 実は単一utilityが明確だと分かった → 多目的として扱う必要がなくなり、単目的solverに戻す",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:まず確認すること",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "確認項目 選択への影響 意思決定者の選好が事前にあるか あるなら重みや制約閾値を決めてscalarizationで単目的solverを使える 目的数が2〜3か、それ以上（many-objective）か 目的数が増えるほどpopulation系の設計とfront品質評価が難しくなる 各目的のscaleや単位 scaleが揃っていないとweighted-sumの重みが意味を持ちにくい 単目的solverの評価コスト 高価ならscalarizationの反復回数を抑える設計が必要 front全体を評価する指標 hypervolumeなどでcoverageを測る前提を作れるか 複数目的を根拠なく1つのscoreへ潰すと、trade-offの構造そのものが見えなくなります。まず「単一のutilityが実は明確にある」のか「trade-off自体が成果物」なのかを確認します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:コラム-hypervolumeは何を測っているのか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "hypervolumeは、得られた解集合と基準点（reference point）との間に囲まれる領域の体積として計算される指標で、front全体の「広さ」と「良さ」を同時に反映します。単一の解の目的値だけを見ても、front全体がどれだけ多様な選択肢を提供しているかは分かりません。hypervolumeやspacing、epsilon indicatorのような指標は、1つの解ではなく解集合全体の品質を評価するために使います。 ただし、これらの指標は基準点の取り方やscaleの正規化に依存します。目的間でscaleが大きく異なる場合、正規化を誤ると指標が実際のtrade-off構造を正しく反映しません。",
+      "title": "コラム: hypervolumeは何を測っているのか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:小さな比較の型",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "実装比較では目的数、評価予算、front品質の指標を揃えて記録します。 python experiment = { \"problem_instance\" : \"same-biobjective-problem\" , \"num_objectives\" : 2 , \"evaluation_budget\" : 10000 , \"seeds\" : [ 0 , 1 , 2 ], \"quality_metric\" : \"hypervolume\" , \"methods\" : [ \"weighted-sum\" , \"nsga2\" , \"moead\" ], } assert experiment [ \"num_objectives\" ] >= 2",
+      "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:条件付きの選び分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "役割 手法 優先しやすい条件 切り替えを考える条件 選好を重みとして固定 重み付き和scalarization 目的間の相対重要度が決まっており、単目的solverを繰り返し使いたい Pareto frontが非凸な部分を持ち、重み変化で捉えられない解がある 1目的を制約へ移す ε制約法 主目的が明確で、他の目的を許容上限・下限として扱いたい 閾値の候補が多く、反復ごとの単目的求解コストが大きい 2〜3目的でfrontを近似 NSGA-II（multi-objective） 事前の選好がなく、2〜3目的のfrontを集団で近似したい 目的数が増えてcrowding distanceによる多様性維持が弱くなる many-objectiveでfrontを近似 NSGA-III 目的数が多く、reference directionでfrontの広がりを維持したい reference directionの設計が問題の形状に合わない 分解によるfront近似 MOEA/D 多数のweightやreference方向でsubproblemに分解して近い候補同士を共有したい subproblem間の近傍構造が問題に合わず収束が偏る これは一般性能rankingではありません。同じproblem instance、目的数、評価予算、seedで比較します。",
+      "title": "条件付きの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.multi-objective:次に読む",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.multi-objective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:moead",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "content:weighted-sum",
+        "method:MF_MULTI_OBJECTIVE",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "事前の選好が明確で単目的化できる場合は 重み付き和scalarization から、目的数が多いmany-objective設定を詳しく検討する場合は NSGA-III へ進みます。",
       "title": "次に読む"
     },
     {
@@ -7482,6 +9121,222 @@
         "S070"
       ],
       "text": "deterministicな滑らか問題なら 滑らかな局所最適化 、trial自体が高価なhyperparameter探索なら 高価なblack-box・HPO へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:30秒でつかむ",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "このfamilyの気持ちは、 「今の二次modelをどこまで信じてよいか」を半径として管理し、信頼できる範囲の中だけで一歩を決めること です。line searchが方向を先に決めてから歩幅を調整するのに対し、trust-region法は先に「この範囲までなら信じる」という半径を決め、その中で部分問題を解いて一歩を作ります。 見ているもの: 目的関数値、勾配、局所二次modelの予測改善量、実際の改善量 動かすもの: 現在点と信頼半径 前進の判断: actual reduction（実測改善）とpredicted reduction（modelの予測改善）の比が十分大きいこと 主な弱点: 部分問題を解く精度と微分情報の品質に依存する、実装が複雑になりやすい 「trust-regionが常にline searchより優れている」という順位ではありません。負の曲率への対処や大域化の安定性と、部分問題を解く追加コストを交換しています。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "局所二次modelを信頼できる半径の中だけで最小化し、実測改善と予測改善の比で半径を更新するtrust-region法群を条件に応じて選び分けるための入口です。",
+      "title": "信頼領域法の選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:うまくいったサインと切替サイン",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "うまく進んでいるときは、次の観測が揃います。 actual reductionとpredicted reductionの比が1に近い値で安定する 信頼半径が縮小し続けずに、拡大と縮小を繰り返しながら前進する 部分問題の反復数（CG iterationsなど）が極端に増えない 勾配ノルムまたは残差ノルムが一貫して小さくなる 切替サイン: 信頼半径が縮小し続ける → modelの品質、微分の正しさ、問題のscaleを確認する actual/predicted reduction比が悪化し続ける → 二次modelが問題の局所構造を捉えていない 部分問題の反復数（CG iterations、rejected steps）が支配的なコストになる → より安価な部分問題解法や別のglobalizationへ切り替える 非線形最小二乗でGauss–Newton近似が発散気味 → Levenberg–Marquardtやtrust-region reflectiveへ切り替える",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:まず確認すること",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "確認項目 選択への影響 勾配・Jacobian・Hessian-vector積のどれが得られるか 部分問題の解き方（CG打ち切り、Krylov、厳密分解）が変わる 目的が一般の非線形関数か、残差の二乗和か 一般関数ならNewton系、残差構造があるならGauss–Newton/Levenberg–Marquardt系 bounds制約の有無 Trust-region reflectiveのように境界を反映したtrust-regionが必要か 変数数とHessianの扱えるscale dense分解が可能か、Hessian-vector積だけを使うKrylov系にすべきか Hessianの不定性 負の曲率が出る問題では、部分問題側で負曲率方向を扱える手法が必要 評価コストと精度要求 高精度な停留点を求めるほど、trust-region診断を丁寧に追う価値が上がる Hessian-vector積（HVP）は自動微分やadjoint法で得られても、方向微分checkをしないと符号や単位の誤りに気づけません。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:コラム-信頼半径はなぜ縮んだり広がったりするのか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "trust-region法は、一歩を踏んだあとにactual reductionとpredicted reductionの比を計算します。比が十分大きければ「modelは信用できた」と判断して半径を広げるか維持し、比が小さければ「modelは今回の範囲では信用できなかった」として半径を縮めます。この仕組みにより、Hessianが不定で負の曲率が出る局面でも、半径の内側で解ける部分問題の範囲に一歩を制限して大域化を保てます。 半径が縮小し続ける場合、それはmodelの二次近似そのものが局所的に悪いか、微分情報に誤りがある兆候です。半径を人為的に固定して無理に前進させるより、まず微分のcheckと問題のscalingを見直します。",
+      "title": "コラム: 信頼半径はなぜ縮んだり広がったりするのか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:小さな比較の型",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "実装比較では、iteration数だけでなく評価回数と部分問題の反復数も記録します。 python experiment = { \"problem_instance\" : \"same-smooth-objective\" , \"initial_point\" : [ 1.0 , - 1.0 ], \"derivative_source\" : \"hessian-vector-product-checked\" , \"objective_evaluation_budget\" : 500 , \"gradient_evaluation_budget\" : 500 , \"gradient_tolerance\" : 1e-6 , \"methods\" : [ \"trust-ncg\" , \"trust-krylov\" , \"lm\" ], } assert experiment [ \"objective_evaluation_budget\" ] > 0",
+      "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:条件付きの選び分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "役割 手法 優先しやすい条件 切り替えを考える条件 CG打ち切りで部分問題を近似 Trust-region Newton-CG Hessian-vector積が得られ、中規模までの一般滑らか問題を大域化したい CGの打ち切りが不安定、Hessianが強く不定 Krylov部分空間で部分問題を近似 Trust-krylov 大規模でHessian-vector積のみ利用でき、より精密な部分問題解が欲しい Krylov反復が伸びる、部分問題のコストが支配的 残差構造を直接利用 Gauss–Newton 目的が非線形最小二乗で、残差Jacobianから曲率近似を作れる 残差が大きい・強い非線形性がありGN近似の質が悪い damping付きで安定化した残差法 Levenberg–Marquardt（least-squares） 非線形最小二乗で、Gauss–Newton近似の不安定さをtrust-region的に抑えたい damping調整だけでは収束せず、bounds制約が本質的に必要 bounds付き非線形最小二乗 Trust-region reflective 変数に上下限があり、境界に応じてtrust-regionを変形したい bounds以外の一般制約が中心になる 厳密な部分問題解法（nearly exact trust-region）を使う実装もありますが、対応する記事はまだないため、名前だけの参考にとどめます。 これは一般性能rankingではありません。同じproblem instance、初期点、微分情報の入手経路、tolerance、budgetで比較します。",
+      "title": "条件付きの選び分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.trust-region:次に読む",
+      "dataset_version": "0.11.0",
+      "document_id": "content:family.trust-region",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:gauss-newton",
+        "content:least-squares",
+        "content:trust-krylov",
+        "content:trust-region-newton-cg",
+        "content:trust-region-reflective",
+        "method:MF_TRUST_REGION",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "一般の滑らかな局所最適化全体を見渡すには 滑らかな局所最適化の選び分け へ進みます。",
       "title": "次に読む"
     },
     {
@@ -8552,6 +10407,214 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:lbfgs:denseな行列を持たずに何を計算しているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "BFGSは逆Hessian近似 H k を n × n のdense行列として更新し、保持します。変数数 n が大きくなると、この行列だけで概ね O ( n 2 ) のmemoryを使うため、大規模problemでは現実的ではありません。 L-BFGSは H k を明示的に組み立てません。代わりに直近 m 回分の s k = x k + 1 − x k y k = ∇ f ( x k + 1 ) − ∇ f ( x k ) だけを保存し、two-loop recursionと呼ばれる手続きで H k ∇ f ( x k ) という積だけを計算します。行列そのものを作らず、保存したvector対に対する内積とscalar倍の組み合わせで同じ作用を再現する点が、BFGSとの本質的な違いです。",
+      "title": "denseな行列を持たずに何を計算しているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:l-bfgs-bとの関係",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "L-BFGSそのものは無制約最適化のアルゴリズムです。各変数に上下限 l i ≤ x i ≤ u i を課したい場合は、 L-BFGS-B というbounds拡張を使います。scipyでは無制約のL-BFGSも含めて method=\"L-BFGS-B\" として提供されており、 bounds 引数を省略すれば実質的に無制約のL-BFGSとして動作します。",
+      "title": "L-BFGS-Bとの関係"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:memoryとmの選び方",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "保存するvector対の数を m とすると、必要なmemoryは概ね O ( m n ) です。 n が大きくても m を小さく保てば、denseなBFGSでは扱えない規模の問題にも適用できます。 m は曲率情報の解像度を決めるhyperparameterです。 m を大きくすると、より長い履歴を使った曲率近似になり、Newton法に近い方向を作りやすくなりますが、memoryと1 iterationあたりの計算量が増えます。 m を小さくすると軽量ですが、履歴が短い分だけ曲率情報が粗く、勾配降下法に近い挙動へ寄っていきます。多くの実装では数〜数十程度の値を初期候補にし、収束の遅さやiteration数を見ながら調整します。",
+      "title": "memoryとmの選び方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "直近m組の曲率更新だけを保持し、two-loop recursionで逆Hessianの作用を計算する大規模無制約向けの準Newton法です。",
+      "title": "L-BFGS法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize def objective ( x : np . ndarray ) -> float : return float ( np . sum (( x - np . arange ( 1 , x . size + 1 )) ** 2 )) def gradient ( x : np . ndarray ) -> np . ndarray : return 2.0 * ( x - np . arange ( 1 , x . size + 1 )) n = 200 result = minimize ( objective , x0 = np . zeros ( n ), jac = gradient , method = \"L-BFGS-B\" , options = { \"maxcor\" : 10 , \"gtol\" : 1e-8 , \"maxiter\" : 300 }, ) print ( result . success , result . fun , result . nit , result . nfev ) maxcor が保存するvector対の数 m に対応します。boundsを渡していないため、この呼び出しは実質的に無制約のL-BFGSです。利用versionのoption名や既定値は scipy.optimize.minimize の公式referenceで確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "条件 理由 変数が多い（数千〜数百万） dense H k を保持できないため 目的が局所的に十分滑らか 曲率情報を勾配差から取り出すため 勾配が信頼できる 誤った勾配は曲率近似を壊すため 局所解でよい 非凸問題で大域最適性を保証しないため denseなBFGSを使えるだけ変数が少ない場合は、 BFGS のほうが少ないiterationで収束することがあります。L-BFGSは、memory制約が支配的なときに検討します。",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "gradient checkが有限差分と一致するか iterationを重ねても目的値が停滞していないか line search failureが繰り返し発生していないか m を増やしても改善しない、またはmemoryが問題になる 初期点によって収束先が大きく変わる 上下限を課したい場合は L-BFGS-B 、denseな曲率近似を保持できる規模なら BFGS 、滑らかな局所最適化全体の選び分けは 滑らかな局所最適化の選び分け で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgs:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:lbfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:lbfgsb",
+        "method:M_LBFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057",
+        "S065"
+      ],
+      "text": "gradient norm line-search iteration数 function / gradient evaluation数 objective change memory parameter m （保存vector対の数）",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:lbfgsb:bfgsとの違い",
       "dataset_version": "0.11.0",
       "document_id": "content:lbfgsb",
@@ -8890,6 +10953,182 @@
       ],
       "text": "異なるparameter組がほぼ同じ予測を作る場合、costが小さくてもparameterは一意に決まりません。 確認: Jacobianのrank condition number profile likelihoodやbootstrap parameter相関 異なる初期点からの解 holdout dataでの予測 Warning optimizerの成功statusを統計的妥当性と混同しません。parameter uncertainty、model mismatch、measurement processを別に評価します。",
       "title": "識別可能性"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "swapや2-optなど離散的な近傍moveを定義し、改善が見つかる限りそれを繰り返して可行解を改善するheuristicです。",
+      "title": "組合せlocal search"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "python import numpy as np def tour_length ( tour : np . ndarray , points : np . ndarray ) -> float : ordered = points [ tour ] diffs = ordered - np . roll ( ordered , - 1 , axis = 0 ) return float ( np . sqrt (( diffs ** 2 ) . sum ( axis = 1 )) . sum ()) def two_opt_step ( tour : np . ndarray , points : np . ndarray ) -> tuple [ np . ndarray , bool ]: n = len ( tour ) best_tour = tour best_length = tour_length ( tour , points ) improved = False for i in range ( n - 1 ): for j in range ( i + 1 , n ): candidate = tour . copy () candidate [ i : j + 1 ] = candidate [ i : j + 1 ][:: - 1 ] candidate_length = tour_length ( candidate , points ) if candidate_length < best_length : best_tour = candidate best_length = candidate_length improved = True return best_tour , improved rng = np . random . default_rng ( 0 ) points = rng . uniform ( size = ( 8 , 2 )) tour = np . arange ( len ( points )) improved = True while improved : tour , improved = two_opt_step ( tour , points ) print ( tour , tour_length ( tour , points )) このコードは、小さなTSP instanceに対して2-optの近傍を総当たりで調べ、改善がなくなるまで反復する教育用の実装です。実務でのrouting/scheduling問題は、より複雑な近傍や制約を扱うため、 OR-Tools Routing のようなmetaheuristicフレームワークを使い、利用versionに対応する公式referenceを確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "巨大なrouting・schedulingで、証明より早い良質な可行解が重要 近傍を問題の構造に合わせて設計でき、1回の近傍評価が軽い 厳密解法（MILPなど）では規模的に現実的な時間で解けない 複数の初期解やrestartを試す計算余力がある",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "早期に局所最適へ収束し、restartやtabuを使っても改善が見られない 近傍1回あたりの評価costが問題規模に対して大きくなりすぎている 到達した解の質を保証するboundが得られず、運用上の説明ができない side constraintsが増え、近傍moveのたびに可行性を保つ処理が複雑化している 近傍の外側を確率的に探索する考え方は Simulated Annealing 、集団で複数解を並行して探索する考え方は 遺伝的algorithm で確認できます。離散・組合せ最適化全体の選び分けは 離散・組合せ最適化の選び分け を参照してください。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:局所最適で止まる性質と脱出戦略",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "組合せlocal searchは、定義した近傍の中に現在の解より良い解が存在しなくなった時点で停止します。この状態を局所最適と呼びますが、それが大域最適である保証はありません。近傍の外側により良い解が存在していても、local searchの手続き自体はそれを見つけられません。 この性質を踏まえ、実務では次のような脱出戦略が使われます。 restart: 異なる初期解から複数回local searchを実行し、最良の結果を採用する simulated annealingの考え方: 改善しないmoveも一定の確率で受理し、局所最適に留まりにくくする tabuの考え方: 直近で訪れた解やmoveを一時的に禁止し、同じ局所最適へ戻ることを防ぐ これらは局所最適から抜け出す確率を高める工夫であり、大域最適性の証明を与えるものではありません。近傍設計と脱出戦略の組み合わせ全体が、解の質と探索costのtrade-offを決めます。",
+      "title": "局所最適で止まる性質と脱出戦略"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "states（現在の解と近傍候補が表す状態） edges（tourやscheduleが持つ辺・順序関係の数） labels（改善move・受理moveの記録） memory（近傍候補の生成と評価に使うmemory量） optimality condition（近傍内に改善moveが残っていないかどうか）",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:近傍をどう定義するか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "組合せlocal searchは、現在の解に小さな変更（move）を加えて得られる解の集合を近傍として定義し、その中から目的値を改善するmoveを見つけては適用する、という操作を繰り返します。代表的な近傍は次のとおりです。 swap: 2つの要素の割り当てや順序を入れ替える 2-opt: 経路の一部を反転させ、交差する2辺を組み替える insertion: 1つの要素を別の位置へ移動する 近傍の定義そのものが、この手法の性能を決める中心的な設計要素です。近傍が狭すぎると改善の機会を見逃し、広すぎると1回の反復で近傍全体を評価するcostが増えます。同じ問題でも、近傍の取り方次第で到達する解の質と探索速度が大きく変わります。",
+      "title": "近傍をどう定義するか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:local-search-combinatorial:避ける-切り替える条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:local-search-combinatorial",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:genetic-algorithm",
+        "content:simulated-annealing",
+        "method:M_LOCAL_SEARCH_COMBINATORIAL",
+        "source:S023",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S023",
+        "S054"
+      ],
+      "text": "大域最適性の証明やoptimality gapの保証が必須の場面では、組合せlocal searchだけでは不十分です。MILPやCP-SATのような厳密法は、たとえ実行時間がかかっても最適性のboundを提供できますが、組合せlocal searchは到達した解が最適からどれだけ離れているかを示せません。厳密な保証が必要な場合や、side constraintsが複雑で近傍設計自体が難しい場合は、 離散・組合せ最適化の選び分け にある他の手法を検討します。",
+      "title": "避ける／切り替える条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -10699,6 +12938,394 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:collocationとの違い",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "Direct Collocation もstateを決定変数にする点はmultiple shootingと共通しますが、defectの作り方が異なります。multiple shootingは各segmentを実際の積分器（Runge–Kuttaなど）でintegrationしてdefectを作るのに対し、collocationは多項式近似とcollocation pointでdefectを作ります。積分器を信頼できるほどdynamicsが scalarに扱いやすいならmultiple shooting、path constraintが密でmeshの疎構造を強く使いたいならcollocationが選択肢になります。 生成されるNLPはcontinuity制約により疎な構造を持ち、 SQP やinterior-point法といった制約付きNLP solverで解きます。実務では CasADi や acados のような、multiple shootingを組み込みで扱う専用ツールを使うことが一般的です。利用versionのAPIやsolver選択は公式referenceで確認します。",
+      "title": "collocationとの違い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。",
+      "title": "Direct Multiple Shooting"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "python import numpy as np from scipy.integrate import solve_ivp from scipy.optimize import minimize SEGMENT_DURATION = 0.5 INITIAL_STATE = 0.0 TARGET_STATE = 1.0 def integrate_segment ( state0 : float , control : float ) -> float : solution = solve_ivp ( lambda t , x : [ control ], ( 0.0 , SEGMENT_DURATION ), [ state0 ]) return float ( solution . y [ 0 , - 1 ]) def unpack ( vector : np . ndarray ) -> tuple [ float , float , float ]: state1 , control0 , control1 = vector return state1 , control0 , control1 def objective ( vector : np . ndarray ) -> float : _ , control0 , control1 = unpack ( vector ) return float ( SEGMENT_DURATION * ( control0 ** 2 + control1 ** 2 )) def continuity_constraints ( vector : np . ndarray ) -> np . ndarray : state1 , control0 , control1 = unpack ( vector ) end_of_segment0 = integrate_segment ( INITIAL_STATE , control0 ) end_of_segment1 = integrate_segment ( state1 , control1 ) return np . array ([ end_of_segment0 - state1 , end_of_segment1 - TARGET_STATE ]) initial_guess = np . array ([ 0.5 , 0.5 , 1.5 ]) result = minimize ( objective , initial_guess , method = \"SLSQP\" , constraints = { \"type\" : \"eq\" , \"fun\" : continuity_constraints }, options = { \"ftol\" : 1e-10 , \"maxiter\" : 200 }, ) state1 , control0 , control1 = unpack ( result . x ) print ( result . success , result . x , np . linalg . norm ( continuity_constraints ( result . x ))) この例は1状態・2segmentの最小構成です。 state1 はsegment境界の決定変数、 continuity_constraints がdefectに対応します。実務ではstate次元、segment数、path constraint、積分器のtoleranceを明示的に設計し、解が積分精度に依存していないかを確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:single-shootingと比べて何が変わるか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "Direct Shooting （single shooting）は、初期状態からhorizon全体を一度に積分し、controlだけを最適化変数にします。これに対しmultiple shootingは各segmentの開始stateも変数化するため、次の違いが生まれます。 長時間積分による感度の爆発を、segment単位の短い積分に分割して抑えられます。single shootingでは初期時刻のcontrolの変化がhorizon全体に伝播し、gradientが極端に大きく・小さくなることがあります。 各segmentへ個別に初期軌道の推測を与えられるため、不安定なdynamicsでも現実的な初期値を設定しやすくなります。 segmentごとの積分は互いに独立なので、並列に実行できます。 一方で決定変数の数はsingle shootingより増え、continuity制約という形で問題の疎な構造が生まれます。",
+      "title": "single shootingと比べて何が変わるか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:何を変数にし-何を制約にしているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "horizon全体を N 個のsegmentに分け、各segmentの開始stateを独立な決定変数 x 0 , x 1 , … , x N − 1 として持ちます。各segment内ではcontrol u i を仮定し、積分器で終端状態を計算します。 x ^ i + 1 = Φ ( x i , u i ) ここで Φ はsegment内の積分結果です。 x ^ i + 1 は積分器が計算した値であり、次segmentの決定変数 x i + 1 とは別物です。両者が一致するという条件 x ^ i + 1 − x i + 1 = 0 をNLPの等式制約（continuity制約、またはdefect制約）として課します。目的関数はsegmentごとのcostの和と終端costで構成します。",
+      "title": "何を変数にし、何を制約にしているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "horizonが中〜長く、dynamicsが不安定または非線形で感度が大きい segmentごとに現実的な初期軌道の推測を用意できる 積分を並列化できる計算資源がある continuity制約を扱えるNLP solver（SQP、interior-point）を利用できる horizonが短くdynamicsが安定しているなら、変数の少ない Direct Shooting のほうが単純です。path constraintが密で多項式近似の疎構造を強く使いたい場合は Direct Collocation を検討します。",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "defectがiterationを重ねても縮小しない segmentごとのrolloutが発散する segment数や分割位置（mesh）を変えると解が大きく変化する 初期軌道の推測が悪く、solverが可行点へ到達しない 積分器のtoleranceを厳しくすると解や制約違反が大きく変わる single shootingとの違いは Direct Shooting 、状態を多項式近似で扱う定式化は Direct Collocation 、生成される制約付きNLPの解き方は SQP で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:multiple-shooting:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:multiple-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:sqp",
+        "method:M_MULTIPLE_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "defect_norm（continuity制約の残差） KKT residual constraint_violation mesh_error（segment分割を変えたときの解の変化） rollout_stability",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:basisが全域木に対応する理由",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "線形計画のsimplex法では、basisは基底変数に対応する列の集合です。最小費用流の場合、node-arc接続行列の性質から、実行可能なbasisは常にnetworkの全域木（spanning tree）に対応することが分かっています。全域木上の各edgeにflow量を割り当てれば、木の外にあるnon-basic edgeのflowは0または容量上限のどちらかに固定され、node数から1を引いた本数のbasic edgeのflow量だけを決めればnetwork全体のflowが定まります。 このため、basis変換（pivot操作）は行列の行基本変形ではなく、木に1本のedgeを追加してcycleを作り、そのcycleに沿ってflowを押し出し、最も制約が厳しいedgeを木から外すという、graph上の操作として実行できます。被約費用の計算もnode potentialの差として求まり、一般のsimplex法が必要とする行列演算より軽い計算で済みます。",
+      "title": "Basisが全域木に対応する理由"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "最小費用流問題が持つnetwork構造を利用し、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。",
+      "title": "Network Simplex法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "python import numpy as np from scipy.optimize import linprog def build_incidence_matrix ( edges : list [ tuple [ int , int ]], n_nodes : int ) -> np . ndarray : incidence = np . zeros (( n_nodes , len ( edges ))) for edge_index , ( tail , head ) in enumerate ( edges ): incidence [ tail , edge_index ] = 1.0 incidence [ head , edge_index ] = - 1.0 return incidence edges = [( 0 , 1 ), ( 0 , 2 ), ( 1 , 2 ), ( 1 , 3 ), ( 2 , 3 )] costs = np . array ([ 4.0 , 2.0 , 1.0 , 5.0 , 3.0 ]) capacities = np . array ([ 4.0 , 3.0 , 2.0 , 4.0 , 5.0 ]) supply_demand = np . array ([ 4.0 , 0.0 , 0.0 , - 4.0 ]) incidence = build_incidence_matrix ( edges , n_nodes = 4 ) bounds = [( 0.0 , capacity ) for capacity in capacities ] result = linprog ( c = costs , A_eq = incidence , b_eq = supply_demand , bounds = bounds , method = \"highs\" , ) print ( result . success , result . x , result . fun ) このコードは scipy.optimize.linprog で最小費用流を一般のLPとして解く教育用の例です。実務でnetwork構造を持つ大規模な最小費用流を解く場合は、node-arc構造を直接利用する専用のnetwork simplex実装のほうが高速です。利用するsolverやライブラリの対応範囲は、公式の NEOS Guide: Optimization Problem Types などの資料と、利用versionのドキュメントを確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:何を解いているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "最小費用流問題は、各nodeでflowの保存則を満たしながら、各edgeの容量制約の範囲でflowを流し、edgeごとの単位費用の合計を最小化する問題です。これは線形計画問題として定式化でき、 Primal simplex法 でも解けます。しかし、この線形計画のnode-arc接続行列は、行の多くが0で、非零成分が + 1 と − 1 だけという特殊な構造を持ちます。Network Simplex法は、この構造を活かし、basisを一般の行列演算ではなくgraph上の全域木として扱うことで、汎用simplex法より高速に同じ最適解を求めます。",
+      "title": "何を解いているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "問題が最小費用流として定式化でき、node-arc接続行列がnetwork構造を保っている flow保存則と容量制約以外のside constraintsがない、または後で分離できる 整数容量・整数需給量に対して整数最適解が必要 大規模なnetworkで汎用simplex法より高速な専用solverを使いたい",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "side constraintsの追加でnode-arc接続行列がnetwork構造を保てなくなっている 需給量や容量が整数でなく、整数解を前提とした後段処理と食い違う 負の費用cycleなど、想定していない前提が紛れ込んでいる 問題規模に対してnode数・edge数が巨大で、汎用LPとして解くと遅い 同じ「node-arc構造を専用法で使う」という考え方は Primal simplex法 や Dijkstra法とA* にも共通します。離散・組合せ最適化全体の選び分けは 離散・組合せ最適化の選び分け を参照してください。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:整数性という構造の恩恵",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "最小費用流問題のnode-arc接続行列はtotally unimodularです。この性質により、edgeの容量とnodeの需給量がすべて整数であれば、線形緩和のまま解いた最適basic feasible solutionは自動的に整数値になります。つまり、整数解を得るために分枝限定法などの追加操作を行う必要がありません。これは、network構造を持つ問題に共通する利点であり、 Hungarian algorithm のような他の専用法にも同様の整数性が現れます。 ただし、この整数性はnetwork構造そのものに由来するため、side constraints（複数edgeにまたがる論理条件やresource制約など）を追加すると、接続行列がtotally unimodularでなくなり、整数性の保証は失われます。",
+      "title": "整数性という構造の恩恵"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "states（basisに対応する全域木の構造） edges（networkのedge数と容量制約の有無） labels（node potentialの値） memory（全域木構造と補助配列が使うmemory量） optimality condition（すべてのnon-basic edgeで被約費用の符号条件が満たされているか）",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:network-simplex:避ける-切り替える条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:network-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:dijkstra-astar",
+        "content:family.discrete-structure",
+        "content:primal-simplex",
+        "method:M_NETWORK_SIMPLEX",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "side constraintsが加わり、node-arc接続行列のnetwork構造が崩れる場合は専用法の前提が成り立ちません。この場合は、一般のLP（ Primal simplex法 などのLP・QP・錐最適化solver）や、離散変数を含むならMILP・CP-SATへ戻ることを検討します。",
+      "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:newton-cg:30秒でつかむ",
       "dataset_version": "0.11.0",
       "document_id": "content:newton-cg",
@@ -11854,6 +14481,231 @@
         "S060"
       ],
       "text": "高次元でpoll点数が予算を圧迫 評価が極端に高価 noiseで改善判定が揺れる variable scaleが悪い black-box constraintを単純penaltyだけで扱う discrete / categorical domainを無理に連続方向へ埋め込む MADS はpoll方向とmeshをより一般化し、black-box constraintを扱う実装もあります。 Warning 同じ「pattern search」でもsearch step、poll set、opportunism、mesh update、constraint handlingが異なります。implementationとoptionを明記します。",
+      "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "行列因数分解を避け、行列ベクトル積だけを使う一次法（PDHG）をLPへ適用し、巨大疎LPを扱う近年の方向です。",
+      "title": "PDHG型一次法LP（PDLP）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:pdhg反復が何をしているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "LP標準形 min x c T x subject to A x = b , x ≥ 0 は、次のsaddle point問題として書けます。 min x ≥ 0 max y c T x + y T ( b − A x ) PDHGは x の勾配stepと y の勾配stepを交互に行い、 x 側の更新に使う y を1歩先の値で外挿（extrapolation）します。 x k + 1 = Π x ≥ 0 ( x k − τ ( c − A T y k ) ) y k + 1 = y k + σ ( b − A ( 2 x k + 1 − x k ) ) Π x ≥ 0 は非負制約へのprojectionで、閉形式（clip）で計算できます。step size τ , σ は行列 A のスペクトルノルム L = ‖ A ‖ 2 から τ σ L 2 < 1 を満たすように保守的に決めます。",
+      "title": "PDHG反復が何をしているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "次はequality制約LP min x c T x subject to A x = b , x ≥ 0 を、単純なsimplex制約（ x 1 + x 2 + x 3 = 1 ）で解く教育用のPDHG反復です。step sizeは A のスペクトルノルムから保守的に決めています。 python import numpy as np def project_nonneg ( x : np . ndarray ) -> np . ndarray : return np . maximum ( x , 0.0 ) a = np . array ([[ 1.0 , 1.0 , 1.0 ]]) b = np . array ([ 1.0 ]) c = np . array ([ 3.0 , 1.0 , 2.0 ]) lipschitz = np . linalg . norm ( a , ord = 2 ) tau = 0.9 / lipschitz sigma = 0.9 / lipschitz x = np . full ( 3 , 1.0 / 3.0 ) y = np . zeros ( 1 ) for _ in range ( 5_000 ): x_next = project_nonneg ( x - tau * ( c - a . T @ y )) y = y + sigma * ( b - a @ ( 2.0 * x_next - x )) x = x_next primal_residual = float ( np . linalg . norm ( a @ x - b )) print ( x , float ( c @ x ), primal_residual ) x は [ 0 , 1 , 0 ] 付近（ c が最小の座標に質量が寄る解）に近づき、 primal_residual が反復とともに小さくなることを確認します。実務規模の疎LP、restart、diagonal scaling、収束判定の詳細は自分で再現せず、 OR-Tools Linear Optimization公式ドキュメント で利用versionのAPIと挙動を確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:なぜ因数分解を避けるのか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "Primal simplex や primal-dual barrier法 は、basisの更新や中心pathのNewton stepでKKT行列やbasis行列のfactorizationを必要とします。問題が超大規模かつ疎になると、このfactorizationのfill-inがmemoryを圧迫し、支配的なcostになることがあります。PDHG（primal-dual hybrid gradient）をLPへ適用する方向は、 A x や A T y といった行列ベクトル積だけで反復を進め、factorizationそのものを避けます。Google OR-ToolsのPDLPはこの方向を実装した代表例です（S078）。",
+      "title": "なぜ因数分解を避けるのか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:中精度で止まりやすいことと許容誤差の意味",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "simplexは頂点（basis）へ厳密に到達して停止しますが、PDHGはprimal feasibility residual、dual feasibility residual、duality gapを漸近的に減らす一次法です。多くの実装で反復数に対する収束は O ( 1 / k ) 程度にとどまり、高精度な解へ絞り込むには反復数がかさみます。そのため、同じ「許容誤差 10 − 8 」でも、simplexのbasisベースの停止条件とPDHGのresidualベースの停止条件は意味が異なります。中精度で十分な超大規模疎LP、またはfactorizationがmemoryに収まらない規模の問題が対象になります。",
+      "title": "中精度で止まりやすいことと許容誤差の意味"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "超大規模・疎なLPでfactorizationのmemoryが問題になる 行列ベクトル積が安価（GPU等での並列化を含む） 中精度の解で運用上十分 warm startやdiagonal scalingを活用できる",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "iteration数を増やしてもresidualが縮まらない infeasibleまたはunboundedの兆候が出ているのに残差だけを見て見落とす coefficient scaleが極端でstep sizeの見積もりが保守的すぎる／不足する 高精度なbasisやsensitivityが必要になり中精度解では不足する restartを繰り返しても収束が遅い 同じLP標準形をNewton stepで解く方式は primal-dual barrier法 、basisを保った再最適化は primal simplex 、非滑らか・複合凸最適化全体での一次法の位置付けは 非滑らか・複合凸最適化の選び分け で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "primal feasibility residual（ ‖ A x − b ‖ ） dual feasibility residual duality gap step size τ , σ と A のスペクトルノルム推定 iteration数 restart発生の有無",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:pdlp:避ける-切り替える条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:pdlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:barrier-lp-qp",
+        "content:concept.convexity",
+        "content:family.composite-convex",
+        "content:primal-simplex",
+        "method:M_PDLP",
+        "source:S016",
+        "source:S055",
+        "source:S078"
+      ],
+      "source_ids": [
+        "S016",
+        "S055",
+        "S078"
+      ],
+      "text": "厳密なbasisやexact certificateが必要（ primal simplex や dual simplex を検討） 問題が小〜中規模で密であり、factorizationのcostが許容範囲内 数値conditioningが悪くpreconditioningなしでは収束が遅い 高精度なdual sensitivityを即座に必要とする",
       "title": "避ける／切り替える条件"
     },
     {
@@ -13583,6 +16435,206 @@
       ],
       "text": "強いnoiseや不連続constraint sparseな巨大NLPでdense処理が支配 infeasible modelをalgorithm tuningで解決しようとする Jacobian rank deficiency scaleが極端 discrete variable global certificateが必要 大規模疎NLPでは Interior-point NLP 、constraint分離やouter loopを使う場合は Augmented Lagrangian を比較します。 Warning ftol は実装の複数停止判定へ影響します。異なるsolverの tol=1e-6 を同じ精度だと見なさず、KKT residualとconstraint violationを比較します。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:gp-boとの使い分け",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "search spaceの形が、GP-BOとrandom forest surrogateのどちらを検討するかの主な手がかりです。 連続変数中心で次元が低〜中程度なら、kernelによる距離の定義が自然なGaussian process系のBayesian Optimizationが選択肢になります。 categorical変数や条件付きparameterが多く混在するalgorithm configurationやhyperparameter optimizationでは、木構造で分岐を表現できるrandom forest系（SMAC）が選択肢になります。 どちらも「良い手法」という一般順位ではなく、search spaceの表現しやすさで選び分けます。",
+      "title": "GP-BOとの使い分け"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。",
+      "title": "SMAC（random forest surrogate）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:python",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "random forest surrogateを使うsequential model-based optimizationの実装は、tree構造のsplit規則や条件付きparameterの扱いなど専用の設計が必要なため、numpy/scipyでの再現はせず、探索loopの教育用pseudocodeだけを示します。 text initialize runhistory as empty initialize incumbent as None loop until budget exhausted: if runhistory is small: candidate = sample_from_search_space(random) else: fit random_forest_surrogate on runhistory candidates = propose_candidates(search_space) scores = acquisition(random_forest_surrogate, candidates, incumbent) candidate = best_of(candidates, scores) result = evaluate(candidate) runhistory.add(candidate, result) if incumbent is None or result.is_better_than(incumbent.result): incumbent = Entry(candidate, result) return incumbent 実装は SMAC3 の公式documentationを参照し、search spaceの定義方法、facade（scenarioの種類）、runhistoryの保存形式は利用versionに対応する説明で確認します。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:runhistoryとincumbentが持つ役割",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "SMACは評価した点とその結果をrunhistoryとして保存し続けます。runhistoryはsurrogateの学習dataであると同時に、途中経過を再現・再開するための記録でもあります。 これまでの評価の中で最良の設定はincumbentと呼ばれます。incumbentはsurrogateの予測ではなく、実際に評価された観測値に基づく候補です。次に評価する候補はacquisitionによってsurrogateから選ばれますが、探索の過程でincumbentが更新されるたびに、以降の探索はその時点のbest-so-farを基準に進みます。",
+      "title": "runhistoryとincumbentが持つ役割"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:何をsurrogateにしているか",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "Bayesian Optimization は多くの場合Gaussian processをsurrogateに使いますが、SMAC（Sequential Model-based Algorithm Configuration）はrandom forestをsurrogateとして使います。観測済みのparameterと評価値の組をrunhistoryとして蓄積し、random forestをそのrunhistoryで学習します。 random forestは各木の予測のばらつきから不確実性の目安を得られるため、Gaussian processと同様に予測平均と不確実性の両方をacquisitionへ渡せます。決定的な違いは、random forestが連続変数だけでなくcategorical変数や、あるparameterが別のparameterの値によってのみ意味を持つ条件付きparameterを、木構造の分岐として自然に扱える点です。",
+      "title": "何をsurrogateにしているか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:向いている条件",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "categorical・整数・条件付きparameterが混在するalgorithm configuration 評価コストが高く、runhistoryを再利用する価値がある 連続変数だけの低次元search spaceに限定されない 失敗trialやtimeoutを記録・活用したい 連続変数中心の低次元search spaceで、kernelによる不確実性をそのまま解釈したい場合は Gaussian-process BO を検討します。評価が安価で大量に並列実行できる場合は Random Search や TPE との比較も有効です。",
+      "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:失敗・切替の兆候",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "surrogateのcross-validation誤差が大きく改善しない 不確実性の較正が悪く、acquisitionが同じ領域ばかり提案する 条件付きparameterの表現が誤っており、無効な組み合わせが提案され続ける 評価が安価すぎてsurrogate構築のoverheadが見合わない runhistoryが少なすぎてrandom forestの分散推定が不安定 連続低次元でGaussian processによる不確実性を直接扱いたい場合は Bayesian Optimization 、条件付き空間で密度比を使う別のsurrogateは TPE 、何も仮定しないbaselineは Random Search 、高価なblack-box探索全体の選び分けは 高価なblack-box・HPOの選び分け で確認できます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:smac:診断値",
+      "dataset_version": "0.11.0",
+      "document_id": "content:smac",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:random-search",
+        "content:tpe",
+        "method:M_SMAC_RF",
+        "source:S037",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S037",
+        "S059",
+        "S075"
+      ],
+      "text": "best_so_far（incumbentの評価値） surrogate_error（random forestの予測誤差） calibration（不確実性の較正） acquisition_value failed_trials数",
+      "title": "診断値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -20883,6 +23935,7 @@
       "relation_context": [
         "case:EC019",
         "content:cp-sat",
+        "content:local-search-combinatorial",
         "implementation:I_GUROBI",
         "implementation:I_ORTOOLS_ROUTING",
         "method:M_BRANCH_CUT",
@@ -20911,6 +23964,7 @@
       "relation_context": [
         "case:EC020",
         "content:direct-collocation",
+        "content:multiple-shooting",
         "implementation:I_ACADOS",
         "implementation:I_CASADI",
         "implementation:I_DRAKE",
@@ -20939,6 +23993,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC025",
+        "content:admm-qp",
         "implementation:I_ACADOS",
         "implementation:I_OSQP",
         "method:M_ACTIVE_SET_QP",
@@ -21188,6 +24243,7 @@
       "document_id": "method:MF_CONSTRAINT_PROGRAMMING",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:family.constraint-programming",
         "source:S022",
         "source:S053"
       ],
@@ -21268,6 +24324,7 @@
       "document_id": "method:MF_EVOLUTIONARY",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:family.evolutionary",
         "source:S032",
         "source:S033",
         "source:S040",
@@ -21323,6 +24380,7 @@
       "document_id": "method:MF_GRAPH_DP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:family.graph-dp",
         "source:S054"
       ],
       "source_ids": [
@@ -21391,6 +24449,7 @@
       "document_id": "method:MF_MULTI_OBJECTIVE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:family.multi-objective",
         "source:S039",
         "source:S068"
       ],
@@ -21506,6 +24565,7 @@
       "document_id": "method:MF_TRUST_REGION",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:family.trust-region",
         "source:S002",
         "source:S003",
         "source:S056"
@@ -21676,6 +24736,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC025",
+        "content:admm-qp",
         "implementation:I_ACADOS",
         "implementation:I_CVXPY",
         "implementation:I_OSQP",
@@ -21739,6 +24800,7 @@
       "document_id": "method:M_BARRIER_LP_QP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:barrier-lp-qp",
         "implementation:I_CLARABEL",
         "implementation:I_CPLEX",
         "implementation:I_CVXOPT",
@@ -21755,6 +24817,7 @@
         "source:S014",
         "source:S016",
         "source:S055",
+        "source:S056",
         "source:S062"
       ],
       "source_ids": [
@@ -21765,6 +24828,7 @@
         "S014",
         "S016",
         "S055",
+        "S056",
         "S062"
       ],
       "text": "central pathを追跡してLP/QP/錐問題を解く。",
@@ -21983,6 +25047,7 @@
       "document_id": "method:M_CDCL_SAT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:cdcl-sat",
         "implementation:I_MINIZINC",
         "implementation:I_ORTOOLS_CPSAT",
         "source:S022",
@@ -22141,6 +25206,7 @@
       "document_id": "method:M_CP_SEARCH",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:cp-search",
         "implementation:I_MINIZINC",
         "implementation:I_ORTOOLS_ROUTING",
         "source:S022",
@@ -22581,6 +25647,7 @@
       "document_id": "method:M_LBFGS",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:lbfgs",
         "implementation:I_JAXOPT",
         "implementation:I_NLOPT",
         "implementation:I_OPTIMJL",
@@ -22659,6 +25726,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC019",
+        "content:local-search-combinatorial",
         "implementation:I_ORTOOLS_ROUTING",
         "source:S023",
         "source:S054"
@@ -22782,6 +25850,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC020",
+        "content:multiple-shooting",
         "implementation:I_ACADOS",
         "implementation:I_CASADI",
         "implementation:I_DRAKE",
@@ -22879,6 +25948,7 @@
       "document_id": "method:M_NETWORK_SIMPLEX",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:network-simplex",
         "source:S054"
       ],
       "source_ids": [
@@ -23125,6 +26195,7 @@
       "document_id": "method:M_PDLP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:pdlp",
         "implementation:I_ORTOOLS_PDLP",
         "source:S004",
         "source:S010",
@@ -23524,6 +26595,7 @@
       "document_id": "method:M_SMAC_RF",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:smac",
         "implementation:I_SMAC3",
         "source:S034",
         "source:S035",

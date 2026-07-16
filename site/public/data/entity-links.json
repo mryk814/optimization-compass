@@ -1442,6 +1442,62 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "admm-qp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Operator-splitting QP（ADMM型）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "凸QPを固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "augmented-lagrangian",
       "entity_type": "content",
       "external_url": null,
@@ -1494,6 +1550,67 @@
         }
       ],
       "summary": "制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "barrier-lp-qp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Primal-dual barrier法（LP/QP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_BARRIER_LP_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "不等式制約をlog barrierへ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。"
     },
     {
       "aliases": [],
@@ -1790,6 +1907,47 @@
         }
       ],
       "summary": "非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "cdcl-sat",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "CDCL SAT",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_CDCL_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        }
+      ],
+      "summary": "conflictからclauseを学習してBoolean satisfiabilityを探索します。"
     },
     {
       "aliases": [],
@@ -2143,6 +2301,47 @@
         }
       ],
       "summary": "Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索で扱い、実行可能解・bound・停止statusを追う離散最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "cp-search",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約プログラミング探索",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_CP_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cdcl-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constraint-programming",
+          "target_type": "content"
+        }
+      ],
+      "summary": "global constraint propagationとbranchingで有限domainを探索します。"
     },
     {
       "aliases": [],
@@ -2653,6 +2852,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "family.constraint-programming",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約プログラミング・SATの選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_CONSTRAINT_PROGRAMMING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cdcl-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        }
+      ],
+      "summary": "domain propagation、learning、searchを用いて論理・組合せ制約の可行性と最適化を扱う手法群の入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "family.discrete-structure",
       "entity_type": "content",
       "external_url": null,
@@ -2725,6 +2970,72 @@
         }
       ],
       "summary": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.evolutionary",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "進化計算・population探索の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S032",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S033",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S040",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S074",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_EVOLUTIONARY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.global-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "particle-swarm",
+          "target_type": "content"
+        }
+      ],
+      "summary": "個体群を選択・変異・交叉・共分散適応などで更新しながら評価予算を使って改善する進化計算・population探索手法を条件に応じて選び分けるための入口です。"
     },
     {
       "aliases": [],
@@ -2891,6 +3202,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "family.graph-dp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Graph専用法・動的計画法の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_GRAPH_DP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hungarian-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "network-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "問題が既知のgraph・DP構造に一致するかを確認し、一致するなら汎用最適化より先に専用法を検討するための入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "family.local-dfo",
       "entity_type": "content",
       "external_url": null,
@@ -2953,6 +3310,57 @@
         }
       ],
       "summary": "勾配を使えない低〜中次元の連続問題で、Nelder–Mead、Powell、Pattern Search、COBYLA、MADSを選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.multi-objective",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "多目的最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_MULTI_OBJECTIVE",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "moead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "nsga-iii",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "weighted-sum",
+          "target_type": "content"
+        }
+      ],
+      "summary": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、単一の最適解ではなくPareto解集合の近似を得るための多目的最適化手法を条件に応じて選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -3065,6 +3473,67 @@
         }
       ],
       "summary": "mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.trust-region",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "信頼領域法の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_TRUST_REGION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-krylov",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "局所二次modelを信頼できる半径の中だけで最小化し、実測改善と予測改善の比で半径を更新するtrust-region法群を条件に応じて選び分けるための入口です。"
     },
     {
       "aliases": [],
@@ -3340,6 +3809,57 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "lbfgs",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "L-BFGS法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S065",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_LBFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        }
+      ],
+      "summary": "直近m組の曲率更新だけを保持し、two-loop recursionで逆Hessianの作用を計算する大規模無制約向けの準Newton法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "lbfgsb",
       "entity_type": "content",
       "external_url": null,
@@ -3423,6 +3943,47 @@
         }
       ],
       "summary": "観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "local-search-combinatorial",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "組合せlocal search",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simulated-annealing",
+          "target_type": "content"
+        }
+      ],
+      "summary": "swapや2-optなど離散的な近傍moveを定義し、改善が見つかる限りそれを繰り返して可行解を改善するheuristicです。"
     },
     {
       "aliases": [],
@@ -3866,6 +4427,93 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "multiple-shooting",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Direct Multiple Shooting",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MULTIPLE_SHOOTING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "sqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "network-simplex",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Network Simplex法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_NETWORK_SIMPLEX",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "最小費用流問題が持つnetwork構造を利用し、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "newton-cg",
       "entity_type": "content",
       "external_url": null,
@@ -4169,6 +4817,57 @@
         }
       ],
       "summary": "現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "pdlp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "PDHG型一次法LP（PDLP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S078",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PDLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.composite-convex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "primal-simplex",
+          "target_type": "content"
+        }
+      ],
+      "summary": "行列因数分解を避け、行列ベクトル積だけを使う一次法（PDHG）をLPへ適用し、巨大疎LPを扱う近年の方向です。"
     },
     {
       "aliases": [],
@@ -4618,6 +5317,57 @@
         }
       ],
       "summary": "一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "smac",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SMAC（random forest surrogate）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S037",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SMAC_RF",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "tpe",
+          "target_type": "content"
+        }
+      ],
+      "summary": "Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。"
     },
     {
       "aliases": [],
@@ -10764,6 +11514,11 @@
           "target_type": "content"
         },
         {
+          "relation_type": "learning",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA031",
           "target_type": "problem"
@@ -10835,6 +11590,11 @@
           "target_type": "content"
         },
         {
+          "relation_type": "learning",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA042",
           "target_type": "problem"
@@ -10894,6 +11654,11 @@
           "relation_type": "implementation",
           "target_id": "I_OSQP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "admm-qp",
+          "target_type": "content"
         },
         {
           "relation_type": "problem",
@@ -11422,7 +12187,9 @@
       "summary": "等式・不等式・上下限を伴う滑らかな連続非線形問題をKKT条件、SQP、内点法等で解く手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.constraint-programming"
+      ],
       "canonical_url": "/methods/MF_CONSTRAINT_PROGRAMMING",
       "entity_id": "MF_CONSTRAINT_PROGRAMMING",
       "entity_type": "method",
@@ -11438,6 +12205,11 @@
           "relation_type": "evidence",
           "target_id": "S053",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.constraint-programming",
+          "target_type": "content"
         }
       ],
       "summary": "domain propagation、learning、searchを用いて論理・組合せ制約の可行性と最適化を扱う手法群。"
@@ -11564,7 +12336,9 @@
       "summary": "緩和下界、分枝、cut、incumbentを用いてMILP/MIQP/MINLP等を探索し、gapで品質を示す手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.evolutionary"
+      ],
       "canonical_url": "/methods/MF_EVOLUTIONARY",
       "entity_id": "MF_EVOLUTIONARY",
       "entity_type": "method",
@@ -11595,6 +12369,11 @@
           "relation_type": "evidence",
           "target_id": "S074",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.evolutionary",
+          "target_type": "content"
         }
       ],
       "summary": "個体群を選択・変異・交叉・共分散適応等で更新する確率的大域探索手法群。"
@@ -11658,7 +12437,9 @@
       "summary": "多start、領域分割、確率的遷移等により複数basinを探索し、大域的に良い候補を探す手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.graph-dp"
+      ],
       "canonical_url": "/methods/MF_GRAPH_DP",
       "entity_id": "MF_GRAPH_DP",
       "entity_type": "method",
@@ -11669,6 +12450,11 @@
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.graph-dp",
+          "target_type": "content"
         }
       ],
       "summary": "最短路、flow、matching、段階構造などの特殊構造を利用する専用アルゴリズム群。"
@@ -11763,7 +12549,9 @@
       "summary": "球面、Stiefel、Grassmann、SO(3)等の幾何をretraction・Riemann勾配として利用する手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.multi-objective"
+      ],
       "canonical_url": "/methods/MF_MULTI_OBJECTIVE",
       "entity_id": "MF_MULTI_OBJECTIVE",
       "entity_type": "method",
@@ -11779,6 +12567,11 @@
           "relation_type": "evidence",
           "target_id": "S068",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.multi-objective",
+          "target_type": "content"
         }
       ],
       "summary": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、Pareto解集合を近似・生成する手法群。"
@@ -11944,7 +12737,9 @@
       "summary": "評価履歴からsurrogateと不確実性または順位modelを構築し、次の評価点やresource配分を選ぶ手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.trust-region"
+      ],
       "canonical_url": "/methods/MF_TRUST_REGION",
       "entity_id": "MF_TRUST_REGION",
       "entity_type": "method",
@@ -11965,6 +12760,11 @@
           "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.trust-region",
+          "target_type": "content"
         }
       ],
       "summary": "局所二次モデルを信頼できる半径内で最小化し、実測改善との比で半径を更新する手法群。"
@@ -12273,7 +13073,9 @@
       "summary": "分離可能な部分問題をdual consensusで交互更新。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/admm-qp"
+      ],
       "canonical_url": "/methods/M_ADMM_QP",
       "entity_id": "M_ADMM_QP",
       "entity_type": "method",
@@ -12339,6 +13141,11 @@
           "relation_type": "implementation",
           "target_id": "I_OSQP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "admm-qp",
+          "target_type": "content"
         }
       ],
       "summary": "準定値QPをoperator splittingで反復解法。"
@@ -12402,7 +13209,9 @@
       "summary": "Lagrange項と二次penaltyを組み合わせ制約を段階的に満たす。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/barrier-lp-qp"
+      ],
       "canonical_url": "/methods/M_BARRIER_LP_QP",
       "entity_id": "M_BARRIER_LP_QP",
       "entity_type": "method",
@@ -12442,6 +13251,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
           "target_type": "source"
         },
         {
@@ -12493,6 +13307,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_LINPROG_HIGHS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
         }
       ],
       "summary": "central pathを追跡してLP/QP/錐問題を解く。"
@@ -12981,7 +13800,9 @@
       "summary": "劣勾配とcutを蓄積し非滑らかmodelを安定化。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/cdcl-sat"
+      ],
       "canonical_url": "/methods/M_CDCL_SAT",
       "entity_id": "M_CDCL_SAT",
       "entity_type": "method",
@@ -13007,6 +13828,11 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_CPSAT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cdcl-sat",
+          "target_type": "content"
         }
       ],
       "summary": "conflictからclauseを学習してBoolean satisfiabilityを探索。"
@@ -13292,7 +14118,9 @@
       "summary": "整数・Boolean制約をSAT learningとLP等を組み合わせて解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/cp-search"
+      ],
       "canonical_url": "/methods/M_CP_SEARCH",
       "entity_id": "M_CP_SEARCH",
       "entity_type": "method",
@@ -13318,6 +14146,11 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_ROUTING",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-search",
+          "target_type": "content"
         }
       ],
       "summary": "global constraint propagationとbranchingで有限domainを探索。"
@@ -14172,7 +15005,9 @@
       "summary": "barrierとprimal-dual KKT系で大規模疎制約NLPを解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/lbfgs"
+      ],
       "canonical_url": "/methods/M_LBFGS",
       "entity_id": "M_LBFGS",
       "entity_type": "method",
@@ -14223,6 +15058,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYTORCH_OPTIM",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lbfgs",
+          "target_type": "content"
         }
       ],
       "summary": "少数の更新vectorだけを保持する大規模向け準Newton法。"
@@ -14324,7 +15164,9 @@
       "summary": "Gauss–Newtonにdampingを加えた非線形最小二乗法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/local-search-combinatorial"
+      ],
       "canonical_url": "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
       "entity_id": "M_LOCAL_SEARCH_COMBINATORIAL",
       "entity_type": "method",
@@ -14350,6 +15192,11 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_ROUTING",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "local-search-combinatorial",
+          "target_type": "content"
         }
       ],
       "summary": "近傍moveで可行解を改善するheuristic。"
@@ -14557,7 +15404,9 @@
       "summary": "gradientの移動平均で加速・振動抑制。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/multiple-shooting"
+      ],
       "canonical_url": "/methods/M_MULTIPLE_SHOOTING",
       "entity_id": "M_MULTIPLE_SHOOTING",
       "entity_type": "method",
@@ -14603,6 +15452,11 @@
           "relation_type": "implementation",
           "target_id": "I_DRAKE",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
         }
       ],
       "summary": "軌道をsegmentに分け状態を変数化しcontinuity制約を置く。"
@@ -14784,7 +15638,9 @@
       "summary": "n+1点の単体を反射・膨張・縮小する局所DFO。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/network-simplex"
+      ],
       "canonical_url": "/methods/M_NETWORK_SIMPLEX",
       "entity_id": "M_NETWORK_SIMPLEX",
       "entity_type": "method",
@@ -14795,6 +15651,11 @@
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "network-simplex",
+          "target_type": "content"
         }
       ],
       "summary": "flow networkのtree basis構造を用いる。"
@@ -15230,7 +16091,9 @@
       "summary": "training中にweightsとhyperparametersをpopulationで継承・摂動。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/pdlp"
+      ],
       "canonical_url": "/methods/M_PDLP",
       "entity_id": "M_PDLP",
       "entity_type": "method",
@@ -15286,6 +16149,11 @@
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_PDLP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "pdlp",
+          "target_type": "content"
         }
       ],
       "summary": "一次primal-dual更新で巨大LPをmatrix-vector中心に解く。"
@@ -16066,7 +16934,9 @@
       "summary": "least-squares型QP subproblemを用いるSQP変種。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/smac"
+      ],
       "canonical_url": "/methods/M_SMAC_RF",
       "entity_id": "M_SMAC_RF",
       "entity_type": "method",
@@ -16117,6 +16987,11 @@
           "relation_type": "implementation",
           "target_id": "I_SMAC3",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "smac",
+          "target_type": "content"
         }
       ],
       "summary": "random forest surrogateで混合/カテゴリHPOを扱う。"

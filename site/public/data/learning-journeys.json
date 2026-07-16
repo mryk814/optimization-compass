@@ -135,7 +135,8 @@
         "M_CP_SAT"
       ],
       "content_ids": [
-        "cp-sat"
+        "cp-sat",
+        "local-search-combinatorial"
       ],
       "dataset_version": "0.11.0",
       "domain": "logistics",
@@ -187,7 +188,8 @@
         "M_MULTIPLE_SHOOTING"
       ],
       "content_ids": [
-        "direct-collocation"
+        "direct-collocation",
+        "multiple-shooting"
       ],
       "dataset_version": "0.11.0",
       "domain": "control",
@@ -239,7 +241,9 @@
       "conditional_method_ids": [
         "M_ACTIVE_SET_QP"
       ],
-      "content_ids": [],
+      "content_ids": [
+        "admm-qp"
+      ],
       "dataset_version": "0.11.0",
       "domain": "control",
       "excluded_method_ids": [
