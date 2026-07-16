@@ -3,7 +3,7 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-MINIMUM_PUBLISHED_METHOD_GUIDES = 50
+MINIMUM_PUBLISHED_METHOD_GUIDES = 66
 MINIMUM_SUMMARY_CHARACTERS = 35
 MINIMUM_BODY_CHARACTERS = 1_200
 MINIMUM_TOC_ENTRIES = 4
@@ -19,13 +19,42 @@ BEGINNER_FAMILY_GUIDE_IDS = {
     "family.stochastic-ml",
 }
 
-REQUIRED_BEGINNER_SECTIONS = (
+BEGINNER_METHOD_TRANCHE_IDS = {
+    "adamw",
+    "basin-hopping",
+    "bundle-method",
+    "cobyqa",
+    "direct-shooting",
+    "epsilon-constraint",
+    "gauss-newton",
+    "hyperband-asha",
+    "moead",
+    "newton-cg",
+    "nonlinear-cg",
+    "nsga-iii",
+    "outer-approximation-minlp",
+    "spsa",
+    "tpe",
+    "trust-krylov",
+}
+
+REQUIRED_FAMILY_SECTIONS = (
     "## 30秒でつかむ",
     "## まず確認すること",
     "## 条件付きの選び分け",
     "## うまくいったサインと切替サイン",
     "## コラム:",
     "## 次に読む",
+)
+
+REQUIRED_BEGINNER_METHOD_SECTIONS = (
+    "## 30秒でつかむ",
+    "## まず確認すること",
+    "## 仕組み",
+    "## 向く条件・避ける条件",
+    "## うまくいったサインと切替サイン",
+    "## Python例",
+    "## コラム:",
 )
 
 
@@ -67,7 +96,24 @@ def test_family_choice_guides_use_the_beginner_first_contract() -> None:
         assert page.status == "published"
         assert page.kind == "method"
         assert page.method_id.startswith("MF_")
-        for section in REQUIRED_BEGINNER_SECTIONS:
+        for section in REQUIRED_FAMILY_SECTIONS:
             assert section in page.body, f"{content_id} is missing {section}"
         assert "切替" in page.body
         assert "| 役割 | 手法 |" in page.body
+
+
+def test_second_method_tranche_uses_the_beginner_first_contract() -> None:
+    root = Path(__file__).resolve().parents[1]
+    pages = {page.content_id: page for page in load_content(root / "content")}
+
+    assert pages.keys() >= BEGINNER_METHOD_TRANCHE_IDS
+
+    for content_id in sorted(BEGINNER_METHOD_TRANCHE_IDS):
+        page = pages[content_id]
+        assert page.status == "published"
+        assert page.kind == "method"
+        assert page.method_id.startswith("M_")
+        for section in REQUIRED_BEGINNER_METHOD_SECTIONS:
+            assert section in page.body, f"{content_id} is missing {section}"
+        assert "この手法の気持ち" in page.body
+        assert "切替サイン" in page.body
