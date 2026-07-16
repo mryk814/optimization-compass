@@ -150,6 +150,8 @@ This raises the published method-guide baseline to 66. It still does not require
 
 After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
+The same canonical export rebuilds search and retrieval documents, so added explanations become available through human search and future external retrieval without a second hand-maintained corpus.
+
 ## Review checklist
 
 - The first paragraph exactly matches frontmatter `summary`.
