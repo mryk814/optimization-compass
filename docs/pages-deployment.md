@@ -9,13 +9,18 @@ site along separate paths.
 `validate_pages_artifact` checks out the workflow commit once and performs the complete gate:
 
 1. install the locked Python and Node.js dependencies;
-2. run Python lint, formatting, mypy, and the full test suite;
+2. run Python lint, formatting, mypy, and the focused API/CLI/recommendation/artifact smoke suite;
 3. delete and regenerate `site/public/data`, then require zero tracked drift;
 4. run database, content, licensing, deterministic two-stage rebuild, and generated-data checks;
 5. run Python/TypeScript recommendation parity;
 6. run site typecheck and unit tests, then build `site/dist`;
 7. stamp `site/dist/deployment.json` and verify the exact directory locally; and
 8. upload that directory once as the `github-pages` artifact.
+
+The exhaustive Python regression suite intentionally stays outside the per-commit deployment path.
+Run `uv run pytest` manually when changing dataset release, rollback, format-mutation, or schema
+enforcement behavior. The normal main-branch path still regenerates and verifies the real dataset,
+tests and builds the site, exercises production browser journeys, and smokes the deployed result.
 
 The deployment identity records the workflow commit SHA, dataset version, release date, database
 SHA-256, and Pages base path. Its commit SHA is `${{ github.sha }}` for the checked-out workflow

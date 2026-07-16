@@ -1,8 +1,8 @@
 # Dependency and supply-chain maintenance
 
 Optimization Compass has one validated CI and Pages workflow. Dependency updates do not bypass it:
-Python 3.12 tests, site tests, recommendation parity, the production build, dataset checks, and the
-Pages artifact gate all run on Dependabot pull requests.
+focused Python 3.12 smoke tests, site tests, recommendation parity, the production build, dataset
+checks, and the Pages artifact gate all run on Dependabot pull requests.
 
 ## Automated updates
 
