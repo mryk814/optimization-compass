@@ -131,11 +131,24 @@ Issue #97 adds beginner-first choice guides for:
 
 This raises the published method-guide baseline to 50 and provides a reusable pattern for future family and method tranches.
 
+## Second beginner method tranche
+
+Issue #101 fills the most visible gaps exposed by the family guides:
+
+- nonlinear CG, Newton-CG, trust-krylov, and Gauss–Newton
+- bundle method, SPSA, COBYQA, and basin hopping
+- TPE, Hyperband / ASHA, and AdamW
+- epsilon-constraint, NSGA-III, MOEA/D, direct shooting, and outer approximation for MINLP
+
+These guides are the first individual-method tranche to require the beginner-first structure directly: `30秒でつかむ`, prerequisite questions, a plain-language mechanism, suitable and unsuitable conditions, observable switch signals, a syntax-valid example, and an advanced column.
+
+This raises the published method-guide baseline to 66. It still does not require every registered method to have the same amount of prose or a visualization.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.
 
-After the beginner family tranche, all 50 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
+After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
 ## Review checklist
 
@@ -148,4 +161,5 @@ After the beginner family tranche, all 50 published method guides must meet the 
 - Examples are syntactically valid and clearly scoped as educational or executable.
 - Comparison claims state budget, initialization, seed, tolerance, and implementation context.
 - Family guides describe conditional roles rather than a universal ranking.
+- Beginner-first method guides explain what is observed, what is updated, and which diagnostic triggers a switch.
 - Generated site data is regenerated from the latest validated database and content tree.
