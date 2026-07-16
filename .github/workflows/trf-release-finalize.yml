@@ -1,0 +1,215 @@
+name: Finalize merged TRF release
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'fix/trf-release-finalize'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
+      - name: Finalize release wiring and golden expectations
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          def replace_once(path: Path, old: str, new: str) -> None:
+              text = path.read_text(encoding='utf-8')
+              if old in text:
+                  if text.count(old) != 1:
+                      raise SystemExit(f'{path}: expected one occurrence of {old[:80]!r}')
+                  path.write_text(text.replace(old, new, 1), encoding='utf-8')
+                  return
+              if new not in text:
+                  raise SystemExit(f'{path}: neither old nor finalized fragment is present: {old[:80]!r}')
+
+          dataset = Path('src/optimization_compass/dataset_release.py')
+          text = dataset.read_text(encoding='utf-8')
+          learning = 'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
+          trf = 'DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"'
+          if trf not in text:
+              if text.count(learning) != 1:
+                  raise SystemExit('learning-graph migration constant did not resolve exactly once')
+              text = text.replace(learning, learning + '\n' + trf, 1)
+          protected_old = (
+              '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
+              '            seed_path,\n'
+          )
+          protected_new = (
+              '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
+              '            DEFAULT_LEARNING_GRAPH_MIGRATION,\n'
+              '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n'
+              '            seed_path,\n'
+          )
+          if protected_old in text:
+              text = text.replace(protected_old, protected_new, 1)
+          elif protected_new not in text:
+              raise SystemExit('protected migration inputs were not in the expected state')
+          execution = '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
+          trf_execution = '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))\n'
+          if trf_execution not in text:
+              if text.count(execution) != 1:
+                  raise SystemExit('learning-graph execution did not resolve exactly once')
+              text = text.replace(execution, execution + trf_execution, 1)
+          text = text.replace(
+              '"Published constrained-continuous and multi-objective learning slices."',
+              '"Published canonical Trust Region Reflective defaults and guidance."',
+              1,
+          )
+          text = text.replace(
+              '"Constrained and multi-objective concepts lacked canonical executable visuals."',
+              '"A widely used SciPy default was represented only through broad adjacent methods."',
+              1,
+          )
+          text = text.replace(
+              '"Added renderer-family contracts for feasible regions and Pareto fronts, "\n'
+              '                "with canonical scenarios, references, and failure contrast."',
+              '"Added a canonical Trust Region Reflective method, primary source, "\n'
+              '                "implementation mapping, and API-default metadata."',
+              1,
+          )
+          text = text.replace(
+              '"Connect canonical problems to artifacts, routes, content, Gallery, "\n'
+              '                "Map, and sources."',
+              '"Separate library default behavior from method recommendation priority, "\n'
+              '                "and connect the dedicated guide to generated search and retrieval."',
+              1,
+          )
+          dataset.write_text(text, encoding='utf-8')
+
+          authority = Path('src/optimization_compass/resources/release-authority.json')
+          payload = json.loads(authority.read_text(encoding='utf-8'))
+          payload['dataset_version'] = '0.11.0'
+          payload['release_date'] = '2026-07-16'
+          authority.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          least_squares = Path('content/methods/least-squares.md')
+          text = least_squares.read_text(encoding='utf-8')
+          text = text.replace(
+              'related_ids: [method.gradient-descent, trust-region-newton-cg]',
+              'related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]',
+              1,
+          )
+          text = text.replace(
+              '- bounds中心・大規模 → trust-region reflective',
+              '- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)',
+              1,
+          )
+          least_squares.write_text(text, encoding='utf-8')
+
+          replacements = {
+              'tests/test_method_content_density.py': [
+                  ('MINIMUM_PUBLISHED_METHOD_GUIDES = 66', 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67'),
+              ],
+              'tests/test_derived_media.py': [
+                  ('manifest.dataset_version == "0.10.0"', 'manifest.dataset_version == "0.11.0"'),
+              ],
+              'tests/test_evidence.py': [
+                  ('len(index.sources) == 95', 'len(index.sources) == 96'),
+              ],
+              'tests/test_release_identity.py': [
+                  ('authority.dataset_version == "0.10.0"', 'authority.dataset_version == "0.11.0"'),
+              ],
+              'tests/test_site_export.py': [
+                  ('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96'),
+              ],
+          }
+          for name, changes in replacements.items():
+              path = Path(name)
+              value = path.read_text(encoding='utf-8')
+              for old, new in changes:
+                  if old in value:
+                      value = value.replace(old, new, 1)
+                  elif new not in value:
+                      raise SystemExit(f'{name}: expected release golden not found: {old}')
+              path.write_text(value, encoding='utf-8')
+
+          fixture = Path('tests/fixtures/recommendation_cases.json')
+          fixture.write_text(
+              fixture.read_text(encoding='utf-8').replace(
+                  '"dataset_version": "0.10.0"',
+                  '"dataset_version": "0.11.0"',
+              ),
+              encoding='utf-8',
+          )
+
+          density_doc = Path('docs/method-content-density.md')
+          text = density_doc.read_text(encoding='utf-8')
+          if '## Default-method pilot' not in text:
+              marker = '## Audit report\n'
+              if marker not in text:
+                  raise SystemExit('method density audit marker is missing')
+              text = text.replace(
+                  marker,
+                  '## Default-method pilot\n\n'
+                  'Issue #111 adds a dedicated Trust Region Reflective guide because it is selected implicitly by '
+                  'a high-use SciPy API. This raises the published method-guide baseline to 67 while keeping library '
+                  'defaults separate from recommendation priority.\n\n'
+                  + marker,
+                  1,
+              )
+          density_doc.write_text(text, encoding='utf-8')
+          PY
+          uv run ruff format \
+            src/optimization_compass/dataset_release.py \
+            tests/test_method_content_density.py \
+            tests/test_derived_media.py \
+            tests/test_evidence.py \
+            tests/test_release_identity.py \
+            tests/test_site_export.py
+      - name: Build and publish deterministic dataset 0.11.0
+        run: |
+          rm -rf .release-stage
+          uv run python scripts/rebuild_dataset.py --stage --output .release-stage
+          uv run python scripts/rebuild_dataset.py --publish --staged-directory .release-stage
+          rm -rf .release-stage
+          uv run python scripts/method_content_density_report.py
+      - name: Validate the complete repository
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src
+          uv run pytest
+          uv run optimization-compass verify-data
+          uv run python scripts/verify_content.py
+          uv run python scripts/verify_licensing.py
+          npm --prefix site run parity
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run
+          npm --prefix site run build
+      - name: Commit finalized release and remove temporary files
+        run: |
+          rm -f docs/trf-final-diagnostics.txt docs/trf-pytest-diagnostics.txt docs/trf-pytest-final.txt
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm -f .github/workflows/trf-default-release-autogen.yml
+          git rm -f .github/workflows/trf-fixture-version.yml
+          git rm -f .github/workflows/trf-release-finalize.yml
+          git add -A data content docs site/public/data src tests .github/workflows
+          git commit -m 'fix: finalize Trust Region Reflective dataset 0.11.0'
+          git push origin HEAD:${{ github.head_ref }}
