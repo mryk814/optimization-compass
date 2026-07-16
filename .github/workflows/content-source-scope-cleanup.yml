@@ -1,0 +1,63 @@
+name: Tighten second tranche source scope
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'content/beginner-method-tranche-2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - name: Restrict source IDs to directly supporting references
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              'content/methods/nonlinear-cg.md': ('source_ids: [S002, S056, S057]', 'source_ids: [S002, S056]'),
+              'content/methods/newton-cg.md': ('source_ids: [S002, S056, S057]', 'source_ids: [S002, S056]'),
+              'content/methods/trust-krylov.md': ('source_ids: [S002, S003, S056]', 'source_ids: [S002, S056]'),
+              'content/methods/gauss-newton.md': ('source_ids: [S002, S003, S041, S056]', 'source_ids: [S003, S041, S056]'),
+              'content/methods/bundle-method.md': ('source_ids: [S055, S056, S066]', 'source_ids: [S055, S056]'),
+              'content/methods/epsilon-constraint.md': ('source_ids: [S039, S055, S068]', 'source_ids: [S039, S055]'),
+              'content/methods/nsga-iii.md': ('source_ids: [S039, S068]', 'source_ids: [S039]'),
+              'content/methods/moead.md': ('source_ids: [S039, S068]', 'source_ids: [S039]'),
+          }
+          for name, (old, new) in replacements.items():
+              path = Path(name)
+              text = path.read_text(encoding='utf-8')
+              if text.count(old) != 1:
+                  raise SystemExit(f'{name}: expected source declaration not found exactly once')
+              path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+      - name: Regenerate and validate canonical artifacts
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          rm -rf site/public/data
+          uv run optimization-compass export-site-data --output site/public/data
+          uv run python scripts/verify_content.py
+          uv run python scripts/method_content_density_report.py
+          uv run pytest tests/test_search_index.py tests/test_content_models.py tests/test_method_content_density.py
+      - name: Commit source cleanup and regenerated indexes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add content docs site/public/data
+          git rm .github/workflows/content-source-scope-cleanup.yml
+          git commit -m 'content: tighten source scope for beginner method guides'
+          git push origin HEAD:${{ github.head_ref }}
