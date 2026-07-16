@@ -225,9 +225,9 @@ class VisualizationArtifact(TraceModel):
     artifact_contract: Literal[
         "AlgorithmTrace", "SurrogateUncertainty", "FeasibleRegion", "ParetoFront"
     ]
-    artifact_contract_version: Literal["1.0.0"]
+    artifact_contract_version: Literal["1.0.0", "1.1.0"]
     renderer_family: RendererFamily
-    renderer_contract_version: Literal["1.0.0"]
+    renderer_contract_version: Literal["1.0.0", "1.1.0"]
     observable_ids: list[NonBlank] = Field(min_length=1)
     payload_path: str = Field(pattern=r"^(traces|visualizations)/[a-z0-9._/-]+\.json$")
     payload_bytes: int = Field(gt=0)
