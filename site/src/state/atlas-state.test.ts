@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import {
   AtlasStateUrlTooLongError,
   decodeAtlasState,
+  decodeAtlasStateToken,
   encodeAtlasState,
   toRecommendationAnswers,
   type AtlasCompatibilityCatalog,
@@ -80,6 +81,38 @@ describe("AtlasState URL codec", () => {
     expect(token).toMatch(/^[A-Za-z0-9_-]+$/u);
     expect(token).not.toContain("=");
     expect(decoded).toEqual({ state, warnings: [] });
+  });
+
+  test("round-trips the canonical Case journey context without a catalog", () => {
+    const state: AtlasStateV1 = {
+      stateVersion: 1,
+      datasetVersion: catalog.datasetVersion,
+      viewId: catalog.viewId,
+      viewVersion: catalog.viewVersion,
+      journey: {
+        journeyId: "constrained-design",
+        caseId: "constrained-design",
+        scenarioId: "constrained-design-primary",
+        comparisonId: "constrained-design-methods",
+        methodId: "M_SQP",
+        memberId: "sqp",
+      },
+      answers: {},
+    };
+
+    expect(decodeAtlasStateToken(encodeAtlasState(state))).toEqual(state);
+    expect(decodeAtlasState(encodeAtlasState(state), catalog)).toEqual({
+      state,
+      warnings: [],
+    });
+  });
+
+  test("rejects a malformed Case journey instead of guessing its identity", () => {
+    const token = encodeRawJson(validRawState({
+      journey: { journeyId: "one-case", caseId: "another-case" },
+    }));
+
+    expect(() => decodeAtlasStateToken(token)).toThrow(/journeyId.*caseId/u);
   });
 
   test("sorts question IDs and multi-choice values without mutating input", () => {
@@ -254,6 +287,20 @@ describe("AtlasState URL codec", () => {
     expect(decoded.warnings).toHaveLength(2);
     expect(decoded.warnings[0]).toMatch(/データセット/u);
     expect(decoded.warnings[1]).toMatch(/ビュー/u);
+  });
+
+  test("drops Case journey context when the dataset version changes", () => {
+    const token = encodeRawJson(
+      validRawState({
+        datasetVersion: "2025-01-01",
+        journey: { journeyId: "constrained-design", caseId: "constrained-design" },
+      }),
+    );
+
+    const decoded = decodeAtlasState(token, catalog);
+
+    expect(decoded.state.journey).toBeUndefined();
+    expect(decoded.warnings.some((warning) => warning.includes("Case journey"))).toBe(true);
   });
 
   test("removes invalid questions, answer values, and selected nodes with warnings", () => {

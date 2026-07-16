@@ -33,8 +33,9 @@ test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作で
   await expectNoHorizontalOverflow(page);
 
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
-  await expect(page.getByRole("link", { name: "分類図上で見る" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "問題構造Mapで位置を確認" })).toBeVisible();
   await expect(page.getByRole("link", { name: "この特徴で診断する" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /固定条件と変えた条件を比べる/u })).toBeVisible();
   await page.getByRole("button", { name: "実装用プロンプトを作る" }).click();
   await expect(page.getByRole("dialog", { name: "実装用プロンプトを作る" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
@@ -56,15 +57,46 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   await expectFitsViewport(plot, page);
 });
 
+test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
+  await expect(page.getByText("18 / 18 scenarios")).toBeVisible();
+  await page.getByLabel("問題domain").selectOption("discrete");
+  await expect(page.getByText("2 / 18 scenarios")).toBeVisible();
+  await expect(page.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");
+});
+
+test("375px Compare Labで比較条件と非trajectory結果を読める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
+  await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "違うもの / Changed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "見る指標 / Metrics" })).toBeVisible();
+  await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Case: 強度制約/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-compare-feasible-region");
+});
+
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
-  await page.getByRole("link", { name: "Search-tree Theaterで再生" }).click();
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
   await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(page.getByRole("tree")).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-search-tree");
+});
+
+test("375px Case journey navigationが横にはみ出さず次へ進める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC017");
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  const journey = page.getByRole("complementary", { name: "Case learning journey" });
+  await expect(journey).toContainText("Step 2/4");
+  await expect(journey.getByRole("link", { name: /次はCompare/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-case-journey");
 });
 
 test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async ({ page, baseURL }, testInfo) => {

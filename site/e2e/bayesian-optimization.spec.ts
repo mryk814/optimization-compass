@@ -8,8 +8,8 @@ function requiredBaseURL(baseURL: string | undefined): string {
 }
 
 test("BO Theaterでcanonical scenarioを切り替え、keyboardで次点選択を追える", async ({ page, baseURL }, testInfo) => {
-  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
-  await page.getByRole("link", { name: "BO Theaterで点選択を見る" }).click();
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
+  await page.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
   await expect(page.getByText(/surrogate_uncertainty 1\.0\.0/u)).toBeVisible();
   await expect(page.getByRole("img", { name: /surrogate平均/u })).toBeVisible();

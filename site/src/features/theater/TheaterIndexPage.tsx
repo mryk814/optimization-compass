@@ -1,70 +1,89 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { THEATER_ROUTES } from "./theater-routes";
 import { PageOrientation } from "../../components/PageOrientation";
-
-const theaterEntries = [
-  {
-    eyebrow: "Simplex geometry · AlgorithmTrace",
-    title: "Nelder–Mead",
-    description: "simplexの反射・拡張・収縮を、目的関数上の幾何操作として追います。",
-    detail: "Nelder–Meadの幾何操作",
-    to: THEATER_ROUTES.nelderMead,
-  },
-  {
-    eyebrow: "Search tree · executable trace",
-    title: "Branch-and-bound",
-    description: "0-1 knapsackで、探索ノードの展開と最適性証明までを再生します。",
-    detail: "Search-tree Theater",
-    to: THEATER_ROUTES.searchTree,
-  },
-  {
-    eyebrow: "Surrogate uncertainty · executable trace",
-    title: "Bayesian Optimization（BO）",
-    description: "観測からsurrogateを更新し、Expected Improvementで次の点を選ぶ流れを見ます。",
-    detail: "BO Theater",
-    to: THEATER_ROUTES.bayesianOptimization,
-  },
-  {
-    eyebrow: "Feasible region · executable teaching trace",
-    title: "Constrained continuous",
-    description: "目的等高線、feasible region、constraint violation、active constraintを同時に読みます。",
-    detail: "制約付き最適化のfailure contrast",
-    to: THEATER_ROUTES.constrainedContinuous,
-  },
-  {
-    eyebrow: "Pareto front · executable result",
-    title: "Multi-objective",
-    description: "dominated / non-dominatedとpreferenceで選ぶ点を、2目的空間で確認します。",
-    detail: "Pareto front learning slice",
-    to: THEATER_ROUTES.multiObjective,
-  },
-] as const;
+import { parseVisualizationScenarioIndex } from "../../contracts/visualization-scenarios";
+import { siteBaseUrl } from "../../data/base-url";
+import { useEntityLinks } from "../../state/entity-links";
+import {
+  buildTheaterCatalog,
+  purposeLabels,
+  rendererLabels,
+  type TheaterCatalogEntry,
+  type TheaterDomain,
+} from "./scenario-catalog";
 
 export function TheaterIndexPage() {
+  const links = useEntityLinks();
+  const [scenarios, setScenarios] = useState<ReturnType<typeof parseVisualizationScenarioIndex>>();
+  const [purpose, setPurpose] = useState("all");
+  const [domain, setDomain] = useState<"all" | TheaterDomain>("all");
+  const [error, setError] = useState<Error>();
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(`${siteBaseUrl()}data/visualization-scenarios.json`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Visualization scenario request failed (${response.status}).`);
+        return parseVisualizationScenarioIndex(await response.json());
+      })
+      .then(setScenarios, (caught: unknown) => {
+        if (!controller.signal.aborted) setError(caught instanceof Error ? caught : new Error(String(caught)));
+      });
+    return () => controller.abort();
+  }, []);
+  const catalog = useMemo(() => (
+    scenarios && links.status === "ready" ? buildTheaterCatalog(scenarios.scenarios, links.index) : []
+  ), [links, scenarios]);
+  const visible = catalog.filter((entry) => (
+    entry.publicationStatus === "published"
+    && (purpose === "all" || entry.scenario.purpose === purpose)
+    && (domain === "all" || entry.domain === domain)
+  ));
+  const families = visible.reduce((groups, entry) => {
+    groups.set(entry.familyId, [...(groups.get(entry.familyId) ?? []), entry]);
+    return groups;
+  }, new Map<string, TheaterCatalogEntry[]>());
   return (
     <section className="atlas-page theater-index-page">
       <header className="atlas-page-header">
-        <p className="eyebrow">Method Theater · Watch the mechanism</p>
+        <p className="eyebrow">Method Theater · One run, one mechanism</p>
         <h1>Method Theater</h1>
-        <p>手法ごとの動きを選んで再生します。個別の実験に入る前に、何を観察するかを選べます。</p>
+        <p>一つの固定runを再生し、更新・評価・停止の理由を読みます。条件を揃えた差の判断はCompareで行います。</p>
       </header>
       <PageOrientation
-        limits="Theaterは教材用の実行Traceを再生します。固定されたscenarioの機構を理解するためのもので、実データへの適用結果ではありません。"
-        next={[{ label: "Compareで同じ条件を比べる", to: "/compare" }, { label: "手法の教材を読む", to: "/learn" }, { label: "根拠資料を確認する", to: "/sources" }]}
-        purpose="アルゴリズムの一手を再生し、更新・評価・停止の理由を目で追います。"
-        readingSteps={["見たいmechanismのTheaterを選びます。", "再生・step・表示条件を操作し、現在のframeを確認します。", "テキスト代替と限界も読み、必要ならCompareや教材へ戻ります。"]}
+        limits="Theaterは固定scenarioの機構を理解する画面です。一つのrunから一般的な手法順位は結論づけません。"
+        next={[{ label: "Compareで条件を揃えて比べる", to: "/compare" }, { label: "Caseから探す", to: "/gallery" }, { label: "手法の教材を読む", to: "/learn" }]}
+        purpose="scenarioごとの一手を再生し、何が観測され、なぜ止まったかを目で追います。"
+        readingSteps={["目的または問題domainでscenarioを絞ります。", "primaryとvariantを同じfamily内で選びます。", "runを再生し、Case・Compareへ同じcontextで戻ります。"]}
       />
-      <div className="theater-card-grid" aria-label="Theaterの再生メニュー">
-        {theaterEntries.map((entry) => (
-          <Link className="theater-card" key={entry.to} to={entry.to}>
-            <span>{entry.eyebrow}</span>
-            <h2>{entry.title}</h2>
-            <p>{entry.description}</p>
-            <small>{entry.detail}を開く →</small>
-          </Link>
-        ))}
+      <div className="theater-catalog-filters" aria-label="Theater catalog filters">
+        <label>見る目的<select aria-label="見る目的" value={purpose} onChange={(event) => setPurpose(event.target.value)}><option value="all">すべて</option>{Object.entries(purposeLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+        <label>問題domain<select aria-label="問題domain" value={domain} onChange={(event) => setDomain(event.target.value as typeof domain)}><option value="all">すべて</option>{["continuous", "constrained", "discrete", "black-box", "multi-objective"].map((value) => <option key={value} value={value}>{value}</option>)}</select></label>
+        <span aria-live="polite">{visible.length} / {catalog.filter((entry) => entry.publicationStatus === "published").length} scenarios</span>
       </div>
+      <p className="atlas-note">Catalogはpublished scenarioのみ表示します。draft / hiddenは公開導線へ出しません。</p>
+      {error && <p className="atlas-error" role="alert">{error.message}</p>}
+      {(!scenarios || links.status === "loading") && !error && <p role="status">scenario catalogを読み込み中…</p>}
+      <div className="theater-family-list" aria-label="Theaterのscenario catalog">
+        {[...families.entries()].map(([familyId, entries]) => {
+          const primary = entries.find((entry) => entry.scenario.lesson.comparison_role === "primary_example") ?? entries[0];
+          return (
+            <section className="theater-family" key={familyId}>
+              <header><span>{rendererLabels[primary.scenario.artifact.renderer_family]} · {primary.domain}</span><h2>{primary.methods[0]?.label ?? primary.scenario.runs[0]?.method_id}</h2><small>{entries.length} scenario{entries.length === 1 ? "" : "s"}</small></header>
+              <div className="theater-card-grid">
+                {entries.map((entry) => <Link className="theater-card" key={entry.scenario.scenario_id} to={entry.route}>
+                  <span>{purposeLabels[entry.scenario.purpose]} · {entry.scenario.lesson.comparison_role}</span>
+                  <h3>{entry.scenario.title_ja}</h3>
+                  <p>{entry.scenario.lesson.learning_objective.ja}</p>
+                  <small>{entry.journey ? `Case: ${entry.journey.label}` : `Problem: ${entry.scenario.problem_instance_id}`}</small>
+                  <small>{entry.difficulty} · {entry.publicationStatus} · {entry.scenario.experiment.budget.value} evaluations →</small>
+                </Link>)}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+      {scenarios && links.status === "ready" && visible.length === 0 && <p className="atlas-note">該当する公開scenarioはありません。</p>}
     </section>
   );
 }

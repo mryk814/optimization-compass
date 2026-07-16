@@ -1,0 +1,509 @@
+# Adding and correcting Optimization Compass knowledge
+
+This guide explains where information is owned, which files to edit, and how to validate common changes.
+It is designed both for maintainers and for contributors making their first small correction or addition.
+
+For the concise repository rules, read [`../AGENTS.md`](../AGENTS.md). For an AI-agent procedure, read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](../.agents/skills/optimization-compass-maintenance/SKILL.md).
+
+## 1. The mental model
+
+Optimization Compass has several kinds of authority because the same concept may have structured facts, human explanation, executable behavior, and generated visual output.
+
+```text
+Auditable editable inputs
+  ├─ SQL migrations / validated data seeds
+  ├─ Markdown content
+  ├─ Python executable registries and generators
+  └─ frontend renderer contracts
+             │
+             ▼
+Deterministic staged build
+             │
+             ├─ released SQLite runtime authority
+             ├─ JSON / JSONL / CSV / Excel distributions
+             ├─ site/public/data indexes
+             ├─ search / retrieval / Coverage artifacts
+             └─ Trace and visualization payloads
+```
+
+The released SQLite database is the runtime authority. It is **not** an authoring interface. Change its build inputs and regenerate it.
+
+## 2. Where each kind of information lives
+
+| Information | Editable authority | Notes |
+|---|---|---|
+| Method, family, implementation, source, evidence, hierarchy, support scope | Dataset migration/build inputs | A knowledge addition may require a SQL migration until a declarative catalog exists. |
+| Method or concept explanation | `content/**/*.md` | Frontmatter links prose to canonical entities and sources. |
+| Gallery case | `data/seeds/site_gallery.json` | Uses existing canonical IDs and is validated against Diagnose questions and features. |
+| Comparison | `data/seeds/site_comparisons.json` | Must state fairness, caveats, synchronization, and members. |
+| Problem definition and instance metadata | `src/optimization_compass/resources/problem-suite.json` | Defines mathematical family, domain, parameters, reference, display, and sources. |
+| Executable objective/gradient | `src/optimization_compass/problem_registry.py` | `registry_key` values must match the problem-suite instances exactly. |
+| View presets and method visualization profiles | `data/seeds/atlas_metadata.json` and canonical database rows | Do not hard-code entity routing in the UI. |
+| Formulation terminology | `data/seeds/formulation_primer_terms.json` | Shared by Case, Diagnose, and Map. |
+| Atomic predicates | `data/seeds/atomic_predicates.json` and related migration tables | Changes may affect recommendation behavior. |
+| Structured failure relations | Existing failure rows plus `src/optimization_compass/failure_modes.py` | Current authoring is partly code-backed; treat changes as canonical-data work. |
+| Implementation claims and benchmark contexts | Canonical implementation data plus `src/optimization_compass/versioned_claims.py` | Defaults and release claims are versioned facts, not rankings. |
+| Visualization scenario contracts | `src/optimization_compass/visualization_scenarios.py` and scenario generation code | Includes learning metadata, experiment policy, run identity, artifact, and sources. |
+| Site indexes, release data, Coverage, search, retrieval, Trace JSON | Generated output | Never fix by hand. |
+
+## 3. Files that must not be edited by hand
+
+These files and directories are products of the build or release process:
+
+```text
+src/optimization_compass/resources/knowledge.sqlite
+src/optimization_compass/resources/DATASET_VERSION
+site/public/data/**
+data/optimization_method_selection_database_v*
+generated Trace, media, search, retrieval, Coverage, manifest, and release artifacts
+```
+
+A generated file may be committed as part of a validated release. It must be produced from canonical inputs, not manually patched.
+
+When a generated page is wrong, trace the value backward:
+
+```text
+visible page
+  → generated site payload
+  → exporter / relation index
+  → Markdown, seed, migration, registry, or generator authority
+```
+
+## 4. Choose a safe change level
+
+### Green: suitable for a first contribution
+
+- fix prose, spelling, terminology, limitations, or practical notes;
+- improve an existing example without changing canonical behavior;
+- add or improve a method/concept article for an existing entity;
+- add aliases or links using existing valid IDs;
+- add a Gallery case that only references existing canonical entities.
+
+### Yellow: agent-assisted or maintainer-reviewed
+
+- add a comparison using existing traces and renderer families;
+- add a problem instance under an existing problem contract;
+- add a family guide or learning relation;
+- extend a structured failure mode inside the current schema;
+- add source/evidence records without changing recommendation semantics.
+
+### Red: dedicated design and release work
+
+- introduce a new method, implementation, source namespace, or controlled vocabulary;
+- change recommendation rules or Diagnose questions;
+- add a new problem/trace/artifact/renderer contract;
+- change the SQLite schema or migration order;
+- publish a dataset version;
+- alter release identity or generated artifact structure.
+
+A red change is not forbidden. It should not be discovered accidentally inside a small content PR.
+
+## 5. General preparation
+
+Before editing:
+
+1. Search for an existing canonical entity or alias. Do not create a near-duplicate ID.
+2. Identify the primary or authoritative source for each factual claim.
+3. Decide whether recommendation output, a public route, Coverage, or release identity changes.
+4. Find one recent merged PR with the same change type and inspect its complete file set.
+5. Keep the PR focused. Avoid mixing schema, content, renderer, and unrelated UI cleanup.
+
+### Source policy
+
+Preferred sources, in order:
+
+1. official documentation;
+2. official repository or release notes;
+3. original paper;
+4. RFC, standard, or specification;
+5. official issue/discussion from maintainers;
+6. a trustworthy technical publication when no primary source exists.
+
+Qiita and Zenn are not accepted as sources.
+
+For third-party quotations, diagrams, screenshots, logos, or copied examples, also follow [`licensing.md`](licensing.md), `NOTICE`, and `THIRD_PARTY_SOURCE_AUDIT.md`.
+
+## 6. Recipe: correct an existing article
+
+Use this for prose, examples, limitations, terminology, or citation corrections where the canonical entity already exists.
+
+### Usually edit
+
+```text
+content/methods/<content-id>.md
+content/concepts/<content-id>.md
+```
+
+### Required checks
+
+- Keep `content_id`, `method_id`, or canonical entity identity stable unless correcting a proven identity error.
+- Keep the frontmatter `summary` exactly equal to the first body paragraph.
+- Keep `source_ids`, `related_ids`, `visualization_ids`, and `comparison_ids` unique and valid.
+- Update `last_reviewed` when the factual review has actually been performed.
+- Do not turn an implementation default into a general method recommendation.
+
+### Validate
+
+```bash
+uv run python scripts/verify_content.py
+uv run python scripts/verify_licensing.py
+npm --prefix site test -- --run
+```
+
+If a relation or generated index changes, also run a staged dataset build and site build.
+
+## 7. Recipe: add an article for an existing method or concept
+
+Use this when the canonical entity exists in the database but has no published explanatory page.
+
+### Add
+
+```text
+content/methods/<content-id>.md
+# or
+content/concepts/<content-id>.md
+```
+
+A method page frontmatter normally includes:
+
+```yaml
+---
+content_id: example-method
+kind: method
+method_id: M_EXAMPLE
+title_ja: 例示手法
+title_en: Example Method
+summary: 最初の本文段落と完全に一致する短い説明です。
+source_ids: [S001]
+prerequisites: []
+related_ids: []
+visualization_ids: []
+comparison_ids: []
+status: draft
+last_reviewed: 2026-07-16
+---
+```
+
+Replace every placeholder and verify the entity and source IDs before committing.
+
+### Content expectations
+
+- explain the method's intuition before advanced detail;
+- state variable type, available information, constraints, evaluation cost, and guarantee scope;
+- state success signals, failure/switch signals, and limitations;
+- distinguish method theory from implementation-specific behavior;
+- link to existing family guidance and application cases when possible.
+
+Start as `draft` if relations or sources are incomplete. Publication should not be used to bypass Coverage or evidence requirements.
+
+## 8. Recipe: add a Gallery case using existing entities
+
+This is the recommended first structured-data contribution.
+
+### Edit
+
+```text
+data/seeds/site_gallery.json
+```
+
+### Before adding
+
+Confirm that the following IDs already exist:
+
+- `problem_archetype_id`;
+- every `feature_id` and value;
+- every Diagnose `question_id` and answer;
+- candidate, conditional, and excluded method IDs;
+- implementation IDs;
+- source IDs;
+- visualization and comparison IDs, when used.
+
+### Required semantics
+
+- Candidate, conditional, and excluded method sets must not overlap.
+- Every conditional or excluded method needs a concrete reason.
+- `map_node_id` must be backed by the case's question answers.
+- Canonical `EC...` cases must match their database example-case/problem relation.
+- The Python example must be nonblank and syntactically compilable.
+- Practical notes must expose modeling assumptions, uncertainty, or operational limitations.
+- Do not imply that the example's fixed educational run guarantees performance on the real problem.
+
+### Suggested workflow
+
+1. Copy the closest existing case.
+2. Change the identity and prose first.
+3. Re-evaluate every copied method, implementation, source, visualization, and comparison ID.
+4. Add complete Diagnose answers when promoting a canonical `EC...` case.
+5. Run validation before touching UI code. The Gallery is generated from data.
+
+### Validate
+
+```bash
+uv run python scripts/verify_content.py
+uv run optimization-compass verify-data
+uv run pytest tests/test_site_export.py
+uv run python scripts/rebuild_dataset.py --stage
+npm --prefix site test -- --run
+npm --prefix site run build
+```
+
+## 9. Recipe: add or revise a comparison
+
+### Edit
+
+```text
+data/seeds/site_comparisons.json
+```
+
+Until the generalized comparison contract is complete, stay inside the existing validated fields and renderer families.
+
+### A comparison must explain
+
+- the comparison question;
+- what is fixed;
+- what changes;
+- initial condition and seed policy;
+- budget and stopping rule;
+- synchronization axis;
+- metrics and status interpretation;
+- member parameters;
+- fairness note;
+- caveat and ranking eligibility;
+- canonical versus derived identity.
+
+A failure contrast is not a ranking. A comparison with incomplete benchmark context must not be marked ranking-eligible.
+
+### Validate
+
+```bash
+uv run python scripts/verify_content.py
+uv run pytest tests/test_site_export.py
+uv run python scripts/rebuild_dataset.py --stage
+npm --prefix site run parity
+npm --prefix site test -- --run
+npm --prefix site run build
+```
+
+## 10. Recipe: add a problem definition or instance
+
+A problem instance has two coordinated parts.
+
+### Metadata
+
+```text
+src/optimization_compass/resources/problem-suite.json
+```
+
+This owns:
+
+- definition and instance IDs;
+- mathematical family and variable domain;
+- objective direction and available oracles;
+- constraint class;
+- dimension and parameters;
+- initialization candidates and seed policy;
+- known-reference status;
+- display range, expression, units, and limitations;
+- source IDs and review date.
+
+### Executable behavior
+
+```text
+src/optimization_compass/problem_registry.py
+```
+
+The instance's `registry_key` must have exactly one corresponding registry entry. The problem-suite key set and Python registry key set must match exactly.
+
+### Rules
+
+- Keep display expressions descriptive; do not evaluate SQLite or display expressions as code.
+- Return objective vectors only for explicitly multi-objective definitions.
+- Validate dimensions and parameter types before evaluating.
+- Make constraints and infeasible-result policy explicit.
+- Separate hidden educational reference data from information available to the optimizer.
+- State when a reference is exact, best-known, approximate, unknown, or not meaningful.
+
+### Validate
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src
+uv run pytest
+uv run python scripts/rebuild_dataset.py --stage
+npm --prefix site test -- --run
+npm --prefix site run build
+```
+
+## 11. Recipe: add a new method, implementation, or source
+
+This is currently a maintainer flow because canonical knowledge additions are partly expressed as SQL migrations.
+
+### Expected change areas
+
+Depending on scope:
+
+```text
+data/migrations/<next-migration>.sql
+src/optimization_compass/dataset_release.py
+src/optimization_compass/resources/release-authority.json
+content/methods/<content-id>.md
+tests/**
+docs/releases/**
+docs/migrations/**
+```
+
+Generated release and site files may also change after a validated publish step.
+
+### Required work
+
+1. Prove the entity is not an alias, variant, implementation, or duplicate of an existing entity.
+2. Add authoritative source records first.
+3. Add the method/implementation row and relationships with stable IDs.
+4. Add method-family hierarchy and implementation mapping where applicable.
+5. Add direct evidence for material claims.
+6. State first-choice, avoid, and switch conditions without a context-free ranking.
+7. Add or update human-readable content.
+8. Add focused tests for identity, relations, counts only where counts are genuine contract boundaries, and affected recommendation behavior.
+9. Register the migration in the deterministic build input sequence.
+10. Update release identity and release documentation only as part of an intentional dataset release.
+
+### Important warning
+
+Creating `data/migrations/<file>.sql` is not sufficient by itself. The deterministic dataset builder currently registers migration inputs explicitly. Verify that the new migration is applied and included among protected build inputs.
+
+### Validate
+
+Run the full Python, data, licensing, parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
+
+## 12. Recipe: add a visualization scenario
+
+A complete visualization is not just an animation. It combines:
+
+```text
+canonical problem definition and instance
+  + method/profile identity
+  + experiment policy and budget
+  + executable or static artifact generator
+  + observable contract
+  + learning objective and failure/success signals
+  + renderer family
+  + static summary and text alternative
+  + source trail and limitations
+```
+
+### Likely change areas
+
+```text
+src/optimization_compass/resources/problem-suite.json
+src/optimization_compass/problem_registry.py
+src/optimization_compass/visualization_scenarios.py
+src/optimization_compass/traces/** or another generator module
+src/optimization_compass/site_export.py
+site/src/** renderer and contract code
+data/seeds/atlas_metadata.json
+data/seeds/site_gallery.json
+data/seeds/site_comparisons.json
+tests/**
+site/e2e/**
+```
+
+### Rules
+
+- Prefer an existing renderer family and artifact contract.
+- Add a new renderer contract only through explicit design work.
+- Use stable canonical scenario identity; mark derived or generated-only scenarios honestly.
+- Make budget, seed, tuning, stopping, and available-oracle policy explicit.
+- Provide a static summary and text alternative equivalent to the visual lesson.
+- Expose failure modes, not only a successful final frame.
+- Do not use a two-dimensional educational trace to imply general high-dimensional performance.
+
+### Validate
+
+Run full Python tests, deterministic stage, frontend parity, frontend tests/build, and browser E2E.
+
+## 13. Deterministic staging and publishing
+
+### Staging
+
+```bash
+uv run python scripts/rebuild_dataset.py --stage
+```
+
+Stage mode:
+
+- starts from the pinned base database;
+- applies registered migrations and seeds;
+- exports all distributions and site data;
+- validates cross-format and release identity;
+- builds twice and compares deterministic tree hashes;
+- does not modify published repository artifacts.
+
+Use `--output <new-directory>` when the staged files need inspection. The output directory must not already exist and must not overlap protected inputs.
+
+### Publishing
+
+Publishing is a separate atomic operation using a previously validated staged directory. It replaces the data release, runtime database, version file, and site data as one unit, restoring backups if replacement fails.
+
+Do not publish as an incidental step in a prose, Gallery, or ordinary content PR. Follow the current release issue/workflow and release documentation.
+
+## 14. Validation matrix
+
+| Change | Minimum focused checks | Full stage | Site parity/build | Browser E2E |
+|---|---|---:|---:|---:|
+| Prose correction | content + licensing | when generated relations change | tests | no |
+| Existing-entity article | content + licensing | recommended | tests/build | no |
+| Gallery case | content + data + site export tests | yes | tests/build | journey changes |
+| Comparison | content + site export tests | yes | parity/tests/build | route/interaction changes |
+| Problem instance | ruff + mypy + pytest | yes | tests/build | scenario changes |
+| Method/implementation/source | full Python/data/licensing | yes | parity/tests/build | public journey changes |
+| Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
+| Release/schema/recommendation | complete repository validation | yes | yes | yes |
+
+Common commands:
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy src
+uv run pytest
+uv run optimization-compass verify-data
+uv run python scripts/verify_content.py
+uv run python scripts/verify_licensing.py
+uv run python scripts/rebuild_dataset.py --stage
+npm --prefix site run typecheck
+npm --prefix site run parity
+npm --prefix site test -- --run
+npm --prefix site run build
+npm --prefix site run test:e2e
+```
+
+## 15. Pull request expectations
+
+Use [`knowledge-change-checklist.md`](knowledge-change-checklist.md) when preparing a PR.
+
+At minimum, state:
+
+- change category;
+- changed canonical IDs;
+- source and evidence basis;
+- previous versus new behavior;
+- recommendation, View, Coverage, route, or release impact;
+- generated files and how they were produced;
+- exact validation commands and results;
+- known limitations and follow-up work.
+
+Keep canonical data, prose, executable behavior, UI, and generated release output separable when practical.
+
+## 16. Known authoring friction
+
+The current system deliberately validates many cross-links, but authoring entry points are distributed:
+
+- knowledge rows may require SQL;
+- Gallery and comparisons use separate JSON seeds;
+- executable problems require JSON plus Python;
+- some failure and versioned-claim metadata is code-backed;
+- migrations are explicitly registered;
+- release identity and generated artifacts must move atomically.
+
+This guide makes the current workflow explicit. Future improvements may introduce declarative catalogs, scaffolding commands, validation aliases, and automatic migration manifests. Until then, do not hide these boundaries by manually editing generated output.

@@ -24,7 +24,7 @@ describe("CompareLabIndexPage", () => {
       "href",
       "/compare/COMPARE_GRADIENT_FAMILY",
     );
-    expect(screen.getByRole("link", { name: /学習率過大による発散を観察する/u })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /学習率を変えたときの発散を観察する/u })).toHaveAttribute(
       "href",
       "/compare/COMPARE_GRADIENT_DIVERGENCE",
     );

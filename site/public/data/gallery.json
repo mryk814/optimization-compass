@@ -300,7 +300,9 @@
         "M_NSGA_II"
       ],
       "case_id": "EC017",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_PARETO_PREFERENCE"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_EPSILON_CONSTRAINT",
@@ -727,7 +729,9 @@
         "M_SLSQP"
       ],
       "case_id": "constrained-design",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_CONSTRAINED_FAILURE"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_INTERIOR_POINT_NLP",

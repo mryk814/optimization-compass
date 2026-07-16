@@ -62,3 +62,13 @@ test("playback controlsをkeyboardでstepする", async ({ page, baseURL }) => {
   await page.keyboard.press("Enter");
   await expect(reducedControls.getByLabel("iteration")).toBeVisible();
 });
+
+test("Case journeyをkeyboardで進み、route変更後もfocusを失わない", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC017");
+  const action = page.getByRole("link", { name: /固定した1 runを追う/u });
+  await action.focus();
+  await page.keyboard.press("Enter");
+
+  await expect(page.locator("#main-content")).toBeFocused();
+  await expect(page.getByRole("complementary", { name: "Case learning journey" })).toContainText("Step 2/4");
+});

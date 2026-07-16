@@ -76,11 +76,34 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
 test("旧canonical comparison IDのdeep linkが現行の比較へ解決する", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_FIRST_ORDER_ROSENBROCK");
 
-  await expect(page.getByRole("heading", { level: 1, name: "手法を比較する" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "細長い谷で一次法を比べる" })).toBeVisible();
   await expect(page.getByRole("combobox", { name: "比較preset", exact: true })).toHaveValue(
     "COMPARE_GRADIENT_FAMILY",
   );
-  await expect(page.getByText("細長い谷で一次法を比べる", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: /同じ初期点と評価回数/u })).toBeVisible();
+});
+
+test("制約failure comparisonでfixed・changed・feasibilityを読める", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
+
+  await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "違うもの / Changed" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 3, name: "見る指標 / Metrics" })).toBeVisible();
+  await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
+  await expect(page.getByText("制約違反", { exact: true }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Case: 強度制約/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Theater: 実行可能領域/u })).toBeVisible();
+});
+
+test("Pareto result comparisonでpreferenceだけを変えられる", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_PARETO_PREFERENCE");
+
+  await expect(page.getByRole("heading", { level: 1, name: "Pareto front上でpreferenceを変える" })).toBeVisible();
+  await expect(page.getByText("preference weight", { exact: false }).first()).toBeVisible();
+  await expect(page.getByRole("slider", { name: /f₁のweight/u })).toBeVisible();
+  await expect(page.getByText("ranking=forbidden", { exact: false })).toHaveCount(0);
+  await expect(page.getByText("forbidden", { exact: true })).toBeVisible();
 });
 
 test("Learn検索からmethod detailとrelated visualizationへ進む", async ({ page, baseURL }) => {

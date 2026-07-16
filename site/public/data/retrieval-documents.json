@@ -45,6 +45,7 @@
       "document_id": "case:EC017",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_PARETO_PREFERENCE",
         "feature_value:F_CONSTRAINT_CLASS:bounds",
         "feature_value:F_DERIVATIVE_ACCESS:none_available",
         "feature_value:F_EVALUATION_COST:moderate",
@@ -244,6 +245,7 @@
       "document_id": "case:constrained-design",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "feature_value:F_CONSTRAINT_CLASS:nonlinear",
         "feature_value:F_DERIVATIVE_ACCESS:analytic_gradient",
         "feature_value:F_EVALUATION_COST:moderate",
@@ -283,6 +285,7 @@
       "document_id": "case:hyperparameter-search",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "feature_value:F_VARIABLE_DOMAIN:continuous",
         "implementation:I_OPTUNA",
@@ -357,21 +360,57 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "comparison:COMPARE_CONSTRAINED_FAILURE:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "comparison:COMPARE_CONSTRAINED_FAILURE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:constrained-design",
+        "journey:constrained-design",
+        "method:M_BFGS",
+        "method:M_SLSQP",
+        "scenario:SCENARIO_CONSTRAINED_DISK",
+        "source:S017",
+        "source:S055",
+        "source:S064",
+        "trace:constrained-disk-feasible-region"
+      ],
+      "source_ids": [
+        "S017",
+        "S055",
+        "S064"
+      ],
+      "text": "同じ問題・初期点で、目的値とfeasibilityを別々に読みます。",
+      "title": "制約を守るrunと無視するrunを比べる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "comparison:COMPARE_GRADIENT_DIVERGENCE:overview",
       "dataset_version": "0.11.0",
       "document_id": "comparison:COMPARE_GRADIENT_DIVERGENCE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:hyperparameter-search",
+        "journey:hyperparameter-search",
         "method:M_ADAM",
         "method:M_GRADIENT_DESCENT",
         "method:M_MOMENTUM_SGD",
+        "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+        "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+        "source:S001",
+        "source:S002",
         "trace:adam-quadratic-divergence",
         "trace:gradient_descent-quadratic-divergence",
         "trace:momentum-quadratic-divergence"
       ],
-      "source_ids": [],
-      "text": "同じ初期点・目的関数・oracle evaluation budgetで、意図的に攻めた固定parameterを比較します。",
-      "title": "学習率過大による発散を観察する"
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "同じ目的・初期点・budgetの下で、意図的に攻めた固定parameterによる感度を読みます。",
+      "title": "学習率を変えたときの発散を観察する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -381,17 +420,51 @@
       "document_id": "comparison:COMPARE_GRADIENT_FAMILY",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:hyperparameter-search",
         "journey:hyperparameter-search",
         "method:M_ADAM",
         "method:M_GRADIENT_DESCENT",
         "method:M_MOMENTUM_SGD",
+        "scenario:SCENARIO_ADAM_QUADRATIC",
+        "scenario:SCENARIO_GD_QUADRATIC",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC",
+        "source:S001",
+        "source:S002",
         "trace:adam-quadratic",
         "trace:gradient_descent-quadratic",
         "trace:momentum-quadratic"
       ],
-      "source_ids": [],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
       "text": "同じ初期点・目的関数・oracle evaluation budgetで、GD / Momentum / Adamを同期します。",
       "title": "細長い谷で一次法を比べる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "comparison:COMPARE_PARETO_PREFERENCE:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "comparison:COMPARE_PARETO_PREFERENCE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC017",
+        "journey:EC017",
+        "method:M_NSGA_II",
+        "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "source:S039",
+        "source:S055",
+        "source:S068",
+        "trace:biobjective-quadratic-pareto-front"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。",
+      "title": "Pareto front上でpreferenceを変える"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -19177,6 +19250,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC017",
+        "comparison:COMPARE_PARETO_PREFERENCE",
         "content:epsilon-constraint",
         "content:multi-objective",
         "implementation:I_CVXPY",
@@ -19347,6 +19421,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:constrained-design",
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "content:interior-point-nlp",
         "content:slsqp",
         "implementation:I_IPOPT",
@@ -19381,6 +19456,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:hyperparameter-search",
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:bayesian-optimization",
         "content:method.nelder-mead",
@@ -20179,6 +20255,7 @@
       "relation_context": [
         "case:EC020",
         "case:constrained-design",
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "content:bfgs",
         "implementation:I_OPTIMJL",
         "implementation:I_SCIPY_BFGS",
@@ -21282,6 +21359,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC017",
+        "comparison:COMPARE_PARETO_PREFERENCE",
         "content:multi-objective",
         "implementation:I_DEAP",
         "implementation:I_PYMOO",
@@ -21809,6 +21887,7 @@
       "relation_context": [
         "case:constrained-design",
         "case:portfolio-allocation",
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "content:slsqp",
         "implementation:I_SCIPY_SLSQP",
         "source:S002",
@@ -23049,6 +23128,7 @@
       "document_id": "scenario:SCENARIO_ADAM_QUADRATIC",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
         "source:S001",
         "source:S002",
         "trace:adam-quadratic"
@@ -23068,6 +23148,7 @@
       "document_id": "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "source:S001",
         "source:S002",
         "trace:adam-quadratic-divergence"
@@ -23130,6 +23211,7 @@
       "document_id": "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_PARETO_PREFERENCE",
         "journey:EC017",
         "source:S039",
         "source:S055",
@@ -23240,6 +23322,7 @@
       "document_id": "scenario:SCENARIO_CONSTRAINED_DISK",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "journey:constrained-design",
         "source:S017",
         "source:S029",
@@ -23268,6 +23351,7 @@
       "document_id": "scenario:SCENARIO_GD_QUADRATIC",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
         "source:S001",
         "source:S002",
         "trace:gradient_descent-quadratic"
@@ -23287,6 +23371,7 @@
       "document_id": "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "source:S001",
         "source:S002",
         "trace:gradient_descent-quadratic-divergence"
@@ -23306,6 +23391,7 @@
       "document_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
         "source:S001",
         "source:S002",
         "trace:momentum-quadratic"
@@ -23325,6 +23411,7 @@
       "document_id": "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "source:S001",
         "source:S002",
         "trace:momentum-quadratic-divergence"
@@ -25002,6 +25089,7 @@
       "document_id": "trace:biobjective-quadratic-pareto-front",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_PARETO_PREFERENCE",
         "method:M_NSGA_II",
         "method:M_WEIGHTED_SUM",
         "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
@@ -25027,6 +25115,7 @@
       "document_id": "trace:constrained-disk-feasible-region",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_CONSTRAINED_FAILURE",
         "method:M_BFGS",
         "method:M_SLSQP",
         "scenario:SCENARIO_CONSTRAINED_DISK",

@@ -1,43 +1,505 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
+import { PageOrientation } from "../../components/PageOrientation";
+import { findEntity, type EntityType, type LinkedEntity } from "../../contracts/entity-links";
 import { parseGalleryIndex, type GalleryCase } from "../../contracts/gallery";
-import { findEntity } from "../../contracts/entity-links";
+import {
+  parseLearningJourneyIndex,
+  type LearningJourney,
+} from "../../contracts/learning-journeys";
 import { siteBaseUrl } from "../../data/base-url";
 import { encodeAtlasState, type AtlasStateV1 } from "../../state/atlas-state";
-import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { useEntityLinks } from "../../state/entity-links";
+import {
+  JourneyLink,
+  type AtlasJourneyPatch,
+} from "../../state/journey-navigation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
-import { THEATER_ROUTES } from "../theater/theater-routes";
-import { PageOrientation } from "../../components/PageOrientation";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
-import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
 
 export function GalleryPage() {
-  const [cases, setCases] = useState<GalleryCase[]>([]); const [domain, setDomain] = useState("all"); const [error, setError] = useState<Error>();
-  useEffect(() => { void loadGallery().then((index) => setCases(index.cases), (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, []);
-  const domains = ["all", ...new Set(cases.map((item) => item.domain))]; const filtered = useMemo(() => cases.filter((item) => domain === "all" || item.domain === domain), [cases, domain]);
-  return <section className="atlas-page gallery-page"><header className="atlas-page-header"><p className="eyebrow">Problem Gallery</p><h1>ケースギャラリー</h1><p>現実の問いから、問題分類・診断・候補手法・最小コードへ逆引きします。</p></header><PageOrientation limits="Galleryは代表的な問題設定を学ぶためのcurated casesです。掲載ケースの結果や最小例を、そのまま実問題の保証として扱いません。" next={[{ label: "この条件で診断する", to: "/diagnose" }, { label: "問題構造Mapを見る", to: "/map" }, { label: "手法の教材を読む", to: "/learn" }]} purpose="実問題の問いから、問題型・診断・候補手法・可視化・最小コードへ逆引きします。" readingSteps={["Domainで近い問題設定を絞ります。", "ケース詳細で目的・制約・候補手法を読みます。", "Map・Diagnose・Theaterへ同じケースの状態を引き継ぎます。"]} /><label className="gallery-filter">Domain<select value={domain} onChange={(event) => setDomain(event.target.value)}>{domains.map((item) => <option key={item} value={item}>{item === "all" ? "すべて" : item}</option>)}</select></label>{error && <p className="atlas-error" role="alert">{error.message}</p>}<div className="gallery-card-grid">{filtered.map((item) => <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}><span>{item.domain} · {item.difficulty}</span><h2>{item.title_ja}</h2><p>{item.question}</p><small>候補 {item.candidate_method_ids.length}件 · Reviewed {item.last_reviewed}</small></Link>)}</div></section>;
+  const [cases, setCases] = useState<GalleryCase[]>([]);
+  const [domain, setDomain] = useState("all");
+  const [error, setError] = useState<Error>();
+  useEffect(() => {
+    void loadGallery().then(
+      (index) => setCases(index.cases),
+      (caught: unknown) => setError(asError(caught)),
+    );
+  }, []);
+  const domains = ["all", ...new Set(cases.map((item) => item.domain))];
+  const filtered = useMemo(
+    () => cases.filter((item) => domain === "all" || item.domain === domain),
+    [cases, domain],
+  );
+
+  return (
+    <section className="atlas-page gallery-page">
+      <header className="atlas-page-header">
+        <p className="eyebrow">Problem Gallery</p>
+        <h1>ケースギャラリー</h1>
+        <p>現実の問いから、定式化・1 run・比較・実装へ進む学習journeyです。</p>
+      </header>
+      <PageOrientation
+        limits="Galleryは代表的な問題設定を学ぶためのcurated casesです。教材instanceや固定runを、そのまま実問題の保証として扱いません。"
+        next={[
+          { label: "この条件で診断する", to: "/diagnose" },
+          { label: "問題構造Mapを見る", to: "/map" },
+          { label: "手法の教材を読む", to: "/learn" },
+        ]}
+        purpose="実問題の問いを共通の記号で定式化し、Theater・Compare・実装へ同じケース文脈で進みます。"
+        readingSteps={[
+          "Domainで近い問題設定を絞ります。",
+          "ケース詳細で定式化と見るべき判断を読みます。",
+          "Theaterで1 runを追い、Compareで条件差を確かめます。",
+        ]}
+      />
+      <label className="gallery-filter">
+        Domain
+        <select value={domain} onChange={(event) => setDomain(event.target.value)}>
+          {domains.map((item) => (
+            <option key={item} value={item}>{item === "all" ? "すべて" : item}</option>
+          ))}
+        </select>
+      </label>
+      {error && <p className="atlas-error" role="alert">{error.message}</p>}
+      <div className="gallery-card-grid">
+        {filtered.map((item) => (
+          <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
+            <span>{item.domain} · {item.difficulty}</span>
+            <h2>{item.title_ja}</h2>
+            <p>{item.question}</p>
+            <small>候補 {item.candidate_method_ids.length}件 · Reviewed {item.last_reviewed}</small>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export function GalleryCasePage() {
   const links = useEntityLinks();
-  const { caseId = "" } = useParams(); const [item, setItem] = useState<GalleryCase>(); const [datasetVersion, setDatasetVersion] = useState<string>(); const [error, setError] = useState<Error>();
-  useEffect(() => { setItem(undefined); setDatasetVersion(undefined); setError(undefined); void loadGallery().then((index) => { const found = index.cases.find((candidate) => candidate.case_id === caseId); if (!found) { setError(new EntityNotFoundError("ケースID", caseId)); return; } setItem(found); setDatasetVersion(index.dataset_version); }, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, [caseId]);
-  const state = item && datasetVersion ? caseState(item, datasetVersion) : undefined;
+  const { caseId = "" } = useParams();
+  const [item, setItem] = useState<GalleryCase>();
+  const [journey, setJourney] = useState<LearningJourney>();
+  const [datasetVersion, setDatasetVersion] = useState<string>();
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    setItem(undefined);
+    setJourney(undefined);
+    setDatasetVersion(undefined);
+    setError(undefined);
+    void loadGalleryCase(caseId).then(
+      ({ item: found, journey: foundJourney, datasetVersion: version }) => {
+        setItem(found);
+        setJourney(foundJourney);
+        setDatasetVersion(version);
+      },
+      (caught: unknown) => setError(asError(caught)),
+    );
+  }, [caseId]);
+
+  const state = item && journey && datasetVersion
+    ? caseState(item, datasetVersion, journey)
+    : undefined;
   const stateQuery = state ? `?state=${encodeAtlasState(state)}` : "";
+  const entity = (type: EntityType, id: string) => (
+    links.status === "ready" ? findEntity(links.index, type, id) : undefined
+  );
+
   if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
-  const method = (id: string) => links.status === "ready" ? findEntity(links.index, "method", id) : undefined;
-  const visualization = (id: string) => links.status === "ready" ? findEntity(links.index, "trace", id) : undefined;
-  const theaterLinks = item?.visualization_ids.flatMap((id) => {
-    const target = visualization(id);
-    return target?.canonical_url?.startsWith("/theater/") ? [target] : [];
-  }) ?? [];
-  const showBoTheater = item
-    ? item.candidate_method_ids.includes("M_BAYESIAN_OPT_GP")
-      || item.conditional_methods.some((entry) => entry.method_id === "M_BAYESIAN_OPT_GP")
-    : false;
-  return <section className="atlas-page gallery-detail"><p className="eyebrow">Problem Gallery</p><h1>{item?.title_ja ?? "ケース詳細"}</h1><p className="route-parameter">Case ID: <strong>{caseId}</strong></p>{error && <p className="atlas-error" role="alert">{error.message}</p>}{item && <><p className="content-lead">{item.question}</p>{datasetVersion && <PromptExportLauncher source={{ kind: "gallery", item, datasetVersion }} />}<OptimizationProblemPrimer caseFormulation={{ decisionVariables: item.decision_variables, variableDomain: item.feature_values.find((feature) => feature.feature_id === "F_VARIABLE_DOMAIN")?.value ?? "未分類", objective: item.objective, constraints: item.constraints }} /><section className="gallery-section"><h2>診断・地図</h2><p>Map node: <code>{item.map_node_id}</code></p><Link className="text-link" to={{ pathname: "/map", search: stateQuery }}>分類図上で見る</Link> <Link className="text-link" to={{ pathname: "/diagnose", search: stateQuery }}>この特徴で診断する</Link></section>{(theaterLinks.length > 0 || showBoTheater) && <section className="gallery-section"><h2>動きを見る</h2><ul>{theaterLinks.map((target) => <li key={target.entity_id}><Link className="text-link" to={target.canonical_url!}>{target.canonical_url?.startsWith("/theater/search-tree/") ? "Search-tree Theaterで再生" : `${target.label}を開く`}</Link></li>)}{showBoTheater && <li><Link className="text-link" to={THEATER_ROUTES.bayesianOptimization}>BO Theaterで点選択を見る</Link></li>}</ul></section>}<section className="gallery-section"><h2>候補手法</h2><ul>{item.candidate_method_ids.map((id) => { const target = method(id); return <li key={id}>{target?.canonical_url ? <Link to={target.canonical_url}>{target.label}</Link> : id}</li>; })}</ul><h3>条件付き</h3><ul>{item.conditional_methods.map((entry) => { const target = method(entry.method_id); return <li key={entry.method_id}>{target?.canonical_url ? <Link to={target.canonical_url}>{target.label}</Link> : <strong>{entry.method_id}</strong>} — {entry.reason}</li>; })}</ul><h3>避ける</h3><ul>{item.excluded_methods.map((entry) => { const target = method(entry.method_id); return <li key={entry.method_id}>{target?.canonical_url ? <Link to={target.canonical_url}>{target.label}</Link> : <strong>{entry.method_id}</strong>} — {entry.reason}</li>; })}</ul></section><section className="gallery-section"><h2>最小Python例</h2><pre><code>{item.python_example}</code></pre></section><p className="atlas-note">{item.practical_notes}</p><small>Last reviewed {item.last_reviewed}</small><EvidenceLinks sourceIds={item.source_ids} /></>}</section>;
+
+  const primaryScenario = journey?.scenarios.find((scenario) => scenario.role === "primary");
+  const alternateScenarios = journey?.scenarios.filter((scenario) => scenario.role !== "primary") ?? [];
+  const canonicalComparison = journey?.comparisons[0];
+  const problemArchetype = journey ? entity("problem", journey.problem_archetype_id) : undefined;
+  const sourceIds = journey && item ? [...new Set([...journey.source_ids, ...item.source_ids])] : [];
+
+  return (
+    <section className="atlas-page gallery-detail">
+      <header className="gallery-detail-header">
+        <div>
+          <p className="eyebrow">Case learning journey</p>
+          <h1>{item?.title_ja ?? "ケース詳細"}</h1>
+          <p className="route-parameter">Case ID: <strong>{caseId}</strong></p>
+        </div>
+        {journey && <JourneyStatus journey={journey} />}
+      </header>
+      {error && <p className="atlas-error" role="alert">{error.message}</p>}
+      {item && journey && (
+        <>
+          <section aria-labelledby="real-question-title" className="gallery-question-panel">
+            <div>
+              <p className="eyebrow">1. Real-world question</p>
+              <h2 id="real-question-title">現実には、何を決めたい？</h2>
+              <p>{item.question}</p>
+            </div>
+            {datasetVersion && (
+              <PromptExportLauncher source={{ kind: "gallery", item, datasetVersion }} />
+            )}
+          </section>
+
+          <OptimizationProblemPrimer
+            caseFormulation={{
+              decisionVariables: journey.formulation.decision_variables,
+              variableDomain: journey.formulation.variable_domain_summary,
+              objective: journey.formulation.objective,
+              constraints: journey.formulation.constraints,
+            }}
+          />
+
+          <section aria-labelledby="context-levels-title" className="gallery-hub-section">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">3. Context</p>
+              <h2 id="context-levels-title">同じ問題でも、3つの粒度を分ける</h2>
+            </header>
+            <div className="gallery-context-grid">
+              <ContextCard label="現実の問題" title="あなたが解きたい問い">
+                <p>{journey.learning_objective}</p>
+                <small>現場のdata・制約・budgetは、教材には自動で引き継がれません。</small>
+              </ContextCard>
+              <ContextCard label="Teaching instance" title="教材用に小さく固定した問題">
+                {journey.problem_instance_ids.length > 0 ? (
+                  <ul>
+                    {journey.problem_instance_ids.map((id) => (
+                      <li key={id}>
+                        {primaryScenario?.problem_instance_id === id ? (
+                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}><code>{id}</code></JourneyLink>
+                        ) : <code>{id}</code>}
+                      </li>
+                    ))}
+                  </ul>
+                ) : <p className="gallery-missing">まだ教材instanceが接続されていません。</p>}
+                <p>問題型: <EntityReference entity={problemArchetype} fallback={journey.problem_archetype_id} /></p>
+              </ContextCard>
+              <ContextCard label="Fixed run" title="条件を固定した1回の実行">
+                {primaryScenario ? (
+                  <EntityRouteLink
+                    atlasState={state}
+                    entity={entity("scenario", primaryScenario.scenario_id)}
+                    fallback={`Theater: ${primaryScenario.scenario_id}`}
+                    journeyPatch={{ scenarioId: primaryScenario.scenario_id }}
+                    to={primaryScenario.canonical_url}
+                  />
+                ) : <p className="gallery-missing">このケースのprimary runは未接続です。</p>}
+                <small>runの結果は、手法全体の優劣や実問題での成功保証ではありません。</small>
+              </ContextCard>
+            </div>
+          </section>
+
+          <section aria-labelledby="inspect-title" className="gallery-hub-section gallery-inspect-panel">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">4. Judgment</p>
+              <h2 id="inspect-title">このケースで見るべきこと</h2>
+            </header>
+            <div className="gallery-inspect-grid">
+              <div><strong>見る</strong><p>{journey.learning_objective}</p></div>
+              <div><strong>持ち帰る</strong><p>{journey.takeaway}</p></div>
+              <div><strong>言い過ぎない</strong><ul>{journey.limitations.map((text) => <li key={text}>{text}</li>)}</ul></div>
+            </div>
+          </section>
+
+          <section aria-labelledby="journey-actions-title" className="gallery-hub-section">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">5–6. Observe & compare</p>
+              <h2 id="journey-actions-title">次の画面へ、同じcase文脈で進む</h2>
+            </header>
+            <div className="gallery-action-grid">
+              <JourneyAction
+                available={Boolean(primaryScenario)}
+                eyebrow="THEATER · ONE RUN"
+                fallbackTo="/theater"
+                href={primaryScenario?.canonical_url}
+                journeyPatch={primaryScenario ? { scenarioId: primaryScenario.scenario_id } : undefined}
+                missing="primary Theaterが未接続です。Theater一覧から近い動きを探せます。"
+                state={state}
+                title="固定した1 runを追う"
+              >
+                初期値・反復・制約違反・停止理由を、順番に観察します。
+              </JourneyAction>
+              <JourneyAction
+                available={Boolean(canonicalComparison)}
+                eyebrow="COMPARE · FIXED / CHANGED"
+                fallbackTo="/compare"
+                href={canonicalComparison?.canonical_url}
+                journeyPatch={canonicalComparison ? { comparisonId: canonicalComparison.comparison_id } : undefined}
+                missing="canonical Compareが未接続です。比較一覧から条件差を確認できます。"
+                state={state}
+                title="固定条件と変えた条件を比べる"
+              >
+                何を固定し、何だけを変えた比較なのかを先に確認します。
+              </JourneyAction>
+            </div>
+            {alternateScenarios.length > 0 && (
+              <div className="gallery-alternate-runs">
+                <strong>補助run</strong>
+                {alternateScenarios.map((scenario) => (
+                  <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: scenario.scenario_id }} key={scenario.scenario_id} to={scenario.canonical_url}>
+                    {scenarioRoleLabel(scenario.role)}: {entity("scenario", scenario.scenario_id)?.label ?? scenario.scenario_id}
+                  </JourneyLink>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section aria-labelledby="method-roles-title" className="gallery-hub-section">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">7. Method roles</p>
+              <h2 id="method-roles-title">候補・条件付き・除外を理由で分ける</h2>
+            </header>
+            <div className="gallery-method-grid">
+              <MethodGroup
+                className="is-candidate"
+                empty="候補手法は未登録です。"
+                ids={journey.candidate_method_ids}
+                label="候補"
+                method={entity}
+                reasons={new Map()}
+                state={state}
+              />
+              <MethodGroup
+                className="is-conditional"
+                empty="条件付き候補はありません。"
+                ids={journey.conditional_method_ids}
+                label="条件付き"
+                method={entity}
+                reasons={new Map(item.conditional_methods.map((entry) => [entry.method_id, entry.reason]))}
+                state={state}
+              />
+              <MethodGroup
+                className="is-excluded"
+                empty="明示的な除外手法はありません。"
+                ids={journey.excluded_method_ids}
+                label="避ける"
+                method={entity}
+                reasons={new Map(item.excluded_methods.map((entry) => [entry.method_id, entry.reason]))}
+                state={state}
+              />
+            </div>
+          </section>
+
+          <section aria-labelledby="implementation-title" className="gallery-hub-section gallery-resource-grid">
+            <div>
+              <header className="gallery-section-heading">
+                <p className="eyebrow">8. Implementation</p>
+                <h2 id="implementation-title">実装と最小例</h2>
+              </header>
+              <ResourceList atlasState={state} ids={journey.implementation_ids} type="implementation" entity={entity} />
+              <details className="gallery-disclosure">
+                <summary>最小Python例を見る</summary>
+                <pre><code>{item.python_example}</code></pre>
+              </details>
+              <p className="atlas-note">{item.practical_notes}</p>
+            </div>
+            <div>
+              <header className="gallery-section-heading">
+                <p className="eyebrow">Evidence & next</p>
+                <h2>根拠・限界・次の道</h2>
+              </header>
+              <ResourceList atlasState={state} ids={journey.content_ids} type="content" entity={entity} />
+              <nav aria-label="このケースの次の導線" className="gallery-next-links">
+                <Link to={{ pathname: "/map", search: stateQuery }}>問題構造Mapで位置を確認</Link>
+                <Link to={{ pathname: "/diagnose", search: stateQuery }}>この特徴で診断する</Link>
+                <Link to="/gallery">別のcaseを選ぶ</Link>
+              </nav>
+              <small>Last reviewed {journey.last_reviewed}</small>
+              <EvidenceLinks atlasState={state} sourceIds={sourceIds} />
+            </div>
+          </section>
+        </>
+      )}
+    </section>
+  );
 }
-export function caseState(item: Pick<GalleryCase, "map_node_id" | "question_answers">, datasetVersion: string): AtlasStateV1 { return { stateVersion: 1, datasetVersion, viewId: "problem-structure", viewVersion: "1.0.0", selectedNodeId: item.map_node_id, answers: Object.fromEntries(Object.entries(item.question_answers).map(([questionId, value]) => [questionId, value === "unknown" ? { status: "unknown", values: ["unknown"] } : { status: "answered", values: [value] }])) }; }
-async function loadGallery() { const response = await fetch(`${siteBaseUrl()}data/gallery.json`); if (!response.ok) throw new Error(`Gallery request failed (${response.status}).`); return parseGalleryIndex(await response.json()); }
+
+function JourneyStatus({ journey }: { journey: LearningJourney }) {
+  return (
+    <aside aria-label="学習journeyの接続状況" className={`gallery-journey-status is-${journey.status}`}>
+      <strong>{journey.status === "complete" ? "Journey complete" : "Journey partial"}</strong>
+      {journey.completion_reasons.length > 0 && (
+        <ul>{journey.completion_reasons.map((reason) => <li key={reason}>{journeyCompletionLabel(reason)}</li>)}</ul>
+      )}
+    </aside>
+  );
+}
+
+function ContextCard({ children, label, title }: { children: ReactNode; label: string; title: string }) {
+  return <article><span>{label}</span><h3>{title}</h3>{children}</article>;
+}
+
+function JourneyAction({
+  available,
+  children,
+  eyebrow,
+  fallbackTo,
+  href,
+  journeyPatch,
+  missing,
+  state,
+  title,
+}: {
+  available: boolean;
+  children: ReactNode;
+  eyebrow: string;
+  fallbackTo: string;
+  href?: string;
+  journeyPatch?: AtlasJourneyPatch;
+  missing: string;
+  state?: AtlasStateV1;
+  title: string;
+}) {
+  const content = (
+    <>
+      <span>{eyebrow}</span>
+      <h3>{title}</h3>
+      <p>{available ? children : missing}</p>
+      <strong>{available ? "開く →" : "一覧で探す →"}</strong>
+    </>
+  );
+  return <JourneyLink atlasState={state} className={`gallery-journey-action${available ? "" : " is-missing"}`} journeyPatch={journeyPatch} to={href ?? fallbackTo}>{content}</JourneyLink>;
+}
+
+function MethodGroup({
+  className,
+  empty,
+  ids,
+  label,
+  method,
+  reasons,
+  state,
+}: {
+  className: string;
+  empty: string;
+  ids: string[];
+  label: string;
+  method: (type: EntityType, id: string) => LinkedEntity | undefined;
+  reasons: Map<string, string>;
+  state?: AtlasStateV1;
+}) {
+  return (
+    <article className={className}>
+      <h3>{label}</h3>
+      {ids.length === 0 ? <p>{empty}</p> : (
+        <ul>
+          {ids.map((id) => {
+            const target = method("method", id);
+            const reason = reasons.get(id) || target?.summary || "このcaseの定式化と前提に合う主要候補です。";
+            return (
+              <li key={id}>
+                <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
+                <p>{reason}</p>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </article>
+  );
+}
+
+function ResourceList({
+  atlasState,
+  ids,
+  type,
+  entity,
+}: {
+  atlasState?: AtlasStateV1;
+  ids: string[];
+  type: EntityType;
+  entity: (type: EntityType, id: string) => LinkedEntity | undefined;
+}) {
+  if (ids.length === 0) return <p className="gallery-missing">接続済みの資料はありません。</p>;
+  return (
+    <ul className="gallery-resource-list">
+      {ids.map((id) => {
+        const target = entity(type, id);
+        return (
+          <li key={id}>
+            <EntityReference atlasState={atlasState} entity={target} fallback={id} />
+            {target?.summary && <p>{target.summary}</p>}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function EntityRouteLink({ atlasState, entity, fallback, journeyPatch, to }: { atlasState?: AtlasStateV1; entity?: LinkedEntity; fallback: string; journeyPatch?: AtlasJourneyPatch; to: string }) {
+  return <JourneyLink atlasState={atlasState} className="text-link" journeyPatch={journeyPatch} to={to}>{entity?.label ?? fallback}</JourneyLink>;
+}
+
+function EntityReference({ atlasState, entity, fallback, journeyPatch }: { atlasState?: AtlasStateV1; entity?: LinkedEntity; fallback: string; journeyPatch?: AtlasJourneyPatch }) {
+  if (entity?.canonical_url) return <JourneyLink atlasState={atlasState} className="text-link" journeyPatch={journeyPatch} to={entity.canonical_url}>{entity.label}</JourneyLink>;
+  if (entity?.external_url) {
+    return <a className="text-link" href={entity.external_url} rel="noreferrer" target="_blank">{entity.label}</a>;
+  }
+  return <strong>{entity?.label ?? fallback}</strong>;
+}
+
+export function journeyCompletionLabel(reason: string): string {
+  if (reason === "missing_primary_scenario") return "primary Theater 未接続";
+  if (reason === "missing_comparison") return "canonical Compare 未接続";
+  return reason.replaceAll("_", " ");
+}
+
+function scenarioRoleLabel(role: LearningJourney["scenarios"][number]["role"]): string {
+  if (role === "failure_contrast") return "失敗contrast";
+  if (role === "sensitivity") return "感度確認";
+  return "別条件";
+}
+
+export function caseState(
+  item: Pick<GalleryCase, "map_node_id" | "question_answers">,
+  datasetVersion: string,
+  journey?: Pick<LearningJourney, "journey_id" | "case_id">,
+): AtlasStateV1 {
+  return {
+    stateVersion: 1,
+    datasetVersion,
+    viewId: "problem-structure",
+    viewVersion: "1.0.0",
+    selectedNodeId: item.map_node_id,
+    journey: journey ? { journeyId: journey.journey_id, caseId: journey.case_id } : undefined,
+    answers: Object.fromEntries(
+      Object.entries(item.question_answers).map(([questionId, value]) => [
+        questionId,
+        value === "unknown"
+          ? { status: "unknown", values: ["unknown"] }
+          : { status: "answered", values: [value] },
+      ]),
+    ),
+  };
+}
+
+async function loadGalleryCase(caseId: string) {
+  const gallery = await loadGallery();
+  const item = gallery.cases.find((candidate) => candidate.case_id === caseId);
+  if (!item) throw new EntityNotFoundError("ケースID", caseId);
+  const journeys = await loadLearningJourneys();
+  if (journeys.dataset_version !== gallery.dataset_version) {
+    throw new Error("Gallery and learning journey dataset versions do not match.");
+  }
+  const journey = journeys.journeys.find((candidate) => candidate.case_id === caseId);
+  if (!journey) throw new Error(`ケース ${caseId} のlearning journeyが見つかりません。`);
+  return { item, journey, datasetVersion: gallery.dataset_version };
+}
+
+async function loadGallery() {
+  const response = await fetch(`${siteBaseUrl()}data/gallery.json`);
+  if (!response.ok) throw new Error(`Gallery request failed (${response.status}).`);
+  return parseGalleryIndex(await response.json());
+}
+
+async function loadLearningJourneys() {
+  const response = await fetch(`${siteBaseUrl()}data/learning-journeys.json`);
+  if (!response.ok) throw new Error(`Learning journey request failed (${response.status}).`);
+  return parseLearningJourneyIndex(await response.json());
+}
+
+function asError(caught: unknown): Error {
+  return caught instanceof Error ? caught : new Error(String(caught));
+}

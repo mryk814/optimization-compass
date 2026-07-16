@@ -25,6 +25,7 @@ import { NelderMeadVisualization } from "../theater/NelderMeadPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
+import { ScenarioContextPanel } from "../theater/ScenarioContextPanel";
 
 type LoadedTrace = {
   trace: AlgorithmTrace;
@@ -102,6 +103,7 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
         </dl>
       </header>
       {scenario && <>
+        <ScenarioContextPanel scenario={scenario} />
         <ScenarioLessonPanel scenario={scenario} />
         <GuidedStoryPanel
           activeStep={guidedStep}
