@@ -73,13 +73,13 @@ jobs:
       - name: Verify README release facts
         run: uv run python scripts/sync_readme_facts.py --check
       - name: Regenerate site data from the validated database
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: |
           rm -rf site/public/data
           uv run optimization-compass export-site-data --output site/public/data
           git diff --exit-code -- site/public/data
       - name: Verify data, content, licenses, and deterministic release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: |
           uv run optimization-compass verify-data
           uv run python scripts/verify_content.py
