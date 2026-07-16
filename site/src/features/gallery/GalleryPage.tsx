@@ -12,6 +12,10 @@ import {
 import { siteBaseUrl } from "../../data/base-url";
 import { encodeAtlasState, type AtlasStateV1 } from "../../state/atlas-state";
 import { useEntityLinks } from "../../state/entity-links";
+import {
+  JourneyLink,
+  type AtlasJourneyPatch,
+} from "../../state/journey-navigation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
@@ -99,7 +103,9 @@ export function GalleryCasePage() {
     );
   }, [caseId]);
 
-  const state = item && datasetVersion ? caseState(item, datasetVersion) : undefined;
+  const state = item && journey && datasetVersion
+    ? caseState(item, datasetVersion, journey)
+    : undefined;
   const stateQuery = state ? `?state=${encodeAtlasState(state)}` : "";
   const entity = (type: EntityType, id: string) => (
     links.status === "ready" ? findEntity(links.index, type, id) : undefined
@@ -162,7 +168,7 @@ export function GalleryCasePage() {
                     {journey.problem_instance_ids.map((id) => (
                       <li key={id}>
                         {primaryScenario?.problem_instance_id === id ? (
-                          <Link className="text-link" to={primaryScenario.canonical_url}><code>{id}</code></Link>
+                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}><code>{id}</code></JourneyLink>
                         ) : <code>{id}</code>}
                       </li>
                     ))}
@@ -173,8 +179,10 @@ export function GalleryCasePage() {
               <ContextCard label="Fixed run" title="条件を固定した1回の実行">
                 {primaryScenario ? (
                   <EntityRouteLink
+                    atlasState={state}
                     entity={entity("scenario", primaryScenario.scenario_id)}
                     fallback={`Theater: ${primaryScenario.scenario_id}`}
+                    journeyPatch={{ scenarioId: primaryScenario.scenario_id }}
                     to={primaryScenario.canonical_url}
                   />
                 ) : <p className="gallery-missing">このケースのprimary runは未接続です。</p>}
@@ -206,7 +214,9 @@ export function GalleryCasePage() {
                 eyebrow="THEATER · ONE RUN"
                 fallbackTo="/theater"
                 href={primaryScenario?.canonical_url}
+                journeyPatch={primaryScenario ? { scenarioId: primaryScenario.scenario_id } : undefined}
                 missing="primary Theaterが未接続です。Theater一覧から近い動きを探せます。"
+                state={state}
                 title="固定した1 runを追う"
               >
                 初期値・反復・制約違反・停止理由を、順番に観察します。
@@ -216,7 +226,9 @@ export function GalleryCasePage() {
                 eyebrow="COMPARE · FIXED / CHANGED"
                 fallbackTo="/compare"
                 href={canonicalComparison?.canonical_url}
+                journeyPatch={canonicalComparison ? { comparisonId: canonicalComparison.comparison_id } : undefined}
                 missing="canonical Compareが未接続です。比較一覧から条件差を確認できます。"
+                state={state}
                 title="固定条件と変えた条件を比べる"
               >
                 何を固定し、何だけを変えた比較なのかを先に確認します。
@@ -226,9 +238,9 @@ export function GalleryCasePage() {
               <div className="gallery-alternate-runs">
                 <strong>補助run</strong>
                 {alternateScenarios.map((scenario) => (
-                  <Link className="text-link" key={scenario.scenario_id} to={scenario.canonical_url}>
+                  <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: scenario.scenario_id }} key={scenario.scenario_id} to={scenario.canonical_url}>
                     {scenarioRoleLabel(scenario.role)}: {entity("scenario", scenario.scenario_id)?.label ?? scenario.scenario_id}
-                  </Link>
+                  </JourneyLink>
                 ))}
               </div>
             )}
@@ -247,6 +259,7 @@ export function GalleryCasePage() {
                 label="候補"
                 method={entity}
                 reasons={new Map()}
+                state={state}
               />
               <MethodGroup
                 className="is-conditional"
@@ -255,6 +268,7 @@ export function GalleryCasePage() {
                 label="条件付き"
                 method={entity}
                 reasons={new Map(item.conditional_methods.map((entry) => [entry.method_id, entry.reason]))}
+                state={state}
               />
               <MethodGroup
                 className="is-excluded"
@@ -263,6 +277,7 @@ export function GalleryCasePage() {
                 label="避ける"
                 method={entity}
                 reasons={new Map(item.excluded_methods.map((entry) => [entry.method_id, entry.reason]))}
+                state={state}
               />
             </div>
           </section>
@@ -273,7 +288,7 @@ export function GalleryCasePage() {
                 <p className="eyebrow">8. Implementation</p>
                 <h2 id="implementation-title">実装と最小例</h2>
               </header>
-              <ResourceList ids={journey.implementation_ids} type="implementation" entity={entity} />
+              <ResourceList atlasState={state} ids={journey.implementation_ids} type="implementation" entity={entity} />
               <details className="gallery-disclosure">
                 <summary>最小Python例を見る</summary>
                 <pre><code>{item.python_example}</code></pre>
@@ -285,14 +300,14 @@ export function GalleryCasePage() {
                 <p className="eyebrow">Evidence & next</p>
                 <h2>根拠・限界・次の道</h2>
               </header>
-              <ResourceList ids={journey.content_ids} type="content" entity={entity} />
+              <ResourceList atlasState={state} ids={journey.content_ids} type="content" entity={entity} />
               <nav aria-label="このケースの次の導線" className="gallery-next-links">
                 <Link to={{ pathname: "/map", search: stateQuery }}>問題構造Mapで位置を確認</Link>
                 <Link to={{ pathname: "/diagnose", search: stateQuery }}>この特徴で診断する</Link>
                 <Link to="/gallery">別のcaseを選ぶ</Link>
               </nav>
               <small>Last reviewed {journey.last_reviewed}</small>
-              <EvidenceLinks sourceIds={sourceIds} />
+              <EvidenceLinks atlasState={state} sourceIds={sourceIds} />
             </div>
           </section>
         </>
@@ -322,7 +337,9 @@ function JourneyAction({
   eyebrow,
   fallbackTo,
   href,
+  journeyPatch,
   missing,
+  state,
   title,
 }: {
   available: boolean;
@@ -330,7 +347,9 @@ function JourneyAction({
   eyebrow: string;
   fallbackTo: string;
   href?: string;
+  journeyPatch?: AtlasJourneyPatch;
   missing: string;
+  state?: AtlasStateV1;
   title: string;
 }) {
   const content = (
@@ -341,7 +360,7 @@ function JourneyAction({
       <strong>{available ? "開く →" : "一覧で探す →"}</strong>
     </>
   );
-  return <Link className={`gallery-journey-action${available ? "" : " is-missing"}`} to={href ?? fallbackTo}>{content}</Link>;
+  return <JourneyLink atlasState={state} className={`gallery-journey-action${available ? "" : " is-missing"}`} journeyPatch={journeyPatch} to={href ?? fallbackTo}>{content}</JourneyLink>;
 }
 
 function MethodGroup({
@@ -351,6 +370,7 @@ function MethodGroup({
   label,
   method,
   reasons,
+  state,
 }: {
   className: string;
   empty: string;
@@ -358,6 +378,7 @@ function MethodGroup({
   label: string;
   method: (type: EntityType, id: string) => LinkedEntity | undefined;
   reasons: Map<string, string>;
+  state?: AtlasStateV1;
 }) {
   return (
     <article className={className}>
@@ -369,7 +390,7 @@ function MethodGroup({
             const reason = reasons.get(id) || target?.summary || "このcaseの定式化と前提に合う主要候補です。";
             return (
               <li key={id}>
-                <EntityReference entity={target} fallback={id} />
+                <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
                 <p>{reason}</p>
               </li>
             );
@@ -381,10 +402,12 @@ function MethodGroup({
 }
 
 function ResourceList({
+  atlasState,
   ids,
   type,
   entity,
 }: {
+  atlasState?: AtlasStateV1;
   ids: string[];
   type: EntityType;
   entity: (type: EntityType, id: string) => LinkedEntity | undefined;
@@ -396,7 +419,7 @@ function ResourceList({
         const target = entity(type, id);
         return (
           <li key={id}>
-            <EntityReference entity={target} fallback={id} />
+            <EntityReference atlasState={atlasState} entity={target} fallback={id} />
             {target?.summary && <p>{target.summary}</p>}
           </li>
         );
@@ -405,12 +428,12 @@ function ResourceList({
   );
 }
 
-function EntityRouteLink({ entity, fallback, to }: { entity?: LinkedEntity; fallback: string; to: string }) {
-  return <Link className="text-link" to={to}>{entity?.label ?? fallback}</Link>;
+function EntityRouteLink({ atlasState, entity, fallback, journeyPatch, to }: { atlasState?: AtlasStateV1; entity?: LinkedEntity; fallback: string; journeyPatch?: AtlasJourneyPatch; to: string }) {
+  return <JourneyLink atlasState={atlasState} className="text-link" journeyPatch={journeyPatch} to={to}>{entity?.label ?? fallback}</JourneyLink>;
 }
 
-function EntityReference({ entity, fallback }: { entity?: LinkedEntity; fallback: string }) {
-  if (entity?.canonical_url) return <Link className="text-link" to={entity.canonical_url}>{entity.label}</Link>;
+function EntityReference({ atlasState, entity, fallback, journeyPatch }: { atlasState?: AtlasStateV1; entity?: LinkedEntity; fallback: string; journeyPatch?: AtlasJourneyPatch }) {
+  if (entity?.canonical_url) return <JourneyLink atlasState={atlasState} className="text-link" journeyPatch={journeyPatch} to={entity.canonical_url}>{entity.label}</JourneyLink>;
   if (entity?.external_url) {
     return <a className="text-link" href={entity.external_url} rel="noreferrer" target="_blank">{entity.label}</a>;
   }
@@ -432,6 +455,7 @@ function scenarioRoleLabel(role: LearningJourney["scenarios"][number]["role"]): 
 export function caseState(
   item: Pick<GalleryCase, "map_node_id" | "question_answers">,
   datasetVersion: string,
+  journey?: Pick<LearningJourney, "journey_id" | "case_id">,
 ): AtlasStateV1 {
   return {
     stateVersion: 1,
@@ -439,6 +463,7 @@ export function caseState(
     viewId: "problem-structure",
     viewVersion: "1.0.0",
     selectedNodeId: item.map_node_id,
+    journey: journey ? { journeyId: journey.journey_id, caseId: journey.case_id } : undefined,
     answers: Object.fromEntries(
       Object.entries(item.question_answers).map(([questionId, value]) => [
         questionId,
