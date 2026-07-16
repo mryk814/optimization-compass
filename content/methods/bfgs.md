@@ -10,7 +10,7 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [lbfgsb, newton-method, trust-region-newton-cg]
 aliases: [/learn/bfgs]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。
@@ -30,7 +30,7 @@ $$
 
 を使って $H_k$ を更新します。曲率条件 $y_k^T s_k > 0$ が満たされると、正定値性を保ちやすく、下り方向を作れます。
 
-## 向いている問題
+## 向いている条件
 
 | 条件 | 理由 |
 |---|---|
@@ -39,7 +39,7 @@ $$
 | 勾配が信頼できる | 誤った勾配は更新行列を壊すため |
 | 局所解でよい | 非凸問題で大域最適性を保証する手法ではないため |
 
-高精度な局所解を少ない反復で得たいときに有力です。変数が非常に多い場合は[L-BFGS-B](#/learn/lbfgsb)などlimited-memory法を検討します。
+高精度な局所解を少ない反復で得たいときに有力です。変数が多い場合は[L-BFGS-B](#/learn/lbfgsb)などlimited-memory法を検討します。
 
 ## Line searchが重要な理由
 
@@ -84,7 +84,7 @@ result = minimize(
 print(result.success, result.x, result.fun, result.nfev, result.njev)
 ```
 
-## 失敗したときに確認する
+## 失敗・切替の兆候
 
 - gradient checkが有限差分と一致するか
 - 変数・目的値のscaleが極端に違わないか

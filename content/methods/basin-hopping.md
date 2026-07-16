@@ -35,7 +35,7 @@ last_reviewed: 2026-07-16
 | seed | 複数runで安定性を確認できるか |
 | constraints | random stepとlocal solveで実行可能性をどう保つか |
 
-一評価が非常に高価なら、basinを飛ぶたびにlocal solveするcostが重すぎる可能性があります。
+一評価が高価なら、basinを飛ぶたびにlocal solveするcostが重すぎる可能性があります。
 
 ## 仕組み
 

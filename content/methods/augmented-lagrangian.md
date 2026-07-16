@@ -10,7 +10,7 @@ prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, slsqp, interior-point-nlp, admm]
 aliases: [/learn/augmented-lagrangian]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。

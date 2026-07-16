@@ -12,7 +12,7 @@ comparison_ids: [COMPARE_GRADIENT_FAMILY]
 aliases: [/learn/adam]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 勾配の一次momentと二次momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
@@ -85,7 +85,7 @@ print(x, np.linalg.norm(gradient(x)))
 
 これはdeterministic quadraticの教育例です。mini-batch noise、weight decay、scheduleを含むframework実装とは条件が異なります。
 
-## 見るべき診断値
+## 診断値
 
 - objective / validation metric
 - gradient norm
