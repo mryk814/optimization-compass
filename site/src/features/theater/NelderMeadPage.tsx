@@ -17,6 +17,7 @@ import { usePlayback } from "../playback/usePlayback";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
+import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
 
 interface NelderMeadVisualizationProps {
   trace: AlgorithmTrace;
@@ -201,6 +202,12 @@ export function NelderMeadVisualization({
           <Link className="text-link" to={`/methods/${trace.method_id}`}>手法ページへ</Link>
         </aside>
       </div>
+
+      <LinkedSurfaceView
+        currentFrameIndex={playback.currentFrameIndex}
+        onFrameSelect={playback.seekToFrame}
+        trace={trace}
+      />
 
       {derivedMedia && thumbnail && (
         <section className="derived-media-card" aria-labelledby="derived-media-heading">

@@ -24,6 +24,7 @@ import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { NelderMeadVisualization } from "../theater/NelderMeadPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
+import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
 
 type LoadedTrace = {
   trace: AlgorithmTrace;
@@ -110,6 +111,13 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
         />
       </>}
       <PlaybackControls playback={playback} />
+      {scenario?.artifact.renderer_family === "continuous_trajectory" && (
+        <LinkedSurfaceView
+          currentFrameIndex={playback.currentFrameIndex}
+          onFrameSelect={playback.seekToFrame}
+          trace={trace}
+        />
+      )}
       <div
         className="trace-snapshot"
         aria-label="現在の完全スナップショット"
