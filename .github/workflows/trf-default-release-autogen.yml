@@ -1,0 +1,171 @@
+name: Stage Trust Region Reflective release
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'data/trust-region-reflective-default'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Wire migration and release authority
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          dataset = Path('src/optimization_compass/dataset_release.py')
+          text = dataset.read_text(encoding='utf-8')
+          replacements = [
+              (
+                  'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"\n',
+                  'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"\n'
+                  'DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"\n',
+              ),
+              (
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n            seed_path,\n',
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n'
+                  '            DEFAULT_LEARNING_GRAPH_MIGRATION,\n'
+                  '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n'
+                  '            seed_path,\n',
+              ),
+              (
+                  '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
+                  '        _insert_problem_seed(connection, problem_seed)\n',
+                  '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
+                  '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))\n'
+                  '        _insert_problem_seed(connection, problem_seed)\n',
+              ),
+              (
+                  '            "Published constrained-continuous and multi-objective learning slices.",\n',
+                  '            "Published canonical Trust Region Reflective defaults and guidance.",\n',
+              ),
+              (
+                  '            "Constrained and multi-objective concepts lacked canonical executable visuals.",\n'
+                  '            (\n'
+                  '                "Added renderer-family contracts for feasible regions and Pareto fronts, "\n'
+                  '                "with canonical scenarios, references, and failure contrast."\n'
+                  '            ),\n'
+                  '            (\n'
+                  '                "Connect canonical problems to artifacts, routes, content, Gallery, "\n'
+                  '                "Map, and sources."\n'
+                  '            ),\n',
+                  '            "A widely used SciPy default was represented only through broad adjacent methods.",\n'
+                  '            (\n'
+                  '                "Added a canonical Trust Region Reflective method, primary source, "\n'
+                  '                "implementation mapping, and API-default metadata."\n'
+                  '            ),\n'
+                  '            (\n'
+                  '                "Separate library default behavior from method recommendation priority, "\n'
+                  '                "and connect the dedicated beginner guide to generated search and retrieval."\n'
+                  '            ),\n',
+              ),
+          ]
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'dataset_release.py replacement did not match exactly once: {old[:80]!r}')
+              text = text.replace(old, new, 1)
+          dataset.write_text(text, encoding='utf-8')
+
+          claims = Path('src/optimization_compass/versioned_claims.py')
+          text = claims.read_text(encoding='utf-8')
+          old = 'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})'
+          new = 'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"})'
+          if text.count(old) != 1:
+              raise SystemExit('HIGH_USAGE_IMPLEMENTATION_IDS replacement did not match')
+          claims.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          authority = Path('src/optimization_compass/resources/release-authority.json')
+          payload = json.loads(authority.read_text(encoding='utf-8'))
+          payload['dataset_version'] = '0.11.0'
+          payload['release_date'] = '2026-07-16'
+          authority.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          least_squares = Path('content/methods/least-squares.md')
+          text = least_squares.read_text(encoding='utf-8')
+          old = 'related_ids: [method.gradient-descent, trust-region-newton-cg]'
+          new = 'related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]'
+          if text.count(old) != 1:
+              raise SystemExit('least-squares related_ids replacement did not match')
+          text = text.replace(old, new, 1)
+          old = '- bounds中心・大規模 → trust-region reflective'
+          new = '- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)'
+          if text.count(old) != 1:
+              raise SystemExit('least-squares TRF link replacement did not match')
+          least_squares.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          density_test = Path('tests/test_method_content_density.py')
+          text = density_test.read_text(encoding='utf-8')
+          old = 'MINIMUM_PUBLISHED_METHOD_GUIDES = 66'
+          if text.count(old) != 1:
+              raise SystemExit('method content guide minimum replacement did not match')
+          density_test.write_text(text.replace(old, 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67', 1), encoding='utf-8')
+
+          density_doc = Path('docs/method-content-density.md')
+          text = density_doc.read_text(encoding='utf-8')
+          marker = '## Audit report\n'
+          addition = (
+              '## Default-method pilot\n\n'
+              'Issue #111 adds a dedicated Trust Region Reflective guide because it is selected implicitly by '
+              'a high-use SciPy API. This raises the current published method-guide baseline to 67 while keeping '
+              'library defaults separate from recommendation priority.\n\n'
+          )
+          if text.count(marker) != 1:
+              raise SystemExit('method density audit marker did not match')
+          density_doc.write_text(text.replace(marker, addition + marker, 1), encoding='utf-8')
+          PY
+          uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests/test_trust_region_reflective.py tests/test_method_content_density.py
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
+      - name: Build deterministic dataset 0.11.0
+        run: |
+          rm -rf .release-stage
+          uv run python scripts/rebuild_dataset.py --stage --output .release-stage
+          uv run python scripts/rebuild_dataset.py --publish --staged-directory .release-stage
+          rm -rf .release-stage
+      - name: Regenerate content audit
+        run: |
+          uv run python scripts/verify_content.py
+          uv run python scripts/method_content_density_report.py
+      - name: Validate Python and release artifacts
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src tests
+          uv run pytest
+          uv run python scripts/verify_release_bundle.py
+      - name: Validate the site
+        run: |
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run
+          npm --prefix site run build
+      - name: Commit generated release and remove temporary workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data content docs site/public/data src tests
+          git rm .github/workflows/trf-default-release-autogen.yml
+          git commit -m 'data: publish Trust Region Reflective dataset 0.11.0'
+          git push origin HEAD:${{ github.head_ref }}
