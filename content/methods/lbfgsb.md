@@ -10,7 +10,7 @@ prerequisites: [bfgs]
 related_ids: [bfgs, newton-method, trust-region-newton-cg]
 aliases: [/learn/lbfgsb]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。
@@ -27,7 +27,7 @@ $$
 
 をnativeに扱います。一般の等式・不等式制約を扱う手法ではありません。
 
-## 向いている問題
+## 向いている条件
 
 - 数千〜数百万変数の滑らかな目的関数
 - gradientまたはautomatic differentiationが利用できる

@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, differential-evolution]
 aliases: [/learn/mads]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。
@@ -73,7 +73,7 @@ def mads_loop(
 
 実際のMADSでは、方向集合のdense性、mesh / poll sizeの関係、barrier rule、opportunistic evaluationなどを実装が管理します。
 
-## 見るべき診断値
+## 診断値
 
 - objective evaluation数
 - feasible / infeasible evaluation数
@@ -96,7 +96,7 @@ def mads_loop(
 ## 避ける／切り替える条件
 
 - 高次元でpoll点数が予算を圧迫
-- 1評価が非常に高価でsurrogate利用が必要
+- 1評価が高価でsurrogate利用が必要
 - noise floorよりmeshを細かくしても意味がない
 - global optimumや厳密gapが必要
 - discrete / categorical変数を無理に連続meshへ埋め込む
