@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-07-16
-- Issue: #116
+- Issues: #116, #123
 
 ## Context
 
@@ -16,7 +16,9 @@ relevant, and what evidence supports the path?
 
 ## Decision
 
-`GalleryCase` is the root authority. The exporter derives `learning-journeys.json` version `1.0.0`
+`GalleryCase` version `2.0.0` is the root authority. Candidate methods are authored as reason-bearing
+rows and limitations remain distinct from operational notes. The exporter derives
+`learning-journeys.json` version `1.1.0`
 from the existing Gallery, VisualizationScenario, Comparison, content, and repository contracts.
 There is no authored journey seed and no parallel v2 contract.
 
@@ -43,14 +45,29 @@ There is no authored journey seed and no parallel v2 contract.
 
 ### Completeness
 
-- `complete`: a published case has one primary scenario, at least one comparison, implementation,
-  and source.
-- `partial`: a published case is missing one or more of those connections. Stable reason codes explain
-  each missing connection.
-- `draft`: the source Gallery case is draft. The missing connections are still reported.
+The exporter evaluates thirteen explicit dimensions: formulation, canonical problem instance,
+primary and alternate scenarios, canonical comparison, method roles, implementation, source review,
+terminology prerequisite, static/text alternative, cross-surface links, route reachability, and
+reference validation. Each dimension publishes its state, target IDs, and stable reason codes.
 
-`orphan_scenario_ids` and `orphan_comparison_ids` report assets not reached by any case-rooted journey.
-They are backlog signals, not export failures.
+- `complete`: every dimension is connected and valid.
+- `partial`: a published case has one or more missing or broken dimensions.
+- `draft`: the source Gallery case is draft. Its missing dimensions are still reported separately.
+
+The index summary publishes the target of five complete journeys and derives the current milestone
+state from the rows. Assets not reached by a journey use an explicit orphan policy. Identity such as
+`derived` or `generated_only` does not prove that standalone publication was intentional, so the
+exporter reports unlinked scenarios, comparisons, run artifacts, and published content as `warning`
+until `data/seeds/learning_journey_asset_policy.json` explicitly declares another policy. An `error`
+policy is rejected during export.
+
+Comparison completeness uses the validated fairness contract, including canonical identity,
+case/journey ownership, fixed and changed factors, aligned budget, metrics, fairness note, caveat,
+limitations, and members. Method-role completeness also requires authored candidate, conditional,
+and exclusion reasons. Source review combines the direct sources of the Case, every linked Scenario,
+Comparison, and published method guide; it checks type-specific freshness, currentness, claim text,
+and source quality as well as the Case review date. Route reachability is checked against actual case, scenario, run artifact, comparison,
+method, and source inventories rather than URL prefixes.
 
 ### Validation and downstream exports
 
@@ -64,9 +81,10 @@ the generated journey asset.
 
 ## Consequences
 
-The initial `constrained-design` pilot resolves its formulation, `SCENARIO_CONSTRAINED_DISK`, methods,
-implementations, content, and sources. It is intentionally `partial` until a fair comparison is authored;
-the contract makes that missing product work visible instead of inventing a misleading comparison.
+The initial `constrained-design` pilot resolves its formulation, `SCENARIO_CONSTRAINED_DISK`, fair
+comparison, methods, implementations, content, and sources. It remains `partial` until an alternate
+failure-contrast or sensitivity scenario is connected; the contract makes that missing product work
+visible instead of weakening the completion definition.
 
 Later Case, Theater, and Compare UI issues can share one generated route-and-relation contract. Adding
 a new complete journey normally means improving existing Gallery/Scenario/Comparison authorities, not

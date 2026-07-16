@@ -130,7 +130,7 @@
       "intents": [],
       "query": "凸性とは",
       "query_id": "convexity-concept",
-      "result_count": 6,
+      "result_count": 11,
       "top_document_ids": [
         "content:concept.convexity",
         "glossary:G021",

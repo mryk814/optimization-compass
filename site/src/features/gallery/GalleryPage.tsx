@@ -72,7 +72,7 @@ export function GalleryPage() {
             <span>{item.domain} · {item.difficulty}</span>
             <h2>{item.title_ja}</h2>
             <p>{item.question}</p>
-            <small>候補 {item.candidate_method_ids.length}件 · Reviewed {item.last_reviewed}</small>
+            <small>候補 {item.candidate_methods.length}件 · Reviewed {item.last_reviewed}</small>
           </Link>
         ))}
       </div>
@@ -258,7 +258,7 @@ export function GalleryCasePage() {
                 ids={journey.candidate_method_ids}
                 label="候補"
                 method={entity}
-                reasons={new Map()}
+                reasons={new Map(item.candidate_methods.map((entry) => [entry.method_id, entry.reason]))}
                 state={state}
               />
               <MethodGroup
@@ -294,6 +294,10 @@ export function GalleryCasePage() {
                 <pre><code>{item.python_example}</code></pre>
               </details>
               <p className="atlas-note">{item.practical_notes}</p>
+              <div className="atlas-note">
+                <strong>このcaseの限界</strong>
+                <ul>{item.limitations.map((text) => <li key={text}>{text}</li>)}</ul>
+              </div>
             </div>
             <div>
               <header className="gallery-section-heading">

@@ -9,7 +9,7 @@ const manifest = {
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "2.0.0", path: "recommendation/site-data.json" },
   problems: { version: "1.0.0", path: "problems.json" },
-  learning_journeys: { version: "1.0.0", path: "learning-journeys.json" },
+  learning_journeys: { version: "1.1.0", path: "learning-journeys.json" },
   formulation_primer: { version: "1.0.0", path: "formulation-primer.json" },
   visualization_scenarios: { version: "1.2.0", path: "visualization-scenarios.json" },
   derived_media: { version: "1.1.0", path: "media/manifest.json" },
