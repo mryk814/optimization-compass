@@ -103,7 +103,7 @@ Issue #87 raises coverage across:
 
 The tranche adds guides for BFGS, L-BFGS-B, Newton, trust-region Newton-CG, ADMM, proximal gradient, FISTA, differential evolution, genetic algorithms, particle swarm optimization, MADS, dynamic programming, Dijkstra / A*, branch-and-cut, dual simplex, and direct collocation.
 
-The first tranche moves the published content baseline from 12 to at least 28 pages. This is a review floor for representative coverage, not a target to give all 98 methods identical page length.
+The first tranche moves the published content baseline from 12 to at least 28 pages. This is a review floor for representative coverage, not a target to give all registered methods identical page length.
 
 ## High-use method tranche
 
@@ -114,7 +114,7 @@ Issue #92 adds guides for methods that already appear frequently in implementati
 - Powell, pattern search, and COBYLA
 - SHGO, DIRECT, and dual annealing
 
-This raises the published method-guide baseline to 42. The remaining registered methods continue to retain structured summaries, predicates, implementations, relations, and sources even where a full guide has not yet been authored.
+This raises the published method-guide baseline to 42. Remaining registered methods continue to retain structured summaries, predicates, implementations, relations, and sources even where a full guide has not yet been authored.
 
 ## Beginner family tranche
 
@@ -144,11 +144,26 @@ These guides are the first individual-method tranche to require the beginner-fir
 
 This raises the published method-guide baseline to 66. It still does not require every registered method to have the same amount of prose or a visualization.
 
+## Default-method pilot
+
+Issue #111 adds Trust Region Reflective as a canonical method instead of leaving it as an implementation alias spread across Gauss–Newton and trust-krylov relations.
+
+Defaults receive elevated content priority because users can execute them without making an explicit algorithm choice. A default-method guide must therefore state:
+
+- the exact API and condition under which the default is selected
+- the library version and validity window of the claim
+- how the user overrides the choice
+- why the default is broadly safe in that API context
+- why the default is not a context-free performance ranking
+- the diagnostics and conditions that should trigger a switch
+
+The TRF pilot raises the published method-guide baseline to 67 and introduces separate versioned claims for `scipy.optimize.least_squares` and the bounds-dependent behavior of `scipy.optimize.curve_fit`.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.
 
-After the second beginner method tranche, all 66 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
+After the default-method pilot, all 67 published method guides must meet the Level 2 floor. This does not imply that every registered method has a full guide; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
 The same canonical export rebuilds search and retrieval documents, so added explanations become available through human search and future external retrieval without a second hand-maintained corpus. `search-index.json` uses deterministic compact JSON serialization to preserve its 2 MiB browser asset budget without removing searchable fields; human-oriented generated reports remain pretty-printed.
 
@@ -165,4 +180,5 @@ The same canonical export rebuilds search and retrieval documents, so added expl
 - Comparison claims state budget, initialization, seed, tolerance, and implementation context.
 - Family guides describe conditional roles rather than a universal ranking.
 - Beginner-first method guides explain what is observed, what is updated, and which diagnostic triggers a switch.
+- Default-method claims identify the API condition, version, override, and non-ranking interpretation.
 - Generated site data is regenerated from the latest validated database and content tree.
