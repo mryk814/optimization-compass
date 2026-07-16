@@ -3,7 +3,7 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-MINIMUM_PUBLISHED_METHOD_GUIDES = 66
+MINIMUM_PUBLISHED_METHOD_GUIDES = 67
 MINIMUM_SUMMARY_CHARACTERS = 35
 MINIMUM_BODY_CHARACTERS = 1_200
 MINIMUM_TOC_ENTRIES = 4
@@ -36,6 +36,7 @@ BEGINNER_METHOD_TRANCHE_IDS = {
     "spsa",
     "tpe",
     "trust-krylov",
+    "trust-region-reflective",
 }
 
 REQUIRED_FAMILY_SECTIONS = (
