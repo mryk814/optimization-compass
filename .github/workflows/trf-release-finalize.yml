@@ -128,6 +128,13 @@ jobs:
               'tests/test_site_export.py': [
                   ('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96'),
               ],
+              'site/src/contracts/learning-slices.test.ts': [
+                  ('expect(feasible.dataset_version).toBe("0.10.0")', 'expect(feasible.dataset_version).toBe("0.11.0")'),
+                  ('expect(pareto.dataset_version).toBe("0.10.0")', 'expect(pareto.dataset_version).toBe("0.11.0")'),
+              ],
+              'site/src/contracts/coverage.test.ts': [
+                  ('expect(report.subjects).toHaveLength(164)', 'expect(report.subjects).toHaveLength(165)'),
+              ],
           }
           for name, changes in replacements.items():
               path = Path(name)
