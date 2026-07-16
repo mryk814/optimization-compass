@@ -69,6 +69,8 @@ Mathematics is retained, but the prose explains what each expression represents 
 
 A family guide uses a canonical `MF_*` row and groups methods with overlapping prerequisites. It does not create a context-free ranking.
 
+Families may overlap from a learner's point of view. A method can appear in more than one guide when the surrounding decision question is different; the canonical method identity remains single and the guide explains why the method is being compared in that context.
+
 Each family guide provides:
 
 - `30秒でつかむ`: the family's motivation or “feeling”
