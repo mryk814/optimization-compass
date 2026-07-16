@@ -1924,7 +1924,6 @@
             ],
             "implementation_ids": [
               "I_CERES",
-              "I_SCIPY_LEAST_SQUARES_TRF",
               "I_SCIPY_TRUST_CONSTR"
             ]
           },
@@ -1947,7 +1946,6 @@
             ],
             "implementation_ids": [
               "I_CERES",
-              "I_SCIPY_LEAST_SQUARES_TRF",
               "I_JAXOPT"
             ]
           }
@@ -2601,7 +2599,6 @@
             ],
             "implementation_ids": [
               "I_CERES",
-              "I_SCIPY_LEAST_SQUARES_TRF",
               "I_SCIPY_TRUST_CONSTR"
             ]
           },
@@ -2647,7 +2644,6 @@
             ],
             "implementation_ids": [
               "I_CERES",
-              "I_SCIPY_LEAST_SQUARES_TRF",
               "I_JAXOPT"
             ]
           },
