@@ -27,10 +27,6 @@ jobs:
           node-version: "24"
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: Install deterministic media encoder
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes ffmpeg
       - name: Verify dependency declarations and workflow pins
         run: |
           uv lock --check
@@ -136,10 +132,6 @@ jobs:
         with:
           python-version: "3.13"
           enable-cache: true
-      - name: Install deterministic media encoder
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes ffmpeg
       - run: uv sync --frozen --all-extras --all-groups
       - run: uv run --frozen pytest
 

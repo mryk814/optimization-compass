@@ -19,8 +19,11 @@ same bytes. The SVG contains title/description text and the same canonical traje
 simplex.
 
 The animation combines authored story frames with ten evenly sampled trace frames at a fixed 0.6
-seconds per frame. GIF and WebM are
-derived with ffmpeg using single-threaded bit-exact settings; no wall-clock metadata is retained.
+seconds per frame. GIF and WebM are canonical packaged projections of those rendered PNG frames.
+The exporter hashes the complete ordered frame input before copying the packaged bytes, so a trace
+or renderer change fails loudly until the media is regenerated and reviewed. This keeps site-data
+exports byte-identical across operating systems and ffmpeg builds while preserving the exact source
+artifact and frame provenance.
 The WebM player uses the static thumbnail as its poster and attaches the WebVTT file as a caption
 track. The plain-text transcript remains usable without video playback.
 
