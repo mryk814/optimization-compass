@@ -127,7 +127,7 @@ test("Pareto sliceでpreferenceに応じた点をkeyboardで選べる", async ({
   await expect(page.locator(".triobjective-lens output")).toHaveText("320°");
 });
 
-test("Galleryからcanonical constrained sliceへ移動できる", async ({ page, baseURL }) => {
+test("制約付きCaseをprimary Theater、failure、CompareからCaseへ完走できる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/constrained-design");
 
   await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
@@ -136,7 +136,19 @@ test("Galleryからcanonical constrained sliceへ移動できる", async ({ page
   await theaterJourney.focus();
   await expect(theaterJourney).toBeFocused();
   await theaterJourney.press("Enter");
+  await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH\?state=/u);
+  await expect(page.getByRole("heading", { level: 1, name: "制約を満たす経路で目的を改善する" })).toBeVisible();
+  await expect(page.getByText("M_SLSQP", { exact: true }).first()).toBeVisible();
+
+  await page.getByRole("link", { name: /Alternate: 実行可能領域と制約を無視した失敗/u }).click();
   await expect(page).toHaveURL(/#\/theater\/learning\/SCENARIO_CONSTRAINED_DISK\?state=/u);
+  await expect(page.getByRole("heading", { level: 1, name: "実行可能領域と制約を無視した失敗を比べる" })).toBeVisible();
+
+  await page.getByRole("link", { name: "Compare: COMPARE_CONSTRAINED_FAILURE" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
+  await page.getByRole("link", { name: /Case: 強度制約/u }).click();
+  await expect(page).toHaveURL(/#\/gallery\/constrained-design\?state=/u);
+  await expect(page.getByRole("heading", { level: 1, name: "強度制約を守りながら軽量設計を探す" })).toBeVisible();
 });
 
 test("Galleryからcanonical comparisonへ移動できる", async ({ page, baseURL }) => {

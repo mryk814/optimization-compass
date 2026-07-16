@@ -14,7 +14,7 @@ describe("TheaterIndexPage", () => {
     render(<MemoryRouter><EntityLinkProvider initialIndex={parseEntityLinkIndex(entityLinks)}><TheaterIndexPage /></EntityLinkProvider></MemoryRouter>);
 
     expect(screen.getByRole("heading", { level: 1, name: "Method Theater" })).toBeVisible();
-    expect(await screen.findByText("18 / 18 scenarios")).toBeVisible();
+    expect(await screen.findByText("19 / 19 scenarios")).toBeVisible();
     expect(screen.getAllByRole("link", { name: /Nelder–Meadの幾何操作/u })[0]).toHaveAttribute("href", "/traces/nelder-mead-quadratic");
     expect(screen.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toHaveAttribute("href", "/theater/search-tree/binary-knapsack-bnb-complete");
     expect(screen.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u })).toHaveAttribute("href", "/theater/bayesian-optimization?scenario=SCENARIO_BO_1D_EXPLORE_NOISELESS");
