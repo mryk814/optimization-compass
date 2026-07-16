@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, test } from "vitest";
 
 import { PageOrientation } from "./PageOrientation";
 
 describe("PageOrientation", () => {
-  test("renders the four common orientation sections and next links", () => {
+  test("keeps repeated guidance collapsed and exposes all sections on request", () => {
     render(
       <MemoryRouter>
         <PageOrientation
@@ -18,6 +18,12 @@ describe("PageOrientation", () => {
     );
 
     expect(screen.getByRole("complementary", { name: "このページの使い方" })).toBeVisible();
+    const summary = screen.getByText("このページの見方");
+    expect(summary).toBeVisible();
+    expect(screen.getByRole("heading", { name: "このページで分かること", hidden: true })).not.toBeVisible();
+
+    fireEvent.click(summary);
+
     expect(screen.getByRole("heading", { name: "このページで分かること" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "読み方" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "前提・限界" })).toBeVisible();

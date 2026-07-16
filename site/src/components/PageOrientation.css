@@ -1,0 +1,83 @@
+.page-orientation-shell {
+  margin: 0.8rem 0 1.1rem;
+}
+
+.page-orientation-disclosure {
+  border: 1px solid #cfd9d1;
+  border-radius: 0.65rem;
+  background: #f8faf6;
+}
+
+.page-orientation-disclosure > summary {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.75rem;
+  color: #234737;
+  cursor: pointer;
+  list-style: none;
+}
+
+.page-orientation-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-orientation-disclosure > summary::after {
+  content: "+";
+  display: grid;
+  width: 1.45rem;
+  height: 1.45rem;
+  place-items: center;
+  border: 1px solid #aebdb2;
+  border-radius: 999px;
+  background: #fff;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.page-orientation-disclosure[open] > summary::after {
+  content: "−";
+}
+
+.page-orientation-disclosure > summary:hover {
+  background: #f0f5ef;
+}
+
+.page-orientation-disclosure > summary:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 3px;
+}
+
+.page-orientation-disclosure .page-orientation-eyebrow {
+  margin: 0;
+}
+
+.page-orientation-summary-title {
+  font-weight: 800;
+}
+
+.page-orientation-summary-hint {
+  min-width: 0;
+  color: #657168;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.page-orientation-disclosure > .page-orientation {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid #dfe6df;
+  border-radius: 0 0 0.65rem 0.65rem;
+}
+
+@media (max-width: 40rem) {
+  .page-orientation-disclosure > summary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .page-orientation-summary-hint {
+    display: none;
+  }
+}

@@ -25,11 +25,14 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
     (item) => item.subject_type === "method" && item.subject_id === methodId,
   );
   return (
-    <section aria-label="機械評価できる前提" className="method-predicates">
+    <section aria-label="構造化された適用前提" className="method-predicates">
       <div className="method-predicate-heading">
-        <h2>機械評価できる前提</h2>
+        <h2>構造化された適用前提</h2>
         {coverage && <span>{coverage.status}</span>}
       </div>
+      <p className="method-predicate-context">
+        推薦・比較・実装用プロンプトで再利用する詳細データです。
+      </p>
       <ul>
         {predicates.map((predicate) => (
           <li key={predicate.predicate_id}>

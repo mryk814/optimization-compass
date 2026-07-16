@@ -253,7 +253,7 @@ describe("MapPage", () => {
     expect(screen.getByText("Q01 = binary")).toBeVisible();
     expect(screen.getByText("CP-SAT")).toBeVisible();
     expect(screen.getByText("branch-and-cut")).toBeVisible();
-    expect(screen.getAllByRole("heading", { level: 2, name: "機械評価できる前提" })).toHaveLength(2);
+    expect(screen.getAllByRole("heading", { level: 2, name: "構造化された適用前提" })).toHaveLength(2);
     expect(screen.getByRole("link", { name: "根拠" })).toHaveAttribute("href", "https://example.com/source");
     expect(within(tree).getByRole("treeitem", { name: /分岐 A/u })).toHaveClass("map-tree-item-ancestor");
     expect(within(tree).getByRole("treeitem", { name: "分岐 B" })).toHaveClass("map-tree-item-unrelated");

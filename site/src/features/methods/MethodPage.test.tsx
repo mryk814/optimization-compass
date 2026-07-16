@@ -41,7 +41,7 @@ function fetchArtifacts(currentView: typeof view) {
       ? { ...structuredClone(rawSiteData), dataset_version: currentView.dataset_version }
       : input.includes("failure-modes.json")
         ? { contract_version: "1.0.0", dataset_version: currentView.dataset_version, failure_modes: [] }
-      : currentView,
+        : currentView,
   }));
 }
 
@@ -141,13 +141,14 @@ describe("MethodPage Map deep link", () => {
     );
 
     expect(await screen.findByRole("heading", { level: 1, name: "M_GALLERY" })).toBeVisible();
+    expect(screen.getByText(/詳細教材は準備中/u)).toBeVisible();
     expect(screen.getByRole("link", { name: "材料ケース" })).toHaveAttribute(
       "href",
       "/gallery/case.materials",
     );
   });
 
-  test("shows symptoms, checks, and mitigations from the canonical failure artifact", async () => {
+  test("keeps canonical symptoms and mitigations behind a supplemental disclosure", async () => {
     const failures = {
       contract_version: "1.0.0", dataset_version: "0.2.0", failure_modes: [{
         failure_mode_id: "FM_TEST", name_ja: "発散", name_en: "Divergence",
@@ -175,7 +176,12 @@ describe("MethodPage Map deep link", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByRole("heading", { name: "症状・確認・対処" })).toBeVisible();
+    const disclosure = await screen.findByText("構造化データとトラブルシューティング");
+    expect(screen.getByRole("heading", { name: "症状・確認・対処", hidden: true })).not.toBeVisible();
+
+    fireEvent.click(disclosure);
+
+    expect(screen.getByRole("heading", { name: "症状・確認・対処" })).toBeVisible();
     expect(screen.getByText("目的値が増加する")).toBeVisible();
     expect(screen.getByText("step履歴を確認")).toBeVisible();
     expect(screen.getByText("stepを下げる")).toBeVisible();
