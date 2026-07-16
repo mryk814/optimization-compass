@@ -928,11 +928,11 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_CONSTRAINED_DISK"
+          ]
         },
         "canonical_comparison": {
           "reason_codes": [],
@@ -954,6 +954,7 @@
           "target_ids": [
             "/gallery/constrained-design",
             "/theater/learning/SCENARIO_CONSTRAINED_DISK",
+            "/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
             "/compare/COMPARE_CONSTRAINED_FAILURE",
             "/methods/M_BFGS",
             "/methods/M_INTERIOR_POINT_NLP",
@@ -996,7 +997,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "SCENARIO_CONSTRAINED_DISK"
+            "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
           ]
         },
         "route_reachability": {
@@ -1005,6 +1006,7 @@
           "target_ids": [
             "/gallery/constrained-design",
             "/theater/learning/SCENARIO_CONSTRAINED_DISK",
+            "/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
             "/compare/COMPARE_CONSTRAINED_FAILURE",
             "/methods/M_BFGS",
             "/methods/M_INTERIOR_POINT_NLP",
@@ -1037,7 +1039,8 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "SCENARIO_CONSTRAINED_DISK"
+            "SCENARIO_CONSTRAINED_DISK",
+            "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
           ]
         },
         "terminology_prerequisite": {
@@ -1055,10 +1058,8 @@
         }
       },
       "journey_id": "constrained-design",
-      "missing_dimensions": [
-        "alternate_scenario"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1939,9 +1940,7 @@
           "comparison_id": "COMPARE_CONSTRAINED_FAILURE"
         }
       ],
-      "completion_reasons": [
-        "missing_failure_or_sensitivity_scenario"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -1980,8 +1979,15 @@
           "canonical_url": "/theater/learning/SCENARIO_CONSTRAINED_DISK",
           "problem_definition_id": "PROBLEM_CONSTRAINED_CONTINUOUS_2D",
           "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",
-          "role": "primary",
+          "role": "failure_contrast",
           "scenario_id": "SCENARIO_CONSTRAINED_DISK"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
+          "problem_definition_id": "PROBLEM_CONSTRAINED_CONTINUOUS_2D",
+          "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
         }
       ],
       "source_ids": [
@@ -1994,7 +2000,7 @@
         "S064",
         "S087"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"
@@ -2916,9 +2922,9 @@
   "summary": {
     "milestone_status": "not_met",
     "status_counts": {
-      "complete": 0,
+      "complete": 1,
       "draft": 0,
-      "partial": 11
+      "partial": 10
     },
     "target_complete_journeys": 5,
     "total_journeys": 11

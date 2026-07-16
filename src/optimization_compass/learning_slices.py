@@ -35,6 +35,7 @@ PARETO_ARTIFACT_ID: Literal["biobjective-quadratic-pareto-front"] = (
     "biobjective-quadratic-pareto-front"
 )
 CONSTRAINED_SCENARIO_ID = "SCENARIO_CONSTRAINED_DISK"
+CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID = "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
 PARETO_SCENARIO_ID = "SCENARIO_BIOBJECTIVE_QUADRATIC"
 
 
@@ -474,8 +475,10 @@ def write_learning_slice_scenarios(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(payload)
         payload_metadata[relative_path] = (len(payload), sha256(payload).hexdigest())
+    constrained_failure = _constrained_scenario(dataset_version, payload_metadata)
     scenarios = [
-        _constrained_scenario(dataset_version, payload_metadata),
+        _constrained_feasible_path_scenario(constrained_failure),
+        constrained_failure,
         _pareto_scenario(dataset_version, payload_metadata),
     ]
     links = [
@@ -681,6 +684,78 @@ def _constrained_scenario(
         source_ids=["S017", "S029", "S030", "S055", "S056", "S064"],
         last_verified=LAST_VERIFIED,
     )
+
+
+def _constrained_feasible_path_scenario(
+    failure_scenario: VisualizationScenario,
+) -> VisualizationScenario:
+    payload = failure_scenario.model_dump(mode="python")
+    lesson = failure_scenario.lesson.model_dump(mode="python")
+    lesson.update(
+        {
+            "learning_objective": {
+                "ja": "実行可能性を回復し、制約境界に沿って目的を改善する仕組みを読む",
+                "en": (
+                    "Read how a constrained path restores feasibility and improves "
+                    "along the boundary"
+                ),
+            },
+            "misconception": {
+                "ja": "制約付き手法も目的関数の降下方向だけを追えばよい",
+                "en": "A constrained method only needs to follow objective descent",
+            },
+            "expected_phenomenon_ja": (
+                "制約対応経路はinfeasibleな初期点から実行可能性を回復し、"
+                "active boundaryに沿って既知最適点へ進みます。"
+            ),
+            "expected_phenomenon_en": (
+                "The constraint-aware path restores feasibility from the infeasible start "
+                "and follows the active boundary to the known optimum."
+            ),
+            "failure_signals": [],
+            "comparison_role": "primary_example",
+            "recommended_next_scenario_ids": [CONSTRAINED_SCENARIO_ID],
+            "static_summary": {
+                "ja": "円内のfeasible regionで制約対応経路が境界へ進む様子を追います。",
+                "en": (
+                    "Follow the constraint-aware path to the boundary of a "
+                    "disk-shaped feasible region."
+                ),
+            },
+            "text_alternative": {
+                "ja": "制約対応経路は円外の初期点から円内へ戻り、円境界の既知最適点へ進みます。",
+                "en": (
+                    "The constraint-aware path returns from the infeasible start to the disk "
+                    "and reaches the boundary reference."
+                ),
+            },
+            "derived_media_caption": {
+                "ja": "feasible region上で実行可能性を回復する制約対応経路",
+                "en": "Constraint-aware path restoring feasibility on a feasible region",
+            },
+            "limitations_ja": (
+                "同じFeasibleRegion artifactに比較用の制約無視経路も併記します。"
+                "SLSQPそのものの内部反復を再現するものではありません。"
+            ),
+            "limitations_en": (
+                "The shared FeasibleRegion artifact also shows the unconstrained contrast path. "
+                "This is not a reproduction of SLSQP internals."
+            ),
+        }
+    )
+    payload.update(
+        {
+            "scenario_id": CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID,
+            "identity_status": "derived",
+            "canonical_scenario_id": CONSTRAINED_SCENARIO_ID,
+            "title_ja": "制約を満たす経路で目的を改善する",
+            "title_en": "Improve the objective along a constraint-aware path",
+            "purpose": "mechanism",
+            "lesson": lesson,
+            "runs": [failure_scenario.runs[0].model_dump(mode="python")],
+        }
+    )
+    return VisualizationScenario.model_validate(payload)
 
 
 def _pareto_scenario(

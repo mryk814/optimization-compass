@@ -110,17 +110,23 @@ def test_canonical_visualization_scenarios_cover_expensive_and_discrete_slices()
 def test_learning_slices_close_constrained_and_multiobjective_coverage() -> None:
     report = load_report()
     expected = {
-        "COV_CONSTRAINED_FEASIBLE": "SCENARIO_CONSTRAINED_DISK",
-        "COV_MULTI_OBJECTIVE_PARETO": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "COV_CONSTRAINED_FEASIBLE": (
+            ["SCENARIO_CONSTRAINED_DISK", "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"],
+            ["/theater/learning/SCENARIO_CONSTRAINED_DISK"],
+        ),
+        "COV_MULTI_OBJECTIVE_PARETO": (
+            ["SCENARIO_BIOBJECTIVE_QUADRATIC"],
+            ["/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC"],
+        ),
     }
 
-    for expectation_id, scenario_id in expected.items():
+    for expectation_id, (scenario_ids, route_ids) in expected.items():
         expectation = next(
             item for item in report.expectations if item.expectation_id == expectation_id
         )
         assert expectation.status == "available"
-        assert expectation.scenario_ids == [scenario_id]
-        assert expectation.route_ids == [f"/theater/learning/{scenario_id}"]
+        assert expectation.scenario_ids == scenario_ids
+        assert expectation.route_ids == route_ids
 
 
 def test_generated_slices_declare_their_canonical_identity() -> None:

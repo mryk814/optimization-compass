@@ -17,7 +17,8 @@
         "/theater/learning/SCENARIO_CONSTRAINED_DISK"
       ],
       "scenario_ids": [
-        "SCENARIO_CONSTRAINED_DISK"
+        "SCENARIO_CONSTRAINED_DISK",
+        "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
       ],
       "slice_id": "SLICE_CONSTRAINED_CONTINUOUS",
       "source_ids": [
