@@ -1,6 +1,6 @@
 {
   "axis": "problem_structure",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "description": "問題の特徴から手法候補へ辿る意味階層。",
   "edges": [
     {
@@ -3320,7 +3320,7 @@
     "problem",
     "alternative"
   ],
-  "generated_at": "2026-07-15T00:00:00Z",
+  "generated_at": "2026-07-16T00:00:00Z",
   "limitations": "手法の優劣を示す図ではなく、問題の記述を整理する入口です。",
   "max_depth": 3,
   "nodes": [

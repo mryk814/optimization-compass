@@ -144,6 +144,10 @@ These guides are the first individual-method tranche to require the beginner-fir
 
 This raises the published method-guide baseline to 66. It still does not require every registered method to have the same amount of prose or a visualization.
 
+## Default-method pilot
+
+Issue #111 adds a dedicated Trust Region Reflective guide because it is selected implicitly by a high-use SciPy API. This raises the published method-guide baseline to 67 while keeping library defaults separate from recommendation priority.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.

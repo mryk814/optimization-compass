@@ -7,7 +7,7 @@ title_en: Nonlinear Least Squares and Levenberg-Marquardt
 summary: 観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。
 source_ids: [S003, S041]
 prerequisites: []
-related_ids: [method.gradient-descent, trust-region-newton-cg]
+related_ids: [method.gradient-descent, trust-region-newton-cg, trust-region-reflective]
 visualization_ids: []
 comparison_ids: []
 aliases: [/learn/least-squares]
@@ -148,7 +148,7 @@ optimizerの成功statusを統計的妥当性と混同しません。parameter u
 
 - 線形least squares → QR / SVDを先に使う
 - root findingが本来の問い → 二乗和化で解が変わらないか確認
-- bounds中心・大規模 → trust-region reflective
+- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)
 - 無制約・小規模 → LM
 - 強い一般制約 → constrained NLP
 - residual/Jacobianを作れないblack-box → derivative-free法

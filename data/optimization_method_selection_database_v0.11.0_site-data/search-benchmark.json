@@ -1,0 +1,207 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.11.0",
+  "metrics": {
+    "expected_entity_recall": 0.9090909090909091,
+    "top_1_relevance": 0.8181818181818182,
+    "top_3_relevance": 0.9090909090909091,
+    "zero_result_rate": 0.09090909090909091
+  },
+  "queries": [
+    {
+      "category": "canonical_term",
+      "entity_types": [
+        "method"
+      ],
+      "expected_document_ids": [
+        "method:M_NELDER_MEAD"
+      ],
+      "intents": [],
+      "query": "Nelder–Mead",
+      "query_id": "canonical-method-ja",
+      "result_count": 1,
+      "top_document_ids": [
+        "method:M_NELDER_MEAD"
+      ]
+    },
+    {
+      "category": "alias_abbreviation",
+      "entity_types": [
+        "method"
+      ],
+      "expected_document_ids": [
+        "method:M_BAYESIAN_OPT_GP"
+      ],
+      "intents": [],
+      "query": "BO",
+      "query_id": "alias-bo",
+      "result_count": 3,
+      "top_document_ids": [
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_SMAC_RF",
+        "method:M_TURBO_SAASBO"
+      ]
+    },
+    {
+      "category": "mixed_language",
+      "entity_types": [
+        "method"
+      ],
+      "expected_document_ids": [
+        "method:M_CP_SAT"
+      ],
+      "intents": [],
+      "query": "CP-SAT 論理制約",
+      "query_id": "mixed-cp-sat",
+      "result_count": 41,
+      "top_document_ids": [
+        "method:M_CP_SAT",
+        "method:MF_CONSTRAINT_PROGRAMMING",
+        "method:M_CP_SEARCH"
+      ]
+    },
+    {
+      "category": "natural_language_problem",
+      "entity_types": [
+        "case",
+        "problem"
+      ],
+      "expected_document_ids": [
+        "problem:PA031"
+      ],
+      "intents": [],
+      "query": "配送順を決めたい",
+      "query_id": "routing-natural-language",
+      "result_count": 3,
+      "top_document_ids": [
+        "problem:PA031",
+        "case:EC019",
+        "case:portfolio-allocation"
+      ]
+    },
+    {
+      "category": "natural_language_problem",
+      "entity_types": [
+        "case",
+        "method"
+      ],
+      "expected_document_ids": [
+        "case:hyperparameter-search",
+        "method:MF_DFO_LOCAL",
+        "method:M_BAYESIAN_OPT_GP"
+      ],
+      "intents": [],
+      "query": "勾配なし 高価な実験",
+      "query_id": "expensive-no-gradient",
+      "result_count": 53,
+      "top_document_ids": [
+        "case:hyperparameter-search",
+        "method:MF_STOCHASTIC_ML",
+        "method:M_GRADIENT_DESCENT"
+      ]
+    },
+    {
+      "category": "natural_language_problem",
+      "entity_types": [
+        "method"
+      ],
+      "expected_document_ids": [
+        "method:MF_CONSTRAINED_NLP"
+      ],
+      "intents": [],
+      "query": "制約違反しない連続最適化",
+      "query_id": "constrained-continuous",
+      "result_count": 56,
+      "top_document_ids": [
+        "method:MF_SMOOTH_LOCAL",
+        "method:MF_CONSTRAINED_NLP",
+        "method:MF_CONSTRAINT_PROGRAMMING"
+      ]
+    },
+    {
+      "category": "concept",
+      "entity_types": [
+        "content",
+        "glossary"
+      ],
+      "expected_document_ids": [
+        "content:concept.convexity"
+      ],
+      "intents": [],
+      "query": "凸性とは",
+      "query_id": "convexity-concept",
+      "result_count": 6,
+      "top_document_ids": [
+        "content:concept.convexity",
+        "glossary:G021",
+        "glossary:G017"
+      ]
+    },
+    {
+      "category": "implementation",
+      "entity_types": [
+        "implementation"
+      ],
+      "expected_document_ids": [
+        "implementation:I_ORTOOLS_CPSAT"
+      ],
+      "intents": [],
+      "query": "OR-Tools CP-SAT",
+      "query_id": "implementation",
+      "result_count": 8,
+      "top_document_ids": [
+        "implementation:I_ORTOOLS_CPSAT",
+        "implementation:I_ORTOOLS_ROUTING",
+        "implementation:I_ORTOOLS_GLOP"
+      ]
+    },
+    {
+      "category": "comparison_visualization",
+      "entity_types": [
+        "comparison",
+        "trace"
+      ],
+      "expected_document_ids": [
+        "comparison:COMPARE_GRADIENT_FAMILY"
+      ],
+      "intents": [],
+      "query": "細長い谷 一次法 比較",
+      "query_id": "visual-comparison",
+      "result_count": 3,
+      "top_document_ids": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "trace:constrained-disk-feasible-region",
+        "comparison:COMPARE_GRADIENT_DIVERGENCE"
+      ]
+    },
+    {
+      "category": "evidence",
+      "entity_types": [
+        "source"
+      ],
+      "expected_document_ids": [
+        "source:S001"
+      ],
+      "intents": [],
+      "query": "SciPy Optimization documentation",
+      "query_id": "evidence-source",
+      "result_count": 64,
+      "top_document_ids": [
+        "source:S001",
+        "source:S082",
+        "source:S012"
+      ]
+    },
+    {
+      "category": "zero_result",
+      "entity_types": [],
+      "expected_document_ids": [],
+      "intents": [],
+      "query": "zzqv-9917",
+      "query_id": "zero-result",
+      "result_count": 0,
+      "top_document_ids": []
+    }
+  ],
+  "query_count": 11
+}

@@ -132,7 +132,7 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "feature_values": [
     {
       "feature_id": "F_CONSTRAINT_CLASS",
@@ -819,7 +819,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-15T00:00:00Z",
+  "generated_at": "2026-07-16T00:00:00Z",
   "implementations": [
     {
       "implementation_id": "I_ACADOS",
@@ -1422,18 +1422,6 @@
       "solver_name": "Levenberg-Marquardt"
     },
     {
-      "implementation_id": "I_SCIPY_LEAST_SQUARES_TRF",
-      "language": "Python",
-      "last_release": "SciPy 1.18.0",
-      "library_name": "SciPy",
-      "license": "BSD-3-Clause",
-      "maintenance_status": "active_docs_verified",
-      "notes": "residual vectorとJacobian sparsityを直接渡す。robust lossも選択可能。",
-      "official_docs_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html",
-      "official_repo_url": "https://github.com/scipy/scipy",
-      "solver_name": "Trust Region Reflective"
-    },
-    {
       "implementation_id": "I_SCIPY_LINPROG_HIGHS",
       "language": "Python",
       "last_release": "SciPy 1.18.0",
@@ -1894,12 +1882,6 @@
     {
       "implementation_id": "I_JAXOPT",
       "implementation_notes": "official repository status/maintenance cadenceを確認。JAX compilation/static shapeとsolver differentiabilityに注意。",
-      "method_id": "M_GAUSS_NEWTON",
-      "support_level": "native"
-    },
-    {
-      "implementation_id": "I_SCIPY_LEAST_SQUARES_TRF",
-      "implementation_notes": "residual vectorとJacobian sparsityを直接渡す。robust lossも選択可能。",
       "method_id": "M_GAUSS_NEWTON",
       "support_level": "native"
     },
@@ -2368,12 +2350,6 @@
     {
       "implementation_id": "I_CERES",
       "implementation_notes": "robust loss、Schur structure、local parameterization/manifold、linear solver choiceが重要。",
-      "method_id": "M_TRUST_KRYLOV",
-      "support_level": "native"
-    },
-    {
-      "implementation_id": "I_SCIPY_LEAST_SQUARES_TRF",
-      "implementation_notes": "residual vectorとJacobian sparsityを直接渡す。robust lossも選択可能。",
       "method_id": "M_TRUST_KRYLOV",
       "support_level": "native"
     },

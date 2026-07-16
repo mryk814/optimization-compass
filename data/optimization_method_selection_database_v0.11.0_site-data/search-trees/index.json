@@ -1,0 +1,26 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "binary-knapsack-bnb-complete",
+      "artifact_kind": "executable_trace",
+      "path": "search-trees/binary-knapsack-bnb-complete.json",
+      "renderer_contract_version": "1.0.0",
+      "renderer_family": "search_tree",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "static_fallback_path": "search-trees/binary-knapsack-bnb-complete.svg",
+      "trace_id": "binary-knapsack-bnb-complete"
+    },
+    {
+      "artifact_id": "binary-knapsack-bnb-budget",
+      "artifact_kind": "executable_trace",
+      "path": "search-trees/binary-knapsack-bnb-budget.json",
+      "renderer_contract_version": "1.0.0",
+      "renderer_family": "search_tree",
+      "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "static_fallback_path": "search-trees/binary-knapsack-bnb-budget.svg",
+      "trace_id": "binary-knapsack-bnb-budget"
+    }
+  ],
+  "contract_version": "1.0.0",
+  "dataset_version": "0.11.0"
+}
