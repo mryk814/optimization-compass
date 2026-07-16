@@ -69,5 +69,5 @@ def test_family_choice_guides_use_the_beginner_first_contract() -> None:
         assert page.method_id.startswith("MF_")
         for section in REQUIRED_BEGINNER_SECTIONS:
             assert section in page.body, f"{content_id} is missing {section}"
-        assert "ranking" in page.body.lower() or "順位" in page.body
         assert "切替" in page.body
+        assert "| 役割 | 手法 |" in page.body
