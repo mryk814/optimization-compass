@@ -1,5 +1,5 @@
-import { cleanup, render, screen, vi } from "@testing-library/react";
-import { afterEach, beforeEach, expect, test } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 import rawFailureModes from "../../../public/data/failure-modes.json";
 import App from "../../App";
