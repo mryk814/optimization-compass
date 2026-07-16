@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import App from "./App";
 import type { EntityLinkIndex } from "./contracts/entity-links";
+import rawLearningJourneys from "../public/data/learning-journeys.json";
 import rawManifest from "../public/data/manifest.json";
 import rawVisualizationScenarios from "../public/data/visualization-scenarios.json";
 
@@ -75,18 +76,21 @@ const releaseIdentity = {
 };
 
 const featuredGallery = {
-  contract_version: "1.0.0",
-  dataset_version: "0.3.0",
+  contract_version: "2.0.0",
+  dataset_version: rawLearningJourneys.dataset_version,
   cases: [
     {
-      case_id: "featured-case",
+      case_id: "EC017",
       title_ja: "観測に合うモデルを推定する",
       title_en: "Estimate a model from observations",
       domain: "science",
       problem_archetype_id: "PA033",
       feature_values: [{ feature_id: "F_VARIABLE_DOMAIN", value: "continuous" }],
       question_answers: { Q01: "continuous" },
-      candidate_method_ids: ["M_NELDER_MEAD"],
+      candidate_methods: [{
+        method_id: "M_NELDER_MEAD",
+        reason: "勾配を使わず、観測残差を直接評価できるため",
+      }],
       conditional_methods: [{ method_id: "M_BFGS", reason: "滑らかで勾配が信頼できる場合" }],
       excluded_methods: [{ method_id: "M_BFGS", reason: "離散的な観測欠損があり、現在の前提には合わない" }],
       implementation_ids: ["I_SCIPY"],
@@ -103,6 +107,7 @@ const featuredGallery = {
       map_node_id: "answer:Q01:continuous",
       python_example: "print('example')",
       practical_notes: "初期値依存性を確認する。",
+      limitations: ["この固定データだけで実問題での性能を保証しません。"],
     },
   ],
 };
@@ -133,6 +138,7 @@ describe("application routes", () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) return jsonResponse(featuredGallery);
+      if (url.endsWith("data/learning-journeys.json")) return jsonResponse(rawLearningJourneys);
       return jsonResponse(emptyView);
     }));
 
@@ -150,11 +156,12 @@ describe("application routes", () => {
       await screen.findByRole("heading", { level: 2, name: "観測に合うモデルを推定する" }),
     ).toBeVisible();
     expect(screen.getByText("Nelder–Mead")).toBeVisible();
+    expect(screen.getByText("勾配を使わず、観測残差を直接評価できるため")).toBeVisible();
     expect(screen.getByText("選ばない理由")).toBeVisible();
     expect(screen.getByText("離散的な観測欠損があり、現在の前提には合わない")).toBeVisible();
     expect(screen.getByRole("link", { name: "このCaseを辿る →" })).toHaveAttribute(
       "href",
-      "#/gallery/featured-case",
+      "#/gallery/EC017",
     );
     expect(screen.queryByLabelText("Atlasの主要な入口")).not.toBeInTheDocument();
 

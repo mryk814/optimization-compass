@@ -11,7 +11,8 @@ import type { ReactNode } from "react";
 
 import { SafeBackButton } from "./components/SafeBackButton";
 import { findEntity, resolveAlias, type EntityLinkIndex } from "./contracts/entity-links";
-import { parseGalleryIndex, type GalleryCase } from "./contracts/gallery";
+import { parseGalleryIndex } from "./contracts/gallery";
+import { parseLearningJourneyIndex } from "./contracts/learning-journeys";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { siteBaseUrl } from "./data/base-url";
 import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
@@ -22,6 +23,7 @@ import { CoveragePage } from "./features/coverage/CoveragePage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { MapPage } from "./features/map/MapPage";
@@ -62,7 +64,7 @@ const secondaryHomeLinks = [
 
 function HomePage() {
   const links = useEntityLinks();
-  const [featuredCase, setFeaturedCase] = useState<GalleryCase | null>();
+  const [featuredCase, setFeaturedCase] = useState<FeaturedCase | null>();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -82,8 +84,8 @@ function HomePage() {
       ? findEntity(links.index, "method", methodId)?.label ?? methodId
       : methodId
   );
-  const candidateId = featuredCase?.candidate_method_ids[0];
-  const excluded = featuredCase?.excluded_methods[0];
+  const candidate = featuredCase?.item.candidate_methods[0];
+  const excluded = featuredCase?.item.excluded_methods[0];
 
   return (
     <section className="home-page">
@@ -118,26 +120,26 @@ function HomePage() {
           <>
             <header className="home-case-header">
               <div>
-                <p className="eyebrow">Case preview · {featuredCase.domain}</p>
-                <h2 id="home-case-title">{featuredCase.title_ja}</h2>
-                <p className="home-case-question">{featuredCase.question}</p>
+                <p className="eyebrow">Case preview · {featuredCase.item.domain}</p>
+                <h2 id="home-case-title">{featuredCase.item.title_ja}</h2>
+                <p className="home-case-question">{featuredCase.item.question}</p>
               </div>
-              <Link className="home-case-link" to={`/gallery/${featuredCase.case_id}`}>
+              <Link className="home-case-link" to={featuredCase.canonicalUrl}>
                 このCaseを辿る →
               </Link>
             </header>
 
             <dl className="home-case-formulation">
-              <div><dt>変数</dt><dd>{featuredCase.decision_variables}</dd></div>
-              <div><dt>目的</dt><dd>{featuredCase.objective}</dd></div>
-              <div><dt>制約</dt><dd>{featuredCase.constraints}</dd></div>
+              <div><dt>変数</dt><dd>{featuredCase.item.decision_variables}</dd></div>
+              <div><dt>目的</dt><dd>{featuredCase.item.objective}</dd></div>
+              <div><dt>制約</dt><dd>{featuredCase.item.constraints}</dd></div>
             </dl>
 
             <div className="home-case-dispositions">
               <article className="home-disposition-candidate">
                 <span>候補</span>
-                <strong>{candidateId ? methodLabel(candidateId) : "Case内で確認"}</strong>
-                <p>問題構造と利用可能な情報に合う主要候補です。</p>
+                <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
+                <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う主要候補です。"}</p>
               </article>
               <article className="home-disposition-excluded">
                 <span>選ばない理由</span>
@@ -166,15 +168,22 @@ function HomePage() {
   );
 }
 
-async function loadFeaturedCase(signal: AbortSignal): Promise<GalleryCase | null> {
-  const response = await fetch(`${siteBaseUrl()}data/gallery.json`, { signal });
-  if (!response.ok) throw new Error(`Gallery request failed (${response.status}).`);
-  const index = parseGalleryIndex(await response.json());
-  return index.cases.find(
-    (item) => item.status === "published"
-      && item.candidate_method_ids.length > 0
-      && item.excluded_methods.length > 0,
-  ) ?? null;
+async function loadFeaturedCase(signal: AbortSignal): Promise<FeaturedCase | null> {
+  const base = siteBaseUrl();
+  const [galleryResponse, journeyResponse] = await Promise.all([
+    fetch(`${base}data/gallery.json`, { signal }),
+    fetch(`${base}data/learning-journeys.json`, { signal }),
+  ]);
+  if (!galleryResponse.ok) {
+    throw new Error(`Gallery request failed (${galleryResponse.status}).`);
+  }
+  if (!journeyResponse.ok) {
+    throw new Error(`Learning journey request failed (${journeyResponse.status}).`);
+  }
+  return selectFeaturedCase(
+    parseGalleryIndex(await galleryResponse.json()),
+    parseLearningJourneyIndex(await journeyResponse.json()),
+  );
 }
 
 function AppShell() {

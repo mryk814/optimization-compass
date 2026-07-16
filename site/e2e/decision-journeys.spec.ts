@@ -6,7 +6,7 @@ function requiredBaseURL(baseURL: string | undefined): string {
   return baseURL;
 }
 
-test("Homeが実Caseを先に見せてCase詳細へ進める", async ({ page, baseURL }) => {
+test("Homeが実Caseを先に見せてTheaterとCompareまで進める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
 
   await expect(
@@ -22,6 +22,15 @@ test("Homeが実Caseを先に見せてCase詳細へ進める", async ({ page, ba
 
   await expect(page).toHaveURL(/#\/gallery\//u);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(title ?? "");
+
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await expect(page).toHaveURL(/#\/theater\//u);
+  await page.waitForLoadState("networkidle");
+
+  await page.goBack();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(title ?? "");
+  await page.getByRole("link", { name: /固定条件と変えた条件を比べる/u }).click();
+  await expect(page).toHaveURL(/#\/compare\//u);
 });
 
 test("Diagnoseの推薦カードから対応するMap nodeへ移動する", async ({ page, baseURL }) => {

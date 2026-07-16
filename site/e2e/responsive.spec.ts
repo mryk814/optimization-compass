@@ -10,11 +10,11 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("375px HomeとMapが横にはみ出さず操作できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
-  await expect(page.getByRole("link", { name: "地図を見る" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "問題構造Map" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-home");
 
-  await page.getByRole("link", { name: "地図を見る" }).click();
+  await page.getByRole("link", { name: "問題構造Map" }).click();
   const tree = page.getByRole("tree", { name: "最適化問題の構造" });
   await tree.getByRole("treeitem").first().click();
   await page.getByRole("button", { name: "詳細" }).click();
