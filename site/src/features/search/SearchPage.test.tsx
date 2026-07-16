@@ -21,7 +21,7 @@ describe("SearchPage", () => {
     mockSearchData();
     render(<MemoryRouter initialEntries={["/search"]}><SearchPage /></MemoryRouter>);
 
-    expect(screen.getByRole("link", { name: "失敗の兆候・除外理由から探す →" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "失敗の兆候・診断から探す →" })).toHaveAttribute(
       "href",
       "/failures",
     );

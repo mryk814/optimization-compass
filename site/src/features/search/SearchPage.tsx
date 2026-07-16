@@ -80,7 +80,7 @@ export function SearchPage() {
       <header className="atlas-page-header search-header">
         <div><p className="eyebrow">Global Search</p><h1>Atlas全体から探す</h1></div>
         <p>手法名だけでなく、「勾配なしで高価な実験」のような状況、日本語・英語・略語からも探せます。</p>
-        <Link className="text-link" to="/failures">失敗の兆候・除外理由から探す →</Link>
+        <Link className="text-link" to="/failures">失敗の兆候・診断から探す →</Link>
       </header>
       <div className="global-search-bar">
         <label htmlFor="global-search-input">検索</label>

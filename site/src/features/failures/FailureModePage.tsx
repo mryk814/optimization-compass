@@ -59,7 +59,7 @@ export function FailureModePage() {
     <section className="atlas-page failure-page">
       <header className="atlas-page-header failure-header">
         <div>
-          <p className="eyebrow">Failure & exclusion</p>
+          <p className="eyebrow">Failure signals</p>
           <h1>失敗の兆候から探す</h1>
           <p>
             何が起きているかから、確認項目・対処候補・影響する手法・根拠へ進みます。
@@ -108,7 +108,7 @@ export function FailureModePage() {
       {failures.length > 0 && filtered.length === 0 && (
         <div className="failure-empty">
           <h2>一致する失敗モードがありません</h2>
-          <p>検索語を短くするか、filterをすべてへ戻してください。</p>
+          <p>検索語を短くするか、絞り込み条件をすべてへ戻してください。</p>
         </div>
       )}
 
