@@ -1,0 +1,115 @@
+name: Capture final TRF validation failure
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'data/trust-region-reflective-default'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --frozen --all-extras --all-groups
+      - name: Prepare dataset 0.11.0
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          dataset = Path('src/optimization_compass/dataset_release.py')
+          text = dataset.read_text(encoding='utf-8')
+          learning = 'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
+          trf = 'DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"'
+          if trf not in text:
+              text = text.replace(learning, learning + '\n' + trf, 1)
+          if '            DEFAULT_TRF_DEFAULTS_MIGRATION,\n' not in text:
+              text = text.replace(
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n',
+                  '            DEFAULT_FAILURE_MODE_MIGRATION,\n            DEFAULT_LEARNING_GRAPH_MIGRATION,\n            DEFAULT_TRF_DEFAULTS_MIGRATION,\n',
+                  1,
+              )
+          if 'connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION' not in text:
+              anchor = '        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))\n'
+              text = text.replace(anchor, anchor + '        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))\n', 1)
+          dataset.write_text(text, encoding='utf-8')
+
+          claims = Path('src/optimization_compass/versioned_claims.py')
+          claims.write_text(claims.read_text(encoding='utf-8').replace(
+              'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})',
+              'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"})',
+              1,
+          ), encoding='utf-8')
+
+          authority = Path('src/optimization_compass/resources/release-authority.json')
+          payload = json.loads(authority.read_text(encoding='utf-8'))
+          payload['dataset_version'] = '0.11.0'
+          payload['release_date'] = '2026-07-16'
+          authority.write_text(json.dumps(payload, indent=2) + '\n', encoding='utf-8')
+
+          replacements = {
+              'tests/test_method_content_density.py': [('MINIMUM_PUBLISHED_METHOD_GUIDES = 66', 'MINIMUM_PUBLISHED_METHOD_GUIDES = 67')],
+              'tests/test_coverage.py': [('"method": 98', '"method": 99'), ('len(report.subjects) == 164', 'len(report.subjects) == 165')],
+              'tests/test_derived_media.py': [('manifest.dataset_version == "0.10.0"', 'manifest.dataset_version == "0.11.0"')],
+              'tests/test_evidence.py': [('len(index.sources) == 95', 'len(index.sources) == 96')],
+              'tests/test_release_identity.py': [('authority.dataset_version == "0.10.0"', 'authority.dataset_version == "0.11.0"')],
+              'tests/test_site_export.py': [('len(source_payload["sources"]) == 95', 'len(source_payload["sources"]) == 96')],
+              'tests/test_source_health.py': [('len(report.links) == 95', 'len(report.links) == 96')],
+              'tests/fixtures/recommendation_cases.json': [('"dataset_version": "0.10.0"', '"dataset_version": "0.11.0"')],
+          }
+          for name, changes in replacements.items():
+              path = Path(name)
+              value = path.read_text(encoding='utf-8')
+              for old, new in changes:
+                  value = value.replace(old, new, 1)
+              path.write_text(value, encoding='utf-8')
+          PY
+          uv run ruff format src/optimization_compass/dataset_release.py src/optimization_compass/versioned_claims.py tests
+          rm -rf .release-stage
+          uv run python scripts/rebuild_dataset.py --stage --output .release-stage >/dev/null
+          uv run python scripts/rebuild_dataset.py --publish --staged-directory .release-stage >/dev/null
+          rm -rf .release-stage
+      - name: Capture command results
+        run: |
+          set +e
+          STATUS=0
+          {
+            echo '# Final TRF validation diagnostics'
+            for COMMAND in \
+              'uv run ruff check .' \
+              'uv run ruff format --check .' \
+              'uv run mypy src' \
+              'uv run pytest --maxfail=20 -q' \
+              'uv run optimization-compass verify-data'; do
+              echo
+              echo "## $COMMAND"
+              echo '```text'
+              bash -lc "$COMMAND"
+              CODE=$?
+              echo "exit_code=$CODE"
+              echo '```'
+              if [[ "$CODE" != '0' ]]; then STATUS=1; fi
+            done
+          } > docs/trf-final-diagnostics.txt 2>&1
+          set -e
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/trf-final-diagnostics.txt
+          git rm .github/workflows/trf-final-diagnostics.yml
+          git commit -m 'chore: capture final TRF validation failure'
+          git push origin HEAD:${{ github.head_ref }}
+          exit "$STATUS"
