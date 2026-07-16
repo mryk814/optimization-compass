@@ -38,16 +38,6 @@ jobs:
           from pathlib import Path
           import json
 
-          def replace_once(path: Path, old: str, new: str) -> None:
-              text = path.read_text(encoding='utf-8')
-              if old in text:
-                  if text.count(old) != 1:
-                      raise SystemExit(f'{path}: expected one occurrence of {old[:80]!r}')
-                  path.write_text(text.replace(old, new, 1), encoding='utf-8')
-                  return
-              if new not in text:
-                  raise SystemExit(f'{path}: neither old nor finalized fragment is present: {old[:80]!r}')
-
           dataset = Path('src/optimization_compass/dataset_release.py')
           text = dataset.read_text(encoding='utf-8')
           learning = 'DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"'
@@ -189,15 +179,20 @@ jobs:
           uv run python scripts/rebuild_dataset.py --publish --staged-directory .release-stage
           rm -rf .release-stage
           uv run python scripts/method_content_density_report.py
-      - name: Validate the complete repository
+      - name: Validate Python static checks
         run: |
           uv run ruff check .
           uv run ruff format --check .
           uv run mypy src
-          uv run pytest
+      - name: Run full Python tests
+        run: uv run pytest
+      - name: Validate data, content, and licensing
+        run: |
           uv run optimization-compass verify-data
           uv run python scripts/verify_content.py
           uv run python scripts/verify_licensing.py
+      - name: Validate frontend parity and production build
+        run: |
           npm --prefix site run parity
           npm --prefix site run typecheck
           npm --prefix site test -- --run
