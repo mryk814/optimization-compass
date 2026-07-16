@@ -92,7 +92,16 @@ describe("ImplementationPromptPack", () => {
       "runnable_prototype",
       "test_validation_plan",
     ]);
-    expect(pack.atlas_context.first_candidates.map((entry) => entry.entity_id)).toEqual(item.candidate_method_ids);
+    expect(pack.atlas_context.first_candidates.map((entry) => entry.entity_id)).toEqual(
+      item.candidate_methods.map((entry) => entry.method_id),
+    );
+    expect(pack.atlas_context.first_candidates.map((entry) => entry.reasons)).toEqual(
+      item.candidate_methods.map((entry) => [entry.reason]),
+    );
+    expect(pack.quality_requirements).toEqual(expect.arrayContaining([
+      item.practical_notes,
+      ...item.limitations,
+    ]));
     expect(pack.atlas_context.conditional_candidates.map((entry) => entry.entity_id)).toEqual(
       item.conditional_methods.map((entry) => entry.method_id),
     );

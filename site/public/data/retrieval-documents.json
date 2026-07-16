@@ -26187,11 +26187,13 @@
         "method:M_NELDER_MEAD",
         "problem:PA033",
         "source:S003",
-        "source:S041"
+        "source:S041",
+        "source:S056"
       ],
       "source_ids": [
         "S003",
-        "S041"
+        "S041",
+        "S056"
       ],
       "text": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
       "title": "観測データから非線形model parameterを推定する"
@@ -26244,13 +26246,17 @@
         "method:M_CP_SAT",
         "method:M_LOCAL_SEARCH_COMBINATORIAL",
         "problem:PA031",
+        "source:S022",
         "source:S023",
         "source:S024",
+        "source:S053",
         "source:S054"
       ],
       "source_ids": [
+        "S022",
         "S023",
         "S024",
+        "S053",
         "S054"
       ],
       "text": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
@@ -26276,11 +26282,13 @@
         "problem:PA042",
         "source:S042",
         "source:S043",
+        "source:S050",
         "source:S076"
       ],
       "source_ids": [
         "S042",
         "S043",
+        "S050",
         "S076"
       ],
       "text": "非線形動力学とpath constraintを守る軌道を設計したい。",
@@ -26303,13 +26311,23 @@
         "method:M_ADMM_QP",
         "method:M_DIFFERENTIAL_EVOLUTION",
         "problem:PA043",
+        "source:S010",
         "source:S012",
+        "source:S016",
         "source:S043",
+        "source:S055",
+        "source:S056",
+        "source:S062",
         "source:S076"
       ],
       "source_ids": [
+        "S010",
         "S012",
+        "S016",
         "S043",
+        "S055",
+        "S056",
+        "S062",
         "S076"
       ],
       "text": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
@@ -26332,11 +26350,13 @@
         "method:M_NEWTON_CG",
         "method:M_TRUST_KRYLOV",
         "problem:PA045",
+        "source:S002",
         "source:S017",
         "source:S019",
         "source:S056"
       ],
       "source_ids": [
+        "S002",
         "S017",
         "S019",
         "S056"
@@ -26361,12 +26381,26 @@
         "method:M_NELDER_MEAD",
         "problem:PA006",
         "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S023",
+        "source:S053",
         "source:S054",
-        "source:S055"
+        "source:S055",
+        "source:S079"
       ],
       "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
         "S054",
-        "S055"
+        "S055",
+        "S079"
       ],
       "text": "複数施策に予算を配分し、効果を最大化したい。",
       "title": "限られた予算を施策へ配分する"
@@ -26390,18 +26424,24 @@
         "method:M_SLSQP",
         "problem:PA009",
         "scenario:SCENARIO_CONSTRAINED_DISK",
+        "source:S002",
         "source:S017",
         "source:S029",
         "source:S030",
         "source:S055",
-        "source:S064"
+        "source:S056",
+        "source:S064",
+        "source:S087"
       ],
       "source_ids": [
+        "S002",
         "S017",
         "S029",
         "S030",
         "S055",
-        "S064"
+        "S056",
+        "S064",
+        "S087"
       ],
       "text": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
       "title": "強度制約を守りながら軽量設計を探す"
@@ -26425,11 +26465,15 @@
         "method:M_NELDER_MEAD",
         "problem:PA055",
         "source:S001",
-        "source:S002"
+        "source:S002",
+        "source:S034",
+        "source:S035"
       ],
       "source_ids": [
         "S001",
-        "S002"
+        "S002",
+        "S034",
+        "S035"
       ],
       "text": "時間のかかる実験を少ない回数で改善したい。",
       "title": "高価な実験の設定を探す"
@@ -26451,11 +26495,27 @@
         "method:M_SLSQP",
         "problem:PA052",
         "source:S001",
-        "source:S054"
+        "source:S002",
+        "source:S004",
+        "source:S010",
+        "source:S012",
+        "source:S014",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S064"
       ],
       "source_ids": [
         "S001",
-        "S054"
+        "S002",
+        "S004",
+        "S010",
+        "S012",
+        "S014",
+        "S054",
+        "S055",
+        "S056",
+        "S064"
       ],
       "text": "リスクを抑えながら期待収益と運用制約を両立したい。",
       "title": "ポートフォリオの配分を決める"
@@ -26476,12 +26536,26 @@
         "method:M_CP_SAT",
         "method:M_GRADIENT_DESCENT",
         "problem:PA006",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S023",
+        "source:S053",
         "source:S054",
-        "source:S055"
+        "source:S055",
+        "source:S079"
       ],
       "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
         "S054",
-        "S055"
+        "S055",
+        "S079"
       ],
       "text": "必要人数を満たしながら、希望と公平性を反映したい。",
       "title": "スタッフのシフトを組む"

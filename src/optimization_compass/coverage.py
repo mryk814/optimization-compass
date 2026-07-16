@@ -383,8 +383,12 @@ def _build_inventory(
                 str(comparison["comparison_id"])
             )
     for case in artifacts["gallery"]["cases"]:
-        for method_id in case.get("candidate_method_ids", []):
-            link_targets[("method", str(method_id))]["gallery"].add(str(case["case_id"]))
+        if "candidate_method_ids" in case:
+            raise ValueError("gallery candidate_method_ids has been replaced by candidate_methods")
+        for candidate_method in case["candidate_methods"]:
+            link_targets[("method", str(candidate_method["method_id"]))]["gallery"].add(
+                str(case["case_id"])
+            )
         for conditional in case.get("conditional_methods", []):
             link_targets[("method", str(conditional["method_id"]))]["gallery"].add(
                 str(case["case_id"])

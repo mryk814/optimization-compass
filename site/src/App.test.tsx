@@ -219,7 +219,7 @@ describe("application routes", () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) {
-        return jsonResponse({ contract_version: "1.0.0", dataset_version: "0.3.0", cases: [] });
+        return jsonResponse({ contract_version: "2.0.0", dataset_version: "0.3.0", cases: [] });
       }
       return jsonResponse(emptyView);
     }));
@@ -234,7 +234,7 @@ describe("application routes", () => {
 
   test.each([
     ["#/learn/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", pages: [] }],
-    ["#/gallery/missing", { contract_version: "1.0.0", dataset_version: "0.2.0", cases: [] }],
+    ["#/gallery/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", cases: [] }],
     [
       "#/compare/missing",
       { contract_version: "2.0.0", dataset_version: "0.2.0", comparisons: [] },
