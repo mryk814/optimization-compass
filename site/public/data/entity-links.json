@@ -1575,7 +1575,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
+      "summary": "高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
     },
     {
       "aliases": [],
@@ -3207,6 +3207,42 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "hungarian-algorithm",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Hungarian Algorithm（割当問題）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_HUNGARIAN",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        }
+      ],
+      "summary": "二部グラフの最小費用完全matching（割当問題）を多項式時間で厳密に解く、専用構造に特化したアルゴリズムです。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "hyperband-asha",
       "entity_type": "content",
       "external_url": null,
@@ -3784,6 +3820,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "multi-start",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Multi-start局所最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S007",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S008",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MULTISTART",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "basin-hopping",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.global-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "複数の初期点から局所法を独立に実行し、最良の解を採用する最も単純な大域化戦略です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "newton-cg",
       "entity_type": "content",
       "external_url": null,
@@ -3871,7 +3953,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。"
+      "summary": "勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。"
     },
     {
       "aliases": [],
@@ -4142,6 +4224,57 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "primal-simplex",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Primal simplex法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SIMPLEX",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "実行可能なbasisを保ちながら被約費用を手がかりに隣接basisへ移動し、LPの目的値を単調に改善していくsimplex法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "projected-gradient",
       "entity_type": "content",
       "external_url": null,
@@ -4244,6 +4377,108 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "random-search",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Random Search",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "tpe",
+          "target_type": "content"
+        }
+      ],
+      "summary": "search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "sgd",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "確率的勾配降下法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adam",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.stochastic-ml",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "shgo",
       "entity_type": "content",
       "external_url": null,
@@ -4291,6 +4526,52 @@
         }
       ],
       "summary": "bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "simulated-annealing",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Simulated Annealing",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S007",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S008",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S009",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SIMULATED_ANNEALING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "basin-hopping",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-annealing",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.global-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "温度parameterに応じて悪化する移動も確率的に受理し、局所解からの脱出を狙う確率的大域探索heuristicです。"
     },
     {
       "aliases": [],
@@ -4372,7 +4653,58 @@
           "target_type": "content"
         }
       ],
-      "summary": "全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元gradientを確率的に推定する局所法です。"
+      "summary": "全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元勾配を確率的に推定する局所法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "sqp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "逐次二次計画法（SQP）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constrained-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "各反復で目的の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。"
     },
     {
       "aliases": [],
@@ -4588,6 +4920,52 @@
         }
       ],
       "summary": "bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "weighted-sum",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "重み付き和scalarization",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_WEIGHTED_SUM",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "moead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。"
     },
     {
       "aliases": [],
@@ -13579,7 +13957,9 @@
       "summary": "勾配の負方向へstepを進める最も基本的な一階法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/hungarian-algorithm"
+      ],
       "canonical_url": "/methods/M_HUNGARIAN",
       "entity_id": "M_HUNGARIAN",
       "entity_type": "method",
@@ -13590,6 +13970,11 @@
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "hungarian-algorithm",
+          "target_type": "content"
         }
       ],
       "summary": "二部matching/assignmentを専用構造で解く。"
@@ -14223,7 +14608,9 @@
       "summary": "軌道をsegmentに分け状態を変数化しcontinuity制約を置く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/multi-start"
+      ],
       "canonical_url": "/methods/M_MULTISTART",
       "entity_id": "M_MULTISTART",
       "entity_type": "method",
@@ -14274,6 +14661,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_BASINHOPPING",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multi-start",
+          "target_type": "content"
         }
       ],
       "summary": "複数初期値から局所法を実行し最良解を選ぶ。"
@@ -15144,7 +15536,9 @@
       "summary": "滑らかな項へgradient、非滑らかな項へproxを適用。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/random-search"
+      ],
       "canonical_url": "/methods/M_RANDOM_SEARCH",
       "entity_id": "M_RANDOM_SEARCH",
       "entity_type": "method",
@@ -15215,6 +15609,11 @@
           "relation_type": "implementation",
           "target_id": "I_SMAC3",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "random-search",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
@@ -15322,7 +15721,9 @@
       "summary": "接空間の二次modelをtrust region内で解きretractionする。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/sgd"
+      ],
       "canonical_url": "/methods/M_SGD",
       "entity_id": "M_SGD",
       "entity_type": "method",
@@ -15363,6 +15764,11 @@
           "relation_type": "implementation",
           "target_id": "I_TENSORFLOW_OPTIM",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "sgd",
+          "target_type": "content"
         }
       ],
       "summary": "mini-batch gradientでparameterを更新。"
@@ -15431,7 +15837,9 @@
       "summary": "simplicial complexと局所探索で低次元bounded問題を探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/primal-simplex"
+      ],
       "canonical_url": "/methods/M_SIMPLEX",
       "entity_id": "M_SIMPLEX",
       "entity_type": "method",
@@ -15517,12 +15925,19 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_LINPROG_HIGHS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "primal-simplex",
+          "target_type": "content"
         }
       ],
       "summary": "LPのbasis間を移動し最適basisを求める。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/simulated-annealing"
+      ],
       "canonical_url": "/methods/M_SIMULATED_ANNEALING",
       "entity_id": "M_SIMULATED_ANNEALING",
       "entity_type": "method",
@@ -15568,6 +15983,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_DUAL_ANNEALING",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "simulated-annealing",
+          "target_type": "content"
         }
       ],
       "summary": "温度に応じて悪化移動も受理し局所解を脱出。"
@@ -15801,7 +16221,9 @@
       "summary": "2回程度の摂動評価から高次元gradientを確率推定。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/sqp"
+      ],
       "canonical_url": "/methods/M_SQP",
       "entity_id": "M_SQP",
       "entity_type": "method",
@@ -15857,6 +16279,11 @@
           "relation_type": "implementation",
           "target_id": "I_SNOPT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "sqp",
+          "target_type": "content"
         }
       ],
       "summary": "各反復でQP近似を解く制約付きNLP法。"
@@ -16179,7 +16606,9 @@
       "summary": "trust regionまたはsparse axis-aligned priorで高次元BOを緩和。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/weighted-sum"
+      ],
       "canonical_url": "/methods/M_WEIGHTED_SUM",
       "entity_id": "M_WEIGHTED_SUM",
       "entity_type": "method",
@@ -16205,6 +16634,11 @@
           "relation_type": "evidence",
           "target_id": "S068",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "weighted-sum",
+          "target_type": "content"
         },
         {
           "relation_type": "visualization",
