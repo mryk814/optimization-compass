@@ -393,11 +393,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "admm",
+            "bundle-method",
             "coordinate-descent",
             "family.composite-convex",
             "fista",
@@ -424,7 +425,7 @@
           ]
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -446,6 +447,7 @@
             "S066",
             "S067",
             "admm",
+            "bundle-method",
             "coordinate-descent",
             "family.composite-convex",
             "fista",
@@ -757,16 +759,18 @@
           ]
         },
         "content": {
-          "count": 6,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "cobyla",
+            "cobyqa",
             "family.local-dfo",
             "mads",
             "method.nelder-mead",
             "pattern-search",
-            "powell"
+            "powell",
+            "spsa"
           ]
         },
         "gallery": {
@@ -795,7 +799,7 @@
           ]
         },
         "map": {
-          "count": 39,
+          "count": 41,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -826,6 +830,7 @@
             "S094",
             "budget-allocation",
             "cobyla",
+            "cobyqa",
             "dummy-educational",
             "family.local-dfo",
             "hyperparameter-search",
@@ -837,7 +842,8 @@
             "nelder-mead-rosenbrock-shifted",
             "pattern-search",
             "portfolio-allocation",
-            "powell"
+            "powell",
+            "spsa"
           ]
         },
         "recommendation": {
@@ -898,13 +904,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "branch-and-bound",
             "branch-and-cut",
-            "family.discrete-structure"
+            "family.discrete-structure",
+            "outer-approximation-minlp"
           ]
         },
         "gallery": {
@@ -940,7 +947,7 @@
           ]
         },
         "map": {
-          "count": 39,
+          "count": 41,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -975,6 +982,7 @@
             "S028",
             "S029",
             "S054",
+            "S056",
             "S079",
             "binary-knapsack-bnb-budget",
             "binary-knapsack-bnb-complete",
@@ -982,6 +990,7 @@
             "branch-and-cut",
             "budget-allocation",
             "family.discrete-structure",
+            "outer-approximation-minlp",
             "shift-scheduling"
           ]
         },
@@ -1000,7 +1009,7 @@
           ]
         },
         "source": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1014,6 +1023,7 @@
             "S028",
             "S029",
             "S054",
+            "S056",
             "S079"
           ]
         },
@@ -1147,10 +1157,11 @@
           "target_ids": []
         },
         "content": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "basin-hopping",
             "differential-evolution",
             "direct-global",
             "family.global-search",
@@ -1181,7 +1192,7 @@
           ]
         },
         "map": {
-          "count": 32,
+          "count": 33,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1213,6 +1224,7 @@
             "S072",
             "S073",
             "S074",
+            "basin-hopping",
             "differential-evolution",
             "direct-global",
             "family.global-search",
@@ -1588,11 +1600,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 1,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "multi-objective"
+            "epsilon-constraint",
+            "moead",
+            "multi-objective",
+            "nsga-iii"
           ]
         },
         "gallery": {
@@ -1613,7 +1628,7 @@
           ]
         },
         "map": {
-          "count": 14,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1630,7 +1645,10 @@
             "S055",
             "S068",
             "biobjective-quadratic-pareto-front",
-            "multi-objective"
+            "epsilon-constraint",
+            "moead",
+            "multi-objective",
+            "nsga-iii"
           ]
         },
         "recommendation": {
@@ -1677,11 +1695,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "direct-collocation"
+            "direct-collocation",
+            "direct-shooting"
           ]
         },
         "gallery": {
@@ -1703,7 +1722,7 @@
           ]
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1720,7 +1739,8 @@
             "S043",
             "S050",
             "S076",
-            "direct-collocation"
+            "direct-collocation",
+            "direct-shooting"
           ]
         },
         "recommendation": {
@@ -1768,7 +1788,7 @@
           ]
         },
         "content": {
-          "count": 5,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1776,7 +1796,9 @@
             "family.smooth-local",
             "lbfgsb",
             "method.gradient-descent",
-            "newton-method"
+            "newton-cg",
+            "newton-method",
+            "nonlinear-cg"
           ]
         },
         "gallery": {
@@ -1806,7 +1828,7 @@
           ]
         },
         "map": {
-          "count": 34,
+          "count": 36,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1842,7 +1864,9 @@
             "gradient_descent-quadratic-divergence",
             "lbfgsb",
             "method.gradient-descent",
+            "newton-cg",
             "newton-method",
+            "nonlinear-cg",
             "shift-scheduling"
           ]
         },
@@ -1906,11 +1930,12 @@
           ]
         },
         "content": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "adam",
+            "adamw",
             "family.stochastic-ml",
             "momentum-sgd"
           ]
@@ -1934,7 +1959,7 @@
           ]
         },
         "map": {
-          "count": 21,
+          "count": 22,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1955,6 +1980,7 @@
             "adam",
             "adam-quadratic",
             "adam-quadratic-divergence",
+            "adamw",
             "family.stochastic-ml",
             "momentum-quadratic",
             "momentum-quadratic-divergence",
@@ -2013,12 +2039,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bayesian-optimization",
-            "family.expensive-black-box"
+            "family.expensive-black-box",
+            "hyperband-asha",
+            "tpe"
           ]
         },
         "gallery": {
@@ -2043,7 +2071,7 @@
           ]
         },
         "map": {
-          "count": 25,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2071,7 +2099,9 @@
             "S075",
             "bayesian-optimization",
             "family.expensive-black-box",
-            "hyperparameter-search"
+            "hyperband-asha",
+            "hyperparameter-search",
+            "tpe"
           ]
         },
         "recommendation": {
@@ -2142,11 +2172,13 @@
           "target_ids": []
         },
         "content": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "gauss-newton",
             "least-squares",
+            "trust-krylov",
             "trust-region-newton-cg"
           ]
         },
@@ -2174,7 +2206,7 @@
           ]
         },
         "map": {
-          "count": 21,
+          "count": 23,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2197,7 +2229,9 @@
             "S003",
             "S041",
             "S056",
+            "gauss-newton",
             "least-squares",
+            "trust-krylov",
             "trust-region-newton-cg"
           ]
         },
@@ -2518,12 +2552,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "adamw"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -2544,7 +2578,7 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2555,7 +2589,8 @@
             "S047",
             "S048",
             "S049",
-            "S070"
+            "S070",
+            "adamw"
           ]
         },
         "recommendation": {
@@ -2977,12 +3012,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "basin-hopping"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -3001,7 +3036,7 @@
           ]
         },
         "map": {
-          "count": 11,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3013,9 +3048,11 @@
             "S007",
             "S008",
             "S009",
+            "S056",
             "S072",
             "S073",
-            "S074"
+            "S074",
+            "basin-hopping"
           ]
         },
         "recommendation": {
@@ -3027,7 +3064,7 @@
           "target_ids": []
         },
         "source": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3037,6 +3074,7 @@
             "S007",
             "S008",
             "S009",
+            "S056",
             "S072",
             "S073",
             "S074"
@@ -3475,12 +3513,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "bundle-method"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -3499,7 +3537,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3508,7 +3546,8 @@
             "S056",
             "S061",
             "S066",
-            "S067"
+            "S067",
+            "bundle-method"
           ]
         },
         "recommendation": {
@@ -3809,12 +3848,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "cobyqa"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -3833,7 +3872,7 @@
           ]
         },
         "map": {
-          "count": 7,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3842,8 +3881,10 @@
             "S002",
             "S018",
             "S031",
+            "S056",
             "S060",
-            "S063"
+            "S063",
+            "cobyqa"
           ]
         },
         "recommendation": {
@@ -3855,13 +3896,14 @@
           ]
         },
         "source": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S002",
             "S018",
             "S031",
+            "S056",
             "S060",
             "S063"
           ]
@@ -4483,12 +4525,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "direct-shooting"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -4507,7 +4549,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4515,7 +4557,8 @@
             "S042",
             "S043",
             "S050",
-            "S076"
+            "S076",
+            "direct-shooting"
           ]
         },
         "recommendation": {
@@ -4727,12 +4770,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "epsilon-constraint"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -4751,7 +4794,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4759,7 +4802,8 @@
             "EC017",
             "S039",
             "S055",
-            "S068"
+            "S068",
+            "epsilon-constraint"
           ]
         },
         "recommendation": {
@@ -4883,12 +4927,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "gauss-newton"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -4909,7 +4953,7 @@
           ]
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4921,7 +4965,8 @@
             "S002",
             "S003",
             "S041",
-            "S056"
+            "S056",
+            "gauss-newton"
           ]
         },
         "recommendation": {
@@ -5214,12 +5259,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "hyperband-asha"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -5239,7 +5284,7 @@
           ]
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5253,7 +5298,8 @@
             "S038",
             "S059",
             "S069",
-            "S075"
+            "S075",
+            "hyperband-asha"
           ]
         },
         "recommendation": {
@@ -5989,12 +6035,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "moead"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -6013,14 +6059,15 @@
           ]
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MOEA_D",
             "I_PYMOO",
             "S039",
-            "S068"
+            "S068",
+            "moead"
           ]
         },
         "recommendation": {
@@ -6585,12 +6632,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "newton-cg"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -6609,7 +6656,7 @@
           ]
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6618,7 +6665,8 @@
             "I_PETSC_TAO",
             "S002",
             "S056",
-            "S057"
+            "S057",
+            "newton-cg"
           ]
         },
         "recommendation": {
@@ -6667,12 +6715,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nonlinear-cg"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -6691,14 +6739,15 @@
           "target_ids": []
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NLCG",
             "S002",
             "S056",
-            "S057"
+            "S057",
+            "nonlinear-cg"
           ]
         },
         "recommendation": {
@@ -6827,12 +6876,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nsga-iii"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -6851,14 +6900,15 @@
           ]
         },
         "map": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NSGA_III",
             "I_PYMOO",
             "S039",
-            "S068"
+            "S068",
+            "nsga-iii"
           ]
         },
         "recommendation": {
@@ -6902,12 +6952,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "outer-approximation-minlp"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -6927,7 +6977,7 @@
           ]
         },
         "map": {
-          "count": 10,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6940,7 +6990,9 @@
             "S024",
             "S025",
             "S028",
-            "S029"
+            "S029",
+            "S056",
+            "outer-approximation-minlp"
           ]
         },
         "recommendation": {
@@ -6952,7 +7004,7 @@
           "target_ids": []
         },
         "source": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6962,7 +7014,8 @@
             "S024",
             "S025",
             "S028",
-            "S029"
+            "S029",
+            "S056"
           ]
         },
         "visualization": {
@@ -8579,12 +8632,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "spsa"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -8603,7 +8656,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8613,7 +8666,8 @@
             "S031",
             "S056",
             "S060",
-            "S063"
+            "S063",
+            "spsa"
           ]
         },
         "recommendation": {
@@ -8833,12 +8887,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "tpe"
+          ]
         },
         "gallery": {
           "count": 0,
@@ -8857,7 +8911,7 @@
           ]
         },
         "map": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8870,7 +8924,8 @@
             "S038",
             "S059",
             "S069",
-            "S075"
+            "S075",
+            "tpe"
           ]
         },
         "recommendation": {
@@ -8998,12 +9053,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "trust-krylov"
+          ]
         },
         "gallery": {
           "count": 1,
@@ -9024,7 +9079,7 @@
           ]
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9035,7 +9090,8 @@
             "I_SCIPY_TRUST_CONSTR",
             "S002",
             "S003",
-            "S056"
+            "S056",
+            "trust-krylov"
           ]
         },
         "recommendation": {

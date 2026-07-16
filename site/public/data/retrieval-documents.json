@@ -790,6 +790,198 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:adamw:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "この手法の気持ちは、 座標ごとのadaptive stepを使いながら、weightを小さく保つ操作までgradientへ混ぜ込まず、regularizationとして独立に調整したい というものです。 見ているもの: stochastic gradient、一次・二次moment、learning rate 動かしているもの: parameter、moment state、weight decay 前進の判断: trainingだけでなくvalidation metricの改善 恐れていること: learning-rateとdecayの混同、過学習、optimizer state memory AdamWは「Adamより常に良い」という順位ではありません。training recipeの中でregularizationをどう定義するかを明確にする選択です。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "Adamのadaptive updateとweight decayを分離し、gradientによる更新とparameterを縮めるregularizationを別の操作として扱う学習optimizerです。",
+      "title": "AdamW"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "python import torch model = torch . nn . Linear ( 4 , 1 ) optimizer = torch . optim . AdamW ( model . parameters (), lr = 1e-3 , weight_decay = 1e-2 , ) inputs = torch . randn ( 16 , 4 ) targets = torch . randn ( 16 , 1 ) optimizer . zero_grad () predictions = model ( inputs ) loss = torch . nn . functional . mse_loss ( predictions , targets ) loss . backward () optimizer . step () print ( float ( loss . detach ())) 実務ではseed、data split、schedule、parameter group、framework versionを記録します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "見る値: training / validation loss primary validation metric learning rateとweight decay update normとparameter norm gradient clipping率 seed間のばらつき peak memoryとthroughput 切替サイン: trainingは改善しvalidationが悪化 → decay、data、early stoppingを見直す parameter normが急減 → decayが強すぎる可能性 optimizer stateがmemoryを圧迫 → SGD系やstate shardingを検討 初期改善後にplateau → schedule、SGD+momentum、L-BFGSを比較 NaNや発散 → learning rate、mixed precision、gradient scalingを確認",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "項目 確認内容 objective mini-batch gradientを利用する学習問題か regularization weight decayをparameter縮小として扱いたいか parameter groups biasやnormalization parameterへdecayを適用するか schedule learning rateとdecayをどう時間変化させるか memory 一次・二次momentを保持できるか evaluation validation metricとearly stoppingがあるか 小規模なdeterministic凸問題や高精度解が必要な問題では、L-BFGSや専用solverも比較します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:コラム-optimizerだけを比較しない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "AdamWの結果はlearning-rate schedule、warmup、batch size、normalization、data augmentation、gradient clippingと組み合わさって決まります。optimizer名だけを変えた比較と、各optimizer向けにrecipeを調整した比較を区別します。 確率勾配・機械学習optimizerの選び分け でSGD、Momentum、Adamとの条件付き優先度を確認してください。",
+      "title": "コラム: optimizerだけを比較しない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "Adamのmoment推定からadaptiveなgradient stepを作り、そのstepとは別にparameterを縮めます。概念的には次の二つを分けます。 gradient情報による更新 weight decayによるparameter縮小 実際の式、bias correction、epsilon、parameter groupはframework実装で確認します。特に「L2 penaltyをlossへ加える」ことと「decoupled weight decay」は同じ操作ではありません。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:adamw:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:adamw",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adam",
+        "content:family.stochastic-ml",
+        "content:momentum-sgd",
+        "method:M_ADAMW",
+        "source:S047",
+        "source:S048",
+        "source:S049"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049"
+      ],
+      "text": "向きやすい条件: neural networkなど高次元stochastic training sparseまたは座標ごとにscaleの違うgradient Adam系を使いつつweight decayを明示したい frameworkのparameter groupで適用範囲を管理できる 避ける条件: optimizer state memoryが厳しい validationなしでtraining lossだけを最小化する decay対象を理解せず全parameterへ同じ設定を適用 厳密な最適性gapや大域certificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:admm:overview",
       "dataset_version": "0.10.0",
       "document_id": "content:admm",
@@ -1164,6 +1356,198 @@
       ],
       "text": "penaltyだけ増えconstraintが減らない multiplierが発散 inner solve failureを無視してouter update constraint scaleが極端に違う infeasible model non-smooth constraintをsmooth inner solverへ渡す terminationがinner objectiveだけ Warning constraint residualが小さくてもstationarityが悪ければ局所最適条件を満たしていません。objective、feasibility、stationarityを別々に報告します。",
       "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 いまいる谷の底まで一度きちんと下り、その谷に満足せず、ときどき別の場所へ飛んでもう一度下り直したい というものです。 見ているもの: 各local solve後の局所最小値、受理判定、best-so-far 動かしているもの: basin間のrandom stepと局所solverの初期点 前進の判断: より良いbasinを発見できたか 恐れていること: 同じbasinへの再訪、local solveの過剰cost、step sizeの不適合 有限budgetで大域最適性を証明する手法ではありません。複数basinを探す実用的strategyとして扱います。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "ランダムな大きな移動と局所最適化を交互に行い、一つの初期点では届きにくい複数の谷を渡り歩く確率的大域探索です。",
+      "title": "Basin Hopping"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "python import numpy as np from scipy.optimize import basinhopping def objective ( x : np . ndarray ) -> float : return float ( np . sum ( x ** 2 - 10.0 * np . cos ( 2.0 * np . pi * x ) + 10.0 )) result = basinhopping ( objective , x0 = np . array ([ 2.5 , - 1.5 ]), niter = 50 , stepsize = 0.5 , seed = 7 , minimizer_kwargs = { \"method\" : \"BFGS\" }, ) print ( result . x , result . fun , result . message ) 比較では niter だけでなく、local solverが使ったobjective / gradient evaluationも合計します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "見る値: best-so-farとlocal minimumの分布 accepted / rejected basin数 同じbasinへの再訪率 local solveごとの評価数 step sizeとtemperature seed間のsuccess率 切替サイン: 同じbasinばかり再訪 → step sizeやproposalを調整 local solveがbudgetの大半を消費 → cheaper local methodか別global searchへ 受理率がほぼ0または1 → temperatureとscaleを見直す 高価評価で試行数が不足 → Bayesian Optimizationへ 低次元boundedで決定論的探索が欲しい → DIRECTやSHGOへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "項目 確認内容 bounds / domain random stepをどこまで許すか local solver 各basin内を安定して解けるか evaluation cost 多数のlocal solveを許容できるか multimodality 初期点ごとに異なる局所解が現れるか seed 複数runで安定性を確認できるか constraints random stepとlocal solveで実行可能性をどう保つか 一評価が非常に高価なら、basinを飛ぶたびにlocal solveするcostが重すぎる可能性があります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:コラム-landscape-transformation",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "Basin Hoppingは、各点をそこから到達するlocal minimumへ写した「basinの地形」を探索していると考えられます。元の関数を直接random walkするのとは異なります。 大域探索・多峰性問題の選び分け でDIRECT、SHGO、Dual Annealing、population法とのbudgetと再現性の違いを確認してください。",
+      "title": "コラム: landscape transformation"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "基本サイクルは次です。 現在点からrandom perturbationで候補初期点を作る 候補からlocal solverを実行する 得られた局所最小を、改善量とtemperatureに基づき受理または棄却する best-so-farを更新し、budgetまで繰り返す 悪化するbasinも一定確率で受け入れることで、局所的な閉じ込めを避けます。step size、temperature、local solver、accept testはまとめて記録します。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:basin-hopping:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:basin-hopping",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:differential-evolution",
+        "content:dual-annealing",
+        "content:family.global-search",
+        "method:M_BASIN_HOPPING",
+        "source:S001",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "向きやすい条件: 低〜中次元の多峰性連続問題 local solverが比較的安価で有効 boundsやparameterizationを妥当に設定できる 証明より良い候補を複数runで探したい 避ける条件: 高次元かつ一評価が高価 離散・カテゴリ変数を無理に連続摂動する 一般制約を無視したrandom step 大域certificateや再現可能な単一run結果が必要",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1961,6 +2345,198 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:bundle-method:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "この手法の気持ちは、 折れ曲がった関数で今の劣勾配だけを信じるのではなく、これまで観測した支持平面を束ねて、次に進むための下側modelを育てたい というものです。 見ているもの: 関数値、劣勾配、cut、model gap 動かしているもの: bundle、中心点、trial point 前進の判断: serious stepで中心点を改善できるか 恐れていること: cutの増大、弱いmodel、部分問題の重さ 劣勾配法が一回ごとに方向を使い捨てるのに対し、Bundle法は過去情報を局所modelへ残します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "非滑らか凸関数で過去の劣勾配を捨てずcutの束として蓄え、単一の劣勾配stepより安定した局所modelを作る方法です。",
+      "title": "Bundle法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "python from dataclasses import dataclass import numpy as np @dataclass class Cut : point : np . ndarray value : float subgradient : np . ndarray def model_value ( cuts : list [ Cut ], candidate : np . ndarray ) -> float : return max ( cut . value + float ( cut . subgradient @ ( candidate - cut . point )) for cut in cuts ) cuts = [ Cut ( np . array ([ 1.0 , 0.0 ]), 1.0 , np . array ([ 1.0 , - 1.0 ])), Cut ( np . array ([ 0.0 , 1.0 ]), 0.8 , np . array ([ - 0.5 , 1.0 ])), ] trial = np . array ([ 0.5 , 0.5 ]) print ( model_value ( cuts , trial )) この例はcut modelだけを示す教育用断片です。実装には安定化付きsubproblem、serious-step判定、cut管理が必要です。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "見る値: serious / null step比率 model gap bundle size center objective stabilization parameter cutのactive数 切替サイン: null stepばかり続く → model、stabilization、oracleを確認 bundleが増えmemoryを圧迫 → aggregationやcut deletionを検討 proxが実は安価 → Proximal Gradientへ 非凸性が重要 → convex guaranteeを外し別methodへ 劣勾配noiseが大きい → samplingやrobust oracleを検討",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "項目 確認内容 convexity 凸非滑らか問題として扱えるか oracle 関数値と劣勾配を返せるか prox structure より単純な近接作用素を使えないか dimension bundle subproblemを解ける規模か precision 粗い解か、安定したgap診断が必要か L1正則化などproxが安価なら、Proximal GradientやFISTAを先に考える方が単純です。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:コラム-null-stepは失敗ではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "trial pointが中心点を更新しなくても、新しいcutがmodelを改善するなら情報は増えています。これがBundle法の特徴です。ただしnull stepが続きすぎる場合は進行していない可能性があります。 非滑らか・複合凸最適化の選び分け でSubgradient、Proximal Gradient、ADMMとの前提差を確認してください。",
+      "title": "コラム: null stepは失敗ではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "観測点 x i と劣勾配 g i から、凸性に基づくcutを作ります。 f ( x ) ≥ f ( x i ) + g i T ( x − x i ) 複数cutの最大値でpiecewise-linear modelを作り、中心点から離れすぎない安定化項と合わせてtrial pointを選びます。trialが十分改善すればserious step、改善が弱くても有用なcutならnull stepとしてbundleだけ更新します。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bundle-method:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:bundle-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.composite-convex",
+        "content:proximal-gradient",
+        "content:subgradient",
+        "method:M_BUNDLE",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "向きやすい条件: 凸だが非滑らかな目的関数 関数値と劣勾配oracleがある 単純なsubgradient法より安定した進行が必要 dual decompositionなどcutに意味がある 避ける条件: 非凸でcutがglobal lower modelにならない proxを閉形式で計算できる単純構造 bundle部分問題が元問題並みに重い 離散変数や強いnoiseを未model化",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:cma-es:alternative-first",
       "dataset_version": "0.10.0",
       "document_id": "content:cma-es",
@@ -2410,6 +2986,182 @@
       ],
       "text": "exact equalityが非常に重要 strong noiseで線形modelが不安定 高次元 1評価が極端に高価 discontinuous feasibility global optimumやcertificateが必要 feasible regionが極端に細い Warning COBYLAがconstraint violationを小さくしたことと、連続modelの大域最適性は別です。異なる初期点とscaleで再確認します。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 gradientを直接聞けないなら、近くで試した複数点から目的関数と制約の曲がり方を推測し、そのmodelを信用できる範囲だけで次の点を選びたい というものです。 見ているもの: 関数値、制約値、補間点のgeometry 動かしているもの: 二次model、補間集合、trust radius、候補点 前進の判断: model予測と実評価の一致、feasibilityと目的値の改善 恐れていること: 補間geometryの退化、悪いscaling、評価budget不足 COBYLAが局所線形近似を使うのに対し、COBYQAは二次近似を使うfamilyです。ただし実装optionや対応制約は必ず公式documentationで確認します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "関数値と制約値から局所的な二次近似modelを育て、微分なしでboundsや一般制約を扱うtrust-region型の局所法です。",
+      "title": "COBYQA"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "python import numpy as np from scipy.optimize import Bounds , LinearConstraint , minimize def objective ( x : np . ndarray ) -> float : return float (( x [ 0 ] - 1.0 ) ** 2 + 2.0 * ( x [ 1 ] + 0.5 ) ** 2 ) bounds = Bounds ([ - 2.0 , - 2.0 ], [ 2.0 , 2.0 ]) constraint = LinearConstraint ([[ 1.0 , 1.0 ]], lb = [ 0.0 ], ub = [ np . inf ]) result = minimize ( objective , x0 = np . array ([ 0.5 , 0.5 ]), method = \"COBYQA\" , bounds = bounds , constraints = [ constraint ], ) print ( result . success , result . x , result . fun , result . message ) API対応は利用するSciPy versionで確認してください。上の例はmethodとmodelの関係を示す最小形です。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "見る値: trust radius actual / predicted improvement constraint violation interpolation geometry model rebuilding回数 objective / constraint evaluation数 切替サイン: 半径が縮み続ける → noise、scaling、model mismatchを確認 geometry修復ばかりで進まない → dimensionとbudgetを見直す constraint violationが減らない → formulation、初期点、MADSや滑らかNLPを検討 評価noiseが支配的 → repeated evaluationやnoise-aware methodへ 多峰性で初期点依存が強い → global searchまたはmulti-startへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "項目 確認内容 dimension 補間点を維持できる低〜中次元か evaluations modelを作り直すだけのbudgetがあるか constraints bounds、線形、滑らかな非線形制約のどれか noise 二次modelを壊すほど値が揺れないか scaling 変数と制約の単位が揃っているか guarantee 局所候補でよいか、大域証明が必要か 正確なgradientとJacobianを用意できるならSLSQPやinterior-pointも比較します。一評価が極端に高価ならsurrogate-based global searchとのbudget比較が必要です。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:コラム-model-based-dfoの評価はどこへ使われるか",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "すべての評価が直接best pointを改善するとは限りません。補間geometryを整え、後続stepのmodel精度を上げる評価にも価値があります。ただし教育用の小問題で有効でも、高価な実験でそのoverheadが許されるとは限りません。 局所Derivative-free最適化の選び分け でCOBYLA、MADS、Nelder–Meadとの制約・noise・budget差を確認してください。",
+      "title": "コラム: model-based DFOの評価はどこへ使われるか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "補間点で得た値から、目的関数と制約の局所modelを作ります。候補stepはtrust region内でmodelを改善するよう選び、実評価後にmodelと半径を更新します。 重要なのは、二次式を使うこと自体より、 どの範囲でその近似を信頼するか です。候補が予測どおり改善すれば半径を維持・拡大し、外れれば縮小します。補間点の配置が悪ければgeometry改善用の評価も必要になります。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cobyqa:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:cobyqa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cobyla",
+        "content:family.local-dfo",
+        "content:mads",
+        "method:M_COBYQA",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "向きやすい条件: 微分を得られない低〜中次元連続問題 boundsや一般制約がある 比較的滑らかで局所二次modelが役立つ Nelder–Meadより制約とmodel診断を重視したい 避ける条件: 強いnoise、不連続、頻繁な評価失敗 高次元で補間点数がbudgetを圧迫 離散・カテゴリ変数 大域最適性certificateが必要",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3811,6 +4563,198 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:direct-shooting:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "この手法の気持ちは、 stateを全部独立に決めるのではなく、controlだけを仮定してsimulationを走らせ、その結果のtrajectoryが目標へ近づくようcontrolを調整したい というものです。 見ているもの: rollout trajectory、cost、terminal error、constraint violation 動かしているもの: control sequenceまたはそのparameter 前進の判断: trajectory costと制約違反の低下 恐れていること: 不安定dynamics、長いhorizon、初期control依存、感度の悪条件化 stateはsimulationで決まるため変数数を減らせますが、長いhorizonでは早い時刻のcontrolが後半stateへ強く影響し、optimizationが難しくなります。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "時間ごとのcontrolを最適化変数にし、初期状態からdynamicsを前進simulationして得たtrajectoryのcostと制約を改善する最適制御法です。",
+      "title": "Direct Shooting"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize DT = 0.1 HORIZON = 20 def rollout ( controls : np . ndarray ) -> np . ndarray : states = np . zeros ( HORIZON + 1 ) for index , control in enumerate ( controls ): states [ index + 1 ] = states [ index ] + DT * control return states def objective ( controls : np . ndarray ) -> float : states = rollout ( controls ) terminal_cost = ( states [ - 1 ] - 1.0 ) ** 2 control_cost = 0.01 * float ( controls @ controls ) return float ( terminal_cost + control_cost ) result = minimize ( objective , x0 = np . zeros ( HORIZON ), method = \"L-BFGS-B\" , bounds = [( - 1.0 , 1.0 )] * HORIZON ) print ( result . success , rollout ( result . x )[ - 1 ], result . fun ) この例は単純なdynamicsです。実務ではintegration error、state constraints、units、solver statusを保存します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "見る値: total costとterminal error state / control constraint violation rollout stability gradient normとstep norm horizon別のsensitivity wall timeとiteration数 初期controlごとの解 切替サイン: rolloutが発散 → parameterization、horizon、stabilizing initial controlを見直す 初期時刻のgradientだけ巨大 → scalingやmultiple shootingを検討 path constraintが満たせない → direct collocationへ horizonを延ばすと解が急変 → discretizationとmodelを確認 real-time deadlineを超える → warm start、receding horizon、専用solverを検討",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "項目 確認内容 dynamics 数値的に安定してsimulationできるか control parameterization piecewise constantなど妥当な表現か horizon 長すぎて感度が消失・爆発しないか constraints path constraintをrolloutだけで評価できるか derivatives sensitivityや自動微分を利用できるか initialization reasonableな初期controlを用意できるか real-time制御ではsolve time、warm start、fallback controllerもmodelの一部です。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:コラム-direct-collocationとの違い",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "Direct Collocationはstateもdecision variableにし、dynamics defectをconstraintとして課します。変数は増えますが、長いhorizonやpath constraintで疎構造を使いやすくなります。 Direct Collocation と、変数数だけでなくrollout安定性、defect、sparsity、warm startで比較してください。",
+      "title": "コラム: Direct Collocationとの違い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "離散dynamicsを例にします。 x t + 1 = F ( x t , u t ) 最適化変数はcontrol列 u 0 , … , u T − 1 です。候補controlで前進simulationし、trajectory costと制約を評価します。gradientを使う場合は、control変更が将来stateへ伝わる感度を計算します。 stateを独立変数にしないためdynamics equalityは自動的に満たされますが、unstable rolloutや長期感度が難しさになります。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:direct-shooting:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:direct-shooting",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "method:M_DIRECT_SHOOTING",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "向きやすい条件: horizonが比較的短い dynamics simulationが安定・高速 state constraintが少ない、または扱いやすい control dimensionを低くparameterizeできる 避ける条件: 長いhorizonで不安定dynamics 多数の厳しいpath constraint eventやdiscontinuityを未処理 model mismatchが大きくsimulationを信用できない",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:dual-annealing:annealingの直感",
       "dataset_version": "0.10.0",
       "document_id": "content:dual-annealing",
@@ -4292,6 +5236,182 @@
       ],
       "text": "DPが厳密でも、常に高速とは限りません。 state数 action数 transition数 horizon memory value rangeによるpseudo-polynomial性 を確認します。knapsackの O ( n C ) はcapacity C の数値に依存し、input bit長に対する純粋な多項式時間とは限りません。",
       "title": "計算量を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "この手法の気持ちは、 複数目的を曖昧な一つのscoreへ足し合わせる代わりに、最も重視する目的を一つ選び、残りは「ここまでは許す」という条件として扱いたい というものです。 見ているもの: 主目的、他目的の値、feasibility、Pareto dominance 動かしているもの: ε thresholdと各単目的subproblemの解 前進の判断: 異なるtrade-off領域を実行可能に取得できたか 恐れていること: thresholdの選び方、目的scale、infeasible subproblem、重複解 weighted sumで取りにくい非凸Pareto frontの領域も候補にできますが、thresholdを何個解くかというbudgetが必要です。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "一つの目的を最適化し、ほかの目的を許容上限・下限の制約へ移して、その閾値を変えながらPareto候補を集める方法です。",
+      "title": "ε-constraint法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize def cost ( x : np . ndarray ) -> float : return float (( x [ 0 ] - 1.0 ) ** 2 + x [ 1 ] ** 2 ) def risk ( x : np . ndarray ) -> float : return float ( x [ 0 ] ** 2 + ( x [ 1 ] - 1.0 ) ** 2 ) def solve_for_epsilon ( epsilon : float ): constraint = { \"type\" : \"ineq\" , \"fun\" : lambda x : epsilon - risk ( x )} return minimize ( cost , x0 = np . array ([ 0.5 , 0.5 ]), constraints = [ constraint ]) solutions = [ solve_for_epsilon ( value ) for value in np . linspace ( 0.2 , 2.0 , 8 )] print ([( result . fun , risk ( result . x ), result . success ) for result in solutions ]) 比較ではbackend、初期点、tolerance、threshold gridを固定します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "見る値: thresholdごとのfeasibility 得られた非支配解数 objective spaceのcoverage 重複解率 backend solver status / gap decision makerが関心を持つ領域の密度 切替サイン: 多数のthresholdがinfeasible → objective rangeを再推定 同じ解ばかり出る → threshold spacingまたはbackend toleranceを見直す 目的数が多くgridが重い → NSGA-IIIやMOEA/Dを検討 preferenceが明確になった → 関心領域だけへthresholdを集中 backendが局所解のみ → Pareto集合も局所候補であることを明示",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "項目 確認内容 objective direction 各目的がminimizeかmaximizeか primary objective 一時的に主目的として選べるか ranges 各目的の現実的な範囲を把握できるか backend εを制約にした単目的問題を解けるか feasibility thresholdごとのinfeasibilityを区別できるか decision use 最終的に誰がtrade-offから選ぶか 目的値をnormalizeせずに閾値幅を決めると、単位の大きな目的だけ細かく調べることがあります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:コラム-はweightではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "weighted sumのweightは目的間の交換率を表します。ε-constraintのthresholdは、ある目的に対する許容限界です。意味が異なるため、同じ数字を対応させても同じ解になるとは限りません。 多目的最適化とPareto front でdominance、ideal / nadir、reference pointの読み方を確認してください。",
+      "title": "コラム: εはweightではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "二目的最小化を例に、 f 1 を主目的、 f 2 を制約へ移します。 min x f 1 ( x ) subject to f 2 ( x ) ≤ ϵ , x ∈ X ϵ を変えて複数回解き、得られた実行可能解から非支配解を残します。目的数が増えるとthreshold gridも増えるため、意思決定上重要な領域へ絞る工夫が必要です。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "向きやすい条件: 目的の一つを主目的として説明しやすい backend solverが制約付きsubproblemを安定に解ける 非凸frontも含め特定trade-off領域を調べたい 許容値に実務的意味がある 避ける条件: threshold範囲が不明 多数目的でgridが爆発する subproblem一回が極端に高価 実際には単一utilityが明確で複数解不要",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -6426,6 +7546,214 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:gauss-newton:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 合計lossだけを見るのではなく、観測ごとの残差がparameterを変えるとどう動くかを使って、全部の残差をまとめて小さくしたい というものです。 見ているもの: 残差vectorとJacobian 動かしているもの: parameterと線形化されたleast-squares step 前進の判断: 二乗和、残差分布、gradient相当量の低下 恐れていること: rank deficiency、外れ値、初期値の悪さ、大きな残差での近似誤差 一般のNewton法と違い、目的関数が残差二乗和であることを利用してHessianの一部を近似します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。",
+      "title": "Gauss–Newton法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "python import numpy as np x_data = np . array ([ 0.0 , 1.0 , 2.0 , 3.0 ]) y_data = np . array ([ 1.1 , 2.9 , 5.2 , 6.8 ]) def residuals ( parameters : np . ndarray ) -> np . ndarray : slope , intercept = parameters return slope * x_data + intercept - y_data def jacobian ( parameters : np . ndarray ) -> np . ndarray : del parameters return np . column_stack ([ x_data , np . ones_like ( x_data )]) parameters = np . array ([ 1.0 , 0.0 ]) for _ in range ( 5 ): residual = residuals ( parameters ) matrix = jacobian ( parameters ) step , * _ = np . linalg . lstsq ( matrix , - residual , rcond = None ) parameters = parameters + step print ( parameters , np . linalg . norm ( residuals ( parameters )))",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "見る値: residual normと観測別residual pattern Jacobian rank / singular values step norm gradient相当の J T r trust radiusまたはdamping 初期値ごとのparameter差 切替サイン: stepが大きく振動 → Levenberg–Marquardtやtrust-regionへ rank deficiency → parameterization、regularization、固定parameterを見直す 一部観測だけ残差が大きい → model mismatch、outlier、weightを確認 二乗和は小さいがparameterが不安定 → identifiabilityを疑う constraintsが本質 → constrained least-squares対応または一般NLPへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "項目 確認内容 formulation 目的が本当に残差二乗和として意味を持つか residual 観測ごとの残差を返せるか Jacobian 正確または安定に計算できるか weighting 単位・noise分散に応じたweightが必要か identifiability parameterがデータから区別できるか constraints boundsや一般制約をどう扱うか 線形最小二乗なら反復法よりQRやSVDを先に検討します。外れ値がある場合はrobust lossの意味を明示します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:コラム-levenberg-marquardtとの違い",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "Gauss–Newton stepが大きすぎる、Jacobianが悪条件、初期点が遠い場合にはdampingやtrust regionが必要です。Levenberg–Marquardtはその代表的な安定化です。 実務上は 非線形最小二乗とLevenberg–Marquardt を入口にし、残差、Jacobian、rank、停止statusを一緒に保存してください。",
+      "title": "コラム: Levenberg–Marquardtとの違い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "残差 r ( x ) を現在点の近くで線形化します。 r ( x + p ) ≈ r ( x ) + J ( x ) p その近似残差の二乗和を最小にするstepを求めます。 J T J p = − J T r J T J を直接作るとcondition numberが悪化する場合があるため、実装ではQR、SVD、疎linear algebra、trust-regionを使うことがあります。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:gauss-newton:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:gauss-newton",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:least-squares",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_GAUSS_NEWTON",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056"
+      ],
+      "text": "向きやすい条件: curve fitting、parameter estimation、bundle adjustmentなどの非線形最小二乗 残差Jacobianを利用できる 解の近くで残差が小さい、またはmodelがよく合う 観測ごとの残差を診断したい 避ける条件: 一般目的関数を無理に一つの残差へ置き換える 不連続・離散変数・強いoutlierを未処理 Jacobianのrankが低くparameterが識別不能 大域最適性certificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:genetic-algorithm:ga-は一つの固定algorithmではない",
       "dataset_version": "0.10.0",
       "document_id": "content:genetic-algorithm",
@@ -6597,6 +7925,198 @@
       ],
       "text": "best / median fitness feasible fraction unique individual数 genotype diversity elite占有率 mutationによる改善率 seed間の分散 evaluation budget",
       "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "この手法の気持ちは、 すべての候補を最後まで育てるのではなく、少し試した時点で見込みの薄い候補を止め、その分の時間や計算資源を有望な候補へ回したい というものです。 見ているもの: intermediate metric、消費resource、trial status 動かしているもの: trialの継続・停止とresource allocation 前進の判断: 限られた総resourceで良い最終trialを残せるか 恐れていること: 初期成績と最終成績の不一致、遅咲きtrialの誤prune ASHAはasynchronousにpromotion / stoppingを進め、worker待ちを減らす実装strategyです。samplerとprunerは別の役割として記録します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "多数のtrialを小さなresourceで始め、中間成績が悪いtrialを早期終了して有望なtrialへbudgetを移すmulti-fidelity探索です。",
+      "title": "Hyperband / ASHA"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "python import optuna def objective ( trial : optuna . Trial ) -> float : rate = trial . suggest_float ( \"rate\" , 1e-4 , 1e-1 , log = True ) score = 10.0 for step in range ( 20 ): score = score * ( 1.0 - min ( rate * 5.0 , 0.5 )) + 0.01 * step trial . report ( score , step ) if trial . should_prune (): raise optuna . TrialPruned () return score pruner = optuna . pruners . HyperbandPruner ( min_resource = 1 , max_resource = 20 , reduction_factor = 3 ) study = optuna . create_study ( direction = \"minimize\" , pruner = pruner ) study . optimize ( objective , n_trials = 30 ) print ( len ( study . trials ), study . best_value ) この例の中間metricは説明用です。実データではprune判断と最終metricの関係を検証します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "見る値: resource段階ごとのtrial数 pruned / completed trial比率 intermediateとfinal rankingの相関 worker utilization checkpoint overhead best final metricと総resource seed / bracket間のばらつき 切替サイン: pruned trialが後から良いと判明 → pruningを弱める、grace periodを増やす worker idleが多い → asynchronous schedulingを確認 checkpoint overheadが支配的 → resource粒度を粗くする intermediate metricが不安定 → smoothing、複数評価、別metricを検討 search-space提案が弱い → TPEやBO samplerと組み合わせる",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "項目 確認内容 resource epoch、sample数、simulation精度など段階的に増やせるか intermediate metric 最終性能をある程度予測するか checkpoint trialを継続・再開できるか workers asynchronous実行に価値があるか fairness trialごとのresourceを比較できるか noise 早い段階の揺れで良いtrialを落とさないか 途中metricが最終目的とほぼ無関係なら、早期停止は探索を速くするどころかsystematic biasを作ります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:コラム-optimizerではなくresource-allocator",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "Hyperband / ASHAはparameterをどう提案するかと、trialへどれだけresourceを与えるかを分けて考えます。Random、TPE、BOなどのsamplerと組み合わせられます。 高価なblack-box・HPOの選び分け でTPEやGP-BOと役割を分けて確認してください。",
+      "title": "コラム: optimizerではなくresource allocator"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "Successive Halvingでは、多数のconfigurationへ小resourceを与え、上位の一部だけを次のresource段階へ進めます。Hyperbandは初期trial数と最大resourceの異なる複数bracketを組み合わせます。 ASHAではtrial完了を待って同期せず、結果が届いた時点で継続可否を判断します。これにより異なる実行時間のtrialが混在する環境でworkerを使いやすくなります。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "向きやすい条件: training epochやsample数を段階的に増やせる intermediate metricと最終metricに相関がある 多数workerでtrialを並列実行する 一trialを最後まで回すcostが高い 避ける条件: 中間結果を観測できないatomicな実験 遅れて急改善するtrialが多い checkpoint / resumeができず再計算costが大きい 最終性能の僅かな差に厳密certificateが必要",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -8121,6 +9641,182 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:moead:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "この手法の気持ちは、 Pareto front全体を一つの巨大なpopulation問題として扱うより、異なるtrade-offを担当する小さな仕事へ分け、近い担当同士で良い候補を交換したい というものです。 見ているもの: scalarized value、reference方向、近傍subproblem、objective vector 動かしているもの: subproblemごとの候補と近傍population 前進の判断: 各方向のscalarized objectiveと全体coverageの改善 恐れていること: decompositionの偏り、objective scaling、近傍の同質化 分解に使うscalarizationが探索するfrontの形へ影響します。weightを均等に置けば解が均等に並ぶとは限りません。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "多目的問題を異なるweightやreference方向を持つ多数の単目的subproblemへ分け、近いsubproblem同士で候補を共有する進化的手法です。",
+      "title": "MOEA/D"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "python from pymoo.algorithms.moo.moead import MOEAD from pymoo.optimize import minimize from pymoo.problems import get_problem from pymoo.util.ref_dirs import get_reference_directions problem = get_problem ( \"zdt1\" ) reference_directions = get_reference_directions ( \"uniform\" , 2 , n_partitions = 40 ) algorithm = MOEAD ( ref_dirs = reference_directions , n_neighbors = 10 , prob_neighbor_mating = 0.7 , ) result = minimize ( problem , algorithm , ( \"n_gen\" , 100 ), seed = 7 , verbose = False ) print ( result . F . shape ) 比較ではdecomposition、weight、neighborhood、population相当数、seed、evaluation budgetを記録します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "見る値: subproblemごとの改善率 occupied reference direction数 neighbor replacement数 hypervolume / IGD / spacing ideal pointの更新 feasible fraction seed間のfront差 切替サイン: 一部方向だけ改善 → scaling、decomposition、weight配置を見直す neighborが同じ解へ収束 → neighborhoodやvariationを広げる frontの重要領域が疎い → preference-based weightへ集中 目的数が多くweight数が爆発 → NSGA-IIIや別many-objective法を比較 backend solverが強くthresholdに意味がある → ε-constraintへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "項目 確認内容 objectives direction、scale、rangeが定義されているか decomposition weighted sum、Tchebycheffなど何を使うか reference directions 関心領域と必要な解数に合うか neighborhood どのsubproblem間で情報を共有するか constraints feasible solutionをどう優先するか budget subproblem数 × generationの評価数を許容できるか convex frontだけを前提にweighted sumを使うと、非凸frontの一部を取りにくい場合があります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:コラム-分解は意思決定ではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "多数のscalarized subproblemを解いても、最終的にどの解を採用するかは別の意思決定です。均等なweightは利用者の選好を表すとは限りません。 多目的最適化とPareto front を入口に、many-objectiveでreference方向を直接使う NSGA-III や、許容値を明示する ε-constraint法 と比較してください。",
+      "title": "コラム: 分解は意思決定ではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "各weight vector w j に対してscalarized subproblemを作ります。 min x g ( x ∣ w j , z * ) z * はideal pointなどのreferenceです。近いweight vectorをneighborとし、variationで作った候補がneighbor subproblemを改善すれば置き換えます。これにより局所的な情報共有とfront全体の分布を両立させます。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:moead:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:moead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "content:nsga-iii",
+        "method:M_MOEA_D",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "向きやすい条件: 複数目的のblack-box問題 trade-offを複数の方向へ分解して管理したい objective spaceに近傍関係を置ける population評価を並列化できる 避ける条件: 一評価が非常に高価で多数subproblemを維持できない objective scaleが未整理 preferenceが一領域に集中しているのに全方向を探索する 厳密なPareto certificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:momentum-sgd:overview",
       "dataset_version": "0.10.0",
       "document_id": "content:momentum-sgd",
@@ -8571,6 +10267,198 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:newton-cg:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "この手法の気持ちは、 谷の傾きだけでなく曲がり方も利用したいが、巨大なHessian行列を作って保存するのは避けたい というものです。 見ているもの: gradientとHessian-vector積 動かしているもの: Newton方向を近似する内部CG反復と現在点 前進の判断: line search後の目的値低下とgradient normの減少 恐れていること: 不定曲率、誤ったHVP、内部CGの過剰計算 Newton方程式を完全に解く代わりに、必要な精度まで方向を近似します。外側の最適化と内側の線形solveの二重構造を持つ手法です。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "Hessian全体を保持せずHessian-vector積と共役勾配法でNewton方向を近似し、滑らかな大規模問題へ二階情報を使う局所法です。",
+      "title": "Newton-CG法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize A = np . array ([[ 4.0 , 1.0 ], [ 1.0 , 3.0 ]]) b = np . array ([ - 1.0 , 2.0 ]) def objective ( x : np . ndarray ) -> float : return float ( 0.5 * x @ A @ x + b @ x ) def gradient ( x : np . ndarray ) -> np . ndarray : return A @ x + b def hessian_product ( x : np . ndarray , vector : np . ndarray ) -> np . ndarray : del x return A @ vector result = minimize ( objective , x0 = np . zeros ( 2 ), jac = gradient , hessp = hessian_product , method = \"Newton-CG\" , ) print ( result . success , result . x , result . fun , result . nit )",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "見る値: gradient norm outer iterationとinner CG iteration line-search試行回数 curvature p T H p step normとobjective change 切替サイン: 内部CGが毎回上限まで走る → preconditioning、tolerance、L-BFGSを検討 負の曲率やline-search failureが多い → trust-region Newton-CGへ HVP計算がobjective評価より重い → 一階法・準Newton法と比較 gradient checkが不一致 → algorithm変更より先に微分実装を修正 解近傍で速いが初期点から不安定 → globalizing strategyを見直す",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "項目 確認内容 gradient 正確または十分信頼できるか HVP H ( x ) v を行列を作らず計算できるか 規模 dense Hessianを保持できない大きさか 曲率 非凸領域で負の曲率が現れるか 制約 原則無制約か、別の制約処理が必要か 自動微分でHVPを得られる場合も、方向微分checkを行い、gradientと同じobjectiveを微分しているか確認します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:コラム-hvpはhessianの近似ではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "正確なHVPは、Hessian行列を明示的に組み立てずにその作用だけを計算する方法です。一方、有限差分でgradient差からHVPを近似する場合はstep幅と数値誤差が追加されます。 非凸問題での安全性を重視するなら Trust-region Newton-CG 、memoryをさらに単純化するなら 非線形共役勾配法 も比較してください。",
+      "title": "コラム: HVPはHessianの近似ではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "Newton方向は理想的には次を満たします。 H ( x k ) p k = − ∇ f ( x k ) Newton-CGはこの線形系をCGで近似します。内部反復を早めに止めれば一stepは安価になりますが、方向の質が落ちます。外側のline search、内部CG tolerance、負の曲率への対応をまとめて一つのalgorithmとして扱います。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:newton-cg:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON_CG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "向きやすい条件: 滑らかな大規模無制約問題 gradientとHVPを効率よく計算できる BFGSのdense memoryを避けつつ曲率を使いたい 解の近くで高精度化したい 避ける条件: 不連続、強いnoise、離散変数 HVPが目的関数と不整合 line searchの追加評価が許されない 一般制約や大域最適性certificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:newton-method:overview",
       "dataset_version": "0.10.0",
       "document_id": "content:newton-method",
@@ -8687,6 +10575,566 @@
       ],
       "text": "項目 確認点 gradient analytic、automatic differentiation、検証済み数値微分か Hessian 明示行列、sparse構造、Hessian-vector積のどれか linear solve factorizationの時間とmemory globalization line searchまたはtrust regionを使うか stopping gradient norm、step norm、目的値変化 Hessianを作る費用だけでなく、線形方程式を解く費用も支配的になります。大規模問題ではNewton-CGやtrust-region Krylov法のようにHessian-vector積を使う変種が有力です。",
       "title": "必要な情報と計算費"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "この手法の気持ちは、 毎回その場の最急降下方向へ曲がり直すのではなく、前の一歩が持っていた良い向きを少し残したい というものです。 見ているもの: 目的関数値、gradient、line searchの結果 動かしているもの: 現在点と探索方向 前進の判断: 十分な目的値低下とgradient normの減少 恐れていること: 古い方向が役に立たなくなり、直交性や降下性を失うこと 二次関数では共役な方向を順に進む発想が基礎ですが、一般の非線形関数では方向を更新しながらline searchとrestartで安定化します。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "現在の勾配だけでなく直前までの探索方向も再利用し、少ないmemoryで大規模な滑らかな無制約問題を解く局所法です。",
+      "title": "非線形共役勾配法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize def objective ( x : np . ndarray ) -> float : return float (( 1.0 - x [ 0 ]) ** 2 + 100.0 * ( x [ 1 ] - x [ 0 ] ** 2 ) ** 2 ) def gradient ( x : np . ndarray ) -> np . ndarray : return np . array ([ - 2.0 * ( 1.0 - x [ 0 ]) - 400.0 * x [ 0 ] * ( x [ 1 ] - x [ 0 ] ** 2 ), 200.0 * ( x [ 1 ] - x [ 0 ] ** 2 ), ]) result = minimize ( objective , x0 = np . array ([ - 1.2 , 1.0 ]), jac = gradient , method = \"CG\" ) print ( result . success , result . fun , np . linalg . norm ( result . jac ), result . nit )",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "見る値は、gradient norm、step length、line-search試行回数、方向とgradientの内積、restart回数です。 gradient normが下がり、stepが極端に小さくならない → 継続候補 restartがほぼ毎回起きる → 共役方向の利点が出ていない line search failureが続く → scaling、gradient、別globalizationを確認 進行は安定するが遅い → L-BFGSやtrust-regionと比較 初期値ごとに別解へ入る → multi-startやglobal-search familyを検討",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "項目 確認内容 変数 連続で、原則として無制約か oracle 信頼できるgradientを計算できるか 規模 BFGSのdense memoryを避けたいほど大きいか 滑らかさ line searchが意味を持つ程度に滑らかか 目標 局所停留点でよいか、大域証明が必要か boundsや一般制約が本質なら、変換で無理に押し込まずL-BFGS-B、projected method、制約付きNLPを検討します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:コラム-共役とは何か",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "線形共役勾配法と非線形共役勾配法は名前が近いものの、解いている対象と保証を同一視できません。非線形版ではline searchやrestartを含むalgorithm全体が挙動を決めます。 まず 滑らかな局所最適化の選び分け でBFGS、L-BFGS、trust-regionとの交換条件を確認してください。",
+      "title": "コラム: 共役とは何か"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "基本形は、gradient g k と直前の方向 p k − 1 から新しい方向を作ります。 p k = − g k + β k p k − 1 β k には複数の定義があります。実装上は、方向が降下方向でなくなった場合や一定間隔で、 p k = − g k へ戻すrestartが重要です。更新式の名前だけでなく、line search条件とrestart policyを記録します。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nonlinear-cg:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nonlinear-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:family.smooth-local",
+        "content:method.gradient-descent",
+        "method:M_NLCG",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "向きやすい条件: 高次元の滑らかな無制約問題 gradientは得られるがHessianやdense近似は保持したくない 一反復のmemoryを小さくしたい line searchの追加評価を許容できる 避ける条件: gradientがnoiseや実装ミスで不安定 強い不連続、離散変数、一般制約 一評価が極端に高価でline searchを何度も試せない 局所解ではなく大域最適性のcertificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "この手法の気持ちは、 目的が3個、5個、10個と増えて「混んでいる場所」が分かりにくくなっても、あらかじめ置いた方向ごとに代表候補を残してtrade-off全体を広く見たい というものです。 見ているもの: objective vector、Pareto rank、reference directionとの距離 動かしているもの: population、association、selection 前進の判断: 非支配候補の質とreference方向のcoverage 恐れていること: objective scaling、方向数の爆発、実行不可能解の偏り NSGA-IIの単純な上位版ではありません。目的数と意思決定上必要な分布に応じて選びます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。",
+      "title": "NSGA-III"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "python from pymoo.algorithms.moo.nsga3 import NSGA3 from pymoo.optimize import minimize from pymoo.problems import get_problem from pymoo.util.ref_dirs import get_reference_directions problem = get_problem ( \"dtlz2\" , n_obj = 3 ) reference_directions = get_reference_directions ( \"das-dennis\" , 3 , n_partitions = 8 ) algorithm = NSGA3 ( pop_size = len ( reference_directions ), ref_dirs = reference_directions ) result = minimize ( problem , algorithm , ( \"n_gen\" , 100 ), seed = 7 , verbose = False ) print ( result . F . shape ) 実務ではproblem、reference directions、population、seed、evaluation budgetを保存します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "見る値: occupied reference direction数 non-dominated solution数 hypervolumeやIGDなどの指標 feasible fraction objective normalizationの範囲 seed間のcoverage差 population diversity 切替サイン: 多くの方向が空のまま → population、方向数、variation operatorを見直す 極端解だけ残る → normalizationとconstraint handlingを確認 関心のない領域へ評価を使う → preference-aware directionへ絞る 目的数が2〜3でbackend solverが強い → ε-constraintへ 評価budgetが不足 → surrogate-assisted multi-objective法を検討",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "項目 確認内容 objective count 2目的か、many-objectiveか direction 各目的がminimize / maximizeのどちらか scaling objectiveの単位とrangeを揃えられるか reference directions 必要な方向数と関心領域を定義できるか constraints feasible populationを維持できるか budget population × generationの評価数を許容できるか 2目的ならNSGA-IIやε-constraintの方が説明しやすく、少ない評価で済む場合があります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:コラム-可視化できないことを前提にする",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "4目的以上ではPareto集合を一枚の散布図へ正確に置けません。pair plot、parallel coordinates、reference direction occupancy、選択中の解のtableを組み合わせます。3Dを使っても目的数そのものは減りません。 多目的最適化とPareto front でdominanceを確認し、preferenceを閾値で表せる場合は ε-constraint法 も比較してください。",
+      "title": "コラム: 可視化できないことを前提にする"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "まずPareto dominanceでfrontを分けます。最後に一部だけ選ぶfrontでは、objective vectorを正規化し、各解を最も近いreference directionへ対応付けます。候補が不足している方向を優先し、population全体の広がりを保ちます。 reference directionは「真のPareto front」ではありません。どのtrade-off方向を均等に見たいかという探索上の設計です。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:nsga-iii:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:nsga-iii",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "method:M_NSGA_III",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "向きやすい条件: 3目的以上のmany-objective問題 非凸・black-boxでgradientを使いにくい 一つの解ではなく多様な候補集合が必要 parallel evaluationを利用できる 避ける条件: 目的が2個で関心領域も狭い 一評価が非常に高価でpopulationを維持できない objective scaleやdirectionが未整理 最終選択のpreferenceを全く議論しない",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 整数の組合せと連続非線形最適化を一度に丸抱えせず、整数候補を選ぶ問題と、その候補で連続変数を詰める問題へ分け、連続側で学んだことをcutとして整数側へ返したい というものです。 見ているもの: MILP masterのbound、NLP subproblemの可行解、gradient、cut 動かしているもの: 整数候補、連続解、linearization cut、incumbent 前進の判断: master boundとfeasible incumbentのgapが縮むか 恐れていること: 非凸連続部分、弱いcut、NLP failure、不適切なBig-M 有限反復のcertificateを期待できるのは、連続部分の凸性など必要な前提が満たされ、solverが正しく処理する場合です。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "整数変数を扱うmaster問題と、整数を固定した連続NLPを交互に解き、凸な非線形情報をcutとしてmasterへ戻す厳密探索法です。",
+      "title": "MINLPのOuter Approximation"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "python from dataclasses import dataclass @dataclass class SubproblemResult : feasible : bool objective : float point : tuple [ float , ... ] def outer_approximation ( max_iterations : int = 20 ) -> SubproblemResult | None : cuts : list [ object ] = [] incumbent : SubproblemResult | None = None for _ in range ( max_iterations ): integer_candidate = solve_milp_master ( cuts ) subproblem = solve_fixed_integer_nlp ( integer_candidate ) if subproblem . feasible : if incumbent is None or subproblem . objective < incumbent . objective : incumbent = subproblem cuts . extend ( linearize_at ( subproblem . point )) else : cuts . append ( build_feasibility_cut ( integer_candidate )) if master_gap_is_closed ( incumbent ): break return incumbent このコードはalgorithmの責務を示す教育用skeletonです。 solve_milp_master などは利用solverに合わせて実装します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "見る値: incumbentとmaster bound optimality gap master iteration数 NLP success / infeasible数 cut追加数とcut violation 同じ整数候補の再訪 MILP node数とNLP evaluation cost 切替サイン: cutを増やしてもboundが動かない → formulationとlinearizationを見直す NLP failureが多い → initial point、scaling、feasibility処理を確認 非凸性でcutが無効 → spatial branch-and-boundへ integer候補を何度も再訪 → no-good cutやmaster toleranceを確認 早い可行解だけ必要 → heuristicやtime-limit strategyを検討",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "項目 確認内容 variable integer / binaryとcontinuousが混在するか convexity 整数を固定したNLPが凸か derivatives objective・constraint gradientを得られるか formulation indicator、Big-M、boundsが妥当か feasibility 整数候補ごとのNLPがinfeasibleになりうるか guarantee global gapやproofが必要か 非凸MINLPでは通常のOuter Approximationのcutがglobalに有効とは限りません。spatial branch-and-boundなど別のglobal methodが必要です。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:コラム-decompositionとglobality",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "整数と連続を分けたから自動的に簡単になるわけではありません。master relaxation、NLPのconditioning、cutの強さ、整数候補の数が全体costを決めます。 MILP側の探索は Branch-and-Cut 、連続subproblemは 制約付き連続最適化 を参照し、両者のstatusを別々に保存してください。",
+      "title": "コラム: decompositionとglobality"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "基本サイクルは次です。 線形化cutを含むMILP masterから整数候補を得る その整数を固定してcontinuous NLPを解く 可行ならincumbentを更新する NLPのgradientからobjective・constraintのlinearization cutを作る masterへcutを加え、boundとincumbentのgapが閉じるまで繰り返す NLPがinfeasibleな場合にはfeasibility subproblemやno-good cutなど、実装ごとの処理が必要です。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:outer-approximation-minlp:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:outer-approximation-minlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-cut",
+        "content:constrained-continuous",
+        "method:M_OUTER_APPROX_MINLP",
+        "source:S021",
+        "source:S024",
+        "source:S028",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S021",
+        "S024",
+        "S028",
+        "S056"
+      ],
+      "text": "向きやすい条件: convex MINLP 整数を固定したNLPを安定して解ける gradientを利用できる MILP masterへ強いcutを追加できる feasible solutionとglobal gapの両方が必要 避ける条件: 一般非凸MINLPを凸とみなす black-box・noiseを含む非線形評価 boundsがなくBig-Mが極端に大きい NLP subproblemが頻繁に失敗する",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -9939,6 +12387,174 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:spsa:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 変数が何千個あっても各座標を一つずつ揺らさず、全部を同時に少し揺らした二つの評価から、だいたいの下り方向を知りたい というものです。 見ているもの: 正負に摂動した2点の関数値 動かしているもの: 現在点、ランダム摂動、gain sequence 前進の判断: noisyなbest-so-farと平均的な改善 恐れていること: 推定variance、step scheduleの不適合、制約違反 一回のgradient推定に必要な評価数が次元へ直接比例しにくい点が強みですが、推定方向は強く揺れます。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "全座標を個別に差分評価せず、ランダムな一方向の正負2評価から高次元gradientを確率的に推定する局所法です。",
+      "title": "SPSA（同時摂動確率近似）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "python import numpy as np rng = np . random . default_rng ( 7 ) def objective ( x : np . ndarray ) -> float : noise = 0.01 * rng . normal () return float ( np . sum (( x - 1.0 ) ** 2 ) + noise ) x = np . zeros ( 20 ) for iteration in range ( 1 , 101 ): delta = rng . choice ( np . array ([ - 1.0 , 1.0 ]), size = x . shape ) a_k = 0.1 / ( iteration ** 0.602 ) c_k = 0.1 / ( iteration ** 0.101 ) y_plus = objective ( x + c_k * delta ) y_minus = objective ( x - c_k * delta ) gradient_estimate = ( y_plus - y_minus ) / ( 2.0 * c_k * delta ) x = x - a_k * gradient_estimate print ( x [: 3 ], objective ( x ))",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "見る値: best-so-farと移動平均objective 推定gradient norm update norm 正負評価差 同じ点の再評価variance boundsへのclip率 seed間の結果分布 切替サイン: update方向が毎回反転しbestが改善しない → gain scheduleと平均化を見直す 正負評価差がnoise以下 → 摂動幅を調整する boundsへ頻繁にclip → parameterizationやprojectionを見直す 少数評価しか使えない → Bayesian Optimizationへ gradient oracleを追加できる → stochastic gradient methodへ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "項目 確認内容 dimension 座標差分が高価になるほど大きいか noise 同一点でも値が揺れるか、平均化できるか budget 多数の小stepを繰り返せるか bounds 摂動点と更新点をどう実行可能に保つか scale 座標ごとの単位差が摂動を壊さないか 正確な自動微分を使えるなら、まずstochastic gradientや一階法を比較します。低次元なら通常の有限差分の方が診断しやすい場合があります。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:コラム-2評価でgradientが正確になるわけではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "SPSAは評価数を抑える代わりにvarianceを受け入れます。単一stepの方向を精密に解釈するより、複数step・複数seed・移動平均で傾向を見ます。 局所Derivative-free最適化の選び分け でMADSやNelder–Meadとの次元・budget・制約対応の違いを確認してください。",
+      "title": "コラム: 2評価でgradientが正確になるわけではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "ランダムvector Δ k を作り、二つの値を評価します。 y + = f ( x k + c k Δ k ) , y − = f ( x k − c k Δ k ) 各成分のgradient推定は概ね次です。 g ^ k , i = y + − y − 2 c k Δ k , i その後、 x k + 1 = x k − a k g ^ k で更新します。 a k と c k のschedule、摂動分布、再評価回数が挙動を決めます。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:spsa:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:spsa",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.local-dfo",
+        "content:method.gradient-descent",
+        "method:M_SPSA",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S018",
+        "S056"
+      ],
+      "text": "向きやすい条件: 高次元で関数値だけ得られる 評価noiseがあり、座標差分を大量に取れない 1 gradient推定あたりの評価数を抑えたい 粗い局所改善を多数stepで積み上げられる 避ける条件: 評価回数が数十回しかない高価実験 離散・カテゴリ変数が中心 厳密なstationarityや大域certificateが必要 bounds外の評価が危険でprojectionも意味を壊す",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:subgradient:gradient-descentとの違い",
       "dataset_version": "0.10.0",
       "document_id": "content:subgradient",
@@ -10103,6 +12719,350 @@
       ],
       "text": "proximableな構造がある → 近接勾配法 smoothで条件数が支配 → gradient / quasi-Newton 非凸でsubgradient理論をそのまま適用 fixed stepの振動を収束と誤認 stoppingをcurrent objectiveだけで判定 scaleが違う座標へ同じEuclidean step Warning 劣勾配法の理論rateは一般に遅く、高精度解には多数の反復が必要です。「微分不要法」ではなく、凸解析のsubgradient oracleを使う方法として位置付けます。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "この手法の気持ちは、 目的関数そのものを滑らかな曲面として当てるより、これまで良かったtrialではどんなparameterが多く、悪かったtrialでは何が多かったかを比べたい というものです。 見ているもの: trial履歴、objective、parameter、trial status 動かしているもの: 良い群・悪い群の密度modelと次の提案 前進の判断: best-so-far改善と良い群へのdensity ratio 恐れていること: 少ない履歴、条件付きparameterの誤表現、失敗trialの偏り Gaussian-process BOと同じ「履歴を使う逐次探索」ですが、model化する向きと得意なsearch spaceが異なります。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "観測済みtrialを良い群と悪い群に分け、条件付きsearch spaceでも良い群に現れやすいparameterを提案する逐次探索です。",
+      "title": "TPE（Tree-structured Parzen Estimator）"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "python import optuna def objective ( trial : optuna . Trial ) -> float : learning_rate = trial . suggest_float ( \"learning_rate\" , 1e-4 , 1e-1 , log = True ) depth = trial . suggest_int ( \"depth\" , 2 , 8 ) booster = trial . suggest_categorical ( \"booster\" , [ \"linear\" , \"tree\" ]) penalty = 0.1 if booster == \"tree\" else 0.0 return ( learning_rate - 0.01 ) ** 2 + ( depth - 5 ) ** 2 + penalty sampler = optuna . samplers . TPESampler ( seed = 7 ) study = optuna . create_study ( direction = \"minimize\" , sampler = sampler ) study . optimize ( objective , n_trials = 40 ) print ( study . best_value , study . best_params ) 実務ではstudy storage、search-space version、sampler option、失敗trialも保存します。",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "見る値: best-so-farとtrial数 startup trial比率 parameterごとの提案分布 duplicate / boundary suggestion率 failed / pruned trial率 seed間のbest分布 random-search baselineとの差 切替サイン: 良い群のsampleが少なすぎる → startup数やbudgetを増やす 同じカテゴリへ偏り続ける → prior、multivariate設定、space設計を見直す 連続低次元でuncertaintyを読みたい → GP-BOと比較 intermediate metricが利用可能 → Hyperband / ASHAとの組合せを検討 多数並列でsuggestionが似る → asynchronous policyやrandom fractionを見直す",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "項目 確認内容 search space 連続、整数、カテゴリ、条件付きparameterを明示できるか trial budget densityを学ぶだけの履歴が得られるか objective directionとtrial間の比較が安定しているか failures prune、timeout、crashをどう扱うか parallelism sequentialかbatch / asynchronousか baseline random searchより履歴活用に価値があるか parameter名だけでなく、log scale、step、条件付き有効範囲、default値をsearch-space contractとして保存します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:コラム-tpeは木を探索するalgorithmではない",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "名前の Tree-structured は、条件付きparameterでsearch spaceが木構造になることに由来します。decision tree modelを必ず使うという意味ではありません。 高価なblack-box・HPOの選び分け でGP-BO、SMAC、Hyperband、Random Searchとの役割を確認してください。",
+      "title": "コラム: TPEは木を探索するalgorithmではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "観測値の上位側を良い群 l ( x ) 、残りを悪い群 g ( x ) としてparameter densityを推定します。次の候補は概念的には、良い群で起きやすく悪い群では起きにくい場所を優先します。 prefer x with large l ( x ) g ( x ) 実装ではstartup trial、良い群の分位、独立・多変量model、条件付きparameter、並列suggestionなどのoptionが挙動を変えます。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:tpe:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "向きやすい条件: hyperparameter optimization カテゴリ・整数・条件付きparameterが混在 trial履歴を再利用したい GPの距離やkernelを自然に定義しにくい 避ける条件: 一回の評価が安価でrandom searchを大量並列できる 履歴が極端に少ない search spaceが時間とともに変わり比較不能 大域最適性certificateが必要",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:30秒でつかむ",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、 高次元空間を全部詳しく見る代わりに、gradientとHessianが作る重要な方向だけを集めた小さな空間で、信用できる一歩を探したい というものです。 見ているもの: gradient、Hessian-vector積、局所modelの予測改善 動かしているもの: Krylov部分空間、trust radius、候補step 前進の判断: 実際の改善とmodel予測の比 恐れていること: 悪い局所model、HVP誤差、半径の過小化 Newton-CGと似ていますが、line searchで方向の長さを決めるより、trust-region部分問題として方向と長さを同時に扱います。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:overview",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近似し、大規模な滑らか問題へ曲率を安全に利用する局所法です。",
+      "title": "Trust-region Krylov法"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:python例",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "python import numpy as np from scipy.optimize import minimize A = np . diag ([ 1.0 , 10.0 , 100.0 ]) def objective ( x : np . ndarray ) -> float : return float ( 0.5 * x @ A @ x ) def gradient ( x : np . ndarray ) -> np . ndarray : return A @ x def hessian_product ( x : np . ndarray , vector : np . ndarray ) -> np . ndarray : del x return A @ vector result = minimize ( objective , x0 = np . array ([ 2.0 , - 1.0 , 0.5 ]), jac = gradient , hessp = hessian_product , method = \"trust-krylov\" , ) print ( result . success , result . fun , result . nit , result . message )",
+      "title": "Python例"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:うまくいったサインと切替サイン",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "見る値: trust radius actual / predicted reduction比 accepted / rejected step数 Krylov iteration数 gradient norm negative curvature detection 切替サイン: 半径が縮み続ける → model、scaling、HVPを確認 step拒否が多い → 二次近似の範囲が悪いかnoiseを疑う Krylov反復が上限に張り付く → preconditioningや低精度solveを検討 曲率を使っても改善しない → L-BFGSや一階法とのcost比較 初期値で解が変わる → local methodであることを受け入れるかglobal探索へ",
+      "title": "うまくいったサインと切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:まず確認すること",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "項目 確認内容 objective 二階近似が意味を持つ程度に滑らかか gradient / HVP 高精度かつ効率的に計算できるか dimension dense Hessianを作らずに済む価値があるか nonconvexity 負の曲率を見つける意味があるか constraints 無制約問題か、対応する制約付きvariantが必要か 一反復の目的評価が高価な場合、候補stepの拒否回数もbudgetとして記録します。",
+      "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:コラム-krylov部分空間が拾うもの",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "Krylov法は、gradientとHessian作用から反復的に重要な方向を作ります。全固有vectorを求めるわけではなく、現在の右辺と曲率に関係する方向を優先的に扱います。 より単純な内部CGを使う Trust-region Newton-CG や、line-search型の Newton-CG と、HVP回数・拒否step・wall timeを揃えて比較してください。",
+      "title": "コラム: Krylov部分空間が拾うもの"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:仕組み",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "局所二次modelを、半径 Δ k の内側で最小化します。 min p g k T p + 1 2 p T H k p subject to ‖ p ‖ ≤ Δ k 高次元ではこの部分問題を全空間で解かず、HVPから構成したKrylov部分空間で近似します。候補stepを評価した後、actual / predicted reduction比に応じて採用と半径更新を行います。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-krylov:向く条件・避ける条件",
+      "dataset_version": "0.10.0",
+      "document_id": "content:trust-krylov",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.smooth-local",
+        "content:newton-cg",
+        "content:trust-region-newton-cg",
+        "method:M_TRUST_KRYLOV",
+        "source:S002",
+        "source:S003",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S056"
+      ],
+      "text": "向きやすい条件: 大規模で滑らかな無制約問題 HVPを自動微分や構造から得られる 不定Hessianや負の曲率を無視したくない line searchより局所modelの信頼度を明示したい 避ける条件: gradient/HVPがnoiseに支配される 不連続・離散・black-box評価のみ 部分問題solveが目的評価より支配的 一般制約や大域certificateが必要",
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -16466,6 +19426,7 @@
       "document_id": "method:M_ADAMW",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:adamw",
         "implementation:I_OPTAX",
         "implementation:I_PYTORCH_OPTIM",
         "implementation:I_TENSORFLOW_OPTIM",
@@ -16622,6 +19583,7 @@
       "document_id": "method:M_BASIN_HOPPING",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:basin-hopping",
         "implementation:I_SCIPY_BASINHOPPING",
         "source:S001",
         "source:S002",
@@ -16629,6 +19591,7 @@
         "source:S007",
         "source:S008",
         "source:S009",
+        "source:S056",
         "source:S072",
         "source:S073",
         "source:S074"
@@ -16640,6 +19603,7 @@
         "S007",
         "S008",
         "S009",
+        "S056",
         "S072",
         "S073",
         "S074"
@@ -16794,6 +19758,7 @@
       "document_id": "method:M_BUNDLE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:bundle-method",
         "source:S055",
         "source:S056",
         "source:S061",
@@ -16894,10 +19859,12 @@
       "document_id": "method:M_COBYQA",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:cobyqa",
         "implementation:I_SCIPY_COBYQA",
         "source:S002",
         "source:S018",
         "source:S031",
+        "source:S056",
         "source:S060",
         "source:S063"
       ],
@@ -16905,6 +19872,7 @@
         "S002",
         "S018",
         "S031",
+        "S056",
         "S060",
         "S063"
       ],
@@ -17102,6 +20070,7 @@
       "document_id": "method:M_DIRECT_SHOOTING",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:direct-shooting",
         "source:S042",
         "source:S043",
         "source:S050",
@@ -17176,6 +20145,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC017",
+        "content:epsilon-constraint",
         "source:S039",
         "source:S055",
         "source:S068"
@@ -17220,6 +20190,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC013",
+        "content:gauss-newton",
         "implementation:I_CERES",
         "implementation:I_JAXOPT",
         "implementation:I_SCIPY_LEAST_SQUARES_TRF",
@@ -17318,6 +20289,7 @@
       "document_id": "method:M_HYPERBAND_ASHA",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:hyperband-asha",
         "implementation:I_OPTUNA",
         "implementation:I_RAY_TUNE",
         "source:S034",
@@ -17556,6 +20528,7 @@
       "document_id": "method:M_MOEA_D",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:moead",
         "implementation:I_PYMOO",
         "source:S039",
         "source:S068"
@@ -17742,6 +20715,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC026",
+        "content:newton-cg",
         "implementation:I_PETSC_TAO",
         "source:S002",
         "source:S056",
@@ -17763,6 +20737,7 @@
       "document_id": "method:M_NLCG",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:nonlinear-cg",
         "source:S002",
         "source:S056",
         "source:S057"
@@ -17808,6 +20783,7 @@
       "document_id": "method:M_NSGA_III",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:nsga-iii",
         "implementation:I_PYMOO",
         "source:S039",
         "source:S068"
@@ -17827,6 +20803,7 @@
       "document_id": "method:M_OUTER_APPROX_MINLP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:outer-approximation-minlp",
         "implementation:I_PYOMO",
         "implementation:I_SCIP",
         "source:S005",
@@ -17835,7 +20812,8 @@
         "source:S024",
         "source:S025",
         "source:S028",
-        "source:S029"
+        "source:S029",
+        "source:S056"
       ],
       "source_ids": [
         "S005",
@@ -17844,7 +20822,8 @@
         "S024",
         "S025",
         "S028",
-        "S029"
+        "S029",
+        "S056"
       ],
       "text": "convex NLP情報からMILP masterへcutを追加するMINLP法。",
       "title": "outer approximation MINLP"
@@ -18391,6 +21370,7 @@
       "document_id": "method:M_SPSA",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:spsa",
         "source:S002",
         "source:S018",
         "source:S031",
@@ -18471,6 +21451,7 @@
       "document_id": "method:M_TPE",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:tpe",
         "implementation:I_OPTUNA",
         "source:S034",
         "source:S035",
@@ -18523,6 +21504,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC026",
+        "content:trust-krylov",
         "implementation:I_CERES",
         "implementation:I_SCIPY_LEAST_SQUARES_TRF",
         "implementation:I_SCIPY_TRUST_CONSTR",
