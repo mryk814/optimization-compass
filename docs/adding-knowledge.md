@@ -171,8 +171,8 @@ A method page frontmatter normally includes:
 content_id: example-method
 kind: method
 method_id: M_EXAMPLE
- title_ja: 例示手法
- title_en: Example Method
+title_ja: 例示手法
+title_en: Example Method
 summary: 最初の本文段落と完全に一致する短い説明です。
 source_ids: [S001]
 prerequisites: []
@@ -184,7 +184,7 @@ last_reviewed: 2026-07-16
 ---
 ```
 
-Remove the leading spaces before `title_ja` and `title_en` when using the template. They are shown indented here only to discourage blind copying without review.
+Replace every placeholder and verify the entity and source IDs before committing.
 
 ### Content expectations
 
