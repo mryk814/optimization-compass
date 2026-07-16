@@ -30,10 +30,6 @@ class ReleaseFacts:
     example_case_count: int
     decision_rule_count: int
     evidence_link_count: int
-    content_page_count: int
-    gallery_case_count: int
-    comparison_count: int
-    visualization_scenario_count: int
 
 
 def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
@@ -69,12 +65,6 @@ def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
         example_case_count=_require_table_count(table_counts, "example_cases", report_path),
         decision_rule_count=_require_table_count(table_counts, "decision_rules", report_path),
         evidence_link_count=_require_table_count(table_counts, "evidence_links", report_path),
-        content_page_count=_site_collection_count(root, "content.json", "pages", version),
-        gallery_case_count=_site_collection_count(root, "gallery.json", "cases", version),
-        comparison_count=_site_collection_count(root, "comparisons.json", "comparisons", version),
-        visualization_scenario_count=_site_collection_count(
-            root, "visualization-scenarios.json", "scenarios", version
-        ),
     )
 
 
@@ -89,10 +79,6 @@ def render_release_facts(facts: ReleaseFacts) -> str:
         ("Example cases", facts.example_case_count),
         ("Decision rules", facts.decision_rule_count),
         ("Evidence links", facts.evidence_link_count),
-        ("Published content pages", facts.content_page_count),
-        ("Public Gallery cases", facts.gallery_case_count),
-        ("Public comparisons", facts.comparison_count),
-        ("Visualization scenarios", facts.visualization_scenario_count),
     )
     table = "\n".join(f"| {label} | {value:,} |" for label, value in rows)
     return (
@@ -102,7 +88,7 @@ def render_release_facts(facts: ReleaseFacts) -> str:
         "| 項目 | 件数 |\n"
         "|---|---:|\n"
         f"{table}\n\n"
-        "このブロックはrelease authority、生成report、公開site dataから生成します。"
+        "このブロックはrelease authorityと生成reportから生成します。"
         "手作業で件数を変更しません。\n"
         f"{END_MARKER}"
     )
@@ -159,20 +145,6 @@ def _parse_report_table_counts(report: str) -> dict[str, int]:
             re.MULTILINE,
         )
     }
-
-
-def _site_collection_count(root: Path, name: str, collection: str, version: str) -> int:
-    path = root / "site/public/data" / name
-    payload = _load_json(path)
-    observed_version = _require_string(payload, "dataset_version", path)
-    if observed_version != version:
-        raise ReadmeFactsError(
-            f"{path} dataset version {observed_version} does not match authority {version}"
-        )
-    values = payload.get(collection)
-    if not isinstance(values, list):
-        raise ReadmeFactsError(f"{path} field {collection} must be a list")
-    return len(values)
 
 
 def _load_json(path: Path) -> dict[str, object]:
