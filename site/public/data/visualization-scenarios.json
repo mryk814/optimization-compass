@@ -3433,6 +3433,201 @@
         "tuning_policy": "fixed_preset"
       },
       "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Constraint-aware path restoring feasibility on a feasible region",
+          "ja": "feasible region上で実行可能性を回復する制約対応経路"
+        },
+        "expected_phenomenon_en": "The constraint-aware path restores feasibility from the infeasible start and follows the active boundary to the known optimum.",
+        "expected_phenomenon_ja": "制約対応経路はinfeasibleな初期点から実行可能性を回復し、active boundaryに沿って既知最適点へ進みます。",
+        "failure_signals": [],
+        "known_reference_display": {
+          "note_en": "Show the analytic optimum and active constraint.",
+          "note_ja": "解析的な既知最適点とactive constraintを表示します。",
+          "policy": "show"
+        },
+        "learning_objective": {
+          "en": "Read how a constrained path restores feasibility and improves along the boundary",
+          "ja": "実行可能性を回復し、制約境界に沿って目的を改善する仕組みを読む"
+        },
+        "limitations_en": "The shared FeasibleRegion artifact also shows the unconstrained contrast path. This is not a reproduction of SLSQP internals.",
+        "limitations_ja": "同じFeasibleRegion artifactに比較用の制約無視経路も併記します。SLSQPそのものの内部反復を再現するものではありません。",
+        "misconception": {
+          "en": "A constrained method only needs to follow objective descent",
+          "ja": "制約付き手法も目的関数の降下方向だけを追えばよい"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "feasible_region",
+              "constraint_violation"
+            ],
+            "title_en": "Infeasible start",
+            "title_ja": "infeasibleな初期点"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "feasible_region",
+              "constraint_violation"
+            ],
+            "title_en": "Restore feasibility",
+            "title_ja": "実行可能性を回復"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_contours",
+              "active_constraint"
+            ],
+            "title_en": "Improve along the boundary",
+            "title_ja": "境界に沿って目的を改善"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "active_constraint",
+              "termination_reason"
+            ],
+            "title_en": "Terminate at active constraint",
+            "title_ja": "active constraintで終了"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.convexity"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "objective contours",
+            "label_ja": "目的関数等高線",
+            "observable_id": "objective_contours"
+          },
+          {
+            "label_en": "feasible region",
+            "label_ja": "実行可能領域",
+            "observable_id": "feasible_region"
+          },
+          {
+            "label_en": "constraint violation",
+            "label_ja": "制約違反",
+            "observable_id": "constraint_violation"
+          },
+          {
+            "label_en": "active constraint",
+            "label_ja": "active constraint",
+            "observable_id": "active_constraint"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_CONSTRAINED_DISK"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "termination reason",
+            "label_ja": "終了理由",
+            "observable_id": "termination_reason"
+          }
+        ],
+        "static_summary": {
+          "en": "Follow the constraint-aware path to the boundary of a disk-shaped feasible region.",
+          "ja": "円内のfeasible regionで制約対応経路が境界へ進む様子を追います。"
+        },
+        "success_signals": [
+          {
+            "label_en": "reaches reference with zero violation",
+            "label_ja": "violation 0で既知最適点へ到達",
+            "observable_ids": [
+              "feasible_region",
+              "active_constraint",
+              "constraint_violation"
+            ],
+            "signal_id": "feasible_reference"
+          }
+        ],
+        "text_alternative": {
+          "en": "The constraint-aware path returns from the infeasible start to the disk and reaches the boundary reference.",
+          "ja": "制約対応経路は円外の初期点から円内へ戻り、円境界の既知最適点へ進みます。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_CONSTRAINED_CONTINUOUS_2D",
+      "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "constrained-disk-feasible-region",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SLSQP",
+          "profile_id": "PROFILE_SLSQP_FEASIBLE_REGION",
+          "run_id": "RUN_CONSTRAINED_AWARE"
+        }
+      ],
+      "scenario_id": "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "title_en": "Improve the objective along a constraint-aware path",
+      "title_ja": "制約を満たす経路で目的を改善する"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "FeasibleRegion",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "objective_contours",
+          "feasible_region",
+          "constraint_violation",
+          "active_constraint",
+          "termination_reason"
+        ],
+        "payload_bytes": 4227,
+        "payload_path": "visualizations/constrained-disk-feasible-region.json",
+        "payload_sha256": "9e078a2ebea23d9a9887855e03351ac24ed082502dd39e1835659cf1cf915e54",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "feasible_region"
+      },
+      "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.11.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            1.8,
+            1.8
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_CONSTRAINED_DISK_TEACHING",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "constraint_tolerance": 1e-09,
+          "objective_tolerance": 1e-09
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {

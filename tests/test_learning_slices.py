@@ -4,6 +4,7 @@ from hashlib import sha256
 
 from optimization_compass.learning_slices import (
     CONSTRAINED_ARTIFACT_ID,
+    CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID,
     CONSTRAINED_SCENARIO_ID,
     PARETO_ARTIFACT_ID,
     PARETO_SCENARIO_ID,
@@ -12,6 +13,7 @@ from optimization_compass.learning_slices import (
     validate_reference_geometry,
     write_learning_slice_scenarios,
 )
+from optimization_compass.visualization_scenarios import scenario_identity
 
 
 def test_feasible_region_trace_separates_objective_and_feasibility() -> None:
@@ -51,6 +53,7 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
     scenarios, links = write_learning_slice_scenarios(tmp_path, dataset_version="0.10.0")
 
     assert {scenario.scenario_id for scenario in scenarios} == {
+        CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID,
         CONSTRAINED_SCENARIO_ID,
         PARETO_SCENARIO_ID,
     }
@@ -66,5 +69,20 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         payload = tmp_path / scenario.artifact.payload_path
         assert payload.stat().st_size == scenario.artifact.payload_bytes
         assert sha256(payload.read_bytes()).hexdigest() == scenario.artifact.payload_sha256
-        link = next(item for item in links if item.artifact_id == scenario.runs[0].artifact_id)
-        assert link.route == f"/theater/learning/{scenario.scenario_id}"
+
+    mechanism = next(
+        scenario
+        for scenario in scenarios
+        if scenario.scenario_id == CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID
+    )
+    assert mechanism.identity_status == "derived"
+    assert mechanism.canonical_scenario_id == CONSTRAINED_SCENARIO_ID
+    assert mechanism.purpose == "mechanism"
+    assert [run.run_id for run in mechanism.runs] == ["RUN_CONSTRAINED_AWARE"]
+    assert mechanism.lesson.recommended_next_scenario_ids == [CONSTRAINED_SCENARIO_ID]
+    assert scenario_identity(CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID) == (
+        "derived",
+        CONSTRAINED_SCENARIO_ID,
+    )
+    constrained_link = next(item for item in links if item.artifact_id == CONSTRAINED_ARTIFACT_ID)
+    assert constrained_link.route == f"/theater/learning/{CONSTRAINED_SCENARIO_ID}"

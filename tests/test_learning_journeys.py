@@ -41,13 +41,20 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert pilot.case_id == "constrained-design"
     assert pilot.problem_archetype_id == "PA009"
     assert pilot.formulation.variable_domain_summary == "continuous"
-    assert [item.scenario_id for item in pilot.scenarios] == ["SCENARIO_CONSTRAINED_DISK"]
-    assert pilot.scenarios[0].canonical_url == "/theater/learning/SCENARIO_CONSTRAINED_DISK"
-    assert pilot.status == "partial"
-    assert pilot.completion_reasons == ["missing_failure_or_sensitivity_scenario"]
+    scenario_roles = {item.role: item for item in pilot.scenarios}
+    assert set(scenario_roles) == {"primary", "failure_contrast"}
+    assert scenario_roles["primary"].scenario_id == "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
+    assert scenario_roles["primary"].canonical_url == (
+        "/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
+    )
+    assert scenario_roles["failure_contrast"].scenario_id == "SCENARIO_CONSTRAINED_DISK"
+    assert pilot.status == "complete"
+    assert pilot.completion_reasons == []
     assessment = next(item for item in index.assessments if item.journey_id == "constrained-design")
-    assert assessment.missing_dimensions == ["alternate_scenario"]
+    assert assessment.missing_dimensions == []
+    assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
+    assert index.summary.status_counts == {"complete": 1, "partial": 10, "draft": 0}
 
 
 def test_index_reports_summary_and_explicit_orphan_policies() -> None:
@@ -177,11 +184,9 @@ def test_index_rejects_missing_and_circular_relations() -> None:
 
 def test_index_rejects_complete_journey_with_missing_dimension() -> None:
     payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    journey = next(
-        item for item in payload["journeys"] if item["journey_id"] == "constrained-design"
-    )
+    journey = next(item for item in payload["journeys"] if item["status"] == "partial")
     assessment = next(
-        item for item in payload["assessments"] if item["journey_id"] == "constrained-design"
+        item for item in payload["assessments"] if item["journey_id"] == journey["journey_id"]
     )
     journey["status"] = "complete"
     journey["completion_reasons"] = []

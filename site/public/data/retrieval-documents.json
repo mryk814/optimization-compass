@@ -26424,6 +26424,7 @@
         "method:M_SLSQP",
         "problem:PA009",
         "scenario:SCENARIO_CONSTRAINED_DISK",
+        "scenario:SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
         "source:S002",
         "source:S017",
         "source:S029",
@@ -30417,6 +30418,34 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH:overview",
+      "dataset_version": "0.11.0",
+      "document_id": "scenario:SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:constrained-design",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S056",
+        "source:S064",
+        "trace:constrained-disk-feasible-region"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "text": "実行可能性を回復し、制約境界に沿って目的を改善する仕組みを読む",
+      "title": "制約を満たす経路で目的を改善する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "scenario:SCENARIO_GD_QUADRATIC:overview",
       "dataset_version": "0.11.0",
       "document_id": "scenario:SCENARIO_GD_QUADRATIC",
@@ -32190,6 +32219,7 @@
         "method:M_BFGS",
         "method:M_SLSQP",
         "scenario:SCENARIO_CONSTRAINED_DISK",
+        "scenario:SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
         "source:S017",
         "source:S029",
         "source:S030",
