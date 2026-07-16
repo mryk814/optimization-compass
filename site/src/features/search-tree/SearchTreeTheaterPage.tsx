@@ -21,6 +21,7 @@ import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { renderVisualizationArtifact } from "./renderer-registry";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
+import { ScenarioContextPanel } from "../theater/ScenarioContextPanel";
 
 type Loaded = {
   artifact: SearchTreeArtifact;
@@ -72,6 +73,7 @@ function SearchTreePlayer({ artifact, index, scenario, scenarioIndex }: Loaded) 
           <div><dt>Seed / strategy</dt><dd>0 / depth-first include-first</dd></div>
         </dl>
       </header>
+      <ScenarioContextPanel scenario={scenario} />
       <aside className="artifact-limitations" aria-label="artifactの種別と制約">
         <strong>教材としての制約</strong><p>{scenario.lesson.limitations_ja}</p>
       </aside>

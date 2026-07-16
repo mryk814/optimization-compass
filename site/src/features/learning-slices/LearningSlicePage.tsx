@@ -7,6 +7,7 @@ import { siteBaseUrl } from "../../data/base-url";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { NotFoundPage } from "../navigation/NotFoundPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { ScenarioContextPanel } from "../theater/ScenarioContextPanel";
 import { LearningSliceRenderer } from "./renderer-registry";
 
 type State =
@@ -48,6 +49,7 @@ export function LearningSlicePage() {
           <span>Problem: {scenario.problem_instance_id}</span>
         </div>
       </header>
+      <ScenarioContextPanel scenario={scenario} />
       <LearningSliceRenderer artifact={artifact} />
       <ScenarioLessonPanel scenario={scenario} />
       <section className="learning-slice-links" aria-label="関連する入口">

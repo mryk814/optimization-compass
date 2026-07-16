@@ -1,25 +1,22 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
+import entityLinks from "../../../public/data/entity-links.json";
+import scenarios from "../../../public/data/visualization-scenarios.json";
+import { parseEntityLinkIndex } from "../../contracts/entity-links";
+import { EntityLinkProvider } from "../../state/entity-links";
 import { TheaterIndexPage } from "./TheaterIndexPage";
 
 describe("TheaterIndexPage", () => {
-  test("offers each visualization family before entering an individual run", () => {
-    render(<MemoryRouter><TheaterIndexPage /></MemoryRouter>);
+  test("generates every published scenario from canonical data", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => structuredClone(scenarios) }));
+    render(<MemoryRouter><EntityLinkProvider initialIndex={parseEntityLinkIndex(entityLinks)}><TheaterIndexPage /></EntityLinkProvider></MemoryRouter>);
 
     expect(screen.getByRole("heading", { level: 1, name: "Method Theater" })).toBeVisible();
-    expect(screen.getByRole("link", { name: /Nelder–Meadの幾何操作を開く/u })).toHaveAttribute(
-      "href",
-      "/traces/nelder-mead-quadratic",
-    );
-    expect(screen.getByRole("link", { name: /Search-tree Theaterを開く/u })).toHaveAttribute(
-      "href",
-      "/theater/search-tree/binary-knapsack-bnb-complete",
-    );
-    expect(screen.getByRole("link", { name: /BO Theaterを開く/u })).toHaveAttribute(
-      "href",
-      "/theater/bayesian-optimization",
-    );
+    expect(await screen.findByText("18 / 18 scenarios")).toBeVisible();
+    expect(screen.getAllByRole("link", { name: /Nelder–Meadの幾何操作/u })[0]).toHaveAttribute("href", "/traces/nelder-mead-quadratic");
+    expect(screen.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toHaveAttribute("href", "/theater/search-tree/binary-knapsack-bnb-complete");
+    expect(screen.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u })).toHaveAttribute("href", "/theater/bayesian-optimization?scenario=SCENARIO_BO_1D_EXPLORE_NOISELESS");
   });
 });
