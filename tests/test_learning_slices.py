@@ -39,6 +39,12 @@ def test_pareto_result_is_deterministic_and_contains_dominance_contrast() -> Non
     assert first.reference.ideal == (0.0, 0.0)
     assert not first.reference.ideal_is_feasible
     assert [selection.weight_f1 for selection in first.preference_selections] == [0.2, 0.5, 0.8]
+    lens = first.triobjective_lens
+    assert len(lens.points) == 81
+    assert lens.reference.status == "sampled_grid"
+    assert any(point.dominated for point in lens.points)
+    assert all(not point.dominated for point in lens.pareto_front)
+    assert lens.objective_expressions[2] == "f₃=(x−2)²+y²"
 
 
 def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> None:

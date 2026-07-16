@@ -48,8 +48,33 @@ export interface ObjectivePoint {
   dominated: boolean;
 }
 
-export interface ParetoFrontArtifact {
+export interface TriObjectivePoint {
+  point_id: string;
+  decision: [number, number];
+  objectives: [number, number, number];
+  dominated: boolean;
+}
+
+export interface TriObjectiveLens {
   contract_version: "1.0.0";
+  derivation_status: "sampled_teaching_extension";
+  objective_directions: ["minimize", "minimize", "minimize"];
+  axis_labels: [string, string, string];
+  objective_expressions: [string, string, string];
+  points: TriObjectivePoint[];
+  pareto_front: TriObjectivePoint[];
+  reference: {
+    ideal: [number, number, number];
+    nadir: [number, number, number];
+    ideal_is_feasible: boolean;
+    status: "sampled_grid";
+  };
+  text_alternative_ja: string;
+  limitations_ja: string;
+}
+
+export interface ParetoFrontArtifact {
+  contract_version: "1.1.0";
   dataset_version: string;
   artifact_id: "biobjective-quadratic-pareto-front";
   artifact_kind: "result_visualization";
@@ -63,6 +88,7 @@ export interface ParetoFrontArtifact {
   pareto_front: ObjectivePoint[];
   preference_selections: { weight_f1: number; decision: [number, number]; objectives: [number, number] }[];
   reference: { ideal: [number, number]; nadir: [number, number]; ideal_is_feasible: boolean; status: "known_exact" };
+  triobjective_lens: TriObjectiveLens;
   weighted_sum_limitation_ja: string;
   text_alternative_ja: string;
   source_ids: string[];
@@ -124,7 +150,7 @@ function parseFeasible(data: Record<string, unknown>): FeasibleRegionArtifact {
 }
 
 function parsePareto(data: Record<string, unknown>): ParetoFrontArtifact {
-  literal(data.contract_version, "1.0.0", "contract_version");
+  literal(data.contract_version, "1.1.0", "contract_version");
   literal(data.artifact_id, "biobjective-quadratic-pareto-front", "artifact_id");
   literal(data.artifact_kind, "result_visualization", "artifact_kind");
   literal(data.execution_status, "executable_result", "execution_status");
@@ -150,12 +176,56 @@ function parsePareto(data: Record<string, unknown>): ParetoFrontArtifact {
   });
   const reference = record(data.reference, "reference");
   literal(reference.status, "known_exact", "reference.status");
+  const triobjectiveLens = parseTriObjectiveLens(data.triobjective_lens);
   return {
-    contract_version: "1.0.0", dataset_version: text(data.dataset_version, "dataset_version"), artifact_id: "biobjective-quadratic-pareto-front",
+    contract_version: "1.1.0", dataset_version: text(data.dataset_version, "dataset_version"), artifact_id: "biobjective-quadratic-pareto-front",
     artifact_kind: "result_visualization", execution_status: "executable_result", renderer_family: "pareto_front", problem_definition_id: "PROBLEM_BIOBJECTIVE_CONTINUOUS", problem_instance_id: "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
     objective_directions: ["minimize", "minimize"], axis_labels: [axisLabels[0], axisLabels[1]], points, pareto_front: paretoFront, preference_selections: preferences,
     reference: { ideal: pair(reference.ideal, "reference.ideal"), nadir: pair(reference.nadir, "reference.nadir"), ideal_is_feasible: boolean(reference.ideal_is_feasible, "reference.ideal_is_feasible"), status: "known_exact" },
+    triobjective_lens: triobjectiveLens,
     weighted_sum_limitation_ja: text(data.weighted_sum_limitation_ja, "weighted_sum_limitation_ja"), text_alternative_ja: text(data.text_alternative_ja, "text_alternative_ja"), source_ids: texts(data.source_ids, "source_ids"), last_verified: text(data.last_verified, "last_verified"),
+  };
+}
+
+function parseTriObjectiveLens(raw: unknown): TriObjectiveLens {
+  const data = record(raw, "triobjective_lens");
+  literal(data.contract_version, "1.0.0", "triobjective_lens.contract_version");
+  literal(data.derivation_status, "sampled_teaching_extension", "triobjective_lens.derivation_status");
+  const directions = texts(data.objective_directions, "triobjective_lens.objective_directions");
+  if (directions.length !== 3 || directions.some((value) => value !== "minimize")) throw new Error("triobjective directions are invalid.");
+  const labels = texts(data.axis_labels, "triobjective_lens.axis_labels");
+  const expressions = texts(data.objective_expressions, "triobjective_lens.objective_expressions");
+  if (labels.length !== 3 || expressions.length !== 3) throw new Error("triobjective labels and expressions require three values.");
+  const point = (value: unknown, owner: string): TriObjectivePoint => {
+    const item = record(value, owner);
+    return {
+      point_id: text(item.point_id, `${owner}.point_id`),
+      decision: pair(item.decision, `${owner}.decision`),
+      objectives: triple(item.objectives, `${owner}.objectives`),
+      dominated: boolean(item.dominated, `${owner}.dominated`),
+    };
+  };
+  const points = list(data.points, "triobjective_lens.points").map((item, index) => point(item, `triobjective_lens.points[${index}]`));
+  const paretoFront = list(data.pareto_front, "triobjective_lens.pareto_front").map((item, index) => point(item, `triobjective_lens.pareto_front[${index}]`));
+  if (paretoFront.some((item) => item.dominated)) throw new Error("triobjective front contains a dominated point.");
+  const reference = record(data.reference, "triobjective_lens.reference");
+  literal(reference.status, "sampled_grid", "triobjective_lens.reference.status");
+  return {
+    contract_version: "1.0.0",
+    derivation_status: "sampled_teaching_extension",
+    objective_directions: ["minimize", "minimize", "minimize"],
+    axis_labels: [labels[0], labels[1], labels[2]],
+    objective_expressions: [expressions[0], expressions[1], expressions[2]],
+    points,
+    pareto_front: paretoFront,
+    reference: {
+      ideal: triple(reference.ideal, "triobjective_lens.reference.ideal"),
+      nadir: triple(reference.nadir, "triobjective_lens.reference.nadir"),
+      ideal_is_feasible: boolean(reference.ideal_is_feasible, "triobjective_lens.reference.ideal_is_feasible"),
+      status: "sampled_grid",
+    },
+    text_alternative_ja: text(data.text_alternative_ja, "triobjective_lens.text_alternative_ja"),
+    limitations_ja: text(data.limitations_ja, "triobjective_lens.limitations_ja"),
   };
 }
 
@@ -170,5 +240,6 @@ function nonNegative(value: unknown, owner: string): number { const result = num
 function integer(value: unknown, owner: string): number { const result = number(value, owner); if (!Number.isSafeInteger(result) || result < 0) throw new Error(`${owner} must be a non-negative integer.`); return result; }
 function boolean(value: unknown, owner: string): boolean { if (typeof value !== "boolean") throw new Error(`${owner} must be boolean.`); return value; }
 function pair(value: unknown, owner: string): [number, number] { const result = numbers(value, owner); if (result.length !== 2) throw new Error(`${owner} must contain two values.`); return [result[0], result[1]]; }
+function triple(value: unknown, owner: string): [number, number, number] { const result = numbers(value, owner); if (result.length !== 3) throw new Error(`${owner} must contain three values.`); return [result[0], result[1], result[2]]; }
 function literal(value: unknown, expected: string, owner: string): void { if (value !== expected) throw new Error(`${owner} must be ${expected}.`); }
 function invalid(owner: string): never { throw new Error(`${owner} is invalid.`); }

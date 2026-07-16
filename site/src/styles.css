@@ -1512,6 +1512,27 @@ caption {
 .dominated-point { fill: #9aa59e; opacity: .55; }
 .pareto-front { stroke: #176d50; stroke-width: 3; }
 .pareto-point { fill: #fff; stroke: #176d50; stroke-width: 2; }
+.projection-disclosure { margin: .45rem 0; color: #59645d; font-size: .72rem; }
+.triobjective-lens { margin-top: .8rem; padding: .7rem; border: 1px solid #d2dbd4; border-radius: .6rem; background: #fbfcf9; }
+.triobjective-lens > header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(13rem, .35fr); align-items: end; gap: .8rem; }
+.triobjective-lens h3 { margin: .1rem 0 .25rem; font-size: .92rem; }
+.triobjective-lens header p:not(.eyebrow) { margin: 0; color: #59645d; font-size: .72rem; }
+.triobjective-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: .6rem; }
+.triobjective-grid figure { min-width: 0; margin: 0; }
+.triobjective-grid svg { display: block; width: 100%; border: 1px solid #d6ded7; border-radius: .45rem; background: #f4f6f1; }
+.triobjective-grid figcaption { margin-top: .25rem; color: #68736c; font-size: .64rem; line-height: 1.45; }
+.triobjective-points circle { vector-effect: non-scaling-stroke; }
+.triobjective-points .is-dominated { fill: #9da8a0; opacity: .35; }
+.triobjective-points .is-front { fill: #2f7c5a; stroke: #fff; stroke-width: 1; }
+.triobjective-points .is-selected { fill: #d66738; stroke: #263c30; stroke-width: 2.5; }
+.parallel-objectives line { stroke: #8b9a90; stroke-width: 1; }
+.parallel-objectives text { fill: #526158; font-size: 10px; font-weight: 750; text-anchor: middle; }
+.parallel-front polyline { fill: none; stroke: #6e9b82; stroke-width: 1; opacity: .32; }
+.parallel-selected { fill: none; stroke: #d66738; stroke-width: 3; }
+.triobjective-values { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; margin: .55rem 0; }
+.triobjective-values div { min-width: 0; padding: .4rem; border: 1px solid #dde3dd; border-radius: .35rem; background: #fff; }
+.triobjective-values dt { color: #59645d; font-size: .64rem; overflow-wrap: anywhere; }
+.triobjective-values dd { margin: .15rem 0 0; color: #263c30; font-weight: 800; font-variant-numeric: tabular-nums; }
 .selected-marker { fill: #dc6b32; stroke: #773315; stroke-width: 1.5; }
 .ideal-marker { fill: #365e92; stroke: #fff; stroke-width: 1.5; }
 .minimize-cue { stroke: #65746b; stroke-width: 2; }
@@ -1599,6 +1620,8 @@ caption {
   .linked-surface-card > header { grid-template-columns: minmax(0, 1fr); }
   .linked-surface-figure svg { max-height: none; }
   .linked-surface-figure figcaption { align-items: flex-start; flex-direction: column; gap: .2rem; }
+  .triobjective-lens > header, .triobjective-grid { grid-template-columns: minmax(0, 1fr); }
+  .triobjective-values { grid-template-columns: minmax(0, 1fr); }
   .content-search, .gallery-filter { align-items: flex-start; flex-direction: column; }
   .content-search input { width: 100%; }
   .compiled-content-layout { grid-template-columns: minmax(0, 1fr); }
