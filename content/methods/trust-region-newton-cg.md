@@ -10,7 +10,7 @@ prerequisites: [newton-method]
 related_ids: [newton-method, bfgs, least-squares]
 aliases: [/learn/trust-region-newton-cg]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
@@ -40,12 +40,12 @@ Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-regi
 向いている条件:
 
 - 連続・滑らかな問題
-- gradientとHessian-vector積が利用可能
+- 勾配とHessian-vector積が利用可能
 - dense Hessianを保存できない
 - line search Newtonが不安定
 - negative curvatureも検出しながら進みたい
 
-## 見るべき診断値
+## 診断値
 
 - gradient norm
 - trust radius $\Delta_k$
@@ -99,7 +99,7 @@ print(result.success, result.x, result.fun, result.message)
 反復回数だけでBFGSと比較しません。HVP、gradient、目的関数の各評価費を分け、同じ停止条件と初期点で比較します。
 :::
 
-## 避ける条件
+## 避ける／切り替える条件
 
 - 目的関数が不連続または強いnoiseを含む
 - gradient / HVPを信頼できない

@@ -14,7 +14,7 @@ aliases: [/learn/lp-qp-conic]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。

@@ -10,7 +10,7 @@ prerequisites: [branch-and-bound]
 related_ids: [branch-and-bound, cp-sat, lp-qp-conic]
 aliases: [/learn/branch-and-cut]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。

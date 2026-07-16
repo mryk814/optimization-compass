@@ -13,7 +13,7 @@ comparison_ids: []
 aliases: [/learn/branch-and-bound]
 visualization_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 問題を部分空間へ分枝し、incumbentとrelaxation boundを比較して改善不能なsubtreeを証拠付きで除外する厳密探索法です。

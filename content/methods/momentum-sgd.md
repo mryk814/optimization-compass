@@ -12,7 +12,7 @@ comparison_ids: [COMPARE_GRADIENT_FAMILY]
 aliases: [/learn/momentum-sgd]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 現在の勾配だけでなく過去の更新を速度として蓄積し、同じ方向の移動を強めて谷を横切る振動を抑える一次法です。
@@ -75,7 +75,7 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 
 この更新式は教育用です。frameworkごとのMomentum / Nesterov定義、weight decay、gradient averagingを公式documentationで確認します。
 
-## 見るべき診断値
+## 診断値
 
 - objectiveとbest-so-far
 - gradient norm

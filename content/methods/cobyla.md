@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free, constrained-continuous]
 related_ids: [constrained-continuous, mads, pattern-search]
 aliases: [/learn/cobyla]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 目的関数と制約の値だけから局所線形modelを作り、trust-region半径内で一般不等式制約付きの局所解を探す微分不要法です。
@@ -19,7 +19,7 @@ last_reviewed: 2026-07-15
 
 COBYLAはsimplex状の補間点から、目的関数と各constraintの局所線形近似を作ります。そのmodel上でtrust-region radius内のstepを求め、実評価でmodelを更新します。
 
-必要なのはvalue evaluationであり、gradientやJacobianを直接要求しません。一方で、局所modelの品質にはscale、geometry、noiseが影響します。
+必要なのはvalue evaluationであり、勾配やJacobianを直接要求しません。一方で、局所modelの品質にはscale、geometry、noiseが影響します。
 
 ## Constraintの表現
 
@@ -92,14 +92,14 @@ COBYLAはderivative-based KKT residualを直接返さない場合があるため
 ## 向いている条件
 
 - 低〜中次元のsmoothまたはmoderately smooth black-box
-- gradient / Jacobianが利用できない
+- 勾配 / Jacobianが利用できない
 - 一般inequality constraint
 - evaluationが比較的安価
 - local feasible candidateが欲しい
 
 ## 避ける／切り替える条件
 
-- exact equalityが非常に重要
+- exact equalityが重要
 - strong noiseで線形modelが不安定
 - 高次元
 - 1評価が極端に高価

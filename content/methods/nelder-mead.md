@@ -13,7 +13,7 @@ visualization_aliases: [nelder-mead-quadratic|/theater/nelder-mead]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。
@@ -96,7 +96,7 @@ print(result.success, result.x, result.fun, result.nfev, result.message)
 - constraint violation（外部penaltyを使う場合）
 - 異なる初期simplexでの解
 
-## 失敗の兆候
+## 失敗・切替の兆候
 
 - simplexが細長く退化する
 - shrinkを繰り返してもbestが改善しない

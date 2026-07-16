@@ -10,7 +10,7 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [fista, admm]
 aliases: [/learn/proximal-gradient]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。
@@ -23,7 +23,7 @@ $$
 
 ここで、
 
-- $f$ は微分可能でgradientが利用できる
+- $f$ は微分可能で勾配が利用できる
 - $g$ は非滑らかでもよいがproximal operatorを計算できる
 
 とします。更新は
@@ -47,7 +47,7 @@ L1正則化ならsoft-thresholding、box制約なら区間へのprojectionにな
 
 ## Step sizeと停止
 
-$f$ のgradientが $L$-Lipschitzなら、基本的な固定stepは $\eta\le 1/L$ が目安です。$L$が不明ならbacktrackingを使います。
+$f$ の勾配が $L$-Lipschitzなら、固定stepは $\eta\le 1/L$ が目安です。$L$が不明ならbacktrackingを使います。
 
 確認する値:
 
@@ -95,17 +95,17 @@ print(x)
 
 - smooth loss + L1、group penalty、indicator constraintなど
 - sparse・大規模で、一反復を安価にしたい
-- gradientとproxを別々に実装できる
+- 勾配とproxを別々に実装できる
 - exactなHessian solveより多数の軽い反復が適する
 
 ## 避ける／切り替える条件
 
 - prox自体が高価な最適化問題になる
-- $f$ が非滑らか、またはgradientが強いnoiseを含む
+- $f$ が非滑らか、または勾配が強いnoiseを含む
 - 変数scaleにより単一step sizeが極端に保守的
 - 強いcoupling constraintを単純projectionで表せない
 - basic法の収束が遅い → [FISTA](#/learn/fista)、restart、preconditioningを検討
 
 ::: note
-FISTAの反復数が少なくても、必ずしも実時間が短いとは限りません。gradientとproxの実コスト、restart、停止条件を揃えて比較します。
+FISTAの反復数が少なくても、必ずしも実時間が短いとは限りません。勾配とproxの実コスト、restart、停止条件を揃えて比較します。
 :::

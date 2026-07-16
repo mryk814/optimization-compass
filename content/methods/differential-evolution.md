@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [cma-es, genetic-algorithm, particle-swarm]
 aliases: [/learn/differential-evolution]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。
@@ -32,15 +32,15 @@ $$
 
 が探索の性格を変えます。
 
-## 向いている問題
+## 向いている条件
 
 - boundsを持つ連続black-box
-- gradientが利用できない、または不連続・多峰性
+- 勾配が利用できない、または不連続・多峰性
 - 目的評価をpopulation単位で並列化できる
 - 局所法の初期値依存を緩和したい
 - 最適性証明ではなく良いglobal candidateが欲しい
 
-評価が非常に高価で数十回しか呼べない場合、populationを維持するだけで予算を使い切るため、Bayesian Optimizationなどとの比較が必要です。
+評価が高価で数十回しか呼べない場合、populationを維持するだけでbudgetを使い切るため、Bayesian Optimizationなどとの比較が必要です。
 
 ## 比較で揃える条件
 
@@ -80,7 +80,7 @@ result = differential_evolution(
 print(result.success, result.x, result.fun, result.nfev)
 ```
 
-## 見るべき診断値
+## 診断値
 
 - best-so-far objective
 - population diversity
@@ -94,11 +94,11 @@ print(result.success, result.x, result.fun, result.nfev)
 `polish=True`で最後に局所法を使う実装では、最終結果はDEだけの成果ではありません。population探索とlocal refinementの評価回数を分けて記録します。
 :::
 
-## 失敗の兆候
+## 失敗・切替の兆候
 
 - population diversityが早期に消える
 - 全個体がboundsへ張り付く
-- 評価予算に対し世代数が少なすぎる
+- 評価budgetに対し世代数が少なすぎる
 - penalty設計によりinfeasible個体しか生成されない
 - 変数scaleが極端で差分vectorが一部座標だけ支配する
 - 単一seedの成功例を一般性能として扱っている

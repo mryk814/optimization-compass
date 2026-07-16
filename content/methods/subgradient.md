@@ -10,7 +10,7 @@ prerequisites: [concept.convexity, method.gradient-descent]
 related_ids: [proximal-gradient, mirror-descent, fista]
 aliases: [/learn/subgradient]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。
@@ -23,7 +23,7 @@ $$
 f(y)\ge f(x)+g^T(y-x)
 $$
 
-をすべての $y$ で満たすとき、$g$ はsubgradientです。滑らかな点では通常のgradientが唯一のsubgradientですが、$f(x)=|x|$ の $x=0$ では区間 $[-1,1]$ のすべてがsubgradientです。
+をすべての $y$ で満たすとき、$g$ はsubgradientです。滑らかな点では通常の勾配が唯一のsubgradientですが、$f(x)=|x|$ の $x=0$ では区間 $[-1,1]$ のすべてがsubgradientです。
 
 更新は
 

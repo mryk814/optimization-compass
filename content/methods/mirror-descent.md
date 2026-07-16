@@ -10,7 +10,7 @@ prerequisites: [concept.convexity, subgradient]
 related_ids: [subgradient, proximal-gradient, multi-objective]
 aliases: [/learn/mirror-descent]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 Euclidean距離ではなく問題に合うBregman geometryを使い、simplex・確率分布・非一様scale上で劣勾配stepを行う一次法です。

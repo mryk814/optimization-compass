@@ -88,7 +88,7 @@ $J^T J$を直接作るとcondition numberが悪化する場合があるため、
 - 二乗和は小さいがparameterが不安定 → identifiabilityを疑う
 - constraintsが本質 → constrained least-squares対応または一般NLPへ
 
-## Python例
+## Python
 
 ```python
 import numpy as np

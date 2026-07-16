@@ -12,7 +12,7 @@ aliases: [/learn/method.gradient-descent]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
@@ -61,7 +61,7 @@ $$
 - NaN / overflow / line-search status
 - iteration / wall-clock budget
 
-凸問題でも、停止許容値が粗ければ高精度解ではありません。非凸問題ではgradient normが小さくてもlocal minimum、saddle、flat regionの可能性があります。
+凸問題でも、停止許容値が粗ければ高精度解ではありません。非凸問題ではgradient normが小さくても局所解、saddle、flat regionの可能性があります。
 
 ## Python
 

@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, pattern-search, mads]
 aliases: [/learn/powell]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。

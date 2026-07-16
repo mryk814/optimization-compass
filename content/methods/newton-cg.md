@@ -80,7 +80,7 @@ Newton-CGはこの線形系をCGで近似します。内部反復を早めに止
 - gradient checkが不一致 → algorithm変更より先に微分実装を修正
 - 解近傍で速いが初期点から不安定 → globalizing strategyを見直す
 
-## Python例
+## Python
 
 ```python
 import numpy as np

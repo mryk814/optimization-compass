@@ -10,7 +10,7 @@ prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, slsqp, augmented-lagrangian]
 aliases: [/learn/interior-point-nlp]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかNLPを解く方法です。

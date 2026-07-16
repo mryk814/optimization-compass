@@ -10,7 +10,7 @@ prerequisites: [method.gradient-descent, constrained-continuous]
 related_ids: [method.gradient-descent, proximal-gradient, mirror-descent, active-set]
 aliases: [/learn/projected-gradient]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
@@ -33,9 +33,9 @@ $$
 
 box、simplex、ball、affine subspaceなど、projectionが閉形式または安価なときに有効です。
 
-## 境界上のgradientを読む
+## 境界上の勾配を読む
 
-解が境界にある場合、通常のgradientは0でなくてもよいです。重要なのは実行可能方向へ進めないことです。
+解が境界にある場合、通常の勾配は0でなくてもよいです。重要なのは実行可能方向へ進めないことです。
 
 projected-gradient mapping
 

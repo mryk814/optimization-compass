@@ -35,7 +35,7 @@ last_reviewed: 2026-07-16
 | seed | 複数runで安定性を確認できるか |
 | constraints | random stepとlocal solveで実行可能性をどう保つか |
 
-一評価が非常に高価なら、basinを飛ぶたびにlocal solveするcostが重すぎる可能性があります。
+一評価が高価なら、basinを飛ぶたびにlocal solveするcostが重すぎる可能性があります。
 
 ## 仕組み
 
@@ -83,7 +83,7 @@ last_reviewed: 2026-07-16
 - 高価評価で試行数が不足 → Bayesian Optimizationへ
 - 低次元boundedで決定論的探索が欲しい → DIRECTやSHGOへ
 
-## Python例
+## Python
 
 ```python
 import numpy as np

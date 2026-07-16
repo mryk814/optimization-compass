@@ -14,7 +14,7 @@ aliases: [/learn/least-squares]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。

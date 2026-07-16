@@ -14,7 +14,7 @@ aliases: [/learn/multi-objective]
 visualization_aliases: [biobjective-quadratic-pareto-front|/theater/multi-objective]
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。

@@ -4,7 +4,7 @@ kind: method
 method_id: M_BAYESIAN_OPT_GP
 title_ja: ベイズ最適化
 title_en: Bayesian Optimization
-summary: 高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
+summary: 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
 source_ids: [S034, S035]
 prerequisites: []
 related_ids: [differential-evolution, cma-es]
@@ -14,10 +14,10 @@ aliases: [/learn/bayesian-optimization]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
-高価なblack-box評価を節約するため、観測履歴から代理モデルと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
+高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
 
 ## 一巡で何をしているか
 
@@ -59,7 +59,7 @@ acquisitionの最良点は、目的関数の最適点だと証明された場所
 |---|---|
 | observed points | 実際に高価な関数を評価した結果 |
 | true objective | 教育用scenarioでだけ既知の関数 |
-| surrogate mean | 現在の代理モデルの予測 |
+| surrogate mean | 現在のsurrogate modelの予測 |
 | uncertainty | surrogate model上の不確実性 |
 | acquisition | 次点を選ぶ基準 |
 | incumbent | 観測済みのbest-so-far |
@@ -108,13 +108,13 @@ print(observed_x[best_index], observed_y[best_index])
 ## 向いている条件
 
 - 1評価が数分〜数日かかるsimulationや実験
-- 評価回数が数十〜数百程度に制限される
+- evaluation数が数十〜数百程度に制限される
 - 低〜中次元のsearch space
 - 過去観測を次点選択へ活用したい
 - gradientを直接得られない
 - observation noiseや失敗をmodel化できる
 
-## 条件付き／避ける条件
+## 避ける／切り替える条件
 
 - 評価が安価で大量並列可能 → random / population searchが単純な場合
 - 極端な高次元 → kernelやacquisition最適化が難しい

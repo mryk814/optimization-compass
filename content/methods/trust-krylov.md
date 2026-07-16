@@ -15,7 +15,7 @@ Hessian-vector積から作るKrylov部分空間でtrust-region部分問題を近
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**高次元空間を全部詳しく見る代わりに、gradientとHessianが作る重要な方向だけを集めた小さな空間で、信用できる一歩を探したい**というものです。
+この手法の気持ちは、**高次元空間を全部詳しく見る代わりに、勾配とHessianが作る重要な方向だけを集めた小さな空間で、信用できる一歩を探したい**というものです。
 
 - 見ているもの: gradient、Hessian-vector積、局所modelの予測改善
 - 動かしているもの: Krylov部分空間、trust radius、候補step
@@ -58,7 +58,7 @@ $$
 
 避ける条件:
 
-- gradient/HVPがnoiseに支配される
+- gradient / HVPがnoiseに支配される
 - 不連続・離散・black-box評価のみ
 - 部分問題solveが目的評価より支配的
 - 一般制約や大域certificateが必要
@@ -82,7 +82,7 @@ $$
 - 曲率を使っても改善しない → L-BFGSや一階法とのcost比較
 - 初期値で解が変わる → local methodであることを受け入れるかglobal探索へ
 
-## Python例
+## Python
 
 ```python
 import numpy as np
@@ -116,6 +116,6 @@ print(result.success, result.fun, result.nit, result.message)
 
 ## コラム: Krylov部分空間が拾うもの
 
-Krylov法は、gradientとHessian作用から反復的に重要な方向を作ります。全固有vectorを求めるわけではなく、現在の右辺と曲率に関係する方向を優先的に扱います。
+Krylov法は、勾配とHessian作用から反復的に重要な方向を作ります。全固有vectorを求めるわけではなく、現在の右辺と曲率に関係する方向を優先的に扱います。
 
 より単純な内部CGを使う[Trust-region Newton-CG](#/learn/trust-region-newton-cg)や、line-search型の[Newton-CG](#/learn/newton-cg)と、HVP回数・拒否step・wall timeを揃えて比較してください。

@@ -10,7 +10,7 @@ prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, least-squares]
 aliases: [/learn/direct-collocation]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。
@@ -120,7 +120,7 @@ meshが粗いと、離散NLPでは可行でも連続systemへ戻すとconstraint
 NLP solverの`success`は、連続時間問題の正しさを直接保証しません。discretization error、model mismatch、simulation validationを別に確認します。
 :::
 
-## 向いている／避ける条件
+## 向く条件・避ける条件
 
 向いている:
 

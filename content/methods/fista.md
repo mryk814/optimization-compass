@@ -10,14 +10,14 @@ prerequisites: [proximal-gradient]
 related_ids: [proximal-gradient, admm]
 aliases: [/learn/fista]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。
 
 ## 加速の仕組み
 
-basic proximal gradientは現在点からgradient + prox stepを行います。FISTAは過去の移動を使った外挿点 $y_k$ からstepを行います。
+basic proximal gradientは現在点から勾配stepとprox stepを行います。FISTAは過去の移動を使った外挿点 $y_k$ からstepを行います。
 
 $$
 x_{k+1}=\operatorname{prox}_{\eta g}\left(y_k-\eta\nabla f(y_k)\right)
@@ -94,7 +94,7 @@ print(x)
 
 - objectiveが大きく振動する → restartやmonotone variant
 - supportが何度も入れ替わる → step、scaling、regularizationを確認
-- backtrackingが毎回縮む → gradientのLipschitz modelが悪い
+- backtrackingが毎回縮む → 勾配のLipschitz modelが悪い
 - proxが支配的 → decompositionや専用solverを検討
 - 非凸問題へ理論rateをそのまま適用している → 適用範囲を明示
 

@@ -10,7 +10,7 @@ prerequisites: [dynamic-programming]
 related_ids: [dynamic-programming, cp-sat]
 aliases: [/learn/dijkstra-astar]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。
@@ -108,7 +108,7 @@ print(dijkstra(graph, "A"))
 地図上の直線距離は常に安全なheuristicとは限りません。実costが地理距離より小さくなり得るdiscountやteleport edgeがある場合、admissibilityを確認します。
 :::
 
-## 失敗の兆候
+## 失敗・切替の兆候
 
 - state explosionでmemoryが増大
 - heuristicが弱くDijkstraと同程度に展開

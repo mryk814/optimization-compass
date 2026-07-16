@@ -10,7 +10,7 @@ related_ids: [method.nelder-mead]
 visualization_ids: [nelder-mead-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 ## 直感
@@ -29,12 +29,12 @@ last_reviewed: 2026-07-15
 
 - 関数値だけで動く局所探索
 - 集団を使う大域探索
-- 代理モデルで評価点を選ぶ逐次探索
+- surrogateで評価点を選ぶ逐次探索
 
 ::: warning
 「導関数を使わない」は「調整不要」を意味しません。評価予算、初期設計、探索範囲を先に固定します。
 :::
 
-## 次に見る
+## 次に読む
 
-[Nelder–Meadの教材](#/methods/M_NELDER_MEAD)では、単体を変形する1ステップを確認できます。
+[Nelder–Meadの教材](#/methods/M_NELDER_MEAD)では、単体を変形する一歩を確認できます。
