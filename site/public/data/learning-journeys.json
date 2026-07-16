@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.10.0",
-  "generated_at": "2026-07-15T00:00:00Z",
+  "dataset_version": "0.11.0",
+  "generated_at": "2026-07-16T00:00:00Z",
   "journeys": [
     {
       "candidate_method_ids": [
@@ -21,7 +21,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -72,7 +72,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -134,7 +134,7 @@
       "content_ids": [
         "cp-sat"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -186,7 +186,7 @@
       "content_ids": [
         "direct-collocation"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -237,7 +237,7 @@
         "M_ACTIVE_SET_QP"
       ],
       "content_ids": [],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -290,7 +290,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -342,7 +342,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -402,7 +402,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -471,7 +471,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_CP_SAT"
@@ -522,7 +522,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -573,7 +573,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.10.0",
+      "dataset_version": "0.11.0",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"

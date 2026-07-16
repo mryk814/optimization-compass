@@ -1,0 +1,630 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.11.0",
+  "generated_at": "2026-07-16T00:00:00Z",
+  "journeys": [
+    {
+      "candidate_method_ids": [
+        "M_LEVENBERG_MARQUARDT"
+      ],
+      "canonical_url": "/gallery/EC013",
+      "case_id": "EC013",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_GAUSS_NEWTON"
+      ],
+      "content_ids": [
+        "gauss-newton",
+        "least-squares"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "science",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "parameter boundsと、物理的に許される範囲。",
+        "decision_variables": "反応速度定数やconstitutive model係数など10個の連続parameter。",
+        "objective": "100個の観測残差の二乗和を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_CERES",
+        "I_SCIPY_LEAST_SQUARES_LM"
+      ],
+      "journey_id": "EC013",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA033",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S003",
+        "S041"
+      ],
+      "status": "partial",
+      "takeaway": "rank、残差scale、外れ値、初期値依存性を確認し、二乗和だけでparameterの一意性を断定しません。",
+      "title_en": "Estimate nonlinear model parameters",
+      "title_ja": "観測データから非線形model parameterを推定する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_NSGA_II"
+      ],
+      "canonical_url": "/gallery/EC017",
+      "case_id": "EC017",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_EPSILON_CONSTRAINT"
+      ],
+      "content_ids": [
+        "epsilon-constraint",
+        "multi-objective"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_WEIGHTED_SUM"
+      ],
+      "formulation": {
+        "constraints": "設計boundsと安全上のfeasibility条件。",
+        "decision_variables": "設計寸法と運転条件。",
+        "objective": "costと性能lossの2目的を同時に最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_CVXPY",
+        "I_PYMOO"
+      ],
+      "journey_id": "EC017",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA038",
+      "problem_instance_ids": [
+        "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+          "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC"
+        }
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "status": "partial",
+      "takeaway": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
+      "title_en": "Explore a cost-performance Pareto trade-off",
+      "title_ja": "costと性能のPareto trade-offを探索する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_LOCAL_SEARCH_COMBINATORIAL"
+      ],
+      "canonical_url": "/gallery/EC019",
+      "case_id": "EC019",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_CP_SAT"
+      ],
+      "content_ids": [
+        "cp-sat"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "logistics",
+      "excluded_method_ids": [
+        "M_BRANCH_CUT"
+      ],
+      "formulation": {
+        "constraints": "車両容量、時間窓、勤務時間、各stopの一度だけの訪問。",
+        "decision_variables": "各車両が訪問するstopの順序と割当。",
+        "objective": "総移動時間と遅延penaltyを小さくする。",
+        "variable_domain_summary": "graph"
+      },
+      "implementation_ids": [
+        "I_GUROBI",
+        "I_ORTOOLS_ROUTING"
+      ],
+      "journey_id": "EC019",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA031",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S023",
+        "S024",
+        "S054"
+      ],
+      "status": "partial",
+      "takeaway": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。",
+      "title_en": "Build time-window delivery routes under a deadline",
+      "title_ja": "時間窓付き配送routeを10分以内に組む"
+    },
+    {
+      "candidate_method_ids": [
+        "M_DIRECT_COLLOCATION"
+      ],
+      "canonical_url": "/gallery/EC020",
+      "case_id": "EC020",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_MULTIPLE_SHOOTING"
+      ],
+      "content_ids": [
+        "direct-collocation"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "control",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "離散化したdynamics、state/control bounds、obstacleと終端条件。",
+        "decision_variables": "各time stepのstate、control、必要なら最終時刻。",
+        "objective": "tracking error、control effort、所要時間を最小化する。",
+        "variable_domain_summary": "trajectory"
+      },
+      "implementation_ids": [
+        "I_ACADOS",
+        "I_CASADI",
+        "I_DRAKE"
+      ],
+      "journey_id": "EC020",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "非線形動力学とpath constraintを守る軌道を設計したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA042",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "status": "partial",
+      "takeaway": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。",
+      "title_en": "Optimize a trajectory with nonlinear dynamics",
+      "title_ja": "非線形動力学を含む軌道を最適化する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_ADMM_QP"
+      ],
+      "canonical_url": "/gallery/EC025",
+      "case_id": "EC025",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_ACTIVE_SET_QP"
+      ],
+      "content_ids": [],
+      "dataset_version": "0.11.0",
+      "domain": "control",
+      "excluded_method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "formulation": {
+        "constraints": "線形化dynamics、input/state bounds、初期state。",
+        "decision_variables": "予測horizon上のstateとcontrol increment。",
+        "objective": "tracking errorとcontrol effortの凸二次costを最小化する。",
+        "variable_domain_summary": "trajectory"
+      },
+      "implementation_ids": [
+        "I_ACADOS",
+        "I_OSQP"
+      ],
+      "journey_id": "EC025",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA043",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S012",
+        "S043",
+        "S076"
+      ],
+      "status": "partial",
+      "takeaway": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。",
+      "title_en": "Solve a repeated MPC QP at 100 Hz",
+      "title_ja": "100Hzで反復MPCのQPを解く"
+    },
+    {
+      "candidate_method_ids": [
+        "M_NEWTON_CG"
+      ],
+      "canonical_url": "/gallery/EC026",
+      "case_id": "EC026",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_TRUST_KRYLOV"
+      ],
+      "content_ids": [
+        "newton-cg",
+        "trust-krylov"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "formulation": {
+        "constraints": "PDE residual、境界条件、design bounds、solver failure。",
+        "decision_variables": "distributed field、境界control、低次元design parameter。",
+        "objective": "PDE solutionから計算する性能指標とregularizationを最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_IPOPT",
+        "I_PETSC_TAO"
+      ],
+      "journey_id": "EC026",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA045",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S017",
+        "S019",
+        "S056"
+      ],
+      "status": "partial",
+      "takeaway": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。",
+      "title_en": "Solve a large PDE-constrained design problem matrix-free",
+      "title_ja": "PDE制約付き大規模設計をmatrix-freeで解く"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/budget-allocation",
+      "case_id": "budget-allocation",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "business",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "予算上限、最低実施数、相互排他条件。",
+        "decision_variables": "各施策を選ぶか、いくら配分するか。",
+        "objective": "期待効果の合計を最大化する。",
+        "variable_domain_summary": "binary"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "budget-allocation",
+      "last_reviewed": "2026-07-14",
+      "learning_objective": "複数施策に予算を配分し、効果を最大化したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA006",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S054",
+        "S055"
+      ],
+      "status": "partial",
+      "takeaway": "実測効果の不確実性と、予算制約の単位を分けて確認します。",
+      "title_en": "Budget allocation",
+      "title_ja": "限られた予算を施策へ配分する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_SLSQP"
+      ],
+      "canonical_url": "/gallery/constrained-design",
+      "case_id": "constrained-design",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_INTERIOR_POINT_NLP"
+      ],
+      "content_ids": [
+        "interior-point-nlp",
+        "slsqp"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "許容領域を表す非線形不等式とdesign bounds。",
+        "decision_variables": "2つの連続design parameter。",
+        "objective": "重量に対応する二次目的を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_IPOPT",
+        "I_SCIPY_SLSQP"
+      ],
+      "journey_id": "constrained-design",
+      "last_reviewed": "2026-07-15",
+      "learning_objective": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA009",
+      "problem_instance_ids": [
+        "INSTANCE_CONSTRAINED_DISK_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_CONSTRAINED_DISK",
+          "problem_definition_id": "PROBLEM_CONSTRAINED_CONTINUOUS_2D",
+          "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_CONSTRAINED_DISK"
+        }
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S064"
+      ],
+      "status": "partial",
+      "takeaway": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
+      "title_en": "Find a lightweight design under a strength constraint",
+      "title_ja": "強度制約を守りながら軽量設計を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/hyperparameter-search",
+      "case_id": "hyperparameter-search",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
+          "comparison_id": "COMPARE_GRADIENT_FAMILY"
+        }
+      ],
+      "completion_reasons": [
+        "missing_primary_scenario"
+      ],
+      "conditional_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "method.nelder-mead"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "machine-learning",
+      "excluded_method_ids": [
+        "M_CP_SAT"
+      ],
+      "formulation": {
+        "constraints": "実験時間、メモリ、許容する設定範囲。",
+        "decision_variables": "learning rate、層数、正則化係数など。",
+        "objective": "検証損失または実験スコアを最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_OPTUNA"
+      ],
+      "journey_id": "hyperparameter-search",
+      "last_reviewed": "2026-07-14",
+      "learning_objective": "時間のかかる実験を少ない回数で改善したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA055",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "status": "partial",
+      "takeaway": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。",
+      "title_en": "Hyperparameter search",
+      "title_ja": "高価な実験の設定を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "MF_LP_QP_CONIC"
+      ],
+      "canonical_url": "/gallery/portfolio-allocation",
+      "case_id": "portfolio-allocation",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "M_SLSQP"
+      ],
+      "content_ids": [
+        "lp-qp-conic",
+        "slsqp"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "finance",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "比率の上下限、合計1、集中投資上限。",
+        "decision_variables": "各資産の保有比率。",
+        "objective": "期待収益とリスクのトレードオフを最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_CVXPY"
+      ],
+      "journey_id": "portfolio-allocation",
+      "last_reviewed": "2026-07-14",
+      "learning_objective": "リスクを抑えながら期待収益と運用制約を両立したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA052",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S001",
+        "S054"
+      ],
+      "status": "partial",
+      "takeaway": "過去データの不確実性と、実運用での取引コストを別に検証します。",
+      "title_en": "Portfolio allocation",
+      "title_ja": "ポートフォリオの配分を決める"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/shift-scheduling",
+      "case_id": "shift-scheduling",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_primary_scenario",
+        "missing_comparison"
+      ],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.11.0",
+      "domain": "operations",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "資格、休憩、連続勤務、必要人数。",
+        "decision_variables": "各スタッフを各時間帯へ割り当てる。",
+        "objective": "希望違反と偏りのペナルティを最小化する。",
+        "variable_domain_summary": "binary"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "shift-scheduling",
+      "last_reviewed": "2026-07-14",
+      "learning_objective": "必要人数を満たしながら、希望と公平性を反映したい。",
+      "limitations": [
+        "教材上の定式化と固定条件に基づく。実データではscale・noise・計算budgetを再確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA006",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S054",
+        "S055"
+      ],
+      "status": "partial",
+      "takeaway": "hard constraintとsoft constraintを最初に分離します。",
+      "title_en": "Shift scheduling",
+      "title_ja": "スタッフのシフトを組む"
+    }
+  ],
+  "orphan_comparison_ids": [
+    "COMPARE_GRADIENT_DIVERGENCE"
+  ],
+  "orphan_scenario_ids": [
+    "SCENARIO_ADAM_QUADRATIC",
+    "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+    "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+    "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+    "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+    "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+    "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+    "SCENARIO_GD_QUADRATIC",
+    "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+    "SCENARIO_MOMENTUM_QUADRATIC",
+    "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+    "SCENARIO_NM_QUADRATIC",
+    "SCENARIO_NM_QUADRATIC_SHIFTED",
+    "SCENARIO_NM_ROSENBROCK",
+    "SCENARIO_NM_ROSENBROCK_SHIFTED"
+  ]
+}

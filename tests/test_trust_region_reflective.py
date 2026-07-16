@@ -36,7 +36,7 @@ def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> Non
     assert method["constraint_support"] == "bounds"
     assert method["reference_source_ids"] == "S003;S096"
     assert [tuple(row) for row in mappings] == [
-        ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native")
+        ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
     ]
     assert claim is not None
     assert claim["value_status"] == "verified"
@@ -57,4 +57,4 @@ def test_trf_has_a_beginner_first_published_guide() -> None:
     assert "この手法の気持ち" in page.body
     assert "## なぜReflectiveなのか" in page.body
     assert "## LM・dogbox・L-BFGS-Bとの違い" in page.body
-    assert "method=\"trf\"" in page.body
+    assert 'method="trf"' in page.body

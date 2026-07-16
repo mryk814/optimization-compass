@@ -1,0 +1,2132 @@
+{
+  "aliases": [
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "適応的モーメント推定"
+      ],
+      "label_en": "Adaptive Moment Estimation",
+      "label_ja": "Adam",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "Adam optimzer"
+      ],
+      "rationale": "正式名とoptimizer名を統合する。",
+      "source_ids": [
+        "S070"
+      ],
+      "synonyms": [
+        "Adam optimizer"
+      ],
+      "target_id": "M_ADAM",
+      "target_type": "method",
+      "term_id": "TERM_ADAM"
+    },
+    {
+      "abbreviations": [
+        "ADMM"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "分散凸最適化"
+      ],
+      "label_en": "Alternating Direction Method of Multipliers",
+      "label_ja": "交互方向乗数法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "alternating directions method"
+      ],
+      "rationale": "正式名と略語を統合する。",
+      "source_ids": [
+        "S061"
+      ],
+      "synonyms": [],
+      "target_id": "M_ADMM",
+      "target_type": "method",
+      "term_id": "TERM_ADMM"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "準Newton法"
+      ],
+      "label_en": "BFGS",
+      "label_ja": "BFGS法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "BFGS method"
+      ],
+      "rationale": "準Newton語彙を代表手法へ結ぶ。",
+      "source_ids": [
+        "S057"
+      ],
+      "synonyms": [
+        "quasi-Newton BFGS"
+      ],
+      "target_id": "M_BFGS",
+      "target_type": "method",
+      "term_id": "TERM_BFGS"
+    },
+    {
+      "abbreviations": [
+        "BO"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "GP-BO",
+        "black-box optimization"
+      ],
+      "label_en": "Bayesian optimization",
+      "label_ja": "ベイズ最適化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "Bayseian optimization"
+      ],
+      "rationale": "BO語彙をGP methodへ解決する。",
+      "source_ids": [
+        "S059",
+        "S075"
+      ],
+      "synonyms": [
+        "Gaussian-process Bayesian optimization"
+      ],
+      "target_id": "M_BAYESIAN_OPT_GP",
+      "target_type": "method",
+      "term_id": "TERM_BO"
+    },
+    {
+      "abbreviations": [
+        "B&B",
+        "BnB"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "探索木"
+      ],
+      "label_en": "Branch and Bound",
+      "label_ja": "分枝限定法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "branch & bound"
+      ],
+      "rationale": "記号・hyphen違いを統合する。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [
+        "branch-and-bound"
+      ],
+      "target_id": "M_BRANCH_BOUND",
+      "target_type": "method",
+      "term_id": "TERM_BRANCH_BOUND"
+    },
+    {
+      "abbreviations": [
+        "CMAES"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "evolution strategy"
+      ],
+      "label_en": "Covariance Matrix Adaptation Evolution Strategy",
+      "label_ja": "CMA-ES",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "CMA ES"
+      ],
+      "rationale": "hyphen有無と正式名を統合する。",
+      "source_ids": [
+        "S058"
+      ],
+      "synonyms": [],
+      "target_id": "M_CMA_ES",
+      "target_type": "method",
+      "term_id": "TERM_CMA_ES"
+    },
+    {
+      "abbreviations": [
+        "PDIPM"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "錐solver"
+      ],
+      "label_en": "Primal-dual conic method",
+      "label_ja": "主双対錐最適化法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "primal dual conic"
+      ],
+      "rationale": "conic solver語彙を解決する。",
+      "source_ids": [
+        "S013",
+        "S014"
+      ],
+      "synonyms": [
+        "primal-dual interior-point conic"
+      ],
+      "target_id": "M_PRIMAL_DUAL_CONIC",
+      "target_type": "method",
+      "term_id": "TERM_CONIC"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "convex objective"
+      ],
+      "label_en": "Convexity",
+      "label_ja": "凸性",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "convexcity"
+      ],
+      "rationale": "高頻度conceptをfeatureへ解決する。",
+      "source_ids": [
+        "S055"
+      ],
+      "synonyms": [
+        "凸最適化の前提"
+      ],
+      "target_id": "F_CONVEXITY",
+      "target_type": "feature",
+      "term_id": "TERM_CONVEXITY"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "OR-Tools CP-SAT"
+      ],
+      "label_en": "Constraint Programming SAT",
+      "label_ja": "CP-SAT",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "CPSAT",
+        "CP SAT"
+      ],
+      "rationale": "製品名とmethodを結ぶ。",
+      "source_ids": [
+        "S022"
+      ],
+      "synonyms": [
+        "制約プログラミングSAT"
+      ],
+      "target_id": "M_CP_SAT",
+      "target_type": "method",
+      "term_id": "TERM_CP_SAT"
+    },
+    {
+      "abbreviations": [
+        "DE"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "DEは微分方程式ではなくoptimizer候補。",
+      "domain_terms": [
+        "population-based global optimization"
+      ],
+      "label_en": "Differential evolution",
+      "label_ja": "差分進化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "differencial evolution"
+      ],
+      "rationale": "略語衝突を説明して解決する。",
+      "source_ids": [
+        "S074"
+      ],
+      "synonyms": [
+        "Differential Evolution optimizer"
+      ],
+      "target_id": "M_DIFFERENTIAL_EVOLUTION",
+      "target_type": "method",
+      "term_id": "TERM_DE"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "Jacobian availability",
+        "Hessian availability"
+      ],
+      "label_en": "Derivative access",
+      "label_ja": "導関数アクセス",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "derivitive access"
+      ],
+      "rationale": "oracle情報をcanonical featureへ解決する。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [
+        "gradient availability"
+      ],
+      "target_id": "F_DERIVATIVE_ACCESS",
+      "target_type": "feature",
+      "term_id": "TERM_DERIVATIVE_ACCESS"
+    },
+    {
+      "abbreviations": [
+        "DFO"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "gradient-freeは検索語として関連づけるが数学的同義とは断定しない。",
+      "domain_terms": [
+        "black-box local optimization"
+      ],
+      "label_en": "Derivative-free optimization",
+      "label_ja": "導関数不要最適化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "derivative free optimisation"
+      ],
+      "rationale": "実務で混在する語を関連づける。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [
+        "gradient-free optimization"
+      ],
+      "target_id": "MF_DFO_LOCAL",
+      "target_type": "method",
+      "term_id": "TERM_DFO"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "高価なblack-box評価"
+      ],
+      "label_en": "Evaluation cost",
+      "label_ja": "評価コスト",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "evalution cost"
+      ],
+      "rationale": "BO選択に重要なcostをfeatureへ解決する。",
+      "source_ids": [
+        "S059"
+      ],
+      "synonyms": [
+        "expensive objective"
+      ],
+      "target_id": "F_EVALUATION_COST",
+      "target_type": "feature",
+      "term_id": "TERM_EVALUATION_COST"
+    },
+    {
+      "abbreviations": [
+        "GN"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "residual least-squares method"
+      ],
+      "label_en": "Gauss-Newton method",
+      "label_ja": "Gauss–Newton法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "Gause Newton"
+      ],
+      "rationale": "最小二乗の基本更新を検索可能にする。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [
+        "Gauss Newton"
+      ],
+      "target_id": "M_GAUSS_NEWTON",
+      "target_type": "method",
+      "term_id": "TERM_GAUSS_NEWTON"
+    },
+    {
+      "abbreviations": [
+        "GD"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "full-batch gradient descent"
+      ],
+      "label_en": "Gradient descent",
+      "label_ja": "勾配降下法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "gradient decent"
+      ],
+      "rationale": "基本一次法の表記を統合する。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [
+        "最急降下法"
+      ],
+      "target_id": "M_GRADIENT_DESCENT",
+      "target_type": "method",
+      "term_id": "TERM_GD"
+    },
+    {
+      "abbreviations": [
+        "IP",
+        "MIP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "IPはinteger programming。内点法は別候補。",
+      "domain_terms": [
+        "混合整数最適化"
+      ],
+      "label_en": "Integer programming",
+      "label_ja": "整数計画",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "mixed integer programing"
+      ],
+      "rationale": "整数・混合整数の表記をfamilyへ解決する。",
+      "source_ids": [
+        "S079"
+      ],
+      "synonyms": [
+        "混合整数計画",
+        "mixed-integer programming"
+      ],
+      "target_id": "MF_DISCRETE_EXACT",
+      "target_type": "method",
+      "term_id": "TERM_INTEGER_PROGRAMMING"
+    },
+    {
+      "abbreviations": [
+        "IP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "IPはinterior-point。integer programmingは別候補。",
+      "domain_terms": [
+        "primal-dual interior point"
+      ],
+      "label_en": "Interior-point method",
+      "label_ja": "内点法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "interior point optimiser"
+      ],
+      "rationale": "略語衝突を明示してNLP methodへ解決する。",
+      "source_ids": [
+        "S017",
+        "S055"
+      ],
+      "synonyms": [
+        "barrier method for NLP"
+      ],
+      "target_id": "M_INTERIOR_POINT_NLP",
+      "target_type": "method",
+      "term_id": "TERM_INTERIOR_POINT"
+    },
+    {
+      "abbreviations": [
+        "L-BFGS",
+        "LBFGS"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "limited memory quasi-Newton"
+      ],
+      "label_en": "Limited-memory BFGS",
+      "label_ja": "L-BFGS法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "L BFGS"
+      ],
+      "rationale": "hyphen・spacingを統合する。",
+      "source_ids": [
+        "S065"
+      ],
+      "synonyms": [],
+      "target_id": "M_LBFGS",
+      "target_type": "method",
+      "term_id": "TERM_LBFGS"
+    },
+    {
+      "abbreviations": [
+        "LM"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "非線形最小二乗LM"
+      ],
+      "label_en": "Levenberg-Marquardt",
+      "label_ja": "Levenberg–Marquardt法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "Levenberg Marquadt"
+      ],
+      "rationale": "略語と人名表記を統合する。",
+      "source_ids": [
+        "S003",
+        "S056"
+      ],
+      "synonyms": [
+        "damped Gauss-Newton"
+      ],
+      "target_id": "M_LEVENBERG_MARQUARDT",
+      "target_type": "method",
+      "term_id": "TERM_LM"
+    },
+    {
+      "abbreviations": [
+        "LP",
+        "QP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "LP/QPはproblem classでも使うためfamily候補として表示する。",
+      "domain_terms": [
+        "線形・二次・錐計画"
+      ],
+      "label_en": "LP/QP/conic optimization",
+      "label_ja": "LP・QP・錐最適化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "LP QP conic"
+      ],
+      "rationale": "隣接する構造クラスを検索可能にする。",
+      "source_ids": [
+        "S055"
+      ],
+      "synonyms": [
+        "convex conic optimization"
+      ],
+      "target_id": "MF_LP_QP_CONIC",
+      "target_type": "method",
+      "term_id": "TERM_LP_QP_CONIC"
+    },
+    {
+      "abbreviations": [
+        "SGDM"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "慣性項付き勾配法"
+      ],
+      "label_en": "Momentum SGD",
+      "label_ja": "Momentum法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "momemtum"
+      ],
+      "rationale": "optimizer表記を統合する。",
+      "source_ids": [
+        "S070"
+      ],
+      "synonyms": [
+        "momentum method"
+      ],
+      "target_id": "M_MOMENTUM_SGD",
+      "target_type": "method",
+      "term_id": "TERM_MOMENTUM"
+    },
+    {
+      "abbreviations": [
+        "MOO"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "Pareto optimization"
+      ],
+      "label_en": "Multi-objective optimization",
+      "label_ja": "多目的最適化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "multiobjective optimisation"
+      ],
+      "rationale": "Pareto語彙をfamilyへ解決する。",
+      "source_ids": [
+        "S068"
+      ],
+      "synonyms": [
+        "multi-criteria optimization"
+      ],
+      "target_id": "MF_MULTI_OBJECTIVE",
+      "target_type": "method",
+      "term_id": "TERM_MULTI_OBJECTIVE"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "trade-off optimization"
+      ],
+      "label_en": "Multi-objective design problem",
+      "label_ja": "多目的設計問題",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "multi objective design"
+      ],
+      "rationale": "method familyとproblemを区別する。",
+      "source_ids": [
+        "S068"
+      ],
+      "synonyms": [
+        "Pareto design"
+      ],
+      "target_id": "PA038",
+      "target_type": "problem",
+      "term_id": "TERM_MULTI_PROBLEM"
+    },
+    {
+      "abbreviations": [
+        "NM"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "LPのsimplex methodとは異なる。",
+      "domain_terms": [
+        "単体法（Nelder–Mead）"
+      ],
+      "label_en": "Nelder-Mead method",
+      "label_ja": "Nelder–Mead法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "Nelder Mead"
+      ],
+      "rationale": "simplexの曖昧性を明示する。",
+      "source_ids": [
+        "S063"
+      ],
+      "synonyms": [
+        "Downhill simplex"
+      ],
+      "target_id": "M_NELDER_MEAD",
+      "target_type": "method",
+      "term_id": "TERM_NELDER_MEAD"
+    },
+    {
+      "abbreviations": [
+        "NLLS"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "residual fitting"
+      ],
+      "label_en": "Nonlinear least squares",
+      "label_ja": "非線形最小二乗",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "non-linear least square"
+      ],
+      "rationale": "curve-fitting語彙をproblemへ解決する。",
+      "source_ids": [
+        "S003"
+      ],
+      "synonyms": [
+        "nonlinear curve fitting"
+      ],
+      "target_id": "PA033",
+      "target_type": "problem",
+      "term_id": "TERM_NONLINEAR_LS"
+    },
+    {
+      "abbreviations": [
+        "NSGA2"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "nondominated sorting GA"
+      ],
+      "label_en": "Non-dominated Sorting Genetic Algorithm II",
+      "label_ja": "NSGA-II",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "NSGA-2"
+      ],
+      "rationale": "Roman numeralと数字表記を統合する。",
+      "source_ids": [
+        "S068"
+      ],
+      "synonyms": [
+        "NSGA II"
+      ],
+      "target_id": "M_NSGA_II",
+      "target_type": "method",
+      "term_id": "TERM_NSGA2"
+    },
+    {
+      "abbreviations": [
+        "PGD"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": "PGDはadversarial MLでも同じ更新familyを指す。",
+      "domain_terms": [
+        "box-constrained first-order"
+      ],
+      "label_en": "Projected gradient method",
+      "label_ja": "射影勾配法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "projection gradient descent"
+      ],
+      "rationale": "projectionを使う一次法を統合する。",
+      "source_ids": [
+        "S055",
+        "S056"
+      ],
+      "synonyms": [
+        "gradient projection"
+      ],
+      "target_id": "M_PROJECTED_GRADIENT",
+      "target_type": "method",
+      "term_id": "TERM_PROJECTED_GRADIENT"
+    },
+    {
+      "abbreviations": [
+        "ProxGrad"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "composite convex optimization"
+      ],
+      "label_en": "Proximal gradient method",
+      "label_ja": "近接勾配法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "proximal gradiant"
+      ],
+      "rationale": "proximalとsplittingの語彙を統合する。",
+      "source_ids": [
+        "S066"
+      ],
+      "synonyms": [
+        "forward-backward splitting"
+      ],
+      "target_id": "M_PROX_GRADIENT",
+      "target_type": "method",
+      "term_id": "TERM_PROX_GRADIENT"
+    },
+    {
+      "abbreviations": [
+        "VRP"
+      ],
+      "deprecated_terms": [
+        "巡回セールスマン一般"
+      ],
+      "disambiguation_note": "TSPはroutingの特殊例であり一般同義語にはしない。",
+      "domain_terms": [
+        "配車計画"
+      ],
+      "label_en": "Routing optimization",
+      "label_ja": "配送・経路最適化",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "vehcle routing"
+      ],
+      "rationale": "配車実務語をrouting archetypeへ解決する。",
+      "source_ids": [
+        "S023"
+      ],
+      "synonyms": [
+        "vehicle routing problem"
+      ],
+      "target_id": "PA031",
+      "target_type": "problem",
+      "term_id": "TERM_ROUTING_PROBLEM"
+    },
+    {
+      "abbreviations": [
+        "SGD"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "stochastic optimizer"
+      ],
+      "label_en": "Stochastic gradient descent",
+      "label_ja": "確率的勾配降下法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "stocastic gradient descent"
+      ],
+      "rationale": "MLのbatch表記を統合する。",
+      "source_ids": [
+        "S048"
+      ],
+      "synonyms": [
+        "mini-batch gradient descent"
+      ],
+      "target_id": "M_SGD",
+      "target_type": "method",
+      "term_id": "TERM_SGD"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": "Nelder–Meadのsimplexとは異なる。",
+      "domain_terms": [
+        "primal simplex"
+      ],
+      "label_en": "Simplex method",
+      "label_ja": "単体法（線形計画）",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "simplex algorithm LP"
+      ],
+      "rationale": "simplexの曖昧性をLP側でも明示する。",
+      "source_ids": [
+        "S004",
+        "S055"
+      ],
+      "synonyms": [
+        "LP simplex"
+      ],
+      "target_id": "M_SIMPLEX",
+      "target_type": "method",
+      "term_id": "TERM_SIMPLEX_LP"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "SciPy SLSQP"
+      ],
+      "label_en": "Sequential Least Squares Programming",
+      "label_ja": "SLSQP",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "SLQSP"
+      ],
+      "rationale": "selectorと正式名を統合する。",
+      "source_ids": [
+        "S064"
+      ],
+      "synonyms": [
+        "逐次最小二乗計画法"
+      ],
+      "target_id": "M_SLSQP",
+      "target_type": "method",
+      "term_id": "TERM_SLSQP"
+    },
+    {
+      "abbreviations": [
+        "SQP"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "constrained NLP method"
+      ],
+      "label_en": "Sequential quadratic programming",
+      "label_ja": "逐次二次計画法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "sequential quadratic programing"
+      ],
+      "rationale": "正式名と略語を統合する。",
+      "source_ids": [
+        "S056"
+      ],
+      "synonyms": [],
+      "target_id": "M_SQP",
+      "target_type": "method",
+      "term_id": "TERM_SQP"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "多目的scalarization"
+      ],
+      "label_en": "Weighted-sum method",
+      "label_ja": "重み付き和法",
+      "last_verified": "2026-07-15",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "weighted sum optimisation"
+      ],
+      "rationale": "scalarization語彙を解決する。",
+      "source_ids": [
+        "S055"
+      ],
+      "synonyms": [
+        "scalarization by weighted sum"
+      ],
+      "target_id": "M_WEIGHTED_SUM",
+      "target_type": "method",
+      "term_id": "TERM_WEIGHTED_SUM"
+    }
+  ],
+  "contract_version": "1.0.0",
+  "dataset_version": "0.11.0",
+  "edges": [
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 1,
+      "edge_id": "LEARN_CONVEX_GD",
+      "last_verified": "2026-07-15",
+      "rationale": "凸性は勾配法の保証を理解する前提になる。",
+      "relation": "prerequisite_for",
+      "source_id": "F_CONVEXITY",
+      "source_ids": [
+        "S055",
+        "S056"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_GRADIENT_DESCENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 2,
+      "edge_id": "LEARN_CONVEX_BFGS",
+      "last_verified": "2026-07-15",
+      "rationale": "凸性と曲率を押さえて準Newton更新を読む。",
+      "relation": "prerequisite_for",
+      "source_id": "F_CONVEXITY",
+      "source_ids": [
+        "S055",
+        "S056"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_BFGS",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 3,
+      "edge_id": "LEARN_CONVEX_LPQP",
+      "last_verified": "2026-07-15",
+      "rationale": "LP・凸QP・錐最適化の保証は凸性を土台にする。",
+      "relation": "prerequisite_for",
+      "source_id": "F_CONVEXITY",
+      "source_ids": [
+        "S055"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "MF_LP_QP_CONIC",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 4,
+      "edge_id": "LEARN_DERIVATIVE_GD",
+      "last_verified": "2026-07-15",
+      "rationale": "導関数の可用性が勾配法の適用可否を決める。",
+      "relation": "prerequisite_for",
+      "source_id": "F_DERIVATIVE_ACCESS",
+      "source_ids": [
+        "S056"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_GRADIENT_DESCENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 5,
+      "edge_id": "LEARN_DERIVATIVE_SLSQP",
+      "last_verified": "2026-07-15",
+      "rationale": "目的・制約Jacobianの品質がSLSQPでは重要になる。",
+      "relation": "prerequisite_for",
+      "source_id": "F_DERIVATIVE_ACCESS",
+      "source_ids": [
+        "S001",
+        "S064"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_SLSQP",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 6,
+      "edge_id": "LEARN_COST_BO",
+      "last_verified": "2026-07-15",
+      "rationale": "高価な評価を少数試行で選ぶときBOが候補になる。",
+      "relation": "prerequisite_for",
+      "source_id": "F_EVALUATION_COST",
+      "source_ids": [
+        "S059",
+        "S075"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_BAYESIAN_OPT_GP",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 7,
+      "edge_id": "LEARN_GD_MOMENTUM",
+      "last_verified": "2026-07-15",
+      "rationale": "勾配法の振動を理解して慣性項へ進む。",
+      "relation": "next_step",
+      "source_id": "M_GRADIENT_DESCENT",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_MOMENTUM_SGD",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 8,
+      "edge_id": "LEARN_MOMENTUM_ADAM",
+      "last_verified": "2026-07-15",
+      "rationale": "一次momentumから適応的二次momentへ進む。",
+      "relation": "next_step",
+      "source_id": "M_MOMENTUM_SGD",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_ADAM",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 9,
+      "edge_id": "LEARN_BFGS_LBFGS",
+      "last_verified": "2026-07-15",
+      "rationale": "密な近似を理解してlimited-memory版へ進む。",
+      "relation": "next_step",
+      "source_id": "M_BFGS",
+      "source_ids": [
+        "S056",
+        "S065"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_LBFGS",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 10,
+      "edge_id": "LEARN_GN_LM",
+      "last_verified": "2026-07-15",
+      "rationale": "Gauss–Newtonの不安定性からdampingへ進む。",
+      "relation": "next_step",
+      "source_id": "M_GAUSS_NEWTON",
+      "source_ids": [
+        "S003",
+        "S056"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_LEVENBERG_MARQUARDT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 11,
+      "edge_id": "LEARN_BNB_CP",
+      "last_verified": "2026-07-15",
+      "rationale": "boundによる探索削減から制約伝播へ進む。",
+      "relation": "next_step",
+      "source_id": "M_BRANCH_BOUND",
+      "source_ids": [
+        "S022",
+        "S079"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_CP_SAT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 12,
+      "edge_id": "LEARN_NM_GD",
+      "last_verified": "2026-07-15",
+      "rationale": "simplex操作と勾配方向の更新を対比する。",
+      "relation": "contrast_with",
+      "source_id": "M_NELDER_MEAD",
+      "source_ids": [
+        "S001",
+        "S063"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_GRADIENT_DESCENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 13,
+      "edge_id": "LEARN_CMA_NM",
+      "last_verified": "2026-07-15",
+      "rationale": "集団分布の適応と局所simplex操作を対比する。",
+      "relation": "contrast_with",
+      "source_id": "M_CMA_ES",
+      "source_ids": [
+        "S058",
+        "S063"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_NELDER_MEAD",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 14,
+      "edge_id": "LEARN_CP_MIP",
+      "last_verified": "2026-07-15",
+      "rationale": "制約伝播と緩和・bound中心の見方を区別する。",
+      "relation": "contrast_with",
+      "source_id": "M_CP_SAT",
+      "source_ids": [
+        "S022",
+        "S079"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "MF_DISCRETE_EXACT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 15,
+      "edge_id": "LEARN_BO_RANDOM",
+      "last_verified": "2026-07-15",
+      "rationale": "model-basedな次点選択と無情報samplingを対比する。",
+      "relation": "contrast_with",
+      "source_id": "M_BAYESIAN_OPT_GP",
+      "source_ids": [
+        "S059",
+        "S075"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_RANDOM_SEARCH",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 16,
+      "edge_id": "LEARN_NM_DFO",
+      "last_verified": "2026-07-15",
+      "rationale": "Nelder–Meadは局所DFO familyの一つである。",
+      "relation": "special_case_of",
+      "source_id": "M_NELDER_MEAD",
+      "source_ids": [
+        "S056",
+        "S063"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "MF_DFO_LOCAL",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 17,
+      "edge_id": "LEARN_NSGA_MULTI",
+      "last_verified": "2026-07-15",
+      "rationale": "NSGA-IIは多目的進化手法の一つである。",
+      "relation": "special_case_of",
+      "source_id": "M_NSGA_II",
+      "source_ids": [
+        "S068"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "MF_MULTI_OBJECTIVE",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 18,
+      "edge_id": "LEARN_DFO_NM",
+      "last_verified": "2026-07-15",
+      "rationale": "DFO familyはsimplexやpattern searchを含む。",
+      "relation": "generalizes",
+      "source_id": "MF_DFO_LOCAL",
+      "source_ids": [
+        "S056"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_NELDER_MEAD",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 19,
+      "edge_id": "LEARN_MIP_BNB",
+      "last_verified": "2026-07-15",
+      "rationale": "離散厳密解法はBranch-and-Boundを基本骨格に含む。",
+      "relation": "generalizes",
+      "source_id": "MF_DISCRETE_EXACT",
+      "source_ids": [
+        "S079"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_BRANCH_BOUND",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 20,
+      "edge_id": "LEARN_MULTI_WEIGHTED",
+      "last_verified": "2026-07-15",
+      "rationale": "重み付き和は多目的problemのscalarizationである。",
+      "relation": "generalizes",
+      "source_id": "MF_MULTI_OBJECTIVE",
+      "source_ids": [
+        "S055",
+        "S068"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_WEIGHTED_SUM",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 21,
+      "edge_id": "LEARN_LM_LS",
+      "last_verified": "2026-07-15",
+      "rationale": "残差二乗和の非線形最小二乗へ適用する。",
+      "relation": "applied_in",
+      "source_id": "M_LEVENBERG_MARQUARDT",
+      "source_ids": [
+        "S003"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "PA033",
+      "target_type": "problem"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 22,
+      "edge_id": "LEARN_NSGA_PA038",
+      "last_verified": "2026-07-15",
+      "rationale": "多目的trade-off集合を求めるproblemへ適用する。",
+      "relation": "applied_in",
+      "source_id": "M_NSGA_II",
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "PA038",
+      "target_type": "problem"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 23,
+      "edge_id": "LEARN_CP_ROUTING",
+      "last_verified": "2026-07-15",
+      "rationale": "論理制約を含むroutingへ適用できる。",
+      "relation": "applied_in",
+      "source_id": "M_CP_SAT",
+      "source_ids": [
+        "S022",
+        "S023"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "PA031",
+      "target_type": "problem"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 24,
+      "edge_id": "LEARN_DFO_MISCONCEPTION",
+      "last_verified": "2026-07-15",
+      "rationale": "gradient-freeは評価情報を使わないという意味ではない。",
+      "relation": "common_misconception_for",
+      "source_id": "MF_DFO_LOCAL",
+      "source_ids": [
+        "S056"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "F_DERIVATIVE_ACCESS",
+      "target_type": "feature"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 25,
+      "edge_id": "LEARN_CP_MISCONCEPTION",
+      "last_verified": "2026-07-15",
+      "rationale": "CP-SATを全MIP solverの一般名として扱わない。",
+      "relation": "common_misconception_for",
+      "source_id": "M_CP_SAT",
+      "source_ids": [
+        "S022",
+        "S079"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "MF_DISCRETE_EXACT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 26,
+      "edge_id": "LEARN_GD_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "細長い谷のzig-zagをTraceで確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_GRADIENT_DESCENT",
+      "source_ids": [
+        "S001"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_GD_QUADRATIC",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 27,
+      "edge_id": "LEARN_MOMENTUM_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "慣性項の影響をTraceで確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_MOMENTUM_SGD",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 28,
+      "edge_id": "LEARN_ADAM_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "適応step更新をTraceで確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_ADAM",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_ADAM_QUADRATIC",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 29,
+      "edge_id": "LEARN_NM_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "reflection等をsimplexの動きで確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_NELDER_MEAD",
+      "source_ids": [
+        "S063"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_NM_QUADRATIC",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 30,
+      "edge_id": "LEARN_GD_COMPARE",
+      "last_verified": "2026-07-15",
+      "rationale": "同じ初期点・budgetでMomentumとAdamに比べる。",
+      "relation": "see_comparison",
+      "source_id": "M_GRADIENT_DESCENT",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "COMPARE_GRADIENT_FAMILY",
+      "target_type": "comparison"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 31,
+      "edge_id": "LEARN_MOMENTUM_COMPARE",
+      "last_verified": "2026-07-15",
+      "rationale": "慣性の効果を他の一次法に比べる。",
+      "relation": "see_comparison",
+      "source_id": "M_MOMENTUM_SGD",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "COMPARE_GRADIENT_FAMILY",
+      "target_type": "comparison"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 32,
+      "edge_id": "LEARN_ADAM_COMPARE",
+      "last_verified": "2026-07-15",
+      "rationale": "適応stepを固定stepとMomentumに比べる。",
+      "relation": "see_comparison",
+      "source_id": "M_ADAM",
+      "source_ids": [
+        "S070"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "COMPARE_GRADIENT_FAMILY",
+      "target_type": "comparison"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 33,
+      "edge_id": "LEARN_LM_CASE",
+      "last_verified": "2026-07-15",
+      "rationale": "非線形最小二乗のGallery caseで条件を確認する。",
+      "relation": "see_case",
+      "source_id": "M_LEVENBERG_MARQUARDT",
+      "source_ids": [
+        "S003"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "EC013",
+      "target_type": "case"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 34,
+      "edge_id": "LEARN_NSGA_CASE",
+      "last_verified": "2026-07-15",
+      "rationale": "多目的Gallery caseでPareto要求を確認する。",
+      "relation": "see_case",
+      "source_id": "M_NSGA_II",
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "EC017",
+      "target_type": "case"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 35,
+      "edge_id": "LEARN_CP_CASE",
+      "last_verified": "2026-07-15",
+      "rationale": "routing Gallery caseで論理制約を確認する。",
+      "relation": "see_case",
+      "source_id": "M_CP_SAT",
+      "source_ids": [
+        "S022",
+        "S023"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "EC019",
+      "target_type": "case"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 36,
+      "edge_id": "LEARN_LM_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "SciPy least_squares LMへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_LEVENBERG_MARQUARDT",
+      "source_ids": [
+        "S003"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_SCIPY_LEAST_SQUARES_LM",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 37,
+      "edge_id": "LEARN_CP_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "OR-Tools CP-SATへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_CP_SAT",
+      "source_ids": [
+        "S022",
+        "S088"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_ORTOOLS_CPSAT",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 38,
+      "edge_id": "LEARN_BO_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "GP-based BOを構成するBoTorchへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_BAYESIAN_OPT_GP",
+      "source_ids": [
+        "S035"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_BOTORCH",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 39,
+      "edge_id": "LEARN_CMA_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "CMA-ESのPython実装へ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_CMA_ES",
+      "source_ids": [
+        "S032",
+        "S058"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_PYCMA",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 40,
+      "edge_id": "LEARN_SLSQP_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "SciPy SLSQPへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_SLSQP",
+      "source_ids": [
+        "S001",
+        "S064"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_SCIPY_SLSQP",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "beginner",
+      "display_order": 41,
+      "edge_id": "LEARN_LP_IMPL",
+      "last_verified": "2026-07-15",
+      "rationale": "LP・QP・錐modelを表現するCVXPYへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "MF_LP_QP_CONIC",
+      "source_ids": [
+        "S010",
+        "S011"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_CVXPY",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 42,
+      "edge_id": "LEARN_MAP_GD",
+      "last_verified": "2026-07-15",
+      "rationale": "Method mechanism Viewで必要情報を横断する。",
+      "relation": "see_visualization",
+      "source_id": "M_GRADIENT_DESCENT",
+      "source_ids": [
+        "S001"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "VIEW_METHOD_MECHANISM",
+      "target_type": "view_preset"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 43,
+      "edge_id": "LEARN_SLSQP_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "feasible region、violation、active constraintとfailure contrastを確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_SLSQP",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S064"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_CONSTRAINED_DISK",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "beginner",
+      "display_order": 44,
+      "edge_id": "LEARN_NSGA_VIS",
+      "last_verified": "2026-07-15",
+      "rationale": "dominated点、Pareto front、preference選択を確認する。",
+      "relation": "see_visualization",
+      "source_id": "M_NSGA_II",
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "target_type": "scenario"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 45,
+      "edge_id": "LEARN_SLSQP_CASE",
+      "last_verified": "2026-07-15",
+      "rationale": "非線形constraintを持つGallery caseで適用条件を確認する。",
+      "relation": "see_case",
+      "source_id": "M_SLSQP",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S064"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "EC028",
+      "target_type": "case"
+    }
+  ],
+  "entities": [
+    {
+      "canonical_url": "/gallery/EC013",
+      "entity_id": "EC013",
+      "entity_type": "case",
+      "external_url": null,
+      "label_en": "非線形最小二乗問題",
+      "label_ja": "非線形最小二乗問題"
+    },
+    {
+      "canonical_url": "/gallery/EC017",
+      "entity_id": "EC017",
+      "entity_type": "case",
+      "external_url": null,
+      "label_en": "多目的最適化",
+      "label_ja": "多目的最適化"
+    },
+    {
+      "canonical_url": "/gallery/EC019",
+      "entity_id": "EC019",
+      "entity_type": "case",
+      "external_url": null,
+      "label_en": "routing",
+      "label_ja": "routing"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "EC028",
+      "entity_type": "case",
+      "external_url": null,
+      "label_en": "求根問題を最適化に見せた例",
+      "label_ja": "求根問題を最適化に見せた例"
+    },
+    {
+      "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
+      "entity_id": "COMPARE_GRADIENT_FAMILY",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label_en": "First-order methods in an elongated valley",
+      "label_ja": "細長い谷で一次法を比較"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "F_CONVEXITY",
+      "entity_type": "feature",
+      "external_url": null,
+      "label_en": "Convexity",
+      "label_ja": "凸性"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "F_DERIVATIVE_ACCESS",
+      "entity_type": "feature",
+      "external_url": null,
+      "label_en": "Derivative access",
+      "label_ja": "微分情報"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "F_EVALUATION_COST",
+      "entity_type": "feature",
+      "external_url": null,
+      "label_en": "Evaluation cost",
+      "label_ja": "評価費"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_BOTORCH",
+      "entity_type": "implementation",
+      "external_url": "https://botorch.org/",
+      "label_en": "BoTorch Bayesian optimization",
+      "label_ja": "BoTorch"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_CVXPY",
+      "entity_type": "implementation",
+      "external_url": "https://www.cvxpy.org/",
+      "label_en": "Disciplined convex programming modeler",
+      "label_ja": "CVXPY"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_ORTOOLS_CPSAT",
+      "entity_type": "implementation",
+      "external_url": "https://developers.google.com/optimization/cp/cp_solver",
+      "label_en": "CP-SAT",
+      "label_ja": "Google OR-Tools"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_PYCMA",
+      "entity_type": "implementation",
+      "external_url": "https://cma-es.github.io/apidocs-pycma/",
+      "label_en": "CMA-ES",
+      "label_ja": "pycma"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_SCIPY_LEAST_SQUARES_LM",
+      "entity_type": "implementation",
+      "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html",
+      "label_en": "Levenberg-Marquardt",
+      "label_ja": "SciPy"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_SCIPY_SLSQP",
+      "entity_type": "implementation",
+      "external_url": "https://docs.scipy.org/doc/scipy/reference/optimize.html",
+      "label_en": "SLSQP",
+      "label_ja": "SciPy"
+    },
+    {
+      "canonical_url": "/methods/MF_DFO_LOCAL",
+      "entity_id": "MF_DFO_LOCAL",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Local derivative-free optimization",
+      "label_ja": "局所微分不要最適化"
+    },
+    {
+      "canonical_url": "/methods/MF_DISCRETE_EXACT",
+      "entity_id": "MF_DISCRETE_EXACT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Exact discrete and mixed-integer optimization",
+      "label_ja": "離散・混合整数の厳密探索"
+    },
+    {
+      "canonical_url": "/methods/MF_LP_QP_CONIC",
+      "entity_id": "MF_LP_QP_CONIC",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Linear, quadratic, and conic optimization",
+      "label_ja": "線形・二次・錐最適化"
+    },
+    {
+      "canonical_url": "/methods/MF_MULTI_OBJECTIVE",
+      "entity_id": "MF_MULTI_OBJECTIVE",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Multi-objective optimization",
+      "label_ja": "多目的最適化"
+    },
+    {
+      "canonical_url": "/methods/M_ADAM",
+      "entity_id": "M_ADAM",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Adaptive moment estimation",
+      "label_ja": "Adam"
+    },
+    {
+      "canonical_url": "/methods/M_ADMM",
+      "entity_id": "M_ADMM",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Alternating direction method of multipliers",
+      "label_ja": "交互方向乗数法"
+    },
+    {
+      "canonical_url": "/methods/M_BAYESIAN_OPT_GP",
+      "entity_id": "M_BAYESIAN_OPT_GP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Gaussian-process Bayesian optimization",
+      "label_ja": "Gaussian process Bayesian optimization"
+    },
+    {
+      "canonical_url": "/methods/M_BFGS",
+      "entity_id": "M_BFGS",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "BFGS",
+      "label_ja": "BFGS法"
+    },
+    {
+      "canonical_url": "/methods/M_BRANCH_BOUND",
+      "entity_id": "M_BRANCH_BOUND",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Branch and bound",
+      "label_ja": "branch-and-bound"
+    },
+    {
+      "canonical_url": "/methods/M_CMA_ES",
+      "entity_id": "M_CMA_ES",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Covariance matrix adaptation evolution strategy",
+      "label_ja": "CMA-ES"
+    },
+    {
+      "canonical_url": "/methods/M_CP_SAT",
+      "entity_id": "M_CP_SAT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Constraint programming with SAT techniques",
+      "label_ja": "CP-SAT"
+    },
+    {
+      "canonical_url": "/methods/M_DIFFERENTIAL_EVOLUTION",
+      "entity_id": "M_DIFFERENTIAL_EVOLUTION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Differential evolution",
+      "label_ja": "差分進化"
+    },
+    {
+      "canonical_url": "/methods/M_GAUSS_NEWTON",
+      "entity_id": "M_GAUSS_NEWTON",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Gauss-Newton",
+      "label_ja": "Gauss–Newton法"
+    },
+    {
+      "canonical_url": "/methods/M_GRADIENT_DESCENT",
+      "entity_id": "M_GRADIENT_DESCENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Gradient descent",
+      "label_ja": "最急降下法"
+    },
+    {
+      "canonical_url": "/methods/M_INTERIOR_POINT_NLP",
+      "entity_id": "M_INTERIOR_POINT_NLP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Interior-point NLP",
+      "label_ja": "NLP内点法"
+    },
+    {
+      "canonical_url": "/methods/M_LBFGS",
+      "entity_id": "M_LBFGS",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Limited-memory BFGS",
+      "label_ja": "L-BFGS法"
+    },
+    {
+      "canonical_url": "/methods/M_LEVENBERG_MARQUARDT",
+      "entity_id": "M_LEVENBERG_MARQUARDT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Levenberg-Marquardt",
+      "label_ja": "Levenberg–Marquardt法"
+    },
+    {
+      "canonical_url": "/methods/M_MOMENTUM_SGD",
+      "entity_id": "M_MOMENTUM_SGD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "SGD with momentum",
+      "label_ja": "momentum SGD"
+    },
+    {
+      "canonical_url": "/methods/M_NELDER_MEAD",
+      "entity_id": "M_NELDER_MEAD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Nelder-Mead simplex",
+      "label_ja": "Nelder–Mead単体法"
+    },
+    {
+      "canonical_url": "/methods/M_NSGA_II",
+      "entity_id": "M_NSGA_II",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Non-dominated sorting genetic algorithm II",
+      "label_ja": "NSGA-II"
+    },
+    {
+      "canonical_url": "/methods/M_PRIMAL_DUAL_CONIC",
+      "entity_id": "M_PRIMAL_DUAL_CONIC",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Primal-dual conic interior-point",
+      "label_ja": "primal-dual錐内点法"
+    },
+    {
+      "canonical_url": "/methods/M_PROJECTED_GRADIENT",
+      "entity_id": "M_PROJECTED_GRADIENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Projected gradient",
+      "label_ja": "射影勾配法"
+    },
+    {
+      "canonical_url": "/methods/M_PROX_GRADIENT",
+      "entity_id": "M_PROX_GRADIENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Proximal gradient",
+      "label_ja": "近接勾配法"
+    },
+    {
+      "canonical_url": "/methods/M_RANDOM_SEARCH",
+      "entity_id": "M_RANDOM_SEARCH",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Random search",
+      "label_ja": "random search"
+    },
+    {
+      "canonical_url": "/methods/M_SGD",
+      "entity_id": "M_SGD",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Stochastic gradient descent",
+      "label_ja": "確率的勾配降下法"
+    },
+    {
+      "canonical_url": "/methods/M_SIMPLEX",
+      "entity_id": "M_SIMPLEX",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Primal simplex",
+      "label_ja": "primal simplex法"
+    },
+    {
+      "canonical_url": "/methods/M_SLSQP",
+      "entity_id": "M_SLSQP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Sequential least-squares programming",
+      "label_ja": "SLSQP"
+    },
+    {
+      "canonical_url": "/methods/M_SQP",
+      "entity_id": "M_SQP",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Sequential quadratic programming",
+      "label_ja": "逐次二次計画法"
+    },
+    {
+      "canonical_url": "/methods/M_WEIGHTED_SUM",
+      "entity_id": "M_WEIGHTED_SUM",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Weighted-sum scalarization",
+      "label_ja": "重み付き和scalarization"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "PA031",
+      "entity_type": "problem",
+      "external_url": null,
+      "label_en": "Vehicle routing",
+      "label_ja": "配送routing"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "PA033",
+      "entity_type": "problem",
+      "external_url": null,
+      "label_en": "Nonlinear least squares",
+      "label_ja": "非線形最小二乗"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "PA038",
+      "entity_type": "problem",
+      "external_url": null,
+      "label_en": "Multiobjective continuous",
+      "label_ja": "多目的連続最適化"
+    },
+    {
+      "canonical_url": "/traces/adam-quadratic",
+      "entity_id": "SCENARIO_ADAM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Learn Adam on an ill-conditioned quadratic",
+      "label_ja": "Adamの適応的更新を学ぶ"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Read a Pareto front instead of one best value",
+      "label_ja": "単一bestではなくPareto frontを読む"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "SCENARIO_CONSTRAINED_DISK",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Compare a feasible path with an unconstrained failure",
+      "label_ja": "実行可能領域と制約を無視した失敗を比べる"
+    },
+    {
+      "canonical_url": "/traces/gradient_descent-quadratic",
+      "entity_id": "SCENARIO_GD_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Learn gradient descent on an ill-conditioned quadratic",
+      "label_ja": "細長い二次関数で勾配降下を学ぶ"
+    },
+    {
+      "canonical_url": "/traces/momentum-quadratic",
+      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Learn momentum on an ill-conditioned quadratic",
+      "label_ja": "慣性付き勾配法を学ぶ"
+    },
+    {
+      "canonical_url": "/traces/dummy-educational",
+      "entity_id": "SCENARIO_NM_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label_en": "Learn simplex operations on a quadratic",
+      "label_ja": "二次関数で単体操作を学ぶ"
+    },
+    {
+      "canonical_url": "/map",
+      "entity_id": "VIEW_METHOD_MECHANISM",
+      "entity_type": "view_preset",
+      "external_url": null,
+      "label_en": "Method mechanism View",
+      "label_ja": "Method mechanism View"
+    }
+  ]
+}

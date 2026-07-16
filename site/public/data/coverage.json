@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "expectations": [
     {
       "applicability": "expected",
@@ -212,7 +212,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-07-15T00:00:00Z",
+  "generated_at": "2026-07-16T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -2302,14 +2302,15 @@
           "target_ids": []
         },
         "content": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "gauss-newton",
             "least-squares",
             "trust-krylov",
-            "trust-region-newton-cg"
+            "trust-region-newton-cg",
+            "trust-region-reflective"
           ]
         },
         "gallery": {
@@ -2344,7 +2345,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 23,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2354,6 +2355,7 @@
             "/methods/M_TRUST_EXACT",
             "/methods/M_TRUST_KRYLOV",
             "/methods/M_TRUST_NCG",
+            "/methods/M_TRUST_REGION_REFLECTIVE",
             "EC013",
             "EC026",
             "I_CERES",
@@ -2367,10 +2369,12 @@
             "S003",
             "S041",
             "S056",
+            "S096",
             "gauss-newton",
             "least-squares",
             "trust-krylov",
-            "trust-region-newton-cg"
+            "trust-region-newton-cg",
+            "trust-region-reflective"
           ]
         },
         "recommendation": {
@@ -2388,14 +2392,15 @@
           ]
         },
         "source": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S002",
             "S003",
             "S041",
-            "S056"
+            "S056",
+            "S096"
           ]
         },
         "visualization": {
@@ -5326,13 +5331,12 @@
           ]
         },
         "implementation": {
-          "count": 3,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "I_CERES",
-            "I_JAXOPT",
-            "I_SCIPY_LEAST_SQUARES_TRF"
+            "I_JAXOPT"
           ]
         },
         "journey": {
@@ -5344,7 +5348,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5352,7 +5356,6 @@
             "EC013",
             "I_CERES",
             "I_JAXOPT",
-            "I_SCIPY_LEAST_SQUARES_TRF",
             "S002",
             "S003",
             "S041",
@@ -9842,12 +9845,11 @@
           ]
         },
         "implementation": {
-          "count": 3,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "I_CERES",
-            "I_SCIPY_LEAST_SQUARES_TRF",
             "I_SCIPY_TRUST_CONSTR"
           ]
         },
@@ -9860,14 +9862,13 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_TRUST_KRYLOV",
             "EC026",
             "I_CERES",
-            "I_SCIPY_LEAST_SQUARES_TRF",
             "I_SCIPY_TRUST_CONSTR",
             "S002",
             "S003",
@@ -9995,6 +9996,90 @@
       },
       "label": "Trust-region Newton-CG",
       "subject_id": "M_TRUST_NCG",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "trust-region-reflective"
+          ]
+        },
+        "gallery": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "implementation": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_SCIPY_LEAST_SQUARES_TRF"
+          ]
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_TRUST_REGION_REFLECTIVE",
+            "I_SCIPY_LEAST_SQUARES_TRF",
+            "S003",
+            "S096",
+            "trust-region-reflective"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S003",
+            "S096"
+          ]
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Trust Region Reflective",
+      "subject_id": "M_TRUST_REGION_REFLECTIVE",
       "subject_type": "method"
     },
     {
@@ -15663,7 +15748,7 @@
     },
     "subject_counts": {
       "feature_family": 10,
-      "method": 98,
+      "method": 99,
       "problem": 56
     }
   }

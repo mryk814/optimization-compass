@@ -58,6 +58,7 @@ DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
 )
 DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
 DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
+DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -264,6 +265,8 @@ def build_staged_release(
             DEFAULT_SEMANTIC_VIEW_MIGRATION,
             DEFAULT_VERSIONED_CLAIMS_MIGRATION,
             DEFAULT_FAILURE_MODE_MIGRATION,
+            DEFAULT_LEARNING_GRAPH_MIGRATION,
+            DEFAULT_TRF_DEFAULTS_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1217,6 +1220,7 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -1273,7 +1277,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published constrained-continuous and multi-objective learning slices.",
+            "Published canonical Trust Region Reflective defaults and guidance.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1287,14 +1291,14 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Constrained and multi-objective concepts lacked canonical executable visuals.",
+            "A widely used SciPy default was represented only through broad adjacent methods.",
             (
-                "Added renderer-family contracts for feasible regions and Pareto fronts, "
-                "with canonical scenarios, references, and failure contrast."
+                "Added a canonical Trust Region Reflective method, primary source, "
+                "implementation mapping, and API-default metadata."
             ),
             (
-                "Connect canonical problems to artifacts, routes, content, Gallery, "
-                "Map, and sources."
+                "Separate library default behavior from method recommendation priority, "
+                "and connect the dedicated guide to generated search and retrieval."
             ),
             target_version,
             release_date,

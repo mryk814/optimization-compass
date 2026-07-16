@@ -16,7 +16,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 25,
         "unit": "objective_evaluations"
@@ -78,7 +78,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 300,
         "unit": "objective_evaluations"
@@ -139,7 +139,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -201,7 +201,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -264,7 +264,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 200,
         "unit": "objective_evaluations"
@@ -326,7 +326,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-16",
       "oracle_budget": {
         "limit": 40,
         "unit": "objective_evaluations"
@@ -374,7 +374,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

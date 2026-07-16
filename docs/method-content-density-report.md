@@ -1,7 +1,7 @@
 # Method content density report
 
-- Published method guides: `66`
-- Meeting the Level 2 floor: `66`
+- Published method guides: `67`
+- Meeting the Level 2 floor: `67`
 - Below the floor: `0`
 
 | Content | Method | Summary | Body | TOC | Python | Result |
@@ -46,7 +46,7 @@
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 2643 | 7 | 1 | pass |
 | `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 77 | 2576 | 7 | 1 | pass |
 | `lbfgsb` | `M_LBFGSB` | 49 | 1695 | 5 | 1 | pass |
-| `least-squares` | `M_LEVENBERG_MARQUARDT` | 79 | 2850 | 8 | 1 | pass |
+| `least-squares` | `M_LEVENBERG_MARQUARDT` | 79 | 2885 | 8 | 1 | pass |
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 83 | 3111 | 12 | 1 | pass |
 | `mads` | `M_MADS` | 65 | 2400 | 6 | 1 | pass |
 | `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 2340 | 7 | 1 | pass |
@@ -72,6 +72,7 @@
 | `tpe` | `M_TPE` | 69 | 2652 | 7 | 1 | pass |
 | `trust-krylov` | `M_TRUST_KRYLOV` | 77 | 2376 | 7 | 1 | pass |
 | `trust-region-newton-cg` | `M_TRUST_NCG` | 49 | 1973 | 5 | 1 | pass |
+| `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 77 | 4338 | 11 | 1 | pass |
 
 ## Floor
 
