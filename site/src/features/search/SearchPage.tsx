@@ -31,7 +31,9 @@ export function SearchPage() {
   const [params, setParams] = useSearchParams();
   const [index, setIndex] = useState<SearchIndex>();
   const [error, setError] = useState<Error>();
+  const [draftQuery, setDraftQuery] = useState(() => params.get("q") ?? "");
   const inputRef = useRef<HTMLInputElement>(null);
+  const isComposingRef = useRef(false);
   const query = params.get("q") ?? "";
   const intentParam = params.get("intent");
   const intent = SEARCH_INTENTS.find((value) => value === intentParam);
@@ -41,6 +43,9 @@ export function SearchPage() {
   const directEntity = params.get("entity");
 
   useEffect(() => { void loadSearchIndex().then(setIndex, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, []);
+  useEffect(() => {
+    if (!isComposingRef.current) setDraftQuery(query);
+  }, [query]);
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if ((event.key === "/" && !isTypingTarget(event.target)) || (event.key.toLocaleLowerCase() === "k" && (event.ctrlKey || event.metaKey))) {
@@ -61,6 +66,10 @@ export function SearchPage() {
   const updateParams = (mutate: (next: URLSearchParams) => void) => {
     const next = new URLSearchParams(params); mutate(next); setParams(next, { replace: true });
   };
+  const commitQuery = (value: string) => updateParams((next) => {
+    value ? next.set("q", value) : next.delete("q");
+    next.delete("entity");
+  });
   const toggleType = (type: SearchEntityType) => updateParams((next) => {
     const types = new Set(next.getAll("type")); types.has(type) ? types.delete(type) : types.add(type);
     next.delete("type"); [...types].sort().forEach((value) => next.append("type", value)); next.delete("entity");
@@ -75,8 +84,28 @@ export function SearchPage() {
       <div className="global-search-bar">
         <label htmlFor="global-search-input">検索</label>
         <div className="global-search-input-wrap">
-          <input id="global-search-input" ref={inputRef} type="search" aria-describedby="search-shortcut search-status" autoComplete="off" onChange={(event) => updateParams((next) => { event.target.value ? next.set("q", event.target.value) : next.delete("q"); next.delete("entity"); })} placeholder="例: BO / 配送順を決めたい / gradient-free" value={query} />
-          {query && <button aria-label="検索語を消去" onClick={() => updateParams((next) => { next.delete("q"); next.delete("entity"); })} type="button">×</button>}
+          <input
+            id="global-search-input"
+            ref={inputRef}
+            type="search"
+            aria-describedby="search-shortcut search-status"
+            autoComplete="off"
+            onChange={(event) => {
+              const value = event.target.value;
+              setDraftQuery(value);
+              if (!isComposingRef.current) commitQuery(value);
+            }}
+            onCompositionEnd={(event) => {
+              isComposingRef.current = false;
+              const value = event.currentTarget.value;
+              setDraftQuery(value);
+              commitQuery(value);
+            }}
+            onCompositionStart={() => { isComposingRef.current = true; }}
+            placeholder="例: BO / 配送順を決めたい / gradient-free"
+            value={draftQuery}
+          />
+          {draftQuery && <button aria-label="検索語を消去" onClick={() => { setDraftQuery(""); commitQuery(""); }} type="button">×</button>}
         </div>
         <span id="search-shortcut" className="search-shortcut" aria-hidden="true">/ または Ctrl K</span>
       </div>
