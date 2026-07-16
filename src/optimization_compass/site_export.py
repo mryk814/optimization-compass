@@ -379,7 +379,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         scenario_index=scenario_index.model_dump(mode="json"),
         source_index=source_index.model_dump(mode="json"),
     )
-    _write_json(output_dir / "search-index.json", search_index)
+    _write_json(output_dir / "search-index.json", search_index, compact=True)
     _write_json(output_dir / "retrieval-documents.json", retrieval_documents)
     _write_json(
         output_dir / "search-benchmark.json",
@@ -1999,10 +1999,13 @@ def _stable_union(*values: list[str]) -> list[str]:
     return list(dict.fromkeys(item for value in values for item in value))
 
 
-def _write_json(path: Path, model: Any) -> None:
+def _write_json(path: Path, model: Any, *, compact: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     value = model if isinstance(model, dict) else model.model_dump(mode="json")
-    payload = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
+    if compact:
+        payload = json.dumps(value, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    else:
+        payload = json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True)
     path.write_text(payload + "\n", encoding="utf-8", newline="\n")
 
 
