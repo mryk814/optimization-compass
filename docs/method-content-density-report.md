@@ -1,7 +1,7 @@
 # Method content density report
 
-- Published method guides: `42`
-- Meeting the Level 2 floor: `42`
+- Published method guides: `50`
+- Meeting the Level 2 floor: `50`
 - Below the floor: `0`
 
 | Content | Method | Summary | Body | TOC | Python | Result |
@@ -26,6 +26,14 @@
 | `dual-annealing` | `M_DUAL_ANNEALING` | 72 | 1997 | 7 | 1 | pass |
 | `dual-simplex` | `M_DUAL_SIMPLEX` | 69 | 1983 | 6 | 1 | pass |
 | `dynamic-programming` | `M_DYNAMIC_PROGRAMMING` | 58 | 1896 | 6 | 1 | pass |
+| `family.composite-convex` | `MF_COMPOSITE_CONVEX` | 76 | 2948 | 7 | 1 | pass |
+| `family.constrained-nlp` | `MF_CONSTRAINED_NLP` | 56 | 2955 | 7 | 1 | pass |
+| `family.discrete-structure` | `MF_DISCRETE_EXACT` | 68 | 3318 | 7 | 1 | pass |
+| `family.expensive-black-box` | `MF_SURROGATE_HPO` | 103 | 3134 | 7 | 1 | pass |
+| `family.global-search` | `MF_GLOBAL_SEARCH` | 73 | 3170 | 7 | 1 | pass |
+| `family.local-dfo` | `MF_DFO_LOCAL` | 75 | 2636 | 7 | 1 | pass |
+| `family.smooth-local` | `MF_SMOOTH_LOCAL` | 64 | 2764 | 7 | 1 | pass |
+| `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 68 | 3376 | 7 | 1 | pass |
 | `fista` | `M_FISTA` | 49 | 1955 | 5 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 83 | 2344 | 6 | 1 | pass |
 | `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 77 | 2576 | 7 | 1 | pass |

@@ -3,10 +3,30 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-MINIMUM_PUBLISHED_METHOD_GUIDES = 42
+MINIMUM_PUBLISHED_METHOD_GUIDES = 50
 MINIMUM_SUMMARY_CHARACTERS = 35
 MINIMUM_BODY_CHARACTERS = 1_200
 MINIMUM_TOC_ENTRIES = 4
+
+BEGINNER_FAMILY_GUIDE_IDS = {
+    "family.composite-convex",
+    "family.constrained-nlp",
+    "family.discrete-structure",
+    "family.expensive-black-box",
+    "family.global-search",
+    "family.local-dfo",
+    "family.smooth-local",
+    "family.stochastic-ml",
+}
+
+REQUIRED_BEGINNER_SECTIONS = (
+    "## 30秒でつかむ",
+    "## まず確認すること",
+    "## 条件付きの選び分け",
+    "## うまくいったサインと切替サイン",
+    "## コラム:",
+    "## 次に読む",
+)
 
 
 def test_all_published_method_guides_meet_the_explanation_floor() -> None:
@@ -34,3 +54,20 @@ def test_all_published_method_guides_meet_the_explanation_floor() -> None:
         assert python_blocks, f"{page.content_id} must include a copyable Python example"
         for index, block in enumerate(python_blocks, start=1):
             compile(block, f"{page.content_id}:python:{index}", "exec")
+
+
+def test_family_choice_guides_use_the_beginner_first_contract() -> None:
+    root = Path(__file__).resolve().parents[1]
+    pages = {page.content_id: page for page in load_content(root / "content")}
+
+    assert pages.keys() >= BEGINNER_FAMILY_GUIDE_IDS
+
+    for content_id in sorted(BEGINNER_FAMILY_GUIDE_IDS):
+        page = pages[content_id]
+        assert page.status == "published"
+        assert page.kind == "method"
+        assert page.method_id.startswith("MF_")
+        for section in REQUIRED_BEGINNER_SECTIONS:
+            assert section in page.body, f"{content_id} is missing {section}"
+        assert "切替" in page.body
+        assert "| 役割 | 手法 |" in page.body

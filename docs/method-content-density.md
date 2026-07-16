@@ -6,7 +6,7 @@ Optimization Compass separates structured method facts from human-facing educati
 
 - `methods` and related canonical tables own stable IDs, short summaries, assumptions, capabilities, implementations, sources, and relations.
 - `content/methods/*.md` owns explanatory prose, mathematics, examples, interpretation, and teaching order.
-- generated `content.json`, `entity-links.json`, and Coverage assets are exporter outputs and must not be edited by hand.
+- generated `content.json`, `entity-links.json`, search, and Coverage assets are exporter outputs and must not be edited by hand.
 
 ## Content levels
 
@@ -52,6 +52,44 @@ A published Markdown guide provides:
 
 Level 4 is selective. Level 2 is the target for representative methods that users are likely to encounter directly.
 
+## Beginner-first reading order
+
+The first reader is assumed to be learning the method rather than implementing a solver from scratch. A guide may contain advanced material, but the main path should answer these questions before entering detailed theory:
+
+1. What is the method trying to accomplish?
+2. What information does it observe?
+3. What state does it move or update?
+4. What counts as progress?
+5. Under which conditions should it be considered or avoided?
+6. Which observable indicates that another method should be tried?
+
+Mathematics is retained, but the prose explains what each expression represents before relying on it. Proof assumptions, implementation differences, numerical linear algebra, and historical details may appear under a clearly named `コラム` or deeper section.
+
+## Family choice guides
+
+A family guide uses a canonical `MF_*` row and groups methods with overlapping prerequisites. It does not create a context-free ranking.
+
+Families may overlap from a learner's point of view. A method can appear in more than one guide when the surrounding decision question is different; the canonical method identity remains single and the guide explains why the method is being compared in that context.
+
+Each family guide provides:
+
+- `30秒でつかむ`: the family's motivation or “feeling”
+- `まず確認すること`: variable, oracle, constraint, cost, and guarantee questions
+- `条件付きの選び分け`: method roles and the conditions that change the preferred candidate
+- `うまくいったサインと切替サイン`: method-specific observables
+- a small comparison or problem-brief contract
+- an advanced `コラム`
+- related family and method routes
+
+Priority is expressed as a role, not a universal score:
+
+- a simple default starting point when its assumptions hold
+- preferred under a stated condition
+- fallback after a stated failure or unavailable oracle
+- contrast-only for learning
+- avoid when assumptions conflict
+- switch when diagnostics show a specific failure mode
+
 ## Initial expanded tranche
 
 Issue #87 raises coverage across:
@@ -78,11 +116,26 @@ Issue #92 adds guides for methods that already appear frequently in implementati
 
 This raises the published method-guide baseline to 42. The remaining registered methods continue to retain structured summaries, predicates, implementations, relations, and sources even where a full guide has not yet been authored.
 
+## Beginner family tranche
+
+Issue #97 adds beginner-first choice guides for:
+
+- smooth local optimization
+- constrained nonlinear programming
+- local derivative-free optimization
+- global and multimodal search
+- expensive black-box optimization and HPO
+- composite and nonsmooth convex optimization
+- discrete and combinatorial optimization
+- stochastic-gradient and machine-learning optimization
+
+This raises the published method-guide baseline to 50 and provides a reusable pattern for future family and method tranches.
+
 ## Audit report
 
 `scripts/method_content_density_report.py` generates [`method-content-density-report.md`](method-content-density-report.md) from the authored Markdown tree. The report records summary length, body length, table-of-contents entries, Python blocks, and syntax status for every published method guide.
 
-After #92, all 42 published method guides meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
+After the beginner family tranche, all 50 published method guides must meet the Level 2 floor. This does not imply that all 98 registered methods have full guides; it makes the remaining content gap measurable and prevents already-published guides from becoming visibly empty again.
 
 ## Review checklist
 
@@ -94,4 +147,5 @@ After #92, all 42 published method guides meet the Level 2 floor. This does not 
 - Unknown facts remain explicit.
 - Examples are syntactically valid and clearly scoped as educational or executable.
 - Comparison claims state budget, initialization, seed, tolerance, and implementation context.
+- Family guides describe conditional roles rather than a universal ranking.
 - Generated site data is regenerated from the latest validated database and content tree.

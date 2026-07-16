@@ -1950,6 +1950,559 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "family.composite-convex",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "非滑らか・複合凸最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S061",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S067",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_COMPOSITE_CONVEX",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "coordinate-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "fista",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "proximal-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "subgradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "滑らかな損失とL1正則化・制約・分離構造を組み合わせるとき、近接法、FISTA、Coordinate Descent、ADMMなどを選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.constrained-nlp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約付き非線形最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_CONSTRAINED_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "constrained-continuous",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.discrete-structure",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "離散・組合せ最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-cut",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dijkstra-astar",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        }
+      ],
+      "summary": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.expensive-black-box",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "高価なblack-box・HPOの選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S036",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S037",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_SURROGATE_HPO",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        }
+      ],
+      "summary": "一回の実験やsimulationが高価なとき、Bayesian Optimization、TPE、multi-fidelity、random・evolutionary baselineを選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.global-search",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "大域探索・多峰性問題の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S006",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S007",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S008",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S009",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S072",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S073",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S074",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_GLOBAL_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "differential-evolution",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-global",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dual-annealing",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "genetic-algorithm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "particle-swarm",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shgo",
+          "target_type": "content"
+        }
+      ],
+      "summary": "bounds内に複数の谷や良い候補があるとき、multi-start、領域分割、annealing、population探索を選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.local-dfo",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "局所Derivative-free最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_DFO_LOCAL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "cobyla",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "pattern-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "powell",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配を使えない低〜中次元の連続問題で、Nelder–Mead、Powell、Pattern Search、COBYLA、MADSを選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.smooth-local",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "滑らかな局所最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_SMOOTH_LOCAL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "勾配や曲率を使える連続問題で、Gradient Descent、BFGS、Newton系を条件に応じて選び分けるための入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.stochastic-ml",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "確率勾配・機械学習optimizerの選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_STOCHASTIC_ML",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adam",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bfgs",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
+        }
+      ],
+      "summary": "mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "fista",
       "entity_type": "content",
       "external_url": null,
@@ -8616,7 +9169,9 @@
       "summary": ""
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.composite-convex"
+      ],
       "canonical_url": "/methods/MF_COMPOSITE_CONVEX",
       "entity_id": "MF_COMPOSITE_CONVEX",
       "entity_type": "method",
@@ -8642,13 +9197,19 @@
           "relation_type": "evidence",
           "target_id": "S067",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.composite-convex",
+          "target_type": "content"
         }
       ],
       "summary": "滑らかな項と非滑らかな正則化・制約の分離構造、近接作用素、射影、分解を利用する手法群。"
     },
     {
       "aliases": [
-        "/learn/constrained-continuous"
+        "/learn/constrained-continuous",
+        "/learn/family.constrained-nlp"
       ],
       "canonical_url": "/methods/MF_CONSTRAINED_NLP",
       "entity_id": "MF_CONSTRAINED_NLP",
@@ -8692,6 +9253,11 @@
           "target_type": "content"
         },
         {
+          "relation_type": "learning",
+          "target_id": "family.constrained-nlp",
+          "target_type": "content"
+        },
+        {
           "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
           "target_type": "trace"
@@ -8721,7 +9287,9 @@
       "summary": "domain propagation、learning、searchを用いて論理・組合せ制約の可行性と最適化を扱う手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.local-dfo"
+      ],
       "canonical_url": "/methods/MF_DFO_LOCAL",
       "entity_id": "MF_DFO_LOCAL",
       "entity_type": "method",
@@ -8752,12 +9320,19 @@
           "relation_type": "evidence",
           "target_id": "S063",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.local-dfo",
+          "target_type": "content"
         }
       ],
       "summary": "関数値または補間モデルだけを用いて局所解を探す直接探索・モデルベース手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.discrete-structure"
+      ],
       "canonical_url": "/methods/MF_DISCRETE_EXACT",
       "entity_id": "MF_DISCRETE_EXACT",
       "entity_type": "method",
@@ -8791,6 +9366,16 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S024",
           "target_type": "source"
         },
@@ -8803,6 +9388,21 @@
           "relation_type": "evidence",
           "target_id": "S028",
           "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
         }
       ],
       "summary": "緩和下界、分枝、cut、incumbentを用いてMILP/MIQP/MINLP等を探索し、gapで品質を示す手法群。"
@@ -8844,7 +9444,9 @@
       "summary": "個体群を選択・変異・交叉・共分散適応等で更新する確率的大域探索手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.global-search"
+      ],
       "canonical_url": "/methods/MF_GLOBAL_SEARCH",
       "entity_id": "MF_GLOBAL_SEARCH",
       "entity_type": "method",
@@ -8873,6 +9475,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S072",
           "target_type": "source"
         },
@@ -8885,6 +9492,11 @@
           "relation_type": "evidence",
           "target_id": "S074",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.global-search",
+          "target_type": "content"
         }
       ],
       "summary": "多start、領域分割、確率的遷移等により複数basinを探索し、大域的に良い候補を探す手法群。"
@@ -9047,7 +9659,9 @@
       "summary": "動力学制約をshooting、collocation、Riccati型再帰等で離散化・解法に組み込む手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.smooth-local"
+      ],
       "canonical_url": "/methods/MF_SMOOTH_LOCAL",
       "entity_id": "MF_SMOOTH_LOCAL",
       "entity_type": "method",
@@ -9068,12 +9682,19 @@
           "relation_type": "evidence",
           "target_id": "S057",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
         }
       ],
       "summary": "滑らかな連続目的に対し、勾配・曲率・線探索を利用して局所停留点を求める手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.stochastic-ml"
+      ],
       "canonical_url": "/methods/MF_STOCHASTIC_ML",
       "entity_id": "MF_STOCHASTIC_ML",
       "entity_type": "method",
@@ -9099,12 +9720,19 @@
           "relation_type": "evidence",
           "target_id": "S070",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.stochastic-ml",
+          "target_type": "content"
         }
       ],
       "summary": "mini-batch勾配とmomentum・adaptive momentsを用いて大規模学習目的を逐次更新する手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.expensive-black-box"
+      ],
       "canonical_url": "/methods/MF_SURROGATE_HPO",
       "entity_id": "MF_SURROGATE_HPO",
       "entity_type": "method",
@@ -9150,6 +9778,11 @@
           "relation_type": "evidence",
           "target_id": "S075",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
         }
       ],
       "summary": "評価履歴からsurrogateと不確実性または順位modelを構築し、次の評価点やresource配分を選ぶ手法群。"

@@ -1392,6 +1392,555 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "MF_COMPOSITE_CONVEX",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.composite-convex",
+      "html": "<p>滑らかな損失とL1正則化・制約・分離構造を組み合わせるとき、近接法、FISTA、Coordinate Descent、ADMMなどを選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>全部を一つの難しい関数として扱わず、滑らかな部分、非滑らかな正則化、単純な制約、分離可能な部分へ分け、それぞれに合う操作を交互に使うこと</strong>です。</p>\n<ul>\n<li><p>見ているもの: gradient、proximal mapping、primal/dual residual、objective gap</p>\n</li>\n<li><p>動かすもの: 現在点、補助変数、dual変数、座標、momentum</p>\n</li>\n<li><p>前進の判断: objective・fixed-point residual・primal/dual residualの低下</p>\n</li>\n<li><p>主な弱点: step size、proxの難しさ、残差balance、多数反復</p>\n</li>\n</ul>\n<p>非滑らかな項があるからといって、すぐsubgradient法を選ぶ必要はありません。proxや座標更新を計算できるなら、より強い構造を使えます。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>分解形</td>\n<td><code>smooth + nonsmooth</code>、separable、consensusのどれか</td>\n</tr>\n<tr>\n<td>prox・projection</td>\n<td>閉形式または安価に計算できるか</td>\n</tr>\n<tr>\n<td>convexity</td>\n<td>大域gapや収束率を解釈できるか</td>\n</tr>\n<tr>\n<td>sparsity</td>\n<td>座標更新や疎解の利点があるか</td>\n</tr>\n<tr>\n<td>分散性</td>\n<td>複数block・machineへ分ける必要があるか</td>\n</tr>\n<tr>\n<td>必要精度</td>\n<td>粗い解か、高精度なprimal-dual残差か</td>\n</tr>\n</tbody>\n</table>\n<p>一般NLPへそのまま渡す前に、L1、box、simplex、norm、indicator functionなどが既知のprox・projectionを持つか確認します。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>基本の分離更新</td>\n<td><a href=\"#/learn/proximal-gradient\">Proximal Gradient</a></td>\n<td>smooth loss + 安価なprox、凸複合問題</td>\n<td>step sizeが保守的で遅い、proxが高価</td>\n</tr>\n<tr>\n<td>加速されたprox</td>\n<td><a href=\"#/learn/fista\">FISTA</a></td>\n<td>凸問題で目的gapを早く下げたい</td>\n<td>振動が強い、restartが頻繁</td>\n</tr>\n<tr>\n<td>変数ごとの更新</td>\n<td><a href=\"#/learn/coordinate-descent\">Coordinate Descent</a></td>\n<td>座標更新が安価、疎な高次元問題</td>\n<td>feature相関が強く一座標ずつでは遅い</td>\n</tr>\n<tr>\n<td>最小限の構造</td>\n<td><a href=\"#/learn/subgradient\">Subgradient</a></td>\n<td>proxが使えず、粗い凸解でよい</td>\n<td>step scheduleに敏感、改善が非常に遅い</td>\n</tr>\n<tr>\n<td>問題幾何を使う</td>\n<td><a href=\"#/learn/mirror-descent\">Mirror Descent</a></td>\n<td>simplex、確率分布、online convex optimization</td>\n<td>mirror mapが問題に合わない</td>\n</tr>\n<tr>\n<td>分離・consensus</td>\n<td><a href=\"#/learn/admm\">ADMM</a></td>\n<td>block分解、distributed、prox部分問題が解きやすい</td>\n<td>primal/dual residualが不均衡、部分問題が重い</td>\n</tr>\n<tr>\n<td>非滑らかmodelを蓄積</td>\n<td><a href=\"#/methods/M_BUNDLE\">Bundle method</a></td>\n<td>subgradientより安定した凸非滑らか解法が必要</td>\n<td>bundle管理・部分問題が支配的</td>\n</tr>\n</tbody>\n</table>\n<p>同じiteration数で比較しません。gradient、prox、通信、部分問題のcostが手法ごとに違います。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>objective valueとbest-so-far</p>\n</li>\n<li><p>gradient mapping / fixed-point residual</p>\n</li>\n<li><p>primal / dual residual</p>\n</li>\n<li><p>sparsity patternの安定</p>\n</li>\n<li><p>step sizeとbacktracking回数</p>\n</li>\n<li><p>ADMM penalty parameter</p>\n</li>\n<li><p>prox time、通信time、座標sweep数</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>subgradientが長時間ほぼ改善しない → prox、bundle、smooth approximationを検討</p>\n</li>\n<li><p>FISTAが振動する → adaptive restartまたはproximal gradientへ</p>\n</li>\n<li><p>coordinate descentが相関変数で停滞 → block更新やquasi-Newtonへ</p>\n</li>\n<li><p>ADMMの一方の残差だけ大きい → penalty調整・scalingを見直す</p>\n</li>\n<li><p>prox計算が本体より高価 → 定式化または別splittingを検討</p>\n</li>\n<li><p>非凸項が入った → 凸保証をそのまま適用しない</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>operation costを分けて記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">comparison</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-composite-objective&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;gradient_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">1_000</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;prox_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">1_000</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;communication_budget&quot;</span><span class=\"p\">:</span> <span class=\"kc\">None</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-6</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;proximal-gradient&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;FISTA&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;ADMM&quot;</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;metrics&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;objective_gap&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;fixed_point_residual&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;wall_time&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">comparison</span><span class=\"p\">[</span><span class=\"s2\">&quot;gradient_budget&quot;</span><span class=\"p\">]</span> <span class=\"o\">==</span> <span class=\"n\">comparison</span><span class=\"p\">[</span><span class=\"s2\">&quot;prox_budget&quot;</span><span class=\"p\">]</span></code></pre></div>\n<h2 id=\"コラム-proxは何をしているか\" tabindex=\"-1\">コラム: proxは何をしているか</h2>\n<p>proximal operatorは、非滑らかな項を単に微分する代わりに、現在点から離れすぎない範囲でその項を含む小問題を解きます。L1正則化のsoft-thresholdingは代表例です。</p>\n<p>「proxが存在する」ことと「実装上安価に計算できる」ことは別です。大規模な内部solveが必要なら、分解した意味が薄れる場合があります。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>滑らかで非滑らかな項がなければ<a href=\"#/learn/family.smooth-local\">滑らかな局所最適化</a>、一般非線形制約が本質なら<a href=\"#/learn/family.constrained-nlp\">制約付きNLP</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "proximal-gradient",
+        "fista",
+        "coordinate-descent",
+        "subgradient",
+        "mirror-descent",
+        "admm"
+      ],
+      "seo_description": "滑らかな損失とL1正則化・制約・分離構造を組み合わせるとき、近接法、FISTA、Coordinate Descent、ADMMなどを選び分ける入口です。",
+      "seo_title": "非滑らか・複合凸最適化の選び分け",
+      "source_ids": [
+        "S055",
+        "S061",
+        "S066",
+        "S067"
+      ],
+      "status": "published",
+      "summary": "滑らかな損失とL1正則化・制約・分離構造を組み合わせるとき、近接法、FISTA、Coordinate Descent、ADMMなどを選び分ける入口です。",
+      "title_en": "Choosing a Composite Convex Optimizer",
+      "title_ja": "非滑らか・複合凸最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-proxは何をしているか",
+          "label": "コラム: proxは何をしているか",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_CONSTRAINED_NLP",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.constrained-nlp",
+      "html": "<p>滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>目的値を下げるだけでなく、実行可能領域から外れないこと、または外れた状態から制約を満たす方向へ戻ることを同時に考える</strong>ことです。</p>\n<ul>\n<li><p>見ているもの: 目的値、constraint violation、勾配、Jacobian、KKT residual</p>\n</li>\n<li><p>動かすもの: 現在点、Lagrange multiplier、barrierまたはpenalty、部分問題</p>\n</li>\n<li><p>前進の判断: objective改善とfeasibility改善の両立</p>\n</li>\n<li><p>主な弱点: scaling、誤ったJacobian、infeasible model、constraint qualification failure</p>\n</li>\n</ul>\n<p>低い目的値でも制約違反があれば候補解ではありません。<code>success=True</code>だけでなく、最大制約違反と停止理由を読みます。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>制約の種類</td>\n<td>bounds、線形、滑らかな非線形、black-boxのどれか</td>\n</tr>\n<tr>\n<td>Jacobian</td>\n<td>正確に計算できるか、疎性を渡せるか</td>\n</tr>\n<tr>\n<td>初期点</td>\n<td>feasible startが必要か、infeasible startから回復できるか</td>\n</tr>\n<tr>\n<td>問題規模</td>\n<td>dense SQP部分問題か、sparse KKT系か</td>\n</tr>\n<tr>\n<td>必要精度</td>\n<td>実用的な可行解か、高精度なKKT点か</td>\n</tr>\n<tr>\n<td>convexity</td>\n<td>局所KKT点と大域最適解を区別できるか</td>\n</tr>\n</tbody>\n</table>\n<p>LP、凸QP、conic formへ落とせる場合は、一般NLPより先に専用solverを検討します。等式制約を安全に変数消去できる場合もあります。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>小～中規模の実用候補</td>\n<td><a href=\"#/learn/slsqp\">SLSQP</a></td>\n<td>boundsと一般制約、比較的少数変数、Jacobianを利用可能</td>\n<td>constraint violationが停滞、部分問題が不安定</td>\n</tr>\n<tr>\n<td>高精度・疎な大規模NLP</td>\n<td><a href=\"#/learn/interior-point-nlp\">非線形内点法</a></td>\n<td>多数の滑らかな制約、sparse KKT構造</td>\n<td>barrier progressが悪い、factorizationがmemoryを圧迫</td>\n</tr>\n<tr>\n<td>制約を段階的に強める</td>\n<td><a href=\"#/learn/augmented-lagrangian\">拡張Lagrange法</a></td>\n<td>制約付き部分問題を解きやすい、multiplier更新を管理できる</td>\n<td>penaltyだけが増え、feasibilityが改善しない</td>\n</tr>\n<tr>\n<td>単純集合へ戻す</td>\n<td><a href=\"#/learn/projected-gradient\">Projected Gradient</a></td>\n<td>box、simplex、球などprojectionが安価</td>\n<td>projection自体が難しい、一般非線形制約がある</td>\n</tr>\n<tr>\n<td>active constraintを明示</td>\n<td><a href=\"#/learn/active-set\">Active-set</a></td>\n<td>QPや少数の有効制約、warm startが効く</td>\n<td>active setの出入りが激しい、degeneracyが強い</td>\n</tr>\n<tr>\n<td>高精度な一般手法</td>\n<td><a href=\"#/methods/M_SQP\">SQP</a></td>\n<td>中規模、正確なderivative、局所高精度</td>\n<td>QP部分問題やmerit調整が支配的</td>\n</tr>\n</tbody>\n</table>\n<p>penalty法は「制約付き問題が無制約問題になった」わけではありません。penalty係数と残る違反量を別に記録します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>maximum constraint violation</p>\n</li>\n<li><p>stationarity / KKT residual</p>\n</li>\n<li><p>complementarity</p>\n</li>\n<li><p>primal / dual feasibility</p>\n</li>\n<li><p>accepted / rejected step</p>\n</li>\n<li><p>barrier parameterまたはpenalty parameter</p>\n</li>\n<li><p>factorization status</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>目的値だけ改善し違反が減らない → merit、scaling、Jacobian、手法を再確認</p>\n</li>\n<li><p>multiplierやpenaltyが発散的に増える → infeasibilityまたはmodel mismatchを疑う</p>\n</li>\n<li><p>KKT factorization failure → regularization、scaling、別linear solverを検討</p>\n</li>\n<li><p>active setが頻繁に反転 → interior-pointや別のglobalizationを検討</p>\n</li>\n<li><p>feasibilityは良いがstationarityが停滞 → derivative checkとtoleranceを確認</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>比較では、同じ初期点だけでなく、初期点がfeasibleかどうかも記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">comparison</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-constrained-problem&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_point&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"mf\">0.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;initial_point_feasible&quot;</span><span class=\"p\">:</span> <span class=\"kc\">True</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-8</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;constraint_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-7</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">1_000</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;SLSQP&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;interior-point&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;augmented-Lagrangian&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">comparison</span><span class=\"p\">[</span><span class=\"s2\">&quot;constraint_tolerance&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mf\">0.0</span></code></pre></div>\n<h2 id=\"コラム-kkt条件は合格証ではない\" tabindex=\"-1\">コラム: KKT条件は合格証ではない</h2>\n<p>KKT条件は、適切な正則性の下で局所最適解が満たす重要な条件です。しかし、非凸問題で小さなKKT residualが得られても、大域最適性を意味しません。また、constraint qualificationが破れている場合にはmultiplierの解釈も難しくなります。</p>\n<p>実務では、KKT residual、feasibility、複数初期値、目的値、物理的妥当性を組み合わせて判断します。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>制約が線形・凸二次・錐構造なら<a href=\"#/learn/lp-qp-conic\">LP・QP・錐最適化</a>、制約が評価関数としてしか得られない場合は<a href=\"#/learn/family.local-dfo\">局所Derivative-freeの選び分け</a>も確認します。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "constrained-continuous",
+        "slsqp",
+        "interior-point-nlp",
+        "augmented-lagrangian",
+        "projected-gradient",
+        "active-set"
+      ],
+      "seo_description": "滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。",
+      "seo_title": "制約付き非線形最適化の選び分け",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S056",
+        "S064"
+      ],
+      "status": "published",
+      "summary": "滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。",
+      "title_en": "Choosing a Constrained Nonlinear Optimizer",
+      "title_ja": "制約付き非線形最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-kkt条件は合格証ではない",
+          "label": "コラム: KKT条件は合格証ではない",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_DISCRETE_EXACT",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.discrete-structure",
+      "html": "<p>離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>候補を全部列挙するのではなく、問題固有の構造、制約伝播、緩和bound、近傍moveを使って調べる必要のない組合せを減らすこと</strong>です。</p>\n<ul>\n<li><p>見ているもの: state、edge、domain、constraint propagation、incumbent、bound、gap</p>\n</li>\n<li><p>動かすもの: path、state、partial assignment、探索木、近傍解</p>\n</li>\n<li><p>前進の判断: 可行解の発見、bound改善、domain縮小、未探索領域の削減</p>\n</li>\n<li><p>主な弱点: state explosion、弱いrelaxation、symmetry、巨大Big-M、弱いpropagation</p>\n</li>\n</ul>\n<p>離散問題を見たら、最初からMILPやmetaheuristicへ進まず、graph・flow・matching・DPなどの専用構造を先に確認します。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>専用構造</td>\n<td>shortest path、flow、matching、interval schedulingとして解けるか</td>\n</tr>\n<tr>\n<td>state分解</td>\n<td>Bellman recursionや段階構造を作れるか</td>\n</tr>\n<tr>\n<td>制約表現</td>\n<td>線形係数中心か、論理・resource・global constraint中心か</td>\n</tr>\n<tr>\n<td>連続変数</td>\n<td>離散と連続が混在するか</td>\n</tr>\n<tr>\n<td>必要な保証</td>\n<td>良い可行解、gap、最適性証明、UNSAT証明のどれか</td>\n</tr>\n<tr>\n<td>時間制限</td>\n<td>proofまで待つか、incumbentを早く得るか</td>\n</tr>\n<tr>\n<td>problem scale</td>\n<td>変数数だけでなくdomain、constraint graph、relaxation強度</td>\n</tr>\n</tbody>\n</table>\n<p>整数化や時間離散化では、scaleが現実の精度を保つか確認します。係数を大きくするだけでは精度問題は解決しません。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>graph専用法</td>\n<td><a href=\"#/learn/dijkstra-astar\">Dijkstra / A*</a></td>\n<td>shortest path、非負edge、admissible heuristic</td>\n<td>side constraintが増え専用構造が崩れる</td>\n</tr>\n<tr>\n<td>段階的再利用</td>\n<td><a href=\"#/learn/dynamic-programming\">Dynamic Programming</a></td>\n<td>optimal substructure、stateを小さく定義可能</td>\n<td>state次元・memoryが爆発する</td>\n</tr>\n<tr>\n<td>論理・scheduling</td>\n<td><a href=\"#/learn/cp-sat\">CP-SAT</a></td>\n<td>finite domain、reification、resource、時間窓</td>\n<td>domainが巨大、整数scaleが不自然、伝播が弱い</td>\n</tr>\n<tr>\n<td>線形modelとgap</td>\n<td><a href=\"#/learn/branch-and-cut\">Branch-and-Cut</a></td>\n<td>binary/integer、強いLP relaxation、証明が必要</td>\n<td>root gapが大、Big-M・symmetryでtreeが爆発</td>\n</tr>\n<tr>\n<td>探索原理の理解</td>\n<td><a href=\"#/learn/branch-and-bound\">Branch-and-Bound</a></td>\n<td>incumbent・bound・gapの意味を確認したい</td>\n<td>実solver機能を単純treeと同一視してしまう</td>\n</tr>\n<tr>\n<td>早い良質可行解</td>\n<td>Combinatorial Local Search</td>\n<td>巨大routing/scheduling、proofより運用解</td>\n<td>feasibility維持が難しい、解品質のboundが必要</td>\n</tr>\n<tr>\n<td>混合非線形と証明</td>\n<td>Outer / Spatial Branch-and-Bound</td>\n<td>対応するconvex relaxationを構築可能</td>\n<td>relaxationが弱い、black-box・noiseがある</td>\n</tr>\n</tbody>\n</table>\n<p>「CP-SAT対MILP」の万能な勝敗はありません。constraint表現とrelaxation / propagationの強さがinstanceごとに変わります。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>incumbent objective</p>\n</li>\n<li><p>best boundとoptimality gap</p>\n</li>\n<li><p>node / branch / conflict / propagation数</p>\n</li>\n<li><p>root relaxation gap</p>\n</li>\n<li><p>feasible solutionの発見時刻</p>\n</li>\n<li><p>presolve reduction</p>\n</li>\n<li><p>domain reduction</p>\n</li>\n<li><p>memoryと未処理node数</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>専用graph構造が見つかる → 汎用modelから専用法へ戻す</p>\n</li>\n<li><p>state数が指数的に増える → DP state圧縮、別定式化、MILP/CPへ</p>\n</li>\n<li><p>CPでdomainが縮まらない → 制約表現、symmetry、MILP relaxationを検討</p>\n</li>\n<li><p>MILP root gapが大きい → formulation、valid inequality、CP/専用法を検討</p>\n</li>\n<li><p>可行解が長時間出ない → heuristic、warm start、constraint debugging</p>\n</li>\n<li><p>gapは小さいがproofが遅い → 許容gapと運用要件を確認</p>\n</li>\n</ul>\n<h2 id=\"小さな選択ブリーフ\" tabindex=\"-1\">小さな選択ブリーフ</h2>\n<p>解法を指定する前に、構造と必要な成果物を記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">problem_brief</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;variable_types&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;binary&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;integer&quot;</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;special_structure&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;time_windows&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;resource_capacity&quot;</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;continuous_relaxation_expected&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;unknown&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;required_output&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;feasible-solution-with-gap&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;time_limit_seconds&quot;</span><span class=\"p\">:</span> <span class=\"mi\">300</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;candidate_families&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;CP-SAT&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;MILP&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;routing-local-search&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">problem_brief</span><span class=\"p\">[</span><span class=\"s2\">&quot;time_limit_seconds&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<h2 id=\"コラム-変数数だけでは難しさは分からない\" tabindex=\"-1\">コラム: 変数数だけでは難しさは分からない</h2>\n<p>同じ1万binary変数でも、network matrixを持つ問題、強い伝播を持つscheduling、弱いBig-Mだらけのmodelでは難しさが異なります。</p>\n<p>離散最適化では、変数数に加え、domain size、constraint graph、symmetry、relaxation gap、可行解密度、decomposition可能性を記録します。solverを替える前にmodel formulationを見直す価値が大きい領域です。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>論理・resource制約が中心なら<a href=\"#/learn/cp-sat\">CP-SAT</a>、線形modelとgapが重要なら<a href=\"#/learn/branch-and-cut\">Branch-and-Cut</a>、専用構造があるなら<a href=\"#/learn/dynamic-programming\">Dynamic Programming</a>と<a href=\"#/learn/dijkstra-astar\">Dijkstra / A*</a>を確認します。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "dynamic-programming",
+        "dijkstra-astar",
+        "cp-sat",
+        "branch-and-bound",
+        "branch-and-cut"
+      ],
+      "seo_description": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。",
+      "seo_title": "離散・組合せ最適化の選び分け",
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S054",
+        "S079"
+      ],
+      "status": "published",
+      "summary": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。",
+      "title_en": "Choosing a Discrete Optimization Strategy",
+      "title_ja": "離散・組合せ最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな選択ブリーフ",
+          "label": "小さな選択ブリーフ",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-変数数だけでは難しさは分からない",
+          "label": "コラム: 変数数だけでは難しさは分からない",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_SURROGATE_HPO",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.expensive-black-box",
+      "html": "<p>一回の実験やsimulationが高価なとき、Bayesian Optimization、TPE、multi-fidelity、random・evolutionary baselineを選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>少ない評価をどこへ使うかを学習し、良さそうな場所とまだ分からない場所の両方を意識して次の試行を選ぶこと</strong>です。</p>\n<ul>\n<li><p>見ているもの: 観測履歴、surrogate、uncertainty、trial status、resource</p>\n</li>\n<li><p>動かすもの: 次の評価点、batch、探索空間、trialへ割り当てるbudget</p>\n</li>\n<li><p>前進の判断: best-so-far改善と、次の評価が持つ情報価値</p>\n</li>\n<li><p>主な弱点: model mismatch、高次元、条件付き空間、失敗trial、非定常性</p>\n</li>\n</ul>\n<p>surrogateの予測平均やacquisitionの最大点は、真の最適点の証明ではありません。次に試す価値を表すmodel上の判断です。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1評価の時間・費用</td>\n<td>surrogate構築に価値があるほど高価か</td>\n</tr>\n<tr>\n<td>total budget</td>\n<td>数十、数百、数千trialのどれか</td>\n</tr>\n<tr>\n<td>変数型</td>\n<td>連続、整数、カテゴリ、条件付きの混合</td>\n</tr>\n<tr>\n<td>noise</td>\n<td>同じ点を再評価できるか</td>\n</tr>\n<tr>\n<td>parallelism</td>\n<td>sequential、batch、asynchronousのどれか</td>\n</tr>\n<tr>\n<td>fidelity</td>\n<td>epoch、sample数、meshなど途中budgetを変えられるか</td>\n</tr>\n<tr>\n<td>failure</td>\n<td>timeout、crash、infeasibleをどう記録するか</td>\n</tr>\n</tbody>\n</table>\n<p>評価が安価で大量に実行できるなら、複雑なsurrogateよりrandom searchやpopulation法が堅実なbaselineになることがあります。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>uncertaintyを明示</td>\n<td><a href=\"#/learn/bayesian-optimization\">Gaussian-process BO</a></td>\n<td>低〜中次元、数十〜数百評価、連続変数中心</td>\n<td>観測数・次元が増えfit/acquisitionが重い</td>\n</tr>\n<tr>\n<td>条件付き・混合空間</td>\n<td><a href=\"#/methods/M_TPE\">TPE</a></td>\n<td>HPO、カテゴリや条件付きparameterが多い</td>\n<td>density modelが良い領域を分離できない</td>\n</tr>\n<tr>\n<td>木系surrogate</td>\n<td><a href=\"#/methods/M_SMAC\">SMAC</a></td>\n<td>mixed space、algorithm configuration、失敗trial</td>\n<td>surrogate calibrationが悪い、並列性が不足</td>\n</tr>\n<tr>\n<td>早期停止でresource配分</td>\n<td><a href=\"#/methods/M_HYPERBAND\">Hyperband</a></td>\n<td>中間評価が最終性能をある程度予測する</td>\n<td>early metricが誤解を招き良いtrialを落とす</td>\n</tr>\n<tr>\n<td>何も仮定しない基準</td>\n<td>Random Search</td>\n<td>baseline、並列性、search space sanity check</td>\n<td>budgetが小さく履歴活用が必要</td>\n</tr>\n<tr>\n<td>並列black-box探索</td>\n<td><a href=\"#/learn/cma-es\">CMA-ES</a> / <a href=\"#/learn/differential-evolution\">DE</a></td>\n<td>連続・多峰性、十分な並列budget</td>\n<td>一評価が極端に高価、populationを維持できない</td>\n</tr>\n</tbody>\n</table>\n<p>「Bayesian Optimizationが常に最少評価」とは限りません。search space、noise model、initial design、acquisition optimizerが不適切なら、baselineに負けます。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>best-so-farとtrial数</p>\n</li>\n<li><p>surrogate cross-validation error</p>\n</li>\n<li><p>uncertainty calibration</p>\n</li>\n<li><p>acquisition valueとselected point</p>\n</li>\n<li><p>duplicate suggestion率</p>\n</li>\n<li><p>failed / infeasible trial率</p>\n</li>\n<li><p>batch idle time</p>\n</li>\n<li><p>fidelity別のranking correlation</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>同じ点や境界ばかり提案 → acquisition optimizer、kernel、encodingを見直す</p>\n</li>\n<li><p>uncertaintyが過小で探索しない → noise model、prior、exploration parameterを見直す</p>\n</li>\n<li><p>カテゴリ・条件付き空間が不自然 → TPE/SMACなど別surrogateへ</p>\n</li>\n<li><p>trialが大量に並列実行可能 → batch BOまたはrandom/evolutionary baselineへ</p>\n</li>\n<li><p>途中metricと最終metricの相関が弱い → Hyperband型早期停止を弱める</p>\n</li>\n<li><p>search spaceが広すぎる → domain knowledgeでbounds・parameterizationを再設計</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>比較ではinitial designと失敗trialの扱いを揃えます。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">study_contract</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;search_space_version&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;v1&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_direction&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;minimize&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_design&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-8-points&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;trial_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">80</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;parallel_workers&quot;</span><span class=\"p\">:</span> <span class=\"mi\">4</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;seeds&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"mi\">11</span><span class=\"p\">,</span> <span class=\"mi\">12</span><span class=\"p\">,</span> <span class=\"mi\">13</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;failure_policy&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;record-and-penalize-explicitly&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;GP-BO&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;TPE&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;random-search&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">study_contract</span><span class=\"p\">[</span><span class=\"s2\">&quot;trial_budget&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;=</span> <span class=\"mi\">1</span></code></pre></div>\n<h2 id=\"コラム-探索空間はmodelの一部\" tabindex=\"-1\">コラム: 探索空間はmodelの一部</h2>\n<p>log-scaleにすべきparameterをlinearに置く、無効な組合せを一つの箱へ押し込む、カテゴリへ架空の距離を与えると、surrogateが学習する地形そのものが歪みます。</p>\n<p>AIやsolverへ渡す前に、parameterの意味、単位、条件付き関係、無効領域、default値を明示します。良いoptimizerを選ぶことより、良いsearch spaceを作ることが支配的な場合があります。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>一評価が安価で多峰性を広く探せるなら<a href=\"#/learn/family.global-search\">大域探索の選び分け</a>、gradientをmini-batchで利用できる学習問題なら<a href=\"#/learn/family.stochastic-ml\">確率勾配optimizerの選び分け</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "bayesian-optimization",
+        "cma-es",
+        "differential-evolution"
+      ],
+      "seo_description": "一回の実験やsimulationが高価なとき、Bayesian Optimization、TPE、multi-fidelity、random・evolutionary baselineを選び分ける入口です。",
+      "seo_title": "高価なblack-box・HPOの選び分け",
+      "source_ids": [
+        "S034",
+        "S035",
+        "S036",
+        "S037",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "status": "published",
+      "summary": "一回の実験やsimulationが高価なとき、Bayesian Optimization、TPE、multi-fidelity、random・evolutionary baselineを選び分ける入口です。",
+      "title_en": "Choosing an Expensive Black-Box Strategy",
+      "title_ja": "高価なblack-box・HPOの選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-探索空間はmodelの一部",
+          "label": "コラム: 探索空間はmodelの一部",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_GLOBAL_SEARCH",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.global-search",
+      "html": "<p>bounds内に複数の谷や良い候補があるとき、multi-start、領域分割、annealing、population探索を選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>一つの初期点から素直に下るだけでは見逃す谷があるので、探索領域を分ける、飛び移る、複数候補を同時に育てることで広く探すこと</strong>です。</p>\n<ul>\n<li><p>見ているもの: best-so-far、領域coverage、population diversity、局所探索の成功</p>\n</li>\n<li><p>動かすもの: start点、矩形、温度、population、探索分布</p>\n</li>\n<li><p>前進の判断: 新しいbasinの発見とincumbent改善</p>\n</li>\n<li><p>主な弱点: 評価budget、次元の呪い、有限時間での証明不足</p>\n</li>\n</ul>\n<p>「global」という名前があっても、有限budgetで大域最適性を証明するとは限りません。deterministic、stochastic、理論保証、実装上の停止条件を分けて読みます。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bounds</td>\n<td>探索領域が有限か、十分狭く設定できるか</td>\n</tr>\n<tr>\n<td>次元</td>\n<td>領域分割やpopulation評価が現実的か</td>\n</tr>\n<tr>\n<td>1評価の費用</td>\n<td>数百〜数万評価を許容できるか</td>\n</tr>\n<tr>\n<td>並列性</td>\n<td>populationやmulti-startを同時評価できるか</td>\n</tr>\n<tr>\n<td>目的関数の性質</td>\n<td>smooth、discontinuous、noisy、multimodal</td>\n</tr>\n<tr>\n<td>必要な保証</td>\n<td>良い候補か、lower boundを伴う証明か</td>\n</tr>\n</tbody>\n</table>\n<p>構造を使える凸問題、graph問題、MILPをblack-box global searchへ隠さないでください。専用構造を使う方が強い保証と診断を得られます。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>複数局所探索の基準</td>\n<td><a href=\"#/methods/M_MULTI_START\">Multi-start</a></td>\n<td>局所法が安価で、basin差を初期点で確認したい</td>\n<td>start数だけ増え、coverageが偏る</td>\n</tr>\n<tr>\n<td>局所法と確率的ジャンプ</td>\n<td><a href=\"#/methods/M_BASIN_HOPPING\">Basin Hopping</a></td>\n<td>低次元、局所最適化が有効、basin間移動を試したい</td>\n<td>局所solveがbudgetを支配する</td>\n</tr>\n<tr>\n<td>決定論的な領域分割</td>\n<td><a href=\"#/learn/direct-global\">DIRECT</a></td>\n<td>低次元bounded、Lipschitz定数を明示したくない</td>\n<td>rectangle数が急増、高次元</td>\n</tr>\n<tr>\n<td>topologyを使う候補生成</td>\n<td><a href=\"#/learn/shgo\">SHGO</a></td>\n<td>低次元、比較的滑らか、決定論的候補が欲しい</td>\n<td>sampling complexが大きくなりすぎる</td>\n</tr>\n<tr>\n<td>温度で悪化stepも許す</td>\n<td><a href=\"#/learn/dual-annealing\">Dual Annealing</a></td>\n<td>多峰性、連続bounds、stochastic探索を許容</td>\n<td>coolingやseedで結果が不安定</td>\n</tr>\n<tr>\n<td>差分でpopulationを更新</td>\n<td><a href=\"#/learn/differential-evolution\">Differential Evolution</a></td>\n<td>並列評価可能、非滑らか・多峰性</td>\n<td>一評価が高価、dimension×populationが重い</td>\n</tr>\n<tr>\n<td>分布の形を学ぶ</td>\n<td><a href=\"#/learn/cma-es\">CMA-ES</a></td>\n<td>連続、変数相関が強い、moderate dimension</td>\n<td>極端な高次元、非常に少ないbudget</td>\n</tr>\n<tr>\n<td>柔軟なencoding</td>\n<td><a href=\"#/learn/genetic-algorithm\">Genetic Algorithm</a></td>\n<td>離散・混合encodingや独自operatorが必要</td>\n<td>encodingが意味を壊し、parameter調整が支配的</td>\n</tr>\n</tbody>\n</table>\n<p>有限budgetで証明が必要なら、convex global optimization、spatial branch-and-bound、問題固有boundを持つ手法を別に検討します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>best-so-farと改善間隔</p>\n</li>\n<li><p>objective evaluation数</p>\n</li>\n<li><p>population diversityまたは領域coverage</p>\n</li>\n<li><p>basinごとの到達頻度</p>\n</li>\n<li><p>複数seedの分布</p>\n</li>\n<li><p>feasible fraction</p>\n</li>\n<li><p>local refinement成功率</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>diversityが早期に消える → restart、mutation、別population法</p>\n</li>\n<li><p>bestが改善しないままbudgetを消費 → search bounds、構造、surrogateを見直す</p>\n</li>\n<li><p>同じbasinばかり再訪 → initializationとcoverage strategyを変更</p>\n</li>\n<li><p>評価が高価すぎる → Bayesian Optimizationやmulti-fidelityへ</p>\n</li>\n<li><p>低次元で決定論的再現性が欲しい → DIRECTやSHGOを検討</p>\n</li>\n<li><p>局所解で十分と分かった → smooth localまたはlocal DFOへ戻す</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>stochastic手法は単一seedで比較しません。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">benchmark</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-bounded-multimodal-problem&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;bounds&quot;</span><span class=\"p\">:</span> <span class=\"p\">[(</span><span class=\"o\">-</span><span class=\"mf\">5.0</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"o\">-</span><span class=\"mf\">5.0</span><span class=\"p\">,</span> <span class=\"mf\">5.0</span><span class=\"p\">)],</span>\n    <span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">2_000</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;seeds&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"mi\">3</span><span class=\"p\">,</span> <span class=\"mi\">4</span><span class=\"p\">,</span> <span class=\"mi\">5</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;DIRECT&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;dual-annealing&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;differential-evolution&quot;</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;reported_metrics&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;best_so_far&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;success_rate&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;evaluation_count&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">benchmark</span><span class=\"p\">[</span><span class=\"s2\">&quot;seeds&quot;</span><span class=\"p\">])</span> <span class=\"o\">&gt;</span> <span class=\"mi\">1</span></code></pre></div>\n<h2 id=\"コラム-大域性には複数の意味がある\" tabindex=\"-1\">コラム: 大域性には複数の意味がある</h2>\n<p>大域探索という言葉は、少なくとも次を区別します。</p>\n<ol>\n<li><p>複数basinを探すheuristic</p>\n</li>\n<li><p>budgetを増やすと広く探索する漸近的性質</p>\n</li>\n<li><p>lower boundとupper boundを詰めるcertificate</p>\n</li>\n<li><p>特定仮定下での理論保証</p>\n</li>\n</ol>\n<p>画面上で広く点が動いていることは、3番の証明ではありません。Optimization Compassでは、global candidateとglobal certificateを別の到達点として扱います。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>評価が非常に高価なら<a href=\"#/learn/family.expensive-black-box\">高価なblack-box探索の選び分け</a>、局所改善へ絞るなら<a href=\"#/learn/family.smooth-local\">滑らかな局所最適化</a>または<a href=\"#/learn/family.local-dfo\">局所Derivative-free</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "direct-global",
+        "shgo",
+        "dual-annealing",
+        "differential-evolution",
+        "cma-es",
+        "genetic-algorithm",
+        "particle-swarm"
+      ],
+      "seo_description": "bounds内に複数の谷や良い候補があるとき、multi-start、領域分割、annealing、population探索を選び分ける入口です。",
+      "seo_title": "大域探索・多峰性問題の選び分け",
+      "source_ids": [
+        "S006",
+        "S007",
+        "S008",
+        "S009",
+        "S058",
+        "S072",
+        "S073",
+        "S074"
+      ],
+      "status": "published",
+      "summary": "bounds内に複数の谷や良い候補があるとき、multi-start、領域分割、annealing、population探索を選び分ける入口です。",
+      "title_en": "Choosing a Global Search Strategy",
+      "title_ja": "大域探索・多峰性問題の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-大域性には複数の意味がある",
+          "label": "コラム: 大域性には複数の意味がある",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_DFO_LOCAL",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.local-dfo",
+      "html": "<p>勾配を使えない低〜中次元の連続問題で、Nelder–Mead、Powell、Pattern Search、COBYLA、MADSを選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>傾きが分からなくても、少し違う点を実際に試し、良かった方向・形・meshを次の探索へ引き継ぐこと</strong>です。</p>\n<ul>\n<li><p>見ているもの: 関数値、候補点の比較、探索geometry、必要なら制約違反</p>\n</li>\n<li><p>動かすもの: 単体、方向集合、poll点、mesh、局所model</p>\n</li>\n<li><p>前進の判断: 評価値の改善と探索半径・meshの縮小</p>\n</li>\n<li><p>主な弱点: 評価回数、高次元、noise floor、弱い停止診断</p>\n</li>\n</ul>\n<p>「微分不要」は「情報不要」ではありません。bounds、変数scale、評価budget、失敗した評価の扱いが結果を大きく変えます。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>次元</td>\n<td>次元が増えるほど候補評価が重くなる</td>\n</tr>\n<tr>\n<td>1評価の費用</td>\n<td>数十〜数千回の評価が許されるか</td>\n</tr>\n<tr>\n<td>bounds・一般制約</td>\n<td>無制約、単純bounds、black-box制約のどれか</td>\n</tr>\n<tr>\n<td>noise</td>\n<td>小さな改善を信頼できるか、再評価が必要か</td>\n</tr>\n<tr>\n<td>不連続・失敗</td>\n<td>simulation failureをどの値として扱うか</td>\n</tr>\n<tr>\n<td>求める保証</td>\n<td>良い局所候補か、stationarityの理論が必要か</td>\n</tr>\n</tbody>\n</table>\n<p>評価が非常に高価で回数が数十回に限られるなら、局所DFOよりBayesian Optimizationやsurrogate法を先に検討します。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>最も素朴な低次元候補</td>\n<td><a href=\"#/learn/method.nelder-mead\">Nelder–Mead</a></td>\n<td>非常に低次元、無制約または単純bounds、評価が比較的安価</td>\n<td>simplex退化、shrink反復、高次元</td>\n</tr>\n<tr>\n<td>方向を再利用</td>\n<td><a href=\"#/learn/powell\">Powell法</a></td>\n<td>座標・方向ごとの探索が効く、滑らかだが勾配なし</td>\n<td>line searchが不安定、方向集合が問題に合わない</td>\n</tr>\n<tr>\n<td>規則的な近傍探索</td>\n<td><a href=\"#/learn/pattern-search\">Pattern Search</a></td>\n<td>bounds内で分かりやすいpollを試したい</td>\n<td>mesh縮小だけ続き改善しない</td>\n</tr>\n<tr>\n<td>微分なしの一般制約</td>\n<td><a href=\"#/learn/cobyla\">COBYLA</a></td>\n<td>低次元、非線形制約を局所線形近似で扱いたい</td>\n<td>constraint violationが停滞、scaleが悪い</td>\n</tr>\n<tr>\n<td>black-box制約と理論</td>\n<td><a href=\"#/learn/mads\">MADS</a></td>\n<td>評価失敗・black-box制約、mesh stationarityを重視</td>\n<td>poll数がbudgetを圧迫、高次元</td>\n</tr>\n<tr>\n<td>同時摂動で高次元へ</td>\n<td><a href=\"#/methods/M_SPSA\">SPSA</a></td>\n<td>noiseあり、高次元、座標差分が高価</td>\n<td>gain sequenceが不安定、varianceが大きすぎる</td>\n</tr>\n</tbody>\n</table>\n<p>同じ「関数値だけで動く」手法でも、探索状態と制約の扱いは大きく違います。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>best-so-far objective</p>\n</li>\n<li><p>evaluation count</p>\n</li>\n<li><p>simplex diameter / mesh size / poll size</p>\n</li>\n<li><p>successful stepの割合</p>\n</li>\n<li><p>repeated or duplicate points</p>\n</li>\n<li><p>constraint violation</p>\n</li>\n<li><p>再評価した点のvariance</p>\n</li>\n<li><p>異なる初期点・初期geometryでの解</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>geometryだけ縮みbestが改善しない → scaling、restart、別familyを検討</p>\n</li>\n<li><p>noise floor以下の差を追う → 再評価、robust比較、停止条件を変更</p>\n</li>\n<li><p>高次元でpoll数が支配的 → SPSA、surrogate、構造を使う手法へ</p>\n</li>\n<li><p>一般制約の違反が減らない → COBYLA/MADS、または滑らかならconstrained NLPへ</p>\n</li>\n<li><p>初期点ごとに別basinへ入る → global-search familyへ</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>DFO比較ではiterationよりobjective evaluation数が重要です。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">experiment</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-black-box-instance&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;bounds&quot;</span><span class=\"p\">:</span> <span class=\"p\">[(</span><span class=\"o\">-</span><span class=\"mf\">2.0</span><span class=\"p\">,</span> <span class=\"mf\">2.0</span><span class=\"p\">),</span> <span class=\"p\">(</span><span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"mf\">3.0</span><span class=\"p\">)],</span>\n    <span class=\"s2\">&quot;initial_point&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mf\">1.2</span><span class=\"p\">,</span> <span class=\"mf\">1.0</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">400</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;noise_repeats&quot;</span><span class=\"p\">:</span> <span class=\"mi\">1</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;Nelder-Mead&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;Powell&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;MADS&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">experiment</span><span class=\"p\">[</span><span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;=</span> <span class=\"mi\">1</span></code></pre></div>\n<h2 id=\"コラム-小さくなったことと解けたこと\" tabindex=\"-1\">コラム: 小さくなったことと解けたこと</h2>\n<p>単体、mesh、探索半径が小さくなるのは、局所探索が細かくなったことを示します。しかし、良いbasinにいることや大域最適性を証明するものではありません。</p>\n<p>停止時には、geometryだけでなくbest objective、制約違反、複数start、残りbudgetを併記します。手法固有のstationarity保証がある場合も、その前提と実装の停止判定を区別します。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>評価が高価なら<a href=\"#/learn/family.expensive-black-box\">高価なblack-box探索の選び分け</a>、複数basinを広く探すなら<a href=\"#/learn/family.global-search\">大域探索の選び分け</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "method.nelder-mead",
+        "powell",
+        "pattern-search",
+        "cobyla",
+        "mads"
+      ],
+      "seo_description": "勾配を使えない低〜中次元の連続問題で、Nelder–Mead、Powell、Pattern Search、COBYLA、MADSを選び分ける入口です。",
+      "seo_title": "局所Derivative-free最適化の選び分け",
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S060",
+        "S063"
+      ],
+      "status": "published",
+      "summary": "勾配を使えない低〜中次元の連続問題で、Nelder–Mead、Powell、Pattern Search、COBYLA、MADSを選び分ける入口です。",
+      "title_en": "Choosing a Local Derivative-Free Optimizer",
+      "title_ja": "局所Derivative-free最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-小さくなったことと解けたこと",
+          "label": "コラム: 小さくなったことと解けたこと",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_SMOOTH_LOCAL",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.smooth-local",
+      "html": "<p>勾配や曲率を使える連続問題で、Gradient Descent、BFGS、Newton系を条件に応じて選び分けるための入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>現在地の近くで目的関数がどちらへ下がり、どの程度曲がっているかを使って、無駄の少ない一歩を作ること</strong>です。</p>\n<ul>\n<li><p>見ているもの: 目的関数値、勾配、必要ならHessianまたはHessian-vector積</p>\n</li>\n<li><p>動かすもの: 現在点と探索方向</p>\n</li>\n<li><p>前進の判断: 目的値の低下、勾配ノルムの低下、局所modelと実際の改善の一致</p>\n</li>\n<li><p>主な弱点: 初期値依存、微分の誤り、変数scale、非凸問題の局所解</p>\n</li>\n</ul>\n<p>「二階法が常に上位」という順位ではありません。1stepの賢さと、memory・線形代数・微分計算の重さを交換しています。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>勾配を正確に得られるか</td>\n<td>得られないなら、このfamilyを第一候補にしない</td>\n</tr>\n<tr>\n<td>変数数とmemory</td>\n<td>dense BFGSやHessianを保持できるか</td>\n</tr>\n<tr>\n<td>Hessian-vector積</td>\n<td>Newton-CGやtrust-regionを大規模化できるか</td>\n</tr>\n<tr>\n<td>bounds</td>\n<td>L-BFGS-Bやprojected methodが必要か</td>\n</tr>\n<tr>\n<td>非凸性</td>\n<td>局所停留点で十分か、負の曲率を扱いたいか</td>\n</tr>\n<tr>\n<td>必要精度</td>\n<td>粗い改善か、高精度なstationarityか</td>\n</tr>\n</tbody>\n</table>\n<p>勾配を自動微分で得られても、正しいとは限りません。有限差分との方向微分check、単位、batch平均、regularizationを確認します。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>分かりやすい基準点</td>\n<td><a href=\"#/learn/method.gradient-descent\">Gradient Descent</a></td>\n<td>更新則を理解したい、巨大問題で単純stepが必要</td>\n<td>learning rate調整だけで進まず評価回数が増える</td>\n</tr>\n<tr>\n<td>中小規模の標準候補</td>\n<td><a href=\"#/learn/bfgs\">BFGS</a></td>\n<td>滑らか、勾配が信頼できる、dense近似を保持可能</td>\n<td>memoryが支配的、line search failureが続く</td>\n</tr>\n<tr>\n<td>高次元・bounds</td>\n<td><a href=\"#/learn/lbfgsb\">L-BFGS-B</a></td>\n<td>変数が多い、上下限がある</td>\n<td>一般非線形制約が本質、曲率近似が不安定</td>\n</tr>\n<tr>\n<td>二階情報を直接利用</td>\n<td><a href=\"#/learn/newton-method\">Newton法</a></td>\n<td>Hessianが得られ、良い近傍で高精度化したい</td>\n<td>Hessianが不定・特異、線形系が重い</td>\n</tr>\n<tr>\n<td>二階法を安全に大規模化</td>\n<td><a href=\"#/learn/trust-region-newton-cg\">Trust-region Newton-CG</a></td>\n<td>HVPがあり、modelを信用する範囲を制御したい</td>\n<td>trust radiusが縮み続ける、HVPが不正</td>\n</tr>\n<tr>\n<td>低memory方向更新</td>\n<td><a href=\"#/methods/M_NLCG\">Nonlinear CG</a></td>\n<td>大規模無制約で勾配はあるがmemoryを抑えたい</td>\n<td>restartが頻発し、方向の質が保てない</td>\n</tr>\n</tbody>\n</table>\n<p>これは一般性能rankingではありません。同じproblem instance、初期点、gradient oracle、tolerance、budgetで比較します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>うまく進んでいるときは、目的値だけでなく次も改善します。</p>\n<ul>\n<li><p>勾配ノルムが一貫して小さくなる</p>\n</li>\n<li><p>line searchの試行回数が極端に増えない</p>\n</li>\n<li><p>step normが停止許容値へ近づく</p>\n</li>\n<li><p>trust-regionではactual / predicted reduction比が安定する</p>\n</li>\n<li><p>異なる初期値でも同程度の解へ到達する</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>gradient checkが一致しない → 微分・単位・データ処理を直す</p>\n</li>\n<li><p>line search failureが続く → scaling、trust-region、別のglobalizationを検討</p>\n</li>\n<li><p>memoryが支配的 → BFGSからL-BFGSやNLCGへ</p>\n</li>\n<li><p>局所解が初期値ごとに変わる → multi-startやglobal-search familyへ</p>\n</li>\n<li><p>bounds以外の制約違反が残る → constrained NLP familyへ</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>実装比較ではiteration数だけを揃えません。少なくとも評価回数と停止条件を記録します。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">experiment</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;problem_instance&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;same-smooth-objective&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_point&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"mf\">1.0</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">1.0</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;gradient_source&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;automatic-differentiation-checked&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">500</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;gradient_evaluation_budget&quot;</span><span class=\"p\">:</span> <span class=\"mi\">500</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;gradient_tolerance&quot;</span><span class=\"p\">:</span> <span class=\"mf\">1e-6</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;BFGS&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;L-BFGS-B&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;trust-ncg&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">experiment</span><span class=\"p\">[</span><span class=\"s2\">&quot;objective_evaluation_budget&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<h2 id=\"コラム-速い収束とは何か\" tabindex=\"-1\">コラム: 速い収束とは何か</h2>\n<p>Newton系の「速い」は、通常は<strong>解の十分近くでの局所収束率</strong>を指します。初期点が遠い、Hessianが不定、line searchやtrust-regionが候補stepを拒否する状況では、その速さはそのまま現れません。</p>\n<p>また、非凸問題で勾配が小さいことは大域最適性の証明ではありません。局所最小、鞍点、平坦領域を区別するには、曲率、複数初期値、problem固有の構造を追加で確認します。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>一般制約がある場合は<a href=\"#/learn/family.constrained-nlp\">制約付きNLPの選び分け</a>、勾配が信用できない場合は<a href=\"#/learn/family.local-dfo\">局所Derivative-freeの選び分け</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "method.gradient-descent",
+        "bfgs",
+        "lbfgsb",
+        "newton-method",
+        "trust-region-newton-cg"
+      ],
+      "seo_description": "勾配や曲率を使える連続問題で、Gradient Descent、BFGS、Newton系を条件に応じて選び分けるための入口です。",
+      "seo_title": "滑らかな局所最適化の選び分け",
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "status": "published",
+      "summary": "勾配や曲率を使える連続問題で、Gradient Descent、BFGS、Newton系を条件に応じて選び分けるための入口です。",
+      "title_en": "Choosing a Smooth Local Optimizer",
+      "title_ja": "滑らかな局所最適化の選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-速い収束とは何か",
+          "label": "コラム: 速い収束とは何か",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_STOCHASTIC_ML",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "family.stochastic-ml",
+      "html": "<p>mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>このfamilyの気持ちは、<strong>全データで正確な勾配を毎回計算せず、mini-batchから得る揺れる方向を何度も積み重ねて、学習目的を改善すること</strong>です。</p>\n<ul>\n<li><p>見ているもの: mini-batch gradient、training loss、validation metric、learning rate</p>\n</li>\n<li><p>動かすもの: parameter、momentum、一次・二次moment、weight decay</p>\n</li>\n<li><p>前進の判断: validation改善、loss低下、gradientやupdateの安定</p>\n</li>\n<li><p>主な弱点: learning-rate依存、seed variance、overfitting、plateau、gradient explosion</p>\n</li>\n</ul>\n<p>optimizerのtraining lossが最も低いことと、未知データで最も良いことは別です。validationと運用metricを停止判断へ含めます。</p>\n<h2 id=\"まず確認すること\" tabindex=\"-1\">まず確認すること</h2>\n<table>\n<thead>\n<tr>\n<th>確認項目</th>\n<th>選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>dataset / model規模</td>\n<td>full-batchが可能か、mini-batchが必要か</td>\n</tr>\n<tr>\n<td>gradient sparsity</td>\n<td>座標ごとのadaptive stepが有効か</td>\n</tr>\n<tr>\n<td>batch noise</td>\n<td>momentumやaveragingで安定化できるか</td>\n</tr>\n<tr>\n<td>hardware</td>\n<td>GPU、distributed、mixed precisionを使うか</td>\n</tr>\n<tr>\n<td>regularization</td>\n<td>weight decay、dropout、data augmentationとの関係</td>\n</tr>\n<tr>\n<td>training budget</td>\n<td>epoch、step、wall time、energyのどれを制約にするか</td>\n</tr>\n<tr>\n<td>generalization</td>\n<td>training objective以外のvalidation指標があるか</td>\n</tr>\n</tbody>\n</table>\n<p>小規模で高精度な凸問題なら、stochastic optimizerよりL-BFGSや専用solverが適する場合があります。</p>\n<h2 id=\"条件付きの選び分け\" tabindex=\"-1\">条件付きの選び分け</h2>\n<table>\n<thead>\n<tr>\n<th>役割</th>\n<th>手法</th>\n<th>優先しやすい条件</th>\n<th>切り替えを考える条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>基準となる単純更新</td>\n<td>SGD</td>\n<td>tuningに時間を使える、generalizationを重視、十分なtraining budget</td>\n<td>振動が強い、収束が遅すぎる</td>\n</tr>\n<tr>\n<td>方向を蓄積</td>\n<td><a href=\"#/learn/momentum-sgd\">Momentum SGD</a></td>\n<td>細長い谷、mini-batch noise、SGDの振動を抑えたい</td>\n<td>momentumが大きくovershootする</td>\n</tr>\n<tr>\n<td>adaptiveな標準候補</td>\n<td><a href=\"#/learn/adam\">Adam</a></td>\n<td>sparse/noisy gradient、初期の立ち上がりを速くしたい</td>\n<td>validationがSGD系より悪い、stepが不安定</td>\n</tr>\n<tr>\n<td>weight decayを分離</td>\n<td><a href=\"#/methods/M_ADAMW\">AdamW</a></td>\n<td>weight decayをregularizationとして明示したい</td>\n<td>decayとlearning-rate scheduleの調整が曖昧</td>\n</tr>\n<tr>\n<td>full-batch曲率利用</td>\n<td><a href=\"#/learn/bfgs\">BFGS</a> / L-BFGS</td>\n<td>小〜中規模、deterministic loss、full gradientが安価</td>\n<td>data全体のgradientが重い、online更新が必要</td>\n</tr>\n<tr>\n<td>座標更新</td>\n<td><a href=\"#/learn/coordinate-descent\">Coordinate Descent</a></td>\n<td>convex・sparse・座標subproblemが安価</td>\n<td>deep modelの一般trainingには自然でない</td>\n</tr>\n</tbody>\n</table>\n<p>AdamとSGDのどちらが「上」かではなく、初期改善、最終validation、wall time、memory、tuning budgetで判断します。</p>\n<h2 id=\"うまくいったサインと切替サイン\" tabindex=\"-1\">うまくいったサインと切替サイン</h2>\n<p>追うべき値:</p>\n<ul>\n<li><p>training lossとvalidation loss</p>\n</li>\n<li><p>primary business / scientific metric</p>\n</li>\n<li><p>learning rateとupdate norm</p>\n</li>\n<li><p>gradient normまたはgradient clipping率</p>\n</li>\n<li><p>epoch / step / wall time</p>\n</li>\n<li><p>seed間のばらつき</p>\n</li>\n<li><p>data throughputとhardware utilization</p>\n</li>\n<li><p>early stopping時点</p>\n</li>\n</ul>\n<p>切替サイン:</p>\n<ul>\n<li><p>lossが発散・NaN → learning rate、normalization、mixed precision、gradient clippingを確認</p>\n</li>\n<li><p>trainingは改善しvalidationが悪化 → optimizerよりregularizationと停止時点を見直す</p>\n</li>\n<li><p>Adamが早くplateau → schedule変更、SGD+momentumへの切替を比較</p>\n</li>\n<li><p>SGDの振動が大きい → momentum、batch size、preconditioningを検討</p>\n</li>\n<li><p>optimizer stateがmemoryを圧迫 → SGD、低memory法、parameter shardingを検討</p>\n</li>\n<li><p>seed差が大きい → 複数runで中央値・分散を報告</p>\n</li>\n</ul>\n<h2 id=\"小さな比較の型\" tabindex=\"-1\">小さな比較の型</h2>\n<p>同じepoch数だけでなく、data accessとwall timeも揃えます。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">training_contract</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;dataset_split_version&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;v1&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;initial_weights_seed&quot;</span><span class=\"p\">:</span> <span class=\"mi\">123</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;data_order_seeds&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"mi\">2</span><span class=\"p\">,</span> <span class=\"mi\">3</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;batch_size&quot;</span><span class=\"p\">:</span> <span class=\"mi\">128</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;maximum_epochs&quot;</span><span class=\"p\">:</span> <span class=\"mi\">100</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;early_stopping_metric&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;validation_loss&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;methods&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;SGD-momentum&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;Adam&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;AdamW&quot;</span><span class=\"p\">],</span>\n    <span class=\"s2\">&quot;reported_metrics&quot;</span><span class=\"p\">:</span> <span class=\"p\">[</span><span class=\"s2\">&quot;validation_loss&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;wall_time&quot;</span><span class=\"p\">,</span> <span class=\"s2\">&quot;peak_memory&quot;</span><span class=\"p\">],</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">training_contract</span><span class=\"p\">[</span><span class=\"s2\">&quot;maximum_epochs&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<h2 id=\"コラム-optimizerとtraining-recipe\" tabindex=\"-1\">コラム: optimizerとtraining recipe</h2>\n<p>実際の結果はoptimizer名だけで決まりません。learning-rate schedule、warmup、batch size、normalization、weight decay、gradient clipping、data augmentation、mixed precisionが一つのtraining recipeを作ります。</p>\n<p>比較では、optimizerだけ変更したのか、recipe全体を各手法向けに調整したのかを明記します。公平性は「parameterを全部同じにすること」ではなく、調整方針とbudgetを事前に決めることです。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>deterministicな滑らか問題なら<a href=\"#/learn/family.smooth-local\">滑らかな局所最適化</a>、trial自体が高価なhyperparameter探索なら<a href=\"#/learn/family.expensive-black-box\">高価なblack-box・HPO</a>へ進みます。</p>",
+      "kind": "method",
+      "last_reviewed": "2026-07-16",
+      "prerequisites": [],
+      "related_ids": [
+        "method.gradient-descent",
+        "momentum-sgd",
+        "adam",
+        "bfgs"
+      ],
+      "seo_description": "mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。",
+      "seo_title": "確率勾配・機械学習optimizerの選び分け",
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S070"
+      ],
+      "status": "published",
+      "summary": "mini-batch勾配を使う大規模学習で、SGD、Momentum、Adam、AdamWとfull-batch法を選び分ける入口です。",
+      "title_en": "Choosing a Stochastic ML Optimizer",
+      "title_ja": "確率勾配・機械学習optimizerの選び分け",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず確認すること",
+          "label": "まず確認すること",
+          "level": 2
+        },
+        {
+          "heading_id": "条件付きの選び分け",
+          "label": "条件付きの選び分け",
+          "level": 2
+        },
+        {
+          "heading_id": "うまくいったサインと切替サイン",
+          "label": "うまくいったサインと切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "小さな比較の型",
+          "label": "小さな比較の型",
+          "level": 2
+        },
+        {
+          "heading_id": "コラム-optimizerとtraining-recipe",
+          "label": "コラム: optimizerとtraining recipe",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "M_FISTA",
       "canonical_entity_type": "method",
       "comparison_ids": [],
