@@ -284,7 +284,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         second_output / "retrieval-documents.json"
     ).read_bytes()
     claim_payload = json.loads((first_output / "implementation-claims.json").read_bytes())
-    assert len(claim_payload["claims"]) == 64 * 7 + 1
+    assert len(claim_payload["claims"]) == 64 * 7 + 3
     assert claim_payload["freshness"]["claim_count"] == 64 * 7
     context_payload = json.loads((first_output / "benchmark-contexts.json").read_bytes())
     assert {item["category"] for item in context_payload["contexts"]} == {

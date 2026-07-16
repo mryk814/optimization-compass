@@ -1277,7 +1277,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published constrained-continuous and multi-objective learning slices.",
+            "Published canonical Trust Region Reflective data and versioned default-method claims.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1291,14 +1291,14 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "Constrained and multi-objective concepts lacked canonical executable visuals.",
+            "SciPy Trust Region Reflective lacked a canonical method and scoped default-selection claims.",
             (
-                "Added renderer-family contracts for feasible regions and Pareto fronts, "
-                "with canonical scenarios, references, and failure contrast."
+                "Added a canonical TRF method, one-to-one implementation relation, direct sources, "
+                "and API-scoped default-selection predicates."
             ),
             (
-                "Connect canonical problems to artifacts, routes, content, Gallery, "
-                "Map, and sources."
+                "Explain a high-use implicit library choice without converting a library default "
+                "into a context-free recommendation ranking."
             ),
             target_version,
             release_date,

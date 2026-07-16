@@ -1,0 +1,117 @@
+{
+  "contract_version": "1.1.0",
+  "dataset_version": "0.11.0",
+  "entries": [
+    {
+      "alt_en": "Report vertex ranks, candidate, operation, decision, and best value for each frame.",
+      "alt_ja": "各frameの頂点順位、候補点、操作、受理結果、最良値を順に読む。",
+      "animation_frame_indices": [
+        0,
+        2,
+        4,
+        9,
+        18,
+        27,
+        36,
+        45,
+        54,
+        63,
+        72,
+        81
+      ],
+      "artifact_contract": "AlgorithmTrace",
+      "artifact_contract_version": "1.0.0",
+      "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
+      "camera_preset": null,
+      "caption_en": "Nelder–Mead: simplex geometry and acceptance decisions",
+      "caption_ja": "Nelder–Mead: simplexの幾何操作と受理判断",
+      "captions": {
+        "bytes": 729,
+        "media_type": "text/vtt",
+        "path": "media/scenario-nm-quadratic/captions.vtt",
+        "sha256": "38191c82fbef7fc28d1e9ef608b1164e9d8c03a430cadf86cd1ddc811c038d1f"
+      },
+      "dataset_version": "0.11.0",
+      "files": [
+        {
+          "bytes": 3610,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 675,
+          "media_kind": "static_svg",
+          "media_type": "image/svg+xml",
+          "path": "media/scenario-nm-quadratic/static.svg",
+          "sha256": "18820fc7873cce697d8ea2e7049b278e6d42ab020b2ccabf815de4cf2ab1574f",
+          "width": 1200
+        },
+        {
+          "bytes": 10289,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 675,
+          "media_kind": "static_png",
+          "media_type": "image/png",
+          "path": "media/scenario-nm-quadratic/static.png",
+          "sha256": "6e7008e612da77fa054403c2e4bbc3f88ac33c9c074f244eff456c4b7f629827",
+          "width": 1200
+        },
+        {
+          "bytes": 3893,
+          "duration_seconds": null,
+          "frame_index": 81,
+          "height": 338,
+          "media_kind": "thumbnail",
+          "media_type": "image/png",
+          "path": "media/scenario-nm-quadratic/thumbnail.png",
+          "sha256": "e9c575b038c52aa401482efac022aa1802f003810276e4cb6737f94e86587008",
+          "width": 600
+        },
+        {
+          "bytes": 11392,
+          "duration_seconds": 7.199999999999999,
+          "frame_index": 81,
+          "height": 360,
+          "media_kind": "animated_gif",
+          "media_type": "image/gif",
+          "path": "media/scenario-nm-quadratic/animation.gif",
+          "sha256": "4b6a8b0bd0e2e2999f2848b752ec703a51d25a9fff7920fcf83cf577fb94345b",
+          "width": 640
+        },
+        {
+          "bytes": 10037,
+          "duration_seconds": 7.199999999999999,
+          "frame_index": 81,
+          "height": 360,
+          "media_kind": "webm",
+          "media_type": "video/webm",
+          "path": "media/scenario-nm-quadratic/animation.webm",
+          "sha256": "6809f85301c92d5508af3c97642146040033613b964a840252492d68c8347c9b",
+          "width": 640
+        }
+      ],
+      "frame_duration_seconds": 0.6,
+      "frame_index": 81,
+      "license_spdx_id": "CC-BY-4.0",
+      "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
+      "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
+      "media_id": "nelder-mead-quadratic-derived",
+      "narration_version": "1.0.0",
+      "renderer_contract_version": "1.0.0",
+      "renderer_family": "simplex_geometry",
+      "scenario_id": "SCENARIO_NM_QUADRATIC",
+      "source_artifact_path": "traces/nelder-mead-quadratic.json",
+      "source_artifact_sha256": "ee074baa417b9ac74649595210f46a0ab62c93ec6212c0c5e5f0491632448451",
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "transcript": {
+        "bytes": 724,
+        "media_type": "text/plain",
+        "path": "media/scenario-nm-quadratic/transcript.txt",
+        "sha256": "e834eaa6ca79122b5a77bdd1a0ed5e4980e8a72dc659ad4eeb4885c1a4846756"
+      },
+      "viewport_preset": "terminal"
+    }
+  ]
+}

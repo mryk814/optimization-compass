@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -35,7 +35,7 @@
       "source_type": "vendor_manual"
     }
   ],
-  "generated_at": "2026-07-15T00:00:00Z",
+  "generated_at": "2026-07-16T00:00:00Z",
   "sources": [
     {
       "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
@@ -3028,30 +3028,30 @@
           "target_type": "problem_method_fit"
         },
         {
-          "canonical_url": "/methods/M_GAUSS_NEWTON",
-          "claim_summary": "",
+          "canonical_url": "/methods/M_TRUST_REGION_REFLECTIVE",
+          "claim_summary": "SciPy least_squares provides the native Trust Region Reflective implementation.",
           "confidence": "high",
           "evidence_link_id": "EL003044",
           "evidence_role": "supporting_or_primary",
           "external_url": null,
-          "label": "M_GAUSS_NEWTON → I_SCIPY_LEAST_SQUARES_TRF",
-          "last_verified": "2026-07-13",
+          "label": "M_TRUST_REGION_REFLECTIVE → I_SCIPY_LEAST_SQUARES_TRF",
+          "last_verified": "2026-07-16",
           "supported_field": "row",
-          "target_id": "MIM00011",
+          "target_id": "MIM_TRF_SCIPY",
           "target_table": "method_implementation_map",
           "target_type": "method_implementation"
         },
         {
-          "canonical_url": "/methods/M_TRUST_KRYLOV",
-          "claim_summary": "",
+          "canonical_url": "/methods/M_TRUST_REGION_REFLECTIVE",
+          "claim_summary": "SciPy least_squares provides the native Trust Region Reflective implementation.",
           "confidence": "high",
           "evidence_link_id": "EL003045",
           "evidence_role": "supporting_or_primary",
           "external_url": null,
-          "label": "M_TRUST_KRYLOV → I_SCIPY_LEAST_SQUARES_TRF",
-          "last_verified": "2026-07-13",
+          "label": "M_TRUST_REGION_REFLECTIVE → I_SCIPY_LEAST_SQUARES_TRF",
+          "last_verified": "2026-07-16",
           "supported_field": "row",
-          "target_id": "MIM00012",
+          "target_id": "MIM_TRF_SCIPY",
           "target_table": "method_implementation_map",
           "target_type": "method_implementation"
         },
@@ -60384,6 +60384,36 @@
       "source_type": "official_repository",
       "supported_claim": "Implementation, license, and current release metadata",
       "title": "Manopt.jl Repository"
+    },
+    {
+      "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [],
+      "last_verified": "2026-07-16",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1137/S1064827595289108",
+      "publication_date": "1999-01-01",
+      "publisher": "Branch, Coleman, and Li",
+      "source_id": "S096",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Trust Region Reflective / STIR bound-constrained trust-region method",
+      "title": "A Subspace, Interior, and Conjugate Gradient Method for Large-Scale Bound-Constrained Minimization Problems"
+    },
+    {
+      "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
+      "currentness_status": "verified_current",
+      "evidence_targets": [],
+      "last_verified": "2026-07-16",
+      "license": "unknown",
+      "official_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html",
+      "publication_date": "None",
+      "publisher": "SciPy",
+      "source_id": "S097",
+      "source_quality": "primary",
+      "source_type": "official_documentation",
+      "supported_claim": "curve_fit method selection and bounds-dependent defaults",
+      "title": "scipy.optimize.curve_fit"
     }
   ]
 }

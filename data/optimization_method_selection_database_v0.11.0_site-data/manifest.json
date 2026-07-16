@@ -1,0 +1,104 @@
+{
+  "benchmark_contexts": {
+    "path": "benchmark-contexts.json",
+    "version": "1.0.0"
+  },
+  "coverage": {
+    "path": "coverage.json",
+    "report_path": "coverage.md",
+    "version": "1.0.0"
+  },
+  "dataset_version": "0.11.0",
+  "derived_media": {
+    "path": "media/manifest.json",
+    "version": "1.1.0"
+  },
+  "entity_links": {
+    "path": "entity-links.json",
+    "version": "1.0.0"
+  },
+  "failure_modes": {
+    "path": "failure-modes.json",
+    "version": "1.0.0"
+  },
+  "generated_at": "2026-07-16T00:00:00Z",
+  "implementation_claims": {
+    "path": "implementation-claims.json",
+    "version": "1.0.0"
+  },
+  "licenses": {
+    "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors",
+    "code": {
+      "path": "licenses/LICENSE.txt",
+      "spdx_id": "MIT"
+    },
+    "content": {
+      "path": "licenses/CONTENT_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "data": {
+      "path": "licenses/DATA_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "legal_code_path": "licenses/CC-BY-4.0.txt",
+    "notice_path": "licenses/NOTICE.txt"
+  },
+  "problems": {
+    "path": "problems.json",
+    "version": "1.0.0"
+  },
+  "recommendation": {
+    "path": "recommendation/site-data.json",
+    "version": "2.0.0"
+  },
+  "retrieval_documents": {
+    "path": "retrieval-documents.json",
+    "version": "1.0.0"
+  },
+  "search_benchmark": {
+    "path": "search-benchmark.json",
+    "version": "1.0.0"
+  },
+  "search_index": {
+    "path": "search-index.json",
+    "version": "1.0.0"
+  },
+  "sources": {
+    "path": "sources.json",
+    "version": "1.0.0"
+  },
+  "traces": {
+    "bytes": 5016,
+    "contract_version": "1.0.0",
+    "index_version": "1.0.0",
+    "path": "traces/index.json",
+    "sha256": "4e330bc674c28254fd30b0b82996ca6278abdec644b94e3113aa085f84c70dab"
+  },
+  "version": "1.1.0",
+  "views": [
+    {
+      "path": "views/problem-structure.json",
+      "version": "1.0.0",
+      "view_id": "problem-structure"
+    },
+    {
+      "path": "views/available-information.json",
+      "version": "1.0.0",
+      "view_id": "available-information"
+    },
+    {
+      "path": "views/guarantee-outcome.json",
+      "version": "1.0.0",
+      "view_id": "guarantee-outcome"
+    },
+    {
+      "path": "views/method-mechanism.json",
+      "version": "1.0.0",
+      "view_id": "method-mechanism"
+    }
+  ],
+  "visualization_scenarios": {
+    "path": "visualization-scenarios.json",
+    "version": "1.2.0"
+  }
+}

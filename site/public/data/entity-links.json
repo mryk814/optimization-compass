@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.10.0",
+  "dataset_version": "0.11.0",
   "entities": [
     {
       "aliases": [],
@@ -3059,6 +3059,11 @@
           "relation_type": "related_content",
           "target_id": "trust-region-newton-cg",
           "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
         }
       ],
       "summary": "観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。"
@@ -4212,6 +4217,62 @@
         }
       ],
       "summary": "局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "trust-region-reflective",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Trust Region Reflective（TRF）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S096",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_TRUST_REGION_REFLECTIVE",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lbfgsb",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-krylov",
+          "target_type": "content"
+        }
+      ],
+      "summary": "bounds付き非線形最小二乗で、境界までの距離と反射方向を使いながらGauss–Newton型の局所modelを安全に改善する方法です。"
     },
     {
       "aliases": [],
@@ -9572,16 +9633,11 @@
       "relations": [
         {
           "relation_type": "implements",
-          "target_id": "M_GAUSS_NEWTON",
-          "target_type": "method"
-        },
-        {
-          "relation_type": "implements",
-          "target_id": "M_TRUST_KRYLOV",
+          "target_id": "M_TRUST_REGION_REFLECTIVE",
           "target_type": "method"
         }
       ],
-      "summary": "residual vectorとJacobian sparsityを直接渡す。robust lossも選択可能。"
+      "summary": "residual vectorとJacobian sparsityを直接渡す。least_squaresのdefaultはtrf。curve_fitはbounds指定時にtrfを選ぶ。robust lossも選択可能。"
     },
     {
       "aliases": [],
@@ -12278,11 +12334,6 @@
           "target_type": "implementation"
         },
         {
-          "relation_type": "implementation",
-          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
-          "target_type": "implementation"
-        },
-        {
           "relation_type": "learning",
           "target_id": "gauss-newton",
           "target_type": "content"
@@ -14828,11 +14879,6 @@
         },
         {
           "relation_type": "implementation",
-          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
-          "target_type": "implementation"
-        },
-        {
-          "relation_type": "implementation",
           "target_id": "I_SCIPY_TRUST_CONSTR",
           "target_type": "implementation"
         },
@@ -14886,6 +14932,44 @@
         }
       ],
       "summary": "Newton-CGでtrust-region部分問題を解く。"
+    },
+    {
+      "aliases": [
+        "/learn/trust-region-reflective"
+      ],
+      "canonical_url": "/methods/M_TRUST_REGION_REFLECTIVE",
+      "entity_id": "M_TRUST_REGION_REFLECTIVE",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "トラストリージョン・リフレクティブ法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S096",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "trust-region-reflective",
+          "target_type": "content"
+        }
+      ],
+      "summary": "bounds付き非線形最小二乗で、境界までの距離と反射方向を使いながらGauss–Newton型の局所modelを安全に改善するtrust-region法。"
     },
     {
       "aliases": [],
@@ -16561,6 +16645,26 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/sources/S096",
+      "entity_id": "S096",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1137/S1064827595289108",
+      "label": "A Subspace, Interior, and Conjugate Gradient Method for Large-Scale Bound-Constrained Minimization Problems",
+      "relations": [],
+      "summary": "Trust Region Reflective / STIR bound-constrained trust-region method"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S097",
+      "entity_id": "S097",
+      "entity_type": "source",
+      "external_url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html",
+      "label": "scipy.optimize.curve_fit",
+      "relations": [],
+      "summary": "curve_fit method selection and bounds-dependent defaults"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/adam-quadratic",
       "entity_id": "adam-quadratic",
       "entity_type": "trace",
@@ -17003,5 +17107,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-07-15T00:00:00Z"
+  "generated_at": "2026-07-16T00:00:00Z"
 }

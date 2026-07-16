@@ -22,7 +22,7 @@ def test_source_evidence_index_exports_every_source_and_canonical_link(
         generated_at=datetime(2026, 7, 13, tzinfo=UTC),
     )
 
-    assert len(index.sources) == 95
+    assert len(index.sources) == 97
     assert sum(len(source.evidence_targets) for source in index.sources) == 4193
     assert {rule.source_type for rule in index.freshness_policy} == set(SOURCE_FRESHNESS_DAYS)
     scipy = next(source for source in index.sources if source.source_id == "S001")
