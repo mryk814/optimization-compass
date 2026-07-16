@@ -259,6 +259,17 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert (first_output / "learning-journeys.json").read_bytes() == (
         second_output / "learning-journeys.json"
     ).read_bytes()
+    assert manifest_payload["formulation_primer"] == {
+        "path": "formulation-primer.json",
+        "version": "1.0.0",
+    }
+    formulation_primer = json.loads(
+        (first_output / "formulation-primer.json").read_text(encoding="utf-8")
+    )
+    assert len(formulation_primer["diagnosis_mappings"]) == 12
+    assert (first_output / "formulation-primer.json").read_bytes() == (
+        second_output / "formulation-primer.json"
+    ).read_bytes()
     assert manifest_payload["sources"] == {
         "path": "sources.json",
         "version": "1.0.0",

@@ -14,7 +14,10 @@ import {
 } from "../../state/atlas-state";
 import { useAtlasState } from "../../state/useAtlasState";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
-import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
+import {
+  diagnosisFieldCue,
+  OptimizationProblemPrimer,
+} from "../../components/OptimizationProblemPrimer";
 import {
   DIAGNOSIS_QUESTION_TITLES,
   diagnosisChoiceLabel,
@@ -133,6 +136,7 @@ function Question({
   return (
     <fieldset className={hasAnswer ? "diagnose-question diagnose-question-answered" : "diagnose-question"}>
       <legend><span aria-hidden="true">{question.sequence}</span>{title}</legend>
+      <span className="diagnose-formulation-cue">定式化のどこ？ {diagnosisFieldCue(question.question_id)}</span>
       {title !== question.question_ja && (
         <details className="diagnose-question-technical">
           <summary>技術用語で確認</summary>

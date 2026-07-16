@@ -275,7 +275,7 @@ class SiteLicenseManifest(ContractModel):
 
 
 class SiteManifest(ContractModel):
-    version: Literal["1.2.0"] = "1.2.0"
+    version: Literal["1.3.0"] = "1.3.0"
     dataset_version: str = Field(min_length=1)
     generated_at: datetime
     views: list[ManifestView]
@@ -283,6 +283,7 @@ class SiteManifest(ContractModel):
     traces: ManifestTraceAsset
     problems: ManifestAsset
     learning_journeys: ManifestAsset
+    formulation_primer: ManifestAsset
     visualization_scenarios: ManifestVisualizationScenarioAsset
     derived_media: ManifestDerivedMediaAsset
     entity_links: ManifestAsset

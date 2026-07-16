@@ -58,13 +58,14 @@ const mediaManifest = {
   entries: generatedMedia.entries.map((entry) => ({ ...entry, dataset_version: "0.2.0" })),
 };
 const manifest = {
-  version: "1.2.0",
+  version: "1.3.0",
   dataset_version: "0.2.0",
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
   recommendation: { version: "2.0.0", path: "recommendation/site-data.json" },
   problems: { version: "1.0.0", path: "problems.json" },
   learning_journeys: { version: "1.0.0", path: "learning-journeys.json" },
+  formulation_primer: { version: "1.0.0", path: "formulation-primer.json" },
   visualization_scenarios: { version: "1.2.0", path: "visualization-scenarios.json" },
   derived_media: { version: "1.1.0", path: "media/manifest.json" },
   entity_links: { version: "1.0.0", path: "entity-links.json" },
