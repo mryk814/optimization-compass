@@ -231,7 +231,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     }
     assert manifest_payload["derived_media"] == {
         "path": "media/manifest.json",
-        "version": "1.0.0",
+        "version": "1.1.0",
     }
     first_media_bytes = (first_output / "media/manifest.json").read_bytes()
     assert first_media_bytes == (second_output / "media/manifest.json").read_bytes()
@@ -242,6 +242,12 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
             assert content == (second_output / file["path"]).read_bytes()
             assert file["bytes"] == len(content)
             assert file["sha256"] == sha256(content).hexdigest()
+        for key in ("captions", "transcript"):
+            text_asset = entry[key]
+            content = (first_output / text_asset["path"]).read_bytes()
+            assert content == (second_output / text_asset["path"]).read_bytes()
+            assert text_asset["bytes"] == len(content)
+            assert text_asset["sha256"] == sha256(content).hexdigest()
     assert manifest_payload["entity_links"] == {
         "path": "entity-links.json",
         "version": "1.0.0",

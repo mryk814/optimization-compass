@@ -1397,6 +1397,8 @@ caption {
 .surface-axis-labels text { fill: #405248; font-size: 11px; font-weight: 800; text-anchor: middle; }
 .linked-surface-figure figcaption { display: flex; justify-content: space-between; gap: .75rem; margin-top: .3rem; color: #68736c; font-size: .66rem; line-height: 1.45; }
 .linked-surface-figure figcaption strong { color: #33483d; font-variant-numeric: tabular-nums; }
+.derived-media-preview { min-width: 0; }
+.derived-media-preview video { display: block; width: 100%; height: auto; border-radius: .45rem; background: #eef2ec; }
 .nm-plot { width: 100%; border: 1px solid #d9dbd4; border-radius: .55rem; background: #f3f5ef; }
 .nm-grid { stroke: #dbe2d8; stroke-width: 1; }
 .nm-simplex { fill: #99bea9; fill-opacity: .35; stroke: #315c48; stroke-width: 2; }

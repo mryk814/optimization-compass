@@ -12,6 +12,13 @@ export interface DerivedMediaFile {
   sha256: string;
 }
 
+export interface DerivedMediaTextAsset {
+  media_type: "text/vtt" | "text/plain";
+  path: string;
+  bytes: number;
+  sha256: string;
+}
+
 export interface DerivedMediaEntry {
   media_id: string;
   scenario_id: string;
@@ -23,6 +30,8 @@ export interface DerivedMediaEntry {
   source_artifact_path: string;
   source_artifact_sha256: string;
   frame_index: number;
+  animation_frame_indices: number[];
+  frame_duration_seconds: number;
   viewport_preset: string;
   camera_preset: string | null;
   narration_version: string | null;
@@ -35,11 +44,13 @@ export interface DerivedMediaEntry {
   caption_en: string;
   license_spdx_id: "CC-BY-4.0";
   attribution: string;
+  captions: DerivedMediaTextAsset;
+  transcript: DerivedMediaTextAsset;
   files: DerivedMediaFile[];
 }
 
 export interface DerivedMediaManifest {
-  contract_version: "1.0.0";
+  contract_version: "1.1.0";
   dataset_version: string;
   entries: DerivedMediaEntry[];
 }
@@ -50,7 +61,7 @@ const mediaTypes = new Set<DerivedMediaFile["media_type"]>(["image/png", "image/
 export function parseDerivedMediaManifest(raw: unknown): DerivedMediaManifest {
   const data = record(raw, "DerivedMediaManifest");
   exact(data, ["contract_version", "dataset_version", "entries"], "DerivedMediaManifest");
-  if (data.contract_version !== "1.0.0") throw new Error("DerivedMediaManifest version is unsupported.");
+  if (data.contract_version !== "1.1.0") throw new Error("DerivedMediaManifest version is unsupported.");
   const datasetVersion = text(data.dataset_version, "dataset_version");
   const entries = list(data.entries, "entries").map((item, index) => parseEntry(item, `entries[${index}]`));
   if (entries.length === 0) throw new Error("derived media entries must not be empty.");
@@ -60,7 +71,7 @@ export function parseDerivedMediaManifest(raw: unknown): DerivedMediaManifest {
   if (entries.some((entry) => entry.dataset_version !== datasetVersion)) {
     throw new Error("derived media dataset versions must match the manifest.");
   }
-  return { contract_version: "1.0.0", dataset_version: datasetVersion, entries };
+  return { contract_version: "1.1.0", dataset_version: datasetVersion, entries };
 }
 
 function parseEntry(raw: unknown, field: string): DerivedMediaEntry {
@@ -68,13 +79,17 @@ function parseEntry(raw: unknown, field: string): DerivedMediaEntry {
   exact(data, [
     "media_id", "scenario_id", "dataset_version", "artifact_contract", "artifact_contract_version",
     "renderer_family", "renderer_contract_version", "source_artifact_path", "source_artifact_sha256",
-    "frame_index", "viewport_preset", "camera_preset", "narration_version", "source_ids",
+    "frame_index", "animation_frame_indices", "frame_duration_seconds", "viewport_preset", "camera_preset", "narration_version", "source_ids",
     "limitations_ja", "limitations_en", "alt_ja", "alt_en", "caption_ja", "caption_en",
-    "license_spdx_id", "attribution", "files",
+    "license_spdx_id", "attribution", "captions", "transcript", "files",
   ], field);
   if (data.license_spdx_id !== "CC-BY-4.0") throw new Error(`${field}.license_spdx_id is unsupported.`);
   const files = list(data.files, `${field}.files`).map((item, index) => parseFile(item, `${field}.files[${index}]`));
   if (files.length === 0) throw new Error(`${field}.files must not be empty.`);
+  const animationFrameIndices = list(data.animation_frame_indices, `${field}.animation_frame_indices`).map(
+    (item, index) => nonNegativeInteger(item, `${field}.animation_frame_indices[${index}]`),
+  );
+  if (animationFrameIndices.length < 2) throw new Error(`${field}.animation_frame_indices must contain at least two frames.`);
   return {
     media_id: text(data.media_id, `${field}.media_id`),
     scenario_id: text(data.scenario_id, `${field}.scenario_id`),
@@ -86,6 +101,8 @@ function parseEntry(raw: unknown, field: string): DerivedMediaEntry {
     source_artifact_path: safePath(data.source_artifact_path, `${field}.source_artifact_path`),
     source_artifact_sha256: hash(data.source_artifact_sha256, `${field}.source_artifact_sha256`),
     frame_index: nonNegativeInteger(data.frame_index, `${field}.frame_index`),
+    animation_frame_indices: animationFrameIndices,
+    frame_duration_seconds: positiveNumber(data.frame_duration_seconds, `${field}.frame_duration_seconds`),
     viewport_preset: text(data.viewport_preset, `${field}.viewport_preset`),
     camera_preset: nullableText(data.camera_preset, `${field}.camera_preset`),
     narration_version: nullableText(data.narration_version, `${field}.narration_version`),
@@ -98,7 +115,28 @@ function parseEntry(raw: unknown, field: string): DerivedMediaEntry {
     caption_en: text(data.caption_en, `${field}.caption_en`),
     license_spdx_id: "CC-BY-4.0",
     attribution: text(data.attribution, `${field}.attribution`),
+    captions: parseTextAsset(data.captions, `${field}.captions`, "text/vtt", ".vtt"),
+    transcript: parseTextAsset(data.transcript, `${field}.transcript`, "text/plain", ".txt"),
     files,
+  };
+}
+
+function parseTextAsset(
+  raw: unknown,
+  field: string,
+  expectedType: DerivedMediaTextAsset["media_type"],
+  extension: string,
+): DerivedMediaTextAsset {
+  const data = record(raw, field);
+  exact(data, ["media_type", "path", "bytes", "sha256"], field);
+  if (data.media_type !== expectedType) throw new Error(`${field}.media_type is invalid.`);
+  const path = safePath(data.path, `${field}.path`);
+  if (!path.startsWith("media/") || !path.endsWith(extension)) throw new Error(`${field}.path is invalid.`);
+  return {
+    media_type: expectedType,
+    path,
+    bytes: positiveInteger(data.bytes, `${field}.bytes`),
+    sha256: hash(data.sha256, `${field}.sha256`),
   };
 }
 

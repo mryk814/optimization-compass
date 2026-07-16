@@ -64,6 +64,8 @@ export function NelderMeadVisualization({
   const thumbnail = derivedMedia?.files.find((file) => file.media_kind === "thumbnail");
   const staticPng = derivedMedia?.files.find((file) => file.media_kind === "static_png");
   const staticSvg = derivedMedia?.files.find((file) => file.media_kind === "static_svg");
+  const animatedGif = derivedMedia?.files.find((file) => file.media_kind === "animated_gif");
+  const webm = derivedMedia?.files.find((file) => file.media_kind === "webm");
 
   return (
     <article className="atlas-page nm-theater">
@@ -211,20 +213,46 @@ export function NelderMeadVisualization({
 
       {derivedMedia && thumbnail && (
         <section className="derived-media-card" aria-labelledby="derived-media-heading">
-          <img
-            alt={derivedMedia.alt_ja}
-            height={thumbnail.height}
-            src={`${siteBaseUrl()}data/${thumbnail.path}`}
-            width={thumbnail.width}
-          />
+          <div className="derived-media-preview">
+            {webm ? (
+              <video
+                aria-label={derivedMedia.alt_ja}
+                controls
+                height={webm.height}
+                poster={`${siteBaseUrl()}data/${thumbnail.path}`}
+                preload="metadata"
+                width={webm.width}
+              >
+                <source src={`${siteBaseUrl()}data/${webm.path}`} type={webm.media_type} />
+                <track
+                  default
+                  kind="captions"
+                  label="日本語 / English"
+                  src={`${siteBaseUrl()}data/${derivedMedia.captions.path}`}
+                  srcLang="ja"
+                />
+              </video>
+            ) : (
+              <img
+                alt={derivedMedia.alt_ja}
+                height={thumbnail.height}
+                src={`${siteBaseUrl()}data/${thumbnail.path}`}
+                width={thumbnail.width}
+              />
+            )}
+          </div>
           <div>
             <p className="eyebrow">Derived media · deterministic</p>
-            <h2 id="derived-media-heading">再利用できる静止画</h2>
+            <h2 id="derived-media-heading">再利用できる静止画・animation</h2>
             <p>{derivedMedia.caption_ja}</p>
             <p className="atlas-note">frame {derivedMedia.frame_index + 1} · {derivedMedia.viewport_preset} · {derivedMedia.license_spdx_id}</p>
             <div className="derived-media-links">
               {staticPng && <a href={`${siteBaseUrl()}data/${staticPng.path}`}>PNGを開く</a>}
               {staticSvg && <a href={`${siteBaseUrl()}data/${staticSvg.path}`}>SVGを開く</a>}
+              {animatedGif && <a href={`${siteBaseUrl()}data/${animatedGif.path}`}>GIFを開く</a>}
+              {webm && <a href={`${siteBaseUrl()}data/${webm.path}`}>WebMを開く</a>}
+              <a href={`${siteBaseUrl()}data/${derivedMedia.captions.path}`}>字幕を開く</a>
+              <a href={`${siteBaseUrl()}data/${derivedMedia.transcript.path}`}>Transcriptを開く</a>
             </div>
             <small>{derivedMedia.attribution}</small>
           </div>

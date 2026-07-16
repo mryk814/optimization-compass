@@ -52,7 +52,7 @@ export interface SiteManifest {
   traces: ManifestTraceAsset;
   problems: ManifestAsset;
   visualization_scenarios: ManifestAsset<"1.2.0">;
-  derived_media: ManifestAsset;
+  derived_media: ManifestAsset<"1.1.0">;
   entity_links: ManifestAsset;
   sources: ManifestAsset;
   implementation_claims: ManifestAsset;
@@ -165,7 +165,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   }
   const derivedMedia = record(data.derived_media, "derived_media");
   exactKeys(derivedMedia, ["version", "path"], "derived_media");
-  if (derivedMedia.version !== "1.0.0" || derivedMedia.path !== "media/manifest.json") {
+  if (derivedMedia.version !== "1.1.0" || derivedMedia.path !== "media/manifest.json") {
     throw new Error("derived_media is unsupported.");
   }
   const coverage = record(data.coverage, "coverage");
@@ -200,7 +200,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       path: safeRelativePath(visualizationScenarios.path, "visualization_scenarios.path"),
     },
     derived_media: {
-      version: "1.0.0",
+      version: "1.1.0",
       path: safeRelativePath(derivedMedia.path, "derived_media.path"),
     },
     entity_links: {
