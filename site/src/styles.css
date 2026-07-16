@@ -1414,6 +1414,33 @@ caption {
 .atlas-note, .comparison-contract { margin: .7rem 0 0; padding: .65rem .75rem; border: 1px solid #d1d5cc; border-radius: .45rem; background: #faf9f4; color: #465249; font-size: .75rem; }
 .comparison-contract { display: flex; gap: .4rem .8rem; flex-wrap: wrap; }
 .comparison-contract p { flex-basis: 100%; margin: 0; color: #68736c; }
+.comparison-contract-v2 { margin: .8rem 0 1rem; overflow: hidden; border: 1px solid #cbd8ce; border-radius: .65rem; background: #f8faf6; }
+.comparison-contract-v2 > header { padding: .75rem .85rem; border-bottom: 1px solid #dce4dc; }
+.comparison-contract-v2 > header > span { color: #8b4d2c; font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.comparison-contract-v2 h2 { margin: .2rem 0 .25rem; color: #213e30; font-size: 1rem; }
+.comparison-contract-v2 header p { margin: 0; color: #59645d; font-size: .74rem; }
+.comparison-factor-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.comparison-factor-grid article { min-width: 0; padding: .7rem .8rem; border-left: 1px solid #dce4dc; }
+.comparison-factor-grid article:first-child { border-left: 0; }
+.comparison-factor-grid h3 { margin: 0 0 .35rem; color: #315c48; font-size: .76rem; }
+.comparison-factor-grid ul, .comparison-limitations { margin: 0; padding-left: 1.05rem; color: #536159; font-size: .7rem; line-height: 1.55; }
+.comparison-policy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; border-top: 1px solid #dce4dc; }
+.comparison-policy-grid div { min-width: 0; padding: .48rem .7rem; border-right: 1px solid #dce4dc; border-bottom: 1px solid #dce4dc; }
+.comparison-policy-grid dt { color: #7b4e34; font-size: .62rem; font-weight: 800; }
+.comparison-policy-grid dd { margin: .12rem 0 0; color: #4d5a52; font-size: .67rem; line-height: 1.4; overflow-wrap: anywhere; }
+.comparison-fairness, .comparison-contract-v2 > .comparison-caveat { margin: 0; padding: .52rem .8rem; color: #46534b; font-size: .7rem; line-height: 1.5; }
+.comparison-contract-v2 > .comparison-caveat { border-top: 1px solid #e1e5df; background: #fff8ef; }
+.scenario-comparison > header { margin: 1rem 0 .65rem; }
+.scenario-comparison > header h2 { margin: 0 0 .2rem; font-size: 1.05rem; }
+.scenario-comparison > header p { margin: 0; color: #59645d; font-size: .76rem; }
+.comparison-scenario-members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: .55rem; margin: .75rem 0; }
+.comparison-scenario-members article { padding: .6rem .7rem; border: 1px solid #d7ddd7; border-radius: .45rem; background: #fff; }
+.comparison-scenario-members span { color: #8b4d2c; font-size: .6rem; font-weight: 800; text-transform: uppercase; }
+.comparison-scenario-members h3 { margin: .2rem 0; font-size: .8rem; }
+.comparison-scenario-members p { margin: 0; color: #647068; font-size: .68rem; }
+.comparison-return-links { display: flex; flex-wrap: wrap; gap: .35rem .85rem; margin: 1rem 0; padding: .7rem 0; border-block: 1px solid #dce1db; }
+.comparison-return-links h2 { flex-basis: 100%; margin: 0 0 .15rem; color: #425149; font-size: .85rem; }
+.comparison-return-links a { color: #285740; font-size: .72rem; font-weight: 700; text-underline-offset: 2px; }
 .comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; margin-top: .65rem; }
 .comparison-card, .content-card, .gallery-card { min-width: 0; padding: .65rem; border: 1px solid #d9dbd4; border-radius: .45rem; background: #fff; }
 .comparison-card header { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
@@ -1669,6 +1696,8 @@ caption {
 .gallery-section h3 { margin: .65rem 0 .2rem; color: #6b4a35; font-size: .75rem; }
 
 @media (max-width: 44rem) {
+  .comparison-factor-grid, .comparison-policy-grid { grid-template-columns: minmax(0, 1fr); }
+  .comparison-factor-grid article, .comparison-factor-grid article:first-child { border-top: 1px solid #dce4dc; border-left: 0; }
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }
   .nm-layout { grid-template-columns: minmax(0, 1fr); }
   .linked-surface-card { padding: .6rem; }

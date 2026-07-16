@@ -170,8 +170,8 @@
       "result_count": 3,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
-        "trace:constrained-disk-feasible-region",
-        "comparison:COMPARE_GRADIENT_DIVERGENCE"
+        "comparison:COMPARE_PARETO_PREFERENCE",
+        "trace:constrained-disk-feasible-region"
       ]
     },
     {

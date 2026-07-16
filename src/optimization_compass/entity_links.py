@@ -415,8 +415,24 @@ def build_entity_link_index(
             comparison_id,
             str(comparison["title_ja"]),
             summary=str(comparison["fairness_note"]),
-            canonical_url=f"/compare/{comparison_id}",
+            canonical_url=str(comparison["canonical_url"]),
             aliases=tuple(f"/compare/{alias}" for alias in comparison.get("aliases", [])),
+        )
+        connect(
+            "comparison",
+            comparison_id,
+            "learning_journey",
+            "journey",
+            str(comparison["journey_id"]),
+            reverse_type="comparison",
+        )
+        connect(
+            "comparison",
+            comparison_id,
+            "case",
+            "case",
+            str(comparison["case_id"]),
+            reverse_type="comparison",
         )
         for member in comparison["members"]:
             connect(
@@ -432,9 +448,19 @@ def build_entity_link_index(
                 comparison_id,
                 "member_trace",
                 "trace",
-                str(member["trace_id"]),
+                str(member["artifact"]["artifact_id"]),
                 reverse_type="comparison",
             )
+            connect(
+                "comparison",
+                comparison_id,
+                "member_scenario",
+                "scenario",
+                str(member["scenario_id"]),
+                reverse_type="comparison",
+            )
+        for source_id in comparison["source_ids"]:
+            connect("comparison", comparison_id, "evidence", "source", str(source_id))
     for case in gallery["cases"]:
         case_id = str(case["case_id"])
         add(
@@ -613,7 +639,7 @@ def _load_comparisons(path: Path, dataset_version: str) -> dict[str, Any]:
     if not isinstance(raw, dict):
         raise ValueError("comparison index must be an object")
     payload: dict[str, Any] = raw
-    if payload.get("contract_version") != "1.0.0":
+    if payload.get("contract_version") != "2.0.0":
         raise ValueError("unsupported comparison contract version")
     if payload.get("dataset_version") != dataset_version:
         raise ValueError("comparison dataset version does not match the release")

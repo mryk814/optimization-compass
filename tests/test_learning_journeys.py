@@ -28,8 +28,8 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert pilot.formulation.variable_domain_summary == "continuous"
     assert [item.scenario_id for item in pilot.scenarios] == ["SCENARIO_CONSTRAINED_DISK"]
     assert pilot.scenarios[0].canonical_url == "/theater/learning/SCENARIO_CONSTRAINED_DISK"
-    assert pilot.status == "partial"
-    assert pilot.completion_reasons == ["missing_comparison"]
+    assert pilot.status == "complete"
+    assert pilot.completion_reasons == []
 
 
 def test_index_reports_orphan_scenarios_and_comparisons() -> None:

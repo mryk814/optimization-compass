@@ -505,12 +505,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_CONSTRAINED_FAILURE"
+          ]
         },
         "content": {
           "count": 7,
@@ -564,7 +564,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 44,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -575,6 +575,7 @@
             "/methods/M_PROJECTED_GRADIENT",
             "/methods/M_SLSQP",
             "/methods/M_SQP",
+            "COMPARE_CONSTRAINED_FAILURE",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -1672,12 +1673,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
         },
         "content": {
           "count": 4,
@@ -1716,7 +1717,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 17,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1726,6 +1727,7 @@
             "/methods/M_NSGA_II",
             "/methods/M_NSGA_III",
             "/methods/M_WEIGHTED_SUM",
+            "COMPARE_PARETO_PREFERENCE",
             "EC017",
             "I_DEAP",
             "I_PYMOO",
@@ -1875,10 +1877,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_CONSTRAINED_FAILURE",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY"
           ]
@@ -1932,7 +1935,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 37,
+          "count": 38,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1944,6 +1947,7 @@
             "/methods/M_NEWTON",
             "/methods/M_NEWTON_CG",
             "/methods/M_NLCG",
+            "COMPARE_CONSTRAINED_FAILURE",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
             "EC020",
@@ -3433,12 +3437,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_CONSTRAINED_FAILURE"
+          ]
         },
         "content": {
           "count": 1,
@@ -3475,11 +3479,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BFGS",
+            "COMPARE_CONSTRAINED_FAILURE",
             "EC020",
             "I_OPTIMJL",
             "I_SCIPY_BFGS",
@@ -7348,12 +7353,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
         },
         "content": {
           "count": 1,
@@ -7389,11 +7394,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NSGA_II",
+            "COMPARE_PARETO_PREFERENCE",
             "EC017",
             "I_DEAP",
             "I_PYMOO",
@@ -9072,12 +9078,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_CONSTRAINED_FAILURE"
+          ]
         },
         "content": {
           "count": 1,
@@ -9113,11 +9119,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_SLSQP",
+            "COMPARE_CONSTRAINED_FAILURE",
             "I_SCIPY_SLSQP",
             "S002",
             "S017",

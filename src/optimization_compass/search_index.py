@@ -664,13 +664,24 @@ def _artifact_metadata(
             "content_status": case["status"],
         }
     for comparison in comparison_index["comparisons"]:
+        renderer_families = sorted(
+            {str(member["artifact"]["renderer_family"]) for member in comparison["members"]}
+        )
         result[("comparison", str(comparison["comparison_id"]))] = {
             "title_ja": comparison["title_ja"],
             "title_en": comparison["title_en"],
             "summary": comparison.get("fairness_note", ""),
             "aliases": ";".join(comparison.get("aliases", [])),
-            "keywords": [comparison.get("caveat", ""), comparison.get("objective_expression", "")],
-            "domains": comparison.get("renderer_families", []),
+            "keywords": [
+                comparison.get("caveat", ""),
+                comparison.get("formulation_summary", ""),
+                comparison.get("comparison_question", ""),
+                *comparison.get("fixed_factors", []),
+                *comparison.get("changed_factors", []),
+            ],
+            "domains": [comparison.get("mode", ""), *renderer_families],
+            "source_ids": comparison.get("source_ids", []),
+            "last_reviewed": comparison.get("last_verified"),
         }
     for scenario in scenario_index["scenarios"]:
         item = {
