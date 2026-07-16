@@ -12,6 +12,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.visualization_scenarios import (
+    GuidedStory,
+    GuidedStoryStep,
     KnownReferenceDisplay,
     LocalizedText,
     VisualizationArtifact,
@@ -315,6 +317,87 @@ def generate_surrogate_scenario(
     budget = payload.frames[-1].oracle_evaluations
     initial_design = [item.x for item in payload.frames[0].observations]
     variant = strategy != "explore" or noise_preset != "noiseless"
+    guided_story = (
+        None
+        if variant
+        else GuidedStory(
+            story_version="1.0.0",
+            introduction=LocalizedText(
+                ja="初期観測から次点選択、予算到達までを4つのcueで追います。",
+                en="Follow four cues from initial observations to the evaluation budget.",
+            ),
+            steps=[
+                GuidedStoryStep(
+                    milestone_id="start",
+                    annotation=LocalizedText(
+                        ja="最初に観測済みの点と、その間に残る不確実性を見ます。",
+                        en="Start with observed points and uncertainty between them.",
+                    ),
+                    frame_index=0,
+                    auto_pause=True,
+                    focus_target="observations",
+                    viewport_preset="overview",
+                    camera_preset=None,
+                    playback_speed=1.0,
+                    visible_layers=["observations", "posterior_mean", "posterior_uncertainty"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="first_change",
+                    annotation=LocalizedText(
+                        ja="Expected Improvementの山から次の評価点が選ばれます。",
+                        en="The next evaluation is selected from an Expected Improvement peak.",
+                    ),
+                    frame_index=min(1, len(payload.frames) - 1),
+                    auto_pause=True,
+                    focus_target="selected_candidate",
+                    viewport_preset="acquisition",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=[
+                        "observations",
+                        "posterior_mean",
+                        "posterior_uncertainty",
+                        "expected_improvement",
+                        "selected_candidate",
+                    ],
+                ),
+                GuidedStoryStep(
+                    milestone_id="pattern_visible",
+                    annotation=LocalizedText(
+                        ja="観測を追加した近傍で不確実性が縮むことを確認します。",
+                        en="Uncertainty contracts near the newly added observation.",
+                    ),
+                    frame_index=min(3, len(payload.frames) - 1),
+                    auto_pause=True,
+                    focus_target="posterior_uncertainty",
+                    viewport_preset="uncertainty",
+                    camera_preset=None,
+                    playback_speed=1.0,
+                    visible_layers=["observations", "posterior_mean", "posterior_uncertainty"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="termination",
+                    annotation=LocalizedText(
+                        ja="固定評価予算で得たincumbentを確認し、一般的優越性とは分けます。",
+                        en="Inspect the incumbent under the fixed budget without claiming "
+                        "general superiority.",
+                    ),
+                    frame_index=len(payload.frames) - 1,
+                    auto_pause=True,
+                    focus_target="incumbent_history",
+                    viewport_preset="terminal",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=["observations", "posterior_mean", "incumbent_history"],
+                ),
+            ],
+            summary=LocalizedText(
+                ja="BOは観測でsurrogateを更新し、acquisitionで次の高価な評価を選びます。",
+                en="BO updates a surrogate from observations and uses acquisition to choose "
+                "the next expensive evaluation.",
+            ),
+        )
+    )
     scenario = VisualizationScenario(
         contract_version="1.2.0",
         dataset_version=dataset_version,
@@ -483,6 +566,7 @@ def generate_surrogate_scenario(
                 "change behavior and do not prove global optimality"
             ),
         ),
+        guided_story=guided_story,
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"],
             initial_condition=VisualizationInitialCondition(point=initial_design),

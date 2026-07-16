@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { parseSiteManifest } from "../../contracts/manifest";
 import {
   parseVisualizationScenarioIndex,
+  type GuidedStoryStep,
   type VisualizationScenario,
   type VisualizationScenarioIndex,
 } from "../../contracts/visualization-scenarios";
@@ -19,6 +20,7 @@ import { usePlayback } from "../playback/usePlayback";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { renderVisualizationArtifact } from "./renderer-registry";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 
 type Loaded = {
   artifact: SearchTreeArtifact;
@@ -47,6 +49,7 @@ export function SearchTreeTheaterPage() {
 
 function SearchTreePlayer({ artifact, index, scenario, scenarioIndex }: Loaded) {
   const playback = usePlayback(artifact.trace.trace_id, artifact.trace.frames);
+  const [guidedStep, setGuidedStep] = useState<GuidedStoryStep | null>(null);
   const alternate = index.artifacts.find((item) => item.artifact_id !== artifact.artifact_id);
   const alternateScenario = alternate
     ? scenarioIndex.scenarios.find((item) => item.scenario_id === alternate.scenario_id)
@@ -73,8 +76,19 @@ function SearchTreePlayer({ artifact, index, scenario, scenarioIndex }: Loaded) 
         <strong>教材としての制約</strong><p>{scenario.lesson.limitations_ja}</p>
       </aside>
       <ScenarioLessonPanel scenario={scenario} />
+      <GuidedStoryPanel
+        activeStep={guidedStep}
+        onStepChange={setGuidedStep}
+        playback={playback}
+        scenario={scenario}
+      />
       <PlaybackControls playback={playback} />
-      {renderVisualizationArtifact(artifact, playback.currentFrameIndex)}
+      {renderVisualizationArtifact(
+        artifact,
+        playback.currentFrameIndex,
+        guidedStep?.visible_layers,
+        guidedStep?.focus_target,
+      )}
       <section className="search-tree-learning" aria-labelledby="search-tree-learning-heading">
         <h2 id="search-tree-learning-heading">Enumeration・MIP・CP-SATを混同しない</h2>
         <p>naive enumerationは全16割当を調べますが、Branch-and-Boundは実行不可能性と上界で、改善不能なsubtreeを丸ごと探索しません。</p>

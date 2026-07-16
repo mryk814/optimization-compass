@@ -822,7 +822,91 @@
         },
         "tuning_policy": "fixed_preset"
       },
-      "guided_story": null,
+      "guided_story": {
+        "introduction": {
+          "en": "Connect the gradient, update vector, and next point in each frame.",
+          "ja": "勾配、更新vector、次の点を同じframeで結び付けます。"
+        },
+        "steps": [
+          {
+            "annotation": {
+              "en": "Inspect the gradient direction at the initial point.",
+              "ja": "初期点で勾配がどちらを指すかを確認します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "gradient",
+            "frame_index": 0,
+            "milestone_id": "start",
+            "playback_speed": 1.0,
+            "viewport_preset": "overview",
+            "visible_layers": [
+              "objective_value",
+              "current_point",
+              "gradient"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "The update along the negative gradient creates the next point.",
+              "ja": "負の勾配方向のupdateが次の現在点を作ります。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "update_vector",
+            "frame_index": 1,
+            "milestone_id": "first_change",
+            "playback_speed": 0.5,
+            "viewport_preset": "decision",
+            "visible_layers": [
+              "objective_value",
+              "current_point",
+              "gradient",
+              "update_vector"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Read cross-valley oscillation together with objective decrease.",
+              "ja": "細長い谷を横切る振動と目的値の減少を同時に読みます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "current_point",
+            "frame_index": 4,
+            "milestone_id": "pattern_visible",
+            "playback_speed": 1.0,
+            "viewport_preset": "trajectory",
+            "visible_layers": [
+              "objective_value",
+              "current_point",
+              "update_vector"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Inspect best-so-far and stopping under this fixed preset.",
+              "ja": "best-so-farと終了条件を、この固定presetの結果として確認します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "objective_value",
+            "frame_index": 40,
+            "milestone_id": "termination",
+            "playback_speed": 0.5,
+            "viewport_preset": "terminal",
+            "visible_layers": [
+              "objective_value",
+              "current_point"
+            ]
+          }
+        ],
+        "story_version": "1.0.0",
+        "summary": {
+          "en": "Gradient descent converts gradients into updates that move toward lower objective values.",
+          "ja": "勾配降下法ではgradientからupdateを作り、目的値を下げる方向へ点を移します。"
+        }
+      },
       "identity_status": "canonical",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -1956,7 +2040,90 @@
         },
         "tuning_policy": "fixed_preset"
       },
-      "guided_story": null,
+      "guided_story": {
+        "introduction": {
+          "en": "Follow nodes, bounds, the incumbent, and pruning until proof completes.",
+          "ja": "node、bound、incumbent、枝刈りを証明完了まで追います。"
+        },
+        "steps": [
+          {
+            "annotation": {
+              "en": "Inspect the root bound.",
+              "ja": "root nodeの上界を確認します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "global_bound",
+            "frame_index": 0,
+            "milestone_id": "start",
+            "playback_speed": 1.0,
+            "viewport_preset": "overview",
+            "visible_layers": [
+              "search_nodes",
+              "global_bound"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "The first branch splits the search into two candidates.",
+              "ja": "最初のbranchで探索候補が二つに分かれます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "search_nodes",
+            "frame_index": 1,
+            "milestone_id": "first_change",
+            "playback_speed": 0.5,
+            "viewport_preset": "branch",
+            "visible_layers": [
+              "search_nodes",
+              "global_bound"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "A bound removes a subtree that cannot improve the incumbent.",
+              "ja": "incumbentより改善不能なsubtreeをboundで捨てます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "prune_reason",
+            "frame_index": 17,
+            "milestone_id": "pattern_visible",
+            "playback_speed": 0.5,
+            "viewport_preset": "pruning",
+            "visible_layers": [
+              "search_nodes",
+              "global_bound",
+              "incumbent",
+              "prune_reason"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "No open nodes remain; matching incumbent and bound proves optimality.",
+              "ja": "open nodeがなくなり、incumbentとboundの一致で最適性を証明します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "incumbent",
+            "frame_index": 28,
+            "milestone_id": "termination",
+            "playback_speed": 0.5,
+            "viewport_preset": "terminal",
+            "visible_layers": [
+              "search_nodes",
+              "global_bound",
+              "incumbent"
+            ]
+          }
+        ],
+        "story_version": "1.0.0",
+        "summary": {
+          "en": "Branch-and-Bound avoids full enumeration by pruning with bounds and an incumbent.",
+          "ja": "Branch-and-Boundは全列挙せず、boundとincumbentで不要なsubtreeを除きます。"
+        }
+      },
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {
@@ -2761,7 +2928,93 @@
         },
         "tuning_policy": "fixed_preset"
       },
-      "guided_story": null,
+      "guided_story": {
+        "introduction": {
+          "en": "Follow four cues from initial observations to the evaluation budget.",
+          "ja": "初期観測から次点選択、予算到達までを4つのcueで追います。"
+        },
+        "steps": [
+          {
+            "annotation": {
+              "en": "Start with observed points and uncertainty between them.",
+              "ja": "最初に観測済みの点と、その間に残る不確実性を見ます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "observations",
+            "frame_index": 0,
+            "milestone_id": "start",
+            "playback_speed": 1.0,
+            "viewport_preset": "overview",
+            "visible_layers": [
+              "observations",
+              "posterior_mean",
+              "posterior_uncertainty"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "The next evaluation is selected from an Expected Improvement peak.",
+              "ja": "Expected Improvementの山から次の評価点が選ばれます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "selected_candidate",
+            "frame_index": 1,
+            "milestone_id": "first_change",
+            "playback_speed": 0.5,
+            "viewport_preset": "acquisition",
+            "visible_layers": [
+              "observations",
+              "posterior_mean",
+              "posterior_uncertainty",
+              "expected_improvement",
+              "selected_candidate"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Uncertainty contracts near the newly added observation.",
+              "ja": "観測を追加した近傍で不確実性が縮むことを確認します。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "posterior_uncertainty",
+            "frame_index": 3,
+            "milestone_id": "pattern_visible",
+            "playback_speed": 1.0,
+            "viewport_preset": "uncertainty",
+            "visible_layers": [
+              "observations",
+              "posterior_mean",
+              "posterior_uncertainty"
+            ]
+          },
+          {
+            "annotation": {
+              "en": "Inspect the incumbent under the fixed budget without claiming general superiority.",
+              "ja": "固定評価予算で得たincumbentを確認し、一般的優越性とは分けます。"
+            },
+            "auto_pause": true,
+            "camera_preset": null,
+            "focus_target": "incumbent_history",
+            "frame_index": 7,
+            "milestone_id": "termination",
+            "playback_speed": 0.5,
+            "viewport_preset": "terminal",
+            "visible_layers": [
+              "observations",
+              "posterior_mean",
+              "incumbent_history"
+            ]
+          }
+        ],
+        "story_version": "1.0.0",
+        "summary": {
+          "en": "BO updates a surrogate from observations and uses acquisition to choose the next expensive evaluation.",
+          "ja": "BOは観測でsurrogateを更新し、acquisitionで次の高価な評価を選びます。"
+        }
+      },
       "identity_status": "generated_only",
       "last_verified": "2026-07-15",
       "lesson": {

@@ -716,7 +716,154 @@ def _step(
     )
 
 
-def _nelder_mead_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
+def _trace_guided_story(trace: AlgorithmTrace) -> GuidedStory | None:
+    if trace.scenario_id == "SCENARIO_GD_QUADRATIC":
+        final_index = len(trace.frames) - 1
+        return GuidedStory(
+            story_version="1.0.0",
+            introduction=_localized(
+                "勾配、更新vector、次の点を同じframeで結び付けます。",
+                "Connect the gradient, update vector, and next point in each frame.",
+            ),
+            steps=[
+                GuidedStoryStep(
+                    milestone_id="start",
+                    annotation=_localized(
+                        "初期点で勾配がどちらを指すかを確認します。",
+                        "Inspect the gradient direction at the initial point.",
+                    ),
+                    frame_index=0,
+                    auto_pause=True,
+                    focus_target="gradient",
+                    viewport_preset="overview",
+                    camera_preset=None,
+                    playback_speed=1.0,
+                    visible_layers=["objective_value", "current_point", "gradient"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="first_change",
+                    annotation=_localized(
+                        "負の勾配方向のupdateが次の現在点を作ります。",
+                        "The update along the negative gradient creates the next point.",
+                    ),
+                    frame_index=min(1, final_index),
+                    auto_pause=True,
+                    focus_target="update_vector",
+                    viewport_preset="decision",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=[
+                        "objective_value",
+                        "current_point",
+                        "gradient",
+                        "update_vector",
+                    ],
+                ),
+                GuidedStoryStep(
+                    milestone_id="pattern_visible",
+                    annotation=_localized(
+                        "細長い谷を横切る振動と目的値の減少を同時に読みます。",
+                        "Read cross-valley oscillation together with objective decrease.",
+                    ),
+                    frame_index=min(4, final_index),
+                    auto_pause=True,
+                    focus_target="current_point",
+                    viewport_preset="trajectory",
+                    camera_preset=None,
+                    playback_speed=1.0,
+                    visible_layers=["objective_value", "current_point", "update_vector"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="termination",
+                    annotation=_localized(
+                        "best-so-farと終了条件を、この固定presetの結果として確認します。",
+                        "Inspect best-so-far and stopping under this fixed preset.",
+                    ),
+                    frame_index=final_index,
+                    auto_pause=True,
+                    focus_target="objective_value",
+                    viewport_preset="terminal",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=["objective_value", "current_point"],
+                ),
+            ],
+            summary=_localized(
+                "勾配降下法ではgradientからupdateを作り、目的値を下げる方向へ点を移します。",
+                "Gradient descent converts gradients into updates that move toward "
+                "lower objective values.",
+            ),
+        )
+    if trace.scenario_id == "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE":
+        final_index = len(trace.frames) - 1
+        return GuidedStory(
+            story_version="1.0.0",
+            introduction=_localized(
+                "node、bound、incumbent、枝刈りを証明完了まで追います。",
+                "Follow nodes, bounds, the incumbent, and pruning until proof completes.",
+            ),
+            steps=[
+                GuidedStoryStep(
+                    milestone_id="start",
+                    annotation=_localized(
+                        "root nodeの上界を確認します。", "Inspect the root bound."
+                    ),
+                    frame_index=0,
+                    auto_pause=True,
+                    focus_target="global_bound",
+                    viewport_preset="overview",
+                    camera_preset=None,
+                    playback_speed=1.0,
+                    visible_layers=["search_nodes", "global_bound"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="first_change",
+                    annotation=_localized(
+                        "最初のbranchで探索候補が二つに分かれます。",
+                        "The first branch splits the search into two candidates.",
+                    ),
+                    frame_index=min(1, final_index),
+                    auto_pause=True,
+                    focus_target="search_nodes",
+                    viewport_preset="branch",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=["search_nodes", "global_bound"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="pattern_visible",
+                    annotation=_localized(
+                        "incumbentより改善不能なsubtreeをboundで捨てます。",
+                        "A bound removes a subtree that cannot improve the incumbent.",
+                    ),
+                    frame_index=max(1, round(final_index * 0.6)),
+                    auto_pause=True,
+                    focus_target="prune_reason",
+                    viewport_preset="pruning",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=["search_nodes", "global_bound", "incumbent", "prune_reason"],
+                ),
+                GuidedStoryStep(
+                    milestone_id="termination",
+                    annotation=_localized(
+                        "open nodeがなくなり、incumbentとboundの一致で最適性を証明します。",
+                        "No open nodes remain; matching incumbent and bound proves optimality.",
+                    ),
+                    frame_index=final_index,
+                    auto_pause=True,
+                    focus_target="incumbent",
+                    viewport_preset="terminal",
+                    camera_preset=None,
+                    playback_speed=0.5,
+                    visible_layers=["search_nodes", "global_bound", "incumbent"],
+                ),
+            ],
+            summary=_localized(
+                "Branch-and-Boundは全列挙せず、boundとincumbentで不要なsubtreeを除きます。",
+                "Branch-and-Bound avoids full enumeration by pruning with bounds and an incumbent.",
+            ),
+        )
     if trace.scenario_id != "SCENARIO_NM_QUADRATIC":
         return None
     final_index = len(trace.frames) - 1
@@ -1187,7 +1334,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             is_nelder_mead=is_nelder_mead,
             is_search_tree=is_search_tree,
         ),
-        guided_story=_nelder_mead_guided_story(trace),
+        guided_story=_trace_guided_story(trace),
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"]
             if is_nelder_mead or is_search_tree

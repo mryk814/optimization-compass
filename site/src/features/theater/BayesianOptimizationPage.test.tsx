@@ -34,7 +34,7 @@ describe("BayesianOptimizationPage", () => {
     expect(screen.getByRole("table", { name: /best-so-far/u })).toBeVisible();
     const player = screen.getByLabelText(/左右矢印で移動/u);
     fireEvent.keyDown(player, { key: "ArrowRight" });
-    expect(screen.getByText("Frame 2/8")).toBeVisible();
+    expect(screen.getByText("Frame 2/8 · 1×")).toBeVisible();
     fireEvent.keyDown(player, { key: " " });
     expect(screen.getByRole("button", { name: "一時停止" })).toBeVisible();
   });

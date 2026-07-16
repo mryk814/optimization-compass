@@ -54,3 +54,23 @@ test("Nelder-Mead guided story applies the authored frame, speed, and focus cue"
     "accepted_operation",
   );
 });
+
+test("guided stories drive four renderer families from one contract", async ({ page, baseURL }) => {
+  const base = requiredBaseURL(baseURL);
+
+  await gotoAtlasRoute(page, base, "/traces/gradient_descent-quadratic");
+  await page.getByRole("button", { name: /最初のupdateを追う/u }).click();
+  await expect(page).toHaveURL(/frame=1&speed=0\.5/u);
+  await expect(page.locator(".trace-snapshot")).toHaveAttribute("data-guided-focus", "update_vector");
+
+  await gotoAtlasRoute(page, base, "/theater/search-tree/binary-knapsack-bnb-complete");
+  await page.getByRole("button", { name: /最初のbranchとbound更新/u }).click();
+  await expect(page).toHaveURL(/frame=1&speed=0\.5/u);
+  await expect(page.locator(".search-tree-renderer")).toHaveAttribute("data-guided-focus", "search_nodes");
+
+  await gotoAtlasRoute(page, base, "/theater/bayesian-optimization");
+  await page.getByRole("button", { name: /最初のsurrogate更新と次点選択/u }).click();
+  await expect(page.getByLabel("評価位置")).toHaveValue("1");
+  await expect(page.locator(".bo-layout")).toHaveAttribute("data-guided-focus", "selected_candidate");
+  await expect(page.getByText(/Frame 2\/8 · 0\.5×/u)).toBeVisible();
+});
