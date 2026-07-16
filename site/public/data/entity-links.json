@@ -1284,6 +1284,67 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "active-set-qp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Active-set QP",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ACTIVE_SET_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "active-set",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "admm-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "adam",
       "entity_type": "content",
       "external_url": null,
@@ -3314,6 +3375,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "family.manifold",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Riemann多様体最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_MANIFOLD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "変数の制約が球面、直交行列、固定rank行列、回転群などの多様体構造そのものであるとき、Riemann勾配法とRiemann trust-region法を条件に応じて選び分けるための入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "family.multi-objective",
       "entity_type": "content",
       "external_url": null,
@@ -3361,6 +3468,62 @@
         }
       ],
       "summary": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、単一の最適解ではなくPareto解集合の近似を得るための多目的最適化手法を条件に応じて選び分ける入口です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "family.optimal-control",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "最適制御・軌道最適化の選び分け",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "MF_OPTIMAL_CONTROL",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。"
     },
     {
       "aliases": [],
@@ -3754,6 +3917,62 @@
         }
       ],
       "summary": "多数のtrialを小さなresourceで始め、中間成績が悪いtrialを早期終了して有望なtrialへbudgetを移すmulti-fidelity探索です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "ilqr-ddp",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "iLQR / DDP",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ILQR_DDP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "dynamic-programming",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。"
     },
     {
       "aliases": [],
@@ -4821,6 +5040,47 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "pbt",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Population Based Training",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PBT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "pdlp",
       "entity_type": "content",
       "external_url": null,
@@ -4919,6 +5179,67 @@
         }
       ],
       "summary": "勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "primal-dual-conic",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Primal-dual錐内点法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S013",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S028",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_PRIMAL_DUAL_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "barrier-lp-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.convexity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。"
     },
     {
       "aliases": [],
@@ -5123,6 +5444,108 @@
         }
       ],
       "summary": "search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "riemannian-gradient",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Riemann勾配法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_RIEMANNIAN_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "method.gradient-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "riemannian-trust-region",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Riemann trust-region法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_RIEMANNIAN_TRUST_REGION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.trust-region",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "接空間上に二次modelを作りtrust radiusの内側だけで最小化し、retractionで多様体上に戻す大域化された二階法です。"
     },
     {
       "aliases": [],
@@ -5372,6 +5795,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "spatial-branch-and-bound",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "空間branch-and-bound",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S024",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S025",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SPATIAL_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "branch-and-bound",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "outer-approximation-minlp",
+          "target_type": "content"
+        }
+      ],
+      "summary": "非凸MINLPの大域最適化のため、整数変数だけでなく連続変数の区間でも分岐し、各領域で凸緩和から下界を作りながら木を刈り込む厳密探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "spsa",
       "entity_type": "content",
       "external_url": null,
@@ -5541,6 +6010,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "trust-exact",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "厳密trust-region Newton法",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_TRUST_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.trust-region",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "newton-method",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-krylov",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "trust-region-newton-cg",
+          "target_type": "content"
+        }
+      ],
+      "summary": "trust-region部分問題をCGで打ち切って近似するのではなく、固有値分解や行列分解に基づいてほぼ厳密に解く二階最適化法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "trust-krylov",
       "entity_type": "content",
       "external_url": null,
@@ -5670,6 +6185,52 @@
         }
       ],
       "summary": "bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "turbo-saasbo",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "高次元Bayesian最適化（TuRBO / SAASBO）",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S036",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_TURBO_SAASBO",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "smac",
+          "target_type": "content"
+        }
+      ],
+      "summary": "標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。"
     },
     {
       "aliases": [],
@@ -11657,6 +12218,11 @@
         },
         {
           "relation_type": "learning",
+          "target_id": "active-set-qp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
           "target_id": "admm-qp",
           "target_type": "content"
         },
@@ -12523,7 +13089,9 @@
       "summary": "LP、凸QP、SOCP、SDP等の凸構造を利用し、simplex、barrier、operator splitting等で解く手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.manifold"
+      ],
       "canonical_url": "/methods/MF_MANIFOLD",
       "entity_id": "MF_MANIFOLD",
       "entity_type": "method",
@@ -12544,6 +13112,11 @@
           "relation_type": "evidence",
           "target_id": "S071",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.manifold",
+          "target_type": "content"
         }
       ],
       "summary": "球面、Stiefel、Grassmann、SO(3)等の幾何をretraction・Riemann勾配として利用する手法群。"
@@ -12577,7 +13150,9 @@
       "summary": "複数目的のtrade-offをscalarizationまたはpopulationで探索し、Pareto解集合を近似・生成する手法群。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/family.optimal-control"
+      ],
       "canonical_url": "/methods/MF_OPTIMAL_CONTROL",
       "entity_id": "MF_OPTIMAL_CONTROL",
       "entity_type": "method",
@@ -12603,6 +13178,11 @@
           "relation_type": "evidence",
           "target_id": "S076",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
         }
       ],
       "summary": "動力学制約をshooting、collocation、Riccati型再帰等で離散化・解法に組み込む手法群。"
@@ -12838,7 +13418,9 @@
       "summary": "activeと推定した制約だけで部分問題を解く。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/active-set-qp"
+      ],
       "canonical_url": "/methods/M_ACTIVE_SET_QP",
       "entity_id": "M_ACTIVE_SET_QP",
       "entity_type": "method",
@@ -12887,8 +13469,18 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S062",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "active-set-qp",
+          "target_type": "content"
         }
       ],
       "summary": "active制約集合を更新してQPを解く。"
@@ -14881,7 +15473,9 @@
       "summary": "低resourceで多数trialを開始し、性能に基づき早期停止・resource増加。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/ilqr-ddp"
+      ],
       "canonical_url": "/methods/M_ILQR_DDP",
       "entity_id": "M_ILQR_DDP",
       "entity_type": "method",
@@ -14912,6 +15506,11 @@
           "relation_type": "implementation",
           "target_id": "I_ACADOS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
         }
       ],
       "summary": "trajectory周りに動力学・costを二次近似しRiccati再帰でupdate。"
@@ -16035,7 +16634,9 @@
       "summary": "poll方向上の点を評価しstep sizeを調整。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/pbt"
+      ],
       "canonical_url": "/methods/M_PBT",
       "entity_id": "M_PBT",
       "entity_type": "method",
@@ -16086,6 +16687,11 @@
           "relation_type": "implementation",
           "target_id": "I_RAY_TUNE",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "pbt",
+          "target_type": "content"
         }
       ],
       "summary": "training中にweightsとhyperparametersをpopulationで継承・摂動。"
@@ -16212,7 +16818,9 @@
       "summary": "微分なしで複数方向の一次元探索を反復。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/primal-dual-conic"
+      ],
       "canonical_url": "/methods/M_PRIMAL_DUAL_CONIC",
       "entity_id": "M_PRIMAL_DUAL_CONIC",
       "entity_type": "method",
@@ -16293,6 +16901,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCS",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "primal-dual-conic",
+          "target_type": "content"
         }
       ],
       "summary": "coneのprimal-dual KKT系を解く内点法。"
@@ -16507,7 +17120,9 @@
       "summary": "search spaceから独立にsamplingするbaseline。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/riemannian-gradient"
+      ],
       "canonical_url": "/methods/M_RIEMANNIAN_GRADIENT",
       "entity_id": "M_RIEMANNIAN_GRADIENT",
       "entity_type": "method",
@@ -16543,12 +17158,19 @@
           "relation_type": "implementation",
           "target_id": "I_PYMANOPT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
         }
       ],
       "summary": "接空間のRiemann gradient方向へ進みretractionで多様体へ戻す。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/riemannian-trust-region"
+      ],
       "canonical_url": "/methods/M_RIEMANNIAN_TRUST_REGION",
       "entity_id": "M_RIEMANNIAN_TRUST_REGION",
       "entity_type": "method",
@@ -16584,6 +17206,11 @@
           "relation_type": "implementation",
           "target_id": "I_PYMANOPT",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
         }
       ],
       "summary": "接空間の二次modelをtrust region内で解きretractionする。"
@@ -16997,7 +17624,9 @@
       "summary": "random forest surrogateで混合/カテゴリHPOを扱う。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/spatial-branch-and-bound"
+      ],
       "canonical_url": "/methods/M_SPATIAL_BRANCH_BOUND",
       "entity_id": "M_SPATIAL_BRANCH_BOUND",
       "entity_type": "method",
@@ -17043,6 +17672,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIP",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "spatial-branch-and-bound",
+          "target_type": "content"
         }
       ],
       "summary": "非凸項をconvex relaxationし変数領域を分枝してglobal boundを詰める。"
@@ -17270,7 +17904,9 @@
       "summary": "良い/悪い観測の密度比で条件付きsearch spaceを探索。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/trust-exact"
+      ],
       "canonical_url": "/methods/M_TRUST_EXACT",
       "entity_id": "M_TRUST_EXACT",
       "entity_type": "method",
@@ -17291,6 +17927,11 @@
           "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "trust-exact",
+          "target_type": "content"
         }
       ],
       "summary": "dense Hessianを用いて部分問題を高精度に解く。"
@@ -17420,7 +18061,9 @@
       "summary": "bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法。"
     },
     {
-      "aliases": [],
+      "aliases": [
+        "/learn/turbo-saasbo"
+      ],
       "canonical_url": "/methods/M_TURBO_SAASBO",
       "entity_id": "M_TURBO_SAASBO",
       "entity_type": "method",
@@ -17476,6 +18119,11 @@
           "relation_type": "implementation",
           "target_id": "I_BOTORCH",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "turbo-saasbo",
+          "target_type": "content"
         }
       ],
       "summary": "trust regionまたはsparse axis-aligned priorで高次元BOを緩和。"

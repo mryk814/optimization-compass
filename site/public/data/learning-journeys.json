@@ -242,6 +242,7 @@
         "M_ACTIVE_SET_QP"
       ],
       "content_ids": [
+        "active-set-qp",
         "admm-qp"
       ],
       "dataset_version": "0.11.0",
