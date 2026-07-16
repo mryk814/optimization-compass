@@ -10,14 +10,14 @@ describe("learning-slice artifact parser", () => {
     const pareto = parseLearningSliceArtifact(paretoPayload);
 
     expect(feasible.renderer_family).toBe("feasible_region");
-    expect(feasible.dataset_version).toBe("0.10.0");
+    expect(feasible.dataset_version).toBe("0.11.0");
     if (feasible.renderer_family !== "feasible_region") throw new Error("unexpected family");
     expect(feasible.paths.map((path) => path.role)).toEqual([
       "constraint_aware",
       "unconstrained_failure",
     ]);
     expect(pareto.renderer_family).toBe("pareto_front");
-    expect(pareto.dataset_version).toBe("0.10.0");
+    expect(pareto.dataset_version).toBe("0.11.0");
     if (pareto.renderer_family !== "pareto_front") throw new Error("unexpected family");
     expect(pareto.pareto_front.every((point) => !point.dominated)).toBe(true);
   });
