@@ -18,6 +18,7 @@ import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
+import { ScenarioContextPanel } from "./ScenarioContextPanel";
 
 interface NelderMeadVisualizationProps {
   trace: AlgorithmTrace;
@@ -107,6 +108,7 @@ export function NelderMeadVisualization({
         </label>
       </section>
 
+      <ScenarioContextPanel scenario={scenario} />
       <ScenarioLessonPanel scenario={scenario} />
       <GuidedStoryPanel
         activeStep={guidedStep}

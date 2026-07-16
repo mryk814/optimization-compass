@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { findEntity } from "../../contracts/entity-links";
 import { parseSiteManifest } from "../../contracts/manifest";
@@ -19,6 +19,7 @@ import { useEntityLinks } from "../../state/entity-links";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
+import { ScenarioContextPanel } from "./ScenarioContextPanel";
 
 type Strategy = "exploit" | "explore";
 type NoisePreset = "noiseless" | "small_noise";
@@ -31,8 +32,19 @@ async function json(url: string): Promise<unknown> {
 }
 
 export function BayesianOptimizationPage() {
-  const [strategy, setStrategy] = useState<Strategy>("explore");
-  const [noise, setNoise] = useState<NoisePreset>("noiseless");
+  const [searchParams] = useSearchParams();
+  const requestedScenarioId = searchParams.get("scenario") ?? "";
+  const [strategy, setStrategy] = useState<Strategy>(() => (
+    requestedScenarioId.includes("EXPLOIT") ? "exploit" : "explore"
+  ));
+  const [noise, setNoise] = useState<NoisePreset>(() => (
+    requestedScenarioId.includes("SMALL_NOISE") ? "small_noise" : "noiseless"
+  ));
+  useEffect(() => {
+    if (!requestedScenarioId) return;
+    setStrategy(requestedScenarioId.includes("EXPLOIT") ? "exploit" : "explore");
+    setNoise(requestedScenarioId.includes("SMALL_NOISE") ? "small_noise" : "noiseless");
+  }, [requestedScenarioId]);
   const [loaded, setLoaded] = useState<{
     scenario: VisualizationScenario;
     payload: SurrogateUncertaintyPayload;
@@ -234,6 +246,7 @@ function Theater({
           評価 {frame.oracle_evaluations}/{budget} · ξ={payload.exploration_xi}
         </span>
       </section>
+      <ScenarioContextPanel scenario={scenario} />
       <ScenarioLessonPanel scenario={scenario} />
       <GuidedStoryPanel
         activeStep={guidedStep}

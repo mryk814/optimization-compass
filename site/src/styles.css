@@ -3175,3 +3175,33 @@ main:focus {
     min-height: 80vh;
   }
 }
+
+.theater-catalog-filters { display: flex; align-items: end; gap: 1rem; margin: 1rem 0 1.5rem; padding: 0.9rem; border: 1px solid #d6dbd5; border-radius: 0.75rem; background: #f5f7f3; }
+.theater-catalog-filters label { display: grid; gap: 0.3rem; font-weight: 700; }
+.theater-catalog-filters span { margin-left: auto; color: #52605a; }
+.theater-family-list { display: grid; gap: 1.5rem; }
+.theater-family { display: grid; gap: 0.75rem; }
+.theater-family > header { display: flex; align-items: baseline; gap: 0.75rem; }
+.theater-family > header span, .theater-family > header small { color: #52605a; }
+.theater-family > header h2 { margin: 0; }
+.theater-family > header small { margin-left: auto; }
+.theater-family .theater-card h3 { margin: 0.45rem 0; font-size: 1.05rem; }
+.theater-family .theater-card small { display: block; margin-top: 0.35rem; }
+.scenario-context-panel { display: grid; gap: 0.8rem; margin: 1rem 0; padding: 1rem; border: 1px solid #d6dbd5; border-left: 4px solid #32634b; border-radius: 0.75rem; background: #f5f7f3; }
+.scenario-context-panel header h2, .scenario-context-panel header p, .scenario-case-formulation h3, .scenario-case-formulation p { margin: 0.25rem 0; }
+.scenario-context-panel header span { color: #52605a; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.scenario-context-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.65rem; margin: 0; }
+.scenario-context-grid div { min-width: 0; }
+.scenario-context-grid dt { color: #52605a; font-size: 0.78rem; }
+.scenario-context-grid dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; }
+.scenario-case-formulation { padding: 0.75rem; border-radius: 0.6rem; background: #fff; }
+.scenario-context-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.scenario-run-limit { margin: 0; color: #52605a; }
+
+@media (max-width: 700px) {
+  .theater-catalog-filters { align-items: stretch; flex-direction: column; }
+  .theater-catalog-filters span { margin-left: 0; }
+  .theater-family > header { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
+  .theater-family > header small { margin-left: 0; }
+  .scenario-context-grid { grid-template-columns: 1fr 1fr; }
+}

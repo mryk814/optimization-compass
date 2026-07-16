@@ -56,6 +56,16 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
   await expectFitsViewport(plot, page);
 });
 
+test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
+  await expect(page.getByText("18 / 18 scenarios")).toBeVisible();
+  await page.getByLabel("問題domain").selectOption("discrete");
+  await expect(page.getByText("2 / 18 scenarios")).toBeVisible();
+  await expect(page.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");
+});
+
 test("375px Compare Labで比較条件と非trajectory結果を読める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
   await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
