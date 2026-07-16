@@ -138,6 +138,23 @@
       "last_verified": "2026-07-15"
     },
     {
+      "problem_definition_id": "PROBLEM_NONLINEAR_LEAST_SQUARES",
+      "name_ja": "bounds付き非線形最小二乗",
+      "name_en": "Bounded nonlinear least squares",
+      "mathematical_family": "nonlinear_least_squares",
+      "variable_domain": "continuous",
+      "objective_form": "sum_of_squared_residuals",
+      "objective_direction": "minimize",
+      "available_oracles": ["residual_vector", "jacobian", "objective_value", "gradient"],
+      "constraint_class": "bounds",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 3},
+      "known_reference_semantics": "The noiseless synthetic data are generated from the recorded three-parameter truth; this reference is for teaching and validation, not optimizer input.",
+      "related_problem_ids": ["PA033"],
+      "feature_ids": ["F_STRUCTURE_NONLINEAR_LEAST_SQUARES", "F_VARIABLE_CONTINUOUS", "F_CONSTRAINT_BOUNDS"],
+      "source_ids": ["S003", "S041", "S056", "S096"],
+      "last_verified": "2026-07-17"
+    },
+    {
       "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
       "name_ja": "2目的連続問題",
       "name_en": "Bi-objective continuous problem",
@@ -353,6 +370,28 @@
       "limitations_en": "A two-dimensional lesson with one convex feasible set.",
       "source_ids": ["S055", "S056"],
       "last_verified": "2026-07-15"
+    },
+    {
+      "problem_instance_id": "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
+      "problem_definition_id": "PROBLEM_NONLINEAR_LEAST_SQUARES",
+      "name_ja": "3 parameter指数減衰fit",
+      "name_en": "Three-parameter exponential-decay fit",
+      "registry_key": "problem.nonlinear_least_squares.exponential_decay.v1",
+      "dimension": 3,
+      "parameters": {"time_points": {"start": 0.0, "stop": 5.0, "count": 20}, "truth": [1.8, 0.7, 0.25], "model": "a*exp(-k*t)+c", "noise": 0.0},
+      "bounds": {"lower": [0.0, 0.0, -1.0], "upper": [5.0, 3.0, 2.0], "parameter_names": ["a", "k", "c"]},
+      "constraints": [{"constraint_id": "parameter_bounds", "type": "bounds", "lower": [0.0, 0.0, -1.0], "upper": [5.0, 3.0, 2.0]}],
+      "initialization_candidates": [{"candidate_id": "normal", "point": [1.0, 0.4, 0.0]}, {"candidate_id": "poor_rank", "point": [0.0, 2.5, 0.25]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "known_exact",
+      "known_reference": {"point": [1.8, 0.7, 0.25], "value": 0.0, "source_ids": ["S056"]},
+      "display": {"range": {"time": [0.0, 5.0], "response": [0.0, 2.2], "residual_norm": [0.0, 4.0]}, "axis_labels": ["time", "response", "residual norm"], "units": ["dimensionless", "dimensionless", "dimensionless"], "expression": "min Σᵢ(a exp(-k tᵢ)+c-yᵢ)², 0≤a≤5, 0≤k≤3, -1≤c≤2"},
+      "intended_phenomena": ["residual_structure", "jacobian_rank", "initialization_sensitivity", "bounded_fit"],
+      "limitations_ja": "20点・noiseなしの合成dataを使う3 parameter教材です。実dataの識別性、外れ値、誤差model、scaleを代表しません。",
+      "limitations_en": "A three-parameter lesson on 20 noiseless synthetic observations; it does not represent real-data identifiability, outliers, error models, or scaling.",
+      "source_ids": ["S003", "S041", "S056", "S096"],
+      "last_verified": "2026-07-17"
     },
     {
       "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",

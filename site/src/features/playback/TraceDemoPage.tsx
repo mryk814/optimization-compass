@@ -25,6 +25,7 @@ import { NelderMeadVisualization } from "../theater/NelderMeadPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
+import { GenericMetricHistory } from "../visualization/GenericMetricHistory";
 import { ScenarioContextPanel } from "../theater/ScenarioContextPanel";
 
 type LoadedTrace = {
@@ -113,6 +114,13 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
         />
       </>}
       <PlaybackControls playback={playback} />
+      {scenario?.artifact.renderer_family === "generic_metric_history" && (
+        <GenericMetricHistory
+          budget={trace.evaluation_budget}
+          evaluation={frame.oracle_evaluations}
+          traces={[trace]}
+        />
+      )}
       {scenario?.artifact.renderer_family === "continuous_trajectory" && (
         <LinkedSurfaceView
           currentFrameIndex={playback.currentFrameIndex}
@@ -126,7 +134,7 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
         data-guided-focus={guidedStep?.focus_target}
         data-viewport-preset={guidedStep?.viewport_preset}
       >
-        {(showAll || visibleLayers.has("current_point")) && <section>
+        {(showAll || visibleLayers.has("current_point") || visibleLayers.has("parameter_estimate")) && <section>
           <h2>Points</h2>
           {frame.points.length === 0 ? <p>点データなし</p> : (
             <ul>
@@ -153,7 +161,7 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
             </ul>
           )}
         </section>}
-        {(showAll || visibleLayers.has("objective_value")) && <section>
+        {(showAll || visibleLayers.has("objective_value") || frame.metrics.some((metric) => visibleLayers.has(metric.metric_id))) && <section>
           <h2>Metrics</h2>
           {frame.metrics.length === 0 ? <p>指標なし</p> : (
             <ul>

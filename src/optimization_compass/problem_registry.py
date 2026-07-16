@@ -180,6 +180,64 @@ def _constrained_disk(_instance: ProblemInstance, point: Sequence[float]) -> flo
     return x * x + y * y
 
 
+def exponential_decay_residuals(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    """Return residuals for the fixed noiseless exponential-decay lesson."""
+    a, k, c = point
+    truth = instance.parameters.get("truth")
+    time_spec = instance.parameters.get("time_points")
+    if (
+        not isinstance(truth, list)
+        or len(truth) != 3
+        or not all(isinstance(value, int | float) for value in truth)
+        or not isinstance(time_spec, dict)
+    ):
+        raise ValueError(f"invalid exponential-decay data for {instance.problem_instance_id}")
+    start = _number(time_spec.get("start"))
+    stop = _number(time_spec.get("stop"))
+    count = time_spec.get("count")
+    if isinstance(count, bool) or not isinstance(count, int) or count < 2:
+        raise ValueError(f"invalid exponential-decay time grid for {instance.problem_instance_id}")
+    truth_a, truth_k, truth_c = (float(value) for value in truth)
+    return [
+        a * math.exp(-k * time) + c - (truth_a * math.exp(-truth_k * time) + truth_c)
+        for time in (start + index * (stop - start) / (count - 1) for index in range(count))
+    ]
+
+
+def exponential_decay_jacobian(
+    instance: ProblemInstance, point: Sequence[float]
+) -> list[list[float]]:
+    """Return the analytic residual Jacobian for the exponential-decay lesson."""
+    a, k, _c = point
+    time_spec = instance.parameters.get("time_points")
+    if not isinstance(time_spec, dict):
+        raise ValueError(f"invalid exponential-decay time grid for {instance.problem_instance_id}")
+    start = _number(time_spec.get("start"))
+    stop = _number(time_spec.get("stop"))
+    count = time_spec.get("count")
+    if isinstance(count, bool) or not isinstance(count, int) or count < 2:
+        raise ValueError(f"invalid exponential-decay time grid for {instance.problem_instance_id}")
+    rows: list[list[float]] = []
+    for index in range(count):
+        time = start + index * (stop - start) / (count - 1)
+        decay = math.exp(-k * time)
+        rows.append([decay, -a * time * decay, 1.0])
+    return rows
+
+
+def _exponential_decay(instance: ProblemInstance, point: Sequence[float]) -> float:
+    return sum(value * value for value in exponential_decay_residuals(instance, point))
+
+
+def _exponential_decay_gradient(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    residuals = exponential_decay_residuals(instance, point)
+    jacobian = exponential_decay_jacobian(instance, point)
+    return [
+        2.0 * sum(row[column] * residual for row, residual in zip(jacobian, residuals, strict=True))
+        for column in range(3)
+    ]
+
+
 def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[float, float]:
     x, y = point
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
@@ -195,5 +253,9 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.knapsack.binary.v1": (_knapsack, None),
     "problem.assignment.linear.v1": (_assignment, None),
     "problem.constrained_disk.v1": (_constrained_disk, None),
+    "problem.nonlinear_least_squares.exponential_decay.v1": (
+        _exponential_decay,
+        _exponential_decay_gradient,
+    ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
 }

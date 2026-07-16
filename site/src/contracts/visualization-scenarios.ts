@@ -50,7 +50,7 @@ export interface VisualizationScenario {
   };
   guided_story: GuidedStory | null;
   experiment: {
-    oracle_policy: ("objective_value" | "gradient" | "constraint_value" | "constraint_jacobian" | "objective_vector")[];
+    oracle_policy: ("objective_value" | "gradient" | "constraint_value" | "constraint_jacobian" | "objective_vector" | "residual_vector" | "jacobian")[];
     initial_condition: { point: number[] };
     parameter_preset_id: string;
     seed: { status: "fixed" | "not_applicable"; value: number | null };
@@ -421,7 +421,7 @@ function parseExperiment(raw: unknown, field: string): VisualizationScenario["ex
   const stopping = parameterRecord(data.stopping, `${field}.stopping`);
   return {
     oracle_policy: nonEmptyTextList(data.oracle_policy, `${field}.oracle_policy`).map((value) => {
-      if (!["objective_value", "gradient", "constraint_value", "constraint_jacobian", "objective_vector"].includes(value)) throw new Error(`${field}.oracle_policy is invalid.`);
+      if (!["objective_value", "gradient", "constraint_value", "constraint_jacobian", "objective_vector", "residual_vector", "jacobian"].includes(value)) throw new Error(`${field}.oracle_policy is invalid.`);
       return value;
     }) as VisualizationScenario["experiment"]["oracle_policy"],
     initial_condition: { point: numberList(initial.point, `${field}.initial_condition.point`) },

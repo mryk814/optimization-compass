@@ -202,6 +202,8 @@ class VisualizationExperiment(TraceModel):
             "constraint_value",
             "constraint_jacobian",
             "objective_vector",
+            "residual_vector",
+            "jacobian",
         ]
     ] = Field(min_length=1)
     initial_condition: VisualizationInitialCondition
