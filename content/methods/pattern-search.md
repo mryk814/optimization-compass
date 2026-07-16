@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [powell, mads, method.nelder-mead]
 aliases: [/learn/pattern-search]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 現在点の周囲へpattern方向のpoll点を配置し、改善の有無に応じてstep sizeを拡大・縮小する微分不要局所探索法です。

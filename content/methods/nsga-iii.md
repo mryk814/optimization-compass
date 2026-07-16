@@ -55,7 +55,7 @@ reference directionは「真のPareto front」ではありません。どのtrad
 避ける条件:
 
 - 目的が2個で関心領域も狭い
-- 一評価が非常に高価でpopulationを維持できない
+- 一評価が高価でpopulationを維持できない
 - objective scaleやdirectionが未整理
 - 最終選択のpreferenceを全く議論しない
 
@@ -79,7 +79,7 @@ reference directionは「真のPareto front」ではありません。どのtrad
 - 目的数が2〜3でbackend solverが強い → ε-constraintへ
 - 評価budgetが不足 → surrogate-assisted multi-objective法を検討
 
-## Python例
+## Python
 
 ```python
 from pymoo.algorithms.moo.nsga3 import NSGA3

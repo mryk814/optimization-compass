@@ -4,16 +4,16 @@ kind: method
 method_id: M_NEWTON
 title_ja: Newton法
 title_en: Newton's method
-summary: 勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。
+summary: 勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。
 source_ids: [S002, S056]
 prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [bfgs, lbfgsb, trust-region-newton-cg]
 aliases: [/learn/newton-method]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
-勾配とHessianから局所二次モデルを作り、その停留点へ進む二階最適化法です。
+勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。
 
 ## 一手の意味
 

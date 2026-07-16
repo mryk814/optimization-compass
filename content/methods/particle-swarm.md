@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [cma-es, differential-evolution, genetic-algorithm]
 aliases: [/learn/particle-swarm]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-16
 ---
 
 各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。
@@ -107,7 +107,7 @@ print(best, personal_value.min())
 - moderate dimension
 - 滑らかさに依存しないglobal candidate探索
 
-## 避ける／修正する条件
+## 避ける／切り替える条件
 
 - 変数scaleが揃っていない
 - boundでclipされた粒子が多数停止する
