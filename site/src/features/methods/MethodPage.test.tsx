@@ -177,7 +177,7 @@ describe("MethodPage Map deep link", () => {
     );
 
     const disclosure = await screen.findByText("構造化データとトラブルシューティング");
-    expect(screen.getByRole("heading", { name: "症状・確認・対処" })).not.toBeVisible();
+    expect(screen.getByRole("heading", { name: "症状・確認・対処", hidden: true })).not.toBeVisible();
 
     fireEvent.click(disclosure);
 
