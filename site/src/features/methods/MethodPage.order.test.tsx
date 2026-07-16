@@ -52,10 +52,10 @@ const links: EntityLinkIndex = {
       canonical_url: "/methods/M_BFGS",
       aliases: [],
       external_url: null,
-      relations: [{ relation_type: "learning", target_type: "learning", target_id: "bfgs" }],
+      relations: [{ relation_type: "learning", target_type: "content", target_id: "bfgs" }],
     },
     {
-      entity_type: "learning",
+      entity_type: "content",
       entity_id: "bfgs",
       label: "BFGS",
       summary: "BFGSの教材",
