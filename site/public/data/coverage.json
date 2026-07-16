@@ -393,12 +393,13 @@
           "target_ids": []
         },
         "content": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "admm",
             "coordinate-descent",
+            "family.composite-convex",
             "fista",
             "mirror-descent",
             "proximal-gradient",
@@ -423,7 +424,7 @@
           ]
         },
         "map": {
-          "count": 23,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -446,6 +447,7 @@
             "S067",
             "admm",
             "coordinate-descent",
+            "family.composite-convex",
             "fista",
             "mirror-descent",
             "proximal-gradient",
@@ -501,13 +503,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "active-set",
             "augmented-lagrangian",
             "constrained-continuous",
+            "family.constrained-nlp",
             "interior-point-nlp",
             "projected-gradient",
             "slsqp"
@@ -543,7 +546,7 @@
           ]
         },
         "map": {
-          "count": 42,
+          "count": 43,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -585,6 +588,7 @@
             "constrained-continuous",
             "constrained-design",
             "constrained-disk-feasible-region",
+            "family.constrained-nlp",
             "interior-point-nlp",
             "portfolio-allocation",
             "projected-gradient",
@@ -753,11 +757,12 @@
           ]
         },
         "content": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "cobyla",
+            "family.local-dfo",
             "mads",
             "method.nelder-mead",
             "pattern-search",
@@ -790,7 +795,7 @@
           ]
         },
         "map": {
-          "count": 38,
+          "count": 39,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -822,6 +827,7 @@
             "budget-allocation",
             "cobyla",
             "dummy-educational",
+            "family.local-dfo",
             "hyperparameter-search",
             "mads",
             "method.nelder-mead",
@@ -892,12 +898,13 @@
           "target_ids": []
         },
         "content": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "branch-and-bound",
-            "branch-and-cut"
+            "branch-and-cut",
+            "family.discrete-structure"
           ]
         },
         "gallery": {
@@ -933,7 +940,7 @@
           ]
         },
         "map": {
-          "count": 36,
+          "count": 39,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -962,16 +969,19 @@
             "S016",
             "S021",
             "S022",
+            "S023",
             "S024",
             "S025",
             "S028",
             "S029",
+            "S054",
             "S079",
             "binary-knapsack-bnb-budget",
             "binary-knapsack-bnb-complete",
             "branch-and-bound",
             "branch-and-cut",
             "budget-allocation",
+            "family.discrete-structure",
             "shift-scheduling"
           ]
         },
@@ -990,7 +1000,7 @@
           ]
         },
         "source": {
-          "count": 9,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -998,10 +1008,12 @@
             "S016",
             "S021",
             "S022",
+            "S023",
             "S024",
             "S025",
             "S028",
             "S029",
+            "S054",
             "S079"
           ]
         },
@@ -1135,12 +1147,13 @@
           "target_ids": []
         },
         "content": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "differential-evolution",
             "direct-global",
+            "family.global-search",
             "shgo"
           ]
         },
@@ -1168,7 +1181,7 @@
           ]
         },
         "map": {
-          "count": 30,
+          "count": 32,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1196,11 +1209,13 @@
             "S009",
             "S018",
             "S056",
+            "S058",
             "S072",
             "S073",
             "S074",
             "differential-evolution",
             "direct-global",
+            "family.global-search",
             "shgo"
           ]
         },
@@ -1217,7 +1232,7 @@
           ]
         },
         "source": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1229,6 +1244,7 @@
             "S009",
             "S018",
             "S056",
+            "S058",
             "S072",
             "S073",
             "S074"
@@ -1752,11 +1768,12 @@
           ]
         },
         "content": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bfgs",
+            "family.smooth-local",
             "lbfgsb",
             "method.gradient-descent",
             "newton-method"
@@ -1789,7 +1806,7 @@
           ]
         },
         "map": {
-          "count": 33,
+          "count": 34,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1820,6 +1837,7 @@
             "bfgs",
             "constrained-design",
             "constrained-disk-feasible-region",
+            "family.smooth-local",
             "gradient_descent-quadratic",
             "gradient_descent-quadratic-divergence",
             "lbfgsb",
@@ -1888,11 +1906,12 @@
           ]
         },
         "content": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "adam",
+            "family.stochastic-ml",
             "momentum-sgd"
           ]
         },
@@ -1915,7 +1934,7 @@
           ]
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1936,6 +1955,7 @@
             "adam",
             "adam-quadratic",
             "adam-quadratic-divergence",
+            "family.stochastic-ml",
             "momentum-quadratic",
             "momentum-quadratic-divergence",
             "momentum-sgd"
@@ -1993,11 +2013,12 @@
           "target_ids": []
         },
         "content": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "bayesian-optimization"
+            "bayesian-optimization",
+            "family.expensive-black-box"
           ]
         },
         "gallery": {
@@ -2022,7 +2043,7 @@
           ]
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2049,6 +2070,7 @@
             "S069",
             "S075",
             "bayesian-optimization",
+            "family.expensive-black-box",
             "hyperparameter-search"
           ]
         },
