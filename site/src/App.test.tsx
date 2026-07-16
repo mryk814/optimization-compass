@@ -7,7 +7,7 @@ import rawManifest from "../public/data/manifest.json";
 import rawVisualizationScenarios from "../public/data/visualization-scenarios.json";
 
 const routes = [
-  ["#/", "Optimization Atlas"],
+  ["#/", "最適化したい。でも、何をどう解けばいい？"],
   ["#/map", "問題構造マップ"],
   ["#/diagnose", "診断"],
   ["#/theater", "Method Theater"],
@@ -23,6 +23,7 @@ const testLinks: EntityLinkIndex = {
   generated_at: "2026-07-13T00:00:00Z",
   entities: [
     { entity_type: "method", entity_id: "M_NELDER_MEAD", label: "Nelder–Mead", summary: "", canonical_url: "/methods/M_NELDER_MEAD", aliases: ["/learn/method.nelder-mead"], external_url: null, relations: [] },
+    { entity_type: "method", entity_id: "M_BFGS", label: "BFGS", summary: "", canonical_url: "/methods/M_BFGS", aliases: [], external_url: null, relations: [] },
     { entity_type: "trace", entity_id: "nelder-mead-quadratic", label: "Nelder–Mead trace", summary: "", canonical_url: "/traces/nelder-mead-quadratic", aliases: ["/theater/nelder-mead"], external_url: null, relations: [] },
     { entity_type: "comparison", entity_id: "COMPARE_GRADIENT_FAMILY", label: "Gradient comparison", summary: "", canonical_url: "/compare/COMPARE_GRADIENT_FAMILY", aliases: ["/compare/gradient-quadratic"], external_url: null, relations: [] },
   ],
@@ -73,6 +74,39 @@ const releaseIdentity = {
   database_sha256: "6fd8851e805ebd4b396905ca33d50b7dd292bfba7a17c02a5d3726e18f3886cc",
 };
 
+const featuredGallery = {
+  contract_version: "1.0.0",
+  dataset_version: "0.3.0",
+  cases: [
+    {
+      case_id: "featured-case",
+      title_ja: "観測に合うモデルを推定する",
+      title_en: "Estimate a model from observations",
+      domain: "science",
+      problem_archetype_id: "PA033",
+      feature_values: [{ feature_id: "F_VARIABLE_DOMAIN", value: "continuous" }],
+      question_answers: { Q01: "continuous" },
+      candidate_method_ids: ["M_NELDER_MEAD"],
+      conditional_methods: [{ method_id: "M_BFGS", reason: "滑らかで勾配が信頼できる場合" }],
+      excluded_methods: [{ method_id: "M_BFGS", reason: "離散的な観測欠損があり、現在の前提には合わない" }],
+      implementation_ids: ["I_SCIPY"],
+      visualization_ids: ["VIEW_PROBLEM_STRUCTURE"],
+      comparison_ids: [],
+      source_ids: ["S001"],
+      difficulty: "intro",
+      status: "published",
+      last_reviewed: "2026-07-16",
+      question: "観測データに合うモデルパラメータを推定したい。",
+      decision_variables: "モデルの連続パラメータ。",
+      objective: "観測残差を小さくする。",
+      constraints: "物理的に妥当な上下限。",
+      map_node_id: "answer:Q01:continuous",
+      python_example: "print('example')",
+      practical_notes: "初期値依存性を確認する。",
+    },
+  ],
+};
+
 function jsonResponse(value: unknown) {
   return { ok: true, json: async () => value };
 }
@@ -95,34 +129,43 @@ describe("application routes", () => {
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
-  test("home exposes six fully clickable entry cards and separates Theater from Compare", () => {
+  test("home foregrounds one problem, one primary action, and an exclusion reason", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
+      if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
+      if (url.endsWith("data/gallery.json")) return jsonResponse(featuredGallery);
+      return jsonResponse(emptyView);
+    }));
+
     render(<App initialEntityLinks={testLinks} />);
 
-    const entries = screen.getByLabelText("Atlasの主要な入口");
-    expect(within(entries).getAllByRole("article")).toHaveLength(6);
-    expect(within(entries).getByRole("link", { name: "Map — 地図を見る" })).toHaveAttribute(
-      "href",
-      "#/map",
-    );
-    expect(within(entries).getByRole("link", { name: "Diagnose — 診断を始める" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "条件から診断する" })).toHaveAttribute(
       "href",
       "#/diagnose",
     );
-    expect(within(entries).getByRole("link", { name: "Methods — 教材を探す" })).toHaveAttribute(
-      "href",
-      "#/learn",
-    );
-    expect(within(entries).getByRole("link", { name: "Method Theater — 動きを見る" })).toHaveAttribute(
-      "href",
-      "#/theater",
-    );
-    expect(within(entries).getByRole("link", { name: "Compare Lab — 違いを比べる" })).toHaveAttribute(
-      "href",
-      "#/compare",
-    );
-    expect(within(entries).getByRole("link", { name: "Problem Gallery — ケースを見る" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "実例から探す" })).toHaveAttribute(
       "href",
       "#/gallery",
+    );
+    expect(
+      await screen.findByRole("heading", { level: 2, name: "観測に合うモデルを推定する" }),
+    ).toBeVisible();
+    expect(screen.getByText("Nelder–Mead")).toBeVisible();
+    expect(screen.getByText("選ばない理由")).toBeVisible();
+    expect(screen.getByText("離散的な観測欠損があり、現在の前提には合わない")).toBeVisible();
+    expect(screen.getByRole("link", { name: "このCaseを辿る →" })).toHaveAttribute(
+      "href",
+      "#/gallery/featured-case",
+    );
+    expect(screen.queryByLabelText("Atlasの主要な入口")).not.toBeInTheDocument();
+
+    const secondary = screen.getByRole("navigation", { name: "Atlasのその他の入口" });
+    expect(within(secondary).getByRole("link", { name: "問題構造Map" })).toHaveAttribute(
+      "href",
+      "#/map",
+    );
+    expect(within(secondary).getByRole("link", { name: "条件を揃えて比べる" })).toHaveAttribute(
+      "href",
+      "#/compare",
     );
 
     const footer = screen.getByRole("contentinfo");
@@ -146,7 +189,7 @@ describe("application routes", () => {
     await waitFor(() => expect(window.location.hash).toBe("#/traces/nelder-mead-quadratic"));
   });
 
-  test("primary navigation and home entries stay reachable at 375px", () => {
+  test("primary navigation and problem-first Home stay reachable at 375px", () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
       value: 375,
@@ -158,7 +201,9 @@ describe("application routes", () => {
     const links = within(navigation).getAllByRole("link");
     expect(links).toHaveLength(9);
     links.forEach((link) => expect(link).toBeVisible());
-    within(screen.getByLabelText("Atlasの主要な入口"))
+    expect(screen.getByRole("link", { name: "条件から診断する" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "実例から探す" })).toBeVisible();
+    within(screen.getByRole("navigation", { name: "Atlasのその他の入口" }))
       .getAllByRole("link")
       .forEach((link) => expect(link).toBeVisible());
   });
