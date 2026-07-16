@@ -33,8 +33,9 @@ test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作で
   await expectNoHorizontalOverflow(page);
 
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
-  await expect(page.getByRole("link", { name: "分類図上で見る" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "問題構造Mapで位置を確認" })).toBeVisible();
   await expect(page.getByRole("link", { name: "この特徴で診断する" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /固定条件と変えた条件を比べる/u })).toBeVisible();
   await page.getByRole("button", { name: "実装用プロンプトを作る" }).click();
   await expect(page.getByRole("dialog", { name: "実装用プロンプトを作る" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
@@ -79,7 +80,7 @@ test("375px Compare Labで比較条件と非trajectory結果を読める", async
 
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
-  await page.getByRole("link", { name: "Search-tree Theaterで再生" }).click();
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
   await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
