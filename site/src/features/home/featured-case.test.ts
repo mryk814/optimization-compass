@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 
-import type { GalleryIndex } from "../../contracts/gallery";
-import type { LearningJourneyIndex } from "../../contracts/learning-journeys";
+import { parseGalleryIndex, type GalleryIndex } from "../../contracts/gallery";
+import {
+  parseLearningJourneyIndex,
+  type LearningJourneyIndex,
+} from "../../contracts/learning-journeys";
+import rawGallery from "../../../public/data/gallery.json";
+import rawLearningJourneys from "../../../public/data/learning-journeys.json";
 import { selectFeaturedCase } from "./featured-case";
 
 const gallery = {
@@ -15,6 +20,18 @@ const gallery = {
 } as GalleryIndex;
 
 describe("featured Home case", () => {
+  test("selects the complete constrained-design journey from current release data", () => {
+    const featured = selectFeaturedCase(
+      parseGalleryIndex(rawGallery),
+      parseLearningJourneyIndex(rawLearningJourneys),
+    );
+
+    expect(featured).toMatchObject({
+      canonicalUrl: "/gallery/constrained-design",
+      item: { case_id: "constrained-design" },
+    });
+  });
+
   test("prefers a complete canonical journey over Gallery order", () => {
     const journeys = journeyIndex([
       journey("first-in-gallery", "partial", 1),
