@@ -17,6 +17,16 @@ function mockSearchData(): void {
 }
 
 describe("SearchPage", () => {
+  test("links to symptom-first failure guidance without adding another primary filter", () => {
+    mockSearchData();
+    render(<MemoryRouter initialEntries={["/search"]}><SearchPage /></MemoryRouter>);
+
+    expect(screen.getByRole("link", { name: "失敗の兆候・診断から探す →" })).toHaveAttribute(
+      "href",
+      "/failures",
+    );
+  });
+
   test("resolves an English alias and explains why it matched", async () => {
     mockSearchData();
     render(<MemoryRouter initialEntries={["/search?q=BO&type=method"]}><SearchPage /></MemoryRouter>);

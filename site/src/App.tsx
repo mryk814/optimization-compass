@@ -22,6 +22,7 @@ import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { CoveragePage } from "./features/coverage/CoveragePage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
+import { FailureModePage } from "./features/failures/FailureModePage";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
@@ -263,6 +264,7 @@ function AppShell() {
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
+          <Route path="/failures" element={<FailureModePage />} />
           <Route path="/sources" element={<SourceIndexPage />} />
           <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           <Route path="/coverage" element={<CoveragePage />} />

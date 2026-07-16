@@ -1,0 +1,213 @@
+.failure-page {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.failure-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.failure-header > div {
+  max-width: 50rem;
+}
+
+.failure-controls {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) repeat(2, minmax(10rem, auto));
+  gap: 0.65rem;
+  padding: 0.8rem;
+  border: 1px solid #d3d7d1;
+  border-radius: 0.65rem;
+  background: #f8f8f4;
+}
+
+.failure-controls label {
+  display: grid;
+  gap: 0.25rem;
+  color: #4f5d54;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.failure-controls input,
+.failure-controls select {
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #aeb8b1;
+  border-radius: 0.4rem;
+  background: #fff;
+}
+
+.failure-controls input:focus-visible,
+.failure-controls select:focus-visible,
+.failure-detail summary:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 2px;
+}
+
+.failure-result-count {
+  margin: -0.55rem 0 0;
+  color: #606a63;
+  font-size: 0.8rem;
+}
+
+.failure-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.failure-card {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #cfd5d0;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.failure-card header h2,
+.failure-card header p {
+  margin: 0.2rem 0;
+}
+
+.failure-card header p[lang="en"] {
+  color: #667168;
+  font-size: 0.82rem;
+}
+
+.failure-badges {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.failure-badges span {
+  padding: 0.12rem 0.45rem;
+  border: 1px solid #c3cac4;
+  border-radius: 999px;
+  color: #4d5a52;
+  background: #f5f6f3;
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.failure-badges .failure-severity.is-critical {
+  border-color: #8c2f24;
+  color: #7e241b;
+  background: #fff0ed;
+}
+
+.failure-badges .failure-severity.is-high {
+  border-color: #b96643;
+  color: #7f3e26;
+  background: #fff4ef;
+}
+
+.failure-badges .failure-severity.is-warning {
+  border-color: #b39145;
+  color: #6d571f;
+  background: #fff9e8;
+}
+
+.failure-primary-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.8rem;
+}
+
+.failure-primary-facts > div {
+  min-width: 0;
+  padding: 0.7rem;
+  border-left: 3px solid #7c9183;
+  background: #f5f7f4;
+}
+
+.failure-primary-facts h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+}
+
+.failure-primary-facts ul,
+.failure-primary-facts ol {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.failure-primary-facts li + li {
+  margin-top: 0.25rem;
+}
+
+.failure-primary-facts small {
+  display: block;
+  margin-top: 0.15rem;
+  color: #667168;
+}
+
+.failure-detail {
+  margin-top: 0.75rem;
+  border-top: 1px solid #d9ddd9;
+  padding-top: 0.65rem;
+}
+
+.failure-detail summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #285740;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.failure-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+}
+
+.failure-detail-grid section {
+  min-width: 0;
+}
+
+.failure-detail-grid h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.78rem;
+}
+
+.failure-detail-grid ul {
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.failure-detail-grid li {
+  overflow-wrap: anywhere;
+}
+
+.failure-detail-grid li small {
+  display: block;
+  color: #68736c;
+}
+
+.failure-empty {
+  padding: 1rem;
+  border: 1px dashed #aeb8b1;
+  border-radius: 0.65rem;
+}
+
+.failure-empty h2,
+.failure-empty p {
+  margin: 0.25rem 0;
+}
+
+@media (max-width: 48rem) {
+  .failure-header,
+  .failure-controls,
+  .failure-primary-facts,
+  .failure-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
