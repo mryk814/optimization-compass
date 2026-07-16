@@ -12530,6 +12530,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_CONSTRAINED_DISK",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_IPOPT",
           "target_type": "implementation"
@@ -12551,7 +12556,7 @@
         },
         {
           "relation_type": "primary",
-          "target_id": "SCENARIO_CONSTRAINED_DISK",
+          "target_id": "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
           "target_type": "scenario"
         },
         {
@@ -19409,6 +19414,57 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "制約を満たす経路で目的を改善する",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "constrained-design",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "実行可能性を回復し、制約境界に沿って目的を改善する仕組みを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_GD_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
@@ -21022,6 +21078,11 @@
         {
           "relation_type": "scenario",
           "target_id": "SCENARIO_CONSTRAINED_DISK",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
           "target_type": "scenario"
         },
         {

@@ -8,12 +8,17 @@ describe("LearningJourney parser", () => {
     const index = parseLearningJourneyIndex(rawJourneys);
     const pilot = index.journeys.find((journey) => journey.journey_id === "constrained-design");
     expect(pilot?.case_id).toBe("constrained-design");
-    expect(pilot?.scenarios[0]?.scenario_id).toBe("SCENARIO_CONSTRAINED_DISK");
-    expect(pilot?.scenarios[0]?.canonical_url).toBe("/theater/learning/SCENARIO_CONSTRAINED_DISK");
-    expect(pilot?.status).toBe("partial");
+    expect(pilot?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
+      .toBe("SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH");
+    expect(pilot?.scenarios.find((scenario) => scenario.role === "primary")?.canonical_url)
+      .toBe("/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH");
+    expect(pilot?.scenarios.find((scenario) => scenario.role === "failure_contrast")?.scenario_id)
+      .toBe("SCENARIO_CONSTRAINED_DISK");
+    expect(pilot?.status).toBe("complete");
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
-    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual(["alternate_scenario"]);
+    expect(index.summary.status_counts).toEqual({ complete: 1, partial: 10, draft: 0 });
+    expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual([]);
     expect(index.orphan_assets.some((item) => item.policy === "warning")).toBe(true);
   });
 
@@ -25,13 +30,13 @@ describe("LearningJourney parser", () => {
 
   test("rejects a complete journey with a missing dimension", () => {
     const changed = structuredClone(rawJourneys);
-    const journey = changed.journeys.find((item) => item.journey_id === "constrained-design");
-    const assessment = changed.assessments.find((item) => item.journey_id === "constrained-design");
-    if (!journey || !assessment) throw new Error("Expected constrained-design fixture.");
+    const journey = changed.journeys.find((item) => item.status === "partial");
+    const assessment = changed.assessments.find((item) => item.journey_id === journey?.journey_id);
+    if (!journey || !assessment) throw new Error("Expected a partial journey fixture.");
     journey.status = "complete";
     journey.completion_reasons = [];
     assessment.status = "complete";
-    expect(() => parseLearningJourneyIndex(changed)).toThrow(/missing dimensions/u);
+    expect(() => parseLearningJourneyIndex(changed)).toThrow(/incomplete|missing dimensions/u);
   });
 
   test("rejects mismatched assessment reasons", () => {

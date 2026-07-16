@@ -7,12 +7,12 @@ import { parseVisualizationScenarioIndex } from "../../contracts/visualization-s
 import { buildTheaterCatalog, validatePublicScenarioReachability } from "./scenario-catalog";
 
 describe("scenario catalog", () => {
-  test("makes all 18 public scenarios reachable across every renderer family", () => {
+  test("makes all 19 public scenarios reachable across every renderer family", () => {
     const catalog = buildTheaterCatalog(
       parseVisualizationScenarioIndex(scenarios).scenarios,
       parseEntityLinkIndex(entityLinks),
     );
-    expect(catalog).toHaveLength(18);
+    expect(catalog).toHaveLength(19);
     expect(new Set(catalog.map((entry) => entry.scenario.artifact.renderer_family))).toEqual(new Set([
       "simplex_geometry", "continuous_trajectory", "search_tree", "surrogate_uncertainty",
       "feasible_region", "pareto_front",
