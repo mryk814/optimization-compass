@@ -1,0 +1,24 @@
+name: README diagnostic
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  readme_diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --frozen --all-extras --all-groups
+      - name: Verify generated block
+        run: uv run python scripts/sync_readme_facts.py --check
+      - name: Test README contract
+        run: uv run pytest tests/test_readme_release_facts.py
+      - name: Test workflow contract
+        run: uv run pytest tests/test_pages_workflow.py
