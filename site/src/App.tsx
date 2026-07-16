@@ -251,6 +251,7 @@ export default function App({ initialEntityLinks }: { initialEntityLinks?: Entit
 function CanonicalRoute({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const links = useEntityLinks();
+  if (links.status === "loading") return <p role="status">正規URLを確認しています…</p>;
   const target = links.status === "ready" ? resolveAlias(links.index, pathname) : undefined;
   return target?.canonical_url ? <Navigate replace to={target.canonical_url} /> : children;
 }
