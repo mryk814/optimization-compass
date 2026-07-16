@@ -83,7 +83,7 @@ last_reviewed: 2026-07-16
 - 高価評価で試行数が不足 → Bayesian Optimizationへ
 - 低次元boundedで決定論的探索が欲しい → DIRECTやSHGOへ
 
-## Python例
+## Python
 
 ```python
 import numpy as np

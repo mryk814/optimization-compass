@@ -82,7 +82,7 @@ Adamのmoment推定からadaptiveなgradient stepを作り、そのstepとは別
 - 初期改善後にplateau → schedule、SGD+momentum、L-BFGSを比較
 - NaNや発散 → learning rate、mixed precision、gradient scalingを確認
 
-## Python例
+## Python
 
 ```python
 import torch

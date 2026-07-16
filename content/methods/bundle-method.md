@@ -81,7 +81,7 @@ $$
 - 非凸性が重要 → convex guaranteeを外し別methodへ
 - 劣勾配noiseが大きい → samplingやrobust oracleを検討
 
-## Python例
+## Python
 
 ```python
 from dataclasses import dataclass
