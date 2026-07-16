@@ -8,9 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 README_PATH = ROOT / "README.md"
-RELEASE_AUTHORITY_PATH = (
-    ROOT / "src/optimization_compass/resources/release-authority.json"
-)
+RELEASE_AUTHORITY_PATH = ROOT / "src/optimization_compass/resources/release-authority.json"
 BEGIN_MARKER = "<!-- BEGIN GENERATED DATASET FACTS -->"
 END_MARKER = "<!-- END GENERATED DATASET FACTS -->"
 
@@ -43,9 +41,7 @@ def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
     authority = _load_json(authority_path)
     version = _require_string(authority, "dataset_version", authority_path)
     release_date = _require_string(authority, "release_date", authority_path)
-    report_path = (
-        root / "data" / f"optimization_method_selection_database_v{version}_report.md"
-    )
+    report_path = root / "data" / f"optimization_method_selection_database_v{version}_report.md"
     report = report_path.read_text(encoding="utf-8")
 
     header = _parse_report_header(report, report_path)
@@ -55,8 +51,7 @@ def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
         )
     if header["release_date"] != release_date:
         raise ReadmeFactsError(
-            "release report date "
-            f"{header['release_date']} does not match authority {release_date}"
+            f"release report date {header['release_date']} does not match authority {release_date}"
         )
 
     table_counts = _parse_report_table_counts(report)
@@ -69,28 +64,14 @@ def load_release_facts(root: Path = ROOT) -> ReleaseFacts:
         problem_archetype_count=_require_table_count(
             table_counts, "problem_archetypes", report_path
         ),
-        implementation_count=_require_table_count(
-            table_counts, "implementations", report_path
-        ),
+        implementation_count=_require_table_count(table_counts, "implementations", report_path),
         source_count=_require_table_count(table_counts, "sources", report_path),
-        example_case_count=_require_table_count(
-            table_counts, "example_cases", report_path
-        ),
-        decision_rule_count=_require_table_count(
-            table_counts, "decision_rules", report_path
-        ),
-        evidence_link_count=_require_table_count(
-            table_counts, "evidence_links", report_path
-        ),
-        content_page_count=_site_collection_count(
-            root, "content.json", "pages", version
-        ),
-        gallery_case_count=_site_collection_count(
-            root, "gallery.json", "cases", version
-        ),
-        comparison_count=_site_collection_count(
-            root, "comparisons.json", "comparisons", version
-        ),
+        example_case_count=_require_table_count(table_counts, "example_cases", report_path),
+        decision_rule_count=_require_table_count(table_counts, "decision_rules", report_path),
+        evidence_link_count=_require_table_count(table_counts, "evidence_links", report_path),
+        content_page_count=_site_collection_count(root, "content.json", "pages", version),
+        gallery_case_count=_site_collection_count(root, "gallery.json", "cases", version),
+        comparison_count=_site_collection_count(root, "comparisons.json", "comparisons", version),
         visualization_scenario_count=_site_collection_count(
             root, "visualization-scenarios.json", "scenarios", version
         ),
@@ -138,8 +119,7 @@ def update_readme(*, root: Path = ROOT, check: bool = False) -> bool:
         return False
     if check:
         raise ReadmeFactsError(
-            "README release facts are stale; run "
-            "`uv run python scripts/sync_readme_facts.py`"
+            "README release facts are stale; run `uv run python scripts/sync_readme_facts.py`"
         )
     readme_path.write_text(expected, encoding="utf-8", newline="\n")
     return True
@@ -147,9 +127,7 @@ def update_readme(*, root: Path = ROOT, check: bool = False) -> bool:
 
 def replace_generated_block(readme: str, block: str) -> str:
     if readme.count(BEGIN_MARKER) != 1 or readme.count(END_MARKER) != 1:
-        raise ReadmeFactsError(
-            "README must contain exactly one generated release-facts block"
-        )
+        raise ReadmeFactsError("README must contain exactly one generated release-facts block")
     start = readme.index(BEGIN_MARKER)
     end = readme.index(END_MARKER, start) + len(END_MARKER)
     return readme[:start] + block + readme[end:]
@@ -244,12 +222,8 @@ def _reject_stale_dataset_versions(readme: str, current_version: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Synchronize README release identity and counts."
-    )
-    parser.add_argument(
-        "--check", action="store_true", help="Fail instead of updating README."
-    )
+    parser = argparse.ArgumentParser(description="Synchronize README release identity and counts.")
+    parser.add_argument("--check", action="store_true", help="Fail instead of updating README.")
     args = parser.parse_args()
     changed = update_readme(check=args.check)
     if args.check:
