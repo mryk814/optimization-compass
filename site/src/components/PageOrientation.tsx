@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 
-import "./PageOrientation.css";
-
 export interface PageOrientationLink {
   label: string;
   to: string;
