@@ -158,6 +158,7 @@ export interface ImplementationPromptDraft {
   generated_at: string;
   atlas_context: ImplementationPromptPack["atlas_context"];
   source_ids: string[];
+  quality_requirements: string[];
   initial_form: PromptFormState;
 }
 
@@ -389,7 +390,7 @@ function diagnoseImplementations(result: RecommendationResult): PromptImplementa
 
 function galleryImplementations(item: GalleryCase, data: SiteData): PromptImplementation[] {
   const relevantMethods = new Set([
-    ...item.candidate_method_ids,
+    ...item.candidate_methods.map((entry) => entry.method_id),
     ...item.conditional_methods.map((entry) => entry.method_id),
   ]);
   return [...item.implementation_ids].sort().map((implementationId) => {
@@ -460,6 +461,7 @@ export function createDiagnosePromptDraft(input: DiagnosePromptInput): Implement
     generated_at: generatedAt,
     atlas_context: atlasContext,
     source_ids: contextSourceIds(atlasContext),
+    quality_requirements: [],
     initial_form: blankForm(),
   };
 }
@@ -477,8 +479,8 @@ export function createGalleryPromptDraft(input: GalleryPromptInput): Implementat
     Object.fromEntries(Object.entries(item.question_answers).map(([questionId, value]) => [questionId, [value]])),
     { expected_dataset_version: datasetVersion },
   );
-  const firstCandidates = item.candidate_method_ids.map((methodId) =>
-    methodCandidate(support.data, methodId, ["Gallery caseで第一候補として登録"], item.source_ids));
+  const firstCandidates = item.candidate_methods.map((entry) =>
+    methodCandidate(support.data, entry.method_id, [entry.reason], item.source_ids));
   const conditionalCandidates = item.conditional_methods.map((entry) =>
     methodCandidate(support.data, entry.method_id, [entry.reason], item.source_ids));
   const excludedMethods = item.excluded_methods.map((entry) =>
@@ -514,6 +516,7 @@ export function createGalleryPromptDraft(input: GalleryPromptInput): Implementat
     generated_at: generatedAt,
     atlas_context: atlasContext,
     source_ids: uniqueSorted([...item.source_ids, ...contextSourceIds(atlasContext)]),
+    quality_requirements: uniqueSorted([item.practical_notes, ...item.limitations]),
     initial_form: form,
   };
 }
@@ -558,7 +561,7 @@ export function createImplementationPromptPack(
     requested_outputs: REQUESTED_OUTPUT_OPTIONS
       .map((option) => option.id)
       .filter((id) => form.requested_outputs.includes(id)),
-    quality_requirements: [...QUALITY_REQUIREMENTS],
+    quality_requirements: [...QUALITY_REQUIREMENTS, ...draft.quality_requirements],
     source_ids: [...draft.source_ids],
   };
 }

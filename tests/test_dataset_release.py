@@ -187,7 +187,7 @@ def test_require_atlas_rejects_database_with_entire_atlas_contract_removed(
     assert "missing-stored:CHK020" in required.status_mismatches
 
 
-def _published_fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
+def _published_fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
     data_dir = tmp_path / "published"
     data_dir.mkdir()
     (data_dir / "keep.txt").write_text("original", encoding="utf-8")
@@ -200,7 +200,9 @@ def _published_fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path]:
     site_data = tmp_path / "site-data"
     site_data.mkdir()
     (site_data / "keep.json").write_text('{"status":"original"}\n', encoding="utf-8")
-    return data_dir, runtime, version_file, site_data
+    readme = tmp_path / "README.md"
+    readme.write_text("# current release\n", encoding="utf-8")
+    return data_dir, runtime, version_file, site_data, readme
 
 
 def _tree_bytes(directory: Path) -> dict[str, bytes]:
@@ -218,18 +220,27 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
         target_version="0.3.0",
         release_date="2026-07-14",
     )
-    data_dir, runtime, version_file, site_data = _published_fixture(tmp_path)
+    data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
-    publish_release(staged.output_directory, data_dir, runtime, version_file, site_data)
+    publish_release(
+        staged.output_directory,
+        data_dir,
+        runtime,
+        version_file,
+        site_data,
+        readme,
+        "# next release\n",
+    )
 
     assert (data_dir / "keep.txt").read_text(encoding="utf-8") == "original"
     assert (data_dir / staged.database_path.name).exists()
     assert runtime.read_bytes() == staged.database_path.read_bytes()
     assert version_file.read_text(encoding="utf-8") == (f"0.3.0\nsha256={sha256(runtime)}\n")
     assert _tree_bytes(site_data) == _tree_bytes(staged.site_data_directory)
+    assert readme.read_text(encoding="utf-8") == "# next release\n"
 
 
-@pytest.mark.parametrize("failure_target", ["data", "runtime", "version", "site"])
+@pytest.mark.parametrize("failure_target", ["data", "runtime", "version", "site", "readme"])
 def test_publish_rolls_back_all_targets_after_injected_failure(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure_target: str
 ) -> None:
@@ -239,17 +250,19 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
         target_version="0.3.0",
         release_date="2026-07-14",
     )
-    data_dir, runtime, version_file, site_data = _published_fixture(tmp_path)
+    data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
     before_data = _tree_bytes(data_dir)
     before_runtime = runtime.read_bytes()
     before_version = version_file.read_bytes()
     before_site = _tree_bytes(site_data)
+    before_readme = readme.read_bytes()
     real_replace = dataset_release_module._atomic_replace
     selected_target = {
         "data": data_dir,
         "runtime": runtime,
         "version": version_file,
         "site": site_data,
+        "readme": readme,
     }[failure_target]
 
     def fail_on_selected_target(source: Path, target: Path) -> None:
@@ -260,12 +273,21 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
     monkeypatch.setattr(dataset_release_module, "_atomic_replace", fail_on_selected_target)
 
     with pytest.raises(OSError, match="injected"):
-        publish_release(staged.output_directory, data_dir, runtime, version_file, site_data)
+        publish_release(
+            staged.output_directory,
+            data_dir,
+            runtime,
+            version_file,
+            site_data,
+            readme,
+            "# next release\n",
+        )
 
     assert _tree_bytes(data_dir) == before_data
     assert runtime.read_bytes() == before_runtime
     assert version_file.read_bytes() == before_version
     assert _tree_bytes(site_data) == before_site
+    assert readme.read_bytes() == before_readme
 
 
 def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
@@ -277,7 +299,7 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
         target_version="0.3.0",
         release_date="2026-07-14",
     )
-    data_dir, runtime, version_file, site_data = _published_fixture(tmp_path)
+    data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
     with pytest.raises(ReleaseValidationError, match="new release version"):
         publish_release(
@@ -291,6 +313,8 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             runtime,
             version_file,
             site_data,
+            readme,
+            "# next release\n",
         )
 
     runtime.write_bytes(runtime.read_bytes() + b"tampered")
@@ -301,6 +325,8 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             runtime,
             version_file,
             site_data,
+            readme,
+            "# next release\n",
         )
 
     shutil.copy2(BASE_DATABASE, runtime)
@@ -312,6 +338,8 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             runtime,
             version_file,
             site_data,
+            readme,
+            "# next release\n",
         )
 
     version_file.write_text(f"{BASE_DATASET_VERSION}\nsha256={'0' * 64}\n", encoding="utf-8")
@@ -322,6 +350,8 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             runtime,
             version_file,
             site_data,
+            readme,
+            "# next release\n",
         )
 
     version_file.write_text(
@@ -337,6 +367,8 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             runtime,
             version_file,
             site_data,
+            readme,
+            "# next release\n",
         )
 
 

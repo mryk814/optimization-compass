@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import rawGallery from "../../../public/data/gallery.json";
+import { parseGalleryIndex } from "../../contracts/gallery";
 import { caseState, journeyCompletionLabel } from "./GalleryPage";
 
 describe("gallery Atlas state", () => {
@@ -22,5 +24,12 @@ describe("gallery learning journey status", () => {
   test("translates missing canonical routes into reader-facing labels", () => {
     expect(journeyCompletionLabel("missing_primary_scenario")).toBe("primary Theater 未接続");
     expect(journeyCompletionLabel("missing_comparison")).toBe("canonical Compare 未接続");
+  });
+
+  test("carries explicit candidate reasons and case limitations into the page model", () => {
+    const item = parseGalleryIndex(structuredClone(rawGallery)).cases[0];
+
+    expect(item.candidate_methods[0].reason).not.toHaveLength(0);
+    expect(item.limitations[0]).not.toHaveLength(0);
   });
 });

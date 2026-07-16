@@ -1,5 +1,15 @@
 export type JourneyStatus = "complete" | "partial" | "draft";
 export type JourneyScenarioRole = "primary" | "failure_contrast" | "sensitivity" | "alternate";
+export type JourneyDimensionState = "complete" | "missing" | "not_applicable" | "broken";
+export type JourneyOrphanPolicy = "standalone" | "warning" | "error";
+
+export const journeyDimensionNames = [
+  "formulation", "canonical_problem_instance", "primary_scenario", "alternate_scenario",
+  "canonical_comparison", "method_roles", "implementation", "source_review",
+  "terminology_prerequisite", "static_text_alternative", "cross_surface_links",
+  "route_reachability", "validation_status",
+] as const;
+export type JourneyDimensionName = typeof journeyDimensionNames[number];
 
 export interface LearningJourney {
   journey_id: string;
@@ -41,19 +51,36 @@ export interface LearningJourney {
 }
 
 export interface LearningJourneyIndex {
-  contract_version: "1.0.0";
+  contract_version: "1.1.0";
   dataset_version: string;
   generated_at: string;
+  summary: {
+    target_complete_journeys: 5;
+    total_journeys: number;
+    status_counts: Record<JourneyStatus, number>;
+    milestone_status: "met" | "not_met";
+  };
   journeys: LearningJourney[];
-  orphan_scenario_ids: string[];
-  orphan_comparison_ids: string[];
+  assessments: Array<{
+    journey_id: string;
+    status: JourneyStatus;
+    dimensions: Record<JourneyDimensionName, { state: JourneyDimensionState; target_ids: string[]; reason_codes: string[] }>;
+    missing_dimensions: JourneyDimensionName[];
+  }>;
+  orphan_assets: Array<{
+    asset_type: "scenario" | "comparison" | "visualization_artifact" | "content";
+    asset_id: string;
+    policy: JourneyOrphanPolicy;
+    reason_code: string;
+  }>;
 }
 
 export function parseLearningJourneyIndex(raw: unknown): LearningJourneyIndex {
   const data = record(raw, "learning journey index");
-  exactKeys(data, ["contract_version", "dataset_version", "generated_at", "journeys", "orphan_scenario_ids", "orphan_comparison_ids"], "learning journey index");
-  if (data.contract_version !== "1.0.0") throw new Error("Unsupported learning journey contract.");
+  exactKeys(data, ["contract_version", "dataset_version", "generated_at", "summary", "journeys", "assessments", "orphan_assets"], "learning journey index");
+  if (data.contract_version !== "1.1.0") throw new Error("Unsupported learning journey contract.");
   const datasetVersion = nonEmpty(data.dataset_version, "dataset_version");
+  const summary = parseSummary(data.summary);
   const journeys = array(data.journeys, "journeys").map((value, index) => parseJourney(value, index));
   const ids = new Set<string>();
   for (const journey of journeys) {
@@ -66,14 +93,92 @@ export function parseLearningJourneyIndex(raw: unknown): LearningJourneyIndex {
     if (missing.length > 0) throw new Error(`Journey has missing prerequisites: ${missing.join(", ")}.`);
   }
   validateAcyclic(journeys);
+  const assessments = array(data.assessments, "assessments").map(parseAssessment);
+  if (new Set(assessments.map((item) => item.journey_id)).size !== assessments.length) throw new Error("Journey assessment IDs must be unique.");
+  if (assessments.length !== journeys.length || assessments.some((assessment) => !ids.has(assessment.journey_id))) throw new Error("Every journey needs one assessment.");
+  const statusByJourney = new Map(journeys.map((journey) => [journey.journey_id, journey.status]));
+  if (assessments.some((assessment) => statusByJourney.get(assessment.journey_id) !== assessment.status)) throw new Error("Journey assessment status must match journey status.");
+  const assessmentByJourney = new Map(assessments.map((assessment) => [assessment.journey_id, assessment]));
+  for (const journey of journeys) {
+    const assessment = assessmentByJourney.get(journey.journey_id);
+    if (!assessment) throw new Error("Every journey needs one assessment.");
+    const expectedReasons = [...new Set([
+      ...Object.values(assessment.dimensions).flatMap((dimension) => dimension.reason_codes),
+      ...(journey.status === "draft" ? ["case_is_draft"] : []),
+    ])].sort();
+    if (journey.completion_reasons.join("|") !== expectedReasons.join("|")) throw new Error("Journey completion reasons must match its assessment.");
+  }
+  if (summary.total_journeys !== journeys.length) throw new Error("Journey summary total must match journeys.");
+  const actualCounts = { complete: 0, partial: 0, draft: 0 } satisfies Record<JourneyStatus, number>;
+  journeys.forEach((journey) => { actualCounts[journey.status] += 1; });
+  if ((Object.keys(actualCounts) as JourneyStatus[]).some((status) => actualCounts[status] !== summary.status_counts[status])) throw new Error("Journey summary counts must match journeys.");
+  const orphanAssets = array(data.orphan_assets, "orphan_assets").map((value, index) => {
+    const row = record(value, `orphan_assets[${index}]`);
+    exactKeys(row, ["asset_type", "asset_id", "policy", "reason_code"], `orphan_assets[${index}]`);
+    return {
+      asset_type: enumValue(row.asset_type, ["scenario", "comparison", "visualization_artifact", "content"] as const, "asset_type"),
+      asset_id: nonEmpty(row.asset_id, "asset_id"),
+      policy: enumValue(row.policy, ["standalone", "warning", "error"] as const, "policy"),
+      reason_code: nonEmpty(row.reason_code, "reason_code"),
+    };
+  });
+  if (new Set(orphanAssets.map((item) => `${item.asset_type}:${item.asset_id}`)).size !== orphanAssets.length) throw new Error("Orphan assets must be unique.");
+  if (orphanAssets.some((item) => item.policy === "error")) throw new Error("Error-policy orphan assets cannot be published.");
   return {
-    contract_version: "1.0.0",
+    contract_version: "1.1.0",
     dataset_version: datasetVersion,
     generated_at: nonEmpty(data.generated_at, "generated_at"),
+    summary,
     journeys,
-    orphan_scenario_ids: uniqueStrings(data.orphan_scenario_ids, "orphan_scenario_ids"),
-    orphan_comparison_ids: uniqueStrings(data.orphan_comparison_ids, "orphan_comparison_ids"),
+    assessments,
+    orphan_assets: orphanAssets,
   };
+}
+
+function parseSummary(value: unknown): LearningJourneyIndex["summary"] {
+  const data = record(value, "summary");
+  exactKeys(data, ["target_complete_journeys", "total_journeys", "status_counts", "milestone_status"], "summary");
+  if (data.target_complete_journeys !== 5) throw new Error("Journey target must be five.");
+  const counts = record(data.status_counts, "status_counts");
+  exactKeys(counts, ["complete", "partial", "draft"], "status_counts");
+  const statusCounts = {
+    complete: integer(counts.complete, "complete", 0),
+    partial: integer(counts.partial, "partial", 0),
+    draft: integer(counts.draft, "draft", 0),
+  };
+  const totalJourneys = integer(data.total_journeys, "total_journeys", 0);
+  if (Object.values(statusCounts).reduce((sum, count) => sum + count, 0) !== totalJourneys) throw new Error("Journey counts must equal total.");
+  const milestoneStatus = enumValue(data.milestone_status, ["met", "not_met"] as const, "milestone_status");
+  if (milestoneStatus !== (statusCounts.complete >= 5 ? "met" : "not_met")) throw new Error("Journey milestone must be derived from count.");
+  return { target_complete_journeys: 5, total_journeys: totalJourneys, status_counts: statusCounts, milestone_status: milestoneStatus };
+}
+
+function parseAssessment(value: unknown, index: number): LearningJourneyIndex["assessments"][number] {
+  const field = `assessments[${index}]`;
+  const data = record(value, field);
+  exactKeys(data, ["journey_id", "status", "dimensions", "missing_dimensions"], field);
+  const dimensions = record(data.dimensions, `${field}.dimensions`);
+  exactKeys(dimensions, journeyDimensionNames, `${field}.dimensions`);
+  const parsedDimensions = Object.fromEntries(journeyDimensionNames.map((name) => {
+    const dimension = record(dimensions[name], `${field}.dimensions.${name}`);
+    exactKeys(dimension, ["state", "target_ids", "reason_codes"], `${field}.dimensions.${name}`);
+    const state = enumValue(dimension.state, ["complete", "missing", "not_applicable", "broken"] as const, `${name}.state`);
+    const reasonCodes = uniqueStrings(dimension.reason_codes, `${name}.reason_codes`);
+    if (state === "complete" && reasonCodes.length > 0) throw new Error("Complete dimensions cannot have reason codes.");
+    if (["missing", "broken"].includes(state) && reasonCodes.length === 0) throw new Error("Missing and broken dimensions require reason codes.");
+    return [name, {
+      state,
+      target_ids: uniqueStrings(dimension.target_ids, `${name}.target_ids`),
+      reason_codes: reasonCodes,
+    }];
+  })) as LearningJourneyIndex["assessments"][number]["dimensions"];
+  const missingDimensions = uniqueStrings(data.missing_dimensions, `${field}.missing_dimensions`).map((name) => enumValue(name, journeyDimensionNames, "missing_dimension"));
+  const expectedMissing = journeyDimensionNames.filter((name) => ["missing", "broken"].includes(parsedDimensions[name].state)).sort();
+  if (missingDimensions.join("|") !== expectedMissing.join("|")) throw new Error("Missing dimensions must be derived from states.");
+  const status = enumValue(data.status, ["complete", "partial", "draft"] as const, `${field}.status`);
+  if (status === "complete" && missingDimensions.length > 0) throw new Error("Complete journey cannot have missing dimensions.");
+  if (status === "partial" && missingDimensions.length === 0) throw new Error("Partial journey must have missing dimensions.");
+  return { journey_id: nonEmpty(data.journey_id, `${field}.journey_id`), status, dimensions: parsedDimensions, missing_dimensions: missingDimensions };
 }
 
 function parseJourney(value: unknown, index: number): LearningJourney {
@@ -162,6 +267,7 @@ function record(value: unknown, field: string): Record<string, unknown> { if (ty
 function array(value: unknown, field: string): unknown[] { if (!Array.isArray(value)) throw new Error(`${field} must be an array.`); return value; }
 function nonEmpty(value: unknown, field: string): string { if (typeof value !== "string" || !value.trim()) throw new Error(`${field} must be non-empty.`); return value; }
 function uniqueStrings(value: unknown, field: string): string[] { const values = array(value, field).map((item, index) => nonEmpty(item, `${field}[${index}]`)); if (new Set(values).size !== values.length) throw new Error(`${field} must be unique.`); return values; }
+function integer(value: unknown, field: string, min: number): number { if (typeof value !== "number" || !Number.isSafeInteger(value) || value < min) throw new Error(`${field} must be an integer >= ${min}.`); return value; }
 function route(value: unknown, field: string): string { const result = nonEmpty(value, field); if (!/^\/[A-Za-z0-9._/-]+$/u.test(result) || result.includes("//")) throw new Error(`${field} must be a safe route.`); return result; }
 function date(value: unknown, field: string): string { const result = nonEmpty(value, field); if (!/^\d{4}-\d{2}-\d{2}$/u.test(result)) throw new Error(`${field} must be a date.`); return result; }
 function enumValue<const T extends readonly string[]>(value: unknown, values: T, field: string): T[number] { const result = nonEmpty(value, field); if (!values.includes(result)) throw new Error(`${field} is unsupported.`); return result as T[number]; }
