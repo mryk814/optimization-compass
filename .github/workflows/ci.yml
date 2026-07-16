@@ -54,11 +54,12 @@ jobs:
           path: dependency-reports/dependency-licenses.json
           if-no-files-found: error
           retention-days: 30
-      - name: Lint, format, and type-check Python
+      - name: Lint and type-check Python
         run: |
           uv run ruff check .
-          uv run ruff format --check .
           uv run mypy src
+      - name: Check Python formatting
+        run: uv run ruff format --check .
       - name: Run Python smoke tests
         run: |
           uv run pytest \
@@ -67,7 +68,10 @@ jobs:
             tests/test_engine.py \
             tests/test_data_integrity.py \
             tests/test_pages_workflow.py \
-            tests/test_pages_artifact.py
+            tests/test_pages_artifact.py \
+            tests/test_readme_release_facts.py
+      - name: Verify README release facts
+        run: uv run python scripts/sync_readme_facts.py --check
       - name: Regenerate site data from the validated database
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |

@@ -59,6 +59,8 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
         "tests/test_data_integrity.py",
         "tests/test_pages_workflow.py",
         "tests/test_pages_artifact.py",
+        "tests/test_readme_release_facts.py",
+        "uv run python scripts/sync_readme_facts.py --check",
         "uv run optimization-compass export-site-data --output site/public/data",
         "git diff --exit-code -- site/public/data",
         "uv run optimization-compass verify-data",
