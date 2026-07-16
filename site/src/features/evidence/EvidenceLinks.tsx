@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
-
 import { findEntity } from "../../contracts/entity-links";
+import type { AtlasStateV1 } from "../../state/atlas-state";
 import { useEntityLinks } from "../../state/entity-links";
+import { JourneyLink } from "../../state/journey-navigation";
 
-export function EvidenceLinks({ sourceIds }: { sourceIds: readonly string[] }) {
+export function EvidenceLinks({ atlasState, sourceIds }: { atlasState?: AtlasStateV1; sourceIds: readonly string[] }) {
   const links = useEntityLinks();
   const uniqueIds = [...new Set(sourceIds)];
   if (uniqueIds.length === 0) return null;
@@ -12,9 +12,9 @@ export function EvidenceLinks({ sourceIds }: { sourceIds: readonly string[] }) {
       {uniqueIds.map((sourceId) => {
         const source = links.status === "ready" ? findEntity(links.index, "source", sourceId) : undefined;
         return (
-          <Link key={sourceId} to={source?.canonical_url ?? `/sources/${sourceId}`}>
+          <JourneyLink atlasState={atlasState} key={sourceId} to={source?.canonical_url ?? `/sources/${sourceId}`}>
             {source?.label ?? "根拠"} <code>{sourceId}</code>
-          </Link>
+          </JourneyLink>
         );
       })}
     </span>

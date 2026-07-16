@@ -89,6 +89,16 @@ test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, te
   await expectNoHighImpactViolations(page, testInfo, "mobile-search-tree");
 });
 
+test("375px Case journey navigationが横にはみ出さず次へ進める", async ({ page, baseURL }, testInfo) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC017");
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  const journey = page.getByRole("complementary", { name: "Case learning journey" });
+  await expect(journey).toContainText("Step 2/4");
+  await expect(journey.getByRole("link", { name: /次はCompare/u })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await expectNoHighImpactViolations(page, testInfo, "mobile-case-journey");
+});
+
 test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/bayesian-optimization");
   const player = page.getByLabel(/Bayesian optimization再生領域/u);

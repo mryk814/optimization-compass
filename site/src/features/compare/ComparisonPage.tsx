@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   parseComparisonIndex,
@@ -16,6 +16,12 @@ import {
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
+import { buildAtlasNavigation } from "../../state/atlas-navigation";
+import {
+  atlasStateFromSearch,
+  JourneyLink,
+  patchJourneyState,
+} from "../../state/journey-navigation";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
@@ -53,6 +59,7 @@ const historyPlot = { left: 46, right: 714, top: 22, bottom: 190 } as const;
 
 export function ComparisonPage() {
   const { comparisonId = "" } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [loaded, setLoaded] = useState<Loaded>();
   const [error, setError] = useState<Error>();
@@ -85,7 +92,14 @@ export function ComparisonPage() {
       />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {!loaded && !error && <p role="status">比較条件を読み込み中…</p>}
-      {loaded && <ComparisonExperience loaded={loaded} onPresetChange={(nextId) => navigate(comparisonRoute(nextId))} />}
+      {loaded && <ComparisonExperience loaded={loaded} onPresetChange={(nextId) => {
+        const state = atlasStateFromSearch(location.search);
+        const nextState = state ? patchJourneyState(state, { comparisonId: nextId }) : undefined;
+        const destination = nextState
+          ? buildAtlasNavigation(comparisonRoute(nextId), location.search, nextState)
+          : undefined;
+        navigate(destination?.ok ? destination.to : comparisonRoute(nextId));
+      }} />}
     </section>
   );
 }
@@ -117,15 +131,15 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         : <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />}
       <section className="comparison-return-links" aria-label="比較の関連導線">
         <h2>同じcontextから確認する</h2>
-        <Link to={comparison.canonical_url}>この比較の共有URL</Link>
-        <Link to={entity("case", comparison.case_id)?.canonical_url ?? `/gallery/${comparison.case_id}`}>Case: {entity("case", comparison.case_id)?.label ?? comparison.case_id}</Link>
+        <JourneyLink journeyPatch={{ comparisonId: comparison.comparison_id }} to={comparison.canonical_url}>この比較の共有URL</JourneyLink>
+        <JourneyLink to={entity("case", comparison.case_id)?.canonical_url ?? `/gallery/${comparison.case_id}`}>Case: {entity("case", comparison.case_id)?.label ?? comparison.case_id}</JourneyLink>
         {[...new Map(comparison.members.map((member) => [member.scenario_id, member])).values()].map((member) => {
           const scenario = entity("scenario", member.scenario_id);
           const theaterUrl = scenario?.canonical_url ?? entity("trace", member.artifact.artifact_id)?.canonical_url;
-          return theaterUrl ? <Link key={member.scenario_id} to={theaterUrl}>Theater: {scenario?.label ?? member.label_ja}</Link> : null;
+          return theaterUrl ? <JourneyLink journeyPatch={{ scenarioId: member.scenario_id, memberId: member.member_id, methodId: member.method_id }} key={member.scenario_id} to={theaterUrl}>Theater: {scenario?.label ?? member.label_ja}</JourneyLink> : null;
         })}
         {[...new Set(comparison.members.map((member) => member.method_id))].map((id) => (
-          <Link key={id} to={entity("method", id)?.canonical_url ?? `/methods/${id}`}>手法: {entity("method", id)?.label ?? id}</Link>
+          <JourneyLink journeyPatch={{ methodId: id }} key={id} to={entity("method", id)?.canonical_url ?? `/methods/${id}`}>手法: {entity("method", id)?.label ?? id}</JourneyLink>
         ))}
       </section>
       <EvidenceLinks sourceIds={comparison.source_ids} />
@@ -319,7 +333,7 @@ function ComparisonMemberCard({
         objective={trace.objective}
         terminalReason={trace.terminal_summary_ja}
       />
-      {traceEntity?.canonical_url && <Link className="text-link" to={traceEntity.canonical_url}>このTraceを単独再生</Link>}
+      {traceEntity?.canonical_url && <JourneyLink className="text-link" journeyPatch={{ scenarioId: comparisonMember.scenario_id, memberId: comparisonMember.member_id, methodId: comparisonMember.method_id }} to={traceEntity.canonical_url}>このTraceを単独再生</JourneyLink>}
     </article>
   );
 }

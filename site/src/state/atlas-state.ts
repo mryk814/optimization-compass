@@ -3,12 +3,22 @@ export type AtlasAnswer =
   | { status: "unknown"; values: ["unknown"] }
   | { status: "not_applicable"; values: [] };
 
+export interface AtlasJourneyContext {
+  journeyId: string;
+  caseId: string;
+  scenarioId?: string;
+  comparisonId?: string;
+  methodId?: string;
+  memberId?: string;
+}
+
 export interface AtlasStateV1 {
   stateVersion: 1;
   datasetVersion: string;
   viewId: string;
   viewVersion: string;
   selectedNodeId?: string;
+  journey?: AtlasJourneyContext;
   answers: Record<string, AtlasAnswer>;
 }
 
@@ -95,6 +105,24 @@ function validateAnswer(value: unknown, questionId: string): AtlasAnswer {
   throw new Error(`AtlasState answer "${questionId}" has invalid status "${String(value.status)}".`);
 }
 
+function validateJourney(value: unknown): AtlasJourneyContext {
+  if (!isRecord(value)) {
+    throw new Error("AtlasState journey must be an object.");
+  }
+  const journeyId = requireNonEmptyString(value.journeyId, "journey.journeyId");
+  const caseId = requireNonEmptyString(value.caseId, "journey.caseId");
+  if (journeyId !== caseId) {
+    throw new Error("AtlasState journeyId must equal caseId.");
+  }
+  const journey: AtlasJourneyContext = { journeyId, caseId };
+  for (const field of ["scenarioId", "comparisonId", "methodId", "memberId"] as const) {
+    if (value[field] !== undefined) {
+      journey[field] = requireNonEmptyString(value[field], `journey.${field}`);
+    }
+  }
+  return journey;
+}
+
 function validateStateShape(value: unknown): AtlasStateV1 {
   if (!isRecord(value)) {
     throw new Error("AtlasState payload must be a JSON object.");
@@ -127,6 +155,9 @@ function validateStateShape(value: unknown): AtlasStateV1 {
   };
   if (value.selectedNodeId !== undefined) {
     state.selectedNodeId = requireNonEmptyString(value.selectedNodeId, "selectedNodeId");
+  }
+  if (value.journey !== undefined) {
+    state.journey = validateJourney(value.journey);
   }
   return state;
 }
@@ -183,10 +214,7 @@ export function encodeAtlasState(state: AtlasStateV1): string {
   return token;
 }
 
-export function decodeAtlasState(
-  token: string,
-  catalog: AtlasCompatibilityCatalog,
-): { state: AtlasStateV1; warnings: string[] } {
+export function decodeAtlasStateToken(token: string): AtlasStateV1 {
   if (token.length > ATLAS_STATE_TOKEN_MAX_LENGTH) {
     throw new AtlasStateUrlTooLongError(token.length);
   }
@@ -199,8 +227,14 @@ export function decodeAtlasState(
     }
     throw new Error("AtlasState token contains malformed JSON.", { cause: error });
   }
+  return validateStateShape(parsed);
+}
 
-  const decoded = validateStateShape(parsed);
+export function decodeAtlasState(
+  token: string,
+  catalog: AtlasCompatibilityCatalog,
+): { state: AtlasStateV1; warnings: string[] } {
+  const decoded = decodeAtlasStateToken(token);
   const catalogDatasetVersion = requireNonEmptyString(
     catalog.datasetVersion,
     "catalog datasetVersion",
@@ -287,6 +321,13 @@ export function decodeAtlasState(
       warnings.push(
         `選択ノード「${decoded.selectedNodeId}」は現在のビューに存在しないため除外しました。`,
       );
+    }
+  }
+  if (decoded.journey !== undefined) {
+    if (decoded.datasetVersion === catalogDatasetVersion) {
+      state.journey = decoded.journey;
+    } else {
+      warnings.push("データセット版が変わったため、古いCase journey文脈を解除しました。");
     }
   }
 

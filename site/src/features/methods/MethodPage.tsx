@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import { parseContentIndex, type AtlasContentPage } from "../../contracts/atlas-content";
 import { parseSiteData, type SiteData } from "../../contracts/site-data";
@@ -11,6 +11,7 @@ import type { AtlasCompatibilityCatalog } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useEntityLinks } from "../../state/entity-links";
 import { useAtlasState } from "../../state/useAtlasState";
+import { JourneyLink } from "../../state/journey-navigation";
 import { PageOrientation } from "../../components/PageOrientation";
 import { CompiledContent } from "../content/CompiledContent";
 import { LearningRelations } from "../learning/LearningRelations";
@@ -248,7 +249,7 @@ function MethodRelations({
 }
 
 function EntityDestination({ entity }: { entity: LinkedEntity }) {
-  if (entity.canonical_url) return <Link to={entity.canonical_url}>{entity.label}</Link>;
+  if (entity.canonical_url) return <JourneyLink to={entity.canonical_url}>{entity.label}</JourneyLink>;
   if (entity.external_url) return <a href={entity.external_url} rel="noreferrer" target="_blank">{entity.label}</a>;
   return <span>{entity.label}</span>;
 }

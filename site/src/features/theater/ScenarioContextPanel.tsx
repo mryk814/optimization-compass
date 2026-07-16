@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { findEntity, relatedEntities } from "../../contracts/entity-links";
 import {
@@ -12,6 +11,7 @@ import {
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
+import { JourneyLink } from "../../state/journey-navigation";
 import { scenarioFamilyId, scenarioRoute } from "./scenario-catalog";
 
 type Context = { journey?: LearningJourney; scenarios: VisualizationScenario[] };
@@ -69,9 +69,9 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
         <p><strong>制約</strong> {context.journey.formulation.constraints}</p>
       </div> : <p className="atlas-note">この教材runはCase journeyへ未接続です。問題instanceの範囲で読みます。</p>}
       <nav className="scenario-context-links" aria-label="同じjourneyの導線">
-        {context?.journey && <Link to={context.journey.canonical_url}>Caseへ戻る</Link>}
-        {[...comparisonLinks.entries()].map(([id, url]) => <Link key={id} to={url}>Compare: {id}</Link>)}
-        {alternates.map((item) => <Link key={item.scenario_id} to={scenarioRoute(item)}>Alternate: {item.title_ja}</Link>)}
+        {context?.journey && <JourneyLink to={context.journey.canonical_url}>Caseへ戻る</JourneyLink>}
+        {[...comparisonLinks.entries()].map(([id, url]) => <JourneyLink journeyPatch={{ comparisonId: id }} key={id} to={url}>Compare: {id}</JourneyLink>)}
+        {alternates.map((item) => <JourneyLink journeyPatch={{ scenarioId: item.scenario_id }} key={item.scenario_id} to={scenarioRoute(item)}>Alternate: {item.title_ja}</JourneyLink>)}
       </nav>
       <p className="scenario-run-limit"><strong>Limit</strong> {scenario.lesson.limitations_ja}</p>
     </section>

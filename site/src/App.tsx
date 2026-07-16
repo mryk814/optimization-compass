@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   HashRouter,
   Link,
@@ -34,6 +34,7 @@ import { PageOrientation } from "./components/PageOrientation";
 import { SafeBackButton } from "./components/SafeBackButton";
 import { SearchPage } from "./features/search/SearchPage";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
+import { JourneyNavigation } from "./state/journey-navigation";
 
 import "./styles.css";
 
@@ -147,6 +148,7 @@ function HomeEntry({
 
 function AppShell() {
   const { pathname } = useLocation();
+  const previousPathname = useRef(pathname);
   const [datasetVersion, setDatasetVersion] = useState<string>();
   useEffect(() => {
     const controller = new AbortController();
@@ -161,6 +163,11 @@ function AppShell() {
     return () => controller.abort();
   }, []);
   const links = useEntityLinks();
+  useEffect(() => {
+    if (previousPathname.current === pathname) return;
+    previousPathname.current = pathname;
+    document.getElementById("main-content")?.focus({ preventScroll: true });
+  }, [pathname]);
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     document.getElementById("main-content")?.focus();
@@ -201,6 +208,7 @@ function AppShell() {
       </header>
       <main id="main-content" tabIndex={-1}>
         <SafeBackButton />
+        <JourneyNavigation />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/map" element={<MapPage />} />
@@ -249,20 +257,22 @@ export default function App({ initialEntityLinks }: { initialEntityLinks?: Entit
 }
 
 function CanonicalRoute({ children }: { children: ReactNode }) {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const links = useEntityLinks();
   if (links.status === "loading") return <p role="status">正規URLを確認しています…</p>;
   const target = links.status === "ready" ? resolveAlias(links.index, pathname) : undefined;
-  return target?.canonical_url ? <Navigate replace to={target.canonical_url} /> : children;
+  return target?.canonical_url
+    ? <Navigate replace to={{ pathname: target.canonical_url, search }} />
+    : children;
 }
 
 function AliasRoute() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const links = useEntityLinks();
   if (links.status === "loading") return <p role="status">正規URLを確認しています…</p>;
   if (links.status === "error") return <NotFoundPage detail={links.error.message} />;
   const target = resolveAlias(links.index, pathname);
   return target?.canonical_url
-    ? <Navigate replace to={target.canonical_url} />
+    ? <Navigate replace to={{ pathname: target.canonical_url, search }} />
     : <NotFoundPage detail={`登録されていないaliasです: ${pathname}`} />;
 }

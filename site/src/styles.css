@@ -1951,6 +1951,99 @@ main:focus {
   text-underline-offset: 0.18em;
 }
 
+.journey-navigation {
+  display: grid;
+  grid-template-columns: minmax(10rem, auto) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem 1rem;
+  margin: -0.2rem 0 1rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cddbd2;
+  border-left: 4px solid #315c48;
+  border-radius: 0.6rem;
+  background: #f3f7f3;
+  font-size: 0.76rem;
+}
+
+.journey-navigation-heading {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.journey-navigation-heading span {
+  color: #647168;
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.journey-navigation-heading strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.journey-navigation nav {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  min-width: 0;
+  color: #667169;
+}
+
+.journey-navigation nav a,
+.journey-navigation-next {
+  color: #285740;
+  font-weight: 750;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+}
+
+.journey-navigation nav a[aria-current="page"] {
+  color: #17211b;
+  text-decoration-thickness: 2px;
+}
+
+.journey-navigation-next {
+  justify-self: end;
+}
+
+.journey-navigation-error,
+.journey-navigation-loading {
+  margin: -0.2rem 0 1rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid #a85a30;
+  background: #fff2e8;
+  color: #713a22;
+  font-size: 0.74rem;
+}
+
+@media (max-width: 48rem) {
+  .journey-navigation {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .journey-navigation nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+  }
+}
+
+@media (max-width: 34rem) {
+  .journey-navigation {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-navigation-next {
+    grid-row: 3;
+    justify-self: start;
+  }
+}
+
 .page-panel h1 {
   margin: 0 0 0.8rem;
   color: #17211b;
