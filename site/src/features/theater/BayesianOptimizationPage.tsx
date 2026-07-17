@@ -18,6 +18,7 @@ import { buildAtlasNavigation } from "../../state/atlas-navigation";
 import { useEntityLinks } from "../../state/entity-links";
 import { atlasStateFromSearch, patchJourneyState } from "../../state/journey-navigation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
 import { SurrogatePlot } from "../visualization/SurrogatePlot";
@@ -25,6 +26,7 @@ import { ScenarioContextPanel } from "./ScenarioContextPanel";
 
 type Strategy = "exploit" | "explore";
 type NoisePreset = "noiseless" | "small_noise";
+const DEFAULT_SCENARIO_ID = "SCENARIO_BO_1D_EXPLORE_NOISELESS";
 
 async function json(url: string): Promise<unknown> {
   const response = await fetch(url);
@@ -35,20 +37,9 @@ async function json(url: string): Promise<unknown> {
 
 export function BayesianOptimizationPage() {
   const { scenarioId = "" } = useParams();
+  const requestedScenarioId = scenarioId || DEFAULT_SCENARIO_ID;
   const location = useLocation();
   const navigate = useNavigate();
-  const strategy: Strategy = scenarioId.includes("EXPLOIT") ? "exploit" : "explore";
-  const noise: NoisePreset = scenarioId.includes("SMALL_NOISE") ? "small_noise" : "noiseless";
-  const selectScenario = (nextStrategy: Strategy, nextNoise: NoisePreset) => {
-    const nextId = `SCENARIO_BO_1D_${nextStrategy.toUpperCase()}_${nextNoise.toUpperCase()}`;
-    const pathname = `/theater/bayesian-optimization/${nextId}`;
-    const state = atlasStateFromSearch(location.search);
-    const nextState = state ? patchJourneyState(state, { scenarioId: nextId }) : undefined;
-    const destination = nextState
-      ? buildAtlasNavigation(pathname, location.search, nextState)
-      : undefined;
-    navigate(destination?.ok ? destination.to : pathname);
-  };
   const [loaded, setLoaded] = useState<{
     scenario: VisualizationScenario;
     payload: SurrogateUncertaintyPayload;
@@ -68,12 +59,11 @@ export function BayesianOptimizationPage() {
         throw new Error(
           "VisualizationScenario indexのdataset versionが一致しません。",
         );
-      const presetId = `BO_${strategy.toUpperCase()}_${noise.toUpperCase()}`;
       const scenario = index.scenarios.find(
-        (item) => item.experiment.parameter_preset_id === presetId,
+        (item) => item.scenario_id === requestedScenarioId,
       );
       if (!scenario)
-        throw new Error(`preset ${strategy}/${noise} がありません。`);
+        throw new EntityNotFoundError("Bayesian Optimization scenario ID", requestedScenarioId);
       if (
         scenario.artifact.renderer_family !== "surrogate_uncertainty" ||
         scenario.artifact.artifact_contract !== "SurrogateUncertainty"
@@ -82,7 +72,8 @@ export function BayesianOptimizationPage() {
       const payload = parseSurrogateUncertaintyPayload(
         await json(`${base}${scenario.artifact.payload_path}`),
       );
-      if (payload.strategy !== strategy || payload.noise_preset !== noise)
+      const payloadPresetId = `BO_${payload.strategy.toUpperCase()}_${payload.noise_preset.toUpperCase()}`;
+      if (scenario.experiment.parameter_preset_id !== payloadPresetId)
         throw new Error("renderer payloadのpresetがscenarioと一致しません。");
       if (
         payload.frames.at(-1)?.oracle_evaluations !==
@@ -95,7 +86,20 @@ export function BayesianOptimizationPage() {
         setError(caught instanceof Error ? caught : new Error(String(caught)));
     });
     return () => controller.abort();
-  }, [strategy, noise]);
+  }, [requestedScenarioId]);
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
+  const strategy: Strategy = loaded?.payload.strategy ?? "explore";
+  const noise: NoisePreset = loaded?.payload.noise_preset ?? "noiseless";
+  const selectScenario = (nextStrategy: Strategy, nextNoise: NoisePreset) => {
+    const nextId = `SCENARIO_BO_1D_${nextStrategy.toUpperCase()}_${nextNoise.toUpperCase()}`;
+    const pathname = `/theater/bayesian-optimization/${nextId}`;
+    const state = atlasStateFromSearch(location.search);
+    const nextState = state ? patchJourneyState(state, { scenarioId: nextId }) : undefined;
+    const destination = nextState
+      ? buildAtlasNavigation(pathname, location.search, nextState)
+      : undefined;
+    navigate(destination?.ok ? destination.to : pathname);
+  };
   return (
     <section className="atlas-page bo-theater">
       <header className="atlas-page-header">

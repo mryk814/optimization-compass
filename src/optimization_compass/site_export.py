@@ -7,7 +7,10 @@ from hashlib import sha256
 from pathlib import Path
 from typing import Any, Literal
 
-from optimization_compass.comparisons import load_comparison_seed
+from optimization_compass.comparisons import (
+    load_comparison_seed,
+    validate_comparison_benchmark_contexts,
+)
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
@@ -301,10 +304,8 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         contract_version="2.0.0",
         dataset_version=release["version"],
     )
-    _write_json(
-        output_dir / "comparisons.json",
-        load_comparison_seed(COMPARISON_SEED, release["version"]),
-    )
+    comparison_seed = load_comparison_seed(COMPARISON_SEED, release["version"])
+    _write_json(output_dir / "comparisons.json", comparison_seed)
     for view in views:
         _write_json(output_dir / f"views/{view.view_id}.json", view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
@@ -326,6 +327,11 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         surrogate_scenarios=surrogate_scenarios,
         learning_slice_scenarios=learning_slice_scenarios,
         dataset_version=release["version"],
+    )
+    validate_comparison_benchmark_contexts(
+        comparison_seed,
+        repository.benchmark_contexts(),
+        scenario_index.scenarios,
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))

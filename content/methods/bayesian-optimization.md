@@ -53,7 +53,7 @@ acquisitionの最良点は、目的関数の最適点だと証明された場所
 
 ## 画面の読み方
 
-[Bayesian Optimization Theater](#/theater/bayesian-optimization)では、次を混同しないようにします。
+[Bayesian Optimization Theater](#/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS)では、次を混同しないようにします。
 
 | 表示 | 意味 |
 |---|---|

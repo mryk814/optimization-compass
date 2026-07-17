@@ -93,7 +93,7 @@
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
       ],
       "comparison_ids": ["COMPARE_BO_ACQUISITION_NOISE_BASELINE"],
-      "source_ids": ["S034", "S035", "S059", "S075"],
+      "source_ids": ["S002", "S034", "S035", "S056", "S059", "S075"],
       "difficulty": "intermediate",
       "status": "published",
       "last_reviewed": "2026-07-17",

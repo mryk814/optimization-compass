@@ -29,7 +29,7 @@ import {
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
-import { comparisonRoute } from "./compare-routes";
+import { comparisonRoute, firstMemberPerScenario } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
@@ -153,7 +153,7 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <h2>同じcontextから確認する</h2>
         <JourneyLink journeyPatch={{ comparisonId: comparison.comparison_id }} to={comparison.canonical_url}>この比較の共有URL</JourneyLink>
         <JourneyLink to={entity("case", comparison.case_id)?.canonical_url ?? `/gallery/${comparison.case_id}`}>Case: {entity("case", comparison.case_id)?.label ?? comparison.case_id}</JourneyLink>
-        {[...new Map(comparison.members.map((member) => [member.scenario_id, member])).values()].map((member) => {
+        {firstMemberPerScenario(comparison.members).map((member) => {
           const scenario = entity("scenario", member.scenario_id);
           const theaterUrl = scenario?.canonical_url ?? entity("trace", member.artifact.artifact_id)?.canonical_url;
           return theaterUrl ? <JourneyLink journeyPatch={{ scenarioId: member.scenario_id, memberId: member.member_id, methodId: member.method_id }} key={member.scenario_id} to={theaterUrl}>Theater: {scenario?.label ?? member.label_ja}</JourneyLink> : null;

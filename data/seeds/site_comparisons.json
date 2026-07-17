@@ -345,7 +345,7 @@
       "case_id": "hyperparameter-search",
       "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
       "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
-      "benchmark_context_id": "BENCH_BO",
+      "benchmark_context_id": "BENCH_BO_EDUCATIONAL_10",
       "title_ja": "acquisition・noise・random baselineを同じbudgetで読む",
       "title_en": "Read acquisition, noise, and a random baseline under one budget",
       "comparison_question": "同じ固定教材とevaluation budgetで、探索係数、観測noise、proposal policyを1つずつ変えると何を読み分ける必要がある？",
@@ -392,7 +392,7 @@
           "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
           "label_ja": "探索寄りEI・noiseなし",
           "label_en": "Exploratory EI · noiseless",
-          "parameters": {"history_source": "bo_frames", "strategy": "explore", "exploration_xi": 0.18, "noise_std": 0.0},
+          "parameters": {"history_source": "bo_frames", "proposal_policy": "expected_improvement", "exploration_xi": 0.18, "noise_std": 0.0},
           "budget": {"metric": "oracle_evaluations", "value": 10},
           "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-noiseless.json"}
         },
@@ -403,7 +403,7 @@
           "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
           "label_ja": "活用寄りEI・noiseなし",
           "label_en": "Exploitative EI · noiseless",
-          "parameters": {"history_source": "bo_frames", "strategy": "exploit", "exploration_xi": 0.0, "noise_std": 0.0},
+          "parameters": {"history_source": "bo_frames", "proposal_policy": "expected_improvement", "exploration_xi": 0.0, "noise_std": 0.0},
           "budget": {"metric": "oracle_evaluations", "value": 10},
           "artifact": {"artifact_id": "ARTIFACT_BO_EXPLOIT_NOISELESS", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-exploit-noiseless.json"}
         },
@@ -414,7 +414,7 @@
           "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
           "label_ja": "探索寄りEI・small noise",
           "label_en": "Exploratory EI · small noise",
-          "parameters": {"history_source": "bo_frames", "strategy": "explore", "exploration_xi": 0.18, "noise_std": 0.08},
+          "parameters": {"history_source": "bo_frames", "proposal_policy": "expected_improvement", "exploration_xi": 0.18, "noise_std": 0.08},
           "budget": {"metric": "oracle_evaluations", "value": 10},
           "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-small_noise.json"}
         },
@@ -425,7 +425,7 @@
           "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
           "label_ja": "uniform random・noiseなし",
           "label_en": "Uniform random · noiseless",
-          "parameters": {"history_source": "random_history", "strategy": "uniform_random", "exploration_xi": 0.0, "noise_std": 0.0},
+          "parameters": {"history_source": "random_history", "proposal_policy": "uniform_random", "exploration_xi": "not_applicable", "noise_std": 0.0},
           "budget": {"metric": "oracle_evaluations", "value": 10},
           "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-noiseless.json"}
         }
