@@ -1,0 +1,124 @@
+name: Failure discovery authority repair
+
+on:
+  push:
+    branches: [feat/failure-discovery-index]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: failure-discovery-authority-repair
+  cancel-in-progress: true
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: feat/failure-discovery-index
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: uv sync --frozen --all-extras --all-groups
+      - run: npm ci
+        working-directory: site
+      - name: Apply integration and use the already generated failure-mode authority
+        run: |
+          if test -f scripts/apply_failure_discovery_slice.py; then
+            uv run python scripts/apply_failure_discovery_slice.py
+          fi
+          uv run python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path.cwd()
+          module = root / "src/optimization_compass/failure_discovery.py"
+          text = module.read_text(encoding="utf-8")
+          text = text.replace(
+              "from optimization_compass.failure_modes import export_failure_modes\n",
+              "",
+          )
+          replacement = '''def build_failure_discovery_from_sources(
+              *,
+              dataset_version: str,
+              gallery_seed: Path,
+              failure_mode_path: Path,
+          ) -> FailureDiscoveryIndex:
+              gallery = json.loads(gallery_seed.read_text(encoding="utf-8"))
+              failure_payload = json.loads(failure_mode_path.read_text(encoding="utf-8"))
+              if not isinstance(gallery, dict):
+                  raise ValueError("Gallery seed must contain an object")
+              if not isinstance(failure_payload, dict):
+                  raise ValueError("failure mode export must contain an object")
+              return build_failure_discovery_index(
+                  dataset_version=dataset_version,
+                  gallery_index=gallery,
+                  failure_mode_index=failure_payload,
+              )
+
+
+          def build_failure_discovery_index('''
+          text, count = re.subn(
+              r"def build_failure_discovery_from_sources\(.*?\n\n\ndef build_failure_discovery_index\(",
+              replacement,
+              text,
+              count=1,
+              flags=re.DOTALL,
+          )
+          if count != 1:
+              raise RuntimeError("failure discovery source function anchor changed")
+          module.write_text(text, encoding="utf-8", newline="\n")
+
+          export = root / "src/optimization_compass/site_export.py"
+          text = export.read_text(encoding="utf-8")
+          old = '''        build_failure_discovery_from_sources(
+                      dataset_version=release["version"],
+                      gallery_seed=GALLERY_SEED,
+                  ),'''
+          new = '''        build_failure_discovery_from_sources(
+                      dataset_version=release["version"],
+                      gallery_seed=GALLERY_SEED,
+                      failure_mode_path=output_dir / "failure-modes.json",
+                  ),'''
+          if new not in text:
+              if old not in text:
+                  raise RuntimeError("failure discovery export call anchor changed")
+              text = text.replace(old, new, 1)
+          export.write_text(text, encoding="utf-8", newline="\n")
+          PY
+      - name: Regenerate and validate
+        run: |
+          uv run ruff check --fix src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          uv run ruff format src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          rm -rf site/public/data
+          uv run optimization-compass export-site-data --output site/public/data
+          uv run mypy src
+          uv run pytest tests/test_failure_modes.py tests/test_failure_discovery.py
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run src/contracts/failure-discovery.test.ts src/features/failures/FailureDiscoveryPage.test.tsx
+          npm --prefix site run build
+      - name: Remove all one-shot helpers and commit
+        run: |
+          rm -f \
+            scripts/apply_failure_discovery_slice.py \
+            .github/workflows/failure-discovery-snapshot.yml \
+            .github/workflows/failure-discovery-finalize.yml \
+            .github/workflows/failure-discovery-clean-finalize.yml \
+            .github/workflows/failure-discovery-path-repair.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -s -m "feat: finalize unified failure discovery authority"
+          git pull --rebase origin feat/failure-discovery-index
+          git push origin HEAD:feat/failure-discovery-index
