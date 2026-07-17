@@ -4,8 +4,13 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
 from optimization_compass import __version__
+from optimization_compass.agent_service import (
+    AgentCapabilitiesResponse,
+    DatasetVersionMismatch,
+    DeterministicGuidanceService,
+    UnsupportedLanguage,
+)
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import (
     Question,
     RecommendationRequest,
@@ -15,7 +20,7 @@ from optimization_compass.models import (
 from optimization_compass.web import CANONICAL_ATLAS_URL, SERVICE_LANDING_HTML
 
 repository = KnowledgeRepository()
-engine = RecommendationEngine(repository)
+service = DeterministicGuidanceService(repository)
 
 app = FastAPI(
     title="Optimization Compass",
@@ -34,24 +39,49 @@ def index() -> HTMLResponse:
 
 @app.get("/healthz")
 def healthz() -> dict[str, str]:
+    capabilities = service.get_capabilities()
     return {
         "status": "ok",
         "app_version": __version__,
-        "dataset_version": repository.dataset_version(),
+        "dataset_version": capabilities.metadata.dataset_version,
     }
 
 
+@app.get("/v1/capabilities", response_model=AgentCapabilitiesResponse)
+def capabilities(expected_dataset_version: str | None = None) -> AgentCapabilitiesResponse:
+    try:
+        return service.get_capabilities(expected_dataset_version=expected_dataset_version)
+    except DatasetVersionMismatch as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.get("/v1/questions", response_model=list[Question])
-def questions(language: str = "ja") -> list[dict[str, object]]:
-    if language not in {"ja", "en"}:
-        raise HTTPException(status_code=422, detail="language must be ja or en")
-    return repository.questions(language)
+def questions(language: str = "ja", expected_dataset_version: str | None = None) -> list[Question]:
+    try:
+        response = service.list_diagnose_questions(
+            language=language,
+            expected_dataset_version=expected_dataset_version,
+        )
+    except UnsupportedLanguage as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except DatasetVersionMismatch as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    return list(response.questions)
 
 
 @app.post("/v1/recommendations", response_model=RecommendationResponse)
-def recommendations(request: RecommendationRequest) -> RecommendationResponse:
+def recommendations(
+    request: RecommendationRequest,
+    expected_dataset_version: str | None = None,
+) -> RecommendationResponse:
     try:
-        return engine.recommend(request)
+        response = service.recommend_methods(
+            request,
+            expected_dataset_version=expected_dataset_version,
+        )
+        return response.recommendation
+    except DatasetVersionMismatch as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
