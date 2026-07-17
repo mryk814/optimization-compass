@@ -1219,13 +1219,14 @@
           "target_ids": []
         },
         "content": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "basin-hopping",
             "differential-evolution",
             "direct-global",
+            "dual-annealing",
             "family.global-search",
             "multi-start",
             "shgo",
@@ -1264,7 +1265,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 35,
+          "count": 36,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1299,6 +1300,7 @@
             "basin-hopping",
             "differential-evolution",
             "direct-global",
+            "dual-annealing",
             "family.global-search",
             "multi-start",
             "shgo",
@@ -9108,10 +9110,11 @@
           "target_ids": []
         },
         "content": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "dual-annealing",
             "simulated-annealing"
           ]
         },
@@ -9140,7 +9143,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9150,9 +9153,11 @@
             "S007",
             "S008",
             "S009",
+            "S018",
             "S072",
             "S073",
             "S074",
+            "dual-annealing",
             "simulated-annealing"
           ]
         },
@@ -9165,7 +9170,7 @@
           "target_ids": []
         },
         "source": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9173,6 +9178,7 @@
             "S007",
             "S008",
             "S009",
+            "S018",
             "S072",
             "S073",
             "S074"

@@ -6178,7 +6178,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6201,7 +6201,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6224,7 +6224,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6232,7 +6232,7 @@
         "S009",
         "S018"
       ],
-      "text": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。",
+      "text": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。 このページでは、canonicalな手法 M_SIMULATED_ANNEALING の一変種としてDual Annealingを扱います。Python例はSciPy実装 I_SCIPY_DUAL_ANNEALING に固有のAPIであり、simulated annealing一般の保証と実装のoptionを混同しないように読みます。",
       "title": "Dual Annealing"
     },
     {
@@ -6247,7 +6247,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6270,7 +6270,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6293,7 +6293,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6316,7 +6316,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -6339,7 +6339,7 @@
         "content:differential-evolution",
         "content:direct-global",
         "content:shgo",
-        "method:M_DUAL_ANNEALING",
+        "method:M_SIMULATED_ANNEALING",
         "source:S009",
         "source:S018"
       ],
@@ -29421,12 +29421,14 @@
       "document_id": "method:M_SIMULATED_ANNEALING",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "content:dual-annealing",
         "content:simulated-annealing",
         "implementation:I_SCIPY_DUAL_ANNEALING",
         "source:S006",
         "source:S007",
         "source:S008",
         "source:S009",
+        "source:S018",
         "source:S072",
         "source:S073",
         "source:S074"
@@ -29436,6 +29438,7 @@
         "S007",
         "S008",
         "S009",
+        "S018",
         "S072",
         "S073",
         "S074"

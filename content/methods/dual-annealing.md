@@ -1,7 +1,7 @@
 ---
 content_id: dual-annealing
 kind: method
-method_id: M_DUAL_ANNEALING
+method_id: M_SIMULATED_ANNEALING
 title_ja: Dual Annealing
 title_en: Dual Annealing
 summary: 温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。
@@ -10,10 +10,12 @@ prerequisites: [concept.derivative-free]
 related_ids: [shgo, direct-global, differential-evolution]
 aliases: [/learn/dual-annealing]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-17
 ---
 
 温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。
+
+このページでは、canonicalな手法 `M_SIMULATED_ANNEALING` の一変種としてDual Annealingを扱います。Python例はSciPy実装 `I_SCIPY_DUAL_ANNEALING` に固有のAPIであり、simulated annealing一般の保証と実装のoptionを混同しないように読みます。
 
 ## Annealingの直感
 

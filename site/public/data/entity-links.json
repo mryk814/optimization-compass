@@ -3067,7 +3067,7 @@
         },
         {
           "relation_type": "explains",
-          "target_id": "M_DUAL_ANNEALING",
+          "target_id": "M_SIMULATED_ANNEALING",
           "target_type": "method"
         },
         {
@@ -15747,34 +15747,6 @@
     },
     {
       "aliases": [
-        "/learn/dual-annealing"
-      ],
-      "canonical_url": null,
-      "entity_id": "M_DUAL_ANNEALING",
-      "entity_type": "method",
-      "external_url": null,
-      "label": "Dual Annealing",
-      "relations": [
-        {
-          "relation_type": "evidence",
-          "target_id": "S009",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
-          "target_id": "S018",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "learning",
-          "target_id": "dual-annealing",
-          "target_type": "content"
-        }
-      ],
-      "summary": ""
-    },
-    {
-      "aliases": [
         "/learn/dual-simplex"
       ],
       "canonical_url": "/methods/M_DUAL_SIMPLEX",
@@ -18194,6 +18166,7 @@
     },
     {
       "aliases": [
+        "/learn/dual-annealing",
         "/learn/simulated-annealing"
       ],
       "canonical_url": "/methods/M_SIMULATED_ANNEALING",
@@ -18224,6 +18197,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S072",
           "target_type": "source"
         },
@@ -18241,6 +18219,11 @@
           "relation_type": "implementation",
           "target_id": "I_SCIPY_DUAL_ANNEALING",
           "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "dual-annealing",
+          "target_type": "content"
         },
         {
           "relation_type": "learning",

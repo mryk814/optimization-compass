@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.release_identity import load_dataset_release_identity
 
@@ -51,6 +52,7 @@ def verify_content(root: Path) -> dict[str, int | str]:
     known_methods = {
         str(row["method_id"]) for row in repository.fetch_all("SELECT method_id FROM methods")
     }
+    require_published_method_references(source_pages, known_methods)
     known_implementations = {
         str(row["implementation_id"])
         for row in repository.fetch_all("SELECT implementation_id FROM implementations")
