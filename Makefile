@@ -1,4 +1,4 @@
-.PHONY: install serve test lint format typecheck verify dataset-stage check
+.PHONY: install serve test lint format typecheck verify dataset-stage check tier-a tier-b tier-c
 
 install:
 	uv sync --all-extras
@@ -25,3 +25,14 @@ dataset-stage:
 	uv run python scripts/rebuild_dataset.py --stage
 
 check: lint typecheck test verify dataset-stage
+
+# Validation tiers delegate to the shared cross-platform authority
+# (src/optimization_compass/validation_tasks.py); do not list commands here.
+tier-a:
+	uv run optimization-compass validate tier-a
+
+tier-b:
+	uv run optimization-compass validate tier-b
+
+tier-c:
+	uv run optimization-compass validate tier-c

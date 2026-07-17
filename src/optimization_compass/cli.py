@@ -12,6 +12,15 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.engine import RecommendationEngine
 from optimization_compass.models import RecommendationRequest
 from optimization_compass.site_export import export_site_data
+from optimization_compass.validation_tasks import (
+    TASKS,
+    CheckResult,
+    UnknownTaskError,
+    ValidationCheck,
+    find_repository_root,
+    run_task,
+    task_plan,
+)
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
 
@@ -40,6 +49,63 @@ def verify_data() -> None:
     result = KnowledgeRepository().verify()
     typer.echo(json.dumps(result, ensure_ascii=False, indent=2))
     if not result["ok"]:
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def validate(
+    task: Annotated[
+        str,
+        typer.Argument(
+            help="Validation task: " + ", ".join(sorted(TASKS)),
+        ),
+    ],
+    format: Annotated[str, typer.Option(help="human or json")] = "human",
+    list_only: Annotated[
+        bool,
+        typer.Option("--list", help="Print the task's checks without executing them."),
+    ] = False,
+) -> None:
+    """Run a documented validation task or tier (AGENTS.md, ADR 0012)."""
+    if format not in {"human", "json"}:
+        raise typer.BadParameter("format must be human or json")
+    try:
+        plan = task_plan(task)
+    except UnknownTaskError as error:
+        raise typer.BadParameter(str(error)) from error
+
+    if list_only:
+        if format == "json":
+            typer.echo(plan.model_dump_json(indent=2))
+        else:
+            typer.echo(f"task {plan.task} (PR gate: {plan.gate})")
+            for check in plan.checks:
+                typer.echo(f"  {check.code}: {check.display_command}")
+        return
+
+    root = find_repository_root()
+    if format == "json":
+        result = run_task(task, root, capture=True)
+        typer.echo(result.model_dump_json(indent=2))
+    else:
+        typer.echo(f"task {plan.task} (PR gate: {plan.gate}) in {root}")
+
+        def _announce(check: ValidationCheck) -> None:
+            typer.echo(f"\n=== {check.code}: {check.display_command}")
+
+        def _report(outcome: CheckResult) -> None:
+            typer.echo(f"{outcome.status.upper():>5}  {outcome.code} ({outcome.duration_seconds}s)")
+            if outcome.status not in {"pass", "skip"}:
+                typer.echo(f"next action: {outcome.next_action}")
+
+        result = run_task(task, root, capture=False, on_start=_announce, on_finish=_report)
+        typer.echo(f"\nresult: {result.status} (task {result.task}, PR gate {result.gate})")
+        if result.task != result.gate and result.status == "pass":
+            typer.echo(
+                f"note: {result.task} is an iteration subset;"
+                f" run `optimization-compass validate {result.gate}` before the PR."
+            )
+    if result.status != "pass":
         raise typer.Exit(code=1)
 
 
