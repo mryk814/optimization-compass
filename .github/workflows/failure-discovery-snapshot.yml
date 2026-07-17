@@ -1,0 +1,38 @@
+name: Failure discovery snapshot
+
+on:
+  push:
+    branches: [feat/failure-discovery-index]
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - name: Package the current implementation surface
+        run: |
+          tar -czf "$RUNNER_TEMP/repository-snapshot.tar.gz" \
+            .github \
+            src \
+            site/src \
+            site/e2e \
+            site/public/data \
+            tests \
+            scripts \
+            docs \
+            data/seeds \
+            data/migrations \
+            pyproject.toml \
+            README.md \
+            AGENTS.md \
+            CONTRIBUTING.md
+      - name: Upload implementation snapshot
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: failure-discovery-repository-snapshot
+          path: ${{ runner.temp }}/repository-snapshot.tar.gz
+          if-no-files-found: error
+          retention-days: 1
