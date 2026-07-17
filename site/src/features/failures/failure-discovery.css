@@ -1,0 +1,225 @@
+.failure-discovery-page {
+  display: grid;
+  width: min(72rem, 100%);
+  gap: 1.25rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  box-sizing: border-box;
+}
+
+.failure-discovery-hero {
+  max-width: 52rem;
+}
+
+.failure-discovery-hero h1 {
+  margin: 0.2rem 0 0.55rem;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  line-height: 1.08;
+}
+
+.failure-discovery-hero p:last-child {
+  margin: 0;
+  color: #46554c;
+}
+
+.failure-discovery-controls {
+  display: grid;
+  grid-template-columns: minmax(16rem, 2fr) minmax(18rem, 1fr);
+  gap: 1rem;
+  align-items: end;
+  padding: 1rem;
+  border: 1px solid #cbd5cd;
+  border-radius: 0.8rem;
+  background: #f7f9f6;
+}
+
+.failure-discovery-controls > label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 750;
+}
+
+.failure-discovery-controls input[type="search"] {
+  min-height: 2.7rem;
+  border: 1px solid #819287;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.65rem;
+  font: inherit;
+  background: #fff;
+}
+
+.failure-discovery-controls fieldset {
+  display: flex;
+  gap: 0.35rem 0.9rem;
+  flex-wrap: wrap;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.failure-discovery-controls legend {
+  width: 100%;
+  margin-bottom: 0.35rem;
+  font-weight: 750;
+}
+
+.failure-discovery-controls fieldset label {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.failure-discovery-count {
+  margin: 0;
+  color: #59645d;
+  font-size: 0.9rem;
+}
+
+.failure-discovery-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.failure-discovery-card {
+  display: grid;
+  min-width: 0;
+  gap: 0.8rem;
+  border: 1px solid #bdc9c0;
+  border-radius: 0.9rem;
+  padding: 1rem;
+  background: #fff;
+  box-shadow: 0 0.45rem 1.8rem rgb(39 66 50 / 7%);
+}
+
+.failure-discovery-card-case_exclusion {
+  border-color: #d8ad9e;
+}
+
+.failure-discovery-card > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.failure-discovery-card h2 {
+  margin: 0.1rem 0 0;
+  font-size: 1.18rem;
+  line-height: 1.25;
+}
+
+.failure-discovery-kind {
+  margin: 0;
+  color: #5d675f;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.failure-discovery-disposition {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  color: #5d3327;
+  background: #fff1eb;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.failure-discovery-summary {
+  margin: 0;
+  font-weight: 750;
+}
+
+.failure-discovery-core {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.failure-discovery-core section {
+  min-width: 0;
+  border-left: 3px solid #819b89;
+  padding: 0.65rem 0.75rem;
+  background: #f3f6f2;
+}
+
+.failure-discovery-card-case_exclusion .failure-discovery-core section {
+  border-left-color: #bb7662;
+  background: #fff6f2;
+}
+
+.failure-discovery-core h3 {
+  margin: 0;
+  color: #526058;
+  font-size: 0.78rem;
+}
+
+.failure-discovery-core p {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+}
+
+.failure-discovery-card details {
+  border-top: 1px solid #dce3dd;
+  padding-top: 0.65rem;
+}
+
+.failure-discovery-card summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.failure-discovery-card dl {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.failure-discovery-card dl div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 0.5rem;
+}
+
+.failure-discovery-card dt {
+  color: #617067;
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.failure-discovery-card dd {
+  display: flex;
+  gap: 0.25rem 0.65rem;
+  flex-wrap: wrap;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.failure-discovery-card a {
+  color: #285740;
+  font-weight: 750;
+  text-underline-offset: 0.16em;
+}
+
+.failure-discovery-controls input:focus-visible,
+.failure-discovery-card summary:focus-visible,
+.failure-discovery-card a:focus-visible {
+  outline: 3px solid #e2a677;
+  outline-offset: 3px;
+}
+
+@media (max-width: 48rem) {
+  .failure-discovery-controls,
+  .failure-discovery-list,
+  .failure-discovery-core {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .failure-discovery-card dl div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
