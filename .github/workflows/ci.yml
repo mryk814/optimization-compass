@@ -63,6 +63,7 @@ jobs:
       - name: Run Python smoke tests
         run: |
           uv run pytest \
+            tests/test_agent_service.py \
             tests/test_api.py \
             tests/test_cli.py \
             tests/test_engine.py \

@@ -7,10 +7,13 @@ from typing import Annotated
 import typer
 import uvicorn
 
+from optimization_compass.agent_service import (
+    DatasetVersionMismatch,
+    DeterministicGuidanceService,
+    UnsupportedLanguage,
+)
 from optimization_compass.coverage import CoverageReport, diff_coverage
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.engine import RecommendationEngine
-from optimization_compass.models import RecommendationRequest
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import (
     TASKS,
@@ -23,24 +26,57 @@ from optimization_compass.validation_tasks import (
 )
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
+service = DeterministicGuidanceService()
+
+
+def _service_parameter_error(error: ValueError) -> typer.BadParameter:
+    return typer.BadParameter(str(error))
 
 
 @app.command()
-def questions(language: Annotated[str, typer.Option()] = "ja") -> None:
+def capabilities(
+    expected_dataset_version: Annotated[str | None, typer.Option()] = None,
+) -> None:
+    """Print versioned read-only service capabilities as JSON."""
+    try:
+        response = service.get_capabilities(expected_dataset_version=expected_dataset_version)
+    except DatasetVersionMismatch as error:
+        raise _service_parameter_error(error) from error
+    typer.echo(response.model_dump_json(indent=2))
+
+
+@app.command()
+def questions(
+    language: Annotated[str, typer.Option()] = "ja",
+    expected_dataset_version: Annotated[str | None, typer.Option()] = None,
+) -> None:
     """Print diagnostic questions as JSON."""
-    rows = KnowledgeRepository().questions(language)
+    try:
+        response = service.list_diagnose_questions(
+            language=language,
+            expected_dataset_version=expected_dataset_version,
+        )
+    except (DatasetVersionMismatch, UnsupportedLanguage) as error:
+        raise _service_parameter_error(error) from error
+    rows = [question.model_dump(mode="json") for question in response.questions]
     typer.echo(json.dumps(rows, ensure_ascii=False, indent=2))
 
 
 @app.command()
 def recommend(
     input_file: Annotated[Path, typer.Argument(exists=True, readable=True)],
+    expected_dataset_version: Annotated[str | None, typer.Option()] = None,
 ) -> None:
     """Recommend methods from a JSON answer file."""
     payload = json.loads(input_file.read_text(encoding="utf-8"))
-    request = RecommendationRequest.model_validate(payload)
-    result = RecommendationEngine().recommend(request)
-    typer.echo(result.model_dump_json(indent=2))
+    try:
+        response = service.recommend_methods(
+            payload,
+            expected_dataset_version=expected_dataset_version,
+        )
+    except DatasetVersionMismatch as error:
+        raise _service_parameter_error(error) from error
+    typer.echo(response.recommendation.model_dump_json(indent=2))
 
 
 @app.command("verify-data")
