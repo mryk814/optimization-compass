@@ -15,6 +15,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def load_index() -> FailureDiscoveryIndex:
+    """Rebuild the discovery index from the same public authorities used by the exporter."""
     gallery = json.loads((ROOT / "site/public/data/gallery.json").read_text(encoding="utf-8"))
     journeys = LearningJourneyIndex.model_validate_json(
         (ROOT / "site/public/data/learning-journeys.json").read_text(encoding="utf-8")
