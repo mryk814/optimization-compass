@@ -26,28 +26,13 @@ dataset-stage:
 
 check: lint typecheck test verify dataset-stage
 
-# Validation tiers from AGENTS.md / docs/adding-knowledge.md.
-# tier-a: prose or existing-content correction
-# tier-b: Gallery, comparison, relations, or canonical data using existing contracts
-# tier-c: executable problem, scenario, generator, renderer, schema, or release change
+# Validation tiers delegate to the shared cross-platform authority
+# (src/optimization_compass/validation_tasks.py); do not list commands here.
 tier-a:
-	uv run python scripts/verify_content.py
-	uv run python scripts/verify_licensing.py
-	npm --prefix site test -- --run
+	uv run optimization-compass validate tier-a
 
 tier-b:
-	uv run ruff check .
-	uv run ruff format --check .
-	uv run mypy src
-	uv run pytest
-	uv run optimization-compass verify-data
-	uv run python scripts/verify_content.py
-	uv run python scripts/verify_licensing.py
-	uv run python scripts/rebuild_dataset.py --stage
-	npm --prefix site run parity
-	npm --prefix site test -- --run
-	npm --prefix site run build
+	uv run optimization-compass validate tier-b
 
-tier-c: tier-b
-	npm --prefix site run typecheck
-	npm --prefix site run test:e2e
+tier-c:
+	uv run optimization-compass validate tier-c

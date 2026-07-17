@@ -468,7 +468,7 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 | Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
 | Release/schema/recommendation | complete repository validation | yes | yes | yes |
 
-The validation tiers from `AGENTS.md` are runnable as single commands: `make tier-a`, `make tier-b`, and `make tier-c`.
+The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`); each prints the PR gate it does not replace. `--list` shows a task's checks, `--format json` emits stable rule codes.
 
 Common commands:
 

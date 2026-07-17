@@ -3,7 +3,7 @@
 This file is the first entry point for humans and automated agents changing this repository.
 For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
 
-Task-shaped authoring skills for growing the dataset live in [`.claude/skills/`](.claude/skills/) (Claude Code loads them automatically): `grow-data` (triage/routing), `add-content-article`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. Each ends with a one-command validation tier (`make tier-a`, `make tier-b`, `make tier-c`).
+Task-shaped authoring skills for growing the dataset live in [`.claude/skills/`](.claude/skills/) (Claude Code loads them automatically): `grow-data` (triage/routing), `add-content-article`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. They are thin wrappers: rules stay in this file, `docs/adding-knowledge.md`, and the maintenance skill; validation runs through the cross-platform `uv run optimization-compass validate <task>` CLI.
 
 ## Product boundary
 
@@ -76,7 +76,7 @@ For high or critical changes, inspect similar merged work and document the autho
 
 ## Validation tiers
 
-Each tier is runnable as one command: `make tier-a`, `make tier-b`, `make tier-c` (tier C = tier B plus site typecheck and browser E2E).
+Each tier is runnable as one cross-platform command: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`; tier C = tier B plus site typecheck and browser E2E). `--list` prints a tier's checks without running them; `--format json` emits machine-readable results with stable rule codes. The composition is owned by `src/optimization_compass/validation_tasks.py` and tested against the lists below. POSIX users may call the same commands through `make tier-a` etc.
 
 ### Tier A — prose or existing-content correction
 
