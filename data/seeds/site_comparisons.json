@@ -221,10 +221,10 @@
       "fixed_factors": ["sampled result set", "objective directions", "Pareto dominance", "81-point grid"],
       "changed_factors": ["f1とf2のpreference weight", "front上の選択点"],
       "seed_policy": "deterministic / not applicable",
-      "budget": {"metric": "sampled_points", "value": 81},
+      "budget": {"metric": "oracle_evaluations", "value": 81},
       "stopping_policy": "81-point grid complete",
       "tuning_policy": "result setを固定し、preferenceだけを変更する。",
-      "synchronization_axis": "sampled_points",
+      "synchronization_axis": "oracle_evaluations",
       "metrics": [
         {"metric_id": "objective_f1", "label_ja": "目的 f1", "direction": "minimize", "unit": "objective value"},
         {"metric_id": "objective_f2", "label_ja": "目的 f2", "direction": "minimize", "unit": "objective value"}
@@ -246,7 +246,7 @@
           "label_ja": "f₂優先weight",
           "label_en": "f2-priority preference",
           "parameters": {"weight_f1": 0.2},
-          "budget": {"metric": "sampled_points", "value": 81},
+          "budget": {"metric": "oracle_evaluations", "value": 81},
           "artifact": {"artifact_id": "biobjective-quadratic-pareto-front", "artifact_kind": "result_visualization", "renderer_family": "pareto_front", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/biobjective-quadratic-pareto-front.json"}
         },
         {
@@ -257,7 +257,7 @@
           "label_ja": "均衡weight",
           "label_en": "Balanced preference",
           "parameters": {"weight_f1": 0.5},
-          "budget": {"metric": "sampled_points", "value": 81},
+          "budget": {"metric": "oracle_evaluations", "value": 81},
           "artifact": {"artifact_id": "biobjective-quadratic-pareto-front", "artifact_kind": "result_visualization", "renderer_family": "pareto_front", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/biobjective-quadratic-pareto-front.json"}
         },
         {
@@ -268,7 +268,7 @@
           "label_ja": "f₁優先weight",
           "label_en": "f1-priority preference",
           "parameters": {"weight_f1": 0.8},
-          "budget": {"metric": "sampled_points", "value": 81},
+          "budget": {"metric": "oracle_evaluations", "value": 81},
           "artifact": {"artifact_id": "biobjective-quadratic-pareto-front", "artifact_kind": "result_visualization", "renderer_family": "pareto_front", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/biobjective-quadratic-pareto-front.json"}
         }
       ]

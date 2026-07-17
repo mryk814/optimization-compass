@@ -200,6 +200,8 @@ def test_pareto_comparison_uses_three_weighted_sum_preference_members() -> None:
 
     assert comparison.problem_instance_id == "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
     assert comparison.mode == "result_tradeoff"
+    assert comparison.budget.metric == comparison.synchronization_axis == "oracle_evaluations"
+    assert comparison.budget.value == 81
     assert comparison.comparability == "not_comparable"
     assert comparison.ranking_eligible is False
     assert [member.parameters["weight_f1"] for member in comparison.members] == [0.2, 0.5, 0.8]

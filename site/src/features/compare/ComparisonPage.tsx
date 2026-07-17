@@ -928,16 +928,25 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     || scenario.artifact.renderer_family !== family
     || scenario.artifact.renderer_contract_version !== artifactDescriptor.renderer_contract_version
     || scenario.artifact.payload_path !== artifactDescriptor.payload_path
+    || scenario.experiment.budget.metric !== comparison.budget.metric
     || scenario.experiment.budget.value !== comparison.budget.value
   ) {
     throw new Error("Scenario comparison artifact contract differs from the comparison.");
   }
+  const sharedArtifactRun = scenario.runs.find(
+    (candidate) => candidate.artifact_id === artifactDescriptor.artifact_id,
+  );
   for (const member of comparison.members) {
-    const run = scenario.runs.find((candidate) => (
+    const methodRun = scenario.runs.find((candidate) => (
       candidate.artifact_id === member.artifact.artifact_id
       && candidate.method_id === member.method_id
     ));
-    if (!run || scenario.experiment.budget.value !== member.budget.value) {
+    const run = family === "pareto_front" ? sharedArtifactRun : methodRun;
+    if (
+      !run
+      || scenario.experiment.budget.metric !== member.budget.metric
+      || scenario.experiment.budget.value !== member.budget.value
+    ) {
       throw new Error(`Scenario comparison run differs from member ${member.member_id}.`);
     }
   }

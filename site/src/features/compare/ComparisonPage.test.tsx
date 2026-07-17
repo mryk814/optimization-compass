@@ -123,10 +123,10 @@ const paretoComparisonIndex: ComparisonIndex = {
     fixed_factors: ["sampled points", "analytic front"],
     changed_factors: ["weight_f1"],
     seed_policy: "not applicable",
-    budget: { metric: "sampled_points", value: 81 },
+    budget: { metric: "oracle_evaluations", value: 81 },
     stopping_policy: "81 points complete",
     tuning_policy: "fixed weights",
-    synchronization_axis: "sampled_points",
+    synchronization_axis: "oracle_evaluations",
     metrics: [
       { metric_id: "objective_f1", label_ja: "目的 f1", direction: "minimize", unit: "value" },
       { metric_id: "objective_f2", label_ja: "目的 f2", direction: "minimize", unit: "value" },
@@ -156,7 +156,7 @@ function paretoMember(memberId: string, label: string, weight: number) {
     label_ja: label,
     label_en: memberId,
     parameters: { weight_f1: weight },
-    budget: { metric: "sampled_points", value: 81 },
+    budget: { metric: "oracle_evaluations", value: 81 },
     artifact: {
       artifact_id: "biobjective-quadratic-pareto-front",
       artifact_kind: "result_visualization" as const,
@@ -172,7 +172,11 @@ function paretoScenarioIndex(): VisualizationScenarioIndex {
   const alternate = index.scenarios.find(
     (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
   );
-  if (!alternate) throw new Error("Pareto sensitivity fixture is missing");
+  const primary = index.scenarios.find(
+    (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_QUADRATIC",
+  );
+  if (!alternate || !primary) throw new Error("Pareto scenario fixture is missing");
+  alternate.runs = structuredClone(primary.runs);
   return index;
 }
 
@@ -456,17 +460,31 @@ describe("ComparisonPage Pareto preference contract", () => {
     );
   });
 
-  test("fails closed when the sensitivity scenario does not run the member method", async () => {
+  test("fails closed when the sensitivity scenario does not expose the shared front artifact run", async () => {
     const scenarioIndex = paretoScenarioIndex();
     const alternate = scenarioIndex.scenarios.find(
       (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
     );
     if (!alternate) throw new Error("Pareto sensitivity fixture is missing");
-    alternate.runs[0].method_id = "M_NSGA_II";
+    alternate.runs[0].artifact_id = "different-artifact";
     renderParetoPage({ scenarioIndex });
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Scenario comparison run differs from member f2-priority.",
+    );
+  });
+
+  test("fails closed when the scenario budget metric differs from the comparison", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].budget.metric = "sampled_points";
+    for (const member of comparison.comparisons[0].members) {
+      member.budget.metric = "sampled_points";
+    }
+    comparison.comparisons[0].synchronization_axis = "sampled_points";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison artifact contract differs from the comparison.",
     );
   });
 });
