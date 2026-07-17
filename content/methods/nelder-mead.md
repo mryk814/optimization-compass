@@ -13,10 +13,18 @@ visualization_aliases: [nelder-mead-quadratic|/theater/nelder-mead]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。
+
+## 30秒でつかむ
+
+この手法の気持ちは、複数の点で囲んだ単体の悪い頂点を、より良さそうな側へ入れ替え続けることです。
+
+- **見るもの**: 単体の各頂点における目的関数値
+- **動かすもの**: 単体の頂点と探索geometry
+- **前進の判断**: best-so-farの目的関数値が改善すること
 
 ## 単体は何を表すか
 

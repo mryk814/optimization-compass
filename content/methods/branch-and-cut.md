@@ -10,10 +10,18 @@ prerequisites: [branch-and-bound]
 related_ids: [branch-and-bound, cp-sat, lp-qp-conic]
 aliases: [/learn/branch-and-cut]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、整数解を残すcutで連続緩和を締め、必要な枝だけを探索して最適性gapを詰めることです。
+
+- **見るもの**: LP relaxation、fractional解、incumbent、best bound、gap
+- **動かすもの**: 探索木、各nodeのrelaxation、追加するcut
+- **前進の判断**: incumbentとbest boundのgapが設定したtoleranceへ近づくこと
 
 ## Cutは何をするか
 

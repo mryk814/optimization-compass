@@ -10,10 +10,18 @@ prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, slsqp, augmented-lagrangian]
 aliases: [/learn/interior-point-nlp]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかNLPを解く方法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、制約境界との距離をbarrierで保ちながら、目的とKKT条件を同時に整えることです。
+
+- **見るもの**: 目的関数、制約、微分情報、primal・dual residualとcomplementarity
+- **動かすもの**: primal変数、dual変数、slack、barrier parameter
+- **前進の判断**: primal・dual infeasibilityとcomplementarityが小さくなること
 
 ## 境界の内側を進む
 

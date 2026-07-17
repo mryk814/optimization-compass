@@ -38,6 +38,27 @@ BEGINNER_METHOD_TRANCHE_IDS = {
     "trust-krylov",
 }
 
+REPRESENTATIVE_INTUITION_METHOD_IDS = {
+    "M_BAYESIAN_OPT_GP",
+    "M_BFGS",
+    "M_BRANCH_CUT",
+    "M_GRADIENT_DESCENT",
+    "M_INTERIOR_POINT_NLP",
+    "M_LBFGSB",
+    "M_MADS",
+    "M_NELDER_MEAD",
+    "M_NEWTON",
+    "M_POWELL",
+    "M_SLSQP",
+    "M_TRUST_NCG",
+}
+
+REQUIRED_INTUITION_LABELS = (
+    "- **見るもの**:",
+    "- **動かすもの**:",
+    "- **前進の判断**:",
+)
+
 REQUIRED_FAMILY_SECTIONS = (
     "## 30秒でつかむ",
     "## まず確認すること",
@@ -117,3 +138,32 @@ def test_second_method_tranche_uses_the_beginner_first_contract() -> None:
             assert section in page.body, f"{content_id} is missing {section}"
         assert "この手法の気持ち" in page.body
         assert "切替サイン" in page.body
+
+
+def test_representative_methods_open_with_the_intuition_contract() -> None:
+    root = Path(__file__).resolve().parents[1]
+    pages = {
+        page.method_id: page
+        for page in load_content(root / "content")
+        if page.method_id is not None
+    }
+
+    assert len(REPRESENTATIVE_INTUITION_METHOD_IDS) == 12
+    assert pages.keys() >= REPRESENTATIVE_INTUITION_METHOD_IDS
+
+    for method_id in sorted(REPRESENTATIVE_INTUITION_METHOD_IDS):
+        page = pages[method_id]
+        assert page.status == "published"
+        assert page.kind == "method"
+
+        headings = [line for line in page.body.splitlines() if line.startswith("## ")]
+        assert headings[0] == "## 30秒でつかむ", (
+            f"{method_id} must open with the beginner intuition section"
+        )
+
+        introduction = page.body.split("## 30秒でつかむ", maxsplit=1)[1].split("\n## ", maxsplit=1)[
+            0
+        ]
+        assert introduction.count("この手法の気持ち") == 1
+        for label in REQUIRED_INTUITION_LABELS:
+            assert introduction.count(label) == 1, f"{method_id} is missing {label}"

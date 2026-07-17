@@ -10,10 +10,18 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [bfgs, lbfgsb, trust-region-newton-cg]
 aliases: [/learn/newton-method]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 勾配とHessianから局所二次modelを作り、その停留点へ進む二階最適化法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、現在地の傾きと曲がり方から近くの地形を二次modelで描き、その停留点を狙うことです。
+
+- **見るもの**: 目的関数値、勾配、Hessian
+- **動かすもの**: 現在点とNewton step
+- **前進の判断**: 目的関数値とgradient normが下がり、stepが過大にならないこと
 
 ## 一手の意味
 

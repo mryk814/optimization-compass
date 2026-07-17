@@ -2523,6 +2523,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:bayesian-optimization:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:bayesian-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "content:cma-es",
+        "content:differential-evolution",
+        "method:M_BAYESIAN_OPT_GP",
+        "source:S034",
+        "source:S035",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S034",
+        "S035"
+      ],
+      "text": "この手法の気持ちは、限られた評価budgetを、既知の良い場所とまだ分からない場所へ配分することです。 見るもの : 観測済みの目的関数値、surrogateの予測と不確実性、acquisition 動かすもの : 次に実評価する点と、観測後のsurrogate 前進の判断 : 同じobjective evaluation budgetでbest-so-farが改善すること",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:bayesian-optimization:acquisitionの意味",
       "dataset_version": "0.15.1",
       "document_id": "content:bayesian-optimization",
@@ -2735,6 +2759,32 @@
       ],
       "text": "評価が安価で大量並列可能 → random / population searchが単純な場合 極端な高次元 → kernelやacquisition最適化が難しい conditional / categorical space → encodingやspecialized surrogateが必要 nonstationary objective → fixed kernelが過去を誤解する evaluation failureを欠損として無視 → feasibility modelが必要 model uncertaintyを実世界の安全保証と誤認",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bfgs:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:bfgs",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:lbfgsb",
+        "content:method.gradient-descent",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_BFGS",
+        "source:S002",
+        "source:S056",
+        "source:S057"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S057"
+      ],
+      "text": "この手法の気持ちは、進んだ前後の勾配の変化から地形の曲がり方を学び、次の方向を整えることです。 見るもの : 目的関数値、勾配の変化、line searchの結果 動かすもの : 現在点、探索方向、逆Hessianの近似 前進の判断 : 目的関数値とgradient normが下がり、line searchが安定してstepを受け入れること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3099,6 +3149,36 @@
       ],
       "text": "incumbent / global bound / relative and absolute gap node count / open node count root relaxation gap first feasibleまでの時間 prune reason別のnode数 depth memory termination reason feasibility / integrality tolerance Search-tree Theater では、optimality provenとbudget stopの結末を分けて確認できます。",
       "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:branch-and-cut:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:branch-and-cut",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:lp-qp-conic",
+        "method:M_BRANCH_CUT",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S024",
+        "source:S025",
+        "source:S028"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S024",
+        "S025",
+        "S028"
+      ],
+      "text": "この手法の気持ちは、整数解を残すcutで連続緩和を締め、必要な枝だけを探索して最適性gapを詰めることです。 見るもの : LP relaxation、fractional解、incumbent、best bound、gap 動かすもの : 探索木、各nodeのrelaxation、追加するcut 前進の判断 : incumbentとbest boundのgapが設定したtoleranceへ近づくこと",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -11215,6 +11295,32 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:interior-point-nlp:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:interior-point-nlp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:constrained-continuous",
+        "content:slsqp",
+        "method:M_INTERIOR_POINT_NLP",
+        "source:S017",
+        "source:S029",
+        "source:S056",
+        "source:S087"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S056",
+        "S087"
+      ],
+      "text": "この手法の気持ちは、制約境界との距離をbarrierで保ちながら、目的とKKT条件を同時に整えることです。 見るもの : 目的関数、制約、微分情報、primal・dual residualとcomplementarity 動かすもの : primal変数、dual変数、slack、barrier parameter 前進の判断 : primal・dual infeasibilityとcomplementarityが小さくなること",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:interior-point-nlp:feasible-interior-が必要とは限らない",
       "dataset_version": "0.15.1",
       "document_id": "content:interior-point-nlp",
@@ -11627,6 +11733,30 @@
       ],
       "text": "gradient norm line-search iteration数 function / gradient evaluation数 objective change memory parameter m （保存vector対の数）",
       "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:lbfgsb:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:lbfgsb",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:newton-method",
+        "content:trust-region-newton-cg",
+        "method:M_LBFGSB",
+        "source:S002",
+        "source:S056",
+        "source:S065"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S065"
+      ],
+      "text": "この手法の気持ちは、最近の曲率情報だけを覚え、boundsの外へ出ずに大規模な問題を進むことです。 見るもの : 目的関数値、勾配、bounds、直近の曲率更新 動かすもの : bounds内の現在点とlimited-memoryの更新履歴 前進の判断 : 目的関数値とprojected gradient normが下がること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12439,6 +12569,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:mads:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:mads",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:method.nelder-mead",
+        "method:M_MADS",
+        "source:S031",
+        "source:S060",
+        "source:S094"
+      ],
+      "source_ids": [
+        "S031",
+        "S060",
+        "S094"
+      ],
+      "text": "この手法の気持ちは、現在のincumbentの周囲をmesh上で確かめ、改善できなければ探索の目を細かくすることです。 見るもの : poll候補の目的関数値、constraint violation、評価成否 動かすもの : incumbent、mesh size、poll directions 前進の判断 : constraint handlingの規則に従い、constraint violationを減らすか、同等のfeasibilityでincumbent objectiveを改善すること",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:mads:nelder-meadとの違い",
       "dataset_version": "0.15.1",
       "document_id": "content:mads",
@@ -12603,6 +12757,30 @@
       ],
       "text": "高次元でpoll点数が予算を圧迫 1評価が高価でsurrogate利用が必要 noise floorよりmeshを細かくしても意味がない global optimumや厳密gapが必要 discrete / categorical変数を無理に連続meshへ埋め込む variable scalingが悪く一部方向だけ変化する Note 停止時のmeshが小さいことは、大域最適性の証明ではありません。初期点、評価予算、constraint handling、noise levelを併記します。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.gradient-descent:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:method.gradient-descent",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:proximal-gradient",
+        "content:trust-region-newton-cg",
+        "method:M_GRADIENT_DESCENT",
+        "source:S001",
+        "source:S002"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "この手法の気持ちは、現在地の坂を読み、最も下りやすい向きへ少しずつ進むことです。 見るもの : 現在の目的関数値と勾配、試したstepの結果 動かすもの : 現在点とstep size 前進の判断 : 目的関数値が下がり、gradient normも小さくなること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12795,6 +12973,30 @@
       ],
       "text": "離散・カテゴリ変数 不連続や評価失敗が頻発 gradient noiseがstepを支配 強い一般制約を無視している 条件数が悪く極端に遅い → scaling、preconditioning、BFGS系 非滑らか正則化がある → 近接勾配法 曲率情報を使える → BFGS やtrust-region法 Warning 同じ反復回数でも、目的評価、gradient評価、line searchの追加評価は異なります。手法比較ではoracle budgetと停止条件を揃えます。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.nelder-mead:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:method.nelder-mead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:mads",
+        "method:M_NELDER_MEAD",
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "この手法の気持ちは、複数の点で囲んだ単体の悪い頂点を、より良さそうな側へ入れ替え続けることです。 見るもの : 単体の各頂点における目的関数値 動かすもの : 単体の頂点と探索geometry 前進の判断 : best-so-farの目的関数値が改善すること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14518,6 +14720,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:newton-method:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:newton-method",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:lbfgsb",
+        "content:method.gradient-descent",
+        "content:trust-region-newton-cg",
+        "method:M_NEWTON",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、現在地の傾きと曲がり方から近くの地形を二次modelで描き、その停留点を狙うことです。 見るもの : 目的関数値、勾配、Hessian 動かすもの : 現在点とNewton step 前進の判断 : 目的関数値とgradient normが下がり、stepが過大にならないこと",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:newton-method:overview",
       "dataset_version": "0.15.1",
       "document_id": "content:newton-method",
@@ -15899,6 +16125,31 @@
       ],
       "text": "厳密なbasisやexact certificateが必要（ primal simplex や dual simplex を検討） 問題が小〜中規模で密であり、factorizationのcostが許容範囲内 数値conditioningが悪くpreconditioningなしでは収束が遅い 高精度なdual sensitivityを即座に必要とする",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:powell:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:powell",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.derivative-free",
+        "content:mads",
+        "content:method.nelder-mead",
+        "content:pattern-search",
+        "method:M_POWELL",
+        "source:S002",
+        "source:S018",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S018",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、いくつかの方向を一本ずつ試し、よく進めた向きを次の一巡へ残すことです。 見るもの : 各探索方向に沿った目的関数値の変化 動かすもの : 現在点とdirection set 前進の判断 : 一巡ごとに目的関数値とbest-so-farが改善すること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -18149,6 +18400,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:slsqp:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:slsqp",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:constrained-continuous",
+        "content:interior-point-nlp",
+        "method:M_SLSQP",
+        "source:S002",
+        "source:S056",
+        "source:S064"
+      ],
+      "source_ids": [
+        "S002",
+        "S056",
+        "S064"
+      ],
+      "text": "この手法の気持ちは、目的と制約を現在点の近くで簡単なQPに置き換え、実行可能性と目的改善を一緒に進めることです。 見るもの : 目的関数値、勾配、制約値、constraint Jacobian 動かすもの : 現在点とQP subproblemが提案するstep 前進の判断 : 実装のmerit functionやfilterなどが目的改善とconstraint violationのtrade-offを評価し、stepを受理すること 収束の判断 : feasibility、KKT stationarity、必要なcomplementarityなどが、それぞれのtolerance内にあること",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:slsqp:derivativeとscale",
       "dataset_version": "0.15.1",
       "document_id": "content:slsqp",
@@ -19802,6 +20077,28 @@
       ],
       "text": "向きやすい条件: 大規模で滑らかな無制約問題 HVPを自動微分や構造から得られる 不定Hessianや負の曲率を無視したくない line searchより局所modelの信頼度を明示したい 避ける条件: gradient / HVPがnoiseに支配される 不連続・離散・black-box評価のみ 部分問題solveが目的評価より支配的 一般制約や大域certificateが必要",
       "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-region-newton-cg:30秒でつかむ",
+      "dataset_version": "0.15.1",
+      "document_id": "content:trust-region-newton-cg",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bfgs",
+        "content:least-squares",
+        "content:newton-method",
+        "method:M_TRUST_NCG",
+        "source:S002",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S002",
+        "S056"
+      ],
+      "text": "この手法の気持ちは、局所二次modelを信じる範囲を区切り、予測が当たった分だけ慎重に歩幅を広げることです。 見るもの : 目的関数値、勾配、Hessian-vector積、実改善と予測改善の比 動かすもの : 現在点、試行step、trust radius 前進の判断 : 試行stepが受理され、gradient normが下がること",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",

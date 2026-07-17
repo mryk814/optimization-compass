@@ -10,10 +10,18 @@ prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, pattern-search, mads]
 aliases: [/learn/powell]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 勾配を使わず複数の探索方向に沿う1次元最小化を繰り返し、改善した合成方向でdirection setを更新する局所法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、いくつかの方向を一本ずつ試し、よく進めた向きを次の一巡へ残すことです。
+
+- **見るもの**: 各探索方向に沿った目的関数値の変化
+- **動かすもの**: 現在点とdirection set
+- **前進の判断**: 一巡ごとに目的関数値とbest-so-farが改善すること
 
 ## 一巡の流れ
 

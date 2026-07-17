@@ -10,10 +10,18 @@ prerequisites: [newton-method]
 related_ids: [newton-method, bfgs, least-squares]
 aliases: [/learn/trust-region-newton-cg]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、局所二次modelを信じる範囲を区切り、予測が当たった分だけ慎重に歩幅を広げることです。
+
+- **見るもの**: 目的関数値、勾配、Hessian-vector積、実改善と予測改善の比
+- **動かすもの**: 現在点、試行step、trust radius
+- **前進の判断**: 試行stepが受理され、gradient normが下がること
 
 ## Trust regionの考え方
 
