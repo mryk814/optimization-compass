@@ -10,6 +10,9 @@ from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.trace_models import AlgorithmTrace, TraceFrame, TraceMetric
 
 SEARCH_TREE_CONTRACT_VERSION: Literal["1.0.0"] = "1.0.0"
+SEARCH_TREE_GENERATOR_ID = "educational.branch_bound.knapsack.v1"
+SEARCH_TREE_GENERATOR_VERSION = "1.1.0"
+SEARCH_TREE_EVALUATION_BUDGET = 9
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 NodeState = Literal[
@@ -226,10 +229,15 @@ _SOURCE_IDS = list(_PROBLEM.instance.source_ids)
 
 
 def generate_search_tree_artifact(
-    *, dataset_version: str, node_budget: int = 64
+    *,
+    dataset_version: str,
+    evaluation_budget: int = SEARCH_TREE_EVALUATION_BUDGET,
+    node_stop_limit: int = SEARCH_TREE_EVALUATION_BUDGET,
 ) -> SearchTreeArtifact:
-    if node_budget < 1:
-        raise ValueError("search-tree node budget must be positive")
+    if evaluation_budget < 1:
+        raise ValueError("search-tree evaluation budget must be positive")
+    if node_stop_limit < 1 or node_stop_limit > evaluation_budget:
+        raise ValueError("search-tree node stop limit must be within the evaluation budget")
     nodes: dict[str, _Node] = {"root": _Node("root", None, 0, "根", "Root", {}, 0, 0)}
     nodes["root"].bound = _fractional_bound(nodes["root"])
     stack = ["root"]
@@ -275,7 +283,7 @@ def generate_search_tree_artifact(
             progress=SearchTreeProgress(
                 explored_nodes=explored,
                 open_nodes=sum(node.state == "open" for node in nodes.values()),
-                node_budget=node_budget,
+                node_budget=node_stop_limit,
             ),
             decision_explanation_ja=explanation_ja,
             decision_explanation_en=explanation_en,
@@ -355,7 +363,7 @@ def generate_search_tree_artifact(
         decision="accepted",
     )
 
-    while stack and explored < node_budget:
+    while stack and explored < node_stop_limit:
         node_id = stack.pop()
         node = nodes[node_id]
         node.state = "active"
@@ -538,8 +546,8 @@ def generate_search_tree_artifact(
         profile_id="PROFILE_SEARCH_TREE_01",
         objective_id="INSTANCE_BINARY_KNAPSACK_4",
         scenario_id=scenario_id,
-        generator_id="educational.branch_bound.knapsack.v1",
-        generator_version="1.0.0",
+        generator_id=SEARCH_TREE_GENERATOR_ID,
+        generator_version=SEARCH_TREE_GENERATOR_VERSION,
         implementation_mapping_status="not_applicable",
         implementation_id=None,
         objective=_PROBLEM.trace_objective(),
@@ -558,9 +566,12 @@ def generate_search_tree_artifact(
         },
         initial_state={"assignment": {}, "heuristic_incumbent": 13},
         seed={"status": "fixed", "value": 0},
-        evaluation_budget=node_budget,
-        stopping={"metric": "explored_nodes", "max_nodes": node_budget},
-        environment={"runtime": "deterministic_educational_generator", "version": "1.0.0"},
+        evaluation_budget=evaluation_budget,
+        stopping={"max_nodes": node_stop_limit},
+        environment={
+            "runtime": "deterministic_educational_generator",
+            "version": SEARCH_TREE_GENERATOR_VERSION,
+        },
         fairness_statement=(
             "同じproblem instance・seed・depth-first include-first strategyで再生成する。"
             "naive enumerationやsolver間の速度比較には用いない。"

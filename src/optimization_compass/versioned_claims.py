@@ -6,6 +6,10 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
+from optimization_compass.search_tree import (
+    SEARCH_TREE_GENERATOR_ID,
+    SEARCH_TREE_GENERATOR_VERSION,
+)
 from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
@@ -311,6 +315,79 @@ def _benchmark_context_fixtures(
                 {"budget_reached": "complete", "error": "failed", "ranking": "forbidden"}
             ),
             "source_ids_json": str(bo_instance["source_ids_json"]),
+            "last_verified": release_date,
+        }
+    )
+    knapsack_instance = connection.execute(
+        "SELECT source_ids_json FROM problem_instances WHERE problem_instance_id = ?",
+        ("INSTANCE_BINARY_KNAPSACK_4",),
+    ).fetchone()
+    if knapsack_instance is None:
+        raise ValueError("educational knapsack benchmark instance does not resolve")
+    results.append(
+        {
+            "context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+            "context_version": "1.0.0",
+            "category": "MIP",
+            "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+            "problem_variant": "fixed four-item binary knapsack with fractional upper bounds",
+            "dimension": 4,
+            "sparsity_json": _json({"status": "reported", "structure": "one dense capacity row"}),
+            "hardware_json": _json(
+                {
+                    "status": "not_applicable",
+                    "reason": "deterministic educational generator; no wall-clock comparison",
+                }
+            ),
+            "runtime_json": _json(
+                {
+                    "comparison_scope": "exact",
+                    "runtime": "deterministic_educational_generator",
+                    "generator_id": SEARCH_TREE_GENERATOR_ID,
+                    "generator_version": SEARCH_TREE_GENERATOR_VERSION,
+                    "member_parameter": "node_stop_limit",
+                    "precision": "float64",
+                }
+            ),
+            "oracle_budget_json": _json({"unit": "oracle_evaluations", "limit": 9}),
+            "evaluation_budget": 9,
+            "time_budget_seconds": None,
+            "tolerance_json": _json(
+                {"status": "not_applicable", "reason": "node-stop sensitivity contrast"}
+            ),
+            "stopping_json": _json({"policy": "member_node_stop_limit", "member_values": [4, 9]}),
+            "initialization_json": _json(
+                {
+                    "policy": "fixed_empty_assignment_with_heuristic_incumbent",
+                    "points": [0.0, 0.0, 0.0, 0.0],
+                    "heuristic_incumbent_value": 13,
+                }
+            ),
+            "seed_status": "fixed",
+            "seed_value": 0,
+            "tuning_policy": (
+                "fixed depth-first include-first branching and fractional bound; "
+                "only node_stop_limit changes"
+            ),
+            "implementation_versions_json": _json(
+                {
+                    "implementation_mapping_status": "not_applicable",
+                    "generator_id": SEARCH_TREE_GENERATOR_ID,
+                    "generator_version": SEARCH_TREE_GENERATOR_VERSION,
+                }
+            ),
+            "outcome_metrics_json": _json(
+                ["explored_nodes", "incumbent", "global_bound", "absolute_gap", "feasibility"]
+            ),
+            "status_mapping_json": _json(
+                {
+                    "optimality_proven": "complete",
+                    "budget_exhausted": "incomplete",
+                    "error": "failed",
+                    "ranking": "forbidden",
+                }
+            ),
+            "source_ids_json": str(knapsack_instance["source_ids_json"]),
             "last_verified": release_date,
         }
     )

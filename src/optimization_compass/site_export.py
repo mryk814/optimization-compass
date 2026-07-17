@@ -1627,11 +1627,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             parameter_preset_id=preset_id,
             seed=VisualizationSeed(status=seed_status, value=seed_value),
             budget=VisualizationBudget(metric="oracle_evaluations", value=trace.evaluation_budget),
-            stopping=(
-                {"max_nodes": trace.evaluation_budget}
-                if is_search_tree
-                else _numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping")
-            ),
+            stopping=_numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping"),
             tuning_policy="fixed_preset",
         ),
         runs=[
@@ -1656,7 +1652,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
-        last_verified="2026-07-17" if is_parameter_estimation else "2026-07-15",
+        last_verified=("2026-07-17" if is_parameter_estimation or is_search_tree else "2026-07-15"),
     )
 
 
@@ -1664,8 +1660,8 @@ def _write_search_tree_artifacts(
     output_dir: Path, *, dataset_version: str
 ) -> tuple[SearchTreeIndex, list[SearchTreeArtifact]]:
     artifacts = [
-        generate_search_tree_artifact(dataset_version=dataset_version),
-        generate_search_tree_artifact(dataset_version=dataset_version, node_budget=4),
+        generate_search_tree_artifact(dataset_version=dataset_version, node_stop_limit=9),
+        generate_search_tree_artifact(dataset_version=dataset_version, node_stop_limit=4),
     ]
     entries: list[SearchTreeIndexEntry] = []
     for artifact in artifacts:
