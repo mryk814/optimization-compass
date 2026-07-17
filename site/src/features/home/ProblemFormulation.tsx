@@ -3,8 +3,7 @@ import type { ProblemDefinition, ProblemInstance } from "../../contracts/problem
 interface ProblemFormulationProps {
   constraintsSummary: string;
   decisionVariablesSummary: string;
-  definition: ProblemDefinition;
-  instance: ProblemInstance;
+  formulation: ReadableProblemFormulation;
   objectiveSummary: string;
 }
 
@@ -16,15 +15,23 @@ export interface ReadableProblemFormulation {
   variables: string;
 }
 
+interface VariableBounds {
+  bounds: [number, number][];
+  symbols: string[];
+}
+
+interface KnapsackItem {
+  item_id: string;
+  value: number;
+  weight: number;
+}
+
 export function ProblemFormulation({
   constraintsSummary,
   decisionVariablesSummary,
-  definition,
-  instance,
+  formulation,
   objectiveSummary,
 }: ProblemFormulationProps) {
-  const formulation = buildReadableProblemFormulation(definition, instance);
-
   return (
     <section aria-labelledby="home-formulation-title" className="home-mathematical-formulation">
       <header>
@@ -62,55 +69,143 @@ export function ProblemFormulation({
 export function buildReadableProblemFormulation(
   definition: ProblemDefinition,
   instance: ProblemInstance,
-): ReadableProblemFormulation {
-  const symbols = variableSymbols(instance);
-  const variables = `(${symbols.join(", ")}) ∈ ${domain(definition.variable_domain, instance.dimension)}`;
-  const sense = objectiveSense(definition.objective_direction);
-  const objective = objectiveExpression(instance, symbols, definition.objective_direction);
-  const constraints = [
-    ...constraintExpressions(instance),
-    ...boundExpressions(instance, symbols),
-  ];
-  const visibleConstraints = constraints.length > 0 ? constraints : ["制約なし"];
+): ReadableProblemFormulation | null {
+  if (!domain(definition.variable_domain, instance.dimension)) return null;
 
-  return {
-    ariaLabel: `${variables}; ${sense} ${objective}; subject to ${visibleConstraints.join("; ")}`,
-    constraints: visibleConstraints,
-    objective,
-    sense,
-    variables,
-  };
+  const knapsack = buildKnapsackFormulation(definition, instance);
+  if (knapsack) return knapsack;
+
+  const variableBounds = parsePerVariableBounds(instance);
+  if (!variableBounds) return null;
+  const variablesDomain = domain(definition.variable_domain, instance.dimension);
+  if (!variablesDomain) return null;
+  const variables = `(${variableBounds.symbols.join(", ")}) ∈ ${variablesDomain}`;
+  const sense = objectiveSense(definition.objective_direction);
+  const objective = objectiveExpression(instance, variableBounds.symbols, definition.objective_direction);
+  const constraints = constraintExpressions(instance);
+  if (!objective || !constraints) return null;
+
+  const bounds = variableBounds.symbols.map((symbol, index) => {
+    const [lower, upper] = variableBounds.bounds[index];
+    return `${formatNumber(lower)} ≤ ${symbol} ≤ ${formatNumber(upper)}`;
+  });
+  const visibleConstraints = [...constraints, ...bounds];
+  if (visibleConstraints.length === 0) visibleConstraints.push("制約なし");
+
+  return readableFormulation(variables, sense, objective, visibleConstraints);
 }
 
-function variableSymbols(instance: ProblemInstance): string[] {
-  const boundKeys = Object.keys(instance.bounds).slice(0, instance.dimension);
-  if (boundKeys.length === instance.dimension && boundKeys.every(isReadableSymbol)) {
-    return boundKeys;
+function buildKnapsackFormulation(
+  definition: ProblemDefinition,
+  instance: ProblemInstance,
+): ReadableProblemFormulation | null {
+  if (
+    definition.mathematical_family !== "binary_knapsack"
+    || definition.variable_domain !== "binary"
+    || definition.objective_direction !== "maximize"
+  ) {
+    return null;
   }
 
-  const axisLabels = instance.display.axis_labels;
+  const items = parseKnapsackItems(instance.parameters.items, instance.dimension);
+  const rawBounds = instance.bounds.variables;
+  const capacity = instance.parameters.capacity;
   if (
-    Array.isArray(axisLabels)
-    && axisLabels.slice(0, instance.dimension).every((label) => (
-      typeof label === "string" && isReadableSymbol(label)
-    ))
+    !items
+    || !Array.isArray(rawBounds)
+    || rawBounds.length !== instance.dimension
+    || !rawBounds.every(isBinaryBound)
+    || typeof capacity !== "number"
+    || !Number.isFinite(capacity)
+    || instance.constraints.length !== 1
   ) {
-    return axisLabels.slice(0, instance.dimension) as string[];
+    return null;
   }
-  return Array.from({ length: instance.dimension }, (_, index) => `x${subscript(index + 1)}`);
+  const constraint = instance.constraints[0];
+  if (
+    constraint.constraint_id !== "capacity"
+    || constraint.sense !== "lte"
+    || constraint.rhs !== capacity
+  ) {
+    return null;
+  }
+
+  const symbols = items.map((item) => item.item_id);
+  const variables = `(${symbols.join(", ")}) ∈ ${domain("binary", instance.dimension)}`;
+  const objective = `f(${symbols.join(", ")}) = ${linearExpression(items, "value")}`;
+  const constraints = [
+    `${linearExpression(items, "weight")} ≤ ${formatNumber(capacity)}`,
+    ...symbols.map((symbol) => `0 ≤ ${symbol} ≤ 1`),
+  ];
+  return readableFormulation(variables, "maximize", objective, constraints);
+}
+
+function parseKnapsackItems(value: unknown, dimension: number): KnapsackItem[] | null {
+  if (!Array.isArray(value) || value.length !== dimension) return null;
+  const items = value.flatMap((entry) => {
+    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) return [];
+    const item = entry as Record<string, unknown>;
+    if (
+      typeof item.item_id !== "string"
+      || !isReadableSymbol(item.item_id)
+      || typeof item.value !== "number"
+      || !Number.isFinite(item.value)
+      || typeof item.weight !== "number"
+      || !Number.isFinite(item.weight)
+    ) {
+      return [];
+    }
+    return [{ item_id: item.item_id, value: item.value, weight: item.weight }];
+  });
+  if (items.length !== dimension || new Set(items.map((item) => item.item_id)).size !== dimension) {
+    return null;
+  }
+  return items;
+}
+
+function isBinaryBound(value: unknown): boolean {
+  return Array.isArray(value) && value.length === 2 && value[0] === 0 && value[1] === 1;
+}
+
+function linearExpression(items: KnapsackItem[], field: "value" | "weight"): string {
+  return items.map((item) => `${formatNumber(item[field])}${item.item_id}`).join("+");
+}
+
+function parsePerVariableBounds(instance: ProblemInstance): VariableBounds | null {
+  const entries = Object.entries(instance.bounds);
+  if (entries.length !== instance.dimension) return null;
+  const symbols: string[] = [];
+  const bounds: [number, number][] = [];
+  for (const [symbol, value] of entries) {
+    if (!isReadableVariableSymbol(symbol) || !isNumericBound(value)) return null;
+    symbols.push(symbol);
+    bounds.push(value);
+  }
+  return { bounds, symbols };
+}
+
+function isNumericBound(value: unknown): value is [number, number] {
+  return Array.isArray(value)
+    && value.length === 2
+    && value.every((entry) => typeof entry === "number" && Number.isFinite(entry));
+}
+
+function isReadableVariableSymbol(value: string): boolean {
+  return !["assignment_columns", "lower", "parameter_names", "upper", "variables"].includes(value)
+    && isReadableSymbol(value);
 }
 
 function isReadableSymbol(value: string): boolean {
   return /^[\p{L}_][\p{L}\p{N}_₀-₉]*$/u.test(value);
 }
 
-function domain(variableDomain: string, dimension: number): string {
+function domain(variableDomain: string, dimension: number): string | null {
   const exponent = superscript(dimension);
   if (variableDomain === "continuous") return `ℝ${exponent}`;
   if (variableDomain === "integer") return `ℤ${exponent}`;
   if (variableDomain === "binary") return `{0, 1}${exponent}`;
   if (variableDomain === "permutation") return `S${subscript(dimension)}`;
-  return `${variableDomain}${exponent}`;
+  return null;
 }
 
 function objectiveSense(
@@ -125,45 +220,52 @@ function objectiveExpression(
   instance: ProblemInstance,
   symbols: string[],
   direction: ProblemDefinition["objective_direction"],
-): string {
+): string | null {
   const displayExpression = instance.display.expression;
-  if (typeof displayExpression !== "string" || !displayExpression.trim()) {
-    return `f(${symbols.join(", ")})`;
-  }
+  if (typeof displayExpression !== "string" || !displayExpression.trim()) return null;
   const normalized = normalizeExpression(displayExpression);
   if (direction === "multiobjective") return normalized;
+  if (normalized.includes(";")) return null;
+
+  const explicitSense = normalized.match(/^(min(?:imize)?|max(?:imize)?)\s+/iu)?.[1]?.toLowerCase();
+  if (
+    (explicitSense?.startsWith("min") && direction !== "minimize")
+    || (explicitSense?.startsWith("max") && direction !== "maximize")
+  ) {
+    return null;
+  }
   const objectivePart = normalized.split(/\s+s\.t\.\s+/iu, 1)[0]
     .replace(/^(?:min(?:imize)?|max(?:imize)?)\s+/iu, "")
     .trim();
+  if (!objectivePart) return null;
   return objectivePart.includes("=")
     ? objectivePart
     : `f(${symbols.join(", ")}) = ${objectivePart}`;
 }
 
-function constraintExpressions(instance: ProblemInstance): string[] {
-  return instance.constraints.flatMap((constraint) => {
+function constraintExpressions(instance: ProblemInstance): string[] | null {
+  const expressions: string[] = [];
+  for (const constraint of instance.constraints) {
     const expression = constraint.expression;
-    return typeof expression === "string" && expression.trim()
-      ? [normalizeExpression(expression)]
-      : [];
-  });
+    if (typeof expression !== "string" || !expression.trim()) return null;
+    expressions.push(normalizeExpression(expression));
+  }
+  return expressions;
 }
 
-function boundExpressions(instance: ProblemInstance, symbols: string[]): string[] {
-  const boundKeys = Object.keys(instance.bounds);
-  return symbols.flatMap((symbol, index) => {
-    const key = Object.hasOwn(instance.bounds, symbol) ? symbol : boundKeys[index];
-    const value = key ? instance.bounds[key] : undefined;
-    if (
-      !Array.isArray(value)
-      || value.length !== 2
-      || value.some((entry) => typeof entry !== "number")
-    ) {
-      return [];
-    }
-    const [lower, upper] = value as [number, number];
-    return [`${formatNumber(lower)} ≤ ${symbol} ≤ ${formatNumber(upper)}`];
-  });
+function readableFormulation(
+  variables: string,
+  sense: ReadableProblemFormulation["sense"],
+  objective: string,
+  constraints: string[],
+): ReadableProblemFormulation {
+  return {
+    ariaLabel: `${variables}; ${sense} ${objective}; subject to ${constraints.join("; ")}`,
+    constraints,
+    objective,
+    sense,
+    variables,
+  };
 }
 
 function normalizeExpression(value: string): string {

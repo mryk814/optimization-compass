@@ -135,8 +135,7 @@ function HomePage() {
             <ProblemFormulation
               constraintsSummary={featuredCase.item.constraints}
               decisionVariablesSummary={featuredCase.item.decision_variables}
-              definition={featuredCase.problemDefinition}
-              instance={featuredCase.problemInstance}
+              formulation={featuredCase.formulation}
               objectiveSummary={featuredCase.item.objective}
             />
 
