@@ -1,0 +1,82 @@
+import type { ComparisonIndex } from "../src/contracts/comparisons";
+
+export const comparisonId = "COMPARE_KNAPSACK_BNB_BUDGET_TEST";
+
+export function searchTreeComparisonFixture(datasetVersion: string): ComparisonIndex {
+  return {
+    contract_version: "2.0.0",
+    dataset_version: datasetVersion,
+    comparisons: [{
+      comparison_id: comparisonId,
+      canonical_url: `/compare/${comparisonId}`,
+      identity_status: "canonical",
+      canonical_comparison_id: comparisonId,
+      aliases: [],
+      mode: "failure_contrast",
+      journey_id: "budget-allocation",
+      case_id: "budget-allocation",
+      problem_definition_id: "PROBLEM_BINARY_KNAPSACK",
+      problem_instance_id: "INSTANCE_BINARY_KNAPSACK_4",
+      benchmark_context_id: "BENCH_BINARY_KNAPSACK_EDUCATIONAL",
+      title_ja: "探索を続けるrunとnode予算停止",
+      title_en: "Complete search and a node-budget stop",
+      comparison_question: "同じ評価回数で、停止判定はどのように違うか。",
+      formulation_summary: "同じ0-1 knapsackと探索順序を使う。",
+      fixed_factors: ["problem instance", "branch order", "initial incumbent"],
+      changed_factors: ["node budget stopping"],
+      seed_policy: "fixed seed 0",
+      budget: { metric: "oracle_evaluations", value: 4 },
+      stopping_policy: "compare at four oracle evaluations",
+      tuning_policy: "fixed depth-first include-first",
+      synchronization_axis: "oracle_evaluations",
+      metrics: [
+        { metric_id: "absolute_gap", label_ja: "絶対gap", direction: "minimize", unit: "objective" },
+        { metric_id: "open_nodes", label_ja: "未探索node", direction: "minimize", unit: "nodes" },
+      ],
+      comparability: "contrast_only",
+      ranking_eligible: false,
+      fairness_note: "同じ評価回数以下の最後のeventを同期する。",
+      caveat: "小さな教育用探索木の停止状態だけを対比する。",
+      takeaway: "incumbentがあってもgapとopen nodeが残れば最適性は未証明です。",
+      limitations: ["一般のMIP solver性能を比較するものではありません。"],
+      source_ids: ["S021", "S022", "S079"],
+      last_verified: "2026-07-17",
+      members: [
+        {
+          member_id: "complete-run",
+          role: "reference",
+          method_id: "M_BRANCH_BOUND",
+          scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          label_ja: "探索継続run",
+          label_en: "Continuing run",
+          parameters: { stopping: "continue" },
+          budget: { metric: "oracle_evaluations", value: 4 },
+          artifact: {
+            artifact_id: "binary-knapsack-bnb-complete",
+            artifact_kind: "executable_trace",
+            renderer_family: "search_tree",
+            renderer_contract_version: "1.0.0",
+            payload_path: "search-trees/binary-knapsack-bnb-complete.json",
+          },
+        },
+        {
+          member_id: "budget-run",
+          role: "failure_contrast",
+          method_id: "M_BRANCH_BOUND",
+          scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          label_ja: "node予算停止run",
+          label_en: "Node-budget run",
+          parameters: { stopping: "four nodes" },
+          budget: { metric: "oracle_evaluations", value: 4 },
+          artifact: {
+            artifact_id: "binary-knapsack-bnb-budget",
+            artifact_kind: "executable_trace",
+            renderer_family: "search_tree",
+            renderer_contract_version: "1.0.0",
+            payload_path: "search-trees/binary-knapsack-bnb-budget.json",
+          },
+        },
+      ],
+    }],
+  };
+}
