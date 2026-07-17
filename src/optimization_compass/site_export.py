@@ -747,15 +747,21 @@ def _write_dummy_trace(
 def _trace_title(trace_id: str, *, locale: str) -> str:
     parameter_titles = {
         "exponential-fit-trf": (
-            "TRFでbounds付き残差fitを追う",
-            "Follow bounded residual fitting with TRF",
+            "共通診断probe · TRF適用条件",
+            "Shared diagnostic probe · TRF applicability",
         ),
         "exponential-fit-trf-poor-init": (
-            "悪い初期値でrankと残差を追う",
-            "Track rank and residuals from a poor start",
+            "共通診断probe · 悪い初期値",
+            "Shared diagnostic probe · poor initialization",
         ),
-        "exponential-fit-lm": ("boundsがactiveでないLM条件", "LM when bounds remain inactive"),
-        "exponential-fit-lbfgsb": ("scalar二乗和fallback", "Scalar sum-of-squares fallback"),
+        "exponential-fit-lm": (
+            "共通診断probe · LM適用条件",
+            "Shared diagnostic probe · LM applicability",
+        ),
+        "exponential-fit-lbfgsb": (
+            "共通診断probe · scalar fallback条件",
+            "Shared diagnostic probe · scalar fallback applicability",
+        ),
     }
     if trace_id in parameter_titles:
         return parameter_titles[trace_id][0 if locale == "ja" else 1]
@@ -1089,10 +1095,10 @@ def _trace_lesson(
         )
         next_id = PRIMARY_SCENARIO_ID if not is_primary else POOR_INITIALIZATION_SCENARIO_ID
         method_condition = {
-            PRIMARY_SCENARIO_ID: "bounds付き残差問題でTRFを使う固定教材path",
-            POOR_INITIALIZATION_SCENARIO_ID: "a=0でJacobian rankが落ちる初期値感度",
-            LM_SCENARIO_ID: "boundsがactiveにならない場合だけを見るLM条件",
-            LBFGSB_SCENARIO_ID: "残差vectorをscalar二乗和へ畳むL-BFGS-B fallback",
+            PRIMARY_SCENARIO_ID: "共通診断stateに対するTRFのbounds・残差vector適用条件",
+            POOR_INITIALIZATION_SCENARIO_ID: "同じ診断probeをa=0から始める初期値感度",
+            LM_SCENARIO_ID: "共通診断stateに対するLMのbounds非active適用条件",
+            LBFGSB_SCENARIO_ID: "共通診断stateに対するscalar目的fallback適用条件",
         }[trace.scenario_id]
         return VisualizationLesson(
             learning_objective=_localized(
@@ -1108,9 +1114,10 @@ def _trace_lesson(
                 if is_poor_initialization
                 else None
             ),
-            expected_phenomenon_ja=f"{method_condition}として、12評価のmetric履歴を比較します。",
+            expected_phenomenon_ja=f"{method_condition}として、共通probeのmetric履歴を読みます。",
             expected_phenomenon_en=(
-                "Compare a fixed 12-evaluation metric history under the stated method condition."
+                "Read one solver-independent diagnostic-probe history through the stated "
+                "applicability lens."
             ),
             success_signals=[
                 _signal(
@@ -1126,9 +1133,9 @@ def _trace_lesson(
                 [
                     _signal(
                         "rank_deficient_start",
-                        "初期Jacobian rankが2となり、12評価後も残差が残る",
+                        "初期Jacobian rankが2となり、probe終了時も残差が残る",
                         "The initial Jacobian rank is two and residual error remains "
-                        "after 12 evaluations",
+                        "when the probe ends",
                         "jacobian_rank",
                         "residual_norm",
                         "parameter_error",
@@ -1171,8 +1178,8 @@ def _trace_lesson(
                 ),
                 _step(
                     "termination",
-                    "12評価後の誤差とstatusを確認",
-                    "Inspect error and status after 12 evaluations",
+                    "最終評価の誤差とstatusを確認",
+                    "Inspect error and status at the final evaluation",
                     "residual_norm",
                     "parameter_error",
                 ),
@@ -1188,8 +1195,9 @@ def _trace_lesson(
                 ),
             ),
             static_summary=_localized(
-                f"{method_condition}。20観測を同じmodelでfitし、metricを12評価まで表示します。",
-                "Fit the same 20 observations and model, showing metrics through 12 evaluations.",
+                f"{method_condition}。20観測に同じsolver非依存probeを適用し、metricを表示します。",
+                "Apply one solver-independent probe to the same 20 observations and show "
+                "its metrics.",
             ),
             text_alternative=_localized(
                 "各evaluationの [a, k, c]、残差norm、gradient norm、Jacobian rank、"
@@ -1198,16 +1206,18 @@ def _trace_lesson(
                 "distance from truth at every evaluation.",
             ),
             derived_media_caption=_localized(
-                "指数減衰fitのresidual・rank metric履歴",
-                "Residual and rank metric history for exponential-decay fitting",
+                "指数減衰fitの共通診断probeによるresidual・rank metric履歴",
+                "Residual and rank history from the shared exponential-fit diagnostic probe",
             ),
             limitations_ja=(
-                "固定補間で作った教育用pathです。SciPy/Ceresの内部反復、速度、一般性能、"
-                "実dataのparameter識別性を表しません。"
+                "deterministic damped Gauss–Newton診断probeであり、member solverは実行して"
+                "いません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataの"
+                "parameter識別性を表しません。"
             ),
             limitations_en=(
-                "A fixed interpolated teaching path, not SciPy/Ceres internals, speed, general "
-                "performance, or real-data parameter identifiability."
+                "A deterministic damped Gauss-Newton diagnostic probe; no member solver was "
+                "executed. It does not represent SciPy/Ceres internals, attained solutions, "
+                "speed, general performance, or real-data parameter identifiability."
             ),
         )
     if is_search_tree:

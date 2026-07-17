@@ -183,18 +183,19 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
 
   await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "TRFでbounds付き残差fitを追う" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · TRF適用条件" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Metric history" })).toBeVisible();
   await expect(page.getByRole("img", { name: /残差normをoracle evaluationで比較/u })).toBeVisible();
 
-  await page.getByRole("link", { name: /Alternate: 悪い初期値でrankと残差を追う/u }).click();
+  await page.getByRole("link", { name: /Alternate: 共通診断probe · 悪い初期値/u }).click();
   await expect(page).toHaveURL(/#\/traces\/exponential-fit-trf-poor-init\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "悪い初期値でrankと残差を追う" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "共通診断probe · 悪い初期値" })).toBeVisible();
   await page.getByRole("link", { name: "Compare: COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS" }).click();
 
   await expect(page.getByRole("heading", { level: 1, name: "非線形fitでsolver条件を比べる" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Metric history" })).toBeVisible();
   await expect(page.getByRole("img", { name: /oracle evaluationで比較/u })).toHaveCount(3);
+  await expect(page.getByText(/3本とも1つのsolver非依存診断probe/u)).toBeVisible();
   await page.getByRole("link", { name: /Case: 観測データから非線形model parameterを推定する/u }).click();
   await expect(page).toHaveURL(/#\/gallery\/EC013\?state=/u);
   await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();

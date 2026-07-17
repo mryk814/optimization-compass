@@ -276,6 +276,9 @@ function MetricHistoryComparison({
     <>
       <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
+      <p className="atlas-note comparison-probe-note">
+        <strong>線が同じなのは意図どおりです。</strong> 3本とも1つのsolver非依存診断probeであり、solver別の実行結果ではありません。
+      </p>
       <GenericMetricHistory
         budget={comparison.budget.value}
         evaluation={evaluation}
@@ -307,7 +310,7 @@ function MetricHistoryComparison({
       <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
       <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
       <p className="atlas-note comparison-ranking-warning">
-        教育用の固定pathであり、SciPy/Ceresの内部反復や一般的なsolver順位を示しません。
+        TRF・LM・L-BFGS-Bは実行していません。この表示から到達解、収束速度、wall-clock、一般的なsolver順位は比較できません。
       </p>
     </>
   );

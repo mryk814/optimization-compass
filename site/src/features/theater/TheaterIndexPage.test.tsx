@@ -15,7 +15,7 @@ describe("TheaterIndexPage", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Method Theater" })).toBeVisible();
     expect(await screen.findByText("23 / 23 scenarios")).toBeVisible();
-    expect(screen.getByRole("link", { name: /TRFでbounds付き残差fitを追う/u })).toHaveAttribute("href", "/traces/exponential-fit-trf");
+    expect(screen.getByRole("link", { name: /共通診断probe · TRF適用条件/u })).toHaveAttribute("href", "/traces/exponential-fit-trf");
     expect(screen.getAllByRole("link", { name: /Nelder–Meadの幾何操作/u })[0]).toHaveAttribute("href", "/traces/nelder-mead-quadratic");
     expect(screen.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toHaveAttribute("href", "/theater/search-tree/binary-knapsack-bnb-complete");
     expect(screen.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u })).toHaveAttribute("href", "/theater/bayesian-optimization?scenario=SCENARIO_BO_1D_EXPLORE_NOISELESS");
