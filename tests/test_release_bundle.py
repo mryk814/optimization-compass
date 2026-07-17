@@ -13,6 +13,7 @@ from optimization_compass.release_bundle import (
     build_release_bundle,
     verify_release_bundle,
 )
+from optimization_compass.repository_boundaries import RepositoryBoundaryError
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
@@ -181,10 +182,38 @@ def test_bundle_verification_rejects_corrupt_zip(staged_release: Path, tmp_path:
 
 
 def test_bundle_build_rejects_output_inside_repository(staged_release: Path) -> None:
-    with pytest.raises(ReleaseBundleError, match="outside the repository"):
+    with pytest.raises(ReleaseBundleError, match="outside every repository worktree"):
         build_release_bundle(
             staged_release,
             ROOT / ".release-bundle-test",
             source_commit=SOURCE_COMMIT,
             tag="v0.3.0",
         )
+
+
+def test_preverified_bundle_uses_shared_guard_with_the_explicit_repository_root(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repository_root = tmp_path / "secondary-worktree"
+    output = tmp_path / "main-worktree" / "bundle"
+    calls: list[tuple[Path, Path]] = []
+
+    def reject_output(output_path: Path, *, repository_root: Path) -> Path:
+        calls.append((output_path, repository_root))
+        raise RepositoryBoundaryError("output must be outside every repository worktree")
+
+    monkeypatch.setattr(release_bundle_module, "ensure_external_output_path", reject_output)
+
+    with pytest.raises(ReleaseBundleError, match="outside every repository worktree"):
+        release_bundle_module._build_preverified_release_bundle(
+            tmp_path / "release-tree",
+            output,
+            version="0.3.0",
+            release_date="2026-07-17",
+            source_commit=SOURCE_COMMIT,
+            tag="v0.3.0",
+            manifest_path=tmp_path / "release-tree/manifest.json",
+            repository_root=repository_root,
+        )
+
+    assert calls == [(output, repository_root)]

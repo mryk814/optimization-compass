@@ -13,6 +13,7 @@ from optimization_compass.release_catalog import (
     ReleaseCatalog,
     ReleaseCatalogEntry,
     ReleaseCatalogError,
+    backfill_catalog_entries,
     canonical_release_catalog_json,
     catalog_entry_from_bundle,
     load_release_catalog,
@@ -185,3 +186,52 @@ def test_merge_catalog_entry_is_sorted_idempotent_and_version_immutable(tmp_path
     assert load_release_catalog(output) == merged
     with pytest.raises(ReleaseCatalogError, match="immutable"):
         merge_catalog_entry(output, replace(_entry("0.12.0"), source_commit="d" * 40), output)
+
+
+def test_historical_backfill_preserves_current_and_is_idempotent(tmp_path: Path) -> None:
+    current = _entry("0.15.1")
+    source = tmp_path / "catalog.json"
+    source.write_text(
+        canonical_release_catalog_json(ReleaseCatalog(1, "0.15.1", (current,))),
+        encoding="utf-8",
+    )
+    output = tmp_path / "candidate.json"
+    historical = (_entry("0.2.0"), _entry("0.12.0"))
+
+    candidate = backfill_catalog_entries(source, historical, output)
+    replayed = backfill_catalog_entries(output, historical, output)
+
+    assert candidate == replayed
+    assert replayed.current_version == "0.15.1"
+    assert [entry.version for entry in replayed.releases] == ["0.2.0", "0.12.0", "0.15.1"]
+
+
+def test_historical_backfill_rejects_conflict_without_writing_candidate(tmp_path: Path) -> None:
+    historical = _entry("0.12.0")
+    current = _entry("0.15.1")
+    source = tmp_path / "catalog.json"
+    source.write_text(
+        canonical_release_catalog_json(ReleaseCatalog(1, "0.15.1", (historical, current))),
+        encoding="utf-8",
+    )
+    output = tmp_path / "candidate.json"
+
+    with pytest.raises(ReleaseCatalogError, match="immutable"):
+        backfill_catalog_entries(
+            source,
+            (replace(historical, source_commit="d" * 40),),
+            output,
+        )
+
+    assert not output.exists()
+
+
+def test_historical_backfill_cannot_advance_current(tmp_path: Path) -> None:
+    source = tmp_path / "catalog.json"
+    source.write_text(
+        canonical_release_catalog_json(ReleaseCatalog(1, "0.15.1", (_entry("0.15.1"),))),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ReleaseCatalogError, match="advance current"):
+        backfill_catalog_entries(source, (_entry("0.16.0"),), tmp_path / "candidate.json")

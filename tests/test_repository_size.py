@@ -154,6 +154,7 @@ def test_gate_allows_only_expected_small_authoring_and_compact_data(tmp_path: Pa
             "data/seeds/example.json": b"{}",
             "data/releases/catalog.json": EMPTY_CATALOG,
             "data/releases/publication-authority.json": b"{}",
+            "data/releases/historical-backfill.json": b"{}",
             "data/optimization_method_selection_database_v0.13.0_manifest.json": b"{}",
         },
     )
