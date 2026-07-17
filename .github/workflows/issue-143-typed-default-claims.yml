@@ -1,0 +1,195 @@
+name: Build typed SciPy default-method claims
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: issue-143-typed-default-method-claims
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >-
+      github.actor != 'github-actions[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.head_ref == 'codex/issue-143-typed-default-method-claims'
+    runs-on: ubuntu-latest
+    env:
+      RESULT_BRANCH: codex/issue-143-typed-default-method-claims-result
+      RELEASE_TAG: v0.16.0
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          uv sync --frozen --all-extras --all-groups
+          npm ci --prefix site
+      - name: Apply and commit canonical source changes on a clean branch
+        run: |
+          set -euo pipefail
+          cat .github/issue143/patch-*.py > "$RUNNER_TEMP/issue_143_release_patch.py"
+          git fetch origin main
+          git checkout -B "$RESULT_BRANCH" origin/main
+          python "$RUNNER_TEMP/issue_143_release_patch.py"
+          uv run ruff check --fix \
+            src/optimization_compass/versioned_claims.py \
+            src/optimization_compass/dataset_release.py \
+            src/optimization_compass/db.py \
+            src/optimization_compass/api.py \
+            tests/test_versioned_claims.py \
+            tests/test_api.py
+          uv run ruff format \
+            src/optimization_compass/versioned_claims.py \
+            src/optimization_compass/dataset_release.py \
+            src/optimization_compass/db.py \
+            src/optimization_compass/api.py \
+            tests/test_versioned_claims.py \
+            tests/test_api.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'data: split SciPy defaults into typed claims
+
+          Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
+          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          git push origin "HEAD:refs/heads/$RESULT_BRANCH"
+      - name: Build deterministic dataset 0.16.0 and complete bundle
+        run: |
+          set -euo pipefail
+          rm -rf \
+            .release-stage \
+            "$RUNNER_TEMP/bundle-a" \
+            "$RUNNER_TEMP/bundle-b" \
+            "$RUNNER_TEMP/bundle-published"
+          uv run python scripts/rebuild_dataset.py --stage --output .release-stage
+          uv run python scripts/release_bundles.py prepare \
+            --staged-directory .release-stage \
+            --output-directory "$RUNNER_TEMP/bundle-a" \
+            --source-commit "$SOURCE_COMMIT" \
+            --tag "$RELEASE_TAG"
+          uv run python scripts/release_bundles.py prepare \
+            --staged-directory .release-stage \
+            --output-directory "$RUNNER_TEMP/bundle-b" \
+            --source-commit "$SOURCE_COMMIT" \
+            --tag "$RELEASE_TAG"
+          cmp \
+            "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip" \
+            "$RUNNER_TEMP/bundle-b/optimization_method_selection_database_v0.16.0_bundle.zip"
+          uv run python scripts/release_bundles.py verify \
+            --bundle "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip"
+          uv run python scripts/rebuild_dataset.py \
+            --publish \
+            --staged-directory .release-stage \
+            --bundle-output "$RUNNER_TEMP/bundle-published" \
+            --source-commit "$SOURCE_COMMIT" \
+            --tag "$RELEASE_TAG"
+          cmp \
+            "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip" \
+            "$RUNNER_TEMP/bundle-published/optimization_method_selection_database_v0.16.0_bundle.zip"
+          rm -rf .release-stage
+          uv run python - <<'PY'
+          from optimization_compass.dataset_publication import (
+              CITATION_PATH,
+              DATASET_CARD_PATH,
+              RELEASE_CATALOG_PATH,
+              load_publication_authority,
+              render_citation_cff,
+              render_dataset_card,
+              select_release_entry,
+          )
+          from optimization_compass.release_catalog import load_release_catalog
+
+          authority = load_publication_authority()
+          entry = select_release_entry(load_release_catalog(RELEASE_CATALOG_PATH))
+          CITATION_PATH.write_text(
+              render_citation_cff(authority, entry),
+              encoding="utf-8",
+              newline="\n",
+          )
+          DATASET_CARD_PATH.write_text(
+              render_dataset_card(authority, entry),
+              encoding="utf-8",
+              newline="\n",
+          )
+          PY
+      - name: Validate source, release, and public surfaces
+        run: |
+          set -euo pipefail
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy src
+          uv run pytest
+          uv run optimization-compass verify-data
+          uv run python scripts/verify_content.py
+          uv run python scripts/verify_licensing.py
+          uv run python scripts/verify_workflow_pins.py
+          uv run python scripts/repository_size.py --check
+          npm --prefix site run typecheck
+          npm --prefix site run parity
+          npm --prefix site test -- --run
+          npm --prefix site run build
+      - name: Create reviewed annotated tag and verified draft release
+        run: |
+          set -euo pipefail
+          BUNDLE="$RUNNER_TEMP/bundle-published/optimization_method_selection_database_v0.16.0_bundle.zip"
+          MANIFEST="data/optimization_method_selection_database_v0.16.0_manifest.json"
+          ASSET_NAME="$(basename "$BUNDLE")"
+          MANIFEST_NAME="$(basename "$MANIFEST")"
+
+          REMOTE_TARGET="$(git ls-remote origin "refs/tags/$RELEASE_TAG^{}" | awk '{print $1}')"
+          if [ -z "$REMOTE_TARGET" ]; then
+            git tag -a "$RELEASE_TAG" "$SOURCE_COMMIT" -m 'Dataset 0.16.0'
+            git push origin "refs/tags/$RELEASE_TAG"
+          elif [ "$REMOTE_TARGET" != "$SOURCE_COMMIT" ]; then
+            echo "refusing to move existing tag $RELEASE_TAG from $REMOTE_TARGET" >&2
+            exit 1
+          fi
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            test "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" = true
+            test "$(gh release view "$RELEASE_TAG" --json targetCommitish --jq .targetCommitish)" = "$SOURCE_COMMIT"
+            gh release upload "$RELEASE_TAG" "$BUNDLE" "$MANIFEST" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$BUNDLE" "$MANIFEST" \
+              --draft \
+              --verify-tag \
+              --target "$SOURCE_COMMIT" \
+              --title 'Dataset 0.16.0' \
+              --notes-file docs/releases/0.16.0.md
+          fi
+
+          rm -rf "$RUNNER_TEMP/release-download"
+          mkdir -p "$RUNNER_TEMP/release-download"
+          gh release download "$RELEASE_TAG" \
+            --pattern "$ASSET_NAME" \
+            --pattern "$MANIFEST_NAME" \
+            --dir "$RUNNER_TEMP/release-download"
+          cmp "$BUNDLE" "$RUNNER_TEMP/release-download/$ASSET_NAME"
+          cmp "$MANIFEST" "$RUNNER_TEMP/release-download/$MANIFEST_NAME"
+          uv run python scripts/release_bundles.py verify \
+            --bundle "$RUNNER_TEMP/release-download/$ASSET_NAME"
+      - name: Commit and push generated release surfaces
+        run: |
+          set -euo pipefail
+          git add -A
+          git commit -m 'data: publish dataset 0.16.0
+
+          Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
+          git push origin "HEAD:refs/heads/$RESULT_BRANCH"
