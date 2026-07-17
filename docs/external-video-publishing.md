@@ -24,7 +24,9 @@ Before upload, retain these fields beside the rendered file:
 - transcript, WebVTT captions, alt/thumbnail text;
 - license, attribution, file SHA-256, and the media-manifest path.
 
-The bundle is valid only when its media files match the byte lengths and hashes in `data/media/manifest.json`.
+The bundle is valid only when its media files match the byte lengths and hashes in the selected
+export root's `media/manifest.json` (for the standard repository export,
+`site/public/data/media/manifest.json`).
 
 ## Description template
 

@@ -1,8 +1,9 @@
 # Derived visualization media
 
-`optimization-compass export-site-data` generates reusable media under `data/media/`. The index is
-`data/media/manifest.json` (`DerivedMediaManifest 1.1.0`) and is discoverable from
-`SiteManifest 1.1.0` as `derived_media`.
+`optimization-compass export-site-data --output <export-root>` generates reusable media under
+`<export-root>/media/`. The standard repository export uses `site/public/data` as that root, so its
+index is `site/public/data/media/manifest.json` (`DerivedMediaManifest 1.1.0`). The site manifest
+discovers it through the relative path `media/manifest.json` in `derived_media`.
 
 The first pilot is `SCENARIO_NM_QUADRATIC`:
 
