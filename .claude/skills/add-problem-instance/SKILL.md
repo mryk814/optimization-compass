@@ -29,8 +29,9 @@ problem instanceは2つのauthorityのペア作業です。片方だけの変更
    ```
 
    **PRゲートは `uv run optimization-compass validate tier-c`**
-   （AGENTS.mdのTier C: executable problemはTier C。E2Eはscenario/journeyへ影響が
-   ない場合は適用外なので、その場合は `validate tier-b` を実行し、適用外の理由をPRに明記する）。
+   （AGENTS.mdのTier C: executable problemはTier C。focusedな `validate problem` や
+   `validate tier-b` は、このCLIが宣言するPRゲートの代わりにはならない。scenario/journeyへの
+   影響がない場合は、その判断をPRに明記する）。
 
 ## Stop条件・PR記載事項
 
