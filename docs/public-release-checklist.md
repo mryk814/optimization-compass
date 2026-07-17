@@ -52,6 +52,12 @@ GitHub Pages artifact.
       byte size. Reusing a version with different metadata is rejected.
 - [ ] External upload remains a draft until every asset digest and byte size has been checked. A failed
       upload does not authorize tracked catalog or retention changes.
+- [ ] Historical migration follows the reviewed plan and
+      [`historical-release-backfill.md`](historical-release-backfill.md): prepare twice from Git blobs,
+      create new annotated tags without force at reviewed source commits, target drafts explicitly,
+      verify authenticated downloads against candidate outer bytes and inner identity, preserve
+      existing public loose assets, publish new releases, prove all remote tag targets, verify all
+      complete bundles anonymously, then commit catalog/Data UI and cleanup.
 - [ ] GitHub release assets include the manifest and licensed dataset bundle.
 - [ ] GitHub Pages was deployed from the validated artifact.
 - [ ] Post-deploy smoke checks confirm routes, data fetches, manifest identity,

@@ -44,6 +44,7 @@ _APPROVED_DATA_FILES = frozenset(
         "data/README.md",
         "data/releases/catalog.json",
         "data/releases/publication-authority.json",
+        "data/releases/historical-backfill.json",
     }
 )
 _APPROVED_AUTHORING_EXTENSIONS = {

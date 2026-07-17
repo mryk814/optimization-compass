@@ -16,6 +16,10 @@ from optimization_compass.dataset_release import (
     sha256_file,
     verify_release_tree,
 )
+from optimization_compass.repository_boundaries import (
+    RepositoryBoundaryError,
+    ensure_external_output_path,
+)
 
 BUNDLE_INDEX_NAME = "bundle-index.json"
 BUNDLE_SCHEMA_VERSION = 1
@@ -54,17 +58,62 @@ def build_release_bundle(
     release_date = _required_string(manifest, "release_date")
     if tag != f"v{version}":
         raise ReleaseBundleError("release tag must equal v<dataset version>")
-    resolved_output = output_directory.resolve(strict=False)
-    repository_root = ROOT.resolve()
-    if resolved_output == repository_root or repository_root in resolved_output.parents:
-        raise ReleaseBundleError("complete release bundles must be written outside the repository")
+    result = _build_preverified_release_bundle(
+        staged_directory,
+        output_directory,
+        version=version,
+        release_date=release_date,
+        source_commit=source_commit,
+        tag=tag,
+        manifest_path=manifest_path,
+    )
+    try:
+        verify_release_bundle(result.path)
+    except BaseException:
+        result.path.unlink(missing_ok=True)
+        raise
+    return result
+
+
+def _build_preverified_release_bundle(
+    release_tree: Path,
+    output_directory: Path,
+    *,
+    version: str,
+    release_date: str,
+    source_commit: str,
+    tag: str,
+    manifest_path: Path,
+    repository_root: Path = ROOT,
+) -> ReleaseBundle:
+    """Write schema-1 bundle bytes after a caller has verified the release tree.
+
+    Historical releases have version-specific validation profiles and call this helper only
+    after those checks pass. The current release path still runs ``verify_release_tree`` before
+    entering this helper and ``verify_release_bundle`` after it, so this extraction does not
+    weaken the published-release contract.
+    """
+
+    if _COMMIT_PATTERN.fullmatch(source_commit) is None:
+        raise ReleaseBundleError("source commit must be a 40-character lowercase SHA")
+    if tag != f"v{version}":
+        raise ReleaseBundleError("release tag must equal v<dataset version>")
+    try:
+        output_directory = ensure_external_output_path(
+            output_directory,
+            repository_root=repository_root,
+        )
+    except RepositoryBoundaryError as error:
+        raise ReleaseBundleError(str(error)) from error
+    if manifest_path.parent != release_tree:
+        raise ReleaseBundleError("bundle manifest must be at the release-tree root")
     output_directory.mkdir(parents=True, exist_ok=True)
     stem = DATASET_STEM.format(version=version)
     archive_path = output_directory / f"{stem}_bundle.zip"
     if archive_path.exists():
         raise ReleaseBundleError(f"bundle output already exists: {archive_path}")
 
-    files = _tree_files(staged_directory)
+    files = _tree_files(release_tree)
     index = {
         "schema_version": BUNDLE_SCHEMA_VERSION,
         "version": version,
@@ -94,24 +143,22 @@ def build_release_bundle(
                 _write_zip_member(
                     archive,
                     f"{stem}/{relative}",
-                    (staged_directory / relative).read_bytes(),
+                    (release_tree / relative).read_bytes(),
                     timestamp,
                 )
-        result = ReleaseBundle(
-            version=version,
-            release_date=release_date,
-            tag=tag,
-            source_commit=source_commit,
-            path=archive_path,
-            bytes=archive_path.stat().st_size,
-            sha256=sha256_file(archive_path),
-            manifest_sha256=sha256_file(manifest_path),
-        )
-        verify_release_bundle(archive_path)
     except BaseException:
         archive_path.unlink(missing_ok=True)
         raise
-    return result
+    return ReleaseBundle(
+        version=version,
+        release_date=release_date,
+        tag=tag,
+        source_commit=source_commit,
+        path=archive_path,
+        bytes=archive_path.stat().st_size,
+        sha256=sha256_file(archive_path),
+        manifest_sha256=sha256_file(manifest_path),
+    )
 
 
 def verify_release_bundle(bundle_path: Path) -> ReleaseBundle:

@@ -94,3 +94,30 @@ staged release rebuilds, while complete historical downloads move to the surface
 them. Future releases require an explicit source commit and tag instead of inferring provenance. Release
 coordination becomes a documented two-surface transaction, but partial publication cannot silently
 redefine the current runtime dataset.
+
+## Historical migration preparation
+
+The accepted policy is implemented in phases. Phase A adds only the reviewed migration plan, exact Git
+blob reconstruction, version-specific local verification, a current-preserving catalog candidate, and
+anonymous remote verification. Its commands and failure boundaries are documented in
+[`../historical-release-backfill.md`](../historical-release-backfill.md).
+
+Historical extraction never reads checkout artifact bytes. Schema-2 releases whose manifests recorded
+Windows CRLF bytes declare a closed materialization profile in the reviewed plan; only its strict path
+classes may expand an LF-normalized Git blob, and the result must match the manifest byte count and
+SHA-256. Undeclared mismatches fail. Dataset 0.2.0 uses a separate legacy profile and supplements its
+unchanged artifact set with plan-pinned license blobs from a later reconstruction commit.
+
+Phase A does not upload, mutate the tracked catalog, remove a historical distribution, lower the size
+baseline, change Pages, create or move a tag, or change repository release settings. Those operations
+remain gated on remote verification in a later phase. New releases use draft upload, authenticated
+download verification against candidate outer bytes and inner identity, publication, and then
+anonymous verification. Their annotated tags are created without force at the reviewed source commit,
+and draft creation names that commit as its explicit target. Existing public 0.3.0 and 0.3.1
+keep their loose assets unchanged and receive only a missing or byte-identical complete bundle before
+anonymous verification. Their tracked, internally consistent bundle reconstruction is the catalog
+authority; it is not represented as a byte-for-byte aggregate of historically inconsistent loose
+manifest/release-identity assets. Before download, the selected remote must identify the repository in
+the reviewed plan and a single strict remote tag inventory must prove all 14 tags still target their
+reviewed source commits. Catalog publication and cleanup wait until all 14 bundles pass anonymous
+verification. Normal tests and staged builds do not contact the remote.

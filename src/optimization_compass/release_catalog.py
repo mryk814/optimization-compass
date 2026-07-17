@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import os
 import re
+import tempfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Protocol
@@ -161,6 +163,63 @@ def merge_catalog_entry(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(canonical_release_catalog_json(merged), encoding="utf-8")
     return merged
+
+
+def backfill_catalog_entries(
+    catalog_path: Path,
+    entries: tuple[ReleaseCatalogEntry, ...],
+    output_path: Path,
+) -> ReleaseCatalog:
+    """Overlay immutable historical entries without changing the current release.
+
+    This is intentionally separate from ``merge_catalog_entry``: normal publication makes a new
+    version current, while migration backfill must preserve the already-published current entry.
+    Every entry is checked before a candidate file is atomically replaced.
+    """
+
+    catalog = load_release_catalog(catalog_path)
+    if not catalog.releases or catalog.current_version is None:
+        raise ReleaseCatalogError("historical backfill requires a non-empty current catalog")
+    current_key = _semantic_version_key(catalog.current_version)
+    existing_by_version = {release.version: release for release in catalog.releases}
+    incoming_versions: set[str] = set()
+    for entry in entries:
+        _validate_entry(entry)
+        if entry.version in incoming_versions:
+            raise ReleaseCatalogError(
+                f"historical backfill versions must be unique: {entry.version}"
+            )
+        incoming_versions.add(entry.version)
+        if _semantic_version_key(entry.version) >= current_key:
+            raise ReleaseCatalogError(
+                f"historical backfill cannot replace or advance current version: {entry.version}"
+            )
+        existing = existing_by_version.get(entry.version)
+        if existing is not None and existing != entry:
+            raise ReleaseCatalogError(f"release catalog version is immutable: {entry.version}")
+        existing_by_version[entry.version] = entry
+
+    releases = tuple(
+        sorted(existing_by_version.values(), key=lambda item: _semantic_version_key(item.version))
+    )
+    candidate = ReleaseCatalog(
+        schema_version=1,
+        current_version=catalog.current_version,
+        releases=releases,
+    )
+    validate_release_catalog(candidate)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{output_path.name}.", suffix=".tmp", dir=output_path.parent
+    )
+    os.close(descriptor)
+    temporary = Path(temporary_name)
+    try:
+        temporary.write_text(canonical_release_catalog_json(candidate), encoding="utf-8")
+        temporary.replace(output_path)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return candidate
 
 
 class ReleaseBundleMetadata(Protocol):

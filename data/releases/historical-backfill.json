@@ -1,0 +1,200 @@
+{
+  "repository": "mryk814/optimization-compass",
+  "releases": [
+    {
+      "reconstruction_commit": "1963561360b08eae4baecf1bd93a903e97658c99",
+      "database_sha256": "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13",
+      "manifest_sha256": "5a191096ae45c3ac76779694414c86b10dd7e934b4490faf003e63b2831dc9a3",
+      "release_date": "2026-07-13",
+      "source_commit": "1bb71675c418dd6b561c02ba2bbe0fe6a2fdd418",
+      "supplemental_files": [
+        {
+          "bundle_path": "licenses/CC-BY-4.0.txt",
+          "git_path": "data/licenses/CC-BY-4.0.txt",
+          "sha256": "b95f5f2a4bc4dfaa9c4a47733b2b76504f5ff6bbb702379ad278656523bc08f1"
+        },
+        {
+          "bundle_path": "licenses/CONTENT_LICENSE.txt",
+          "git_path": "data/licenses/CONTENT_LICENSE.txt",
+          "sha256": "de024ff4417b44b528fa7982e8c085192216b00799e6c59bbafc984627e82b62"
+        },
+        {
+          "bundle_path": "licenses/DATA_LICENSE.txt",
+          "git_path": "data/licenses/DATA_LICENSE.txt",
+          "sha256": "9ac48b02711c75d67778de3469da7fda0de0343292ccb77cad094a846da897ce"
+        },
+        {
+          "bundle_path": "licenses/LICENSE.txt",
+          "git_path": "data/licenses/LICENSE.txt",
+          "sha256": "53ba679cd0e8490352036490f78d67f9713e5c590131d9cdde845d582a7d6a2c"
+        },
+        {
+          "bundle_path": "licenses/NOTICE.txt",
+          "git_path": "data/licenses/NOTICE.txt",
+          "sha256": "6475d10f0f9ae786436b51882bb3a2ca981f2165ddf5b9d31593976a4e7cb007"
+        }
+      ],
+      "tag": "v0.2.0",
+      "verification_profile": "legacy-v0.2",
+      "materialization_profile": "git-blob-v1",
+      "version": "0.2.0"
+    },
+    {
+      "reconstruction_commit": "1963561360b08eae4baecf1bd93a903e97658c99",
+      "database_sha256": "6fd8851e805ebd4b396905ca33d50b7dd292bfba7a17c02a5d3726e18f3886cc",
+      "manifest_sha256": "ab27c0976f47bfd3ae950d55e66dfce02b14a78b3ff73013a30312ce715e84a2",
+      "release_date": "2026-07-15",
+      "source_commit": "4f0d167d2bba47a7e0342b51b4724852a9a9acd6",
+      "supplemental_files": [],
+      "tag": "v0.3.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.3.0"
+    },
+    {
+      "reconstruction_commit": "91a41bd9cbbddeeabfb7e5d4e60309a9d00ddcf6",
+      "database_sha256": "2fe6578731db3688697def28bacb9c3f4753c6549c718792a83ba2a54061c602",
+      "manifest_sha256": "0204de2319ac3ac9107c64af8d4a6fe00ae84efe53ac151e34d9985b6f87c118",
+      "release_date": "2026-07-15",
+      "source_commit": "ed94b48b67ffbbc34f629f3630a2c696bfa264dd",
+      "supplemental_files": [],
+      "tag": "v0.3.1",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.3.1"
+    },
+    {
+      "reconstruction_commit": "95a776267cc8f0a369e5b911728c56061972c838",
+      "database_sha256": "40b7f692187811d2e75d74701e52dfed662e86cd3c028c3fae6fe5b2834b6847",
+      "manifest_sha256": "0e646afc3ccc7f3f1ac0193eca0bf49cecab8175a26c2405a5bcead42a93677b",
+      "release_date": "2026-07-15",
+      "source_commit": "95a776267cc8f0a369e5b911728c56061972c838",
+      "supplemental_files": [],
+      "tag": "v0.3.2",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.3.2"
+    },
+    {
+      "reconstruction_commit": "7581d9560e33866ac6acc41ed71723ff69ca7c2a",
+      "database_sha256": "a14e756e85a7ade47f3ada5e30187b45916060648c5fd15d722d8847c89f8acd",
+      "manifest_sha256": "04622f2f30ce303c485dbfa3806f8e950f35f431b63f96ac181af249fad2ab09",
+      "release_date": "2026-07-15",
+      "source_commit": "7581d9560e33866ac6acc41ed71723ff69ca7c2a",
+      "supplemental_files": [],
+      "tag": "v0.4.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.4.0"
+    },
+    {
+      "reconstruction_commit": "d2f9c912e7a11f82caec91d7655e09bb19ef9d7c",
+      "database_sha256": "69e77bf9d76a51a5f20aca590ce746f01e6bbb2cb637e3e7cd50e831218b504e",
+      "manifest_sha256": "179e390578947f498ac60f90de662e06f7c3ad26a6d61d07238e1268a6a6d3e5",
+      "release_date": "2026-07-15",
+      "source_commit": "d2f9c912e7a11f82caec91d7655e09bb19ef9d7c",
+      "supplemental_files": [],
+      "tag": "v0.5.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.5.0"
+    },
+    {
+      "reconstruction_commit": "d2f9c912e7a11f82caec91d7655e09bb19ef9d7c",
+      "database_sha256": "bfe3ba8a2bd1022d2d82b7d26c74e41843bfbb77f0d386f59e32e91c2d786292",
+      "manifest_sha256": "59791f84f904da3177e68663a43c29059cf964309690925b23aa2b7efc40879c",
+      "release_date": "2026-07-15",
+      "source_commit": "d2f9c912e7a11f82caec91d7655e09bb19ef9d7c",
+      "supplemental_files": [],
+      "tag": "v0.5.1",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.5.1"
+    },
+    {
+      "reconstruction_commit": "e3b3f70067b05cb07363b5a61394381d78a631fd",
+      "database_sha256": "0460901dc5e832753667dc3663c2d620fe02182a4684bc01d6d6a505eec71278",
+      "manifest_sha256": "7447c6725a24f911267e836597d852a58aabe54b7b3d878fc69e6949ed453a6e",
+      "release_date": "2026-07-15",
+      "source_commit": "e3b3f70067b05cb07363b5a61394381d78a631fd",
+      "supplemental_files": [],
+      "tag": "v0.6.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.6.0"
+    },
+    {
+      "reconstruction_commit": "ce673144b8e3b6607c59847a9202893d4cd4c719",
+      "database_sha256": "feb2d7ed33a9400a1bddaa1801695f51d97fd06670baf8629a3312fa5510e99f",
+      "manifest_sha256": "7ade22ee1c36977e7e5059431a21a4c723218a1bf2c05f06c732b298ff6d4c4c",
+      "release_date": "2026-07-15",
+      "source_commit": "ce673144b8e3b6607c59847a9202893d4cd4c719",
+      "supplemental_files": [],
+      "tag": "v0.7.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.7.0"
+    },
+    {
+      "reconstruction_commit": "49386639a20563567ebca0b55e9c8bcf2341d021",
+      "database_sha256": "b5a02cb481f4fd3f00caa049d4d808aee7b6a9ff035c8bb7363a5a71916d273c",
+      "manifest_sha256": "7f08e8c7f948aceef4147cb189c32888fbd2c1d81696f0a6d9ac174b21c6411c",
+      "release_date": "2026-07-15",
+      "source_commit": "49386639a20563567ebca0b55e9c8bcf2341d021",
+      "supplemental_files": [],
+      "tag": "v0.8.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.8.0"
+    },
+    {
+      "reconstruction_commit": "837f98af84fd29117be23f8f45e918e300bd8a85",
+      "database_sha256": "ebc759d9130d4178e620d001081b4ffc46bbed0819b7151b7717182f100c28c0",
+      "manifest_sha256": "e05946cee0ba4650487648175be59ec0d6a779743fe25c993cb491e4f3b94dfd",
+      "release_date": "2026-07-15",
+      "source_commit": "837f98af84fd29117be23f8f45e918e300bd8a85",
+      "supplemental_files": [],
+      "tag": "v0.9.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.9.0"
+    },
+    {
+      "reconstruction_commit": "784a00f7cdfe9125d17389f9913934228394f492",
+      "database_sha256": "0c424653e19631100b932d24beaa8740d2dfbd245e05f679338f31a46089404e",
+      "manifest_sha256": "42ca1f32944bc4361d3f1b5ec60f6b035d0742555e82a0f8f53c5fb110c4988a",
+      "release_date": "2026-07-15",
+      "source_commit": "784a00f7cdfe9125d17389f9913934228394f492",
+      "supplemental_files": [],
+      "tag": "v0.10.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.10.0"
+    },
+    {
+      "reconstruction_commit": "deacd04eab34d643897944bbf3ad8f36d5253ae2",
+      "database_sha256": "0e26a12b2f276dcf53ffce5626199a7fc9c7727c1feb2fe0de72f65a59864f7b",
+      "manifest_sha256": "4c26c6541ecc36b3e061d9cc63b0d65b0610c26e6a100335fb527f4982f73be4",
+      "release_date": "2026-07-16",
+      "source_commit": "deacd04eab34d643897944bbf3ad8f36d5253ae2",
+      "supplemental_files": [],
+      "tag": "v0.11.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "git-blob-v1",
+      "version": "0.11.0"
+    },
+    {
+      "reconstruction_commit": "1484738da4f4844ab5cd9512b772ae54d1c217c1",
+      "database_sha256": "fe0a7e67c764747390034b3c44b7f801e539cbd16db8abddbd08ee012d5b5b35",
+      "manifest_sha256": "7b7a77a62597b247623aad48618d992a438e6ebcfc4b5eae6becc1ecae454391",
+      "release_date": "2026-07-17",
+      "source_commit": "1484738da4f4844ab5cd9512b772ae54d1c217c1",
+      "supplemental_files": [],
+      "tag": "v0.12.0",
+      "verification_profile": "manifest-v2",
+      "materialization_profile": "manifest-crlf-v1",
+      "version": "0.12.0"
+    }
+  ],
+  "schema_version": 1
+}
