@@ -43,6 +43,7 @@ jobs:
           npm ci --prefix site
       - name: Apply and commit canonical source changes on a clean branch
         run: |
+          exec > >(tee "$RUNNER_TEMP/issue143-apply.log") 2>&1
           set -euo pipefail
           cat .github/issue143/patch-*.py > "$RUNNER_TEMP/issue_143_release_patch.py"
           git fetch origin main
@@ -70,6 +71,14 @@ jobs:
           Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
           echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
           git push origin "HEAD:refs/heads/$RESULT_BRANCH"
+      - name: Upload implementation diagnostic log
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: issue-143-implementation-log-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/issue143-apply.log
+          if-no-files-found: warn
+          retention-days: 1
       - name: Build deterministic dataset 0.16.0 and complete bundle
         run: |
           set -euo pipefail
