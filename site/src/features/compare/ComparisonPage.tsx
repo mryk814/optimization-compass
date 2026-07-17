@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   parseComparisonIndex,
@@ -9,6 +9,12 @@ import {
 import { findEntity } from "../../contracts/entity-links";
 import { parseLearningSliceArtifact, type LearningSliceArtifact } from "../../contracts/learning-slices";
 import { parseSiteManifest } from "../../contracts/manifest";
+import {
+  parseSearchTreeArtifact,
+  parseSearchTreeFramePayload,
+  parseSearchTreeIndex,
+  type SearchTreeArtifact,
+} from "../../contracts/search-tree";
 import {
   parseSurrogateUncertaintyPayload,
   type SurrogateUncertaintyPayload,
@@ -33,6 +39,7 @@ import { comparisonRoute, firstMemberPerScenario } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
+import { SearchTreeRenderer } from "../search-tree/SearchTreeRenderer";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GenericMetricHistory } from "../visualization/GenericMetricHistory";
@@ -61,6 +68,10 @@ type Loaded = LoadedBase & ({
 } | {
   renderer: "surrogate";
   payloads: SurrogateUncertaintyPayload[];
+  scenarios: VisualizationScenario[];
+} | {
+  renderer: "search-tree";
+  artifacts: SearchTreeArtifact[];
   scenarios: VisualizationScenario[];
 } | {
   renderer: "learning-slice";
@@ -146,6 +157,8 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <MetricHistoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "surrogate" ? (
         <SurrogateComparison comparison={comparison} payloads={loaded.payloads} scenarios={loaded.scenarios} />
+      ) : loaded.renderer === "search-tree" ? (
+        <SearchTreeComparison artifacts={loaded.artifacts} comparison={comparison} scenarios={loaded.scenarios} />
       ) : (
         <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />
       )}
@@ -164,6 +177,79 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
       </section>
       <EvidenceLinks sourceIds={comparison.source_ids} />
     </>
+  );
+}
+
+function SearchTreeComparison({
+  artifacts,
+  comparison,
+  scenarios,
+}: {
+  artifacts: SearchTreeArtifact[];
+  comparison: ComparisonSet;
+  scenarios: VisualizationScenario[];
+}) {
+  const timeline = useMemo(() => {
+    const template = artifacts[0].trace.frames[0];
+    return Array.from({ length: comparison.budget.value + 1 }, (_, evaluation): TraceFrame => ({
+      ...template,
+      frame_index: evaluation,
+      iteration: evaluation,
+      oracle_evaluations: evaluation,
+      elapsed_steps: evaluation,
+      elapsed_time_ms: evaluation * 100,
+      event_type: evaluation === 0 ? "initialize" : "comparison_tick",
+      event_label_ja: evaluation === 0 ? "比較を開始" : `評価 ${evaluation} に同期`,
+      event_label_en: evaluation === 0 ? "Start comparison" : `Align at evaluation ${evaluation}`,
+    }));
+  }, [artifacts, comparison.budget.value]);
+  const playback = usePlayback(comparison.comparison_id, timeline);
+  const evaluation = playback.currentFrame.oracle_evaluations;
+  return (
+    <section className="search-tree-comparison" aria-labelledby="search-tree-comparison-heading">
+      <header>
+        <h2 id="search-tree-comparison-heading">同じ評価回数で探索状態を比べる</h2>
+        <p>各memberについて、現在の評価回数以下にある最後のeventを表示します。</p>
+      </header>
+      <ScenarioLessonPanel scenario={scenarios[0]} />
+      <PlaybackControls playback={playback} />
+      <div className="comparison-grid search-tree-comparison-grid">
+        {artifacts.map((artifact, index) => {
+          const member = comparison.members[index];
+          const frame = latestFrame(artifact.trace.frames, evaluation);
+          if (!frame) throw new Error(`Search-tree member ${member.member_id} has no aligned frame.`);
+          const payload = parseSearchTreeFramePayload(frame.payload);
+          return (
+            <article className="comparison-card search-tree-comparison-card" key={member.member_id}>
+              <header>
+                <div><h2>{member.label_ja}</h2><small>{member.label_en}</small></div>
+                <span>{searchTreeTerminalLabel(payload.terminal_state)}</span>
+              </header>
+              <p className="method-parameters">{parameterText(member.parameters)}</p>
+              <p className="comparison-event">
+                {frame.event_label_ja ?? frame.event_type} · evaluation {frame.oracle_evaluations}
+              </p>
+              <dl className="comparison-search-tree-metrics" aria-label={`${member.label_ja}の同期指標`}>
+                <div><dt>Terminal status</dt><dd>{searchTreeTerminalLabel(payload.terminal_state)}</dd></div>
+                <div><dt>Incumbent</dt><dd>{payload.incumbent?.value ?? "未発見"}</dd></div>
+                <div><dt>Global bound</dt><dd>{payload.global_bound.toFixed(2)}</dd></div>
+                <div><dt>Absolute gap</dt><dd>{payload.absolute_gap === null ? "—" : payload.absolute_gap.toFixed(2)}</dd></div>
+                <div><dt>Explored nodes</dt><dd>{payload.progress.explored_nodes}</dd></div>
+                <div><dt>Open nodes</dt><dd>{payload.progress.open_nodes}</dd></div>
+              </dl>
+              <SearchTreeRenderer
+                headingId={`comparison-search-tree-heading-${index}`}
+                headingLabel={`${member.label_ja}の探索木`}
+                payload={payload}
+                visibleLayers={["search_nodes", "prune_reason"]}
+              />
+            </article>
+          );
+        })}
+      </div>
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+    </section>
   );
 }
 
@@ -644,6 +730,9 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
   if (!scenarioResponse.ok) throw new Error(`Visualization scenario request failed (${scenarioResponse.status}).`);
   const index = parseComparisonIndex(await response.json());
   const scenarioIndex = parseVisualizationScenarioIndex(await scenarioResponse.json());
+  if (index.dataset_version !== manifest.dataset_version) {
+    throw new Error("Comparison dataset version does not match the manifest.");
+  }
   if (scenarioIndex.dataset_version !== manifest.dataset_version) {
     throw new Error("Visualization scenario dataset version does not match the manifest.");
   }
@@ -706,6 +795,70 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       comparisons: index.comparisons,
       renderer: "surrogate",
       payloads: loadedMembers.map((item) => item.payload),
+      scenarios: loadedMembers.map((item) => item.scenario),
+    };
+  }
+  if (families.size === 1 && family === "search_tree") {
+    if (comparison.synchronization_axis !== "oracle_evaluations") {
+      throw new Error("Search-tree comparison must synchronize by oracle_evaluations.");
+    }
+    const searchTreeIndexResponse = await fetch(`${siteBaseUrl()}data/search-trees/index.json`, { signal });
+    if (!searchTreeIndexResponse.ok) {
+      throw new Error(`Search-tree index request failed (${searchTreeIndexResponse.status}).`);
+    }
+    const searchTreeIndex = parseSearchTreeIndex(await searchTreeIndexResponse.json());
+    if (searchTreeIndex.dataset_version !== manifest.dataset_version) {
+      throw new Error("Search-tree index dataset version does not match the manifest.");
+    }
+    const loadedMembers = await Promise.all(comparison.members.map(async (member) => {
+      const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === member.scenario_id);
+      const entry = searchTreeIndex.artifacts.find((candidate) => candidate.artifact_id === member.artifact.artifact_id);
+      const run = scenario?.runs.find((candidate) => candidate.artifact_id === member.artifact.artifact_id);
+      if (!scenario || !entry || !run) {
+        throw new Error(`Search-tree scenario/index identity is missing for ${member.member_id}.`);
+      }
+      if (
+        scenario.problem_definition_id !== comparison.problem_definition_id
+        || scenario.problem_instance_id !== comparison.problem_instance_id
+        || scenario.dataset_version !== manifest.dataset_version
+        || run.method_id !== member.method_id
+        || entry.scenario_id !== member.scenario_id
+        || entry.artifact_id !== member.artifact.artifact_id
+        || entry.path !== member.artifact.payload_path
+        || entry.artifact_kind !== member.artifact.artifact_kind
+        || entry.renderer_family !== member.artifact.renderer_family
+        || entry.renderer_contract_version !== member.artifact.renderer_contract_version
+        || scenario.artifact.artifact_kind !== member.artifact.artifact_kind
+        || scenario.artifact.renderer_family !== member.artifact.renderer_family
+        || scenario.artifact.renderer_contract_version !== member.artifact.renderer_contract_version
+      ) {
+        throw new Error(`Search-tree scenario/index contract differs from comparison member ${member.member_id}.`);
+      }
+      const artifactResponse = await fetch(`${siteBaseUrl()}data/${entry.path}`, { signal });
+      if (!artifactResponse.ok) {
+        throw new Error(`Search-tree artifact request failed (${artifactResponse.status}).`);
+      }
+      const artifact = parseSearchTreeArtifact(await artifactResponse.json());
+      if (
+        artifact.dataset_version !== manifest.dataset_version
+        || artifact.artifact_id !== entry.artifact_id
+        || artifact.artifact_kind !== entry.artifact_kind
+        || artifact.renderer_family !== entry.renderer_family
+        || artifact.renderer_contract_version !== entry.renderer_contract_version
+        || artifact.scenario_id !== entry.scenario_id
+        || artifact.trace.trace_id !== entry.trace_id
+        || artifact.trace.method_id !== member.method_id
+        || artifact.trace.objective_id !== comparison.problem_instance_id
+      ) {
+        throw new Error(`Search-tree artifact identity differs from comparison member ${member.member_id}.`);
+      }
+      return { artifact, scenario };
+    }));
+    return {
+      comparison,
+      comparisons: index.comparisons,
+      renderer: "search-tree",
+      artifacts: loadedMembers.map((item) => item.artifact),
       scenarios: loadedMembers.map((item) => item.scenario),
     };
   }
@@ -778,6 +931,14 @@ function memberSummary(
 
 function historySymbol(index: number): string {
   return index === 0 ? "●" : index === 1 ? "■" : "▲";
+}
+
+function searchTreeTerminalLabel(state: "ongoing" | "optimality_proven" | "budget_exhausted"): string {
+  return {
+    ongoing: "探索中",
+    optimality_proven: "最適性証明済み",
+    budget_exhausted: "予算停止・未証明",
+  }[state];
 }
 
 function isOutsideBounds(coordinates: readonly number[], spec: ObjectivePlotSpec): boolean {

@@ -292,11 +292,11 @@ describe("application routes", () => {
   });
 
   test.each([
-    ["#/learn/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", pages: [] }],
-    ["#/gallery/missing", { contract_version: "2.0.0", dataset_version: "0.2.0", cases: [] }],
+    ["#/learn/missing", { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, pages: [] }],
+    ["#/gallery/missing", { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, cases: [] }],
     [
       "#/compare/missing",
-      { contract_version: "2.0.0", dataset_version: "0.2.0", comparisons: [] },
+      { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, comparisons: [] },
     ],
   ])("%s uses the common Not Found page for an unknown entity ID", async (hash, payload) => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {

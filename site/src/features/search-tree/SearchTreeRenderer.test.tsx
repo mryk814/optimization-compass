@@ -27,4 +27,21 @@ describe("SearchTreeRenderer", () => {
     fireEvent.keyDown(items[0], { key: "ArrowDown" });
     expect(items[1]).toHaveFocus();
   });
+
+  test("accepts a unique heading identity when multiple trees share one page", () => {
+    const artifact = parseSearchTreeArtifact(artifactFixture);
+    const payload = parseSearchTreeFramePayload(artifact.trace.frames.at(-1)!.payload);
+    render(
+      <SearchTreeRenderer
+        headingId="comparison-tree-reference"
+        headingLabel="証明runの探索木"
+        payload={payload}
+      />,
+    );
+
+    const heading = screen.getByRole("heading", { level: 2, name: "証明runの探索木" });
+    expect(heading).toHaveAttribute("id", "comparison-tree-reference");
+    expect(heading.closest("section")).toHaveAttribute("aria-labelledby", "comparison-tree-reference");
+    expect(document.querySelector("#search-tree-heading")).not.toBeInTheDocument();
+  });
 });

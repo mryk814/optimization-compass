@@ -201,7 +201,8 @@ caption {
   line-height: 1.5;
 }
 
-.search-tree-page {
+.search-tree-page,
+.search-tree-comparison {
   --search-accent: #285740;
   --search-focus: #174c85;
   --search-line: #d7d6ce;
@@ -1476,6 +1477,15 @@ caption {
 .comparison-return-links h2 { flex-basis: 100%; margin: 0 0 .15rem; color: #425149; font-size: .85rem; }
 .comparison-return-links a { color: #285740; font-size: .72rem; font-weight: 700; text-underline-offset: 2px; }
 .comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; margin-top: .65rem; }
+.search-tree-comparison > header { margin: 1rem 0 .65rem; }
+.search-tree-comparison > header h2 { margin: 0 0 .2rem; font-size: 1.05rem; }
+.search-tree-comparison > header p { margin: 0; color: #59645d; font-size: .76rem; }
+.search-tree-comparison-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.search-tree-comparison-card { overflow: hidden; }
+.comparison-search-tree-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .35rem; margin: .6rem 0; }
+.comparison-search-tree-metrics div { min-width: 0; padding: .45rem; border: 1px solid var(--search-line); border-radius: .4rem; background: #f8faf6; }
+.comparison-search-tree-metrics dt { color: var(--search-muted); font-size: .62rem; font-weight: 750; }
+.comparison-search-tree-metrics dd { margin: .15rem 0 0; font-size: .75rem; font-weight: 750; overflow-wrap: anywhere; }
 .comparison-card, .content-card, .gallery-card { min-width: 0; padding: .65rem; border: 1px solid #d9dbd4; border-radius: .45rem; background: #fff; }
 .comparison-card header { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
 .comparison-card h2, .content-card h2, .gallery-card h2 { margin: 0; font-size: .9rem; }
@@ -1797,6 +1807,7 @@ caption {
   .comparison-factor-grid, .comparison-policy-grid { grid-template-columns: minmax(0, 1fr); }
   .comparison-factor-grid article, .comparison-factor-grid article:first-child { border-top: 1px solid #dce4dc; border-left: 0; }
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }
+  .search-tree-comparison-grid, .comparison-search-tree-metrics { grid-template-columns: minmax(0, 1fr); }
   .nm-layout { grid-template-columns: minmax(0, 1fr); }
   .linked-surface-card { padding: .6rem; }
   .linked-surface-card > header { grid-template-columns: minmax(0, 1fr); }

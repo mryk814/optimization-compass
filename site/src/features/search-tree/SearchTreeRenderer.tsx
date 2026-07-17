@@ -16,10 +16,14 @@ export function SearchTreeRenderer({
   payload,
   visibleLayers,
   focusTarget,
+  headingId = "search-tree-heading",
+  headingLabel = "探索木",
 }: {
   payload: SearchTreeFramePayload;
   visibleLayers?: readonly string[];
   focusTarget?: string;
+  headingId?: string;
+  headingLabel?: string;
 }) {
   const visible = new Set(visibleLayers ?? ["search_nodes", "global_bound", "incumbent", "prune_reason"]);
   const [focusedNodeId, setFocusedNodeId] = useState(payload.active_node_id ?? payload.nodes[0].node_id);
@@ -73,10 +77,10 @@ export function SearchTreeRenderer({
   return (
     <section
       className="search-tree-renderer"
-      aria-labelledby="search-tree-heading"
+      aria-labelledby={headingId}
       data-guided-focus={focusTarget}
     >
-      <h2 id="search-tree-heading">探索木</h2>
+      <h2 id={headingId}>{headingLabel}</h2>
       <dl className="search-tree-metrics" aria-label="探索の現在値">
         {visible.has("incumbent") && <Metric label="Best feasible" value={payload.best_feasible_value ?? "未発見"} />}
         {visible.has("global_bound") && <Metric label="Global bound" value={payload.global_bound.toFixed(2)} />}
