@@ -455,20 +455,20 @@
       "sha256": "4d4df49fdd35c445f81c5d1d9ab14d598d873806f220c64ba3a433c6c370965c"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-lbfgsb.json": {
-      "bytes": 22640,
-      "sha256": "ed90e46b439253aced02ded925998c399ffe59083db2ff67ce355c54c4544dfc"
+      "bytes": 22741,
+      "sha256": "6cae70d31ef7176c9b3e1afa271978f537c16e85d47aa5c46af05bfc0c79768a"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-lm.json": {
-      "bytes": 22634,
-      "sha256": "c2f035ca6610a38cded8f251737bb9f00c45eb01bd8a75c3875a30b350398027"
+      "bytes": 22735,
+      "sha256": "6a1b2de4dd8ea4d0a4bf838043392595044e726a062aeb4c63acdb66803b4e58"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-trf-poor-init.json": {
-      "bytes": 22368,
-      "sha256": "8dc549c289b37a9463e949293c8e4f724e2fde1475ec6634e1e8d50f21aaacd3"
+      "bytes": 22451,
+      "sha256": "180bfbf809318c1ef67d401c47950737979ee6af1546ada5f22dae7d4ba54808"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-trf.json": {
-      "bytes": 22648,
-      "sha256": "9fb9cf44f134261f709d964f7dc14a05b4ccbe6c867b511e69eec79f57bac291"
+      "bytes": 22749,
+      "sha256": "f08795248af46dab76e49d2e33685b877a84f1a9942f431d73129e0763111d8c"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/gradient_descent-quadratic-divergence.json": {
       "bytes": 53138,
@@ -524,7 +524,7 @@
     },
     "optimization_method_selection_database_v0.12.0_site-data/visualization-scenarios.json": {
       "bytes": 176082,
-      "sha256": "57b5615cf5335ac90d4ce3718b30d9893a2cc6a0ebbd27040a0c87b8dab14a41"
+      "sha256": "98504e8b7512e9eabaac548fc21d768897d26ddf1f2ad8eb4bd83701f23f9de4"
     },
     "optimization_method_selection_database_v0.12.0_site-data/visualizations/biobjective-quadratic-pareto-front.json": {
       "bytes": 23935,

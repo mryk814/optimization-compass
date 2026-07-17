@@ -2006,9 +2006,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 22648,
+        "payload_bytes": 22749,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "9fb9cf44f134261f709d964f7dc14a05b4ccbe6c867b511e69eec79f57bac291",
+        "payload_sha256": "f08795248af46dab76e49d2e33685b877a84f1a9942f431d73129e0763111d8c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2194,9 +2194,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 22368,
+        "payload_bytes": 22451,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "8dc549c289b37a9463e949293c8e4f724e2fde1475ec6634e1e8d50f21aaacd3",
+        "payload_sha256": "180bfbf809318c1ef67d401c47950737979ee6af1546ada5f22dae7d4ba54808",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2396,9 +2396,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 22634,
+        "payload_bytes": 22735,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "c2f035ca6610a38cded8f251737bb9f00c45eb01bd8a75c3875a30b350398027",
+        "payload_sha256": "6a1b2de4dd8ea4d0a4bf838043392595044e726a062aeb4c63acdb66803b4e58",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2584,9 +2584,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 22640,
+        "payload_bytes": 22741,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "ed90e46b439253aced02ded925998c399ffe59083db2ff67ce355c54c4544dfc",
+        "payload_sha256": "6cae70d31ef7176c9b3e1afa271978f537c16e85d47aa5c46af05bfc0c79768a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
