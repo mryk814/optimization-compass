@@ -33,6 +33,7 @@ RESIDUAL_NORM_TOLERANCE = 1e-6
 GRADIENT_NORM_TOLERANCE = 1e-6
 PROBE_DAMPING = 0.25
 PROBE_STEP_RADIUS = 0.5
+TRACE_DECIMAL_PLACES = 12
 
 
 @dataclass(frozen=True)
@@ -158,6 +159,9 @@ def _generate_trace(*, dataset_version: str, preset: TracePreset) -> AlgorithmTr
             "probe_update_rule": "damped_gauss_newton",
             "probe_damping": PROBE_DAMPING,
             "probe_step_radius": PROBE_STEP_RADIUS,
+            "numeric_canonicalization": (
+                "round_half_even_12_decimal_places_after_each_update_and_before_export"
+            ),
             "solver_execution": False,
             "condition_lens": preset.condition_en,
             "condition_lens_ja": preset.condition_ja,
@@ -215,7 +219,7 @@ def _diagnostic_probe_update(problem: RuntimeProblem, point: Sequence[float]) ->
     if step_norm > PROBE_STEP_RADIUS:
         step = [value * PROBE_STEP_RADIUS / step_norm for value in step]
     return [
-        max(lower, min(upper, value + delta))
+        _canonicalize_trace_value(max(lower, min(upper, value + delta)))
         for value, delta, lower, upper in zip(point, step, LOWER_BOUNDS, UPPER_BOUNDS, strict=True)
     ]
 
@@ -246,6 +250,24 @@ def validate_stopping_consistency(
     terminal_status: TerminalStatus,
 ) -> None:
     """Reject a trace that records updates after its first satisfied stop criterion."""
+    budget = stopping.get("max_oracle_evaluations")
+    if isinstance(budget, (int, float)):
+        first_budget = next(
+            (
+                index
+                for index, frame in enumerate(frames)
+                if frame.oracle_evaluations >= int(budget)
+            ),
+            None,
+        )
+        if first_budget is not None and first_budget != len(frames) - 1:
+            raise ValueError("parameter-estimation trace contains frames after evaluation budget")
+        if any(frame.oracle_evaluations > int(budget) for frame in frames):
+            raise ValueError("parameter-estimation trace exceeds evaluation budget")
+        if terminal_status == "budget_exhausted" and frames[-1].oracle_evaluations < int(budget):
+            raise ValueError(
+                "budget-exhausted terminal status requires using the evaluation budget"
+            )
     first_stop = next(
         (index for index, frame in enumerate(frames) if _meets_stopping_criterion(frame, stopping)),
         None,
@@ -301,8 +323,8 @@ def _frame(problem: RuntimeProblem, point: list[float], *, frame_index: int) -> 
             TracePoint(
                 point_id="parameters",
                 role="parameter-estimate",
-                coordinates=point,
-                value=objective,
+                coordinates=[_canonicalize_trace_value(value) for value in point],
+                value=_canonicalize_trace_value(objective),
                 label_ja="診断probe parameter [a, k, c]",
                 label_en="diagnostic-probe parameters [a, k, c]",
             )
@@ -313,14 +335,14 @@ def _frame(problem: RuntimeProblem, point: list[float], *, frame_index: int) -> 
                 metric_id="residual_norm",
                 label_ja="残差norm",
                 label_en="Residual norm",
-                value=residual_norm,
+                value=_canonicalize_trace_value(residual_norm),
                 unit="response",
             ),
             TraceMetric(
                 metric_id="gradient_norm",
                 label_ja="scalar目的のgradient norm",
                 label_en="Scalar-objective gradient norm",
-                value=gradient_norm,
+                value=_canonicalize_trace_value(gradient_norm),
                 unit="objective/parameter",
             ),
             TraceMetric(
@@ -334,7 +356,7 @@ def _frame(problem: RuntimeProblem, point: list[float], *, frame_index: int) -> 
                 metric_id="parameter_error",
                 label_ja="既知truthからの距離",
                 label_en="Distance from known truth",
-                value=parameter_error,
+                value=_canonicalize_trace_value(parameter_error),
                 unit="parameter distance",
             ),
         ],
@@ -346,6 +368,11 @@ def _frame(problem: RuntimeProblem, point: list[float], *, frame_index: int) -> 
             "not_scipy_or_ceres_internal_iterations": True,
         },
     )
+
+
+def _canonicalize_trace_value(value: float) -> float:
+    """Remove platform libm drift at the documented educational-trace boundary."""
+    return round(float(value), TRACE_DECIMAL_PLACES)
 
 
 def _matrix_rank(rows: Sequence[Sequence[float]]) -> int:

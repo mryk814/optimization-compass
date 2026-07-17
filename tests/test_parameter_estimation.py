@@ -9,10 +9,12 @@ from optimization_compass.parameter_estimation import (
     NORMAL_INITIAL_POINT,
     POOR_INITIALIZATION_SCENARIO_ID,
     PRIMARY_SCENARIO_ID,
+    TRACE_DECIMAL_PLACES,
     generate_parameter_estimation_traces,
     validate_stopping_consistency,
 )
 from optimization_compass.problem_registry import get_runtime_problem
+from optimization_compass.trace_models import canonical_trace_bytes
 from optimization_compass.visualization_scenarios import scenario_identity
 
 
@@ -79,6 +81,36 @@ def test_parameter_estimation_trace_rejects_frames_after_first_stop() -> None:
 
     with pytest.raises(ValueError, match="frames after a stopping criterion"):
         validate_stopping_consistency(trace.frames[:2], stopping, "converged")
+
+
+def test_parameter_estimation_trace_rejects_thirteenth_evaluation() -> None:
+    trace = generate_parameter_estimation_traces(dataset_version="0.12.0")[0]
+    thirteenth = trace.frames[-1].model_copy(
+        update={"frame_index": 12, "iteration": 12, "oracle_evaluations": 13}
+    )
+
+    with pytest.raises(ValueError, match="frames after evaluation budget"):
+        validate_stopping_consistency(
+            [*trace.frames, thirteenth], trace.stopping, "budget_exhausted"
+        )
+
+
+def test_parameter_estimation_trace_values_are_canonical_and_byte_repeatable() -> None:
+    first = generate_parameter_estimation_traces(dataset_version="0.12.0")
+    second = generate_parameter_estimation_traces(dataset_version="0.12.0")
+
+    assert [canonical_trace_bytes(trace) for trace in first] == [
+        canonical_trace_bytes(trace) for trace in second
+    ]
+    for trace in first:
+        assert trace.parameters["numeric_canonicalization"] == (
+            "round_half_even_12_decimal_places_after_each_update_and_before_export"
+        )
+        for frame in trace.frames:
+            values = [metric.value for metric in frame.metrics]
+            values.extend(coordinate for point in frame.points for coordinate in point.coordinates)
+            values.extend(point.value for point in frame.points if point.value is not None)
+            assert all(value == round(value, TRACE_DECIMAL_PLACES) for value in values)
 
 
 def test_parameter_estimation_scenarios_do_not_expand_canonical_metadata_contract() -> None:
