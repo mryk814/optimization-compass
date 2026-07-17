@@ -83,14 +83,25 @@ export function buildReadableProblemFormulation(
 }
 
 function variableSymbols(instance: ProblemInstance): string[] {
+  const boundKeys = Object.keys(instance.bounds).slice(0, instance.dimension);
+  if (boundKeys.length === instance.dimension && boundKeys.every(isReadableSymbol)) {
+    return boundKeys;
+  }
+
   const axisLabels = instance.display.axis_labels;
   if (
     Array.isArray(axisLabels)
-    && axisLabels.slice(0, instance.dimension).every((label) => typeof label === "string" && label)
+    && axisLabels.slice(0, instance.dimension).every((label) => (
+      typeof label === "string" && isReadableSymbol(label)
+    ))
   ) {
     return axisLabels.slice(0, instance.dimension) as string[];
   }
   return Array.from({ length: instance.dimension }, (_, index) => `x${subscript(index + 1)}`);
+}
+
+function isReadableSymbol(value: string): boolean {
+  return /^[\p{L}_][\p{L}\p{N}_₀-₉]*$/u.test(value);
 }
 
 function domain(variableDomain: string, dimension: number): string {
@@ -139,8 +150,9 @@ function constraintExpressions(instance: ProblemInstance): string[] {
 }
 
 function boundExpressions(instance: ProblemInstance, symbols: string[]): string[] {
+  const boundKeys = Object.keys(instance.bounds);
   return symbols.flatMap((symbol, index) => {
-    const key = Object.keys(instance.bounds)[index];
+    const key = Object.hasOwn(instance.bounds, symbol) ? symbol : boundKeys[index];
     const value = key ? instance.bounds[key] : undefined;
     if (
       !Array.isArray(value)
