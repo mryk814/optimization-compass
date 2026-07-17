@@ -800,18 +800,18 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
         },
         "canonical_problem_instance": {
           "reason_codes": [],
@@ -821,16 +821,17 @@
           ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/budget-allocation",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
             "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_NELDER_MEAD",
+            "/sources/S002",
             "/sources/S005",
             "/sources/S016",
             "/sources/S021",
@@ -838,7 +839,6 @@
             "/sources/S023",
             "/sources/S053",
             "/sources/S054",
-            "/sources/S055",
             "/sources/S079"
           ]
         },
@@ -877,10 +877,13 @@
           "state": "complete",
           "target_ids": [
             "/gallery/budget-allocation",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
             "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_NELDER_MEAD",
+            "/sources/S002",
             "/sources/S005",
             "/sources/S016",
             "/sources/S021",
@@ -888,16 +891,14 @@
             "/sources/S023",
             "/sources/S053",
             "/sources/S054",
-            "/sources/S055",
             "/sources/S079"
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
+            "S002",
             "S005",
             "S016",
             "S021",
@@ -905,7 +906,6 @@
             "S023",
             "S053",
             "S054",
-            "S055",
             "S079"
           ]
         },
@@ -913,6 +913,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
             "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
           ]
         },
@@ -931,13 +932,8 @@
         }
       },
       "journey_id": "budget-allocation",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "cross_surface_links",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1509,7 +1505,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.13.0",
+  "dataset_version": "0.14.0",
   "generated_at": "2026-07-17T00:00:00Z",
   "journeys": [
     {
@@ -1534,7 +1530,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -1627,7 +1623,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -1696,7 +1692,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -1757,7 +1753,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -1818,7 +1814,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1882,7 +1878,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1924,13 +1920,13 @@
       ],
       "canonical_url": "/gallery/budget-allocation",
       "case_id": "budget-allocation",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+          "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -1938,32 +1934,39 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
       ],
       "formulation": {
-        "constraints": "予算上限、最低実施数、相互排他条件。",
-        "decision_variables": "各施策を選ぶか、いくら配分するか。",
-        "objective": "期待効果の合計を最大化する。",
+        "constraints": "選択した施策の費用合計を予算以下にする。固定教材では 4x_A+3x_B+2x_D+3x_C≤7。",
+        "decision_variables": "各施策 i を選ぶとき1、選ばないとき0となるbinary変数 x_i。固定教材では [x_A,x_B,x_D,x_C]∈{0,1}⁴。",
+        "objective": "選択した施策の期待効果を最大化する。固定教材では max 9x_A+6x_B+4x_D+5x_C。",
         "variable_domain_summary": "binary"
       },
       "implementation_ids": [
         "I_ORTOOLS_CPSAT"
       ],
       "journey_id": "budget-allocation",
-      "last_reviewed": "2026-07-14",
-      "learning_objective": "複数施策に予算を配分し、効果を最大化したい。",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
       "limitations": [
-        "固定した期待効果を前提とする教材modelであり、施策間の相互作用や将来の効果変動は別途検証が必要です。"
+        "4施策・固定費用・固定期待効果の教育用0-1 knapsackです。施策間相互作用、効果の不確実性、実solverのcut・presolve性能、大規模instanceでの一般性能は示しません。"
       ],
       "prerequisite_journey_ids": [],
-      "problem_archetype_id": "PA006",
+      "problem_archetype_id": "PA032",
       "problem_instance_ids": [
         "INSTANCE_BINARY_KNAPSACK_4"
       ],
       "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
         {
           "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
           "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
@@ -1973,6 +1976,7 @@
         }
       ],
       "source_ids": [
+        "S002",
         "S005",
         "S016",
         "S021",
@@ -1980,11 +1984,10 @@
         "S023",
         "S053",
         "S054",
-        "S055",
         "S079"
       ],
-      "status": "partial",
-      "takeaway": "実測効果の不確実性と、予算制約の単位を分けて確認します。",
+      "status": "complete",
+      "takeaway": "Caseは施策選択、Theaterは同じ数式の4品目instanceとして読みます。incumbent、global bound、gap、feasibility、停止理由を一緒に記録します。",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する"
     },
@@ -2008,7 +2011,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2085,7 +2088,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2179,7 +2182,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2244,7 +2247,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.13.0",
+      "dataset_version": "0.14.0",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -2815,12 +2818,6 @@
       "reason_code": "scenario_without_journey"
     },
     {
-      "asset_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "SCENARIO_GD_QUADRATIC",
       "asset_type": "scenario",
       "policy": "warning",
@@ -2881,12 +2878,6 @@
       "reason_code": "public_artifact_without_journey"
     },
     {
-      "asset_id": "binary-knapsack-bnb-budget",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
       "asset_id": "gradient_descent-quadratic",
       "asset_type": "visualization_artifact",
       "policy": "warning",
@@ -2938,9 +2929,9 @@
   "summary": {
     "milestone_status": "not_met",
     "status_counts": {
-      "complete": 3,
+      "complete": 4,
       "draft": 0,
-      "partial": 8
+      "partial": 7
     },
     "target_complete_journeys": 5,
     "total_journeys": 11

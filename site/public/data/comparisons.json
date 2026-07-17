@@ -822,8 +822,137 @@
       "title_en": "Read acquisition, noise, and a random baseline under one budget",
       "title_ja": "acquisition・noise・random baselineを同じbudgetで読む",
       "tuning_policy": "explore ξ=0.18、exploit ξ=0、noise σ∈{0,0.08}を事前固定し、run後に変更しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 9
+      },
+      "canonical_comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+      "case_id": "budget-allocation",
+      "caveat": "教育用Branch-and-Bound generatorの停止感度です。CP-SAT、MIP solver、総当たり実装の速度や一般性能を順位付けしません。",
+      "changed_factors": [
+        "node_stop_limitだけを9から4へ変える"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "comparison_question": "16割当を調べる可能性がある問題で、同じbound-pruned探索を4 nodeで止めると、incumbent・bound・gap・feasibilityの読み方はどう変わる？",
+      "fairness_note": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。",
+      "fixed_factors": [
+        "problem instance INSTANCE_BINARY_KNAPSACK_4",
+        "depth-first include-first strategy",
+        "initial heuristic incumbent value 13",
+        "seed 0",
+        "oracle evaluation budget 9",
+        "fractional-knapsack upper bound"
+      ],
+      "formulation_summary": "max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7, [A,B,D,C]∈{0,1}⁴。",
+      "identity_status": "canonical",
+      "journey_id": "budget-allocation",
+      "last_verified": "2026-07-17",
+      "limitations": [
+        "4変数の決定的な教材instanceだけを扱う。",
+        "cut生成、presolve、並列探索、wall-clock、memoryを比較しない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "binary-knapsack-bnb-complete",
+            "artifact_kind": "executable_trace",
+            "payload_path": "search-trees/binary-knapsack-bnb-complete.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "search_tree"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 9
+          },
+          "label_en": "Proof completed within 9 nodes",
+          "label_ja": "9 node以内で証明完了",
+          "member_id": "bnb-complete",
+          "method_id": "M_BRANCH_BOUND",
+          "parameters": {
+            "node_stop_limit": 9
+          },
+          "role": "complete_reference",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        },
+        {
+          "artifact": {
+            "artifact_id": "binary-knapsack-bnb-budget",
+            "artifact_kind": "executable_trace",
+            "payload_path": "search-trees/binary-knapsack-bnb-budget.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "search_tree"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 9
+          },
+          "label_en": "Stopped at 4 nodes",
+          "label_ja": "4 nodeで予算停止",
+          "member_id": "bnb-budget-stop",
+          "method_id": "M_BRANCH_BOUND",
+          "parameters": {
+            "node_stop_limit": 4
+          },
+          "role": "budget_stop_sensitivity",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "none",
+          "label_ja": "展開node数",
+          "metric_id": "explored_nodes",
+          "unit": "nodes"
+        },
+        {
+          "direction": "maximize",
+          "label_ja": "best feasible値",
+          "metric_id": "incumbent",
+          "unit": "objective value"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "大域上界",
+          "metric_id": "global_bound",
+          "unit": "objective bound"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "絶対gap",
+          "metric_id": "absolute_gap",
+          "unit": "objective gap"
+        },
+        {
+          "direction": "target",
+          "label_ja": "incumbentの可行性",
+          "metric_id": "feasibility",
+          "unit": "status"
+        }
+      ],
+      "mode": "failure_contrast",
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "ranking_eligible": false,
+      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明です。",
+      "title_en": "Compare search completion with a node-stop limit",
+      "title_ja": "探索完了とnode予算停止を同じ上限で比べる",
+      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.13.0"
+  "dataset_version": "0.14.0"
 }

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.13.0",
+  "dataset_version": "0.14.0",
   "entities": [
     {
       "aliases": [],
@@ -657,24 +657,64 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
+          "target_id": "S002",
           "target_type": "source"
         },
         {
           "relation_type": "evidence",
-          "target_id": "S055",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
           "target_type": "source"
         },
         {
           "relation_type": "excluded_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
         },
         {
           "relation_type": "feature_value",
@@ -693,13 +733,18 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA006",
+          "target_id": "PA032",
           "target_type": "problem"
         },
         {
           "relation_type": "visualization",
-          "target_id": "binary-knapsack-bnb-complete",
-          "target_type": "trace"
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -707,7 +752,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "複数施策に予算を配分し、効果を最大化したい。"
+      "summary": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。"
     },
     {
       "aliases": [],
@@ -1480,6 +1525,67 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+      "entity_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "探索完了とnode予算停止を同じ上限で比べる",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "budget-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。"
     },
     {
       "aliases": [],
@@ -12751,9 +12857,19 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
         },
         {
           "relation_type": "evidence",
@@ -12792,11 +12908,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S055",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S079",
           "target_type": "source"
         },
@@ -12804,6 +12915,11 @@
           "relation_type": "excluded_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
         },
         {
           "relation_type": "implementation",
@@ -12827,11 +12943,11 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA006",
+          "target_id": "PA032",
           "target_type": "problem"
         }
       ],
-      "summary": "複数施策に予算を配分し、効果を最大化したい。"
+      "summary": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。"
     },
     {
       "aliases": [],
@@ -14779,6 +14895,11 @@
       "external_url": null,
       "label": "branch-and-bound",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S005",
@@ -18893,18 +19014,8 @@
       "relations": [
         {
           "relation_type": "case",
-          "target_id": "budget-allocation",
-          "target_type": "case"
-        },
-        {
-          "relation_type": "case",
           "target_id": "shift-scheduling",
           "target_type": "case"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "budget-allocation",
-          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -19193,7 +19304,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "knapsack・set cover",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "budget-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
+        }
+      ],
       "summary": "knapsack・set cover。変数=binary、目的=linear、制約=combinatorial。"
     },
     {
@@ -19589,6 +19711,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S021",
           "target_type": "source"
@@ -19602,6 +19729,11 @@
           "relation_type": "evidence",
           "target_id": "S079",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
         }
       ],
       "summary": "上界とincumbentが探索範囲を狭める過程を読む"
@@ -19618,6 +19750,11 @@
           "relation_type": "artifact",
           "target_id": "binary-knapsack-bnb-complete",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -21565,6 +21702,11 @@
       "label": "0-1 knapsack: node予算で停止",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S021",
           "target_type": "source"
@@ -21610,6 +21752,11 @@
       "external_url": null,
       "label": "0-1 knapsack: 最適性証明",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S021",
@@ -22087,6 +22234,26 @@
           "target_type": "method"
         }
       ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "relations": [],
       "summary": ""
     },
     {
