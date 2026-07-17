@@ -13,7 +13,7 @@ describe("case-bound comparison contract", () => {
     expect(new Set(parsed.comparisons.flatMap((comparison) => (
       comparison.members.map((member) => member.artifact.renderer_family)
     )))).toEqual(new Set([
-      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "surrogate_uncertainty",
+      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "search_tree", "surrogate_uncertainty",
     ]));
   });
 

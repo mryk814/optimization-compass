@@ -14,6 +14,8 @@ from optimization_compass.comparisons import (
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
     generate_search_tree_artifact,
 )
 from optimization_compass.site_export import _visualization_scenario
@@ -177,6 +179,14 @@ def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
     context = _knapsack_context()
 
     validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context["initialization"]["heuristic_incumbent_value"] = 12
+    with pytest.raises(ValueError, match="initialization differs"):
+        validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context = _knapsack_context()
+    context["initialization"]["heuristic_incumbent_assignment"] = {"A": 1}
+    with pytest.raises(ValueError, match="initialization differs"):
+        validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context = _knapsack_context()
     context["stopping"] = {"policy": "member_node_stop_limit", "member_values": [3, 9]}
     with pytest.raises(ValueError, match="member values differ"):
         validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
@@ -265,7 +275,8 @@ def _knapsack_context() -> dict[str, object]:
         "initialization": {
             "policy": "fixed_empty_assignment_with_heuristic_incumbent",
             "points": [0.0, 0.0, 0.0, 0.0],
-            "heuristic_incumbent_value": 13,
+            "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+            "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
         },
         "seed_status": "fixed",
         "seed_value": 0,

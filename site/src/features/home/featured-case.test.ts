@@ -20,7 +20,7 @@ const gallery = {
 const problems = problemCatalog(caseIds);
 
 describe("featured Home case", () => {
-  test("selects the complete constrained-design journey and problem from current release data", () => {
+  test("selects the highest-ranked complete journey and problem from current release data", () => {
     const featured = selectFeaturedCase(
       parseGalleryIndex(rawGallery),
       parseLearningJourneyIndex(rawLearningJourneys),
@@ -28,14 +28,14 @@ describe("featured Home case", () => {
     );
 
     expect(featured).toMatchObject({
-      canonicalUrl: "/gallery/constrained-design",
+      canonicalUrl: "/gallery/budget-allocation",
       formulation: {
-        sense: "minimize",
-        variables: "(x, y) ∈ ℝ²",
+        sense: "maximize",
+        variables: "(A, B, D, C) ∈ {0, 1}⁴",
       },
-      item: { case_id: "constrained-design" },
-      problemDefinition: { problem_definition_id: "PROBLEM_CONSTRAINED_CONTINUOUS_2D" },
-      problemInstance: { problem_instance_id: "INSTANCE_CONSTRAINED_DISK_2D" },
+      item: { case_id: "budget-allocation" },
+      problemDefinition: { problem_definition_id: "PROBLEM_BINARY_KNAPSACK" },
+      problemInstance: { problem_instance_id: "INSTANCE_BINARY_KNAPSACK_4" },
     });
   });
 

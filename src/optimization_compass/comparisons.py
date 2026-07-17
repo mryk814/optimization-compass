@@ -10,6 +10,8 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
 )
 from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
@@ -20,6 +22,13 @@ from optimization_compass.visualization_scenarios import VisualizationScenario
 _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "search_tree": (SEARCH_TREE_GENERATOR_ID, SEARCH_TREE_GENERATOR_VERSION),
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
+}
+_EDUCATIONAL_INITIALIZATION_BY_RENDERER = {
+    "search_tree": {
+        "policy": "fixed_empty_assignment_with_heuristic_incumbent",
+        "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+        "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+    }
 }
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
@@ -254,6 +263,7 @@ def _validate_exact_comparison_context(
     ) != implementation.get("generator_version"):
         raise ValueError("educational comparison generator identity is inconsistent")
     expected_generators: set[tuple[str, str]] = set()
+    renderer_families: set[str] = set()
     for member in comparison.members:
         scenario = scenarios_by_id.get(member.scenario_id)
         if scenario is None:
@@ -267,6 +277,7 @@ def _validate_exact_comparison_context(
                 f"{scenario.artifact.renderer_family}"
             )
         expected_generators.add(expected_generator)
+        renderer_families.add(scenario.artifact.renderer_family)
     if len(expected_generators) != 1 or (
         runtime.get("generator_id"),
         runtime.get("generator_version"),
@@ -274,6 +285,15 @@ def _validate_exact_comparison_context(
         raise ValueError("educational comparison context uses an unknown generator")
     if context.get("seed_status") != "fixed" or context.get("seed_value") is None:
         raise ValueError("exact educational comparison context requires one fixed seed")
+    if len(renderer_families) != 1:
+        raise ValueError("exact educational comparison must use one renderer family")
+    expected_initialization = _EDUCATIONAL_INITIALIZATION_BY_RENDERER.get(
+        next(iter(renderer_families))
+    )
+    if expected_initialization is not None and any(
+        initialization.get(key) != value for key, value in expected_initialization.items()
+    ):
+        raise ValueError("exact benchmark initialization differs from canonical generator")
     initial_points = initialization.get("points")
     member_parameter = runtime.get("member_parameter")
     expected_member_values = stopping.get("member_values")

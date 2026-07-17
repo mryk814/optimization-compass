@@ -13,6 +13,15 @@ SEARCH_TREE_CONTRACT_VERSION: Literal["1.0.0"] = "1.0.0"
 SEARCH_TREE_GENERATOR_ID = "educational.branch_bound.knapsack.v1"
 SEARCH_TREE_GENERATOR_VERSION = "1.1.0"
 SEARCH_TREE_EVALUATION_BUDGET = 9
+SEARCH_TREE_INITIAL_ASSIGNMENT: dict[str, Literal[0, 1]] = {}
+SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT: dict[str, Literal[0, 1]] = {
+    "A": 1,
+    "B": 0,
+    "D": 1,
+    "C": 0,
+}
+SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE = 13
+SEARCH_TREE_HEURISTIC_INCUMBENT_WEIGHT = 6
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 NodeState = Literal[
@@ -349,9 +358,9 @@ def generate_search_tree_artifact(
     incumbent = SearchTreeIncumbent(
         node_id=None,
         source="heuristic",
-        assignment={"A": 1, "B": 0, "D": 1, "C": 0},
-        value=13,
-        weight=6,
+        assignment=SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+        value=SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+        weight=SEARCH_TREE_HEURISTIC_INCUMBENT_WEIGHT,
     )
     append(
         "incumbent_update",
@@ -564,7 +573,12 @@ def generate_search_tree_artifact(
                 for item in _ITEMS
             ],
         },
-        initial_state={"assignment": {}, "heuristic_incumbent": 13},
+        initial_state={
+            "assignment": SEARCH_TREE_INITIAL_ASSIGNMENT,
+            "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+            "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+            "heuristic_incumbent_weight": SEARCH_TREE_HEURISTIC_INCUMBENT_WEIGHT,
+        },
         seed={"status": "fixed", "value": 0},
         evaluation_budget=evaluation_budget,
         stopping={"max_nodes": node_stop_limit},

@@ -9,6 +9,8 @@ from typing import Any
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
 )
 from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
@@ -360,7 +362,8 @@ def _benchmark_context_fixtures(
                 {
                     "policy": "fixed_empty_assignment_with_heuristic_incumbent",
                     "points": [0.0, 0.0, 0.0, 0.0],
-                    "heuristic_incumbent_value": 13,
+                    "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+                    "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
                 }
             ),
             "seed_status": "fixed",
