@@ -57,17 +57,17 @@ source commit, matching tag, and external output directory fails before changing
 | Current runtime SQLite and `DATASET_VERSION` | retained | retained | Python runtime authority |
 | Current generated Pages data | retained | retained | Current site only |
 | Current manifest, release identity, report, schema | retained | retained | Compact verification and documentation |
-| Full JSON/JSONL/CSV/Excel and versioned site-data | not added after 0.12.0 | retained | Download distribution |
+| Full JSON/JSONL/CSV/Excel and versioned site-data | not retained | retained | Download distribution; only the pinned 0.2.0 SQLite base remains in Git |
 | Historical compact catalog | retained | bundled at publication time | Generated public discovery input |
 | Licenses and attribution | retained at project root | included in every bundle | Never fetched separately for verification |
 | Small focused fixtures | retained | not required | Tests must not become historical bundles |
 
 ## Publication and failure boundaries
 
-This ADR separates deterministic local preparation from external publication. A later migration step
-will upload and verify historical bundles, populate the catalog, remove historical working-tree copies,
-and enable immutable GitHub Releases. This first step does not delete a historical file, create or move a
-tag, publish an asset, or enable a repository setting.
+This ADR separates deterministic local preparation from external publication. The historical bundles
+have been uploaded and independently verified, the catalog is populated, and historical working-tree
+copies are removed except for the pinned 0.2.0 SQLite build base. Enabling immutable GitHub Releases
+remains a separate repository-setting operation.
 
 Bundle preparation happens before atomic source promotion. If staging, packing, catalog validation, or
 target preparation fails, tracked targets remain unchanged. If replacement fails, data, runtime,
@@ -83,9 +83,9 @@ external publication is investigated.
 ## Repository growth gate
 
 `scripts/repository_size.py` reports both checkout bytes and Git-index blob bytes. The latter is stable
-across line-ending settings and is the CI gate. PR A grandfathers the exact 0.2.0–0.12.0 distribution
-set and rejects a new tracked version or growth beyond that baseline. The migration PR will lower the
-allowlist and byte ceiling after remote assets have been independently verified.
+across line-ending settings and is the CI gate. After remote verification, the allowlist and byte
+ceiling were lowered to the exact retained v0.2.0 SQLite blob: 3,506,176 bytes. A new tracked historical
+version or any growth beyond that baseline fails the gate.
 
 ## Consequences
 
@@ -119,5 +119,5 @@ anonymous verification. Their tracked, internally consistent bundle reconstructi
 authority; it is not represented as a byte-for-byte aggregate of historically inconsistent loose
 manifest/release-identity assets. Before download, the selected remote must identify the repository in
 the reviewed plan and a single strict remote tag inventory must prove all 14 tags still target their
-reviewed source commits. Catalog publication and cleanup wait until all 14 bundles pass anonymous
-verification. Normal tests and staged builds do not contact the remote.
+reviewed source commits. All 14 reconstructed bundles passed anonymous verification before catalog
+publication and cleanup. Normal tests and staged builds do not contact the remote.

@@ -1,8 +1,0 @@
-revision_id,trigger_case_ids,issue_found,schema_change,reason,version,date
-\SMR001,\SEC028;EC001;EC010,\S求根・閉形式・LP/graph等を汎用最適化の同列候補にすると誤推奨になる。,\Salternative_solution_checksを独立entityとして追加し、problem_archetypesからmany-to-many参照。,\S『最適化algorithmを選ぶ前に問題を正しく還元する』判断を表現するため。,\S0.1.0,\S2026-07-13
-\SMR002,\SEC004;EC005;EC006;EC007;EC027,\Sblack-boxという一語では次元・費用・noise・失敗・並列性を区別できない。,\Sevaluation_cost、noise_level、evaluation_reliability、parallel_budget、derivative_accessを独立feature化。,\SBO、direct search、SPSA、evolutionaryの選択条件が相互に異なるため。,\S0.1.0,\S2026-07-13
-\SMR003,\SEC003;EC010;EC021;EC022,\S一般algorithm名とlibrary/API指定名を同一階層に置くと機能と推奨を混同する。,\Smethods、method_hierarchy、implementations、method_implementation_mapを分離。,\S理論適用、実装受付、実務推奨、current software metadataを別管理するため。,\S0.1.0,\S2026-07-13
-\SMR004,\SEC012;EC023;EC024,\Sglobal search、global candidate、global certificateが混同される。,\Ssolution_scope、exactness、optimality_certificate、guarantee_notes、fit_levelを分離。,\S良い解と証明済み解を同じrankingで扱わないため。,\S0.1.0,\S2026-07-13
-\SMR005,\SEC002;EC004;EC007,\S低次元/高次元を固定thresholdだけで判定すると評価費・構造を無視する。,\Sdimension_contextに加え、evaluation budget notes、sparsity/block、method-specific dimensionality notesを保持。,\S同じnでもgradient・HVP・evaluation costで適切なmethodが変わるため。,\S0.1.0,\S2026-07-13
-\SMR006,\SEC011;EC025;EC026,\Swarm start対応のyes/noだけでは反復問題での安全性を表せない。,\Srepeated_solve_mode、warm_start、diagnostic D029、failure FM042を追加。,\Sstale stateやproblem変化による失敗とcold fallbackを明示するため。,\S0.1.0,\S2026-07-13
-\SMR_ATLAS_0_4_0,\N,\SOptimization Atlas lacked canonical machine-evaluable method predicates.,\SAdded normalized Atlas and atomic-predicate tables with explicit coverage and rule-target retirement.,"\SKeep learning contracts, artifacts, priorities, and release deltas auditable.",\S0.4.0,\S2026-07-15

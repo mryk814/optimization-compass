@@ -59,9 +59,10 @@ contract versionはデータ形状を独立に識別するもので、別のア�
 配布形式はSQLite、JSON / JSONL、CSV ZIP、Excel、SQL schema、release manifest / reportです。
 完全配布ZIPは [GitHub Releases](https://github.com/mryk814/optimization-compass/releases) に置き、
 版、download URL、byte数、SHA-256は
-[`data/releases/catalog.json`](data/releases/catalog.json) で確認できます。0.13.0以降のreleaseでは、
-Git treeの [`data/`](data/) に完全配布treeを追加せず、current releaseのcompact metadataと
-catalogだけを保持します。
+[`data/releases/catalog.json`](data/releases/catalog.json) または公開サイトの
+[Data](https://mryk814.github.io/optimization-compass/#/data) で確認できます。Git treeの
+[`data/`](data/) にはbuild入力であるv0.2.0のSQLiteだけを履歴配布物として残し、完全配布treeは
+GitHub Releases、版ごとの検証情報はcompact catalogに保持します。
 
 ## 入口
 
@@ -73,6 +74,7 @@ catalogだけを保持します。
 | 手法・概念を学ぶ | [Learn](https://mryk814.github.io/optimization-compass/#/learn) |
 | アルゴリズムの動きを見る | [Theater](https://mryk814.github.io/optimization-compass/#/theater) |
 | 条件を揃えて比較する | [Compare](https://mryk814.github.io/optimization-compass/#/compare) |
+| 公開データの版とハッシュを見る | [Data](https://mryk814.github.io/optimization-compass/#/data) |
 | Case・手法・根拠を横断検索する | [Search](https://mryk814.github.io/optimization-compass/#/search) |
 | 根拠と欠落を確認する | [Sources](https://mryk814.github.io/optimization-compass/#/sources) / [Coverage](https://mryk814.github.io/optimization-compass/#/coverage) |
 

@@ -1,4 +1,0 @@
-edge_id,source_type,source_id,target_type,target_id,relation,rationale,display_order,source_ids_json,last_verified
-\SLEARN_GD_TO_MOMENTUM,\Smethod,\SM_GRADIENT_DESCENT,\Smethod,\SM_MOMENTUM_SGD,\Snext,\S勾配降下法の振動を理解してから慣性項へ進む。,\I1,"\S[""S070""]",\S2026-07-13
-\SLEARN_MOMENTUM_TO_ADAM,\Smethod,\SM_MOMENTUM_SGD,\Smethod,\SM_ADAM,\Snext,\S一次モーメントの役割を理解してから適応的二次モーメントへ進む。,\I2,"\S[""S070""]",\S2026-07-13
-\SLEARN_NM_CONTRAST_GD,\Smethod,\SM_NELDER_MEAD,\Smethod,\SM_GRADIENT_DESCENT,\Scontrast,\S導関数を使わない単体操作と勾配方向の更新を対比する。,\I3,"\S[""S001"",""S002""]",\S2026-07-13

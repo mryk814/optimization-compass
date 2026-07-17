@@ -1,8 +1,0 @@
-retirement_id,rule_id,method_id,policy_id,reason,source_ids_json,last_verified
-\SRTR_R034_M_BFGS,\SR034,\SM_BFGS,\SPOL_M_BFGS_INCOMPATIBILITY,\SAtomic policy supersedes the legacy not-differentiable target.,"\S[""S002"",""S056"",""S057""]",\S2026-07-13
-\SRTR_R034_M_INTERIOR_POINT_NLP,\SR034,\SM_INTERIOR_POINT_NLP,\SPOL_M_INTERIOR_POINT_NLP_INCOMPATIBILITY,\SAtomic policy supersedes the legacy not-differentiable target.,"\S[""S017"",""S029"",""S030"",""S056"",""S064""]",\S2026-07-13
-\SRTR_R042_M_BFGS,\SR042,\SM_BFGS,\SPOL_M_BFGS_INCOMPATIBILITY,\SAtomic policy supersedes the legacy large-noise target.,"\S[""S002"",""S056"",""S057""]",\S2026-07-13
-\SRTR_R042_M_SLSQP,\SR042,\SM_SLSQP,\SPOL_M_SLSQP_INCOMPATIBILITY,\SAtomic policy supersedes the legacy large-noise target.,"\S[""S002"",""S017"",""S029"",""S030"",""S056"",""S064""]",\S2026-07-13
-\SRTR_R050_M_BAYESIAN_OPT_GP,\SR050,\SM_BAYESIAN_OPT_GP,\SPOL_M_BAYESIAN_OPT_GP_INCOMPATIBILITY,\SAtomic policy supersedes the legacy high-dimension target.,"\S[""S034"",""S035"",""S036"",""S037"",""S038"",""S059"",""S069"",""S075""]",\S2026-07-13
-\SRTR_R050_M_CMA_ES,\SR050,\SM_CMA_ES,\SPOL_M_CMA_ES_INCOMPATIBILITY,\SAtomic policy supersedes the legacy high-dimension target.,"\S[""S032"",""S033"",""S040"",""S058"",""S074""]",\S2026-07-13
-\SRTR_R050_M_NELDER_MEAD,\SR050,\SM_NELDER_MEAD,\SPOL_M_NELDER_MEAD_INCOMPATIBILITY,\SAtomic policy supersedes the legacy high-dimension target.,"\S[""S002"",""S018"",""S031"",""S060"",""S063""]",\S2026-07-13

@@ -9,28 +9,11 @@ from pathlib import Path, PurePosixPath
 
 from optimization_compass.release_identity import ReleaseIdentityError, validate_semantic_version
 
-HISTORICAL_RELEASE_VERSIONS = frozenset(
-    {
-        "0.2.0",
-        "0.3.0",
-        "0.3.1",
-        "0.3.2",
-        "0.4.0",
-        "0.5.0",
-        "0.5.1",
-        "0.6.0",
-        "0.7.0",
-        "0.8.0",
-        "0.9.0",
-        "0.10.0",
-        "0.11.0",
-        "0.12.0",
-    }
-)
+HISTORICAL_RELEASE_VERSIONS = frozenset({"0.2.0"})
 
-# Filled from the Git index on the PR-A baseline. The gate uses blob bytes, not checkout
-# line endings, so it is stable across platforms. A later migration may lower this ceiling.
-HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES = 334_703_071
+# The immutable v0.2.0 SQLite base is the only retained complete historical artifact.
+# The gate uses Git blob bytes, so the exact ceiling is stable across line-ending settings.
+HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES = 3_506_176
 
 _RELEASE_PATH_PATTERN = re.compile(
     r"^data/optimization_method_selection_database_v(?P<version>[0-9]+\.[0-9]+\.[0-9]+)(?P<suffix>.*)$"
@@ -181,7 +164,7 @@ def collect_repository_size(
                     code="new_tracked_release_distribution",
                     path=relative_path,
                     detail=(
-                        f"version {release_version} is not in the PR-A historical baseline; "
+                        f"version {release_version} is not the retained v0.2.0 base; "
                         "publish complete bundles as release assets"
                     ),
                 )
@@ -197,7 +180,7 @@ def collect_repository_size(
                 path=None,
                 detail=(
                     f"tracked release distribution blobs total {release_git_blob_bytes} bytes; "
-                    "PR-A baseline is "
+                    "retained-base baseline is "
                     f"{policy.historical_release_distribution_baseline_bytes} bytes"
                 ),
             )

@@ -57,6 +57,11 @@ def test_report_counts_tracked_checkout_data_and_release_distribution(tmp_path: 
     assert report.violations == ()
 
 
+def test_default_policy_retains_only_the_exact_v020_sqlite_blob() -> None:
+    assert frozenset({"0.2.0"}) == REPOSITORY_SIZE.HISTORICAL_RELEASE_VERSIONS
+    assert REPOSITORY_SIZE.HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES == 3_506_176
+
+
 def test_gate_rejects_new_release_distribution_but_allows_compact_metadata(
     tmp_path: Path,
 ) -> None:

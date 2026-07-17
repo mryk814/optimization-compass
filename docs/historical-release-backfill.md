@@ -1,8 +1,9 @@
 # Historical release backfill runbook
 
-This runbook covers migration preparation for dataset 0.2.0 through 0.12.0. It does not upload an
-asset, create or move a tag, modify the tracked release catalog, delete a distribution, change the
-repository-size baseline, or enable immutable releases.
+This runbook records the migration preparation and verification procedure for dataset 0.2.0 through
+0.12.0. The verified bundles are now public, `data/releases/catalog.json` is the tracked discovery
+authority, and the repository retains only the pinned v0.2.0 SQLite historical distribution. Immutable
+release enforcement remains a separate repository-setting operation; normal validation stays offline.
 
 ## Authority and provenance
 

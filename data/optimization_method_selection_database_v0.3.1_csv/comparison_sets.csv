@@ -1,2 +1,0 @@
-comparison_set_id,objective_id,name_ja,name_en,initial_point_json,seed_status,seed_value,budget,stopping_json,synchronization,fairness_note,source_ids_json,last_verified
-\SCOMPARE_FIRST_ORDER_ROSENBROCK,\SOBJECTIVE_ROSENBROCK_2D,\SRosenbrockで一次法を比較,\SCompare first-order methods on Rosenbrock,"\S[-1.2,1.0]",\Snot_applicable,\N,\I200,"\S{""gradient_norm"":0.0001,""max_oracle_evaluations"":200}",\Soracle_evaluations,\S全手法を同一の初期点・目的関数・累積oracle評価回数で比較する。,"\S[""S070""]",\S2026-07-13

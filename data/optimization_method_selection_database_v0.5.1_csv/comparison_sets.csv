@@ -1,2 +1,0 @@
-comparison_set_id,problem_instance_id,name_ja,name_en,initial_point_json,seed_status,seed_value,budget,stopping_json,synchronization,fairness_note,source_ids_json,last_verified
-\SCOMPARE_GRADIENT_FAMILY,\SOBJECTIVE_QUADRATIC_2D,\S細長い谷で一次法を比較,\SFirst-order methods in an elongated valley,"\S[-1.6,1.6]",\Snot_applicable,\N,\I40,"\S{""max_oracle_evaluations"":40,""objective_tolerance"":1e-06}",\Soracle_evaluations,\S全手法を同一の初期点・目的関数・累積oracle評価回数で比較する。,"\S[""S001""]",\S2026-07-15

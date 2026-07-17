@@ -31,6 +31,7 @@ from optimization_compass.parameter_estimation import (
     generate_parameter_estimation_traces,
 )
 from optimization_compass.problem_registry import get_runtime_problem
+from optimization_compass.release_catalog import load_release_catalog, validate_release_catalog
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.search_index import (
     build_search_artifacts,
@@ -99,7 +100,7 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-SITE_MANIFEST_VERSION: Literal["1.3.0"] = "1.3.0"
+SITE_MANIFEST_VERSION: Literal["1.4.0"] = "1.4.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
@@ -108,6 +109,7 @@ SEARCH_BENCHMARK_SEED = ROOT / "data/seeds/search_benchmark.json"
 VISUALIZATION_SCENARIO_PATH = "visualization-scenarios.json"
 FORMULATION_PRIMER_TERMS_SEED = ROOT / "data/seeds/formulation_primer_terms.json"
 LEARNING_JOURNEY_ASSET_POLICY_SEED = ROOT / "data/seeds/learning_journey_asset_policy.json"
+RELEASE_CATALOG_PATH = ROOT / "data/releases/catalog.json"
 
 # Keep these labels aligned with the existing browser copy contract in web.py.
 ANSWER_LABELS_JA: dict[str, str] = {
@@ -204,6 +206,8 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         release_date=release["release_date"],
         database_sha256=repository.database_sha256(),
     )
+    release_catalog = load_release_catalog(RELEASE_CATALOG_PATH)
+    validate_release_catalog(release_catalog, expected_current_identity=release_identity)
     generated_at = datetime.combine(
         date.fromisoformat(release["release_date"]), time.min, tzinfo=UTC
     )
@@ -296,6 +300,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
     (output_dir / "release.json").write_text(
         canonical_identity_json(release_identity), encoding="utf-8", newline="\n"
     )
+    _write_json(output_dir / "release-catalog.json", release_catalog.as_json_object())
     _write_content_index(output_dir / "content.json", release["version"])
     _write_seeded_index(
         output_dir / "gallery.json",
@@ -530,6 +535,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
         failure_modes=ManifestAsset(version="1.0.0", path="failure-modes.json"),
+        release_catalog=ManifestAsset(version="1.0.0", path="release-catalog.json"),
         search_index=ManifestAsset(version="1.0.0", path="search-index.json"),
         retrieval_documents=ManifestAsset(version="1.0.0", path="retrieval-documents.json"),
         search_benchmark=ManifestAsset(version="1.0.0", path="search-benchmark.json"),

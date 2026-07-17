@@ -27,6 +27,11 @@ from optimization_compass.failure_modes import (
 from optimization_compass.metadata_models import AtlasMetadataSeed
 from optimization_compass.predicates import PredicateCatalog
 from optimization_compass.problem_instances import ProblemSuiteSeed
+from optimization_compass.release_catalog import (
+    ReleaseCatalogError,
+    load_release_catalog,
+    validate_release_catalog,
+)
 from optimization_compass.release_identity import (
     DatasetReleaseIdentity,
     ReleaseIdentityError,
@@ -911,6 +916,7 @@ def _verify_site_release_tree(
 ) -> None:
     required_paths = {
         "release.json",
+        "release-catalog.json",
         "manifest.json",
         "content.json",
         "gallery.json",
@@ -932,6 +938,13 @@ def _verify_site_release_tree(
         raise ReleaseValidationError("site release identity does not match dataset release")
     for relative in sorted(actual_paths - {"release.json"}):
         path = directory / relative
+        if relative == "release-catalog.json":
+            try:
+                catalog = load_release_catalog(path)
+                validate_release_catalog(catalog, expected_current_identity=expected_identity)
+            except ReleaseCatalogError as error:
+                raise ReleaseValidationError(str(error)) from error
+            continue
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:
@@ -955,6 +968,7 @@ def _verify_site_release_tree(
     referenced.add(str(manifest["implementation_claims"]["path"]))
     referenced.add(str(manifest["benchmark_contexts"]["path"]))
     referenced.add(str(manifest["failure_modes"]["path"]))
+    referenced.add(str(manifest["release_catalog"]["path"]))
     referenced.add(str(manifest["coverage"]["path"]))
     referenced.add(str(manifest["coverage"]["report_path"]))
     for relative in referenced:
@@ -1045,11 +1059,8 @@ def publish_release(
         raise ReleaseValidationError("release identity version does not match manifest")
 
     from optimization_compass.release_catalog import (
-        ReleaseCatalogError,
         catalog_entry_from_bundle,
-        load_release_catalog,
         merge_catalog_entry,
-        validate_release_catalog,
     )
 
     catalog_path = data_directory / "releases/catalog.json"

@@ -1,7 +1,0 @@
-﻿revision_id,trigger_case_ids,issue_found,schema_change,reason,version,date
-MR001,EC028;EC001;EC010,求根・閉形式・LP/graph等を汎用最適化の同列候補にすると誤推奨になる。,alternative_solution_checksを独立entityとして追加し、problem_archetypesからmany-to-many参照。,『最適化algorithmを選ぶ前に問題を正しく還元する』判断を表現するため。,0.1.0,2026-07-13
-MR002,EC004;EC005;EC006;EC007;EC027,black-boxという一語では次元・費用・noise・失敗・並列性を区別できない。,evaluation_cost、noise_level、evaluation_reliability、parallel_budget、derivative_accessを独立feature化。,BO、direct search、SPSA、evolutionaryの選択条件が相互に異なるため。,0.1.0,2026-07-13
-MR003,EC003;EC010;EC021;EC022,一般algorithm名とlibrary/API指定名を同一階層に置くと機能と推奨を混同する。,methods、method_hierarchy、implementations、method_implementation_mapを分離。,理論適用、実装受付、実務推奨、current software metadataを別管理するため。,0.1.0,2026-07-13
-MR004,EC012;EC023;EC024,global search、global candidate、global certificateが混同される。,solution_scope、exactness、optimality_certificate、guarantee_notes、fit_levelを分離。,良い解と証明済み解を同じrankingで扱わないため。,0.1.0,2026-07-13
-MR005,EC002;EC004;EC007,低次元/高次元を固定thresholdだけで判定すると評価費・構造を無視する。,dimension_contextに加え、evaluation budget notes、sparsity/block、method-specific dimensionality notesを保持。,同じnでもgradient・HVP・evaluation costで適切なmethodが変わるため。,0.1.0,2026-07-13
-MR006,EC011;EC025;EC026,warm start対応のyes/noだけでは反復問題での安全性を表せない。,repeated_solve_mode、warm_start、diagnostic D029、failure FM042を追加。,stale stateやproblem変化による失敗とcold fallbackを明示するため。,0.1.0,2026-07-13
