@@ -18,15 +18,19 @@ jobs:
           tar -czf "$RUNNER_TEMP/repository-snapshot.tar.gz" \
             .github \
             src \
+            content \
             site/src \
             site/e2e \
             site/public/data \
+            site/package.json \
+            site/package-lock.json \
             tests \
             scripts \
             docs \
             data/seeds \
             data/migrations \
             pyproject.toml \
+            uv.lock \
             README.md \
             AGENTS.md \
             CONTRIBUTING.md
