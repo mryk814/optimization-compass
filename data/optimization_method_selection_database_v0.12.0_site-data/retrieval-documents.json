@@ -432,7 +432,7 @@
         "S065",
         "S096"
       ],
-      "text": "同じdata・model・初期値・bounds・12 oracle evaluationでmetricを同期します。",
+      "text": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
       "title": "非線形fitでsolver条件を比べる"
     },
     {
@@ -30538,7 +30538,7 @@
         "S065"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "scalar二乗和fallback"
+      "title": "共通診断probe · scalar fallback条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -30561,7 +30561,7 @@
         "S056"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "boundsがactiveでないLM条件"
+      "title": "共通診断probe · LM適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -30584,7 +30584,7 @@
         "S096"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "TRFでbounds付き残差fitを追う"
+      "title": "共通診断probe · TRF適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -30606,7 +30606,7 @@
         "S096"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "悪い初期値でrankと残差を追う"
+      "title": "共通診断probe · 悪い初期値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -32423,7 +32423,7 @@
         "S065"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "scalar二乗和fallback"
+      "title": "共通診断probe · scalar fallback条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -32443,7 +32443,7 @@
         "S056"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "boundsがactiveでないLM条件"
+      "title": "共通診断probe · LM適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -32462,7 +32462,7 @@
         "S096"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "悪い初期値でrankと残差を追う"
+      "title": "共通診断probe · 悪い初期値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -32482,7 +32482,7 @@
         "S096"
       ],
       "text": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
-      "title": "TRFでbounds付き残差fitを追う"
+      "title": "共通診断probe · TRF適用条件"
     },
     {
       "attribution": "Optimization Compass contributors",

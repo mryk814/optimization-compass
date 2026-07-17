@@ -299,7 +299,7 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "TheaterとCompareは20点・noiseなし・3 parameterの固定教材で、SciPy/Ceresの内部反復や一般的なsolver順位を表しません。",
+        "TheaterとCompareはsolver非依存の共通診断probeです。TRF・LM・L-BFGS-Bの実行結果ではなく、Compareの3 lineは意図的に同一です。",
         "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
       ],
       "map_node_id": "answer:Q11:least_squares",

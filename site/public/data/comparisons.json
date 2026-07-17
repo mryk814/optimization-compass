@@ -499,20 +499,22 @@
       "canonical_comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "canonical_url": "/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "case_id": "EC013",
-      "caveat": "固定補間で作った条件比較であり、SciPy/Ceresの内部反復、wall-clock、または一般的なsolver順位を表しません。",
+      "caveat": "TRF・LM・L-BFGS-Bは実行していません。線の一致やlabelから、到達解・収束速度・wall-clock・solver順位を推論できません。",
       "changed_factors": [
-        "residual/Jacobian専用pathかscalar目的fallbackか",
-        "boundsを直接扱う条件"
+        "solverがboundsを直接扱えるかという適用条件annotation",
+        "残差vector interfaceを保持できるかという適用条件annotation"
       ],
       "comparability": "contrast_only",
       "comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
-      "comparison_question": "同じ残差model・初期値・12評価で、boundsと残差構造の扱いは診断metricにどう現れる？",
-      "fairness_note": "同じdata・model・初期値・bounds・12 oracle evaluationでmetricを同期します。",
+      "comparison_question": "同じsolver非依存probeを見ながら、boundsと残差構造に対する各solverの適用条件をどう切り分ける？",
+      "fairness_note": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
       "fixed_factors": [
         "20点のnoiseなし合成data",
         "model a exp(-kt)+c",
         "初期値 [1.0, 0.4, 0.0]",
         "bounds [0,0,-1]..[5,3,2]",
+        "solver非依存のdamped Gauss–Newton診断probe",
+        "3 memberで完全に同一のframe履歴",
         "oracle evaluation budget 12"
       ],
       "formulation_summary": "20点の y=a exp(-kt)+c を、[a,k,c]=[1.0,0.4,0.0] からbounds内で残差二乗和fitする。",
@@ -521,7 +523,7 @@
       "last_verified": "2026-07-17",
       "limitations": [
         "20点・3 parameter・noiseなしの合成教材である。",
-        "各pathは実装benchmarkではなく、solverを選ぶ条件の可視化である。"
+        "表示lineはsolver別の実行結果ではなく、意図的に同一のsolver非依存probeである。"
       ],
       "members": [
         {
@@ -536,13 +538,15 @@
             "metric": "oracle_evaluations",
             "value": 12
           },
-          "label_en": "TRF · bounded residual",
-          "label_ja": "TRF · bounds付き残差",
+          "label_en": "TRF applicability · bounded residual",
+          "label_ja": "TRF適用条件 · bounds付き残差",
           "member_id": "trf-bounded-residual",
           "method_id": "M_TRUST_REGION_REFLECTIVE",
           "parameters": {
             "bounds_support": true,
-            "path_semantics": "educational"
+            "residual_vector_interface": true,
+            "solver_execution": false,
+            "trace_semantics": "shared_solver_independent_probe"
           },
           "role": "primary_bounded_residual",
           "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF"
@@ -559,13 +563,15 @@
             "metric": "oracle_evaluations",
             "value": 12
           },
-          "label_en": "LM · inactive-bound condition",
-          "label_ja": "LM · bounds非active条件",
+          "label_en": "LM applicability · inactive bounds",
+          "label_ja": "LM適用条件 · bounds非active",
           "member_id": "lm-inactive-bounds",
           "method_id": "M_LEVENBERG_MARQUARDT",
           "parameters": {
             "bounds_support": false,
-            "path_semantics": "educational"
+            "residual_vector_interface": true,
+            "solver_execution": false,
+            "trace_semantics": "shared_solver_independent_probe"
           },
           "role": "conditional_inactive_bounds",
           "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LM"
@@ -582,13 +588,15 @@
             "metric": "oracle_evaluations",
             "value": 12
           },
-          "label_en": "L-BFGS-B · scalar fallback",
-          "label_ja": "L-BFGS-B · scalar fallback",
+          "label_en": "L-BFGS-B applicability · scalar fallback",
+          "label_ja": "L-BFGS-B適用条件 · scalar fallback",
           "member_id": "lbfgsb-scalar-fallback",
           "method_id": "M_LBFGSB",
           "parameters": {
-            "path_semantics": "educational",
-            "residual_structure": false
+            "bounds_support": true,
+            "residual_vector_interface": false,
+            "solver_execution": false,
+            "trace_semantics": "shared_solver_independent_probe"
           },
           "role": "scalar_objective_fallback",
           "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB"
@@ -627,12 +635,12 @@
         "S065",
         "S096"
       ],
-      "stopping_policy": "residual normまたはgradient normが1e-6以下、もしくは12評価",
+      "stopping_policy": "共通probeはresidual normまたはgradient normが1e-6以下になった最初のframeで停止し、未達なら12評価で停止する。",
       "synchronization_axis": "oracle_evaluations",
-      "takeaway": "残差値だけでなく、bounds対応、Jacobian rank、初期値、残差構造を保持した診断を一緒に確認します。",
+      "takeaway": "同一の診断stateでbounds対応と残差vector interfaceの条件を整理し、実際の挙動は選んだsolverを別途実行して確かめます。",
       "title_en": "Compare solver conditions for nonlinear fitting",
       "title_ja": "非線形fitでsolver条件を比べる",
-      "tuning_policy": "3つの教育用pathを事前固定し、結果を見てparameterを調整しない。"
+      "tuning_policy": "同じdeterministic damped Gauss–Newton診断probeを3 memberへ複製する。member solverは実行しない。"
     }
   ],
   "contract_version": "2.0.0",

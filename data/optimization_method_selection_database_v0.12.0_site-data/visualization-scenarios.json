@@ -2006,9 +2006,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 20910,
+        "payload_bytes": 22648,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "54ec32fc4e865731a715fbabdacf83afb166968d230dfb17922d1ffc05aa0317",
+        "payload_sha256": "9fb9cf44f134261f709d964f7dc14a05b4ccbe6c867b511e69eec79f57bac291",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2049,11 +2049,11 @@
       "lesson": {
         "comparison_role": "primary_example",
         "derived_media_caption": {
-          "en": "Residual and rank metric history for exponential-decay fitting",
-          "ja": "指数減衰fitのresidual・rank metric履歴"
+          "en": "Residual and rank history from the shared exponential-fit diagnostic probe",
+          "ja": "指数減衰fitの共通診断probeによるresidual・rank metric履歴"
         },
-        "expected_phenomenon_en": "Compare a fixed 12-evaluation metric history under the stated method condition.",
-        "expected_phenomenon_ja": "bounds付き残差問題でTRFを使う固定教材pathとして、12評価のmetric履歴を比較します。",
+        "expected_phenomenon_en": "Read one solver-independent diagnostic-probe history through the stated applicability lens.",
+        "expected_phenomenon_ja": "共通診断stateに対するTRFのbounds・残差vector適用条件として、共通probeのmetric履歴を読みます。",
         "failure_signals": [],
         "known_reference_display": {
           "note_en": "Use the synthetic-data truth [1.8, 0.7, 0.25] only for teaching diagnostics",
@@ -2064,8 +2064,8 @@
           "en": "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
           "ja": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
         },
-        "limitations_en": "A fixed interpolated teaching path, not SciPy/Ceres internals, speed, general performance, or real-data parameter identifiability.",
-        "limitations_ja": "固定補間で作った教育用pathです。SciPy/Ceresの内部反復、速度、一般性能、実dataのparameter識別性を表しません。",
+        "limitations_en": "A deterministic damped Gauss-Newton diagnostic probe; no member solver was executed. It does not represent SciPy/Ceres internals, attained solutions, speed, general performance, or real-data parameter identifiability.",
+        "limitations_ja": "deterministic damped Gauss–Newton診断probeであり、member solverは実行していません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataのparameter識別性を表しません。",
         "misconception": null,
         "narration_steps": [
           {
@@ -2102,8 +2102,8 @@
               "residual_norm",
               "parameter_error"
             ],
-            "title_en": "Inspect error and status after 12 evaluations",
-            "title_ja": "12評価後の誤差とstatusを確認"
+            "title_en": "Inspect error and status at the final evaluation",
+            "title_ja": "最終評価の誤差とstatusを確認"
           }
         ],
         "prerequisite_concept_ids": [],
@@ -2140,8 +2140,8 @@
           }
         ],
         "static_summary": {
-          "en": "Fit the same 20 observations and model, showing metrics through 12 evaluations.",
-          "ja": "bounds付き残差問題でTRFを使う固定教材path。20観測を同じmodelでfitし、metricを12評価まで表示します。"
+          "en": "Apply one solver-independent probe to the same 20 observations and show its metrics.",
+          "ja": "共通診断stateに対するTRFのbounds・残差vector適用条件。20観測に同じsolver非依存probeを適用し、metricを表示します。"
         },
         "success_signals": [
           {
@@ -2179,8 +2179,8 @@
         "S056",
         "S096"
       ],
-      "title_en": "Follow bounded residual fitting with TRF",
-      "title_ja": "TRFでbounds付き残差fitを追う"
+      "title_en": "Shared diagnostic probe · TRF applicability",
+      "title_ja": "共通診断probe · TRF適用条件"
     },
     {
       "artifact": {
@@ -2194,9 +2194,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 20371,
+        "payload_bytes": 22368,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "50e3e478f720f56d9b2297173ba2bb043ef51abe26cb0211ae69088978360575",
+        "payload_sha256": "8dc549c289b37a9463e949293c8e4f724e2fde1475ec6634e1e8d50f21aaacd3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2237,15 +2237,15 @@
       "lesson": {
         "comparison_role": "sensitivity_variant",
         "derived_media_caption": {
-          "en": "Residual and rank metric history for exponential-decay fitting",
-          "ja": "指数減衰fitのresidual・rank metric履歴"
+          "en": "Residual and rank history from the shared exponential-fit diagnostic probe",
+          "ja": "指数減衰fitの共通診断probeによるresidual・rank metric履歴"
         },
-        "expected_phenomenon_en": "Compare a fixed 12-evaluation metric history under the stated method condition.",
-        "expected_phenomenon_ja": "a=0でJacobian rankが落ちる初期値感度として、12評価のmetric履歴を比較します。",
+        "expected_phenomenon_en": "Read one solver-independent diagnostic-probe history through the stated applicability lens.",
+        "expected_phenomenon_ja": "同じ診断probeをa=0から始める初期値感度として、共通probeのmetric履歴を読みます。",
         "failure_signals": [
           {
-            "label_en": "The initial Jacobian rank is two and residual error remains after 12 evaluations",
-            "label_ja": "初期Jacobian rankが2となり、12評価後も残差が残る",
+            "label_en": "The initial Jacobian rank is two and residual error remains when the probe ends",
+            "label_ja": "初期Jacobian rankが2となり、probe終了時も残差が残る",
             "observable_ids": [
               "jacobian_rank",
               "residual_norm",
@@ -2263,8 +2263,8 @@
           "en": "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
           "ja": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
         },
-        "limitations_en": "A fixed interpolated teaching path, not SciPy/Ceres internals, speed, general performance, or real-data parameter identifiability.",
-        "limitations_ja": "固定補間で作った教育用pathです。SciPy/Ceresの内部反復、速度、一般性能、実dataのparameter識別性を表しません。",
+        "limitations_en": "A deterministic damped Gauss-Newton diagnostic probe; no member solver was executed. It does not represent SciPy/Ceres internals, attained solutions, speed, general performance, or real-data parameter identifiability.",
+        "limitations_ja": "deterministic damped Gauss–Newton診断probeであり、member solverは実行していません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataのparameter識別性を表しません。",
         "misconception": {
           "en": "A decreasing residual sum of squares does not remove the need to check initialization and rank",
           "ja": "残差二乗和が下がれば、悪い初期値やrank不足を確認しなくてよい"
@@ -2304,8 +2304,8 @@
               "residual_norm",
               "parameter_error"
             ],
-            "title_en": "Inspect error and status after 12 evaluations",
-            "title_ja": "12評価後の誤差とstatusを確認"
+            "title_en": "Inspect error and status at the final evaluation",
+            "title_ja": "最終評価の誤差とstatusを確認"
           }
         ],
         "prerequisite_concept_ids": [],
@@ -2342,8 +2342,8 @@
           }
         ],
         "static_summary": {
-          "en": "Fit the same 20 observations and model, showing metrics through 12 evaluations.",
-          "ja": "a=0でJacobian rankが落ちる初期値感度。20観測を同じmodelでfitし、metricを12評価まで表示します。"
+          "en": "Apply one solver-independent probe to the same 20 observations and show its metrics.",
+          "ja": "同じ診断probeをa=0から始める初期値感度。20観測に同じsolver非依存probeを適用し、metricを表示します。"
         },
         "success_signals": [
           {
@@ -2381,8 +2381,8 @@
         "S056",
         "S096"
       ],
-      "title_en": "Track rank and residuals from a poor start",
-      "title_ja": "悪い初期値でrankと残差を追う"
+      "title_en": "Shared diagnostic probe · poor initialization",
+      "title_ja": "共通診断probe · 悪い初期値"
     },
     {
       "artifact": {
@@ -2396,9 +2396,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 20336,
+        "payload_bytes": 22634,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "a2ba5cdf3abbc60131657ebf912f7df176c30829036c0cbaccef0cb4557d1f8d",
+        "payload_sha256": "c2f035ca6610a38cded8f251737bb9f00c45eb01bd8a75c3875a30b350398027",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2439,11 +2439,11 @@
       "lesson": {
         "comparison_role": "baseline",
         "derived_media_caption": {
-          "en": "Residual and rank metric history for exponential-decay fitting",
-          "ja": "指数減衰fitのresidual・rank metric履歴"
+          "en": "Residual and rank history from the shared exponential-fit diagnostic probe",
+          "ja": "指数減衰fitの共通診断probeによるresidual・rank metric履歴"
         },
-        "expected_phenomenon_en": "Compare a fixed 12-evaluation metric history under the stated method condition.",
-        "expected_phenomenon_ja": "boundsがactiveにならない場合だけを見るLM条件として、12評価のmetric履歴を比較します。",
+        "expected_phenomenon_en": "Read one solver-independent diagnostic-probe history through the stated applicability lens.",
+        "expected_phenomenon_ja": "共通診断stateに対するLMのbounds非active適用条件として、共通probeのmetric履歴を読みます。",
         "failure_signals": [],
         "known_reference_display": {
           "note_en": "Use the synthetic-data truth [1.8, 0.7, 0.25] only for teaching diagnostics",
@@ -2454,8 +2454,8 @@
           "en": "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
           "ja": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
         },
-        "limitations_en": "A fixed interpolated teaching path, not SciPy/Ceres internals, speed, general performance, or real-data parameter identifiability.",
-        "limitations_ja": "固定補間で作った教育用pathです。SciPy/Ceresの内部反復、速度、一般性能、実dataのparameter識別性を表しません。",
+        "limitations_en": "A deterministic damped Gauss-Newton diagnostic probe; no member solver was executed. It does not represent SciPy/Ceres internals, attained solutions, speed, general performance, or real-data parameter identifiability.",
+        "limitations_ja": "deterministic damped Gauss–Newton診断probeであり、member solverは実行していません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataのparameter識別性を表しません。",
         "misconception": null,
         "narration_steps": [
           {
@@ -2492,8 +2492,8 @@
               "residual_norm",
               "parameter_error"
             ],
-            "title_en": "Inspect error and status after 12 evaluations",
-            "title_ja": "12評価後の誤差とstatusを確認"
+            "title_en": "Inspect error and status at the final evaluation",
+            "title_ja": "最終評価の誤差とstatusを確認"
           }
         ],
         "prerequisite_concept_ids": [],
@@ -2530,8 +2530,8 @@
           }
         ],
         "static_summary": {
-          "en": "Fit the same 20 observations and model, showing metrics through 12 evaluations.",
-          "ja": "boundsがactiveにならない場合だけを見るLM条件。20観測を同じmodelでfitし、metricを12評価まで表示します。"
+          "en": "Apply one solver-independent probe to the same 20 observations and show its metrics.",
+          "ja": "共通診断stateに対するLMのbounds非active適用条件。20観測に同じsolver非依存probeを適用し、metricを表示します。"
         },
         "success_signals": [
           {
@@ -2569,8 +2569,8 @@
         "S041",
         "S056"
       ],
-      "title_en": "LM when bounds remain inactive",
-      "title_ja": "boundsがactiveでないLM条件"
+      "title_en": "Shared diagnostic probe · LM applicability",
+      "title_ja": "共通診断probe · LM適用条件"
     },
     {
       "artifact": {
@@ -2584,9 +2584,9 @@
           "jacobian_rank",
           "parameter_error"
         ],
-        "payload_bytes": 21196,
+        "payload_bytes": 22640,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "265c4cf422a1139631df90533b51dfdedb4091d800354af3668566dca5d60820",
+        "payload_sha256": "ed90e46b439253aced02ded925998c399ffe59083db2ff67ce355c54c4544dfc",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
@@ -2627,11 +2627,11 @@
       "lesson": {
         "comparison_role": "baseline",
         "derived_media_caption": {
-          "en": "Residual and rank metric history for exponential-decay fitting",
-          "ja": "指数減衰fitのresidual・rank metric履歴"
+          "en": "Residual and rank history from the shared exponential-fit diagnostic probe",
+          "ja": "指数減衰fitの共通診断probeによるresidual・rank metric履歴"
         },
-        "expected_phenomenon_en": "Compare a fixed 12-evaluation metric history under the stated method condition.",
-        "expected_phenomenon_ja": "残差vectorをscalar二乗和へ畳むL-BFGS-B fallbackとして、12評価のmetric履歴を比較します。",
+        "expected_phenomenon_en": "Read one solver-independent diagnostic-probe history through the stated applicability lens.",
+        "expected_phenomenon_ja": "共通診断stateに対するscalar目的fallback適用条件として、共通probeのmetric履歴を読みます。",
         "failure_signals": [],
         "known_reference_display": {
           "note_en": "Use the synthetic-data truth [1.8, 0.7, 0.25] only for teaching diagnostics",
@@ -2642,8 +2642,8 @@
           "en": "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
           "ja": "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む"
         },
-        "limitations_en": "A fixed interpolated teaching path, not SciPy/Ceres internals, speed, general performance, or real-data parameter identifiability.",
-        "limitations_ja": "固定補間で作った教育用pathです。SciPy/Ceresの内部反復、速度、一般性能、実dataのparameter識別性を表しません。",
+        "limitations_en": "A deterministic damped Gauss-Newton diagnostic probe; no member solver was executed. It does not represent SciPy/Ceres internals, attained solutions, speed, general performance, or real-data parameter identifiability.",
+        "limitations_ja": "deterministic damped Gauss–Newton診断probeであり、member solverは実行していません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataのparameter識別性を表しません。",
         "misconception": null,
         "narration_steps": [
           {
@@ -2680,8 +2680,8 @@
               "residual_norm",
               "parameter_error"
             ],
-            "title_en": "Inspect error and status after 12 evaluations",
-            "title_ja": "12評価後の誤差とstatusを確認"
+            "title_en": "Inspect error and status at the final evaluation",
+            "title_ja": "最終評価の誤差とstatusを確認"
           }
         ],
         "prerequisite_concept_ids": [],
@@ -2718,8 +2718,8 @@
           }
         ],
         "static_summary": {
-          "en": "Fit the same 20 observations and model, showing metrics through 12 evaluations.",
-          "ja": "残差vectorをscalar二乗和へ畳むL-BFGS-B fallback。20観測を同じmodelでfitし、metricを12評価まで表示します。"
+          "en": "Apply one solver-independent probe to the same 20 observations and show its metrics.",
+          "ja": "共通診断stateに対するscalar目的fallback適用条件。20観測に同じsolver非依存probeを適用し、metricを表示します。"
         },
         "success_signals": [
           {
@@ -2757,8 +2757,8 @@
         "S056",
         "S065"
       ],
-      "title_en": "Scalar sum-of-squares fallback",
-      "title_ja": "scalar二乗和fallback"
+      "title_en": "Shared diagnostic probe · scalar fallback applicability",
+      "title_ja": "共通診断probe · scalar fallback条件"
     },
     {
       "artifact": {

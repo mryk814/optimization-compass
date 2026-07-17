@@ -119,8 +119,8 @@
       "path": "exponential-fit-trf.json",
       "profile_id": "PROFILE_TRF_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
-      "title_en": "Follow bounded residual fitting with TRF",
-      "title_ja": "TRFでbounds付き残差fitを追う",
+      "title_en": "Shared diagnostic probe · TRF applicability",
+      "title_ja": "共通診断probe · TRF適用条件",
       "trace_id": "exponential-fit-trf"
     },
     {
@@ -129,8 +129,8 @@
       "path": "exponential-fit-trf-poor-init.json",
       "profile_id": "PROFILE_TRF_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
-      "title_en": "Track rank and residuals from a poor start",
-      "title_ja": "悪い初期値でrankと残差を追う",
+      "title_en": "Shared diagnostic probe · poor initialization",
+      "title_ja": "共通診断probe · 悪い初期値",
       "trace_id": "exponential-fit-trf-poor-init"
     },
     {
@@ -139,8 +139,8 @@
       "path": "exponential-fit-lm.json",
       "profile_id": "PROFILE_LM_RESIDUAL_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LM",
-      "title_en": "LM when bounds remain inactive",
-      "title_ja": "boundsがactiveでないLM条件",
+      "title_en": "Shared diagnostic probe · LM applicability",
+      "title_ja": "共通診断probe · LM適用条件",
       "trace_id": "exponential-fit-lm"
     },
     {
@@ -149,8 +149,8 @@
       "path": "exponential-fit-lbfgsb.json",
       "profile_id": "PROFILE_LBFGSB_SCALAR_HISTORY",
       "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
-      "title_en": "Scalar sum-of-squares fallback",
-      "title_ja": "scalar二乗和fallback",
+      "title_en": "Shared diagnostic probe · scalar fallback applicability",
+      "title_ja": "共通診断probe · scalar fallback条件",
       "trace_id": "exponential-fit-lbfgsb"
     },
     {

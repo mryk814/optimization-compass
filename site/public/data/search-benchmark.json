@@ -167,11 +167,11 @@
       "intents": [],
       "query": "細長い谷 一次法 比較",
       "query_id": "visual-comparison",
-      "result_count": 8,
+      "result_count": 3,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
         "comparison:COMPARE_PARETO_PREFERENCE",
-        "comparison:COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS"
+        "trace:constrained-disk-feasible-region"
       ]
     },
     {

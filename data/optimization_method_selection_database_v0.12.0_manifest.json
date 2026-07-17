@@ -307,8 +307,8 @@
       "sha256": "fff14992a62d3aa952bee99d8e61a489f1de755b48d37e49fb1b0420e9b47273"
     },
     "optimization_method_selection_database_v0.12.0_site-data/comparisons.json": {
-      "bytes": 24126,
-      "sha256": "c8e66b4c1b4c79eada66e2a6e114b75bea95377e72b0ad58d0fafa5e0e98844c"
+      "bytes": 24893,
+      "sha256": "287c20dda59de7cec96ebacdbb9306494f6826ac9930b1049b971c5a1cf9f1d0"
     },
     "optimization_method_selection_database_v0.12.0_site-data/content.json": {
       "bytes": 1284089,
@@ -323,8 +323,8 @@
       "sha256": "8e255a9f94360f86394b9c97567b5ecb89833c974bbec6594f8621acfeb553a4"
     },
     "optimization_method_selection_database_v0.12.0_site-data/entity-links.json": {
-      "bytes": 615236,
-      "sha256": "6a1c2ecfc3afa5ad8d70b3e761f5fa50a14958881a10032b8c34e84264899ab6"
+      "bytes": 615313,
+      "sha256": "10e56c35bace22aaa059f81f3a75054877d3326c1dbf07e95a7ad2f0e1d0bf35"
     },
     "optimization_method_selection_database_v0.12.0_site-data/failure-modes.json": {
       "bytes": 37387,
@@ -335,8 +335,8 @@
       "sha256": "7595cbac078cfc942d8ea97b97932c9f6130bac74f91f7c4481b8124a4678269"
     },
     "optimization_method_selection_database_v0.12.0_site-data/gallery.json": {
-      "bytes": 32999,
-      "sha256": "f0602212eed962a483b17701fb17f24060641f259e8b73bd174935dbdeca0709"
+      "bytes": 33010,
+      "sha256": "4d4b429df3b42dda9cb3ec219df59c75fa10050d7652e43dea70e03c92d295f5"
     },
     "optimization_method_selection_database_v0.12.0_site-data/implementation-claims.json": {
       "bytes": 386836,
@@ -347,12 +347,12 @@
       "sha256": "cb760fcd6d5ce8544dceaa95810eae99fccedbe36e52c42ea08dd42d6defbe0a"
     },
     "optimization_method_selection_database_v0.12.0_site-data/learning-journeys.json": {
-      "bytes": 86209,
-      "sha256": "6fa04f9760e5b2be4eba3137d89b517f022446a386a1fa796859bda3a6ff6015"
+      "bytes": 86220,
+      "sha256": "7464ef4fb0c7e82c49fc08703ef293e38664bdf9d61b2734946011d423773360"
     },
     "optimization_method_selection_database_v0.12.0_site-data/manifest.json": {
       "bytes": 2657,
-      "sha256": "cd3239246aec6ca23a86c5d96956d79f64847d10863843b342cca82d341b2ef2"
+      "sha256": "6f0fc517ebcd2481fce2aae65313233f93d1ec402f72537f2153c8335bd049f0"
     },
     "optimization_method_selection_database_v0.12.0_site-data/media/manifest.json": {
       "bytes": 4155,
@@ -399,16 +399,16 @@
       "sha256": "1a86acaf308f676b71da7f4335b0f5c02ae38f015ea4f675787c3079717a40a0"
     },
     "optimization_method_selection_database_v0.12.0_site-data/retrieval-documents.json": {
-      "bytes": 1346526,
-      "sha256": "5875b0cab19c6a08cca6698acae4a0ddef4cfb43732b6e756051ae6f2392ee48"
+      "bytes": 1346603,
+      "sha256": "efb410ab85f2ac15233b1d33e2d7538755bb00ab08f524218e379e65a4912635"
     },
     "optimization_method_selection_database_v0.12.0_site-data/search-benchmark.json": {
-      "bytes": 5056,
-      "sha256": "f749d1377bd1bcbf0e0bb60f01786814fdd23c8896c8dd055e7f79e1b5f5cdde"
+      "bytes": 5042,
+      "sha256": "8bfe1c8947b03aa1f044b942d17c7ac12494864431600c9a5ffe3695594ac229"
     },
     "optimization_method_selection_database_v0.12.0_site-data/search-index.json": {
-      "bytes": 1500634,
-      "sha256": "40b79b632b49f966ab8805645fc57ad8feec132ed6e7075965ab71091f84f093"
+      "bytes": 1502412,
+      "sha256": "50018727ec758abeea435ddd25ce12bb5edb2b4893a9bf25347265bf5fd5fcfc"
     },
     "optimization_method_selection_database_v0.12.0_site-data/search-trees/binary-knapsack-bnb-budget.json": {
       "bytes": 68980,
@@ -455,20 +455,20 @@
       "sha256": "4d4df49fdd35c445f81c5d1d9ab14d598d873806f220c64ba3a433c6c370965c"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-lbfgsb.json": {
-      "bytes": 21196,
-      "sha256": "265c4cf422a1139631df90533b51dfdedb4091d800354af3668566dca5d60820"
+      "bytes": 22640,
+      "sha256": "ed90e46b439253aced02ded925998c399ffe59083db2ff67ce355c54c4544dfc"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-lm.json": {
-      "bytes": 20336,
-      "sha256": "a2ba5cdf3abbc60131657ebf912f7df176c30829036c0cbaccef0cb4557d1f8d"
+      "bytes": 22634,
+      "sha256": "c2f035ca6610a38cded8f251737bb9f00c45eb01bd8a75c3875a30b350398027"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-trf-poor-init.json": {
-      "bytes": 20371,
-      "sha256": "50e3e478f720f56d9b2297173ba2bb043ef51abe26cb0211ae69088978360575"
+      "bytes": 22368,
+      "sha256": "8dc549c289b37a9463e949293c8e4f724e2fde1475ec6634e1e8d50f21aaacd3"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/exponential-fit-trf.json": {
-      "bytes": 20910,
-      "sha256": "54ec32fc4e865731a715fbabdacf83afb166968d230dfb17922d1ffc05aa0317"
+      "bytes": 22648,
+      "sha256": "9fb9cf44f134261f709d964f7dc14a05b4ccbe6c867b511e69eec79f57bac291"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/gradient_descent-quadratic-divergence.json": {
       "bytes": 53138,
@@ -479,8 +479,8 @@
       "sha256": "c924f58b4b80c03de4686c54ed97c170cea5de832c5fb8a4614c542824d3c86b"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/index.json": {
-      "bytes": 6708,
-      "sha256": "8a774e1e9f2ebb4b2c2ad811e9fa603db0d71fa12dff277a24c418585fa4cd56"
+      "bytes": 6773,
+      "sha256": "ea9853b1c320bf5620cccc50acb8cbca7b563e9d37013f3cc924c9983cbe2a01"
     },
     "optimization_method_selection_database_v0.12.0_site-data/traces/momentum-quadratic-divergence.json": {
       "bytes": 66386,
@@ -523,8 +523,8 @@
       "sha256": "d3d92738f23033babda3709276090130376ee9704c06ff88cd34458f305998f5"
     },
     "optimization_method_selection_database_v0.12.0_site-data/visualization-scenarios.json": {
-      "bytes": 175093,
-      "sha256": "68c23b6e2c0c9d20d4d94d40d21dc2dd748cb197ba8530891d854061f937a8c7"
+      "bytes": 176082,
+      "sha256": "57b5615cf5335ac90d4ce3718b30d9893a2cc6a0ebbd27040a0c87b8dab14a41"
     },
     "optimization_method_selection_database_v0.12.0_site-data/visualizations/biobjective-quadratic-pareto-front.json": {
       "bytes": 23935,

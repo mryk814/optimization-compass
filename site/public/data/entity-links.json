@@ -1168,7 +1168,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じdata・model・初期値・bounds・12 oracle evaluationでmetricを同期します。"
+      "summary": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。"
     },
     {
       "aliases": [],
@@ -19714,7 +19714,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "scalar二乗和fallback",
+      "label": "共通診断probe · scalar fallback条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -19755,7 +19755,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LM",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "boundsがactiveでないLM条件",
+      "label": "共通診断probe · LM適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -19796,7 +19796,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "TRFでbounds付き残差fitを追う",
+      "label": "共通診断probe · TRF適用条件",
       "relations": [
         {
           "relation_type": "artifact",
@@ -19837,7 +19837,7 @@
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "悪い初期値でrankと残差を追う",
+      "label": "共通診断probe · 悪い初期値",
       "relations": [
         {
           "relation_type": "artifact",
@@ -21525,7 +21525,7 @@
       "entity_id": "exponential-fit-lbfgsb",
       "entity_type": "trace",
       "external_url": null,
-      "label": "scalar二乗和fallback",
+      "label": "共通診断probe · scalar fallback条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -21551,7 +21551,7 @@
       "entity_id": "exponential-fit-lm",
       "entity_type": "trace",
       "external_url": null,
-      "label": "boundsがactiveでないLM条件",
+      "label": "共通診断probe · LM適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -21577,7 +21577,7 @@
       "entity_id": "exponential-fit-trf",
       "entity_type": "trace",
       "external_url": null,
-      "label": "TRFでbounds付き残差fitを追う",
+      "label": "共通診断probe · TRF適用条件",
       "relations": [
         {
           "relation_type": "comparison",
@@ -21603,7 +21603,7 @@
       "entity_id": "exponential-fit-trf-poor-init",
       "entity_type": "trace",
       "external_url": null,
-      "label": "悪い初期値でrankと残差を追う",
+      "label": "共通診断probe · 悪い初期値",
       "relations": [
         {
           "relation_type": "scenario",
