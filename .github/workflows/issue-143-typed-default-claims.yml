@@ -1,4 +1,4 @@
-name: Build typed SciPy default-method claims
+name: Finalize typed SciPy default-method claims
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: issue-143-typed-default-method-claims
+  group: issue-143-typed-default-method-claims-finalize
   cancel-in-progress: false
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ env.RESULT_BRANCH }}
           fetch-depth: 0
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
@@ -36,51 +36,15 @@ jobs:
           node-version: "24"
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: Install dependencies
+      - name: Install dependencies and record source identity
         run: |
           set -euo pipefail
           uv sync --frozen --all-extras --all-groups
           npm ci --prefix site
-      - name: Apply and commit canonical source changes on a clean branch
-        run: |
-          exec > >(tee "$RUNNER_TEMP/issue143-apply.log") 2>&1
-          set -euo pipefail
-          cat .github/issue143/patch-*.py > "$RUNNER_TEMP/issue_143_release_patch.py"
-          git fetch origin main
-          git checkout -B "$RESULT_BRANCH" origin/main
-          python "$RUNNER_TEMP/issue_143_release_patch.py"
-          uv run ruff check --fix \
-            src/optimization_compass/versioned_claims.py \
-            src/optimization_compass/dataset_release.py \
-            src/optimization_compass/db.py \
-            src/optimization_compass/api.py \
-            tests/test_versioned_claims.py \
-            tests/test_api.py
-          uv run ruff format \
-            src/optimization_compass/versioned_claims.py \
-            src/optimization_compass/dataset_release.py \
-            src/optimization_compass/db.py \
-            src/optimization_compass/api.py \
-            tests/test_versioned_claims.py \
-            tests/test_api.py
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'data: split SciPy defaults into typed claims
-
-          Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
           echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-          git push origin "HEAD:refs/heads/$RESULT_BRANCH"
-      - name: Upload implementation diagnostic log
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: issue-143-implementation-log-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/issue143-apply.log
-          if-no-files-found: warn
-          retention-days: 1
       - name: Build deterministic dataset 0.16.0 and complete bundle
         run: |
+          exec > >(tee "$RUNNER_TEMP/issue143-build.log") 2>&1
           set -euo pipefail
           rm -rf \
             .release-stage \
@@ -140,6 +104,7 @@ jobs:
           PY
       - name: Validate source, release, and public surfaces
         run: |
+          exec > >(tee "$RUNNER_TEMP/issue143-validation.log") 2>&1
           set -euo pipefail
           uv run ruff check .
           uv run ruff format --check .
@@ -154,6 +119,16 @@ jobs:
           npm --prefix site run parity
           npm --prefix site test -- --run
           npm --prefix site run build
+      - name: Upload build and validation diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: issue-143-finalize-log-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/issue143-build.log
+            ${{ runner.temp }}/issue143-validation.log
+          if-no-files-found: warn
+          retention-days: 1
       - name: Create reviewed annotated tag and verified draft release
         run: |
           set -euo pipefail
@@ -197,6 +172,8 @@ jobs:
       - name: Commit and push generated release surfaces
         run: |
           set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'data: publish dataset 0.16.0
 
