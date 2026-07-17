@@ -28,10 +28,12 @@ describe("LearningJourney parser", () => {
       (journey) => journey.journey_id === "budget-allocation",
     );
     expect(discreteAllocation?.status).toBe("complete");
-    expect(discreteAllocation?.scenarios.map((scenario) => scenario.scenario_id)).toEqual([
-      "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
-      "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
-    ]);
+    expect(Object.fromEntries(
+      discreteAllocation?.scenarios.map((scenario) => [scenario.role, scenario.scenario_id]) ?? [],
+    )).toEqual({
+      failure_contrast: "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      primary: "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+    });
     expect(discreteAllocation?.comparisons[0]?.comparison_id)
       .toBe("COMPARE_KNAPSACK_BNB_BUDGET");
     expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual([]);
