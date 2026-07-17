@@ -1,0 +1,66 @@
+name: Failure discovery clean finalizer
+
+on:
+  push:
+    branches: [feat/failure-discovery-index]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: failure-discovery-clean-finalizer
+  cancel-in-progress: true
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: feat/failure-discovery-index
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: uv sync --frozen --all-extras --all-groups
+      - run: npm ci
+        working-directory: site
+      - name: Apply source integration when needed
+        run: |
+          if test -f scripts/apply_failure_discovery_slice.py; then
+            uv run python scripts/apply_failure_discovery_slice.py
+          fi
+      - name: Regenerate canonical site data
+        run: |
+          rm -rf site/public/data
+          uv run optimization-compass export-site-data --output site/public/data
+      - name: Validate focused and production contracts
+        run: |
+          uv run ruff check src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          uv run ruff format --check src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          uv run mypy src
+          uv run pytest tests/test_failure_modes.py tests/test_failure_discovery.py
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run src/contracts/failure-discovery.test.ts src/features/failures/FailureDiscoveryPage.test.tsx
+          npm --prefix site run build
+      - name: Remove one-shot helpers and commit the complete slice
+        run: |
+          rm -f \
+            scripts/apply_failure_discovery_slice.py \
+            .github/workflows/failure-discovery-snapshot.yml \
+            .github/workflows/failure-discovery-finalize.yml \
+            .github/workflows/failure-discovery-clean-finalize.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -s -m "feat: finalize unified failure discovery slice"
+          git pull --rebase origin feat/failure-discovery-index
+          git push origin HEAD:feat/failure-discovery-index
