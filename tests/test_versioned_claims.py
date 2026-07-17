@@ -10,6 +10,8 @@ import pytest
 
 from optimization_compass.dataset_release import build_staged_release, verify_database
 from optimization_compass.versioned_claims import (
+    CLAIM_PREDICATES,
+    DEFAULT_METHOD_CLAIM_PREDICATES,
     HIGH_USAGE_IMPLEMENTATION_IDS,
     ComparisonEligibility,
     claim_freshness_report,
@@ -44,7 +46,9 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
     ).fetchone()[0]
 
     assert implementation_count == 64
-    assert active_claims == implementation_count * 7
+    assert active_claims == implementation_count * len(CLAIM_PREDICATES) + len(
+        DEFAULT_METHOD_CLAIM_PREDICATES
+    )
     assert unknowns > 0
     placeholders = ",".join("?" for _ in HIGH_USAGE_IMPLEMENTATION_IDS)
     verified_high_usage = connection.execute(
@@ -56,9 +60,66 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
         tuple(sorted(HIGH_USAGE_IMPLEMENTATION_IDS)),
     ).fetchone()[0]
     assert verified_high_usage / len(HIGH_USAGE_IMPLEMENTATION_IDS) >= 0.8
-    freshness = claim_freshness_report(connection, as_of=date(2026, 7, 15))
+    freshness = claim_freshness_report(connection, as_of=date(2026, 7, 17))
     assert freshness["claim_count"] == active_claims
     assert len(freshness["claims"]) == active_claims
+
+
+def test_scipy_defaults_are_separate_typed_versioned_claims(
+    connection: sqlite3.Connection,
+) -> None:
+    rows = connection.execute(
+        """
+        SELECT * FROM implementation_claims
+        WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+          AND predicate IN (?, ?)
+          AND valid_to IS NULL
+        ORDER BY predicate
+        """,
+        DEFAULT_METHOD_CLAIM_PREDICATES,
+    ).fetchall()
+
+    assert [row["predicate"] for row in rows] == sorted(DEFAULT_METHOD_CLAIM_PREDICATES)
+    assert all(row["source_id"] == "S003" for row in rows)
+    assert all(row["product_version"] for row in rows)
+    assert all(row["valid_from"] == "2026-07-16" for row in rows)
+    assert all(row["valid_to"] is None for row in rows)
+    assert all(row["verification_status"] == "verified" for row in rows)
+
+    values = {row["predicate"]: json.loads(row["value_json"]) for row in rows}
+    least_squares = values["default_method_least_squares"]
+    assert least_squares == {
+        "api": "scipy.optimize.least_squares",
+        "condition": "method omitted",
+        "fallback": None,
+        "recommendation_effect": "none",
+        "selected_method": "trf",
+        "selected_method_id": "M_TRUST_REGION_REFLECTIVE",
+        "user_override": "method",
+    }
+    curve_fit = values["default_method_curve_fit_bounds"]
+    assert curve_fit["api"] == "scipy.optimize.curve_fit"
+    assert curve_fit["condition"] == "bounds supplied and method omitted"
+    assert curve_fit["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+    assert curve_fit["fallback"] == {
+        "condition": "bounds omitted and method omitted",
+        "selected_method": "lm",
+        "selected_method_id": "M_LEVENBERG_MARQUARDT",
+    }
+    assert curve_fit["recommendation_effect"] == "none"
+
+    generic = connection.execute(
+        """
+        SELECT value_json FROM implementation_claims
+        WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+          AND predicate = 'important_option_defaults'
+          AND valid_to IS NULL
+        """
+    ).fetchone()
+    assert generic is not None
+    generic_value = json.loads(generic["value_json"])
+    assert "least_squares" not in generic_value
+    assert "curve_fit" not in generic_value
 
 
 def test_superseded_release_is_reproducible_as_of_date(connection: sqlite3.Connection) -> None:

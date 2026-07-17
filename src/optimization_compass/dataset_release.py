@@ -36,6 +36,8 @@ from optimization_compass.release_identity import (
     validate_release_identity,
 )
 from optimization_compass.versioned_claims import (
+    CLAIM_PREDICATES,
+    DEFAULT_METHOD_CLAIM_PREDICATES,
     HIGH_USAGE_IMPLEMENTATION_IDS,
     insert_versioned_claims_and_contexts,
 )
@@ -63,6 +65,9 @@ DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
 DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
 DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
 DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"
+DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION = (
+    ROOT / "data/migrations/012_typed_default_method_claims.sql"
+)
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -271,6 +276,7 @@ def build_staged_release(
             DEFAULT_FAILURE_MODE_MIGRATION,
             DEFAULT_LEARNING_GRAPH_MIGRATION,
             DEFAULT_TRF_DEFAULTS_MIGRATION,
+            DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1301,6 +1307,7 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)
@@ -1357,7 +1364,7 @@ def _record_target_release(
         (
             target_version,
             release_date,
-            "Published canonical Trust Region Reflective defaults and guidance.",
+            "Published typed, independently queryable SciPy default-method claims.",
             "official documentation/repositories, original papers, trusted textbooks",
             f"Generated deterministically from the pinned v{BASE_DATASET_VERSION} base.",
         ),
@@ -1371,14 +1378,14 @@ def _record_target_release(
         """,
         (
             revision_id,
-            "A widely used SciPy default was represented only through broad adjacent methods.",
+            "Conditional SciPy API defaults were consolidated in one generic option claim.",
             (
-                "Added a canonical Trust Region Reflective method, primary source, "
-                "implementation mapping, and API-default metadata."
+                "Added typed least_squares and bounded curve_fit default-method predicates, "
+                "versioned claim rows, and an implementation-claim API filter."
             ),
             (
-                "Separate library default behavior from method recommendation priority, "
-                "and connect the dedicated guide to generated search and retrieval."
+                "Keep API condition, selected method, fallback, override, source, product "
+                "version, and validity independently queryable without changing ranking."
             ),
             target_version,
             release_date,
@@ -2847,7 +2854,7 @@ def _versioned_claim_issues(connection: sqlite3.Connection, tables: list[str]) -
             "SELECT COUNT(*) FROM implementation_claims WHERE valid_to IS NULL"
         ).fetchone()[0]
     )
-    expected = implementation_count * 7
+    expected = implementation_count * len(CLAIM_PREDICATES) + len(DEFAULT_METHOD_CLAIM_PREDICATES)
     if active_count != expected:
         issues.append(f"active-claim-count:{active_count}/{expected}")
     duplicates = connection.execute(
@@ -2857,6 +2864,64 @@ def _versioned_claim_issues(connection: sqlite3.Connection, tables: list[str]) -
         """
     ).fetchall()
     issues.extend(f"active-duplicate:{row[0]}:{row[1]}" for row in duplicates)
+    placeholders = ",".join("?" for _ in DEFAULT_METHOD_CLAIM_PREDICATES)
+    default_rows = connection.execute(
+        f"""
+        SELECT claim_id, predicate, value_json, source_id, product_version,
+               valid_from, valid_to, verification_status
+        FROM implementation_claims
+        WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+          AND predicate IN ({placeholders})
+          AND valid_to IS NULL
+        ORDER BY predicate
+        """,
+        DEFAULT_METHOD_CLAIM_PREDICATES,
+    ).fetchall()
+    if len(default_rows) != len(DEFAULT_METHOD_CLAIM_PREDICATES):
+        issues.append(
+            f"typed-default-count:{len(default_rows)}/{len(DEFAULT_METHOD_CLAIM_PREDICATES)}"
+        )
+    required_fields = {
+        "api",
+        "condition",
+        "selected_method",
+        "selected_method_id",
+        "fallback",
+        "user_override",
+        "recommendation_effect",
+    }
+    for row in default_rows:
+        claim_id = str(row["claim_id"])
+        try:
+            value = json.loads(str(row["value_json"]))
+        except json.JSONDecodeError:
+            issues.append(f"typed-default-json:{claim_id}")
+            continue
+        if not isinstance(value, dict) or not required_fields <= set(value):
+            issues.append(f"typed-default-contract:{claim_id}")
+            continue
+        if (
+            value["selected_method_id"] != "M_TRUST_REGION_REFLECTIVE"
+            or value["user_override"] != "method"
+            or value["recommendation_effect"] != "none"
+        ):
+            issues.append(f"typed-default-semantics:{claim_id}")
+        if row["predicate"] == "default_method_least_squares":
+            if value["fallback"] is not None:
+                issues.append(f"typed-default-fallback:{claim_id}")
+        elif (
+            not isinstance(value["fallback"], dict)
+            or value["fallback"].get("selected_method_id") != "M_LEVENBERG_MARQUARDT"
+        ):
+            issues.append(f"typed-default-fallback:{claim_id}")
+        if (
+            row["source_id"] != "S003"
+            or not str(row["product_version"] or "").strip()
+            or not str(row["valid_from"] or "").strip()
+            or row["valid_to"] is not None
+            or row["verification_status"] != "verified"
+        ):
+            issues.append(f"typed-default-provenance:{claim_id}")
     broken_replacements = int(
         connection.execute(
             """

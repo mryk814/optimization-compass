@@ -92,6 +92,28 @@ def test_recommendations_use_the_shared_service_without_changing_the_public_payl
     assert len(calls) == 1
 
 
+def test_typed_default_method_claims_are_filterable_by_implementation_and_predicate() -> None:
+    response = client.get(
+        "/v1/implementations/I_SCIPY_LEAST_SQUARES_TRF/claims",
+        params={"predicate": "default_method_least_squares"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body) == 1
+    assert body[0]["predicate"] == "default_method_least_squares"
+    assert body[0]["source_id"] == "S003"
+    assert body[0]["product_version"]
+    assert body[0]["valid_to"] is None
+    assert body[0]["value"]["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+    assert body[0]["value"]["recommendation_effect"] == "none"
+
+
+def test_unknown_implementation_claim_path_returns_404() -> None:
+    response = client.get("/v1/implementations/I_NOT_REAL/claims")
+    assert response.status_code == 404
+
+
 def test_invalid_answer_returns_422() -> None:
     response = client.post("/v1/recommendations", json={"answers": {"Q01": ["banana"]}})
     assert response.status_code == 422
@@ -131,6 +153,7 @@ def test_rest_api_and_openapi_remain_available_after_browser_ui_migration() -> N
     assert "/v1/recommendations" in paths
     assert "/v1/methods/{method_id}" in paths
     assert "/v1/implementations/{implementation_id}" in paths
+    assert "/v1/implementations/{implementation_id}/claims" in paths
     assert "/v1/sources/{source_id}" in paths
     assert "/v1/data/verify" in paths
     assert "/healthz" in paths
