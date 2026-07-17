@@ -73,8 +73,8 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
 
   await page.getByRole("link", { name: "問題構造Mapで位置を確認" }).click();
-  await expect(page.getByRole("heading", { level: 2, name: "連続" })).toBeVisible();
-  await expect(page.locator('[role="treeitem"][aria-selected="true"]')).toContainText("連続");
+  await expect(page.getByRole("heading", { level: 2, name: "時間以上（hours or more）" })).toBeVisible();
+  await expect(page.locator('[role="treeitem"][aria-selected="true"]')).toContainText("時間以上");
 
   await page.goBack();
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
