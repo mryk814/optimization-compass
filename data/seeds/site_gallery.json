@@ -198,15 +198,15 @@
       "source_ids": ["S039", "S068", "S055"],
       "difficulty": "intermediate",
       "status": "published",
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-17",
       "question": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
       "decision_variables": "設計寸法と運転条件。",
-      "objective": "costと性能lossの2目的を同時に最小化する。",
+      "objective": "実problemではcostと性能lossの2目的を同時に最小化する。TheaterとCompareの固定教材では、0≤x,y≤2上のf₁=x²+y²とf₂=(x−2)²+(y−2)²を最小化する。",
       "constraints": "設計boundsと安全上のfeasibility条件。",
       "map_node_id": "answer:Q03:multiobjective",
       "python_example": "from pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.optimize import minimize\nfrom pymoo.problems import get_problem\n\nresult = minimize(get_problem(\"zdt1\"), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F)",
-      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
-      "limitations": ["有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"]
+      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontとpreferenceで選んだ1点を区別します。",
+      "limitations": ["実problemのCaseと、解析的な2変数凸二次教材を同一視しません。教材のdecision [x,y] は設計寸法と運転条件そのものではなく、trade-offを読むための無次元化した代理変数です。", "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"]
     },
     {
       "case_id": "EC019",

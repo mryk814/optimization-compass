@@ -102,6 +102,10 @@ test("Pareto result comparisonでpreferenceだけを変えられる", async ({ p
   await expect(page.getByRole("heading", { level: 1, name: "Pareto front上でpreferenceを変える" })).toBeVisible();
   await expect(page.getByText("preference weight", { exact: false }).first()).toBeVisible();
   await expect(page.getByRole("slider", { name: /f₁のweight/u })).toBeVisible();
+  await expect(page.getByLabel("Pareto coverage集計")).toContainText("Sampled81");
+  await expect(page.getByLabel("f₂優先weightの選択結果")).toContainText("Decision(1.6, 1.6)");
+  await expect(page.getByLabel("均衡weightの選択結果")).toContainText("f₁2");
+  await expect(page.getByLabel("f₁優先weightの選択結果")).toContainText("f₂5.12");
   await expect(page.getByText("ranking=forbidden", { exact: false })).toHaveCount(0);
   await expect(page.getByText("forbidden", { exact: true })).toBeVisible();
 });
