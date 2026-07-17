@@ -25,8 +25,8 @@ export function searchTreeComparisonFixture(datasetVersion: string): ComparisonI
       fixed_factors: ["problem instance", "branch order", "initial incumbent"],
       changed_factors: ["node budget stopping"],
       seed_policy: "fixed seed 0",
-      budget: { metric: "oracle_evaluations", value: 4 },
-      stopping_policy: "compare at four oracle evaluations",
+      budget: { metric: "oracle_evaluations", value: 9 },
+      stopping_policy: "compare within nine oracle evaluations",
       tuning_policy: "fixed depth-first include-first",
       synchronization_axis: "oracle_evaluations",
       metrics: [
@@ -49,8 +49,8 @@ export function searchTreeComparisonFixture(datasetVersion: string): ComparisonI
           scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
           label_ja: "探索継続run",
           label_en: "Continuing run",
-          parameters: { stopping: "continue" },
-          budget: { metric: "oracle_evaluations", value: 4 },
+          parameters: { node_stop_limit: 9 },
+          budget: { metric: "oracle_evaluations", value: 9 },
           artifact: {
             artifact_id: "binary-knapsack-bnb-complete",
             artifact_kind: "executable_trace",
@@ -66,8 +66,8 @@ export function searchTreeComparisonFixture(datasetVersion: string): ComparisonI
           scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
           label_ja: "node予算停止run",
           label_en: "Node-budget run",
-          parameters: { stopping: "four nodes" },
-          budget: { metric: "oracle_evaluations", value: 4 },
+          parameters: { node_stop_limit: 4 },
+          budget: { metric: "oracle_evaluations", value: 9 },
           artifact: {
             artifact_id: "binary-knapsack-bnb-budget",
             artifact_kind: "executable_trace",
