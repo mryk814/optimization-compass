@@ -468,6 +468,8 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 | Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
 | Release/schema/recommendation | complete repository validation | yes | yes | yes |
 
+The validation tiers from `AGENTS.md` are runnable as single commands: `make tier-a`, `make tier-b`, and `make tier-c`.
+
 Common commands:
 
 ```bash
