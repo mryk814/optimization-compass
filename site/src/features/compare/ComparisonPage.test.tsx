@@ -169,28 +169,10 @@ function paretoMember(memberId: string, label: string, weight: number) {
 
 function paretoScenarioIndex(): VisualizationScenarioIndex {
   const index = structuredClone(scenarios) as unknown as VisualizationScenarioIndex;
-  const primary = index.scenarios.find(
-    (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_QUADRATIC",
+  const alternate = index.scenarios.find(
+    (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
   );
-  if (!primary) throw new Error("Pareto scenario fixture is missing");
-  const alternate = structuredClone(primary);
-  alternate.scenario_id = "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY";
-  alternate.identity_status = "derived";
-  alternate.canonical_scenario_id = "SCENARIO_BIOBJECTIVE_QUADRATIC";
-  alternate.purpose = "sensitivity";
-  alternate.title_ja = "preference weight感度";
-  alternate.lesson.failure_signals = [{
-    signal_id: "single_best_misread",
-    label_ja: "単一bestと誤読",
-    label_en: "misreads a unique best",
-    observable_ids: ["preference_selection"],
-  }];
-  alternate.runs = [{
-    ...alternate.runs[0],
-    run_id: "RUN_BIOBJECTIVE_WEIGHTED_SUM",
-    method_id: "M_WEIGHTED_SUM",
-  }];
-  index.scenarios.push(alternate);
+  if (!alternate) throw new Error("Pareto sensitivity fixture is missing");
   return index;
 }
 

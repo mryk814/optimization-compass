@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.14.0",
+  "dataset_version": "0.15.0",
   "entities": [
     {
       "aliases": [],
@@ -1622,12 +1622,12 @@
         },
         {
           "relation_type": "member_method",
-          "target_id": "M_NSGA_II",
+          "target_id": "M_WEIGHTED_SUM",
           "target_type": "method"
         },
         {
           "relation_type": "member_scenario",
-          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
           "target_type": "scenario"
         },
         {
@@ -12500,6 +12500,11 @@
           "relation_type": "problem",
           "target_id": "PA038",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "scenario"
         }
       ],
       "summary": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。"
@@ -17147,11 +17152,6 @@
           "target_type": "case"
         },
         {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_PARETO_PREFERENCE",
-          "target_type": "comparison"
-        },
-        {
           "relation_type": "evidence",
           "target_id": "S039",
           "target_type": "source"
@@ -18927,6 +18927,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S039",
           "target_type": "source"
@@ -19782,10 +19787,10 @@
     {
       "aliases": [],
       "canonical_url": null,
-      "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "entity_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
       "entity_type": "scenario",
       "external_url": null,
-      "label": "単一bestではなくPareto frontを読む",
+      "label": "preference weightで選択点がどう動くか比べる",
       "relations": [
         {
           "relation_type": "artifact",
@@ -19796,6 +19801,42 @@
           "relation_type": "comparison",
           "target_id": "COMPARE_PARETO_PREFERENCE",
           "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC017",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "同じPareto frontから、weightによって選択点が変わることを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "単一bestではなくPareto frontを読む",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "biobjective-quadratic-pareto-front",
+          "target_type": "trace"
         },
         {
           "relation_type": "evidence",
@@ -21834,6 +21875,11 @@
           "relation_type": "related_map",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "scenario"
         },
         {
           "relation_type": "scenario",

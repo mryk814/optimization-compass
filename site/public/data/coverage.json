@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.14.0",
+  "dataset_version": "0.15.0",
   "expectations": [
     {
       "applicability": "expected",
@@ -126,6 +126,7 @@
         "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC"
       ],
       "scenario_ids": [
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
         "SCENARIO_BIOBJECTIVE_QUADRATIC"
       ],
       "slice_id": "SLICE_MULTI_OBJECTIVE",
@@ -7459,12 +7460,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "COMPARE_PARETO_PREFERENCE"
-          ]
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "content": {
           "count": 1,
@@ -7500,12 +7501,11 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NSGA_II",
-            "COMPARE_PARETO_PREFERENCE",
             "EC017",
             "I_DEAP",
             "I_PYMOO",
@@ -10315,12 +10315,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
         },
         "content": {
           "count": 1,
@@ -10355,11 +10355,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_WEIGHTED_SUM",
+            "COMPARE_PARETO_PREFERENCE",
             "EC017",
             "S039",
             "S055",

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.14.0",
+  "dataset_version": "0.15.0",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215662,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "4f2fe6b8fd08a01b6c452df858287a1a16eba114a078c64ca05c18701dde691a",
+        "payload_sha256": "6fc7d57010bc596e5dd2580b41ee030710a73a6084e68b20b1630aa8a7b328ec",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210211,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "848da7156f19191ee440e7b7280688186858757b1b657b7ca45858425233c9a5",
+        "payload_sha256": "26da4f4c53107584edb47e53f9f0cc53076af875d4d477564381f0ee1faf8412",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -442,13 +442,13 @@
         ],
         "payload_bytes": 208170,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "493f57f113ebb567cad220286ad2f11d34351ebeb2cd114b20b861161ad978e7",
+        "payload_sha256": "b184fee0022c2f09a00274a2a2248dfaed87ad6d191c22aa055a1bb8cfed75f2",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -615,13 +615,13 @@
         ],
         "payload_bytes": 204202,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "7a10297c6e48c40db9bc14166baaedbdf586ad93bd626997736968fbf61a5bb2",
+        "payload_sha256": "c664cc610ed60105cb7b106360a2331d5331d5a67c84b7b3724d8503a9935f05",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -789,13 +789,13 @@
         ],
         "payload_bytes": 72534,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "ae48b90217b5072c72681844f9bcad4d9c4dd1b612820113e41ef53506f40a84",
+        "payload_sha256": "47c308a8b24075291fb13349e8002f15790bd6cd481acc53a73eb84969b771d4",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1055,13 +1055,13 @@
         ],
         "payload_bytes": 66443,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "ad04c7a3880808bcd92a371967d96e8cc4cbc6788b08c07382de805cede0eb3b",
+        "payload_sha256": "cae95eed58abf84ff007747257858a3ae1d18459d42409f56698f95c02bc4149",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1237,13 +1237,13 @@
         ],
         "payload_bytes": 65995,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "e8dbb8108f2b3cc9d920be06959aae78d70046bafd4ad7ebd086d91238274be6",
+        "payload_sha256": "9e8251b4e475a5461ae29c97b9d0b67175fd41a1bc382ce73ed5e1eb0d0589d3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1419,13 +1419,13 @@
         ],
         "payload_bytes": 53138,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "645d76956df57b96b55b6d53d98c7c4a40cf0e1877bce635b7abd8a904a8a36e",
+        "payload_sha256": "10edd2907e5de25c2738f7165c1474b2823f9582e348d9594e2babf1e51637bb",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1615,13 +1615,13 @@
         ],
         "payload_bytes": 66386,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "267fe4d80024911048c739d05d5332db283af44632dacbfdce5b65bc5a6db92c",
+        "payload_sha256": "1ff203624d307cbe60245a38313043a1479ea3a68bdd4d5766148f91c6a33ad5",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1811,13 +1811,13 @@
         ],
         "payload_bytes": 66017,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "cf491a1b35e1c2a70aacf7c571a56b97a074d5eca37a11b114d8998b04588ac1",
+        "payload_sha256": "3545775afd6c547ab877b2f8a7f21d440214cc5f8234ca9aec58dd8efe9ef5d2",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2008,13 +2008,13 @@
         ],
         "payload_bytes": 22749,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "faea368edabef7669b7fca88cec8d99fb7a84841e95b6f2337a429178ec32af8",
+        "payload_sha256": "08fc51a2bf62fc3e91cff08c47a4db277b04447f1258f8f9bfeaef066d7d9a1c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2196,13 +2196,13 @@
         ],
         "payload_bytes": 22451,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "2c10fbf77c1b881c4759ad55244064d8ee54c4d4e6a3c1caa359228febc71fe4",
+        "payload_sha256": "4722e244307460bf8a92b6b93216a36d322cf0a383ec5a69b9537239bdd7cb1c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2398,13 +2398,13 @@
         ],
         "payload_bytes": 22735,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "0d6d3051ea16841f5c03e2c1486e68c0336162f872933079fb0f4733d5d4afce",
+        "payload_sha256": "d02cb6c5a8a87dc7e804b3c4dfd6824983cf9441c789256e7eea741bf18dd7e6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2586,13 +2586,13 @@
         ],
         "payload_bytes": 22741,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "0a32ef648735a09d8a26b87b5541a0c1c24d465af6340e315ef8a451225beebd",
+        "payload_sha256": "6aaf4b383293777f110cabbb346440fb753cd2a8003b4580023c16ddf1726404",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2773,13 +2773,13 @@
         ],
         "payload_bytes": 102176,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "081487a3e70c34cc673fcbc652b14d704cbc7c0d593aa622ba417b242d86a3ed",
+        "payload_sha256": "181baad358cc67210019ed724b8903c47823edd6af10054f902ac473bebb8569",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3036,13 +3036,13 @@
         ],
         "payload_bytes": 39756,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "1530b94c78f10b3cf516f3daacc7d2a6d3a17abe7e81d5bbaa69f7676c91c606",
+        "payload_sha256": "b0a30771e128a6f69bb1c4700cb8fe37bcb0d439c35fbe368e3352fb7eabb8bf",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3238,7 +3238,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3453,7 +3453,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3668,7 +3668,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3955,7 +3955,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4163,13 +4163,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "4519e16bae1b5df3a8f7464c37e31cfabc91e239eb2f46abd80c3a6720413b78",
+        "payload_sha256": "f9b266f497106697c8da3399321c826b171436076276c762512acc83a4ba5231",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4358,13 +4358,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "4519e16bae1b5df3a8f7464c37e31cfabc91e239eb2f46abd80c3a6720413b78",
+        "payload_sha256": "f9b266f497106697c8da3399321c826b171436076276c762512acc83a4ba5231",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4570,13 +4570,13 @@
         ],
         "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "c901f8e1c87808e6599af70d6bf85f1a7b8bfa81b1357e091b59fa496c5f2842",
+        "payload_sha256": "dcd34e51f95f217f09380931072085d7f7b7926e61946e0140ee3468c2abe2df",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.14.0",
+      "dataset_version": "0.15.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4734,6 +4734,194 @@
       ],
       "title_en": "Read a Pareto front instead of one best value",
       "title_ja": "単一bestではなくPareto frontを読む"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "ParetoFront",
+        "artifact_contract_version": "1.1.0",
+        "artifact_kind": "result_visualization",
+        "observable_ids": [
+          "dominated_points",
+          "pareto_front",
+          "preference_selection",
+          "ideal_nadir"
+        ],
+        "payload_bytes": 23935,
+        "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
+        "payload_sha256": "dcd34e51f95f217f09380931072085d7f7b7926e61946e0140ee3468c2abe2df",
+        "renderer_contract_version": "1.1.0",
+        "renderer_family": "pareto_front"
+      },
+      "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.15.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 81
+        },
+        "initial_condition": {
+          "point": [
+            1.0,
+            1.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_vector"
+        ],
+        "parameter_preset_id": "PRESET_BIOBJECTIVE_GRID",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "grid_complete": true
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-17",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "Preference-weight sensitivity on a fixed Pareto front",
+          "ja": "固定したPareto frontに対するpreference weight感度"
+        },
+        "expected_phenomenon_en": "The non-dominated candidates and analytic front stay fixed while weights 0.2, 0.5, and 0.8 move only the selected point along the front.",
+        "expected_phenomenon_ja": "非劣候補と解析的frontは固定したまま、f1のweightを0.2、0.5、0.8へ変えると選択点だけがfront上を移動します。",
+        "failure_signals": [
+          {
+            "label_en": "misreads one weighted selection as the unique best",
+            "label_ja": "1つのweightによる選択を唯一のbestと誤読する",
+            "observable_ids": [
+              "preference_selection",
+              "ideal_nadir"
+            ],
+            "signal_id": "single_best_misread"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Show the analytic front and ideal / nadir references.",
+          "note_ja": "解析的frontとideal / nadirを表示します。",
+          "policy": "show"
+        },
+        "learning_objective": {
+          "en": "Read how weights select different points from the same Pareto front",
+          "ja": "同じPareto frontから、weightによって選択点が変わることを読む"
+        },
+        "limitations_en": "A weighted-sum selection lesson on an analytic convex front; scanning weights can miss non-dominated points on a non-convex front.",
+        "limitations_ja": "解析的な凸front上のweighted-sum選択教材です。一般の非凸frontでは、weightを走査しても取得できない非劣点があります。",
+        "misconception": {
+          "en": "A point selected by one weight is the unique best solution",
+          "ja": "weightを変えて得た1点が、多目的問題の唯一のbestである"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "dominated_points"
+            ],
+            "title_en": "Plot results in objective space",
+            "title_ja": "実行結果を目的空間へ配置"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "dominated_points",
+              "pareto_front"
+            ],
+            "title_en": "Remove dominated points",
+            "title_ja": "支配される点を除く"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "pareto_front",
+              "ideal_nadir"
+            ],
+            "title_en": "Read the trade-off front",
+            "title_ja": "trade-off frontを読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "preference_selection",
+              "ideal_nadir"
+            ],
+            "title_en": "Choose with preference",
+            "title_ja": "preferenceで1点を選ぶ"
+          }
+        ],
+        "prerequisite_concept_ids": [],
+        "primary_observables": [
+          {
+            "label_en": "dominated points",
+            "label_ja": "支配される点",
+            "observable_id": "dominated_points"
+          },
+          {
+            "label_en": "Pareto front",
+            "label_ja": "Pareto front",
+            "observable_id": "pareto_front"
+          },
+          {
+            "label_en": "preference-selected point",
+            "label_ja": "preferenceで選ぶ点",
+            "observable_id": "preference_selection"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BIOBJECTIVE_QUADRATIC"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "ideal / nadir reference",
+            "label_ja": "ideal / nadir reference",
+            "observable_id": "ideal_nadir"
+          }
+        ],
+        "static_summary": {
+          "en": "Compare selections from three preference weights on one Pareto front.",
+          "ja": "同じPareto front上で3つのpreference weightによる選択点を比べます。"
+        },
+        "success_signals": [
+          {
+            "label_en": "distinguishes each weighted selection from the front",
+            "label_ja": "weightごとの選択点をfrontと区別できる",
+            "observable_ids": [
+              "pareto_front",
+              "preference_selection"
+            ],
+            "signal_id": "preference_moves_selection"
+          }
+        ],
+        "text_alternative": {
+          "en": "Weights 0.2, 0.5, and 0.8 select three different points on one front.",
+          "ja": "weight 0.2、0.5、0.8で、同じ非劣front上の異なる3点を選びます。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+      "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "biobjective-quadratic-pareto-front",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_WEIGHTED_SUM",
+          "profile_id": "PROFILE_NSGA_II_PARETO_FRONT",
+          "run_id": "RUN_BIOBJECTIVE_WEIGHTED_SUM"
+        }
+      ],
+      "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "title_en": "Compare how preference weights move the selected point",
+      "title_ja": "preference weightで選択点がどう動くか比べる"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.14.0",
+  "dataset_version": "0.15.0",
   "definitions": [
     {
       "available_oracles": [

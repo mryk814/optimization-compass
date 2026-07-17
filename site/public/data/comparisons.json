@@ -404,10 +404,10 @@
         "Pareto dominance",
         "81-point grid"
       ],
-      "formulation_summary": "2つの目的を同時に最小化し、非劣frontからpreferenceで1点を選ぶ。",
+      "formulation_summary": "0≤x,y≤2でf₁=x²+y²とf₂=(x−2)²+(y−2)²を同時に最小化し、同じ非劣frontからweightで1点を選ぶ。",
       "identity_status": "canonical",
       "journey_id": "EC017",
-      "last_verified": "2026-07-16",
+      "last_verified": "2026-07-17",
       "limitations": [
         "凸で解析的な2目的教材である。",
         "weighted sumは一般の非凸frontを欠落させうる。"
@@ -425,15 +425,37 @@
             "metric": "sampled_points",
             "value": 81
           },
+          "label_en": "f2-priority preference",
+          "label_ja": "f₂優先weight",
+          "member_id": "f2-priority",
+          "method_id": "M_WEIGHTED_SUM",
+          "parameters": {
+            "weight_f1": 0.2
+          },
+          "role": "preference_variant",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+        },
+        {
+          "artifact": {
+            "artifact_id": "biobjective-quadratic-pareto-front",
+            "artifact_kind": "result_visualization",
+            "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
+            "renderer_contract_version": "1.1.0",
+            "renderer_family": "pareto_front"
+          },
+          "budget": {
+            "metric": "sampled_points",
+            "value": 81
+          },
           "label_en": "Balanced preference",
           "label_ja": "均衡weight",
           "member_id": "balanced-preference",
-          "method_id": "M_NSGA_II",
+          "method_id": "M_WEIGHTED_SUM",
           "parameters": {
             "weight_f1": 0.5
           },
           "role": "balanced_preference",
-          "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
         },
         {
           "artifact": {
@@ -448,14 +470,14 @@
             "value": 81
           },
           "label_en": "f1-priority preference",
-          "label_ja": "f1優先weight",
+          "label_ja": "f₁優先weight",
           "member_id": "f1-priority",
-          "method_id": "M_NSGA_II",
+          "method_id": "M_WEIGHTED_SUM",
           "parameters": {
             "weight_f1": 0.8
           },
           "role": "preference_variant",
-          "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
         }
       ],
       "metrics": [
@@ -954,5 +976,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.14.0"
+  "dataset_version": "0.15.0"
 }
