@@ -12,10 +12,18 @@ aliases: [/learn/method.gradient-descent]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、現在地の坂を読み、最も下りやすい向きへ少しずつ進むことです。
+
+- **見るもの**: 現在の目的関数値と勾配、試したstepの結果
+- **動かすもの**: 現在点とstep size
+- **前進の判断**: 目的関数値が下がり、gradient normも小さくなること
 
 ## 一手の意味
 

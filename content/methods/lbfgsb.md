@@ -10,10 +10,18 @@ prerequisites: [bfgs]
 related_ids: [bfgs, newton-method, trust-region-newton-cg]
 aliases: [/learn/lbfgsb]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、最近の曲率情報だけを覚え、boundsの外へ出ずに大規模な問題を進むことです。
+
+- **見るもの**: 目的関数値、勾配、bounds、直近の曲率更新
+- **動かすもの**: bounds内の現在点とlimited-memoryの更新履歴
+- **前進の判断**: 目的関数値とprojected gradient normが下がること
 
 ## BFGSとの違い
 

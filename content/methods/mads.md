@@ -10,10 +10,18 @@ prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, differential-evolution]
 aliases: [/learn/mads]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、現在のincumbentの周囲をmesh上で確かめ、改善できなければ探索の目を細かくすることです。
+
+- **見るもの**: poll候補の目的関数値、constraint violation、評価成否
+- **動かすもの**: incumbent、mesh size、poll directions
+- **前進の判断**: constraint handlingの規則に従い、constraint violationを減らすか、同等のfeasibilityでincumbent objectiveを改善すること
 
 ## SearchとPoll
 

@@ -10,10 +10,18 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [lbfgsb, newton-method, trust-region-newton-cg]
 aliases: [/learn/bfgs]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、進んだ前後の勾配の変化から地形の曲がり方を学び、次の方向を整えることです。
+
+- **見るもの**: 目的関数値、勾配の変化、line searchの結果
+- **動かすもの**: 現在点、探索方向、逆Hessianの近似
+- **前進の判断**: 目的関数値とgradient normが下がり、line searchが安定してstepを受け入れること
 
 ## 何を更新しているか
 
