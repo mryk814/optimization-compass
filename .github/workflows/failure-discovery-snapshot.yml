@@ -3,6 +3,7 @@ name: Failure discovery snapshot
 on:
   push:
     branches: [feat/failure-discovery-index]
+  pull_request:
 
 permissions:
   contents: read
