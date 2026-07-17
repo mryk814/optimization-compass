@@ -3,6 +3,8 @@
 This file is the first entry point for humans and automated agents changing this repository.
 For detailed recipes, read [`docs/adding-knowledge.md`](docs/adding-knowledge.md). Automated agents should also read [`.agents/skills/optimization-compass-maintenance/SKILL.md`](.agents/skills/optimization-compass-maintenance/SKILL.md).
 
+Task-shaped authoring skills for growing the dataset live in [`.claude/skills/`](.claude/skills/) (Claude Code loads them automatically): `grow-data` (triage/routing), `add-content-article`, `add-gallery-case`, `add-comparison`, and `add-problem-instance`. Each ends with a one-command validation tier (`make tier-a`, `make tier-b`, `make tier-c`).
+
 ## Product boundary
 
 Optimization Compass is a versioned, data-driven Optimization Atlas. Keep these responsibilities separate:
@@ -73,6 +75,8 @@ For high or critical changes, inspect similar merged work and document the autho
 8. In the PR, state changed IDs, sources, behavioral impact, generated artifacts, and validation results.
 
 ## Validation tiers
+
+Each tier is runnable as one command: `make tier-a`, `make tier-b`, `make tier-c` (tier C = tier B plus site typecheck and browser E2E).
 
 ### Tier A — prose or existing-content correction
 
