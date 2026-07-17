@@ -1245,6 +1245,288 @@
           ],
           "state": "missing",
           "target_ids": [
+            "/gallery/materials-composition-search",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_TURBO_SAASBO",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S036",
+            "/sources/S059"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "materials-composition-search"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_AX",
+            "I_BOTORCH"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_DIFFERENTIAL_EVOLUTION",
+            "M_TURBO_SAASBO"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/materials-composition-search",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_TURBO_SAASBO",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S036",
+            "/sources/S059"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S034",
+            "S035",
+            "S036",
+            "S059"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "turbo-saasbo"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "materials-composition-search",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "comparison_wrong_journey"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "COMPARE_GRADIENT_FAMILY"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/nn-training",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_ADAMW",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_LBFGS",
+            "/methods/M_MOMENTUM_SGD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S047",
+            "/sources/S048",
+            "/sources/S049",
+            "/sources/S056",
+            "/sources/S057",
+            "/sources/S065",
+            "/sources/S070"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "nn-training"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_ADAMW",
+            "M_BAYESIAN_OPT_GP",
+            "M_LBFGS",
+            "M_MOMENTUM_SGD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/nn-training",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_ADAMW",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_LBFGS",
+            "/methods/M_MOMENTUM_SGD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S047",
+            "/sources/S048",
+            "/sources/S049",
+            "/sources/S056",
+            "/sources/S057",
+            "/sources/S065",
+            "/sources/S070"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S001",
+            "S002",
+            "S047",
+            "S048",
+            "S049",
+            "S056",
+            "S057",
+            "S065",
+            "S070"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "adamw",
+            "lbfgs",
+            "momentum-sgd"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "nn-training",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
             "/gallery/portfolio-allocation",
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
@@ -1392,6 +1674,143 @@
           ],
           "state": "missing",
           "target_ids": [
+            "/gallery/raw-material-blending",
+            "/methods/M_BARRIER_LP_QP",
+            "/methods/M_DUAL_SIMPLEX",
+            "/methods/M_SIMPLEX",
+            "/methods/M_SQP",
+            "/sources/S004",
+            "/sources/S016",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "raw-material-blending"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_HIGHS_NATIVE",
+            "I_SCIPY_LINPROG_HIGHS"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BARRIER_LP_QP",
+            "M_DUAL_SIMPLEX",
+            "M_SIMPLEX",
+            "M_SQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/raw-material-blending",
+            "/methods/M_BARRIER_LP_QP",
+            "/methods/M_DUAL_SIMPLEX",
+            "/methods/M_SIMPLEX",
+            "/methods/M_SQP",
+            "/sources/S004",
+            "/sources/S016",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S004",
+            "S016",
+            "S054",
+            "S055",
+            "S056"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "barrier-lp-qp",
+            "dual-simplex",
+            "primal-simplex"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "raw-material-blending",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
             "/gallery/shift-scheduling",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
@@ -1496,6 +1915,282 @@
         }
       },
       "journey_id": "shift-scheduling",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/sparse-feature-selection",
+            "/methods/M_COORDINATE_DESCENT",
+            "/methods/M_FISTA",
+            "/methods/M_PROX_GRADIENT",
+            "/methods/M_SUBGRADIENT",
+            "/sources/S046",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S067"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_JAXOPT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_COORDINATE_DESCENT",
+            "M_FISTA",
+            "M_PROX_GRADIENT",
+            "M_SUBGRADIENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/sparse-feature-selection",
+            "/methods/M_COORDINATE_DESCENT",
+            "/methods/M_FISTA",
+            "/methods/M_PROX_GRADIENT",
+            "/methods/M_SUBGRADIENT",
+            "/sources/S046",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S067"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S046",
+            "S055",
+            "S056",
+            "S066",
+            "S067"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "coordinate-descent",
+            "fista",
+            "proximal-gradient"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "sparse-feature-selection",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/surrogate-inverse-design",
+            "/methods/M_LBFGS",
+            "/methods/M_MIRROR_DESCENT",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S046",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S066"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "surrogate-inverse-design"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_JAXOPT",
+            "I_SCIPY_SLSQP"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_LBFGS",
+            "M_MIRROR_DESCENT",
+            "M_PROJECTED_GRADIENT",
+            "M_SLSQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/surrogate-inverse-design",
+            "/methods/M_LBFGS",
+            "/methods/M_MIRROR_DESCENT",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S046",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S066"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S046",
+            "S055",
+            "S056",
+            "S064",
+            "S066"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "mirror-descent",
+            "projected-gradient",
+            "slsqp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "surrogate-inverse-design",
       "missing_dimensions": [
         "alternate_scenario",
         "canonical_comparison",
@@ -2157,6 +2852,137 @@
     },
     {
       "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/materials-composition-search",
+      "case_id": "materials-composition-search",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
+      ],
+      "conditional_method_ids": [
+        "M_TURBO_SAASBO"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "turbo-saasbo"
+      ],
+      "dataset_version": "0.13.0",
+      "domain": "materials-informatics",
+      "excluded_method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "formulation": {
+        "constraints": "各成分の許容範囲と、装置が許すprocess条件の範囲。",
+        "decision_variables": "組成比率と焼成温度などのprocess条件。",
+        "objective": "測定した物性値と目標値の差を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_AX",
+        "I_BOTORCH"
+      ],
+      "journey_id": "materials-composition-search",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "実験できる回数が数十回に限られる中で、目標物性に近い組成を見つけたい。",
+      "limitations": [
+        "有限の実験budgetで得た最良組成に大域最適の保証はなく、装置や原料ロットが変わった場合の再現性も別途検証が必要です。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA014",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "status": "partial",
+      "takeaway": "測定noiseと再現実験を計画に含め、surrogateの予測分散が大きい領域の外挿を信頼しません。同時に複数試料を作る場合は多点acquisitionを使います。",
+      "title_en": "Search material compositions with few experiments",
+      "title_ja": "少ない実験回数で材料の組成・process条件を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_ADAMW"
+      ],
+      "canonical_url": "/gallery/nn-training",
+      "case_id": "nn-training",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
+          "comparison_id": "COMPARE_GRADIENT_FAMILY"
+        }
+      ],
+      "completion_reasons": [
+        "comparison_wrong_journey",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
+      ],
+      "conditional_method_ids": [
+        "M_LBFGS",
+        "M_MOMENTUM_SGD"
+      ],
+      "content_ids": [
+        "adamw",
+        "lbfgs",
+        "momentum-sgd"
+      ],
+      "dataset_version": "0.13.0",
+      "domain": "machine-learning",
+      "excluded_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "formulation": {
+        "constraints": "明示的な制約はなく、GPU memoryと学習時間が実質的な上限。",
+        "decision_variables": "networkの重みとbias。",
+        "objective": "mini-batchで推定する訓練損失の期待値を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_OPTAX",
+        "I_PYTORCH_OPTIM"
+      ],
+      "journey_id": "nn-training",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "数百万parameterのmodelを、全datasetを一度に読み切れない条件で学習したい。",
+      "limitations": [
+        "確率的勾配法の挙動は学習率scheduleとbatch sizeに依存し、この固定例は別datasetでの汎化性能やoptimizer間の優劣を保証しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA040",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S047",
+        "S048",
+        "S049",
+        "S056",
+        "S057",
+        "S065",
+        "S070"
+      ],
+      "status": "partial",
+      "takeaway": "学習率・schedule・batch sizeとseedを記録し、訓練損失ではなく検証指標で停止と比較を判断します。optimizerの既定値を万能設定として扱いません。",
+      "title_en": "Train a neural network on a large dataset",
+      "title_ja": "大規模datasetでneural networkを学習する"
+    },
+    {
+      "candidate_method_ids": [
         "MF_LP_QP_CONIC"
       ],
       "canonical_url": "/gallery/portfolio-allocation",
@@ -2222,6 +3048,69 @@
     },
     {
       "candidate_method_ids": [
+        "M_SIMPLEX"
+      ],
+      "canonical_url": "/gallery/raw-material-blending",
+      "case_id": "raw-material-blending",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
+      ],
+      "conditional_method_ids": [
+        "M_BARRIER_LP_QP",
+        "M_DUAL_SIMPLEX"
+      ],
+      "content_ids": [
+        "barrier-lp-qp",
+        "dual-simplex",
+        "primal-simplex"
+      ],
+      "dataset_version": "0.13.0",
+      "domain": "materials-informatics",
+      "excluded_method_ids": [
+        "M_SQP"
+      ],
+      "formulation": {
+        "constraints": "成分ごとの規格上下限、配合比率の合計100%、原料の使用上限。",
+        "decision_variables": "各原料の配合比率(非負で合計100%)。",
+        "objective": "配合costの合計を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_HIGHS_NATIVE",
+        "I_SCIPY_LINPROG_HIGHS"
+      ],
+      "journey_id": "raw-material-blending",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "原料ごとの単価と成分規格の下で、百分率の配合を最小costで決めたい。",
+      "limitations": [
+        "成分が配合比に対して線形に混ざるという仮定に依存し、非線形な相互作用や工程での組成変動はこの教材modelの保証範囲に含みません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA017",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "partial",
+      "takeaway": "分析値と規格の変動幅を確認し、dual価格でcostを支配する規格を特定します。原料切替の固定費や最小使用量が入る場合はMILPへ拡張します。",
+      "title_en": "Blend raw materials at minimum cost",
+      "title_ja": "規格を満たす原料配合を最小costで決める"
+    },
+    {
+      "candidate_method_ids": [
         "M_CP_SAT"
       ],
       "canonical_url": "/gallery/shift-scheduling",
@@ -2283,17 +3172,137 @@
       "takeaway": "hard constraintとsoft constraintを最初に分離します。",
       "title_en": "Shift scheduling",
       "title_ja": "スタッフのシフトを組む"
+    },
+    {
+      "candidate_method_ids": [
+        "M_PROX_GRADIENT"
+      ],
+      "canonical_url": "/gallery/sparse-feature-selection",
+      "case_id": "sparse-feature-selection",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
+      ],
+      "conditional_method_ids": [
+        "M_COORDINATE_DESCENT",
+        "M_FISTA"
+      ],
+      "content_ids": [
+        "coordinate-descent",
+        "fista",
+        "proximal-gradient"
+      ],
+      "dataset_version": "0.13.0",
+      "domain": "machine-learning",
+      "excluded_method_ids": [
+        "M_SUBGRADIENT"
+      ],
+      "formulation": {
+        "constraints": "明示的な制約はなく、正則化強度がsparsityを制御する。",
+        "decision_variables": "線形modelの回帰係数。",
+        "objective": "二乗損失とL1正則化項の和を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_JAXOPT"
+      ],
+      "journey_id": "sparse-feature-selection",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "多数の特徴のうち効く少数だけを残した、解釈しやすいmodelが欲しい。",
+      "limitations": [
+        "L1正則化は相関した特徴の一方を任意に残すことがあり、この固定例は選択された特徴の因果的重要性を保証しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA035",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S046",
+        "S055",
+        "S056",
+        "S066",
+        "S067"
+      ],
+      "status": "partial",
+      "takeaway": "正則化係数はcross-validationで選び、選ばれた特徴の安定性を複数のデータ分割で確認します。相関の強い特徴間では選択が入れ替わります。",
+      "title_en": "Fit a sparse model with L1 regularization",
+      "title_ja": "L1正則化でsparseな予測modelを作る"
+    },
+    {
+      "candidate_method_ids": [
+        "M_PROJECTED_GRADIENT"
+      ],
+      "canonical_url": "/gallery/surrogate-inverse-design",
+      "case_id": "surrogate-inverse-design",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
+      ],
+      "conditional_method_ids": [
+        "M_MIRROR_DESCENT",
+        "M_SLSQP"
+      ],
+      "content_ids": [
+        "mirror-descent",
+        "projected-gradient",
+        "slsqp"
+      ],
+      "dataset_version": "0.13.0",
+      "domain": "materials-informatics",
+      "excluded_method_ids": [
+        "M_LBFGS"
+      ],
+      "formulation": {
+        "constraints": "組成の非負と合計1、成分ごとの上限。",
+        "decision_variables": "各成分のmole分率(非負で合計1)。",
+        "objective": "予測物性と目標値の差の二乗を最小化する。",
+        "variable_domain_summary": "continuous"
+      },
+      "implementation_ids": [
+        "I_JAXOPT",
+        "I_SCIPY_SLSQP"
+      ],
+      "journey_id": "surrogate-inverse-design",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "学習済みの予測model上で目標物性に最も近い組成を、組成の合計1を守りながら探したい。",
+      "limitations": [
+        "逆設計解は予測modelの精度と適用範囲に依存し、model上の最適値は実材料での物性や合成可能性を保証しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA036",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S002",
+        "S046",
+        "S055",
+        "S056",
+        "S064",
+        "S066"
+      ],
+      "status": "partial",
+      "takeaway": "最適化はsurrogateの誤差を増幅するため、訓練データ分布から外れた組成は予測の不確かさと併せて確認します。複数の初期組成から再実行して候補を比較し、上位候補を実験で検証します。",
+      "title_en": "Invert a trained property predictor for composition design",
+      "title_ja": "学習済み物性予測modelで組成を逆設計する"
     }
   ],
   "orphan_assets": [
     {
       "asset_id": "COMPARE_GRADIENT_DIVERGENCE",
-      "asset_type": "comparison",
-      "policy": "warning",
-      "reason_code": "comparison_without_journey"
-    },
-    {
-      "asset_id": "COMPARE_GRADIENT_FAMILY",
       "asset_type": "comparison",
       "policy": "warning",
       "reason_code": "comparison_without_journey"
@@ -2311,12 +3320,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "adamw",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "admm",
       "asset_type": "content",
       "policy": "warning",
@@ -2324,12 +3327,6 @@
     },
     {
       "asset_id": "augmented-lagrangian",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "barrier-lp-qp",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -2407,12 +3404,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "coordinate-descent",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "cp-search",
       "asset_type": "content",
       "policy": "warning",
@@ -2444,12 +3435,6 @@
     },
     {
       "asset_id": "dual-annealing",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "dual-simplex",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -2545,12 +3530,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "fista",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "gauss-newton",
       "asset_type": "content",
       "policy": "warning",
@@ -2581,12 +3560,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "lbfgs",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "mads",
       "asset_type": "content",
       "policy": "warning",
@@ -2599,19 +3572,7 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "mirror-descent",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "moead",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "momentum-sgd",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -2684,24 +3645,6 @@
     },
     {
       "asset_id": "primal-dual-conic",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "primal-simplex",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "projected-gradient",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "proximal-gradient",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -2786,12 +3729,6 @@
     },
     {
       "asset_id": "trust-region-newton-cg",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "turbo-saasbo",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -2940,9 +3877,9 @@
     "status_counts": {
       "complete": 3,
       "draft": 0,
-      "partial": 8
+      "partial": 13
     },
     "target_complete_journeys": 5,
-    "total_journeys": 11
+    "total_journeys": 16
   }
 }

@@ -934,6 +934,403 @@
         "VIEW_PROBLEM_STRUCTURE",
         "constrained-disk-feasible-region"
       ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_ADAMW",
+          "reason": "mini-batch勾配のnoiseに座標ごとの適応学習率で対応し、weight decayを勾配の適応scalingから分離して扱えるため"
+        }
+      ],
+      "case_id": "nn-training",
+      "comparison_ids": [
+        "COMPARE_GRADIENT_FAMILY"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_MOMENTUM_SGD",
+          "reason": "学習率scheduleを調整する運用ができ、汎化性能を適応法と比較したい場合"
+        },
+        {
+          "method_id": "M_LBFGS",
+          "reason": "modelが小さくfull-batchの決定的勾配を使え、曲率近似を活かせる場合"
+        }
+      ],
+      "constraints": "明示的な制約はなく、GPU memoryと学習時間が実質的な上限。",
+      "decision_variables": "networkの重みとbias。",
+      "difficulty": "intro",
+      "domain": "machine-learning",
+      "excluded_methods": [
+        {
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "reason": "安価なstochastic勾配が使える数百万parameterの学習に、少数の高価な評価を前提とするGP surrogate構築は規模も前提も合わない"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "stochastic_gradient"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "local_stationary"
+        }
+      ],
+      "implementation_ids": [
+        "I_PYTORCH_OPTIM",
+        "I_OPTAX"
+      ],
+      "last_reviewed": "2026-07-17",
+      "limitations": [
+        "確率的勾配法の挙動は学習率scheduleとbatch sizeに依存し、この固定例は別datasetでの汎化性能やoptimizer間の優劣を保証しません。"
+      ],
+      "map_node_id": "answer:Q05:stochastic_gradient",
+      "objective": "mini-batchで推定する訓練損失の期待値を最小化する。",
+      "practical_notes": "学習率・schedule・batch sizeとseedを記録し、訓練損失ではなく検証指標で停止と比較を判断します。optimizerの既定値を万能設定として扱いません。",
+      "problem_archetype_id": "PA040",
+      "python_example": "import torch\n\nmodel = torch.nn.Linear(784, 10)\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=0.01)",
+      "question": "数百万parameterのmodelを、全datasetを一度に読み切れない条件で学習したい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q05": "stochastic_gradient",
+        "Q08": "over_10000",
+        "Q09": "local_is_fine",
+        "Q12": "gpu_available"
+      },
+      "source_ids": [
+        "S048",
+        "S047",
+        "S070"
+      ],
+      "status": "published",
+      "title_en": "Train a neural network on a large dataset",
+      "title_ja": "大規模datasetでneural networkを学習する",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_PROX_GRADIENT",
+          "reason": "滑らかな損失とL1項のcomposite構造を分離し、prox演算で正確に0の係数を得られるため"
+        }
+      ],
+      "case_id": "sparse-feature-selection",
+      "comparison_ids": [],
+      "conditional_methods": [
+        {
+          "method_id": "M_FISTA",
+          "reason": "条件数が大きく、単純なproximal勾配の収束が遅い場合に加速版を使う"
+        },
+        {
+          "method_id": "M_COORDINATE_DESCENT",
+          "reason": "設計行列が疎で、座標ごとの閉形式更新が安価な場合"
+        }
+      ],
+      "constraints": "明示的な制約はなく、正則化強度がsparsityを制御する。",
+      "decision_variables": "線形modelの回帰係数。",
+      "difficulty": "intermediate",
+      "domain": "machine-learning",
+      "excluded_methods": [
+        {
+          "method_id": "M_SUBGRADIENT",
+          "reason": "収束が遅く、係数が正確に0になるsparse解を得にくい"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "composite"
+        },
+        {
+          "feature_id": "F_SMOOTHNESS",
+          "value": "nonsmooth"
+        }
+      ],
+      "implementation_ids": [
+        "I_JAXOPT"
+      ],
+      "last_reviewed": "2026-07-17",
+      "limitations": [
+        "L1正則化は相関した特徴の一方を任意に残すことがあり、この固定例は選択された特徴の因果的重要性を保証しません。"
+      ],
+      "map_node_id": "answer:Q11:prox_separable",
+      "objective": "二乗損失とL1正則化項の和を最小化する。",
+      "practical_notes": "正則化係数はcross-validationで選び、選ばれた特徴の安定性を複数のデータ分割で確認します。相関の強い特徴間では選択が入れ替わります。",
+      "problem_archetype_id": "PA035",
+      "python_example": "import jax.numpy as jnp\nfrom jaxopt import ProximalGradient\nfrom jaxopt.prox import prox_lasso\n\nloss = lambda w, data: jnp.mean((data[0] @ w - data[1]) ** 2)\nsolver = ProximalGradient(fun=loss, prox=prox_lasso)",
+      "question": "多数の特徴のうち効く少数だけを残した、解釈しやすいmodelが欲しい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q05": "analytic_gradient",
+        "Q08": "100_to_10000",
+        "Q11": "prox_separable"
+      },
+      "source_ids": [
+        "S066",
+        "S067",
+        "S046"
+      ],
+      "status": "published",
+      "title_en": "Fit a sparse model with L1 regularization",
+      "title_ja": "L1正則化でsparseな予測modelを作る",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "reason": "合成と測定に日単位のcostがかかる実験をGP surrogateで近似し、獲得関数で次の実験点を少数試行から選べるため"
+        }
+      ],
+      "case_id": "materials-composition-search",
+      "comparison_ids": [],
+      "conditional_methods": [
+        {
+          "method_id": "M_TURBO_SAASBO",
+          "reason": "組成・process変数が数十次元に増え、単一GPで探索空間全体をmodel化しにくい場合"
+        }
+      ],
+      "constraints": "各成分の許容範囲と、装置が許すprocess条件の範囲。",
+      "decision_variables": "組成比率と焼成温度などのprocess条件。",
+      "difficulty": "intermediate",
+      "domain": "materials-informatics",
+      "excluded_methods": [
+        {
+          "method_id": "M_DIFFERENTIAL_EVOLUTION",
+          "reason": "population全体の評価を世代ごとに繰り返す前提で、数十回しか実験できないbudgetに合わない"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "none_available"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "very_expensive"
+        },
+        {
+          "feature_id": "F_NOISE_LEVEL",
+          "value": "small_noise"
+        }
+      ],
+      "implementation_ids": [
+        "I_BOTORCH",
+        "I_AX"
+      ],
+      "last_reviewed": "2026-07-17",
+      "limitations": [
+        "有限の実験budgetで得た最良組成に大域最適の保証はなく、装置や原料ロットが変わった場合の再現性も別途検証が必要です。"
+      ],
+      "map_node_id": "answer:Q06:hours_or_more",
+      "objective": "測定した物性値と目標値の差を最小化する。",
+      "practical_notes": "測定noiseと再現実験を計画に含め、surrogateの予測分散が大きい領域の外挿を信頼しません。同時に複数試料を作る場合は多点acquisitionを使います。",
+      "problem_archetype_id": "PA014",
+      "python_example": "from ax.service.ax_client import AxClient\n\nclient = AxClient()\nclient.create_experiment(name=\"composition\", parameters=[{\"name\": \"x1\", \"type\": \"range\", \"bounds\": [0.0, 1.0]}])",
+      "question": "実験できる回数が数十回に限られる中で、目標物性に近い組成を見つけたい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "experiment_only",
+        "Q05": "unreliable_or_none",
+        "Q06": "hours_or_more",
+        "Q07": "small_noise",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired"
+      },
+      "source_ids": [
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "status": "published",
+      "title_en": "Search material compositions with few experiments",
+      "title_ja": "少ない実験回数で材料の組成・process条件を探す",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_PROJECTED_GRADIENT",
+          "reason": "autodiff勾配のstepごとに単体(非負・合計1)への射影を挟み、組成の可行性を保ったまま探索できるため"
+        }
+      ],
+      "case_id": "surrogate-inverse-design",
+      "comparison_ids": [],
+      "conditional_methods": [
+        {
+          "method_id": "M_SLSQP",
+          "reason": "成分上限や物性の追加条件を明示的な制約式として同時に扱いたい場合"
+        },
+        {
+          "method_id": "M_MIRROR_DESCENT",
+          "reason": "単体上の幾何に合った指数化勾配stepを使い、明示的な射影計算を避けたい場合"
+        }
+      ],
+      "constraints": "組成の非負と合計1、成分ごとの上限。",
+      "decision_variables": "各成分のmole分率(非負で合計1)。",
+      "difficulty": "intermediate",
+      "domain": "materials-informatics",
+      "excluded_methods": [
+        {
+          "method_id": "M_LBFGS",
+          "reason": "制約なしの平滑最適化を前提とし、射影なしでは非負と合計1という組成の可行性を維持できない"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "automatic_differentiation"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "cheap"
+        }
+      ],
+      "implementation_ids": [
+        "I_JAXOPT",
+        "I_SCIPY_SLSQP"
+      ],
+      "last_reviewed": "2026-07-17",
+      "limitations": [
+        "逆設計解は予測modelの精度と適用範囲に依存し、model上の最適値は実材料での物性や合成可能性を保証しません。"
+      ],
+      "map_node_id": "answer:Q02:automatic_differentiation_graph",
+      "objective": "予測物性と目標値の差の二乗を最小化する。",
+      "practical_notes": "最適化はsurrogateの誤差を増幅するため、訓練データ分布から外れた組成は予測の不確かさと併せて確認します。複数の初期組成から再実行して候補を比較し、上位候補を実験で検証します。",
+      "problem_archetype_id": "PA036",
+      "python_example": "import jax.numpy as jnp\nfrom jaxopt import ProjectedGradient\nfrom jaxopt.projection import projection_simplex\n\npredict = lambda w: jnp.sum((w - 0.5) ** 2)\nsolver = ProjectedGradient(fun=predict, projection=projection_simplex)",
+      "question": "学習済みの予測model上で目標物性に最も近い組成を、組成の合計1を守りながら探したい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "automatic_differentiation_graph",
+        "Q04": "linear",
+        "Q05": "autodiff",
+        "Q06": "milliseconds_or_less",
+        "Q09": "local_is_fine"
+      },
+      "source_ids": [
+        "S046",
+        "S002",
+        "S055"
+      ],
+      "status": "published",
+      "title_en": "Invert a trained property predictor for composition design",
+      "title_ja": "学習済み物性予測modelで組成を逆設計する",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_SIMPLEX",
+          "reason": "線形の成分規格とcost目的をそのまま表し、大域最適の配合と規格ごとのdual価格を同時に得られるため"
+        }
+      ],
+      "case_id": "raw-material-blending",
+      "comparison_ids": [],
+      "conditional_methods": [
+        {
+          "method_id": "M_DUAL_SIMPLEX",
+          "reason": "規格や原料を追加しながら繰り返し解く運用で、直前の基底からwarm startしたい場合"
+        },
+        {
+          "method_id": "M_BARRIER_LP_QP",
+          "reason": "原料・規格が数万規模の疎な大規模LPに育った場合"
+        }
+      ],
+      "constraints": "成分ごとの規格上下限、配合比率の合計100%、原料の使用上限。",
+      "decision_variables": "各原料の配合比率(非負で合計100%)。",
+      "difficulty": "intro",
+      "domain": "materials-informatics",
+      "excluded_methods": [
+        {
+          "method_id": "M_SQP",
+          "reason": "一般非線形向けのsolverはLPの構造を活かさず、simplex/barrierが与える厳密なdual・warm start・大域最適性の利点を捨てる"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_CONVEXITY",
+          "value": "convex"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "convex_global"
+        }
+      ],
+      "implementation_ids": [
+        "I_SCIPY_LINPROG_HIGHS",
+        "I_HIGHS_NATIVE"
+      ],
+      "last_reviewed": "2026-07-17",
+      "limitations": [
+        "成分が配合比に対して線形に混ざるという仮定に依存し、非線形な相互作用や工程での組成変動はこの教材modelの保証範囲に含みません。"
+      ],
+      "map_node_id": "answer:Q03:linear",
+      "objective": "配合costの合計を最小化する。",
+      "practical_notes": "分析値と規格の変動幅を確認し、dual価格でcostを支配する規格を特定します。原料切替の固定費や最小使用量が入る場合はMILPへ拡張します。",
+      "problem_archetype_id": "PA017",
+      "python_example": "import numpy as np\nfrom scipy.optimize import linprog\n\ncost = np.array([40.0, 25.0, 60.0])\nprotein = np.array([0.30, 0.10, 0.50])\nspec_rows = np.vstack([-protein, protein])\nspec_limits = np.array([-0.20, 0.35])\nresult = linprog(cost, A_ub=spec_rows, b_ub=spec_limits, A_eq=np.ones((1, 3)), b_eq=np.array([1.0]), bounds=[(0.0, 0.6)] * 3, method=\"highs\")\nprint(result.x, result.fun)",
+      "question": "原料ごとの単価と成分規格の下で、百分率の配合を最小costで決めたい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "linear",
+        "Q06": "milliseconds_or_less",
+        "Q10": "global_proof_required",
+        "Q11": "lp_qp_conic"
+      },
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054"
+      ],
+      "status": "published",
+      "title_en": "Blend raw materials at minimum cost",
+      "title_ja": "規格を満たす原料配合を最小costで決める",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
     }
   ],
   "contract_version": "2.0.0",

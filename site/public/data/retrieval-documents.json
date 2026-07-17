@@ -341,6 +341,71 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:materials-composition-search:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "case:materials-composition-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:very_expensive",
+        "feature_value:F_NOISE_LEVEL:small_noise",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_AX",
+        "implementation:I_BOTORCH",
+        "journey:materials-composition-search",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "method:M_TURBO_SAASBO",
+        "problem:PA014",
+        "source:S035",
+        "source:S036",
+        "source:S059",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "text": "実験できる回数が数十回に限られる中で、目標物性に近い組成を見つけたい。",
+      "title": "少ない実験回数で材料の組成・process条件を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:nn-training:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "case:nn-training",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "feature_value:F_DERIVATIVE_ACCESS:stochastic_gradient",
+        "feature_value:F_SOLUTION_GOAL:local_stationary",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_OPTAX",
+        "implementation:I_PYTORCH_OPTIM",
+        "journey:nn-training",
+        "method:M_ADAMW",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_LBFGS",
+        "method:M_MOMENTUM_SGD",
+        "problem:PA040",
+        "source:S047",
+        "source:S048",
+        "source:S070",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S070"
+      ],
+      "text": "数百万parameterのmodelを、全datasetを一度に読み切れない条件で学習したい。",
+      "title": "大規模datasetでneural networkを学習する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:portfolio-allocation:overview",
       "dataset_version": "0.13.0",
       "document_id": "case:portfolio-allocation",
@@ -367,6 +432,40 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:raw-material-blending:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "case:raw-material-blending",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:linear",
+        "feature_value:F_CONVEXITY:convex",
+        "feature_value:F_OBJECTIVE_FORM:linear",
+        "feature_value:F_SOLUTION_GOAL:convex_global",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_HIGHS_NATIVE",
+        "implementation:I_SCIPY_LINPROG_HIGHS",
+        "journey:raw-material-blending",
+        "method:M_BARRIER_LP_QP",
+        "method:M_DUAL_SIMPLEX",
+        "method:M_SIMPLEX",
+        "method:M_SQP",
+        "problem:PA017",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054"
+      ],
+      "text": "原料ごとの単価と成分規格の下で、百分率の配合を最小costで決めたい。",
+      "title": "規格を満たす原料配合を最小costで決める"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:shift-scheduling:overview",
       "dataset_version": "0.13.0",
       "document_id": "case:shift-scheduling",
@@ -389,6 +488,70 @@
       ],
       "text": "必要人数を満たしながら、希望と公平性を反映したい。",
       "title": "スタッフのシフトを組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:sparse-feature-selection:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "case:sparse-feature-selection",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_OBJECTIVE_FORM:composite",
+        "feature_value:F_SMOOTHNESS:nonsmooth",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_JAXOPT",
+        "journey:sparse-feature-selection",
+        "method:M_COORDINATE_DESCENT",
+        "method:M_FISTA",
+        "method:M_PROX_GRADIENT",
+        "method:M_SUBGRADIENT",
+        "problem:PA035",
+        "source:S046",
+        "source:S066",
+        "source:S067",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S046",
+        "S066",
+        "S067"
+      ],
+      "text": "多数の特徴のうち効く少数だけを残した、解釈しやすいmodelが欲しい。",
+      "title": "L1正則化でsparseな予測modelを作る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:surrogate-inverse-design:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "case:surrogate-inverse-design",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:linear",
+        "feature_value:F_DERIVATIVE_ACCESS:automatic_differentiation",
+        "feature_value:F_EVALUATION_COST:cheap",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_JAXOPT",
+        "implementation:I_SCIPY_SLSQP",
+        "journey:surrogate-inverse-design",
+        "method:M_LBFGS",
+        "method:M_MIRROR_DESCENT",
+        "method:M_PROJECTED_GRADIENT",
+        "method:M_SLSQP",
+        "problem:PA036",
+        "source:S002",
+        "source:S046",
+        "source:S055",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S002",
+        "S046",
+        "S055"
+      ],
+      "text": "学習済みの予測model上で目標物性に最も近い組成を、組成の合計1を守りながら探したい。",
+      "title": "学習済み物性予測modelで組成を逆設計する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -525,6 +688,7 @@
       "relation_context": [
         "case:hyperparameter-search",
         "journey:hyperparameter-search",
+        "journey:nn-training",
         "method:M_ADAM",
         "method:M_GRADIENT_DESCENT",
         "method:M_MOMENTUM_SGD",
@@ -26638,6 +26802,81 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:materials-composition-search:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "journey:materials-composition-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:materials-composition-search",
+        "content:bayesian-optimization",
+        "content:turbo-saasbo",
+        "implementation:I_AX",
+        "implementation:I_BOTORCH",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "method:M_TURBO_SAASBO",
+        "problem:PA014",
+        "source:S034",
+        "source:S035",
+        "source:S036",
+        "source:S059"
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "text": "実験できる回数が数十回に限られる中で、目標物性に近い組成を見つけたい。",
+      "title": "少ない実験回数で材料の組成・process条件を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:nn-training:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "journey:nn-training",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:nn-training",
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:adamw",
+        "content:lbfgs",
+        "content:momentum-sgd",
+        "implementation:I_OPTAX",
+        "implementation:I_PYTORCH_OPTIM",
+        "method:M_ADAMW",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_LBFGS",
+        "method:M_MOMENTUM_SGD",
+        "problem:PA040",
+        "source:S001",
+        "source:S002",
+        "source:S047",
+        "source:S048",
+        "source:S049",
+        "source:S056",
+        "source:S057",
+        "source:S065",
+        "source:S070"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S047",
+        "S048",
+        "S049",
+        "S056",
+        "S057",
+        "S065",
+        "S070"
+      ],
+      "text": "数百万parameterのmodelを、全datasetを一度に読み切れない条件で学習したい。",
+      "title": "大規模datasetでneural networkを学習する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:portfolio-allocation:overview",
       "dataset_version": "0.13.0",
       "document_id": "journey:portfolio-allocation",
@@ -26680,6 +26919,41 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:raw-material-blending:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "journey:raw-material-blending",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:raw-material-blending",
+        "content:barrier-lp-qp",
+        "content:dual-simplex",
+        "content:primal-simplex",
+        "implementation:I_HIGHS_NATIVE",
+        "implementation:I_SCIPY_LINPROG_HIGHS",
+        "method:M_BARRIER_LP_QP",
+        "method:M_DUAL_SIMPLEX",
+        "method:M_SIMPLEX",
+        "method:M_SQP",
+        "problem:PA017",
+        "source:S004",
+        "source:S016",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S004",
+        "S016",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "原料ごとの単価と成分規格の下で、百分率の配合を最小costで決めたい。",
+      "title": "規格を満たす原料配合を最小costで決める"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:shift-scheduling:overview",
       "dataset_version": "0.13.0",
       "document_id": "journey:shift-scheduling",
@@ -26716,6 +26990,77 @@
       ],
       "text": "必要人数を満たしながら、希望と公平性を反映したい。",
       "title": "スタッフのシフトを組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:sparse-feature-selection:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "journey:sparse-feature-selection",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:sparse-feature-selection",
+        "content:coordinate-descent",
+        "content:fista",
+        "content:proximal-gradient",
+        "implementation:I_JAXOPT",
+        "method:M_COORDINATE_DESCENT",
+        "method:M_FISTA",
+        "method:M_PROX_GRADIENT",
+        "method:M_SUBGRADIENT",
+        "problem:PA035",
+        "source:S046",
+        "source:S055",
+        "source:S056",
+        "source:S066",
+        "source:S067"
+      ],
+      "source_ids": [
+        "S046",
+        "S055",
+        "S056",
+        "S066",
+        "S067"
+      ],
+      "text": "多数の特徴のうち効く少数だけを残した、解釈しやすいmodelが欲しい。",
+      "title": "L1正則化でsparseな予測modelを作る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:surrogate-inverse-design:overview",
+      "dataset_version": "0.13.0",
+      "document_id": "journey:surrogate-inverse-design",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:surrogate-inverse-design",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "content:slsqp",
+        "implementation:I_JAXOPT",
+        "implementation:I_SCIPY_SLSQP",
+        "method:M_LBFGS",
+        "method:M_MIRROR_DESCENT",
+        "method:M_PROJECTED_GRADIENT",
+        "method:M_SLSQP",
+        "problem:PA036",
+        "source:S002",
+        "source:S046",
+        "source:S055",
+        "source:S056",
+        "source:S064",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S002",
+        "S046",
+        "S055",
+        "S056",
+        "S064",
+        "S066"
+      ],
+      "text": "学習済みの予測model上で目標物性に最も近い組成を、組成の合計1を守りながら探したい。",
+      "title": "学習済み物性予測modelで組成を逆設計する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -27220,6 +27565,7 @@
       "document_id": "method:M_ADAMW",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:nn-training",
         "content:adamw",
         "implementation:I_OPTAX",
         "implementation:I_PYTORCH_OPTIM",
@@ -27339,6 +27685,7 @@
       "document_id": "method:M_BARRIER_LP_QP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:raw-material-blending",
         "content:barrier-lp-qp",
         "implementation:I_CLARABEL",
         "implementation:I_CPLEX",
@@ -27418,6 +27765,8 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:hyperparameter-search",
+        "case:materials-composition-search",
+        "case:nn-training",
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "content:bayesian-optimization",
         "implementation:I_AX",
@@ -27693,6 +28042,7 @@
       "document_id": "method:M_COORDINATE_DESCENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:sparse-feature-selection",
         "content:coordinate-descent",
         "source:S055",
         "source:S056",
@@ -27769,6 +28119,7 @@
       "relation_context": [
         "case:EC025",
         "case:EC026",
+        "case:materials-composition-search",
         "content:differential-evolution",
         "implementation:I_NEVERGRAD",
         "implementation:I_SCIPY_DIFFERENTIAL_EVOLUTION",
@@ -27899,6 +28250,7 @@
       "document_id": "method:M_DUAL_SIMPLEX",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:raw-material-blending",
         "content:dual-simplex",
         "implementation:I_HIGHS_NATIVE",
         "implementation:I_ORTOOLS_GLOP",
@@ -27972,6 +28324,7 @@
       "document_id": "method:M_FISTA",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:sparse-feature-selection",
         "content:fista",
         "source:S055",
         "source:S061",
@@ -28187,6 +28540,8 @@
       "document_id": "method:M_LBFGS",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:nn-training",
+        "case:surrogate-inverse-design",
         "content:lbfgs",
         "implementation:I_JAXOPT",
         "implementation:I_NLOPT",
@@ -28319,6 +28674,7 @@
       "document_id": "method:M_MIRROR_DESCENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:surrogate-inverse-design",
         "content:mirror-descent",
         "source:S055",
         "source:S061",
@@ -28362,6 +28718,7 @@
       "document_id": "method:M_MOMENTUM_SGD",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:nn-training",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:momentum-sgd",
@@ -28842,6 +29199,7 @@
       "document_id": "method:M_PROJECTED_GRADIENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:surrogate-inverse-design",
         "content:projected-gradient",
         "implementation:I_JAXOPT",
         "implementation:I_PETSC_TAO",
@@ -28873,6 +29231,7 @@
       "document_id": "method:M_PROX_GRADIENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:sparse-feature-selection",
         "content:proximal-gradient",
         "implementation:I_JAXOPT",
         "source:S055",
@@ -29044,6 +29403,7 @@
       "document_id": "method:M_SIMPLEX",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:raw-material-blending",
         "content:primal-simplex",
         "implementation:I_CPLEX",
         "implementation:I_EXCEL_SOLVER",
@@ -29115,6 +29475,7 @@
       "relation_context": [
         "case:constrained-design",
         "case:portfolio-allocation",
+        "case:surrogate-inverse-design",
         "comparison:COMPARE_CONSTRAINED_FAILURE",
         "content:slsqp",
         "implementation:I_SCIPY_SLSQP",
@@ -29233,6 +29594,7 @@
       "document_id": "method:M_SQP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:raw-material-blending",
         "content:sqp",
         "implementation:I_ACADOS",
         "implementation:I_CASADI",
@@ -29263,6 +29625,7 @@
       "document_id": "method:M_SUBGRADIENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:sparse-feature-selection",
         "content:subgradient",
         "source:S055",
         "source:S056",
@@ -29412,6 +29775,7 @@
       "document_id": "method:M_TURBO_SAASBO",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:materials-composition-search",
         "content:turbo-saasbo",
         "implementation:I_AX",
         "implementation:I_BOTORCH",
@@ -29676,7 +30040,10 @@
       "dataset_version": "0.13.0",
       "document_id": "problem:PA014",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:materials-composition-search",
+        "journey:materials-composition-search"
+      ],
       "source_ids": [
         "S035",
         "S059",
@@ -29722,7 +30089,10 @@
       "dataset_version": "0.13.0",
       "document_id": "problem:PA017",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:raw-material-blending",
+        "journey:raw-material-blending"
+      ],
       "source_ids": [
         "S004",
         "S016",
@@ -30007,7 +30377,10 @@
       "dataset_version": "0.13.0",
       "document_id": "problem:PA035",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:sparse-feature-selection",
+        "journey:sparse-feature-selection"
+      ],
       "source_ids": [
         "S055",
         "S066",
@@ -30023,7 +30396,10 @@
       "dataset_version": "0.13.0",
       "document_id": "problem:PA036",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:surrogate-inverse-design",
+        "journey:surrogate-inverse-design"
+      ],
       "source_ids": [
         "S055",
         "S066"
@@ -30092,7 +30468,10 @@
       "dataset_version": "0.13.0",
       "document_id": "problem:PA040",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:nn-training",
+        "journey:nn-training"
+      ],
       "source_ids": [
         "S047",
         "S048",

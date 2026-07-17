@@ -3,7 +3,7 @@
   "dataset_version": "0.13.0",
   "metrics": {
     "expected_entity_recall": 0.9090909090909091,
-    "top_1_relevance": 0.7272727272727273,
+    "top_1_relevance": 0.6363636363636364,
     "top_3_relevance": 0.8181818181818182,
     "zero_result_rate": 0.09090909090909091
   },
@@ -72,11 +72,11 @@
       "intents": [],
       "query": "配送順を決めたい",
       "query_id": "routing-natural-language",
-      "result_count": 3,
+      "result_count": 4,
       "top_document_ids": [
+        "case:raw-material-blending",
         "problem:PA031",
-        "case:EC019",
-        "case:portfolio-allocation"
+        "case:EC019"
       ]
     },
     {
@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 54,
+      "result_count": 56,
       "top_document_ids": [
         "method:MF_STOCHASTIC_ML",
         "method:M_GRADIENT_DESCENT",

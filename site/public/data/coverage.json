@@ -409,12 +409,13 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection",
+            "surrogate-inverse-design"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -434,7 +435,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 25,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -462,7 +463,9 @@
             "fista",
             "mirror-descent",
             "proximal-gradient",
-            "subgradient"
+            "sparse-feature-selection",
+            "subgradient",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -529,12 +532,14 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "constrained-design",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "raw-material-blending",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -566,7 +571,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 47,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -613,8 +618,10 @@
             "interior-point-nlp",
             "portfolio-allocation",
             "projected-gradient",
+            "raw-material-blending",
             "slsqp",
-            "sqp"
+            "sqp",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -1231,12 +1238,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "materials-composition-search"
           ]
         },
         "implementation": {
@@ -1262,7 +1270,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 35,
+          "count": 36,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1298,6 +1306,7 @@
             "differential-evolution",
             "direct-global",
             "family.global-search",
+            "materials-composition-search",
             "multi-start",
             "shgo",
             "simulated-annealing"
@@ -1475,12 +1484,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "raw-material-blending"
           ]
         },
         "implementation": {
@@ -1515,7 +1525,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 46,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1563,7 +1573,8 @@
             "pdlp",
             "portfolio-allocation",
             "primal-dual-conic",
-            "primal-simplex"
+            "primal-simplex",
+            "raw-material-blending"
           ]
         },
         "recommendation": {
@@ -1955,7 +1966,7 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1964,7 +1975,9 @@
             "EC026",
             "constrained-design",
             "hyperparameter-search",
-            "shift-scheduling"
+            "nn-training",
+            "shift-scheduling",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -1991,7 +2004,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2036,8 +2049,10 @@
             "method.gradient-descent",
             "newton-cg",
             "newton-method",
+            "nn-training",
             "nonlinear-cg",
-            "shift-scheduling"
+            "shift-scheduling",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -2113,12 +2128,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nn-training"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -2139,7 +2154,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2166,6 +2181,7 @@
             "momentum-quadratic",
             "momentum-quadratic-divergence",
             "momentum-sgd",
+            "nn-training",
             "sgd"
           ]
         },
@@ -2236,11 +2252,13 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training"
           ]
         },
         "implementation": {
@@ -2265,7 +2283,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 40,
+          "count": 42,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2304,6 +2322,8 @@
             "family.expensive-black-box",
             "hyperband-asha",
             "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training",
             "pbt",
             "random-search",
             "smac",
@@ -2818,12 +2838,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nn-training"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -2844,7 +2864,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2856,7 +2876,8 @@
             "S048",
             "S049",
             "S070",
-            "adamw"
+            "adamw",
+            "nn-training"
           ]
         },
         "recommendation": {
@@ -3206,12 +3227,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "raw-material-blending"
+          ]
         },
         "implementation": {
           "count": 9,
@@ -3238,7 +3259,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3261,7 +3282,8 @@
             "S055",
             "S056",
             "S062",
-            "barrier-lp-qp"
+            "barrier-lp-qp",
+            "raw-material-blending"
           ]
         },
         "recommendation": {
@@ -3422,11 +3444,13 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training"
           ]
         },
         "implementation": {
@@ -3449,7 +3473,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 22,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3472,7 +3496,9 @@
             "S069",
             "S075",
             "bayesian-optimization",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training"
           ]
         },
         "recommendation": {
@@ -4331,12 +4357,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -4355,7 +4381,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4365,7 +4391,8 @@
             "S061",
             "S066",
             "S067",
-            "coordinate-descent"
+            "coordinate-descent",
+            "sparse-feature-selection"
           ]
         },
         "recommendation": {
@@ -4608,12 +4635,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "materials-composition-search"
           ]
         },
         "implementation": {
@@ -4634,7 +4662,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4650,7 +4678,8 @@
             "S072",
             "S073",
             "S074",
-            "differential-evolution"
+            "differential-evolution",
+            "materials-composition-search"
           ]
         },
         "recommendation": {
@@ -5066,12 +5095,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "raw-material-blending"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -5092,7 +5121,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5108,7 +5137,8 @@
             "S016",
             "S055",
             "S062",
-            "dual-simplex"
+            "dual-simplex",
+            "raw-material-blending"
           ]
         },
         "recommendation": {
@@ -5334,12 +5364,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -5358,7 +5388,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5367,7 +5397,8 @@
             "S061",
             "S066",
             "S067",
-            "fista"
+            "fista",
+            "sparse-feature-selection"
           ]
         },
         "recommendation": {
@@ -6083,12 +6114,13 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nn-training",
+            "surrogate-inverse-design"
+          ]
         },
         "implementation": {
           "count": 5,
@@ -6111,7 +6143,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6125,7 +6157,9 @@
             "S056",
             "S057",
             "S065",
-            "lbfgs"
+            "lbfgs",
+            "nn-training",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -6553,12 +6587,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "surrogate-inverse-design"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -6577,7 +6611,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6586,7 +6620,8 @@
             "S061",
             "S066",
             "S067",
-            "mirror-descent"
+            "mirror-descent",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -6725,12 +6760,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nn-training"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -6751,7 +6786,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6768,7 +6803,8 @@
             "S070",
             "momentum-quadratic",
             "momentum-quadratic-divergence",
-            "momentum-sgd"
+            "momentum-sgd",
+            "nn-training"
           ]
         },
         "recommendation": {
@@ -8330,12 +8366,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "surrogate-inverse-design"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -8355,7 +8391,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8369,7 +8405,8 @@
             "S056",
             "S064",
             "S066",
-            "projected-gradient"
+            "projected-gradient",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -8426,12 +8463,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -8450,7 +8487,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8460,7 +8497,8 @@
             "S061",
             "S066",
             "S067",
-            "proximal-gradient"
+            "proximal-gradient",
+            "sparse-feature-selection"
           ]
         },
         "recommendation": {
@@ -9002,12 +9040,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "raw-material-blending"
+          ]
         },
         "implementation": {
           "count": 8,
@@ -9033,7 +9071,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9054,7 +9092,8 @@
             "S016",
             "S055",
             "S062",
-            "primal-simplex"
+            "primal-simplex",
+            "raw-material-blending"
           ]
         },
         "recommendation": {
@@ -9208,12 +9247,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "constrained-design",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -9233,7 +9273,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9249,7 +9289,8 @@
             "constrained-design",
             "constrained-disk-feasible-region",
             "portfolio-allocation",
-            "slsqp"
+            "slsqp",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -9591,12 +9632,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "raw-material-blending"
+          ]
         },
         "implementation": {
           "count": 5,
@@ -9619,7 +9660,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9634,6 +9675,7 @@
             "S030",
             "S056",
             "S064",
+            "raw-material-blending",
             "sqp"
           ]
         },
@@ -9690,12 +9732,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -9714,7 +9756,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9724,6 +9766,7 @@
             "S061",
             "S066",
             "S067",
+            "sparse-feature-selection",
             "subgradient"
           ]
         },
@@ -10231,12 +10274,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "materials-composition-search"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -10256,7 +10299,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -10271,6 +10314,7 @@
             "S059",
             "S069",
             "S075",
+            "materials-composition-search",
             "turbo-saasbo"
           ]
         },
@@ -11474,12 +11518,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "materials-composition-search"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11490,19 +11534,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "materials-composition-search"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "materials-composition-search"
           ]
         },
         "recommendation": {
@@ -11716,12 +11761,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "raw-material-blending"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11732,19 +11777,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "raw-material-blending"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "raw-material-blending"
           ]
         },
         "recommendation": {
@@ -13168,12 +13214,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "sparse-feature-selection"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13184,19 +13230,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "sparse-feature-selection"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "sparse-feature-selection"
           ]
         },
         "recommendation": {
@@ -13249,12 +13296,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "surrogate-inverse-design"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13265,19 +13312,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "surrogate-inverse-design"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "surrogate-inverse-design"
           ]
         },
         "recommendation": {
@@ -13575,12 +13623,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nn-training"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13591,19 +13639,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "nn-training"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "nn-training"
           ]
         },
         "recommendation": {
@@ -14945,7 +14994,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -14956,7 +15005,9 @@
             "EC025",
             "EC026",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -15046,7 +15097,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15057,7 +15108,9 @@
             "EC025",
             "EC026",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "raw-material-blending",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -15146,7 +15199,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15157,7 +15210,10 @@
             "EC025",
             "EC026",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
@@ -15330,7 +15386,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15341,7 +15397,9 @@
             "EC025",
             "EC026",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "nn-training",
+            "raw-material-blending"
           ]
         },
         "implementation": {
@@ -15507,7 +15565,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15518,7 +15576,10 @@
             "EC025",
             "EC026",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "materials-composition-search",
+            "raw-material-blending",
+            "sparse-feature-selection"
           ]
         },
         "implementation": {
@@ -15792,7 +15853,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15805,8 +15866,13 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "materials-composition-search",
+            "nn-training",
             "portfolio-allocation",
-            "shift-scheduling"
+            "raw-material-blending",
+            "shift-scheduling",
+            "sparse-feature-selection",
+            "surrogate-inverse-design"
           ]
         },
         "implementation": {
