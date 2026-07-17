@@ -1,0 +1,232 @@
+diff --git a/site/src/contracts/manifest.test.ts b/site/src/contracts/manifest.test.ts
+index 2df88bb..12023a6 100644
+--- a/site/src/contracts/manifest.test.ts
++++ b/site/src/contracts/manifest.test.ts
+@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
+ import { parseSiteManifest } from "./manifest";
+ 
+ const manifest = {
+-  version: "1.3.0",
++  version: "1.4.0",
+   dataset_version: "0.2.0",
+   generated_at: "2026-07-13T00:00:00Z",
+   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
+@@ -18,6 +18,7 @@ const manifest = {
+   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
+   benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
+   failure_modes: { version: "1.0.0", path: "failure-modes.json" },
++  failure_discovery: { version: "1.0.0", path: "failure-discovery.json" },
+   search_index: { version: "1.0.0", path: "search-index.json" },
+   retrieval_documents: { version: "1.0.0", path: "retrieval-documents.json" },
+   search_benchmark: { version: "1.0.0", path: "search-benchmark.json" },
+@@ -49,6 +50,7 @@ describe("SiteManifest parser", () => {
+     expect(parseSiteManifest(manifest).derived_media.path).toBe("media/manifest.json");
+     expect(parseSiteManifest(manifest).benchmark_contexts.path).toBe("benchmark-contexts.json");
+     expect(parseSiteManifest(manifest).failure_modes.path).toBe("failure-modes.json");
++    expect(parseSiteManifest(manifest).failure_discovery.path).toBe("failure-discovery.json");
+     expect(parseSiteManifest(manifest).search_index.path).toBe("search-index.json");
+     expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
+   });
+diff --git a/site/src/contracts/manifest.ts b/site/src/contracts/manifest.ts
+index 19e6656..94743ee 100644
+--- a/site/src/contracts/manifest.ts
++++ b/site/src/contracts/manifest.ts
+@@ -44,7 +44,7 @@ export interface SiteLicenseManifest {
+ }
+ 
+ export interface SiteManifest {
+-  version: "1.3.0";
++  version: "1.4.0";
+   dataset_version: string;
+   generated_at: string;
+   views: ManifestView[];
+@@ -60,6 +60,7 @@ export interface SiteManifest {
+   implementation_claims: ManifestAsset;
+   benchmark_contexts: ManifestAsset;
+   failure_modes: ManifestAsset;
++  failure_discovery: ManifestAsset;
+   search_index: ManifestAsset;
+   retrieval_documents: ManifestAsset;
+   search_benchmark: ManifestAsset;
+@@ -88,6 +89,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
+       "implementation_claims",
+       "benchmark_contexts",
+       "failure_modes",
++      "failure_discovery",
+       "search_index",
+       "retrieval_documents",
+       "search_benchmark",
+@@ -96,7 +98,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
+     ],
+     "SiteManifest",
+   );
+-  if (data.version !== "1.3.0") throw new Error("Unsupported SiteManifest version.");
++  if (data.version !== "1.4.0") throw new Error("Unsupported SiteManifest version.");
+ 
+   const views = array(data.views, "views").map((value, index): ManifestView => {
+     const view = record(value, `views[${index}]`);
+@@ -159,6 +161,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
+   const failureModes = record(data.failure_modes, "failure_modes");
+   exactKeys(failureModes, ["version", "path"], "failure_modes");
+   if (failureModes.version !== "1.0.0") throw new Error("failure_modes.version is unsupported.");
++  const failureDiscovery = record(data.failure_discovery, "failure_discovery");
++  exactKeys(failureDiscovery, ["version", "path"], "failure_discovery");
++  if (failureDiscovery.version !== "1.0.0") throw new Error("failure_discovery.version is unsupported.");
+   const searchIndex = record(data.search_index, "search_index");
+   exactKeys(searchIndex, ["version", "path"], "search_index");
+   if (searchIndex.version !== "1.0.0") throw new Error("search_index.version is unsupported.");
+@@ -186,7 +191,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
+   }
+ 
+   return {
+-    version: "1.3.0",
++    version: "1.4.0",
+     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
+     generated_at: nonEmptyString(data.generated_at, "generated_at"),
+     views,
+@@ -241,6 +246,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
+       version: "1.0.0",
+       path: safeRelativePath(failureModes.path, "failure_modes.path"),
+     },
++    failure_discovery: {
++      version: "1.0.0",
++      path: safeRelativePath(failureDiscovery.path, "failure_discovery.path"),
++    },
+     search_index: {
+       version: "1.0.0",
+       path: safeRelativePath(searchIndex.path, "search_index.path"),
+diff --git a/site/src/features/playback/TraceDemoPage.test.tsx b/site/src/features/playback/TraceDemoPage.test.tsx
+index 0c0db95..f2b550a 100644
+--- a/site/src/features/playback/TraceDemoPage.test.tsx
++++ b/site/src/features/playback/TraceDemoPage.test.tsx
+@@ -58,7 +58,7 @@ const mediaManifest = {
+   entries: generatedMedia.entries.map((entry) => ({ ...entry, dataset_version: "0.2.0" })),
+ };
+ const manifest = {
+-  version: "1.3.0",
++  version: "1.4.0",
+   dataset_version: "0.2.0",
+   generated_at: "2026-07-13T00:00:00Z",
+   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
+@@ -73,6 +73,7 @@ const manifest = {
+   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
+   benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
+   failure_modes: { version: "1.0.0", path: "failure-modes.json" },
++  failure_discovery: { version: "1.0.0", path: "failure-discovery.json" },
+   search_index: { version: "1.0.0", path: "search-index.json" },
+   retrieval_documents: { version: "1.0.0", path: "retrieval-documents.json" },
+   search_benchmark: { version: "1.0.0", path: "search-benchmark.json" },
+diff --git a/src/optimization_compass/dataset_release.py b/src/optimization_compass/dataset_release.py
+index ec419bb..7a20dab 100644
+--- a/src/optimization_compass/dataset_release.py
++++ b/src/optimization_compass/dataset_release.py
+@@ -955,6 +955,7 @@ def _verify_site_release_tree(
+     referenced.add(str(manifest["implementation_claims"]["path"]))
+     referenced.add(str(manifest["benchmark_contexts"]["path"]))
+     referenced.add(str(manifest["failure_modes"]["path"]))
++    referenced.add(str(manifest["failure_discovery"]["path"]))
+     referenced.add(str(manifest["coverage"]["path"]))
+     referenced.add(str(manifest["coverage"]["report_path"]))
+     for relative in referenced:
+diff --git a/src/optimization_compass/site_export.py b/src/optimization_compass/site_export.py
+index e7057da..7036367 100644
+--- a/src/optimization_compass/site_export.py
++++ b/src/optimization_compass/site_export.py
+@@ -17,6 +17,7 @@ from optimization_compass.db import KnowledgeRepository
+ from optimization_compass.derived_media import write_derived_media
+ from optimization_compass.entity_links import build_entity_link_index
+ from optimization_compass.evidence import build_source_evidence_index
++from optimization_compass.failure_discovery import build_failure_discovery_index
+ from optimization_compass.formulation_primer import build_formulation_primer_index
+ from optimization_compass.learning_graph import build_learning_graph_index
+ from optimization_compass.learning_journey_policy import load_learning_journey_asset_policy
+@@ -99,7 +100,7 @@ from optimization_compass.visualization_scenarios import (
+ )
+ 
+ VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
+-SITE_MANIFEST_VERSION: Literal["1.3.0"] = "1.3.0"
++SITE_MANIFEST_VERSION: Literal["1.4.0"] = "1.4.0"
+ ROOT = Path(__file__).parents[2]
+ CONTENT_DIRECTORY = ROOT / "content"
+ GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
+@@ -386,6 +387,14 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
+         inventories=journey_inventories,
+     )
+     _write_json(output_dir / "learning-journeys.json", learning_journeys)
++    failure_discovery = build_failure_discovery_index(
++        repository,
++        dataset_version=release["version"],
++        generated_at=generated_at,
++        gallery_index=gallery_index,
++        learning_journeys=learning_journeys,
++    )
++    _write_json(output_dir / "failure-discovery.json", failure_discovery)
+     formulation_primer = build_formulation_primer_index(
+         dataset_version=release["version"],
+         generated_at=generated_at,
+@@ -530,6 +539,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
+         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
+         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
+         failure_modes=ManifestAsset(version="1.0.0", path="failure-modes.json"),
++        failure_discovery=ManifestAsset(version="1.0.0", path="failure-discovery.json"),
+         search_index=ManifestAsset(version="1.0.0", path="search-index.json"),
+         retrieval_documents=ManifestAsset(version="1.0.0", path="retrieval-documents.json"),
+         search_benchmark=ManifestAsset(version="1.0.0", path="search-benchmark.json"),
+diff --git a/src/optimization_compass/view_spec.py b/src/optimization_compass/view_spec.py
+index bc84978..ed41fbe 100644
+--- a/src/optimization_compass/view_spec.py
++++ b/src/optimization_compass/view_spec.py
+@@ -280,7 +280,7 @@ class SiteLicenseManifest(ContractModel):
+ 
+ 
+ class SiteManifest(ContractModel):
+-    version: Literal["1.3.0"] = "1.3.0"
++    version: Literal["1.4.0"] = "1.4.0"
+     dataset_version: str = Field(min_length=1)
+     generated_at: datetime
+     views: list[ManifestView]
+@@ -296,6 +296,7 @@ class SiteManifest(ContractModel):
+     implementation_claims: ManifestAsset
+     benchmark_contexts: ManifestAsset
+     failure_modes: ManifestAsset
++    failure_discovery: ManifestAsset
+     search_index: ManifestAsset
+     retrieval_documents: ManifestAsset
+     search_benchmark: ManifestAsset
+diff --git a/tests/test_site_export.py b/tests/test_site_export.py
+index f686e71..ab82c2e 100644
+--- a/tests/test_site_export.py
++++ b/tests/test_site_export.py
+@@ -286,6 +286,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
+         "path": "failure-modes.json",
+         "version": "1.0.0",
+     }
++    assert manifest_payload["failure_discovery"] == {
++        "path": "failure-discovery.json",
++        "version": "1.0.0",
++    }
+     assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
+     assert manifest_payload["retrieval_documents"] == {
+         "path": "retrieval-documents.json",
+@@ -339,6 +343,21 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
+     assert len(failure_payload["failure_modes"]) == 12
+     assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
+     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
++    discovery_payload = json.loads((first_output / "failure-discovery.json").read_bytes())
++    assert discovery_payload["summary"] == {
++        "case_exclusion_count": 11,
++        "entries_with_scenarios": 9,
++        "structured_failure_count": 12,
++        "total_entries": 23,
++    }
++    assert (first_output / "failure-discovery.json").read_bytes() == (
++        second_output / "failure-discovery.json"
++    ).read_bytes()
++    case_exclusions = [
++        item for item in discovery_payload["entries"] if item["entry_kind"] == "case_exclusion"
++    ]
++    assert all(len(item["method_ids"]) == 1 and item["source_ids"] for item in case_exclusions)
++    assert sum(bool(item["scenario_ids"]) for item in case_exclusions) >= 3
+     source_payload = json.loads((first_output / "sources.json").read_bytes())
+     assert len(source_payload["sources"]) == 96
+     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4202
