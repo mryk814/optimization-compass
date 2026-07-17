@@ -955,6 +955,7 @@ def _verify_site_release_tree(
     referenced.add(str(manifest["implementation_claims"]["path"]))
     referenced.add(str(manifest["benchmark_contexts"]["path"]))
     referenced.add(str(manifest["failure_modes"]["path"]))
+    referenced.add(str(manifest["failure_discovery"]["path"]))
     referenced.add(str(manifest["coverage"]["path"]))
     referenced.add(str(manifest["coverage"]["report_path"]))
     for relative in referenced:

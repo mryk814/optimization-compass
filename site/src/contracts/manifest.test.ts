@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { parseSiteManifest } from "./manifest";
 
 const manifest = {
-  version: "1.3.0",
+  version: "1.4.0",
   dataset_version: "0.2.0",
   generated_at: "2026-07-13T00:00:00Z",
   views: [{ view_id: "problem-structure", version: "1.0.0", path: "views/problem-structure.json" }],
@@ -18,6 +18,7 @@ const manifest = {
   implementation_claims: { version: "1.0.0", path: "implementation-claims.json" },
   benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
   failure_modes: { version: "1.0.0", path: "failure-modes.json" },
+  failure_discovery: { version: "1.0.0", path: "failure-discovery.json" },
   search_index: { version: "1.0.0", path: "search-index.json" },
   retrieval_documents: { version: "1.0.0", path: "retrieval-documents.json" },
   search_benchmark: { version: "1.0.0", path: "search-benchmark.json" },
@@ -49,6 +50,7 @@ describe("SiteManifest parser", () => {
     expect(parseSiteManifest(manifest).derived_media.path).toBe("media/manifest.json");
     expect(parseSiteManifest(manifest).benchmark_contexts.path).toBe("benchmark-contexts.json");
     expect(parseSiteManifest(manifest).failure_modes.path).toBe("failure-modes.json");
+    expect(parseSiteManifest(manifest).failure_discovery.path).toBe("failure-discovery.json");
     expect(parseSiteManifest(manifest).search_index.path).toBe("search-index.json");
     expect(parseSiteManifest(manifest).licenses.data.spdx_id).toBe("CC-BY-4.0");
   });

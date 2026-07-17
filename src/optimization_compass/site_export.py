@@ -17,6 +17,7 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.derived_media import write_derived_media
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.failure_discovery import build_failure_discovery_index
 from optimization_compass.formulation_primer import build_formulation_primer_index
 from optimization_compass.learning_graph import build_learning_graph_index
 from optimization_compass.learning_journey_policy import load_learning_journey_asset_policy
@@ -99,7 +100,7 @@ from optimization_compass.visualization_scenarios import (
 )
 
 VIEW_VERSION: Literal["1.0.0"] = "1.0.0"
-SITE_MANIFEST_VERSION: Literal["1.3.0"] = "1.3.0"
+SITE_MANIFEST_VERSION: Literal["1.4.0"] = "1.4.0"
 ROOT = Path(__file__).parents[2]
 CONTENT_DIRECTORY = ROOT / "content"
 GALLERY_SEED = ROOT / "data/seeds/site_gallery.json"
@@ -386,6 +387,14 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         inventories=journey_inventories,
     )
     _write_json(output_dir / "learning-journeys.json", learning_journeys)
+    failure_discovery = build_failure_discovery_index(
+        repository,
+        dataset_version=release["version"],
+        generated_at=generated_at,
+        gallery_index=gallery_index,
+        learning_journeys=learning_journeys,
+    )
+    _write_json(output_dir / "failure-discovery.json", failure_discovery)
     formulation_primer = build_formulation_primer_index(
         dataset_version=release["version"],
         generated_at=generated_at,
@@ -530,6 +539,7 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         implementation_claims=ManifestAsset(version="1.0.0", path="implementation-claims.json"),
         benchmark_contexts=ManifestAsset(version="1.0.0", path="benchmark-contexts.json"),
         failure_modes=ManifestAsset(version="1.0.0", path="failure-modes.json"),
+        failure_discovery=ManifestAsset(version="1.0.0", path="failure-discovery.json"),
         search_index=ManifestAsset(version="1.0.0", path="search-index.json"),
         retrieval_documents=ManifestAsset(version="1.0.0", path="retrieval-documents.json"),
         search_benchmark=ManifestAsset(version="1.0.0", path="search-benchmark.json"),

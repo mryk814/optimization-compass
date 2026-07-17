@@ -286,6 +286,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "failure-modes.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["failure_discovery"] == {
+        "path": "failure-discovery.json",
+        "version": "1.0.0",
+    }
     assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
     assert manifest_payload["retrieval_documents"] == {
         "path": "retrieval-documents.json",
@@ -339,6 +343,21 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert len(failure_payload["failure_modes"]) == 12
     assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
+    discovery_payload = json.loads((first_output / "failure-discovery.json").read_bytes())
+    assert discovery_payload["summary"] == {
+        "case_exclusion_count": 11,
+        "entries_with_scenarios": 9,
+        "structured_failure_count": 12,
+        "total_entries": 23,
+    }
+    assert (first_output / "failure-discovery.json").read_bytes() == (
+        second_output / "failure-discovery.json"
+    ).read_bytes()
+    case_exclusions = [
+        item for item in discovery_payload["entries"] if item["entry_kind"] == "case_exclusion"
+    ]
+    assert all(len(item["method_ids"]) == 1 and item["source_ids"] for item in case_exclusions)
+    assert sum(bool(item["scenario_ids"]) for item in case_exclusions) >= 3
     source_payload = json.loads((first_output / "sources.json").read_bytes())
     assert len(source_payload["sources"]) == 96
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4202
