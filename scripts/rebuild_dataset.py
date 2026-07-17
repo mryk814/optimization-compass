@@ -51,17 +51,29 @@ def main() -> None:
     mode.add_argument("--publish", action="store_true", help="Atomically publish a validated tree.")
     parser.add_argument("--staged-directory", type=Path)
     parser.add_argument("--output", type=Path, help="Keep the first validated staged tree here.")
+    parser.add_argument(
+        "--bundle-output",
+        type=Path,
+        help="External directory for the complete release ZIP; required for publish.",
+    )
+    parser.add_argument("--source-commit", help="Exact 40-character source commit for publish.")
+    parser.add_argument("--tag", help="Immutable version tag for publish (v<dataset version>).")
     args = parser.parse_args()
     if args.stage:
-        if args.staged_directory is not None:
-            parser.error("--staged-directory is only valid with --publish")
+        if any(
+            value is not None
+            for value in (args.staged_directory, args.bundle_output, args.source_commit, args.tag)
+        ):
+            parser.error("publish identity arguments are only valid with --publish")
         print(json.dumps(stage(args.output), ensure_ascii=False, indent=2))
         return
     if args.output is not None:
         parser.error("--output is only valid with --stage")
     if args.staged_directory is None:
         parser.error("--publish requires --staged-directory")
-    publish_release(
+    if args.bundle_output is None or args.source_commit is None or args.tag is None:
+        parser.error("--publish requires --bundle-output, --source-commit, and --tag")
+    bundle = publish_release(
         args.staged_directory,
         ROOT / "data",
         RUNTIME_DATABASE,
@@ -69,8 +81,24 @@ def main() -> None:
         SITE_DATA_DIRECTORY,
         README_PATH,
         render_readme_from_release(README_PATH, args.staged_directory),
+        args.bundle_output,
+        source_commit=args.source_commit,
+        tag=args.tag,
     )
-    print(json.dumps({"mode": "publish", "version": RELEASE_AUTHORITY.dataset_version}, indent=2))
+    print(
+        json.dumps(
+            {
+                "mode": "publish",
+                "version": RELEASE_AUTHORITY.dataset_version,
+                "bundle": {
+                    "path": str(bundle.path),
+                    "bytes": bundle.bytes,
+                    "sha256": bundle.sha256,
+                },
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

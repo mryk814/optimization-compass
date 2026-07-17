@@ -13,7 +13,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from openpyxl import Workbook, load_workbook
 
@@ -40,7 +40,11 @@ from optimization_compass.versioned_claims import (
     insert_versioned_claims_and_contexts,
 )
 
+if TYPE_CHECKING:
+    from optimization_compass.release_bundle import ReleaseBundle
+
 DATASET_STEM = "optimization_method_selection_database_v{version}"
+COMPACT_RELEASE_ARTIFACT_KEYS = ("ddl", "report", "release_identity")
 ROOT = Path(__file__).parents[2]
 RELEASE_AUTHORITY_PATH = Path(__file__).parent / "resources/release-authority.json"
 RELEASE_AUTHORITY = load_release_authority(RELEASE_AUTHORITY_PATH)
@@ -1007,7 +1011,11 @@ def publish_release(
     site_data_directory: Path,
     readme_path: Path,
     readme_content: str,
-) -> None:
+    bundle_output_directory: Path,
+    *,
+    source_commit: str,
+    tag: str,
+) -> ReleaseBundle:
     verify_release_tree(staged_directory)
     manifests = list(staged_directory.glob("*_manifest.json"))
     manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
@@ -1036,6 +1044,44 @@ def publish_release(
     if staged_identity.dataset_version != version:
         raise ReleaseValidationError("release identity version does not match manifest")
 
+    from optimization_compass.release_catalog import (
+        ReleaseCatalogError,
+        catalog_entry_from_bundle,
+        load_release_catalog,
+        merge_catalog_entry,
+        validate_release_catalog,
+    )
+
+    catalog_path = data_directory / "releases/catalog.json"
+    try:
+        load_release_catalog(catalog_path)
+    except ReleaseCatalogError as error:
+        raise ReleaseValidationError(str(error)) from error
+
+    bundle_output = bundle_output_directory.resolve(strict=False)
+    repository_root = ROOT.resolve()
+    if bundle_output == repository_root or repository_root in bundle_output.parents:
+        raise ReleaseValidationError(
+            "complete release bundles must be written outside the repository"
+        )
+
+    from optimization_compass.release_bundle import build_release_bundle
+
+    bundle = build_release_bundle(
+        staged_directory,
+        bundle_output_directory,
+        source_commit=source_commit,
+        tag=tag,
+    )
+    try:
+        catalog_entry = catalog_entry_from_bundle(
+            bundle,
+            database_sha256=staged_identity.database_sha256,
+        )
+    except ReleaseCatalogError as error:
+        bundle.path.unlink(missing_ok=True)
+        raise ReleaseValidationError(str(error)) from error
+
     data_directory.parent.mkdir(parents=True, exist_ok=True)
     site_data_directory.parent.mkdir(parents=True, exist_ok=True)
     temporary = Path(
@@ -1046,6 +1092,7 @@ def publish_release(
     version_existed = version_file.exists()
     site_data_existed = site_data_directory.exists()
     readme_existed = readme_path.exists()
+    published = False
     try:
         prepared = temporary / "prepared"
         backup = temporary / "backup"
@@ -1065,16 +1112,28 @@ def publish_release(
             shutil.copytree(site_data_directory, backup / "site-data")
         if readme_existed:
             shutil.copy2(readme_path, backup / "README.md")
-        for staged_path in staged_directory.iterdir():
-            target = prepared_data / staged_path.name
-            if target.exists() and target.is_dir():
-                shutil.rmtree(target)
-            elif target.exists():
-                target.unlink()
-            if staged_path.is_dir():
-                shutil.copytree(staged_path, target)
-            else:
-                shutil.copy2(staged_path, target)
+        compact_paths = [
+            manifests[0],
+            *(
+                staged_directory / str(manifest["artifacts"][key])
+                for key in COMPACT_RELEASE_ARTIFACT_KEYS
+            ),
+        ]
+        for staged_path in compact_paths:
+            shutil.copy2(staged_path, prepared_data / staged_path.name)
+        prepared_catalog = prepared_data / "releases/catalog.json"
+        try:
+            merged_catalog = merge_catalog_entry(
+                catalog_path,
+                catalog_entry,
+                prepared_catalog,
+            )
+            validate_release_catalog(
+                merged_catalog,
+                expected_current_identity=staged_identity,
+            )
+        except ReleaseCatalogError as error:
+            raise ReleaseValidationError(str(error)) from error
         prepared_runtime = prepared / "knowledge.sqlite"
         shutil.copy2(expected_database, prepared_runtime)
         prepared_version = prepared / "DATASET_VERSION"
@@ -1097,6 +1156,7 @@ def publish_release(
                 _atomic_replace(site_data_directory, temporary / "displaced-site-data")
             _atomic_replace(prepared_site_data, site_data_directory)
             _atomic_replace(prepared_readme, readme_path)
+            published = True
         except Exception:
             _restore_publish_targets(
                 data_directory=data_directory,
@@ -1114,6 +1174,9 @@ def publish_release(
             raise
     finally:
         shutil.rmtree(temporary, ignore_errors=True)
+        if not published and bundle.path.exists():
+            bundle.path.unlink()
+    return bundle
 
 
 def _atomic_replace(source: Path, target: Path) -> None:
