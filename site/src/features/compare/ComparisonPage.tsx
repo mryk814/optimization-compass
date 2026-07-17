@@ -232,6 +232,7 @@ function SearchTreeComparison({
               <dl className="comparison-search-tree-metrics" aria-label={`${member.label_ja}の同期指標`}>
                 <div><dt>Terminal status</dt><dd>{searchTreeTerminalLabel(payload.terminal_state)}</dd></div>
                 <div><dt>Incumbent</dt><dd>{payload.incumbent?.value ?? "未発見"}</dd></div>
+                <div><dt>Feasibility</dt><dd>{searchTreeFeasibilityLabel(payload)}</dd></div>
                 <div><dt>Global bound</dt><dd>{payload.global_bound.toFixed(2)}</dd></div>
                 <div><dt>Absolute gap</dt><dd>{payload.absolute_gap === null ? "—" : payload.absolute_gap.toFixed(2)}</dd></div>
                 <div><dt>Explored nodes</dt><dd>{payload.progress.explored_nodes}</dd></div>
@@ -852,6 +853,22 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       ) {
         throw new Error(`Search-tree artifact identity differs from comparison member ${member.member_id}.`);
       }
+      const traceNodeStopLimit = artifact.trace.stopping.max_nodes;
+      const scenarioNodeStopLimit = scenario.experiment.stopping.max_nodes;
+      const memberNodeStopLimit = member.parameters.node_stop_limit;
+      if (
+        artifact.trace.profile_id !== run.profile_id
+        || artifact.trace.implementation_mapping_status !== run.implementation_mapping_status
+        || artifact.trace.implementation_id !== run.implementation_id
+        || artifact.trace.evaluation_budget !== scenario.experiment.budget.value
+        || !isPositiveInteger(traceNodeStopLimit)
+        || !isPositiveInteger(scenarioNodeStopLimit)
+        || !isPositiveInteger(memberNodeStopLimit)
+        || traceNodeStopLimit !== scenarioNodeStopLimit
+        || traceNodeStopLimit !== memberNodeStopLimit
+      ) {
+        throw new Error(`Search-tree execution contract differs from comparison member ${member.member_id}.`);
+      }
       return { artifact, scenario };
     }));
     return {
@@ -939,6 +956,16 @@ function searchTreeTerminalLabel(state: "ongoing" | "optimality_proven" | "budge
     optimality_proven: "最適性証明済み",
     budget_exhausted: "予算停止・未証明",
   }[state];
+}
+
+function searchTreeFeasibilityLabel(payload: ReturnType<typeof parseSearchTreeFramePayload>): string {
+  return payload.incumbent
+    ? "実行可能解あり（feasible）"
+    : "実行可能解は未発見（undetermined）";
+}
+
+function isPositiveInteger(value: unknown): value is number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value > 0;
 }
 
 function isOutsideBounds(coordinates: readonly number[], spec: ObjectivePlotSpec): boolean {

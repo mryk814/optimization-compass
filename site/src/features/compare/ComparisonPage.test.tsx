@@ -56,7 +56,7 @@ const comparisonIndex: ComparisonIndex = {
         scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
         label_ja: "探索継続run",
         label_en: "Continuing run",
-        parameters: { stopping: "continue" },
+        parameters: { node_stop_limit: completeArtifact.trace.stopping.max_nodes },
         budget: { metric: "oracle_evaluations", value: 4 },
         artifact: {
           artifact_id: "binary-knapsack-bnb-complete",
@@ -73,7 +73,7 @@ const comparisonIndex: ComparisonIndex = {
         scenario_id: "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
         label_ja: "node予算停止run",
         label_en: "Node-budget run",
-        parameters: { stopping: "four nodes" },
+        parameters: { node_stop_limit: budgetArtifact.trace.stopping.max_nodes },
         budget: { metric: "oracle_evaluations", value: 4 },
         artifact: {
           artifact_id: "binary-knapsack-bnb-budget",
@@ -92,17 +92,56 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function renderPage(
-  indexOverride: unknown = searchTreeIndex,
-  completeOverride: unknown = completeArtifact,
-) {
+type RenderOverrides = {
+  comparison?: unknown;
+  complete?: unknown;
+  index?: unknown;
+  scenarioIndex?: unknown;
+};
+
+type MutableTraceContract = {
+  trace: {
+    evaluation_budget: number;
+    frames: Array<{ oracle_evaluations: number; payload: {
+      absolute_gap: number | null;
+      best_feasible_value: number | null;
+      incumbent: unknown | null;
+      relative_gap: number | null;
+    } }>;
+    implementation_id: string | null;
+    implementation_mapping_status: string;
+    profile_id: string;
+    stopping: Record<string, unknown>;
+  };
+};
+
+type MutableScenarioIndex = {
+  scenarios: Array<{
+    scenario_id: string;
+    runs: Array<{
+      implementation_id: string | null;
+      implementation_mapping_status: string;
+    }>;
+  }>;
+};
+
+function mutableCompleteArtifact(): MutableTraceContract {
+  return structuredClone(completeArtifact) as unknown as MutableTraceContract;
+}
+
+function renderPage({
+  comparison = comparisonIndex,
+  complete = completeArtifact,
+  index = searchTreeIndex,
+  scenarioIndex = scenarios,
+}: RenderOverrides = {}) {
   vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
     const url = String(input);
     const body = url.endsWith("data/manifest.json") ? manifest
-      : url.endsWith("data/comparisons.json") ? comparisonIndex
-        : url.endsWith("visualization-scenarios.json") ? scenarios
-          : url.endsWith("search-trees/index.json") ? indexOverride
-            : url.endsWith("binary-knapsack-bnb-complete.json") ? completeOverride
+      : url.endsWith("data/comparisons.json") ? comparison
+        : url.endsWith("visualization-scenarios.json") ? scenarioIndex
+          : url.endsWith("search-trees/index.json") ? index
+            : url.endsWith("binary-knapsack-bnb-complete.json") ? complete
               : url.endsWith("binary-knapsack-bnb-budget.json") ? budgetArtifact
                 : undefined;
     return body
@@ -131,6 +170,7 @@ describe("ComparisonPage search-tree renderer", () => {
     });
     const completeMetrics = within(screen.getByLabelText("探索継続runの同期指標"));
     expect(completeMetrics.getByText("13")).toBeVisible();
+    expect(completeMetrics.getByText("実行可能解あり（feasible）")).toBeVisible();
     expect(completeMetrics.getByText("15.00")).toBeVisible();
     expect(completeMetrics.getByText("2.00")).toBeVisible();
     expect(completeMetrics.getByText("4")).toBeVisible();
@@ -152,7 +192,7 @@ describe("ComparisonPage search-tree renderer", () => {
   test("rejects a comparison descriptor that differs from the search-tree index", async () => {
     const mismatched = structuredClone(searchTreeIndex);
     mismatched.artifacts[0].path = "search-trees/wrong.json";
-    renderPage(mismatched);
+    renderPage({ index: mismatched });
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Search-tree scenario/index contract differs from comparison member complete-run.",
@@ -161,10 +201,85 @@ describe("ComparisonPage search-tree renderer", () => {
 
   test("rejects an artifact whose identity differs from the validated index entry", async () => {
     const mismatched = { ...structuredClone(completeArtifact), artifact_id: "wrong-artifact" };
-    renderPage(searchTreeIndex, mismatched);
+    renderPage({ complete: mismatched });
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Search-tree artifact identity differs from comparison member complete-run.",
     );
+  });
+
+  test("rejects a trace profile that differs from its scenario run", async () => {
+    const mismatched = mutableCompleteArtifact();
+    mismatched.trace.profile_id = "PROFILE_WRONG";
+    renderPage({ complete: mismatched });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("rejects an implementation mapping status that differs from its scenario run", async () => {
+    const mismatched = mutableCompleteArtifact();
+    mismatched.trace.implementation_mapping_status = "unknown";
+    mismatched.trace.implementation_id = null;
+    renderPage({ complete: mismatched });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("rejects an implementation ID that differs from its scenario run", async () => {
+    const mismatchedArtifact = mutableCompleteArtifact();
+    mismatchedArtifact.trace.implementation_mapping_status = "supported";
+    mismatchedArtifact.trace.implementation_id = "I_TRACE";
+    const mismatchedScenarios = structuredClone(scenarios) as unknown as MutableScenarioIndex;
+    const scenario = mismatchedScenarios.scenarios.find(
+      (candidate) => candidate.scenario_id === "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+    );
+    if (!scenario) throw new Error("search-tree scenario fixture is missing");
+    scenario.runs[0].implementation_mapping_status = "supported";
+    scenario.runs[0].implementation_id = "I_SCENARIO";
+    renderPage({ complete: mismatchedArtifact, scenarioIndex: mismatchedScenarios });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("rejects a trace evaluation budget that differs from its scenario experiment", async () => {
+    const mismatched = mutableCompleteArtifact();
+    mismatched.trace.evaluation_budget += 1;
+    renderPage({ complete: mismatched });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("rejects a trace node stop that differs from the comparison member", async () => {
+    const mismatched = structuredClone(comparisonIndex);
+    mismatched.comparisons[0].members[0].parameters.node_stop_limit =
+      Number(completeArtifact.trace.stopping.max_nodes) + 1;
+    renderPage({ comparison: mismatched });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("labels missing incumbents as undetermined rather than infeasible", async () => {
+    const withoutIncumbent = mutableCompleteArtifact();
+    for (const frame of withoutIncumbent.trace.frames.filter((candidate) => candidate.oracle_evaluations === 0)) {
+      frame.payload.incumbent = null;
+      frame.payload.best_feasible_value = null;
+      frame.payload.absolute_gap = null;
+      frame.payload.relative_gap = null;
+    }
+    renderPage({ complete: withoutIncumbent });
+
+    const metrics = within(await screen.findByLabelText("探索継続runの同期指標"));
+    expect(metrics.getByText("実行可能解は未発見（undetermined）")).toBeVisible();
+    expect(metrics.queryByText(/infeasible/u)).not.toBeInTheDocument();
   });
 });
