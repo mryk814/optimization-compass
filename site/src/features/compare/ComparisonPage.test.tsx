@@ -6,8 +6,10 @@ import completeArtifact from "../../../public/data/search-trees/binary-knapsack-
 import budgetArtifact from "../../../public/data/search-trees/binary-knapsack-bnb-budget.json";
 import searchTreeIndex from "../../../public/data/search-trees/index.json";
 import manifest from "../../../public/data/manifest.json";
+import paretoArtifact from "../../../public/data/visualizations/biobjective-quadratic-pareto-front.json";
 import scenarios from "../../../public/data/visualization-scenarios.json";
 import type { ComparisonIndex } from "../../contracts/comparisons";
+import type { VisualizationScenarioIndex } from "../../contracts/visualization-scenarios";
 import { ComparisonPage } from "./ComparisonPage";
 
 const alignedEvaluationBudget = 9;
@@ -99,6 +101,85 @@ const comparisonIndex: ComparisonIndex = {
   }],
 };
 
+const paretoComparisonIndex: ComparisonIndex = {
+  contract_version: "2.0.0",
+  dataset_version: manifest.dataset_version,
+  comparisons: [{
+    comparison_id: "COMPARE_PARETO_PREFERENCE_TEST",
+    canonical_url: "/compare/COMPARE_PARETO_PREFERENCE_TEST",
+    identity_status: "canonical",
+    canonical_comparison_id: "COMPARE_PARETO_PREFERENCE_TEST",
+    aliases: [],
+    mode: "result_tradeoff",
+    journey_id: "EC017",
+    case_id: "EC017",
+    problem_definition_id: "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+    problem_instance_id: "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+    benchmark_context_id: "BENCH_NLP",
+    title_ja: "Pareto preferenceの選択結果",
+    title_en: "Pareto preference selections",
+    comparison_question: "同じfrontでweightだけを変えると選択点はどう動くか。",
+    formulation_summary: "同じ二目的二次問題を使う。",
+    fixed_factors: ["sampled points", "analytic front"],
+    changed_factors: ["weight_f1"],
+    seed_policy: "not applicable",
+    budget: { metric: "oracle_evaluations", value: 81 },
+    stopping_policy: "81 points complete",
+    tuning_policy: "fixed weights",
+    synchronization_axis: "oracle_evaluations",
+    metrics: [
+      { metric_id: "objective_f1", label_ja: "目的 f1", direction: "minimize", unit: "value" },
+      { metric_id: "objective_f2", label_ja: "目的 f2", direction: "minimize", unit: "value" },
+    ],
+    comparability: "not_comparable",
+    ranking_eligible: false,
+    fairness_note: "同じartifactを使う。",
+    caveat: "solver rankingではない。",
+    takeaway: "単一bestではない。",
+    limitations: ["凸教材に限る。"],
+    source_ids: ["S039", "S055", "S068"],
+    last_verified: "2026-07-17",
+    members: [
+      paretoMember("f2-priority", "f₂優先weight", 0.2),
+      paretoMember("balanced", "均衡weight", 0.5),
+      paretoMember("f1-priority", "f₁優先weight", 0.8),
+    ],
+  }],
+};
+
+function paretoMember(memberId: string, label: string, weight: number) {
+  return {
+    member_id: memberId,
+    role: weight === 0.5 ? "balanced_preference" : "preference_variant",
+    method_id: "M_WEIGHTED_SUM",
+    scenario_id: "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+    label_ja: label,
+    label_en: memberId,
+    parameters: { weight_f1: weight },
+    budget: { metric: "oracle_evaluations", value: 81 },
+    artifact: {
+      artifact_id: "biobjective-quadratic-pareto-front",
+      artifact_kind: "result_visualization" as const,
+      renderer_family: "pareto_front" as const,
+      renderer_contract_version: "1.1.0",
+      payload_path: "visualizations/biobjective-quadratic-pareto-front.json",
+    },
+  };
+}
+
+function paretoScenarioIndex(): VisualizationScenarioIndex {
+  const index = structuredClone(scenarios) as unknown as VisualizationScenarioIndex;
+  const alternate = index.scenarios.find(
+    (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+  );
+  const primary = index.scenarios.find(
+    (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_QUADRATIC",
+  );
+  if (!alternate || !primary) throw new Error("Pareto scenario fixture is missing");
+  alternate.runs = structuredClone(primary.runs);
+  return index;
+}
+
 afterEach(() => {
   cleanup();
   vi.unstubAllGlobals();
@@ -169,6 +250,31 @@ function renderPage({
   }));
   return render(
     <MemoryRouter initialEntries={["/compare/COMPARE_KNAPSACK_BNB_BUDGET_TEST"]}>
+      <Routes>
+        <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+function renderParetoPage({
+  artifact = paretoArtifact,
+  comparison = paretoComparisonIndex,
+  scenarioIndex = paretoScenarioIndex(),
+}: { artifact?: unknown; comparison?: unknown; scenarioIndex?: unknown } = {}) {
+  vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+    const url = String(input);
+    const body = url.endsWith("data/manifest.json") ? manifest
+      : url.endsWith("data/comparisons.json") ? comparison
+        : url.endsWith("visualization-scenarios.json") ? scenarioIndex
+          : url.endsWith("biobjective-quadratic-pareto-front.json") ? artifact
+            : undefined;
+    return body
+      ? { ok: true, json: async () => structuredClone(body) }
+      : { ok: false, status: 404 };
+  }));
+  return render(
+    <MemoryRouter initialEntries={["/compare/COMPARE_PARETO_PREFERENCE_TEST"]}>
       <Routes>
         <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
       </Routes>
@@ -322,5 +428,83 @@ describe("ComparisonPage search-tree renderer", () => {
     const metrics = within(await screen.findByLabelText("探索継続runの同期指標"));
     expect(metrics.getByText("実行可能解は未発見（undetermined）")).toBeVisible();
     expect(metrics.queryByText(/infeasible/u)).not.toBeInTheDocument();
+  });
+});
+
+describe("ComparisonPage Pareto preference contract", () => {
+  test("renders the artifact-backed decision and objective values for all three weights", async () => {
+    renderParetoPage();
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Pareto preferenceの選択結果" })).toBeVisible();
+    const f2 = within(screen.getByLabelText("f₂優先weightの選択結果"));
+    expect(f2.getByText("weight_f1=0.2")).toBeVisible();
+    expect(f2.getByText("(1.6, 1.6)")).toBeVisible();
+    expect(f2.getByText("5.12")).toBeVisible();
+    expect(f2.getByText("0.32")).toBeVisible();
+    const balanced = within(screen.getByLabelText("均衡weightの選択結果"));
+    expect(balanced.getByText("(1, 1)")).toBeVisible();
+    expect(balanced.getAllByText("2")).toHaveLength(2);
+    const f1 = within(screen.getByLabelText("f₁優先weightの選択結果"));
+    expect(f1.getByText("(0.4, 0.4)")).toBeVisible();
+    expect(f1.getByText("0.32")).toBeVisible();
+    expect(f1.getByText("5.12")).toBeVisible();
+  });
+
+  test("fails closed when a member weight has no artifact selection", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].members[0].parameters.weight_f1 = 0.3;
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Pareto artifact has no preference selection for member f2-priority.",
+    );
+  });
+
+  test("fails closed when the sensitivity scenario does not expose the shared front artifact run", async () => {
+    const scenarioIndex = paretoScenarioIndex();
+    const alternate = scenarioIndex.scenarios.find(
+      (candidate) => candidate.scenario_id === "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+    );
+    if (!alternate) throw new Error("Pareto sensitivity fixture is missing");
+    alternate.runs[0].artifact_id = "different-artifact";
+    renderParetoPage({ scenarioIndex });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison run differs from member f2-priority.",
+    );
+  });
+
+  test("fails closed when a member names a different artifact ID", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].members[1].artifact.artifact_id = "different-artifact";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison members must share one canonical artifact.",
+    );
+  });
+
+  test("does not bypass member method matching for a Pareto method comparison", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].mode = "method_contrast";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison run differs from member f2-priority.",
+    );
+  });
+
+  test("fails closed when the scenario budget metric differs from the comparison", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].budget.metric = "sampled_points";
+    for (const member of comparison.comparisons[0].members) {
+      member.budget.metric = "sampled_points";
+    }
+    comparison.comparisons[0].synchronization_axis = "sampled_points";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison artifact contract differs from the comparison.",
+    );
   });
 });

@@ -7,6 +7,7 @@ from optimization_compass.learning_slices import (
     CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID,
     CONSTRAINED_SCENARIO_ID,
     PARETO_ARTIFACT_ID,
+    PARETO_PREFERENCE_SCENARIO_ID,
     PARETO_SCENARIO_ID,
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
@@ -55,6 +56,7 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
     assert {scenario.scenario_id for scenario in scenarios} == {
         CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID,
         CONSTRAINED_SCENARIO_ID,
+        PARETO_PREFERENCE_SCENARIO_ID,
         PARETO_SCENARIO_ID,
     }
     assert {scenario.artifact.renderer_family for scenario in scenarios} == {
@@ -86,3 +88,25 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
     )
     constrained_link = next(item for item in links if item.artifact_id == CONSTRAINED_ARTIFACT_ID)
     assert constrained_link.route == f"/theater/learning/{CONSTRAINED_SCENARIO_ID}"
+
+    preference = next(
+        scenario for scenario in scenarios if scenario.scenario_id == PARETO_PREFERENCE_SCENARIO_ID
+    )
+    assert preference.identity_status == "derived"
+    assert preference.canonical_scenario_id == PARETO_SCENARIO_ID
+    assert preference.purpose == "sensitivity"
+    assert (
+        preference.artifact
+        == next(
+            scenario for scenario in scenarios if scenario.scenario_id == PARETO_SCENARIO_ID
+        ).artifact
+    )
+    primary = next(scenario for scenario in scenarios if scenario.scenario_id == PARETO_SCENARIO_ID)
+    assert preference.runs == primary.runs
+    assert [(run.method_id, run.profile_id, run.artifact_id) for run in preference.runs] == [
+        ("M_NSGA_II", "PROFILE_NSGA_II_PARETO_FRONT", PARETO_ARTIFACT_ID)
+    ]
+    assert scenario_identity(PARETO_PREFERENCE_SCENARIO_ID) == (
+        "derived",
+        PARETO_SCENARIO_ID,
+    )

@@ -54,7 +54,7 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert assessment.missing_dimensions == []
     assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
-    assert index.summary.status_counts == {"complete": 4, "partial": 7, "draft": 0}
+    assert index.summary.status_counts == {"complete": 5, "partial": 6, "draft": 0}
 
 
 def test_parameter_estimation_journey_connects_primary_sensitivity_and_comparison() -> None:
@@ -93,6 +93,24 @@ def test_expensive_black_box_journey_reuses_bo_scenarios_and_comparison() -> Non
         item for item in index.assessments if item.journey_id == "hyperparameter-search"
     )
     assert assessment.missing_dimensions == []
+
+
+def test_multiobjective_journey_separates_front_generation_from_preference_selection() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "EC017")
+
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    assert {(item.role, item.scenario_id) for item in journey.scenarios} == {
+        ("primary", "SCENARIO_BIOBJECTIVE_QUADRATIC"),
+        ("sensitivity", "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"),
+    }
+    assert {item.comparison_id for item in journey.comparisons} == {"COMPARE_PARETO_PREFERENCE"}
+    assessment = next(item for item in index.assessments if item.journey_id == "EC017")
+    assert assessment.missing_dimensions == []
+    assert assessment.dimensions["alternate_scenario"].target_ids == [
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+    ]
 
 
 def test_index_reports_summary_and_explicit_orphan_policies() -> None:

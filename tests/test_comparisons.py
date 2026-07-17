@@ -192,6 +192,37 @@ def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
         validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
 
 
+def test_pareto_comparison_uses_three_weighted_sum_preference_members() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.15.1")
+    comparison = next(
+        item for item in index.comparisons if item.comparison_id == "COMPARE_PARETO_PREFERENCE"
+    )
+
+    assert comparison.problem_instance_id == "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+    assert comparison.mode == "result_tradeoff"
+    assert comparison.budget.metric == comparison.synchronization_axis == "oracle_evaluations"
+    assert comparison.budget.value == 81
+    assert comparison.comparability == "not_comparable"
+    assert comparison.ranking_eligible is False
+    assert [member.parameters["weight_f1"] for member in comparison.members] == [0.2, 0.5, 0.8]
+    assert {member.method_id for member in comparison.members} == {"M_WEIGHTED_SUM"}
+    assert {member.scenario_id for member in comparison.members} == {
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+    }
+    assert {member.artifact.artifact_id for member in comparison.members} == {
+        "biobjective-quadratic-pareto-front"
+    }
+
+
+def test_ec017_formulation_distinguishes_the_real_case_from_the_fixed_lesson() -> None:
+    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+    case = next(item for item in gallery["cases"] if item["case_id"] == "EC017")
+
+    assert "f₁=x²+y²" in case["objective"]
+    assert "f₂=(x−2)²+(y−2)²" in case["objective"]
+    assert any("同一視しません" in limitation for limitation in case["limitations"])
+
+
 def test_rejects_unfair_budget_alignment() -> None:
     index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.13.0")
     payload = index.model_dump(mode="json")

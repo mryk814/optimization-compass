@@ -24,6 +24,7 @@ describe("learning-slice renderer registry", () => {
 
   test("moves the selected Pareto point with the preference weight", () => {
     const artifact = parseLearningSliceArtifact(paretoPayload);
+    if (artifact.renderer_family !== "pareto_front") throw new Error("Pareto fixture is invalid");
     render(<LearningSliceRenderer artifact={artifact} />);
 
     expect(screen.getByRole("heading", { name: /単一bestではなく/u })).toBeVisible();
@@ -32,6 +33,11 @@ describe("learning-slice renderer registry", () => {
     expect(screen.getByTestId("triobjective-scatter")).toBeVisible();
     expect(screen.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
     expect(screen.getByText(/sampled teaching lens/u)).toBeInTheDocument();
+    const coverage = screen.getByLabelText("Pareto coverage集計");
+    expect(coverage).toHaveTextContent(`Sampled${artifact.points.length}`);
+    expect(coverage).toHaveTextContent(`Dominated${artifact.points.filter((point) => point.dominated).length}`);
+    expect(coverage).toHaveTextContent(`Non-dominated sampled${artifact.points.filter((point) => !point.dominated).length}`);
+    expect(coverage).toHaveTextContent(`Analytic reference${artifact.pareto_front.length} · known_exact`);
     const before = screen.getByText("Selected f₁").nextElementSibling?.textContent;
 
     fireEvent.change(screen.getByRole("slider", { name: /f₁のweight/u }), {

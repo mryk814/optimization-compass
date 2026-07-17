@@ -1,5 +1,5 @@
 {
-  "current_version": "0.14.0",
+  "current_version": "0.15.1",
   "releases": [
     {
       "archival": null,
@@ -28,6 +28,34 @@
       "source_commit": "0460c180d9cd4b6d93f1e20280df404fc8dfeb4e",
       "tag": "v0.14.0",
       "version": "0.14.0"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "f8bd66e41bdeab8cf231dfedba8a90c1be9e5acc8948efea75c332cc7ec0197f",
+        "size_bytes": 4050034,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.15.0/optimization_method_selection_database_v0.15.0_bundle.zip"
+      },
+      "database_sha256": "6655ffddf85bcdace4fa82c40199687e23cb6ce02deae484065b08a04ce72845",
+      "manifest_sha256": "bdeaf9e79bd68113e4f605168aa8ee7263e8ca976ddabf88f04e5cc7a9b45c9c",
+      "release_date": "2026-07-17",
+      "source_commit": "97c7037b2e8e50434d315b2b8814e96d5821b92a",
+      "tag": "v0.15.0",
+      "version": "0.15.0"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "deb7076eaa0dc84e760e5e27356d1f1d59103fd873fcfc3cd292e9960a2d69d5",
+        "size_bytes": 4050094,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.15.1/optimization_method_selection_database_v0.15.1_bundle.zip"
+      },
+      "database_sha256": "cfbeb82d3f6bfcc32562f983d9f4f7017523a187edd09901e985575973886f3f",
+      "manifest_sha256": "6279e20e452285be59ce1f090a9eba3ea794eeee971167c909acee5b6bc19af6",
+      "release_date": "2026-07-17",
+      "source_commit": "2785931ed21a63a898ab14ab7c506d384098358b",
+      "tag": "v0.15.1",
+      "version": "0.15.1"
     }
   ],
   "schema_version": 1

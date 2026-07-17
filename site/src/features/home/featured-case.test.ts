@@ -28,14 +28,14 @@ describe("featured Home case", () => {
     );
 
     expect(featured).toMatchObject({
-      canonicalUrl: "/gallery/budget-allocation",
+      canonicalUrl: "/gallery/EC017",
       formulation: {
-        sense: "maximize",
-        variables: "(A, B, D, C) ∈ {0, 1}⁴",
+        sense: "objectives",
+        variables: "(x, y) ∈ ℝ²",
       },
-      item: { case_id: "budget-allocation" },
-      problemDefinition: { problem_definition_id: "PROBLEM_BINARY_KNAPSACK" },
-      problemInstance: { problem_instance_id: "INSTANCE_BINARY_KNAPSACK_4" },
+      item: { case_id: "EC017" },
+      problemDefinition: { problem_definition_id: "PROBLEM_BIOBJECTIVE_CONTINUOUS" },
+      problemInstance: { problem_instance_id: "INSTANCE_BIOBJECTIVE_QUADRATIC_2D" },
     });
   });
 

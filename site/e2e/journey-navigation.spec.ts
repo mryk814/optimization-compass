@@ -21,6 +21,10 @@ test("Case→Theater→Compare→Caseで共有可能なjourney文脈を保つ", 
   await journey.getByRole("link", { name: /次はCompare/u }).click();
   await expect(journey).toContainText("Step 3/4");
   await expect(page).toHaveURL(/#\/compare\/COMPARE_PARETO_PREFERENCE\?state=/u);
+  await expect(page.getByRole("link", { name: /Theater: preference weightで選択点/u })).toHaveAttribute(
+    "href",
+    expect.stringContaining("SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"),
+  );
 
   const sharedUrl = page.url();
   await page.reload();

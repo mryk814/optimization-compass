@@ -473,13 +473,14 @@
         "I_PYMOO",
         "I_CVXPY"
       ],
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-17",
       "limitations": [
+        "実problemのCaseと、解析的な2変数凸二次教材を同一視しません。教材のdecision [x,y] は設計寸法と運転条件そのものではなく、trade-offを読むための無次元化した代理変数です。",
         "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"
       ],
       "map_node_id": "answer:Q03:multiobjective",
-      "objective": "costと性能lossの2目的を同時に最小化する。",
-      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontを保証済みfrontと呼びません。",
+      "objective": "実problemではcostと性能lossの2目的を同時に最小化する。TheaterとCompareの固定教材では、0≤x,y≤2上のf₁=x²+y²とf₂=(x−2)²+(y−2)²を最小化する。",
+      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontとpreferenceで選んだ1点を区別します。",
       "problem_archetype_id": "PA038",
       "python_example": "from pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.optimize import minimize\nfrom pymoo.problems import get_problem\n\nresult = minimize(get_problem(\"zdt1\"), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F)",
       "question": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
@@ -973,5 +974,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.14.0"
+  "dataset_version": "0.15.1"
 }

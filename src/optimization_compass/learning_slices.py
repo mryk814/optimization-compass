@@ -37,6 +37,7 @@ PARETO_ARTIFACT_ID: Literal["biobjective-quadratic-pareto-front"] = (
 CONSTRAINED_SCENARIO_ID = "SCENARIO_CONSTRAINED_DISK"
 CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID = "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
 PARETO_SCENARIO_ID = "SCENARIO_BIOBJECTIVE_QUADRATIC"
+PARETO_PREFERENCE_SCENARIO_ID = "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
 
 
 class PlotBounds(TraceModel):
@@ -476,10 +477,12 @@ def write_learning_slice_scenarios(
         path.write_bytes(payload)
         payload_metadata[relative_path] = (len(payload), sha256(payload).hexdigest())
     constrained_failure = _constrained_scenario(dataset_version, payload_metadata)
+    pareto_primary = _pareto_scenario(dataset_version, payload_metadata)
     scenarios = [
         _constrained_feasible_path_scenario(constrained_failure),
         constrained_failure,
-        _pareto_scenario(dataset_version, payload_metadata),
+        pareto_primary,
+        _pareto_preference_scenario(pareto_primary),
     ]
     links = [
         LearningSliceLink(
@@ -908,6 +911,85 @@ def _pareto_scenario(
         source_ids=["S039", "S055", "S068"],
         last_verified=LAST_VERIFIED,
     )
+
+
+def _pareto_preference_scenario(
+    primary_scenario: VisualizationScenario,
+) -> VisualizationScenario:
+    """Derive a preference-sensitivity lesson without duplicating its result artifact."""
+    payload = primary_scenario.model_dump(mode="python")
+    lesson = primary_scenario.lesson.model_dump(mode="python")
+    lesson.update(
+        {
+            "learning_objective": {
+                "ja": "同じPareto frontから、weightによって選択点が変わることを読む",
+                "en": "Read how weights select different points from the same Pareto front",
+            },
+            "misconception": {
+                "ja": "weightを変えて得た1点が、多目的問題の唯一のbestである",
+                "en": "A point selected by one weight is the unique best solution",
+            },
+            "expected_phenomenon_ja": (
+                "非劣候補と解析的frontは固定したまま、f1のweightを0.2、0.5、0.8へ"
+                "変えると選択点だけがfront上を移動します。"
+            ),
+            "expected_phenomenon_en": (
+                "The non-dominated candidates and analytic front stay fixed while weights "
+                "0.2, 0.5, and 0.8 move only the selected point along the front."
+            ),
+            "success_signals": [
+                {
+                    "signal_id": "preference_moves_selection",
+                    "label_ja": "weightごとの選択点をfrontと区別できる",
+                    "label_en": "distinguishes each weighted selection from the front",
+                    "observable_ids": ["pareto_front", "preference_selection"],
+                }
+            ],
+            "failure_signals": [
+                {
+                    "signal_id": "single_best_misread",
+                    "label_ja": "1つのweightによる選択を唯一のbestと誤読する",
+                    "label_en": "misreads one weighted selection as the unique best",
+                    "observable_ids": ["preference_selection", "ideal_nadir"],
+                }
+            ],
+            "comparison_role": "sensitivity_variant",
+            "recommended_next_scenario_ids": [PARETO_SCENARIO_ID],
+            "static_summary": {
+                "ja": "同じPareto front上で3つのpreference weightによる選択点を比べます。",
+                "en": "Compare selections from three preference weights on one Pareto front.",
+            },
+            "text_alternative": {
+                "ja": "weight 0.2、0.5、0.8で、同じ非劣front上の異なる3点を選びます。",
+                "en": "Weights 0.2, 0.5, and 0.8 select three different points on one front.",
+            },
+            "derived_media_caption": {
+                "ja": "固定したPareto frontに対するpreference weight感度",
+                "en": "Preference-weight sensitivity on a fixed Pareto front",
+            },
+            "limitations_ja": (
+                "解析的な凸front上のweighted-sum選択教材です。一般の非凸frontでは、"
+                "weightを走査しても取得できない非劣点があります。"
+            ),
+            "limitations_en": (
+                "A weighted-sum selection lesson on an analytic convex front; scanning "
+                "weights can miss non-dominated points on a non-convex front."
+            ),
+        }
+    )
+    payload.update(
+        {
+            "scenario_id": PARETO_PREFERENCE_SCENARIO_ID,
+            "identity_status": "derived",
+            "canonical_scenario_id": PARETO_SCENARIO_ID,
+            "title_ja": "preference weightで選択点がどう動くか比べる",
+            "title_en": "Compare how preference weights move the selected point",
+            "purpose": "sensitivity",
+            "lesson": lesson,
+            "last_verified": "2026-07-17",
+        }
+    )
+    return VisualizationScenario.model_validate(payload)
 
 
 def _canonical_bytes(model: TraceModel) -> bytes:
