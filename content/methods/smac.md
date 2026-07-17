@@ -10,7 +10,7 @@ prerequisites: []
 related_ids: [bayesian-optimization, tpe, random-search, family.expensive-black-box]
 aliases: [/learn/smac]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。
@@ -47,28 +47,27 @@ SMACは評価した点とその結果をrunhistoryとして保存し続けます
 
 ## Python
 
-random forest surrogateを使うsequential model-based optimizationの実装は、tree構造のsplit規則や条件付きparameterの扱いなど専用の設計が必要なため、numpy/scipyでの再現はせず、探索loopの教育用pseudocodeだけを示します。
+次はSMAC3で1変数のconfiguration spaceを作り、deterministicな目的関数を限られたtrial数で最小化する最小例です。
 
-```text
-initialize runhistory as empty
-initialize incumbent as None
+```python
+from ConfigSpace import Configuration, ConfigurationSpace, Float
+from smac import HyperparameterOptimizationFacade, Scenario
 
-loop until budget exhausted:
-    if runhistory is small:
-        candidate = sample_from_search_space(random)
-    else:
-        fit random_forest_surrogate on runhistory
-        candidates = propose_candidates(search_space)
-        scores = acquisition(random_forest_surrogate, candidates, incumbent)
-        candidate = best_of(candidates, scores)
+space = ConfigurationSpace(
+    space={"x": Float("x", bounds=(-5.0, 5.0), default=0.0)}
+)
 
-    result = evaluate(candidate)
-    runhistory.add(candidate, result)
 
-    if incumbent is None or result.is_better_than(incumbent.result):
-        incumbent = Entry(candidate, result)
+def objective(config: Configuration, seed: int = 0) -> float:
+    del seed
+    return float((config["x"] - 1.5) ** 2)
 
-return incumbent
+
+scenario = Scenario(space, deterministic=True, n_trials=20)
+smac = HyperparameterOptimizationFacade(scenario, objective, overwrite=True)
+incumbent = smac.optimize()
+
+print(dict(incumbent), objective(incumbent))
 ```
 
 実装は[SMAC3](https://automl.github.io/SMAC3/latest/)の公式documentationを参照し、search spaceの定義方法、facade（scenarioの種類）、runhistoryの保存形式は利用versionに対応する説明で確認します。

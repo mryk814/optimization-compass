@@ -53,7 +53,7 @@ REQUIRED_BEGINNER_METHOD_SECTIONS = (
     "## 仕組み",
     "## 向く条件・避ける条件",
     "## うまくいったサインと切替サイン",
-    "## Python例",
+    "## Python",
     "## コラム:",
 )
 

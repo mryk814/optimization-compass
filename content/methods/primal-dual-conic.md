@@ -9,7 +9,7 @@ source_ids: [S013, S014, S028, S010, S055]
 prerequisites: [concept.convexity]
 related_ids: [barrier-lp-qp, lp-qp-conic, interior-point-nlp]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。
@@ -61,28 +61,26 @@ modeling層に収まらない非凸な制約や、black-boxな評価しかでき
 
 ## Python
 
-conic内点法はCVXPYやClarabelなどの専用実装が担うため、numpyでKKT系を忠実に再現するのは無理があります。ここではmodelingからsolveまでの流れを教育用pseudocodeで示します。
+次はsecond-order cone制約 $\lVert Ax-b\rVert_2 \leq t$ をCVXPYで記述する最小例です。modeling層がconic標準形へ変換し、対応solverへ渡します。
 
-```text
-# 1. modeling層: 人が読みやすい形式で問題を書く
-minimize     c^T x
-subject to   ||A x - b||_2 <= t        # second-order cone制約
-             X >> 0                     # semidefinite制約（該当する場合）
-             linear equality/inequality
+```python
+import cvxpy as cp
+import numpy as np
 
-# 2. modeling層がconic標準形へ変換する（canonicalization）
-minimize     c'^T x'
-subject to   A' x' + s = b'
-             s in K = K_1 x K_2 x ... （non-negative, second-order, semidefiniteの直積）
+A = np.array([[1.0, 2.0], [-1.0, 1.0]])
+b = np.array([1.0, 0.0])
+c = np.array([1.0, -0.5])
 
-# 3. solver層（例: Clarabel, SCS, MOSEK）がprimal-dual内点法を実行する
-for mu in decreasing_sequence:
-    solve Newton system for (x, y, s) at barrier parameter mu
-    check primal_residual, dual_residual, duality_gap
-    if converged or infeasibility_certificate_found:
-        break
+x = cp.Variable(2)
+t = cp.Variable(nonneg=True)
+problem = cp.Problem(
+    cp.Minimize(c @ x + t),
+    [cp.norm(A @ x - b, 2) <= t, x >= 0],
+)
+value = problem.solve(solver="CLARABEL")
 
-# 4. modeling層が solver層の結果を元の変数へ戻す
+print(problem.status, value)
+print("x:", x.value, "cone radius:", t.value)
 ```
 
 実装は[CVXPYの公式ドキュメント](https://www.cvxpy.org/)でconic標準形への変換方法を、solverの反復挙動やoptionは[Clarabelの公式ドキュメント](https://clarabel.org/stable/)で確認します。利用versionによってdefault parameterやbackendの対応coneが異なるため、必ず該当versionのreferenceを参照します。

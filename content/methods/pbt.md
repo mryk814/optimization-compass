@@ -9,7 +9,7 @@ source_ids: [S038, S069]
 prerequisites: []
 related_ids: [hyperband-asha, random-search, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。
@@ -49,28 +49,46 @@ random searchやHyperbandは、1つのtrialに1つの固定hyperparameter setを
 
 ## Python
 
-```text
-population = [make_worker(sample_hyperparameters()) for _ in range(population_size)]
+次は学習器そのものを単純なscore関数に置き換え、下位workerが上位workerの状態を継承してlearning rateを摂動する1回分のexploit / exploreを再現します。
 
-for step in range(total_steps):
-    for worker in population:
-        worker.train_one_interval()
+```python
+from dataclasses import dataclass, replace
+import random
 
-    if step % eval_interval == 0:
-        scores = {w.id: w.evaluate_validation_metric() for w in population}
-        ranked = rank_workers_by_score(scores)
 
-        for worker in ranked.bottom(fraction=exploit_fraction):
-            source = ranked.sample_from_top(fraction=exploit_fraction)
-            worker.copy_weights_and_state_from(source)
-            worker.hyperparameters = perturb(source.hyperparameters)
+@dataclass(frozen=True)
+class Worker:
+    worker_id: int
+    weight: float
+    learning_rate: float
 
-        log_lineage(step, ranked, exploit_fraction)
 
-best_worker = select_best_by_final_validation_metric(population)
+def validation_score(worker: Worker) -> float:
+    return -((worker.weight - 1.0) ** 2) - 0.1 * worker.learning_rate
+
+
+rng = random.Random(7)
+population = [
+    Worker(worker_id=index, weight=rng.uniform(-1.0, 2.0), learning_rate=0.1)
+    for index in range(4)
+]
+ranked = sorted(population, key=validation_score, reverse=True)
+source = ranked[0]
+target = ranked[-1]
+
+# exploit: 上位workerの状態を継承する
+# explore: 継承したhyperparameterを少し変える
+replacement = replace(
+    source,
+    worker_id=target.worker_id,
+    learning_rate=source.learning_rate * rng.choice([0.8, 1.2]),
+)
+population[target.worker_id] = replacement
+
+print([(worker.worker_id, validation_score(worker)) for worker in population])
 ```
 
-継承・摂動・再評価をこの粒度でnumpy/scipyだけで忠実に再現するのは実務の実装（checkpointの保存・restore、分散worker管理）を省略しすぎるため、教育用のpseudocodeにとどめます。実装は[Ray Tune](https://docs.ray.io/en/latest/tune/index.html)のPopulationBasedTrainingの公式referenceで、利用versionに対応するAPIとcheckpoint挙動を確認します。
+実務ではこの操作を学習intervalごとに繰り返し、weight、optimizer state、系譜をcheckpointへ保存します。実装は[Ray Tune](https://docs.ray.io/en/latest/tune/index.html)のPopulationBasedTrainingの公式referenceで、利用versionに対応するAPIとcheckpoint挙動を確認します。
 
 ## 診断値
 
