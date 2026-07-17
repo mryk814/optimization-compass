@@ -1,43 +1,58 @@
-name: Failure discovery snapshot
+name: Finalize failure discovery contract
 
 on:
   push:
     branches: [feat/failure-discovery-index]
-  pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  snapshot:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Package the current implementation surface
-        run: |
-          tar -czf "$RUNNER_TEMP/repository-snapshot.tar.gz" \
-            .github \
-            src \
-            content \
-            site/src \
-            site/e2e \
-            site/public/data \
-            site/package.json \
-            site/package-lock.json \
-            tests \
-            scripts \
-            docs \
-            data/seeds \
-            data/migrations \
-            pyproject.toml \
-            uv.lock \
-            README.md \
-            AGENTS.md \
-            CONTRIBUTING.md
-      - name: Upload implementation snapshot
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: failure-discovery-repository-snapshot
-          path: ${{ runner.temp }}/repository-snapshot.tar.gz
-          if-no-files-found: error
-          retention-days: 1
+          ref: feat/failure-discovery-index
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Apply the reviewed integration patch
+        run: |
+          git apply --check .github/failure-contract.patch
+          git apply .github/failure-contract.patch
+      - name: Install dependencies
+        run: |
+          uv sync --frozen --all-extras --all-groups
+          npm --prefix site ci
+      - name: Regenerate the public site projection
+        run: uv run optimization-compass export-site-data --output site/public/data
+      - name: Validate the contract slice
+        run: |
+          uv run ruff check src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          uv run ruff format --check src/optimization_compass/failure_discovery.py tests/test_failure_discovery.py
+          uv run mypy src
+          uv run pytest tests/test_failure_discovery.py tests/test_site_export.py
+          npm --prefix site run typecheck
+          npm --prefix site test -- --run \
+            src/contracts/failure-discovery.test.ts \
+            src/contracts/manifest.test.ts \
+            src/features/playback/TraceDemoPage.test.tsx
+          npm --prefix site run build
+      - name: Commit source and generated outputs atomically
+        run: |
+          rm -rf .github/failure-patch
+          git rm .github/failure-contract.patch .github/workflows/failure-discovery-snapshot.yml
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --signoff -m "feat: generate unified failure discovery data"
+          git push origin HEAD:feat/failure-discovery-index
