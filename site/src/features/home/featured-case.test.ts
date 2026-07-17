@@ -29,6 +29,10 @@ describe("featured Home case", () => {
 
     expect(featured).toMatchObject({
       canonicalUrl: "/gallery/constrained-design",
+      formulation: {
+        sense: "minimize",
+        variables: "(x, y) ∈ ℝ²",
+      },
       item: { case_id: "constrained-design" },
       problemDefinition: { problem_definition_id: "PROBLEM_CONSTRAINED_CONTINUOUS_2D" },
       problemInstance: { problem_instance_id: "INSTANCE_CONSTRAINED_DISK_2D" },
@@ -81,6 +85,36 @@ describe("featured Home case", () => {
     const incompleteProblems = problemCatalog(["near-complete"]);
 
     expect(selectFeaturedCase(gallery, journeys, incompleteProblems)).toMatchObject({
+      item: { case_id: "near-complete" },
+    });
+  });
+
+  test("skips the highest-ranked journey when its problem shape is not truthfully formattable", () => {
+    const journeys = journeyIndex([
+      journey("first-in-gallery", "complete", 0),
+      journey("near-complete", "partial", 1),
+    ]);
+    const unsupportedProblems = problemCatalog(["first-in-gallery", "near-complete"]);
+    unsupportedProblems.instances[0].bounds = {
+      lower: [-1, -1],
+      upper: [1, 1],
+    };
+
+    expect(selectFeaturedCase(gallery, journeys, unsupportedProblems)).toMatchObject({
+      item: { case_id: "near-complete" },
+      problemInstance: { problem_instance_id: "INSTANCE_near-complete" },
+    });
+  });
+
+  test("skips a journey whose scenario definition disagrees with its instance", () => {
+    const first = journey("first-in-gallery", "complete", 0);
+    first.journey.scenarios[0].problem_definition_id = "PROBLEM_OTHER";
+    const journeys = journeyIndex([
+      first,
+      journey("near-complete", "partial", 1),
+    ]);
+
+    expect(selectFeaturedCase(gallery, journeys, problems)).toMatchObject({
       item: { case_id: "near-complete" },
     });
   });

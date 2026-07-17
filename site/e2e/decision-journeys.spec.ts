@@ -16,8 +16,14 @@ test("Homeが実Caseを先に見せてTheaterとCompareまで進める", async (
   await expect(
     page.getByRole("heading", { level: 3, name: "このケースを定式化すると" }),
   ).toBeVisible();
-  await expect(page.getByText("f(x, y) = x²+y²")).toBeVisible();
-  await expect(page.getByText("(x−1)²+(y−1)² ≤ 1")).toBeVisible();
+  const formulation = page.locator(".home-formula");
+  await expect(formulation).toBeVisible();
+  await expect(formulation.locator(".home-formula-line").filter({ hasText: "variables" })).toBeVisible();
+  await expect(
+    formulation.locator(".home-formula-line").filter({ hasText: /minimize|maximize|objectives/u }),
+  ).toBeVisible();
+  await expect(formulation).not.toContainText("undefined");
+  await expect(formulation).not.toContainText("[object Object]");
   await expect(page.getByText("選ばない理由")).toBeVisible();
 
   const casePreview = page.locator(".home-case-preview");

@@ -1,11 +1,16 @@
 import type { GalleryCase, GalleryIndex } from "../../contracts/gallery";
 import type { LearningJourney, LearningJourneyIndex } from "../../contracts/learning-journeys";
 import type { ProblemCatalog, ProblemDefinition, ProblemInstance } from "../../contracts/problems";
+import {
+  buildReadableProblemFormulation,
+  type ReadableProblemFormulation,
+} from "./ProblemFormulation";
 
 export interface FeaturedCase {
   canonicalUrl: string;
   item: GalleryCase;
   journey: LearningJourney;
+  formulation: ReadableProblemFormulation;
   problemDefinition: ProblemDefinition;
   problemInstance: ProblemInstance;
 }
@@ -44,6 +49,9 @@ export function selectFeaturedCase(
     const problemDefinition = problemInstance
       ? definitionById.get(problemInstance.problem_definition_id)
       : undefined;
+    const formulation = problemDefinition && problemInstance
+      ? buildReadableProblemFormulation(problemDefinition, problemInstance)
+      : null;
     if (
       journey.status === "draft"
       || !item
@@ -55,11 +63,16 @@ export function selectFeaturedCase(
       || !assessment
       || !problemInstance
       || !problemDefinition
+      || primaryScenario.problem_definition_id !== problemDefinition.problem_definition_id
+      || primaryScenario.problem_instance_id !== problemInstance.problem_instance_id
+      || problemInstance.problem_definition_id !== problemDefinition.problem_definition_id
+      || !formulation
     ) {
       return [];
     }
     return [{
       canonicalUrl: journey.canonical_url,
+      formulation,
       item,
       journey,
       journeyId: journey.journey_id,
@@ -78,6 +91,7 @@ export function selectFeaturedCase(
   const selected = candidates[0];
   return selected ? {
     canonicalUrl: selected.canonicalUrl,
+    formulation: selected.formulation,
     item: selected.item,
     journey: selected.journey,
     problemDefinition: selected.problemDefinition,
