@@ -193,7 +193,7 @@ def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
 
 
 def test_pareto_comparison_uses_three_weighted_sum_preference_members() -> None:
-    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.15.0")
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.15.1")
     comparison = next(
         item for item in index.comparisons if item.comparison_id == "COMPARE_PARETO_PREFERENCE"
     )

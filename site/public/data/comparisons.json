@@ -383,7 +383,7 @@
       "aliases": [],
       "benchmark_context_id": "BENCH_NLP",
       "budget": {
-        "metric": "sampled_points",
+        "metric": "oracle_evaluations",
         "value": 81
       },
       "canonical_comparison_id": "COMPARE_PARETO_PREFERENCE",
@@ -422,7 +422,7 @@
             "renderer_family": "pareto_front"
           },
           "budget": {
-            "metric": "sampled_points",
+            "metric": "oracle_evaluations",
             "value": 81
           },
           "label_en": "f2-priority preference",
@@ -444,7 +444,7 @@
             "renderer_family": "pareto_front"
           },
           "budget": {
-            "metric": "sampled_points",
+            "metric": "oracle_evaluations",
             "value": 81
           },
           "label_en": "Balanced preference",
@@ -466,7 +466,7 @@
             "renderer_family": "pareto_front"
           },
           "budget": {
-            "metric": "sampled_points",
+            "metric": "oracle_evaluations",
             "value": 81
           },
           "label_en": "f1-priority preference",
@@ -505,7 +505,7 @@
         "S068"
       ],
       "stopping_policy": "81-point grid complete",
-      "synchronization_axis": "sampled_points",
+      "synchronization_axis": "oracle_evaluations",
       "takeaway": "Pareto frontと、その中から選ぶpreferenceを混同しません。",
       "title_en": "Change preference on a Pareto front",
       "title_ja": "Pareto front上でpreferenceを変える",
@@ -976,5 +976,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.15.0"
+  "dataset_version": "0.15.1"
 }
