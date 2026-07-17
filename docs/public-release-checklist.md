@@ -45,6 +45,13 @@ GitHub Pages artifact.
 
 - [ ] The release commit passed the complete CI pipeline; no artifact from a
       different commit is reused.
+- [ ] `scripts/repository_size.py --check` rejects a new complete distribution in the Git tree.
+- [ ] The complete dataset ZIP was prepared outside the repository with an explicit source commit and
+      matching `v<dataset version>` tag, then independently verified with `release_bundles.py verify`.
+- [ ] The release catalog entry matches the database, canonical manifest, and complete ZIP hashes and
+      byte size. Reusing a version with different metadata is rejected.
+- [ ] External upload remains a draft until every asset digest and byte size has been checked. A failed
+      upload does not authorize tracked catalog or retention changes.
 - [ ] GitHub release assets include the manifest and licensed dataset bundle.
 - [ ] GitHub Pages was deployed from the validated artifact.
 - [ ] Post-deploy smoke checks confirm routes, data fetches, manifest identity,

@@ -44,6 +44,7 @@ The released SQLite database is the runtime authority. It is **not** an authorin
 | Structured failure relations | Existing failure rows plus `src/optimization_compass/failure_modes.py` | Current authoring is partly code-backed; treat changes as canonical-data work. |
 | Implementation claims and benchmark contexts | Canonical implementation data plus `src/optimization_compass/versioned_claims.py` | Defaults and release claims are versioned facts, not rankings. |
 | Visualization scenario contracts | `src/optimization_compass/visualization_scenarios.py` and scenario generation code | Includes learning metadata, experiment policy, run identity, artifact, and sources. |
+| Release download catalog | `data/releases/catalog.json` via the validated publish command | Compact immutable metadata; complete bundles are prepared outside Git. |
 | Site indexes, release data, Coverage, search, retrieval, Trace JSON | Generated output | Never fix by hand. |
 
 ## 3. Files that must not be edited by hand
@@ -57,6 +58,11 @@ site/public/data/**
 data/optimization_method_selection_database_v*
 generated Trace, media, search, retrieval, Coverage, manifest, and release artifacts
 ```
+
+Complete versioned release bundles are also generated outside the repository. After dataset 0.12.0,
+do not add a new JSON/JSONL/CSV/Excel/site-data distribution tree under `data/`. The Git tree retains
+only current compact release metadata plus the runtime and build inputs defined by
+[`adr/0014-release-retention-and-external-bundles.md`](adr/0014-release-retention-and-external-bundles.md).
 
 A generated file may be committed as part of a validated release. It must be produced from canonical inputs, not manually patched.
 
