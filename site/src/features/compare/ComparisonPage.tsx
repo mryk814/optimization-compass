@@ -7,7 +7,11 @@ import {
   type ComparisonSet,
 } from "../../contracts/comparisons";
 import { findEntity } from "../../contracts/entity-links";
-import { parseLearningSliceArtifact, type LearningSliceArtifact } from "../../contracts/learning-slices";
+import {
+  parseLearningSliceArtifact,
+  type LearningSliceArtifact,
+  type ParetoFrontArtifact,
+} from "../../contracts/learning-slices";
 import { parseSiteManifest } from "../../contracts/manifest";
 import {
   parseSearchTreeArtifact,
@@ -327,12 +331,27 @@ function TrajectoryComparison({ comparison, traces, scenarios }: { comparison: C
 }
 
 function ScenarioComparison({ artifact, comparison, scenario }: { artifact: LearningSliceArtifact; comparison: ComparisonSet; scenario: VisualizationScenario }) {
+  const paretoArtifact = artifact.renderer_family === "pareto_front" ? artifact : undefined;
   return (
     <section className="scenario-comparison" aria-labelledby="scenario-comparison-title">
       <header><h2 id="scenario-comparison-title">{scenario.lesson.learning_objective.ja}</h2><p>{scenario.lesson.text_alternative.ja}</p></header>
       <LearningSliceRenderer artifact={artifact} />
       <div className="comparison-scenario-members">
-        {comparison.members.map((member) => <article key={member.member_id}><span>{member.role}</span><h3>{member.label_ja}</h3><p>{parameterText(member.parameters)}</p></article>)}
+        {comparison.members.map((member) => {
+          const selection = paretoArtifact ? paretoSelectionForMember(paretoArtifact, member) : undefined;
+          return (
+            <article aria-label={`${member.label_ja}の選択結果`} key={member.member_id}>
+              <span>{member.role}</span><h3>{member.label_ja}</h3><p>{parameterText(member.parameters)}</p>
+              {selection && (
+                <dl className="comparison-pareto-selection">
+                  <div><dt>Decision</dt><dd>({selection.decision.map(formatScalar).join(", ")})</dd></div>
+                  <div><dt>f₁</dt><dd>{formatScalar(selection.objectives[0])}</dd></div>
+                  <div><dt>f₂</dt><dd>{formatScalar(selection.objectives[1])}</dd></div>
+                </dl>
+              )}
+            </article>
+          );
+        })}
       </div>
       <ScenarioLessonPanel scenario={scenario} />
       <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
@@ -896,10 +915,64 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
   const artifactResponse = await fetch(`${siteBaseUrl()}data/${artifactDescriptor.payload_path}`, { signal });
   if (!artifactResponse.ok) throw new Error(`Comparison artifact request failed (${artifactResponse.status}).`);
   const artifact = parseLearningSliceArtifact(await artifactResponse.json());
-  if (artifact.artifact_id !== artifactDescriptor.artifact_id || artifact.renderer_family !== family) {
-    throw new Error("Comparison artifact identity differs from its contract.");
+  if (
+    artifact.dataset_version !== manifest.dataset_version
+    || artifact.artifact_id !== artifactDescriptor.artifact_id
+    || artifact.artifact_kind !== artifactDescriptor.artifact_kind
+    || artifact.renderer_family !== family
+    || artifact.contract_version !== artifactDescriptor.renderer_contract_version
+    || scenario.dataset_version !== manifest.dataset_version
+    || scenario.problem_definition_id !== comparison.problem_definition_id
+    || scenario.problem_instance_id !== comparison.problem_instance_id
+    || scenario.artifact.artifact_kind !== artifactDescriptor.artifact_kind
+    || scenario.artifact.renderer_family !== family
+    || scenario.artifact.renderer_contract_version !== artifactDescriptor.renderer_contract_version
+    || scenario.artifact.payload_path !== artifactDescriptor.payload_path
+    || scenario.experiment.budget.value !== comparison.budget.value
+  ) {
+    throw new Error("Scenario comparison artifact contract differs from the comparison.");
+  }
+  for (const member of comparison.members) {
+    const run = scenario.runs.find((candidate) => (
+      candidate.artifact_id === member.artifact.artifact_id
+      && candidate.method_id === member.method_id
+    ));
+    if (!run || scenario.experiment.budget.value !== member.budget.value) {
+      throw new Error(`Scenario comparison run differs from member ${member.member_id}.`);
+    }
+  }
+  if (artifact.renderer_family === "pareto_front") {
+    const weights = comparison.members.map((member) => paretoWeight(member));
+    if (new Set(weights).size !== weights.length) {
+      throw new Error("Pareto comparison preference weights must be unique.");
+    }
+    for (const member of comparison.members) paretoSelectionForMember(artifact, member);
   }
   return { comparison, comparisons: index.comparisons, renderer: "learning-slice", artifact, scenario };
+}
+
+function paretoWeight(member: ComparisonMember): number {
+  const value = member.parameters.weight_f1;
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) {
+    throw new Error(`Pareto member ${member.member_id} requires weight_f1 between zero and one.`);
+  }
+  return value;
+}
+
+function paretoSelectionForMember(
+  artifact: ParetoFrontArtifact,
+  member: ComparisonMember,
+): ParetoFrontArtifact["preference_selections"][number] {
+  const weight = paretoWeight(member);
+  const selection = artifact.preference_selections.find((candidate) => candidate.weight_f1 === weight);
+  if (!selection) {
+    throw new Error(`Pareto artifact has no preference selection for member ${member.member_id}.`);
+  }
+  return selection;
+}
+
+function formatScalar(value: number): string {
+  return Number(value.toFixed(3)).toString();
 }
 
 function latestFrame(frames: readonly TraceFrame[], evaluation: number): TraceFrame | undefined {

@@ -62,11 +62,19 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
   const x = (value: number) => LEFT + (value / 8) * SIZE;
   const y = (value: number) => TOP + (value / 8) * SIZE;
   const frontPath = artifact.pareto_front.map((point, index) => `${index === 0 ? "M" : "L"}${x(point.objectives[0])},${y(point.objectives[1])}`).join(" ");
+  const dominatedCount = artifact.points.filter((point) => point.dominated).length;
+  const nonDominatedCount = artifact.points.length - dominatedCount;
   const selectedTri = useMemo(() => selectTriObjectivePoint(artifact.triobjective_lens, weightPercent), [artifact.triobjective_lens, weightPercent]);
   return (
     <section className="learning-renderer" aria-labelledby="pareto-heading">
       <div className="learning-renderer-heading"><div><p className="eyebrow">pareto_front · 1.1.0</p><h2 id="pareto-heading">単一bestではなくtrade-off集合を選ぶ</h2></div><strong>f₁ ↓ · f₂ ↓</strong></div>
       <p className="projection-disclosure"><strong>2D precision fallback:</strong> まず f₁ × f₂ の支配関係を読み、下の3Dとparallel coordinatesで第3目的を照合します。</p>
+      <dl className="comparison-policy-grid pareto-coverage-summary" aria-label="Pareto coverage集計">
+        <div><dt>Sampled</dt><dd>{artifact.points.length}</dd></div>
+        <div><dt>Dominated</dt><dd>{dominatedCount}</dd></div>
+        <div><dt>Non-dominated sampled</dt><dd>{nonDominatedCount}</dd></div>
+        <div><dt>Analytic reference</dt><dd>{artifact.pareto_front.length} · {artifact.reference.status}</dd></div>
+      </dl>
       <div className="learning-plot-layout">
         <svg aria-label={artifact.text_alternative_ja} className="learning-plot" role="img" viewBox="0 0 520 440">
           <rect className="plot-background" height={SIZE} width={SIZE} x={LEFT} y={TOP} />
