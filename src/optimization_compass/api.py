@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
 from optimization_compass import __version__
-from optimization_compass.agent_service import AgentService
+from optimization_compass.agent_service import AgentEntityType, AgentService
 from optimization_compass.models import (
     Question,
     RecommendationRequest,
@@ -41,10 +43,8 @@ def healthz() -> dict[str, str]:
 
 
 @app.get("/v1/questions", response_model=list[Question])
-def questions(language: str = "ja") -> list[dict[str, object]]:
-    if language not in {"ja", "en"}:
-        raise HTTPException(status_code=422, detail="language must be ja or en")
-    return service.list_diagnose_questions(language)  # type: ignore[arg-type]
+def questions(language: Literal["ja", "en"] = "ja") -> list[dict[str, object]]:
+    return service.list_diagnose_questions(language)
 
 
 @app.post("/v1/recommendations", response_model=RecommendationResponse)
@@ -75,8 +75,8 @@ def verify_data() -> dict[str, object]:
     return service.verify_data()
 
 
-def _entity(entity_type: str, entity_id: str) -> dict[str, object]:
+def _entity(entity_type: AgentEntityType, entity_id: str) -> dict[str, object]:
     try:
-        return service.get_entity(entity_type, entity_id)  # type: ignore[arg-type,return-value]
+        return service.get_entity(entity_type, entity_id)
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=f"{entity_type} not found") from exc
