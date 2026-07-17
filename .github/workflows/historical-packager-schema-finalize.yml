@@ -1,0 +1,81 @@
+name: Historical packager schema finalizer
+
+on:
+  push:
+    branches: [feat/historical-release-packager]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: historical-packager-schema-finalizer
+  cancel-in-progress: true
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: feat/historical-release-packager
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --frozen --all-extras --all-groups
+      - name: Support keyed artifact manifests without treating artifact IDs as paths
+        run: |
+          uv run python - <<'PY'
+          from pathlib import Path
+
+          path = Path("scripts/package_historical_release.py")
+          text = path.read_text(encoding="utf-8")
+          old = '''def _iter_manifest_rows(value: object) -> list[tuple[str, object]]:
+              if isinstance(value, dict):
+                  return [(str(path), metadata) for path, metadata in value.items()]
+              if not isinstance(value, list):
+                  raise HistoricalReleaseError("release manifest collection must be a list or object")
+          '''
+          new = '''def _iter_manifest_rows(value: object) -> list[tuple[str, object]]:
+              if isinstance(value, dict):
+                  rows: list[tuple[str, object]] = []
+                  for key, metadata in value.items():
+                      raw_path = str(key)
+                      if isinstance(metadata, dict):
+                          for field in ("path", "relative_path", "file", "name"):
+                              candidate = metadata.get(field)
+                              if isinstance(candidate, str) and candidate.strip():
+                                  raw_path = candidate.strip()
+                                  break
+                      rows.append((raw_path, metadata))
+                  return rows
+              if not isinstance(value, list):
+                  raise HistoricalReleaseError("release manifest collection must be a list or object")
+          '''
+          if old not in text:
+              raise RuntimeError("manifest-row parser anchor changed")
+          path.write_text(text.replace(old, new, 1), encoding="utf-8", newline="\n")
+          PY
+      - name: Format and validate fixture plus current immutable release
+        run: |
+          uv run ruff check --fix scripts/package_historical_release.py tests/test_historical_release_packager.py
+          uv run ruff format scripts/package_historical_release.py tests/test_historical_release_packager.py
+          uv run pytest tests/test_historical_release_packager.py
+          uv run python scripts/package_historical_release.py \
+            --manifest data/optimization_method_selection_database_v0.11.0_manifest.json \
+            --check-only > /tmp/v0.11.0-packager-check.json
+          test -s /tmp/v0.11.0-packager-check.json
+      - name: Remove finalizers and commit the clean slice
+        run: |
+          rm -f \
+            .github/workflows/historical-packager-finalize.yml \
+            .github/workflows/historical-packager-schema-finalize.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -s -m "chore: align historical packager with release manifest schema"
+          git pull --rebase origin feat/historical-release-packager
+          git push origin HEAD:feat/historical-release-packager
