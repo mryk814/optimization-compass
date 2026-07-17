@@ -38,6 +38,15 @@ _RELEASE_PATH_PATTERN = re.compile(
 _COMPACT_RELEASE_SUFFIXES = frozenset(
     {"_manifest.json", "_release.json", "_report.md", "_schema.sql"}
 )
+_ARCHIVE_SUFFIXES = frozenset({".zip", ".tar", ".tgz", ".gz", ".bz2", ".xz", ".7z", ".rar", ".zst"})
+_APPROVED_DATA_FILES = frozenset({"data/README.md", "data/releases/catalog.json"})
+_APPROVED_AUTHORING_EXTENSIONS = {
+    "data/licenses": frozenset({".txt"}),
+    "data/migrations": frozenset({".sql"}),
+    "data/seeds": frozenset({".json"}),
+}
+_RELEASE_PATH_MARKERS = frozenset({"archive", "bundle", "distribution", "release"})
+MAX_APPROVED_DATA_BLOB_BYTES = 1_048_576
 
 
 class RepositorySizeError(RuntimeError):
@@ -115,6 +124,45 @@ def collect_repository_size(
             data_bytes += working_tree_bytes
 
         release_version = release_distribution_version(relative_path)
+        if release_version is None and _is_disallowed_archive(relative_path):
+            release_file_count += 1
+            release_working_tree_bytes += working_tree_bytes
+            release_git_blob_bytes += blob_bytes
+            violations.append(
+                RepositorySizeViolation(
+                    code="disallowed_tracked_archive",
+                    path=relative_path,
+                    detail="tracked archives are forbidden outside the grandfathered release set",
+                )
+            )
+            continue
+        if release_version is None and _is_large_release_candidate(relative_path, blob_bytes):
+            release_file_count += 1
+            release_working_tree_bytes += working_tree_bytes
+            release_git_blob_bytes += blob_bytes
+            violations.append(
+                RepositorySizeViolation(
+                    code="unapproved_large_release_blob",
+                    path=relative_path,
+                    detail=(
+                        f"unapproved release/data blob is {blob_bytes} bytes; complete bundles "
+                        "must be external assets"
+                    ),
+                )
+            )
+            continue
+        if release_version is None and relative_path.startswith("data/"):
+            if not _is_approved_data_path(relative_path):
+                violations.append(
+                    RepositorySizeViolation(
+                        code="unapproved_data_path",
+                        path=relative_path,
+                        detail=(
+                            "data paths must match the source-input or compact-metadata allowlist"
+                        ),
+                    )
+                )
+            continue
         if release_version is None:
             continue
         release_file_count += 1
@@ -180,6 +228,35 @@ def release_distribution_version(relative_path: str) -> str | None:
     except ReleaseIdentityError:
         return None
     return version
+
+
+def _is_approved_data_path(relative_path: str) -> bool:
+    if relative_path in _APPROVED_DATA_FILES:
+        return True
+    match = _RELEASE_PATH_PATTERN.fullmatch(relative_path)
+    if match is not None and match.group("suffix") in _COMPACT_RELEASE_SUFFIXES:
+        try:
+            validate_semantic_version(match.group("version"))
+        except ReleaseIdentityError:
+            return False
+        return True
+    path = PurePosixPath(relative_path)
+    parent = path.parent.as_posix()
+    return path.suffix.lower() in _APPROVED_AUTHORING_EXTENSIONS.get(parent, frozenset())
+
+
+def _is_disallowed_archive(relative_path: str) -> bool:
+    path = PurePosixPath(relative_path.lower())
+    return any(path.name.endswith(suffix) for suffix in _ARCHIVE_SUFFIXES)
+
+
+def _is_large_release_candidate(relative_path: str, blob_bytes: int) -> bool:
+    if blob_bytes < MAX_APPROVED_DATA_BLOB_BYTES:
+        return False
+    if relative_path.startswith("data/"):
+        return True
+    lowered_parts = {part.lower() for part in PurePosixPath(relative_path).parts}
+    return bool(lowered_parts & _RELEASE_PATH_MARKERS)
 
 
 def main() -> int:

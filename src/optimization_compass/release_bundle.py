@@ -81,34 +81,34 @@ def build_release_bundle(
     }
     index_bytes = _canonical_json(index)
     timestamp = _zip_timestamp(release_date)
-    with zipfile.ZipFile(
-        archive_path,
-        "x",
-        compression=zipfile.ZIP_DEFLATED,
-        compresslevel=9,
-        strict_timestamps=True,
-    ) as archive:
-        _write_zip_member(archive, BUNDLE_INDEX_NAME, index_bytes, timestamp)
-        for relative in sorted(files):
-            _write_zip_member(
-                archive,
-                f"{stem}/{relative}",
-                (staged_directory / relative).read_bytes(),
-                timestamp,
-            )
-    result = ReleaseBundle(
-        version=version,
-        release_date=release_date,
-        tag=tag,
-        source_commit=source_commit,
-        path=archive_path,
-        bytes=archive_path.stat().st_size,
-        sha256=sha256_file(archive_path),
-        manifest_sha256=sha256_file(manifest_path),
-    )
     try:
+        with zipfile.ZipFile(
+            archive_path,
+            "x",
+            compression=zipfile.ZIP_DEFLATED,
+            compresslevel=9,
+            strict_timestamps=True,
+        ) as archive:
+            _write_zip_member(archive, BUNDLE_INDEX_NAME, index_bytes, timestamp)
+            for relative in sorted(files):
+                _write_zip_member(
+                    archive,
+                    f"{stem}/{relative}",
+                    (staged_directory / relative).read_bytes(),
+                    timestamp,
+                )
+        result = ReleaseBundle(
+            version=version,
+            release_date=release_date,
+            tag=tag,
+            source_commit=source_commit,
+            path=archive_path,
+            bytes=archive_path.stat().st_size,
+            sha256=sha256_file(archive_path),
+            manifest_sha256=sha256_file(manifest_path),
+        )
         verify_release_bundle(archive_path)
-    except Exception:
+    except BaseException:
         archive_path.unlink(missing_ok=True)
         raise
     return result
@@ -174,6 +174,11 @@ def verify_release_bundle(bundle_path: Path) -> ReleaseBundle:
             manifest = index["manifest"]
             _validate_file_descriptor("manifest", manifest, require_path=True)
             manifest_relative = _required_string(manifest, "path")
+            canonical_manifest_relative = f"{stem}_manifest.json"
+            if manifest_relative != canonical_manifest_relative:
+                raise ReleaseBundleError(
+                    "bundle manifest path is not the canonical versioned manifest"
+                )
             manifest_descriptor = files.get(manifest_relative)
             if manifest_descriptor != {
                 "bytes": manifest["bytes"],

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import optimization_compass.release_bundle as release_bundle_module
 from optimization_compass.dataset_release import build_staged_release
 from optimization_compass.release_bundle import (
     ReleaseBundleError,
@@ -71,6 +72,74 @@ def test_bundle_verification_rejects_tampered_member(staged_release: Path, tmp_p
 
     with pytest.raises(ReleaseBundleError, match="size differs"):
         verify_release_bundle(tampered)
+
+
+def test_bundle_verification_binds_index_to_canonical_manifest(
+    staged_release: Path, tmp_path: Path
+) -> None:
+    original = build_release_bundle(
+        staged_release,
+        tmp_path / "original-manifest",
+        source_commit=SOURCE_COMMIT,
+        tag="v0.3.0",
+    ).path
+    tampered = tmp_path / "manifest-substitution.zip"
+    with (
+        zipfile.ZipFile(original) as source,
+        zipfile.ZipFile(tampered, "w", compression=zipfile.ZIP_DEFLATED) as target,
+    ):
+        index = release_bundle_module.json.loads(source.read("bundle-index.json"))
+        report_relative = next(name for name in index["files"] if name.endswith("_report.md"))
+        index["manifest"] = {"path": report_relative, **index["files"][report_relative]}
+        for member in source.infolist():
+            content = source.read(member.filename)
+            if member.filename == "bundle-index.json":
+                content = release_bundle_module._canonical_json(index)
+            target.writestr(member, content)
+
+    with pytest.raises(ReleaseBundleError, match="canonical versioned manifest"):
+        verify_release_bundle(tampered)
+
+
+def test_bundle_write_failure_removes_partial_archive_and_allows_retry(
+    staged_release: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output = tmp_path / "write-failure"
+    archive = output / "optimization_method_selection_database_v0.3.0_bundle.zip"
+    real_write = release_bundle_module._write_zip_member
+    writes = 0
+
+    def fail_after_first_member(
+        target: zipfile.ZipFile,
+        name: str,
+        content: bytes,
+        timestamp: tuple[int, int, int, int, int, int],
+    ) -> None:
+        nonlocal writes
+        writes += 1
+        if writes == 2:
+            raise OSError("injected ZIP write failure")
+        real_write(target, name, content, timestamp)
+
+    monkeypatch.setattr(release_bundle_module, "_write_zip_member", fail_after_first_member)
+    with pytest.raises(OSError, match="injected ZIP write failure"):
+        build_release_bundle(
+            staged_release,
+            output,
+            source_commit=SOURCE_COMMIT,
+            tag="v0.3.0",
+        )
+    assert not archive.exists()
+
+    monkeypatch.setattr(release_bundle_module, "_write_zip_member", real_write)
+    retried = build_release_bundle(
+        staged_release,
+        output,
+        source_commit=SOURCE_COMMIT,
+        tag="v0.3.0",
+    )
+    assert retried.path == archive
+    assert verify_release_bundle(archive) == retried
 
 
 @pytest.mark.parametrize(
