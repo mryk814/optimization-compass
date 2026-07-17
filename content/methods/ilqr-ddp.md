@@ -9,7 +9,7 @@ source_ids: [S042, S043, S050, S076]
 prerequisites: []
 related_ids: [multiple-shooting, direct-collocation, dynamic-programming, family.optimal-control]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。
@@ -63,33 +63,44 @@ DDP（differential dynamic programming）は、dynamicsの2次項（stateとcont
 
 ## Python
 
-Riccati型のbackward passは2階微分の扱いも含めて実装が細かく、numpy/scipyだけで忠実に再現すると本質を見誤りやすい手法です。ここでは反復の骨格だけを教育用pseudocodeで示します。
+非線形dynamicsを反復的に再linearizeする完全なiLQR/DDP実装は、自動微分、regularization、line searchまで必要です。次はその内部で解く有限horizon LQR部分問題だけを取り出し、backward passでfeedback gainを作ってforward rolloutする最小例です。
 
-```text
-initialize trajectory: xbar[0..N], ubar[0..N-1]
+```python
+import numpy as np
 
-repeat until cost_change is small or budget exhausted:
-    # backward pass
-    Vx, Vxx = terminal_cost_gradient_hessian(xbar[N])
-    for k = N-1 down to 0:
-        Ak, Bk = linearize_dynamics(xbar[k], ubar[k])
-        lx, lu, lxx, luu, lux = quadratic_cost_expansion(xbar[k], ubar[k])
-        Qx, Qu, Qxx, Quu, Qux = expand_value_function(
-            Ak, Bk, lx, lu, lxx, luu, lux, Vx, Vxx
-        )  # DDP adds second-order dynamics terms here; iLQR omits them
-        Kk, kk = solve_local_lqr(Quu, Qux, Qu)
-        Vx, Vxx = update_value_function(Qx, Qxx, Kk, kk, Qu, Quu, Qux)
-        store(Kk, kk)
+# x[k + 1] = A x[k] + B u[k]
+A = np.array([[1.0, 0.1], [0.0, 1.0]])
+B = np.array([[0.0], [0.1]])
+Q = np.diag([1.0, 0.1])
+R = np.array([[0.01]])
+terminal_Q = 10.0 * Q
+horizon = 40
 
-    # forward pass with line search on alpha
-    for alpha in candidate_step_lengths:
-        x_new, u_new = rollout(xbar, ubar, K, k, alpha)
-        if cost(x_new, u_new) < cost(xbar, ubar):
-            xbar, ubar = x_new, u_new
-            break
+# backward pass: value Hessian Pからfeedback gain Kを求める
+P = terminal_Q.copy()
+gains = []
+for _ in range(horizon):
+    control_hessian = R + B.T @ P @ B
+    K = np.linalg.solve(control_hessian, B.T @ P @ A)
+    gains.append(K)
+    P = Q + A.T @ P @ (A - B @ K)
+gains.reverse()
+
+# forward pass: 得られたfeedback則で軌道をrolloutする
+x = np.array([2.0, 0.0])
+states = [x.copy()]
+controls = []
+for K in gains:
+    u = -K @ x
+    x = A @ x + B @ u
+    controls.append(float(u.item()))
+    states.append(x.copy())
+
+print("terminal state:", states[-1])
+print("maximum control:", max(abs(value) for value in controls))
 ```
 
-実際の数値実装は[CasADi](https://web.casadi.org/docs/)や[acados](https://docs.acados.org/)、[Drake MathematicalProgram](https://drake.mit.edu/doxygen_cxx/group__solvers.html)などがiLQR/DDP系のsolverや自動微分によるlinearizationを提供しています。利用versionのAPI、regularizationの入れ方、line-search戦略は公式referenceで確認します。
+この例はlinearな1回のLQR solveであり、iLQR/DDPの非線形反復や一般制約処理は含みません。実際の数値実装は[CasADi](https://web.casadi.org/docs/)や[acados](https://docs.acados.org/)、[Drake MathematicalProgram](https://drake.mit.edu/doxygen_cxx/group__solvers.html)などの公式referenceで、利用versionのAPI、regularization、line-search戦略を確認します。
 
 ## 診断値
 

@@ -9,7 +9,7 @@ source_ids: [S035, S036, S059]
 prerequisites: []
 related_ids: [bayesian-optimization, smac, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。
@@ -56,34 +56,36 @@ TuRBOが探索領域を局所化するのに対し、SAASBOはsurrogateの構造
 
 ## Python
 
-```text
-trust_region_length = initial_length
-success_count = 0
-failure_count = 0
+次はTuRBOの核となる局所boxと、success / failureに応じた長さの更新だけを取り出した最小例です。実際の候補選択は局所surrogateとacquisitionが担います。
 
-for iteration in range(max_iterations):
-    candidates = sample_within_box(best_point, trust_region_length)
-    local_model = fit_local_surrogate(observed_x, observed_y, box=candidates.box)
-    next_x = maximize_acquisition(local_model, candidates)
-    next_y = evaluate_expensive_objective(next_x)
+```python
+import numpy as np
 
-    if next_y improves_on best_observed_y:
-        success_count += 1
-        failure_count = 0
+rng = np.random.default_rng(7)
+best_x = np.array([0.8, 0.2])
+best_y = float(np.sum((best_x - 0.5) ** 2))
+length = 0.4
+successes = 0
+failures = 0
+
+for _ in range(12):
+    lower = np.maximum(0.0, best_x - length / 2.0)
+    upper = np.minimum(1.0, best_x + length / 2.0)
+    candidate = rng.uniform(lower, upper)
+    value = float(np.sum((candidate - 0.5) ** 2))
+    if value < best_y:
+        best_x, best_y = candidate, value
+        successes, failures = successes + 1, 0
     else:
-        success_count = 0
-        failure_count += 1
+        successes, failures = 0, failures + 1
+    if successes >= 2:
+        length = min(1.0, 2.0 * length)
+        successes = 0
+    elif failures >= 3:
+        length = max(0.05, length / 2.0)
+        failures = 0
 
-    if success_count >= success_threshold:
-        trust_region_length = expand(trust_region_length)
-    if failure_count >= failure_threshold:
-        trust_region_length = shrink(trust_region_length)
-
-    if trust_region_length < min_length:
-        best_point = restart_from_new_region()
-        trust_region_length = initial_length
-
-    record(next_x, next_y)
+print("best:", best_x, best_y, "trust-region length:", length)
 ```
 
 TuRBOとSAASBOの実装、および両者を組み合わせたacquisition最適化・sparse GPの具体的な挙動は、[BoTorch](https://botorch.org/)と[Ax](https://ax.dev/)の公式referenceで利用versionに対応する説明を確認します。標準的なBOの背景は[A Tutorial on Bayesian Optimization](https://arxiv.org/abs/1807.02811)で確認できます。

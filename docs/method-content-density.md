@@ -34,7 +34,7 @@ A published Markdown guide provides:
 - suitable and unsuitable conditions
 - important parameters and diagnostics
 - stopping / budget interpretation
-- a copyable example or explicit educational pseudocode
+- a copyable, syntactically valid Python example
 - common failures and checks
 - sources and related content
 
