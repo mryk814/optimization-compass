@@ -909,7 +909,13 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     throw new Error("Scenario comparison members must share one canonical scenario.");
   }
   const artifactDescriptor = comparison.members[0].artifact;
-  if (comparison.members.some((member) => member.artifact.payload_path !== artifactDescriptor.payload_path)) {
+  if (comparison.members.some((member) => (
+    member.artifact.artifact_id !== artifactDescriptor.artifact_id
+    || member.artifact.artifact_kind !== artifactDescriptor.artifact_kind
+    || member.artifact.renderer_family !== artifactDescriptor.renderer_family
+    || member.artifact.renderer_contract_version !== artifactDescriptor.renderer_contract_version
+    || member.artifact.payload_path !== artifactDescriptor.payload_path
+  ))) {
     throw new Error("Scenario comparison members must share one canonical artifact.");
   }
   const artifactResponse = await fetch(`${siteBaseUrl()}data/${artifactDescriptor.payload_path}`, { signal });
@@ -941,7 +947,9 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       candidate.artifact_id === member.artifact.artifact_id
       && candidate.method_id === member.method_id
     ));
-    const run = family === "pareto_front" ? sharedArtifactRun : methodRun;
+    const run = family === "pareto_front" && comparison.mode === "result_tradeoff"
+      ? sharedArtifactRun
+      : methodRun;
     if (
       !run
       || scenario.experiment.budget.metric !== member.budget.metric

@@ -474,6 +474,26 @@ describe("ComparisonPage Pareto preference contract", () => {
     );
   });
 
+  test("fails closed when a member names a different artifact ID", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].members[1].artifact.artifact_id = "different-artifact";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison members must share one canonical artifact.",
+    );
+  });
+
+  test("does not bypass member method matching for a Pareto method comparison", async () => {
+    const comparison = structuredClone(paretoComparisonIndex);
+    comparison.comparisons[0].mode = "method_contrast";
+    renderParetoPage({ comparison });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Scenario comparison run differs from member f2-priority.",
+    );
+  });
+
   test("fails closed when the scenario budget metric differs from the comparison", async () => {
     const comparison = structuredClone(paretoComparisonIndex);
     comparison.comparisons[0].budget.metric = "sampled_points";
