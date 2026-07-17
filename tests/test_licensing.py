@@ -1,13 +1,20 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 import zipfile
 from pathlib import Path
 
-from optimization_compass.dataset_release import build_staged_release, verify_release_tree
+from optimization_compass.dataset_release import (
+    TARGET_DATASET_VERSION,
+    build_staged_release,
+    verify_release_tree,
+)
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
+RUNTIME_DATABASE = ROOT / "src/optimization_compass/resources/knowledge.sqlite"
 
 
 def test_staged_release_bundles_and_validates_license_notices(tmp_path: Path) -> None:
@@ -53,3 +60,21 @@ def test_site_license_manifest_paths_resolve() -> None:
         manifest["licenses"]["notice_path"],
     ]
     assert all((public / path).is_file() for path in paths)
+
+
+def test_source_catalog_uses_retained_runtime_database_for_compact_release() -> None:
+    assert RUNTIME_DATABASE.is_file()
+    assert not (
+        ROOT / f"data/optimization_method_selection_database_v{TARGET_DATASET_VERSION}.sqlite"
+    ).exists()
+
+    result = subprocess.run(
+        [sys.executable, "scripts/verify_licensing.py"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert "validated license notices" in result.stdout
+    assert "source records across" in result.stdout

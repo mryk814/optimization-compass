@@ -1078,41 +1078,48 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
         },
         "canonical_comparison": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "COMPARE_GRADIENT_FAMILY"
+            "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
           ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/hyperparameter-search",
-            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
             "/methods/M_BAYESIAN_OPT_GP",
-            "/methods/M_CP_SAT",
+            "/methods/M_BFGS",
             "/methods/M_NELDER_MEAD",
             "/sources/S001",
             "/sources/S002",
             "/sources/S034",
-            "/sources/S035"
+            "/sources/S035",
+            "/sources/S056",
+            "/sources/S059",
+            "/sources/S075"
           ]
         },
         "formulation": {
@@ -1126,6 +1133,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "I_BOTORCH",
             "I_OPTUNA"
           ]
         },
@@ -1134,50 +1142,61 @@
           "state": "complete",
           "target_ids": [
             "M_BAYESIAN_OPT_GP",
-            "M_CP_SAT",
+            "M_BFGS",
             "M_NELDER_MEAD"
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/hyperparameter-search",
-            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
             "/methods/M_BAYESIAN_OPT_GP",
-            "/methods/M_CP_SAT",
+            "/methods/M_BFGS",
             "/methods/M_NELDER_MEAD",
             "/sources/S001",
             "/sources/S002",
             "/sources/S034",
-            "/sources/S035"
+            "/sources/S035",
+            "/sources/S056",
+            "/sources/S059",
+            "/sources/S075"
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S001",
             "S002",
             "S034",
-            "S035"
+            "S035",
+            "S056",
+            "S059",
+            "S075"
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -1194,15 +1213,8 @@
         }
       },
       "journey_id": "hyperparameter-search",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1497,7 +1509,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.12.0",
+  "dataset_version": "0.13.0",
   "generated_at": "2026-07-17T00:00:00Z",
   "journeys": [
     {
@@ -1522,7 +1534,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -1615,7 +1627,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -1684,7 +1696,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -1745,7 +1757,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -1806,7 +1818,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1870,7 +1882,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1926,7 +1938,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -1996,7 +2008,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2061,18 +2073,11 @@
       "case_id": "hyperparameter-search",
       "comparisons": [
         {
-          "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
-          "comparison_id": "COMPARE_GRADIENT_FAMILY"
+          "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
         }
       ],
-      "completion_reasons": [
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_NELDER_MEAD"
       ],
@@ -2080,38 +2085,73 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "machine-learning",
       "excluded_method_ids": [
-        "M_CP_SAT"
+        "M_BFGS"
       ],
       "formulation": {
-        "constraints": "実験時間、メモリ、許容する設定範囲。",
-        "decision_variables": "learning rate、層数、正則化係数など。",
-        "objective": "検証損失または実験スコアを最小化する。",
+        "constraints": "hyperparameter boundsと合計10回のevaluation budget。",
+        "decision_variables": "bounds内のlearning rateと正則化係数。固定教材では1つの正規化変数 x に写像する。",
+        "objective": "各設定で観測した検証損失を最小化する。固定教材では未知の波状black-box値を観測する。",
         "variable_domain_summary": "continuous"
       },
       "implementation_ids": [
+        "I_BOTORCH",
         "I_OPTUNA"
       ],
       "journey_id": "hyperparameter-search",
-      "last_reviewed": "2026-07-14",
-      "learning_objective": "時間のかかる実験を少ない回数で改善したい。",
+      "last_reviewed": "2026-07-17",
+      "learning_objective": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。",
       "limitations": [
-        "固定した探索範囲とevaluation budgetでの結果であり、別datasetやmodelでの優位性は保証しません。"
+        "固定seed・1次元・RBF kernel・10 evaluationの教材であり、別dataset、search space、noise条件でのBOやbaselineの優位性を示しません。"
       ],
       "prerequisite_journey_ids": [],
-      "problem_archetype_id": "PA055",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_archetype_id": "PA039",
+      "problem_instance_ids": [
+        "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        }
+      ],
       "source_ids": [
         "S001",
         "S002",
         "S034",
-        "S035"
+        "S035",
+        "S056",
+        "S059",
+        "S075"
       ],
-      "status": "partial",
-      "takeaway": "ノイズと再現性を記録し、単一の試行結果だけで手法を断定しません。",
+      "status": "complete",
+      "takeaway": "実務Caseと1次元の固定教材を分け、観測noise、best-so-far、不確実性、budget到達を一緒に記録します。",
       "title_en": "Hyperparameter search",
       "title_ja": "高価な実験の設定を探す"
     },
@@ -2139,7 +2179,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2204,7 +2244,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.12.0",
+      "dataset_version": "0.13.0",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -2248,6 +2288,12 @@
   "orphan_assets": [
     {
       "asset_id": "COMPARE_GRADIENT_DIVERGENCE",
+      "asset_type": "comparison",
+      "policy": "warning",
+      "reason_code": "comparison_without_journey"
+    },
+    {
+      "asset_id": "COMPARE_GRADIENT_FAMILY",
       "asset_type": "comparison",
       "policy": "warning",
       "reason_code": "comparison_without_journey"
@@ -2775,30 +2821,6 @@
       "reason_code": "scenario_without_journey"
     },
     {
-      "asset_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "SCENARIO_GD_QUADRATIC",
       "asset_type": "scenario",
       "policy": "warning",
@@ -2845,54 +2867,6 @@
       "asset_type": "scenario",
       "policy": "warning",
       "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLOIT_NOISELESS_RANDOM_BASELINE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE_RANDOM_BASELINE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
     },
     {
       "asset_id": "adam-quadratic",
@@ -2964,9 +2938,9 @@
   "summary": {
     "milestone_status": "not_met",
     "status_counts": {
-      "complete": 2,
+      "complete": 3,
       "draft": 0,
-      "partial": 9
+      "partial": 8
     },
     "target_complete_journeys": 5,
     "total_journeys": 11

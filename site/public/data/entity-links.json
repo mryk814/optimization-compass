@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.12.0",
+  "dataset_version": "0.13.0",
   "entities": [
     {
       "aliases": [],
@@ -840,6 +840,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_DIVERGENCE",
           "target_type": "comparison"
         },
@@ -855,23 +860,73 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S001",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
-          "target_id": "M_CP_SAT",
+          "target_id": "M_BFGS",
           "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:very_expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:global_candidate",
+          "target_type": "feature_value"
         },
         {
           "relation_type": "feature_value",
           "target_id": "F_VARIABLE_DOMAIN:continuous",
           "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
         },
         {
           "relation_type": "implementation",
@@ -885,16 +940,31 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA055",
+          "target_id": "PA039",
           "target_type": "problem"
         },
         {
           "relation_type": "visualization",
-          "target_id": "VIEW_NELDER_MEAD_THEATER",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
           "target_type": "view"
         }
       ],
-      "summary": "時間のかかる実験を少ない回数で改善したい。"
+      "summary": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。"
     },
     {
       "aliases": [],
@@ -1017,6 +1087,92 @@
         }
       ],
       "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "entity_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
     },
     {
       "aliases": [],
@@ -1879,6 +2035,11 @@
       "label": "ベイズ最適化",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -1902,6 +2063,16 @@
           "relation_type": "related_content",
           "target_id": "differential-evolution",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
         }
       ],
       "summary": "高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。"
@@ -12793,6 +12964,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_DIVERGENCE",
           "target_type": "comparison"
         },
@@ -12827,9 +13003,29 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
-          "target_id": "M_CP_SAT",
+          "target_id": "M_BFGS",
           "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
         },
         {
           "relation_type": "implementation",
@@ -12847,12 +13043,32 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
-          "target_id": "PA055",
+          "target_id": "PA039",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
         }
       ],
-      "summary": "時間のかかる実験を少ない回数で改善したい。"
+      "summary": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。"
     },
     {
       "aliases": [],
@@ -14393,6 +14609,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -14498,6 +14719,11 @@
         {
           "relation_type": "case",
           "target_id": "constrained-design",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "hyperparameter-search",
           "target_type": "case"
         },
         {
@@ -15050,11 +15276,6 @@
         {
           "relation_type": "case",
           "target_id": "budget-allocation",
-          "target_type": "case"
-        },
-        {
-          "relation_type": "case",
-          "target_id": "hyperparameter-search",
           "target_type": "case"
         },
         {
@@ -17443,6 +17664,11 @@
       "label": "random search",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -19059,7 +19285,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "hyperparameter optimization",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        }
+      ],
       "summary": "hyperparameter optimization。変数=mixed、目的=simulation、制約=bounds。"
     },
     {
@@ -19263,18 +19500,7 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "逆問題",
-      "relations": [
-        {
-          "relation_type": "case",
-          "target_id": "hyperparameter-search",
-          "target_type": "case"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "hyperparameter-search",
-          "target_type": "journey"
-        }
-      ],
+      "relations": [],
       "summary": "逆問題。変数=continuous、目的=sum_of_squares、制約=mixed。"
     },
     {
@@ -19476,6 +19702,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S035",
           "target_type": "source"
@@ -19489,6 +19720,11 @@
           "relation_type": "evidence",
           "target_id": "S075",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -19525,6 +19761,11 @@
           "relation_type": "evidence",
           "target_id": "S075",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -19548,6 +19789,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S035",
           "target_type": "source"
@@ -19561,6 +19807,11 @@
           "relation_type": "evidence",
           "target_id": "S075",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -19584,6 +19835,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S035",
           "target_type": "source"
@@ -19597,6 +19853,11 @@
           "relation_type": "evidence",
           "target_id": "S075",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -21064,6 +21325,11 @@
       "label": "高価な1次元black-box: exploit / noiseless",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
           "target_type": "scenario"
@@ -21148,6 +21414,11 @@
       "label": "高価な1次元black-box: explore / noiseless",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
           "target_type": "scenario"
@@ -21169,6 +21440,11 @@
       "label": "高価な1次元black-box: explore / noiseless",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
           "target_type": "scenario"
@@ -21189,6 +21465,11 @@
       "external_url": null,
       "label": "高価な1次元black-box: explore / small_noise",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
@@ -21811,6 +22092,46 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
       "entity_type": "view",
       "external_url": null,
@@ -21877,16 +22198,6 @@
           "target_type": "trace"
         }
       ],
-      "summary": ""
-    },
-    {
-      "aliases": [],
-      "canonical_url": null,
-      "entity_id": "VIEW_NELDER_MEAD_THEATER",
-      "entity_type": "view",
-      "external_url": null,
-      "label": "VIEW_NELDER_MEAD_THEATER",
-      "relations": [],
       "summary": ""
     },
     {
