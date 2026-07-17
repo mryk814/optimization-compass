@@ -189,8 +189,12 @@ def test_require_atlas_rejects_database_with_entire_atlas_contract_removed(
 
 def _published_fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
     data_dir = tmp_path / "published"
-    data_dir.mkdir()
+    (data_dir / "releases").mkdir(parents=True)
     (data_dir / "keep.txt").write_text("original", encoding="utf-8")
+    (data_dir / "releases/catalog.json").write_text(
+        '{"current_version":null,"releases":[],"schema_version":1}\n',
+        encoding="utf-8",
+    )
     runtime = tmp_path / "knowledge.sqlite"
     shutil.copy2(BASE_DATABASE, runtime)
     version_file = tmp_path / "DATASET_VERSION"
@@ -213,6 +217,31 @@ def _tree_bytes(directory: Path) -> dict[str, bytes]:
     }
 
 
+def _publish_release(
+    staged_directory: Path,
+    data_directory: Path,
+    runtime_database: Path,
+    version_file: Path,
+    site_data_directory: Path,
+    readme_path: Path,
+    readme_content: str,
+) -> None:
+    manifest_path = next(staged_directory.glob("*_manifest.json"))
+    version = json.loads(manifest_path.read_text(encoding="utf-8"))["version"]
+    publish_release(
+        staged_directory,
+        data_directory,
+        runtime_database,
+        version_file,
+        site_data_directory,
+        readme_path,
+        readme_content,
+        readme_path.parent / "external-bundles",
+        source_commit="1" * 40,
+        tag=f"v{version}",
+    )
+
+
 def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
     staged = build_staged_release(
         BASE_DATABASE,
@@ -222,7 +251,7 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
-    publish_release(
+    _publish_release(
         staged.output_directory,
         data_dir,
         runtime,
@@ -233,7 +262,20 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
     )
 
     assert (data_dir / "keep.txt").read_text(encoding="utf-8") == "original"
-    assert (data_dir / staged.database_path.name).exists()
+    assert not (data_dir / staged.database_path.name).exists()
+    manifest = json.loads(staged.manifest_path.read_text(encoding="utf-8"))
+    assert (data_dir / staged.manifest_path.name).read_bytes() == staged.manifest_path.read_bytes()
+    for key in ("ddl", "report", "release_identity"):
+        relative = str(manifest["artifacts"][key])
+        assert (data_dir / relative).read_bytes() == (
+            staged.output_directory / relative
+        ).read_bytes()
+    assert not (data_dir / str(manifest["artifacts"]["json"])).exists()
+    assert len(list((tmp_path / "external-bundles").glob("*_bundle.zip"))) == 1
+    catalog = json.loads((data_dir / "releases/catalog.json").read_text(encoding="utf-8"))
+    assert catalog["current_version"] == "0.3.0"
+    assert catalog["releases"][0]["source_commit"] == "1" * 40
+    assert catalog["releases"][0]["manifest_sha256"] == sha256(staged.manifest_path)
     assert runtime.read_bytes() == staged.database_path.read_bytes()
     assert version_file.read_text(encoding="utf-8") == (f"0.3.0\nsha256={sha256(runtime)}\n")
     assert _tree_bytes(site_data) == _tree_bytes(staged.site_data_directory)
@@ -273,7 +315,7 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
     monkeypatch.setattr(dataset_release_module, "_atomic_replace", fail_on_selected_target)
 
     with pytest.raises(OSError, match="injected"):
-        publish_release(
+        _publish_release(
             staged.output_directory,
             data_dir,
             runtime,
@@ -288,6 +330,7 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
     assert version_file.read_bytes() == before_version
     assert _tree_bytes(site_data) == before_site
     assert readme.read_bytes() == before_readme
+    assert not list((tmp_path / "external-bundles").glob("*_bundle.zip"))
 
 
 def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
@@ -302,7 +345,7 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
     with pytest.raises(ReleaseValidationError, match="new release version"):
-        publish_release(
+        _publish_release(
             build_staged_release(
                 BASE_DATABASE,
                 tmp_path / "current",
@@ -319,7 +362,7 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
 
     runtime.write_bytes(runtime.read_bytes() + b"tampered")
     with pytest.raises(ReleaseValidationError, match="runtime hash"):
-        publish_release(
+        _publish_release(
             staged.output_directory,
             data_dir,
             runtime,
@@ -332,7 +375,7 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
     shutil.copy2(BASE_DATABASE, runtime)
     version_file.write_text(f"9.9.9\nsha256={BASE_DATASET_SHA256}\n", encoding="utf-8")
     with pytest.raises(ReleaseValidationError, match="code version"):
-        publish_release(
+        _publish_release(
             staged.output_directory,
             data_dir,
             runtime,
@@ -344,7 +387,7 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
 
     version_file.write_text(f"{BASE_DATASET_VERSION}\nsha256={'0' * 64}\n", encoding="utf-8")
     with pytest.raises(ReleaseValidationError, match="runtime hash"):
-        publish_release(
+        _publish_release(
             staged.output_directory,
             data_dir,
             runtime,
@@ -361,6 +404,44 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
     manifest["artifacts"]["database"] = "wrong.sqlite"
     staged.manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with pytest.raises(ReleaseValidationError, match="filenames"):
+        _publish_release(
+            staged.output_directory,
+            data_dir,
+            runtime,
+            version_file,
+            site_data,
+            readme,
+            "# next release\n",
+        )
+
+
+def test_publish_requires_catalog_and_external_bundle_output(tmp_path: Path) -> None:
+    staged = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "staged",
+        target_version="0.3.0",
+        release_date="2026-07-14",
+    )
+    data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
+    catalog = data_dir / "releases/catalog.json"
+    catalog.unlink()
+
+    with pytest.raises(ReleaseValidationError, match="release catalog"):
+        _publish_release(
+            staged.output_directory,
+            data_dir,
+            runtime,
+            version_file,
+            site_data,
+            readme,
+            "# next release\n",
+        )
+
+    catalog.write_text(
+        '{"current_version":null,"releases":[],"schema_version":1}\n',
+        encoding="utf-8",
+    )
+    with pytest.raises(ReleaseValidationError, match="outside the repository"):
         publish_release(
             staged.output_directory,
             data_dir,
@@ -369,6 +450,9 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             site_data,
             readme,
             "# next release\n",
+            ROOT / ".release-bundle-test",
+            source_commit="1" * 40,
+            tag="v0.3.0",
         )
 
 
