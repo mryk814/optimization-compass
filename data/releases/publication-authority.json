@@ -1,0 +1,34 @@
+{
+  "abstract_en": "A versioned, evidence-linked dataset that connects optimization problem structure, candidate and excluded methods, implementations, examples, comparisons, and educational visualizations.",
+  "abstract_ja": "最適化問題の構造、候補・除外手法、実装、事例、比較、教材可視化を根拠付きで接続する、版管理されたデータセットです。",
+  "attribution": "Optimization Compass dataset, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors, licensed under CC BY 4.0, https://github.com/mryk814/optimization-compass",
+  "canonical_terms_language": "en",
+  "coverage_limitations": [
+    "The catalog is curated and incomplete; absence is not evidence that a method, implementation, or problem class does not exist.",
+    "Recommendation relations are conditional on recorded problem features, available information, budgets, and evidence scope.",
+    "Linked third-party sources are identified by metadata and URLs; the referenced works are not redistributed or relicensed."
+  ],
+  "creators": [
+    {
+      "name": "TAKUYA OTANI"
+    }
+  ],
+  "homepage_url": "https://mryk814.github.io/optimization-compass/",
+  "keywords": [
+    "optimization",
+    "mathematical optimization",
+    "method selection",
+    "knowledge base",
+    "optimization education"
+  ],
+  "license": "CC-BY-4.0",
+  "non_guarantees": [
+    "The Atlas does not guarantee that a listed method finds a global or local optimum.",
+    "The Atlas does not guarantee feasibility, robustness, or safety in a real system.",
+    "Educational examples and comparisons do not establish universal rankings or performance guarantees."
+  ],
+  "primary_language": "ja",
+  "repository_url": "https://github.com/mryk814/optimization-compass",
+  "schema_version": 1,
+  "title": "Optimization Compass Optimization Atlas Dataset"
+}

@@ -1,0 +1,22 @@
+# Generated from data/releases/publication-authority.json and data/releases/catalog.json.
+# Run `uv run python scripts/dataset_publication.py check` before committing.
+cff-version: "1.2.0"
+message: "If you use this dataset, please cite this exact version."
+title: "Optimization Compass Optimization Atlas Dataset"
+type: dataset
+abstract: "A versioned, evidence-linked dataset that connects optimization problem structure, candidate and excluded methods, implementations, examples, comparisons, and educational visualizations."
+authors:
+  - name: "TAKUYA OTANI"
+version: "0.15.1"
+date-released: "2026-07-17"
+commit: "2785931ed21a63a898ab14ab7c506d384098358b"
+license: "CC-BY-4.0"
+repository-code: "https://github.com/mryk814/optimization-compass"
+repository-artifact: "https://github.com/mryk814/optimization-compass/releases/download/v0.15.1/optimization_method_selection_database_v0.15.1_bundle.zip"
+url: "https://mryk814.github.io/optimization-compass/"
+keywords:
+  - "optimization"
+  - "mathematical optimization"
+  - "method selection"
+  - "knowledge base"
+  - "optimization education"

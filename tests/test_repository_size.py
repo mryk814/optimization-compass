@@ -153,6 +153,7 @@ def test_gate_allows_only_expected_small_authoring_and_compact_data(tmp_path: Pa
             "data/migrations/012_next.sql": b"select 1;",
             "data/seeds/example.json": b"{}",
             "data/releases/catalog.json": EMPTY_CATALOG,
+            "data/releases/publication-authority.json": b"{}",
             "data/optimization_method_selection_database_v0.13.0_manifest.json": b"{}",
         },
     )
