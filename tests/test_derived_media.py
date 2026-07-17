@@ -2,6 +2,7 @@ import struct
 from hashlib import sha256
 from pathlib import Path
 
+from optimization_compass.dataset_release import TARGET_DATASET_VERSION
 from optimization_compass.derived_media import DerivedMediaManifest, write_derived_media
 from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
@@ -76,7 +77,7 @@ def test_exported_media_manifest_matches_files() -> None:
     root = Path("site/public/data")
     manifest = DerivedMediaManifest.model_validate_json((root / "media/manifest.json").read_bytes())
 
-    assert manifest.dataset_version == "0.12.0"
+    assert manifest.dataset_version == TARGET_DATASET_VERSION
     assert {file.media_kind for file in manifest.entries[0].files} == {
         "thumbnail",
         "static_png",

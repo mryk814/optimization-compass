@@ -23,11 +23,21 @@ def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> Non
             "SELECT method_id, implementation_id, support_level FROM method_implementation_map "
             "WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'"
         ).fetchall()
-        claim = connection.execute(
-            "SELECT value_json, value_status, valid_from, source_id FROM implementation_claims "
-            "WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF' "
-            "AND predicate = 'important_option_defaults' AND valid_to IS NULL"
-        ).fetchone()
+        claims = connection.execute(
+            """
+            SELECT predicate, value_json, value_status, valid_from, source_id,
+                   product_version
+            FROM implementation_claims
+            WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+              AND predicate IN (
+                'important_option_defaults',
+                'default_method_least_squares',
+                'default_method_curve_fit_bounds'
+              )
+              AND valid_to IS NULL
+            ORDER BY predicate
+            """
+        ).fetchall()
     finally:
         connection.close()
 
@@ -38,13 +48,37 @@ def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> Non
     assert [tuple(row) for row in mappings] == [
         ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
     ]
-    assert claim is not None
-    assert claim["value_status"] == "verified"
-    assert claim["source_id"] == "S003"
-    assert claim["valid_from"] == "2026-07-16"
-    default_text = json.loads(claim["value_json"])
-    assert "least_squares: method=trf is the default" in default_text
-    assert "curve_fit: trf is selected when bounds are supplied" in default_text
+
+    claims_by_predicate = {str(row["predicate"]): row for row in claims}
+    assert set(claims_by_predicate) == {
+        "important_option_defaults",
+        "default_method_least_squares",
+        "default_method_curve_fit_bounds",
+    }
+    generic = claims_by_predicate["important_option_defaults"]
+    assert generic["value_status"] == "verified"
+    assert generic["source_id"] == "S003"
+    assert generic["valid_from"] == "2026-07-16"
+    assert json.loads(generic["value_json"]) == (
+        "tr_solver; jac_sparsity; x_scale; loss; ftol; xtol; gtol; max_nfev"
+    )
+
+    for predicate in (
+        "default_method_least_squares",
+        "default_method_curve_fit_bounds",
+    ):
+        claim = claims_by_predicate[predicate]
+        assert claim["value_status"] == "verified"
+        assert claim["source_id"] == "S003"
+        assert claim["valid_from"] == "2026-07-16"
+        assert claim["product_version"] == "1.18.0"
+
+    least_squares = json.loads(claims_by_predicate["default_method_least_squares"]["value_json"])
+    assert least_squares["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+    assert least_squares["fallback"] is None
+    curve_fit = json.loads(claims_by_predicate["default_method_curve_fit_bounds"]["value_json"])
+    assert curve_fit["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+    assert curve_fit["fallback"]["selected_method_id"] == "M_LEVENBERG_MARQUARDT"
 
 
 def test_trf_has_a_beginner_first_published_guide() -> None:

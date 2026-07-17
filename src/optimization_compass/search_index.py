@@ -406,6 +406,7 @@ def load_benchmark_cases(path: Path) -> list[dict[str, Any]]:
 def evaluate_search_benchmark(index: SearchIndex, cases: list[dict[str, Any]]) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     top1 = top3 = recalled = zero_results = 0
+    relevance_cases = 0
     for case in cases:
         entity_types = {
             cast(SearchEntityType, str(value)) for value in case.get("entity_types", [])
@@ -419,9 +420,11 @@ def evaluate_search_benchmark(index: SearchIndex, cases: list[dict[str, Any]]) -
         )
         hit_ids = [hit.document_id for hit in hits]
         expected = set(map(str, case["expected_document_ids"]))
-        top1 += bool(hit_ids and hit_ids[0] in expected)
-        top3 += bool(expected.intersection(hit_ids[:3]))
-        recalled += bool(expected.intersection(hit_ids))
+        if expected:
+            relevance_cases += 1
+            top1 += bool(hit_ids and hit_ids[0] in expected)
+            top3 += bool(expected.intersection(hit_ids[:3]))
+            recalled += bool(expected.intersection(hit_ids))
         zero_results += not hit_ids
         rows.append(
             {
@@ -441,9 +444,9 @@ def evaluate_search_benchmark(index: SearchIndex, cases: list[dict[str, Any]]) -
         "dataset_version": index.dataset_version,
         "query_count": count,
         "metrics": {
-            "top_1_relevance": top1 / count if count else 0,
-            "top_3_relevance": top3 / count if count else 0,
-            "expected_entity_recall": recalled / count if count else 0,
+            "top_1_relevance": (top1 / relevance_cases if relevance_cases else 0),
+            "top_3_relevance": (top3 / relevance_cases if relevance_cases else 0),
+            "expected_entity_recall": (recalled / relevance_cases if relevance_cases else 0),
             "zero_result_rate": zero_results / count if count else 0,
         },
         "queries": rows,
