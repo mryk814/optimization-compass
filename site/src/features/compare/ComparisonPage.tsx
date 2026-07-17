@@ -46,7 +46,11 @@ type LoadedBase = {
   comparisons: ComparisonSet[];
 };
 type Loaded = LoadedBase & ({
-  renderer: "trajectory" | "metric-history";
+  renderer: "trajectory";
+  traces: AlgorithmTrace[];
+  scenarios: VisualizationScenario[];
+} | {
+  renderer: "metric-history";
   traces: AlgorithmTrace[];
   scenarios: VisualizationScenario[];
 } | {
@@ -529,6 +533,9 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === member.scenario_id);
       if (!scenario || !scenario.runs.some((run) => run.artifact_id === member.artifact.artifact_id)) {
         throw new Error(`Visualization scenario is missing for ${member.artifact.artifact_id}.`);
+      }
+      if (scenario.artifact.renderer_family !== member.artifact.renderer_family) {
+        throw new Error(`Visualization renderer differs from comparison member ${member.member_id}.`);
       }
       return scenario;
     });

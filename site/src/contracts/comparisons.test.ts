@@ -12,7 +12,9 @@ describe("case-bound comparison contract", () => {
     ]));
     expect(new Set(parsed.comparisons.flatMap((comparison) => (
       comparison.members.map((member) => member.artifact.renderer_family)
-    )))).toEqual(new Set(["continuous_trajectory", "feasible_region", "pareto_front"]));
+    )))).toEqual(new Set([
+      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front",
+    ]));
   });
 
   test("rejects an unfair member budget", () => {

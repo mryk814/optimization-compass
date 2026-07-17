@@ -101,6 +101,7 @@ def test_existing_visualization_families_resolve_canonical_instances() -> None:
         "continuous_trajectory",
         "search_tree",
         "surrogate_uncertainty",
+        "generic_metric_history",
     }
     resolved = {
         scenario["artifact"]["renderer_family"]: scenario["problem_instance_id"]

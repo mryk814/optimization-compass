@@ -20,15 +20,15 @@ const gallery = {
 } as GalleryIndex;
 
 describe("featured Home case", () => {
-  test("selects the complete constrained-design journey from current release data", () => {
+  test("selects the first complete journey from current release data", () => {
     const featured = selectFeaturedCase(
       parseGalleryIndex(rawGallery),
       parseLearningJourneyIndex(rawLearningJourneys),
     );
 
     expect(featured).toMatchObject({
-      canonicalUrl: "/gallery/constrained-design",
-      item: { case_id: "constrained-design" },
+      canonicalUrl: "/gallery/EC013",
+      item: { case_id: "EC013" },
     });
   });
 

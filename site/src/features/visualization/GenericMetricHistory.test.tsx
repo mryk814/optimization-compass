@@ -7,7 +7,7 @@ import { GenericMetricHistory } from "./GenericMetricHistory";
 
 function metricTrace(traceId: string, methodId: string, values: number[]): AlgorithmTrace {
   return {
-    ...algorithmTraceFixture,
+    ...(algorithmTraceFixture as AlgorithmTrace),
     trace_id: traceId,
     method_id: methodId,
     evaluation_budget: 12,
@@ -25,7 +25,7 @@ function metricTrace(traceId: string, methodId: string, values: number[]): Algor
         value,
         unit: "response",
       }],
-    })),
+    })) as AlgorithmTrace["frames"],
   };
 }
 
@@ -43,8 +43,8 @@ describe("GenericMetricHistory", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Metric history" })).toBeVisible();
     expect(screen.getByRole("img", { name: "残差normをoracle evaluationで比較" })).toBeVisible();
-    expect(screen.getByText(/TRF/)).toBeVisible();
-    expect(screen.getByText(/LM/)).toBeVisible();
+    expect(screen.getAllByText(/TRF/)[0]).toBeVisible();
+    expect(screen.getAllByText(/LM/)[0]).toBeVisible();
     expect(screen.getByText(/0.50000 response/u)).toBeVisible();
     expect(screen.getByText(/0.25000 response/u)).toBeVisible();
   });
