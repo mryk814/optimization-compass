@@ -861,6 +861,8 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
         || artifact.trace.implementation_mapping_status !== run.implementation_mapping_status
         || artifact.trace.implementation_id !== run.implementation_id
         || artifact.trace.evaluation_budget !== scenario.experiment.budget.value
+        || artifact.trace.evaluation_budget !== member.budget.value
+        || scenario.experiment.budget.value !== member.budget.value
         || !isPositiveInteger(traceNodeStopLimit)
         || !isPositiveInteger(scenarioNodeStopLimit)
         || !isPositiveInteger(memberNodeStopLimit)

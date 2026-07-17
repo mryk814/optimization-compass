@@ -10,6 +10,18 @@ import scenarios from "../../../public/data/visualization-scenarios.json";
 import type { ComparisonIndex } from "../../contracts/comparisons";
 import { ComparisonPage } from "./ComparisonPage";
 
+const alignedEvaluationBudget = 9;
+const alignedCompleteArtifact = structuredClone(completeArtifact);
+alignedCompleteArtifact.trace.evaluation_budget = alignedEvaluationBudget;
+const alignedBudgetArtifact = structuredClone(budgetArtifact);
+alignedBudgetArtifact.trace.evaluation_budget = alignedEvaluationBudget;
+const alignedScenarios = structuredClone(scenarios);
+for (const scenario of alignedScenarios.scenarios.filter(
+  (candidate) => candidate.scenario_id.startsWith("SCENARIO_BINARY_KNAPSACK_BNB_"),
+)) {
+  scenario.experiment.budget.value = alignedEvaluationBudget;
+}
+
 const comparisonIndex: ComparisonIndex = {
   contract_version: "2.0.0",
   dataset_version: manifest.dataset_version,
@@ -32,8 +44,8 @@ const comparisonIndex: ComparisonIndex = {
     fixed_factors: ["problem instance", "branch order", "initial incumbent"],
     changed_factors: ["node budget stopping"],
     seed_policy: "fixed seed 0",
-    budget: { metric: "oracle_evaluations", value: 4 },
-    stopping_policy: "compare at four oracle evaluations",
+    budget: { metric: "oracle_evaluations", value: alignedEvaluationBudget },
+    stopping_policy: "compare at nine oracle evaluations",
     tuning_policy: "fixed depth-first include-first",
     synchronization_axis: "oracle_evaluations",
     metrics: [
@@ -57,7 +69,7 @@ const comparisonIndex: ComparisonIndex = {
         label_ja: "探索継続run",
         label_en: "Continuing run",
         parameters: { node_stop_limit: completeArtifact.trace.stopping.max_nodes },
-        budget: { metric: "oracle_evaluations", value: 4 },
+        budget: { metric: "oracle_evaluations", value: alignedEvaluationBudget },
         artifact: {
           artifact_id: "binary-knapsack-bnb-complete",
           artifact_kind: "executable_trace",
@@ -74,7 +86,7 @@ const comparisonIndex: ComparisonIndex = {
         label_ja: "node予算停止run",
         label_en: "Node-budget run",
         parameters: { node_stop_limit: budgetArtifact.trace.stopping.max_nodes },
-        budget: { metric: "oracle_evaluations", value: 4 },
+        budget: { metric: "oracle_evaluations", value: alignedEvaluationBudget },
         artifact: {
           artifact_id: "binary-knapsack-bnb-budget",
           artifact_kind: "executable_trace",
@@ -93,6 +105,7 @@ afterEach(() => {
 });
 
 type RenderOverrides = {
+  budget?: unknown;
   comparison?: unknown;
   complete?: unknown;
   index?: unknown;
@@ -117,6 +130,7 @@ type MutableTraceContract = {
 
 type MutableScenarioIndex = {
   scenarios: Array<{
+    experiment: { budget: { value: number } };
     scenario_id: string;
     runs: Array<{
       implementation_id: string | null;
@@ -126,14 +140,19 @@ type MutableScenarioIndex = {
 };
 
 function mutableCompleteArtifact(): MutableTraceContract {
-  return structuredClone(completeArtifact) as unknown as MutableTraceContract;
+  return structuredClone(alignedCompleteArtifact) as unknown as MutableTraceContract;
+}
+
+function mutableBudgetArtifact(): MutableTraceContract {
+  return structuredClone(alignedBudgetArtifact) as unknown as MutableTraceContract;
 }
 
 function renderPage({
+  budget = alignedBudgetArtifact,
   comparison = comparisonIndex,
-  complete = completeArtifact,
+  complete = alignedCompleteArtifact,
   index = searchTreeIndex,
-  scenarioIndex = scenarios,
+  scenarioIndex = alignedScenarios,
 }: RenderOverrides = {}) {
   vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
     const url = String(input);
@@ -142,7 +161,7 @@ function renderPage({
         : url.endsWith("visualization-scenarios.json") ? scenarioIndex
           : url.endsWith("search-trees/index.json") ? index
             : url.endsWith("binary-knapsack-bnb-complete.json") ? complete
-              : url.endsWith("binary-knapsack-bnb-budget.json") ? budgetArtifact
+              : url.endsWith("binary-knapsack-bnb-budget.json") ? budget
                 : undefined;
     return body
       ? { ok: true, json: async () => structuredClone(body) }
@@ -233,7 +252,7 @@ describe("ComparisonPage search-tree renderer", () => {
     const mismatchedArtifact = mutableCompleteArtifact();
     mismatchedArtifact.trace.implementation_mapping_status = "supported";
     mismatchedArtifact.trace.implementation_id = "I_TRACE";
-    const mismatchedScenarios = structuredClone(scenarios) as unknown as MutableScenarioIndex;
+    const mismatchedScenarios = structuredClone(alignedScenarios) as unknown as MutableScenarioIndex;
     const scenario = mismatchedScenarios.scenarios.find(
       (candidate) => candidate.scenario_id === "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
     );
@@ -254,6 +273,28 @@ describe("ComparisonPage search-tree renderer", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Search-tree execution contract differs from comparison member complete-run.",
+    );
+  });
+
+  test("rejects matching trace and scenario budgets that differ from the comparison member", async () => {
+    const mismatchedArtifact = mutableBudgetArtifact();
+    mismatchedArtifact.trace.evaluation_budget = 8;
+    const mismatchedScenarios = structuredClone(alignedScenarios) as unknown as MutableScenarioIndex;
+    const scenario = mismatchedScenarios.scenarios.find(
+      (candidate) => candidate.scenario_id === "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+    );
+    if (!scenario) throw new Error("search-tree budget scenario fixture is missing");
+    scenario.experiment.budget.value = 8;
+    const mismatchedComparison = structuredClone(comparisonIndex);
+    mismatchedComparison.comparisons[0].members[1].budget.value = 9;
+    renderPage({
+      budget: mismatchedArtifact,
+      comparison: mismatchedComparison,
+      scenarioIndex: mismatchedScenarios,
+    });
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Search-tree execution contract differs from comparison member budget-run.",
     );
   });
 
