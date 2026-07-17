@@ -333,6 +333,103 @@
           "artifact": {"artifact_id": "exponential-fit-lbfgsb", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/exponential-fit-lbfgsb.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "hyperparameter-search",
+      "case_id": "hyperparameter-search",
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "benchmark_context_id": "BENCH_BO",
+      "title_ja": "acquisition・noise・random baselineを同じbudgetで読む",
+      "title_en": "Read acquisition, noise, and a random baseline under one budget",
+      "comparison_question": "同じ固定教材とevaluation budgetで、探索係数、観測noise、proposal policyを1つずつ変えると何を読み分ける必要がある？",
+      "formulation_summary": "x∈[-3,3] の未知な1次元black-boxを、初期観測3点から合計10回評価する。",
+      "fixed_factors": [
+        "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D",
+        "domain [-3, 3]",
+        "initial design [-2.6, 0.0, 2.6]",
+        "base seed 2604",
+        "oracle evaluation budget 10"
+      ],
+      "changed_factors": [
+        "referenceに対してexploration coefficient ξだけを0.18から0へ変える",
+        "referenceに対してobservation noise σだけを0から0.08へ変える",
+        "referenceに対してproposal policyだけをExpected Improvementからuniform randomへ変える"
+      ],
+      "seed_policy": "base seed 2604を固定し、noiseとrandom baselineはgeneratorで分離した決定的streamを使う。",
+      "budget": {"metric": "oracle_evaluations", "value": 10},
+      "stopping_policy": "初期観測3点を含む10 objective evaluationsで停止する。",
+      "tuning_policy": "explore ξ=0.18、exploit ξ=0、noise σ∈{0,0.08}を事前固定し、run後に変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "observations", "label_ja": "観測数", "direction": "none", "unit": "objective evaluations"},
+        {"metric_id": "best_so_far", "label_ja": "best-so-far", "direction": "minimize", "unit": "observed objective"},
+        {"metric_id": "selected_acquisition", "label_ja": "選択点のacquisition", "direction": "none", "unit": "Expected Improvement"},
+        {"metric_id": "selected_uncertainty", "label_ja": "選択点の予測不確実性", "direction": "none", "unit": "1.96 sigma"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "各memberをoracle evaluationsで同期する。3つのBO memberはreferenceから1要因だけを変え、random baselineも同じ初期設計・domain・base seed・budgetを使う。",
+      "caveat": "固定seed・1次元・RBF kernelの教育用contrastである。表示されたbest-so-farの差から、BO、acquisition設定、noise処理、random searchの一般的な優劣や因果効果を推論できない。",
+      "takeaway": "観測、model上の不確実性、acquisition、best-so-far、budgetを分け、referenceから何を変えたmemberかを確認する。",
+      "limitations": [
+        "単一seed・固定initial design・10 evaluationだけを扱う。",
+        "高次元、categorical space、非定常性、evaluation failure、並列acquisitionを扱わない。"
+      ],
+      "source_ids": ["S034", "S035", "S059", "S075"],
+      "last_verified": "2026-07-17",
+      "members": [
+        {
+          "member_id": "explore-noiseless-reference",
+          "role": "reference_acquisition",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "label_ja": "探索寄りEI・noiseなし",
+          "label_en": "Exploratory EI · noiseless",
+          "parameters": {"history_source": "bo_frames", "strategy": "explore", "exploration_xi": 0.18, "noise_std": 0.0},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-noiseless.json"}
+        },
+        {
+          "member_id": "exploit-noiseless-sensitivity",
+          "role": "acquisition_sensitivity",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "label_ja": "活用寄りEI・noiseなし",
+          "label_en": "Exploitative EI · noiseless",
+          "parameters": {"history_source": "bo_frames", "strategy": "exploit", "exploration_xi": 0.0, "noise_std": 0.0},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLOIT_NOISELESS", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-exploit-noiseless.json"}
+        },
+        {
+          "member_id": "explore-small-noise-sensitivity",
+          "role": "noise_sensitivity",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "label_ja": "探索寄りEI・small noise",
+          "label_en": "Exploratory EI · small noise",
+          "parameters": {"history_source": "bo_frames", "strategy": "explore", "exploration_xi": 0.18, "noise_std": 0.08},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-small_noise.json"}
+        },
+        {
+          "member_id": "random-noiseless-baseline",
+          "role": "random_baseline",
+          "method_id": "M_RANDOM_SEARCH",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "label_ja": "uniform random・noiseなし",
+          "label_en": "Uniform random · noiseless",
+          "parameters": {"history_source": "random_history", "strategy": "uniform_random", "exploration_xi": 0.0, "noise_std": 0.0},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-noiseless.json"}
+        }
+      ]
     }
   ]
 }

@@ -19,6 +19,7 @@ RendererFamily = Literal[
     "continuous_trajectory",
     "generic_metric_history",
     "search_tree",
+    "surrogate_uncertainty",
     "feasible_region",
     "pareto_front",
 ]
@@ -51,7 +52,13 @@ class ComparisonArtifact(ComparisonModel):
     def validate_artifact_kind(self) -> ComparisonArtifact:
         if (
             self.renderer_family
-            in {"continuous_trajectory", "generic_metric_history", "search_tree", "feasible_region"}
+            in {
+                "continuous_trajectory",
+                "generic_metric_history",
+                "search_tree",
+                "surrogate_uncertainty",
+                "feasible_region",
+            }
             and self.artifact_kind != "executable_trace"
         ):
             raise ValueError(f"{self.renderer_family} requires an executable_trace artifact")

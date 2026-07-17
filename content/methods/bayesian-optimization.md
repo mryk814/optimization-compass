@@ -8,13 +8,13 @@ summary: 高価なblack-box評価を節約するため、観測履歴からsurro
 source_ids: [S034, S035]
 prerequisites: []
 related_ids: [differential-evolution, cma-es]
-visualization_ids: []
-comparison_ids: []
+visualization_ids: [ARTIFACT_BO_EXPLORE_NOISELESS, ARTIFACT_BO_EXPLORE_SMALL_NOISE]
+comparison_ids: [COMPARE_BO_ACQUISITION_NOISE_BASELINE]
 aliases: [/learn/bayesian-optimization]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-17
 ---
 
 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
