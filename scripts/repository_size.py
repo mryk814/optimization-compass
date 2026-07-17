@@ -39,7 +39,13 @@ _COMPACT_RELEASE_SUFFIXES = frozenset(
     {"_manifest.json", "_release.json", "_report.md", "_schema.sql"}
 )
 _ARCHIVE_SUFFIXES = frozenset({".zip", ".tar", ".tgz", ".gz", ".bz2", ".xz", ".7z", ".rar", ".zst"})
-_APPROVED_DATA_FILES = frozenset({"data/README.md", "data/releases/catalog.json"})
+_APPROVED_DATA_FILES = frozenset(
+    {
+        "data/README.md",
+        "data/releases/catalog.json",
+        "data/releases/publication-authority.json",
+    }
+)
 _APPROVED_AUTHORING_EXTENSIONS = {
     "data/licenses": frozenset({".txt"}),
     "data/migrations": frozenset({".sql"}),
