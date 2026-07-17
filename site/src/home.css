@@ -108,31 +108,80 @@
   flex: 0 0 auto;
 }
 
-.home-case-formulation {
+.home-mathematical-formulation {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 0;
-}
-
-.home-case-formulation div {
-  min-width: 0;
-  padding: 0.75rem;
-  border-left: 3px solid #75917f;
+  gap: 0.7rem;
+  padding: clamp(0.85rem, 2vw, 1.2rem);
+  border: 1px solid #c4d0c8;
+  border-radius: 0.75rem;
   background: #f3f6f2;
 }
 
-.home-case-formulation dt {
-  color: #5c695f;
+.home-mathematical-formulation header p,
+.home-mathematical-formulation header h3 {
+  margin: 0;
+}
+
+.home-mathematical-formulation header h3 {
+  margin-top: 0.1rem;
+  font-size: 1.05rem;
+}
+
+.home-formula {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #527562;
+  background: #fff;
+}
+
+.home-formula-line {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.22fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.home-formula-line > span {
+  color: #526057;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
-.home-case-formulation dd {
-  margin: 0.25rem 0 0;
+.home-formula code {
+  color: #172d23;
+  background: transparent;
+  font-family: "Times New Roman", "Noto Serif JP", serif;
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  line-height: 1.6;
   overflow-wrap: anywhere;
+}
+
+.home-formula-constraints > div {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.home-formulation-reading {
+  display: flex;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  color: #4e5b53;
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.home-formulation-reading strong {
+  color: #294b3a;
+}
+
+.home-formulation-reading span + span::before {
+  content: "·";
+  margin-right: 0.75rem;
+  color: #8a958e;
 }
 
 .home-case-dispositions {
@@ -246,7 +295,19 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .home-case-formulation,
+  .home-formula-line {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .home-formulation-reading {
+    display: grid;
+  }
+
+  .home-formulation-reading span + span::before {
+    content: none;
+  }
+
   .home-case-dispositions {
     grid-template-columns: minmax(0, 1fr);
   }
