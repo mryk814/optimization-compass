@@ -1,0 +1,13 @@
+failure_mode_id,failure_category,failure_scope,recoverability,diagnose_disposition,severity,confidence,source_ids_json,last_verified
+\SFM003,\Snoise,\Smethod_theory,\Srecoverable,\Sexclude,\Shigh,\Shigh,"\S[""S059""]",\S2026-07-17
+\SFM007,\Snumerical,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S056""]",\S2026-07-17
+\SFM009,\Snumerical,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S056""]",\S2026-07-17
+\SFM011,\Sconstraint,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S017"",""S056""]",\S2026-07-17
+\SFM014,\Sconstraint,\Smethod_theory,\Sfatal,\Sexclude,\Scritical,\Shigh,"\S[""S016"",""S021"",""S024""]",\S2026-07-17
+\SFM015,\Sreporting,\Smethod_theory,\Sfatal,\Swarning,\Scritical,\Shigh,"\S[""S002"",""S017""]",\S2026-07-17
+\SFM016,\Sguarantee,\Smethod_theory,\Sfatal,\Swarning,\Scritical,\Shigh,"\S[""S055"",""S056""]",\S2026-07-17
+\SFM022,\Sbudget,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S031"",""S060""]",\S2026-07-17
+\SFM024,\Sstopping,\Smethod_theory,\Srecoverable,\Swarning,\Swarning,\Shigh,"\S[""S056""]",\S2026-07-17
+\SFM025,\Sreporting,\Simplementation_specific,\Sfatal,\Swarning,\Scritical,\Shigh,"\S[""S002"",""S016"",""S017""]",\S2026-07-17
+\SFM033,\Ssurrogate,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S035"",""S059""]",\S2026-07-17
+\SFM037,\Sevolutionary,\Smethod_theory,\Srecoverable,\Swarning,\Shigh,\Shigh,"\S[""S032"",""S039""]",\S2026-07-17

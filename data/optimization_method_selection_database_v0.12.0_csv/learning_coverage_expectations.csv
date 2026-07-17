@@ -1,0 +1,9 @@
+expectation_id,subject_type,subject_id,purpose,artifact_kind,renderer_family,applicability,rationale,source_ids_json,last_verified,slice_id
+\SCOV_CONSTRAINED_FEASIBLE,\Smethod,\SMF_CONSTRAINED_NLP,\Sfailure_contrast,\Sexecutable_trace,\Sfeasible_region,\Sexpected,\S目的改善と制約違反の違いを対比する。,"\S[""S017"",""S029""]",\S2026-07-15,\SSLICE_CONSTRAINED_CONTINUOUS
+\SCOV_DISCRETE_SEARCH_TREE,\Smethod,\SMF_DISCRETE_EXACT,\Smechanism,\Sexecutable_trace,\Ssearch_tree,\Sexpected,\S探索木・下界・枝刈りを一つのシナリオで学ぶ。,"\S[""S005"",""S016""]",\S2026-07-15,\SSLICE_DISCRETE_SEARCH_TREE
+\SCOV_EXPENSIVE_SURROGATE,\Smethod,\SMF_SURROGATE_HPO,\Smechanism,\Sexecutable_trace,\Ssurrogate_uncertainty,\Sexpected,\S観測・不確実性・次の評価点の関係を学ぶ。,"\S[""S034"",""S035""]",\S2026-07-15,\SSLICE_EXPENSIVE_BLACK_BOX
+\SCOV_GD_COMPARISON,\Smethod,\SM_GRADIENT_DESCENT,\Scomparison,\Sexecutable_trace,\Sfirst_order_trajectory_2d,\Sexpected,\S一次法の軌跡を同一予算で比較する。,"\S[""S002"",""S056""]",\S2026-07-15,\N
+\SCOV_MULTI_OBJECTIVE_PARETO,\Smethod,\SMF_MULTI_OBJECTIVE,\Sapplication_result,\Sresult_visualization,\Spareto_front,\Sexpected,\S非劣解集合とトレードオフを結果として読む。,"\S[""S039"",""S068""]",\S2026-07-15,\SSLICE_MULTI_OBJECTIVE
+\SCOV_NM_MECHANISM,\Smethod,\SM_NELDER_MEAD,\Smechanism,\Sexecutable_trace,\Ssimplex_2d,\Sexpected,\S単体の反射・展開・収縮を逐次確認する。,"\S[""S002"",""S018""]",\S2026-07-15,\N
+\SCOV_NM_SENSITIVITY_NA,\Smethod,\SM_NELDER_MEAD,\Ssensitivity,\Sexecutable_trace,\Ssimplex_2d,\Snot_applicable,\S初期版は仕組み理解を優先し、感度比較は明示的に適用外とする。,"\S[""S002""]",\S2026-07-15,\N
+\SCOV_OPTIMAL_CONTROL_HISTORY,\Smethod,\SMF_OPTIMAL_CONTROL,\Smechanism,\Sexecutable_trace,\Sgeneric_metric_history,\Sexpected,\S状態・制御・制約残差の時間発展を学ぶ。,"\S[""S042"",""S043""]",\S2026-07-15,\SSLICE_OPTIMAL_CONTROL

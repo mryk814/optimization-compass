@@ -76,7 +76,7 @@ def test_exported_media_manifest_matches_files() -> None:
     root = Path("site/public/data")
     manifest = DerivedMediaManifest.model_validate_json((root / "media/manifest.json").read_bytes())
 
-    assert manifest.dataset_version == "0.11.0"
+    assert manifest.dataset_version == "0.12.0"
     assert {file.media_kind for file in manifest.entries[0].files} == {
         "thumbnail",
         "static_png",

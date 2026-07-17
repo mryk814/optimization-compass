@@ -54,7 +54,22 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert assessment.missing_dimensions == []
     assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
-    assert index.summary.status_counts == {"complete": 1, "partial": 10, "draft": 0}
+    assert index.summary.status_counts == {"complete": 2, "partial": 9, "draft": 0}
+
+
+def test_parameter_estimation_journey_connects_primary_sensitivity_and_comparison() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "EC013")
+
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    assert {item.role for item in journey.scenarios} == {"primary", "alternate", "sensitivity"}
+    assert next(item for item in journey.scenarios if item.role == "primary").scenario_id == (
+        "SCENARIO_EXPONENTIAL_FIT_TRF"
+    )
+    assert {item.comparison_id for item in journey.comparisons} == {
+        "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS"
+    }
 
 
 def test_index_reports_summary_and_explicit_orphan_policies() -> None:

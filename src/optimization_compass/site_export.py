@@ -20,6 +20,13 @@ from optimization_compass.learning_journey_policy import load_learning_journey_a
 from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
+from optimization_compass.parameter_estimation import (
+    LBFGSB_SCENARIO_ID,
+    LM_SCENARIO_ID,
+    POOR_INITIALIZATION_SCENARIO_ID,
+    PRIMARY_SCENARIO_ID,
+    generate_parameter_estimation_traces,
+)
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.search_index import (
@@ -688,6 +695,7 @@ def _write_dummy_trace(
     ]
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
+    generated_traces.extend(generate_parameter_estimation_traces(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -737,6 +745,26 @@ def _write_dummy_trace(
 
 
 def _trace_title(trace_id: str, *, locale: str) -> str:
+    parameter_titles = {
+        "exponential-fit-trf": (
+            "共通診断probe · TRF適用条件",
+            "Shared diagnostic probe · TRF applicability",
+        ),
+        "exponential-fit-trf-poor-init": (
+            "共通診断probe · 悪い初期値",
+            "Shared diagnostic probe · poor initialization",
+        ),
+        "exponential-fit-lm": (
+            "共通診断probe · LM適用条件",
+            "Shared diagnostic probe · LM applicability",
+        ),
+        "exponential-fit-lbfgsb": (
+            "共通診断probe · scalar fallback条件",
+            "Shared diagnostic probe · scalar fallback applicability",
+        ),
+    }
+    if trace_id in parameter_titles:
+        return parameter_titles[trace_id][0 if locale == "ja" else 1]
     if trace_id.startswith("nelder-mead-"):
         return "Nelder–Meadの幾何操作" if locale == "ja" else "Nelder–Mead geometric operations"
     if trace_id == "binary-knapsack-bnb-complete":
@@ -1055,6 +1083,143 @@ def _trace_lesson(
     is_nelder_mead: bool,
     is_search_tree: bool,
 ) -> VisualizationLesson:
+    if trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P":
+        is_poor_initialization = trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
+        is_primary = trace.scenario_id == PRIMARY_SCENARIO_ID
+        role: Literal["sensitivity_variant", "primary_example", "baseline"] = (
+            "sensitivity_variant"
+            if is_poor_initialization
+            else "primary_example"
+            if is_primary
+            else "baseline"
+        )
+        next_id = PRIMARY_SCENARIO_ID if not is_primary else POOR_INITIALIZATION_SCENARIO_ID
+        method_condition = {
+            PRIMARY_SCENARIO_ID: "共通診断stateに対するTRFのbounds・残差vector適用条件",
+            POOR_INITIALIZATION_SCENARIO_ID: "同じ診断probeをa=0から始める初期値感度",
+            LM_SCENARIO_ID: "共通診断stateに対するLMのbounds非active適用条件",
+            LBFGSB_SCENARIO_ID: "共通診断stateに対するscalar目的fallback適用条件",
+        }[trace.scenario_id]
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "parameter推定値、残差norm、Jacobian rankを同じevaluation軸で読む",
+                "Read parameter estimates, residual norm, and Jacobian rank on one evaluation axis",
+            ),
+            misconception=(
+                _localized(
+                    "残差二乗和が下がれば、悪い初期値やrank不足を確認しなくてよい",
+                    "A decreasing residual sum of squares does not remove the need "
+                    "to check initialization and rank",
+                )
+                if is_poor_initialization
+                else None
+            ),
+            expected_phenomenon_ja=f"{method_condition}として、共通probeのmetric履歴を読みます。",
+            expected_phenomenon_en=(
+                "Read one solver-independent diagnostic-probe history through the stated "
+                "applicability lens."
+            ),
+            success_signals=[
+                _signal(
+                    "residual_and_rank_visible",
+                    "残差normとJacobian rankをparameter推定値と同時に確認できる",
+                    "Residual norm and Jacobian rank remain visible with the parameter estimate",
+                    "parameter_estimate",
+                    "residual_norm",
+                    "jacobian_rank",
+                )
+            ],
+            failure_signals=(
+                [
+                    _signal(
+                        "rank_deficient_start",
+                        "初期Jacobian rankが2となり、probe終了時も残差が残る",
+                        "The initial Jacobian rank is two and residual error remains "
+                        "when the probe ends",
+                        "jacobian_rank",
+                        "residual_norm",
+                        "parameter_error",
+                    )
+                ]
+                if is_poor_initialization
+                else []
+            ),
+            primary_observables=[
+                _observable("parameter_estimate", "parameter推定値", "parameter estimate"),
+                _observable("residual_norm", "残差norm", "residual norm"),
+                _observable("jacobian_rank", "Jacobian rank", "Jacobian rank"),
+            ],
+            secondary_observables=[
+                _observable("gradient_norm", "gradient norm", "gradient norm"),
+                _observable("parameter_error", "既知truthからの距離", "distance from known truth"),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "初期parameterとrankを確認",
+                    "Inspect initial parameters and rank",
+                    "parameter_estimate",
+                    "jacobian_rank",
+                ),
+                _step(
+                    "first_change",
+                    "最初の残差変化を追う",
+                    "Follow the first residual change",
+                    "parameter_estimate",
+                    "residual_norm",
+                ),
+                _step(
+                    "pattern_visible",
+                    "rankと収束metricを並べる",
+                    "Align rank and convergence metrics",
+                    "residual_norm",
+                    "gradient_norm",
+                    "jacobian_rank",
+                ),
+                _step(
+                    "termination",
+                    "最終評価の誤差とstatusを確認",
+                    "Inspect error and status at the final evaluation",
+                    "residual_norm",
+                    "parameter_error",
+                ),
+            ],
+            comparison_role=role,
+            prerequisite_concept_ids=[],
+            recommended_next_scenario_ids=[next_id],
+            known_reference_display=KnownReferenceDisplay(
+                policy="show",
+                note_ja="合成dataを生成したtruth [1.8, 0.7, 0.25] を教材診断にだけ使う",
+                note_en=(
+                    "Use the synthetic-data truth [1.8, 0.7, 0.25] only for teaching diagnostics"
+                ),
+            ),
+            static_summary=_localized(
+                f"{method_condition}。20観測に同じsolver非依存probeを適用し、metricを表示します。",
+                "Apply one solver-independent probe to the same 20 observations and show "
+                "its metrics.",
+            ),
+            text_alternative=_localized(
+                "各evaluationの [a, k, c]、残差norm、gradient norm、Jacobian rank、"
+                "truthからの距離を列挙します。",
+                "List [a, k, c], residual norm, gradient norm, Jacobian rank, and "
+                "distance from truth at every evaluation.",
+            ),
+            derived_media_caption=_localized(
+                "指数減衰fitの共通診断probeによるresidual・rank metric履歴",
+                "Residual and rank history from the shared exponential-fit diagnostic probe",
+            ),
+            limitations_ja=(
+                "deterministic damped Gauss–Newton診断probeであり、member solverは実行して"
+                "いません。SciPy/Ceresの内部反復、到達解、速度、一般性能、実dataの"
+                "parameter識別性を表しません。"
+            ),
+            limitations_en=(
+                "A deterministic damped Gauss-Newton diagnostic probe; no member solver was "
+                "executed. It does not represent SciPy/Ceres internals, attained solutions, "
+                "speed, general performance, or real-data parameter identifiability."
+            ),
+        )
     if is_search_tree:
         budget_stop = trace.terminal_status == "budget_exhausted"
         return VisualizationLesson(
@@ -1365,6 +1530,7 @@ def _trace_lesson(
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
+    is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"
     is_divergence = trace.trace_id.endswith("-divergence")
     point = [0.0, 0.0, 0.0, 0.0] if is_search_tree else trace.initial_state.get("point")
     if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
@@ -1381,6 +1547,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     renderer_family: RendererFamily = (
         "search_tree"
         if is_search_tree
+        else "generic_metric_history"
+        if is_parameter_estimation
         else "simplex_geometry"
         if is_nelder_mead
         else "continuous_trajectory"
@@ -1388,12 +1556,26 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     observable_ids = (
         ["search_nodes", "global_bound", "incumbent", "prune_reason"]
         if is_search_tree
+        else [
+            "parameter_estimate",
+            "residual_norm",
+            "gradient_norm",
+            "jacobian_rank",
+            "parameter_error",
+        ]
+        if is_parameter_estimation
         else ["objective_value", "simplex_vertices", "accepted_operation"]
         if is_nelder_mead
         else ["objective_value", "current_point", "gradient", "update_vector"]
     )
-    purpose: Literal["mechanism", "comparison", "failure_contrast"] = (
-        "failure_contrast"
+    purpose: Literal["mechanism", "comparison", "failure_contrast", "sensitivity"] = (
+        "sensitivity"
+        if trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
+        else "mechanism"
+        if trace.scenario_id == PRIMARY_SCENARIO_ID
+        else "comparison"
+        if is_parameter_estimation
+        else "failure_contrast"
         if is_divergence or (is_search_tree and trace.terminal_status == "budget_exhausted")
         else "mechanism"
         if is_nelder_mead or is_search_tree
@@ -1411,7 +1593,11 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         title_en=_trace_title(trace.trace_id, locale="en"),
         purpose=purpose,
         problem_definition_id=(
-            "PROBLEM_BINARY_KNAPSACK" if is_search_tree else "PROBLEM_CONTINUOUS_UNCONSTRAINED"
+            "PROBLEM_BINARY_KNAPSACK"
+            if is_search_tree
+            else "PROBLEM_NONLINEAR_LEAST_SQUARES"
+            if is_parameter_estimation
+            else "PROBLEM_CONTINUOUS_UNCONSTRAINED"
         ),
         problem_instance_id=trace.objective_id,
         lesson=_trace_lesson(
@@ -1422,9 +1608,13 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         ),
         guided_story=_trace_guided_story(trace),
         experiment=VisualizationExperiment(
-            oracle_policy=["objective_value"]
-            if is_nelder_mead or is_search_tree
-            else ["objective_value", "gradient"],
+            oracle_policy=(
+                ["residual_vector", "jacobian"]
+                if is_parameter_estimation
+                else ["objective_value"]
+                if is_nelder_mead or is_search_tree
+                else ["objective_value", "gradient"]
+            ),
             initial_condition=VisualizationInitialCondition(
                 point=[float(value) for value in point]
             ),
@@ -1460,7 +1650,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
-        last_verified="2026-07-15",
+        last_verified="2026-07-17" if is_parameter_estimation else "2026-07-15",
     )
 
 

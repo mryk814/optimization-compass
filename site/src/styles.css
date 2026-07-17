@@ -1010,6 +1010,16 @@ caption {
 }
 
 .objective-history h2 { margin: 0 0 0.45rem; color: #344b3e; font-size: 0.85rem; }
+.metric-history { margin-top: 0.75rem; }
+.metric-history > header { display: flex; align-items: baseline; gap: 0.75rem; }
+.metric-history > header h2, .metric-history > header p { margin: 0; }
+.metric-history > header p { color: #59645d; font-size: 0.72rem; }
+.metric-history-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; margin-top: 0.55rem; }
+.metric-history-panel { min-width: 0; margin: 0; padding: 0.6rem; border: 1px solid #d4d9d3; border-radius: 0.5rem; background: #fff; }
+.metric-history-panel h3 { margin: 0 0 0.35rem; color: #344b3e; font-size: 0.82rem; }
+.metric-history-panel h3 small { color: #647068; font-weight: 500; }
+.metric-history-panel svg { display: block; width: 100%; height: auto; }
+.metric-history-panel .text-alternative { margin-top: 0.35rem; }
 .history-series polyline { fill: none; stroke-width: 2.3; vector-effect: non-scaling-stroke; }
 .history-series text { font-size: 10px; font-weight: 800; }
 .history-0 polyline { stroke: #2d6b50; }
@@ -1043,6 +1053,8 @@ caption {
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }
   .shape-legend { grid-template-columns: minmax(0, 1fr); }
   .objective-history { padding: 0.45rem; }
+  .metric-history-grid { grid-template-columns: minmax(0, 1fr); }
+  .metric-history > header { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
 }
 
 .atlas-page { min-width: 0; }

@@ -31,6 +31,7 @@ import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
+import { GenericMetricHistory } from "../visualization/GenericMetricHistory";
 import {
   contourSegments,
   mapX,
@@ -46,6 +47,10 @@ type LoadedBase = {
 };
 type Loaded = LoadedBase & ({
   renderer: "trajectory";
+  traces: AlgorithmTrace[];
+  scenarios: VisualizationScenario[];
+} | {
+  renderer: "metric-history";
   traces: AlgorithmTrace[];
   scenarios: VisualizationScenario[];
 } | {
@@ -126,9 +131,13 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <span>{comparison.identity_status} · {comparison.comparability}</span>
       </div>
       <ComparisonContract comparison={comparison} />
-      {loaded.renderer === "trajectory"
-        ? <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
-        : <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />}
+      {loaded.renderer === "trajectory" ? (
+        <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+      ) : loaded.renderer === "metric-history" ? (
+        <MetricHistoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+      ) : (
+        <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />
+      )}
       <section className="comparison-return-links" aria-label="比較の関連導線">
         <h2>同じcontextから確認する</h2>
         <JourneyLink journeyPatch={{ comparisonId: comparison.comparison_id }} to={comparison.canonical_url}>この比較の共有URL</JourneyLink>
@@ -231,6 +240,79 @@ function ScenarioComparison({ artifact, comparison, scenario }: { artifact: Lear
       <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
       <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
     </section>
+  );
+}
+
+function MetricHistoryComparison({
+  comparison,
+  traces,
+  scenarios,
+}: {
+  comparison: ComparisonSet;
+  traces: AlgorithmTrace[];
+  scenarios: VisualizationScenario[];
+}) {
+  const timeline = useMemo(() => {
+    const template = traces[0].frames[0];
+    return Array.from({ length: comparison.budget.value + 1 }, (_, evaluation) => ({
+      ...template,
+      frame_index: evaluation,
+      iteration: evaluation,
+      oracle_evaluations: evaluation,
+      elapsed_steps: evaluation,
+      elapsed_time_ms: evaluation * 100,
+      event_type: evaluation === 0 ? "initialize" : "comparison_tick",
+      event_label_ja: evaluation === 0 ? "比較を開始" : "metric比較timeline",
+      event_label_en: evaluation === 0 ? "Start comparison" : "Metric comparison timeline",
+    }));
+  }, [comparison.budget.value, traces]);
+  const playback = usePlayback(comparison.comparison_id, timeline);
+  const evaluation = playback.currentFrame.oracle_evaluations;
+  const labels = Object.fromEntries(comparison.members.map((member) => [
+    member.artifact.artifact_id,
+    member.label_ja,
+  ]));
+  return (
+    <>
+      <ScenarioLessonPanel scenario={scenarios[0]} />
+      <PlaybackControls playback={playback} />
+      <p className="atlas-note comparison-probe-note">
+        <strong>線が同じなのは意図どおりです。</strong> 3本とも1つのsolver非依存診断probeであり、solver別の実行結果ではありません。
+      </p>
+      <GenericMetricHistory
+        budget={comparison.budget.value}
+        evaluation={evaluation}
+        labels={labels}
+        metricIds={comparison.metrics.map((metric) => metric.metric_id)}
+        traces={traces}
+      />
+      <div className="comparison-grid metric-comparison-members">
+        {traces.map((trace) => {
+          const member = comparison.members.find((candidate) => candidate.artifact.artifact_id === trace.trace_id)!;
+          const frame = latestFrame(trace.frames, evaluation);
+          const estimate = frame?.points.find((point) => point.point_id === "parameters");
+          return (
+            <article className="comparison-card" key={trace.trace_id}>
+              <header><div><h2>{member.label_ja}</h2><small>{member.label_en}</small></div><span>{trace.terminal_status}</span></header>
+              <p className="method-parameters">{parameterText(member.parameters)}</p>
+              <dl className="comparison-metrics">
+                <div><dt>evaluation</dt><dd>{frame?.oracle_evaluations ?? 0}</dd></div>
+                <div><dt>[a, k, c]</dt><dd>{estimate?.coordinates.map((value) => value.toFixed(4)).join(", ") ?? "未評価"}</dd></div>
+                {comparison.metrics.map((metric) => {
+                  const value = frame?.metrics.find((candidate) => candidate.metric_id === metric.metric_id);
+                  return <div key={metric.metric_id}><dt>{metric.label_ja}</dt><dd>{value ? value.value.toPrecision(5) : "未評価"}</dd></div>;
+                })}
+              </dl>
+            </article>
+          );
+        })}
+      </div>
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+      <p className="atlas-note comparison-ranking-warning">
+        TRF・LM・L-BFGS-Bは実行していません。この表示から到達解、収束速度、wall-clock、一般的なsolver順位は比較できません。
+      </p>
+    </>
   );
 }
 
@@ -436,8 +518,11 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     (item) => item.comparison_id === comparisonId || item.aliases.includes(comparisonId),
   );
   if (!comparison) throw new EntityNotFoundError("比較ID", comparisonId);
-  const family = comparison.members[0].artifact.renderer_family;
-  if (family === "continuous_trajectory") {
+  const families = new Set(comparison.members.map((member) => member.artifact.renderer_family));
+  const isTraceComparison = [...families].every((family) => (
+    family === "continuous_trajectory" || family === "generic_metric_history"
+  ));
+  if (isTraceComparison) {
     const traces = await Promise.all(comparison.members.map(async (member) => {
       const traceResponse = await fetch(`${siteBaseUrl()}data/${member.artifact.payload_path}`, { signal });
       if (!traceResponse.ok) throw new Error(`Trace request failed (${traceResponse.status}).`);
@@ -452,10 +537,20 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       if (!scenario || !scenario.runs.some((run) => run.artifact_id === member.artifact.artifact_id)) {
         throw new Error(`Visualization scenario is missing for ${member.artifact.artifact_id}.`);
       }
+      if (scenario.artifact.renderer_family !== member.artifact.renderer_family) {
+        throw new Error(`Visualization renderer differs from comparison member ${member.member_id}.`);
+      }
       return scenario;
     });
-    return { comparison, comparisons: index.comparisons, renderer: "trajectory", traces, scenarios };
+    return {
+      comparison,
+      comparisons: index.comparisons,
+      renderer: families.has("generic_metric_history") ? "metric-history" : "trajectory",
+      traces,
+      scenarios,
+    };
   }
+  const family = comparison.members[0].artifact.renderer_family;
   if (family !== "feasible_region" && family !== "pareto_front") {
     throw new Error(`Comparison renderer is not implemented: ${family}.`);
   }

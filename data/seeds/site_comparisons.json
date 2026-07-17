@@ -261,6 +261,78 @@
           "artifact": {"artifact_id": "biobjective-quadratic-pareto-front", "artifact_kind": "result_visualization", "renderer_family": "pareto_front", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/biobjective-quadratic-pareto-front.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+      "canonical_url": "/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+      "aliases": [],
+      "mode": "method_contrast",
+      "journey_id": "EC013",
+      "case_id": "EC013",
+      "problem_definition_id": "PROBLEM_NONLINEAR_LEAST_SQUARES",
+      "problem_instance_id": "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
+      "benchmark_context_id": "BENCH_NLP",
+      "title_ja": "非線形fitでsolver条件を比べる",
+      "title_en": "Compare solver conditions for nonlinear fitting",
+      "comparison_question": "同じsolver非依存probeを見ながら、boundsと残差構造に対する各solverの適用条件をどう切り分ける？",
+      "formulation_summary": "20点の y=a exp(-kt)+c を、[a,k,c]=[1.0,0.4,0.0] からbounds内で残差二乗和fitする。",
+      "fixed_factors": ["20点のnoiseなし合成data", "model a exp(-kt)+c", "初期値 [1.0, 0.4, 0.0]", "bounds [0,0,-1]..[5,3,2]", "solver非依存のdamped Gauss–Newton診断probe", "3 memberで完全に同一のframe履歴", "oracle evaluation budget 12"],
+      "changed_factors": ["solverがboundsを直接扱えるかという適用条件annotation", "残差vector interfaceを保持できるかという適用条件annotation"],
+      "seed_policy": "deterministic / not applicable",
+      "budget": {"metric": "oracle_evaluations", "value": 12},
+      "stopping_policy": "共通probeはresidual normまたはgradient normが1e-6以下になった最初のframeで停止し、未達なら12評価で停止する。",
+      "tuning_policy": "同じdeterministic damped Gauss–Newton診断probeを3 memberへ複製する。member solverは実行しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "residual_norm", "label_ja": "残差norm", "direction": "minimize", "unit": "response"},
+        {"metric_id": "gradient_norm", "label_ja": "gradient norm", "direction": "minimize", "unit": "objective/parameter"},
+        {"metric_id": "jacobian_rank", "label_ja": "Jacobian rank", "direction": "target", "unit": "rank"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。",
+      "caveat": "TRF・LM・L-BFGS-Bは実行していません。線の一致やlabelから、到達解・収束速度・wall-clock・solver順位を推論できません。",
+      "takeaway": "同一の診断stateでbounds対応と残差vector interfaceの条件を整理し、実際の挙動は選んだsolverを別途実行して確かめます。",
+      "limitations": ["20点・3 parameter・noiseなしの合成教材である。", "表示lineはsolver別の実行結果ではなく、意図的に同一のsolver非依存probeである。"],
+      "source_ids": ["S002", "S003", "S041", "S056", "S065", "S096"],
+      "last_verified": "2026-07-17",
+      "members": [
+        {
+          "member_id": "trf-bounded-residual",
+          "role": "primary_bounded_residual",
+          "method_id": "M_TRUST_REGION_REFLECTIVE",
+          "scenario_id": "SCENARIO_EXPONENTIAL_FIT_TRF",
+          "label_ja": "TRF適用条件 · bounds付き残差",
+          "label_en": "TRF applicability · bounded residual",
+          "parameters": {"trace_semantics": "shared_solver_independent_probe", "solver_execution": false, "bounds_support": true, "residual_vector_interface": true},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "exponential-fit-trf", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/exponential-fit-trf.json"}
+        },
+        {
+          "member_id": "lm-inactive-bounds",
+          "role": "conditional_inactive_bounds",
+          "method_id": "M_LEVENBERG_MARQUARDT",
+          "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LM",
+          "label_ja": "LM適用条件 · bounds非active",
+          "label_en": "LM applicability · inactive bounds",
+          "parameters": {"trace_semantics": "shared_solver_independent_probe", "solver_execution": false, "bounds_support": false, "residual_vector_interface": true},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "exponential-fit-lm", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/exponential-fit-lm.json"}
+        },
+        {
+          "member_id": "lbfgsb-scalar-fallback",
+          "role": "scalar_objective_fallback",
+          "method_id": "M_LBFGSB",
+          "scenario_id": "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
+          "label_ja": "L-BFGS-B適用条件 · scalar fallback",
+          "label_en": "L-BFGS-B applicability · scalar fallback",
+          "parameters": {"trace_semantics": "shared_solver_independent_probe", "solver_execution": false, "bounds_support": true, "residual_vector_interface": false},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "exponential-fit-lbfgsb", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/exponential-fit-lbfgsb.json"}
+        }
+      ]
     }
   ]
 }
