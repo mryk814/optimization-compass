@@ -6,7 +6,11 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
 from optimization_compass import __version__
-from optimization_compass.agent_service import AgentEntityType, AgentService
+from optimization_compass.agent_service import (
+    AgentCapabilities,
+    AgentEntityType,
+    AgentService,
+)
 from optimization_compass.models import (
     Question,
     RecommendationRequest,
@@ -40,6 +44,11 @@ def healthz() -> dict[str, str]:
         "app_version": __version__,
         "dataset_version": capabilities.dataset_version,
     }
+
+
+@app.get("/v1/capabilities", response_model=AgentCapabilities)
+def capabilities() -> AgentCapabilities:
+    return service.get_capabilities()
 
 
 @app.get("/v1/questions", response_model=list[Question])
