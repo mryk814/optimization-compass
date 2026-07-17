@@ -19,6 +19,9 @@ def test_search_tree_is_deterministic_and_replays_required_events() -> None:
 
     assert first == second
     assert first.trace.model_dump_json() == second.trace.model_dump_json()
+    assert first.trace.evaluation_budget == 9
+    assert first.trace.stopping == {"max_nodes": 9}
+    assert first.trace.generator_version == "1.1.0"
     events = {frame.event_type for frame in first.trace.frames}
     assert {
         "branch",
@@ -46,16 +49,25 @@ def test_search_tree_is_deterministic_and_replays_required_events() -> None:
 
 
 def test_budget_exhaustion_keeps_candidate_without_claiming_proof() -> None:
-    artifact = generate_search_tree_artifact(dataset_version="0.3.0", node_budget=4)
+    artifact = generate_search_tree_artifact(dataset_version="0.3.0", node_stop_limit=4)
     final = SearchTreeFramePayload.model_validate(artifact.trace.frames[-1].payload)
 
     assert artifact.scenario_id == "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
     assert artifact.trace.terminal_status == "budget_exhausted"
+    assert artifact.trace.evaluation_budget == 9
+    assert artifact.trace.stopping == {"max_nodes": 4}
     assert final.terminal_state == "budget_exhausted"
     assert final.best_feasible_value == 13
     assert final.global_bound == 15
     assert final.absolute_gap == 2
     assert "未証明" in artifact.trace.terminal_summary_ja
+
+
+def test_node_stop_limit_must_fit_the_common_evaluation_budget() -> None:
+    with pytest.raises(ValueError, match="within the evaluation budget"):
+        generate_search_tree_artifact(
+            dataset_version="0.3.0", evaluation_budget=9, node_stop_limit=10
+        )
 
 
 def test_search_tree_contract_rejects_unknown_fields_and_inconsistent_gap() -> None:

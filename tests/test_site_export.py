@@ -313,8 +313,27 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "DFO",
         "BO",
     }
+    contexts_by_id = {item["context_id"]: item for item in context_payload["contexts"]}
+    non_ranking_context_ids = {
+        "BENCH_BO_EDUCATIONAL_10",
+        "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+    }
+    assert {
+        context_id
+        for context_id, item in contexts_by_id.items()
+        if not item["ranking_eligibility"]["ranking_eligible"]
+    } == non_ranking_context_ids
+    for context_id in non_ranking_context_ids:
+        context = contexts_by_id[context_id]
+        assert context["ranking_eligibility"] == {
+            "ranking_eligible": False,
+            "reason": "context_forbids_ranking",
+        }
+        assert context["status_mapping"]["ranking"] == "forbidden"
     assert all(
-        item["ranking_eligibility"]["ranking_eligible"] for item in context_payload["contexts"]
+        item["ranking_eligibility"]["ranking_eligible"]
+        for context_id, item in contexts_by_id.items()
+        if context_id not in non_ranking_context_ids
     )
     failure_payload = json.loads((first_output / "failure-modes.json").read_bytes())
     assert len(failure_payload["failure_modes"]) == 12

@@ -7,11 +7,29 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.search_tree import (
+    SEARCH_TREE_GENERATOR_ID,
+    SEARCH_TREE_GENERATOR_VERSION,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+)
 from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
 )
 from optimization_compass.visualization_scenarios import VisualizationScenario
+
+_EDUCATIONAL_GENERATORS_BY_RENDERER = {
+    "search_tree": (SEARCH_TREE_GENERATOR_ID, SEARCH_TREE_GENERATOR_VERSION),
+    "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
+}
+_EDUCATIONAL_INITIALIZATION_BY_RENDERER = {
+    "search_tree": {
+        "policy": "fixed_empty_assignment_with_heuristic_incumbent",
+        "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+        "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+    }
+}
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 ComparisonMode = Literal[
@@ -215,9 +233,10 @@ def _validate_exact_comparison_context(
     implementation = context["implementation_versions"]
     initialization = context["initialization"]
     oracle_budget = context["oracle_budget"]
+    stopping = context["stopping"]
     if not all(
         isinstance(item, Mapping)
-        for item in (runtime, implementation, initialization, oracle_budget)
+        for item in (runtime, implementation, initialization, oracle_budget, stopping)
     ):
         raise ValueError(f"exact benchmark context is malformed: {context['context_id']}")
     expected = {
@@ -243,14 +262,48 @@ def _validate_exact_comparison_context(
         "generator_version"
     ) != implementation.get("generator_version"):
         raise ValueError("educational comparison generator identity is inconsistent")
-    if (
+    expected_generators: set[tuple[str, str]] = set()
+    renderer_families: set[str] = set()
+    for member in comparison.members:
+        scenario = scenarios_by_id.get(member.scenario_id)
+        if scenario is None:
+            raise ValueError(f"comparison scenario does not resolve: {member.scenario_id}")
+        expected_generator = _EDUCATIONAL_GENERATORS_BY_RENDERER.get(
+            scenario.artifact.renderer_family
+        )
+        if expected_generator is None:
+            raise ValueError(
+                "educational comparison renderer has no registered generator: "
+                f"{scenario.artifact.renderer_family}"
+            )
+        expected_generators.add(expected_generator)
+        renderer_families.add(scenario.artifact.renderer_family)
+    if len(expected_generators) != 1 or (
         runtime.get("generator_id"),
         runtime.get("generator_version"),
-    ) != (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION):
+    ) != next(iter(expected_generators)):
         raise ValueError("educational comparison context uses an unknown generator")
     if context.get("seed_status") != "fixed" or context.get("seed_value") is None:
         raise ValueError("exact educational comparison context requires one fixed seed")
+    if len(renderer_families) != 1:
+        raise ValueError("exact educational comparison must use one renderer family")
+    expected_initialization = _EDUCATIONAL_INITIALIZATION_BY_RENDERER.get(
+        next(iter(renderer_families))
+    )
+    if expected_initialization is not None and any(
+        initialization.get(key) != value for key, value in expected_initialization.items()
+    ):
+        raise ValueError("exact benchmark initialization differs from canonical generator")
     initial_points = initialization.get("points")
+    member_parameter = runtime.get("member_parameter")
+    expected_member_values = stopping.get("member_values")
+    observed_member_values: list[object] = []
+    if member_parameter is not None and (
+        not isinstance(member_parameter, str)
+        or not isinstance(expected_member_values, list)
+        or not expected_member_values
+    ):
+        raise ValueError("exact benchmark member parameter policy is malformed")
     for member in comparison.members:
         scenario = scenarios_by_id.get(member.scenario_id)
         if scenario is None:
@@ -276,6 +329,21 @@ def _validate_exact_comparison_context(
             or run.implementation_mapping_status != implementation["implementation_mapping_status"]
         ):
             raise ValueError(f"comparison member differs from exact context: {member.member_id}")
+        if isinstance(member_parameter, str):
+            member_value = member.parameters.get(member_parameter)
+            observed_member_values.append(member_value)
+            if member_value != scenario.experiment.stopping.get("max_nodes"):
+                raise ValueError(
+                    f"comparison member stop limit differs from scenario: {member.member_id}"
+                )
+    if isinstance(member_parameter, str) and sorted(
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        for value in observed_member_values
+    ) != sorted(
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        for value in expected_member_values
+    ):
+        raise ValueError("comparison member values differ from exact context")
 
 
 def _require_unique(values: list[str], owner: str) -> None:

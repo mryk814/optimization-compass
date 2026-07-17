@@ -11,6 +11,14 @@ from optimization_compass.comparisons import (
     load_comparison_seed,
     validate_comparison_benchmark_contexts,
 )
+from optimization_compass.search_tree import (
+    SEARCH_TREE_GENERATOR_ID,
+    SEARCH_TREE_GENERATOR_VERSION,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+    SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+    generate_search_tree_artifact,
+)
+from optimization_compass.site_export import _visualization_scenario
 from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
@@ -113,6 +121,77 @@ def test_hpo_method_reasons_have_direct_canonical_sources() -> None:
     assert {"S002", "S056"} <= set(case["source_ids"])
 
 
+def test_budget_allocation_case_matches_the_canonical_knapsack_lesson() -> None:
+    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+    case = next(item for item in gallery["cases"] if item["case_id"] == "budget-allocation")
+
+    assert case["problem_archetype_id"] == "PA032"
+    assert set(case["question_answers"]) == {f"Q{index:02d}" for index in range(1, 13)}
+    assert {"S002", "S021", "S022", "S079"} <= set(case["source_ids"])
+    assert set(case["visualization_ids"]) >= {
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+    }
+    assert case["comparison_ids"] == ["COMPARE_KNAPSACK_BNB_BUDGET"]
+    compile(case["python_example"], "<budget-allocation>", "exec")
+
+
+def test_knapsack_comparison_is_a_non_ranking_one_factor_stop_contrast() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.14.0")
+    comparison = next(
+        item for item in index.comparisons if item.comparison_id == "COMPARE_KNAPSACK_BNB_BUDGET"
+    )
+
+    assert comparison.problem_definition_id == "PROBLEM_BINARY_KNAPSACK"
+    assert comparison.problem_instance_id == "INSTANCE_BINARY_KNAPSACK_4"
+    assert comparison.benchmark_context_id == "BENCH_KNAPSACK_BNB_EDUCATIONAL_9"
+    assert comparison.mode == "failure_contrast"
+    assert comparison.budget.metric == comparison.synchronization_axis == "oracle_evaluations"
+    assert comparison.budget.value == 9
+    assert comparison.comparability == "contrast_only"
+    assert comparison.ranking_eligible is False
+    assert {member.parameters["node_stop_limit"] for member in comparison.members} == {4, 9}
+    assert all(set(member.parameters) == {"node_stop_limit"} for member in comparison.members)
+    assert {member.artifact.payload_path for member in comparison.members} == {
+        "search-trees/binary-knapsack-bnb-complete.json",
+        "search-trees/binary-knapsack-bnb-budget.json",
+    }
+
+
+def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.14.0")
+    knapsack_index = ComparisonIndex(
+        dataset_version=index.dataset_version,
+        comparisons=[
+            comparison
+            for comparison in index.comparisons
+            if comparison.comparison_id == "COMPARE_KNAPSACK_BNB_BUDGET"
+        ],
+    )
+    scenarios = [
+        _visualization_scenario(
+            generate_search_tree_artifact(
+                dataset_version="0.14.0", node_stop_limit=node_stop_limit
+            ).trace
+        )
+        for node_stop_limit in (9, 4)
+    ]
+    context = _knapsack_context()
+
+    validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context["initialization"]["heuristic_incumbent_value"] = 12
+    with pytest.raises(ValueError, match="initialization differs"):
+        validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context = _knapsack_context()
+    context["initialization"]["heuristic_incumbent_assignment"] = {"A": 1}
+    with pytest.raises(ValueError, match="initialization differs"):
+        validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+    context = _knapsack_context()
+    context["stopping"] = {"policy": "member_node_stop_limit", "member_values": [3, 9]}
+    with pytest.raises(ValueError, match="member values differ"):
+        validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
+
+
 def test_rejects_unfair_budget_alignment() -> None:
     index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.13.0")
     payload = index.model_dump(mode="json")
@@ -167,7 +246,38 @@ def _bo_context() -> dict[str, object]:
             "generator_version": SURROGATE_GENERATOR_VERSION,
         },
         "implementation_versions": generator,
+        "stopping": {"policy": "fixed_oracle_budget", "value": 10},
         "initialization": {"policy": "fixed_initial_design", "points": [-2.6, 0.0, 2.6]},
         "seed_status": "fixed",
         "seed_value": 2604,
+    }
+
+
+def _knapsack_context() -> dict[str, object]:
+    generator = {
+        "implementation_mapping_status": "not_applicable",
+        "generator_id": SEARCH_TREE_GENERATOR_ID,
+        "generator_version": SEARCH_TREE_GENERATOR_VERSION,
+    }
+    return {
+        "context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+        "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+        "evaluation_budget": 9,
+        "oracle_budget": {"unit": "oracle_evaluations", "limit": 9},
+        "runtime": {
+            "comparison_scope": "exact",
+            "generator_id": SEARCH_TREE_GENERATOR_ID,
+            "generator_version": SEARCH_TREE_GENERATOR_VERSION,
+            "member_parameter": "node_stop_limit",
+        },
+        "implementation_versions": generator,
+        "stopping": {"policy": "member_node_stop_limit", "member_values": [4, 9]},
+        "initialization": {
+            "policy": "fixed_empty_assignment_with_heuristic_incumbent",
+            "points": [0.0, 0.0, 0.0, 0.0],
+            "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
+            "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
+        },
+        "seed_status": "fixed",
+        "seed_value": 0,
     }

@@ -77,10 +77,13 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     contexts = connection.execute("SELECT * FROM benchmark_contexts ORDER BY category").fetchall()
     assert {row["category"] for row in contexts} == {"LP", "QP", "NLP", "MIP", "DFO", "BO"}
     educational_bo = next(row for row in contexts if row["context_id"] == "BENCH_BO_EDUCATIONAL_10")
+    educational_knapsack = next(
+        row for row in contexts if row["context_id"] == "BENCH_KNAPSACK_BNB_EDUCATIONAL_9"
+    )
     assert all(
         comparison_eligibility(dict(row)).ranking_eligible
         for row in contexts
-        if row["context_id"] != "BENCH_BO_EDUCATIONAL_10"
+        if row["context_id"] not in {"BENCH_BO_EDUCATIONAL_10", "BENCH_KNAPSACK_BNB_EDUCATIONAL_9"}
     )
     assert comparison_eligibility(dict(educational_bo)) == ComparisonEligibility(
         False, "context_forbids_ranking"
@@ -95,6 +98,25 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     assert json.loads(educational_bo["implementation_versions_json"]) == {
         "generator_id": "educational.surrogate_uncertainty.v1",
         "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable",
+    }
+    assert comparison_eligibility(dict(educational_knapsack)) == ComparisonEligibility(
+        False, "context_forbids_ranking"
+    )
+    assert educational_knapsack["problem_instance_id"] == "INSTANCE_BINARY_KNAPSACK_4"
+    assert educational_knapsack["evaluation_budget"] == 9
+    assert educational_knapsack["seed_value"] == 0
+    assert json.loads(educational_knapsack["oracle_budget_json"]) == {
+        "limit": 9,
+        "unit": "oracle_evaluations",
+    }
+    assert json.loads(educational_knapsack["stopping_json"]) == {
+        "member_values": [4, 9],
+        "policy": "member_node_stop_limit",
+    }
+    assert json.loads(educational_knapsack["implementation_versions_json"]) == {
+        "generator_id": "educational.branch_bound.knapsack.v1",
+        "generator_version": "1.1.0",
         "implementation_mapping_status": "not_applicable",
     }
     assert (

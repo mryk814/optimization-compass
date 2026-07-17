@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.13.0",
+  "dataset_version": "0.14.0",
   "expectations": [
     {
       "applicability": "expected",
@@ -936,12 +936,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
         },
         "content": {
           "count": 5,
@@ -996,7 +996,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 42,
+          "count": 43,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1005,6 +1005,7 @@
             "/methods/M_BRANCH_CUT",
             "/methods/M_OUTER_APPROX_MINLP",
             "/methods/M_SPATIAL_BRANCH_BOUND",
+            "COMPARE_KNAPSACK_BNB_BUDGET",
             "EC019",
             "I_CBC",
             "I_CPLEX",
@@ -3629,12 +3630,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
         },
         "content": {
           "count": 1,
@@ -3671,11 +3672,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 15,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BRANCH_BOUND",
+            "COMPARE_KNAPSACK_BNB_BUDGET",
             "I_EXCEL_SOLVER",
             "I_KNITRO",
             "I_SCIPY_MILP_HIGHS",
@@ -10816,11 +10818,10 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 2,
+          "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "budget-allocation",
             "shift-scheduling"
           ]
         },
@@ -10833,21 +10834,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 2,
+          "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "budget-allocation",
             "shift-scheduling"
           ]
         },
         "map": {
-          "count": 3,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "None",
-            "budget-allocation",
             "shift-scheduling"
           ]
         },
@@ -12927,12 +12926,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "budget-allocation"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12943,19 +12942,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "budget-allocation"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "budget-allocation"
           ]
         },
         "recommendation": {
@@ -14945,7 +14945,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -14955,6 +14955,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "budget-allocation",
             "constrained-design",
             "hyperparameter-search"
           ]
@@ -15046,7 +15047,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15056,6 +15057,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "budget-allocation",
             "constrained-design",
             "hyperparameter-search"
           ]
@@ -15146,7 +15148,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15156,6 +15158,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "budget-allocation",
             "constrained-design",
             "hyperparameter-search"
           ]
@@ -15330,7 +15333,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15340,6 +15343,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "budget-allocation",
             "constrained-design",
             "hyperparameter-search"
           ]
@@ -15507,7 +15511,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15517,6 +15521,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "budget-allocation",
             "constrained-design",
             "hyperparameter-search"
           ]

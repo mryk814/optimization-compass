@@ -2,7 +2,7 @@
   "artifact_id": "binary-knapsack-bnb-budget",
   "artifact_kind": "executable_trace",
   "contract_version": "1.0.0",
-  "dataset_version": "0.13.0",
+  "dataset_version": "0.14.0",
   "renderer_contract_version": "1.0.0",
   "renderer_family": "search_tree",
   "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
@@ -15,12 +15,12 @@
   "trace": {
     "contract_version": "1.0.0",
     "data_version": "1.0.0",
-    "dataset_version": "0.13.0",
+    "dataset_version": "0.14.0",
     "environment": {
       "runtime": "deterministic_educational_generator",
-      "version": "1.0.0"
+      "version": "1.1.0"
     },
-    "evaluation_budget": 4,
+    "evaluation_budget": 9,
     "fairness_statement": "同じproblem instance・seed・depth-first include-first strategyで再生成する。naive enumerationやsolver間の速度比較には用いない。",
     "frames": [
       {
@@ -2076,12 +2076,19 @@
       }
     ],
     "generator_id": "educational.branch_bound.knapsack.v1",
-    "generator_version": "1.0.0",
+    "generator_version": "1.1.0",
     "implementation_id": null,
     "implementation_mapping_status": "not_applicable",
     "initial_state": {
       "assignment": {},
-      "heuristic_incumbent": 13
+      "heuristic_incumbent_assignment": {
+        "A": 1,
+        "B": 0,
+        "C": 0,
+        "D": 1
+      },
+      "heuristic_incumbent_value": 13,
+      "heuristic_incumbent_weight": 6
     },
     "method_id": "M_BRANCH_BOUND",
     "objective": {
@@ -2172,8 +2179,7 @@
       "S079"
     ],
     "stopping": {
-      "max_nodes": 4,
-      "metric": "explored_nodes"
+      "max_nodes": 4
     },
     "terminal_status": "budget_exhausted",
     "terminal_summary_en": "Stopped at the node budget with a feasible candidate and no optimality proof.",

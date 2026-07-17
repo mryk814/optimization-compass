@@ -260,6 +260,94 @@
     },
     {
       "category": "MIP",
+      "context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+      "context_version": "1.0.0",
+      "dimension": 4,
+      "evaluation_budget": 9,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.branch_bound.knapsack.v1",
+        "generator_version": "1.1.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "heuristic_incumbent_assignment": {
+          "A": 1,
+          "B": 0,
+          "C": 0,
+          "D": 1
+        },
+        "heuristic_incumbent_value": 13,
+        "points": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "policy": "fixed_empty_assignment_with_heuristic_incumbent"
+      },
+      "last_verified": "2026-07-17",
+      "oracle_budget": {
+        "limit": 9,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "explored_nodes",
+        "incumbent",
+        "global_bound",
+        "absolute_gap",
+        "feasibility"
+      ],
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "problem_variant": "fixed four-item binary knapsack with fractional upper bounds",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.branch_bound.knapsack.v1",
+        "generator_version": "1.1.0",
+        "member_parameter": "node_stop_limit",
+        "precision": "float64",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "fixed",
+      "seed_value": 0,
+      "source_ids": [
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "sparsity": {
+        "status": "reported",
+        "structure": "one dense capacity row"
+      },
+      "status_mapping": {
+        "budget_exhausted": "incomplete",
+        "error": "failed",
+        "optimality_proven": "complete",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "member_values": [
+          4,
+          9
+        ],
+        "policy": "member_node_stop_limit"
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "reason": "node-stop sensitivity contrast",
+        "status": "not_applicable"
+      },
+      "tuning_policy": "fixed depth-first include-first branching and fractional bound; only node_stop_limit changes"
+    },
+    {
+      "category": "MIP",
       "context_id": "BENCH_MIP",
       "context_version": "1.0.0",
       "dimension": 4,
@@ -447,7 +535,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.13.0",
+  "dataset_version": "0.14.0",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

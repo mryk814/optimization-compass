@@ -17,13 +17,25 @@ describe("LearningJourney parser", () => {
     expect(pilot?.status).toBe("complete");
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
-    expect(index.summary.status_counts).toEqual({ complete: 3, partial: 8, draft: 0 });
+    expect(index.summary.status_counts).toEqual({ complete: 4, partial: 7, draft: 0 });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
     expect(parameterEstimation?.status).toBe("complete");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
       .toBe("SCENARIO_EXPONENTIAL_FIT_TRF");
     expect(parameterEstimation?.comparisons[0]?.comparison_id)
       .toBe("COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS");
+    const discreteAllocation = index.journeys.find(
+      (journey) => journey.journey_id === "budget-allocation",
+    );
+    expect(discreteAllocation?.status).toBe("complete");
+    expect(Object.fromEntries(
+      discreteAllocation?.scenarios.map((scenario) => [scenario.role, scenario.scenario_id]) ?? [],
+    )).toEqual({
+      failure_contrast: "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+      primary: "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+    });
+    expect(discreteAllocation?.comparisons[0]?.comparison_id)
+      .toBe("COMPARE_KNAPSACK_BNB_BUDGET");
     expect(index.assessments.find((item) => item.journey_id === "constrained-design")?.missing_dimensions).toEqual([]);
     expect(index.orphan_assets.some((item) => item.policy === "warning")).toBe(true);
   });
