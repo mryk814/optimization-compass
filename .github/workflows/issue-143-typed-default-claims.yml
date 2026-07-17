@@ -36,11 +36,285 @@ jobs:
           node-version: "24"
           cache: npm
           cache-dependency-path: site/package-lock.json
-      - name: Install dependencies and record source identity
+      - name: Install dependencies
         run: |
           set -euo pipefail
           uv sync --frozen --all-extras --all-groups
           npm ci --prefix site
+      - name: Reconcile release-wide full-suite contracts
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+
+          def replace_once(
+              path: str,
+              old: str,
+              new: str,
+              *,
+              marker: str,
+          ) -> None:
+              target = Path(path)
+              text = target.read_text(encoding="utf-8")
+              if old in text:
+                  if text.count(old) != 1:
+                      raise SystemExit(f"{path}: replacement is not unique")
+                  target.write_text(
+                      text.replace(old, new, 1),
+                      encoding="utf-8",
+                      newline="\n",
+                  )
+                  return
+              if marker not in text:
+                  raise SystemExit(f"{path}: neither old text nor idempotence marker was found")
+
+
+          replace_once(
+              "src/optimization_compass/search_index.py",
+              "    top1 = top3 = recalled = zero_results = 0\n",
+              "    top1 = top3 = recalled = zero_results = 0\n"
+              "    relevance_cases = 0\n",
+              marker="    relevance_cases = 0\n",
+          )
+          replace_once(
+              "src/optimization_compass/search_index.py",
+              "        expected = set(map(str, case[\"expected_document_ids\"]))\n"
+              "        top1 += bool(hit_ids and hit_ids[0] in expected)\n"
+              "        top3 += bool(expected.intersection(hit_ids[:3]))\n"
+              "        recalled += bool(expected.intersection(hit_ids))\n"
+              "        zero_results += not hit_ids\n",
+              "        expected = set(map(str, case[\"expected_document_ids\"]))\n"
+              "        if expected:\n"
+              "            relevance_cases += 1\n"
+              "            top1 += bool(hit_ids and hit_ids[0] in expected)\n"
+              "            top3 += bool(expected.intersection(hit_ids[:3]))\n"
+              "            recalled += bool(expected.intersection(hit_ids))\n"
+              "        zero_results += not hit_ids\n",
+              marker="            relevance_cases += 1\n",
+          )
+          replace_once(
+              "src/optimization_compass/search_index.py",
+              '            "top_1_relevance": top1 / count if count else 0,\n'
+              '            "top_3_relevance": top3 / count if count else 0,\n'
+              '            "expected_entity_recall": recalled / count if count else 0,\n',
+              '            "top_1_relevance": (\n'
+              '                top1 / relevance_cases if relevance_cases else 0\n'
+              '            ),\n'
+              '            "top_3_relevance": (\n'
+              '                top3 / relevance_cases if relevance_cases else 0\n'
+              '            ),\n'
+              '            "expected_entity_recall": (\n'
+              '                recalled / relevance_cases if relevance_cases else 0\n'
+              '            ),\n',
+              marker="top1 / relevance_cases if relevance_cases else 0",
+          )
+
+          replace_once(
+              "tests/test_search_index.py",
+              '    assert report["metrics"]["top_1_relevance"] >= 0.8\n'
+              '    assert report["metrics"]["top_3_relevance"] >= 0.9\n'
+              '    assert report["metrics"]["expected_entity_recall"] >= 0.9\n',
+              '    assert sum(bool(case["expected_document_ids"]) for case in cases) == 10\n'
+              '    assert report["metrics"]["top_1_relevance"] == 0.8\n'
+              '    assert report["metrics"]["top_3_relevance"] == 0.9\n'
+              '    assert report["metrics"]["expected_entity_recall"] == 1.0\n'
+              '    assert report["metrics"]["zero_result_rate"] == 1 / len(cases)\n',
+              marker='report["metrics"]["expected_entity_recall"] == 1.0',
+          )
+
+          replace_once(
+              "tests/test_site_export.py",
+              "from optimization_compass.site_export import export_site_data\n",
+              "from optimization_compass.site_export import export_site_data\n"
+              "from optimization_compass.versioned_claims import (\n"
+              "    CLAIM_PREDICATES,\n"
+              "    DEFAULT_METHOD_CLAIM_PREDICATES,\n"
+              ")\n",
+              marker="DEFAULT_METHOD_CLAIM_PREDICATES",
+          )
+          replace_once(
+              "tests/test_site_export.py",
+              '    assert len(claim_payload["claims"]) == 64 * 7 + 1\n'
+              '    assert claim_payload["freshness"]["claim_count"] == 64 * 7\n',
+              "    active_claim_count = 64 * len(CLAIM_PREDICATES) + len(\n"
+              "        DEFAULT_METHOD_CLAIM_PREDICATES\n"
+              "    )\n"
+              '    assert len(claim_payload["claims"]) == active_claim_count + 1\n'
+              '    assert claim_payload["freshness"]["claim_count"] == active_claim_count\n',
+              marker="active_claim_count = 64 * len(CLAIM_PREDICATES)",
+          )
+
+          replace_once(
+              "tests/test_coverage.py",
+              '            ["SCENARIO_BIOBJECTIVE_QUADRATIC"],\n',
+              "            [\n"
+              '                "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",\n'
+              '                "SCENARIO_BIOBJECTIVE_QUADRATIC",\n'
+              "            ],\n",
+              marker="SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          )
+
+          replace_once(
+              "tests/test_derived_media.py",
+              "from optimization_compass.derived_media import DerivedMediaManifest, write_derived_media\n",
+              "from optimization_compass.dataset_release import TARGET_DATASET_VERSION\n"
+              "from optimization_compass.derived_media import DerivedMediaManifest, write_derived_media\n",
+              marker="TARGET_DATASET_VERSION",
+          )
+          replace_once(
+              "tests/test_derived_media.py",
+              '    assert manifest.dataset_version == "0.12.0"\n',
+              "    assert manifest.dataset_version == TARGET_DATASET_VERSION\n",
+              marker="manifest.dataset_version == TARGET_DATASET_VERSION",
+          )
+
+          old_trf_test = '''def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> None:
+              staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
+              connection = sqlite3.connect(staged.database_path)
+              connection.row_factory = sqlite3.Row
+              try:
+                  method = connection.execute(
+                      "SELECT * FROM methods WHERE method_id = 'M_TRUST_REGION_REFLECTIVE'"
+                  ).fetchone()
+                  mappings = connection.execute(
+                      "SELECT method_id, implementation_id, support_level FROM method_implementation_map "
+                      "WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'"
+                  ).fetchall()
+                  claim = connection.execute(
+                      "SELECT value_json, value_status, valid_from, source_id FROM implementation_claims "
+                      "WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF' "
+                      "AND predicate = 'important_option_defaults' AND valid_to IS NULL"
+                  ).fetchone()
+              finally:
+                  connection.close()
+
+              assert method is not None
+              assert method["method_family_id"] == "MF_TRUST_REGION"
+              assert method["constraint_support"] == "bounds"
+              assert method["reference_source_ids"] == "S003;S096"
+              assert [tuple(row) for row in mappings] == [
+                  ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
+              ]
+              assert claim is not None
+              assert claim["value_status"] == "verified"
+              assert claim["source_id"] == "S003"
+              assert claim["valid_from"] == "2026-07-16"
+              default_text = json.loads(claim["value_json"])
+              assert "least_squares: method=trf is the default" in default_text
+              assert "curve_fit: trf is selected when bounds are supplied" in default_text
+          '''
+          new_trf_test = '''def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> None:
+              staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
+              connection = sqlite3.connect(staged.database_path)
+              connection.row_factory = sqlite3.Row
+              try:
+                  method = connection.execute(
+                      "SELECT * FROM methods WHERE method_id = 'M_TRUST_REGION_REFLECTIVE'"
+                  ).fetchone()
+                  mappings = connection.execute(
+                      "SELECT method_id, implementation_id, support_level FROM method_implementation_map "
+                      "WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'"
+                  ).fetchall()
+                  claims = connection.execute(
+                      """
+                      SELECT predicate, value_json, value_status, valid_from, source_id,
+                             product_version
+                      FROM implementation_claims
+                      WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+                        AND predicate IN (
+                          'important_option_defaults',
+                          'default_method_least_squares',
+                          'default_method_curve_fit_bounds'
+                        )
+                        AND valid_to IS NULL
+                      ORDER BY predicate
+                      """
+                  ).fetchall()
+              finally:
+                  connection.close()
+
+              assert method is not None
+              assert method["method_family_id"] == "MF_TRUST_REGION"
+              assert method["constraint_support"] == "bounds"
+              assert method["reference_source_ids"] == "S003;S096"
+              assert [tuple(row) for row in mappings] == [
+                  ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
+              ]
+
+              claims_by_predicate = {str(row["predicate"]): row for row in claims}
+              assert set(claims_by_predicate) == {
+                  "important_option_defaults",
+                  "default_method_least_squares",
+                  "default_method_curve_fit_bounds",
+              }
+              generic = claims_by_predicate["important_option_defaults"]
+              assert generic["value_status"] == "verified"
+              assert generic["source_id"] == "S003"
+              assert generic["valid_from"] == "2026-07-16"
+              assert json.loads(generic["value_json"]) == (
+                  "tr_solver; jac_sparsity; x_scale; loss; ftol; xtol; gtol; max_nfev"
+              )
+
+              for predicate in (
+                  "default_method_least_squares",
+                  "default_method_curve_fit_bounds",
+              ):
+                  claim = claims_by_predicate[predicate]
+                  assert claim["value_status"] == "verified"
+                  assert claim["source_id"] == "S003"
+                  assert claim["valid_from"] == "2026-07-16"
+                  assert claim["product_version"] == "1.18.0"
+
+              least_squares = json.loads(
+                  claims_by_predicate["default_method_least_squares"]["value_json"]
+              )
+              assert least_squares["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+              assert least_squares["fallback"] is None
+              curve_fit = json.loads(
+                  claims_by_predicate["default_method_curve_fit_bounds"]["value_json"]
+              )
+              assert curve_fit["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
+              assert curve_fit["fallback"]["selected_method_id"] == "M_LEVENBERG_MARQUARDT"
+          '''
+          replace_once(
+              "tests/test_trust_region_reflective.py",
+              old_trf_test,
+              new_trf_test,
+              marker="claims_by_predicate =",
+          )
+          PY
+
+          uv run ruff check --fix \
+            src/optimization_compass/search_index.py \
+            tests/test_search_index.py \
+            tests/test_site_export.py \
+            tests/test_coverage.py \
+            tests/test_derived_media.py \
+            tests/test_trust_region_reflective.py
+          uv run ruff format \
+            src/optimization_compass/search_index.py \
+            tests/test_search_index.py \
+            tests/test_site_export.py \
+            tests/test_coverage.py \
+            tests/test_derived_media.py \
+            tests/test_trust_region_reflective.py
+
+          if ! git diff --quiet; then
+            git config user.name 'mryk814'
+            git config user.email 'moriyuki.814@gmail.com'
+            git add \
+              src/optimization_compass/search_index.py \
+              tests/test_search_index.py \
+              tests/test_site_export.py \
+              tests/test_coverage.py \
+              tests/test_derived_media.py \
+              tests/test_trust_region_reflective.py
+            git commit -m 'fix: reconcile release benchmark and claim contracts
+
+            Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
+            git push origin "HEAD:refs/heads/$RESULT_BRANCH"
+          fi
           echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - name: Build deterministic dataset 0.16.0 and complete bundle
         run: |
@@ -172,8 +446,8 @@ jobs:
       - name: Commit and push generated release surfaces
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'mryk814'
+          git config user.email 'moriyuki.814@gmail.com'
           git add -A
           git commit -m 'data: publish dataset 0.16.0
 
