@@ -1,0 +1,26 @@
+check_id,check_name,scope,severity,status,observed_value,expected_condition,details,checked_at
+\SCHK001,\SSQL DDL creation,\Sall tables,\Scritical,\Spass,\Sok,\SPRAGMA integrity_check is ok,\SSchema and b-trees are readable.,\S2026-07-17
+\SCHK002,\SSQLite full data load,\Sall base/derived tables,\Scritical,\Spass,"\S8,938 rows present",\Sall tables are readable and contain released rows,\SCounted directly from SQLite.,\S2026-07-17
+\SCHK003,\SForeign-key integrity,\Sall declared foreign keys,\Scritical,\Spass,\S0 violations,\SPRAGMA foreign_key_check returns zero rows,\SComputed live; stored status is not trusted.,\S2026-07-17
+\SCHK004,\SPrimary-key uniqueness,\Sall tables with declared PK,\Scritical,\Spass,\S0 duplicates,\Szero duplicate primary-key tuples,\SAll declared primary keys are unique.,\S2026-07-17
+\SCHK005,\SSource reference integrity,\Sall source reference fields,\Shigh,\Spass,\S0 unresolved source IDs,\Severy referenced source ID exists,\SSemicolon and JSON source lists included.,\S2026-07-17
+\SCHK006,\SEvidence target integrity,\Sevidence_links,\Shigh,\Spass,\S0 unresolved targets,\Severy target_table/target_id pair resolves,\SPolymorphic evidence targets resolve.,\S2026-07-17
+\SCHK007,\SDecision action target typing,\Sdecision_rules,\Shigh,\Spass,\S0 unresolved IDs,\Severy action target resolves under its declared type,\SDecision target interpretation is explicit.,\S2026-07-17
+\SCHK008,\SOptional foreign-key null semantics,\Sdeclared foreign keys,\Scritical,\Spass,\S0 blank-string foreign keys,\Sabsent optional references use SQL NULL,\SNo blank foreign-key values.,\S2026-07-17
+\SCHK009,\SObjective-form enum normalization,\Sfeature_values + case_feature_map,\Smedium,\Spass,\S0 issues,\Sno free-text discrete objective form remains,\SObjective-form values are canonical.,\S2026-07-17
+\SCHK010,\SImplementation release coverage,\Simplementations,\Smedium,\Swarn,\S39/64 have non-unknown release metadata,\Sunknown remains explicit and tracked,\SCoverage is advisory and therefore warning when incomplete.,\S2026-07-17
+\SCHK011,\SLicense verification,\SManopt MATLAB and NOMAD,\Shigh,\Spass,\S0 mismatches,\Sexact license family is recorded,\SLicense families match the released assertions.,\S2026-07-17
+\SCHK012,\SMaintenance-status risk,\SJAXopt,\Shigh,\Spass,\S0 mismatches,\SJAXopt legacy status and release are explicit,\SMaintenance risk is explicit.,\S2026-07-17
+\SCHK013,\SAtlas schema closure,\S26 atlas metadata tables,\Scritical,\Spass,\S0 missing tables,\Sall 26 normalized tables exist,\SAll atlas tables exist.,\S2026-07-17
+\SCHK014,\SView preset constraints,\Sview_presets,\Shigh,\Spass,\S0 issues,\Sroot condition and relation lists are explicit,\SPreset roots and relations are valid.,\S2026-07-17
+\SCHK015,\SVisualization/problem closure,\Sprofiles + problem definitions + instances,\Scritical,\Spass,\S0 issues,"\Sgenerators, dimensions, implementations, and JSON are closed",\SProfiles and problems are closed.,\S2026-07-17
+\SCHK016,\SDemo scenario closure,\Sdemo_scenarios,\Scritical,\Spass,\S0 issues,\Sscenario references and seed semantics resolve,\SScenarios are closed.,\S2026-07-17
+\SCHK017,\SComparison fairness closure,\Scomparison sets and members,\Scritical,\Spass,\S0 issues,\Smembers are normalized and synchronize by oracle evaluations,\SComparison membership is normalized.,\S2026-07-17
+\SCHK018,\SLearning edge closure,\Slearning_edges,\Shigh,\Spass,\S0 issues,\Styped endpoints resolve without self or duplicate edges,\SLearning endpoints resolve.,\S2026-07-17
+\SCHK019,\SExplicit state semantics,\Satlas metadata,\Scritical,\Spass,\S0 ambiguous values,"\Sunknown, not_applicable, and unsupported are explicit; blanks are forbidden",\SNo ambiguous blank state values.,\S2026-07-17
+\SCHK020,\SRelease artifact consistency,\Sall staged formats,\Scritical,\Snot_run,\Sdatabase-only verification,\Srelease tree round-trip and manifest checks pass,\SOnly verify_release_tree may establish artifact consistency.,\S2026-07-17
+\SCHK021,\SLearning coverage closure,\Scoverage expectations and priority slices,\Scritical,\Spass,\S0 issues,"\Ssubjects, slices, scores, and evidence resolve without inferred status",\SCoverage policy rows are closed.,\S2026-07-17
+\SCHK022,\SVersioned implementation claim closure,\Simplementation_claims,\Scritical,\Spass,\S0 issues,\Severy implementation/predicate has one explicit active claim and history resolves,\SClaim ledger and supersession are closed.,\S2026-07-17
+\SCHK023,\SBenchmark context completeness,\Sbenchmark_contexts + comparison_sets,\Scritical,\Spass,\S0 issues,\SLP/QP/NLP/MIP/DFO/BO fixtures are complete and comparisons reference context,\SBenchmark contexts are complete.,\S2026-07-17
+\SCHK024,\SStructured failure-mode closure,\Sfailure mode profiles and relations,\Scritical,\Spass,\S0 issues,"\S12 profiles resolve triggers, symptoms, diagnostics, mitigations, and scenarios",\SFailure-mode relations are closed.,\S2026-07-17
+\SCHK025,\STerminology alias closure,\Sterminology_aliases,\Shigh,\Spass,\S0 issues,\Stargets and sources resolve; collisions are explicitly disambiguated,\STerminology aliases are closed.,\S2026-07-17
