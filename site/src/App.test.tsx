@@ -5,6 +5,7 @@ import App from "./App";
 import type { EntityLinkIndex } from "./contracts/entity-links";
 import rawLearningJourneys from "../public/data/learning-journeys.json";
 import rawManifest from "../public/data/manifest.json";
+import rawProblems from "../public/data/problems.json";
 import rawVisualizationScenarios from "../public/data/visualization-scenarios.json";
 
 const routes = [
@@ -134,11 +135,12 @@ describe("application routes", () => {
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
-  test("home foregrounds one problem, one primary action, and an exclusion reason", async () => {
+  test("home foregrounds one problem, its formulation, and an exclusion reason", async () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) return jsonResponse(featuredGallery);
       if (url.endsWith("data/learning-journeys.json")) return jsonResponse(rawLearningJourneys);
+      if (url.endsWith("data/problems.json")) return jsonResponse(rawProblems);
       return jsonResponse(emptyView);
     }));
 
@@ -155,6 +157,11 @@ describe("application routes", () => {
     expect(
       await screen.findByRole("heading", { level: 2, name: "観測に合うモデルを推定する" }),
     ).toBeVisible();
+    expect(
+      screen.getByRole("heading", { level: 3, name: "このケースを定式化すると" }),
+    ).toBeVisible();
+    expect(screen.getByText("f₁=x²+y²; f₂=(x−2)²+(y−2)²")).toBeVisible();
+    expect(screen.getByText("0 ≤ x ≤ 2")).toBeVisible();
     expect(screen.getByText("Nelder–Mead")).toBeVisible();
     expect(screen.getByText("勾配を使わず、観測残差を直接評価できるため")).toBeVisible();
     expect(screen.getByText("選ばない理由")).toBeVisible();

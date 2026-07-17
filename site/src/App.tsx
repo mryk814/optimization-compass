@@ -13,6 +13,7 @@ import { SafeBackButton } from "./components/SafeBackButton";
 import { findEntity, resolveAlias, type EntityLinkIndex } from "./contracts/entity-links";
 import { parseGalleryIndex } from "./contracts/gallery";
 import { parseLearningJourneyIndex } from "./contracts/learning-journeys";
+import { parseProblemCatalog } from "./contracts/problems";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { siteBaseUrl } from "./data/base-url";
 import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
@@ -25,6 +26,7 @@ import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePag
 import { FailureModePage } from "./features/failures/FailureModePage";
 import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
+import { ProblemFormulation } from "./features/home/ProblemFormulation";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { MapPage } from "./features/map/MapPage";
@@ -130,11 +132,13 @@ function HomePage() {
               </Link>
             </header>
 
-            <dl className="home-case-formulation">
-              <div><dt>変数</dt><dd>{featuredCase.item.decision_variables}</dd></div>
-              <div><dt>目的</dt><dd>{featuredCase.item.objective}</dd></div>
-              <div><dt>制約</dt><dd>{featuredCase.item.constraints}</dd></div>
-            </dl>
+            <ProblemFormulation
+              constraintsSummary={featuredCase.item.constraints}
+              decisionVariablesSummary={featuredCase.item.decision_variables}
+              definition={featuredCase.problemDefinition}
+              instance={featuredCase.problemInstance}
+              objectiveSummary={featuredCase.item.objective}
+            />
 
             <div className="home-case-dispositions">
               <article className="home-disposition-candidate">
@@ -171,9 +175,10 @@ function HomePage() {
 
 async function loadFeaturedCase(signal: AbortSignal): Promise<FeaturedCase | null> {
   const base = siteBaseUrl();
-  const [galleryResponse, journeyResponse] = await Promise.all([
+  const [galleryResponse, journeyResponse, problemResponse] = await Promise.all([
     fetch(`${base}data/gallery.json`, { signal }),
     fetch(`${base}data/learning-journeys.json`, { signal }),
+    fetch(`${base}data/problems.json`, { signal }),
   ]);
   if (!galleryResponse.ok) {
     throw new Error(`Gallery request failed (${galleryResponse.status}).`);
@@ -181,9 +186,13 @@ async function loadFeaturedCase(signal: AbortSignal): Promise<FeaturedCase | nul
   if (!journeyResponse.ok) {
     throw new Error(`Learning journey request failed (${journeyResponse.status}).`);
   }
+  if (!problemResponse.ok) {
+    throw new Error(`Problem catalog request failed (${problemResponse.status}).`);
+  }
   return selectFeaturedCase(
     parseGalleryIndex(await galleryResponse.json()),
     parseLearningJourneyIndex(await journeyResponse.json()),
+    parseProblemCatalog(await problemResponse.json()),
   );
 }
 
