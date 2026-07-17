@@ -9,9 +9,9 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("Theater catalogからfailure runを選びCaseとCompareへ戻れる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  await expect(page.getByText("23 / 23 scenarios")).toBeVisible();
+  await expect(page.getByText("24 / 24 scenarios")).toBeVisible();
   await page.getByLabel("見る目的").selectOption("failure_contrast");
-  await expect(page.getByText("5 / 23 scenarios")).toBeVisible();
+  await expect(page.getByText("5 / 24 scenarios")).toBeVisible();
   await page.getByRole("link", { name: /実行可能領域と制約を無視した失敗を比べる/u }).click();
   await expect(page.getByRole("heading", { level: 2, name: "このrunで見るもの" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: /Case: 強度制約/u })).toBeVisible();
