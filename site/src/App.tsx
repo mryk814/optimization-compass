@@ -267,6 +267,7 @@ function AppShell() {
           <Route path={THEATER_ROUTES.index} element={<TheaterIndexPage />} />
           <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
           <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
+          <Route path="/theater/bayesian-optimization/:scenarioId" element={<BayesianOptimizationPage />} />
           <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
           <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
           <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />

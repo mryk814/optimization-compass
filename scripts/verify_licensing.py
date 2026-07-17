@@ -4,9 +4,10 @@ import json
 import sqlite3
 from pathlib import Path
 
-from optimization_compass.dataset_release import TARGET_DATASET_VERSION
+from optimization_compass.dataset_release import TARGET_DATASET_VERSION, verify_database
 
 ROOT = Path(__file__).resolve().parents[1]
+RUNTIME_DATABASE = ROOT / "src/optimization_compass/resources/knowledge.sqlite"
 REQUIRED_ROOT_FILES = ("LICENSE", "DATA_LICENSE", "CONTENT_LICENSE", "CC-BY-4.0", "NOTICE")
 REQUIRED_SOURCE_FIELDS = (
     "source_id",
@@ -82,8 +83,15 @@ def _verify_site_distribution() -> None:
 
 
 def _verify_source_catalog() -> tuple[int, set[str]]:
-    path = ROOT / f"data/optimization_method_selection_database_v{TARGET_DATASET_VERSION}.sqlite"
-    connection = sqlite3.connect(path)
+    if not RUNTIME_DATABASE.is_file():
+        raise SystemExit("runtime source catalog database is missing")
+    result = verify_database(RUNTIME_DATABASE)
+    if result.dataset_version != TARGET_DATASET_VERSION:
+        raise SystemExit(
+            "runtime source catalog version does not match release authority: "
+            f"{result.dataset_version} != {TARGET_DATASET_VERSION}"
+        )
+    connection = sqlite3.connect(RUNTIME_DATABASE)
     connection.row_factory = sqlite3.Row
     try:
         rows = [dict(row) for row in connection.execute("SELECT * FROM sources ORDER BY source_id")]

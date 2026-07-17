@@ -1,6 +1,6 @@
 {
   "axis": "method_mechanism",
-  "dataset_version": "0.12.0",
+  "dataset_version": "0.13.0",
   "description": "更新則や探索の仕組みで代表的な最適化手法を見渡す。",
   "edges": [
     {

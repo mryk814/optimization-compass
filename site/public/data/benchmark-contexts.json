@@ -63,6 +63,79 @@
       "tuning_policy": "documented defaults; no per-instance winner tuning"
     },
     {
+      "category": "BO",
+      "context_id": "BENCH_BO_EDUCATIONAL_10",
+      "context_version": "1.0.0",
+      "dimension": 1,
+      "evaluation_budget": 10,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.surrogate_uncertainty.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          -2.6,
+          0.0,
+          2.6
+        ],
+        "policy": "fixed_initial_design"
+      },
+      "last_verified": "2026-07-17",
+      "oracle_budget": {
+        "limit": 10,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "observations",
+        "best_so_far",
+        "selected_acquisition",
+        "selected_uncertainty"
+      ],
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "problem_variant": "fixed one-dimensional educational black box on [-3, 3]",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.surrogate_uncertainty.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "fixed",
+      "seed_value": 2604,
+      "source_ids": [
+        "S059",
+        "S075"
+      ],
+      "sparsity": {
+        "reason": "one dimension",
+        "status": "not_applicable"
+      },
+      "status_mapping": {
+        "budget_reached": "complete",
+        "error": "failed",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "fixed_oracle_budget",
+        "value": 10
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "reason": "fixed evaluation budget contrast",
+        "status": "not_applicable"
+      },
+      "tuning_policy": "fixed presets; no post-run or per-member winner tuning"
+    },
+    {
       "category": "DFO",
       "context_id": "BENCH_DFO",
       "context_version": "1.0.0",
@@ -374,7 +447,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.12.0",
+  "dataset_version": "0.13.0",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

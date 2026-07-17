@@ -70,7 +70,7 @@ export function scenarioRoute(scenario: VisualizationScenario): string {
     case "search_tree":
       return `/theater/search-tree/${artifactId}`;
     case "surrogate_uncertainty":
-      return `/theater/bayesian-optimization?scenario=${scenario.scenario_id}`;
+      return `/theater/bayesian-optimization/${scenario.scenario_id}`;
     case "feasible_region":
     case "pareto_front":
       return `/theater/learning/${scenario.scenario_id}`;

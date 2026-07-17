@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 from collections.abc import Iterator
 from datetime import date
@@ -10,6 +11,7 @@ import pytest
 from optimization_compass.dataset_release import build_staged_release, verify_database
 from optimization_compass.versioned_claims import (
     HIGH_USAGE_IMPLEMENTATION_IDS,
+    ComparisonEligibility,
     claim_freshness_report,
     claims_at,
     comparison_eligibility,
@@ -74,7 +76,27 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     assert comparison_eligibility(None).ranking_eligible is False
     contexts = connection.execute("SELECT * FROM benchmark_contexts ORDER BY category").fetchall()
     assert {row["category"] for row in contexts} == {"LP", "QP", "NLP", "MIP", "DFO", "BO"}
-    assert all(comparison_eligibility(dict(row)).ranking_eligible for row in contexts)
+    educational_bo = next(row for row in contexts if row["context_id"] == "BENCH_BO_EDUCATIONAL_10")
+    assert all(
+        comparison_eligibility(dict(row)).ranking_eligible
+        for row in contexts
+        if row["context_id"] != "BENCH_BO_EDUCATIONAL_10"
+    )
+    assert comparison_eligibility(dict(educational_bo)) == ComparisonEligibility(
+        False, "context_forbids_ranking"
+    )
+    assert educational_bo["problem_instance_id"] == "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+    assert educational_bo["evaluation_budget"] == 10
+    assert educational_bo["seed_value"] == 2604
+    assert json.loads(educational_bo["oracle_budget_json"]) == {
+        "limit": 10,
+        "unit": "oracle_evaluations",
+    }
+    assert json.loads(educational_bo["implementation_versions_json"]) == {
+        "generator_id": "educational.surrogate_uncertainty.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable",
+    }
     assert (
         connection.execute(
             "SELECT benchmark_context_id FROM comparison_sets WHERE comparison_set_id = ?",

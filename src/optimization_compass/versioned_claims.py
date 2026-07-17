@@ -6,6 +6,11 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
+from optimization_compass.surrogate_uncertainty import (
+    SURROGATE_GENERATOR_ID,
+    SURROGATE_GENERATOR_VERSION,
+)
+
 CLAIM_PREDICATES: tuple[tuple[str, str], ...] = (
     ("current_release", "last_release"),
     ("maintenance_status", "maintenance_status"),
@@ -47,6 +52,11 @@ def comparison_eligibility(context: dict[str, Any] | None) -> ComparisonEligibil
     missing = [field for field in required if context.get(field) in (None, "", "{}", "[]")]
     if missing:
         return ComparisonEligibility(False, "missing_context:" + ",".join(missing))
+    status_mapping = context.get("status_mapping")
+    if status_mapping is None and isinstance(context.get("status_mapping_json"), str):
+        status_mapping = json.loads(context["status_mapping_json"])
+    if isinstance(status_mapping, dict) and status_mapping.get("ranking") == "forbidden":
+        return ComparisonEligibility(False, "context_forbids_ranking")
     return ComparisonEligibility(True, "context_complete")
 
 
@@ -244,6 +254,66 @@ def _benchmark_context_fixtures(
                 "last_verified": release_date,
             }
         )
+    bo_instance = connection.execute(
+        "SELECT source_ids_json FROM problem_instances WHERE problem_instance_id = ?",
+        ("OBJECTIVE_EDUCATIONAL_WAVY_1D",),
+    ).fetchone()
+    if bo_instance is None:
+        raise ValueError("educational BO benchmark instance does not resolve")
+    results.append(
+        {
+            "context_id": "BENCH_BO_EDUCATIONAL_10",
+            "context_version": "1.0.0",
+            "category": "BO",
+            "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+            "problem_variant": "fixed one-dimensional educational black box on [-3, 3]",
+            "dimension": 1,
+            "sparsity_json": _json({"status": "not_applicable", "reason": "one dimension"}),
+            "hardware_json": _json(
+                {
+                    "status": "not_applicable",
+                    "reason": "deterministic educational generator; no wall-clock comparison",
+                }
+            ),
+            "runtime_json": _json(
+                {
+                    "comparison_scope": "exact",
+                    "runtime": "deterministic_educational_generator",
+                    "generator_id": SURROGATE_GENERATOR_ID,
+                    "generator_version": SURROGATE_GENERATOR_VERSION,
+                    "precision": "float64",
+                }
+            ),
+            "oracle_budget_json": _json({"unit": "oracle_evaluations", "limit": 10}),
+            "evaluation_budget": 10,
+            "time_budget_seconds": None,
+            "tolerance_json": _json(
+                {"status": "not_applicable", "reason": "fixed evaluation budget contrast"}
+            ),
+            "stopping_json": _json({"policy": "fixed_oracle_budget", "value": 10}),
+            "initialization_json": _json(
+                {"policy": "fixed_initial_design", "points": [-2.6, 0.0, 2.6]}
+            ),
+            "seed_status": "fixed",
+            "seed_value": 2604,
+            "tuning_policy": "fixed presets; no post-run or per-member winner tuning",
+            "implementation_versions_json": _json(
+                {
+                    "implementation_mapping_status": "not_applicable",
+                    "generator_id": SURROGATE_GENERATOR_ID,
+                    "generator_version": SURROGATE_GENERATOR_VERSION,
+                }
+            ),
+            "outcome_metrics_json": _json(
+                ["observations", "best_so_far", "selected_acquisition", "selected_uncertainty"]
+            ),
+            "status_mapping_json": _json(
+                {"budget_reached": "complete", "error": "failed", "ranking": "forbidden"}
+            ),
+            "source_ids_json": str(bo_instance["source_ids_json"]),
+            "last_verified": release_date,
+        }
+    )
     return results
 
 
