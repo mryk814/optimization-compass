@@ -101,8 +101,10 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
             scenario for scenario in scenarios if scenario.scenario_id == PARETO_SCENARIO_ID
         ).artifact
     )
-    assert [(run.method_id, run.artifact_id) for run in preference.runs] == [
-        ("M_WEIGHTED_SUM", PARETO_ARTIFACT_ID)
+    primary = next(scenario for scenario in scenarios if scenario.scenario_id == PARETO_SCENARIO_ID)
+    assert preference.runs == primary.runs
+    assert [(run.method_id, run.profile_id, run.artifact_id) for run in preference.runs] == [
+        ("M_NSGA_II", "PROFILE_NSGA_II_PARETO_FRONT", PARETO_ARTIFACT_ID)
     ]
     assert scenario_identity(PARETO_PREFERENCE_SCENARIO_ID) == (
         "derived",

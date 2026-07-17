@@ -987,13 +987,6 @@ def _pareto_preference_scenario(
             "purpose": "sensitivity",
             "lesson": lesson,
             "last_verified": "2026-07-17",
-            "runs": [
-                {
-                    **primary_scenario.runs[0].model_dump(mode="python"),
-                    "run_id": "RUN_BIOBJECTIVE_WEIGHTED_SUM",
-                    "method_id": "M_WEIGHTED_SUM",
-                }
-            ],
         }
     )
     return VisualizationScenario.model_validate(payload)
