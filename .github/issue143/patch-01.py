@@ -8,8 +8,13 @@ if claims.count(anchor) != 1:
 claims = claims.replace(anchor, constants, 1)
 claims = claims.replace(
     'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})',
-    'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset('
-    '{"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY", "I_SCIPY_LEAST_SQUARES_TRF"}'
+    'HIGH_USAGE_IMPLEMENTATION_IDS = frozenset(\n'
+    '    {\n'
+    '        "I_ORTOOLS_CPSAT",\n'
+    '        "I_OPTUNA",\n'
+    '        "I_CVXPY",\n'
+    '        "I_SCIPY_LEAST_SQUARES_TRF",\n'
+    '    }\n'
     ')',
     1,
 )
