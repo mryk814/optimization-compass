@@ -58,10 +58,12 @@ replace_once(
 fixture_path = ROOT / 'tests/fixtures/recommendation_cases.json'
 fixture = fixture_path.read_text(encoding='utf-8')
 fixture_count = fixture.count('"dataset_version": "0.15.1"')
-if fixture_count != 1:
-    raise SystemExit(f'recommendation fixture expected one 0.15.1 identity, found {fixture_count}')
+if fixture_count != 10:
+    raise SystemExit(
+        f'recommendation fixture expected ten 0.15.1 identities, found {fixture_count}'
+    )
 fixture_path.write_text(
-    fixture.replace('"dataset_version": "0.15.1"', '"dataset_version": "0.16.0"', 1),
+    fixture.replace('"dataset_version": "0.15.1"', '"dataset_version": "0.16.0"'),
     encoding='utf-8',
     newline='\n',
 )
