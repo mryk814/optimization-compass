@@ -1,71 +1,38 @@
 ---
 name: add-problem-instance
-description: Add an executable problem definition/instance (問題インスタンス・ベンチマーク問題の追加) as a coordinated pair — problem-suite.json metadata plus problem_registry.py evaluator — then validate with tier B.
+description: Add an executable problem definition/instance (問題インスタンス・ベンチマーク問題の追加) as a coordinated problem-suite.json + problem_registry.py pair, validated via optimization-compass validate problem / tier-c.
 ---
 
-# 実行可能なproblem instanceを追加する
+# 実行可能なproblem instanceを追加する（薄いwrapper）
 
-problem instanceは**2つの authority のペア作業**です。片方だけの変更は不完全です。
+規則の正はこのスキルではなく次の2つです。編集前に必ず読むこと:
 
-1. metadata: `src/optimization_compass/resources/problem-suite.json`
-2. 実行可能な評価器: `src/optimization_compass/problem_registry.py`
+1. `.agents/skills/optimization-compass-maintenance/SKILL.md` — Recipe E
+2. `docs/adding-knowledge.md` §10
 
-instanceの `registry_key` とPython registryのキー集合は**完全一致**が要求されます。
+problem instanceは2つのauthorityのペア作業です。片方だけの変更は不完全です:
 
-## Step 1 — 既存定義を確認する
+- metadata: `src/optimization_compass/resources/problem-suite.json`
+- 評価器: `src/optimization_compass/problem_registry.py`
+  （instanceの `registry_key` とregistryのキー集合は完全一致が要求される）
 
-- 追加したい問題が既存definitionのinstance追加で済むか、新definitionが要るか。
-- 最も近い既存instance（同じmathematical family・domain）をJSONとPython両方で読む。
+## 手順
 
-## Step 2 — metadataを書く（problem-suite.json）
+1. 既存definitionのinstance追加で済むか、新definitionが要るかを既存定義をReadして判断する。
+2. mathematical familyが最も近い既存instanceをJSONとPythonの両方でReadし、
+   その形に合わせて書く。referenceの根拠sourceが無ければ**stop**。
+3. `tests/test_problem_instances.py` の既存パターンに合わせてfocusedテストを追加する。
+4. 検証する:
 
-definition/instanceが持つもの: ID、mathematical family、変数domain、目的の方向、
-利用可能なoracle（objective / gradient / …）、制約class、次元とパラメータ、
-初期化候補とseed方針、known-reference状態、表示range・数式・単位・limitations、
-source IDと `last_reviewed`。
+   ```
+   uv run optimization-compass validate problem
+   ```
 
-### 規律
+   **PRゲートは `uv run optimization-compass validate tier-c`**
+   （AGENTS.mdのTier C: executable problemはTier C。E2Eはscenario/journeyへ影響が
+   ない場合は適用外なので、その場合は `validate tier-b` を実行し、適用外の理由をPRに明記する）。
 
-- 表示用の数式expressionは説明的な文字列。**コードとして評価させない**。
-- referenceは exact / best-known / approximate / unknown / not meaningful を明示する。
-- 教材用の隠しreference情報と、optimizerに見える情報を分離する。
+## Stop条件・PR記載事項
 
-## Step 3 — 評価器を書く（problem_registry.py）
-
-- instanceの `registry_key` に対応するregistry entryを**ちょうど1つ**追加する。
-- 評価前に次元・パラメータ型をvalidateする。
-- 制約と infeasible時の結果ポリシーを明示する。
-- 多目的と明示されたdefinition以外で目的ベクトルを返さない。
-- 近い既存evaluatorのコードスタイル（vectorization、型注釈）に合わせる。
-
-## Step 4 — テストを書く
-
-`tests/test_problem_instances.py` 等の既存パターンに合わせ、
-評価値・gradient・次元validation・infeasible挙動のfocusedテストを追加します。
-生の件数assertは、それ自体がrelease契約でない限り書きません。
-
-## Step 5 — 検証する
-
-```bash
-make tier-b
-```
-
-反復中の先行チェック:
-
-```bash
-uv run ruff check . && uv run mypy src
-uv run pytest tests/test_problem_instances.py tests/test_engine.py
-```
-
-新しいvisualization scenarioまで作る場合はtier C（`make tier-c`）。
-
-## Stop条件
-
-- 新しいmathematical familyやoracle種別など、既存contractに無い概念が必要。
-- 連続/離散のfeasibility意味論が曖昧なまま埋められない。
-- referenceの根拠となる一次sourceが無い。
-
-## PRに書くこと
-
-definition/instance ID、`registry_key`、oracle・制約・referenceの宣言内容、
-根拠source、テスト内容、検証コマンドと結果。DCO sign-off必須。
+maintenance skillの「Stop conditions」と `docs/knowledge-change-checklist.md` の
+「Problem, scenario, and visualization」節に従う。DCO sign-off必須。

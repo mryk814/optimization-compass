@@ -1,67 +1,48 @@
 ---
 name: grow-data
-description: Decide what Optimization Compass knowledge to grow next (データを育てる・次に何を追加するか). Finds coverage / content-density / concept / Gallery / comparison gaps from generated reports, then routes to the matching authoring skill.
+description: Decide what Optimization Compass knowledge to grow next (データを育てる・次に何を追加するか). Observes coverage / content-density / seed gaps, then routes to the matching authoring skill and validate task.
 ---
 
 # データ育成のtriage（何を、どの導線で育てるか）
 
-「データを増やしたい・育てたいが、どこから手を付けるか」を決めるためのスキルです。
-ギャップを観測してから、変更種類ごとの導線（skill）へルーティングします。
+「次に何を育てるか」を観測してから、変更種類ごとの導線へルーティングする薄いスキルです。
+規則の本体はこのスキルには置きません。必ず先に読むこと:
 
-## Step 1 — ギャップを観測する
+1. `/AGENTS.md`
+2. `.agents/skills/optimization-compass-maintenance/SKILL.md`（作業手順・不変条件の正）
 
-生成物は読み取り専用ですが、**ギャップの観測には積極的に使います**。
+## Step 1 — ギャップを観測する（生成物は読むだけ）
 
-```bash
-# 学習coverageの優先slice（rank順の「次にやるべき領域」）
-sed -n '/## Priority slices/,/## Integrity issues/p' site/public/data/coverage.md
+ファイルはReadツールで読みます（プラットフォーム依存のシェル加工をしない）:
 
-# method記事の密度floor（summary>=35字 / body>=1200字 / TOC>=4 / Python>=1）
-uv run python scripts/method_content_density_report.py --output /tmp/density.md && cat /tmp/density.md
-
-# 量の現状（README生成factsと突き合わせる）
-ls content/methods | wc -l   # method記事数
-ls content/concepts | wc -l  # concept記事数（歴史的に最も薄い領域）
-python3 -c "import json; print(len(json.load(open('data/seeds/site_gallery.json'))['cases']), 'gallery cases')"
-python3 -c "import json; print(len(json.load(open('data/seeds/site_comparisons.json'))['comparisons']), 'comparisons')"
-```
-
-補助的な観測:
-
-- `content/**/*.md` で `status: draft` のまま止まっている記事（`grep -rl 'status: draft' content/`）
-- Gallery caseの `comparison_ids: []` / `visualization_ids: []`（既存artifactへの未接続）
-- `docs/product-direction/` と GitHub issues #122/#123（journey completeness が現在の優先方針）
+- `site/public/data/coverage.md` の「Priority slices」節 — rank順の「次にやるべき領域」
+- method記事の密度floor: `uv run python scripts/method_content_density_report.py --output <一時ファイルパス>`
+  を実行し、出力レポートを読む（デフォルト出力先はリポジトリ内なので必ず`--output`で退避する）
+- `content/methods/` と `content/concepts/` のファイル数と `status: draft` の記事
+- `data/seeds/site_gallery.json` の `cases` 配列、`data/seeds/site_comparisons.json` の
+  `comparisons` 配列（件数と、`comparison_ids: []` / `visualization_ids: []` の未接続case）
+- `docs/product-direction/` と Issues #122 / #123（journey completenessが現在の優先方針）
 
 ## Step 2 — 育成対象を1つに絞る
 
-Roadmapの方針は「新しい基盤の数より、**完全に辿れるProblem journey**を増やす」です。
-迷ったら次の優先順で選びます。
+Roadmapの方針は「新しい基盤の数より、完全に辿れるProblem journeyを増やす」。迷ったら:
 
-1. coverage priority sliceの上位に紐づく、既存entityの**未接続リンク**（case↔comparison↔visualization↔content）
-2. 密度floor未達、または `draft` のmethod/concept記事の充実
-3. 既存entityだけで書けるGallery case（構造化データ貢献の推奨入口）
+1. coverage priority slice上位に紐づく既存entityの未接続リンク
+2. 密度floor未達・`draft` 記事の充実
+3. 既存entityだけで書けるGallery case
 4. 既存trace/rendererを再利用するcomparison
-5. 新しいproblem instance（JSON+Pythonのペア作業）
-6. 新しいmethod/implementation/source（migrationが必要。安易に踏み込まない）
+5. 新しいproblem instance
+6. 新しいmethod/implementation/source（migration必須の高リスク。安易に踏み込まない）
 
 ## Step 3 — 導線へルーティングする
 
-| 育てたいもの | 使うskill | 検証tier |
-|---|---|---|
-| method/concept記事の追加・充実 | `add-content-article` | A（関係が変わればstage追加） |
-| Gallery case | `add-gallery-case` | B |
-| 比較（comparison） | `add-comparison` | B |
-| 実行可能なproblem instance | `add-problem-instance` | B |
-| 新しいmethod/implementation/source | skillなし。`docs/adding-knowledge.md` §11 と `.agents/skills/optimization-compass-maintenance/SKILL.md` Recipe F（高リスク・maintainerフロー） | B〜C |
+| 育てたいもの | skill | 反復チェック | PRゲート |
+|---|---|---|---|
+| method/concept記事 | `add-content-article` | `uv run optimization-compass validate content` | `validate tier-a` |
+| Gallery case | `add-gallery-case` | `validate gallery` | `validate tier-b` |
+| comparison | `add-comparison` | `validate comparison` | `validate tier-b` |
+| problem instance | `add-problem-instance` | `validate problem` | `validate tier-c` |
+| method/implementation/source追加 | skillなし — maintenance skill Recipe F + `docs/adding-knowledge.md` §11 | — | `validate tier-b`〜`tier-c` |
 
-検証tierは `make tier-a` / `make tier-b` / `make tier-c` で一発実行できます。
-
-## 全導線に共通の不変条件（要約）
-
-- 生成物（`knowledge.sqlite`, `DATASET_VERSION`, `site/public/data/**`, `data/optimization_method_selection_database_v*`）を手で直さない。
-- 新しいIDを作る前に、既存entity・alias・近縁重複を必ず検索する。
-- 事実の追加には一次sourceを付ける。Qiita / Zennはsource不可。
-- `unknown` / `not_applicable` / `unsupported` を混同しない。
-- 1 PR = 1つのレビュー関心事。content・canonical data・生成releaseを混ぜない。
-
-完全版は `/AGENTS.md` と `.agents/skills/optimization-compass-maintenance/SKILL.md` を参照。
+`uv run optimization-compass validate <task> --list` で各タスクの実行内容を確認できます。
+タスク構成の正は `src/optimization_compass/validation_tasks.py` です。
