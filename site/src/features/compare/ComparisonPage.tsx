@@ -9,6 +9,10 @@ import {
 import { findEntity } from "../../contracts/entity-links";
 import { parseLearningSliceArtifact, type LearningSliceArtifact } from "../../contracts/learning-slices";
 import { parseSiteManifest } from "../../contracts/manifest";
+import {
+  parseSurrogateUncertaintyPayload,
+  type SurrogateUncertaintyPayload,
+} from "../../contracts/surrogate-uncertainty";
 import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame } from "../../contracts/trace";
 import {
   parseVisualizationScenarioIndex,
@@ -25,13 +29,14 @@ import {
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
-import { comparisonRoute } from "./compare-routes";
+import { comparisonRoute, firstMemberPerScenario } from "./compare-routes";
 import { PageOrientation } from "../../components/PageOrientation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GenericMetricHistory } from "../visualization/GenericMetricHistory";
+import { SurrogatePlot } from "../visualization/SurrogatePlot";
 import {
   contourSegments,
   mapX,
@@ -52,6 +57,10 @@ type Loaded = LoadedBase & ({
 } | {
   renderer: "metric-history";
   traces: AlgorithmTrace[];
+  scenarios: VisualizationScenario[];
+} | {
+  renderer: "surrogate";
+  payloads: SurrogateUncertaintyPayload[];
   scenarios: VisualizationScenario[];
 } | {
   renderer: "learning-slice";
@@ -135,6 +144,8 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "metric-history" ? (
         <MetricHistoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+      ) : loaded.renderer === "surrogate" ? (
+        <SurrogateComparison comparison={comparison} payloads={loaded.payloads} scenarios={loaded.scenarios} />
       ) : (
         <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />
       )}
@@ -142,7 +153,7 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <h2>同じcontextから確認する</h2>
         <JourneyLink journeyPatch={{ comparisonId: comparison.comparison_id }} to={comparison.canonical_url}>この比較の共有URL</JourneyLink>
         <JourneyLink to={entity("case", comparison.case_id)?.canonical_url ?? `/gallery/${comparison.case_id}`}>Case: {entity("case", comparison.case_id)?.label ?? comparison.case_id}</JourneyLink>
-        {[...new Map(comparison.members.map((member) => [member.scenario_id, member])).values()].map((member) => {
+        {firstMemberPerScenario(comparison.members).map((member) => {
           const scenario = entity("scenario", member.scenario_id);
           const theaterUrl = scenario?.canonical_url ?? entity("trace", member.artifact.artifact_id)?.canonical_url;
           return theaterUrl ? <JourneyLink journeyPatch={{ scenarioId: member.scenario_id, memberId: member.member_id, methodId: member.method_id }} key={member.scenario_id} to={theaterUrl}>Theater: {scenario?.label ?? member.label_ja}</JourneyLink> : null;
@@ -314,6 +325,128 @@ function MetricHistoryComparison({
       </p>
     </>
   );
+}
+
+function SurrogateComparison({
+  comparison,
+  payloads,
+  scenarios,
+}: {
+  comparison: ComparisonSet;
+  payloads: SurrogateUncertaintyPayload[];
+  scenarios: VisualizationScenario[];
+}) {
+  const minimumEvaluation = scenarios[0].experiment.initial_condition.point.length;
+  const [evaluation, setEvaluation] = useState(minimumEvaluation);
+  const snapshots = comparison.members.map((member, index) => (
+    surrogateSnapshot(member, payloads[index], evaluation)
+  ));
+  const referenceIndex = comparison.members.findIndex((member) => member.role === "reference_acquisition");
+  const referencePayload = payloads[referenceIndex];
+  const referenceFrame = referencePayload.frames.find((frame) => frame.oracle_evaluations === evaluation);
+  const visibleLayers = new Set([
+    "observations",
+    "posterior_mean",
+    "posterior_uncertainty",
+    "expected_improvement",
+    "selected_candidate",
+  ]);
+  return (
+    <section className="surrogate-comparison" aria-labelledby="surrogate-comparison-title">
+      <header>
+        <h2 id="surrogate-comparison-title">同じevaluationで観測と選択根拠を読む</h2>
+        <p>referenceから1要因だけを変えたmemberと、同じinitial designを使うrandom baselineを同期します。</p>
+      </header>
+      <ScenarioLessonPanel scenario={scenarios[referenceIndex]} />
+      <label className="surrogate-comparison-slider">
+        <span>Oracle evaluations: {evaluation}/{comparison.budget.value}</span>
+        <input
+          aria-label="BO比較のevaluation"
+          max={comparison.budget.value}
+          min={minimumEvaluation}
+          onChange={(event) => setEvaluation(Number(event.target.value))}
+          type="range"
+          value={evaluation}
+        />
+      </label>
+      {referenceFrame && <SurrogatePlot frame={referenceFrame} visibleLayers={visibleLayers} />}
+      <p className="atlas-note">上のplotはreference memberだけです。下のcardは同じevaluation時点の各memberを読みます。</p>
+      <div className="comparison-grid surrogate-comparison-members">
+        {comparison.members.map((member, index) => {
+          const snapshot = snapshots[index];
+          return (
+            <article className="comparison-card" key={member.member_id}>
+              <header><div><h3>{member.label_ja}</h3><small>{member.label_en}</small></div><span>{member.role}</span></header>
+              <p className="method-parameters">{parameterText(member.parameters)}</p>
+              <dl className="comparison-metrics">
+                <div><dt>observations</dt><dd>{snapshot.observations}</dd></div>
+                <div><dt>best-so-far</dt><dd>{snapshot.bestSoFar.toFixed(4)}</dd></div>
+                <div><dt>next x</dt><dd>{formatOptional(snapshot.nextPoint)}</dd></div>
+                <div><dt>acquisition</dt><dd>{snapshot.historySource === "random_history" ? "not applicable" : formatOptional(snapshot.acquisition)}</dd></div>
+                <div><dt>予測不確実性</dt><dd>{snapshot.historySource === "random_history" ? "not applicable" : formatOptional(snapshot.uncertainty)}</dd></div>
+                <div><dt>noise σ</dt><dd>{payloads[index].noise_std.toFixed(2)}</dd></div>
+              </dl>
+            </article>
+          );
+        })}
+      </div>
+      <details className="text-alternative" open>
+        <summary>同期値のtext alternative</summary>
+        <ul>{comparison.members.map((member, index) => {
+          const snapshot = snapshots[index];
+          return <li key={member.member_id}><strong>{member.label_ja}</strong>: evaluation {evaluation}, observations {snapshot.observations}, best-so-far {snapshot.bestSoFar.toFixed(4)}, next x {formatOptional(snapshot.nextPoint)}。</li>;
+        })}</ul>
+      </details>
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+      <p className="atlas-note comparison-ranking-warning">この固定contrastから、method、acquisition、noise処理、random baselineの一般的な優劣や因果効果は推論できません。</p>
+    </section>
+  );
+}
+
+type SurrogateSnapshot = {
+  historySource: "bo_frames" | "random_history";
+  observations: number;
+  bestSoFar: number;
+  nextPoint: number | null;
+  acquisition: number | null;
+  uncertainty: number | null;
+};
+
+function surrogateSnapshot(
+  member: ComparisonMember,
+  payload: SurrogateUncertaintyPayload,
+  evaluation: number,
+): SurrogateSnapshot {
+  const historySource = member.parameters.history_source;
+  if (historySource === "random_history") {
+    const observations = payload.random_history.slice(0, evaluation);
+    return {
+      historySource,
+      observations: observations.length,
+      bestSoFar: Math.min(...observations.map((item) => item.observed_value)),
+      nextPoint: payload.random_history[evaluation]?.x ?? null,
+      acquisition: null,
+      uncertainty: null,
+    };
+  }
+  if (historySource !== "bo_frames") {
+    throw new Error(`Unsupported surrogate history source for ${member.member_id}.`);
+  }
+  const frame = payload.frames.find((item) => item.oracle_evaluations === evaluation);
+  if (!frame) throw new Error(`Surrogate payload has no frame at evaluation ${evaluation}.`);
+  return {
+    historySource,
+    observations: frame.observations.length,
+    bestSoFar: frame.incumbent_value,
+    nextPoint: frame.selected_point,
+    acquisition: frame.selected_acquisition,
+    uncertainty: frame.selected_uncertainty,
+  };
+}
+
+function formatOptional(value: number | null): string {
+  return value === null ? "budget reached" : value.toFixed(4);
 }
 
 function ComparisonMemberCard({
@@ -551,6 +684,31 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     };
   }
   const family = comparison.members[0].artifact.renderer_family;
+  if (families.size === 1 && family === "surrogate_uncertainty") {
+    const loadedMembers = await Promise.all(comparison.members.map(async (member) => {
+      const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === member.scenario_id);
+      if (!scenario || !scenario.runs.some((run) => run.artifact_id === member.artifact.artifact_id)) {
+        throw new Error(`Surrogate scenario is missing for ${member.artifact.artifact_id}.`);
+      }
+      if (
+        scenario.artifact.renderer_family !== family
+        || scenario.artifact.renderer_contract_version !== member.artifact.renderer_contract_version
+        || scenario.artifact.payload_path !== member.artifact.payload_path
+      ) {
+        throw new Error(`Surrogate artifact contract differs from comparison member ${member.member_id}.`);
+      }
+      const artifactResponse = await fetch(`${siteBaseUrl()}data/${member.artifact.payload_path}`, { signal });
+      if (!artifactResponse.ok) throw new Error(`Surrogate artifact request failed (${artifactResponse.status}).`);
+      return { scenario, payload: parseSurrogateUncertaintyPayload(await artifactResponse.json()) };
+    }));
+    return {
+      comparison,
+      comparisons: index.comparisons,
+      renderer: "surrogate",
+      payloads: loadedMembers.map((item) => item.payload),
+      scenarios: loadedMembers.map((item) => item.scenario),
+    };
+  }
   if (family !== "feasible_region" && family !== "pareto_front") {
     throw new Error(`Comparison renderer is not implemented: ${family}.`);
   }

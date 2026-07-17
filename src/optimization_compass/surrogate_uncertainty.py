@@ -31,6 +31,8 @@ from optimization_compass.visualization_scenarios import (
 
 Strategy = Literal["exploit", "explore"]
 NoisePreset = Literal["noiseless", "small_noise"]
+SURROGATE_GENERATOR_ID = "educational.surrogate_uncertainty.v1"
+SURROGATE_GENERATOR_VERSION = "1.0.0"
 CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
 CANONICAL_FLOAT_ZERO_TOLERANCE = 1e-9
 _PROBLEM = get_runtime_problem("OBJECTIVE_EDUCATIONAL_WAVY_1D")

@@ -1,10 +1,17 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from optimization_compass.surrogate_uncertainty import (
+    SURROGATE_GENERATOR_ID,
+    SURROGATE_GENERATOR_VERSION,
+)
+from optimization_compass.visualization_scenarios import VisualizationScenario
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
 ComparisonMode = Literal[
@@ -19,6 +26,7 @@ RendererFamily = Literal[
     "continuous_trajectory",
     "generic_metric_history",
     "search_tree",
+    "surrogate_uncertainty",
     "feasible_region",
     "pareto_front",
 ]
@@ -51,7 +59,13 @@ class ComparisonArtifact(ComparisonModel):
     def validate_artifact_kind(self) -> ComparisonArtifact:
         if (
             self.renderer_family
-            in {"continuous_trajectory", "generic_metric_history", "search_tree", "feasible_region"}
+            in {
+                "continuous_trajectory",
+                "generic_metric_history",
+                "search_tree",
+                "surrogate_uncertainty",
+                "feasible_region",
+            }
             and self.artifact_kind != "executable_trace"
         ):
             raise ValueError(f"{self.renderer_family} requires an executable_trace artifact")
@@ -161,6 +175,107 @@ def load_comparison_seed(path: Path, dataset_version: str) -> ComparisonIndex:
     if set(payload) != {"comparisons"} or not isinstance(payload["comparisons"], list):
         raise ValueError(f"invalid comparison seed: {path}")
     return ComparisonIndex(dataset_version=dataset_version, comparisons=payload["comparisons"])
+
+
+def validate_comparison_benchmark_contexts(
+    index: ComparisonIndex,
+    contexts: Iterable[Mapping[str, Any]],
+    scenarios: Iterable[VisualizationScenario],
+) -> None:
+    contexts_by_id = {str(context["context_id"]): context for context in contexts}
+    scenarios_by_id = {scenario.scenario_id: scenario for scenario in scenarios}
+    exact_context_ids = {
+        context_id
+        for context_id, context in contexts_by_id.items()
+        if isinstance(context.get("runtime"), Mapping)
+        and context["runtime"].get("comparison_scope") == "exact"
+    }
+    referenced_exact_context_ids: set[str] = set()
+    for comparison in index.comparisons:
+        context = contexts_by_id.get(comparison.benchmark_context_id)
+        if context is None:
+            raise ValueError(
+                f"comparison benchmark context does not resolve: {comparison.benchmark_context_id}"
+            )
+        if comparison.benchmark_context_id not in exact_context_ids:
+            continue
+        referenced_exact_context_ids.add(comparison.benchmark_context_id)
+        _validate_exact_comparison_context(comparison, context, scenarios_by_id)
+    unreferenced = exact_context_ids - referenced_exact_context_ids
+    if unreferenced:
+        raise ValueError(f"exact benchmark context is not referenced: {sorted(unreferenced)}")
+
+
+def _validate_exact_comparison_context(
+    comparison: ComparisonSet,
+    context: Mapping[str, Any],
+    scenarios_by_id: Mapping[str, VisualizationScenario],
+) -> None:
+    runtime = context["runtime"]
+    implementation = context["implementation_versions"]
+    initialization = context["initialization"]
+    oracle_budget = context["oracle_budget"]
+    if not all(
+        isinstance(item, Mapping)
+        for item in (runtime, implementation, initialization, oracle_budget)
+    ):
+        raise ValueError(f"exact benchmark context is malformed: {context['context_id']}")
+    expected = {
+        "problem_instance_id": comparison.problem_instance_id,
+        "evaluation_budget": comparison.budget.value,
+        "oracle_budget_limit": comparison.budget.value,
+        "oracle_budget_unit": comparison.budget.metric,
+    }
+    observed = {
+        "problem_instance_id": context["problem_instance_id"],
+        "evaluation_budget": context["evaluation_budget"],
+        "oracle_budget_limit": oracle_budget.get("limit"),
+        "oracle_budget_unit": oracle_budget.get("unit"),
+    }
+    if observed != expected:
+        raise ValueError(
+            f"comparison benchmark context differs from {comparison.comparison_id}: "
+            f"expected {expected}, observed {observed}"
+        )
+    if implementation.get("implementation_mapping_status") != "not_applicable":
+        raise ValueError("educational comparison context must mark implementation not_applicable")
+    if runtime.get("generator_id") != implementation.get("generator_id") or runtime.get(
+        "generator_version"
+    ) != implementation.get("generator_version"):
+        raise ValueError("educational comparison generator identity is inconsistent")
+    if (
+        runtime.get("generator_id"),
+        runtime.get("generator_version"),
+    ) != (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION):
+        raise ValueError("educational comparison context uses an unknown generator")
+    if context.get("seed_status") != "fixed" or context.get("seed_value") is None:
+        raise ValueError("exact educational comparison context requires one fixed seed")
+    initial_points = initialization.get("points")
+    for member in comparison.members:
+        scenario = scenarios_by_id.get(member.scenario_id)
+        if scenario is None:
+            raise ValueError(f"comparison scenario does not resolve: {member.scenario_id}")
+        run = next(
+            (
+                candidate
+                for candidate in scenario.runs
+                if candidate.artifact_id == member.artifact.artifact_id
+                and candidate.method_id == member.method_id
+            ),
+            None,
+        )
+        if run is None:
+            raise ValueError(f"comparison member run does not resolve: {member.member_id}")
+        if (
+            scenario.problem_instance_id != context["problem_instance_id"]
+            or scenario.experiment.budget.metric != comparison.budget.metric
+            or scenario.experiment.budget.value != context["evaluation_budget"]
+            or scenario.experiment.seed.status != context["seed_status"]
+            or scenario.experiment.seed.value != context["seed_value"]
+            or scenario.experiment.initial_condition.point != initial_points
+            or run.implementation_mapping_status != implementation["implementation_mapping_status"]
+        ):
+            raise ValueError(f"comparison member differs from exact context: {member.member_id}")
 
 
 def _require_unique(values: list[str], owner: str) -> None:

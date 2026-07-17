@@ -54,7 +54,7 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert assessment.missing_dimensions == []
     assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
-    assert index.summary.status_counts == {"complete": 2, "partial": 9, "draft": 0}
+    assert index.summary.status_counts == {"complete": 3, "partial": 8, "draft": 0}
 
 
 def test_parameter_estimation_journey_connects_primary_sensitivity_and_comparison() -> None:
@@ -70,6 +70,29 @@ def test_parameter_estimation_journey_connects_primary_sensitivity_and_compariso
     assert {item.comparison_id for item in journey.comparisons} == {
         "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS"
     }
+
+
+def test_expensive_black_box_journey_reuses_bo_scenarios_and_comparison() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "hyperparameter-search")
+
+    assert journey.problem_archetype_id == "PA039"
+    assert journey.problem_instance_ids == ["OBJECTIVE_EDUCATIONAL_WAVY_1D"]
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    primary = next(item for item in journey.scenarios if item.role == "primary")
+    assert primary.scenario_id == "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+    assert primary.canonical_url == (
+        "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS"
+    )
+    assert {item.role for item in journey.scenarios} == {"primary", "sensitivity"}
+    assert {item.comparison_id for item in journey.comparisons} == {
+        "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+    }
+    assessment = next(
+        item for item in index.assessments if item.journey_id == "hyperparameter-search"
+    )
+    assert assessment.missing_dimensions == []
 
 
 def test_index_reports_summary_and_explicit_orphan_policies() -> None:

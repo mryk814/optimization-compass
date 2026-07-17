@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import manifest from "../../../public/data/manifest.json";
 import scenarios from "../../../public/data/visualization-scenarios.json";
@@ -10,7 +10,12 @@ import { BayesianOptimizationPage } from "./BayesianOptimizationPage";
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
-function renderPage() {
+function LocationProbe() {
+  const location = useLocation();
+  return <output aria-label="current route">{location.pathname + location.search}</output>;
+}
+
+function renderPage(entry = "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS") {
   vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
     const url = String(input);
     const body = url.endsWith("data/manifest.json") ? manifest
@@ -20,7 +25,13 @@ function renderPage() {
             : undefined;
     return body ? { ok: true, json: async () => structuredClone(body) } : { ok: false, status: 404 };
   }));
-  return render(<MemoryRouter><BayesianOptimizationPage /></MemoryRouter>);
+  return render(
+    <MemoryRouter initialEntries={[entry]}>
+      <Routes>
+        <Route path="/theater/bayesian-optimization/:scenarioId" element={<><BayesianOptimizationPage /><LocationProbe /></>} />
+      </Routes>
+    </MemoryRouter>,
+  );
 }
 
 describe("BayesianOptimizationPage", () => {
@@ -44,5 +55,15 @@ describe("BayesianOptimizationPage", () => {
     await screen.findByText(/noise σ=0/u);
     fireEvent.change(screen.getByRole("combobox", { name: "観測noise" }), { target: { value: "small_noise" } });
     await waitFor(() => expect(screen.getByText(/noise σ=0.08/u)).toBeVisible());
+    expect(screen.getByLabelText("current route")).toHaveTextContent(
+      "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+    );
+  });
+
+  test("rejects an unknown scenario ID instead of falling back by substring", async () => {
+    renderPage("/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_UNKNOWN");
+
+    expect(await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" })).toBeVisible();
+    expect(screen.getByText(/scenario ID「SCENARIO_BO_1D_EXPLOIT_UNKNOWN」/u)).toBeVisible();
   });
 });

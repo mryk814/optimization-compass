@@ -212,11 +212,33 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
   await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();
 });
 
-test("Galleryからcanonical comparisonへ移動できる", async ({ page, baseURL }) => {
+test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ完走できる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
 
   await expect(page.getByRole("heading", { level: 1, name: "高価な実験の設定を探す" })).toBeVisible();
-  await expect(page.getByText("primary Theater 未接続")).toBeVisible();
-  await page.getByRole("link", { name: /固定条件と変えた条件を比べる/u }).click();
-  await expect(page).toHaveURL(/#\/compare\/COMPARE_GRADIENT_FAMILY\?state=/u);
+  await expect(page.getByText("Journey complete")).toBeVisible();
+  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await expect(page).toHaveURL(/#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_NOISELESS\?state=/u);
+  await expect(page.getByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
+  await expect(page.getByText(/Case: 高価な実験の設定を探す/u)).toBeVisible();
+
+  await page.getByRole("link", { name: /Alternate: 高価な1次元black-box: explore \/ small_noise/u }).click();
+  await expect(page).toHaveURL(/#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE\?state=/u);
+  await expect(page.getByLabel("観測noise")).toHaveValue("small_noise");
+  await page.getByRole("link", { name: "Compare: COMPARE_BO_ACQUISITION_NOISE_BASELINE" }).click();
+
+  await expect(page.getByRole("heading", { level: 1, name: "acquisition・noise・random baselineを同じbudgetで読む" })).toBeVisible();
+  const evaluation = page.getByRole("slider", { name: "BO比較のevaluation" });
+  await evaluation.press("End");
+  await expect(page.getByText("Oracle evaluations: 10/10")).toBeVisible();
+  await expect(page.getByText(/一般的な優劣や因果効果は推論できません/u)).toBeVisible();
+  const primaryTheater = page.getByRole("link", { name: "Theater: 高価な1次元black-box: explore / noiseless" });
+  await expect(primaryTheater).toHaveAttribute(
+    "href",
+    /#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_NOISELESS\?state=/u,
+  );
+  await primaryTheater.click();
+  await expect(page).toHaveURL(/#\/theater\/bayesian-optimization\/SCENARIO_BO_1D_EXPLORE_NOISELESS\?state=/u);
+  await page.getByRole("link", { name: "Caseへ戻る" }).click();
+  await expect(page).toHaveURL(/#\/gallery\/hyperparameter-search\?state=/u);
 });

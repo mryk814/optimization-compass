@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { findEntity } from "../../contracts/entity-links";
 import { parseSiteManifest } from "../../contracts/manifest";
 import {
   parseSurrogateUncertaintyPayload,
-  type SurrogateFrame,
   type SurrogateUncertaintyPayload,
 } from "../../contracts/surrogate-uncertainty";
 import {
@@ -15,14 +14,19 @@ import {
   type VisualizationScenario,
 } from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
+import { buildAtlasNavigation } from "../../state/atlas-navigation";
 import { useEntityLinks } from "../../state/entity-links";
+import { atlasStateFromSearch, patchJourneyState } from "../../state/journey-navigation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
+import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
+import { SurrogatePlot } from "../visualization/SurrogatePlot";
 import { ScenarioContextPanel } from "./ScenarioContextPanel";
 
 type Strategy = "exploit" | "explore";
 type NoisePreset = "noiseless" | "small_noise";
+const DEFAULT_SCENARIO_ID = "SCENARIO_BO_1D_EXPLORE_NOISELESS";
 
 async function json(url: string): Promise<unknown> {
   const response = await fetch(url);
@@ -32,19 +36,10 @@ async function json(url: string): Promise<unknown> {
 }
 
 export function BayesianOptimizationPage() {
-  const [searchParams] = useSearchParams();
-  const requestedScenarioId = searchParams.get("scenario") ?? "";
-  const [strategy, setStrategy] = useState<Strategy>(() => (
-    requestedScenarioId.includes("EXPLOIT") ? "exploit" : "explore"
-  ));
-  const [noise, setNoise] = useState<NoisePreset>(() => (
-    requestedScenarioId.includes("SMALL_NOISE") ? "small_noise" : "noiseless"
-  ));
-  useEffect(() => {
-    if (!requestedScenarioId) return;
-    setStrategy(requestedScenarioId.includes("EXPLOIT") ? "exploit" : "explore");
-    setNoise(requestedScenarioId.includes("SMALL_NOISE") ? "small_noise" : "noiseless");
-  }, [requestedScenarioId]);
+  const { scenarioId = "" } = useParams();
+  const requestedScenarioId = scenarioId || DEFAULT_SCENARIO_ID;
+  const location = useLocation();
+  const navigate = useNavigate();
   const [loaded, setLoaded] = useState<{
     scenario: VisualizationScenario;
     payload: SurrogateUncertaintyPayload;
@@ -64,12 +59,11 @@ export function BayesianOptimizationPage() {
         throw new Error(
           "VisualizationScenario indexのdataset versionが一致しません。",
         );
-      const presetId = `BO_${strategy.toUpperCase()}_${noise.toUpperCase()}`;
       const scenario = index.scenarios.find(
-        (item) => item.experiment.parameter_preset_id === presetId,
+        (item) => item.scenario_id === requestedScenarioId,
       );
       if (!scenario)
-        throw new Error(`preset ${strategy}/${noise} がありません。`);
+        throw new EntityNotFoundError("Bayesian Optimization scenario ID", requestedScenarioId);
       if (
         scenario.artifact.renderer_family !== "surrogate_uncertainty" ||
         scenario.artifact.artifact_contract !== "SurrogateUncertainty"
@@ -78,7 +72,8 @@ export function BayesianOptimizationPage() {
       const payload = parseSurrogateUncertaintyPayload(
         await json(`${base}${scenario.artifact.payload_path}`),
       );
-      if (payload.strategy !== strategy || payload.noise_preset !== noise)
+      const payloadPresetId = `BO_${payload.strategy.toUpperCase()}_${payload.noise_preset.toUpperCase()}`;
+      if (scenario.experiment.parameter_preset_id !== payloadPresetId)
         throw new Error("renderer payloadのpresetがscenarioと一致しません。");
       if (
         payload.frames.at(-1)?.oracle_evaluations !==
@@ -91,7 +86,20 @@ export function BayesianOptimizationPage() {
         setError(caught instanceof Error ? caught : new Error(String(caught)));
     });
     return () => controller.abort();
-  }, [strategy, noise]);
+  }, [requestedScenarioId]);
+  if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
+  const strategy: Strategy = loaded?.payload.strategy ?? "explore";
+  const noise: NoisePreset = loaded?.payload.noise_preset ?? "noiseless";
+  const selectScenario = (nextStrategy: Strategy, nextNoise: NoisePreset) => {
+    const nextId = `SCENARIO_BO_1D_${nextStrategy.toUpperCase()}_${nextNoise.toUpperCase()}`;
+    const pathname = `/theater/bayesian-optimization/${nextId}`;
+    const state = atlasStateFromSearch(location.search);
+    const nextState = state ? patchJourneyState(state, { scenarioId: nextId }) : undefined;
+    const destination = nextState
+      ? buildAtlasNavigation(pathname, location.search, nextState)
+      : undefined;
+    navigate(destination?.ok ? destination.to : pathname);
+  };
   return (
     <section className="atlas-page bo-theater">
       <header className="atlas-page-header">
@@ -108,7 +116,7 @@ export function BayesianOptimizationPage() {
           <select
             aria-label="探索方針"
             value={strategy}
-            onChange={(event) => setStrategy(event.target.value as Strategy)}
+            onChange={(event) => selectScenario(event.target.value as Strategy, noise)}
           >
             <option value="exploit">活用寄り (exploit)</option>
             <option value="explore">探索寄り (explore)</option>
@@ -119,7 +127,7 @@ export function BayesianOptimizationPage() {
           <select
             aria-label="観測noise"
             value={noise}
-            onChange={(event) => setNoise(event.target.value as NoisePreset)}
+            onChange={(event) => selectScenario(strategy, event.target.value as NoisePreset)}
           >
             <option value="noiseless">noiseなし</option>
             <option value="small_noise">小さいnoise</option>
@@ -405,117 +413,6 @@ function Theater({
         <EvidenceLinks sourceIds={scenario.source_ids} />
       </section>
     </div>
-  );
-}
-
-function SurrogatePlot({
-  frame,
-  visibleLayers,
-}: {
-  frame: SurrogateFrame;
-  visibleLayers: ReadonlySet<string>;
-}) {
-  const points = frame.predictive_summary;
-  const minY = Math.min(
-    ...points.flatMap((point) => [point.lower, point.true_value]),
-  );
-  const maxY = Math.max(
-    ...points.flatMap((point) => [point.upper, point.true_value]),
-  );
-  const x = (value: number) => 54 + ((value + 3) / 6) * 612;
-  const y = (value: number) =>
-    258 - ((value - minY) / (maxY - minY || 1)) * 212;
-  const acquisitionMax = Math.max(
-    ...points.map((point) => point.acquisition),
-    1e-9,
-  );
-  const line = (values: (point: (typeof points)[number]) => number) =>
-    points
-      .map(
-        (point, index) =>
-          `${index ? "L" : "M"}${x(point.x).toFixed(1)},${y(values(point)).toFixed(1)}`,
-      )
-      .join(" ");
-  const band = `${points.map((point, index) => `${index ? "L" : "M"}${x(point.x).toFixed(1)},${y(point.upper).toFixed(1)}`).join(" ")} ${[
-    ...points,
-  ]
-    .reverse()
-    .map((point) => `L${x(point.x).toFixed(1)},${y(point.lower).toFixed(1)}`)
-    .join(" ")} Z`;
-  return (
-    <figure className="bo-figure">
-      <svg
-        viewBox="0 0 720 390"
-        role="img"
-        aria-labelledby="bo-plot-title bo-plot-desc"
-      >
-        <title id="bo-plot-title">
-          surrogate平均、不確実性、観測、Expected Improvement
-        </title>
-        <desc id="bo-plot-desc">
-          上段は真の目的関数を破線、モデル予測を実線、不確実性を帯で示します。下段はacquisition値で、次候補は縦線です。
-        </desc>
-        <rect
-          className="bo-chart-bg"
-          x="38"
-          y="24"
-          width="644"
-          height="338"
-          rx="12"
-        />
-        {visibleLayers.has("posterior_uncertainty") && <path className="bo-band" d={band} />}
-        <path className="bo-truth" d={line((point) => point.true_value)} />
-        {visibleLayers.has("posterior_mean") && <path className="bo-mean" d={line((point) => point.mean)} />}
-        {visibleLayers.has("observations") && frame.observations.map((point, index) => (
-          <circle
-            className="bo-observation"
-            key={`${point.x}:${index}`}
-            cx={x(point.x)}
-            cy={y(point.observed_value)}
-            r="5"
-          />
-        ))}
-        {visibleLayers.has("selected_candidate") && frame.selected_point !== null && (
-          <line
-            className="bo-next"
-            x1={x(frame.selected_point)}
-            x2={x(frame.selected_point)}
-            y1="24"
-            y2="362"
-          />
-        )}
-        {visibleLayers.has("expected_improvement") && points.map((point) => (
-          <line
-            className="bo-ei"
-            key={point.x}
-            x1={x(point.x)}
-            x2={x(point.x)}
-            y1="350"
-            y2={350 - (point.acquisition / acquisitionMax) * 62}
-          />
-        ))}
-        <text x="54" y="46">
-          objective / surrogate
-        </text>
-        <text x="54" y="286">
-          Expected Improvement
-        </text>
-        <g className="bo-legend">
-          <text x="430" y="46">
-            ― model mean
-          </text>
-          <text x="430" y="64">
-            ┄ true objective (教材のみ)
-          </text>
-          <text x="430" y="82">
-            ● observed
-          </text>
-        </g>
-      </svg>
-      <figcaption>
-        モデル予測（実線）と教材用の真の目的関数（破線）は別物です。
-      </figcaption>
-    </figure>
   );
 }
 
