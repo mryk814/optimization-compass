@@ -74,6 +74,7 @@ const manifest = {
   benchmark_contexts: { version: "1.0.0", path: "benchmark-contexts.json" },
   failure_modes: { version: "1.0.0", path: "failure-modes.json" },
   failure_discovery: { version: "1.0.0", path: "failure-discovery.json" },
+  release_catalog: { version: "1.0.0", path: "release-catalog.json" },
   search_index: { version: "1.0.0", path: "search-index.json" },
   retrieval_documents: { version: "1.0.0", path: "retrieval-documents.json" },
   search_benchmark: { version: "1.0.0", path: "search-benchmark.json" },

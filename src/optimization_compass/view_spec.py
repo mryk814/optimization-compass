@@ -297,6 +297,7 @@ class SiteManifest(ContractModel):
     benchmark_contexts: ManifestAsset
     failure_modes: ManifestAsset
     failure_discovery: ManifestAsset
+    release_catalog: ManifestAsset
     search_index: ManifestAsset
     retrieval_documents: ManifestAsset
     search_benchmark: ManifestAsset

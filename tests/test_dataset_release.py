@@ -12,7 +12,6 @@ import optimization_compass.dataset_release as dataset_release_module
 from optimization_compass.dataset_release import (
     BASE_DATASET_SHA256,
     BASE_DATASET_VERSION,
-    TARGET_DATASET_VERSION,
     ReleaseValidationError,
     build_staged_release,
     publish_release,
@@ -49,12 +48,22 @@ def test_live_checks_detect_mutation_after_stored_pass(tmp_path: Path) -> None:
 def test_staging_preserves_published_dataset_and_is_reproducible(tmp_path: Path) -> None:
     before = sha256(BASE_DATABASE)
 
-    first = build_staged_release(BASE_DATABASE, tmp_path / "first")
-    second = build_staged_release(BASE_DATABASE, tmp_path / "second")
+    first = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "first",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
+    second = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "second",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
 
     assert before == BASE_DATASET_SHA256
     assert sha256(BASE_DATABASE) == before
-    assert first.version == TARGET_DATASET_VERSION
+    assert first.version == "0.15.2"
     assert tree_hash(first.output_directory) == tree_hash(second.output_directory)
     assert first.tree_sha256 == second.tree_sha256
 
@@ -81,30 +90,30 @@ def test_new_version_stage_updates_every_versioned_artifact(tmp_path: Path) -> N
     release = build_staged_release(
         BASE_DATABASE,
         tmp_path / "release",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     )
 
-    assert release.version == "0.3.0"
-    assert release.database_path.name.endswith("_v0.3.0.sqlite")
+    assert release.version == "0.15.2"
+    assert release.database_path.name.endswith("_v0.15.2.sqlite")
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
-    assert manifest["version"] == "0.3.0"
-    assert manifest["release_date"] == "2026-07-14"
-    assert all("v0.3.0" in name for name in manifest["artifacts"].values())
-    json_path = release.output_directory / "optimization_method_selection_database_v0.3.0.json"
+    assert manifest["version"] == "0.15.2"
+    assert manifest["release_date"] == "2026-07-18"
+    assert all("v0.15.2" in name for name in manifest["artifacts"].values())
+    json_path = release.output_directory / "optimization_method_selection_database_v0.15.2.json"
     json_payload = json.loads(json_path.read_text(encoding="utf-8"))
     assert (json_payload["version"], json_payload["release_date"]) == (
-        "0.3.0",
-        "2026-07-14",
+        "0.15.2",
+        "2026-07-18",
     )
     jsonl_header = json.loads(
         next(release.output_directory.glob("*.jsonl")).read_text(encoding="utf-8").splitlines()[0]
     )
     assert (jsonl_header["version"], jsonl_header["release_date"]) == (
-        "0.3.0",
-        "2026-07-14",
+        "0.15.2",
+        "2026-07-18",
     )
-    assert "Version: `0.3.0`" in next(release.output_directory.glob("*_report.md")).read_text(
+    assert "Version: `0.15.2`" in next(release.output_directory.glob("*_report.md")).read_text(
         encoding="utf-8"
     )
     connection = sqlite3.connect(release.database_path)
@@ -113,12 +122,12 @@ def test_new_version_stage_updates_every_versioned_artifact(tmp_path: Path) -> N
             "SELECT version, release_date FROM version_history ORDER BY release_date"
         ).fetchall()
         revisions = connection.execute(
-            "SELECT version, date FROM model_revisions WHERE version = '0.3.0'"
+            "SELECT version, date FROM model_revisions WHERE version = '0.15.2'"
         ).fetchall()
     finally:
         connection.close()
-    assert ("0.3.0", "2026-07-14") in versions
-    assert revisions == [("0.3.0", "2026-07-14")]
+    assert ("0.15.2", "2026-07-18") in versions
+    assert revisions == [("0.15.2", "2026-07-18")]
 
 
 def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
@@ -134,7 +143,12 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
     assert base_result.ok is False
     assert "missing-stored:CHK012" in base_result.status_mismatches
 
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "staged")
+    staged = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "staged",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
     connection = sqlite3.connect(staged.database_path)
     connection.execute("DELETE FROM release_checks WHERE check_id = 'CHK015'")
     connection.execute(
@@ -166,7 +180,12 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
 def test_require_atlas_rejects_database_with_entire_atlas_contract_removed(
     tmp_path: Path,
 ) -> None:
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "staged")
+    staged = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "staged",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
     stripped = tmp_path / "stripped.sqlite"
     shutil.copy2(staged.database_path, stripped)
     connection = sqlite3.connect(stripped)
@@ -246,8 +265,8 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
     staged = build_staged_release(
         BASE_DATABASE,
         tmp_path / "staged",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
@@ -273,11 +292,11 @@ def test_publish_succeeds_for_a_consistent_new_version(tmp_path: Path) -> None:
     assert not (data_dir / str(manifest["artifacts"]["json"])).exists()
     assert len(list((tmp_path / "external-bundles").glob("*_bundle.zip"))) == 1
     catalog = json.loads((data_dir / "releases/catalog.json").read_text(encoding="utf-8"))
-    assert catalog["current_version"] == "0.3.0"
+    assert catalog["current_version"] == "0.15.2"
     assert catalog["releases"][0]["source_commit"] == "1" * 40
     assert catalog["releases"][0]["manifest_sha256"] == sha256(staged.manifest_path)
     assert runtime.read_bytes() == staged.database_path.read_bytes()
-    assert version_file.read_text(encoding="utf-8") == (f"0.3.0\nsha256={sha256(runtime)}\n")
+    assert version_file.read_text(encoding="utf-8") == (f"0.15.2\nsha256={sha256(runtime)}\n")
     assert _tree_bytes(site_data) == _tree_bytes(staged.site_data_directory)
     assert readme.read_text(encoding="utf-8") == "# next release\n"
 
@@ -289,8 +308,8 @@ def test_publish_rolls_back_all_targets_after_injected_failure(
     staged = build_staged_release(
         BASE_DATABASE,
         tmp_path / "staged",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
     before_data = _tree_bytes(data_dir)
@@ -339,19 +358,18 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
     staged = build_staged_release(
         BASE_DATABASE,
         tmp_path / "staged",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
+    version_file.write_text(
+        "0.15.2\nsha256=ignored-for-same-version-check\n",
+        encoding="utf-8",
+    )
     with pytest.raises(ReleaseValidationError, match="new release version"):
         _publish_release(
-            build_staged_release(
-                BASE_DATABASE,
-                tmp_path / "current",
-                target_version=BASE_DATASET_VERSION,
-                release_date="2026-07-13",
-            ).output_directory,
+            staged.output_directory,
             data_dir,
             runtime,
             version_file,
@@ -359,6 +377,11 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             readme,
             "# next release\n",
         )
+
+    version_file.write_text(
+        f"{BASE_DATASET_VERSION}\nsha256={BASE_DATASET_SHA256}\n",
+        encoding="utf-8",
+    )
 
     runtime.write_bytes(runtime.read_bytes() + b"tampered")
     with pytest.raises(ReleaseValidationError, match="runtime hash"):
@@ -419,8 +442,8 @@ def test_publish_requires_catalog_and_external_bundle_output(tmp_path: Path) -> 
     staged = build_staged_release(
         BASE_DATABASE,
         tmp_path / "staged",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
     catalog = data_dir / "releases/catalog.json"
@@ -452,7 +475,7 @@ def test_publish_requires_catalog_and_external_bundle_output(tmp_path: Path) -> 
             "# next release\n",
             ROOT / ".release-bundle-test",
             source_commit="1" * 40,
-            tag="v0.3.0",
+            tag="v0.15.2",
         )
 
 

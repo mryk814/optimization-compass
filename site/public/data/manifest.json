@@ -63,6 +63,10 @@
     "path": "recommendation/site-data.json",
     "version": "2.0.0"
   },
+  "release_catalog": {
+    "path": "release-catalog.json",
+    "version": "1.0.0"
+  },
   "retrieval_documents": {
     "path": "retrieval-documents.json",
     "version": "1.0.0"

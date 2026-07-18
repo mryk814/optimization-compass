@@ -139,6 +139,87 @@ def validate_release_catalog(
         raise ReleaseCatalogError("catalog current entry does not match expected release identity")
 
 
+def release_catalog_snapshot(
+    catalog: ReleaseCatalog,
+    release_identity: DatasetReleaseIdentity,
+) -> ReleaseCatalog:
+    """Return the catalog that can be embedded in a deterministic release tree."""
+
+    validate_release_catalog(catalog)
+    _validate_expected_identity(release_identity)
+    target_key = _semantic_version_key(release_identity.dataset_version)
+    matching = next(
+        (entry for entry in catalog.releases if entry.version == release_identity.dataset_version),
+        None,
+    )
+    if matching is not None and (
+        matching.release_date != release_identity.release_date
+        or matching.database_sha256 != release_identity.database_sha256
+    ):
+        if matching.version != catalog.current_version:
+            raise ReleaseCatalogError(
+                "catalog current entry does not match expected release identity"
+            )
+        matching = None
+    releases = tuple(
+        entry
+        for entry in catalog.releases
+        if _semantic_version_key(entry.version) <= target_key
+        and (matching is not None or _semantic_version_key(entry.version) < target_key)
+    )
+    snapshot = ReleaseCatalog(
+        schema_version=1,
+        current_version=releases[-1].version if releases else None,
+        releases=releases,
+    )
+    validate_release_catalog_snapshot(snapshot, release_identity)
+    return snapshot
+
+
+def validate_release_catalog_snapshot(
+    catalog: ReleaseCatalog,
+    release_identity: DatasetReleaseIdentity,
+) -> None:
+    """Validate a current or predecessor-only embedded release catalog."""
+
+    validate_release_catalog(catalog)
+    _validate_expected_identity(release_identity)
+    target_key = _semantic_version_key(release_identity.dataset_version)
+    if any(_semantic_version_key(entry.version) > target_key for entry in catalog.releases):
+        raise ReleaseCatalogError("embedded catalog cannot contain releases newer than its tree")
+    matching = next(
+        (entry for entry in catalog.releases if entry.version == release_identity.dataset_version),
+        None,
+    )
+    if matching is not None:
+        if catalog.current_version != matching.version:
+            raise ReleaseCatalogError("embedded current release must be the catalog current entry")
+        if (
+            matching.release_date != release_identity.release_date
+            or matching.database_sha256 != release_identity.database_sha256
+        ):
+            raise ReleaseCatalogError(
+                "embedded current entry does not match expected release identity"
+            )
+        return
+    if catalog.current_version is not None and (
+        _semantic_version_key(catalog.current_version) >= target_key
+    ):
+        raise ReleaseCatalogError(
+            "pre-publication catalog current version must precede the staged release"
+        )
+
+
+def _validate_expected_identity(identity: DatasetReleaseIdentity) -> None:
+    if identity.schema_version != 1:
+        raise ReleaseCatalogError("expected current release identity schema is unsupported")
+    try:
+        validate_release_identity(identity.dataset_version, identity.release_date)
+        validate_sha256(identity.database_sha256, "database_sha256")
+    except ReleaseIdentityError as error:
+        raise ReleaseCatalogError("expected current release identity is invalid") from error
+
+
 def merge_catalog_entry(
     catalog_path: Path,
     entry: ReleaseCatalogEntry,

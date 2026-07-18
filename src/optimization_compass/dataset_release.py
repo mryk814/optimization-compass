@@ -325,7 +325,7 @@ def build_staged_release(
     from optimization_compass.db import KnowledgeRepository
     from optimization_compass.site_export import export_site_data
 
-    export_site_data(site_data_directory, KnowledgeRepository(database_path))
+    export_site_data(site_data_directory, KnowledgeRepository(database_path), staged=True)
     release_identity = DatasetReleaseIdentity(
         schema_version=1,
         dataset_version=target_version,
@@ -945,8 +945,10 @@ def _verify_site_release_tree(
         except (OSError, json.JSONDecodeError) as error:
             raise ReleaseValidationError(f"site asset is not valid JSON: {relative}") from error
         is_embedded_visualization_payload = relative.startswith("visualizations/")
+        is_cross_release_catalog = relative == "release-catalog.json"
         if not isinstance(payload, dict) or (
             not is_embedded_visualization_payload
+            and not is_cross_release_catalog
             and payload.get("dataset_version") != expected_identity.dataset_version
         ):
             raise ReleaseValidationError(

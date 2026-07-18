@@ -195,7 +195,10 @@ describe("application routes", () => {
 
     render(<App initialEntityLinks={testLinks} />);
 
-    expect(await screen.findByText("Dataset 0.3.0")).toBeVisible();
+    expect(await screen.findByRole("link", { name: "Dataset 0.3.0" })).toHaveAttribute(
+      "href",
+      "#/data",
+    );
   });
 
   test("deprecated Theater alias redirects to its generated canonical Trace URL", async () => {
