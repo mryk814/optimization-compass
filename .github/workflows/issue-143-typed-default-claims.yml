@@ -1,455 +1,106 @@
-name: Finalize typed SciPy default-method claims
+name: Publish validated dataset 0.16.0
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [reopened, synchronize]
 
 permissions:
+  actions: read
   contents: write
 
 concurrency:
-  group: issue-143-typed-default-method-claims-finalize
+  group: issue-143-publish-dataset-0.16.0
   cancel-in-progress: false
 
 jobs:
-  release:
+  publish:
     if: >-
       github.actor != 'github-actions[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.head_ref == 'codex/issue-143-typed-default-method-claims'
     runs-on: ubuntu-latest
     env:
-      RESULT_BRANCH: codex/issue-143-typed-default-method-claims-result
-      RELEASE_TAG: v0.16.0
       GH_TOKEN: ${{ github.token }}
+      MERGE_SHA: 1dffa94ba442c8c9f02a506d6aca9ddf3e96642b
+      SOURCE_SHA: f5405c7c525476a65d3703beba1a5f28a331cabe
+      RELEASE_TAG: v0.16.0
+      BUNDLE_NAME: optimization_method_selection_database_v0.16.0_bundle.zip
+      MANIFEST_NAME: optimization_method_selection_database_v0.16.0_manifest.json
+      BUNDLE_SHA256: 17775e4e8548b308459ad545dbdcf6ffce09703191e8be9848149430615c9dc9
+      MANIFEST_SHA256: 059b77102487400dab0f19e372a0d4f0842dec382f21c941fd7e602096ec7a7a
+      DATABASE_SHA256: 033aeeed35affc2873d7e1dc0dbd5e221197dc5fea2c057df2058c7e2ac72145
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          ref: ${{ env.RESULT_BRANCH }}
+          ref: main
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-        with:
-          python-version: "3.12"
-          enable-cache: true
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: "24"
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-      - name: Install dependencies
+      - name: Verify merged history and annotated release tag
         run: |
           set -euo pipefail
-          uv sync --frozen --all-extras --all-groups
-          npm ci --prefix site
-      - name: Reconcile release-wide full-suite contracts
+          git fetch origin main --tags --force
+          git merge-base --is-ancestor "$MERGE_SHA" origin/main
+          git merge-base --is-ancestor "$SOURCE_SHA" origin/main
+          test "$(git rev-parse "${RELEASE_TAG}^{commit}")" = "$SOURCE_SHA"
+      - name: Wait for successful main validation and Pages deployment
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
+          success=false
+          for attempt in $(seq 1 90); do
+            run_line="$(
+              gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${MERGE_SHA}&event=push&per_page=20" \
+                --jq '.workflow_runs[] | select(.name == "Validated CI and Pages") | [.id, .status, (.conclusion // "")] | @tsv' \
+                | head -n 1
+            )"
+            if [[ -n "$run_line" ]]; then
+              IFS=$'\t' read -r run_id status conclusion <<<"$run_line"
+              echo "main workflow run=${run_id} status=${status} conclusion=${conclusion}"
+              if [[ "$status" == "completed" && "$conclusion" == "success" ]]; then
+                success=true
+                break
+              fi
+              if [[ "$status" == "completed" && "$conclusion" != "success" ]]; then
+                echo "main workflow did not succeed" >&2
+                exit 1
+              fi
+            fi
+            sleep 10
+          done
+          test "$success" = true
 
-
-          def replace_once(
-              path: str,
-              old: str,
-              new: str,
-              *,
-              marker: str,
-          ) -> None:
-              target = Path(path)
-              text = target.read_text(encoding="utf-8")
-              if old in text:
-                  if text.count(old) != 1:
-                      raise SystemExit(f"{path}: replacement is not unique")
-                  target.write_text(
-                      text.replace(old, new, 1),
-                      encoding="utf-8",
-                      newline="\n",
-                  )
-                  return
-              if marker not in text:
-                  raise SystemExit(f"{path}: neither old text nor idempotence marker was found")
-
-
-          replace_once(
-              "src/optimization_compass/search_index.py",
-              "    top1 = top3 = recalled = zero_results = 0\n",
-              "    top1 = top3 = recalled = zero_results = 0\n"
-              "    relevance_cases = 0\n",
-              marker="    relevance_cases = 0\n",
-          )
-          replace_once(
-              "src/optimization_compass/search_index.py",
-              "        expected = set(map(str, case[\"expected_document_ids\"]))\n"
-              "        top1 += bool(hit_ids and hit_ids[0] in expected)\n"
-              "        top3 += bool(expected.intersection(hit_ids[:3]))\n"
-              "        recalled += bool(expected.intersection(hit_ids))\n"
-              "        zero_results += not hit_ids\n",
-              "        expected = set(map(str, case[\"expected_document_ids\"]))\n"
-              "        if expected:\n"
-              "            relevance_cases += 1\n"
-              "            top1 += bool(hit_ids and hit_ids[0] in expected)\n"
-              "            top3 += bool(expected.intersection(hit_ids[:3]))\n"
-              "            recalled += bool(expected.intersection(hit_ids))\n"
-              "        zero_results += not hit_ids\n",
-              marker="            relevance_cases += 1\n",
-          )
-          replace_once(
-              "src/optimization_compass/search_index.py",
-              '            "top_1_relevance": top1 / count if count else 0,\n'
-              '            "top_3_relevance": top3 / count if count else 0,\n'
-              '            "expected_entity_recall": recalled / count if count else 0,\n',
-              '            "top_1_relevance": (\n'
-              '                top1 / relevance_cases if relevance_cases else 0\n'
-              '            ),\n'
-              '            "top_3_relevance": (\n'
-              '                top3 / relevance_cases if relevance_cases else 0\n'
-              '            ),\n'
-              '            "expected_entity_recall": (\n'
-              '                recalled / relevance_cases if relevance_cases else 0\n'
-              '            ),\n',
-              marker="top1 / relevance_cases if relevance_cases else 0",
-          )
-
-          replace_once(
-              "tests/test_search_index.py",
-              '    assert report["metrics"]["top_1_relevance"] >= 0.8\n'
-              '    assert report["metrics"]["top_3_relevance"] >= 0.9\n'
-              '    assert report["metrics"]["expected_entity_recall"] >= 0.9\n',
-              '    assert sum(bool(case["expected_document_ids"]) for case in cases) == 10\n'
-              '    assert report["metrics"]["top_1_relevance"] == 0.8\n'
-              '    assert report["metrics"]["top_3_relevance"] == 0.9\n'
-              '    assert report["metrics"]["expected_entity_recall"] == 1.0\n'
-              '    assert report["metrics"]["zero_result_rate"] == 1 / len(cases)\n',
-              marker='report["metrics"]["expected_entity_recall"] == 1.0',
-          )
-
-          replace_once(
-              "tests/test_site_export.py",
-              "from optimization_compass.site_export import export_site_data\n",
-              "from optimization_compass.site_export import export_site_data\n"
-              "from optimization_compass.versioned_claims import (\n"
-              "    CLAIM_PREDICATES,\n"
-              "    DEFAULT_METHOD_CLAIM_PREDICATES,\n"
-              ")\n",
-              marker="DEFAULT_METHOD_CLAIM_PREDICATES",
-          )
-          replace_once(
-              "tests/test_site_export.py",
-              '    assert len(claim_payload["claims"]) == 64 * 7 + 1\n'
-              '    assert claim_payload["freshness"]["claim_count"] == 64 * 7\n',
-              "    active_claim_count = 64 * len(CLAIM_PREDICATES) + len(\n"
-              "        DEFAULT_METHOD_CLAIM_PREDICATES\n"
-              "    )\n"
-              '    assert len(claim_payload["claims"]) == active_claim_count + 1\n'
-              '    assert claim_payload["freshness"]["claim_count"] == active_claim_count\n',
-              marker="active_claim_count = 64 * len(CLAIM_PREDICATES)",
-          )
-
-          replace_once(
-              "tests/test_coverage.py",
-              '            ["SCENARIO_BIOBJECTIVE_QUADRATIC"],\n',
-              "            [\n"
-              '                "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",\n'
-              '                "SCENARIO_BIOBJECTIVE_QUADRATIC",\n'
-              "            ],\n",
-              marker="SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
-          )
-
-          replace_once(
-              "tests/test_derived_media.py",
-              "from optimization_compass.derived_media import DerivedMediaManifest, write_derived_media\n",
-              "from optimization_compass.dataset_release import TARGET_DATASET_VERSION\n"
-              "from optimization_compass.derived_media import DerivedMediaManifest, write_derived_media\n",
-              marker="TARGET_DATASET_VERSION",
-          )
-          replace_once(
-              "tests/test_derived_media.py",
-              '    assert manifest.dataset_version == "0.12.0"\n',
-              "    assert manifest.dataset_version == TARGET_DATASET_VERSION\n",
-              marker="manifest.dataset_version == TARGET_DATASET_VERSION",
-          )
-
-          old_trf_test = '''def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> None:
-              staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
-              connection = sqlite3.connect(staged.database_path)
-              connection.row_factory = sqlite3.Row
-              try:
-                  method = connection.execute(
-                      "SELECT * FROM methods WHERE method_id = 'M_TRUST_REGION_REFLECTIVE'"
-                  ).fetchone()
-                  mappings = connection.execute(
-                      "SELECT method_id, implementation_id, support_level FROM method_implementation_map "
-                      "WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'"
-                  ).fetchall()
-                  claim = connection.execute(
-                      "SELECT value_json, value_status, valid_from, source_id FROM implementation_claims "
-                      "WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF' "
-                      "AND predicate = 'important_option_defaults' AND valid_to IS NULL"
-                  ).fetchone()
-              finally:
-                  connection.close()
-
-              assert method is not None
-              assert method["method_family_id"] == "MF_TRUST_REGION"
-              assert method["constraint_support"] == "bounds"
-              assert method["reference_source_ids"] == "S003;S096"
-              assert [tuple(row) for row in mappings] == [
-                  ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
-              ]
-              assert claim is not None
-              assert claim["value_status"] == "verified"
-              assert claim["source_id"] == "S003"
-              assert claim["valid_from"] == "2026-07-16"
-              default_text = json.loads(claim["value_json"])
-              assert "least_squares: method=trf is the default" in default_text
-              assert "curve_fit: trf is selected when bounds are supplied" in default_text
-          '''
-          new_trf_test = '''def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> None:
-              staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
-              connection = sqlite3.connect(staged.database_path)
-              connection.row_factory = sqlite3.Row
-              try:
-                  method = connection.execute(
-                      "SELECT * FROM methods WHERE method_id = 'M_TRUST_REGION_REFLECTIVE'"
-                  ).fetchone()
-                  mappings = connection.execute(
-                      "SELECT method_id, implementation_id, support_level FROM method_implementation_map "
-                      "WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'"
-                  ).fetchall()
-                  claims = connection.execute(
-                      """
-                      SELECT predicate, value_json, value_status, valid_from, source_id,
-                             product_version
-                      FROM implementation_claims
-                      WHERE subject_id = 'I_SCIPY_LEAST_SQUARES_TRF'
-                        AND predicate IN (
-                          'important_option_defaults',
-                          'default_method_least_squares',
-                          'default_method_curve_fit_bounds'
-                        )
-                        AND valid_to IS NULL
-                      ORDER BY predicate
-                      """
-                  ).fetchall()
-              finally:
-                  connection.close()
-
-              assert method is not None
-              assert method["method_family_id"] == "MF_TRUST_REGION"
-              assert method["constraint_support"] == "bounds"
-              assert method["reference_source_ids"] == "S003;S096"
-              assert [tuple(row) for row in mappings] == [
-                  ("M_TRUST_REGION_REFLECTIVE", "I_SCIPY_LEAST_SQUARES_TRF", "native"),
-              ]
-
-              claims_by_predicate = {str(row["predicate"]): row for row in claims}
-              assert set(claims_by_predicate) == {
-                  "important_option_defaults",
-                  "default_method_least_squares",
-                  "default_method_curve_fit_bounds",
-              }
-              generic = claims_by_predicate["important_option_defaults"]
-              assert generic["value_status"] == "verified"
-              assert generic["source_id"] == "S003"
-              assert generic["valid_from"] == "2026-07-16"
-              assert json.loads(generic["value_json"]) == (
-                  "tr_solver; jac_sparsity; x_scale; loss; ftol; xtol; gtol; max_nfev"
-              )
-
-              for predicate in (
-                  "default_method_least_squares",
-                  "default_method_curve_fit_bounds",
-              ):
-                  claim = claims_by_predicate[predicate]
-                  assert claim["value_status"] == "verified"
-                  assert claim["source_id"] == "S003"
-                  assert claim["valid_from"] == "2026-07-16"
-                  assert claim["product_version"] == "1.18.0"
-
-              least_squares = json.loads(
-                  claims_by_predicate["default_method_least_squares"]["value_json"]
-              )
-              assert least_squares["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
-              assert least_squares["fallback"] is None
-              curve_fit = json.loads(
-                  claims_by_predicate["default_method_curve_fit_bounds"]["value_json"]
-              )
-              assert curve_fit["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
-              assert curve_fit["fallback"]["selected_method_id"] == "M_LEVENBERG_MARQUARDT"
-          '''
-          replace_once(
-              "tests/test_trust_region_reflective.py",
-              old_trf_test,
-              new_trf_test,
-              marker="claims_by_predicate =",
-          )
-          PY
-
-          uv run ruff check --fix \
-            src/optimization_compass/search_index.py \
-            tests/test_search_index.py \
-            tests/test_site_export.py \
-            tests/test_coverage.py \
-            tests/test_derived_media.py \
-            tests/test_trust_region_reflective.py
-          uv run ruff format \
-            src/optimization_compass/search_index.py \
-            tests/test_search_index.py \
-            tests/test_site_export.py \
-            tests/test_coverage.py \
-            tests/test_derived_media.py \
-            tests/test_trust_region_reflective.py
-
-          if ! git diff --quiet; then
-            git config user.name 'mryk814'
-            git config user.email 'moriyuki.814@gmail.com'
-            git add \
-              src/optimization_compass/search_index.py \
-              tests/test_search_index.py \
-              tests/test_site_export.py \
-              tests/test_coverage.py \
-              tests/test_derived_media.py \
-              tests/test_trust_region_reflective.py
-            git commit -m 'fix: reconcile release benchmark and claim contracts
-
-            Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
-            git push origin "HEAD:refs/heads/$RESULT_BRANCH"
-          fi
-          echo "SOURCE_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Build deterministic dataset 0.16.0 and complete bundle
-        run: |
-          exec > >(tee "$RUNNER_TEMP/issue143-build.log") 2>&1
-          set -euo pipefail
-          rm -rf \
-            .release-stage \
-            "$RUNNER_TEMP/bundle-a" \
-            "$RUNNER_TEMP/bundle-b" \
-            "$RUNNER_TEMP/bundle-published"
-          uv run python scripts/rebuild_dataset.py --stage --output .release-stage
-          uv run python scripts/release_bundles.py prepare \
-            --staged-directory .release-stage \
-            --output-directory "$RUNNER_TEMP/bundle-a" \
-            --source-commit "$SOURCE_COMMIT" \
-            --tag "$RELEASE_TAG"
-          uv run python scripts/release_bundles.py prepare \
-            --staged-directory .release-stage \
-            --output-directory "$RUNNER_TEMP/bundle-b" \
-            --source-commit "$SOURCE_COMMIT" \
-            --tag "$RELEASE_TAG"
-          cmp \
-            "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip" \
-            "$RUNNER_TEMP/bundle-b/optimization_method_selection_database_v0.16.0_bundle.zip"
-          uv run python scripts/release_bundles.py verify \
-            --bundle "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip"
-          uv run python scripts/rebuild_dataset.py \
-            --publish \
-            --staged-directory .release-stage \
-            --bundle-output "$RUNNER_TEMP/bundle-published" \
-            --source-commit "$SOURCE_COMMIT" \
-            --tag "$RELEASE_TAG"
-          cmp \
-            "$RUNNER_TEMP/bundle-a/optimization_method_selection_database_v0.16.0_bundle.zip" \
-            "$RUNNER_TEMP/bundle-published/optimization_method_selection_database_v0.16.0_bundle.zip"
-          rm -rf .release-stage
-          uv run python - <<'PY'
-          from optimization_compass.dataset_publication import (
-              CITATION_PATH,
-              DATASET_CARD_PATH,
-              RELEASE_CATALOG_PATH,
-              load_publication_authority,
-              render_citation_cff,
-              render_dataset_card,
-              select_release_entry,
-          )
-          from optimization_compass.release_catalog import load_release_catalog
-
-          authority = load_publication_authority()
-          entry = select_release_entry(load_release_catalog(RELEASE_CATALOG_PATH))
-          CITATION_PATH.write_text(
-              render_citation_cff(authority, entry),
-              encoding="utf-8",
-              newline="\n",
-          )
-          DATASET_CARD_PATH.write_text(
-              render_dataset_card(authority, entry),
-              encoding="utf-8",
-              newline="\n",
-          )
-          PY
-      - name: Validate source, release, and public surfaces
-        run: |
-          exec > >(tee "$RUNNER_TEMP/issue143-validation.log") 2>&1
-          set -euo pipefail
-          uv run ruff check .
-          uv run ruff format --check .
-          uv run mypy src
-          uv run pytest
-          uv run optimization-compass verify-data
-          uv run python scripts/verify_content.py
-          uv run python scripts/verify_licensing.py
-          uv run python scripts/verify_workflow_pins.py
-          uv run python scripts/repository_size.py --check
-          npm --prefix site run typecheck
-          npm --prefix site run parity
-          npm --prefix site test -- --run
-          npm --prefix site run build
-      - name: Upload build and validation diagnostics
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: issue-143-finalize-log-${{ github.run_attempt }}
-          path: |
-            ${{ runner.temp }}/issue143-build.log
-            ${{ runner.temp }}/issue143-validation.log
-          if-no-files-found: warn
-          retention-days: 1
-      - name: Create reviewed annotated tag and verified draft release
+          deployed=false
+          for attempt in $(seq 1 60); do
+            payload="$(curl -fsSL "https://mryk814.github.io/optimization-compass/data/release.json?merge=${MERGE_SHA}" || true)"
+            version="$(jq -r '.dataset_version // empty' <<<"$payload" 2>/dev/null || true)"
+            database_sha="$(jq -r '.database_sha256 // empty' <<<"$payload" 2>/dev/null || true)"
+            echo "Pages dataset_version=${version:-missing} database_sha256=${database_sha:-missing}"
+            if [[ "$version" == "0.16.0" && "$database_sha" == "$DATABASE_SHA256" ]]; then
+              deployed=true
+              break
+            fi
+            sleep 10
+          done
+          test "$deployed" = true
+      - name: Re-download and verify draft release assets
         run: |
           set -euo pipefail
-          BUNDLE="$RUNNER_TEMP/bundle-published/optimization_method_selection_database_v0.16.0_bundle.zip"
-          MANIFEST="data/optimization_method_selection_database_v0.16.0_manifest.json"
-          ASSET_NAME="$(basename "$BUNDLE")"
-          MANIFEST_NAME="$(basename "$MANIFEST")"
+          release_json="$(gh release view "$RELEASE_TAG" --json tagName,isDraft,isPrerelease,url,targetCommitish)"
+          jq -e '.tagName == "v0.16.0" and .isDraft == true and .isPrerelease == false' <<<"$release_json"
 
-          REMOTE_TARGET="$(git ls-remote origin "refs/tags/$RELEASE_TAG^{}" | awk '{print $1}')"
-          if [ -z "$REMOTE_TARGET" ]; then
-            git tag -a "$RELEASE_TAG" "$SOURCE_COMMIT" -m 'Dataset 0.16.0'
-            git push origin "refs/tags/$RELEASE_TAG"
-          elif [ "$REMOTE_TARGET" != "$SOURCE_COMMIT" ]; then
-            echo "refusing to move existing tag $RELEASE_TAG from $REMOTE_TARGET" >&2
-            exit 1
-          fi
-
-          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            test "$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft)" = true
-            test "$(gh release view "$RELEASE_TAG" --json targetCommitish --jq .targetCommitish)" = "$SOURCE_COMMIT"
-            gh release upload "$RELEASE_TAG" "$BUNDLE" "$MANIFEST" --clobber
-          else
-            gh release create "$RELEASE_TAG" "$BUNDLE" "$MANIFEST" \
-              --draft \
-              --verify-tag \
-              --target "$SOURCE_COMMIT" \
-              --title 'Dataset 0.16.0' \
-              --notes-file docs/releases/0.16.0.md
-          fi
-
-          rm -rf "$RUNNER_TEMP/release-download"
-          mkdir -p "$RUNNER_TEMP/release-download"
+          rm -rf release-download
+          mkdir release-download
           gh release download "$RELEASE_TAG" \
-            --pattern "$ASSET_NAME" \
+            --pattern "$BUNDLE_NAME" \
             --pattern "$MANIFEST_NAME" \
-            --dir "$RUNNER_TEMP/release-download"
-          cmp "$BUNDLE" "$RUNNER_TEMP/release-download/$ASSET_NAME"
-          cmp "$MANIFEST" "$RUNNER_TEMP/release-download/$MANIFEST_NAME"
-          uv run python scripts/release_bundles.py verify \
-            --bundle "$RUNNER_TEMP/release-download/$ASSET_NAME"
-      - name: Commit and push generated release surfaces
+            --dir release-download \
+            --clobber
+          echo "$BUNDLE_SHA256  release-download/$BUNDLE_NAME" | sha256sum --check --strict
+          echo "$MANIFEST_SHA256  release-download/$MANIFEST_NAME" | sha256sum --check --strict
+          jq -e --arg sha "$DATABASE_SHA256" '.database.sha256 == $sha' \
+            "release-download/$MANIFEST_NAME"
+      - name: Publish GitHub Release
         run: |
           set -euo pipefail
-          git config user.name 'mryk814'
-          git config user.email 'moriyuki.814@gmail.com'
-          git add -A
-          git commit -m 'data: publish dataset 0.16.0
-
-          Signed-off-by: mryk814 <moriyuki.814@gmail.com>'
-          git push origin "HEAD:refs/heads/$RESULT_BRANCH"
+          gh release edit "$RELEASE_TAG" --draft=false --latest
+          published="$(gh release view "$RELEASE_TAG" --json tagName,isDraft,isPrerelease,publishedAt,url)"
+          jq -e '.tagName == "v0.16.0" and .isDraft == false and .isPrerelease == false and .publishedAt != null' <<<"$published"
+          echo "$published" | jq .
