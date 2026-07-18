@@ -1626,6 +1626,7 @@ caption {
 .theater-card h2 { margin: .45rem 0 0; font-size: .95rem; }
 .theater-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
 .theater-card small { margin-top: auto; color: #285740; font-size: .68rem; font-weight: 700; }
+.theater-card-observables { margin-top: .45rem; color: #4d6253 !important; font-weight: 600 !important; line-height: 1.45; }
 .compare-card { min-height: 12rem; }
 .compare-card-contract { display: grid; gap: .25rem; margin: .35rem 0 .6rem; padding: .45rem .55rem; border-left: 3px solid #6c9a7f; background: #f5f8f3; color: #52605a; font-size: .68rem; line-height: 1.4; }
 .compare-card-contract span { display: flex; gap: .35rem; }
@@ -3459,6 +3460,16 @@ main:focus {
 .theater-family .theater-card small { display: block; margin-top: 0.35rem; }
 .theater-card-primary { border-color: #9fc4a9; box-shadow: inset 0 3px 0 #4f8d6a; }
 .theater-card-primary::after { content: "まず見る代表例"; align-self: flex-start; order: -1; margin-bottom: .15rem; color: #32634b; font-size: .62rem; font-weight: 800; }
+.theater-structure-guide { margin: 1rem 0 1.25rem; padding: 1rem 1.1rem; border: 1px solid #d5ded5; border-radius: .75rem; background: #f7faf6; }
+.theater-structure-guide > header { max-width: 52rem; }
+.theater-structure-guide > header h2 { margin: .15rem 0 .35rem; color: #213e30; font-size: 1.1rem; }
+.theater-structure-guide > header p:last-child { margin: 0; color: #4f5e57; font-size: .78rem; line-height: 1.6; }
+.theater-structure-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin-top: .85rem; }
+.theater-structure-guide-grid article { min-width: 0; padding: .75rem; border: 1px solid #d9e2da; border-radius: .55rem; background: #fff; }
+.theater-structure-guide-grid article > span { color: #32634b; font-size: .64rem; font-weight: 800; letter-spacing: .02em; }
+.theater-structure-guide-grid h3 { margin: .25rem 0 .4rem; font-size: .9rem; }
+.theater-structure-guide-grid p { margin: 0 0 .55rem; color: #59645d; font-size: .74rem; line-height: 1.55; }
+.theater-structure-guide-grid small { color: #285740; font-size: .66rem; font-weight: 700; line-height: 1.45; }
 .scenario-context-panel { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr); gap: 0.8rem; margin: 1rem 0; padding: 1rem; border: 1px solid #d6dbd5; border-left: 4px solid #32634b; border-radius: 0.75rem; background: #f5f7f3; }
 .scenario-context-panel header h2, .scenario-context-panel header p, .scenario-case-formulation h3, .scenario-case-formulation p { margin: 0.25rem 0; }
 .scenario-context-panel header span { color: #52605a; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -3478,5 +3489,6 @@ main:focus {
   .theater-catalog-filters span { margin-left: 0; }
   .theater-family > header { align-items: flex-start; flex-direction: column; gap: 0.25rem; }
   .theater-family > header small { margin-left: 0; }
+  .theater-structure-guide-grid { grid-template-columns: minmax(0, 1fr); }
   .scenario-context-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
