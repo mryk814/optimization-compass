@@ -14,11 +14,14 @@ last_reviewed: 2026-07-18
 
 評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。
 
-## 評価費は「1回のwall-clock時間」だけではない
+## 評価費は1回のwall-clock時間だけでは決まらない
 
-simulationを1回実行する時間、実験試料を作る費用、GPU queueの待ち時間、失敗trialの後始末、担当者が確認できる回数は、どれも探索に使える予算を減らします。同じ10分の評価でも、100台で並列に回せる計算と、装置を占有して逐次にしか測れない実験では、適した探索の形が異なります。
+simulationを1回実行する時間は、評価費の一部です。
+実験試料を作る費用、GPU queueの待ち時間、失敗trialの後始末も、探索に使える予算を減らします。
+担当者が結果を確認できる回数も、使える予算を制約します。
+同じ10分の評価でも、100台で並列に回せる計算と、装置を占有して逐次にしか測れない実験では、適した探索の形が異なります。
 
-まず、次の予算を混ぜずに記録します。
+したがって、次の予算を混ぜずに記録します。
 
 | 予算 | 例 | 手法選択への影響 |
 | --- | --- | --- |
@@ -29,17 +32,24 @@ simulationを1回実行する時間、実験試料を作る費用、GPU queueの
 | 再評価枠 | 同一点を何回測るか | noise推定、外れ値確認、比較の公平性 |
 | 失敗枠 | timeout、破損、infeasible | retry・停止・欠測の扱い |
 
-`cheap`や`very_expensive`は普遍的な秒数ではありません。評価回数、並列性、必要精度、実験の不可逆性との相対的な分類です。
+`cheap`や`very_expensive`は、普遍的な秒数を表す分類ではありません。
+評価回数、並列性、必要精度、実験の不可逆性に対する相対的な分類です。
 
-## 少数評価なら、履歴を使う価値が上がる
+## 評価回数と並列度で候補手法が変わる
 
-数十〜数百回しか評価できず、1回ごとの結果を待てるなら、観測履歴と不確実性から次の点を選ぶ[Bayesian Optimization](#/learn/bayesian-optimization)が候補になります。これは「必ず最少回数で最適解へ着く」ことを意味しません。surrogateの仮定、initial design、noise、acquisition最適化が合わなければ、単純な[Random Search](#/learn/random-search)より悪くなることもあります。
+数十〜数百回しか評価できず、1回ごとの結果を待てるなら、観測履歴と不確実性から次の点を選ぶ[Bayesian Optimization](#/learn/bayesian-optimization)が候補になります。
+これは「必ず最少回数で最適解へ着く」ことを意味しません。
+surrogateの仮定、initial design、noise、acquisition最適化が合わなければ、単純な[Random Search](#/learn/random-search)より悪くなることもあります。
 
-評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試すbaselineが強いことがあります。途中の低コスト評価が最終性能をある程度予測するなら、[Hyperband / ASHA](#/learn/hyperband-asha)のようにresourceを段階配分する設計も検討できます。ただし、途中指標と最終指標の順位相関が弱いと、良い候補を早く落とします。
+評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試すbaselineが強いことがあります。
+途中の低コスト評価が最終性能をある程度予測するなら、[Hyperband / ASHA](#/learn/hyperband-asha)のようにresourceを段階配分する設計も検討できます。
+ただし、途中指標と最終指標の順位相関が弱いと、良い候補を早く落とします。
 
-## budgetは停止規則まで含めて固定する
+## budgetには停止規則も含める
 
-手法比較や実運用では、評価回数だけでなく停止規則を先に決めます。たとえば「80 trial、4 worker、wall-clock 6時間、failed trialは記録して再試行しない、同一点の再評価は最大2回」のように書きます。後から一方の手法だけに追加budgetを与えると、性能差と予算差を分けられません。
+手法比較や実運用では、評価回数だけでなく停止規則を先に決めます。
+たとえば「80 trial、4 worker、wall-clock 6時間、failed trialは記録して再試行しない、同一点の再評価は最大2回」のように書きます。
+後から一方の手法だけに追加budgetを与えると、性能差と予算差を分けられません。
 
 ```python
 experiment_budget = {
@@ -55,9 +65,9 @@ assert experiment_budget["max_evaluations"] > 0
 assert experiment_budget["parallel_workers"] > 0
 ```
 
-このようなcontractがあると、best-so-farだけでなく、評価開始・完了時刻、idle時間、失敗率、実際に使ったbudgetを並べて読めます。
+このようなcontract（契約）があると、best-so-farだけでなく、評価開始・完了時刻、idle時間、失敗率、実際に使ったbudgetを並べて読めます。
 
-## 高価な評価で見落としやすいこと
+## 高価な評価で混同しやすい失敗
 
 - 初期designを省くと、surrogateや局所探索が偏った場所から始まる
 - noiseがあるのに再評価枠をゼロにすると、偶然の良い値を改善と誤認しやすい
@@ -66,9 +76,11 @@ assert experiment_budget["parallel_workers"] > 0
 - fidelityを下げた結果だけで最終品質を判断すると、早期停止のbiasを見落とす
 
 ::: warning
-評価費が高いことは、Bayesian Optimizationを自動的に第一選択にする条件ではありません。変数のdomain、条件付き空間、noise、並列度、失敗の意味、利用できるfidelityを一緒に見ます。
+評価費が高いことだけで、Bayesian Optimizationを第一選択にはできません。
+変数のdomain、条件付き空間、noise、並列度、失敗の意味、利用できるfidelityを一緒に見ます。
 :::
 
 ## 次に読む
 
-高価なblack-box全体の条件付き選択は[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)へ、評価不能・失敗を含む可行性の扱いは[制約class](#/learn/concept.constraint-class)へ進みます。
+高価なblack-box全体の条件付き選択は、[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。
+評価不能・失敗を含む可行性の扱いは、[制約class](#/learn/concept.constraint-class)へ進みます。
