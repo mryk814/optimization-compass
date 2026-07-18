@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.0",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215662,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "e5a850921e57eeb16b5bde1560202aee942d6a912e458895fa6f35fdb51c0385",
+        "payload_sha256": "db107c3d90819fba4fe9e1440f92f212abf333cdd78d091a62f72a31add337d1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210211,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "863b9caf2c645ee9c85b855248f59e0095d16f1473fd7ea4ba8e48a262b89c80",
+        "payload_sha256": "be3aa3214ee05f8b42a0c90e4fae004c08bc1183db2efe1909383046419b64b9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -442,13 +442,13 @@
         ],
         "payload_bytes": 208170,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "6800c7a38fcb7e70d69d0a8bb95a0ec8b3842a63817afdcc0f2414b70b55c74b",
+        "payload_sha256": "b8a159583bd6a77d4f3d22b5743f90a730d2716e09597ca29086a7d8d396c856",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -615,13 +615,13 @@
         ],
         "payload_bytes": 204202,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "9c9c12cee79e77b2def4a53a47770094ee3e49865f73a46084876de0d080938f",
+        "payload_sha256": "702a29aa08b9f5642ab7ca88a4961fcec0551272420810748d5fd93aab3c5012",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -789,13 +789,13 @@
         ],
         "payload_bytes": 72534,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "c0df5b604fda7e1665eacdbc92f51466640751af06566ee6d7d896f0c91e553f",
+        "payload_sha256": "85bee8146707804ad879e649b46ac499942625dbb8e7e93a97c3639be22e1dc0",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1055,13 +1055,13 @@
         ],
         "payload_bytes": 66443,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "143f0bd0c9622d9e535934ff205c836dba1a9a3d9e1ac8375dbf4120a964598f",
+        "payload_sha256": "6d576f1c6737f8373c0ad0204de641de923197fee20456670ff8473696f565ce",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1237,13 +1237,13 @@
         ],
         "payload_bytes": 65995,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "0d19e6da4eef4862f223e67724f4368ecbe09350cdebb7fed433bdd95931f5c7",
+        "payload_sha256": "e0566c8e0673213b8e9055a29552d8ce3eb1db94008afdb15800d3a23009002a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1419,13 +1419,13 @@
         ],
         "payload_bytes": 53138,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "477d440fa87a23366100fe229efff672ba2d11728341aeaec5d92906dc7c4bb5",
+        "payload_sha256": "9b72dfae2f347c8517a87bc1c62bafb54620980a43e0daa277f0402b4873007a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1615,13 +1615,13 @@
         ],
         "payload_bytes": 66386,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "5cbc97aa3ca2ad4d7a6a03d92c45290bcb3e704a96be53f876023865697beb48",
+        "payload_sha256": "0d693ce4c1b80a0ab437e75f6ca5e2510473c6ecb03be393ee916468168d7898",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1811,13 +1811,13 @@
         ],
         "payload_bytes": 66017,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "1cffd9c0728b805e2004344d58934bc900642a6dee38530222a1abae9b2888e3",
+        "payload_sha256": "94342526b4b972609795375de9b709f5aa3e8bf096ca6c0da94a092b602c5be3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2008,13 +2008,13 @@
         ],
         "payload_bytes": 22749,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "4e76f75a24c905796de850595e4846c194cc08e80dbd6b8fa21c19d091431ba7",
+        "payload_sha256": "bcb4bded2b1959b86913d04a753af2ba62ff3b2d0c5faf04a886b0fcc99ba56c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2196,13 +2196,13 @@
         ],
         "payload_bytes": 22451,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "45046326f03ca23ff3d27a48bdd9b8d15f0e1938eecb4a2380a5a69421360da1",
+        "payload_sha256": "da4cfa74b907b459981f4a7aec288120de6d44773ce7d67aed061dba656a679f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2398,13 +2398,13 @@
         ],
         "payload_bytes": 22735,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "f9449e26fd523bf04cd815fd38ac2e5f30e54ec6facfb641022d8626949da5c7",
+        "payload_sha256": "789ce240236c004fe6235ce4fefab6ffd5429311823be2100eca08120398d20a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2586,13 +2586,13 @@
         ],
         "payload_bytes": 22741,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "83324085a65b86e8437ac3cfcf9cafd96a70bd80a9e28c3d0d4e326cb3c3d40c",
+        "payload_sha256": "25a3d3e303fd74699cd3048d8b3a5d98a9c468a2e0b564a02e3c5e80c02027d1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2773,13 +2773,13 @@
         ],
         "payload_bytes": 102176,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "8d28166f6a9c37065128ec8203a9a93e7dfc9d9ab321b305e412f0a370bfee99",
+        "payload_sha256": "f6590b0049938f23e83e984a5d3512d3270828e3fc1a3abfd612150fe94a59f8",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3036,13 +3036,13 @@
         ],
         "payload_bytes": 39756,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "57b7f96b6c7f1940a070d4f6a48cd26bccce472a114f72ed034745ca9d71aa3d",
+        "payload_sha256": "c3a40816a37fd9978c560f299ffb9dbe695390f30c6fcfe5a5aa4898e7bc2221",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3238,7 +3238,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3453,7 +3453,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3668,7 +3668,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3955,7 +3955,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4163,13 +4163,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "084dd6b21f56906e8029186ef71b44911d622eba65ed0b67fd80d89f3dbc7c6e",
+        "payload_sha256": "b29f70256376d46afe09890407b9ae7dcb91da27b5ecec22fc82c85b04ef8cc7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4358,13 +4358,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "084dd6b21f56906e8029186ef71b44911d622eba65ed0b67fd80d89f3dbc7c6e",
+        "payload_sha256": "b29f70256376d46afe09890407b9ae7dcb91da27b5ecec22fc82c85b04ef8cc7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4570,13 +4570,13 @@
         ],
         "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "08ef412ab02344c14cc7a91ebaa707363b8d4f48d95e593c99e2a9cbd7c34ae5",
+        "payload_sha256": "fea8adb652bd9bf5f697ef21d2a882a0341361a40d679746dfdbe2230deeb877",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4748,13 +4748,13 @@
         ],
         "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "08ef412ab02344c14cc7a91ebaa707363b8d4f48d95e593c99e2a9cbd7c34ae5",
+        "payload_sha256": "fea8adb652bd9bf5f697ef21d2a882a0341361a40d679746dfdbe2230deeb877",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.0",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4922,6 +4922,558 @@
       ],
       "title_en": "Compare how preference weights move the selected point",
       "title_ja": "preference weightで選択点がどう動くか比べる"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "TopologyFieldEvolution",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "density_field",
+          "displacement_field",
+          "strain_energy_field",
+          "sensitivity_raw",
+          "sensitivity_filtered",
+          "volume_fraction",
+          "compliance",
+          "gray_fraction",
+          "checkerboard_score"
+        ],
+        "payload_bytes": 130843,
+        "payload_path": "visualizations/topology-optimization-field-evolution.json",
+        "payload_sha256": "2fa8567d1178b09eaf158945eaed4a387120cf47de10ead183070256d1ad5f95",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "field_evolution"
+      },
+      "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_TOPOLOGY_CANTILEVER_8X4",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "max_iterations": 12,
+          "volume_tolerance": 0.001
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "canonical",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Density, state, and sensitivity field evolution for a cantilever",
+          "ja": "片持ちはりのdensity、state、sensitivityのfield evolution"
+        },
+        "expected_phenomenon_en": "The load path remains under a volume constraint while filtering and projection change field boundaries and gray fraction.",
+        "expected_phenomenon_ja": "体積率を保ちながら荷重経路が残り、filterとprojectionの強さに応じて密度fieldの境界とgray fractionが変わります。",
+        "failure_signals": [
+          {
+            "label_en": "low compliance with a checkerboard artifact",
+            "label_ja": "低いcomplianceとcheckerboardの併存",
+            "observable_ids": [
+              "compliance",
+              "checkerboard_score",
+              "density_field"
+            ],
+            "signal_id": "checkerboard_artifact"
+          },
+          {
+            "label_en": "persistent gray density",
+            "label_ja": "gray fractionが残る",
+            "observable_ids": [
+              "gray_fraction",
+              "density_field"
+            ],
+            "signal_id": "gray_field"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Show an educational field trace rather than an analytic or manufacturable reference.",
+          "note_ja": "解析解や製造可能な最終形状ではなく、教育用のfield traceを表示します。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Relate design density, state fields, sensitivity, and updates in one iteration",
+          "ja": "設計密度、状態field、感度、更新則を一つの反復で対応づける"
+        },
+        "limitations_en": "This is a deterministic educational trace on 32 elements. It does not guarantee finite-element convergence, manufacturability, topology invariance under mesh refinement, or global optimality.",
+        "limitations_ja": "これは32要素の決定的な教育用traceです。実際の有限要素法の収束、製造制約、mesh refinement後の同一topology、局所解や大域解を保証しません。",
+        "misconception": {
+          "en": "A falling compliance means discretization artifacts have disappeared",
+          "ja": "コンプライアンスが下がれば、離散化の癖も消えている"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "density_field",
+              "volume_fraction"
+            ],
+            "title_en": "Uniform initial density",
+            "title_ja": "一様な初期密度"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "sensitivity_raw",
+              "sensitivity_filtered",
+              "density_field"
+            ],
+            "title_en": "Update density from sensitivity",
+            "title_ja": "感度から密度を更新"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "density_field",
+              "strain_energy_field",
+              "checkerboard_score"
+            ],
+            "title_en": "Separate load path from discretization artifacts",
+            "title_ja": "荷重経路と離散化の癖が分かれる"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "volume_fraction",
+              "compliance",
+              "gray_fraction"
+            ],
+            "title_en": "Check volume and termination",
+            "title_ja": "体積率と停止理由を確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.variable-domain",
+          "concept.constraint-class"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "design density field",
+            "label_ja": "設計密度field",
+            "observable_id": "density_field"
+          },
+          {
+            "label_en": "displacement field",
+            "label_ja": "変位field",
+            "observable_id": "displacement_field"
+          },
+          {
+            "label_en": "strain-energy field",
+            "label_ja": "ひずみエネルギーfield",
+            "observable_id": "strain_energy_field"
+          },
+          {
+            "label_en": "raw sensitivity",
+            "label_ja": "未処理感度",
+            "observable_id": "sensitivity_raw"
+          },
+          {
+            "label_en": "filtered sensitivity",
+            "label_ja": "filter後の感度",
+            "observable_id": "sensitivity_filtered"
+          },
+          {
+            "label_en": "volume fraction",
+            "label_ja": "体積率",
+            "observable_id": "volume_fraction"
+          },
+          {
+            "label_en": "compliance",
+            "label_ja": "コンプライアンス",
+            "observable_id": "compliance"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_TOPOLOGY_CHECKERBOARD"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "gray fraction",
+            "label_ja": "gray fraction",
+            "observable_id": "gray_fraction"
+          },
+          {
+            "label_en": "checkerboard score",
+            "label_ja": "checkerboard score",
+            "observable_id": "checkerboard_score"
+          }
+        ],
+        "static_summary": {
+          "en": "Inspect density, state, sensitivity, and update metrics for a cantilever.",
+          "ja": "片持ちはりの密度field、状態field、感度、更新指標を反復ごとに並べます。"
+        },
+        "success_signals": [
+          {
+            "label_en": "load path under the volume target",
+            "label_ja": "体積率を保った荷重経路",
+            "observable_ids": [
+              "density_field",
+              "volume_fraction",
+              "compliance"
+            ],
+            "signal_id": "stable_load_path"
+          },
+          {
+            "label_en": "filtered sensitivity drives the update",
+            "label_ja": "filter後の感度が更新に反映される",
+            "observable_ids": [
+              "sensitivity_raw",
+              "sensitivity_filtered",
+              "density_field"
+            ],
+            "signal_id": "filtered_sensitivity"
+          }
+        ],
+        "text_alternative": {
+          "en": "Starting from uniform density, the field is updated from filtered sensitivity. OC and MMA share the problem and budget, while the unfiltered path develops a higher checkerboard score.",
+          "ja": "初期の一様密度から、filter後の感度で密度を更新します。OCとMMAは同じ問題と予算で動き、filterなしの経路はcheckerboard scoreが高くなります。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_OC_TOPOLOGY",
+          "profile_id": "PROFILE_OC_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_OC"
+        },
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_MMA",
+          "profile_id": "PROFILE_MMA_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_MMA"
+        },
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SIMP_TOPOLOGY",
+          "profile_id": "PROFILE_SIMP_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_NO_FILTER"
+        }
+      ],
+      "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "title_en": "Read a cantilever design field as it evolves",
+      "title_ja": "片持ちはりの設計fieldを更新過程で読む"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "TopologyFieldEvolution",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "density_field",
+          "displacement_field",
+          "strain_energy_field",
+          "sensitivity_raw",
+          "sensitivity_filtered",
+          "volume_fraction",
+          "compliance",
+          "gray_fraction",
+          "checkerboard_score"
+        ],
+        "payload_bytes": 130843,
+        "payload_path": "visualizations/topology-optimization-field-evolution.json",
+        "payload_sha256": "2fa8567d1178b09eaf158945eaed4a387120cf47de10ead183070256d1ad5f95",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "field_evolution"
+      },
+      "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.0",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0.5
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_TOPOLOGY_CANTILEVER_8X4",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "max_iterations": 12,
+          "volume_tolerance": 0.001
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Failure contrast with a checkerboard artifact",
+          "ja": "checkerboard artifactを含む失敗contrast"
+        },
+        "expected_phenomenon_en": "Without filtering, compliance may improve while alternating adjacent cells remain and the checkerboard score rises.",
+        "expected_phenomenon_ja": "filterを外した経路ではcomplianceが改善しても、隣接要素の交互模様が残り、checkerboard scoreが上がります。",
+        "failure_signals": [
+          {
+            "label_en": "compliance hides the artifact",
+            "label_ja": "complianceだけではartifactを見落とす",
+            "observable_ids": [
+              "compliance",
+              "checkerboard_score"
+            ],
+            "signal_id": "compliance_hides_artifact"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Show an educational field trace rather than an analytic or manufacturable reference.",
+          "note_ja": "解析解や製造可能な最終形状ではなく、教育用のfield traceを表示します。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Find a checkerboard failure that compliance alone cannot diagnose",
+          "ja": "complianceだけでは判定できないcheckerboard failureを見つける"
+        },
+        "limitations_en": "This is a deterministic educational trace on 32 elements. It does not guarantee finite-element convergence, manufacturability, topology invariance under mesh refinement, or global optimality.",
+        "limitations_ja": "これは32要素の決定的な教育用traceです。実際の有限要素法の収束、製造制約、mesh refinement後の同一topology、局所解や大域解を保証しません。",
+        "misconception": {
+          "en": "Finer density alternation always represents a better structure",
+          "ja": "密度fieldが細かく変化するほど構造を表現できている"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "density_field",
+              "volume_fraction"
+            ],
+            "title_en": "Uniform initial density",
+            "title_ja": "一様な初期密度"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "density_field",
+              "checkerboard_score"
+            ],
+            "title_en": "Alternating cells appear",
+            "title_ja": "交互模様が現れる"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "compliance",
+              "checkerboard_score"
+            ],
+            "title_en": "Separate compliance from the artifact",
+            "title_ja": "complianceとartifactを分けて読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "checkerboard_score",
+              "gray_fraction"
+            ],
+            "title_en": "Judge whether filtering is needed",
+            "title_ja": "filterの必要性を判断"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.variable-domain",
+          "concept.constraint-class"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "design density field",
+            "label_ja": "設計密度field",
+            "observable_id": "density_field"
+          },
+          {
+            "label_en": "volume fraction",
+            "label_ja": "体積率",
+            "observable_id": "volume_fraction"
+          },
+          {
+            "label_en": "compliance",
+            "label_ja": "コンプライアンス",
+            "observable_id": "compliance"
+          },
+          {
+            "label_en": "checkerboard score",
+            "label_ja": "checkerboard score",
+            "observable_id": "checkerboard_score"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_TOPOLOGY_SIMP_OC"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "gray fraction",
+            "label_ja": "gray fraction",
+            "observable_id": "gray_fraction"
+          }
+        ],
+        "static_summary": {
+          "en": "Unfiltered density updates show low compliance together with a checkerboard artifact.",
+          "ja": "filterなしの密度更新で、低いcomplianceとcheckerboard artifactが同時に現れます。"
+        },
+        "success_signals": [
+          {
+            "label_en": "the checkerboard score is visible",
+            "label_ja": "checkerboard scoreが可視化される",
+            "observable_ids": [
+              "density_field",
+              "checkerboard_score"
+            ],
+            "signal_id": "artifact_is_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "The unfiltered path preserves volume but develops alternation, so compliance alone is insufficient.",
+          "ja": "filterなしの経路は体積率を保つ一方、交互模様が増え、complianceだけでは良し悪しを決められません。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_OC_TOPOLOGY",
+          "profile_id": "PROFILE_OC_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_OC"
+        },
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_MMA",
+          "profile_id": "PROFILE_MMA_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_MMA"
+        },
+        {
+          "artifact_id": "topology-optimization-field-evolution",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SIMP_TOPOLOGY",
+          "profile_id": "PROFILE_SIMP_TOPOLOGY_FIELD",
+          "run_id": "RUN_TOPOLOGY_NO_FILTER"
+        }
+      ],
+      "scenario_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "title_en": "Find the checkerboard failure without filtering",
+      "title_ja": "filterなしのcheckerboard failureを見つける"
     }
   ]
 }

@@ -1092,8 +1092,135 @@
       "title_en": "Compare search completion with a node-stop limit",
       "title_ja": "探索完了とnode予算停止を同じ上限で比べる",
       "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_TOPOLOGY_EDUCATIONAL_12",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 12
+      },
+      "canonical_comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
+      "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
+      "case_id": "topology-cantilever",
+      "caveat": "教育用field traceは実装内部のOC・MMAや実FEM solverのwall-clock性能を再現せず、complianceの小ささだけで設計品質を順位付けできません。",
+      "changed_factors": [
+        "density update rule: Optimality Criteria versus Method of Moving Asymptotes"
+      ],
+      "comparability": "comparable_with_caveat",
+      "comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
+      "comparison_question": "同じ片持ちはり、初期密度、体積率、反復予算で、OCとMMAの更新則はdensity fieldと指標にどう現れる？",
+      "fairness_note": "同じ問題instance、初期density、volume target、filter・projection preset、generator、12回の評価予算で更新則だけを変えます。",
+      "fixed_factors": [
+        "8×4 density field",
+        "initial density 0.5",
+        "volume fraction target 0.5",
+        "SIMP penalization 3",
+        "filter radius 1.5",
+        "projection beta 8",
+        "oracle evaluation budget 12"
+      ],
+      "formulation_summary": "min c(ρ)=Fᵀu subject to K(ρ)u=F, mean(ρ)≤0.5, 0.001≤ρₑ≤1。",
+      "identity_status": "canonical",
+      "journey_id": "topology-cantilever",
+      "last_verified": "2026-07-18",
+      "limitations": [
+        "32要素の決定的な教育用比較です。",
+        "実FEMの収束、mesh依存性、製造制約、座屈・強度、wall-clock、memoryは比較しません。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "topology-optimization-field-evolution",
+            "artifact_kind": "executable_trace",
+            "payload_path": "visualizations/topology-optimization-field-evolution.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "field_evolution"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 12
+          },
+          "label_en": "Optimality Criteria",
+          "label_ja": "Optimality Criteria",
+          "member_id": "topology-oc",
+          "method_id": "M_OC_TOPOLOGY",
+          "parameters": {
+            "move_limit": 0.2,
+            "update_rule": "oc"
+          },
+          "role": "optimality_criteria",
+          "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC"
+        },
+        {
+          "artifact": {
+            "artifact_id": "topology-optimization-field-evolution",
+            "artifact_kind": "executable_trace",
+            "payload_path": "visualizations/topology-optimization-field-evolution.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "field_evolution"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 12
+          },
+          "label_en": "Method of Moving Asymptotes",
+          "label_ja": "MMA",
+          "member_id": "topology-mma",
+          "method_id": "M_MMA",
+          "parameters": {
+            "move_limit": 0.2,
+            "update_rule": "mma"
+          },
+          "role": "moving_asymptotes",
+          "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "minimize",
+          "label_ja": "compliance",
+          "metric_id": "compliance",
+          "unit": "objective value"
+        },
+        {
+          "direction": "target",
+          "label_ja": "体積率",
+          "metric_id": "volume_fraction",
+          "unit": "fraction"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "gray fraction",
+          "metric_id": "gray_fraction",
+          "unit": "fraction"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "checkerboard score",
+          "metric_id": "checkerboard_score",
+          "unit": "artifact score"
+        }
+      ],
+      "mode": "method_contrast",
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "ranking_eligible": true,
+      "seed_policy": "deterministic educational generator; seed not applicable",
+      "source_ids": [
+        "S097",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "stopping_policy": "12 iteration budget or volume tolerance 0.001; no post-run tuning",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "同じ制約でも更新則が変わると、fieldの境界、gray fraction、checkerboard scoreの現れ方が変わります。",
+      "title_en": "Compare OC and MMA on the same density field",
+      "title_ja": "同じ密度fieldでOCとMMAを比べる",
+      "tuning_policy": "同じ固定presetを使い、run後にparameterを調整しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.17.0"
+  "dataset_version": "0.18.0"
 }
