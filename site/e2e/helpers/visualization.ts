@@ -54,7 +54,7 @@ export async function expectGradientComparisonSvg(page: Page, evaluation: number
   }
 
   const history = page.getByRole("img", {
-    name: "3手法の目的関数値を同じoracle evaluation軸で比較",
+    name: "3件のmemberの目的関数値を同じoracle evaluation軸で比較",
   });
   await expect(history).toBeVisible();
   await expect(history.locator(".history-series")).toHaveCount(3);

@@ -98,7 +98,7 @@ test("Gallery caseからMap、Diagnose、method pageへ遷移する", async ({ p
 test("canonical Gallery caseで候補・条件付き・除外理由を区別できる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC013");
 
-  await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形モデルのパラメータを推定する" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "候補・条件付き・除外を理由で分ける" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "候補" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: "条件付き" })).toBeVisible();
@@ -293,9 +293,9 @@ test("parameter推定CaseをTRF、初期値感度、条件比較からCaseへ完
   await expect(page.getByRole("heading", { level: 2, name: "Metric history" })).toBeVisible();
   await expect(page.getByRole("img", { name: /oracle evaluationで比較/u })).toHaveCount(3);
   await expect(page.getByText(/3本とも1つのsolver非依存診断probe/u)).toBeVisible();
-  await page.getByRole("link", { name: /Case: 観測データから非線形model parameterを推定する/u }).click();
+  await page.getByRole("link", { name: /Case: 観測データから非線形モデルのパラメータを推定する/u }).click();
   await expect(page).toHaveURL(/#\/gallery\/EC013\?state=/u);
-  await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形model parameterを推定する" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "観測データから非線形モデルのパラメータを推定する" })).toBeVisible();
 });
 
 test("高価なblack-box CaseをBO Theater、noise感度、CompareからCaseへ完走できる", async ({ page, baseURL }) => {

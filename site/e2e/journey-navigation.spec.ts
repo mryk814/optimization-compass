@@ -35,7 +35,7 @@ test("Case→Theater→Compare→Caseで共有可能なjourney文脈を保つ", 
 
   await journey.getByRole("link", { name: "Case", exact: true }).click();
   await expect(page).toHaveURL(/#\/gallery\/EC017\?state=/u);
-  await expect(page.getByRole("heading", { name: "costと性能のPareto trade-offを探索する" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "コストと性能のパレートトレードオフを探索する" })).toBeVisible();
   await expect(journey).toContainText("Step 1/4");
 });
 
