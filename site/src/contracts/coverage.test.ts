@@ -8,8 +8,8 @@ describe("CoverageReport parser", () => {
     expect(Object.keys(report.summary.status_counts)).toEqual([
       "available", "partial", "missing", "not_applicable",
     ]);
-    expect(report.subjects).toHaveLength(165);
-    expect(report.priorities).toHaveLength(5);
+    expect(report.subjects).toHaveLength(171);
+    expect(report.priorities).toHaveLength(6);
   });
 
   test("rejects unknown fields and implicit baselines", () => {

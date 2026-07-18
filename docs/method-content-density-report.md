@@ -1,7 +1,7 @@
 # Method content density report
 
-- Published method guides: `101`
-- Meeting the Level 2 floor: `101`
+- Published method guides: `106`
+- Meeting the Level 2 floor: `106`
 - Below the floor: `0`
 
 | Content | Method | Summary | Body | TOC | Python | Result |
@@ -10,6 +10,7 @@
 | `active-set-qp` | `M_ACTIVE_SET_QP` | 80 | 4492 | 8 | 1 | pass |
 | `adam` | `M_ADAM` | 127 | 3001 | 9 | 1 | pass |
 | `adamw` | `M_ADAMW` | 122 | 2926 | 9 | 1 | pass |
+| `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 69 | 1615 | 7 | 1 | pass |
 | `admm` | `M_ADMM` | 51 | 2309 | 9 | 1 | pass |
 | `admm-qp` | `M_ADMM_QP` | 83 | 3140 | 9 | 1 | pass |
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 73 | 2563 | 7 | 1 | pass |
@@ -28,6 +29,7 @@
 | `coordinate-descent` | `M_COORDINATE_DESCENT` | 54 | 2865 | 8 | 1 | pass |
 | `cp-sat` | `M_CP_SAT` | 80 | 3185 | 10 | 1 | pass |
 | `cp-search` | `M_CP_SEARCH` | 66 | 3057 | 8 | 1 | pass |
+| `density-filter` | `M_DENSITY_FILTER` | 76 | 1415 | 5 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 70 | 1703 | 6 | 1 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 69 | 2414 | 8 | 1 | pass |
 | `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4406 | 8 | 1 | pass |
@@ -68,6 +70,7 @@
 | `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 3098 | 10 | 1 | pass |
 | `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 2552 | 9 | 1 | pass |
 | `mirror-descent` | `M_MIRROR_DESCENT` | 92 | 2835 | 9 | 1 | pass |
+| `mma` | `M_MMA` | 63 | 1250 | 5 | 1 | pass |
 | `moead` | `M_MOEA_D` | 80 | 2772 | 8 | 1 | pass |
 | `momentum-sgd` | `M_MOMENTUM_SGD` | 53 | 2889 | 8 | 1 | pass |
 | `multi-objective` | `M_NSGA_II` | 76 | 3935 | 11 | 1 | pass |
@@ -78,6 +81,7 @@
 | `newton-method` | `M_NEWTON` | 42 | 2359 | 9 | 1 | pass |
 | `nonlinear-cg` | `M_NLCG` | 57 | 2257 | 9 | 1 | pass |
 | `nsga-iii` | `M_NSGA_III` | 89 | 2731 | 8 | 1 | pass |
+| `optimality-criteria-topology` | `M_OC_TOPOLOGY` | 87 | 1515 | 6 | 1 | pass |
 | `outer-approximation-minlp` | `M_OUTER_APPROX_MINLP` | 67 | 3181 | 8 | 1 | pass |
 | `particle-swarm` | `M_PARTICLE_SWARM` | 56 | 2276 | 6 | 1 | pass |
 | `pattern-search` | `M_PATTERN_SEARCH` | 65 | 1995 | 6 | 1 | pass |
@@ -93,6 +97,7 @@
 | `riemannian-trust-region` | `M_RIEMANNIAN_TRUST_REGION` | 68 | 3047 | 10 | 1 | pass |
 | `sgd` | `M_SGD` | 65 | 4065 | 8 | 1 | pass |
 | `shgo` | `M_SHGO` | 102 | 2016 | 7 | 1 | pass |
+| `simp-topology` | `M_SIMP_TOPOLOGY` | 71 | 1450 | 6 | 1 | pass |
 | `simulated-annealing` | `M_SIMULATED_ANNEALING` | 60 | 3210 | 9 | 1 | pass |
 | `slsqp` | `M_SLSQP` | 68 | 2774 | 8 | 1 | pass |
 | `smac` | `M_SMAC_RF` | 193 | 3154 | 7 | 1 | pass |
@@ -104,7 +109,7 @@
 | `trust-exact` | `M_TRUST_EXACT` | 66 | 3501 | 9 | 1 | pass |
 | `trust-krylov` | `M_TRUST_KRYLOV` | 77 | 2501 | 9 | 1 | pass |
 | `trust-region-newton-cg` | `M_TRUST_NCG` | 49 | 2361 | 8 | 1 | pass |
-| `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 77 | 4305 | 12 | 1 | pass |
+| `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 77 | 4563 | 14 | 1 | pass |
 | `turbo-saasbo` | `M_TURBO_SAASBO` | 173 | 3721 | 7 | 1 | pass |
 | `weighted-sum` | `M_WEIGHTED_SUM` | 62 | 2629 | 7 | 1 | pass |
 

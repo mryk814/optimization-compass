@@ -68,6 +68,7 @@ DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflec
 DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION = (
     ROOT / "data/migrations/012_typed_default_method_claims.sql"
 )
+DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION = ROOT / "data/migrations/013_topology_optimization.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -277,6 +278,7 @@ def build_staged_release(
             DEFAULT_LEARNING_GRAPH_MIGRATION,
             DEFAULT_TRF_DEFAULTS_MIGRATION,
             DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION,
+            DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION,
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -1308,6 +1310,9 @@ def _apply_atlas_metadata(
         connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))
         connection.executescript(DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
+        connection.executescript(
+            DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION.read_text(encoding="utf-8")
+        )
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)

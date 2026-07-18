@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -53,7 +53,7 @@
       "intents": [],
       "query": "CP-SAT 論理制約",
       "query_id": "mixed-cp-sat",
-      "result_count": 41,
+      "result_count": 46,
       "top_document_ids": [
         "method:M_CP_SAT",
         "method:MF_CONSTRAINT_PROGRAMMING",
@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 55,
+      "result_count": 56,
       "top_document_ids": [
         "case:hyperparameter-search",
         "method:MF_STOCHASTIC_ML",
@@ -111,7 +111,7 @@
       "intents": [],
       "query": "制約違反しない連続最適化",
       "query_id": "constrained-continuous",
-      "result_count": 56,
+      "result_count": 62,
       "top_document_ids": [
         "method:MF_SMOOTH_LOCAL",
         "method:MF_CONSTRAINED_NLP",
@@ -185,7 +185,7 @@
       "intents": [],
       "query": "SciPy Optimization documentation",
       "query_id": "evidence-source",
-      "result_count": 64,
+      "result_count": 69,
       "top_document_ids": [
         "source:S001",
         "source:S082",

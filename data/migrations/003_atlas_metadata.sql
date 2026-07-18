@@ -25,7 +25,7 @@ CREATE TABLE view_presets (
 CREATE TABLE method_visualization_profiles (
   profile_id TEXT NOT NULL PRIMARY KEY CHECK (trim(profile_id) <> ''),
   method_id TEXT NOT NULL,
-  family TEXT NOT NULL CHECK (family IN ('simplex_2d', 'first_order_trajectory_2d', 'feasible_region', 'pareto_front')),
+  family TEXT NOT NULL CHECK (family IN ('simplex_2d', 'first_order_trajectory_2d', 'feasible_region', 'pareto_front', 'field_evolution')),
   support_status TEXT NOT NULL CHECK (support_status IN ('supported', 'unsupported', 'unknown', 'not_applicable')),
   min_dimension INTEGER NOT NULL CHECK (min_dimension >= 1),
   max_dimension INTEGER NOT NULL CHECK (max_dimension >= min_dimension),

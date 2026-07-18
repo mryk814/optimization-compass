@@ -472,6 +472,110 @@
       "tuning_policy": "documented defaults; no per-instance winner tuning"
     },
     {
+      "category": "NLP",
+      "context_id": "BENCH_TOPOLOGY_EDUCATIONAL_12",
+      "context_version": "1.0.0",
+      "dimension": 32,
+      "evaluation_budget": 12,
+      "hardware": {
+        "hardware": "educational",
+        "os": "platform-neutral",
+        "precision": "float64"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.topology_optimization.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5
+        ],
+        "policy": "fixed_density_field"
+      },
+      "last_verified": "2026-07-18",
+      "oracle_budget": {
+        "limit": 12,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "compliance",
+        "volume_fraction",
+        "gray_fraction",
+        "checkerboard_score"
+      ],
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "problem_variant": "deterministic_density_field_teaching_trace",
+      "ranking_eligibility": {
+        "ranking_eligible": true,
+        "reason": "context_complete"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.topology_optimization.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "sparsity": {
+        "field_grid": "8x4",
+        "state_solve": "sparse_reference"
+      },
+      "status_mapping": {
+        "feasibility": "discretized_volume_only",
+        "terminal_status": "teaching_trace"
+      },
+      "stopping": {
+        "policy": "fixed_oracle_budget",
+        "value": 12
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "state_residual": "teaching_reference",
+        "volume_fraction": 0.5
+      },
+      "tuning_policy": "fixed educational presets; no post-run tuning"
+    },
+    {
       "category": "QP",
       "context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
       "context_version": "1.0.0",
@@ -614,7 +718,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

@@ -9,6 +9,9 @@ from optimization_compass.learning_slices import (
     PARETO_ARTIFACT_ID,
     PARETO_PREFERENCE_SCENARIO_ID,
     PARETO_SCENARIO_ID,
+    TOPOLOGY_ARTIFACT_ID,
+    TOPOLOGY_FAILURE_SCENARIO_ID,
+    TOPOLOGY_SCENARIO_ID,
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
     validate_reference_geometry,
@@ -58,14 +61,18 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         CONSTRAINED_SCENARIO_ID,
         PARETO_PREFERENCE_SCENARIO_ID,
         PARETO_SCENARIO_ID,
+        TOPOLOGY_SCENARIO_ID,
+        TOPOLOGY_FAILURE_SCENARIO_ID,
     }
     assert {scenario.artifact.renderer_family for scenario in scenarios} == {
         "feasible_region",
         "pareto_front",
+        "field_evolution",
     }
     assert {link.artifact_id for link in links} == {
         CONSTRAINED_ARTIFACT_ID,
         PARETO_ARTIFACT_ID,
+        TOPOLOGY_ARTIFACT_ID,
     }
     for scenario in scenarios:
         payload = tmp_path / scenario.artifact.payload_path

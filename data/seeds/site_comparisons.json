@@ -575,5 +575,67 @@
         }
       ]
     }
+    ,{
+      "comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
+      "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
+      "aliases": [],
+      "mode": "method_contrast",
+      "journey_id": "topology-cantilever",
+      "case_id": "topology-cantilever",
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "benchmark_context_id": "BENCH_TOPOLOGY_EDUCATIONAL_12",
+      "title_ja": "同じ密度fieldでOCとMMAを比べる",
+      "title_en": "Compare OC and MMA on the same density field",
+      "comparison_question": "同じ片持ちはり、初期密度、体積率、反復予算で、OCとMMAの更新則はdensity fieldと指標にどう現れる？",
+      "formulation_summary": "min c(ρ)=Fᵀu subject to K(ρ)u=F, mean(ρ)≤0.5, 0.001≤ρₑ≤1。",
+      "fixed_factors": ["8×4 density field", "initial density 0.5", "volume fraction target 0.5", "SIMP penalization 3", "filter radius 1.5", "projection beta 8", "oracle evaluation budget 12"],
+      "changed_factors": ["density update rule: Optimality Criteria versus Method of Moving Asymptotes"],
+      "seed_policy": "deterministic educational generator; seed not applicable",
+      "budget": {"metric": "oracle_evaluations", "value": 12},
+      "stopping_policy": "12 iteration budget or volume tolerance 0.001; no post-run tuning",
+      "tuning_policy": "同じ固定presetを使い、run後にparameterを調整しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "compliance", "label_ja": "compliance", "direction": "minimize", "unit": "objective value"},
+        {"metric_id": "volume_fraction", "label_ja": "体積率", "direction": "target", "unit": "fraction"},
+        {"metric_id": "gray_fraction", "label_ja": "gray fraction", "direction": "minimize", "unit": "fraction"},
+        {"metric_id": "checkerboard_score", "label_ja": "checkerboard score", "direction": "minimize", "unit": "artifact score"}
+      ],
+      "comparability": "comparable_with_caveat",
+      "ranking_eligible": true,
+      "fairness_note": "同じ問題instance、初期density、volume target、filter・projection preset、generator、12回の評価予算で更新則だけを変えます。",
+      "caveat": "教育用field traceは実装内部のOC・MMAや実FEM solverのwall-clock性能を再現せず、complianceの小ささだけで設計品質を順位付けできません。",
+      "takeaway": "同じ制約でも更新則が変わると、fieldの境界、gray fraction、checkerboard scoreの現れ方が変わります。",
+      "limitations": ["32要素の決定的な教育用比較です。", "実FEMの収束、mesh依存性、製造制約、座屈・強度、wall-clock、memoryは比較しません。"],
+      "source_ids": ["S097", "S099", "S100", "S101"],
+      "last_verified": "2026-07-18",
+      "members": [
+        {
+          "member_id": "topology-oc",
+          "role": "optimality_criteria",
+          "method_id": "M_OC_TOPOLOGY",
+          "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "label_ja": "Optimality Criteria",
+          "label_en": "Optimality Criteria",
+          "parameters": {"update_rule": "oc", "move_limit": 0.2},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "topology-optimization-field-evolution", "artifact_kind": "executable_trace", "renderer_family": "field_evolution", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/topology-optimization-field-evolution.json"}
+        },
+        {
+          "member_id": "topology-mma",
+          "role": "moving_asymptotes",
+          "method_id": "M_MMA",
+          "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "label_ja": "MMA",
+          "label_en": "Method of Moving Asymptotes",
+          "parameters": {"update_rule": "mma", "move_limit": 0.2},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "topology-optimization-field-evolution", "artifact_kind": "executable_trace", "renderer_family": "field_evolution", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/topology-optimization-field-evolution.json"}
+        }
+      ]
+    }
   ]
 }

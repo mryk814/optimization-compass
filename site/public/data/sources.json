@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -60399,6 +60399,156 @@
       "source_type": "original_paper",
       "supported_claim": "Subspace, interior, reflected-direction trust-region method for large-scale bound-constrained problems",
       "title": "A Subspace, Interior, and Conjugate Gradient Method for Large-Scale Bound-Constrained Minimization Problems"
+    },
+    {
+      "access_note": "Original paper for the compact educational compliance topology-optimization loop.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_topology-optimization-field-evolution_S097",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "構造トポロジー最適化: field evolution",
+          "last_verified": "2026-07-15",
+          "supported_field": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
+        }
+      ],
+      "last_verified": "2026-07-18",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1007/s001580050176",
+      "publication_date": "2001-04-01",
+      "publisher": "Ole Sigmund",
+      "source_id": "S097",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "Educational density-based compliance topology optimization with finite elements, sensitivity filtering, and an Optimality Criteria update.",
+      "title": "A 99 line topology optimization code written in MATLAB"
+    },
+    {
+      "access_note": "Official TopOpt educational page; the downloadable code is not copied into this repository.",
+      "currentness_status": "verified_current",
+      "evidence_targets": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_topology-optimization-field-evolution_S098",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "構造トポロジー最適化: field evolution",
+          "last_verified": "2026-07-15",
+          "supported_field": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
+        }
+      ],
+      "last_verified": "2026-07-18",
+      "license": "unknown",
+      "official_url": "https://www.topopt.mek.dtu.dk/apps-and-software/a-99-line-topology-optimization-code-written-in-matlab",
+      "publication_date": "None",
+      "publisher": "Technical University of Denmark TopOpt",
+      "source_id": "S098",
+      "source_quality": "primary",
+      "source_type": "official_documentation",
+      "supported_claim": "Maintainer-hosted educational implementation and scope of the 99-line compliance example.",
+      "title": "A 99 line topology optimization code written in MATLAB"
+    },
+    {
+      "access_note": "Official TopOpt page describing the 88-line code and filtering extensions.",
+      "currentness_status": "verified_current",
+      "evidence_targets": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_topology-optimization-field-evolution_S099",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "構造トポロジー最適化: field evolution",
+          "last_verified": "2026-07-15",
+          "supported_field": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
+        }
+      ],
+      "last_verified": "2026-07-18",
+      "license": "unknown",
+      "official_url": "https://www.topopt.mek.dtu.dk/apps-and-software/efficient-topology-optimization-in-matlab",
+      "publication_date": "None",
+      "publisher": "Technical University of Denmark TopOpt",
+      "source_id": "S099",
+      "source_quality": "primary",
+      "source_type": "official_documentation",
+      "supported_claim": "Density filtering, projection filtering, and the educational top88/top110 family.",
+      "title": "Efficient topology optimization in MATLAB"
+    },
+    {
+      "access_note": "Original MMA paper.",
+      "currentness_status": "historical_primary",
+      "evidence_targets": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_topology-optimization-field-evolution_S100",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "構造トポロジー最適化: field evolution",
+          "last_verified": "2026-07-15",
+          "supported_field": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
+        }
+      ],
+      "last_verified": "2026-07-18",
+      "license": "unknown",
+      "official_url": "https://doi.org/10.1002/nme.1620240207",
+      "publication_date": "1987-02-01",
+      "publisher": "Krister Svanberg",
+      "source_id": "S100",
+      "source_quality": "primary",
+      "source_type": "original_paper",
+      "supported_claim": "MMA uses strictly convex approximating subproblems controlled by moving asymptotes.",
+      "title": "The method of moving asymptotes—a new method for structural optimization"
+    },
+    {
+      "access_note": "Official project documentation used for the state/adjoint explanation.",
+      "currentness_status": "verified_current",
+      "evidence_targets": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_topology-optimization-field-evolution_S101",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "構造トポロジー最適化: field evolution",
+          "last_verified": "2026-07-15",
+          "supported_field": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
+        }
+      ],
+      "last_verified": "2026-07-18",
+      "license": "unknown",
+      "official_url": "https://www.dolfin-adjoint.org/en/latest/documentation/maths/",
+      "publication_date": "None",
+      "publisher": "dolfin-adjoint project",
+      "source_id": "S101",
+      "source_quality": "primary",
+      "source_type": "official_documentation",
+      "supported_claim": "Adjoint equations and reduced sensitivities for PDE-constrained optimization.",
+      "title": "Mathematical background: adjoints and their applications"
     }
   ]
 }

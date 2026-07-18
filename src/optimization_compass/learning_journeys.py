@@ -1013,7 +1013,7 @@ def _scenario_route(scenario: VisualizationScenario) -> str:
         return f"/theater/bayesian-optimization/{scenario.scenario_id}"
     if renderer == "simplex_geometry":
         return "/theater/nelder-mead"
-    if renderer in {"feasible_region", "pareto_front"}:
+    if renderer in {"feasible_region", "pareto_front", "field_evolution"}:
         return f"/theater/learning/{scenario.scenario_id}"
     return f"/traces/{artifact_id}"
 

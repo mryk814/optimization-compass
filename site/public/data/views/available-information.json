@@ -1,6 +1,6 @@
 {
   "axis": "available_information",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "description": "目的値・微分・ノイズ・評価費など、solverが利用できる情報を見渡す。",
   "edges": [
     {

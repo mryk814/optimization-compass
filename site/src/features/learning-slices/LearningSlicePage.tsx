@@ -68,7 +68,7 @@ async function loadScenario(scenarioId: string, signal: AbortSignal) {
   if (!indexResponse.ok) throw new Error(`Visualization scenarios request failed (${indexResponse.status}).`);
   const index = parseVisualizationScenarioIndex(await indexResponse.json());
   const scenario = index.scenarios.find((candidate) => candidate.scenario_id === scenarioId);
-  if (!scenario || (scenario.artifact.renderer_family !== "feasible_region" && scenario.artifact.renderer_family !== "pareto_front")) return undefined;
+  if (!scenario || (scenario.artifact.renderer_family !== "feasible_region" && scenario.artifact.renderer_family !== "pareto_front" && scenario.artifact.renderer_family !== "field_evolution")) return undefined;
   const payloadResponse = await fetch(`${siteBaseUrl()}data/${scenario.artifact.payload_path}`, { signal });
   if (!payloadResponse.ok) throw new Error(`Visualization payload request failed (${payloadResponse.status}).`);
   const artifact = parseLearningSliceArtifact(await payloadResponse.json());

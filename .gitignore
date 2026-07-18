@@ -14,6 +14,7 @@ site/playwright-report/
 site/test-results/
 *.tsbuildinfo
 build/
+.release-stage*/
 *.egg-info/
 .DS_Store
 .env

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "definitions": [
     {
       "available_oracles": [
@@ -331,6 +331,47 @@
         "S063"
       ],
       "variable_domain": "continuous"
+    },
+    {
+      "available_oracles": [
+        "objective_value",
+        "gradient",
+        "constraint_value",
+        "constraint_jacobian"
+      ],
+      "constraint_class": "integral_volume_fraction",
+      "dimensionality_policy": {
+        "dimension": 32,
+        "kind": "fixed"
+      },
+      "feature_ids": [
+        "F_VARIABLE_FUNCTION",
+        "F_OBJECTIVE_SIMULATION",
+        "F_CONSTRAINT_PDE",
+        "F_CONSTRAINT_LINEAR_INEQUALITY",
+        "F_DERIVATIVE_ANALYTIC_GRADIENT",
+        "F_DERIVATIVE_INNER_ITERATION",
+        "F_STRUCTURE_PDE_CONSTRAINED",
+        "F_GUARANTEE_LOCAL_OK"
+      ],
+      "known_reference_semantics": "The educational instance has no exact global reference; the rendered fields are deterministic teaching outputs on a discretized model.",
+      "last_verified": "2026-07-18",
+      "mathematical_family": "topology_optimization",
+      "name_en": "Structural topology optimization",
+      "name_ja": "構造トポロジー最適化",
+      "objective_direction": "minimize",
+      "objective_form": "simulation",
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "related_problem_ids": [
+        "PA045"
+      ],
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S101"
+      ],
+      "variable_domain": "field"
     }
   ],
   "instances": [
@@ -1158,6 +1199,94 @@
       "seed_value": null,
       "source_ids": [
         "S056"
+      ]
+    },
+    {
+      "bounds": {
+        "density": [
+          0.001,
+          1.0
+        ]
+      },
+      "constraints": [
+        {
+          "constraint_id": "volume_fraction",
+          "expression": "mean(ρ) ≤ 0.5",
+          "rhs": 0.5,
+          "sense": "lte"
+        }
+      ],
+      "dimension": 32,
+      "display": {
+        "axis_labels": [
+          "element x",
+          "element y",
+          "density/compliance"
+        ],
+        "expression": "min c(ρ)=Fᵀu, K(ρ)u=F, Eₑ=Emin+ρₑᵖ(E₀−Emin), mean(ρ)≤0.5",
+        "range": {
+          "compliance": [
+            0.0,
+            80.0
+          ],
+          "density": [
+            0.0,
+            1.0
+          ]
+        },
+        "units": [
+          "element",
+          "element",
+          "normalized"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "uniform_half",
+          "density": 0.5
+        }
+      ],
+      "intended_phenomena": [
+        "field_valued_design",
+        "state_solve",
+        "adjoint_sensitivity",
+        "density_filter",
+        "optimality_criteria",
+        "gray_density",
+        "checkerboard",
+        "mesh_dependence"
+      ],
+      "known_reference": null,
+      "known_reference_status": "not_meaningful",
+      "last_verified": "2026-07-18",
+      "limitations_en": "A deterministic 8x4 educational instance for following the FEM state equation, filtering, projection, and OC/MMA roles; it does not establish real-design strength, buckling, manufacturability, continuous-model guarantees, or general performance.",
+      "limitations_ja": "8×4要素の決定的な教育用instanceです。FEM方程式、filter、projection、OC/MMAの役割を追うためのreferenceであり、実設計の強度・座屈・製造性・連続体の保証や一般性能を示しません。",
+      "name_en": "Cantilever minimum-compliance topology optimization",
+      "name_ja": "片持ちはりの最小compliance",
+      "parameters": {
+        "filter_radius": 1.5,
+        "grid": {
+          "columns": 8,
+          "rows": 4
+        },
+        "minimum_modulus": 0.001,
+        "penalization": 3.0,
+        "projection_beta": 8.0,
+        "reference_generator": "educational.topology_optimization.v1",
+        "volume_fraction": 0.5,
+        "youngs_modulus": 1.0
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "registry_key": "problem.topology.cantilever.v1",
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
       ]
     },
     {

@@ -2,7 +2,7 @@
   "artifact_id": "binary-knapsack-bnb-complete",
   "artifact_kind": "executable_trace",
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "renderer_contract_version": "1.0.0",
   "renderer_family": "search_tree",
   "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
@@ -15,7 +15,7 @@
   "trace": {
     "contract_version": "1.0.0",
     "data_version": "1.0.0",
-    "dataset_version": "0.17.0",
+    "dataset_version": "0.18.4",
     "environment": {
       "runtime": "deterministic_educational_generator",
       "version": "1.1.0"

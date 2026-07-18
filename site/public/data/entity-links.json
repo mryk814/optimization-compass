@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "entities": [
     {
       "aliases": [],
@@ -1140,6 +1140,137 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/topology-cantilever",
+      "entity_id": "topology-cantilever",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "片持ちはりの材料配置を軽くする",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_DENSITY_FILTER",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MMA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:analytic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA045",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_METHOD_MECHANISM",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
       "entity_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
       "entity_type": "comparison",
@@ -1703,6 +1834,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
+      "entity_id": "COMPARE_TOPOLOGY_OC_MMA",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_TOPOLOGY_OC_MMA",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_MMA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "active-set",
       "entity_type": "content",
@@ -1919,6 +2111,57 @@
         }
       ],
       "summary": "Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離し、勾配（gradient）による更新とパラメータを縮める正則化（regularization）を別の操作として扱う学習optimizerです。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "adjoint-sensitivity",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "adjoint sensitivity",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "adjoint sensitivityは、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加solveで計算する方法です。"
     },
     {
       "aliases": [],
@@ -3348,6 +3591,57 @@
         }
       ],
       "summary": "有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "density-filter",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "density filter",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_DENSITY_FILTER",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。"
     },
     {
       "aliases": [],
@@ -5407,6 +5701,57 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "mma",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "MMA",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_MMA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "MMAは、非線形最適化を変数ごとの凸な近似問題へ分解し、moving asymptotesで更新幅を制御する逐次近似手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "moead",
       "entity_type": "content",
       "external_url": null,
@@ -5838,6 +6183,67 @@
         }
       ],
       "summary": "多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "optimality-criteria-topology",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "トポロジー最適化のOptimality Criteria",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mma",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "Optimality Criteriaは、密度感度と体積率制約から要素密度を乗法的に更新し、minimum-complianceの設計fieldを効率よく改善する更新則です。"
     },
     {
       "aliases": [],
@@ -6597,6 +7003,67 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "simp-topology",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SIMP密度法",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "explains",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mma",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "SIMP密度法は、要素密度を連続変数にして剛性を密度のべき乗で補間し、体積率制約のもとでcomplianceを下げるトポロジー最適化手法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "simulated-annealing",
       "entity_type": "content",
       "external_url": null,
@@ -6920,6 +7387,72 @@
         }
       ],
       "summary": "凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/topology-optimization",
+      "entity_id": "topology-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "トポロジー最適化",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "トポロジー最適化は、設計領域内の材料分布を変数にして、状態方程式と体積制約のもとで剛性やcomplianceを改善する設計問題です。"
     },
     {
       "aliases": [],
@@ -13911,6 +14444,122 @@
       "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
     },
     {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "topology-cantilever",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "片持ちはりの材料配置を軽くする",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_DENSITY_FILTER",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MMA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mma",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA045",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+    },
+    {
       "aliases": [
         "/learn/family.composite-convex"
       ],
@@ -14572,6 +15221,37 @@
       "summary": "評価履歴からsurrogateと不確実性または順位modelを構築し、次の評価点やresource配分を選ぶ手法群。"
     },
     {
+      "aliases": [],
+      "canonical_url": "/methods/MF_TOPOLOGY_OPTIMIZATION",
+      "entity_id": "MF_TOPOLOGY_OPTIMIZATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "構造トポロジー最適化",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        }
+      ],
+      "summary": "材料の分布や形状を設計変数にし、状態方程式を解きながら性能と体積などの制約を調整する手法群。"
+    },
+    {
       "aliases": [
         "/learn/family.trust-region"
       ],
@@ -14865,6 +15545,39 @@
         }
       ],
       "summary": "weight decayをadaptive gradient updateから分離。"
+    },
+    {
+      "aliases": [
+        "/learn/adjoint-sensitivity"
+      ],
+      "canonical_url": "/methods/M_ADJOINT_SENSITIVITY",
+      "entity_id": "M_ADJOINT_SENSITIVITY",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "adjoint感度解析",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "状態方程式のadjointを解き、設計変数ごとの目的感度を少ない追加state solveで計算する方法。"
     },
     {
       "aliases": [
@@ -15367,6 +16080,11 @@
         {
           "relation_type": "case",
           "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
           "target_type": "case"
         },
         {
@@ -16011,6 +16729,49 @@
         }
       ],
       "summary": "global constraint propagationとbranchingで有限domainを探索。"
+    },
+    {
+      "aliases": [
+        "/learn/density-filter"
+      ],
+      "canonical_url": "/methods/M_DENSITY_FILTER",
+      "entity_id": "M_DENSITY_FILTER",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "密度・感度filter",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "近傍要素の密度または感度を平滑化し、checkerboardと過度に細かい構造を抑える正則化手法。"
     },
     {
       "aliases": [
@@ -17150,6 +17911,44 @@
     },
     {
       "aliases": [
+        "/learn/mma"
+      ],
+      "canonical_url": "/methods/M_MMA",
+      "entity_id": "M_MMA",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "移動漸近線法",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mma",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "各反復で漸近線を動かしながらstrictly convexな近似部分問題を解く更新法。"
+    },
+    {
+      "aliases": [
         "/learn/moead"
       ],
       "canonical_url": "/methods/M_MOEA_D",
@@ -17720,6 +18519,49 @@
         }
       ],
       "summary": "reference directionでmany-objective多様性を維持。"
+    },
+    {
+      "aliases": [
+        "/learn/optimality-criteria-topology"
+      ],
+      "canonical_url": "/methods/M_OC_TOPOLOGY",
+      "entity_id": "M_OC_TOPOLOGY",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "Optimality Criteria更新",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "complianceの感度とvolume制約のKKT条件を使い、move limitと二分法で密度を更新する構造最適化向けの更新則。"
     },
     {
       "aliases": [
@@ -18690,6 +19532,54 @@
         }
       ],
       "summary": "LPのbasis間を移動し最適basisを求める。"
+    },
+    {
+      "aliases": [
+        "/learn/simp-topology"
+      ],
+      "canonical_url": "/methods/M_SIMP_TOPOLOGY",
+      "entity_id": "M_SIMP_TOPOLOGY",
+      "entity_type": "method",
+      "external_url": null,
+      "label": "SIMP密度法",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "simp-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "各有限要素の密度を連続変数として扱い、剛性を密度のべき乗で補間するdensity-based topology optimization。"
     },
     {
       "aliases": [
@@ -20022,8 +20912,18 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "topology-cantilever",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC026",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
           "target_type": "journey"
         }
       ],
@@ -21056,6 +21956,103 @@
     },
     {
       "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "filterなしのcheckerboard failureを見つける",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "complianceだけでは判定できないcheckerboard failureを見つける"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "片持ちはりの設計fieldを更新過程で読む",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "設計密度、状態field、感度、更新則を一つの反復で対応づける"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/sources/S001",
       "entity_id": "S001",
       "entity_type": "source",
@@ -22016,6 +23013,56 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/sources/S097",
+      "entity_id": "S097",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s001580050176",
+      "label": "A 99 line topology optimization code written in MATLAB",
+      "relations": [],
+      "summary": "Educational density-based compliance topology optimization with finite elements, sensitivity filtering, and an Optimality Criteria update."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S098",
+      "entity_id": "S098",
+      "entity_type": "source",
+      "external_url": "https://www.topopt.mek.dtu.dk/apps-and-software/a-99-line-topology-optimization-code-written-in-matlab",
+      "label": "A 99 line topology optimization code written in MATLAB",
+      "relations": [],
+      "summary": "Maintainer-hosted educational implementation and scope of the 99-line compliance example."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S099",
+      "entity_id": "S099",
+      "entity_type": "source",
+      "external_url": "https://www.topopt.mek.dtu.dk/apps-and-software/efficient-topology-optimization-in-matlab",
+      "label": "Efficient topology optimization in MATLAB",
+      "relations": [],
+      "summary": "Density filtering, projection filtering, and the educational top88/top110 family."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S100",
+      "entity_id": "S100",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1002/nme.1620240207",
+      "label": "The method of moving asymptotes—a new method for structural optimization",
+      "relations": [],
+      "summary": "MMA uses strictly convex approximating subproblems controlled by moving asymptotes."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S101",
+      "entity_id": "S101",
+      "entity_type": "source",
+      "external_url": "https://www.dolfin-adjoint.org/en/latest/documentation/maths/",
+      "label": "Mathematical background: adjoints and their applications",
+      "relations": [],
+      "summary": "Adjoint equations and reduced sensitivities for PDE-constrained optimization."
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
@@ -22814,6 +23861,92 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+      "entity_id": "topology-optimization-field-evolution",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "構造トポロジー最適化: field evolution",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TOPOLOGY_OC_MMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_map",
+          "target_id": "VIEW_METHOD_MECHANISM",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "related_map",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DENSITY_FILTER",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_MMA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
       "entity_type": "view",
@@ -22915,6 +24048,26 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "VIEW_METHOD_MECHANISM",
       "entity_type": "view",
       "external_url": null,
@@ -22938,6 +24091,11 @@
         {
           "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
           "target_type": "trace"
         }
       ],
@@ -22969,6 +24127,11 @@
         {
           "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
           "target_type": "trace"
         }
       ],

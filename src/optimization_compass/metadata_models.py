@@ -106,6 +106,7 @@ class VisualizationProfileSeed(MetadataModel):
         "first_order_trajectory_2d",
         "feasible_region",
         "pareto_front",
+        "field_evolution",
     ]
     support_status: SupportStatus
     min_dimension: int = Field(ge=1)

@@ -1506,10 +1506,150 @@
         "static_text_alternative"
       ],
       "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TOPOLOGY_CHECKERBOARD"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_TOPOLOGY_CANTILEVER_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/topology-cantilever",
+            "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+            "/compare/COMPARE_TOPOLOGY_OC_MMA",
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "/methods/M_BFGS",
+            "/methods/M_DENSITY_FILTER",
+            "/methods/M_MMA",
+            "/methods/M_OC_TOPOLOGY",
+            "/methods/M_SIMP_TOPOLOGY",
+            "/sources/S097",
+            "/sources/S098",
+            "/sources/S099",
+            "/sources/S100",
+            "/sources/S101"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [
+            "missing_implementation"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_ADJOINT_SENSITIVITY",
+            "M_BFGS",
+            "M_DENSITY_FILTER",
+            "M_MMA",
+            "M_OC_TOPOLOGY",
+            "M_SIMP_TOPOLOGY"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TOPOLOGY_SIMP_OC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/topology-cantilever",
+            "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+            "/compare/COMPARE_TOPOLOGY_OC_MMA",
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "/methods/M_BFGS",
+            "/methods/M_DENSITY_FILTER",
+            "/methods/M_MMA",
+            "/methods/M_OC_TOPOLOGY",
+            "/methods/M_SIMP_TOPOLOGY",
+            "/sources/S097",
+            "/sources/S098",
+            "/sources/S099",
+            "/sources/S100",
+            "/sources/S101"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S097",
+            "S098",
+            "S099",
+            "S100",
+            "S101"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "SCENARIO_TOPOLOGY_SIMP_OC"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "adjoint-sensitivity",
+            "density-filter",
+            "mma",
+            "optimality-criteria-topology",
+            "simp-topology"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "topology-cantilever",
+      "missing_dimensions": [
+        "implementation"
+      ],
+      "status": "partial"
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "generated_at": "2026-07-18T00:00:00Z",
   "journeys": [
     {
@@ -1534,7 +1674,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -1625,7 +1765,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -1702,7 +1842,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -1763,7 +1903,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -1824,7 +1964,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1888,7 +2028,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -1944,7 +2084,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2021,7 +2161,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2102,7 +2242,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2196,7 +2336,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2261,7 +2401,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.17.0",
+      "dataset_version": "0.18.4",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -2300,6 +2440,85 @@
       "takeaway": "必ず守る制約（hard constraint）と、できれば満たしたい制約（soft constraint）を最初に分離します。",
       "title_en": "Shift scheduling",
       "title_ja": "スタッフのシフトを組む"
+    },
+    {
+      "candidate_method_ids": [
+        "M_OC_TOPOLOGY",
+        "M_SIMP_TOPOLOGY"
+      ],
+      "canonical_url": "/gallery/topology-cantilever",
+      "case_id": "topology-cantilever",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
+          "comparison_id": "COMPARE_TOPOLOGY_OC_MMA"
+        }
+      ],
+      "completion_reasons": [
+        "missing_implementation"
+      ],
+      "conditional_method_ids": [
+        "M_ADJOINT_SENSITIVITY",
+        "M_DENSITY_FILTER",
+        "M_MMA"
+      ],
+      "content_ids": [
+        "adjoint-sensitivity",
+        "density-filter",
+        "mma",
+        "optimality-criteria-topology",
+        "simp-topology"
+      ],
+      "dataset_version": "0.18.4",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "平均密度を0.5以下に保つ体積率制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>≤</mi><mn>0.5</mn></mrow></math> と、各密度の上下限を課す。",
+        "decision_variables": "各有限要素の密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mn>1</mn></mrow></math>は材料、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>が小さい値は空孔に近い状態を表す。",
+        "objective": "線形弾性の状態方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>u</mi><mo>&#x0003D;</mo><mi>F</mi></mrow></math>を解き、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>F</mi><mi>ᵀ</mi><mi>u</mi></mrow></math> を最小化する。SIMPでは剛性を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>E</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo>&#x0002B;</mo><mi>ρ</mi><mi>ₑ</mi><mi>ᵖ</mi><mo stretchy=\"false\">&#x00028;</mo><mi>E</mi><mi>₀</mi><mi>−</mi><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> で補間する。",
+        "variable_domain_summary": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。設計変数集合は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0.001</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mrow><mn>32</mn></mrow></msup></mrow></math> と書ける。実務ではmeshと材料補間の定義が設計結果を左右する。"
+      },
+      "implementation_ids": [],
+      "journey_id": "topology-cantilever",
+      "last_reviewed": "2026-07-18",
+      "learning_objective": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。",
+      "limitations": [
+        "8×4要素の決定的な教育用instanceであり、実際のFEM実装の収束、強度・座屈、製造性、mesh refinement後の同一topology、局所解からの独立性や大域最適性を保証しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA045",
+      "problem_instance_ids": [
+        "INSTANCE_TOPOLOGY_CANTILEVER_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_TOPOLOGY_CHECKERBOARD"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC"
+        }
+      ],
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "status": "partial",
+      "takeaway": "最終密度だけでなく、state solve、感度のraw・filter後、volume fraction、gray fraction、checkerboard指標、meshとfilter radiusを一緒に保存します。complianceが下がっても、離散化artifactや製造制約が解決したとは限りません。",
+      "title_en": "Reduce material in a cantilever",
+      "title_ja": "片持ちはりの材料配置を軽くする"
     }
   ],
   "orphan_assets": [
@@ -2844,6 +3063,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "topology-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "tpe",
       "asset_type": "content",
       "policy": "warning",
@@ -2999,9 +3224,9 @@
     "status_counts": {
       "complete": 5,
       "draft": 0,
-      "partial": 6
+      "partial": 7
     },
     "target_complete_journeys": 5,
-    "total_journeys": 11
+    "total_journeys": 12
   }
 }

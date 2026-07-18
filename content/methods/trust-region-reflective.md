@@ -22,6 +22,15 @@ bounds付き非線形最小二乗で、境界までの距離に応じてtrust re
 - 前進の判断: 実際のcost低下と局所modelが予測した低下の一致
 - 恐れていること: 悪いJacobian、rank deficiency、parameter scaleの不一致、境界上での停滞
 
+## なぜReflectiveなのか
+
+Reflectiveは、境界に近づいたときにそのまま外へ進めず、境界までの距離を使ってtrust regionを調整し、必要なら反射方向を候補にします。
+
+## LM・dogbox・L-BFGS-Bとの違い
+
+LM法は局所的な最小二乗モデルを重視し、dogboxは矩形のtrust regionを使います。
+L-BFGS-Bはbounds付きの一般目的関数に対する準Newton更新であり、非線形最小二乗のresidual構造を直接使うTRFとは観測する情報が異なります。
+
 SciPyの`scipy.optimize.least_squares`では`method="trf"`がdefaultです。
 しかしdefaultであることは、あらゆる問題で最も速い、または最も正確という意味ではありません。
 

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "expectations": [
     {
       "applicability": "expected",
@@ -212,6 +212,80 @@
       "status": "missing",
       "subject_id": "MF_OPTIMAL_CONTROL",
       "subject_type": "method"
+    },
+    {
+      "applicability": "expected",
+      "artifact_ids": [],
+      "artifact_kind": "executable_trace",
+      "expectation_id": "COV_TOPOLOGY_COMPARISON",
+      "purpose": "comparison",
+      "rationale": "同じ問題、初期密度、予算でOCとMMAの更新差を比較する。",
+      "reason_codes": [
+        "scenario_contract_incomplete"
+      ],
+      "renderer_family": "field_evolution",
+      "route_ids": [],
+      "scenario_ids": [
+        "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_SIMP_OC"
+      ],
+      "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
+      "source_ids": [
+        "S097",
+        "S100"
+      ],
+      "status": "partial",
+      "subject_id": "M_OC_TOPOLOGY",
+      "subject_type": "method"
+    },
+    {
+      "applicability": "expected",
+      "artifact_ids": [],
+      "artifact_kind": "executable_trace",
+      "expectation_id": "COV_TOPOLOGY_FAILURE",
+      "purpose": "failure_contrast",
+      "rationale": "filterなしのcheckerboard artifactをcomplianceと分けて診断する。",
+      "reason_codes": [
+        "scenario_not_built"
+      ],
+      "renderer_family": "field_evolution",
+      "route_ids": [],
+      "scenario_ids": [],
+      "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
+      "source_ids": [
+        "S099"
+      ],
+      "status": "missing",
+      "subject_id": "M_DENSITY_FILTER",
+      "subject_type": "method"
+    },
+    {
+      "applicability": "expected",
+      "artifact_ids": [
+        "topology-optimization-field-evolution"
+      ],
+      "artifact_kind": "executable_trace",
+      "expectation_id": "COV_TOPOLOGY_MECHANISM",
+      "purpose": "mechanism",
+      "rationale": "density、state、sensitivity、更新則の対応を一つの反復で学ぶ。",
+      "reason_codes": [],
+      "renderer_family": "field_evolution",
+      "route_ids": [
+        "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC"
+      ],
+      "scenario_ids": [
+        "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_SIMP_OC"
+      ],
+      "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
+      "source_ids": [
+        "S097",
+        "S098",
+        "S101"
+      ],
+      "status": "available",
+      "subject_id": "MF_TOPOLOGY_OPTIMIZATION",
+      "subject_type": "method"
     }
   ],
   "generated_at": "2026-07-18T00:00:00Z",
@@ -290,6 +364,39 @@
     {
       "factors": {
         "classification": {
+          "reason": "設計field、状態方程式、感度、体積制約を一つの設計反復として読める。",
+          "score": 3
+        },
+        "demand": {
+          "reason": "構造設計とPDE制約付き設計で再利用される問題型である。",
+          "score": 2
+        },
+        "misconception": {
+          "reason": "complianceの改善だけでcheckerboard、gray density、mesh依存性まで解消したと誤認しやすい。",
+          "score": 3
+        },
+        "visualization": {
+          "reason": "density、state、sensitivityをfieldとして同期表示し、filterとupdateの差を確認できる。",
+          "score": 3
+        }
+      },
+      "proposed_scope": "MF_TOPOLOGY_OPTIMIZATION、PA045、M_SIMP_TOPOLOGY、M_OC_TOPOLOGY、M_MMAをfield_evolutionで結ぶ。",
+      "rank": 3,
+      "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "title_en": "Structural topology optimization",
+      "title_ja": "構造トポロジー最適化",
+      "total": 11
+    },
+    {
+      "factors": {
+        "classification": {
           "reason": "目的改善と実行可能性を同時に扱う主要分類を代表する。",
           "score": 3
         },
@@ -307,7 +414,7 @@
         }
       },
       "proposed_scope": "MF_CONSTRAINED_NLP、M_SLSQP、PA008/PA009 を feasible_region で結ぶ。",
-      "rank": 3,
+      "rank": 4,
       "slice_id": "SLICE_CONSTRAINED_CONTINUOUS",
       "source_ids": [
         "S017",
@@ -340,7 +447,7 @@
         }
       },
       "proposed_scope": "MF_MULTI_OBJECTIVE と PA038 を pareto_front で結ぶ。",
-      "rank": 4,
+      "rank": 5,
       "slice_id": "SLICE_MULTI_OBJECTIVE",
       "source_ids": [
         "S039",
@@ -370,7 +477,7 @@
         }
       },
       "proposed_scope": "MF_OPTIMAL_CONTROL と PA042/PA044 を generic_metric_history で結ぶ。",
-      "rank": 5,
+      "rank": 6,
       "slice_id": "SLICE_OPTIMAL_CONTROL",
       "source_ids": [
         "S042",
@@ -1961,7 +2068,7 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1970,7 +2077,8 @@
             "EC026",
             "constrained-design",
             "hyperparameter-search",
-            "shift-scheduling"
+            "shift-scheduling",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -1997,7 +2105,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 44,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2043,7 +2151,8 @@
             "newton-cg",
             "newton-method",
             "nonlinear-cg",
-            "shift-scheduling"
+            "shift-scheduling",
+            "topology-cantilever"
           ]
         },
         "recommendation": {
@@ -2372,6 +2481,111 @@
       },
       "label": "Surrogate, Bayesian optimization, and HPO",
       "subject_id": "MF_SURROGATE_HPO",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "content": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "adjoint-sensitivity",
+            "density-filter",
+            "mma",
+            "optimality-criteria-topology",
+            "simp-topology"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 19,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/MF_TOPOLOGY_OPTIMIZATION",
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "/methods/M_DENSITY_FILTER",
+            "/methods/M_MMA",
+            "/methods/M_OC_TOPOLOGY",
+            "/methods/M_SIMP_TOPOLOGY",
+            "COMPARE_TOPOLOGY_OC_MMA",
+            "S097",
+            "S098",
+            "S099",
+            "S100",
+            "S101",
+            "adjoint-sensitivity",
+            "density-filter",
+            "mma",
+            "optimality-criteria-topology",
+            "simp-topology",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S097",
+            "S098",
+            "S099",
+            "S100",
+            "S101"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "Structural topology optimization",
+      "subject_id": "MF_TOPOLOGY_OPTIMIZATION",
       "subject_type": "method"
     },
     {
@@ -2897,6 +3111,89 @@
       },
       "label": "Adam with decoupled weight decay",
       "subject_id": "M_ADAMW",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "adjoint-sensitivity"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 5,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "S101",
+            "adjoint-sensitivity",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S101"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "Adjoint sensitivity analysis",
+      "subject_id": "M_ADJOINT_SENSITIVITY",
       "subject_type": "method"
     },
     {
@@ -3550,13 +3847,14 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -3577,7 +3875,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3592,7 +3890,8 @@
             "bfgs",
             "constrained-design",
             "constrained-disk-feasible-region",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "recommendation": {
@@ -4594,6 +4893,92 @@
       },
       "label": "Constraint-programming search",
       "subject_id": "M_CP_SEARCH",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "density-filter"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 7,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_DENSITY_FILTER",
+            "COMPARE_TOPOLOGY_OC_MMA",
+            "S097",
+            "S099",
+            "density-filter",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S097",
+            "S099"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "Density and sensitivity filtering",
+      "subject_id": "M_DENSITY_FILTER",
       "subject_type": "method"
     },
     {
@@ -6631,6 +7016,90 @@
     {
       "dimensions": {
         "comparison": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "mma"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 6,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_MMA",
+            "COMPARE_TOPOLOGY_OC_MMA",
+            "S100",
+            "mma",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S100"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "Method of Moving Asymptotes",
+      "subject_id": "M_MMA",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
           "count": 0,
           "reason_codes": [
             "no_inventory_connection"
@@ -7637,6 +8106,92 @@
       },
       "label": "Reference-point based NSGA-III",
       "subject_id": "M_NSGA_III",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "optimality-criteria-topology"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 7,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_OC_TOPOLOGY",
+            "COMPARE_TOPOLOGY_OC_MMA",
+            "S097",
+            "S098",
+            "optimality-criteria-topology",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S097",
+            "S098"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "Optimality Criteria update",
+      "subject_id": "M_OC_TOPOLOGY",
       "subject_type": "method"
     },
     {
@@ -9101,6 +9656,94 @@
       },
       "label": "Primal simplex",
       "subject_id": "M_SIMPLEX",
+      "subject_type": "method"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TOPOLOGY_OC_MMA"
+          ]
+        },
+        "content": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "simp-topology"
+          ]
+        },
+        "gallery": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-cantilever"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
+          "count": 8,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "/methods/M_SIMP_TOPOLOGY",
+            "COMPARE_TOPOLOGY_OC_MMA",
+            "S097",
+            "S098",
+            "S099",
+            "simp-topology",
+            "topology-cantilever",
+            "topology-optimization-field-evolution"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "S097",
+            "S098",
+            "S099"
+          ]
+        },
+        "visualization": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "topology-optimization-field-evolution"
+          ]
+        }
+      },
+      "label": "SIMP density method",
+      "subject_id": "M_SIMP_TOPOLOGY",
       "subject_type": "method"
     },
     {
@@ -13994,11 +14637,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC026"
+            "EC026",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -14010,20 +14654,22 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "EC026"
-          ]
-        },
-        "map": {
           "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC026",
-            "None"
+            "topology-cantilever"
+          ]
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC026",
+            "None",
+            "topology-cantilever"
           ]
         },
         "recommendation": {
@@ -14956,7 +15602,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -14968,7 +15614,8 @@
             "EC026",
             "budget-allocation",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15058,7 +15705,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15070,7 +15717,8 @@
             "EC026",
             "budget-allocation",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15159,7 +15807,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15171,7 +15819,8 @@
             "EC026",
             "budget-allocation",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15344,7 +15993,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15356,7 +16005,8 @@
             "EC026",
             "budget-allocation",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15522,7 +16172,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15534,7 +16184,8 @@
             "EC026",
             "budget-allocation",
             "constrained-design",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15808,7 +16459,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15822,7 +16473,8 @@
             "constrained-design",
             "hyperparameter-search",
             "portfolio-allocation",
-            "shift-scheduling"
+            "shift-scheduling",
+            "topology-cantilever"
           ]
         },
         "implementation": {
@@ -15894,14 +16546,14 @@
   "summary": {
     "baseline": "not_provided",
     "status_counts": {
-      "available": 4,
-      "missing": 1,
+      "available": 5,
+      "missing": 2,
       "not_applicable": 0,
-      "partial": 3
+      "partial": 4
     },
     "subject_counts": {
       "feature_family": 10,
-      "method": 99,
+      "method": 105,
       "problem": 56
     }
   }

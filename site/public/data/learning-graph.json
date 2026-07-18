@@ -535,6 +535,29 @@
       "term_id": "TERM_LP_QP_CONIC"
     },
     {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "convex separable approximation"
+      ],
+      "label_en": "Method of Moving Asymptotes",
+      "label_ja": "MMA",
+      "last_verified": "2026-07-18",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "移動漸近線法の略称をcanonical methodへ解決する。",
+      "source_ids": [
+        "S100"
+      ],
+      "synonyms": [
+        "moving asymptotes"
+      ],
+      "target_id": "M_MMA",
+      "target_type": "method",
+      "term_id": "TERM_MMA_TOPOLOGY"
+    },
+    {
       "abbreviations": [
         "SGDM"
       ],
@@ -836,6 +859,30 @@
       "deprecated_terms": [],
       "disambiguation_note": null,
       "domain_terms": [
+        "density method"
+      ],
+      "label_en": "SIMP topology optimization",
+      "label_ja": "SIMP",
+      "last_verified": "2026-07-18",
+      "locale": "ja-JP,en",
+      "misspellings": [],
+      "rationale": "密度法の代表的なpenalization手法へ解決する。",
+      "source_ids": [
+        "S097",
+        "S098"
+      ],
+      "synonyms": [
+        "solid isotropic material with penalization"
+      ],
+      "target_id": "M_SIMP_TOPOLOGY",
+      "target_type": "method",
+      "term_id": "TERM_SIMP_TOPOLOGY"
+    },
+    {
+      "abbreviations": [],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
         "SciPy SLSQP"
       ],
       "label_en": "Sequential Least Squares Programming",
@@ -882,6 +929,35 @@
       "term_id": "TERM_SQP"
     },
     {
+      "abbreviations": [
+        "TO"
+      ],
+      "deprecated_terms": [],
+      "disambiguation_note": null,
+      "domain_terms": [
+        "density-based topology optimization",
+        "minimum compliance"
+      ],
+      "label_en": "Topology optimization",
+      "label_ja": "トポロジー最適化",
+      "last_verified": "2026-07-18",
+      "locale": "ja-JP,en",
+      "misspellings": [
+        "toplogy optimization"
+      ],
+      "rationale": "構造設計語をトポロジー最適化familyへ解決する。",
+      "source_ids": [
+        "S097",
+        "S098"
+      ],
+      "synonyms": [
+        "構造最適化"
+      ],
+      "target_id": "MF_TOPOLOGY_OPTIMIZATION",
+      "target_type": "method",
+      "term_id": "TERM_TOPOLOGY_OPTIMIZATION"
+    },
+    {
       "abbreviations": [],
       "deprecated_terms": [],
       "disambiguation_note": null,
@@ -908,7 +984,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.17.0",
+  "dataset_version": "0.18.4",
   "edges": [
     {
       "audience": "learner",
@@ -1701,6 +1777,24 @@
       "status": "current",
       "target_id": "EC028",
       "target_type": "case"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 50,
+      "edge_id": "LEARN_TOPOLOGY_FAMILY",
+      "last_verified": "2026-07-18",
+      "rationale": "構造トポロジー最適化はPDE制約付き設計の具体例である。",
+      "relation": "applied_in",
+      "source_id": "MF_TOPOLOGY_OPTIMIZATION",
+      "source_ids": [
+        "S097",
+        "S101"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "PA045",
+      "target_type": "problem"
     }
   ],
   "entities": [
@@ -1849,6 +1943,14 @@
       "label_ja": "多目的最適化"
     },
     {
+      "canonical_url": "/methods/MF_TOPOLOGY_OPTIMIZATION",
+      "entity_id": "MF_TOPOLOGY_OPTIMIZATION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Structural topology optimization",
+      "label_ja": "構造トポロジー最適化"
+    },
+    {
       "canonical_url": "/methods/M_ADAM",
       "entity_id": "M_ADAM",
       "entity_type": "method",
@@ -1953,6 +2055,14 @@
       "label_ja": "Levenberg–Marquardt法"
     },
     {
+      "canonical_url": "/methods/M_MMA",
+      "entity_id": "M_MMA",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Method of Moving Asymptotes",
+      "label_ja": "移動漸近線法"
+    },
+    {
       "canonical_url": "/methods/M_MOMENTUM_SGD",
       "entity_id": "M_MOMENTUM_SGD",
       "entity_type": "method",
@@ -2025,6 +2135,14 @@
       "label_ja": "primal simplex法"
     },
     {
+      "canonical_url": "/methods/M_SIMP_TOPOLOGY",
+      "entity_id": "M_SIMP_TOPOLOGY",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "SIMP density method",
+      "label_ja": "SIMP密度法"
+    },
+    {
       "canonical_url": "/methods/M_SLSQP",
       "entity_id": "M_SLSQP",
       "entity_type": "method",
@@ -2071,6 +2189,14 @@
       "external_url": null,
       "label_en": "Multiobjective continuous",
       "label_ja": "多目的連続最適化"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "PA045",
+      "entity_type": "problem",
+      "external_url": null,
+      "label_en": "PDE-constrained",
+      "label_ja": "PDE制約付き最適化"
     },
     {
       "canonical_url": "/traces/adam-quadratic",

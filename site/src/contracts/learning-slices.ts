@@ -95,13 +95,103 @@ export interface ParetoFrontArtifact {
   last_verified: string;
 }
 
-export type LearningSliceArtifact = FeasibleRegionArtifact | ParetoFrontArtifact;
+export interface TopologyFieldStep {
+  iteration: number;
+  density: number[];
+  displacement_field: number[];
+  strain_energy_field: number[];
+  sensitivity_raw: number[];
+  sensitivity_filtered: number[];
+  volume_fraction: number;
+  compliance: number;
+  gray_fraction: number;
+  checkerboard_score: number;
+  projection_beta: number;
+  label_ja: string;
+}
+
+export interface TopologyFieldArtifact {
+  contract_version: "1.0.0";
+  dataset_version: string;
+  artifact_id: "topology-optimization-field-evolution";
+  artifact_kind: "executable_trace";
+  renderer_family: "field_evolution";
+  problem_definition_id: "PROBLEM_TOPOLOGY_OPTIMIZATION";
+  problem_instance_id: "INSTANCE_TOPOLOGY_CANTILEVER_2D";
+  objective_expression: string;
+  state_equation: string;
+  grid: { columns: number; rows: number };
+  volume_fraction_target: number;
+  load_description: string;
+  runs: { run_id: string; method_id: string; label_ja: string; role: "primary" | "comparison" | "failure_contrast"; steps: TopologyFieldStep[]; termination_reason_ja: string }[];
+  method_distinctions_ja: string[];
+  text_alternative_ja: string;
+  limitations_ja: string;
+  source_ids: string[];
+  last_verified: string;
+}
+
+export type LearningSliceArtifact = FeasibleRegionArtifact | ParetoFrontArtifact | TopologyFieldArtifact;
 
 export function parseLearningSliceArtifact(raw: unknown): LearningSliceArtifact {
   const data = record(raw, "learning slice");
   if (data.renderer_family === "feasible_region") return parseFeasible(data);
   if (data.renderer_family === "pareto_front") return parsePareto(data);
+  if (data.renderer_family === "field_evolution") return parseTopology(data);
   throw new Error(`Unsupported learning-slice renderer: ${String(data.renderer_family)}`);
+}
+
+function parseTopology(data: Record<string, unknown>): TopologyFieldArtifact {
+  literal(data.contract_version, "1.0.0", "contract_version");
+  literal(data.artifact_id, "topology-optimization-field-evolution", "artifact_id");
+  literal(data.artifact_kind, "executable_trace", "artifact_kind");
+  literal(data.renderer_family, "field_evolution", "renderer_family");
+  literal(data.problem_definition_id, "PROBLEM_TOPOLOGY_OPTIMIZATION", "problem_definition_id");
+  literal(data.problem_instance_id, "INSTANCE_TOPOLOGY_CANTILEVER_2D", "problem_instance_id");
+  const grid = record(data.grid, "grid");
+  const columns = integer(grid.columns, "grid.columns");
+  const rows = integer(grid.rows, "grid.rows");
+  if (columns < 2 || rows < 2) throw new Error("topology grid must contain at least two rows and columns.");
+  const cellCount = columns * rows;
+  const field = (value: unknown, owner: string): number[] => {
+    const result = numbers(value, owner);
+    if (result.length !== cellCount) throw new Error(`${owner} must contain ${cellCount} cells.`);
+    return result;
+  };
+  const runs = list(data.runs, "runs").map((rawRun, runIndex) => {
+    const run = record(rawRun, `runs[${runIndex}]`);
+    const role: TopologyFieldArtifact["runs"][number]["role"] = run.role === "primary" || run.role === "comparison" || run.role === "failure_contrast"
+      ? run.role
+      : invalid(`runs[${runIndex}].role`);
+    const steps = list(run.steps, `runs[${runIndex}].steps`).map((rawStep, stepIndex) => {
+      const step = record(rawStep, `runs[${runIndex}].steps[${stepIndex}]`);
+      return {
+        iteration: integer(step.iteration, "iteration"),
+        density: field(step.density, "density"),
+        displacement_field: field(step.displacement_field, "displacement_field"),
+        strain_energy_field: field(step.strain_energy_field, "strain_energy_field"),
+        sensitivity_raw: field(step.sensitivity_raw, "sensitivity_raw"),
+        sensitivity_filtered: field(step.sensitivity_filtered, "sensitivity_filtered"),
+        volume_fraction: number(step.volume_fraction, "volume_fraction"),
+        compliance: nonNegative(step.compliance, "compliance"),
+        gray_fraction: number(step.gray_fraction, "gray_fraction"),
+        checkerboard_score: nonNegative(step.checkerboard_score, "checkerboard_score"),
+        projection_beta: positive(step.projection_beta, "projection_beta"),
+        label_ja: text(step.label_ja, "label_ja"),
+      };
+    });
+    if (steps.length < 2) throw new Error(`runs[${runIndex}].steps must contain at least two steps.`);
+    return { run_id: text(run.run_id, "run_id"), method_id: text(run.method_id, "method_id"), label_ja: text(run.label_ja, "label_ja"), role, steps, termination_reason_ja: text(run.termination_reason_ja, "termination_reason_ja") };
+  });
+  const roles = new Set(runs.map((run) => run.role));
+  if (roles.size !== 3 || !roles.has("primary") || !roles.has("comparison") || !roles.has("failure_contrast")) throw new Error("topology artifact requires primary, comparison, and failure runs.");
+  return {
+    contract_version: "1.0.0", dataset_version: text(data.dataset_version, "dataset_version"), artifact_id: "topology-optimization-field-evolution",
+    artifact_kind: "executable_trace", renderer_family: "field_evolution", problem_definition_id: "PROBLEM_TOPOLOGY_OPTIMIZATION", problem_instance_id: "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+    objective_expression: text(data.objective_expression, "objective_expression"), state_equation: text(data.state_equation, "state_equation"),
+    grid: { columns, rows }, volume_fraction_target: number(data.volume_fraction_target, "volume_fraction_target"), load_description: text(data.load_description, "load_description"),
+    runs, method_distinctions_ja: texts(data.method_distinctions_ja, "method_distinctions_ja"), text_alternative_ja: text(data.text_alternative_ja, "text_alternative_ja"), limitations_ja: text(data.limitations_ja, "limitations_ja"), source_ids: texts(data.source_ids, "source_ids"), last_verified: text(data.last_verified, "last_verified"),
+  };
 }
 
 function parseFeasible(data: Record<string, unknown>): FeasibleRegionArtifact {
