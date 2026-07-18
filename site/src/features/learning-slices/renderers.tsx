@@ -103,9 +103,10 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
   );
 }
 
-export function FieldEvolutionRenderer({ payload }: { payload: FieldEvolutionPayload }) {
-  const [selectedRunId, setSelectedRunId] = useState(payload.family_payload.runs[0].run_id);
-  const [selectedStep, setSelectedStep] = useState(payload.family_payload.runs[0].snapshots.length - 1);
+export function FieldEvolutionRenderer({ payload, initialRunRole = "primary" }: { payload: FieldEvolutionPayload; initialRunRole?: "primary" | "comparison" | "failure_contrast" }) {
+  const initialRun = payload.family_payload.runs.find((run) => run.role === initialRunRole) ?? payload.family_payload.runs[0];
+  const [selectedRunId, setSelectedRunId] = useState(initialRun.run_id);
+  const [selectedStep, setSelectedStep] = useState(initialRun.snapshots.length - 1);
   const selectedRun = payload.family_payload.runs.find((run) => run.run_id === selectedRunId) ?? payload.family_payload.runs[0];
   const stepIndex = Math.min(selectedStep, selectedRun.snapshots.length - 1);
   const current = selectedRun.snapshots[stepIndex];
@@ -118,7 +119,8 @@ export function FieldEvolutionRenderer({ payload }: { payload: FieldEvolutionPay
   return (
     <section className="learning-renderer topology-renderer" aria-labelledby="topology-heading">
       <div className="learning-renderer-heading"><div><p className="eyebrow">設計fieldの進化 (field_evolution) · {payload.renderer_contract_version}</p><h2 id="topology-heading">密度、状態、感度を同じ反復で読む</h2></div><strong>volume {format(payload.family_payload.volume_fraction_target)}</strong></div>
-      <p className="projection-disclosure"><strong>見る順番:</strong> 密度fieldで荷重経路を見て、状態と感度を重ね、最後にcomplianceとcheckerboardを確認します。</p>
+      <p className="projection-disclosure"><strong>{selectedRun.role === "failure_contrast" ? "失敗を観察する順番:" : "見る順番:"}</strong> 密度fieldで荷重経路を見て、状態と感度を重ね、最後にcomplianceとcheckerboardを確認します。</p>
+      {selectedRun.role === "failure_contrast" && <p className="callout-warning" role="note"><strong>Failure Theater:</strong> checkerboard riskを含む経路を先に表示しています。complianceの改善だけで、設計fieldが妥当とは判断しません。</p>}
       <div className="topology-controls">
         <label htmlFor="topology-run">経路 <select id="topology-run" onChange={(event) => changeRun(event.target.value)} value={selectedRun.run_id}>{payload.family_payload.runs.map((run) => <option key={run.run_id} value={run.run_id}>{run.label_ja}</option>)}</select></label>
         <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.snapshots[selectedRun.snapshots.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.snapshots.length - 1} min="0" onChange={(event) => setSelectedStep(Number(event.target.value))} type="range" value={stepIndex} /></label>

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 
 import paretoPayload from "../../../public/data/visualizations/biobjective-quadratic-pareto-front.json";
@@ -62,5 +62,15 @@ describe("learning-slice renderer registry", () => {
     expect(screen.getAllByText(/checkerboard score/u).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/状態方程式/u)).toBeVisible();
     expect(document.querySelectorAll(".topology-field")).toHaveLength(3);
+  });
+
+  test("opens the field failure Theater on the failure run", () => {
+    cleanup();
+    const artifact = parseLearningSliceArtifact(topologyPayload);
+    render(<LearningSliceRenderer artifact={artifact} initialRunRole="failure_contrast" />);
+
+    expect(screen.getByRole("note")).toHaveTextContent("Failure Theater");
+    expect(screen.getAllByRole("combobox", { name: /経路/u }).some((element) => (element as HTMLSelectElement).value === "topology-no-filter")).toBe(true);
+    expect(screen.getByText("失敗を観察する順番:")).toBeVisible();
   });
 });
