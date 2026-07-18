@@ -3,6 +3,73 @@
   "dataset_version": "0.18.4",
   "pages": [
     {
+      "canonical_entity_id": "F_CONSTRAINT_CHANCE",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.chance-risk-contract",
+      "html": "<p>Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>不確実な最適化では、「悪い結果をどこまで許すか」を目的と制約に分けて記録します。</p>\n<table>\n<thead>\n<tr>\n<th>語彙</th>\n<th>主に置く場所</th>\n<th>問い</th>\n<th>依存する前提</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>stochastic</td>\n<td>目的・制約</td>\n<td>分布やscenarioの平均的な結果をどう扱うか</td>\n<td>分布・生成規則・sample</td>\n</tr>\n<tr>\n<td>robust</td>\n<td>制約・目的</td>\n<td>指定したuncertainty setのどの値でも守るか</td>\n<td>setの範囲・形・根拠</td>\n</tr>\n<tr>\n<td>chance constraint</td>\n<td>制約</td>\n<td>違反確率を目標以下にできるか</td>\n<td>分布・確率水準・推定</td>\n</tr>\n<tr>\n<td>CVaR</td>\n<td>目的・場合によっては制約</td>\n<td>悪い側のtailをどれだけ抑えるか</td>\n<td>lossの向き・tail水準・sample</td>\n</tr>\n<tr>\n<td>distributionally robust optimization (DRO)</td>\n<td>目的・制約</td>\n<td>許容した分布集合の中で結果を抑えられるか</td>\n<td>ambiguity set・距離・半径</td>\n</tr>\n</tbody>\n</table>\n<p>「stochastic」は一つのsolver名ではありません。確率分布や有限scenarioを使う問題の表現です。<code>robust</code>は不確実性をsetで囲む考え方であり、<code>chance constraint</code>は確率を制約の判定へ入れる考え方です。CVaRはtail riskの測り方で、これらと同じ分類軸ではありません。</p>\n<h2 id=\"chance-constraintは制約違反の確率を指定する\" tabindex=\"-1\">chance constraintは制約違反の確率を指定する</h2>\n<p>不確実な値を<code>ξ</code>、制約関数を<code>g(x, ξ)</code>とすると、代表的なchance constraintは次の形です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo movablelimits=\"true\">Pr</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>&#x003BE;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo stretchy=\"false\">&#x0007D;</mo><mo>&#x02265;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B1;</mi><mo>&#x0002E;</mo></mrow></math></div>\n<p><code>α</code>は許容する違反確率です。ここで指定しているのは、明示した分布と確率モデルのもとでの制約充足です。<code>α=0.05</code>と書いただけで、未知の分布や将来の全データに対する安全保証になるわけではありません。</p>\n<p>実装やCaseでは、少なくとも次を一緒に残します。</p>\n<ul>\n<li><p>何が揺らぐか。parameter、observation noise、process disturbanceの区別</p>\n</li>\n<li><p><code>ξ</code>の分布、推定方法、独立性や定常性の仮定</p>\n</li>\n<li><p><code>α</code>の値と、確率を評価する単位</p>\n</li>\n<li><p>分布を推定したsampleと、性能を確認するheld-out sampleの分割</p>\n</li>\n<li><p>violationの定義、tolerance、未観測条件への外挿範囲</p>\n</li>\n</ul>\n<p>有限scenarioのうち何件で制約を満たしたかを数えるだけなら、まずはempirical scenario satisfactionです。scenarioの生成規則と評価データが別に固定されていない限り、それを確率保証と呼びません。</p>\n<h2 id=\"cvarは悪い側のtailを目的へ入れる\" tabindex=\"-1\">CVaRは悪い側のtailを目的へ入れる</h2>\n<p>損失<code>L(x, ξ)</code>を小さくしたいとき、平均だけでなく悪い側のtailを重く見るためにCVaR（Conditional Value at Risk）を使う場合があります。CVaRは、指定したquantileより悪い損失の平均を表すtail-riskの指標です。</p>\n<p>chance constraintが「制約違反の頻度をどこまで許すか」を問うのに対して、CVaRは「悪い損失が起きたとき、その大きさをどれだけ抑えるか」を問います。そのため、CVaRを目的関数へ加えても、制約違反確率を直接<code>1-α</code>以下にしたことにはなりません。反対に、chance constraintを置いても、違反したときの損失額やtailの厚さは制御しません。</p>\n<p>目的と制約の両方へ不確実性を入れるなら、次のように別々に記録します。</p>\n<table>\n<thead>\n<tr>\n<th>記録する場所</th>\n<th>例</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>目的</td>\n<td>期待損失 + CVaRの重み付き和</td>\n<td>平均性能とtail riskの交換を読む</td>\n</tr>\n<tr>\n<td>制約</td>\n<td>chance constraint</td>\n<td>違反の頻度に上限を置く</td>\n</tr>\n<tr>\n<td>両方</td>\n<td>CVaR objective + robust constraint</td>\n<td>tailの大きさとset内の最悪可行性を別々に読む</td>\n</tr>\n</tbody>\n</table>\n<p>CVaRの値を比較するときは、lossの向き、tail水準、sample数、scenarioの重み、最適化に使ったsampleと評価用sampleを固定します。値が小さいことだけで、異なる分布や異なるtail水準の結果を順位付けしません。</p>\n<h2 id=\"robust・stochastic・droを同じ軸で混ぜない\" tabindex=\"-1\">robust・stochastic・DROを同じ軸で混ぜない</h2>\n<table>\n<thead>\n<tr>\n<th>formulation</th>\n<th>揺らぎの表現</th>\n<th>代表的な主張</th>\n<th>外側へ言えないこと</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>robust optimization</td>\n<td>uncertainty set <code>U</code></td>\n<td><code>U</code>の中の全ての値で制約を守る</td>\n<td><code>U</code>の外側の値への保証</td>\n</tr>\n<tr>\n<td>stochastic programming</td>\n<td>distributionまたはscenario</td>\n<td>指定した分布・scenarioで期待値や制約を評価する</td>\n<td>分布外・未観測データでの同じ結果</td>\n</tr>\n<tr>\n<td>chance-constrained optimization</td>\n<td>distributionと許容確率</td>\n<td>指定した確率モデルで違反確率を抑える</td>\n<td>分布推定の誤差やmodel misspecificationを無視した保証</td>\n</tr>\n<tr>\n<td>DRO</td>\n<td>分布の集合（ambiguity set）</td>\n<td>許容した分布集合の中でworst-caseを抑える</td>\n<td>ambiguity setの外側の分布</td>\n</tr>\n</tbody>\n</table>\n<p>robust optimizationのsetは、parameterが取りうる範囲を表します。DROのambiguity setは、確率分布そのものの候補集合を表します。どちらも「不確実なものを集合で扱う」と説明できますが、集合の要素がparameterなのか分布なのかを省略しません。</p>\n<p>stochastic programmingでscenarioを増やすと、計算問題の表現は細かくなります。しかし、sample sizeが増えたことだけでout-of-sample性能や確率保証が自動的に得られるわけではありません。scenarioの生成、重み、seed、評価用データを固定して、in-sampleとheld-outを分けます。</p>\n<h2 id=\"simplex配分での読み方\" tabindex=\"-1\">simplex配分での読み方</h2>\n<p>ポートフォリオや資源配分では、配分<code>x</code>をsimplex上に置き、scenarioごとの損失<code>L_s(x)</code>を評価する形がよく現れます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"2em\" /><munder><mo>&#x02211;</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>このsimplex制約は、配分のdomainを定めます。不確実性の扱いは別に、たとえば次のように追加します。</p>\n<ul>\n<li><p>stochastic: <code>L_s(x)</code>の期待損失を目的にする</p>\n</li>\n<li><p>CVaR: 大きい<code>L_s(x)</code>のtailを目的に加える</p>\n</li>\n<li><p>chance constraint: 予算超過などの制約をscenarioで許容確率までに抑える</p>\n</li>\n<li><p>robust: 定めた損失・需要のsetの全てで制約を守る</p>\n</li>\n<li><p>DRO: scenario分布の候補集合に対するworst-caseを抑える</p>\n</li>\n</ul>\n<p>同じ配分変数を使っても、目的・制約・保証範囲が変われば別の問題です。nominalな共分散riskの結果を、そのままCVaR、chance constraint、robust、DROの結果として表示しません。</p>\n<h2 id=\"仕様に残す最小contract\" tabindex=\"-1\">仕様に残す最小contract</h2>\n<p>不確実性を含む問題では、次の項目を空欄にしません。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">uncertainty_contract</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;source&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;parameter | observation_noise | process_disturbance&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;model&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;distribution | scenarios | uncertainty_set | ambiguity_set&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_risk&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;expectation | variance | worst_case | cvar | not_applicable&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;constraint_treatment&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;nominal | robust | chance | scenario&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;confidence_or_tail&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;explicit_value_and_definition&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;training_evaluation_split&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;fixed_description&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;guarantee_scope&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;supported_claim_and_assumptions&quot;</span><span class=\"p\">,</span>\n<span class=\"p\">}</span></code></pre></div>\n<p><code>unknown</code>は、まだ調べていない前提を<code>nominal</code>や<code>not_applicable</code>へ変換する値ではありません。分布、set、tail水準、評価データのどれが未確定かをそのまま残し、追加で必要な観測やsourceを記録します。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>scenario上の可行性、chance constraintの確率計算、robust set内の可行性、DROのambiguity set内のworst-caseは、それぞれ保証の範囲が違います。表示する結果には、対象となったscenario・分布・setと、評価時のtoleranceを添えます。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/concept.uncertainty-models\">不確実性モデル・リスク・保証範囲</a>で、uncertainty sourceとguarantee scopeの分解を確認してください。配分変数のdomainは<a href=\"#/learn/concept.simplex\">Simplex・確率ベクトル</a>、一般の可行性判定は<a href=\"#/learn/concept.constraint-class\">制約class</a>で確認できます。確率的gradientのnoiseと確率制約は別の話なので、optimizerの選択は<a href=\"#/learn/family.stochastic-ml\">確率勾配・機械学習optimizerの選び分け</a>へ分けて進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [
+        "concept.uncertainty-models",
+        "concept.constraint-class"
+      ],
+      "related_ids": [
+        "concept.simplex",
+        "family.stochastic-ml",
+        "lp-qp-conic"
+      ],
+      "seo_description": "Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。",
+      "seo_title": "Chance constraint・CVaR・robustness",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。",
+      "title_en": "Chance Constraints, CVaR, and Robustness",
+      "title_ja": "Chance constraint・CVaR・robustness",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "chance-constraintは制約違反の確率を指定する",
+          "label": "chance constraintは制約違反の確率を指定する",
+          "level": 2
+        },
+        {
+          "heading_id": "cvarは悪い側のtailを目的へ入れる",
+          "label": "CVaRは悪い側のtailを目的へ入れる",
+          "level": 2
+        },
+        {
+          "heading_id": "robust・stochastic・droを同じ軸で混ぜない",
+          "label": "robust・stochastic・DROを同じ軸で混ぜない",
+          "level": 2
+        },
+        {
+          "heading_id": "simplex配分での読み方",
+          "label": "simplex配分での読み方",
+          "level": 2
+        },
+        {
+          "heading_id": "仕様に残す最小contract",
+          "label": "仕様に残す最小contract",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "F_CONSTRAINT_CLASS",
       "canonical_entity_type": "feature",
       "comparison_ids": [],

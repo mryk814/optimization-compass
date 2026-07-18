@@ -2862,6 +2862,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.chance-risk-contract",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.constraint-class",
       "asset_type": "content",
       "policy": "warning",
