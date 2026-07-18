@@ -1219,6 +1219,152 @@
     {
       "dimensions": {
         "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/multi-fidelity-simulator",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_HYPERBAND_ASHA",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S059",
+            "/sources/S069",
+            "/sources/S075"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "multi-fidelity-simulator"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_BOTORCH",
+            "I_OPTUNA",
+            "I_RAY_TUNE"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_HYPERBAND_ASHA",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/multi-fidelity-simulator",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_HYPERBAND_ASHA",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S059",
+            "/sources/S069",
+            "/sources/S075"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S034",
+            "S035",
+            "S038",
+            "S059",
+            "S069",
+            "S075"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "hyperband-asha"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "multi-fidelity-simulator",
+      "missing_dimensions": [
+        "canonical_comparison",
+        "cross_surface_links",
+        "source_review"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
           "reason_codes": [
             "missing_failure_or_sensitivity_scenario"
           ],
@@ -2314,6 +2460,97 @@
     },
     {
       "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/multi-fidelity-simulator",
+      "case_id": "multi-fidelity-simulator",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_HYPERBAND_ASHA"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "hyperband-asha"
+      ],
+      "dataset_version": "0.18.4",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "設計変数は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>3</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>。成功した call の cost 合計を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>36</mn></mrow></math>（high-fidelity-equivalent では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>k</mi></msub><msub><mi>c</mi><mrow><msub><mi>&#x02113;</mi><mi>k</mi></msub></mrow></msub><mo>&#x0002F;</mo><mn>12</mn></mrow></math>）以下にする。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003E;</mo><mn>2.4</mn></mrow></math> は failure、high fidelity で <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003C;</mo><mo>&#x02212;</mo><mn>2.2</mn></mrow></math> は timeout/censored として status と cost だけを ledger に残し、目的値の大きな値へ置換しない。",
+        "decision_variables": "設計変数 x と simulator call ごとの fidelity ℓ。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math>、low fidelity の cost を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>c</mi><mi>L</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math>、high fidelity の cost を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>c</mi><mi>H</mi></msub><mo>&#x0003D;</mo><mn>12</mn></mrow></math> とする。",
+        "objective": "高 fidelity の真の目的 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mi>H</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0.16</mn><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1.7</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.45</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>2.2</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.12</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>5.3</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。low fidelity は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mi>L</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>f</mi><mi>H</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.18</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>1.4</mn><mi>x</mi><mo>&#x0002B;</mo><mn>0.3</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math> とし、観測は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>&#x02113;</mi></msub><mo>&#x0003D;</mo><msub><mi>f</mi><mi>&#x02113;</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><msub><mi>&#x003B5;</mi><mi>&#x02113;</mi></msub></mrow></math>。low fidelity の順位が high fidelity と一致する保証は置かない。",
+        "variable_domain_summary": "実務では設計変数 x と fidelity ℓ を分け、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x02113;</mi><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>L</mi><mo>&#x0002C;</mo><mi>H</mi><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。x は設計値、ℓ は同じ設計をどの精度で評価するかを表す policy variable。"
+      },
+      "implementation_ids": [
+        "I_BOTORCH",
+        "I_OPTUNA",
+        "I_RAY_TUNE"
+      ],
+      "journey_id": "multi-fidelity-simulator",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
+      "limitations": [
+        "low fidelity の bias は意図的に順位を保存しないため、少ない high-fidelity call や discrepancy model の妥当性を保証しません。multi-fidelity ledger を再生する Theater と high-fidelity-equivalent cost を揃えた Compare は後続作業です。",
+        "固定された1次元・決定論的な教育用 simulator であり、実際の物理 simulator の fidelity 間誤差、noise 分布、runtime、failure 原因を表しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA014",
+      "problem_instance_ids": [
+        "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        }
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "status": "partial",
+      "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。既存の Bayesian Optimization Theater はこの高 fidelity 側の surrogate・acquisition の読み方を示しますが、low/high 選択、cost accounting、failure/censoring はまだ表示しません。",
+      "title_en": "Allocate a budget across low- and high-fidelity simulation",
+      "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "candidate_method_ids": [
         "MF_LP_QP_CONIC"
       ],
       "canonical_url": "/gallery/portfolio-allocation",
@@ -2883,12 +3120,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "hyperband-asha",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "ilqr-ddp",
       "asset_type": "content",
       "policy": "warning",
@@ -3254,9 +3485,9 @@
     "status_counts": {
       "complete": 5,
       "draft": 0,
-      "partial": 7
+      "partial": 8
     },
     "target_complete_journeys": 5,
-    "total_journeys": 12
+    "total_journeys": 13
   }
 }

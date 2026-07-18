@@ -353,6 +353,48 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:multi-fidelity-simulator:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "case:multi-fidelity-simulator",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:bounds",
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:very_expensive",
+        "feature_value:F_OBJECTIVE_FORM:simulation",
+        "feature_value:F_SOLUTION_GOAL:global_candidate",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_BOTORCH",
+        "implementation:I_OPTUNA",
+        "implementation:I_RAY_TUNE",
+        "journey:multi-fidelity-simulator",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_HYPERBAND_ASHA",
+        "method:M_NELDER_MEAD",
+        "problem:PA014",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075",
+        "view:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "view:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "view:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "view:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
+      "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:portfolio-allocation:overview",
       "dataset_version": "0.18.4",
       "document_id": "case:portfolio-allocation",
@@ -27338,6 +27380,37 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:multi-fidelity-simulator:M_NELDER_MEAD:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "failure:case:multi-fidelity-simulator:M_NELDER_MEAD",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:multi-fidelity-simulator",
+        "failure:structured:FM022",
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
+      "title": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:portfolio-allocation:M_NELDER_MEAD:overview",
       "dataset_version": "0.18.4",
       "document_id": "failure:case:portfolio-allocation:M_NELDER_MEAD",
@@ -33731,6 +33804,46 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:multi-fidelity-simulator:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "journey:multi-fidelity-simulator",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:multi-fidelity-simulator",
+        "content:bayesian-optimization",
+        "content:hyperband-asha",
+        "implementation:I_BOTORCH",
+        "implementation:I_OPTUNA",
+        "implementation:I_RAY_TUNE",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_HYPERBAND_ASHA",
+        "method:M_NELDER_MEAD",
+        "problem:PA014",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "source:S034",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
+      "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:portfolio-allocation:overview",
       "dataset_version": "0.18.4",
       "document_id": "journey:portfolio-allocation",
@@ -34592,6 +34705,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:hyperparameter-search",
+        "case:multi-fidelity-simulator",
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "content:bayesian-optimization",
         "implementation:I_AX",
@@ -35293,6 +35407,7 @@
       "document_id": "method:M_HYPERBAND_ASHA",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:multi-fidelity-simulator",
         "content:hyperband-asha",
         "implementation:I_OPTUNA",
         "implementation:I_RAY_TUNE",
@@ -35674,6 +35789,7 @@
         "case:EC013",
         "case:budget-allocation",
         "case:hyperparameter-search",
+        "case:multi-fidelity-simulator",
         "case:portfolio-allocation",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
@@ -36942,7 +37058,10 @@
       "dataset_version": "0.18.4",
       "document_id": "problem:PA014",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:multi-fidelity-simulator",
+        "journey:multi-fidelity-simulator"
+      ],
       "source_ids": [
         "S035",
         "S059",
@@ -37770,6 +37889,7 @@
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "journey:hyperparameter-search",
+        "journey:multi-fidelity-simulator",
         "source:S035",
         "source:S059",
         "source:S075",
@@ -37793,6 +37913,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "journey:hyperparameter-search",
+        "journey:multi-fidelity-simulator",
         "source:S035",
         "source:S059",
         "source:S075",
@@ -37817,6 +37938,7 @@
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "journey:hyperparameter-search",
+        "journey:multi-fidelity-simulator",
         "source:S035",
         "source:S059",
         "source:S075",
@@ -37841,6 +37963,7 @@
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "journey:hyperparameter-search",
+        "journey:multi-fidelity-simulator",
         "source:S035",
         "source:S059",
         "source:S075",

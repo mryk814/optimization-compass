@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 56,
+      "result_count": 57,
       "top_document_ids": [
         "case:hyperparameter-search",
         "method:MF_STOCHASTIC_ML",
