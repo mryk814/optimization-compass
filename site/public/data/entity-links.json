@@ -7609,6 +7609,62 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/shape-parameter-sensitivity",
+      "entity_id": "shape-parameter-sensitivity",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "形状parameterと感度",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.pde-constrained-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        }
+      ],
+      "summary": "形状最適化では、形状parameterの感度とPDE状態を介した目的の感度を分け、geometryとmeshが妥当な候補だけを更新比較に使います。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "shgo",
       "entity_type": "content",
