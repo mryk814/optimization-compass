@@ -799,6 +799,118 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "F_GUARANTEE_UNCERTAINTY",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.uncertainty-models",
+      "html": "<p>不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>「不確実な最適化」という一語だけでは、少なくとも次の4つが混ざります。</p>\n<table>\n<thead>\n<tr>\n<th>先に分けるもの</th>\n<th>問うていること</th>\n<th>代表的な記録</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>不確実性のsource</td>\n<td>何が揺らぐのか</td>\n<td>parameter、観測、process disturbance</td>\n</tr>\n<tr>\n<td>uncertainty model</td>\n<td>揺らぎを何として表すか</td>\n<td>point、set、distribution、scenario</td>\n</tr>\n<tr>\n<td>risk treatment</td>\n<td>悪い結果を目的へどう反映するか</td>\n<td>expectation、variance、worst case、tail risk</td>\n</tr>\n<tr>\n<td>guarantee scope</td>\n<td>どの条件で何を言えるか</td>\n<td>nominal、robust、probabilistic、empirical</td>\n</tr>\n</tbody>\n</table>\n<p>この分解をしないまま「robustだから安全」「scenarioで満たしたから確率保証がある」と読まないことが、この語彙の出発点です。</p>\n<h2 id=\"まず-何が不確実かを分ける\" tabindex=\"-1\">まず、何が不確実かを分ける</h2>\n<h3 id=\"不確実なparameter\" tabindex=\"-1\">不確実なparameter</h3>\n<p>材料定数、需要、将来価格など、モデルへ入れる値そのものが分からない場合です。真の値が固定されていても、推定できていないことがあります。これは、観測を増やせば減る知識不足（epistemic uncertainty）として扱う場合がありますが、必ずこの二分法だけで整理できるとは限りません。</p>\n<h3 id=\"observation-noise\" tabindex=\"-1\">observation noise</h3>\n<p>同じ条件を測り直しても値が揺れる、あるいは測定過程が真の状態を正確に返さない場合です。データを増やして平均を安定させることと、将来の観測が揺れないことは同じではありません。ノイズを目的関数の値へ入れたのか、制約判定へ入れたのかも残します。</p>\n<h3 id=\"process-disturbance\" tabindex=\"-1\">process disturbance</h3>\n<p>制御や運用の途中で外乱が入り、決定後の状態が変わる場合です。設計時点のparameter uncertaintyだけでなく、実行中のdisturbanceとfeedback・再計画の有無を記録します。</p>\n<p>これらは同じ問題に同時に現れます。たとえば、需要の推定誤差はparameter uncertainty、注文の到着時のばらつきはobservation noise、配送中の遅延はprocess disturbanceとして別々に検証する必要があります。</p>\n<h2 id=\"次に-揺らぎの表現を選ぶ\" tabindex=\"-1\">次に、揺らぎの表現を選ぶ</h2>\n<h3 id=\"nominal-model\" tabindex=\"-1\">nominal model</h3>\n<p>代表値を1つ置いて、通常の最適化問題を解きます。計算と説明は簡単ですが、代表値以外での可行性や性能は別の検証です。nominal feasibilityは、robust feasibilityや確率的な制約充足を意味しません。</p>\n<h3 id=\"uncertainty-set\" tabindex=\"-1\">uncertainty set</h3>\n<p>未知量が入る範囲を集合 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>U</mi></mrow></math> として、集合の中の値に対する条件を検討します。robust formulationでは「この集合のどの値を採っても制約を守る」のように、集合全体に対する可行性を問います。集合の形・幅・根拠を変えると保守性も変わるため、uncertainty setは単なるsolver parameterではありません。</p>\n<h3 id=\"distribution\" tabindex=\"-1\">distribution</h3>\n<p>未知量の確率分布を仮定し、期待値や確率を目的・制約へ入れます。確率モデルの選択、推定、calibration、独立性や定常性の仮定を明示します。分布を仮定した結果は、その仮定から外れたデータに対する無条件の保証ではありません。</p>\n<h3 id=\"empirical-scenarios\" tabindex=\"-1\">empirical scenarios</h3>\n<p>観測または生成した有限個のscenarioを並べ、各scenarioでの目的・制約値を比較します。これはscenario集合上の結果を確認する方法であり、未観測のout-of-sampleや真の分布に対する保証とは別です。scenario数、生成規則、seed、学習用と評価用の分割を固定して記録します。</p>\n<h3 id=\"ambiguity-set\" tabindex=\"-1\">ambiguity set</h3>\n<p>分布そのものを1つに固定せず、妥当と考える分布の集合を扱う考え方です。distributionally robust optimization（DRO）を使う場合は、どの分布集合を許したか、半径や距離の意味、データからの構成方法を明記します。これは uncertainty setでparameterを囲むことと同じではありません。</p>\n<h2 id=\"riskは目的と制約で別に扱う\" tabindex=\"-1\">riskは目的と制約で別に扱う</h2>\n<p>同じ「riskを抑える」でも、目的関数と制約では問いが違います。</p>\n<table>\n<thead>\n<tr>\n<th>場所</th>\n<th>問い</th>\n<th>記録するもの</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>objective</td>\n<td>平均的な性能と悪い結果のどちらを重く見るか</td>\n<td>expectation、variance、worst-case、tail-riskの定義と係数</td>\n</tr>\n<tr>\n<td>constraint</td>\n<td>危険な結果をどの頻度・範囲まで許すか</td>\n<td>violationの定義、target、confidence、判定単位</td>\n</tr>\n</tbody>\n</table>\n<p>varianceを小さくする目的を置いても、制約違反の確率を直接制御したことにはなりません。逆に、chance constraintを置いても、制約違反が起きないことを保証するわけではありません。CVaRなどtail riskを使う場合も、lossの向き、tailの定義、quantile、confidence level、sampleでの評価方法を同じ契約へ書きます。</p>\n<h2 id=\"guarantee-scopeを4段階で読む\" tabindex=\"-1\">guarantee scopeを4段階で読む</h2>\n<ol>\n<li><p><strong>Nominal</strong>: 代表値・基準データでの結果。基準から外れた場合の主張は含まない。</p>\n</li>\n<li><p><strong>Robust</strong>: 明示したuncertainty setの中での最悪条件に対する結果。setの外側までは言えない。</p>\n</li>\n<li><p><strong>Probabilistic</strong>: 明示した分布と確率水準のもとでの主張。分布仮定と推定誤差を別に検証する。</p>\n</li>\n<li><p><strong>Empirical scenario</strong>: 手元の有限scenarioで観測した結果。out-of-sample性能や確率保証は、別の評価設計が必要。</p>\n</li>\n</ol>\n<p>「制約を満たした」という一文には、どの時点で、どのscenario・set・分布で、何を計算し、どのtoleranceで判定したかを添えます。離散化したscenarioや固定sampleでの可行性を、連続系・将来データ・分布外の安全保証へ拡張しません。</p>\n<h2 id=\"case-journeyへつなぐ\" tabindex=\"-1\">Case journeyへつなぐ</h2>\n<p>現在の<a href=\"#/gallery/portfolio-allocation\">ポートフォリオ配分Case</a>は、4資産のsimplex制約と共分散riskを読むnominalな教材です。過去データの推定誤差や将来分布の変化を扱うrobust・stochastic・chance-constrained・DROのcomplete journeyではありません。Caseの制約、目的、実装を読んだあと、次のsliceでは固定scenarioとheld-out scenarioを分けたTheater/Compareを接続します。</p>\n<p>この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。complete journeyへ進めるには、少なくとも次を同じCase identityへ接続します。</p>\n<ul>\n<li><p>uncertainty sourceとmodel assumption</p>\n</li>\n<li><p>objective riskとconstraint riskの定義</p>\n</li>\n<li><p>固定した教育用scenarioとout-of-sample評価</p>\n</li>\n<li><p>sample size、confidence target、seed、停止条件</p>\n</li>\n<li><p>candidate・conditional・excluded methodの理由と、実装が報告する診断値</p>\n</li>\n</ul>\n<h2 id=\"仕様に残す最小contract\" tabindex=\"-1\">仕様に残す最小contract</h2>\n<p>不確実性を含むCaseでは、次の項目を空欄にしません。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">uncertainty_contract</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;source&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;uncertain_parameter | observation_noise | process_disturbance&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;model&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;nominal | set | distribution | scenarios | ambiguity_set&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;objective_risk&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;explicit_definition_or_not_applicable&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;constraint_treatment&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;nominal | robust | chance | scenario&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;training_evaluation_split&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;fixed_description&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;guarantee_scope&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;what_is_supported_and_under_which_assumptions&quot;</span><span class=\"p\">,</span>\n<span class=\"p\">}</span></code></pre></div>\n<p><code>unknown</code>は、まだ調べていないことを<code>nominal</code>や<code>not_applicable</code>へ変換するための値ではありません。未確定の前提を残したまま、どの追加観測・追加scenario・追加sourceが必要かを記録します。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/concept.constraint-class\">制約class</a>で可行性の判定単位を確認し、<a href=\"#/learn/concept.simplex\">Simplex・確率ベクトル</a>で配分Caseの変数領域を確認します。確率的な更新noiseとtraining validationの区別は<a href=\"#/learn/family.stochastic-ml\">確率勾配・機械学習optimizerの選び分け</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [
+        "concept.constraint-class",
+        "concept.simplex"
+      ],
+      "related_ids": [
+        "family.stochastic-ml",
+        "family.expensive-black-box",
+        "lp-qp-conic"
+      ],
+      "seo_description": "不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。",
+      "seo_title": "不確実性モデル・リスク・保証範囲",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。",
+      "title_en": "Uncertainty Models, Risk, and Guarantee Scope",
+      "title_ja": "不確実性モデル・リスク・保証範囲",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず-何が不確実かを分ける",
+          "label": "まず、何が不確実かを分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "不確実なparameter",
+          "label": "不確実なparameter",
+          "level": 3
+        },
+        {
+          "heading_id": "observation-noise",
+          "label": "observation noise",
+          "level": 3
+        },
+        {
+          "heading_id": "process-disturbance",
+          "label": "process disturbance",
+          "level": 3
+        },
+        {
+          "heading_id": "次に-揺らぎの表現を選ぶ",
+          "label": "次に、揺らぎの表現を選ぶ",
+          "level": 2
+        },
+        {
+          "heading_id": "nominal-model",
+          "label": "nominal model",
+          "level": 3
+        },
+        {
+          "heading_id": "uncertainty-set",
+          "label": "uncertainty set",
+          "level": 3
+        },
+        {
+          "heading_id": "distribution",
+          "label": "distribution",
+          "level": 3
+        },
+        {
+          "heading_id": "empirical-scenarios",
+          "label": "empirical scenarios",
+          "level": 3
+        },
+        {
+          "heading_id": "ambiguity-set",
+          "label": "ambiguity set",
+          "level": 3
+        },
+        {
+          "heading_id": "riskは目的と制約で別に扱う",
+          "label": "riskは目的と制約で別に扱う",
+          "level": 2
+        },
+        {
+          "heading_id": "guarantee-scopeを4段階で読む",
+          "label": "guarantee scopeを4段階で読む",
+          "level": 2
+        },
+        {
+          "heading_id": "case-journeyへつなぐ",
+          "label": "Case journeyへつなぐ",
+          "level": 2
+        },
+        {
+          "heading_id": "仕様に残す最小contract",
+          "label": "仕様に残す最小contract",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "F_VARIABLE_DOMAIN",
       "canonical_entity_type": "feature",
       "comparison_ids": [],
