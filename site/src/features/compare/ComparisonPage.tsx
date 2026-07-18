@@ -40,6 +40,7 @@ import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { comparisonRoute, firstMemberPerScenario } from "./compare-routes";
+import { comparisonModeLabel, rendererFamilyLabel } from "./compare-catalog";
 import { PageOrientation } from "../../components/PageOrientation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
@@ -1242,30 +1243,6 @@ function searchTreeTerminalLabel(state: "ongoing" | "optimality_proven" | "budge
     optimality_proven: "最適性証明済み",
     budget_exhausted: "予算停止・未証明",
   }[state];
-}
-
-function comparisonModeLabel(mode: string): string {
-  return {
-    method_contrast: "手法の違い",
-    parameter_sensitivity: "条件の違い",
-    initial_condition_sensitivity: "初期条件の違い",
-    failure_contrast: "失敗の違い",
-    result_tradeoff: "結果のトレードオフ",
-    strategy_contrast: "戦略の違い",
-  }[mode] ?? mode;
-}
-
-function rendererFamilyLabel(family: string): string {
-  return {
-    simplex_geometry: "単体形状",
-    continuous_trajectory: "連続軌跡",
-    generic_metric_history: "指標の履歴",
-    search_tree: "探索木",
-    surrogate_uncertainty: "代理モデルの不確実性",
-    feasible_region: "実行可能領域",
-    pareto_front: "パレート前線",
-    field_evolution: "設計fieldの進化",
-  }[family] ?? family;
 }
 
 function metricDirectionLabel(direction: string): string {

@@ -28,5 +28,17 @@ describe("CompareLabIndexPage", () => {
       "href",
       "/compare/COMPARE_GRADIENT_DIVERGENCE",
     );
+    expect(screen.getByRole("heading", { level: 2, name: "手法の違いから読む" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: "失敗の違いから読む" })).toBeVisible();
+    expect(screen.getAllByRole("heading", { level: 2 }).slice(1).map((heading) => heading.textContent)).toEqual([
+      "手法の違いから読む",
+      "条件の違いから読む",
+      "初期条件の違いから読む",
+      "失敗の違いから読む",
+      "結果のトレードオフから読む",
+      "戦略の違いから読む",
+    ]);
+    expect(screen.getByText("表示: 単体形状")).toBeVisible();
+    expect(screen.getByText("表示: 実行可能領域")).toBeVisible();
   });
 });
