@@ -7,7 +7,7 @@ title_en: Density Filter
 summary: density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。
 source_ids: [S099]
 prerequisites: [topology-optimization, simp-topology]
-related_ids: [optimality-criteria-topology, adjoint-sensitivity]
+related_ids: [shape-optimization, geometry-update-failure-modes, optimality-criteria-topology, adjoint-sensitivity]
 visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA]
 aliases: [/learn/density-filter]
@@ -37,6 +37,9 @@ $$
 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。
 したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。
 
+mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。
+density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。
+
 ```python
 weights = build_neighbor_weights(mesh, radius)
 filtered_density = weighted_average(density, weights)
@@ -62,6 +65,9 @@ filterはcomplianceを直接最小化する手法ではありません。
 
 filter radiusを変えると結果が大きく変わる場合、mesh、projection、penalizationの影響を分けて確認します。
 filterを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。
+
+目的値が改善しても、mesh refinementで荷重経路や境界が変わるならmesh dependenceが残っています。
+[形状更新の失敗モード](#/learn/geometry-update-failure-modes)でgeometry validityとmesh qualityを先に確認してください。
 
 ## 次に読む
 

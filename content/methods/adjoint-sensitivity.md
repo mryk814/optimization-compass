@@ -7,7 +7,7 @@ title_en: Adjoint Sensitivity Analysis
 summary: adjoint sensitivityは、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加solveで計算する方法です。
 source_ids: [S101]
 prerequisites: [topology-optimization, concept.constraint-class]
-related_ids: [simp-topology, density-filter, optimality-criteria-topology]
+related_ids: [shape-optimization, geometry-update-failure-modes, simp-topology, density-filter, optimality-criteria-topology]
 visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: []
 aliases: [/learn/adjoint-sensitivity]
@@ -58,6 +58,9 @@ adjoint sensitivityは、単独の更新則ではありません。
 gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。
 complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。
 
+形状変数を扱う場合は、感度の検査対象が密度fieldから境界やgeometry parameterへ移ります。
+geometry update、mesh quality、state solveを同じ反復の記録に残し、無効なmeshを通った感度を物理的な勾配として扱わないようにします。
+
 ## 最小コードで見る計算順序
 
 実装では、state solve、adjoint solve、設計感度の組み立てを分けて記録します。
@@ -80,4 +83,4 @@ SIMPでは、まず密度fieldから剛性を作り、state solveで変位を得
 
 ## 次に読む
 
-[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認し、[density filter](#/learn/density-filter)で離散fieldの正則化を読みます。
+[形状最適化の設計変数](#/learn/shape-optimization)でparameterizationの意味を確認し、[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認します。[density filter](#/learn/density-filter)は離散fieldの正則化、[形状更新の失敗モード](#/learn/geometry-update-failure-modes)はmeshとstateの切り分けを扱います。
