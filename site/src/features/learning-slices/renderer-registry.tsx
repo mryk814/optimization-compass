@@ -1,5 +1,6 @@
 import type { LearningSliceArtifact } from "../../contracts/learning-slices";
-import { FeasibleRegionRenderer, ParetoFrontRenderer, TopologyFieldRenderer } from "./renderers";
+import { buildFieldEvolutionPayload } from "../../contracts/field-evolution";
+import { FeasibleRegionRenderer, FieldEvolutionRenderer, ParetoFrontRenderer } from "./renderers";
 
 const renderers = {
   feasible_region: (artifact: LearningSliceArtifact) => (
@@ -9,7 +10,7 @@ const renderers = {
     <ParetoFrontRenderer artifact={artifact as Extract<LearningSliceArtifact, { renderer_family: "pareto_front" }>} />
   ),
   field_evolution: (artifact: LearningSliceArtifact) => (
-    <TopologyFieldRenderer artifact={artifact as Extract<LearningSliceArtifact, { renderer_family: "field_evolution" }>} />
+    <FieldEvolutionRenderer payload={buildFieldEvolutionPayload(artifact as Extract<LearningSliceArtifact, { renderer_family: "field_evolution" }>)} />
   ),
 } satisfies Record<LearningSliceArtifact["renderer_family"], (artifact: LearningSliceArtifact) => React.ReactNode>;
 

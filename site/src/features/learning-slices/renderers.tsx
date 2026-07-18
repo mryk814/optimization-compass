@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
-import type { FeasibleRegionArtifact, ParetoFrontArtifact, TopologyFieldArtifact, TopologyFieldStep, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
+import type { FeasibleRegionArtifact, ParetoFrontArtifact, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
+import type { FieldEvolutionPayload } from "../../contracts/field-evolution";
 
 const SIZE = 360;
 const LEFT = 70;
@@ -102,41 +103,42 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
   );
 }
 
-export function TopologyFieldRenderer({ artifact }: { artifact: TopologyFieldArtifact }) {
-  const [selectedRunId, setSelectedRunId] = useState(artifact.runs[0].run_id);
-  const [selectedStep, setSelectedStep] = useState(artifact.runs[0].steps.length - 1);
-  const selectedRun = artifact.runs.find((run) => run.run_id === selectedRunId) ?? artifact.runs[0];
-  const stepIndex = Math.min(selectedStep, selectedRun.steps.length - 1);
-  const current = selectedRun.steps[stepIndex];
+export function FieldEvolutionRenderer({ payload }: { payload: FieldEvolutionPayload }) {
+  const [selectedRunId, setSelectedRunId] = useState(payload.family_payload.runs[0].run_id);
+  const [selectedStep, setSelectedStep] = useState(payload.family_payload.runs[0].snapshots.length - 1);
+  const selectedRun = payload.family_payload.runs.find((run) => run.run_id === selectedRunId) ?? payload.family_payload.runs[0];
+  const stepIndex = Math.min(selectedStep, selectedRun.snapshots.length - 1);
+  const current = selectedRun.snapshots[stepIndex];
   const changeRun = (runId: string) => {
-    const next = artifact.runs.find((run) => run.run_id === runId) ?? artifact.runs[0];
+    const next = payload.family_payload.runs.find((run) => run.run_id === runId) ?? payload.family_payload.runs[0];
     setSelectedRunId(next.run_id);
-    setSelectedStep(Math.min(next.steps.length - 1, stepIndex));
+    setSelectedStep(Math.min(next.snapshots.length - 1, stepIndex));
   };
+  const currentMarkers = payload.event_markers.filter((marker) => marker.position.value === current.iteration && marker.marker_id.startsWith(`${selectedRun.run_id}-`));
   return (
     <section className="learning-renderer topology-renderer" aria-labelledby="topology-heading">
-      <div className="learning-renderer-heading"><div><p className="eyebrow">設計fieldの進化 (field_evolution) · 1.0.0</p><h2 id="topology-heading">密度、状態、感度を同じ反復で読む</h2></div><strong>volume {format(artifact.volume_fraction_target)}</strong></div>
+      <div className="learning-renderer-heading"><div><p className="eyebrow">設計fieldの進化 (field_evolution) · {payload.renderer_contract_version}</p><h2 id="topology-heading">密度、状態、感度を同じ反復で読む</h2></div><strong>volume {format(payload.family_payload.volume_fraction_target)}</strong></div>
       <p className="projection-disclosure"><strong>見る順番:</strong> 密度fieldで荷重経路を見て、状態と感度を重ね、最後にcomplianceとcheckerboardを確認します。</p>
       <div className="topology-controls">
-        <label htmlFor="topology-run">経路 <select id="topology-run" onChange={(event) => changeRun(event.target.value)} value={selectedRun.run_id}>{artifact.runs.map((run) => <option key={run.run_id} value={run.run_id}>{run.label_ja}</option>)}</select></label>
-        <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.steps[selectedRun.steps.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.steps.length - 1} min="0" onChange={(event) => setSelectedStep(Number(event.target.value))} type="range" value={stepIndex} /></label>
+        <label htmlFor="topology-run">経路 <select id="topology-run" onChange={(event) => changeRun(event.target.value)} value={selectedRun.run_id}>{payload.family_payload.runs.map((run) => <option key={run.run_id} value={run.run_id}>{run.label_ja}</option>)}</select></label>
+        <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.snapshots[selectedRun.snapshots.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.snapshots.length - 1} min="0" onChange={(event) => setSelectedStep(Number(event.target.value))} type="range" value={stepIndex} /></label>
       </div>
       <div className="topology-field-grid">
-        <FieldGrid label="設計密度 density" values={current.density} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="density" />
-        <FieldGrid label="状態 state" values={current.displacement_field} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="state" />
-        <FieldGrid label="filter後の感度" values={current.sensitivity_filtered} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="sensitivity" />
+        <FieldGrid label="設計密度 density" values={current.fields.design_field} columns={payload.family_payload.mesh.columns} rows={payload.family_payload.mesh.rows} mode="density" />
+        <FieldGrid label="状態 state" values={current.fields.state_field} columns={payload.family_payload.mesh.columns} rows={payload.family_payload.mesh.rows} mode="state" />
+        <FieldGrid label="filter後の感度" values={current.fields.sensitivity_field} columns={payload.family_payload.mesh.columns} rows={payload.family_payload.mesh.rows} mode="sensitivity" />
       </div>
       <dl className="comparison-policy-grid topology-metrics" aria-label="トポロジー最適化の現在値">
-        <div><dt>体積率</dt><dd>{format(current.volume_fraction)} / {format(artifact.volume_fraction_target)}</dd></div>
-        <div><dt>compliance</dt><dd>{format(current.compliance)}</dd></div>
-        <div><dt>gray fraction</dt><dd>{format(current.gray_fraction)}</dd></div>
-        <div><dt>checkerboard score</dt><dd>{format(current.checkerboard_score)}</dd></div>
-        <div><dt>projection beta</dt><dd>{format(current.projection_beta)}</dd></div>
+        <div><dt>体積率</dt><dd>{format(current.metrics.volume_fraction)} / {format(payload.family_payload.volume_fraction_target)}</dd></div>
+        <div><dt>compliance</dt><dd>{format(current.metrics.compliance)}</dd></div>
+        <div><dt>gray fraction</dt><dd>{format(current.metrics.gray_fraction)}</dd></div>
+        <div><dt>checkerboard score</dt><dd>{format(current.metrics.checkerboard_score)}</dd></div>
+        <div><dt>projection beta</dt><dd>{format(current.metrics.projection_beta)}</dd></div>
       </dl>
       <ul className="plot-legend topology-legend" aria-label="設計fieldの凡例"><li><span className="legend-swatch density-low" />低密度</li><li><span className="legend-swatch density-high" />高密度</li><li><span className="legend-swatch sensitivity" />感度の大きいセル</li></ul>
-      <p><strong>{current.label_ja}</strong>。{stepIndex === selectedRun.steps.length - 1 ? selectedRun.termination_reason_ja : "反復を進めて密度fieldと指標の対応を確認します。"}</p>
-      <details><summary>数値を文章で読む</summary><p>{artifact.text_alternative_ja}</p><ul>{artifact.method_distinctions_ja.map((item) => <li key={item}>{item}</li>)}</ul></details>
-      <p className="atlas-note">{artifact.limitations_ja}</p>
+      <p><strong>{current.label_ja}</strong>。{stepIndex === selectedRun.snapshots.length - 1 ? selectedRun.termination_reason_ja : "反復を進めて密度fieldと指標の対応を確認します。"}</p>
+      <section className="field-event-markers" aria-labelledby="field-event-markers-title"><h3 id="field-event-markers-title">イベントマーカー</h3><ol>{currentMarkers.map((marker) => <li key={marker.marker_id}><strong>{marker.label_ja}</strong> · {marker.position.axis}={marker.position.value} · {marker.severity === "warning" ? "warning" : "info"} · {marker.observable_ids.join(", ")}</li>)}</ol></section>
+      <aside className="field-static-fallback" aria-labelledby="field-static-fallback-title"><h3 id="field-static-fallback-title">{payload.static_fallback.title_ja}</h3><p>アニメーションなしでも、同じ field と指標の要点を確認できます。{payload.static_fallback.artifact_kind} · {payload.static_fallback.execution_status}</p><dl>{payload.static_fallback.facts.map((fact) => <div key={fact.observable_id}><dt>静的: {payload.observables.find((observable) => observable.observable_id === fact.observable_id)?.label_ja ?? fact.observable_id}</dt><dd>{fact.value}</dd></div>)}</dl><p className="atlas-note">{payload.static_fallback.limitations_ja}</p></aside>
     </section>
   );
 }
