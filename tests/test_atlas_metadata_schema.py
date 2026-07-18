@@ -38,13 +38,14 @@ def test_seed_is_explicit_and_closes_all_references() -> None:
         "M_SLSQP",
         "M_MOMENTUM_SGD",
         "M_ADAM",
+        "M_OC_TOPOLOGY",
     }
     assert all(
         profile.implementation_status == "not_applicable"
         for profile in seed.method_visualization_profiles
     )
     assert all(profile.implementation_id is None for profile in seed.method_visualization_profiles)
-    assert len(seed.demo_scenarios) == 7
+    assert len(seed.demo_scenarios) == 8
     assert len(seed.comparison_sets) == 1
     assert len(seed.comparison_set_members) == 3
     assert seed.learning_edges

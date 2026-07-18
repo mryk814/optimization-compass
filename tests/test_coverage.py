@@ -25,7 +25,7 @@ def test_report_separates_inventory_from_expected_coverage() -> None:
         "problem": 56,
     }
     assert len(report.subjects) == 171
-    assert len(report.expectations) == 8
+    assert len(report.expectations) == 11
     assert set(report.summary.status_counts) == {
         "available",
         "partial",

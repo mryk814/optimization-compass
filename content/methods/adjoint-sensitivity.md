@@ -58,6 +58,17 @@ adjoint sensitivityは、単独の更新則ではありません。
 gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。
 complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。
 
+## 最小コードで見る計算順序
+
+実装では、state solve、adjoint solve、設計感度の組み立てを分けて記録します。
+次の擬似コードは、更新則や境界条件を省いた感度計算の骨格です。
+
+```python
+state = solve_state(design)
+adjoint = solve_transpose_jacobian(state, objective)
+sensitivity = direct_derivative(state, design) - adjoint @ residual_derivative(state, design)
+```
+
 ## トポロジー最適化での読み方
 
 SIMPでは、まず密度fieldから剛性を作り、state solveで変位を得ます。

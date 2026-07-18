@@ -32,6 +32,17 @@ $$
 の形です。
 実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。
 
+近傍平均は、単に画像をぼかす処理ではありません。
+設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。
+半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。
+したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。
+
+```python
+weights = build_neighbor_weights(mesh, radius)
+filtered_density = weighted_average(density, weights)
+filtered_sensitivity = weighted_average(raw_sensitivity, weights)
+```
+
 ## 何を直しているか
 
 filterはcomplianceを直接最小化する手法ではありません。

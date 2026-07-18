@@ -40,6 +40,16 @@ $p>1$ にすると中間密度の剛性が相対的に不利になります。
 
 complianceの単調な改善だけでは終了判定に足りません。
 
+SIMPで見えている密度は、完成した部材形状そのものではありません。
+連続な設計変数を使いやすくするためのrelaxationであり、penalization、filter、projection、meshの選択によって最終fieldの読み方が変わります。
+特に中間密度が残る場合は、単にpを大きくするのではなく、state residual、感度のgradient check、volume制約、mesh refinementを分けて確認します。
+
+```python
+stiffness = emin + density**penalty * (e0 - emin)
+state = solve_linear_system(assemble_stiffness(stiffness), load)
+compliance = load @ state
+```
+
 ## 向く条件・避ける条件
 
 要素密度を設計変数として扱え、体積率と状態方程式を定義できる問題に向きます。
