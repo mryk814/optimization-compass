@@ -6,7 +6,9 @@ from pathlib import Path
 
 import pytest
 
+import optimization_compass.site_export as site_export_module
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.release_catalog import ReleaseCatalogError
 from optimization_compass.site_export import export_site_data
 from optimization_compass.trace_models import (
     AlgorithmTrace,
@@ -44,6 +46,42 @@ class BlankQuestionLabelRepository(KnowledgeRepository):
         return questions
 
 
+def test_exporter_fails_before_writing_when_release_catalog_is_missing(
+    tmp_path: Path,
+    repository: KnowledgeRepository,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    output = tmp_path / "site-data"
+    monkeypatch.setattr(site_export_module, "RELEASE_CATALOG_PATH", tmp_path / "missing.json")
+
+    with pytest.raises(ReleaseCatalogError, match="release catalog is not valid JSON"):
+        export_site_data(output, repository)
+
+    assert not output.exists()
+
+
+def test_exporter_rejects_catalog_current_entry_that_differs_from_local_release(
+    tmp_path: Path,
+    repository: KnowledgeRepository,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    catalog_path = tmp_path / "catalog.json"
+    catalog_payload = json.loads(
+        site_export_module.RELEASE_CATALOG_PATH.read_text(encoding="utf-8")
+    )
+    current_entry = next(
+        entry
+        for entry in catalog_payload["releases"]
+        if entry["version"] == catalog_payload["current_version"]
+    )
+    current_entry["database_sha256"] = "0" * 64
+    catalog_path.write_text(json.dumps(catalog_payload), encoding="utf-8")
+    monkeypatch.setattr(site_export_module, "RELEASE_CATALOG_PATH", catalog_path)
+
+    with pytest.raises(ReleaseCatalogError, match="current entry does not match"):
+        export_site_data(tmp_path / "site-data", repository)
+
+
 def test_exporter_rejects_blank_canonical_question_label(
     tmp_path: Path, database_path: Path
 ) -> None:
@@ -70,6 +108,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     second_recommendation_bytes = (second_output / "recommendation/site-data.json").read_bytes()
     first_scenario_bytes = (first_output / "visualization-scenarios.json").read_bytes()
     second_scenario_bytes = (second_output / "visualization-scenarios.json").read_bytes()
+    first_catalog_bytes = (first_output / "release-catalog.json").read_bytes()
+    second_catalog_bytes = (second_output / "release-catalog.json").read_bytes()
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
@@ -78,6 +118,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     ).read_bytes()
     assert first_recommendation_bytes == second_recommendation_bytes
     assert first_scenario_bytes == second_scenario_bytes
+    assert first_catalog_bytes == second_catalog_bytes
+    assert json.loads(first_catalog_bytes) == json.loads(
+        site_export_module.RELEASE_CATALOG_PATH.read_bytes()
+    )
     assert first_manifest == second_manifest
     assert first_view_bytes.endswith(b"\n")
     assert first_manifest_bytes.endswith(b"\n")
@@ -302,6 +346,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "total_entries": 25,
     }
     assert any(item["entry_kind"] == "case_exclusion" for item in failure_discovery["entries"])
+    assert manifest_payload["release_catalog"] == {
+        "path": "release-catalog.json",
+        "version": "1.0.0",
+    }
     assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
     assert manifest_payload["retrieval_documents"] == {
         "path": "retrieval-documents.json",

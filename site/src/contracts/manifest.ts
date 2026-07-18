@@ -61,6 +61,7 @@ export interface SiteManifest {
   benchmark_contexts: ManifestAsset;
   failure_modes: ManifestAsset;
   failure_discovery: ManifestAsset;
+  release_catalog: ManifestAsset;
   search_index: ManifestAsset;
   retrieval_documents: ManifestAsset;
   search_benchmark: ManifestAsset;
@@ -90,6 +91,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "benchmark_contexts",
       "failure_modes",
       "failure_discovery",
+      "release_catalog",
       "search_index",
       "retrieval_documents",
       "search_benchmark",
@@ -164,6 +166,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const failureDiscovery = record(data.failure_discovery, "failure_discovery");
   exactKeys(failureDiscovery, ["version", "path"], "failure_discovery");
   if (failureDiscovery.version !== "1.0.0") throw new Error("failure_discovery.version is unsupported.");
+  const releaseCatalog = record(data.release_catalog, "release_catalog");
+  exactKeys(releaseCatalog, ["version", "path"], "release_catalog");
+  if (releaseCatalog.version !== "1.0.0") throw new Error("release_catalog.version is unsupported.");
   const searchIndex = record(data.search_index, "search_index");
   exactKeys(searchIndex, ["version", "path"], "search_index");
   if (searchIndex.version !== "1.0.0") throw new Error("search_index.version is unsupported.");
@@ -249,6 +254,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     failure_discovery: {
       version: "1.0.0",
       path: safeRelativePath(failureDiscovery.path, "failure_discovery.path"),
+    release_catalog: {
+      version: "1.0.0",
+      path: safeRelativePath(releaseCatalog.path, "release_catalog.path"),
     },
     search_index: {
       version: "1.0.0",

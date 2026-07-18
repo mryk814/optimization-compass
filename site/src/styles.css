@@ -3448,6 +3448,23 @@ main:focus {
 .theater-catalog-tools > header .eyebrow { margin: 0; }
 .theater-catalog-tools h2 { margin: 0; font-size: .95rem; }
 .theater-catalog-filters { display: flex; align-items: end; gap: 1rem; margin: .65rem 0 .45rem; }
+.data-page { max-width: 76rem; margin: 0 auto; }
+.data-current { display: flex; align-items: baseline; gap: 0.45rem; margin: 1.25rem 0 0.65rem; }
+.data-current strong { color: #285d45; font-size: 1.15rem; }
+.data-current span, .data-note { color: #52605a; }
+.data-table-wrap { overflow-x: auto; border: 1px solid #d6dbd5; border-radius: 0.75rem; background: #fff; }
+.data-table-wrap:focus { outline: 3px solid #aac8b7; outline-offset: 2px; }
+.data-table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.data-table-wrap caption { padding: 0.75rem 0.9rem; color: #52605a; text-align: left; }
+.data-table-wrap th, .data-table-wrap td { padding: 0.65rem 0.75rem; border-top: 1px solid #e1e5df; text-align: left; vertical-align: top; white-space: nowrap; }
+.data-table-wrap thead th { color: #52605a; font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.data-table-wrap tbody th { display: flex; align-items: center; gap: 0.45rem; }
+.data-status { padding: 0.12rem 0.35rem; border-radius: 999px; background: #edf0ed; color: #52605a; font-size: 0.68rem; font-weight: 600; }
+.data-status-current { background: #dcebe1; color: #285d45; }
+.data-digest summary, .data-source summary { cursor: pointer; }
+.data-digest > code, .data-source > a { display: block; max-width: 32rem; margin-top: 0.35rem; overflow-wrap: anywhere; white-space: normal; }
+.data-source { margin-top: 0.35rem; }
+.data-note { margin: 0.7rem 0 0; font-size: 0.78rem; }
 .theater-catalog-filters label { display: grid; gap: 0.3rem; font-weight: 700; }
 .theater-catalog-filters span { margin-left: auto; color: #52605a; }
 .theater-family-list { display: grid; gap: 1.5rem; }

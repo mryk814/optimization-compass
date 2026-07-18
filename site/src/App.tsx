@@ -21,6 +21,7 @@ import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonP
 import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
 import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
 import { CoveragePage } from "./features/coverage/CoveragePage";
+import { DataPage } from "./features/data/DataPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
 import { FailureModePage } from "./features/failures/FailureModePage";
@@ -277,6 +278,7 @@ function AppShell() {
           <Route path="/sources" element={<SourceIndexPage />} />
           <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
           <Route path="/coverage" element={<CoveragePage />} />
+          <Route path="/data" element={<DataPage />} />
           <Route path="/learn" element={<ContentIndexPage />} />
           <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
           <Route path="/search" element={<SearchPage />} />
@@ -285,7 +287,7 @@ function AppShell() {
         </Routes>
       </main>
       <footer className="site-footer">
-        <span aria-live="polite">Dataset {datasetVersion ?? "…"}</span>
+        <Link aria-live="polite" to="/data">Dataset {datasetVersion ?? "…"}</Link>
         <span aria-hidden="true">·</span>
         <span>ViewSpec 1.0.0</span>
         <span aria-hidden="true">·</span>
