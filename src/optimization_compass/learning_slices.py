@@ -27,6 +27,9 @@ from optimization_compass.visualization_scenarios import (
     VisualizationSignal,
 )
 
+CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
+CANONICAL_FLOAT_ZERO_TOLERANCE = 1e-9
+
 LAST_VERIFIED = "2026-07-15"
 CONSTRAINED_ARTIFACT_ID: Literal["constrained-disk-feasible-region"] = (
     "constrained-disk-feasible-region"
@@ -779,7 +782,10 @@ def write_learning_slice_scenarios(
     ]
     payload_metadata: dict[str, tuple[int, str]] = {}
     for artifact, relative_path in payloads:
-        payload = _canonical_bytes(artifact)
+        payload = _canonical_bytes(
+            artifact,
+            canonicalize_floats=relative_path == f"visualizations/{TOPOLOGY_ARTIFACT_ID}.json",
+        )
         path = output_dir / relative_path
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(payload)
@@ -1668,15 +1674,32 @@ def _pareto_preference_scenario(
     return VisualizationScenario.model_validate(payload)
 
 
-def _canonical_bytes(model: TraceModel) -> bytes:
+def _canonical_bytes(model: TraceModel, *, canonicalize_floats: bool = False) -> bytes:
+    payload = model.model_dump(mode="json")
+    if canonicalize_floats:
+        payload = _canonicalize_floats(payload)
     payload = json.dumps(
-        model.model_dump(mode="json"),
+        payload,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
         allow_nan=False,
     )
     return (payload + "\n").encode("utf-8")
+
+
+def _canonicalize_floats(value: object) -> object:
+    """Remove platform-specific libm noise before hashing the topology trace."""
+    if isinstance(value, float):
+        if abs(value) < CANONICAL_FLOAT_ZERO_TOLERANCE:
+            return 0.0
+        normalized = float(format(value, f".{CANONICAL_FLOAT_SIGNIFICANT_DIGITS}g"))
+        return 0.0 if normalized == 0.0 else normalized
+    if isinstance(value, list):
+        return [_canonicalize_floats(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _canonicalize_floats(item) for key, item in value.items()}
+    return value
 
 
 def validate_reference_geometry() -> None:
