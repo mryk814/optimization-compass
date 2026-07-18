@@ -407,6 +407,7 @@ def evaluate_search_benchmark(index: SearchIndex, cases: list[dict[str, Any]]) -
     rows: list[dict[str, Any]] = []
     top1 = top3 = recalled = zero_results = 0
     relevance_cases = 0
+    relevance_cases = 0
     for case in cases:
         entity_types = {
             cast(SearchEntityType, str(value)) for value in case.get("entity_types", [])
