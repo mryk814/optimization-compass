@@ -3,6 +3,63 @@
   "dataset_version": "0.16.0",
   "pages": [
     {
+      "canonical_entity_id": "F_CONSTRAINT_CLASS",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.constraint-class",
+      "html": "<p>制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。</p>\n<h2 id=\"目的値が良くても-可行でなければ候補解ではない\" tabindex=\"-1\">目的値が良くても、可行でなければ候補解ではない</h2>\n<p>最小化問題では目的<code>f(x)</code>を小さくしたくなりますが、<code>x</code>が許容領域に入っていることは別の条件です。たとえば温度を下げるほど目的が改善しても、装置の下限温度を破れば実行できません。制約はこの「実行できる範囲」を定義します。</p>\n<p>一般には、bounds、等式、不等式を次のように書きます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>x</mi></msub><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>l</mi><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mi>u</mi><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"0.278em\" /><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>この式だけでなく、制約を評価できる情報の質が重要です。<code>g(x)</code>とそのJacobianを滑らかに計算できるのか、Boolean論理として扱うのか、simulationが失敗したとき初めて違反が分かるのかで、使える手法と診断値が変わります。</p>\n<h2 id=\"よくあるclassと-読むべき量\" tabindex=\"-1\">よくあるclassと、読むべき量</h2>\n<table>\n<thead>\n<tr>\n<th>class</th>\n<th>例</th>\n<th>解法側で読む量</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bounds</td>\n<td>温度、濃度、設計範囲</td>\n<td>各変数の下限・上限、active bound</td>\n</tr>\n<tr>\n<td>linear</td>\n<td>予算、質量保存、容量</td>\n<td>slack、dual、線形緩和のbound</td>\n</tr>\n<tr>\n<td>smooth nonlinear</td>\n<td>応力、反応速度、幾何条件</td>\n<td>constraint value、Jacobian、KKT residual</td>\n</tr>\n<tr>\n<td>equality / dynamics</td>\n<td>収支、状態方程式、ODE</td>\n<td>defect、初期・終端条件、integration error</td>\n</tr>\n<tr>\n<td>combinatorial / logical</td>\n<td>排他、順序、資源割当</td>\n<td>domain reduction、conflict、incumbent / gap</td>\n</tr>\n<tr>\n<td>implicit / failure</td>\n<td>simulator crash、実験失敗</td>\n<td>failure率、再試行規則、保守的な判定</td>\n</tr>\n</tbody>\n</table>\n<p>「制約なし」も有用な分類ですが、単にまだ制約を聞いていない状態とは区別します。不明な制約は<code>unknown</code>であり、制約なしと仮定してよい根拠にはなりません。</p>\n<h2 id=\"制約の形をsolverへ渡せるか\" tabindex=\"-1\">制約の形をsolverへ渡せるか</h2>\n<p>boundsやsimplexのようにprojectionが安価な集合なら、<a href=\"#/learn/projected-gradient\">Projected Gradient</a>のように一歩進んでから集合へ戻す方法を使えます。滑らかな一般制約と微分があるなら、<a href=\"#/learn/family.constrained-nlp\">制約付き非線形最適化</a>で扱うSQP、内点法、拡張Lagrange法などが候補です。</p>\n<p>一方で、<code>Aを選ぶならBを選ばない</code>、<code>3台のうち2台まで</code>、<code>この順序でしか工程を通せない</code>のような制約は、連続微分可能な不等式へ無理に直すより、<a href=\"#/learn/family.discrete-structure\">離散・組合せ最適化</a>として論理・整数・global constraintを表現する方が自然なことがあります。</p>\n<p>penaltyを目的へ足す方法は、制約違反を無視してよいという意味ではありません。係数を大きくするほど数値条件が悪くなることがあり、有限のpenaltyでは違反が残る場合もあります。目的値と最大違反量を別々に記録します。</p>\n<h2 id=\"可行性の確認を仕様にする\" tabindex=\"-1\">可行性の確認を仕様にする</h2>\n<p>最適化の完了条件を<code>success</code>フラグだけにしないで、問題に応じた可行性判定を書き下します。</p>\n<ul>\n<li><p>不等式は最大違反量と許容tolerance</p>\n</li>\n<li><p>等式は残差のnormと単位に応じたtolerance</p>\n</li>\n<li><p>dynamicsはmesh上のdefectだけでなく、必要なら区間内の制約確認</p>\n</li>\n<li><p>論理・整数制約は丸め後ではなく、最終candidateの割当で判定</p>\n</li>\n<li><p>simulation失敗は大きな目的値へ黙って置換せず、failureとして件数・条件・扱いを記録</p>\n</li>\n</ul>\n<p>非凸問題で小さいKKT residualが得られても、大域最適性の証明にはなりません。また、離散化されたmodelの可行性を、そのまま連続系・実機の安全性として読まないようにします。</p>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>制約は「solverへ渡す入力」である前に、解を採用してよいかを決める製品・実験上の仕様です。式、単位、tolerance、判定時点を一緒に保存すると、再現と切替がしやすくなります。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>変数が連続・整数・trajectoryのどれかは<a href=\"#/learn/concept.variable-domain\">変数のdomain</a>、評価が高価で違反を事前に判定しにくい場合の予算配分は<a href=\"#/learn/concept.evaluation-cost\">評価費と予算</a>を確認してください。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.constrained-nlp",
+        "family.discrete-structure",
+        "projected-gradient",
+        "augmented-lagrangian"
+      ],
+      "seo_description": "制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。",
+      "seo_title": "制約class",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。",
+      "title_en": "Constraint Class",
+      "title_ja": "制約class",
+      "toc": [
+        {
+          "heading_id": "目的値が良くても-可行でなければ候補解ではない",
+          "label": "目的値が良くても、可行でなければ候補解ではない",
+          "level": 2
+        },
+        {
+          "heading_id": "よくあるclassと-読むべき量",
+          "label": "よくあるclassと、読むべき量",
+          "level": 2
+        },
+        {
+          "heading_id": "制約の形をsolverへ渡せるか",
+          "label": "制約の形をsolverへ渡せるか",
+          "level": 2
+        },
+        {
+          "heading_id": "可行性の確認を仕様にする",
+          "label": "可行性の確認を仕様にする",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "F_CONVEXITY",
       "canonical_entity_type": "feature",
       "comparison_ids": [],
@@ -79,6 +136,462 @@
       "visualization_ids": [
         "nelder-mead-quadratic"
       ]
+    },
+    {
+      "canonical_entity_id": "F_STRUCTURE_TRAJECTORY",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.dynamics-defect",
+      "html": "<p>dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。</p>\n<h2 id=\"次のstateが合っているか-の誤差\" tabindex=\"-1\">「次のstateが合っているか」の誤差</h2>\n<p>離散化したdynamicsを</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>f</mi><mi>d</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>と書くと、時刻<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi></mrow></math>のdefectは</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x02212;</mo><msub><mi>f</mi><mi>d</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>です。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math>なら、列として置いたstateはそのdynamicsと整合します。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02016;</mo><msub><mi>d</mi><mi>k</mi></msub><mo>&#x02016;</mo></mrow></math>が大きいなら、見た目が滑らかな軌道でも、指定したmodelをたどってはいません。</p>\n<p>この残差はobjectiveに混ぜて小さくする場合も、NLPの等式制約として0へ押し込む場合もあります。どちらでも、結果を読むときは「costが下がったか」と「defectが許容値内か」を別に見ます。</p>\n<h2 id=\"defectが現れる場所\" tabindex=\"-1\">defectが現れる場所</h2>\n<table>\n<thead>\n<tr>\n<th>手法</th>\n<th>stateをどう扱うか</th>\n<th>defectの読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Direct Shooting</td>\n<td>rolloutでstateを生成</td>\n<td>同じ積分器・初期stateなら離散dynamicsは構成上満たしやすい。モデル誤差や積分誤差は別に残る。</td>\n</tr>\n<tr>\n<td>Direct Multiple Shooting</td>\n<td>segment境界のstateも変数</td>\n<td>各segmentの終点と次segmentの開始点の差がcontinuity defect。</td>\n</tr>\n<tr>\n<td>Direct Collocation</td>\n<td>mesh上のstateを変数</td>\n<td>多項式近似とcollocation条件から作るdynamics defect。</td>\n</tr>\n<tr>\n<td>iLQR / DDP</td>\n<td>nominal trajectoryをrollout</td>\n<td>update後のforward rolloutがlocal modelの外へ出ていないかを合わせて確認。</td>\n</tr>\n</tbody>\n</table>\n<p>defectの定義は積分器、collocation scheme、stateのscaleで変わります。別の実装どうしで数値だけを並べる前に、どのnorm・正規化・時刻点を使った値かを揃えます。</p>\n<h2 id=\"1個のnormだけで安心しない\" tabindex=\"-1\">1個のnormだけで安心しない</h2>\n<p><code>max_k ||d_k||</code>は最悪の結び目、<code>sum_k ||d_k||^2</code>は全体量を見ます。両方が役に立ちますが、どちらも違反の位置を隠します。次の3つを一緒に記録すると、切り分けしやすくなります。</p>\n<ul>\n<li><p>最大defectと、それが出た時刻</p>\n</li>\n<li><p>時刻ごとのdefect列。境界・接触・急な入力の近くで跳ねていないか</p>\n</li>\n<li><p>stateごとのscaleで正規化したdefect。単位の大きい状態だけが支配していないか</p>\n</li>\n</ul>\n<p>costが改善してもdefectが停滞するなら、停止判定を緩める前に、初期軌道、scale、regularization、mesh、積分器のいずれが原因かを分けて確認します。</p>\n<h2 id=\"defectが小さくても残る問い\" tabindex=\"-1\">defectが小さくても残る問い</h2>\n<p>defectが小さいことは、<strong>離散化したモデル</strong>に対する整合性の証拠です。実測dynamicsが合っていること、途中のpath制約を連続時間で満たすこと、より細かいmeshでも同じ解が出ることまでは意味しません。</p>\n<p>そのため、最終候補はcontrolを独立した高精度simulationに通し、state・path制約・終端状態を再評価します。これはsolverの成否とは別の検証です。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>defectをsegment境界で扱う方法は<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、mesh全体の制約として扱う方法は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>で確認できます。離散化そのものの読み方は<a href=\"#/learn/concept.time-discretization\">時間discretization</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.optimal-control",
+        "multiple-shooting",
+        "direct-collocation",
+        "direct-shooting"
+      ],
+      "seo_description": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。",
+      "seo_title": "dynamics defect",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。",
+      "title_en": "Dynamics Defect",
+      "title_ja": "dynamics defect",
+      "toc": [
+        {
+          "heading_id": "次のstateが合っているか-の誤差",
+          "label": "「次のstateが合っているか」の誤差",
+          "level": 2
+        },
+        {
+          "heading_id": "defectが現れる場所",
+          "label": "defectが現れる場所",
+          "level": 2
+        },
+        {
+          "heading_id": "1個のnormだけで安心しない",
+          "label": "1個のnormだけで安心しない",
+          "level": 2
+        },
+        {
+          "heading_id": "defectが小さくても残る問い",
+          "label": "defectが小さくても残る問い",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_EVALUATION_COST",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.evaluation-cost",
+      "html": "<p>評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。</p>\n<h2 id=\"評価費は-1回のwall-clock時間-だけではない\" tabindex=\"-1\">評価費は「1回のwall-clock時間」だけではない</h2>\n<p>simulationを1回実行する時間、実験試料を作る費用、GPU queueの待ち時間、失敗trialの後始末、担当者が確認できる回数は、どれも探索に使える予算を減らします。同じ10分の評価でも、100台で並列に回せる計算と、装置を占有して逐次にしか測れない実験では、適した探索の形が異なります。</p>\n<p>まず、次の予算を混ぜずに記録します。</p>\n<table>\n<thead>\n<tr>\n<th>予算</th>\n<th>例</th>\n<th>手法選択への影響</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>評価回数</td>\n<td>実験50回、simulation 1,000回</td>\n<td>surrogateを学習する余地、baselineの強さ</td>\n</tr>\n<tr>\n<td>逐次時間</td>\n<td>装置1日、締切まで6時間</td>\n<td>次の点を待って選ぶ価値</td>\n</tr>\n<tr>\n<td>並列枠</td>\n<td>GPU 8枚、試験片4本</td>\n<td>batch / asynchronous探索、idle時間</td>\n</tr>\n<tr>\n<td>fidelity</td>\n<td>epoch、mesh、試料量</td>\n<td>early stoppingやmulti-fidelityが使えるか</td>\n</tr>\n<tr>\n<td>再評価枠</td>\n<td>同一点を何回測るか</td>\n<td>noise推定、外れ値確認、比較の公平性</td>\n</tr>\n<tr>\n<td>失敗枠</td>\n<td>timeout、破損、infeasible</td>\n<td>retry・停止・欠測の扱い</td>\n</tr>\n</tbody>\n</table>\n<p><code>cheap</code>や<code>very_expensive</code>は普遍的な秒数ではありません。評価回数、並列性、必要精度、実験の不可逆性との相対的な分類です。</p>\n<h2 id=\"少数評価なら-履歴を使う価値が上がる\" tabindex=\"-1\">少数評価なら、履歴を使う価値が上がる</h2>\n<p>数十〜数百回しか評価できず、1回ごとの結果を待てるなら、観測履歴と不確実性から次の点を選ぶ<a href=\"#/learn/bayesian-optimization\">Bayesian Optimization</a>が候補になります。これは「必ず最少回数で最適解へ着く」ことを意味しません。surrogateの仮定、initial design、noise、acquisition最適化が合わなければ、単純な<a href=\"#/learn/random-search\">Random Search</a>より悪くなることもあります。</p>\n<p>評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試すbaselineが強いことがあります。途中の低コスト評価が最終性能をある程度予測するなら、<a href=\"#/learn/hyperband-asha\">Hyperband / ASHA</a>のようにresourceを段階配分する設計も検討できます。ただし、途中指標と最終指標の順位相関が弱いと、良い候補を早く落とします。</p>\n<h2 id=\"budgetは停止規則まで含めて固定する\" tabindex=\"-1\">budgetは停止規則まで含めて固定する</h2>\n<p>手法比較や実運用では、評価回数だけでなく停止規則を先に決めます。たとえば「80 trial、4 worker、wall-clock 6時間、failed trialは記録して再試行しない、同一点の再評価は最大2回」のように書きます。後から一方の手法だけに追加budgetを与えると、性能差と予算差を分けられません。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"n\">experiment_budget</span> <span class=\"o\">=</span> <span class=\"p\">{</span>\n    <span class=\"s2\">&quot;max_evaluations&quot;</span><span class=\"p\">:</span> <span class=\"mi\">80</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;wall_clock_minutes&quot;</span><span class=\"p\">:</span> <span class=\"mi\">360</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;parallel_workers&quot;</span><span class=\"p\">:</span> <span class=\"mi\">4</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;replicates_per_selected_point&quot;</span><span class=\"p\">:</span> <span class=\"mi\">2</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;failure_policy&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;record-and-stop&quot;</span><span class=\"p\">,</span>\n    <span class=\"s2\">&quot;stopping_rule&quot;</span><span class=\"p\">:</span> <span class=\"s2\">&quot;first-reached-limit&quot;</span><span class=\"p\">,</span>\n<span class=\"p\">}</span>\n\n<span class=\"k\">assert</span> <span class=\"n\">experiment_budget</span><span class=\"p\">[</span><span class=\"s2\">&quot;max_evaluations&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span>\n<span class=\"k\">assert</span> <span class=\"n\">experiment_budget</span><span class=\"p\">[</span><span class=\"s2\">&quot;parallel_workers&quot;</span><span class=\"p\">]</span> <span class=\"o\">&gt;</span> <span class=\"mi\">0</span></code></pre></div>\n<p>このようなcontractがあると、best-so-farだけでなく、評価開始・完了時刻、idle時間、失敗率、実際に使ったbudgetを並べて読めます。</p>\n<h2 id=\"高価な評価で見落としやすいこと\" tabindex=\"-1\">高価な評価で見落としやすいこと</h2>\n<ul>\n<li><p>初期designを省くと、surrogateや局所探索が偏った場所から始まる</p>\n</li>\n<li><p>noiseがあるのに再評価枠をゼロにすると、偶然の良い値を改善と誤認しやすい</p>\n</li>\n<li><p>batchを大きくしすぎると、同じ情報を得る前に似た候補を消費する</p>\n</li>\n<li><p>timeoutや実験失敗を黙って悪い目的値へ置換すると、失敗領域と低性能領域を区別できない</p>\n</li>\n<li><p>fidelityを下げた結果だけで最終品質を判断すると、早期停止のbiasを見落とす</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>評価費が高いことは、Bayesian Optimizationを自動的に第一選択にする条件ではありません。変数のdomain、条件付き空間、noise、並列度、失敗の意味、利用できるfidelityを一緒に見ます。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>高価なblack-box全体の条件付き選択は<a href=\"#/learn/family.expensive-black-box\">高価なblack-box・HPOの選び分け</a>へ、評価不能・失敗を含む可行性の扱いは<a href=\"#/learn/concept.constraint-class\">制約class</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.expensive-black-box",
+        "bayesian-optimization",
+        "random-search",
+        "hyperband-asha"
+      ],
+      "seo_description": "評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。",
+      "seo_title": "評価費と予算",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "status": "published",
+      "summary": "評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。",
+      "title_en": "Evaluation Cost and Budget",
+      "title_ja": "評価費と予算",
+      "toc": [
+        {
+          "heading_id": "評価費は-1回のwall-clock時間-だけではない",
+          "label": "評価費は「1回のwall-clock時間」だけではない",
+          "level": 2
+        },
+        {
+          "heading_id": "少数評価なら-履歴を使う価値が上がる",
+          "label": "少数評価なら、履歴を使う価値が上がる",
+          "level": 2
+        },
+        {
+          "heading_id": "budgetは停止規則まで含めて固定する",
+          "label": "budgetは停止規則まで含めて固定する",
+          "level": 2
+        },
+        {
+          "heading_id": "高価な評価で見落としやすいこと",
+          "label": "高価な評価で見落としやすいこと",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_CONSTRAINT_CLASS",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.path-terminal-constraints",
+      "html": "<p>path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。</p>\n<h2 id=\"制約は-どこで守るか-まで書く\" tabindex=\"-1\">制約は「どこで守るか」まで書く</h2>\n<p>軌道最適化の制約は、同じ不等式でも時刻の範囲で意味が変わります。</p>\n<table>\n<thead>\n<tr>\n<th>種類</th>\n<th>典型形</th>\n<th>例</th>\n<th>見落としやすい点</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>initial constraint</td>\n<td><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mrow><mi mathvariant=\"normal\">m</mi><mi mathvariant=\"normal\">e</mi><mi mathvariant=\"normal\">a</mi><mi mathvariant=\"normal\">s</mi><mi mathvariant=\"normal\">u</mi><mi mathvariant=\"normal\">r</mi><mi mathvariant=\"normal\">e</mi><mi mathvariant=\"normal\">d</mi></mrow></mrow></msub></mrow></math></td>\n<td>現在位置・初期速度</td>\n<td>推定値とmodelの初期化を混同する</td>\n</tr>\n<tr>\n<td>path constraint</td>\n<td><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn></mrow></math> for all <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi></mrow></math></td>\n<td>入力上限、温度上限、障害物回避</td>\n<td>mesh点だけ確認して時刻の間を見ない</td>\n</tr>\n<tr>\n<td>terminal constraint</td>\n<td><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>N</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math> または <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>g</mi><mi>T</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>N</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn></mrow></math></td>\n<td>目標姿勢、残量、到達条件</td>\n<td>終端costだけで到達を代用する</td>\n</tr>\n</tbody>\n</table>\n<p>terminal costは「終端へ近づく好み」を表せますが、terminal constraintそのものではありません。たとえば目標に少し近ければよい問題と、必ず所定の姿勢・速度で止まる必要がある問題は、定式化で区別します。</p>\n<h2 id=\"path制約は毎時刻のチェックリスト\" tabindex=\"-1\">path制約は毎時刻のチェックリスト</h2>\n<p>入力の上限を例にすると、</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>u</mi><mrow><mo>min</mo></mrow></msub><mo>&#x02264;</mo><msub><mi>u</mi><mi>k</mi></msub><mo>&#x02264;</mo><msub><mi>u</mi><mrow><mo>max</mo></mrow></msub><mspace width=\"2em\" /><mo stretchy=\"false\">&#x00028;</mo><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>N</mi><mo>&#x02212;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>は各時刻の入力を守る制約です。状態の上限や障害物距離も同様に、軌道の途中で破れた瞬間があれば不適です。</p>\n<p>結果の表には、<code>max_violation</code>だけでなく、どの制約が・いつ・どの程度破れたかを残します。制約ごとにscaleが違うなら、物理単位の違反量とsolver内部の正規化残差を混ぜずに表示します。</p>\n<h2 id=\"mesh上の可行性と連続時間の可行性\" tabindex=\"-1\">mesh上の可行性と連続時間の可行性</h2>\n<p>direct法ではpath制約をmesh点やcollocation pointで評価します。これは実用的な近似ですが、その時刻で制約を満たしたことと、点と点の間で常に満たすことは同じではありません。</p>\n<p>特に障害物の近傍、速いdynamics、bang-bangに近いcontrolでは、粗いmeshが違反を見逃すことがあります。候補解では次を確認します。</p>\n<ul>\n<li><p>より細かい時刻でforward simulationし、path制約を再評価する</p>\n</li>\n<li><p>mesh refinementで最大違反・終端誤差・costが安定するかを見る</p>\n</li>\n<li><p>制約のactive化が意図した時刻に起きているかを見る</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>mesh点で<code>max_violation = 0</code>でも、「連続時間で安全」とは限りません。連続時間の保証が必要な問題では、評価点の増加だけで済ませず、モデル・補間・安全marginを含む検証の設計を別に置きます。</p>\n</aside>\n<h2 id=\"制約を罰則へ逃がす前に\" tabindex=\"-1\">制約を罰則へ逃がす前に</h2>\n<p>path制約をpenaltyとしてobjectiveへ入れると、solverは違反とcostを交換できます。違反を絶対に許さない条件なら、penalty係数を大きくしただけでhard constraintになったとは扱いません。許容する違反、評価する時刻、最終判定のthresholdを明記します。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>path制約を疎なNLP制約として置く形は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>、segmentごとに扱う形は<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>で確認できます。制約が離散化にどう依存するかは<a href=\"#/learn/concept.time-discretization\">時間discretization</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.optimal-control",
+        "direct-collocation",
+        "multiple-shooting",
+        "direct-shooting",
+        "ilqr-ddp"
+      ],
+      "seo_description": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。",
+      "seo_title": "path・terminal制約",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。",
+      "title_en": "Path and Terminal Constraints",
+      "title_ja": "path・terminal制約",
+      "toc": [
+        {
+          "heading_id": "制約は-どこで守るか-まで書く",
+          "label": "制約は「どこで守るか」まで書く",
+          "level": 2
+        },
+        {
+          "heading_id": "path制約は毎時刻のチェックリスト",
+          "label": "path制約は毎時刻のチェックリスト",
+          "level": 2
+        },
+        {
+          "heading_id": "mesh上の可行性と連続時間の可行性",
+          "label": "mesh上の可行性と連続時間の可行性",
+          "level": 2
+        },
+        {
+          "heading_id": "制約を罰則へ逃がす前に",
+          "label": "制約を罰則へ逃がす前に",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "MF_OPTIMAL_CONTROL",
+      "canonical_entity_type": "method",
+      "comparison_ids": [],
+      "content_id": "concept.receding-horizon",
+      "html": "<p>receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。</p>\n<h2 id=\"計画を全部は実行しない\" tabindex=\"-1\">計画を全部は実行しない</h2>\n<p>時刻<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>t</mi></mrow></math>で、現在の推定state <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow></math>から先の<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi></mrow></math>stepを最適化し、control列</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msubsup><mi>U</mi><mi>t</mi><mo>&#x0002A;</mo></msubsup><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msubsup><mi>u</mi><mrow><mi>t</mi><mo stretchy=\"false\">&#x0007C;</mo><mi>t</mi></mrow><mo>&#x0002A;</mo></msubsup><mo>&#x0002C;</mo><msubsup><mi>u</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007C;</mo><mi>t</mi></mrow><mo>&#x0002A;</mo></msubsup><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msubsup><mi>u</mi><mrow><mi>t</mi><mo>&#x0002B;</mo><mi>N</mi><mo>&#x02212;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007C;</mo><mi>t</mi></mrow><mo>&#x0002A;</mo></msubsup><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>を得たとします。receding horizonでは先頭の<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msubsup><mi>u</mi><mrow><mi>t</mi><mo stretchy=\"false\">&#x0007C;</mo><mi>t</mi></mrow><mo>&#x0002A;</mo></msubsup></mrow></math>だけを適用し、次の観測でstateを更新して、また<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi></mrow></math>step先まで解きます。horizonは時間とともに前へ滑るのでreceding horizonと呼びます。</p>\n<p>open-loopの1回きりの軌道最適化と違い、観測したstateから計画を更新できるのがこの運用の核です。ただし、毎回解き直せることと、実際の閉ループ性能・安全性・安定性が自動で保証されることは別です。</p>\n<h2 id=\"1-cycleで分けて見るもの\" tabindex=\"-1\">1 cycleで分けて見るもの</h2>\n<table>\n<thead>\n<tr>\n<th>段階</th>\n<th>入力</th>\n<th>出力</th>\n<th>記録すべきこと</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>state estimation</td>\n<td>センサ値・前回の実行</td>\n<td>現在stateの推定</td>\n<td>timestamp、遅れ、推定の不確かさ</td>\n</tr>\n<tr>\n<td>trajectory optimization</td>\n<td>推定state・reference・制約</td>\n<td>horizon内のcontrol列とstate列</td>\n<td>solve time、停止理由、constraint violation</td>\n</tr>\n<tr>\n<td>execution</td>\n<td>先頭control</td>\n<td>次の実系の応答</td>\n<td>実行時間、飽和、通信遅延</td>\n</tr>\n<tr>\n<td>shift / warm start</td>\n<td>前回の解</td>\n<td>次cycleの初期軌道</td>\n<td>どの区間をshiftしたか、再初期化条件</td>\n</tr>\n</tbody>\n</table>\n<p>この4段階を混ぜると、「solverは成功しているのに追従が悪い」理由を見失います。推定、model mismatch、solve time、入力の飽和はそれぞれ別の失敗経路です。</p>\n<h2 id=\"horizonの長さは未来を見る距離と計算時間の交換\" tabindex=\"-1\">horizonの長さは未来を見る距離と計算時間の交換</h2>\n<p>horizonを長くすると遠い目標や制約を計画へ入れやすくなりますが、変数と計算時間も増えます。短すぎるhorizonでは、先の制約や目標を見ずに近視眼的な入力を選ぶことがあります。実時間に間に合わないhorizonは、良いoffline解でもそのcycleのcontrolになりません。</p>\n<p>比較では、horizonだけでなくsample time、許容solve time、初期化方法、同じstate推定、同じ制約評価を揃えます。<code>平均solve time</code>だけではなく、deadlineを越えた回数とそのとき採った制御動作も残します。</p>\n<h2 id=\"warm-startは魔法ではない\" tabindex=\"-1\">warm startは魔法ではない</h2>\n<p>前cycleの解を1stepずらして初期軌道へ入れるwarm startは、連続するcycleの計算を助けることがあります。しかし、referenceの急変、接触状態の切替、観測の飛び、制約のactive set変化では、過去の解がかえって悪い初期値になります。</p>\n<p>warm startを使うなら、shift後の初期軌道が初期stateと整合しているか、違反をどう初期化するか、失敗時にどの安全な制御へ移るかをsystem設計として明示します。ここでのfallbackは最適化器の比較を隠すためではなく、実行系の責務です。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>receding horizonは計画を更新する運用であり、特定のsolver・離散化・feedback保証を意味しません。結果は<a href=\"#/learn/concept.time-discretization\">時間discretization</a>、state estimation、model mismatch、実行deadlineを含めて評価します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>有限horizonの変数と制約の置き方は<a href=\"#/learn/concept.trajectory-variable\">trajectory variable</a>と<a href=\"#/learn/concept.path-terminal-constraints\">path・terminal制約</a>から確認できます。local feedbackの考え方を含む軌道更新は<a href=\"#/learn/ilqr-ddp\">iLQR / DDP</a>、directな制約処理は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.optimal-control",
+        "direct-shooting",
+        "multiple-shooting",
+        "direct-collocation",
+        "ilqr-ddp"
+      ],
+      "seo_description": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。",
+      "seo_title": "receding horizon",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。",
+      "title_en": "Receding Horizon",
+      "title_ja": "receding horizon",
+      "toc": [
+        {
+          "heading_id": "計画を全部は実行しない",
+          "label": "計画を全部は実行しない",
+          "level": 2
+        },
+        {
+          "heading_id": "1-cycleで分けて見るもの",
+          "label": "1 cycleで分けて見るもの",
+          "level": 2
+        },
+        {
+          "heading_id": "horizonの長さは未来を見る距離と計算時間の交換",
+          "label": "horizonの長さは未来を見る距離と計算時間の交換",
+          "level": 2
+        },
+        {
+          "heading_id": "warm-startは魔法ではない",
+          "label": "warm startは魔法ではない",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_VARIABLE_SIMPLEX",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.simplex",
+      "html": "<p>Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。</p>\n<h2 id=\"このページのsimplexは-比率の集合\" tabindex=\"-1\">このページのsimplexは「比率の集合」</h2>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi></mrow></math>成分のprobability simplexは、次の集合です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msup><mi>&#x00394;</mi><mrow><mi>n</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msup><mo>&#x0003D;</mo><mrow><mo stretchy=\"true\" fence=\"true\" form=\"prefix\">&#x0007B;</mo><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup><mo>&#x02223;</mo><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msubsup><mo>&#x02211;</mo><mrow><mi>i</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"true\" fence=\"true\" form=\"postfix\">&#x0007D;</mo></mrow><mo>&#x0002E;</mo></mrow></math></div>\n<p>成分は各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi></mrow></math>ではなく、和が1という等式制約を除いた<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>n</mi><mo>&#x02212;</mo><mn>1</mn></mrow></math>です。</p>\n<p>ここでいうsimplexは、LPのbasisを辿る<strong>Primal Simplex法</strong>や、Nelder–Meadの探索点を並べた<strong>単体</strong>とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。</p>\n<h2 id=\"素朴なeuclidean-stepが壊すもの\" tabindex=\"-1\">素朴なEuclidean stepが壊すもの</h2>\n<p>無制約の勾配step <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>x</mi><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x02207;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> は、一般に負の成分を作り、和も1からずらします。たとえば<code>[-0.1, 0.6, 0.5]</code>は合計こそ1でも、確率・配合比としては不正です。</p>\n<p><code>y / y.sum()</code>のような正規化も万能ではありません。負の成分を直せず、和が0に近いと不安定で、最も近いsimplex上の点を選ぶ操作でもありません。解釈できる比率を各反復で保ちたいなら、更新後にどの方法で集合へ戻すかを最初に決めます。</p>\n<table>\n<thead>\n<tr>\n<th>方策</th>\n<th>常に保つもの</th>\n<th style=\"text-align:right\">境界の0を表せるか</th>\n<th>主な注意</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Euclidean projection</td>\n<td>非負・和1</td>\n<td style=\"text-align:right\">はい</td>\n<td>projectionの費用とactive faceを確認</td>\n</tr>\n<tr>\n<td>softmax parameterization</td>\n<td>正・和1</td>\n<td style=\"text-align:right\">通常はいいえ</td>\n<td>logitに同じ定数を足しても解が同じ</td>\n</tr>\n<tr>\n<td>entropy mirror update</td>\n<td>正・和1（正の初期値なら）</td>\n<td style=\"text-align:right\">通常はいいえ</td>\n<td>log / underflow、mirror mapとstep schedule</td>\n</tr>\n<tr>\n<td>penaltyだけを加える</td>\n<td>反復中の可行性は保証しない</td>\n<td style=\"text-align:right\">場合による</td>\n<td>penalty係数と残る違反を別に診断</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"projectionとparameterizationは別の選択\" tabindex=\"-1\">Projectionとparameterizationは別の選択</h2>\n<p>Euclidean projectionは、更新候補<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi></mrow></math>に最も近いsimplex上の点を求めます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>&#x003A0;</mi><mrow><mi>&#x00394;</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>\\arg</mi><msub><mo>min</mo><mrow><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x00394;</mi><mrow><mi>n</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msup></mrow></msub><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mi>x</mi><mo>&#x02212;</mo><mi>y</mi><msubsup><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup><mo>&#x0002E;</mo></mrow></math></div>\n<p>この方法では、最適解がある成分をちょうど0にするなら、その境界へ到達できます。したがって「混合物から成分を完全に外す」「配分先をゼロにする」ことが解として必要なら、projectionは自然な候補です。<a href=\"#/learn/projected-gradient\">射影勾配法</a>では、このprojectionを各勾配stepの後に行います。</p>\n<p>一方、logit <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup></mrow></math> をsoftmaxで変換するparameterizationは</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mfrac><mrow><mi>exp</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>z</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow><mrow><msub><mo>&#x02211;</mo><mi>j</mi></msub><mi>exp</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>z</mi><mi>j</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></mfrac></mrow></math></div>\n<p>により内部点を保ちます。<code>z</code>に同じ定数を加えても<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>は変わらないため、logit自体の一意性はありません。また有限のlogitでは<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math>を厳密には表せません。これは欠点ではなく、境界の解を必要とするかどうかで選ぶべき性質です。</p>\n<h2 id=\"mirror-descentは比率のgeometryを使う\" tabindex=\"-1\">Mirror Descentは比率のgeometryを使う</h2>\n<p><a href=\"#/learn/mirror-descent\">Mirror Descent</a>ではnegative entropyのようなmirror mapを使い、simplex上でmultiplicativeな更新を作れます。正の初期値から始めるexponentiated-gradient型の更新は、正の成分と和1を保つため、確率・online allocationでEuclidean距離より自然な場合があります。</p>\n<p>ただし、entropy geometryが常に優れるわけではありません。boundaryの0を表す必要がある、logを取る成分がunderflowする、選んだmirror mapでdual側の計算が難しい、といったときはprojectionや別のparameterizationを比較します。方法名だけでなく、mirror map・初期点・step scheduleを記録します。</p>\n<h2 id=\"python-simplexへのeuclidean-projection\" tabindex=\"-1\">Python: simplexへのEuclidean projection</h2>\n<p>次の関数は、任意の実ベクトルをsum=1かつ非負な点へ射影します。更新後に<code>sum</code>と最小成分を確認するところまでを、最小の検証単位にします。</p>\n<div class=\"code-block\"><span class=\"code-language\">python</span><pre><code class=\"language-python\"><span class=\"kn\">import</span><span class=\"w\"> </span><span class=\"nn\">numpy</span><span class=\"w\"> </span><span class=\"k\">as</span><span class=\"w\"> </span><span class=\"nn\">np</span>\n\n\n<span class=\"k\">def</span><span class=\"w\"> </span><span class=\"nf\">project_to_simplex</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">:</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">)</span> <span class=\"o\">-&gt;</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">ndarray</span><span class=\"p\">:</span>\n    <span class=\"n\">descending</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">sort</span><span class=\"p\">(</span><span class=\"n\">values</span><span class=\"p\">)[::</span><span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">]</span>\n    <span class=\"n\">offsets</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">cumsum</span><span class=\"p\">(</span><span class=\"n\">descending</span><span class=\"p\">)</span> <span class=\"o\">-</span> <span class=\"mf\">1.0</span>\n    <span class=\"n\">indices</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">arange</span><span class=\"p\">(</span><span class=\"mi\">1</span><span class=\"p\">,</span> <span class=\"n\">values</span><span class=\"o\">.</span><span class=\"n\">size</span> <span class=\"o\">+</span> <span class=\"mi\">1</span><span class=\"p\">)</span>\n    <span class=\"n\">active</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">nonzero</span><span class=\"p\">(</span><span class=\"n\">descending</span> <span class=\"o\">-</span> <span class=\"n\">offsets</span> <span class=\"o\">/</span> <span class=\"n\">indices</span> <span class=\"o\">&gt;</span> <span class=\"mf\">0.0</span><span class=\"p\">)[</span><span class=\"mi\">0</span><span class=\"p\">]</span>\n    <span class=\"n\">threshold</span> <span class=\"o\">=</span> <span class=\"n\">offsets</span><span class=\"p\">[</span><span class=\"n\">active</span><span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">]]</span> <span class=\"o\">/</span> <span class=\"n\">indices</span><span class=\"p\">[</span><span class=\"n\">active</span><span class=\"p\">[</span><span class=\"o\">-</span><span class=\"mi\">1</span><span class=\"p\">]]</span>\n    <span class=\"k\">return</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">maximum</span><span class=\"p\">(</span><span class=\"n\">values</span> <span class=\"o\">-</span> <span class=\"n\">threshold</span><span class=\"p\">,</span> <span class=\"mf\">0.0</span><span class=\"p\">)</span>\n\n\n<span class=\"n\">candidate</span> <span class=\"o\">=</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">array</span><span class=\"p\">([</span><span class=\"o\">-</span><span class=\"mf\">0.30</span><span class=\"p\">,</span> <span class=\"mf\">0.85</span><span class=\"p\">,</span> <span class=\"mf\">1.20</span><span class=\"p\">,</span> <span class=\"o\">-</span><span class=\"mf\">0.05</span><span class=\"p\">])</span>\n<span class=\"n\">probability</span> <span class=\"o\">=</span> <span class=\"n\">project_to_simplex</span><span class=\"p\">(</span><span class=\"n\">candidate</span><span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"n\">probability</span><span class=\"p\">)</span>\n<span class=\"k\">assert</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">all</span><span class=\"p\">(</span><span class=\"n\">probability</span> <span class=\"o\">&gt;=</span> <span class=\"o\">-</span><span class=\"mf\">1e-12</span><span class=\"p\">)</span>\n<span class=\"k\">assert</span> <span class=\"n\">np</span><span class=\"o\">.</span><span class=\"n\">isclose</span><span class=\"p\">(</span><span class=\"n\">probability</span><span class=\"o\">.</span><span class=\"n\">sum</span><span class=\"p\">(),</span> <span class=\"mf\">1.0</span><span class=\"p\">)</span></code></pre></div>\n<p>これはsimplex制約を保つための部品です。目的関数が凸か、勾配が正しいか、step sizeが適切かは別に確認します。projection後の可行性だけから大域最適性を結論付けません。</p>\n<h2 id=\"見るべき診断値と切替サイン\" tabindex=\"-1\">見るべき診断値と切替サイン</h2>\n<ul>\n<li><p>成分和の誤差と最小成分（数値上の可行性）</p>\n</li>\n<li><p>0に張り付く成分とactive faceの変化</p>\n</li>\n<li><p>projection distanceまたはBregman stepの大きさ</p>\n</li>\n<li><p>objective、projected-gradient mapping、またはregret</p>\n</li>\n<li><p>step size、line search、underflow / overflow</p>\n</li>\n<li><p>0成分を許すべき問題なのにsoftmax内部点に張り付いていないか</p>\n</li>\n</ul>\n<p>切替の目安は明確です。projectionが支配的な計算時間になるなら、parameterization・分解・別のprimal-dual法を検討します。softmaxで必要な0配分へ近づけないなら、境界を表せるprojectionへ戻します。成分が頻繁に0と正を行き来するなら、step size、scale、目的のnoise、または配分の粗さを見直します。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>simplex上の可行解は「配分として成立する」ことを意味しますが、実験・生産・制御の下限量、整数ロット、時間変化する制約までは含みません。元の問題にある制約を別途評価します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>各反復で集合へ戻す方法は<a href=\"#/learn/projected-gradient\">射影勾配法</a>、entropyなど問題に合う距離で更新する方法は<a href=\"#/learn/mirror-descent\">Mirror Descent</a>を参照してください。より一般の集合とretractionの考え方は<a href=\"#/learn/family.manifold\">manifold最適化</a>へ進みます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "projected-gradient",
+        "mirror-descent",
+        "family.manifold"
+      ],
+      "seo_description": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。",
+      "seo_title": "Simplex・確率ベクトル",
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "status": "published",
+      "summary": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。",
+      "title_en": "Simplex and Probability Vectors",
+      "title_ja": "Simplex・確率ベクトル",
+      "toc": [
+        {
+          "heading_id": "このページのsimplexは-比率の集合",
+          "label": "このページのsimplexは「比率の集合」",
+          "level": 2
+        },
+        {
+          "heading_id": "素朴なeuclidean-stepが壊すもの",
+          "label": "素朴なEuclidean stepが壊すもの",
+          "level": 2
+        },
+        {
+          "heading_id": "projectionとparameterizationは別の選択",
+          "label": "Projectionとparameterizationは別の選択",
+          "level": 2
+        },
+        {
+          "heading_id": "mirror-descentは比率のgeometryを使う",
+          "label": "Mirror Descentは比率のgeometryを使う",
+          "level": 2
+        },
+        {
+          "heading_id": "python-simplexへのeuclidean-projection",
+          "label": "Python: simplexへのEuclidean projection",
+          "level": 2
+        },
+        {
+          "heading_id": "見るべき診断値と切替サイン",
+          "label": "見るべき診断値と切替サイン",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_STRUCTURE_TRAJECTORY",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.time-discretization",
+      "html": "<p>時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。</p>\n<h2 id=\"horizonを格子に切る\" tabindex=\"-1\">horizonを格子に切る</h2>\n<p>連続時間の系を</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mover><mrow><mi>x</mi></mrow><mo>&#x002D9;</mo></mover><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"2em\" /><mi>t</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mi>T</mi><mo stretchy=\"false\">]</mo></mrow></math></div>\n<p>とすると、時間discretizationは<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi></mrow></math>を<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi></mrow></math>区間へ分け、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x00394;</mi><mi>t</mi><mo>&#x0003D;</mo><mi>T</mi><mo>&#x0002F;</mo><mi>N</mi></mrow></math>ごとにstateやcontrolを表す操作です。最適化が解くのは、元の微分方程式そのものではなく、選んだintegrator・補間・meshにより作られた有限次元問題です。</p>\n<p>粗いmeshは変数と計算を減らしますが、速い変化、制約境界、短い接触を見落としやすくなります。細かいmeshは表現力を増やす一方で、変数・制約・条件数を増やし、初期軌道への依存を強めることがあります。</p>\n<h2 id=\"step-sizeはsolver設定ではなく定式化の一部\" tabindex=\"-1\">step sizeはsolver設定ではなく定式化の一部</h2>\n<table>\n<thead>\n<tr>\n<th>設計項目</th>\n<th>粗すぎるとき</th>\n<th>細かすぎるとき</th>\n<th>記録する値</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x00394;</mi><mi>t</mi></mrow></math></td>\n<td>dynamicsと制約の変化を取り逃す</td>\n<td>NLPが大きくなり収束が遅い</td>\n<td>horizon、区間数、step size</td>\n</tr>\n<tr>\n<td>control parameterization</td>\n<td>入力の切替を表せない</td>\n<td>不自然な高周波controlを許す</td>\n<td>zero-order holdかpiecewise linearか</td>\n</tr>\n<tr>\n<td>integrator / collocation scheme</td>\n<td>rollout誤差が解へ混ざる</td>\n<td>計算費用が支配する</td>\n<td>方式、order、tolerance</td>\n</tr>\n<tr>\n<td>mesh distribution</td>\n<td>重要なイベントに点がない</td>\n<td>不要な領域まで過剰に細かい</td>\n<td>等間隔か局所refinementか</td>\n</tr>\n</tbody>\n</table>\n<p>同じmethod名でも、この表の選択が違えば別の問題を解いているに近いことがあります。比較や再現では、method名とobjectiveだけでなくdiscretizationを固定条件として書きます。</p>\n<h2 id=\"refinementは-解が安定するか-を見る実験\" tabindex=\"-1\">refinementは「解が安定するか」を見る実験</h2>\n<p>もっとも小さな検証は、同じhorizon・初期軌道・modelでmeshを細かくして、判断が変わるかを見ることです。たとえば次を追います。</p>\n<ul>\n<li><p>objectiveとterminal errorが大きく変わらないか</p>\n</li>\n<li><p><a href=\"#/learn/concept.dynamics-defect\">dynamics defect</a>とpath制約違反が許容範囲に収まるか</p>\n</li>\n<li><p>controlの形やactive constraintの時刻が大きく動かないか</p>\n</li>\n<li><p>高精度simulationに通した結果が離散化解と整合するか</p>\n</li>\n</ul>\n<p>解が大きく変わるなら、粗いmeshの結果を「最適な連続時間軌道」と呼びません。どこを細かくすべきか、initial guessが変わっただけではないか、integratorの誤差かを切り分けます。</p>\n<h2 id=\"先に決めるべき3つ\" tabindex=\"-1\">先に決めるべき3つ</h2>\n<ol>\n<li><p>controlを各区間で一定にするか、線形・高次に補間するか</p>\n</li>\n<li><p>stateをrolloutで作るか、mesh上の変数として明示するか</p>\n</li>\n<li><p>path制約をどの時刻点で評価し、最終的にどのsimulationで再確認するか</p>\n</li>\n</ol>\n<p>この3つは<a href=\"#/learn/direct-shooting\">Direct Shooting</a>、<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、<a href=\"#/learn/direct-collocation\">Direct Collocation</a>の比較条件でもあります。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>離散化を細かくして結果が安定したことは、modelが正しいことの証明ではありません。model mismatch、測定誤差、実機の遅れは別の検証対象です。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>mesh上のstateとcontrolを同時に扱う設計は<a href=\"#/learn/direct-collocation\">Direct Collocation</a>、segmentを積分して結ぶ設計は<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>で具体化します。途中の可行性の読み方は<a href=\"#/learn/concept.path-terminal-constraints\">path・terminal制約</a>を参照してください。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.optimal-control",
+        "direct-collocation",
+        "multiple-shooting",
+        "direct-shooting",
+        "ilqr-ddp"
+      ],
+      "seo_description": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。",
+      "seo_title": "時間discretization",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。",
+      "title_en": "Time Discretization",
+      "title_ja": "時間discretization",
+      "toc": [
+        {
+          "heading_id": "horizonを格子に切る",
+          "label": "horizonを格子に切る",
+          "level": 2
+        },
+        {
+          "heading_id": "step-sizeはsolver設定ではなく定式化の一部",
+          "label": "step sizeはsolver設定ではなく定式化の一部",
+          "level": 2
+        },
+        {
+          "heading_id": "refinementは-解が安定するか-を見る実験",
+          "label": "refinementは「解が安定するか」を見る実験",
+          "level": 2
+        },
+        {
+          "heading_id": "先に決めるべき3つ",
+          "label": "先に決めるべき3つ",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_VARIABLE_TRAJECTORY",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.trajectory-variable",
+      "html": "<p>trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。</p>\n<h2 id=\"1個の点ではなく-時間に並んだ決定\" tabindex=\"-1\">1個の点ではなく、時間に並んだ決定</h2>\n<p>通常の最適化では、変数は<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup></mrow></math>のような1本のベクトルです。軌道最適化では、状態<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub></mrow></math>とcontrol <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mi>k</mi></msub></mrow></math>を時刻<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>N</mi></mrow></math>に並べ、次のような<strong>列</strong>として扱います。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"2em\" /><mi>U</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002E;</mo></mrow></math></div>\n<p>この列がtrajectory variableです。ロボットなら<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub></mrow></math>は位置・速度・姿勢など、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mi>k</mi></msub></mrow></math>は力・トルク・操舵などを表します。最適化は「次の入力を1個選ぶ」だけでなく、futureの状態と入力が矛盾しない並びを選びます。</p>\n<h2 id=\"state列とcontrol列を混同しない\" tabindex=\"-1\">state列とcontrol列を混同しない</h2>\n<p>stateは系が実際にたどる量、controlは系へ与える量です。両方を変数に置くか、controlだけを置いてstateをsimulationで作るかが、定式化の大きな違いになります。</p>\n<table>\n<thead>\n<tr>\n<th>定式化</th>\n<th>主な最適化変数</th>\n<th>stateの作り方</th>\n<th>最初に疑う点</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Direct Shooting</td>\n<td>control列</td>\n<td>初期stateからforward rollout</td>\n<td>長いhorizonで感度が悪化していないか</td>\n</tr>\n<tr>\n<td>Direct Multiple Shooting</td>\n<td>control列とsegment境界state</td>\n<td>segmentごとにrolloutし連続性を制約化</td>\n<td>境界でstateがつながっているか</td>\n</tr>\n<tr>\n<td>Direct Collocation</td>\n<td>mesh上のstate列とcontrol列</td>\n<td>dynamics defectを制約化</td>\n<td>meshが粗すぎないか</td>\n</tr>\n<tr>\n<td>iLQR / DDP</td>\n<td>nominal trajectoryの周りのupdate</td>\n<td>rolloutとlocal modelを往復</td>\n<td>local近似の外へ出ていないか</td>\n</tr>\n</tbody>\n</table>\n<p>変数数だけを見て「少ないほうが良い」とは決められません。stateを明示的に持つと変数は増えますが、path制約や途中の状態を直接見られる利点があります。controlだけにすると形は小さくなりますが、rolloutの感度がすべてcontrol列へ集まります。</p>\n<h2 id=\"まず描くべき4本の線\" tabindex=\"-1\">まず描くべき4本の線</h2>\n<p>実装や結果を読む前に、少なくとも次を別々に描きます。</p>\n<ul>\n<li><p>state trajectory: 位置、速度、温度などがどう変わるか</p>\n</li>\n<li><p>control trajectory: 入力が飽和・振動していないか</p>\n</li>\n<li><p>reference: 追従したい目標軌道や終端目標</p>\n</li>\n<li><p>constraint boundary: 許容範囲、障害物、入力上限</p>\n</li>\n</ul>\n<p>objectiveが下がっていても、controlが細かく振動する、stateが制約境界をかすめる、終端だけを合わせて途中が不自然になる、といった違和感はこの4本を分けると見つけやすくなります。</p>\n<h2 id=\"変数の意味はdynamicsで閉じる\" tabindex=\"-1\">変数の意味はdynamicsで閉じる</h2>\n<p>stateとcontrolを自由に並べただけではtrajectoryになりません。離散化したdynamics</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>f</mi><mi>d</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>またはそれに対応する残差が、隣り合う時刻を結びます。この結び目をどのように扱うかが、<a href=\"#/learn/direct-shooting\">Direct Shooting</a>、<a href=\"#/learn/multiple-shooting\">Direct Multiple Shooting</a>、<a href=\"#/learn/direct-collocation\">Direct Collocation</a>の差になります。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>trajectory variableは離散時刻上の表現です。solverがこの列に対して成功したことだけから、連続時間の実機・高精度simulationでも同じ軌道になるとは結論付けません。controlを再simulationし、時刻刻みを変えても重要な判断が変わらないかを確認します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>trajectoryの隣り合う点がdynamicsと整合しているかは<a href=\"#/learn/concept.dynamics-defect\">dynamics defect</a>、制約をどの時刻で確認するかは<a href=\"#/learn/concept.path-terminal-constraints\">path・terminal制約</a>へ進みます。変数をどう置くかの比較は<a href=\"#/learn/family.optimal-control\">最適制御・軌道最適化の選び分け</a>が入口です。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.optimal-control",
+        "direct-shooting",
+        "multiple-shooting",
+        "direct-collocation",
+        "ilqr-ddp"
+      ],
+      "seo_description": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。",
+      "seo_title": "trajectory variable",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "status": "published",
+      "summary": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。",
+      "title_en": "Trajectory Variables",
+      "title_ja": "trajectory variable",
+      "toc": [
+        {
+          "heading_id": "1個の点ではなく-時間に並んだ決定",
+          "label": "1個の点ではなく、時間に並んだ決定",
+          "level": 2
+        },
+        {
+          "heading_id": "state列とcontrol列を混同しない",
+          "label": "state列とcontrol列を混同しない",
+          "level": 2
+        },
+        {
+          "heading_id": "まず描くべき4本の線",
+          "label": "まず描くべき4本の線",
+          "level": 2
+        },
+        {
+          "heading_id": "変数の意味はdynamicsで閉じる",
+          "label": "変数の意味はdynamicsで閉じる",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_VARIABLE_DOMAIN",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.variable-domain",
+      "html": "<p>変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。</p>\n<h2 id=\"まず-何を選ぶか-を言葉にする\" tabindex=\"-1\">まず「何を選ぶか」を言葉にする</h2>\n<p>最適化でいう変数は、Pythonの<code>float</code>や<code>int</code>の型だけではありません。設計長さなら連続値、製品を採用するかならbinary、訪問順ならpermutation、制御入力の時系列ならtrajectoryが変数です。solver選択の前に、<strong>解として返したい対象がどの集合に属するか</strong>を明示します。</p>\n<p>同じ実装でも、表現を変えると別の問題になります。たとえば「3種類から1つを選ぶ」は、整数<code>0, 1, 2</code>として連続最適化器へ渡すより、categorical choiceまたはone-hot binaryとして制約を伴う離散問題として表す方が、選択の意味を保ちやすくなります。</p>\n<table>\n<thead>\n<tr>\n<th>domain</th>\n<th>典型例</th>\n<th>最初に確認すること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>continuous</td>\n<td>寸法、濃度、温度</td>\n<td>bounds、scale、微分の有無</td>\n</tr>\n<tr>\n<td>integer / binary</td>\n<td>台数、採否、on/off</td>\n<td>線形緩和の強さ、論理制約、許容gap</td>\n</tr>\n<tr>\n<td>categorical / ordinal</td>\n<td>材料種、モデル種、段階</td>\n<td>順序や距離を仮定してよいか</td>\n</tr>\n<tr>\n<td>permutation / graph / set</td>\n<td>順路、接続、選抜</td>\n<td>専用のgraph・matching・routing構造がないか</td>\n</tr>\n<tr>\n<td>simplex / matrix / manifold</td>\n<td>配合比、共分散、回転</td>\n<td>集合を保つprojection・parameterization・retractionがあるか</td>\n</tr>\n<tr>\n<td>trajectory / function</td>\n<td>制御列、温度profile</td>\n<td>時間離散化、dynamics、連続時間での妥当性</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"domainはsolver名より先に効く\" tabindex=\"-1\">domainはsolver名より先に効く</h2>\n<p>連続変数で滑らかな目的と勾配があるなら、<a href=\"#/learn/family.smooth-local\">滑らかな局所最適化</a>のような勾配法を検討できます。一方、binaryや整数を連続変数として解いて丸めるだけでは、丸め後の解が制約を満たすとは限らず、最適性gapの解釈も失われます。離散性が本質なら、<a href=\"#/learn/family.discrete-structure\">離散・組合せ最適化</a>の定式化から考えます。</p>\n<p>domainが特殊な集合である場合も同様です。確率の比率は単に非負な実数の並びではなく、合計1のsimplexです。回転行列や低ランク行列は、成分ごとのboundsだけでは本来の集合を保てません。制約へpenaltyを足す方法もありますが、projection、変数変換、または<a href=\"#/learn/family.manifold\">manifold最適化</a>のように集合を直接扱う方法と比べて、conditionや実行可能性を確認します。</p>\n<h2 id=\"連続緩和は便利だが-元の問題ではない\" tabindex=\"-1\">連続緩和は便利だが、元の問題ではない</h2>\n<p>整数・binary問題を連続緩和して解くと、下界、初期解、感度解析、branch-and-boundの部分問題として役立つことがあります。ただし、緩和解の<code>x = 0.37</code>は「0か1を選ぶ」という元の意思決定そのものではありません。丸めや整数化の後には、目的値・制約違反・最適性証明を改めて評価します。</p>\n<p>同じ注意はtrajectoryにもあります。時間を粗く離散化した制約を満たしても、連続時間の途中で安全制約を満たす保証には直結しません。必要ならmesh refinement、区間内検証、または連続時間の制約を扱う定式化を追加します。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>「変数が数値で表せる」ことと、「連続最適化として扱ってよい」ことは別です。カテゴリ、順列、論理、行列構造を安易に連続値へ符号化すると、solverが動いても解の意味を壊すことがあります。</p>\n</aside>\n<h2 id=\"診断するときの最小チェック\" tabindex=\"-1\">診断するときの最小チェック</h2>\n<p>解法を比較する前に、次を記録しておくと切替理由を追えます。</p>\n<ul>\n<li><p>各変数のdomain、単位、bounds、許容精度</p>\n</li>\n<li><p>整数・カテゴリの符号化と、無効な組合せを除く制約</p>\n</li>\n<li><p>連続緩和を使う場合は、丸め・repair後に再評価した可行性と目的値</p>\n</li>\n<li><p>trajectoryなら、時間刻み、制御の保持方法、区間内制約の確認方法</p>\n</li>\n<li><p>特殊集合なら、projection・parameterization・retractionのどれで集合を保つか</p>\n</li>\n</ul>\n<p>次に、目的の形が滑らかか、制約が何か、1回の評価にどれだけの予算を使えるかを並べます。domainだけで万能なsolverは決まりませんが、domainと矛盾する選択は早い段階で除外できます。</p>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p>制約の表し方と可行性の読み方は<a href=\"#/learn/concept.constraint-class\">制約class</a>、評価回数が限られるときの予算設計は<a href=\"#/learn/concept.evaluation-cost\">評価費と予算</a>を確認してください。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-18",
+      "prerequisites": [],
+      "related_ids": [
+        "family.smooth-local",
+        "family.discrete-structure",
+        "family.manifold"
+      ],
+      "seo_description": "変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。",
+      "seo_title": "変数のdomain",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。",
+      "title_en": "Variable Domain",
+      "title_ja": "変数のdomain",
+      "toc": [
+        {
+          "heading_id": "まず-何を選ぶか-を言葉にする",
+          "label": "まず「何を選ぶか」を言葉にする",
+          "level": 2
+        },
+        {
+          "heading_id": "domainはsolver名より先に効く",
+          "label": "domainはsolver名より先に効く",
+          "level": 2
+        },
+        {
+          "heading_id": "連続緩和は便利だが-元の問題ではない",
+          "label": "連続緩和は便利だが、元の問題ではない",
+          "level": 2
+        },
+        {
+          "heading_id": "診断するときの最小チェック",
+          "label": "診断するときの最小チェック",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
     },
     {
       "canonical_entity_id": "M_ACTIVE_SET_QP",

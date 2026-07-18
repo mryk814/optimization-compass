@@ -9,9 +9,9 @@
 | Status | Count |
 |---|---:|
 | available | 4 |
-| partial | 2 |
+| partial | 3 |
 | missing | 1 |
-| not_applicable | 1 |
+| not_applicable | 0 |
 
 ## Priority slices
 

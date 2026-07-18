@@ -1087,7 +1087,8 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+            "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
           ]
         },
         "canonical_problem_instance": {
@@ -1107,6 +1108,7 @@
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
             "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_BFGS",
             "/methods/M_NELDER_MEAD",
@@ -1160,6 +1162,7 @@
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
             "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_BFGS",
             "/methods/M_NELDER_MEAD",
@@ -2085,6 +2088,10 @@
         {
           "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
           "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+        },
+        {
+          "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
         }
       ],
       "completion_reasons": [],
@@ -2399,6 +2406,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.constraint-class",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.convexity",
       "asset_type": "content",
       "policy": "warning",
@@ -2406,6 +2419,54 @@
     },
     {
       "asset_id": "concept.derivative-free",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.dynamics-defect",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.evaluation-cost",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.path-terminal-constraints",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.receding-horizon",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.simplex",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.time-discretization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.trajectory-variable",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.variable-domain",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

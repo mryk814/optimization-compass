@@ -314,6 +314,7 @@
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "feature_value:F_CONSTRAINT_CLASS:bounds",
         "feature_value:F_DERIVATIVE_ACCESS:none_available",
         "feature_value:F_EVALUATION_COST:very_expensive",
@@ -581,6 +582,31 @@
       ],
       "text": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。",
       "title": "探索完了とnode予算停止を同じ上限で比べる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:hyperparameter-search",
+        "journey:hyperparameter-search",
+        "method:M_NELDER_MEAD",
+        "scenario:SCENARIO_NM_QUADRATIC",
+        "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-quadratic",
+        "trace:nelder-mead-quadratic-shifted"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
+      "title": "初期simplexでNelder–Meadの経路を読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -4404,6 +4430,174 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。",
+      "title": "制約class"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:よくあるclassと-読むべき量",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "class 例 解法側で読む量 bounds 温度、濃度、設計範囲 各変数の下限・上限、active bound linear 予算、質量保存、容量 slack、dual、線形緩和のbound smooth nonlinear 応力、反応速度、幾何条件 constraint value、Jacobian、KKT residual equality / dynamics 収支、状態方程式、ODE defect、初期・終端条件、integration error combinatorial / logical 排他、順序、資源割当 domain reduction、conflict、incumbent / gap implicit / failure simulator crash、実験失敗 failure率、再試行規則、保守的な判定 「制約なし」も有用な分類ですが、単にまだ制約を聞いていない状態とは区別します。不明な制約は unknown であり、制約なしと仮定してよい根拠にはなりません。",
+      "title": "よくあるclassと、読むべき量"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:制約の形をsolverへ渡せるか",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "boundsやsimplexのようにprojectionが安価な集合なら、 Projected Gradient のように一歩進んでから集合へ戻す方法を使えます。滑らかな一般制約と微分があるなら、 制約付き非線形最適化 で扱うSQP、内点法、拡張Lagrange法などが候補です。 一方で、 Aを選ぶならBを選ばない 、 3台のうち2台まで 、 この順序でしか工程を通せない のような制約は、連続微分可能な不等式へ無理に直すより、 離散・組合せ最適化 として論理・整数・global constraintを表現する方が自然なことがあります。 penaltyを目的へ足す方法は、制約違反を無視してよいという意味ではありません。係数を大きくするほど数値条件が悪くなることがあり、有限のpenaltyでは違反が残る場合もあります。目的値と最大違反量を別々に記録します。",
+      "title": "制約の形をsolverへ渡せるか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:可行性の確認を仕様にする",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "最適化の完了条件を success フラグだけにしないで、問題に応じた可行性判定を書き下します。 不等式は最大違反量と許容tolerance 等式は残差のnormと単位に応じたtolerance dynamicsはmesh上のdefectだけでなく、必要なら区間内の制約確認 論理・整数制約は丸め後ではなく、最終candidateの割当で判定 simulation失敗は大きな目的値へ黙って置換せず、failureとして件数・条件・扱いを記録 非凸問題で小さいKKT residualが得られても、大域最適性の証明にはなりません。また、離散化されたmodelの可行性を、そのまま連続系・実機の安全性として読まないようにします。 Note 制約は「solverへ渡す入力」である前に、解を採用してよいかを決める製品・実験上の仕様です。式、単位、tolerance、判定時点を一緒に保存すると、再現と切替がしやすくなります。",
+      "title": "可行性の確認を仕様にする"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "変数が連続・整数・trajectoryのどれかは 変数のdomain 、評価が高価で違反を事前に判定しにくい場合の予算配分は 評価費と予算 を確認してください。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.constraint-class:目的値が良くても-可行でなければ候補解ではない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.constraint-class",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:augmented-lagrangian",
+        "content:family.constrained-nlp",
+        "content:family.discrete-structure",
+        "content:projected-gradient",
+        "source:S017",
+        "source:S029",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "最小化問題では目的 f(x) を小さくしたくなりますが、 x が許容領域に入っていることは別の条件です。たとえば温度を下げるほど目的が改善しても、装置の下限温度を破れば実行できません。制約はこの「実行できる範囲」を定義します。 一般には、bounds、等式、不等式を次のように書きます。 min x f ( x ) subject to l ≤ x ≤ u , g ( x ) ≤ 0 , h ( x ) = 0 . この式だけでなく、制約を評価できる情報の質が重要です。 g(x) とそのJacobianを滑らかに計算できるのか、Boolean論理として扱うのか、simulationが失敗したとき初めて違反が分かるのかで、使える手法と診断値が変わります。",
+      "title": "目的値が良くても、可行でなければ候補解ではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.convexity:直感",
       "dataset_version": "0.16.0",
       "document_id": "content:concept.convexity",
@@ -4457,6 +4651,1264 @@
       ],
       "text": "微分を直接使わず、関数値の比較から探索する考え方です。 微分不能という意味だけではありません。勾配が得られない、信頼できない、または取得コストが高い場合も対象です。 向いている状況 状況 確認すること 実験・シミュレーション 1評価の時間と並列実行数 ノイズあり 再評価、ロバストな比較、停止条件 混合変数 離散変数を扱える探索演算子 関数値だけで動く局所探索 集団を使う大域探索 surrogateで評価点を選ぶ逐次探索 Warning 「導関数を使わない」は「調整不要」を意味しません。評価予算、初期設計、探索範囲を先に固定します。",
       "title": "直感"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:1個のnormだけで安心しない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "max_k ||d_k|| は最悪の結び目、 sum_k ||d_k||^2 は全体量を見ます。両方が役に立ちますが、どちらも違反の位置を隠します。次の3つを一緒に記録すると、切り分けしやすくなります。 最大defectと、それが出た時刻 時刻ごとのdefect列。境界・接触・急な入力の近くで跳ねていないか stateごとのscaleで正規化したdefect。単位の大きい状態だけが支配していないか costが改善してもdefectが停滞するなら、停止判定を緩める前に、初期軌道、scale、regularization、mesh、積分器のいずれが原因かを分けて確認します。",
+      "title": "1個のnormだけで安心しない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:defectが小さくても残る問い",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "defectが小さいことは、 離散化したモデル に対する整合性の証拠です。実測dynamicsが合っていること、途中のpath制約を連続時間で満たすこと、より細かいmeshでも同じ解が出ることまでは意味しません。 そのため、最終候補はcontrolを独立した高精度simulationに通し、state・path制約・終端状態を再評価します。これはsolverの成否とは別の検証です。",
+      "title": "defectが小さくても残る問い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:defectが現れる場所",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "手法 stateをどう扱うか defectの読み方 Direct Shooting rolloutでstateを生成 同じ積分器・初期stateなら離散dynamicsは構成上満たしやすい。モデル誤差や積分誤差は別に残る。 Direct Multiple Shooting segment境界のstateも変数 各segmentの終点と次segmentの開始点の差がcontinuity defect。 Direct Collocation mesh上のstateを変数 多項式近似とcollocation条件から作るdynamics defect。 iLQR / DDP nominal trajectoryをrollout update後のforward rolloutがlocal modelの外へ出ていないかを合わせて確認。 defectの定義は積分器、collocation scheme、stateのscaleで変わります。別の実装どうしで数値だけを並べる前に、どのnorm・正規化・時刻点を使った値かを揃えます。",
+      "title": "defectが現れる場所"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。",
+      "title": "dynamics defect"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "defectをsegment境界で扱う方法は Direct Multiple Shooting 、mesh全体の制約として扱う方法は Direct Collocation で確認できます。離散化そのものの読み方は 時間discretization へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.dynamics-defect:次のstateが合っているか-の誤差",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.dynamics-defect",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "離散化したdynamicsを x k + 1 = f d ( x k , u k ) と書くと、時刻 k のdefectは d k = x k + 1 − f d ( x k , u k ) です。 d k = 0 なら、列として置いたstateはそのdynamicsと整合します。 ‖ d k ‖ が大きいなら、見た目が滑らかな軌道でも、指定したmodelをたどってはいません。 この残差はobjectiveに混ぜて小さくする場合も、NLPの等式制約として0へ押し込む場合もあります。どちらでも、結果を読むときは「costが下がったか」と「defectが許容値内か」を別に見ます。",
+      "title": "「次のstateが合っているか」の誤差"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:budgetは停止規則まで含めて固定する",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "手法比較や実運用では、評価回数だけでなく停止規則を先に決めます。たとえば「80 trial、4 worker、wall-clock 6時間、failed trialは記録して再試行しない、同一点の再評価は最大2回」のように書きます。後から一方の手法だけに追加budgetを与えると、性能差と予算差を分けられません。 python experiment_budget = { \"max_evaluations\" : 80 , \"wall_clock_minutes\" : 360 , \"parallel_workers\" : 4 , \"replicates_per_selected_point\" : 2 , \"failure_policy\" : \"record-and-stop\" , \"stopping_rule\" : \"first-reached-limit\" , } assert experiment_budget [ \"max_evaluations\" ] > 0 assert experiment_budget [ \"parallel_workers\" ] > 0 このようなcontractがあると、best-so-farだけでなく、評価開始・完了時刻、idle時間、失敗率、実際に使ったbudgetを並べて読めます。",
+      "title": "budgetは停止規則まで含めて固定する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。",
+      "title": "評価費と予算"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:少数評価なら-履歴を使う価値が上がる",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "数十〜数百回しか評価できず、1回ごとの結果を待てるなら、観測履歴と不確実性から次の点を選ぶ Bayesian Optimization が候補になります。これは「必ず最少回数で最適解へ着く」ことを意味しません。surrogateの仮定、initial design、noise、acquisition最適化が合わなければ、単純な Random Search より悪くなることもあります。 評価が安価で大量並列に実行できる場合は、探索の複雑な逐次判断より、広く独立に試すbaselineが強いことがあります。途中の低コスト評価が最終性能をある程度予測するなら、 Hyperband / ASHA のようにresourceを段階配分する設計も検討できます。ただし、途中指標と最終指標の順位相関が弱いと、良い候補を早く落とします。",
+      "title": "少数評価なら、履歴を使う価値が上がる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "高価なblack-box全体の条件付き選択は 高価なblack-box・HPOの選び分け へ、評価不能・失敗を含む可行性の扱いは 制約class へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:評価費は-1回のwall-clock時間-だけではない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "simulationを1回実行する時間、実験試料を作る費用、GPU queueの待ち時間、失敗trialの後始末、担当者が確認できる回数は、どれも探索に使える予算を減らします。同じ10分の評価でも、100台で並列に回せる計算と、装置を占有して逐次にしか測れない実験では、適した探索の形が異なります。 まず、次の予算を混ぜずに記録します。 予算 例 手法選択への影響 評価回数 実験50回、simulation 1,000回 surrogateを学習する余地、baselineの強さ 逐次時間 装置1日、締切まで6時間 次の点を待って選ぶ価値 並列枠 GPU 8枚、試験片4本 batch / asynchronous探索、idle時間 fidelity epoch、mesh、試料量 early stoppingやmulti-fidelityが使えるか 再評価枠 同一点を何回測るか noise推定、外れ値確認、比較の公平性 失敗枠 timeout、破損、infeasible retry・停止・欠測の扱い cheap や very_expensive は普遍的な秒数ではありません。評価回数、並列性、必要精度、実験の不可逆性との相対的な分類です。",
+      "title": "評価費は「1回のwall-clock時間」だけではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.evaluation-cost:高価な評価で見落としやすいこと",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.evaluation-cost",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:random-search",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "初期designを省くと、surrogateや局所探索が偏った場所から始まる noiseがあるのに再評価枠をゼロにすると、偶然の良い値を改善と誤認しやすい batchを大きくしすぎると、同じ情報を得る前に似た候補を消費する timeoutや実験失敗を黙って悪い目的値へ置換すると、失敗領域と低性能領域を区別できない fidelityを下げた結果だけで最終品質を判断すると、早期停止のbiasを見落とす Warning 評価費が高いことは、Bayesian Optimizationを自動的に第一選択にする条件ではありません。変数のdomain、条件付き空間、noise、並列度、失敗の意味、利用できるfidelityを一緒に見ます。",
+      "title": "高価な評価で見落としやすいこと"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:mesh上の可行性と連続時間の可行性",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "direct法ではpath制約をmesh点やcollocation pointで評価します。これは実用的な近似ですが、その時刻で制約を満たしたことと、点と点の間で常に満たすことは同じではありません。 特に障害物の近傍、速いdynamics、bang-bangに近いcontrolでは、粗いmeshが違反を見逃すことがあります。候補解では次を確認します。 より細かい時刻でforward simulationし、path制約を再評価する mesh refinementで最大違反・終端誤差・costが安定するかを見る 制約のactive化が意図した時刻に起きているかを見る Warning mesh点で max_violation = 0 でも、「連続時間で安全」とは限りません。連続時間の保証が必要な問題では、評価点の増加だけで済ませず、モデル・補間・安全marginを含む検証の設計を別に置きます。",
+      "title": "mesh上の可行性と連続時間の可行性"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。",
+      "title": "path・terminal制約"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:path制約は毎時刻のチェックリスト",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "入力の上限を例にすると、 u min ≤ u k ≤ u max ( k = 0 , … , N − 1 ) は各時刻の入力を守る制約です。状態の上限や障害物距離も同様に、軌道の途中で破れた瞬間があれば不適です。 結果の表には、 max_violation だけでなく、どの制約が・いつ・どの程度破れたかを残します。制約ごとにscaleが違うなら、物理単位の違反量とsolver内部の正規化残差を混ぜずに表示します。",
+      "title": "path制約は毎時刻のチェックリスト"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:制約は-どこで守るか-まで書く",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "軌道最適化の制約は、同じ不等式でも時刻の範囲で意味が変わります。 種類 典型形 例 見落としやすい点 initial constraint x 0 = x m e a s u r e d 現在位置・初期速度 推定値とmodelの初期化を混同する path constraint g ( x k , u k ) ≤ 0 for all k 入力上限、温度上限、障害物回避 mesh点だけ確認して時刻の間を見ない terminal constraint h ( x N ) = 0 または g T ( x N ) ≤ 0 目標姿勢、残量、到達条件 終端costだけで到達を代用する terminal costは「終端へ近づく好み」を表せますが、terminal constraintそのものではありません。たとえば目標に少し近ければよい問題と、必ず所定の姿勢・速度で止まる必要がある問題は、定式化で区別します。",
+      "title": "制約は「どこで守るか」まで書く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:制約を罰則へ逃がす前に",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "path制約をpenaltyとしてobjectiveへ入れると、solverは違反とcostを交換できます。違反を絶対に許さない条件なら、penalty係数を大きくしただけでhard constraintになったとは扱いません。許容する違反、評価する時刻、最終判定のthresholdを明記します。",
+      "title": "制約を罰則へ逃がす前に"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.path-terminal-constraints:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.path-terminal-constraints",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "path制約を疎なNLP制約として置く形は Direct Collocation 、segmentごとに扱う形は Direct Multiple Shooting で確認できます。制約が離散化にどう依存するかは 時間discretization へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:1-cycleで分けて見るもの",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "段階 入力 出力 記録すべきこと state estimation センサ値・前回の実行 現在stateの推定 timestamp、遅れ、推定の不確かさ trajectory optimization 推定state・reference・制約 horizon内のcontrol列とstate列 solve time、停止理由、constraint violation execution 先頭control 次の実系の応答 実行時間、飽和、通信遅延 shift / warm start 前回の解 次cycleの初期軌道 どの区間をshiftしたか、再初期化条件 この4段階を混ぜると、「solverは成功しているのに追従が悪い」理由を見失います。推定、model mismatch、solve time、入力の飽和はそれぞれ別の失敗経路です。",
+      "title": "1 cycleで分けて見るもの"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:horizonの長さは未来を見る距離と計算時間の交換",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "horizonを長くすると遠い目標や制約を計画へ入れやすくなりますが、変数と計算時間も増えます。短すぎるhorizonでは、先の制約や目標を見ずに近視眼的な入力を選ぶことがあります。実時間に間に合わないhorizonは、良いoffline解でもそのcycleのcontrolになりません。 比較では、horizonだけでなくsample time、許容solve time、初期化方法、同じstate推定、同じ制約評価を揃えます。 平均solve time だけではなく、deadlineを越えた回数とそのとき採った制御動作も残します。",
+      "title": "horizonの長さは未来を見る距離と計算時間の交換"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。",
+      "title": "receding horizon"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:warm-startは魔法ではない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "前cycleの解を1stepずらして初期軌道へ入れるwarm startは、連続するcycleの計算を助けることがあります。しかし、referenceの急変、接触状態の切替、観測の飛び、制約のactive set変化では、過去の解がかえって悪い初期値になります。 warm startを使うなら、shift後の初期軌道が初期stateと整合しているか、違反をどう初期化するか、失敗時にどの安全な制御へ移るかをsystem設計として明示します。ここでのfallbackは最適化器の比較を隠すためではなく、実行系の責務です。 Warning receding horizonは計画を更新する運用であり、特定のsolver・離散化・feedback保証を意味しません。結果は 時間discretization 、state estimation、model mismatch、実行deadlineを含めて評価します。",
+      "title": "warm startは魔法ではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "有限horizonの変数と制約の置き方は trajectory variable と path・terminal制約 から確認できます。local feedbackの考え方を含む軌道更新は iLQR / DDP 、directな制約処理は Direct Collocation へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.receding-horizon:計画を全部は実行しない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.receding-horizon",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "text": "時刻 t で、現在の推定state x t から先の N stepを最適化し、control列 U t * = ( u t | t * , u t + 1 | t * , … , u t + N − 1 | t * ) を得たとします。receding horizonでは先頭の u t | t * だけを適用し、次の観測でstateを更新して、また N step先まで解きます。horizonは時間とともに前へ滑るのでreceding horizonと呼びます。 open-loopの1回きりの軌道最適化と違い、観測したstateから計画を更新できるのがこの運用の核です。ただし、毎回解き直せることと、実際の閉ループ性能・安全性・安定性が自動で保証されることは別です。",
+      "title": "計画を全部は実行しない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:mirror-descentは比率のgeometryを使う",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "Mirror Descent ではnegative entropyのようなmirror mapを使い、simplex上でmultiplicativeな更新を作れます。正の初期値から始めるexponentiated-gradient型の更新は、正の成分と和1を保つため、確率・online allocationでEuclidean距離より自然な場合があります。 ただし、entropy geometryが常に優れるわけではありません。boundaryの0を表す必要がある、logを取る成分がunderflowする、選んだmirror mapでdual側の計算が難しい、といったときはprojectionや別のparameterizationを比較します。方法名だけでなく、mirror map・初期点・step scheduleを記録します。",
+      "title": "Mirror Descentは比率のgeometryを使う"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。",
+      "title": "Simplex・確率ベクトル"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:projectionとparameterizationは別の選択",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "Euclidean projectionは、更新候補 y に最も近いsimplex上の点を求めます。 Π Δ ( y ) = \\arg min x ∈ Δ n − 1 ‖ x − y ‖ 2 2 . この方法では、最適解がある成分をちょうど0にするなら、その境界へ到達できます。したがって「混合物から成分を完全に外す」「配分先をゼロにする」ことが解として必要なら、projectionは自然な候補です。 射影勾配法 では、このprojectionを各勾配stepの後に行います。 一方、logit z ∈ ℝ n をsoftmaxで変換するparameterizationは x i = exp ( z i ) ∑ j exp ( z j ) により内部点を保ちます。 z に同じ定数を加えても x は変わらないため、logit自体の一意性はありません。また有限のlogitでは x i = 0 を厳密には表せません。これは欠点ではなく、境界の解を必要とするかどうかで選ぶべき性質です。",
+      "title": "Projectionとparameterizationは別の選択"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:python-simplexへのeuclidean-projection",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "次の関数は、任意の実ベクトルをsum=1かつ非負な点へ射影します。更新後に sum と最小成分を確認するところまでを、最小の検証単位にします。 python import numpy as np def project_to_simplex ( values : np . ndarray ) -> np . ndarray : descending = np . sort ( values )[:: - 1 ] offsets = np . cumsum ( descending ) - 1.0 indices = np . arange ( 1 , values . size + 1 ) active = np . nonzero ( descending - offsets / indices > 0.0 )[ 0 ] threshold = offsets [ active [ - 1 ]] / indices [ active [ - 1 ]] return np . maximum ( values - threshold , 0.0 ) candidate = np . array ([ - 0.30 , 0.85 , 1.20 , - 0.05 ]) probability = project_to_simplex ( candidate ) print ( probability ) assert np . all ( probability >= - 1e-12 ) assert np . isclose ( probability . sum (), 1.0 ) これはsimplex制約を保つための部品です。目的関数が凸か、勾配が正しいか、step sizeが適切かは別に確認します。projection後の可行性だけから大域最適性を結論付けません。",
+      "title": "Python: simplexへのEuclidean projection"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:このページのsimplexは-比率の集合",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "n 成分のprobability simplexは、次の集合です。 Δ n − 1 = { x ∈ ℝ n ∣ x i ≥ 0 , ∑ i = 1 n x i = 1 } . 成分は各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は n ではなく、和が1という等式制約を除いた n − 1 です。 ここでいうsimplexは、LPのbasisを辿る Primal Simplex法 や、Nelder–Meadの探索点を並べた 単体 とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。",
+      "title": "このページのsimplexは「比率の集合」"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "各反復で集合へ戻す方法は 射影勾配法 、entropyなど問題に合う距離で更新する方法は Mirror Descent を参照してください。より一般の集合とretractionの考え方は manifold最適化 へ進みます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:素朴なeuclidean-stepが壊すもの",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "無制約の勾配step y = x − η ∇ f ( x ) は、一般に負の成分を作り、和も1からずらします。たとえば [-0.1, 0.6, 0.5] は合計こそ1でも、確率・配合比としては不正です。 y / y.sum() のような正規化も万能ではありません。負の成分を直せず、和が0に近いと不安定で、最も近いsimplex上の点を選ぶ操作でもありません。解釈できる比率を各反復で保ちたいなら、更新後にどの方法で集合へ戻すかを最初に決めます。 方策 常に保つもの 境界の0を表せるか 主な注意 Euclidean projection 非負・和1 はい projectionの費用とactive faceを確認 softmax parameterization 正・和1 通常はいいえ logitに同じ定数を足しても解が同じ entropy mirror update 正・和1（正の初期値なら） 通常はいいえ log / underflow、mirror mapとstep schedule penaltyだけを加える 反復中の可行性は保証しない 場合による penalty係数と残る違反を別に診断",
+      "title": "素朴なEuclidean stepが壊すもの"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.simplex:見るべき診断値と切替サイン",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "成分和の誤差と最小成分（数値上の可行性） 0に張り付く成分とactive faceの変化 projection distanceまたはBregman stepの大きさ objective、projected-gradient mapping、またはregret step size、line search、underflow / overflow 0成分を許すべき問題なのにsoftmax内部点に張り付いていないか 切替の目安は明確です。projectionが支配的な計算時間になるなら、parameterization・分解・別のprimal-dual法を検討します。softmaxで必要な0配分へ近づけないなら、境界を表せるprojectionへ戻します。成分が頻繁に0と正を行き来するなら、step size、scale、目的のnoise、または配分の粗さを見直します。 Warning simplex上の可行解は「配分として成立する」ことを意味しますが、実験・生産・制御の下限量、整数ロット、時間変化する制約までは含みません。元の問題にある制約を別途評価します。",
+      "title": "見るべき診断値と切替サイン"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:horizonを格子に切る",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "連続時間の系を x ˙ ( t ) = f ( x ( t ) , u ( t ) ) , t ∈ [ 0 , T ] とすると、時間discretizationは T を N 区間へ分け、 Δ t = T / N ごとにstateやcontrolを表す操作です。最適化が解くのは、元の微分方程式そのものではなく、選んだintegrator・補間・meshにより作られた有限次元問題です。 粗いmeshは変数と計算を減らしますが、速い変化、制約境界、短い接触を見落としやすくなります。細かいmeshは表現力を増やす一方で、変数・制約・条件数を増やし、初期軌道への依存を強めることがあります。",
+      "title": "horizonを格子に切る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。",
+      "title": "時間discretization"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:refinementは-解が安定するか-を見る実験",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "もっとも小さな検証は、同じhorizon・初期軌道・modelでmeshを細かくして、判断が変わるかを見ることです。たとえば次を追います。 objectiveとterminal errorが大きく変わらないか dynamics defect とpath制約違反が許容範囲に収まるか controlの形やactive constraintの時刻が大きく動かないか 高精度simulationに通した結果が離散化解と整合するか 解が大きく変わるなら、粗いmeshの結果を「最適な連続時間軌道」と呼びません。どこを細かくすべきか、initial guessが変わっただけではないか、integratorの誤差かを切り分けます。",
+      "title": "refinementは「解が安定するか」を見る実験"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:step-sizeはsolver設定ではなく定式化の一部",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "設計項目 粗すぎるとき 細かすぎるとき 記録する値 Δ t dynamicsと制約の変化を取り逃す NLPが大きくなり収束が遅い horizon、区間数、step size control parameterization 入力の切替を表せない 不自然な高周波controlを許す zero-order holdかpiecewise linearか integrator / collocation scheme rollout誤差が解へ混ざる 計算費用が支配する 方式、order、tolerance mesh distribution 重要なイベントに点がない 不要な領域まで過剰に細かい 等間隔か局所refinementか 同じmethod名でも、この表の選択が違えば別の問題を解いているに近いことがあります。比較や再現では、method名とobjectiveだけでなくdiscretizationを固定条件として書きます。",
+      "title": "step sizeはsolver設定ではなく定式化の一部"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:先に決めるべき3つ",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "controlを各区間で一定にするか、線形・高次に補間するか stateをrolloutで作るか、mesh上の変数として明示するか path制約をどの時刻点で評価し、最終的にどのsimulationで再確認するか この3つは Direct Shooting 、 Direct Multiple Shooting 、 Direct Collocation の比較条件でもあります。 Warning 離散化を細かくして結果が安定したことは、modelが正しいことの証明ではありません。model mismatch、測定誤差、実機の遅れは別の検証対象です。",
+      "title": "先に決めるべき3つ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.time-discretization:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.time-discretization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "mesh上のstateとcontrolを同時に扱う設計は Direct Collocation 、segmentを積分して結ぶ設計は Direct Multiple Shooting で具体化します。途中の可行性の読み方は path・terminal制約 を参照してください。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:1個の点ではなく-時間に並んだ決定",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "通常の最適化では、変数は x ∈ ℝ n のような1本のベクトルです。軌道最適化では、状態 x k とcontrol u k を時刻 k = 0 , … , N に並べ、次のような 列 として扱います。 X = ( x 0 , x 1 , … , x N ) , U = ( u 0 , u 1 , … , u N − 1 ) . この列がtrajectory variableです。ロボットなら x k は位置・速度・姿勢など、 u k は力・トルク・操舵などを表します。最適化は「次の入力を1個選ぶ」だけでなく、futureの状態と入力が矛盾しない並びを選びます。",
+      "title": "1個の点ではなく、時間に並んだ決定"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。",
+      "title": "trajectory variable"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:state列とcontrol列を混同しない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "stateは系が実際にたどる量、controlは系へ与える量です。両方を変数に置くか、controlだけを置いてstateをsimulationで作るかが、定式化の大きな違いになります。 定式化 主な最適化変数 stateの作り方 最初に疑う点 Direct Shooting control列 初期stateからforward rollout 長いhorizonで感度が悪化していないか Direct Multiple Shooting control列とsegment境界state segmentごとにrolloutし連続性を制約化 境界でstateがつながっているか Direct Collocation mesh上のstate列とcontrol列 dynamics defectを制約化 meshが粗すぎないか iLQR / DDP nominal trajectoryの周りのupdate rolloutとlocal modelを往復 local近似の外へ出ていないか 変数数だけを見て「少ないほうが良い」とは決められません。stateを明示的に持つと変数は増えますが、path制約や途中の状態を直接見られる利点があります。controlだけにすると形は小さくなりますが、rolloutの感度がすべてcontrol列へ集まります。",
+      "title": "state列とcontrol列を混同しない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:まず描くべき4本の線",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "実装や結果を読む前に、少なくとも次を別々に描きます。 state trajectory: 位置、速度、温度などがどう変わるか control trajectory: 入力が飽和・振動していないか reference: 追従したい目標軌道や終端目標 constraint boundary: 許容範囲、障害物、入力上限 objectiveが下がっていても、controlが細かく振動する、stateが制約境界をかすめる、終端だけを合わせて途中が不自然になる、といった違和感はこの4本を分けると見つけやすくなります。",
+      "title": "まず描くべき4本の線"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:変数の意味はdynamicsで閉じる",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "stateとcontrolを自由に並べただけではtrajectoryになりません。離散化したdynamics x k + 1 = f d ( x k , u k ) またはそれに対応する残差が、隣り合う時刻を結びます。この結び目をどのように扱うかが、 Direct Shooting 、 Direct Multiple Shooting 、 Direct Collocation の差になります。 Warning trajectory variableは離散時刻上の表現です。solverがこの列に対して成功したことだけから、連続時間の実機・高精度simulationでも同じ軌道になるとは結論付けません。controlを再simulationし、時刻刻みを変えても重要な判断が変わらないかを確認します。",
+      "title": "変数の意味はdynamicsで閉じる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.trajectory-variable:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.trajectory-variable",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:direct-collocation",
+        "content:direct-shooting",
+        "content:family.optimal-control",
+        "content:ilqr-ddp",
+        "content:multiple-shooting",
+        "source:S042",
+        "source:S043",
+        "source:S050",
+        "source:S076"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "text": "trajectoryの隣り合う点がdynamicsと整合しているかは dynamics defect 、制約をどの時刻で確認するかは path・terminal制約 へ進みます。変数をどう置くかの比較は 最適制御・軌道最適化の選び分け が入口です。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:domainはsolver名より先に効く",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "連続変数で滑らかな目的と勾配があるなら、 滑らかな局所最適化 のような勾配法を検討できます。一方、binaryや整数を連続変数として解いて丸めるだけでは、丸め後の解が制約を満たすとは限らず、最適性gapの解釈も失われます。離散性が本質なら、 離散・組合せ最適化 の定式化から考えます。 domainが特殊な集合である場合も同様です。確率の比率は単に非負な実数の並びではなく、合計1のsimplexです。回転行列や低ランク行列は、成分ごとのboundsだけでは本来の集合を保てません。制約へpenaltyを足す方法もありますが、projection、変数変換、または manifold最適化 のように集合を直接扱う方法と比べて、conditionや実行可能性を確認します。",
+      "title": "domainはsolver名より先に効く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:overview",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。",
+      "title": "変数のdomain"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:まず-何を選ぶか-を言葉にする",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "最適化でいう変数は、Pythonの float や int の型だけではありません。設計長さなら連続値、製品を採用するかならbinary、訪問順ならpermutation、制御入力の時系列ならtrajectoryが変数です。solver選択の前に、 解として返したい対象がどの集合に属するか を明示します。 同じ実装でも、表現を変えると別の問題になります。たとえば「3種類から1つを選ぶ」は、整数 0, 1, 2 として連続最適化器へ渡すより、categorical choiceまたはone-hot binaryとして制約を伴う離散問題として表す方が、選択の意味を保ちやすくなります。 domain 典型例 最初に確認すること continuous 寸法、濃度、温度 bounds、scale、微分の有無 integer / binary 台数、採否、on/off 線形緩和の強さ、論理制約、許容gap categorical / ordinal 材料種、モデル種、段階 順序や距離を仮定してよいか permutation / graph / set 順路、接続、選抜 専用のgraph・matching・routing構造がないか simplex / matrix / manifold 配合比、共分散、回転 集合を保つprojection・parameterization・retractionがあるか trajectory / function 制御列、温度profile 時間離散化、dynamics、連続時間での妥当性",
+      "title": "まず「何を選ぶか」を言葉にする"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:次に読む",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "制約の表し方と可行性の読み方は 制約class 、評価回数が限られるときの予算設計は 評価費と予算 を確認してください。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:診断するときの最小チェック",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "解法を比較する前に、次を記録しておくと切替理由を追えます。 各変数のdomain、単位、bounds、許容精度 整数・カテゴリの符号化と、無効な組合せを除く制約 連続緩和を使う場合は、丸め・repair後に再評価した可行性と目的値 trajectoryなら、時間刻み、制御の保持方法、区間内制約の確認方法 特殊集合なら、projection・parameterization・retractionのどれで集合を保つか 次に、目的の形が滑らかか、制約が何か、1回の評価にどれだけの予算を使えるかを並べます。domainだけで万能なsolverは決まりませんが、domainと矛盾する選択は早い段階で除外できます。",
+      "title": "診断するときの最小チェック"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.variable-domain:連続緩和は便利だが-元の問題ではない",
+      "dataset_version": "0.16.0",
+      "document_id": "content:concept.variable-domain",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.discrete-structure",
+        "content:family.manifold",
+        "content:family.smooth-local",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "整数・binary問題を連続緩和して解くと、下界、初期解、感度解析、branch-and-boundの部分問題として役立つことがあります。ただし、緩和解の x = 0.37 は「0か1を選ぶ」という元の意思決定そのものではありません。丸めや整数化の後には、目的値・制約違反・最適性証明を改めて評価します。 同じ注意はtrajectoryにもあります。時間を粗く離散化した制約を満たしても、連続時間の途中で安全制約を満たす保証には直結しません。必要ならmesh refinement、区間内検証、または連続時間の制約を扱う定式化を追加します。 Warning 「変数が数値で表せる」ことと、「連続最適化として扱ってよい」ことは別です。カテゴリ、順列、論理、行列構造を安易に連続値へ符号化すると、solverが動いても解の意味を壊すことがあります。",
+      "title": "連続緩和は便利だが、元の問題ではない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -26941,6 +28393,7 @@
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "content:bayesian-optimization",
         "content:method.nelder-mead",
         "implementation:I_BOTORCH",
@@ -28797,6 +30250,7 @@
         "case:hyperparameter-search",
         "case:portfolio-allocation",
         "comparison:COMPARE_GRADIENT_FAMILY",
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "content:method.nelder-mead",
         "implementation:I_NLOPT",
         "implementation:I_OPTIMJL",
@@ -31163,6 +32617,7 @@
       "document_id": "scenario:SCENARIO_NM_QUADRATIC",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-quadratic"
@@ -31182,6 +32637,7 @@
       "document_id": "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-quadratic-shifted"
@@ -33042,6 +34498,7 @@
       "document_id": "trace:nelder-mead-quadratic-shifted",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "method:M_NELDER_MEAD",
         "scenario:SCENARIO_NM_QUADRATIC_SHIFTED"
       ],
@@ -33060,6 +34517,7 @@
       "document_id": "trace:nelder-mead-quadratic",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "method:M_NELDER_MEAD",
         "scenario:SCENARIO_NM_QUADRATIC"
       ],

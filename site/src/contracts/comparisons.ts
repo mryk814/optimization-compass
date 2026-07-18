@@ -11,6 +11,7 @@ export type ComparisonRendererFamily =
   | "generic_metric_history"
   | "search_tree"
   | "surrogate_uncertainty"
+  | "simplex_geometry"
   | "feasible_region"
   | "pareto_front";
 
@@ -92,7 +93,7 @@ const modes: ComparisonMode[] = [
   "failure_contrast", "strategy_contrast", "result_tradeoff",
 ];
 const rendererFamilies: ComparisonRendererFamily[] = [
-  "continuous_trajectory", "generic_metric_history", "search_tree", "surrogate_uncertainty", "feasible_region", "pareto_front",
+  "continuous_trajectory", "generic_metric_history", "search_tree", "surrogate_uncertainty", "simplex_geometry", "feasible_region", "pareto_front",
 ];
 
 export function parseComparisonIndex(raw: unknown): ComparisonIndex {
