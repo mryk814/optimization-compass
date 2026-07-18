@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import date
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
@@ -100,6 +102,21 @@ def implementation(implementation_id: str) -> dict[str, object]:
     if row is None:
         raise HTTPException(status_code=404, detail="implementation not found")
     return row
+
+
+@app.get("/v1/implementations/{implementation_id}/claims")
+def implementation_claims(
+    implementation_id: str,
+    predicate: str | None = None,
+    as_of: date | None = None,
+) -> list[dict[str, object]]:
+    if repository.implementation(implementation_id) is None:
+        raise HTTPException(status_code=404, detail="implementation not found")
+    return repository.implementation_claims(
+        as_of=as_of,
+        subject_id=implementation_id,
+        predicate=predicate,
+    )
 
 
 @app.get("/v1/sources/{source_id}")

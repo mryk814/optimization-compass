@@ -115,7 +115,10 @@ def test_learning_slices_close_constrained_and_multiobjective_coverage() -> None
             ["/theater/learning/SCENARIO_CONSTRAINED_DISK"],
         ),
         "COV_MULTI_OBJECTIVE_PARETO": (
-            ["SCENARIO_BIOBJECTIVE_QUADRATIC"],
+            [
+                "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+                "SCENARIO_BIOBJECTIVE_QUADRATIC",
+            ],
             ["/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC"],
         ),
     }

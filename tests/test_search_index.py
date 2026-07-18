@@ -60,7 +60,9 @@ def test_alias_ranking_and_representative_benchmark(
     assert "alias" in hits[0].matched_fields
     cases = load_benchmark_cases(Path("data/seeds/search_benchmark.json"))
     report = evaluate_search_benchmark(index, cases)
-    assert report["metrics"]["top_1_relevance"] >= 0.8
-    assert report["metrics"]["top_3_relevance"] >= 0.9
-    assert report["metrics"]["expected_entity_recall"] >= 0.9
+    assert sum(bool(case["expected_document_ids"]) for case in cases) == 10
+    assert report["metrics"]["top_1_relevance"] == 0.8
+    assert report["metrics"]["top_3_relevance"] == 0.9
+    assert report["metrics"]["expected_entity_recall"] == 1.0
+    assert report["metrics"]["zero_result_rate"] == 1 / len(cases)
     assert json.loads((tmp_path / "search-benchmark.json").read_bytes()) == report

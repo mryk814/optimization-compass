@@ -27,8 +27,51 @@ CLAIM_PREDICATES: tuple[tuple[str, str], ...] = (
     ("important_option_defaults", "major_options"),
 )
 
+DEFAULT_METHOD_CLAIM_SPECS: tuple[tuple[str, str, dict[str, object]], ...] = (
+    (
+        "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
+        "default_method_least_squares",
+        {
+            "api": "scipy.optimize.least_squares",
+            "condition": "method omitted",
+            "selected_method": "trf",
+            "selected_method_id": "M_TRUST_REGION_REFLECTIVE",
+            "fallback": None,
+            "user_override": "method",
+            "recommendation_effect": "none",
+        },
+    ),
+    (
+        "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
+        "default_method_curve_fit_bounds",
+        {
+            "api": "scipy.optimize.curve_fit",
+            "condition": "bounds supplied and method omitted",
+            "selected_method": "trf",
+            "selected_method_id": "M_TRUST_REGION_REFLECTIVE",
+            "fallback": {
+                "condition": "bounds omitted and method omitted",
+                "selected_method": "lm",
+                "selected_method_id": "M_LEVENBERG_MARQUARDT",
+            },
+            "user_override": "method",
+            "recommendation_effect": "none",
+        },
+    ),
+)
+DEFAULT_METHOD_CLAIM_PREDICATES: tuple[str, ...] = tuple(
+    predicate for _, predicate, _ in DEFAULT_METHOD_CLAIM_SPECS
+)
+
 # High usage means currently exposed by the published Gallery, not raw method-map fan-out.
-HIGH_USAGE_IMPLEMENTATION_IDS = frozenset({"I_ORTOOLS_CPSAT", "I_OPTUNA", "I_CVXPY"})
+HIGH_USAGE_IMPLEMENTATION_IDS = frozenset(
+    {
+        "I_ORTOOLS_CPSAT",
+        "I_OPTUNA",
+        "I_CVXPY",
+        "I_SCIPY_LEAST_SQUARES_TRF",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -122,6 +165,7 @@ def insert_versioned_claims_and_contexts(
                 ),
             )
 
+    _insert_scipy_default_method_claims(connection, release_date=release_date)
     _insert_historical_release_fixture(connection)
     for context in _benchmark_context_fixtures(connection, release_date):
         columns = list(context)
@@ -172,6 +216,58 @@ def claim_freshness_report(connection: sqlite3.Connection, *, as_of: date) -> di
         ),
         "claims": claims,
     }
+
+
+def _insert_scipy_default_method_claims(
+    connection: sqlite3.Connection, *, release_date: str
+) -> None:
+    implementation = connection.execute(
+        """
+        SELECT last_release, last_verified, confidence
+        FROM implementations
+        WHERE implementation_id = 'I_SCIPY_LEAST_SQUARES_TRF'
+        """
+    ).fetchone()
+    source = connection.execute(
+        """
+        SELECT publication_date, accessed_date
+        FROM sources
+        WHERE source_id = 'S003'
+        """
+    ).fetchone()
+    if implementation is None or source is None:
+        raise ValueError("SciPy TRF default-method claim prerequisites are missing")
+
+    product_version = str(implementation["last_release"] or "").strip()
+    if not product_version or product_version.lower() == "unknown":
+        raise ValueError("SciPy TRF default-method claims require a product version")
+    last_verified = str(implementation["last_verified"] or release_date)
+    source_date = str(source["publication_date"] or source["accessed_date"] or last_verified)
+    confidence = str(implementation["confidence"] or "unverified")
+
+    for claim_id, predicate, value in DEFAULT_METHOD_CLAIM_SPECS:
+        connection.execute(
+            """
+            INSERT INTO implementation_claims (
+              claim_id, subject_id, predicate, value_json, value_status, valid_from,
+              valid_to, replaced_by, source_id, source_date, last_verified, confidence,
+              verification_status, product_version, commit_sha, release_tag
+            ) VALUES (
+              ?, 'I_SCIPY_LEAST_SQUARES_TRF', ?, ?, 'verified', ?, NULL, NULL,
+              'S003', ?, ?, ?, 'verified', ?, NULL, NULL
+            )
+            """,
+            (
+                claim_id,
+                predicate,
+                _json(value),
+                last_verified,
+                source_date,
+                last_verified,
+                confidence,
+                product_version,
+            ),
+        )
 
 
 def _insert_historical_release_fixture(connection: sqlite3.Connection) -> None:

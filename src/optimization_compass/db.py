@@ -151,15 +151,27 @@ class KnowledgeRepository:
             "SELECT * FROM implementations WHERE implementation_id = ?", (implementation_id,)
         )
 
-    def implementation_claims(self, as_of: date | None = None) -> list[dict[str, Any]]:
+    def implementation_claims(
+        self,
+        as_of: date | None = None,
+        *,
+        subject_id: str | None = None,
+        predicate: str | None = None,
+    ) -> list[dict[str, Any]]:
         selected_date = (as_of or date.today()).isoformat()
+        clauses = ["valid_from <= ?", "(valid_to IS NULL OR valid_to >= ?)"]
+        parameters: list[Any] = [selected_date, selected_date]
+        if subject_id is not None:
+            clauses.append("subject_id = ?")
+            parameters.append(subject_id)
+        if predicate is not None:
+            clauses.append("predicate = ?")
+            parameters.append(predicate)
         rows = self.fetch_all(
-            """
-            SELECT * FROM implementation_claims
-            WHERE valid_from <= ? AND (valid_to IS NULL OR valid_to >= ?)
-            ORDER BY subject_id, predicate, claim_id
-            """,
-            (selected_date, selected_date),
+            "SELECT * FROM implementation_claims WHERE "
+            + " AND ".join(clauses)
+            + " ORDER BY subject_id, predicate, claim_id",
+            parameters,
         )
         for row in rows:
             row["value"] = json.loads(str(row.pop("value_json")))
