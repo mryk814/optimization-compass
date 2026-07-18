@@ -17,6 +17,11 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from openpyxl import Workbook, load_workbook
 
+from optimization_compass.build_manifest import (
+    DEFAULT_BUILD_MANIFEST,
+    migration_paths,
+    validate_build_manifest,
+)
 from optimization_compass.failure_modes import (
     OBSERVABLE_IDS,
     insert_structured_failure_modes,
@@ -54,21 +59,6 @@ BASE_DATASET_VERSION = RELEASE_AUTHORITY.base_dataset_version
 BASE_DATASET_SHA256 = RELEASE_AUTHORITY.base_database_sha256
 TARGET_DATASET_VERSION = RELEASE_AUTHORITY.dataset_version
 RELEASE_DATE = RELEASE_AUTHORITY.release_date
-DEFAULT_MIGRATION = ROOT / "data/migrations/003_atlas_metadata.sql"
-DEFAULT_COVERAGE_MIGRATION = ROOT / "data/migrations/004_learning_coverage.sql"
-DEFAULT_PREDICATE_MIGRATION = ROOT / "data/migrations/005_atomic_predicates.sql"
-DEFAULT_PROBLEM_MIGRATION = ROOT / "data/migrations/006_problem_instances.sql"
-DEFAULT_SEMANTIC_VIEW_MIGRATION = ROOT / "data/migrations/007_semantic_view_presets.sql"
-DEFAULT_VERSIONED_CLAIMS_MIGRATION = (
-    ROOT / "data/migrations/008_versioned_claims_and_benchmark_context.sql"
-)
-DEFAULT_FAILURE_MODE_MIGRATION = ROOT / "data/migrations/009_structured_failure_modes.sql"
-DEFAULT_LEARNING_GRAPH_MIGRATION = ROOT / "data/migrations/010_learning_graph_and_aliases.sql"
-DEFAULT_TRF_DEFAULTS_MIGRATION = ROOT / "data/migrations/011_trust_region_reflective_defaults.sql"
-DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION = (
-    ROOT / "data/migrations/012_typed_default_method_claims.sql"
-)
-DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION = ROOT / "data/migrations/013_topology_optimization.sql"
 DEFAULT_SEED = ROOT / "data/seeds/atlas_metadata.json"
 DEFAULT_PREDICATE_SEED = ROOT / "data/seeds/atomic_predicates.json"
 DEFAULT_PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
@@ -258,27 +248,21 @@ def build_staged_release(
     base_database: Path,
     output_directory: Path,
     *,
-    migration_path: Path = DEFAULT_MIGRATION,
+    build_manifest_path: Path = DEFAULT_BUILD_MANIFEST,
     seed_path: Path = DEFAULT_SEED,
     target_version: str = TARGET_DATASET_VERSION,
     release_date: str = RELEASE_DATE,
 ) -> StagedRelease:
     _validate_release_identity(target_version, release_date)
+    build_manifest = validate_build_manifest(build_manifest_path, repository_root=ROOT)
+    staged_migration_paths = migration_paths(build_manifest, repository_root=ROOT)
     _validate_output_directory(
         output_directory,
         protected_inputs=(
             base_database,
-            migration_path,
-            DEFAULT_COVERAGE_MIGRATION,
-            DEFAULT_PREDICATE_MIGRATION,
-            DEFAULT_PROBLEM_MIGRATION,
-            DEFAULT_SEMANTIC_VIEW_MIGRATION,
-            DEFAULT_VERSIONED_CLAIMS_MIGRATION,
-            DEFAULT_FAILURE_MODE_MIGRATION,
-            DEFAULT_LEARNING_GRAPH_MIGRATION,
-            DEFAULT_TRF_DEFAULTS_MIGRATION,
-            DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION,
-            DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION,
+            build_manifest_path,
+            *staged_migration_paths,
+            *(ROOT / input_path for input_path in build_manifest.specialized_inputs),
             seed_path,
             DEFAULT_PREDICATE_SEED,
             DEFAULT_PROBLEM_SEED,
@@ -291,7 +275,7 @@ def build_staged_release(
     shutil.copyfile(base_database, database_path)
     _apply_atlas_metadata(
         database_path,
-        migration_path,
+        staged_migration_paths,
         seed_path,
         target_version=target_version,
         release_date=release_date,
@@ -1285,7 +1269,7 @@ def _verify_pinned_base(base_database: Path) -> None:
 
 def _apply_atlas_metadata(
     database_path: Path,
-    migration_path: Path,
+    migration_paths: tuple[Path, ...],
     seed_path: Path,
     *,
     target_version: str,
@@ -1302,19 +1286,8 @@ def _apply_atlas_metadata(
     connection.row_factory = sqlite3.Row
     connection.execute("PRAGMA foreign_keys = ON")
     try:
-        connection.executescript(migration_path.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_COVERAGE_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_PREDICATE_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_PROBLEM_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_SEMANTIC_VIEW_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_VERSIONED_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_FAILURE_MODE_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_LEARNING_GRAPH_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_TRF_DEFAULTS_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(DEFAULT_TYPED_DEFAULT_CLAIMS_MIGRATION.read_text(encoding="utf-8"))
-        connection.executescript(
-            DEFAULT_TOPOLOGY_OPTIMIZATION_MIGRATION.read_text(encoding="utf-8")
-        )
+        for migration_path in migration_paths:
+            connection.executescript(migration_path.read_text(encoding="utf-8"))
         _insert_problem_seed(connection, problem_seed)
         _insert_seed(connection, seed)
         _insert_predicate_seed(connection, predicate_seed)

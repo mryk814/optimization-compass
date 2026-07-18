@@ -18,6 +18,8 @@ from optimization_compass.dataset_release import (
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
+STAGED_TEST_VERSION = "0.18.5"
+STAGED_TEST_DATE = "2026-07-19"
 
 
 def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:
@@ -74,8 +76,8 @@ def test_release_tree_rejects_self_hashed_wrong_format_identity(
     release = build_staged_release(
         BASE_DATABASE,
         tmp_path / "release",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version=STAGED_TEST_VERSION,
+        release_date=STAGED_TEST_DATE,
     )
     manifest = json.loads(release.manifest_path.read_text(encoding="utf-8"))
     artifact = release.output_directory / manifest["artifacts"][format_name]
@@ -200,13 +202,14 @@ def test_release_tree_rejects_self_consistent_wrong_sqlite_release_identity(
     release = build_staged_release(
         BASE_DATABASE,
         tmp_path / "release",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version=STAGED_TEST_VERSION,
+        release_date=STAGED_TEST_DATE,
     )
     connection = sqlite3.connect(release.database_path)
     try:
         connection.execute(
-            "UPDATE version_history SET release_date = '2026-07-15' WHERE version = '0.3.0'"
+            "UPDATE version_history SET release_date = '2026-07-20' "
+            f"WHERE version = '{STAGED_TEST_VERSION}'"
         )
         connection.commit()
     finally:
