@@ -18,7 +18,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def _digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def _write_manifest(root: Path, migrations: list[dict[str, str]]) -> Path:
@@ -123,6 +123,19 @@ def test_manifest_rejects_hash_drift(tmp_path: Path) -> None:
 
     with pytest.raises(BuildManifestError, match="hash_mismatch"):
         validate_build_manifest(manifest_path, repository_root=tmp_path)
+
+
+def test_manifest_hash_is_stable_across_text_checkout_line_endings(tmp_path: Path) -> None:
+    manifest_path = _write_manifest(
+        tmp_path,
+        [{"id": "003", "path": "data/migrations/003_a.sql"}],
+    )
+    migration_path = tmp_path / "data/migrations/003_a.sql"
+    migration_path.write_bytes(
+        migration_path.read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+    )
+
+    validate_build_manifest(manifest_path, repository_root=tmp_path)
 
 
 def test_manifest_rejects_missing_specialized_input(tmp_path: Path) -> None:

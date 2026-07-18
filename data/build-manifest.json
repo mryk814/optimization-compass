@@ -4,57 +4,57 @@
     {
       "id": "003",
       "path": "data/migrations/003_atlas_metadata.sql",
-      "sha256": "6812d622ca92441b862c29ec55994b754881dc96a506ea543fe5fd1fc3f547bf"
+      "sha256": "af10a366fc4caa9d6a0c1aa8d5dcd240f12d196c5184fad9202ca18385b59699"
     },
     {
       "id": "004",
       "path": "data/migrations/004_learning_coverage.sql",
-      "sha256": "b57f547c12ac16843c08bb43fc9019e72a44d4b0e4d3779677d0151024381e38"
+      "sha256": "9cd239d4135aea2bc696873c3f5fd28400336b7444e550e009ecd26347935b7f"
     },
     {
       "id": "005",
       "path": "data/migrations/005_atomic_predicates.sql",
-      "sha256": "238556ee96922c4b46f5d3e04db240585cfbad3b1fd6d52c402e5253db1a0ebe"
+      "sha256": "02b04fb5cc1c969e7308480ad1e363fd461de75a35827f4f4bccf04836e6ce04"
     },
     {
       "id": "006",
       "path": "data/migrations/006_problem_instances.sql",
-      "sha256": "614c94b892e29fb6c38cd97f666f9b88ba190b6b2cf2d42e7f86cc9da8bdbf8a"
+      "sha256": "096a6c4ed7a1962f06a8278303e44e4d720a09885d594f6c9488d55d2498842c"
     },
     {
       "id": "007",
       "path": "data/migrations/007_semantic_view_presets.sql",
-      "sha256": "a045e69e655d27988011feaf56b497c84c3679c34d7cdb3260325dba6c2cd2a8"
+      "sha256": "ff09281b62b1dcda09d62954a09ac9089c4598df9d1351ce8b05a8be519015ef"
     },
     {
       "id": "008",
       "path": "data/migrations/008_versioned_claims_and_benchmark_context.sql",
-      "sha256": "2821aab3d1bcf9bc14bd9af43794e5affb55774ba46989583daefd90733d21f1"
+      "sha256": "8d346e0d0f4dc3d2440c608763875e24ec1c503d3109e0e867df15cf97f749b7"
     },
     {
       "id": "009",
       "path": "data/migrations/009_structured_failure_modes.sql",
-      "sha256": "1ff5d5e1c2b5a681c072bda11301ce9743cafa3f32e2fd806b32c26e24fe6dc3"
+      "sha256": "c18ae798ff314e980dc7ba42858f3892e34db4d0074a5da76b65c6e631c52dc2"
     },
     {
       "id": "010",
       "path": "data/migrations/010_learning_graph_and_aliases.sql",
-      "sha256": "7a6cef022aee719246d93411c61edc91f9c4d0382db0f673eab8df68947754f0"
+      "sha256": "a924c39137d7a79633ff05d9fda72827eadce867f06550594101bf9e7ae022f7"
     },
     {
       "id": "011",
       "path": "data/migrations/011_trust_region_reflective_defaults.sql",
-      "sha256": "26989bee993ebc351f300d6978344b9f296abc843ae27b87013d8c92bf755126"
+      "sha256": "24353ec96e9509b2cfe75e83120745b4f385a1c20c32f975dab54561aca9cbab"
     },
     {
       "id": "012",
       "path": "data/migrations/012_typed_default_method_claims.sql",
-      "sha256": "d7226f58086353389db8c73d52b234df91462d55019f1c02f8ec78e7e194c6b9"
+      "sha256": "03d5c1f1ec7fc45d84f18909cf512aabe1c2c1c9ef565d9963727fbbc0c15fd8"
     },
     {
       "id": "013",
       "path": "data/migrations/013_topology_optimization.sql",
-      "sha256": "fe504c0085eaf41d9991192dfe5376aa0168693ddfe64a53160605155617eb93"
+      "sha256": "ec1b6d9b00d494884a7733a82a75f163bf5b606d10b0fb763b2a06622f33e68c"
     }
   ],
   "specialized_inputs": [
