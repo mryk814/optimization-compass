@@ -161,7 +161,7 @@ describe("DiagnosePage", () => {
       status: "not_applicable",
       values: [],
     });
-    fireEvent.click(within(q1).getByRole("button", { name: "選択解除" }));
+    fireEvent.click(within(q1).getByRole("button", { name: "選択を解除" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toBeUndefined();
 
     const q2 = screen.getByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u });
@@ -210,9 +210,9 @@ describe("DiagnosePage", () => {
     expect(screen.getByRole("heading", { name: "追加確認" })).toBeVisible();
     expect(screen.getByText(/R\d{3}/u)).toBeVisible();
     expect(screen.getAllByRole("link", { name: /根拠/u }).length).toBeGreaterThan(0);
-    expect(screen.getByRole("button", { name: "地図上で見る" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "地図を開く" })).toBeVisible();
 
-    const methodButton = screen.getAllByRole("button", { name: "地図で見る" })[0];
+    const methodButton = screen.getAllByRole("button", { name: "地図で確認" })[0];
     const card = methodButton.closest("article");
     expect(card).not.toBeNull();
     const methodName = within(card!).getByRole("heading", { level: 3 }).textContent;
@@ -229,7 +229,7 @@ describe("DiagnosePage", () => {
     const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
     fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
     const token = tokenFromLocation();
-    fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
+    fireEvent.click(screen.getByRole("button", { name: "地図を開く" }));
     await waitFor(() => expect(screen.getByText("MAP ROUTE")).toBeVisible());
     expect(tokenFromLocation()).toBe(token);
     const location = screen.getByTestId("location").textContent ?? "";
@@ -242,7 +242,7 @@ describe("DiagnosePage", () => {
     renderDiagnose("/diagnose?keep=1", true);
     const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
     fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
-    fireEvent.click(screen.getByRole("button", { name: "地図上で見る" }));
+    fireEvent.click(screen.getByRole("button", { name: "地図を開く" }));
 
     const tree = await screen.findByRole("tree", { name: "最適化問題の構造" });
     const match = await within(tree).findByRole("treeitem", { name: /^0-1answer$/u });
@@ -281,9 +281,9 @@ describe("DiagnosePage", () => {
     renderDiagnose(`/diagnose?keep=1&state=${token}`);
     const before = screen.getByTestId("location").textContent;
 
-    fireEvent.click((await screen.findAllByRole("button", { name: "地図で見る" }))[0]);
+    fireEvent.click((await screen.findAllByRole("button", { name: "地図で確認" }))[0]);
 
-    expect(await screen.findByRole("alert")).toHaveTextContent(/maximum is 1800/u);
+    expect(await screen.findByText(/maximum is 1800/u)).toBeVisible();
     expect(screen.getByTestId("location")).toHaveTextContent(before ?? "");
     expect(screen.queryByText("MAP ROUTE")).not.toBeInTheDocument();
   });
@@ -304,7 +304,7 @@ describe("DiagnosePage", () => {
 
   test("shows malformed URL recovery without silently resetting", async () => {
     renderDiagnose("/diagnose?state=bad");
-    expect(await screen.findByRole("alert")).toHaveTextContent(/URL の状態を復元できません/u);
+    expect(await screen.findByRole("alert")).toHaveTextContent(/URLの状態を復元できませんでした/u);
     expect(screen.getByRole("button", { name: "状態をリセット" })).toBeVisible();
     expect(tokenFromLocation()).toBe("bad");
   });

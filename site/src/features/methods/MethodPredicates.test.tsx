@@ -12,7 +12,7 @@ describe("MethodPredicates", () => {
 
     expect(screen.getByRole("heading", { name: "構造化された適用前提" })).toBeVisible();
     expect(screen.getByText(/推薦・比較・実装用プロンプトで再利用/u)).toBeVisible();
-    expect(screen.getByText("complete")).toBeVisible();
+    expect(screen.getByText("移行済み")).toBeVisible();
     expect(screen.getAllByText(/not differentiable|微分/u).length).toBeGreaterThan(0);
     expect(screen.getByText(/推薦で使う前提・非対応条件を移行済み/u)).toBeVisible();
   });

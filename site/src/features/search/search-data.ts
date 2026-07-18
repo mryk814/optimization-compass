@@ -16,13 +16,13 @@ export function resetSearchIndexCache(): void {
 async function fetchSearchIndex(): Promise<SearchIndex> {
   const base = `${siteBaseUrl()}data/`;
   const manifestResponse = await fetch(`${base}manifest.json`);
-  if (!manifestResponse.ok) throw new Error(`Manifest request failed (${manifestResponse.status}).`);
+  if (!manifestResponse.ok) throw new Error(`サイト設定を読み込めませんでした (${manifestResponse.status})。`);
   const manifest = parseSiteManifest(await manifestResponse.json());
   const response = await fetch(`${base}${manifest.search_index.path}`);
-  if (!response.ok) throw new Error(`Search index request failed (${response.status}).`);
+  if (!response.ok) throw new Error(`検索データを取得できませんでした (${response.status})。`);
   const index = parseSearchIndex(await response.json());
   if (index.dataset_version !== manifest.dataset_version) {
-    throw new Error("Search index dataset version does not match the manifest.");
+    throw new Error("検索データの版がサイト設定と一致しません。");
   }
   return index;
 }

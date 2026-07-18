@@ -30,13 +30,13 @@ export function LearningSlicePage() {
     );
     return () => controller.abort();
   }, [scenarioId]);
-  if (state.status === "not-found") return <NotFoundPage detail={`Visualization scenario「${scenarioId}」は登録されていません。`} />;
+  if (state.status === "not-found") return <NotFoundPage detail={`可視化シナリオ「${scenarioId}」は登録されていません。`} />;
   if (state.status === "error") return <section className="atlas-page"><h1>可視化を読み込めません</h1><p role="alert">{state.error.message}</p></section>;
   if (state.status === "loading") return <p role="status">可視化を読み込んでいます…</p>;
   const { scenario, artifact } = state;
   const kindLabel = artifact.artifact_kind === "executable_trace"
-    ? "実行Trace / Executable teaching trace"
-    : "実行結果 / Executable result";
+    ? "実行Trace (Executable teaching trace)"
+    : "実行結果 (Executable result)";
   return (
     <section className="atlas-page learning-slice-page">
       <header className="atlas-page-header">
@@ -45,17 +45,17 @@ export function LearningSlicePage() {
         <p>{scenario.title_en}</p>
         <div className="artifact-provenance" aria-label="可視化の由来">
           <strong>{kindLabel}</strong>
-          <span>Renderer family: {artifact.renderer_family}</span>
-          <span>Problem: {scenario.problem_instance_id}</span>
+          <span>描画方式 (Renderer family): {artifact.renderer_family}</span>
+          <span>問題 (Problem): {scenario.problem_instance_id}</span>
         </div>
       </header>
       <ScenarioContextPanel scenario={scenario} />
       <LearningSliceRenderer artifact={artifact} />
       <ScenarioLessonPanel scenario={scenario} />
       <section className="learning-slice-links" aria-label="関連する入口">
-        <h2>同じcanonical dataからたどる</h2>
-        <Link to="/map">Mapで問題構造を見る</Link>
-        {scenario.runs.map((run) => <Link key={run.run_id} to={`/methods/${run.method_id}`}>{run.method_id}の教材を見る</Link>)}
+        <h2>同じデータからたどる</h2>
+        <Link to="/map">Mapで問題の構造を見る</Link>
+        {scenario.runs.map((run) => <Link key={run.run_id} to={`/methods/${run.method_id}`}>{run.method_id}の手法教材を見る</Link>)}
       </section>
       <p className="atlas-note">{scenario.lesson.limitations_ja}</p>
       <EvidenceLinks sourceIds={scenario.source_ids} />

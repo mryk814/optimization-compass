@@ -9,11 +9,11 @@ import rawProblems from "../public/data/problems.json";
 import rawVisualizationScenarios from "../public/data/visualization-scenarios.json";
 
 const routes = [
-  ["#/", "最適化したい。でも、何をどう解けばいい？"],
+  ["#/", "最適化したい問いを、問題の形にする"],
   ["#/map", "問題構造マップ"],
   ["#/diagnose", "診断"],
   ["#/theater", "Method Theater"],
-  ["#/compare", "Compare Lab"],
+  ["#/compare", "比較ラボ"],
   ["#/compare/gradient-quadratic", "比較条件を読み込み中"],
   ["#/gallery", "ケースギャラリー"],
   ["#/learn", "手法・概念を学ぶ"],
@@ -147,7 +147,7 @@ describe("application routes", () => {
 
     render(<App initialEntityLinks={testLinks} />);
 
-    expect(screen.getByRole("link", { name: "条件から診断する" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "条件から診断を始める" })).toHaveAttribute(
       "href",
       "#/diagnose",
     );
@@ -167,27 +167,27 @@ describe("application routes", () => {
     expect(screen.getByText("勾配を使わず、観測残差を直接評価できるため")).toBeVisible();
     expect(screen.getByText("選ばない理由")).toBeVisible();
     expect(screen.getByText("離散的な観測欠損があり、現在の前提には合わない")).toBeVisible();
-    expect(screen.getByRole("link", { name: "このCaseを辿る →" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "このCaseの詳細を見る →" })).toHaveAttribute(
       "href",
       "#/gallery/EC017",
     );
     expect(screen.queryByLabelText("Atlasの主要な入口")).not.toBeInTheDocument();
 
-    const secondary = screen.getByRole("navigation", { name: "Atlasのその他の入口" });
-    expect(within(secondary).getByRole("link", { name: "問題構造Map" })).toHaveAttribute(
+    const secondary = screen.getByRole("navigation", { name: "次に進む入口" });
+    expect(within(secondary).getByRole("link", { name: "問題構造をたどる" })).toHaveAttribute(
       "href",
       "#/map",
     );
-    expect(within(secondary).getByRole("link", { name: "条件を揃えて比べる" })).toHaveAttribute(
+    expect(within(secondary).getByRole("link", { name: "比較条件を揃える" })).toHaveAttribute(
       "href",
       "#/compare",
     );
 
     const footer = screen.getByRole("contentinfo");
-    expect(within(footer).getByRole("link", { name: "Code: MIT" }).getAttribute("href"))
+    expect(within(footer).getByRole("link", { name: "コード: MIT" }).getAttribute("href"))
       .toMatch(/\/licenses\/LICENSE\.txt$/u);
-    expect(within(footer).getByRole("link", { name: "Data: CC BY 4.0" })).toBeVisible();
-    expect(within(footer).getByRole("link", { name: "Content: CC BY 4.0" })).toBeVisible();
+    expect(within(footer).getByRole("link", { name: "データ: CC BY 4.0" })).toBeVisible();
+    expect(within(footer).getByRole("link", { name: "本文: CC BY 4.0" })).toBeVisible();
   });
 
   test("footer renders the dataset version from the release identity", async () => {
@@ -216,35 +216,35 @@ describe("application routes", () => {
     const links = within(navigation).getAllByRole("link");
     expect(links).toHaveLength(9);
     links.forEach((link) => expect(link).toBeVisible());
-    expect(screen.getByRole("link", { name: "条件から診断する" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "条件から診断を始める" })).toBeVisible();
     expect(screen.getByRole("link", { name: "実例から探す" })).toBeVisible();
-    within(screen.getByRole("navigation", { name: "Atlasのその他の入口" }))
+    within(screen.getByRole("navigation", { name: "次に進む入口" }))
       .getAllByRole("link")
       .forEach((link) => expect(link).toBeVisible());
   });
 
   test("the methods navigation opens the real learning index and stays active on method pages", () => {
     render(<App initialEntityLinks={testLinks} />);
-    expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("href", "#/learn");
+    expect(screen.getByRole("link", { name: "手法を学ぶ" })).toHaveAttribute("href", "#/learn");
     cleanup();
 
     window.location.hash = "#/methods/M_NELDER_MEAD";
     render(<App initialEntityLinks={testLinks} />);
-    expect(screen.getByRole("link", { name: "手法" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "手法を学ぶ" })).toHaveAttribute("aria-current", "page");
   });
 
   test("keeps Theater and Compare as separate primary navigation destinations", () => {
     render(<App initialEntityLinks={testLinks} />);
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
-    expect(within(navigation).getByRole("link", { name: "再生" })).toHaveAttribute("href", "#/theater");
-    expect(within(navigation).getByRole("link", { name: "比較" })).toHaveAttribute("href", "#/compare");
+    expect(within(navigation).getByRole("link", { name: "動きを見る" })).toHaveAttribute("href", "#/theater");
+    expect(within(navigation).getByRole("link", { name: "条件を比較" })).toHaveAttribute("href", "#/compare");
   });
 
   test("the back control uses a safe in-app fallback on a direct entry", () => {
     window.history.replaceState({ idx: 0 }, "", "#/map");
     render(<App initialEntityLinks={testLinks} />);
 
-    fireEvent.click(screen.getByRole("button", { name: "← 戻る" }));
+    fireEvent.click(screen.getByRole("button", { name: "← ホームに戻る" }));
 
     expect(window.location.hash).toBe("#/");
   });
@@ -258,7 +258,7 @@ describe("application routes", () => {
     fireEvent.click(skipLink);
     expect(screen.getByRole("main")).toHaveFocus();
 
-    const learnLink = screen.getByRole("link", { name: "手法" });
+    const learnLink = screen.getByRole("link", { name: "手法を学ぶ" });
     learnLink.focus();
     expect(learnLink).toHaveFocus();
     fireEvent.click(learnLink);
@@ -316,7 +316,7 @@ describe("application routes", () => {
       await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" }),
     ).toBeVisible();
     expect(screen.getByRole("link", { name: "Atlasへ戻る" })).toBeVisible();
-    expect(screen.getByRole("link", { name: "Mapを見る" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "問題構造を見る" })).toBeVisible();
   });
 
   test.each(["#/mapping", "#/diagnose-old", "#/gallery-old"])(

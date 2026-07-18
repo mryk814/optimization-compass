@@ -72,9 +72,9 @@ export function NelderMeadVisualization({
     <article className="atlas-page nm-theater">
       <header className="atlas-page-header nm-page-header">
         <div>
-          <p className="eyebrow">Method Theater · executable_trace</p>
+          <p className="eyebrow">Method Theater · 実行Trace</p>
           <h1>Nelder–Meadの幾何操作</h1>
-          <p>等高線と単体の役割を重ね、候補をなぜ受理・却下したかまで追います。</p>
+          <p>等高線と単体の役割を重ね、候補を受理・却下した理由まで追います。</p>
         </div>
         <div className="visualization-badges" aria-label="可視化artifact情報">
           <span>AlgorithmTrace {trace.contract_version}</span>
@@ -83,27 +83,27 @@ export function NelderMeadVisualization({
         </div>
       </header>
 
-      <section className="visualization-switches" aria-label="Nelder–Mead表示条件">
+      <section className="visualization-switches" aria-label="Nelder–Meadの表示条件">
         <label>
-          <span>目的関数 / Objective</span>
+          <span>目的関数 (Objective)</span>
           <select
             aria-label="目的関数"
             onChange={(event) => chooseTrace(event.target.value, shifted)}
             value={trace.objective_id}
           >
-            <option value="OBJECTIVE_QUADRATIC_2D">細長い二次関数 / Quadratic</option>
-            <option value="OBJECTIVE_ROSENBROCK_2D">Rosenbrock関数 / Rosenbrock</option>
+            <option value="OBJECTIVE_QUADRATIC_2D">細長い二次関数 (Quadratic)</option>
+            <option value="OBJECTIVE_ROSENBROCK_2D">Rosenbrock関数</option>
           </select>
         </label>
         <label>
-          <span>初期simplex / Initial simplex</span>
+          <span>初期単体 (Initial simplex)</span>
           <select
             aria-label="初期simplex"
             onChange={(event) => chooseTrace(trace.objective_id, event.target.value === "shifted")}
             value={shifted ? "shifted" : "standard"}
           >
-            <option value="standard">標準 / Standard</option>
-            <option value="shifted">別の初期位置 / Shifted</option>
+            <option value="standard">標準</option>
+            <option value="shifted">別の初期位置</option>
           </select>
         </label>
       </section>
@@ -118,9 +118,9 @@ export function NelderMeadVisualization({
       />
       <section className="nm-contract" aria-label="現在の操作">
         <strong>{frame.event_label_ja} / {frame.event_label_en}</strong>
-        <span>iteration {frame.iteration} · evaluations {frame.oracle_evaluations}</span>
+        <span>反復 {frame.iteration} · 評価 {frame.oracle_evaluations}回</span>
         <span className={`decision-badge decision-${frame.decision}`}>{decisionLabel(frame)}</span>
-        <span>best f = {objectiveMetric(frame)}</span>
+        <span>現在の最良値 f = {objectiveMetric(frame)}</span>
       </section>
       <ObjectiveGoalCues
         bestValue={Number.isFinite(bestSoFar) ? bestSoFar : null}
@@ -181,29 +181,29 @@ export function NelderMeadVisualization({
             {visibleLayers.has("accepted_operation") && candidate && <CandidateMarker point={candidate} bounds={spec.bounds} accepted={frame.decision === "accepted"} />}
           </svg>
           <figcaption>
-            objective metadataの表示範囲 x=[{spec.bounds.xMin}, {spec.bounds.xMax}], y=[{spec.bounds.yMin}, {spec.bounds.yMax}] から等高線を生成。
+            Objective metadataの表示範囲 x=[{spec.bounds.xMin}, {spec.bounds.xMax}], y=[{spec.bounds.yMin}, {spec.bounds.yMax}] から等高線を生成します。
           </figcaption>
         </figure>
 
         <aside className="nm-explanation" aria-label="操作の説明">
-          <p className="operation-kicker">{operationSymbol(frame.event_type)} {frame.event_type}</p>
+            <p className="operation-kicker">{operationSymbol(frame.event_type)} 操作: {frame.event_type}</p>
           <h2>{frame.event_label_ja} / {frame.event_label_en}</h2>
           <p className="operation-reason">{explanation}</p>
           <dl>
-            <div><dt>Objective</dt><dd>{spec.expression}</dd></div>
-            <div><dt>Initial</dt><dd>{initialPoint(trace)}</dd></div>
-            <div><dt>Parameters</dt><dd>{parameters(trace.parameters)}</dd></div>
-            <div><dt>Candidate</dt><dd>{candidate ? `${formatPoint(candidate)} · ${decisionLabel(frame)}` : "このframeでは候補点なし"}</dd></div>
+              <div><dt>目的関数 (Objective)</dt><dd>{spec.expression}</dd></div>
+              <div><dt>初期点 (Initial)</dt><dd>{initialPoint(trace)}</dd></div>
+              <div><dt>パラメータ (Parameters)</dt><dd>{parameters(trace.parameters)}</dd></div>
+              <div><dt>候補点 (Candidate)</dt><dd>{candidate ? `${formatPoint(candidate)} · ${decisionLabel(frame)}` : "このフレームには候補点がありません"}</dd></div>
           </dl>
           <div className="shape-legend" aria-label="点の役割凡例">
-            <span><i className="legend-circle" />Best</span>
-            <span><i className="legend-square" />Second-worst</span>
-            <span><i className="legend-triangle" />Worst</span>
-            <span><i className="legend-diamond" />Candidate</span>
-            <span><i className="legend-cross">＋</i>Centroid</span>
+            <span><i className="legend-circle" />最良点 (Best)</span>
+            <span><i className="legend-square" />次に悪い点 (Second-worst)</span>
+            <span><i className="legend-triangle" />最悪点 (Worst)</span>
+            <span><i className="legend-diamond" />候補点 (Candidate)</span>
+            <span><i className="legend-cross">＋</i>重心 (Centroid)</span>
           </div>
           <p className="atlas-note">{scenario.lesson.limitations_ja}。初期simplexや目的関数を変えると経路は変わります。</p>
-          <Link className="text-link" to={`/methods/${trace.method_id}`}>手法ページへ</Link>
+          <Link className="text-link" to={`/methods/${trace.method_id}`}>手法の詳細へ</Link>
         </aside>
       </div>
 
@@ -244,17 +244,17 @@ export function NelderMeadVisualization({
             )}
           </div>
           <div>
-            <p className="eyebrow">Derived media · deterministic</p>
-            <h2 id="derived-media-heading">再利用できる静止画・animation</h2>
+            <p className="eyebrow">派生メディア · deterministic</p>
+            <h2 id="derived-media-heading">再利用できる静止画・アニメーション</h2>
             <p>{derivedMedia.caption_ja}</p>
-            <p className="atlas-note">frame {derivedMedia.frame_index + 1} · {derivedMedia.viewport_preset} · {derivedMedia.license_spdx_id}</p>
+            <p className="atlas-note">フレーム {derivedMedia.frame_index + 1} · {derivedMedia.viewport_preset} · {derivedMedia.license_spdx_id}</p>
             <div className="derived-media-links">
               {staticPng && <a href={`${siteBaseUrl()}data/${staticPng.path}`}>PNGを開く</a>}
               {staticSvg && <a href={`${siteBaseUrl()}data/${staticSvg.path}`}>SVGを開く</a>}
               {animatedGif && <a href={`${siteBaseUrl()}data/${animatedGif.path}`}>GIFを開く</a>}
               {webm && <a href={`${siteBaseUrl()}data/${webm.path}`}>WebMを開く</a>}
               <a href={`${siteBaseUrl()}data/${derivedMedia.captions.path}`}>字幕を開く</a>
-              <a href={`${siteBaseUrl()}data/${derivedMedia.transcript.path}`}>Transcriptを開く</a>
+              <a href={`${siteBaseUrl()}data/${derivedMedia.transcript.path}`}>文字起こしを開く</a>
             </div>
             <small>{derivedMedia.attribution}</small>
           </div>
@@ -262,7 +262,7 @@ export function NelderMeadVisualization({
       )}
 
       <details className="text-alternative" open>
-        <summary>静的summary / Text alternative</summary>
+        <summary>静的要約・テキスト代替</summary>
         <p>{staticSummary(frame, vertices, centroid, candidate)}</p>
         <ul>
           {vertices.map(({ point, rank }) => (
@@ -363,15 +363,15 @@ function pointCoordinates(point: TracePoint, bounds: PlotBounds): string {
 }
 
 function decisionLabel(frame: TraceFrame): string {
-  if (frame.decision === "accepted") return "受理 / Accepted";
-  if (frame.decision === "rejected") return "却下 / Rejected";
-  return "判定なし / N/A";
+  if (frame.decision === "accepted") return "受理 (Accepted)";
+  if (frame.decision === "rejected") return "却下 (Rejected)";
+  return "判定なし (N/A)";
 }
 
 function operationExplanation(frame: TraceFrame): string {
   const accepted = frame.decision === "accepted";
   const copy: Record<string, string> = {
-    initialize: "初期simplexの3頂点を評価し、best / second-worst / worstを決めます。",
+    initialize: "初期単体 (simplex) の3頂点を評価し、最良点・次に悪い点・最悪点を決めます。",
     order: "目的関数値の小さい順に頂点を並べ、次の操作の基準を作ります。",
     reflect: accepted
       ? "最悪点を重心の反対側へ反射した候補が改善したため受理しました。"
@@ -379,10 +379,10 @@ function operationExplanation(frame: TraceFrame): string {
     expand: "反射点よりさらに先の拡大候補が改善したため、拡大点を受理しました。",
     outside_contract: "反射点側へ外側収縮し、最悪点より改善した候補を受理しました。",
     inside_contract: "重心側へ内側収縮し、最悪点より改善した候補を受理しました。",
-    shrink: "収縮候補が最悪点を改善しなかったため却下し、bestへ向けて単体全体を縮小しました。",
+    shrink: "収縮候補が最悪点を改善しなかったため却下し、最良点へ向けて単体全体を縮小しました。",
     stop: "収束条件または評価予算に達したため、このTraceを停止しました。",
   };
-  return copy[frame.event_type] ?? `未登録の操作です: ${frame.event_type}`;
+  return copy[frame.event_type] ?? `登録されていない操作です: ${frame.event_type}`;
 }
 
 function operationSymbol(eventType: string): string {

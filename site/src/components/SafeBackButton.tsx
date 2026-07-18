@@ -12,6 +12,15 @@ function safeFallback(pathname: string): string {
   return "/";
 }
 
+function safeFallbackLabel(pathname: string): string {
+  if (pathname.startsWith("/methods/") || pathname.startsWith("/learn/")) return "手法・概念一覧に戻る";
+  if (pathname.startsWith("/theater/") || pathname.startsWith("/traces/")) return "動きの一覧に戻る";
+  if (pathname.startsWith("/compare/")) return "比較一覧に戻る";
+  if (pathname.startsWith("/gallery/")) return "Case一覧に戻る";
+  if (pathname.startsWith("/sources/")) return "根拠一覧に戻る";
+  return "ホームに戻る";
+}
+
 export function SafeBackButton() {
   const { pathname, search } = useLocation();
   const navigate = useNavigate();
@@ -27,9 +36,9 @@ export function SafeBackButton() {
   };
 
   return (
-    <nav aria-label="ページ履歴" className="page-back-row">
+    <nav aria-label="関連する入口へ戻る" className="page-back-row">
       <button onClick={goBack} type="button">
-        {caseDestination?.ok ? "← このCaseへ戻る" : "← 戻る"}
+        {caseDestination?.ok ? "← このCaseへ戻る" : `← ${safeFallbackLabel(pathname)}`}
       </button>
     </nav>
   );

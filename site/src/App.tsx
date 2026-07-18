@@ -46,23 +46,23 @@ import "./home.css";
 
 const primaryNavigation = [
   { label: "ホーム", to: "/", matchPaths: ["/"] },
-  { label: "地図", to: "/map", matchPaths: ["/map"] },
-  { label: "診断", to: "/diagnose", matchPaths: ["/diagnose"] },
-  { label: "手法", to: "/learn", matchPaths: ["/learn", "/methods"] },
-  { label: "再生", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
-  { label: "比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
-  { label: "検索", to: "/search", matchPaths: ["/search"] },
-  { label: "事例", to: "/gallery", matchPaths: ["/gallery"] },
-  { label: "根拠", to: "/sources", matchPaths: ["/sources"] },
+  { label: "問題構造", to: "/map", matchPaths: ["/map"] },
+  { label: "条件で診断", to: "/diagnose", matchPaths: ["/diagnose"] },
+  { label: "手法を学ぶ", to: "/learn", matchPaths: ["/learn", "/methods"] },
+  { label: "動きを見る", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
+  { label: "条件を比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
+  { label: "横断検索", to: "/search", matchPaths: ["/search"] },
+  { label: "事例を見る", to: "/gallery", matchPaths: ["/gallery"] },
+  { label: "根拠を見る", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
 
 const secondaryHomeLinks = [
-  { label: "問題構造Map", to: "/map" },
+  { label: "問題構造をたどる", to: "/map" },
   { label: "手法・概念を学ぶ", to: "/learn" },
   { label: "動きを見る", to: THEATER_ROUTES.index },
-  { label: "条件を揃えて比べる", to: COMPARE_LAB_ROUTE },
-  { label: "横断検索", to: "/search" },
-  { label: "根拠を確認", to: "/sources" },
+  { label: "比較条件を揃える", to: COMPARE_LAB_ROUTE },
+  { label: "横断して検索", to: "/search" },
+  { label: "根拠を確認する", to: "/sources" },
 ] as const;
 
 function HomePage() {
@@ -94,12 +94,12 @@ function HomePage() {
     <section className="home-page">
       <header className="home-hero">
         <p className="eyebrow">Optimization Compass</p>
-        <h1>最適化したい。でも、何をどう解けばいい？</h1>
+        <h1>最適化したい問いを、問題の形にする</h1>
         <p>
-          現実の問いを定式化し、候補だけでなく除外理由・失敗の兆候・根拠まで辿るAtlasです。
+          現実の問いを変数・目的・制約に整理し、候補・除外理由・失敗の兆候・根拠を確認できるAtlasです。
         </p>
-        <div className="home-primary-actions" aria-label="最初の選択">
-          <Link className="home-primary-action" to="/diagnose">条件から診断する</Link>
+        <div className="home-primary-actions" aria-label="最初に選ぶ入口">
+          <Link className="home-primary-action" to="/diagnose">条件から診断を始める</Link>
           <Link className="home-secondary-action" to="/gallery">実例から探す</Link>
         </div>
       </header>
@@ -108,15 +108,15 @@ function HomePage() {
         {featuredCase === undefined && (
           <div className="home-case-loading" role="status">
             <p className="eyebrow">Case preview</p>
-            <h2 id="home-case-title">実問題を読み込んでいます</h2>
+            <h2 id="home-case-title">ケースを読み込んでいます</h2>
           </div>
         )}
         {featuredCase === null && (
           <div className="home-case-loading">
             <p className="eyebrow">Problem first</p>
-            <h2 id="home-case-title">問いを、変数・目的・制約へ分解する</h2>
-            <p>Galleryでは、Caseごとに候補・条件付き候補・除外理由を同じ形式で確認できます。</p>
-            <Link className="text-link" to="/gallery">Case一覧を開く →</Link>
+            <h2 id="home-case-title">問いを、変数・目的・制約に分けて見る</h2>
+            <p>ギャラリーでケースを選ぶと、候補・条件付き候補・除外理由を同じ形式で確認できます。</p>
+            <Link className="text-link" to="/gallery">ギャラリーでケースを選ぶ →</Link>
           </div>
         )}
         {featuredCase && (
@@ -128,7 +128,7 @@ function HomePage() {
                 <p className="home-case-question">{featuredCase.item.question}</p>
               </div>
               <Link className="home-case-link" to={featuredCase.canonicalUrl}>
-                このCaseを辿る →
+                このCaseの詳細を見る →
               </Link>
             </header>
 
@@ -143,7 +143,7 @@ function HomePage() {
               <article className="home-disposition-candidate">
                 <span>候補</span>
                 <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
-                <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う主要候補です。"}</p>
+                <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う候補です。"}</p>
               </article>
               <article className="home-disposition-excluded">
                 <span>選ばない理由</span>
@@ -155,8 +155,8 @@ function HomePage() {
         )}
       </section>
 
-      <nav aria-label="Atlasのその他の入口" className="home-secondary-nav">
-        <p>必要になったら</p>
+      <nav aria-label="次に進む入口" className="home-secondary-nav">
+        <p>目的に合わせて選ぶ</p>
         <div>
           {secondaryHomeLinks.map((item) => (
             <Link key={item.to} to={item.to}>{item.label}</Link>
@@ -165,8 +165,8 @@ function HomePage() {
       </nav>
 
       <p className="home-scope-note">
-        Theater・Compareは、接続済みの固定Caseと条件で提供します。一般的な手法順位を示すものではありません。
-        <Link to="/coverage"> Coverageを見る</Link>
+        Theater・Compareは、接続済みの固定Caseと条件で読みます。一般的な手法順位は示しません。
+        <Link to="/coverage"> Coverageを確認</Link>
       </p>
     </section>
   );
@@ -228,7 +228,7 @@ function AppShell() {
         本文へ移動
       </a>
       <header className="site-header">
-        <Link className="brand" to="/" aria-label="Optimization Atlas ホーム">
+        <Link className="brand" to="/" aria-label="Optimization Atlasのホーム">
           <span aria-hidden="true" className="brand-mark">
             OC
           </span>
@@ -291,7 +291,7 @@ function AppShell() {
         <span aria-hidden="true">·</span>
         <LicenseLinks />
         <span aria-hidden="true">·</span>
-        <Link to="/coverage">Coverage</Link>
+        <Link to="/coverage">Coverageを確認</Link>
       </footer>
     </div>
   );

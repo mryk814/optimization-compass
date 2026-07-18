@@ -45,16 +45,16 @@ describe("PromptExportDialog", () => {
     render(<PromptExportDialog draft={draft()} onClose={vi.fn()} />);
 
     const dialog = screen.getByRole("dialog", { name: "実装用プロンプトを作る" });
-    const presets = within(dialog).getByRole("group", { name: "Requested outputs" });
+    const presets = within(dialog).getByRole("group", { name: /作成するもの/u });
     expect(within(presets).getAllByRole("checkbox", { checked: true })).toHaveLength(3);
     expect(screen.getByLabelText("やりたいこと")).toHaveFocus();
 
-    const preview = screen.getByLabelText("実装用プロンプトのMarkdown preview");
-    fireEvent.change(screen.getByLabelText("Programming language"), { target: { value: "Python 3.12" } });
+    const preview = screen.getByLabelText("実装用プロンプトのMarkdownプレビュー");
+    fireEvent.change(screen.getByLabelText(/プログラミング言語/u), { target: { value: "Python 3.12" } });
     expect((preview as HTMLTextAreaElement).value).toContain("Programming language: Python 3.12");
 
     fireEvent.change(preview, { target: { value: "manual final prompt" } });
-    fireEvent.change(screen.getByLabelText("Problem scale"), { target: { value: "10,000 variables" } });
+    fireEvent.change(screen.getByLabelText(/問題の規模/u), { target: { value: "10,000 variables" } });
     expect(preview).toHaveValue("manual final prompt");
     expect(screen.getByRole("status")).toHaveTextContent("未反映");
 

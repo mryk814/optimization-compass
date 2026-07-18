@@ -58,12 +58,12 @@ export function GuidedStoryPanel({
     <section className="guided-story-panel" aria-labelledby={`guided-${scenario.scenario_id}`}>
       <header>
         <div>
-          <p className="eyebrow">Guided story</p>
+          <p className="eyebrow">Guided story · 順に見る</p>
           <h2 id={`guided-${scenario.scenario_id}`}>順に見る</h2>
           <p>{story.introduction.ja}</p>
         </div>
         <button onClick={() => activate(activeIndex < 0 ? story.steps[0] : nextStep)} type="button">
-          {activeIndex < 0 ? "Guidedを始める" : activeIndex === story.steps.length - 1 ? "最初から" : "次のcue"}
+          {activeIndex < 0 ? "案内を始める" : activeIndex === story.steps.length - 1 ? "最初から" : "次のポイント"}
         </button>
       </header>
       <ol className="guided-story-steps">
@@ -78,7 +78,7 @@ export function GuidedStoryPanel({
               >
                 <span>{index + 1}</span>
                 <strong>{scenario.lesson.narration_steps.find((item) => item.milestone_id === step.milestone_id)?.title_ja}</strong>
-                <small>frame {step.frame_index + 1} · {step.playback_speed}×{step.auto_pause ? " · auto-pause" : ""}</small>
+                <small>フレーム {step.frame_index + 1} · {step.playback_speed}倍{step.auto_pause ? " · 自動停止" : ""}</small>
               </button>
             </li>
           );
@@ -88,8 +88,8 @@ export function GuidedStoryPanel({
         <div className="guided-story-callout" role="status" aria-live="polite">
           <strong>{activeStep.annotation.ja}</strong>
           <span>
-            Focus: {activeStep.focus_target} · View: {activeStep.viewport_preset}
-            {activeStep.camera_preset ? ` · Camera: ${activeStep.camera_preset}` : ""}
+            注目: {activeStep.focus_target} · 表示: {activeStep.viewport_preset}
+            {activeStep.camera_preset ? ` · カメラ: ${activeStep.camera_preset}` : ""}
           </span>
         </div>
       )}

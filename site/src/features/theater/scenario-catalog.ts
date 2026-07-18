@@ -124,19 +124,19 @@ function scenarioDifficulty(scenario: VisualizationScenario): TheaterDifficulty 
 }
 
 export const purposeLabels: Record<VisualizationPurpose, string> = {
-  mechanism: "mechanism",
-  comparison: "comparison run",
-  failure_contrast: "failure contrast",
-  sensitivity: "sensitivity variant",
-  application_result: "result / trade-off",
+  mechanism: "機構を見る",
+  comparison: "条件を揃えて比較",
+  failure_contrast: "失敗と対比する",
+  sensitivity: "条件を変えて比較",
+  application_result: "結果・トレードオフ",
 };
 
 export const rendererLabels: Record<RendererFamily, string> = {
-  simplex_geometry: "Simplex geometry",
-  continuous_trajectory: "Continuous trajectory",
-  generic_metric_history: "Metric history",
-  search_tree: "Search tree",
-  surrogate_uncertainty: "Surrogate uncertainty",
-  feasible_region: "Feasible region",
-  pareto_front: "Pareto front",
+  simplex_geometry: "単体形状 (Simplex geometry)",
+  continuous_trajectory: "連続軌跡 (Continuous trajectory)",
+  generic_metric_history: "指標の履歴 (Metric history)",
+  search_tree: "探索木 (Search tree)",
+  surrogate_uncertainty: "代理モデルの不確実性 (Surrogate uncertainty)",
+  feasible_region: "実行可能領域 (Feasible region)",
+  pareto_front: "パレート前線 (Pareto front)",
 };

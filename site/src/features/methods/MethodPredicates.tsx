@@ -28,7 +28,7 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
     <section aria-label="構造化された適用前提" className="method-predicates">
       <div className="method-predicate-heading">
         <h2>構造化された適用前提</h2>
-        {coverage && <span>{coverage.status}</span>}
+        {coverage && <span>{coverage.status === "complete" ? "移行済み" : "一部移行"}</span>}
       </div>
       <p className="method-predicate-context">
         推薦・比較・実装用プロンプトで再利用する詳細データです。
@@ -38,7 +38,7 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
           <li key={predicate.predicate_id}>
             <strong>{features.get(predicate.feature_id)?.name_ja ?? predicate.feature_id}</strong>
             <span><code>{predicate.operator}</code> {expectedValue(predicate, data)}</span>
-            <small>{predicate.predicate_kind} · confidence {predicate.confidence}</small>
+            <small>{predicate.predicate_kind} · 信頼度 {predicate.confidence}</small>
           </li>
         ))}
       </ul>
@@ -46,7 +46,7 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
         <p>
           {coverage.status === "complete"
             ? "推薦で使う前提・非対応条件を移行済みです。"
-            : "一部を移行済みです。未移行条件はrelease reportで追跡しています。"}
+             : "一部を移行済みです。未移行の条件はリリースレポートで追跡しています。"}
         </p>
       )}
     </section>

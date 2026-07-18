@@ -136,8 +136,8 @@ describe("TraceDemoPage", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "AlgorithmTrace 契約デモ" })).toBeVisible();
     expect(screen.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
     expect(screen.getByText("初期状態")).toBeVisible();
-    expect(screen.getByLabelText("iteration")).toHaveTextContent("0");
-    expect(screen.getByLabelText("decision")).toHaveTextContent("受理");
+    expect(screen.getByLabelText("反復")).toHaveTextContent("0");
+    expect(screen.getByLabelText("判定")).toHaveTextContent("受理");
     expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
       "初期状態を評価し、完全なスナップショットを作成します。",
     );

@@ -41,7 +41,7 @@ function Diagnostics({ model }: { model: MapModel }) {
   if (model.diagnostics.length === 0) return null;
   return (
     <section className="map-diagnostics" role="status">
-      <h2>データ診断 {model.diagnostics.length}件</h2>
+      <h2>データの確認 {model.diagnostics.length}件</h2>
       <ul>{model.diagnostics.map((item, index) => <li key={`${item.kind}:${item.subjectId}:${index}`}>{item.message}</li>)}</ul>
     </section>
   );
@@ -52,10 +52,10 @@ function MapLegend() {
     <section aria-label="地図の読み方" className="map-legend">
       <h2>地図の読み方</h2>
       <ul>
-        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-root" />root: 問題構造の入口</li>
-        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-current" />現在地: キーボードや「現在地へ」の焦点</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-root" />入口: 問題構造の起点</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-current" />現在地: キーボード操作や「現在地へ」で移動する項目</li>
         <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-selected" />選択経路: 詳細パネルに表示中の項目と親</li>
-        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-related" />関連候補: 診断回答に一致する候補</li>
+        <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-related" />関連候補: 診断回答に合う候補</li>
       </ul>
     </section>
   );
@@ -194,7 +194,7 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
   if (atlas.error) {
     return (
       <section className="map-state-panel" role="alert">
-        <h2>URL の状態を復元できません</h2>
+        <h2>URLの状態を復元できませんでした</h2>
         <p>{atlas.error.message}</p>
         <button className="map-action-button" onClick={atlas.reset} type="button">状態をリセット</button>
       </section>
@@ -205,7 +205,7 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
     return (
       <>
         <Diagnostics model={model} />
-        <p className="map-state-panel">表示できる項目がありません。</p>
+        <p className="map-state-panel">表示する項目がありません。</p>
       </>
     );
   }
@@ -219,14 +219,14 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
       )}
       {atlasNavigation.error && <p className="map-state-panel" role="alert">{atlasNavigation.error.message}</p>}
       <Diagnostics model={model} />
-      <section className="map-view-selector" aria-label="Semantic View">
-        <label htmlFor="semantic-view">View</label>
+      <section className="map-view-selector" aria-label="表示の種類">
+        <label htmlFor="semantic-view">表示</label>
         <select id="semantic-view" onChange={(event) => switchView(event.target.value)} value={view.view_id}>
           {views.map((candidate, index) => <option key={`${candidate.view_id}:${index}`} value={candidate.view_id}>{candidate.title}</option>)}
         </select>
         <div>
           <strong>{view.description}</strong>
-          <span>限界: {view.limitations}</span>
+          <span>注意: {view.limitations}</span>
         </div>
       </section>
       <MapLegend />
@@ -242,7 +242,7 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
         <button disabled={!atlas.state.selectedNodeId} onClick={focusCurrent} type="button">現在地へ</button>
       </div>
       <p className="map-view-help" role="note">
-        zoomは文字倍率です。地図ペインは横・縦にスクロールでき、選択中の項目へは「現在地へ」で戻れます。ノードにカーソルを置くと概要を確認できます。
+        表示倍率は文字の大きさです。地図は横・縦にスクロールできます。選択中の項目へは「現在地へ」で戻れます。ノードにカーソルを合わせると概要を確認できます。
       </p>
       <div className="map-workspace">
         <section className="map-tree-pane" data-active={activePane === "map"} data-testid="map-tree-pane">
@@ -321,12 +321,12 @@ export function MapPage() {
   return (
     <section className="map-page">
       <header className="map-page-header">
-        <p className="eyebrow">Semantic View</p>
+        <p className="eyebrow">問題構造の見取り図</p>
         <h1>{loadState.status === "ready" ? loadState.view.title : requestedViewId === "problem-structure" ? "問題構造マップ" : "最適化マップ"}</h1>
         {loadState.status === "ready" && <p>{loadState.view.description}</p>}
       </header>
       <OptimizationProblemPrimer />
-      {loadState.status === "loading" && <p className="map-state-panel" role="status">地図を読み込んでいます…</p>}
+      {loadState.status === "loading" && <p className="map-state-panel" role="status">地図を読み込み中…</p>}
       {loadState.status === "error" && (
         <section className="map-state-panel" role="alert">
           <h2>地図データを読み込めませんでした</h2>

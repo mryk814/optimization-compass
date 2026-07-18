@@ -26,7 +26,7 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
         fetch(`${siteBaseUrl()}data/learning-journeys.json`, { signal: controller.signal }),
         fetch(`${siteBaseUrl()}data/visualization-scenarios.json`, { signal: controller.signal }),
       ]);
-      if (!journeyResponse.ok || !scenarioResponse.ok) throw new Error("Scenario context request failed.");
+      if (!journeyResponse.ok || !scenarioResponse.ok) throw new Error("シナリオの関連情報を読み込めませんでした。");
       const journeys = parseLearningJourneyIndex(await journeyResponse.json());
       const scenarios = parseVisualizationScenarioIndex(await scenarioResponse.json());
       setContext({
@@ -53,27 +53,27 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
     ...relatedComparisons.flatMap((item) => item.canonical_url ? [[item.entity_id, item.canonical_url] as const] : []),
   ]);
   return (
-    <section className="scenario-context-panel" aria-label="Caseとscenarioのcontext">
-      <header><span>One run / mechanism</span><h2>このrunで見るもの</h2><p>{scenario.lesson.learning_objective.ja}</p></header>
+    <section className="scenario-context-panel" aria-label="ケースとシナリオの関連情報">
+      <header><span>1回の実行で機構を見る</span><h2>このrunで見るもの</h2><p>{scenario.lesson.learning_objective.ja}</p></header>
       <dl className="scenario-context-grid">
-        <div><dt>Problem</dt><dd>{scenario.problem_definition_id}</dd></div>
-        <div><dt>Instance</dt><dd>{scenario.problem_instance_id}</dd></div>
-        <div><dt>Method</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
-        <div><dt>Observables</dt><dd>{scenario.lesson.primary_observables.map((item) => item.label_ja).join(" / ")}</dd></div>
+        <div><dt>問題 (Problem)</dt><dd>{scenario.problem_definition_id}</dd></div>
+        <div><dt>問題インスタンス (Instance)</dt><dd>{scenario.problem_instance_id}</dd></div>
+        <div><dt>手法 (Method)</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
+        <div><dt>観測する値 (Observables)</dt><dd>{scenario.lesson.primary_observables.map((item) => item.label_ja).join(" / ")}</dd></div>
       </dl>
       {context?.journey ? <div className="scenario-case-formulation">
-        <h3>Case: {context.journey.title_ja}</h3>
+        <h3>ケース: {context.journey.title_ja}</h3>
         <p>{context.journey.learning_objective}</p>
         <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>
         <p><strong>f(x)</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.objective }} /></p>
         <p><strong>制約</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.constraints }} /></p>
-      </div> : <p className="atlas-note">この教材runはCase journeyへ未接続です。問題instanceの範囲で読みます。</p>}
-      <nav className="scenario-context-links" aria-label="同じjourneyの導線">
+      </div> : <p className="atlas-note">この教材runはケースの学習経路に未接続です。問題インスタンスの範囲で読みます。</p>}
+      <nav className="scenario-context-links" aria-label="同じ学習経路への導線">
         {context?.journey && <JourneyLink to={context.journey.canonical_url}>Caseへ戻る</JourneyLink>}
-        {[...comparisonLinks.entries()].map(([id, url]) => <JourneyLink journeyPatch={{ comparisonId: id }} key={id} to={url}>Compare: {id}</JourneyLink>)}
-        {alternates.map((item) => <JourneyLink journeyPatch={{ scenarioId: item.scenario_id }} key={item.scenario_id} to={scenarioRoute(item)}>Alternate: {item.title_ja}</JourneyLink>)}
+        {[...comparisonLinks.entries()].map(([id, url]) => <JourneyLink journeyPatch={{ comparisonId: id }} key={id} to={url}>Compareへ: {id}</JourneyLink>)}
+        {alternates.map((item) => <JourneyLink journeyPatch={{ scenarioId: item.scenario_id }} key={item.scenario_id} to={scenarioRoute(item)}>別のシナリオ: {item.title_ja}</JourneyLink>)}
       </nav>
-      <p className="scenario-run-limit"><strong>Limit</strong> {scenario.lesson.limitations_ja}</p>
+      <p className="scenario-run-limit"><strong>適用範囲の限界</strong> {scenario.lesson.limitations_ja}</p>
     </section>
   );
 }

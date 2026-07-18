@@ -103,11 +103,11 @@ export function BayesianOptimizationPage() {
   return (
     <section className="atlas-page bo-theater">
       <header className="atlas-page-header">
-        <p className="eyebrow">Method Theater · Executable Trace</p>
+        <p className="eyebrow">Method Theater · 実行Trace</p>
         <h1>Bayesian Optimization Theater</h1>
         <p>
-          高価なblack-boxを、観測 → surrogate更新 → Expected
-          Improvementで次点選択、の順に再生します。
+           評価コストの高いblack-box最適化を、観測 → surrogate更新 → Expected
+           Improvementによる次候補の選択、という順に再生します。
         </p>
       </header>
       <div className="bo-presets" aria-label="実験preset">
@@ -123,14 +123,14 @@ export function BayesianOptimizationPage() {
           </select>
         </label>
         <label>
-          観測noise
+          観測ノイズ (noise)
           <select
-            aria-label="観測noise"
+            aria-label="観測ノイズ"
             value={noise}
             onChange={(event) => selectScenario(strategy, event.target.value as NoisePreset)}
           >
-            <option value="noiseless">noiseなし</option>
-            <option value="small_noise">小さいnoise</option>
+            <option value="noiseless">ノイズなし</option>
+            <option value="small_noise">小さいノイズ</option>
           </select>
         </label>
       </div>
@@ -140,7 +140,7 @@ export function BayesianOptimizationPage() {
         </p>
       )}
       {!loaded && !error && (
-        <p role="status">生成済みscenarioを検証しています…</p>
+        <p role="status">生成済みシナリオを検証しています…</p>
       )}
       {loaded && (
         <Theater
@@ -236,7 +236,7 @@ function Theater({
       tabIndex={0}
       onKeyDown={onKeyDown}
       className="bo-player"
-      aria-label="Bayesian optimization再生領域。左右矢印で移動、Spaceで再生"
+       aria-label="Bayesian Optimizationの再生領域。左右矢印で移動、Spaceで再生"
     >
       <section className="bo-contract">
         <strong>
@@ -244,14 +244,14 @@ function Theater({
           {scenario.artifact.renderer_family}{" "}
           {scenario.artifact.renderer_contract_version}
         </strong>
-        <span>方向 / Direction: minimize（best valueが小さいほど良い）</span>
+        <span>最適化方向: minimize（値が小さいほど良い）</span>
         <span>
           seed {scenario.experiment.seed.value} · 初期点{" "}
           {scenario.experiment.initial_condition.point.join(", ")} · noise σ=
           {payload.noise_std}
         </span>
         <span>
-          評価 {frame.oracle_evaluations}/{budget} · ξ={payload.exploration_xi}
+          評価 {frame.oracle_evaluations}/{budget}回 · ξ={payload.exploration_xi}
         </span>
       </section>
       <ScenarioContextPanel scenario={scenario} />
@@ -265,26 +265,26 @@ function Theater({
       <section className="bo-goal-cues" aria-label="BOの目標と現在値">
         <dl>
           <div>
-            <dt>Initial design</dt>
+            <dt>初期設計 (Initial design)</dt>
             <dd>[{scenario.experiment.initial_condition.point.join(", ")}]</dd>
           </div>
           <div>
-            <dt>Current incumbent</dt>
+            <dt>現在の最良値 (incumbent)</dt>
             <dd>
               x={frame.incumbent_x.toFixed(3)} · y=
               {frame.incumbent_value.toFixed(3)}
             </dd>
           </div>
           <div>
-            <dt>Known optimum</dt>
+            <dt>既知の最適値 (Known optimum)</dt>
             <dd>{scenario.lesson.known_reference_display.note_ja}</dd>
           </div>
           <div>
-            <dt>Terminal</dt>
+            <dt>状態</dt>
             <dd>
               {frame.oracle_evaluations >= budget
-                ? "evaluation budget reached"
-                : "ongoing"}
+                 ? "評価予算に到達"
+                 : "実行中"}
             </dd>
           </div>
         </dl>
@@ -324,7 +324,7 @@ function Theater({
           />
         </label>
         <span aria-live="polite">
-          Frame {frameIndex + 1}/{payload.frames.length} · {speed}×
+           フレーム {frameIndex + 1}/{payload.frames.length} · {speed}倍
         </span>
       </div>
       <div
@@ -334,12 +334,12 @@ function Theater({
       >
         <SurrogatePlot frame={frame} visibleLayers={visibleLayers} />
         <aside className="bo-explanation">
-          <h2>なぜこの点？</h2>
+          <h2>なぜこの点を選ぶ？</h2>
           <p aria-live="polite">{frame.explanation_ja}</p>
           {frame.selected_point !== null && (
             <dl>
               <div>
-                <dt>next x</dt>
+                <dt>次の候補 x</dt>
                 <dd>{frame.selected_point.toFixed(3)}</dd>
               </div>
               <div>
@@ -351,7 +351,7 @@ function Theater({
                 <dd>{frame.selected_uncertainty?.toFixed(3)}</dd>
               </div>
               <div>
-                <dt>incumbent</dt>
+                <dt>現在の最良値 (incumbent)</dt>
                 <dd>
                   x={frame.incumbent_x.toFixed(2)}, y=
                   {frame.incumbent_value.toFixed(3)}
@@ -371,7 +371,7 @@ function Theater({
       <details className="bo-text-alternative">
         <summary>図のテキスト代替</summary>
         <p>
-          観測点は
+           観測点は
           {frame.observations
             .map(
               (item) =>
@@ -382,16 +382,16 @@ function Theater({
         </p>
         <p>{frame.explanation_ja}</p>
         <p>
-          同じ評価回数で、BOの最良値は{frame.incumbent_value.toFixed(3)}、random
-          searchは{frame.random_incumbent_value.toFixed(3)}です。
+           同じ評価回数で、BOの最良値は{frame.incumbent_value.toFixed(3)}、random
+           searchの最良値は{frame.random_incumbent_value.toFixed(3)}です。
         </p>
       </details>
       <section className="bo-limitations">
         <h2>この可視化の限界</h2>
         <p>{scenario.lesson.limitations_ja}</p>
         <p>
-          Fairness: 同じ目的関数・domain・seed・評価予算 {budget}
-          。比較線は優越性の証明ではなく、この固定runの履歴です。
+           比較条件: 同じ目的関数・問題領域 (domain)・seed・評価予算 {budget}回。
+           比較線は優越性の証明ではなく、この固定runの履歴です。
         </p>
         <p>
           {method?.canonical_url ? (
@@ -437,18 +437,18 @@ function Comparison({
   });
   return (
     <section className="bo-comparison">
-      <h2>Equal-budget comparison</h2>
+       <h2>同じ予算での比較 (Equal-budget comparison)</h2>
       <p>
-        共通の初期設計3点から、評価回数を同じ {budget} 回に固定したrandom search
-        baseline。
+         共通の初期設計3点から始め、評価回数を {budget}回に揃えたrandom searchを
+         baselineとして比較します。
       </p>
       <div className="bo-score">
         <strong>BO {rows.at(-1)?.bo.toFixed(3)}</strong>
-        <span>vs</span>
+       <span>対</span>
         <strong>Random {rows.at(-1)?.random.toFixed(3)}</strong>
       </div>
       <table>
-        <caption>評価ごとのbest-so-far（小さいほど良い）</caption>
+         <caption>評価ごとの最良値 (best-so-far)（小さいほど良い）</caption>
         <thead>
           <tr>
             <th>評価</th>

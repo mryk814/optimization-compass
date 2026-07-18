@@ -23,17 +23,17 @@ const TEXT_FIELDS: Array<{
   multiline?: boolean;
 }> = [
   { field: "intent", label: "やりたいこと", multiline: true },
-  { field: "decision_variables", label: "Decision variables", multiline: true },
-  { field: "objective", label: "Objective / minimize-maximize", multiline: true },
-  { field: "constraints", label: "Constraints", multiline: true },
-  { field: "input_data_format", label: "Input data / format", multiline: true },
-  { field: "problem_scale", label: "Problem scale" },
-  { field: "evaluation_cost", label: "Evaluation cost" },
-  { field: "computation_budget", label: "Computation budget" },
-  { field: "programming_language", label: "Programming language" },
-  { field: "preferred_libraries", label: "Preferred libraries" },
-  { field: "prohibited_libraries", label: "Prohibited libraries" },
-  { field: "runtime_environment", label: "Runtime / deployment environment" },
+  { field: "decision_variables", label: "決定変数 (Decision variables)", multiline: true },
+  { field: "objective", label: "目的関数・最小化/最大化 (Objective)", multiline: true },
+  { field: "constraints", label: "制約 (Constraints)", multiline: true },
+  { field: "input_data_format", label: "入力データ・形式 (Input data / format)", multiline: true },
+  { field: "problem_scale", label: "問題の規模 (Problem scale)" },
+  { field: "evaluation_cost", label: "評価コスト (Evaluation cost)" },
+  { field: "computation_budget", label: "計算予算 (Computation budget)" },
+  { field: "programming_language", label: "プログラミング言語 (Programming language)" },
+  { field: "preferred_libraries", label: "使用したいライブラリ (Preferred libraries)" },
+  { field: "prohibited_libraries", label: "使用できないライブラリ (Prohibited libraries)" },
+  { field: "runtime_environment", label: "実行・配備環境 (Runtime / deployment)" },
   { field: "additional_unknowns", label: "その他の不明点（1行1件）", multiline: true },
 ];
 
@@ -89,12 +89,12 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
 
   const copy = async () => {
     try {
-      if (!navigator.clipboard) throw new Error("Clipboard API is unavailable.");
+      if (!navigator.clipboard) throw new Error("クリップボードを利用できません。");
       await navigator.clipboard.writeText(markdown);
       setCopyStatus("実装用プロンプトをコピーしました。");
     } catch (caught) {
       const detail = caught instanceof Error ? caught.message : String(caught);
-      setCopyStatus(`コピーできませんでした: ${detail}`);
+      setCopyStatus(`コピーできませんでした。${detail}`);
     }
   };
 
@@ -108,7 +108,7 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
       <div className="prompt-export-shell">
         <header className="prompt-export-header">
           <div>
-            <p className="eyebrow">Implementation Prompt Pack</p>
+            <p className="eyebrow">実装用プロンプトパック</p>
             <h2 id="prompt-export-title">実装用プロンプトを作る</h2>
           </div>
           <button aria-label="実装用プロンプトを閉じる" onClick={() => dialogRef.current?.close()} type="button">閉じる</button>
@@ -138,7 +138,7 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
               ))}
             </div>
             <fieldset className="prompt-export-presets">
-              <legend>Requested outputs</legend>
+              <legend>作成するもの (Requested outputs)</legend>
               {REQUESTED_OUTPUT_OPTIONS.map((option) => (
                 <label key={option.id}>
                   <input
@@ -151,14 +151,14 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
               ))}
             </fieldset>
             <section className="prompt-export-unknowns" aria-labelledby="prompt-export-unknowns-title">
-              <h3 id="prompt-export-unknowns-title">Unknownとして残る項目</h3>
+              <h3 id="prompt-export-unknowns-title">不明なまま残る項目 (Unknown)</h3>
               {unknowns.length > 0 ? <ul>{unknowns.map((item) => <li key={item}>{item}</li>)}</ul> : <p>なし</p>}
             </section>
           </form>
           <section className="prompt-export-preview" aria-labelledby="prompt-export-preview-title">
             <div className="prompt-export-preview-heading">
               <div>
-                <h3 id="prompt-export-preview-title">Markdown preview</h3>
+                <h3 id="prompt-export-preview-title">Markdownプレビュー</h3>
                 <p>ここで最終文面を直接編集できます。</p>
               </div>
               <div className="prompt-export-actions">
@@ -166,9 +166,9 @@ export function PromptExportDialog({ draft, onClose }: PromptExportDialogProps) 
                 <button className="prompt-export-copy" onClick={() => void copy()} type="button">Markdownをコピー</button>
               </div>
             </div>
-            {stale && <p className="prompt-export-stale" role="status">フォームの変更は直接編集したpreviewへ未反映です。「入力から再生成」で上書きできます。</p>}
+            {stale && <p className="prompt-export-stale" role="status">フォームの変更は直接編集したプレビューへ未反映です。「入力から再生成」で上書きできます。</p>}
             <textarea
-              aria-label="実装用プロンプトのMarkdown preview"
+              aria-label="実装用プロンプトのMarkdownプレビュー"
               className="prompt-export-markdown"
               onChange={(event) => {
                 setMarkdown(event.target.value);

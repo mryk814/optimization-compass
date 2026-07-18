@@ -55,7 +55,7 @@ describe("PromptExportLauncher", () => {
 
     expect(await screen.findByRole("dialog", { name: "実装用プロンプトを作る" })).toBeVisible();
     expect(screen.getByLabelText("やりたいこと")).toHaveValue(galleryItem.question);
-    expect(screen.getByLabelText("Programming language")).toHaveValue("unknown");
+    expect(screen.getByLabelText(/プログラミング言語/u)).toHaveValue("unknown");
     expect(vi.mocked(fetch).mock.calls.every((call) => call.length === 1)).toBe(true);
 
     fireEvent.click(screen.getByRole("button", { name: "実装用プロンプトを閉じる" }));
@@ -71,7 +71,7 @@ describe("PromptExportLauncher", () => {
     render(<PromptExportLauncher source={{ kind: "diagnose", state, result, manifest, data }} />);
 
     fireEvent.click(screen.getByRole("button", { name: "実装用プロンプトを作る" }));
-    const preview = await screen.findByLabelText("実装用プロンプトのMarkdown preview");
+    const preview = await screen.findByLabelText("実装用プロンプトのMarkdownプレビュー");
     expect((preview as HTMLTextAreaElement).value).toContain(`Atlas origin: Diagnose (${result.answered_question_count} answered)`);
     expect((preview as HTMLTextAreaElement).value).toContain("Alternative-first checks");
     expect((preview as HTMLTextAreaElement).value).toContain("Excluded methods");

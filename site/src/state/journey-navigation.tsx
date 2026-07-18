@@ -98,7 +98,7 @@ function useJourneyContext(): JourneyContextResult {
   if (loadError) return { state, error: loadError };
   if (!index) return { state };
   if (state.datasetVersion !== index.dataset_version) {
-    return { state, error: new Error("共有URLのdataset版が現在版と異なるため、Case journeyを復元できません。Caseを開き直してください。") };
+    return { state, error: new Error("共有URLのデータ版が現在版と異なるため、ケースの学習経路を復元できません。ケースを開き直してください。") };
   }
   const journey = index.journeys.find((item) => item.journey_id === state.journey?.journeyId);
   if (!journey || journey.case_id !== state.journey.caseId) {
@@ -136,7 +136,7 @@ export function JourneyNavigation() {
   const methodId = context.methodId ?? journey.candidate_method_ids[0];
   const step = currentStep(pathname);
   const next = step === 1 && scenario
-    ? { label: "次はTheaterで1 runを見る", to: scenario.canonical_url, patch: { scenarioId: scenario.scenario_id } }
+    ? { label: "次はTheaterで1回の実行を見る", to: scenario.canonical_url, patch: { scenarioId: scenario.scenario_id } }
     : step === 2 && comparison
       ? { label: "次はCompareで条件差を見る", to: comparison.canonical_url, patch: { comparisonId: comparison.comparison_id } }
       : step === 3 && methodId
@@ -144,7 +144,7 @@ export function JourneyNavigation() {
         : { label: "このCaseへ戻る", to: journey.canonical_url, patch: {} };
 
   return (
-    <aside className="journey-navigation" aria-label="Case learning journey">
+    <aside className="journey-navigation" aria-label="ケースの学習経路">
       <div className="journey-navigation-heading">
         <span>Case journey · Step {step}/4</span>
         <strong>{journey.title_ja}</strong>

@@ -41,8 +41,8 @@ describe("GenericMetricHistory", () => {
       />,
     );
 
-    expect(screen.getByRole("heading", { level: 2, name: "Metric history" })).toBeVisible();
-    expect(screen.getByRole("img", { name: "残差normをoracle evaluationで比較" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: /指標の履歴/u })).toBeVisible();
+    expect(screen.getByRole("img", { name: "残差normを評価回数ごとに比較" })).toBeVisible();
     expect(screen.getAllByText(/TRF/)[0]).toBeVisible();
     expect(screen.getAllByText(/LM/)[0]).toBeVisible();
     expect(screen.getByText(/0.50000 response/u)).toBeVisible();

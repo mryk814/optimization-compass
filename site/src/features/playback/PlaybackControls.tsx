@@ -16,10 +16,10 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
       <div className="playback-status" aria-live="polite">
         <strong>{eventLabel}</strong>
         <span>
-          Frame {playback.currentFrameIndex + 1}/{playback.frames.length}
-          {" · "}Iteration <output aria-label="iteration">{playback.currentFrame.iteration}</output>
+          フレーム {playback.currentFrameIndex + 1}/{playback.frames.length}
+          {" · "}反復 <output aria-label="反復">{playback.currentFrame.iteration}</output>
           {" · "}評価 {playback.currentFrame.oracle_evaluations}
-          {" · "}判定 <output aria-label="decision">{decisionLabel(playback.currentFrame.decision)}</output>
+          {" · "}判定 <output aria-label="判定">{decisionLabel(playback.currentFrame.decision)}</output>
         </span>
         <p aria-label="イベント説明">{eventExplanation}</p>
       </div>
@@ -53,7 +53,7 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
           onClick={playback.reverse}
           type="button"
         >
-          {playback.direction === "forward" ? "Reverse" : "Forward"}
+          {playback.direction === "forward" ? "逆再生" : "順再生"}
         </button>
         <label>
           <span>再生速度</span>
@@ -70,7 +70,7 @@ export function PlaybackControls({ playback }: { playback: PlaybackController })
       </div>
       {playback.reducedMotion && (
         <p className="reduced-motion-notice" role="status">
-          動きを減らす設定を検出しました。矢印buttonとsliderで静的にstepできます。
+           動きを減らす設定を検出しました。矢印ボタンとスライダーでフレームを移動できます。
         </p>
       )}
       <label className="playback-seek">

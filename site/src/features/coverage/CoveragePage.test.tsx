@@ -19,15 +19,15 @@ describe("CoveragePage", () => {
 
   test("shows priority reasons and filters the full inventory", async () => {
     render(<MemoryRouter><CoveragePage /></MemoryRouter>);
-    expect(await screen.findByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
+    expect(await screen.findByRole("heading", { name: "Atlasの接続状況" })).toBeVisible();
     expect(screen.getByText(/言語Coverage:/u)).toBeVisible();
     expect(screen.getByText(/現在は日本語の説明を基準に監査します/u)).toBeVisible();
-    expect(screen.getByRole("heading", { name: "Learning journey completeness" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "学習経路の接続状況" })).toBeVisible();
     expect(screen.getByText(/^\d+\/5 complete$/u)).toHaveTextContent(`${rawJourneys.summary.status_counts.complete}/5`);
-    expect(screen.getByRole("region", { name: "Learning journey completeness table" })).toBeVisible();
-    expect(screen.getByText(/未接続asset:/u)).toBeVisible();
+    expect(screen.getByRole("region", { name: "学習経路の接続状況一覧" })).toBeVisible();
+    expect(screen.getByText(/未接続の成果物:/u)).toBeVisible();
     expect(screen.getByText(new RegExp(rawJourneys.orphan_assets[0].asset_id, "u"))).toBeInTheDocument();
-    const inventory = screen.getByRole("region", { name: "Artifact inventory table" });
+    const inventory = screen.getByRole("region", { name: "成果物一覧の表" });
     expect(inventory).toHaveAttribute("tabindex", "0");
     expect(screen.getAllByText(/12$/u).length).toBeGreaterThan(0);
     fireEvent.change(screen.getByLabelText("Subject"), { target: { value: "feature_family" } });

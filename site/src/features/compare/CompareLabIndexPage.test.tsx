@@ -19,7 +19,7 @@ describe("CompareLabIndexPage", () => {
 
     render(<MemoryRouter><CompareLabIndexPage /></MemoryRouter>);
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Compare Lab" })).toBeVisible();
+    expect(await screen.findByRole("heading", { level: 1, name: "比較ラボ" })).toBeVisible();
     expect(screen.getByRole("link", { name: /細長い谷で一次法を比べる/u })).toHaveAttribute(
       "href",
       "/compare/COMPARE_GRADIENT_FAMILY",

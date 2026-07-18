@@ -204,7 +204,7 @@ describe("MapPage", () => {
     });
     renderMap(`/map?state=${token}`);
 
-    const selector = await screen.findByRole("combobox", { name: "View" });
+    const selector = await screen.findByRole("combobox", { name: "表示" });
     fireEvent.change(selector, { target: { value: "available-information" } });
     expect(await screen.findByRole("heading", { level: 1, name: "Oracle View" })).toBeVisible();
 
@@ -227,7 +227,7 @@ describe("MapPage", () => {
     renderMap();
     const tree = await loadedTree();
     expect(screen.getByRole("heading", { level: 2, name: "地図の読み方" })).toBeVisible();
-    expect(screen.getByText(/zoomは文字倍率です/u)).toBeVisible();
+    expect(screen.getByText(/表示倍率は文字の大きさです/u)).toBeVisible();
     const root = within(tree).getAllByRole("treeitem")[0];
     expect(root).toHaveClass("map-tree-item-root");
     expect(root).toHaveAttribute("title", "root A");
@@ -243,7 +243,7 @@ describe("MapPage", () => {
     fireEvent.click(question);
     const leaf = within(tree).getByRole("treeitem", { name: /0-1/u });
     expect(leaf).toHaveAttribute("aria-level", "3");
-    expect(screen.getByRole("heading", { level: 3, name: "次の項目" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 3, name: "関連項目" })).toBeVisible();
     expect(screen.getAllByText("0-1").length).toBeGreaterThan(1);
     fireEvent.click(leaf);
 
@@ -285,7 +285,7 @@ describe("MapPage", () => {
       questions: { Q01: { answerType: "single_choice", allowedAnswers: ["binary"] } },
     }).state.answers).toEqual({});
 
-    fireEvent.click(screen.getByRole("button", { name: "この条件で診断を続ける" }));
+    fireEvent.click(screen.getByRole("button", { name: "この条件で診断する" }));
     expect(await screen.findByText("DIAGNOSE ROUTE")).toBeVisible();
     token = new URLSearchParams(currentSearch()).get("state")!;
     expect(decodeAtlasState(token, {
@@ -343,7 +343,7 @@ describe("MapPage", () => {
     fireEvent.click(within(tree).getByRole("treeitem", { name: /0-1/u }));
     const before = currentSearch();
 
-    fireEvent.click(screen.getByRole("button", { name: "この条件で診断を続ける" }));
+    fireEvent.click(screen.getByRole("button", { name: "この条件で診断する" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent(/maximum is 1800/u);
     expect(currentSearch()).toBe(before);
@@ -446,7 +446,7 @@ describe("MapPage", () => {
 
       const tree = await loadedTree();
       expect(await screen.findByRole("heading", { level: 2, name: caseName === "broken parent" ? "孤立した選択" : "循環した選択" })).toBeVisible();
-      expect(screen.getByText(/データ診断/u)).toBeVisible();
+    expect(screen.getByText(/データの確認/u)).toBeVisible();
       const visibleItems = within(tree).getAllByRole("treeitem");
       expect(visibleItems.filter((item) => item.tabIndex === 0)).toEqual([visibleItems[0]]);
       expect(visibleItems.some((item) => item.tabIndex === -1)).toBe(true);
@@ -476,7 +476,7 @@ describe("MapPage", () => {
   });
 
   test.each([
-    ["empty", { ...mapFixture(), nodes: [], edges: [], root_node_ids: [] }, "表示できる項目がありません"],
+    ["empty", { ...mapFixture(), nodes: [], edges: [], root_node_ids: [] }, "表示する項目がありません"],
     ["malformed", { ...mapFixture(), title: null }, "地図データを読み込めませんでした"],
   ])("renders a safe %s state", async (_label, fixture, message) => {
     mockFirstView({ ok: true, json: async () => fixture });
@@ -492,7 +492,7 @@ describe("MapPage", () => {
 
     mockFirstView({ ok: true, json: async () => mapFixture() });
     renderMap("/map?state=bad");
-    expect(await screen.findByText(/URL の状態を復元できません/u)).toBeVisible();
+    expect(await screen.findByText(/URLの状態を復元できませんでした/u)).toBeVisible();
     expect(screen.getByRole("button", { name: "状態をリセット" })).toBeVisible();
   });
 
@@ -502,9 +502,9 @@ describe("MapPage", () => {
     fixture.nodes[0].parent_node_id = "missing-parent";
     mockFirstView({ ok: true, json: async () => fixture });
     renderMap();
-    expect(await screen.findByText(/データ診断/u)).toBeVisible();
+    expect(await screen.findByText(/データの確認/u)).toBeVisible();
     expect(screen.getByText(/missing-root/u)).toBeVisible();
-    expect(screen.getByText(/表示できる項目がありません/u)).toBeVisible();
+    expect(screen.getByText(/表示する項目がありません/u)).toBeVisible();
   });
 
   test("renders unknown entity types generically and unsafe URLs as text", async () => {
