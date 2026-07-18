@@ -3276,6 +3276,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.nested-equilibrium-complementarity-hybrid",
+      "entity_id": "concept.nested-equilibrium-complementarity-hybrid",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "入れ子・均衡・相補性・hybrid構造",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constrained-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        }
+      ],
+      "summary": "入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.path-terminal-constraints",
       "entity_id": "concept.path-terminal-constraints",
       "entity_type": "content",

@@ -376,6 +376,78 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "F_STRUCTURE_BILEVEL",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.nested-equilibrium-complementarity-hybrid",
+      "html": "<p>入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。</p>\n<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>この4つは同じ「複雑な最適化」ではありません。最初に、外側の目的値以外に何を解いているかを分けます。</p>\n<table>\n<thead>\n<tr>\n<th>構造</th>\n<th>追加で解いているもの</th>\n<th>まず記録するもの</th>\n<th>既存のcanonical vocabulary</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>bilevel / nested</td>\n<td>外側の変数ごとのinner optimization</td>\n<td>inner tolerance、inner residual、解の選択規則</td>\n<td><code>F_STRUCTURE_BILEVEL</code>、<code>F_DERIVATIVE_INNER_ITERATION</code></td>\n</tr>\n<tr>\n<td>equilibrium</td>\n<td>複数主体または条件が同時に満たす状態</td>\n<td>equilibrium residual、解の一意性、停止条件</td>\n<td><code>F_STRUCTURE_GAME_EQUILIBRIUM</code>、<code>F_STRUCTURE_VARIATIONAL_INEQUALITY</code></td>\n</tr>\n<tr>\n<td>complementarity</td>\n<td>互いに同時に正になれない条件</td>\n<td>complementarity residual、violation、smoothing parameter</td>\n<td><code>F_STRUCTURE_COMPLEMENTARITY</code>、<code>F_CONSTRAINT_COMPLEMENTARITY</code></td>\n</tr>\n<tr>\n<td>hybrid / mode</td>\n<td>連続状態と離散modeの遷移</td>\n<td>mode sequence、switching event、chattering</td>\n<td><code>F_CONSTRAINT_LOGICAL</code>、<code>F_NUM_DISCRETE_VARIABLES</code>、<code>F_STRUCTURE_TRAJECTORY</code></td>\n</tr>\n</tbody>\n</table>\n<p>hybridには現時点で専用のcanonical stable IDを追加していません。上表の既存語彙で、論理条件・離散変数・trajectoryのどこが問題を決めているかを記録します。<code>hybrid</code>という名前だけで、smoothなNLPや通常のoptimal controlと同一視しません。</p>\n<h2 id=\"まず-内側の問題を外側から分ける\" tabindex=\"-1\">まず、内側の問題を外側から分ける</h2>\n<p>bilevel optimizationでは、外側の変数<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>を選ぶたびに、内側の問題を解いて得た<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>y</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>を使います。典型的には次の形です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mi>x</mi></msub><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><msup><mi>y</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"2em\" /><msup><mi>y</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>\\arg</mi><msub><mo>min</mo><mi>y</mi></msub><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>g</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>ここで、外側のobjectiveを1回評価しただけではありません。少なくともinner solveのiteration数、tolerance、終了status、inner objectiveまたはresidualを別に記録します。inner solveを途中で打ち切るtruncated solveや、反復を計算グラフへ展開するunrolled solveでは、得られた<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi></mrow></math>が厳密な<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>y</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>とは限りません。</p>\n<p>hyperparameter selectionやinverse designも、parameterを変えるたびに学習・simulation・equilibrium solveを実行するなら、このnested構造として読めます。ただし、外側の問題をbilevelと呼ぶには、内側の解が外側の評価へどう定義されるかを明示します。</p>\n<h3 id=\"解の選択規則と微分経路\" tabindex=\"-1\">解の選択規則と微分経路</h3>\n<p>inner problemに複数の解がある場合、どの解を<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>y</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>とするかで外側の問題が変わります。</p>\n<ul>\n<li><p><strong>optimistic</strong>: innerの解の集合から、外側に都合のよい解を選ぶ。</p>\n</li>\n<li><p><strong>pessimistic</strong>: innerの解の集合から、外側に不利な解を想定する。</p>\n</li>\n<li><p><strong>algorithm-dependent</strong>: 初期値、warm start、停止条件、solverの履歴が、実際に得る解を決める。</p>\n</li>\n</ul>\n<p>「solverの反復を微分した」のか、「十分に解いた後のsolution mapを微分した」のかも分けます。implicit differentiationは解写像の局所的な関係を使う場合がありますが、inner solveが未収束、解が非一意、constraint qualificationが崩れる場合には、その微分を無条件に保証できません。</p>\n<h2 id=\"equilibriumは-最小化-と同じではない\" tabindex=\"-1\">equilibriumは「最小化」と同じではない</h2>\n<p>equilibriumは、複数の主体や状態方程式が、他の条件を固定した一方的な改善だけでは動けない状態を表します。game equilibriumだけでなく、network、market、mechanicsの状態を均衡条件で定める場合もあります。</p>\n<p>variational inequalityなら、集合<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi></mrow></math>上の状態<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math>について、次のように書けます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>find&#x000A0;</mtext><mi>z</mi><mo>&#x02208;</mo><mi>C</mi><mspace width=\"1em\" /><mtext>such&#x000A0;that</mtext><mspace width=\"1em\" /><mi>G</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><msup><mo stretchy=\"false\">&#x00029;</mo><mi>&#x1D5B3;</mi></msup><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo>&#x02212;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02265;</mo><mn>0</mn><mspace width=\"1em\" /><mtext>for&#x000A0;all&#x000A0;</mtext><mi>w</mi><mo>&#x02208;</mo><mi>C</mi><mo>&#x0002E;</mo></mrow></math></div>\n<p>この条件を満たすことは、ある目的関数のglobal minimumを証明することと同じではありません。最適化のobjective、equilibrium residual、constraint violation、解の一意性を別々に記録します。外側で設計を最適化するなら、design updateとequilibrium solveの停止を混ぜません。</p>\n<h2 id=\"complementarityは接触だけの語ではない\" tabindex=\"-1\">complementarityは接触だけの語ではない</h2>\n<p>相補性（complementarity）は、非負の量<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>a</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>と<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>b</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>が同時には正にならない条件です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>a</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"2em\" /><mi>b</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"2em\" /><mi>a</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mi>b</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>一方が正なら他方は0で、両方が0の境界も許します。KKT条件のactive constraintとmultiplier、contactのgapとnormal force、MPECのequilibrium constraintなどに現れます。</p>\n<p>exact complementarityをそのまま扱ったのか、penalty・smoothing・relaxationで近似したのかを分けます。たとえば<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>s</mi><mi>&#x003BC;</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>a</mi><mo>&#x0002C;</mo><mi>b</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math>のような平滑化条件を使っても、有限の<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BC;</mi></mrow></math>で<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>a</mi><mi>b</mi><mo>&#x0003D;</mo><mn>0</mn></mrow></math>を満たしたとは限りません。少なくともcomplementarity residual、非負制約のviolation、smoothingまたはpenalty parameterの履歴を保存します。</p>\n<h2 id=\"hybridはmodeの扱いを先に決める\" tabindex=\"-1\">hybridはmodeの扱いを先に決める</h2>\n<p>hybrid systemでは、連続状態<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>と離散mode<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>が同時に現れます。modeごとに状態方程式や制約が異なり、eventでmodeが切り替わることがあります。</p>\n<p>次の二つは別の問題です。</p>\n<ul>\n<li><p><strong>prescribed mode schedule</strong>: modeの順序や切替時刻を先に固定し、連続変数だけを調整する。</p>\n</li>\n<li><p><strong>mode discovery</strong>: 候補modeや切替時刻そのものを探索し、mode sequenceを決める。</p>\n</li>\n</ul>\n<p>前者を解いたからといって、後者のmode選択まで最適化したことにはなりません。modeを離散変数で表すか、logical constraintで表すか、trajectoryのeventとして表すかを記録し、mode sequenceとswitching eventを目的値の履歴から推測しないようにします。chatteringやrelaxation artifactがある場合は、連続状態が滑らかでもmodeの意味が壊れていないか確認します。</p>\n<h2 id=\"4つの構造をまたぐ診断値\" tabindex=\"-1\">4つの構造をまたぐ診断値</h2>\n<p>同じrunに複数の構造が含まれる場合でも、次の値を一つの「収束」へまとめません。</p>\n<table>\n<thead>\n<tr>\n<th>判定</th>\n<th>見るもの</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>outer progress</td>\n<td>outer objective、design change、outer iteration</td>\n<td>外側の目的が進んだか</td>\n</tr>\n<tr>\n<td>inner solve</td>\n<td>inner residual、inner tolerance、inner status、inner iteration数</td>\n<td>その外側点で内側をどこまで解いたか</td>\n</tr>\n<tr>\n<td>equilibrium / complementarity</td>\n<td>equilibrium residual、constraint violation、complementarity residual</td>\n<td>条件をどのtoleranceで満たしたか</td>\n</tr>\n<tr>\n<td>derivative route</td>\n<td>implicit、unrolled、solver iteration、numerical derivative</td>\n<td>何を微分したか</td>\n</tr>\n<tr>\n<td>mode behavior</td>\n<td>mode sequence、switching event、chattering</td>\n<td>どのmodeを選び、どこで切り替わったか</td>\n</tr>\n<tr>\n<td>stationarity</td>\n<td>stationarity residual、constraint qualification、active set</td>\n<td>停止条件の意味と未保証の範囲</td>\n</tr>\n</tbody>\n</table>\n<p>inner residualが小さくてもouter objectiveが改善するとは限りません。逆に、outer objectiveが改善してもinner solveが粗ければ、outer gradientやequilibriumの評価が変わります。異なる種類の残差を単位やtoleranceをそろえずに比較しません。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>教育用の小さなrunで得たstationarity、exactness、mode sequenceは、一般のbilevel、MPEC、接触問題、hybrid systemのglobal guaranteeではありません。inner solve policy、解の選択規則、relaxation、mode discovery、constraint qualificationを明記してから結果を解釈します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/concept.constraint-class\">制約class</a>で、equality・inequality・logical・complementarityを別々の可行性判定として確認します。trajectoryのstateと更新を分けるときは<a href=\"#/learn/concept.trajectory-variable\">trajectory変数</a>と<a href=\"#/learn/concept.dynamics-defect\">dynamics defect</a>へ進み、実際のsolver familyとの接続は<a href=\"#/learn/family.constrained-nlp\">制約付きNLP</a>と<a href=\"#/learn/family.optimal-control\">optimal control</a>で確認します。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [
+        "concept.constraint-class",
+        "concept.dynamics-defect",
+        "concept.trajectory-variable"
+      ],
+      "related_ids": [
+        "family.constrained-nlp",
+        "family.optimal-control"
+      ],
+      "seo_description": "入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。",
+      "seo_title": "入れ子・均衡・相補性・hybrid構造",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "summary": "入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。",
+      "title_en": "Nested, Equilibrium, Complementarity, and Hybrid Structures",
+      "title_ja": "入れ子・均衡・相補性・hybrid構造",
+      "toc": [
+        {
+          "heading_id": "30秒でつかむ",
+          "label": "30秒でつかむ",
+          "level": 2
+        },
+        {
+          "heading_id": "まず-内側の問題を外側から分ける",
+          "label": "まず、内側の問題を外側から分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "解の選択規則と微分経路",
+          "label": "解の選択規則と微分経路",
+          "level": 3
+        },
+        {
+          "heading_id": "equilibriumは-最小化-と同じではない",
+          "label": "equilibriumは「最小化」と同じではない",
+          "level": 2
+        },
+        {
+          "heading_id": "complementarityは接触だけの語ではない",
+          "label": "complementarityは接触だけの語ではない",
+          "level": 2
+        },
+        {
+          "heading_id": "hybridはmodeの扱いを先に決める",
+          "label": "hybridはmodeの扱いを先に決める",
+          "level": 2
+        },
+        {
+          "heading_id": "4つの構造をまたぐ診断値",
+          "label": "4つの構造をまたぐ診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "F_CONSTRAINT_CLASS",
       "canonical_entity_type": "feature",
       "comparison_ids": [],
