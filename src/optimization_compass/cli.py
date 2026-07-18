@@ -201,7 +201,8 @@ def scaffold_gallery_case_command(
             output_directory=output,
         )
     except ScaffoldError as error:
-        raise typer.BadParameter(str(error)) from error
+        typer.echo(str(error), err=True)
+        raise typer.Exit(code=2) from error
     typer.echo(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 
