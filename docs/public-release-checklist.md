@@ -43,6 +43,22 @@ GitHub Pages artifact.
 
 ## Publication
 
+### Common recovery traps
+
+- Do not retry `rebuild_dataset.py --publish` with the same version after a
+  bundle or generated payload has changed. Publication rejects version reuse;
+  bump the patch version and regenerate the complete release instead.
+- Run the exact CI export command locally before committing generated site
+  data. A payload that contains unrounded results from `exp`, `tanh`, `hypot`,
+  or similar functions can hash differently across Windows and Linux even
+  when the underlying teaching trace is the same.
+- When changing the dataset version, search all committed fixtures and
+  expected outputs for the previous version. TypeScript parity fixtures are
+  intentionally strict and otherwise fail only after the PR reaches CI.
+- Keep the release source commit, staged tree, bundle, catalog, citation, and
+  dataset card aligned. The final proof is the post-merge Pages workflow and
+  the public `deployment.json` / `data/release.json`, not local `main` alone.
+
 - [ ] The release commit passed the complete CI pipeline; no artifact from a
       different commit is reused.
 - [ ] `scripts/repository_size.py --check` rejects a new complete distribution in the Git tree.
