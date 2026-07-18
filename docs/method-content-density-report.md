@@ -10,7 +10,7 @@
 | `active-set-qp` | `M_ACTIVE_SET_QP` | 80 | 4492 | 8 | 1 | pass |
 | `adam` | `M_ADAM` | 127 | 3001 | 9 | 1 | pass |
 | `adamw` | `M_ADAMW` | 122 | 2926 | 9 | 1 | pass |
-| `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 69 | 1615 | 7 | 1 | pass |
+| `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 69 | 1894 | 7 | 1 | pass |
 | `admm` | `M_ADMM` | 51 | 2309 | 9 | 1 | pass |
 | `admm-qp` | `M_ADMM_QP` | 83 | 3140 | 9 | 1 | pass |
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 73 | 2563 | 7 | 1 | pass |
@@ -29,7 +29,7 @@
 | `coordinate-descent` | `M_COORDINATE_DESCENT` | 54 | 2865 | 8 | 1 | pass |
 | `cp-sat` | `M_CP_SAT` | 80 | 3185 | 10 | 1 | pass |
 | `cp-search` | `M_CP_SEARCH` | 66 | 3057 | 8 | 1 | pass |
-| `density-filter` | `M_DENSITY_FILTER` | 76 | 1415 | 5 | 1 | pass |
+| `density-filter` | `M_DENSITY_FILTER` | 76 | 1691 | 5 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 70 | 1703 | 6 | 1 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 69 | 2414 | 8 | 1 | pass |
 | `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4406 | 8 | 1 | pass |
@@ -97,7 +97,7 @@
 | `riemannian-trust-region` | `M_RIEMANNIAN_TRUST_REGION` | 68 | 3047 | 10 | 1 | pass |
 | `sgd` | `M_SGD` | 65 | 4065 | 8 | 1 | pass |
 | `shgo` | `M_SHGO` | 102 | 2016 | 7 | 1 | pass |
-| `simp-topology` | `M_SIMP_TOPOLOGY` | 71 | 1450 | 6 | 1 | pass |
+| `simp-topology` | `M_SIMP_TOPOLOGY` | 71 | 1669 | 6 | 1 | pass |
 | `simulated-annealing` | `M_SIMULATED_ANNEALING` | 60 | 3210 | 9 | 1 | pass |
 | `slsqp` | `M_SLSQP` | 68 | 2774 | 8 | 1 | pass |
 | `smac` | `M_SMAC_RF` | 193 | 3154 | 7 | 1 | pass |
