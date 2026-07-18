@@ -107,6 +107,15 @@ def test_distribution_classifier_excludes_only_compact_release_metadata() -> Non
     assert release_distribution_version("data/seeds/site_gallery.json") is None
 
 
+def test_default_policy_retains_only_pinned_legacy_sqlite() -> None:
+    assert {"0.2.0"} == REPOSITORY_SIZE.HISTORICAL_RELEASE_VERSIONS
+    assert REPOSITORY_SIZE.HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES == 3_506_176
+    assert (
+        release_distribution_version("data/optimization_method_selection_database_v0.2.0.sqlite")
+        == "0.2.0"
+    )
+
+
 def test_gate_rejects_bundle_moved_under_compact_release_directory(tmp_path: Path) -> None:
     repo = _repository(
         tmp_path,
