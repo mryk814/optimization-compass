@@ -8,7 +8,7 @@ summary: 非線形最小二乗の残差Jacobianから曲率近似を作り、一
 source_ids: [S003, S041, S056]
 related_ids: [least-squares, newton-method, trust-region-newton-cg]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
@@ -22,20 +22,7 @@ last_reviewed: 2026-07-16
 - 前進の判断: 二乗和、残差分布、gradient相当量の低下
 - 恐れていること: rank deficiency、外れ値、初期値の悪さ、大きな残差での近似誤差
 
-一般のNewton法と違い、目的関数が残差二乗和であることを利用してHessianの一部を近似します。
-
-## まず確認すること
-
-| 項目 | 確認内容 |
-|---|---|
-| formulation | 目的が本当に残差二乗和として意味を持つか |
-| residual | 観測ごとの残差を返せるか |
-| Jacobian | 正確または安定に計算できるか |
-| weighting | 単位・noise分散に応じたweightが必要か |
-| identifiability | parameterがデータから区別できるか |
-| constraints | boundsや一般制約をどう扱うか |
-
-線形最小二乗なら反復法よりQRやSVDを先に検討します。外れ値がある場合はrobust lossの意味を明示します。
+一般のNewton法とは異なり、目的関数が残差二乗和であることを利用してHessianの一部を近似します。
 
 ## 仕組み
 
@@ -53,6 +40,20 @@ $$
 
 $J^T J$を直接作るとcondition numberが悪化する場合があるため、実装ではQR、SVD、疎linear algebra、trust-regionを使うことがあります。
 
+## まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| formulation | 目的が本当に残差二乗和として意味を持つか |
+| residual | 観測ごとの残差を返せるか |
+| Jacobian | 正確または安定に計算できるか |
+| weighting | 単位・noise分散に応じたweightが必要か |
+| identifiability | parameterがデータから区別できるか |
+| constraints | boundsや一般制約をどう扱うか |
+
+線形最小二乗なら反復法よりQRやSVDを先に検討します。
+外れ値がある場合はrobust lossの意味を明示します。
+
 ## 向く条件・避ける条件
 
 向きやすい条件:
@@ -68,25 +69,6 @@ $J^T J$を直接作るとcondition numberが悪化する場合があるため、
 - 不連続・離散変数・強いoutlierを未処理
 - Jacobianのrankが低くparameterが識別不能
 - 大域最適性certificateが必要
-
-## うまくいったサインと切替サイン
-
-見る値:
-
-- residual normと観測別residual pattern
-- Jacobian rank / singular values
-- step norm
-- gradient相当の $J^T r$
-- trust radiusまたはdamping
-- 初期値ごとのparameter差
-
-切替サイン:
-
-- stepが大きく振動 → Levenberg–Marquardtやtrust-regionへ
-- rank deficiency → parameterization、regularization、固定parameterを見直す
-- 一部観測だけ残差が大きい → model mismatch、outlier、weightを確認
-- 二乗和は小さいがparameterが不安定 → identifiabilityを疑う
-- constraintsが本質 → constrained least-squares対応または一般NLPへ
 
 ## Python
 
@@ -117,8 +99,28 @@ for _ in range(5):
 print(parameters, np.linalg.norm(residuals(parameters)))
 ```
 
-## コラム: Levenberg–Marquardtとの違い
+## 診断値
 
-Gauss–Newton stepが大きすぎる、Jacobianが悪条件、初期点が遠い場合にはdampingやtrust regionが必要です。Levenberg–Marquardtはその代表的な安定化です。
+残差を一つのnormにまとめるだけでなく、観測別の偏りとparameterの安定性を分けて確認します。
+
+- residual normと観測別residual pattern
+- Jacobian rank / singular values
+- step norm
+- gradient相当の $J^T r$
+- trust radiusまたはdamping
+- 初期値ごとのparameter差
+
+## 失敗・切替の兆候
+
+- stepが大きく振動する → Levenberg–Marquardtやtrust-regionへ切り替える
+- rank deficiencyがある → parameterization、regularization、固定parameterを見直す
+- 一部観測だけ残差が大きい → model mismatch、outlier、weightを確認する
+- 二乗和は小さいがparameterが不安定 → identifiabilityを疑う
+- constraintsが本質 → constrained least-squares対応または一般NLPへ切り替える
+
+## 次に読む
+
+Gauss–Newton stepが大きすぎる、Jacobianが悪条件、初期点が遠い場合にはdampingやtrust regionが必要です。
+Levenberg–Marquardtはその代表的な安定化です。
 
 実務上は[非線形最小二乗とLevenberg–Marquardt](#/learn/least-squares)を入口にし、残差、Jacobian、rank、停止statusを一緒に保存してください。

@@ -10,14 +10,26 @@ prerequisites: [proximal-gradient]
 related_ids: [proximal-gradient, admm]
 aliases: [/learn/fista]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 近接勾配法へNesterov型の外挿を加え、凸複合問題の目的gapをより速く減らす加速一次法です。
 
-## 加速の仕組み
+## 30秒でつかむ
 
-basic proximal gradientは現在点から勾配stepとprox stepを行います。FISTAは過去の移動を使った外挿点 $y_k$ からstepを行います。
+FISTAは、勾配stepの前に過去の移動を使った外挿を入れ、近接勾配法より目的gapを速く減らすことを狙います。
+
+- 見ているもの: objective、proximal-gradient mapping、support / active set
+- 動かしているもの: 現在点、外挿点、step、近接演算
+- 前進の判断: best-so-far objectiveと目的gapが減ること
+- 恐れていること: 外挿による振動、supportの入れ替わり、variantの違いによる比較のずれ
+
+速さはcurrent objectiveの単調減少を意味しません。
+
+## 仕組み
+
+basic proximal gradientは現在点から勾配stepとprox stepを行います。
+FISTAは過去の移動を使った外挿点 $y_k$ からstepを行います。
 
 $$
 x_{k+1}=\operatorname{prox}_{\eta g}\left(y_k-\eta\nabla f(y_k)\right)
@@ -33,18 +45,27 @@ $$
 
 凸条件下では、basic法の代表的な $O(1/k)$ に対し、FISTAは目的gapについて $O(1/k^2)$ のrateを持ちます。
 
-## 「速い」が単調とは限らない
+## まず確認すること
 
-外挿により目的値が一時的に増えたり、解の周囲で振動したりすることがあります。次を分けて見ます。
+- 目的関数がsmoothな項と、proxを計算できる項の複合形になっているか
+- 勾配とproxが安価に計算できるか
+- 凸条件下のrateを使う問題か、非凸問題として挙動を別に評価するか
+- backtracking、restart、monotonicityのvariantを比較条件として記録できるか
 
-- best-so-far objective
-- current objective
-- proximal-gradient mapping
-- iterate difference
-- support / active setの変化
-- restart回数
+## 向く条件・避ける条件
 
-monotone variantやadaptive restartを使うと実務上安定する場合がありますが、variantと条件を記録します。
+向きやすい条件:
+
+- convexなsmooth + proximable構造
+- L1など非滑らか正則化
+- gradientとproxが安価
+- 高精度より中程度の精度を多数反復で得たい
+- basic proximal gradientが安定だが遅い
+
+避ける条件:
+
+- 非凸問題へ理論rateをそのまま適用する
+- proxが支配的で、分解や専用solverのほうが適している
 
 ## Python
 
@@ -82,22 +103,30 @@ for _ in range(1500):
 print(x)
 ```
 
-## 向いている条件
+## 診断値
 
-- convexなsmooth + proximable構造
-- L1など非滑らか正則化
-- gradientとproxが安価
-- 高精度より中程度の精度を多数反復で得たい
-- basic proximal gradientが安定だが遅い
+「速い」をcurrent objectiveだけで判断すると、外挿による一時的な増加を見落とします。
+
+monotone variantやadaptive restartを使うと実務上安定する場合がありますが、variantと条件を記録します。
+
+- best-so-far objective
+- current objective
+- proximal-gradient mapping
+- iterate difference
+- support / active setの変化
+- restart回数
 
 ## 失敗・切替の兆候
 
-- objectiveが大きく振動する → restartやmonotone variant
-- supportが何度も入れ替わる → step、scaling、regularizationを確認
-- backtrackingが毎回縮む → 勾配のLipschitz modelが悪い
-- proxが支配的 → decompositionや専用solverを検討
-- 非凸問題へ理論rateをそのまま適用している → 適用範囲を明示
+- objectiveが大きく振動する → restartやmonotone variantを検討する
+- supportが何度も入れ替わる → step、scaling、regularizationを確認する
+- backtrackingが毎回縮む → 勾配のLipschitz modelを確認する
+- proxが支配的 → decompositionや専用solverを検討する
 
 ::: warning
 FISTAという名前だけでは、backtracking、restart、monotonicity、停止条件が分かりません。比較時はvariantを明記します。
 :::
+
+## 次に読む
+
+[近接勾配法](#/learn/proximal-gradient)で外挿を使わない基本のstepと比較し、分解が必要なら[ADMM](#/learn/admm)も確認します。

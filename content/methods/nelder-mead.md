@@ -13,7 +13,7 @@ visualization_aliases: [nelder-mead-quadratic|/theater/nelder-mead]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 勾配を使わず、n次元でn+1頂点からなる単体を反射・膨張・収縮・縮小しながら局所的に良い点を探します。
@@ -28,7 +28,9 @@ last_reviewed: 2026-07-17
 
 ## 単体は何を表すか
 
-2次元では三角形、3次元では四面体がsimplexです。各頂点で目的関数を評価し、best、second-worst、worstを並べます。worst以外の頂点の重心 $c$ を基準に、worst点を反対側へ動かして候補を作ります。
+2次元では三角形、3次元では四面体がsimplexです。
+各頂点で目的関数を評価し、best、second-worst、worstを並べます。
+worst以外の頂点の重心 $c$ を基準に、worst点を反対側へ動かして候補を作ります。
 
 代表操作:
 
@@ -53,6 +55,16 @@ last_reviewed: 2026-07-17
 | operation caption | 候補を採用・棄却した理由 |
 
 単体が小さくなったことと、正しいbasinへ入ったことは別です。
+
+## まず確認すること
+
+初期点だけでなく、初期simplexの大きさと方向が探索を変えます。
+変数scaleが大きく違うと、標準生成されたsimplexが一部座標では大きすぎ、別の座標では小さすぎる場合があります。
+
+- 低〜低次元の連続変数か
+- gradientを得られない、またはgradient checkが不安定か
+- 一評価が比較的安価か
+- 無制約または単純boundsで扱えるか
 
 ## 向いている条件
 
@@ -88,13 +100,11 @@ result = minimize(
 print(result.success, result.x, result.fun, result.nfev, result.message)
 ```
 
-`xatol`はgeometry、`fatol`は目的値差の停止条件です。両方が小さくても大域最適性は証明されません。optionとboundsの具体的な挙動は[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html)で利用versionに対応する説明を確認します。
+`xatol`はgeometry、`fatol`は目的値差の停止条件です。
+両方が小さくても大域最適性は証明されません。
+optionとboundsの具体的な挙動は[公式SciPyリファレンス](https://docs.scipy.org/doc/scipy/reference/optimize.minimize-neldermead.html)で利用versionに対応する説明を確認します。
 
-## 初期単体とscaling
-
-初期点だけでなく、初期simplexの大きさ・方向が探索を変えます。変数scaleが大きく違うと、標準生成されたsimplexが一部座標では大きすぎ、別の座標では小さすぎる場合があります。
-
-確認する値:
+## 診断値
 
 - function evaluation数
 - simplex diameter / volume
@@ -115,7 +125,10 @@ print(result.success, result.x, result.fun, result.nfev, result.message)
 - 一般制約をpenaltyだけで扱い、infeasible解を誤採用する
 
 ::: warning
-Nelder–Meadは「微分不要」ですが、「評価回数が少ない」ことを意味しません。高価なblack-boxでは、評価budgetをBayesian Optimizationやsurrogate法と比較します。
+Nelder–Meadは「微分不要」ですが、「評価回数が少ない」ことを意味しません。
+高価なblack-boxでは、評価budgetをBayesian Optimizationやsurrogate法と比較します。
 :::
+
+## 次に読む
 
 black-box制約やstationarityの扱いを強めたい場合は[MADS](#/learn/mads)、複数basinを集団で探したい場合は[Differential Evolution](#/learn/differential-evolution)も候補です。
