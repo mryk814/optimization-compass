@@ -4,37 +4,35 @@ kind: method
 method_id: M_DIJKSTRA_ASTAR
 title_ja: Dijkstra法とA*探索
 title_en: Dijkstra's Algorithm and A* Search
-summary: graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。
+summary: 非負のedge costを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。
 source_ids: [S054]
 prerequisites: [dynamic-programming]
 related_ids: [dynamic-programming, cp-sat]
 aliases: [/learn/dijkstra-astar]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。
+非負のedge costを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。
+
+## まず確認すること
+
+- edge weightが非負か
+- costの単位と加法性が妥当か
+- node / edgeが問題の状態と遷移を正しく表しているか
+- side constraintがpath stateへ含まれているか
 
 ## Dijkstra法
 
 始点からの暫定距離が最小のnodeを取り出し、そのnodeから伸びるedgeをrelaxします。edge costが非負なら、priority queueから確定した距離は後から改善されません。
 
-確認する前提:
-
-- edge weightが非負
-- costの単位と加法性が妥当
-- node / edgeが問題の状態と遷移を正しく表す
-- side constraintがpath stateへ含まれている
-
 ## A*探索
 
-A*はpriorityを
+A*は、現在までのcostとgoalまでの残りcostの推定を足したpriorityでnodeを選びます。
 
 $$
 f(n)=g(n)+h(n)
 $$
-
-とします。
 
 - $g(n)$: 始点から現在nodeまでの実cost
 - $h(n)$: goalまでの推定cost
@@ -116,3 +114,7 @@ print(dijkstra(graph, "A"))
 - side constraintをnode stateへ入れ忘れる
 - negative edgeをDijkstraで処理する
 - path costが加法的でないのに単純edge sumへ落とす
+
+## 次に読む
+
+stateを拡張して履歴を扱うなら[動的計画法](#/learn/dynamic-programming)、論理制約やschedulingを含むなら[CP-SAT](#/learn/cp-sat)と比較します。

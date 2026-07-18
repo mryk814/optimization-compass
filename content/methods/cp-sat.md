@@ -4,7 +4,7 @@ kind: method
 method_id: M_CP_SAT
 title_ja: CP-SATと制約プログラミング
 title_en: CP-SAT and Constraint Programming
-summary: Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索で扱い、実行可能解・bound・停止statusを追う離散最適化法です。
+summary: Boolean・整数・論理・scheduling制約を、伝播・SAT学習・探索の組合せで解き、実行可能解とboundから停止statusを読む離散最適化法です。
 source_ids: [S022, S053]
 prerequisites: [branch-and-bound]
 related_ids: [branch-and-bound, branch-and-cut, dynamic-programming]
@@ -14,10 +14,10 @@ aliases: [/learn/cp-sat]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-18
 ---
 
-Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索で扱い、実行可能解・bound・停止statusを追う離散最適化法です。
+Boolean・整数・論理・scheduling制約を、伝播・SAT学習・探索の組合せで解き、実行可能解とboundから停止statusを読む離散最適化法です。
 
 ## 現実の問いをmodelへ移す
 
@@ -31,7 +31,7 @@ Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索
 
 hard constraintとsoft penaltyを分けます。すべてを大きなpenaltyへ押し込むと、本当に禁止したい条件と単に避けたい条件を区別しにくくなります。
 
-## CP-SATの内部をどう捉えるか
+## 探索で何が起きるか
 
 CP-SATは単純なtree enumerationではありません。実装は、
 
@@ -55,6 +55,28 @@ CP-SATは単純なtree enumerationではありません。実装は、
 - overflowや巨大係数で伝播が弱くならないか
 
 「整数化できた」ことと、現実の精度を保ったことは別です。
+
+## まず確認すること
+
+- 変数をBoolean・integer・finite-domainとして表せるか
+- hard constraintとsoft penaltyを分けられているか
+- 整数化のscaleが、必要な精度と係数範囲に収まっているか
+- time limit内の良い解だけでなく、boundや証明も必要か
+
+## 向いている条件
+
+- Boolean・integer・finite-domain変数
+- 論理含意、optional interval、no-overlap、cumulativeなど
+- scheduling・assignment・packing
+- feasibility自体が難しい
+- time limit内の良い解とboundが欲しい
+
+## Alternative-first
+
+- pure shortest path / matching / flow → 専用graph algorithm
+- small state DP → [動的計画法](#/learn/dynamic-programming)
+- 強い線形緩和を持つMILP → [Branch-and-Cut](#/learn/branch-and-cut)
+- 本質的に連続・滑らか → NLP/QP系
 
 ## Python
 
@@ -112,21 +134,6 @@ print(status, solver.objective_value, solver.best_objective_bound)
 
 並列worker数を変えると探索順と再現性が変わる場合があります。
 
-## 向いている条件
-
-- Boolean・integer・finite-domain変数
-- 論理含意、optional interval、no-overlap、cumulativeなど
-- scheduling・assignment・packing
-- feasibility自体が難しい
-- time limit内の良い解とboundが欲しい
-
-## Alternative-first
-
-- pure shortest path / matching / flow → 専用graph algorithm
-- small state DP → [動的計画法](#/learn/dynamic-programming)
-- 強い線形緩和を持つMILP → [Branch-and-Cut](#/learn/branch-and-cut)
-- 本質的に連続・滑らか → NLP/QP系
-
 ## 失敗・切替の兆候
 
 - domainが巨大でpropagationが弱い
@@ -140,3 +147,7 @@ print(status, solver.objective_value, solver.best_objective_bound)
 ::: warning
 CP-SAT、MIP、専用DPは同じ離散問題を異なる表現で解けます。algorithm名だけで比較せず、model、time limit、hardware、seed、worker数、gapを揃えます。
 :::
+
+## 次に読む
+
+強い線形緩和を使うMILPなら[Branch-and-Cut](#/learn/branch-and-cut)、state再利用が中心なら[動的計画法](#/learn/dynamic-programming)と比較します。

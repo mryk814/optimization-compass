@@ -4,19 +4,22 @@ kind: method
 method_id: M_NETWORK_SIMPLEX
 title_ja: Network Simplex法
 title_en: Network Simplex
-summary: 最小費用流問題が持つnetwork構造を利用し、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
+summary: 最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
 source_ids: [S054]
 prerequisites: []
 related_ids: [primal-simplex, dijkstra-astar, family.discrete-structure]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-最小費用流問題が持つnetwork構造を利用し、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
+最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
 
 ## 何を解いているか
 
-最小費用流問題は、各nodeでflowの保存則を満たしながら、各edgeの容量制約の範囲でflowを流し、edgeごとの単位費用の合計を最小化する問題です。これは線形計画問題として定式化でき、[Primal simplex法](#/learn/primal-simplex)でも解けます。しかし、この線形計画のnode-arc接続行列は、行の多くが0で、非零成分が$+1$と$-1$だけという特殊な構造を持ちます。Network Simplex法は、この構造を活かし、basisを一般の行列演算ではなくgraph上の全域木として扱うことで、汎用simplex法より高速に同じ最適解を求めます。
+最小費用流問題は、各nodeでflowの保存則を満たしながら、各edgeの容量制約の範囲でflowを流し、edgeごとの単位費用の合計を最小化する問題です。
+これは線形計画問題として定式化でき、[Primal simplex法](#/learn/primal-simplex)でも解けます。
+しかし、この線形計画のnode-arc接続行列は、行の多くが0で、非零成分が$+1$と$-1$だけという特殊な構造を持ちます。
+Network Simplex法は、この構造を活かし、basisを一般の行列演算ではなくgraph上の全域木として扱うことで、汎用simplex法より高速に同じ最適解を求めます。
 
 ## Basisが全域木に対応する理由
 
@@ -81,6 +84,8 @@ print(result.success, result.x, result.fun)
 
 ## 診断値
 
+network構造を保てているかと、basis更新が最適性条件へ近づいているかを確認します。
+
 - states（basisに対応する全域木の構造）
 - edges（networkのedge数と容量制約の有無）
 - labels（node potentialの値）
@@ -93,5 +98,7 @@ print(result.success, result.x, result.fun)
 - 需給量や容量が整数でなく、整数解を前提とした後段処理と食い違う
 - 負の費用cycleなど、想定していない前提が紛れ込んでいる
 - 問題規模に対してnode数・edge数が巨大で、汎用LPとして解くと遅い
+
+## 次に読む
 
 同じ「node-arc構造を専用法で使う」という考え方は[Primal simplex法](#/learn/primal-simplex)や[Dijkstra法とA*](#/learn/dijkstra-astar)にも共通します。離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。

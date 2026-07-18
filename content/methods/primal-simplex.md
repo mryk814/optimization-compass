@@ -4,22 +4,25 @@ kind: method
 method_id: M_SIMPLEX
 title_ja: Primal simplex法
 title_en: Primal Simplex
-summary: 実行可能なbasisを保ちながら被約費用を手がかりに隣接basisへ移動し、LPの目的値を単調に改善していくsimplex法です。
+summary: LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。
 source_ids: [S004, S016, S055]
 prerequisites: [concept.convexity]
 related_ids: [dual-simplex, lp-qp-conic, family.discrete-structure]
 aliases: [/learn/primal-simplex]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-実行可能なbasisを保ちながら被約費用を手がかりに隣接basisへ移動し、LPの目的値を単調に改善していくsimplex法です。
+LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。
 
-## 頂点だけを調べればよい理由
+## LPの頂点とbasis
 
-線形計画問題の実行可能領域は多面体です。目的関数が線形で最適値が有限なら、最適解は多面体のどこかの頂点、つまりbasic feasible solutionに存在します。内部の点をわずかに動かしても目的値は線形にしか変化しないため、頂点の集合だけを調べれば最適解を取りこぼしません。
+線形計画問題の実行可能領域は多面体です。
+目的関数が線形で最適値が有限なら、最適解は多面体のどこかの頂点、つまりbasic feasible solutionに存在します。
+内部の点をわずかに動かしても目的値は線形にしか変化しないため、頂点の集合だけを調べれば最適解を取りこぼしません。
 
-$n$個の変数と$m$本の等式制約からなる標準形では、頂点は$m$個の変数を基底（basis）として選び、残りを$0$に固定した解に対応します。primal simplexは、常にprimal feasibleなbasisを保ったまま、より目的値の良い隣接basisへ移動を繰り返します。
+$n$個の変数と$m$本の等式制約からなる標準形では、頂点は$m$個の変数を基底（basis）として選び、残りを$0$に固定した解に対応します。
+primal simplexは、常にprimal feasibleなbasisを保ったまま、より目的値の良い隣接basisへ移動を繰り返します。
 
 ## 被約費用とpivotの直感
 
@@ -29,7 +32,10 @@ $$
 \bar{c}_j = c_j - c_B^T B^{-1} A_j
 $$
 
-最小化問題では、$\bar{c}_j < 0$となる非基底変数が存在すれば、その変数を増やすことで目的値を改善できます。この変数を**entering variable**として選び、基底変数のどれかが実行可能性の境界（多くは非負制約）に達するまで増やします。境界に達した基底変数が**leaving variable**としてbasisから外れ、新しいbasisに置き換わる操作がpivotです。すべての非基底変数で$\bar{c}_j \ge 0$になれば、それ以上改善する方向がなく最適basisに到達したと判断できます。
+最小化問題では、$\bar{c}_j < 0$となる非基底変数が存在すれば、その変数を増やすことで目的値を改善できます。
+この変数を**entering variable**として選び、基底変数のどれかが実行可能性の境界（多くは非負制約）に達するまで増やします。
+境界に達した基底変数が**leaving variable**としてbasisから外れ、新しいbasisに置き換わる操作がpivotです。
+すべての非基底変数で$\bar{c}_j \ge 0$になれば、それ以上改善する方向がなく最適basisに到達したと判断できます。
 
 ## 退化・cycling・infeasible/unboundedの見分け方
 
@@ -106,5 +112,7 @@ print(result.success, result.x, -result.fun, result.status, result.message)
 - 係数のscaleが桁違いで数値warningが出る
 - factorizationがmemoryを圧迫する大規模denseなLP
 - 反復のたびに同じ頂点集合を巡回している疑いがある
+
+## 次に読む
 
 被可行性の向きを変えたsimplex変種は[Dual Simplex](#/learn/dual-simplex)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)、離散変数を含む問題での役割は[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)で確認できます。
