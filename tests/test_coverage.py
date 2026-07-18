@@ -21,10 +21,10 @@ def test_report_separates_inventory_from_expected_coverage() -> None:
     report = load_report()
     assert report.summary.subject_counts == {
         "feature_family": 10,
-        "method": 99,
+        "method": 105,
         "problem": 56,
     }
-    assert len(report.subjects) == 165
+    assert len(report.subjects) == 171
     assert len(report.expectations) == 8
     assert set(report.summary.status_counts) == {
         "available",
@@ -59,7 +59,7 @@ def test_broken_references_are_distinct_from_unbuilt_scenarios() -> None:
 
 def test_priority_order_is_deterministic_and_ignores_popularity() -> None:
     report = load_report()
-    assert [item.rank for item in report.priorities] == list(range(1, 6))
+    assert [item.rank for item in report.priorities] == list(range(1, 7))
     assert [(item.total, item.slice_id) for item in report.priorities] == sorted(
         ((item.total, item.slice_id) for item in report.priorities),
         key=lambda item: (-item[0], item[1]),

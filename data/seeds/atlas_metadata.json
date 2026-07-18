@@ -269,6 +269,21 @@
       "event_types": ["evaluate", "classify_dominance", "select_preference", "stop"],
       "source_ids": ["S039", "S068"],
       "last_verified": "2026-07-15"
+    },
+    {
+      "profile_id": "PROFILE_OC_TOPOLOGY_FIELD",
+      "method_id": "M_OC_TOPOLOGY",
+      "family": "field_evolution",
+      "support_status": "supported",
+      "min_dimension": 32,
+      "max_dimension": 32,
+      "generator_id": "educational.topology_optimization.v1",
+      "implementation_status": "not_applicable",
+      "implementation_id": null,
+      "state_fields": ["density_field", "displacement_field", "sensitivity_filtered", "compliance", "volume_fraction"],
+      "event_types": ["initialize", "state_solve", "sensitivity", "update", "stop"],
+      "source_ids": ["S097", "S098", "S099"],
+      "last_verified": "2026-07-18"
     }
   ],
   "demo_scenarios": [
@@ -383,6 +398,22 @@
       "budget": 81,
       "source_ids": ["S039", "S055", "S068"],
       "last_verified": "2026-07-15"
+    },
+    {
+      "scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
+      "method_id": "M_OC_TOPOLOGY",
+      "profile_id": "PROFILE_OC_TOPOLOGY_FIELD",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "name_ja": "片持ちはりの設計fieldを更新過程で読む",
+      "name_en": "Read a cantilever design field as it evolves",
+      "initial_point": [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+      "parameters": {"volume_fraction": 0.5, "filter_radius": 1.5, "projection_beta": 8.0, "teaching_trace": true},
+      "stopping": {"max_oracle_evaluations": 12, "volume_tolerance": 0.001},
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "budget": 12,
+      "source_ids": ["S097", "S098", "S099", "S100", "S101"],
+      "last_verified": "2026-07-18"
     }
   ],
   "comparison_sets": [

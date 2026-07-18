@@ -348,7 +348,10 @@ def generate_topology_field_artifact(dataset_version: str) -> TopologyFieldArtif
         problem_definition_id="PROBLEM_TOPOLOGY_OPTIMIZATION",
         problem_instance_id="INSTANCE_TOPOLOGY_CANTILEVER_2D",
         objective_expression="min c(ρ)=Fᵀu, K(ρ)u=F, Eₑ=Emin+ρₑᵖ(E₀−Emin)",
-        state_equation="K(ρ)u=F; compliance c=Fᵀu; sensitivity is obtained through the state/adjoint relation",
+        state_equation=(
+            "K(ρ)u=F; compliance c=Fᵀu; "
+            "sensitivity is obtained through the state/adjoint relation"
+        ),
         grid=TopologyGrid(columns=columns, rows=rows),
         volume_fraction_target=target_volume,
         load_description="左端を固定し、右端下側へ下向き荷重を置く片持ちはりの教育用配置。",
@@ -356,16 +359,22 @@ def generate_topology_field_artifact(dataset_version: str) -> TopologyFieldArtif
         method_distinctions_ja=[
             "設計field ρ、状態field u、感度 dc/dρ、更新則を別々の観測値として表示します。",
             "filter前の感度とfilter後の感度を分け、近傍平均が更新方向をどう変えるかを追います。",
-            "projectionのβは中間密度を押しつぶす強さで、volume constraintやmesh independenceそのものではありません。",
+            (
+                "projectionのβは中間密度を押しつぶす強さで、"
+                "volume constraintやmesh independenceそのものではありません。"
+            ),
             "OCとMMA-style updateは同じ教育用budgetで並べますが、一般性能のrankingではありません。",
         ],
         text_alternative_ja=(
-            "OC経路はfilterとprojectionを通して滑らかな密度fieldを作り、volume fractionを約0.5に保ちます。"
-            "filterなしの経路は交互配置のcheckerboardが強くなり、同じcomplianceの低下だけでは安全な設計と判断できません。"
+            "OC経路はfilterとprojectionを通して滑らかな密度fieldを作り、"
+            "volume fractionを約0.5に保ちます。"
+            "filterなしの経路は交互配置のcheckerboardが強くなり、"
+            "同じcomplianceの低下だけでは安全な設計と判断できません。"
         ),
         limitations_ja=(
-            "8×4要素の決定的な教育用referenceです。実際のQ4 FEM、境界条件、load case、stress・buckling・"
-            "manufacturing constraint、continuous modelの保証、mesh refinement後の同一topologyを示すものではありません。"
+            "8×4要素の決定的な教育用referenceです。実際のQ4 FEM、境界条件、"
+            "load case、stress・buckling・manufacturing constraint、"
+            "continuous modelの保証、mesh refinement後の同一topologyを示すものではありません。"
         ),
         source_ids=["S097", "S098", "S099", "S100", "S101"],
         last_verified=LAST_VERIFIED,
@@ -392,8 +401,7 @@ def _topology_run(
     for iteration in range(max_iterations + 1):
         beta = 1.0 + iteration * 0.65 if projection else 1.0
         raw_sensitivity = [
-            -(0.45 + target[index]) / (0.18 + density[index]) ** 2
-            for index in range(len(density))
+            -(0.45 + target[index]) / (0.18 + density[index]) ** 2 for index in range(len(density))
         ]
         filtered_sensitivity = (
             _topology_filter(raw_sensitivity, columns, rows, filter_radius)
@@ -428,14 +436,14 @@ def _topology_run(
         if iteration == max_iterations:
             break
         next_density = [
-            density[index] + update_rate * (target[index] - density[index])
+            density[index]
+            + update_rate * (target[index] - density[index])
             + 0.025 * filtered_sensitivity[index] / (1.0 + abs(filtered_sensitivity[index]))
             for index in range(len(density))
         ]
         if projection:
             next_density = [
-                0.5
-                + math.tanh(beta * (value - 0.5)) / (2.0 * math.tanh(beta * 0.5))
+                0.5 + math.tanh(beta * (value - 0.5)) / (2.0 * math.tanh(beta * 0.5))
                 for value in next_density
             ]
         density = _normalize_volume([_clamp(value) for value in next_density], volume_fraction)
@@ -454,8 +462,8 @@ def _topology_smooth_target(columns: int, rows: int) -> list[float]:
     for y in range(rows):
         for x in range(columns):
             center = (rows - 1) / 2.0 - 0.65 * x / max(columns - 1, 1)
-            load_path = math.exp(-((y - center) / 0.72) ** 2)
-            support_branch = math.exp(-((y - (rows - 1)) / 0.55) ** 2) * (x / max(columns - 1, 1))
+            load_path = math.exp(-(((y - center) / 0.72) ** 2))
+            support_branch = math.exp(-(((y - (rows - 1)) / 0.55) ** 2)) * (x / max(columns - 1, 1))
             values.append(_clamp(0.08 + 0.78 * load_path + 0.16 * support_branch))
     return _normalize_volume(values, 0.5)
 
@@ -491,8 +499,7 @@ def _checkerboard_score(values: list[float], columns: int, rows: int) -> float:
         if index % columns < columns - 1
     ]
     differences.extend(
-        abs(values[index] - values[index + columns])
-        for index in range(len(values) - columns)
+        abs(values[index] - values[index + columns]) for index in range(len(values) - columns)
     )
     alternating = sum(
         abs(values[index] - values[index + 1])
@@ -972,7 +979,10 @@ def _topology_scenario(
             known_reference_display=KnownReferenceDisplay(
                 policy="not_shown",
                 note_ja="解析解や製造可能な最終形状ではなく、教育用のfield traceを表示します。",
-                note_en="Show an educational field trace rather than an analytic or manufacturable reference.",
+                note_en=(
+                    "Show an educational field trace rather than an analytic or "
+                    "manufacturable reference."
+                ),
             ),
             static_summary=LocalizedText(
                 ja="片持ちはりの密度field、状態field、感度、更新指標を反復ごとに並べます。",
@@ -981,11 +991,13 @@ def _topology_scenario(
             text_alternative=LocalizedText(
                 ja=(
                     "初期の一様密度から、filter後の感度で密度を更新します。"
-                    "OCとMMAは同じ問題と予算で動き、filterなしの経路はcheckerboard scoreが高くなります。"
+                    "OCとMMAは同じ問題と予算で動き、"
+                    "filterなしの経路はcheckerboard scoreが高くなります。"
                 ),
                 en=(
-                    "Starting from uniform density, the field is updated from filtered sensitivity. "
-                    "OC and MMA share the problem and budget, while the unfiltered path develops a higher checkerboard score."
+                    "Starting from uniform density, the field is updated from filtered "
+                    "sensitivity. OC and MMA share the problem and budget, while the "
+                    "unfiltered path develops a higher checkerboard score."
                 ),
             ),
             derived_media_caption=LocalizedText(
@@ -998,7 +1010,8 @@ def _topology_scenario(
             ),
             limitations_en=(
                 "This is a deterministic educational trace on 32 elements. It does not guarantee "
-                "finite-element convergence, manufacturability, topology invariance under mesh refinement, or global optimality."
+                "finite-element convergence, manufacturability, topology invariance "
+                "under mesh refinement, or global optimality."
             ),
         ),
         experiment=VisualizationExperiment(
@@ -1095,14 +1108,15 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
                 }
             ],
             "primary_observables": [
-                item for item in [*lesson["primary_observables"], *lesson["secondary_observables"]] if item["observable_id"] in {
-                    "density_field", "compliance", "checkerboard_score", "volume_fraction"
-                }
+                item
+                for item in [*lesson["primary_observables"], *lesson["secondary_observables"]]
+                if item["observable_id"]
+                in {"density_field", "compliance", "checkerboard_score", "volume_fraction"}
             ],
             "secondary_observables": [
-                item for item in lesson["secondary_observables"] if item["observable_id"] in {
-                    "gray_fraction", "volume_fraction"
-                }
+                item
+                for item in lesson["secondary_observables"]
+                if item["observable_id"] in {"gray_fraction", "volume_fraction"}
             ],
             "narration_steps": [
                 {
@@ -1133,12 +1147,24 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "comparison_role": "failure_contrast",
             "recommended_next_scenario_ids": [TOPOLOGY_SCENARIO_ID],
             "static_summary": {
-                "ja": "filterなしの密度更新で、低いcomplianceとcheckerboard artifactが同時に現れます。",
-                "en": "Unfiltered density updates show low compliance together with a checkerboard artifact.",
+                "ja": (
+                    "filterなしの密度更新で、低いcomplianceとcheckerboard artifactが"
+                    "同時に現れます。"
+                ),
+                "en": (
+                    "Unfiltered density updates show low compliance together with a "
+                    "checkerboard artifact."
+                ),
             },
             "text_alternative": {
-                "ja": "filterなしの経路は体積率を保つ一方、交互模様が増え、complianceだけでは良し悪しを決められません。",
-                "en": "The unfiltered path preserves volume but develops alternation, so compliance alone is insufficient.",
+                "ja": (
+                    "filterなしの経路は体積率を保つ一方、交互模様が増え、"
+                    "complianceだけでは良し悪しを決められません。"
+                ),
+                "en": (
+                    "The unfiltered path preserves volume but develops alternation, "
+                    "so compliance alone is insufficient."
+                ),
             },
             "derived_media_caption": {
                 "ja": "checkerboard artifactを含む失敗contrast",

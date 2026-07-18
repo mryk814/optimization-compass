@@ -58,6 +58,15 @@ adjoint sensitivityは、単独の更新則ではありません。
 gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。
 complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。
 
+## トポロジー最適化での読み方
+
+SIMPでは、まず密度fieldから剛性を作り、state solveで変位を得ます。
+その後、adjoint sensitivityを使って各要素の密度を増減したときのcomplianceの変化を計算します。
+この順番を分けて記録すると、更新が止まった原因が「状態方程式の収束」なのか「感度の符号」なのかを切り分けられます。
+
+教育用traceでは、raw sensitivityとfilter後の感度を同じ反復番号で並べます。
+これは実装のwall-clock性能を順位付けするためではなく、どの情報が次のdensity updateを決めるかを観察するためです。
+
 ## 次に読む
 
 [SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認し、[density filter](#/learn/density-filter)で離散fieldの正則化を読みます。
