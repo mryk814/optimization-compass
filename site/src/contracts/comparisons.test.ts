@@ -8,12 +8,12 @@ describe("case-bound comparison contract", () => {
     const parsed = parseComparisonIndex(rawComparisons);
 
     expect(new Set(parsed.comparisons.map((comparison) => comparison.mode))).toEqual(new Set([
-      "method_contrast", "parameter_sensitivity", "failure_contrast", "result_tradeoff", "strategy_contrast",
+      "method_contrast", "parameter_sensitivity", "initial_condition_sensitivity", "failure_contrast", "result_tradeoff", "strategy_contrast",
     ]));
     expect(new Set(parsed.comparisons.flatMap((comparison) => (
       comparison.members.map((member) => member.artifact.renderer_family)
     )))).toEqual(new Set([
-      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "search_tree", "surrogate_uncertainty",
+      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "search_tree", "simplex_geometry", "surrogate_uncertainty",
     ]));
   });
 
@@ -32,31 +32,10 @@ describe("case-bound comparison contract", () => {
   });
 
   test("keeps initial-simplex sensitivity as a non-ranking geometry comparison", () => {
-    type MutableMember = Record<string, unknown> & {
-      artifact: Record<string, unknown>;
-      budget: Record<string, unknown>;
-    };
-    type MutableComparison = Record<string, unknown> & { members: MutableMember[] };
-    const payload = structuredClone(rawComparisons) as unknown as { comparisons: MutableComparison[] };
-    const reference = payload.comparisons[0];
-    const comparison: MutableComparison = {
-      ...reference,
-      members: reference.members.slice(0, 2).map((member) => ({
-        ...member,
-        budget: { metric: "oracle_evaluations", value: 80 },
-        artifact: { ...member.artifact, renderer_family: "simplex_geometry" },
-      })),
-    };
-    comparison.comparison_id = "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX";
-    comparison.canonical_url = "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX";
-    comparison.canonical_comparison_id = "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX";
-    comparison.mode = "initial_condition_sensitivity";
-    comparison.ranking_eligible = false;
-    comparison.budget = { metric: "oracle_evaluations", value: 80 };
-    comparison.synchronization_axis = "oracle_evaluations";
-    payload.comparisons.push(comparison);
-    const parsed = parseComparisonIndex(payload);
-    const parsedComparison = parsed.comparisons.at(-1)!;
+    const parsed = parseComparisonIndex(rawComparisons);
+    const parsedComparison = parsed.comparisons.find(
+      (comparison) => comparison.comparison_id === "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+    )!;
 
     expect(parsedComparison.mode).toBe("initial_condition_sensitivity");
     expect(parsedComparison.ranking_eligible).toBe(false);
