@@ -9,10 +9,20 @@ source_ids: [S047, S048, S049]
 prerequisites: [method.gradient-descent]
 related_ids: [momentum-sgd, adam, family.stochastic-ml]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。
+
+## 30秒でつかむ
+
+SGDは、全dataの勾配を毎回計算する代わりに、mini-batchの勾配で安価な更新を多数回行います。
+その分、各更新にはsampling noiseが入り、1 stepの改善と学習全体の傾向を分けて読む必要があります。
+
+- 見ているもの: train loss、validation loss、gradient estimate、seed間のばらつき
+- 動かしているもの: parameter、mini-batch、learning rate、batch size
+- 前進の判断: validation指標が改善し、複数seedで結果が安定すること
+- 恐れていること: divergence、overfitting、gradient noise、seed依存
 
 ## 何を不偏推定しているか
 
@@ -89,7 +99,7 @@ print(w, true_w, np.linalg.norm(w - true_w))
 
 `w`が`true_w`へ近づくかは、mini-batchのsamplingとlearning rateに依存します。実務のoptimizerが持つmomentumやper-coordinate scalingなどの機能は、利用framework（[Optax](https://optax.readthedocs.io/en/latest/)、[torch.optim](https://docs.pytorch.org/docs/stable/optim.html)、[Keras optimizers](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers)）の公式referenceで利用versionに対応する説明を確認します。
 
-## 診断値
+## 最初に見る診断値
 
 - train_loss
 - validation_loss
@@ -99,12 +109,12 @@ print(w, true_w, np.linalg.norm(w - true_w))
 
 ## 失敗・切替の兆候
 
-- divergence（lossが増大し続ける）
-- plateau（train_lossが長期間改善しない）
-- overfitting（train_lossは下がるがvalidation_lossが悪化する）
-- bad_learning_rate（大きすぎて発散、または小さすぎて停滞する）
-- saddle点付近で更新が長時間停滞する
-- gradient explosionやseed間でのvalidation指標のばらつきが大きい
+- divergence（lossが増大し続ける） → learning rate、batch size、gradient clippingを確認する
+- plateau（train_lossが長期間改善しない） → learning-rate schedule、batch size、初期化を見直す
+- overfitting（train_lossは下がるがvalidation_lossが悪化する） → early stoppingとregularizationを確認する
+- bad_learning_rate（大きすぎて発散、または小さすぎて停滞する） → learning rateを調整し、同じbudgetで比較する
+- saddle点付近で更新が長時間停滞する → Momentum SGDや別のoptimizerを検討する
+- gradient explosionやseed間でのvalidation指標のばらつきが大きい → clipping、normalization、複数seed評価を行う
 
 ::: note
 これらの兆候が出た場合、まずlearning rate scheduleとbatch sizeを見直します。単純な反復回数の増加は解決策にならないことが多いです。

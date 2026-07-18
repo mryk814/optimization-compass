@@ -10,7 +10,7 @@ prerequisites: [bfgs]
 related_ids: [bfgs, newton-method, trust-region-newton-cg]
 aliases: [/learn/lbfgsb]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。
@@ -91,10 +91,10 @@ print(result.success, result.x, result.fun, result.message)
 
 この例では無制約最適点の $x_0=3$ が上限2を超えるため、制約付き解は境界へ移ります。
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- nonlinear equalityやcoupled inequalityが重要 → SLSQP、interior-pointなど
-- 目的関数が不連続・強いnoiseを含む → derivative-free法を検討
-- gradientが誤っている → 先にgradient check
-- line searchが何度も失敗 → scaling、非滑らかさ、NaN領域を確認
-- boundsだけではmodelの実行可能性を表現できない → 制約付きmodelへ移行
+- nonlinear equalityやcoupled inequalityが重要 → SLSQP、interior-pointなどへ移行する
+- 目的関数が不連続・強いnoiseを含む → derivative-free法を検討する
+- gradientが誤っている → 先にgradient checkを通す
+- line searchが何度も失敗 → scaling、非滑らかさ、NaN領域を確認する
+- boundsだけではmodelの実行可能性を表現できない → 一般制約を扱うmodelへ移行する
