@@ -2630,6 +2630,276 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.dynamics-defect",
+      "entity_id": "concept.dynamics-defect",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "dynamics defect",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.path-terminal-constraints",
+      "entity_id": "concept.path-terminal-constraints",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "path・terminal制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.receding-horizon",
+      "entity_id": "concept.receding-horizon",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "receding horizon",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.time-discretization",
+      "entity_id": "concept.time-discretization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "時間discretization",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.trajectory-variable",
+      "entity_id": "concept.trajectory-variable",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "trajectory variable",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "constrained-continuous",
       "entity_type": "content",
