@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 import uvicorn
@@ -14,7 +15,15 @@ from optimization_compass.agent_service import (
 )
 from optimization_compass.coverage import CoverageReport, diff_coverage
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.scaffold import ScaffoldError, scaffold_gallery_case
+from optimization_compass.scaffold import (
+    ScaffoldError,
+    scaffold_comparison,
+    scaffold_content_method,
+    scaffold_gallery_case,
+    scaffold_method,
+    scaffold_problem_instance,
+    scaffold_scenario,
+)
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import (
     TASKS,
@@ -28,7 +37,9 @@ from optimization_compass.validation_tasks import (
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
 scaffold_app = typer.Typer(no_args_is_help=True, help="Create review-first authoring templates.")
+content_scaffold_app = typer.Typer(no_args_is_help=True, help="Create content article templates.")
 app.add_typer(scaffold_app, name="scaffold")
+scaffold_app.add_typer(content_scaffold_app, name="content")
 service = DeterministicGuidanceService()
 
 
@@ -194,8 +205,19 @@ def scaffold_gallery_case_command(
     ] = None,
 ) -> None:
     """Plan or write a Gallery case scaffold without inventing facts."""
+    _run_scaffold(scaffold_gallery_case, requested_id, write=write, output=output)
+
+
+def _run_scaffold(
+    builder: Callable[..., dict[str, Any]],
+    requested_id: str,
+    *,
+    write: bool,
+    output: Path | None,
+) -> None:
+    """Print one shared scaffold result and preserve safe error semantics."""
     try:
-        manifest = scaffold_gallery_case(
+        manifest = builder(
             requested_id,
             write=write,
             output_directory=output,
@@ -204,6 +226,81 @@ def scaffold_gallery_case_command(
         typer.echo(str(error), err=True)
         raise typer.Exit(code=2) from error
     typer.echo(json.dumps(manifest, ensure_ascii=False, indent=2))
+
+
+@content_scaffold_app.command("method")
+def scaffold_content_method_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed content ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write an existing-method article scaffold."""
+    _run_scaffold(scaffold_content_method, requested_id, write=write, output=output)
+
+
+@scaffold_app.command("problem-instance")
+def scaffold_problem_instance_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed problem instance ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write a problem-instance review scaffold."""
+    _run_scaffold(scaffold_problem_instance, requested_id, write=write, output=output)
+
+
+@scaffold_app.command("comparison")
+def scaffold_comparison_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed comparison ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write a comparison review scaffold."""
+    _run_scaffold(scaffold_comparison, requested_id, write=write, output=output)
+
+
+@scaffold_app.command("method")
+def scaffold_method_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed canonical method ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write a canonical-method review scaffold."""
+    _run_scaffold(scaffold_method, requested_id, write=write, output=output)
+
+
+@scaffold_app.command("scenario")
+def scaffold_scenario_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed scenario ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write a visualization-scenario review scaffold."""
+    _run_scaffold(scaffold_scenario, requested_id, write=write, output=output)
 
 
 @app.command()
