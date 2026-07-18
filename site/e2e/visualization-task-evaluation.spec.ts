@@ -22,7 +22,7 @@ test("three-objective preference is shared with a precise mobile fallback", asyn
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC");
 
   await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
-  await expect(page.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "3目的のparallel coordinates表示" })).toBeVisible();
   await expect(page.getByText(/9×9 gridから得たsampled teaching lens/u)).toBeVisible();
   const selected = page.locator(".triobjective-values dd");
   const before = await selected.allTextContents();
@@ -34,7 +34,7 @@ test("three-objective preference is shared with a precise mobile fallback", asyn
   await page.setViewportSize({ width: 375, height: 812 });
   await expectNoHorizontalOverflow(page);
   await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
-  await expect(page.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "3目的のparallel coordinates表示" })).toBeVisible();
 });
 
 test("derived video retains captions, transcript, and independent formats", async ({ page, baseURL }) => {

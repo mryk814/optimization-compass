@@ -24,6 +24,6 @@ test("Theater catalogのBO variantが指定presetを開く", async ({ page, base
   await page.getByLabel("問題domain").selectOption("black-box");
   await page.getByRole("link", { name: /exploit \/ small_noise/u }).click();
   await expect(page.getByLabel("探索方針")).toHaveValue("exploit");
-  await expect(page.getByLabel("観測noise")).toHaveValue("small_noise");
+  await expect(page.getByLabel("観測ノイズ")).toHaveValue("small_noise");
   await expect(page.getByText(/noise σ=0\.08/u)).toBeVisible();
 });

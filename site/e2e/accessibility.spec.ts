@@ -11,7 +11,7 @@ test("Homeにaxe critical/serious違反がない", async ({ page, baseURL }, tes
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
   await page.getByRole("heading", {
     level: 1,
-    name: "最適化したい。でも、何をどう解けばいい？",
+    name: "最適化したい問いを、問題の形にする",
   }).waitFor();
   await expectNoHighImpactViolations(page, testInfo, "home");
 });
@@ -36,11 +36,11 @@ test("回答後のDiagnoseにaxe critical/serious違反がない", async ({ page
 const staticScans = [
   { route: "/gallery/hyperparameter-search", heading: "高価な実験の設定を探す", label: "gallery-detail" },
   { route: "/learn/method.nelder-mead", heading: "Nelder–Mead単体法", label: "learn-detail" },
-  { route: "/traces/nelder-mead-quadratic", heading: "Nelder–Meadの幾何操作", label: "nelder-mead" },
+  { route: "/traces/nelder-mead-quadratic", heading: "Nelder–Meadの一手を追う", label: "nelder-mead" },
   { route: "/compare/gradient-quadratic", heading: "細長い谷で一次法を比べる", label: "gradient-compare" },
   { route: "/theater/learning/SCENARIO_CONSTRAINED_DISK", heading: "実行可能領域と制約を無視した失敗を比べる", label: "constrained-slice" },
   { route: "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC", heading: "単一bestではなくPareto frontを読む", label: "pareto-slice" },
-  { route: "/coverage", heading: "Atlas Coverage", label: "coverage" },
+  { route: "/coverage", heading: "Atlasの接続状況", label: "coverage" },
   { route: "/failures", heading: "失敗の兆候から探す", label: "failure-discovery" },
   { route: "/search?q=BO&type=method", heading: "Atlas全体から探す", label: "global-search" },
   { route: "/missing-route", heading: "ページが見つかりません", label: "not-found" },
