@@ -95,7 +95,7 @@ jobs:
             --clobber
           echo "$BUNDLE_SHA256  release-download/$BUNDLE_NAME" | sha256sum --check --strict
           echo "$MANIFEST_SHA256  release-download/$MANIFEST_NAME" | sha256sum --check --strict
-          jq -e --arg sha "$DATABASE_SHA256" '.database.sha256 == $sha' \
+          jq -e --arg sha "$DATABASE_SHA256" '.database_sha256 == $sha' \
             "release-download/$MANIFEST_NAME"
       - name: Publish GitHub Release
         run: |
