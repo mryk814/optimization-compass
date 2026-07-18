@@ -207,6 +207,34 @@
       "limitations": ["期待収益と共分散の推定に依存し、取引コスト（cost）や将来分布の変化を保証範囲に含めません。"]
     },
     {
+      "case_id": "portfolio-cvar-allocation",
+      "title_ja": "scenarioのtail riskを抑えて配分する",
+      "title_en": "Portfolio allocation with CVaR",
+      "domain": "finance",
+      "problem_archetype_id": "PA036",
+      "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"}],
+      "question_answers": {"Q01": "continuous"},
+      "candidate_methods": [{"method_id": "MF_LP_QP_CONIC", "reason": "scenario lossのCVaRを補助変数の線形・錐形式へ展開し、simplex制約と合わせて可行性・最適性を確認しやすいため"}],
+      "conditional_methods": [{"method_id": "M_PROJECTED_GRADIENT", "reason": "CVaRを滑らかな近似へ置き換える、またはscenario lossの勾配を使う場合にsimplexへの射影と組み合わせる"}],
+      "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため"}],
+      "implementation_ids": ["I_CVXPY"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
+      "source_ids": ["S054", "S055", "S056"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid w_i\\ge0,\\ \\sum_i w_i=1,\\ 0\\le w_i\\le0.6\\}$。$w$ はsimplex上の配分ベクトルである。",
+      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
+      "objective": "scenario $s$ のlossを $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
+      "constraints": "空売りを禁止し、simplex制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
+      "map_node_id": "answer:Q01:continuous",
+      "python_example": "import cvxpy as cp\nimport numpy as np\n\nreturns_train = np.array([[0.08, 0.02, -0.01, 0.04], [-0.03, 0.05, 0.01, 0.02], [0.04, -0.02, 0.03, 0.01], [0.01, 0.00, -0.04, 0.03], [-0.06, 0.03, -0.02, 0.01], [0.02, -0.04, 0.02, 0.00], [0.03, 0.01, 0.00, -0.05], [-0.02, 0.02, 0.04, 0.01]])\nreturns_test = np.array([[0.01, 0.00, -0.02, 0.03], [-0.04, 0.02, 0.01, 0.00], [0.02, -0.01, 0.02, -0.03], [0.00, 0.03, -0.01, 0.02]])\nalpha, risk_weight = 0.75, 0.5\nw = cp.Variable(4)\neta = cp.Variable()\nloss = -returns_train @ w\ncvar = eta + cp.sum(cp.pos(loss - eta)) / ((1 - alpha) * len(returns_train))\nproblem = cp.Problem(cp.Minimize(cp.sum(loss) / len(returns_train) + risk_weight * cvar), [w >= 0, w <= 0.6, cp.sum(w) == 1])\nproblem.solve()\nprint(problem.status, w.value, cvar.value)\nprint(\"held-out mean loss\", float(np.mean(-returns_test @ w.value)))",
+      "practical_notes": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
+      "limitations": ["8個のtraining scenarioと4個のheld-out scenario、4資産、固定return、固定alpha=0.75の教育用instanceであり、scenario生成過程、時系列依存、推定誤差、実際の取引コストや流動性を表さない。", "CVaRのtail objectiveを最適化しただけで、chance constraintの確率保証、robust optimizationのset内保証、DROのambiguity set内保証、母集団・将来データへの性能保証は得られない。", "sample sizeが小さいためtailの順位と保守性は不安定であり、scenario数、alpha、risk weight、取引コスト、held-out期間を揃えた再検証が必要である。"]
+    },
+    {
       "case_id": "EC013",
       "title_ja": "観測データから非線形モデルのパラメータを推定する",
       "title_en": "Estimate nonlinear model parameters",
@@ -507,10 +535,38 @@
         {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
         {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
       ],
-      "question_answers": {"Q01": "continuous", "Q02": "residual_vector", "Q03": "sum_of_squares", "Q04": "bounds", "Q05": "jacobian_or_hvp", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "10_to_100", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "least_squares", "Q12": "one_off"},
-      "candidate_methods": [{"method_id": "M_SLSQP", "reason": "小規模なinnerの非負制約を保ちながら、primal feasibility・stationarity・complementarityを外側の更新と分けて再検証できるため"}],
-      "conditional_methods": [{"method_id": "M_INTERIOR_POINT_NLP", "reason": "innerが大規模・疎になり、KKT系とbarrier continuationを使える場合。ただし有限barrierではrelaxed complementarityとして記録する"}],
-      "excluded_methods": [{"method_id": "M_BFGS", "reason": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない"}],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "residual_vector",
+        "Q03": "sum_of_squares",
+        "Q04": "bounds",
+        "Q05": "jacobian_or_hvp",
+        "Q06": "seconds",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "least_squares",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_SLSQP",
+          "reason": "小規模なinnerの非負制約を保ちながら、primal feasibility・stationarity・complementarityを外側の更新と分けて再検証できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_INTERIOR_POINT_NLP",
+          "reason": "innerが大規模・疎になり、KKT系とbarrier continuationを使える場合。ただし有限barrierではrelaxed complementarityとして記録する"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない"
+        }
+      ],
       "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
       "comparison_ids": [],
@@ -526,7 +582,12 @@
       "map_node_id": "answer:Q11:least_squares",
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nX_train = np.array([[1.0, 0.0], [1.0, 1.0], [1.0, 2.0]])\ny_train = np.array([0.2, 1.0, 1.8])\n\ndef inner_solve(lam: float, start: np.ndarray) -> tuple[np.ndarray, dict[str, float]]:\n    def gradient(w: np.ndarray) -> np.ndarray:\n        return X_train.T @ (X_train @ w - y_train) + lam * w\n\n    result = minimize(\n        lambda w: 0.5 * np.sum((X_train @ w - y_train) ** 2) + 0.5 * lam * np.sum(w ** 2),\n        start,\n        jac=gradient,\n        method=\"SLSQP\",\n        bounds=[(0.0, None), (0.0, None)],\n        options={\"ftol\": 1e-10, \"maxiter\": 100},\n    )\n    w = result.x\n    grad = gradient(w)\n    mu = np.where(w <= 1e-8, np.maximum(grad, 0.0), 0.0)\n    residuals = {\n        \"primal\": float(np.max(np.maximum(-w, 0.0))),\n        \"stationarity\": float(np.max(np.abs(grad - mu))),\n        \"complementarity\": float(np.max(np.abs(w * mu))),\n    }\n    if max(residuals.values()) > 1e-8:\n        raise RuntimeError(\"inner KKT residual exceeds tolerance\")\n    return w, residuals\n\nw, diagnostics = inner_solve(0.2, np.array([0.1, 0.8]))\nprint(w, diagnostics)",
       "practical_notes": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
-      "limitations": ["固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データのvalidation性能、外側のglobal最適性、実装間の速度順位を示さない。", "ridge項と固定データではinner解を追いやすいが、一般のbilevel問題で解の選択が一意とは限らない。optimistic／pessimisticのどちらを採るかを明記し、KKT stationarityを得てもglobal optimumとは解釈しない。", "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。", "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"]
+      "limitations": [
+        "固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データのvalidation性能、外側のglobal最適性、実装間の速度順位を示さない。",
+        "ridge項と固定データではinner解を追いやすいが、一般のbilevel問題で解の選択が一意とは限らない。optimistic／pessimisticのどちらを採るかを明記し、KKT stationarityを得てもglobal optimumとは解釈しない。",
+        "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。",
+        "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"
+      ]
     }
   ]
 }
