@@ -218,7 +218,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "version": "1.0.0",
     }
     problem_catalog = json.loads((first_output / "problems.json").read_bytes())
-    assert len(problem_catalog["definitions"]) == 10
+    assert len(problem_catalog["definitions"]) == 11
     assert len(problem_catalog["instances"]) == 11
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
     search_tree_index = json.loads(search_tree_index_bytes)
@@ -346,7 +346,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
-    assert len(source_payload["sources"]) == 96
+    assert len(source_payload["sources"]) == 101
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4202
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     search_trace = next(
