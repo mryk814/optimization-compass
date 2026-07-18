@@ -71,7 +71,7 @@ def test_trf_is_a_canonical_method_with_one_scipy_mapping(tmp_path: Path) -> Non
         assert claim["value_status"] == "verified"
         assert claim["source_id"] == "S003"
         assert claim["valid_from"] == "2026-07-16"
-        assert claim["product_version"] == "1.18.0"
+        assert claim["product_version"] == "SciPy 1.18.0"
 
     least_squares = json.loads(claims_by_predicate["default_method_least_squares"]["value_json"])
     assert least_squares["selected_method_id"] == "M_TRUST_REGION_REFLECTIVE"
