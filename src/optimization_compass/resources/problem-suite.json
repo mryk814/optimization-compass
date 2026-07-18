@@ -187,6 +187,23 @@
       "feature_ids": ["F_VARIABLE_FUNCTION", "F_OBJECTIVE_SIMULATION", "F_CONSTRAINT_PDE", "F_CONSTRAINT_LINEAR_INEQUALITY", "F_DERIVATIVE_ANALYTIC_GRADIENT", "F_DERIVATIVE_INNER_ITERATION", "F_STRUCTURE_PDE_CONSTRAINED", "F_GUARANTEE_LOCAL_OK"],
       "source_ids": ["S097", "S098", "S099", "S101"],
       "last_verified": "2026-07-18"
+    },
+    {
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "name_ja": "離散化された最適制御問題",
+      "name_en": "Discretized optimal control problem",
+      "mathematical_family": "optimal_control",
+      "variable_domain": "trajectory",
+      "objective_form": "simulation",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "constraint_value"],
+      "constraint_class": "dynamics_equality",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 60},
+      "known_reference_semantics": "The fixed mesh is an educational transcription; continuous-time feasibility and optimality require mesh refinement and trajectory reconstruction.",
+      "related_problem_ids": ["PA042", "PA044"],
+      "feature_ids": ["F_VARIABLE_TRAJECTORY", "F_CONSTRAINT_DYNAMICS", "F_OBJECTIVE_SIMULATION", "F_STRUCTURE_OPTIMAL_CONTROL"],
+      "source_ids": ["S042", "S043", "S050", "S076"],
+      "last_verified": "2026-07-19"
     }
   ],
   "instances": [
@@ -453,6 +470,28 @@
       "limitations_en": "A deterministic 8x4 educational instance for following the FEM state equation, filtering, projection, and OC/MMA roles; it does not establish real-design strength, buckling, manufacturability, continuous-model guarantees, or general performance.",
       "source_ids": ["S097", "S098", "S099", "S100", "S101"],
       "last_verified": "2026-07-18"
+    },
+    {
+      "problem_instance_id": "INSTANCE_OPTIMAL_CONTROL_EC020",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "name_ja": "EC020 二次系の軌道・制御",
+      "name_en": "EC020 trajectory and control for a second-order system",
+      "registry_key": "problem.optimal_control.ec020.v1",
+      "dimension": 60,
+      "parameters": {"mesh_intervals": 20, "state_dimension": 2, "control_dimension": 1, "dynamics": "x_dot=v; v_dot=u", "running_weights": {"state": 1.0, "control": 0.01}, "terminal_target": [1.0, 0.0]},
+      "bounds": {"state": [-2.0, 2.0], "control": [-4.0, 4.0]},
+      "constraints": [{"constraint_id": "dynamics_defect", "expression": "x[k+1]-x[k]-h*v[k]=0; v[k+1]-v[k]-h*u[k]=0", "sense": "eq"}, {"constraint_id": "terminal_target", "expression": "[x[N],v[N]]=[1,0]", "sense": "eq"}],
+      "initialization_candidates": [{"candidate_id": "zero_trajectory", "point": [0.0]}],
+      "seed_status": "fixed",
+      "seed_value": 2026,
+      "known_reference_status": "unknown",
+      "known_reference": null,
+      "display": {"range": {"time": [0.0, 1.0], "state_norm": [0.0, 2.0], "control_effort": [0.0, 8.0], "dynamics_defect": [0.0, 1.0], "path_violation": [0.0, 1.0], "objective_value": [0.0, 20.0]}, "axis_labels": ["normalized time", "diagnostic value"], "units": ["dimensionless", "normalized"], "expression": "min ∫(‖state‖²+0.01‖control‖²)dt with ẋ=v, v̇=u and terminal target [1,0]"},
+      "intended_phenomena": ["trajectory_variable", "dynamics_defect", "path_constraint", "terminal_constraint", "mesh_refinement"],
+      "limitations_ja": "20区間の固定meshによる教育用instanceです。連続時間の可行性・最適性、制御入力の実機安全性、solver family間の性能差を保証しません。",
+      "limitations_en": "A fixed 20-interval educational instance; it does not establish continuous-time feasibility or optimality, physical actuator safety, or solver-family performance differences.",
+      "source_ids": ["S042", "S043", "S050", "S076"],
+      "last_verified": "2026-07-19"
     }
   ]
 }

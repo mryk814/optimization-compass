@@ -20,7 +20,7 @@ export function GenericMetricHistory({
     <section className="metric-history" aria-label="指標の履歴">
       <header>
         <h2>指標の履歴 (Metric history)</h2>
-        <p>同じ評価回数 (oracle evaluation) で、残差・gradient・rankを揃えて読みます。</p>
+        <p>同じ評価回数 (oracle evaluation) で、目的・状態・制約診断を揃えて読みます。</p>
       </header>
       <div className="metric-history-grid">
         {ids.map((metricId) => (

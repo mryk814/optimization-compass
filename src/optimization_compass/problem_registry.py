@@ -223,6 +223,38 @@ def _topology_compliance_gradient(instance: ProblemInstance, point: Sequence[flo
     return gradient
 
 
+def _optimal_control(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return a scalar objective for the fixed-mesh optimal-control lesson."""
+    mesh_intervals = instance.parameters.get("mesh_intervals")
+    if isinstance(mesh_intervals, bool) or not isinstance(mesh_intervals, int):
+        raise ValueError(f"invalid optimal-control mesh for {instance.problem_instance_id}")
+    expected_dimension = mesh_intervals * 3
+    if len(point) != expected_dimension:
+        raise ValueError(
+            f"{instance.problem_instance_id} expects {expected_dimension} trajectory values"
+        )
+    states_x = point[:mesh_intervals]
+    states_v = point[mesh_intervals : 2 * mesh_intervals]
+    controls = point[2 * mesh_intervals :]
+    target = instance.parameters.get("terminal_target")
+    if not isinstance(target, list) or len(target) != 2:
+        raise ValueError(
+            f"invalid optimal-control terminal target for {instance.problem_instance_id}"
+        )
+    running_weights = instance.parameters.get("running_weights")
+    if not isinstance(running_weights, dict):
+        raise ValueError(f"invalid optimal-control weights for {instance.problem_instance_id}")
+    state_weight = _number(running_weights.get("state"))
+    control_weight = _number(running_weights.get("control"))
+    terminal_x, terminal_v = (_number(value) for value in target)
+    running_cost = sum(
+        state_weight * (x * x + v * v) + control_weight * u * u
+        for x, v, u in zip(states_x, states_v, controls, strict=True)
+    )
+    terminal_cost = (states_x[-1] - terminal_x) ** 2 + (states_v[-1] - terminal_v) ** 2
+    return float(running_cost + terminal_cost)
+
+
 def exponential_decay_residuals(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
     """Return residuals for the fixed noiseless exponential-decay lesson."""
     a, k, c = point
@@ -302,4 +334,5 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
         _exponential_decay_gradient,
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
+    "problem.optimal_control.ec020.v1": (_optimal_control, None),
 }

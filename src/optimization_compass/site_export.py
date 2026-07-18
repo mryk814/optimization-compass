@@ -583,6 +583,137 @@ def export_site_data(
     return manifest
 
 
+def _generate_optimal_control_history_trace(*, dataset_version: str) -> AlgorithmTrace:
+    values = [
+        (1.00, 0.70, 0.42, 0.18, 4.80),
+        (0.88, 0.76, 0.21, 0.13, 3.62),
+        (0.79, 0.81, 0.11, 0.09, 2.74),
+        (0.72, 0.86, 0.065, 0.06, 2.18),
+        (0.67, 0.90, 0.038, 0.041, 1.91),
+        (0.64, 0.93, 0.022, 0.029, 1.79),
+        (0.62, 0.95, 0.014, 0.021, 1.73),
+        (0.61, 0.96, 0.009, 0.016, 1.70),
+        (0.60, 0.97, 0.006, 0.013, 1.68),
+    ]
+    frames = [
+        TraceFrame(
+            frame_index=index,
+            iteration=index,
+            oracle_evaluations=index,
+            elapsed_steps=index,
+            elapsed_time_ms=float(index * 120),
+            event_type="initialize"
+            if index == 0
+            else "update"
+            if index < len(values) - 1
+            else "stop",
+            decision="not_applicable" if index == 0 or index == len(values) - 1 else "accepted",
+            explanation_key="initial_trajectory"
+            if index == 0
+            else "trajectory_update"
+            if index < len(values) - 1
+            else "mesh_result",
+            event_label_ja="初期trajectory"
+            if index == 0
+            else "trajectoryを更新"
+            if index < len(values) - 1
+            else "固定meshで停止",
+            event_label_en="Initial trajectory"
+            if index == 0
+            else "Update trajectory"
+            if index < len(values) - 1
+            else "Stop on fixed mesh",
+            keyframe=index in {0, 4, len(values) - 1},
+            points=[],
+            vectors=[],
+            metrics=[
+                TraceMetric(
+                    metric_id="state_norm",
+                    label_ja="state norm",
+                    label_en="state norm",
+                    value=state,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="control_effort",
+                    label_ja="control effort",
+                    label_en="control effort",
+                    value=control,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="dynamics_defect",
+                    label_ja="dynamics defect",
+                    label_en="dynamics defect",
+                    value=defect,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="path_violation",
+                    label_ja="path violation",
+                    label_en="path violation",
+                    value=violation,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="objective_value",
+                    label_ja="目的関数値",
+                    label_en="objective value",
+                    value=objective,
+                    unit=None,
+                ),
+            ],
+            payload={
+                "mesh_nodes": 20,
+                "state": state,
+                "control": control,
+                "dynamics_defect": defect,
+                "path_violation": violation,
+            },
+        )
+        for index, (state, control, defect, violation, objective) in enumerate(values)
+    ]
+    return AlgorithmTrace(
+        contract_version="1.0.0",
+        dataset_version=dataset_version,
+        data_version="1.0.0",
+        trace_id="optimal-control-ec020-history",
+        method_id="M_DIRECT_COLLOCATION",
+        profile_id="PROFILE_OPTIMAL_CONTROL_GENERIC",
+        objective_id="INSTANCE_OPTIMAL_CONTROL_EC020",
+        scenario_id="SCENARIO_OPTIMAL_CONTROL_EC020",
+        generator_id="educational.optimal_control.v1",
+        generator_version="1.0.0",
+        implementation_mapping_status="not_applicable",
+        implementation_id=None,
+        objective={"kind": "trajectory_tracking_plus_control_effort", "mesh_nodes": 20},
+        preset={
+            "preset_id": "VIEW_OPTIMAL_CONTROL_HISTORY",
+            "discretization": "direct_collocation",
+        },
+        parameters={"mesh_nodes": 20, "horizon": 2.0, "path_tolerance": 1e-4},
+        initial_state={"point": [0.0, 0.0], "state_dimension": 2, "control_dimension": 1},
+        seed={"status": "fixed", "value": 2026},
+        evaluation_budget=len(values) - 1,
+        stopping={"max_oracle_evaluations": len(values) - 1, "dynamics_defect_tolerance": 1e-3},
+        environment={"runtime": "educational", "version": "1.0.0"},
+        fairness_statement=(
+            "固定mesh・初期trajectory・dynamics modelの教育用履歴であり、"
+            "手法の一般性能を比較しない。"
+        ),
+        frames=frames,
+        terminal_status="converged",
+        terminal_summary_ja=(
+            "固定mesh上のdiagnostic historyを完了しました。連続時間の可行性は別途検証します。"
+        ),
+        terminal_summary_en=(
+            "The fixed-mesh diagnostic history completed; continuous-time feasibility "
+            "requires separate validation."
+        ),
+        source_ids=["S042", "S043"],
+    )
+
+
 def _write_dummy_trace(
     output_dir: Path,
     *,
@@ -732,6 +863,9 @@ def _write_dummy_trace(
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
     generated_traces.extend(generate_parameter_estimation_traces(dataset_version=dataset_version))
+    generated_traces.append(
+        _generate_optimal_control_history_trace(dataset_version=dataset_version)
+    )
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -807,6 +941,12 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
         return "0-1 knapsack: 最適性証明" if locale == "ja" else "0-1 knapsack: optimality proof"
     if trace_id == "binary-knapsack-bnb-budget":
         return "0-1 knapsack: node予算で停止" if locale == "ja" else "0-1 knapsack: node budget"
+    if trace_id == "optimal-control-ec020-history":
+        return (
+            "Direct collocation · state/control diagnostics"
+            if locale == "en"
+            else "Direct collocation · state/control診断"
+        )
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -1118,7 +1258,122 @@ def _trace_lesson(
     is_divergence: bool,
     is_nelder_mead: bool,
     is_search_tree: bool,
+    is_optimal_control: bool,
 ) -> VisualizationLesson:
+    if is_optimal_control:
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "state・control・dynamics defect・path violationを同じ評価軸で読む",
+                "Read state, control, dynamics defects, and path violations on one evaluation axis",
+            ),
+            misconception=_localized(
+                "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される",
+                "An NLP success status guarantees feasibility between mesh points and "
+                "continuous-time safety",
+            ),
+            expected_phenomenon_ja=(
+                "objectiveだけでなくdynamics defectとconstraint marginが同時に改善するとは限らない"
+            ),
+            expected_phenomenon_en=(
+                "Objective progress does not by itself guarantee smaller dynamics defects "
+                "or constraint margins"
+            ),
+            success_signals=[
+                _signal(
+                    "trajectory_diagnostics_visible",
+                    "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+                    "State/control and dynamics/path diagnostics are visible at the same "
+                    "evaluation",
+                    "state_norm",
+                    "control_effort",
+                    "dynamics_defect",
+                    "path_violation",
+                )
+            ],
+            failure_signals=[
+                _signal(
+                    "mesh_feasibility_limit",
+                    "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる",
+                    "Small mesh defects still require interval reconstruction and "
+                    "high-fidelity simulation",
+                    "dynamics_defect",
+                    "path_violation",
+                )
+            ],
+            primary_observables=[
+                _observable("state_norm", "state norm", "state norm"),
+                _observable("control_effort", "control effort", "control effort"),
+                _observable("dynamics_defect", "dynamics defect", "dynamics defect"),
+            ],
+            secondary_observables=[
+                _observable("path_violation", "path violation", "path violation"),
+                _observable("objective_value", "目的関数値", "objective value"),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "初期trajectoryとcontrolを確認",
+                    "Inspect the initial trajectory and control",
+                    "state_norm",
+                    "control_effort",
+                ),
+                _step(
+                    "first_change",
+                    "最初のdynamics defectの変化を追う",
+                    "Follow the first dynamics-defect change",
+                    "dynamics_defect",
+                    "objective_value",
+                ),
+                _step(
+                    "pattern_visible",
+                    "path violationとobjectiveを分けて読む",
+                    "Separate path violations from objective progress",
+                    "path_violation",
+                    "objective_value",
+                ),
+                _step(
+                    "termination",
+                    "mesh上の結果と連続時間の限界を確認",
+                    "Inspect the mesh result and continuous-time limitation",
+                    "dynamics_defect",
+                    "path_violation",
+                ),
+            ],
+            comparison_role="primary_example",
+            prerequisite_concept_ids=["CONCEPT_TRAJECTORY_VARIABLE", "CONCEPT_DYNAMICS_DEFECT"],
+            recommended_next_scenario_ids=[],
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja=(
+                    "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。"
+                ),
+                note_en=(
+                    "Continuous-time optimality and safety are not shown; validate them "
+                    "with refinement and reconstruction."
+                ),
+            ),
+            static_summary=_localized(
+                "state、control、dynamics defect、path violationをmeshの評価履歴として並べる。",
+                "Align state, control, dynamics defects, and path violations as a mesh "
+                "evaluation history.",
+            ),
+            text_alternative=_localized(
+                "各evaluationのstate norm、control effort、dynamics defect、path violation、"
+                "objectiveを列挙する。",
+                "List state norm, control effort, dynamics defect, path violation, and "
+                "objective at each evaluation.",
+            ),
+            derived_media_caption=_localized(
+                "direct collocationのstate・control・制約診断履歴",
+                "State, control, and constraint diagnostics for direct collocation",
+            ),
+            limitations_ja="N=20の固定meshによる教育用履歴であり、連続時間の可行性・実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない",
+            limitations_en=(
+                "A fixed N=20 educational mesh history; it does not guarantee "
+                "continuous-time feasibility, hardware safety, model validity, or "
+                "general solver performance"
+            ),
+        )
     if trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P":
         is_poor_initialization = trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
         is_primary = trace.scenario_id == PRIMARY_SCENARIO_ID
@@ -1567,6 +1822,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"
+    is_optimal_control = trace.profile_id == "PROFILE_OPTIMAL_CONTROL_GENERIC"
     is_divergence = trace.trace_id.endswith("-divergence")
     point = [0.0, 0.0, 0.0, 0.0] if is_search_tree else trace.initial_state.get("point")
     if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
@@ -1584,7 +1840,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         "search_tree"
         if is_search_tree
         else "generic_metric_history"
-        if is_parameter_estimation
+        if is_parameter_estimation or is_optimal_control
         else "simplex_geometry"
         if is_nelder_mead
         else "continuous_trajectory"
@@ -1592,6 +1848,14 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     observable_ids = (
         ["search_nodes", "global_bound", "incumbent", "prune_reason"]
         if is_search_tree
+        else [
+            "state_norm",
+            "control_effort",
+            "dynamics_defect",
+            "path_violation",
+            "objective_value",
+        ]
+        if is_optimal_control
         else [
             "parameter_estimate",
             "residual_norm",
@@ -1611,6 +1875,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         if trace.scenario_id == PRIMARY_SCENARIO_ID
         else "comparison"
         if is_parameter_estimation
+        else "mechanism"
+        if is_optimal_control
         else "failure_contrast"
         if is_divergence or (is_search_tree and trace.terminal_status == "budget_exhausted")
         else "mechanism"
@@ -1633,6 +1899,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             if is_search_tree
             else "PROBLEM_NONLINEAR_LEAST_SQUARES"
             if is_parameter_estimation
+            else "PROBLEM_OPTIMAL_CONTROL"
+            if is_optimal_control
             else "PROBLEM_CONTINUOUS_UNCONSTRAINED"
         ),
         problem_instance_id=trace.objective_id,
@@ -1641,6 +1909,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             is_divergence=is_divergence,
             is_nelder_mead=is_nelder_mead,
             is_search_tree=is_search_tree,
+            is_optimal_control=is_optimal_control,
         ),
         guided_story=_trace_guided_story(trace),
         experiment=VisualizationExperiment(
