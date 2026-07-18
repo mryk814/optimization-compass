@@ -1649,7 +1649,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.0",
+  "dataset_version": "0.18.3",
   "generated_at": "2026-07-18T00:00:00Z",
   "journeys": [
     {
@@ -1674,7 +1674,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -1765,7 +1765,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -1842,7 +1842,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -1903,7 +1903,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -1964,7 +1964,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2028,7 +2028,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2084,7 +2084,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2161,7 +2161,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2242,7 +2242,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2336,7 +2336,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2401,7 +2401,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -2469,16 +2469,16 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
       ],
       "formulation": {
-        "constraints": "平均密度を0.5以下に保つ体積率制約 mean(ρ)≤0.5と、各密度の上下限を課す。",
-        "decision_variables": "各有限要素の密度ρₑ。ρₑ=1は材料、ρₑが小さい値は空孔に近い状態を表す。",
-        "objective": "線形弾性の状態方程式 K(ρ)u=Fを解き、compliance c(ρ)=Fᵀuを最小化する。SIMPでは剛性をEₑ=Emin+ρₑᵖ(E₀−Emin)で補間する。",
-        "variable_domain_summary": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。実務ではmeshと材料補間の定義が設計結果を左右する。"
+        "constraints": "平均密度を0.5以下に保つ体積率制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>≤</mi><mn>0.5</mn></mrow></math> と、各密度の上下限を課す。",
+        "decision_variables": "各有限要素の密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mn>1</mn></mrow></math>は材料、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>が小さい値は空孔に近い状態を表す。",
+        "objective": "線形弾性の状態方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>u</mi><mo>&#x0003D;</mo><mi>F</mi></mrow></math>を解き、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>F</mi><mi>ᵀ</mi><mi>u</mi></mrow></math> を最小化する。SIMPでは剛性を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>E</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo>&#x0002B;</mo><mi>ρ</mi><mi>ₑ</mi><mi>ᵖ</mi><mo stretchy=\"false\">&#x00028;</mo><mi>E</mi><mi>₀</mi><mi>−</mi><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> で補間する。",
+        "variable_domain_summary": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。設計変数集合は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0.001</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mrow><mn>32</mn></mrow></msup></mrow></math> と書ける。実務ではmeshと材料補間の定義が設計結果を左右する。"
       },
       "implementation_ids": [],
       "journey_id": "topology-cantilever",

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.0",
+  "dataset_version": "0.18.3",
   "entries": [
     {
       "alt_en": "Report vertex ranks, candidate, operation, decision, and best value for each frame.",
@@ -31,7 +31,7 @@
         "path": "media/scenario-nm-quadratic/captions.vtt",
         "sha256": "38191c82fbef7fc28d1e9ef608b1164e9d8c03a430cadf86cd1ddc811c038d1f"
       },
-      "dataset_version": "0.18.0",
+      "dataset_version": "0.18.3",
       "files": [
         {
           "bytes": 3610,
@@ -41,7 +41,7 @@
           "media_kind": "static_svg",
           "media_type": "image/svg+xml",
           "path": "media/scenario-nm-quadratic/static.svg",
-          "sha256": "6bda3cb624995de331d3e8a7d6cf5f32d849735563d0c8fe454dfbcfd6939c28",
+          "sha256": "7e51baa30e46f4280869b9e32935cbb94827400d902d2b4c06364f22bdb2fae4",
           "width": 1200
         },
         {
@@ -100,7 +100,7 @@
       "renderer_family": "simplex_geometry",
       "scenario_id": "SCENARIO_NM_QUADRATIC",
       "source_artifact_path": "traces/nelder-mead-quadratic.json",
-      "source_artifact_sha256": "db107c3d90819fba4fe9e1440f92f212abf333cdd78d091a62f72a31add337d1",
+      "source_artifact_sha256": "86ce541a627aa08d14a4f41c1f1778c74bcc671b2cdae3d635fadda07c50c63b",
       "source_ids": [
         "S001",
         "S002"

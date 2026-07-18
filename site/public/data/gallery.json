@@ -916,8 +916,8 @@
           "reason": "状態方程式を解いた後の感度計算を大規模fieldへ拡張するため"
         }
       ],
-      "constraints": "平均密度を0.5以下に保つ体積率制約 mean(ρ)≤0.5と、各密度の上下限を課す。",
-      "decision_variables": "各有限要素の密度ρₑ。ρₑ=1は材料、ρₑが小さい値は空孔に近い状態を表す。",
+      "constraints": "平均密度を0.5以下に保つ体積率制約 $mean(ρ)≤0.5$ と、各密度の上下限を課す。",
+      "decision_variables": "各有限要素の密度 $ρₑ$。$ρₑ=1$は材料、$ρₑ$が小さい値は空孔に近い状態を表す。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
@@ -958,7 +958,7 @@
         "8×4要素の決定的な教育用instanceであり、実際のFEM実装の収束、強度・座屈、製造性、mesh refinement後の同一topology、局所解からの独立性や大域最適性を保証しません。"
       ],
       "map_node_id": "answer:Q01:continuous",
-      "objective": "線形弾性の状態方程式 K(ρ)u=Fを解き、compliance c(ρ)=Fᵀuを最小化する。SIMPでは剛性をEₑ=Emin+ρₑᵖ(E₀−Emin)で補間する。",
+      "objective": "線形弾性の状態方程式 $K(ρ)u=F$を解き、$f(ρ)=c(ρ)=Fᵀu$ を最小化する。SIMPでは剛性を $Eₑ=Emin+ρₑᵖ(E₀−Emin)$ で補間する。",
       "practical_notes": "最終密度だけでなく、state solve、感度のraw・filter後、volume fraction、gray fraction、checkerboard指標、meshとfilter radiusを一緒に保存します。complianceが下がっても、離散化artifactや製造制約が解決したとは限りません。",
       "problem_archetype_id": "PA045",
       "python_example": "import numpy as np\n\nrows, columns = 4, 8\nrho = np.full((rows, columns), 0.5)\nvolume_target = 0.5\nfor iteration in range(12):\n    sensitivity = -rho**2\n    filtered = sensitivity.copy()\n    rho = np.clip(rho * np.exp(0.15 * filtered), 0.001, 1.0)\n    rho *= volume_target / rho.mean()\nprint(float(rho.mean()))",
@@ -987,7 +987,7 @@
       "status": "published",
       "title_en": "Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くする",
-      "variable_domain": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。実務ではmeshと材料補間の定義が設計結果を左右する。",
+      "variable_domain": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。設計変数集合は $X=[0.001,1]^{32}$ と書ける。実務ではmeshと材料補間の定義が設計結果を左右する。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "VIEW_METHOD_MECHANISM",
@@ -1094,5 +1094,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.0"
+  "dataset_version": "0.18.3"
 }

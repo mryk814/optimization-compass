@@ -1,5 +1,5 @@
 {
-  "current_version": "0.18.0",
+  "current_version": "0.18.3",
   "releases": [
     {
       "archival": null,
@@ -98,6 +98,48 @@
       "source_commit": "18820d700974fdb3158392f0918517b206f6c56f",
       "tag": "v0.18.0",
       "version": "0.18.0"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "469844a1c9f05eeba5403322e5dc598ac76a30d35844359665b39343198cae3f",
+        "size_bytes": 4271514,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.1/optimization_method_selection_database_v0.18.1_bundle.zip"
+      },
+      "database_sha256": "1b299f42829aabce423f55de9614d8329f726873065d6ba2f8a91c0171824cdf",
+      "manifest_sha256": "f1113d1b6c36af02b90b9209fe38d4a735081942bdfc0f7ed58fa72328bb4256",
+      "release_date": "2026-07-18",
+      "source_commit": "1f15d6c2ce2d50f42b88a3b320617180689d43d2",
+      "tag": "v0.18.1",
+      "version": "0.18.1"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "7c4b096c0a59c006c5c62c110b78ee726d5294179642ce72ad2769d228353459",
+        "size_bytes": 4274929,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.2/optimization_method_selection_database_v0.18.2_bundle.zip"
+      },
+      "database_sha256": "03d2e538028a22571200a0885a7d203185ed47ab239fe2b77c0801751d79da72",
+      "manifest_sha256": "5f5912b85c8e5c1e0d09aedc83b0482872a19ce58b7f2639828b557520ebd24d",
+      "release_date": "2026-07-18",
+      "source_commit": "a8890a376655aa7f4b97c10520f53288a047cd0c",
+      "tag": "v0.18.2",
+      "version": "0.18.2"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "60c85583e21dad65c617e73a0e93905d47792cad0fdb7038cddfa40732782f43",
+        "size_bytes": 4274945,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.3/optimization_method_selection_database_v0.18.3_bundle.zip"
+      },
+      "database_sha256": "80d678b2e791728b83580d0128b20cb86c42bd87aedd18d7bd2c740f966944c1",
+      "manifest_sha256": "b465be1dc67a5ea267aa84be202ef698dba5ed9b3870683df5732a67d035ff87",
+      "release_date": "2026-07-18",
+      "source_commit": "bd9885670a048a63c6c13f858371089bc917db46",
+      "tag": "v0.18.3",
+      "version": "0.18.3"
     }
   ],
   "schema_version": 1

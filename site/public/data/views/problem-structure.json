@@ -1,6 +1,6 @@
 {
   "axis": "problem_structure",
-  "dataset_version": "0.18.0",
+  "dataset_version": "0.18.3",
   "description": "問題の特徴から手法候補へ辿る意味階層。",
   "edges": [
     {

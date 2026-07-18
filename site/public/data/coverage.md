@@ -1,6 +1,6 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.0`
+- Dataset: `0.18.3`
 - Generated: `2026-07-18T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
@@ -26,4 +26,4 @@
 
 ## Integrity issues
 
-- `broken_scenario_alias` `SCENARIO_TOPOLOGY_SIMP_OC`: A derived generated scenario points to a canonical scenario missing from the database.
+- None

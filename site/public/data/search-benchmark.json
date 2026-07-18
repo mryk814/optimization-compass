@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.0",
+  "dataset_version": "0.18.3",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
