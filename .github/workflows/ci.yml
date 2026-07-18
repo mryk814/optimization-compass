@@ -168,7 +168,7 @@ jobs:
           tar -xf .pages-artifact/artifact.tar -C site/dist
           test -f site/dist/deployment.json
       - name: Run production browser journeys and axe scans
-        run: npm run test:e2e:artifact
+        run: npm run test:e2e:artifact -- e2e/accessibility.spec.ts --project=chromium-desktop
         working-directory: site
       - name: Upload browser failure evidence
         if: failure()

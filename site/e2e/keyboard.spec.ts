@@ -65,7 +65,7 @@ test("playback controlsをkeyboardでstepする", async ({ page, baseURL }) => {
 
 test("Case journeyをkeyboardで進み、route変更後もfocusを失わない", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC017");
-  const action = page.getByRole("link", { name: /固定した1 runを追う/u });
+  const action = page.getByRole("link", { name: /固定した1回の実行を追う/u });
   await action.focus();
   await page.keyboard.press("Enter");
 

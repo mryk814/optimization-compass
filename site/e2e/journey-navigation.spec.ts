@@ -13,7 +13,7 @@ test("Case→Theater→Compare→Caseで共有可能なjourney文脈を保つ", 
 }) => {
   const root = requiredBaseURL(baseURL);
   await gotoAtlasRoute(page, root, "/gallery/EC017");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
 
   const journey = page.getByRole("complementary", { name: "Case learning journey" });
   await expect(journey).toContainText("Step 2/4");
@@ -42,7 +42,7 @@ test("Case→Theater→Compare→Caseで共有可能なjourney文脈を保つ", 
 test("browser backと画面内Backがそれぞれ予測可能に動く", async ({ page, baseURL }) => {
   const root = requiredBaseURL(baseURL);
   await gotoAtlasRoute(page, root, "/gallery/EC017");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page.getByRole("complementary", { name: "Case learning journey" })).toContainText("Step 2/4");
   await page.getByRole("link", { name: /次はCompare/u }).click();
   await expect(page.getByRole("heading", { name: "Pareto front上でpreferenceを変える" })).toBeVisible();
@@ -67,7 +67,7 @@ test("文脈のないdeep linkは従来の安全なfallbackを使う", async ({ 
 test("dataset版が変わった共有URLは古いjourneyを誤復元しない", async ({ page, baseURL }) => {
   const root = requiredBaseURL(baseURL);
   await gotoAtlasRoute(page, root, "/gallery/EC017");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page.getByRole("complementary", { name: "Case learning journey" })).toContainText("Step 2/4");
 
   const hashUrl = new URL(`https://atlas.invalid${new URL(page.url()).hash.slice(1)}`);
@@ -85,7 +85,7 @@ test("dataset版が変わった共有URLは古いjourneyを誤復元しない", 
 test("CompareからMethodへ進んでも元のCaseへ戻れる", async ({ page, baseURL }) => {
   const root = requiredBaseURL(baseURL);
   await gotoAtlasRoute(page, root, "/gallery/EC017");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await page.getByRole("link", { name: /次はCompare/u }).click();
   await page.getByRole("link", { name: /次は手法の前提を読む/u }).click();
 

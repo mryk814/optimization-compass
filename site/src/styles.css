@@ -1469,7 +1469,7 @@ caption {
 .comparison-factor-changed { border-top-color: #c67843 !important; background: #fff7ef; }
 .comparison-factor-observe { border-top-color: #637fa1 !important; background: #f2f6fb; }
 .comparison-factor-observe li { display: grid; gap: .08rem; }
-.comparison-factor-observe li span { color: #697773; font-size: .68rem; }
+.comparison-factor-observe li span { color: #4f5e57; font-size: .68rem; }
 .comparison-factor-observe p { margin: .5rem 0 0; color: #4f5e57; font-size: .7rem; line-height: 1.45; }
 .comparison-factor-observe p strong { display: block; color: #315c48; }
 .comparison-member-strip { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; padding: .55rem .8rem; border-top: 1px solid #dce4dc; }

@@ -10,20 +10,20 @@ function requiredBaseURL(baseURL: string | undefined): string {
 test("BO Theaterでcanonical scenarioを切り替え、keyboardで次点選択を追える", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
   await page.getByRole("link", { name: /高価な1次元black-box: explore \/ noiseless/u }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
   await expect(page.getByText(/surrogate_uncertainty 1\.0\.0/u)).toBeVisible();
-  await expect(page.getByRole("img", { name: /surrogate平均/u })).toBeVisible();
+  await expect(page.getByRole("img", { name: /surrogateの平均/u })).toBeVisible();
 
-  const player = page.getByLabel(/Bayesian optimization再生領域/u);
+  const player = page.getByLabel(/Bayesian Optimizationの再生領域/u);
   await player.focus();
   await expect(player).toBeFocused();
   await page.keyboard.press("ArrowRight");
-  await expect(page.getByText("Frame 2/8")).toBeVisible();
+  await expect(page.getByText("フレーム 2/8")).toBeVisible();
   await page.keyboard.press(" ");
   await expect(page.getByRole("button", { name: "一時停止" })).toBeVisible();
   await page.keyboard.press(" ");
 
-  await page.getByRole("combobox", { name: "観測noise" }).selectOption("small_noise");
+  await page.getByRole("combobox", { name: "観測ノイズ" }).selectOption("small_noise");
   await expect(page.getByText(/noise σ=0\.08/u)).toBeVisible();
   await expect(page.getByRole("link", { name: "Gaussian process Bayesian optimization" })).toBeVisible();
   await expect(page.getByRole("link", { name: "random search" })).toBeVisible();

@@ -87,7 +87,7 @@ test("375px Compare Labで比較条件と非trajectory結果を読める", async
 
 test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/budget-allocation");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
@@ -98,7 +98,7 @@ test("375px Search-tree Theaterを再生できる", async ({ page, baseURL }, te
 
 test("375px Case journey navigationが横にはみ出さず次へ進める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/EC017");
-  await page.getByRole("link", { name: /固定した1 runを追う/u }).click();
+  await page.getByRole("link", { name: /固定した1回の実行を追う/u }).click();
   const journey = page.getByRole("complementary", { name: "Case learning journey" });
   await expect(journey).toContainText("Step 2/4");
   await expect(journey.getByRole("link", { name: /次はCompare/u })).toBeVisible();
