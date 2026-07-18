@@ -4064,6 +4064,31 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.path-terminal-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "constrained-continuous",
           "target_type": "content"
         },
@@ -4158,6 +4183,31 @@
           "relation_type": "explains",
           "target_id": "M_DIRECT_SHOOTING",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.path-terminal-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
         },
         {
           "relation_type": "related_content",
@@ -5052,6 +5102,31 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.path-terminal-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "direct-collocation",
           "target_type": "content"
         },
@@ -5559,6 +5634,31 @@
           "relation_type": "explains",
           "target_id": "M_ILQR_DDP",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.path-terminal-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
         },
         {
           "relation_type": "related_content",
@@ -6335,6 +6435,31 @@
           "relation_type": "explains",
           "target_id": "M_MULTIPLE_SHOOTING",
           "target_type": "method"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.dynamics-defect",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.path-terminal-constraints",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.receding-horizon",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.time-discretization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.trajectory-variable",
+          "target_type": "content"
         },
         {
           "relation_type": "related_content",

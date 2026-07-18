@@ -6,8 +6,8 @@ title_ja: iLQR / DDP
 title_en: Iterative LQR / Differential Dynamic Programming
 summary: 現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。
 source_ids: [S042, S043, S050, S076]
-prerequisites: []
-related_ids: [multiple-shooting, direct-collocation, dynamic-programming, family.optimal-control]
+prerequisites: [concept.trajectory-variable, concept.time-discretization, concept.receding-horizon]
+related_ids: [concept.dynamics-defect, concept.path-terminal-constraints, multiple-shooting, direct-collocation, dynamic-programming, family.optimal-control]
 status: published
 last_reviewed: 2026-07-18
 ---
@@ -144,3 +144,7 @@ print("maximum control:", max(abs(value) for value in controls))
 - 一般path制約の違反が反復後も残り続ける
 
 segment分割で感度を抑える定式化は[Direct Multiple Shooting](#/learn/multiple-shooting)、path制約を密に扱いたい場合は[Direct Collocation](#/learn/direct-collocation)、時間構造を使う考え方の原型は[動的計画法](#/learn/dynamic-programming)、軌道最適化手法全体の選び分けは[最適制御・軌道最適化の選び分け](#/learn/family.optimal-control)で確認できます。
+
+## 次に読む
+
+[trajectory variable](#/learn/concept.trajectory-variable)でnominal state/control trajectoryを読み、[時間discretization](#/learn/concept.time-discretization)でlocal modelの時間刻みを確認します。実行するcontrol列の先頭だけを使う場合は[receding horizon](#/learn/concept.receding-horizon)へ進み、forward rolloutの[dynamics defect](#/learn/concept.dynamics-defect)とconstraint violationを分けて記録します。一般path制約や障害物回避が主役なら[path・terminal制約](#/learn/concept.path-terminal-constraints)を経て[Direct Collocation](#/learn/direct-collocation)と比較します。

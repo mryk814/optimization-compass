@@ -32,9 +32,9 @@
 | `density-filter` | `M_DENSITY_FILTER` | 76 | 1691 | 5 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 70 | 1703 | 6 | 1 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 69 | 2414 | 8 | 1 | pass |
-| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4406 | 8 | 1 | pass |
+| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4844 | 9 | 1 | pass |
 | `direct-global` | `M_DIRECT` | 85 | 3002 | 11 | 1 | pass |
-| `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 3256 | 9 | 1 | pass |
+| `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 3703 | 10 | 1 | pass |
 | `dual-annealing` | `M_SIMULATED_ANNEALING` | 72 | 2171 | 7 | 1 | pass |
 | `dual-simplex` | `M_DUAL_SIMPLEX` | 85 | 2015 | 7 | 1 | pass |
 | `dynamic-programming` | `M_DYNAMIC_PROGRAMMING` | 56 | 1946 | 7 | 1 | pass |
@@ -50,7 +50,7 @@
 | `family.local-dfo` | `MF_DFO_LOCAL` | 75 | 2636 | 7 | 1 | pass |
 | `family.manifold` | `MF_MANIFOLD` | 96 | 3166 | 7 | 1 | pass |
 | `family.multi-objective` | `MF_MULTI_OBJECTIVE` | 99 | 3057 | 7 | 1 | pass |
-| `family.optimal-control` | `MF_OPTIMAL_CONTROL` | 129 | 3275 | 7 | 1 | pass |
+| `family.optimal-control` | `MF_OPTIMAL_CONTROL` | 129 | 4135 | 9 | 1 | pass |
 | `family.smooth-local` | `MF_SMOOTH_LOCAL` | 64 | 2764 | 7 | 1 | pass |
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 68 | 3376 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 80 | 3344 | 7 | 1 | pass |
@@ -59,7 +59,7 @@
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 83 | 2334 | 6 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 56 | 2426 | 8 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 2809 | 8 | 1 | pass |
-| `ilqr-ddp` | `M_ILQR_DDP` | 102 | 4714 | 10 | 1 | pass |
+| `ilqr-ddp` | `M_ILQR_DDP` | 102 | 5212 | 11 | 1 | pass |
 | `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 78 | 2823 | 8 | 1 | pass |
 | `lbfgs` | `M_LBFGS` | 71 | 2999 | 9 | 1 | pass |
 | `lbfgsb` | `M_LBFGSB` | 49 | 1903 | 6 | 1 | pass |
@@ -75,7 +75,7 @@
 | `momentum-sgd` | `M_MOMENTUM_SGD` | 53 | 2889 | 8 | 1 | pass |
 | `multi-objective` | `M_NSGA_II` | 76 | 3935 | 11 | 1 | pass |
 | `multi-start` | `M_MULTISTART` | 41 | 2635 | 9 | 1 | pass |
-| `multiple-shooting` | `M_MULTIPLE_SHOOTING` | 81 | 4780 | 9 | 1 | pass |
+| `multiple-shooting` | `M_MULTIPLE_SHOOTING` | 81 | 5177 | 10 | 1 | pass |
 | `network-simplex` | `M_NETWORK_SIMPLEX` | 60 | 3334 | 9 | 1 | pass |
 | `newton-cg` | `M_NEWTON_CG` | 72 | 2385 | 10 | 1 | pass |
 | `newton-method` | `M_NEWTON` | 42 | 2359 | 9 | 1 | pass |
