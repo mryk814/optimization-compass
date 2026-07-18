@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.15.1",
+  "dataset_version": "0.16.0",
   "entities": [
     {
       "aliases": [],
@@ -12069,7 +12069,7 @@
           "target_type": "method"
         }
       ],
-      "summary": "least_squares defaults to trf. curve_fit delegates bounded problems to least_squares and defaults to trf when bounds are supplied."
+      "summary": "SciPy Trust Region Reflective implementation for least_squares and bounded curve_fit; API selection conditions are stored in typed versioned claims."
     },
     {
       "aliases": [],

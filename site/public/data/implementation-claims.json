@@ -6615,6 +6615,62 @@
       "verification_status": "verified"
     },
     {
+      "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
+      "commit_sha": null,
+      "confidence": "high",
+      "last_verified": "2026-07-16",
+      "predicate": "default_method_curve_fit_bounds",
+      "product_version": "SciPy 1.18.0",
+      "release_tag": null,
+      "replaced_by": null,
+      "source_date": "2026-07-13",
+      "source_id": "S003",
+      "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
+      "valid_from": "2026-07-16",
+      "valid_to": null,
+      "value": {
+        "api": "scipy.optimize.curve_fit",
+        "condition": "bounds supplied and method omitted",
+        "fallback": {
+          "condition": "bounds omitted and method omitted",
+          "selected_method": "lm",
+          "selected_method_id": "M_LEVENBERG_MARQUARDT"
+        },
+        "recommendation_effect": "none",
+        "selected_method": "trf",
+        "selected_method_id": "M_TRUST_REGION_REFLECTIVE",
+        "user_override": "method"
+      },
+      "value_status": "verified",
+      "verification_status": "verified"
+    },
+    {
+      "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
+      "commit_sha": null,
+      "confidence": "high",
+      "last_verified": "2026-07-16",
+      "predicate": "default_method_least_squares",
+      "product_version": "SciPy 1.18.0",
+      "release_tag": null,
+      "replaced_by": null,
+      "source_date": "2026-07-13",
+      "source_id": "S003",
+      "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
+      "valid_from": "2026-07-16",
+      "valid_to": null,
+      "value": {
+        "api": "scipy.optimize.least_squares",
+        "condition": "method omitted",
+        "fallback": null,
+        "recommendation_effect": "none",
+        "selected_method": "trf",
+        "selected_method_id": "M_TRUST_REGION_REFLECTIVE",
+        "user_override": "method"
+      },
+      "value_status": "verified",
+      "verification_status": "verified"
+    },
+    {
       "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_GPU_DISTRIBUTED_SUPPORT",
       "commit_sha": null,
       "confidence": "high",
@@ -6646,7 +6702,7 @@
       "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
       "valid_from": "2026-07-16",
       "valid_to": null,
-      "value": "least_squares: method=trf is the default; curve_fit: trf is selected when bounds are supplied and lm otherwise; tr_solver; jac_sparsity; x_scale; loss; ftol; xtol; gtol; max_nfev",
+      "value": "tr_solver; jac_sparsity; x_scale; loss; ftol; xtol; gtol; max_nfev",
       "value_status": "verified",
       "verification_status": "verified"
     },
@@ -8134,10 +8190,10 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.15.1",
+  "dataset_version": "0.16.0",
   "freshness": {
     "as_of": "2026-07-17",
-    "claim_count": 448,
+    "claim_count": 450,
     "claims": [
       {
         "age_days": 4,
@@ -11358,6 +11414,24 @@
         "freshness_status": "current",
         "last_verified": "2026-07-16",
         "predicate": "current_release",
+        "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
+        "value_status": "verified"
+      },
+      {
+        "age_days": 1,
+        "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
+        "freshness_status": "current",
+        "last_verified": "2026-07-16",
+        "predicate": "default_method_curve_fit_bounds",
+        "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
+        "value_status": "verified"
+      },
+      {
+        "age_days": 1,
+        "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
+        "freshness_status": "current",
+        "last_verified": "2026-07-16",
+        "predicate": "default_method_least_squares",
         "subject_id": "I_SCIPY_LEAST_SQUARES_TRF",
         "value_status": "verified"
       },
