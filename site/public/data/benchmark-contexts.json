@@ -718,7 +718,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.3",
+  "dataset_version": "0.18.4",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"
