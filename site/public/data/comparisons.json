@@ -270,6 +270,125 @@
       "tuning_policy": "発散を説明する固定parameterを意図的に使用する。"
     },
     {
+      "aliases": [
+        "COMPARE_NM_INITIAL_SIMPLEX"
+      ],
+      "benchmark_context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 80
+      },
+      "canonical_comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "case_id": "hyperparameter-search",
+      "caveat": "初期条件の感度を読む教育用contrastです。2つの開始位置がこの二次目的で収束したことは、別の目的や次元での頑健性・速度・手法順位を示しません。",
+      "changed_factors": [
+        "初期simplexの位置"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "comparison_question": "目的・係数・評価予算を固定し、初期simplexの位置だけを変えると、反射・収縮と目的値の経路はどう変わる？",
+      "fairness_note": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
+      "fixed_factors": [
+        "目的関数 f(x, y) = 100x² + y²",
+        "Nelder–Mead係数 α=1, γ=2, ρ=0.5, σ=0.5",
+        "initial simplex scale 0.8",
+        "oracle evaluation budget 80",
+        "simplex tolerance 1e-4"
+      ],
+      "formulation_summary": "f(x, y) = 100x² + y² を、同じNelder–Mead係数とsimplex scale=0.8で最小化する。",
+      "identity_status": "canonical",
+      "journey_id": "hyperparameter-search",
+      "last_verified": "2026-07-18",
+      "limitations": [
+        "決定的な2次元二次目的と2つの固定開始位置だけを扱う。",
+        "wall-clock、関数評価の不均一コスト、大域的なbasin、実装差を比較しない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "nelder-mead-quadratic",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/nelder-mead-quadratic.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "simplex_geometry"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 80
+          },
+          "label_en": "Standard initial simplex",
+          "label_ja": "標準の初期simplex",
+          "member_id": "standard-initial-simplex",
+          "method_id": "M_NELDER_MEAD",
+          "parameters": {
+            "initial_point": "[-2.5, 2.0]",
+            "initial_simplex_scale": 0.8
+          },
+          "role": "reference_initial_condition",
+          "scenario_id": "SCENARIO_NM_QUADRATIC"
+        },
+        {
+          "artifact": {
+            "artifact_id": "nelder-mead-quadratic-shifted",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/nelder-mead-quadratic-shifted.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "simplex_geometry"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 80
+          },
+          "label_en": "Shifted initial simplex",
+          "label_ja": "移動した初期simplex",
+          "member_id": "shifted-initial-simplex",
+          "method_id": "M_NELDER_MEAD",
+          "parameters": {
+            "initial_point": "[2.4, -2.4]",
+            "initial_simplex_scale": 0.8
+          },
+          "role": "initial_condition_sensitivity",
+          "scenario_id": "SCENARIO_NM_QUADRATIC_SHIFTED"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "minimize",
+          "label_ja": "best objective",
+          "metric_id": "objective",
+          "unit": "objective value"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "simplex diameter",
+          "metric_id": "simplex_diameter",
+          "unit": "decision-coordinate distance"
+        },
+        {
+          "direction": "none",
+          "label_ja": "best vertex",
+          "metric_id": "position",
+          "unit": "decision coordinates"
+        }
+      ],
+      "mode": "initial_condition_sensitivity",
+      "problem_definition_id": "PROBLEM_QUADRATIC_CONTINUOUS",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+      "ranking_eligible": false,
+      "seed_policy": "deterministic / not applicable",
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "stopping_policy": "simplex tolerance <= 1e-4 or 80 oracle evaluations",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "頂点・重心・候補点を同じevaluationで追うと、同じ更新則でも初期simplexが探索する領域と操作列を変えることが分かります。",
+      "title_en": "Read Nelder-Mead paths from the initial simplex",
+      "title_ja": "初期simplexでNelder–Meadの経路を読む",
+      "tuning_policy": "係数とscaleを事前固定し、run後に調整しない。"
+    },
+    {
       "aliases": [],
       "benchmark_context_id": "BENCH_NLP",
       "budget": {

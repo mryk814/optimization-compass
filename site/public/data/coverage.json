@@ -166,14 +166,14 @@
       "subject_type": "method"
     },
     {
-      "applicability": "not_applicable",
+      "applicability": "expected",
       "artifact_ids": [],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_NM_SENSITIVITY_NA",
       "purpose": "sensitivity",
-      "rationale": "初期版は仕組み理解を優先し、感度比較は明示的に適用外とする。",
+      "rationale": "同じ目的・係数・評価予算で初期simplexの位置だけを変え、幾何操作の経路を同期比較する。",
       "reason_codes": [
-        "explicit_policy"
+        "scenario_contract_incomplete"
       ],
       "renderer_family": "simplex_2d",
       "route_ids": [],
@@ -187,7 +187,7 @@
       "source_ids": [
         "S002"
       ],
-      "status": "not_applicable",
+      "status": "partial",
       "subject_id": "M_NELDER_MEAD",
       "subject_type": "method"
     },
@@ -784,11 +784,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_GRADIENT_FAMILY"
+            "COMPARE_GRADIENT_FAMILY",
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
           ]
         },
         "content": {
@@ -840,7 +841,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 41,
+          "count": 42,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -853,6 +854,7 @@
             "/methods/M_POWELL",
             "/methods/M_SPSA",
             "COMPARE_GRADIENT_FAMILY",
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "EC013",
             "I_NLOPT",
             "I_NOMAD",
@@ -7004,11 +7006,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_GRADIENT_FAMILY"
+            "COMPARE_GRADIENT_FAMILY",
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
           ]
         },
         "content": {
@@ -7049,12 +7052,13 @@
           "target_ids": []
         },
         "map": {
-          "count": 21,
+          "count": 22,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NELDER_MEAD",
             "COMPARE_GRADIENT_FAMILY",
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "EC013",
             "I_NLOPT",
             "I_OPTIMJL",
@@ -15892,8 +15896,8 @@
     "status_counts": {
       "available": 4,
       "missing": 1,
-      "not_applicable": 1,
-      "partial": 2
+      "not_applicable": 0,
+      "partial": 3
     },
     "subject_counts": {
       "feature_family": 10,

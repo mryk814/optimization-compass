@@ -899,6 +899,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
@@ -1586,6 +1591,64 @@
         }
       ],
       "summary": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。"
+    },
+    {
+      "aliases": [
+        "/compare/COMPARE_NM_INITIAL_SIMPLEX"
+      ],
+      "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "entity_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "初期simplexでNelder–Meadの経路を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_NM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "nelder-mead-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "nelder-mead-quadratic-shifted",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。"
     },
     {
       "aliases": [],
@@ -2578,6 +2641,62 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.constraint-class",
+      "entity_id": "concept.constraint-class",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "制約class",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "augmented-lagrangian",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.constrained-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "制約classは、解として許される領域をどの式・論理・simulationで定めるかを表し、可行性の扱いとsolver選択を左右します。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.convexity",
       "entity_id": "concept.convexity",
       "entity_type": "content",
@@ -2627,6 +2746,404 @@
         }
       ],
       "summary": "微分を直接使わず、関数値の比較から探索する考え方です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.dynamics-defect",
+      "entity_id": "concept.dynamics-defect",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "dynamics defect",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "dynamics defectは、離散化したtrajectoryがモデルの時間発展とどれだけずれているかを表す残差で、costとは別に可行性として追う指標です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.evaluation-cost",
+      "entity_id": "concept.evaluation-cost",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "評価費と予算",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "random-search",
+          "target_type": "content"
+        }
+      ],
+      "summary": "評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.path-terminal-constraints",
+      "entity_id": "concept.path-terminal-constraints",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "path・terminal制約",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "path制約は軌道の途中で守る条件、terminal制約は終端で守る条件であり、どの時刻で評価した可行性かを分けて扱います。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.receding-horizon",
+      "entity_id": "concept.receding-horizon",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "receding horizon",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "receding horizonは有限horizonの軌道最適化を観測のたびに解き直し、計画したcontrol列の先頭だけを実行する運用の考え方です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.simplex",
+      "entity_id": "concept.simplex",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Simplex・確率ベクトル",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "mirror-descent",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        }
+      ],
+      "summary": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.time-discretization",
+      "entity_id": "concept.time-discretization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "時間discretization",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "時間discretizationは連続時間のdynamicsと制約を有限個の時刻点へ写す設計で、meshの粗さは計算量だけでなく解の意味を変えます。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.trajectory-variable",
+      "entity_id": "concept.trajectory-variable",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "trajectory variable",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "direct-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.optimal-control",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "ilqr-ddp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        }
+      ],
+      "summary": "trajectory variableは、時刻ごとのstateやcontrolをまとめて最適化変数として扱う見方で、軌道最適化で「何を動かしているか」を明確にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.variable-domain",
+      "entity_id": "concept.variable-domain",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "変数のdomain",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.smooth-local",
+          "target_type": "content"
+        }
+      ],
+      "summary": "変数のdomainは、最適化で何を動かせるかを決め、使える定式化・solver・保証の範囲を最初に絞る分類です。"
     },
     {
       "aliases": [],
@@ -13099,6 +13616,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
@@ -16894,6 +17416,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S001",
           "target_type": "source"
@@ -20427,6 +20954,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S001",
           "target_type": "source"
@@ -20451,6 +20983,11 @@
           "relation_type": "artifact",
           "target_id": "nelder-mead-quadratic-shifted",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -22190,6 +22727,11 @@
       "label": "Nelder–Meadの幾何操作",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "scenario",
           "target_id": "SCENARIO_NM_QUADRATIC",
           "target_type": "scenario"
@@ -22210,6 +22752,11 @@
       "external_url": null,
       "label": "Nelder–Meadの幾何操作",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "scenario",
           "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",

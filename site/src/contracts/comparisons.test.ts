@@ -8,12 +8,12 @@ describe("case-bound comparison contract", () => {
     const parsed = parseComparisonIndex(rawComparisons);
 
     expect(new Set(parsed.comparisons.map((comparison) => comparison.mode))).toEqual(new Set([
-      "method_contrast", "parameter_sensitivity", "failure_contrast", "result_tradeoff", "strategy_contrast",
+      "method_contrast", "parameter_sensitivity", "initial_condition_sensitivity", "failure_contrast", "result_tradeoff", "strategy_contrast",
     ]));
     expect(new Set(parsed.comparisons.flatMap((comparison) => (
       comparison.members.map((member) => member.artifact.renderer_family)
     )))).toEqual(new Set([
-      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "search_tree", "surrogate_uncertainty",
+      "continuous_trajectory", "feasible_region", "generic_metric_history", "pareto_front", "search_tree", "simplex_geometry", "surrogate_uncertainty",
     ]));
   });
 
@@ -29,6 +29,20 @@ describe("case-bound comparison contract", () => {
     expect(new Set(comparison.members.map((member) => member.role))).toEqual(new Set([
       "reference_acquisition", "acquisition_sensitivity", "noise_sensitivity", "random_baseline",
     ]));
+  });
+
+  test("keeps initial-simplex sensitivity as a non-ranking geometry comparison", () => {
+    const parsed = parseComparisonIndex(rawComparisons);
+    const parsedComparison = parsed.comparisons.find(
+      (comparison) => comparison.comparison_id === "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+    )!;
+
+    expect(parsedComparison.mode).toBe("initial_condition_sensitivity");
+    expect(parsedComparison.ranking_eligible).toBe(false);
+    expect(parsedComparison.budget).toEqual({ metric: "oracle_evaluations", value: 80 });
+    expect(new Set(parsedComparison.members.map((member) => member.artifact.renderer_family))).toEqual(
+      new Set(["simplex_geometry"]),
+    );
   });
 
   test("rejects an unfair member budget", () => {

@@ -473,6 +473,85 @@
     },
     {
       "category": "QP",
+      "context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
+      "context_version": "1.0.0",
+      "dimension": 2,
+      "evaluation_budget": 80,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.nelder_mead.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "initial_simplex_scale": 0.8,
+        "points": [
+          [
+            -2.5,
+            2.0
+          ],
+          [
+            2.4,
+            -2.4
+          ]
+        ],
+        "policy": "member_initial_points"
+      },
+      "last_verified": "2026-07-17",
+      "oracle_budget": {
+        "limit": 80,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "objective",
+        "simplex_diameter",
+        "simplex_vertices",
+        "terminal_status"
+      ],
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+      "problem_variant": "fixed ill-conditioned quadratic for initial-simplex sensitivity",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.nelder_mead.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "sparsity": {
+        "status": "reported",
+        "structure": "diagonal quadratic"
+      },
+      "status_mapping": {
+        "budget_exhausted": "incomplete",
+        "converged": "complete",
+        "error": "failed",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "simplex_tolerance_or_fixed_oracle_budget",
+        "value": 80
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "simplex_tolerance": 0.0001
+      },
+      "tuning_policy": "fixed Nelder-Mead coefficients and simplex scale; only initial point changes"
+    },
+    {
+      "category": "QP",
       "context_id": "BENCH_QP",
       "context_version": "1.0.0",
       "dimension": 2,

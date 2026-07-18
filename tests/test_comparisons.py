@@ -25,6 +25,7 @@ from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_VERSION,
     generate_surrogate_scenario,
 )
+from optimization_compass.traces.generators import generate_nelder_mead_trace
 
 ROOT = Path(__file__).parents[1]
 
@@ -38,6 +39,7 @@ def test_seed_expresses_multiple_modes_and_renderer_families() -> None:
         "failure_contrast",
         "result_tradeoff",
         "strategy_contrast",
+        "initial_condition_sensitivity",
     }
     assert {
         member.artifact.renderer_family
@@ -48,6 +50,7 @@ def test_seed_expresses_multiple_modes_and_renderer_families() -> None:
         "feasible_region",
         "pareto_front",
         "surrogate_uncertainty",
+        "simplex_geometry",
     }
 
 
@@ -120,6 +123,61 @@ def test_hpo_method_reasons_have_direct_canonical_sources() -> None:
     case = next(item for item in gallery["cases"] if item["case_id"] == "hyperparameter-search")
 
     assert {"S002", "S056"} <= set(case["source_ids"])
+
+
+def test_nelder_mead_initial_simplex_comparison_is_a_non_ranking_geometry_contrast() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.16.0")
+    comparison = next(
+        item
+        for item in index.comparisons
+        if item.comparison_id == "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+    )
+
+    assert comparison.mode == "initial_condition_sensitivity"
+    assert comparison.benchmark_context_id == "BENCH_NELDER_MEAD_QUADRATIC_80"
+    assert comparison.comparability == "contrast_only"
+    assert comparison.ranking_eligible is False
+    assert comparison.budget.value == 80
+    assert {member.artifact.renderer_family for member in comparison.members} == {
+        "simplex_geometry"
+    }
+    assert {member.parameters["initial_point"] for member in comparison.members} == {
+        "[-2.5, 2.0]",
+        "[2.4, -2.4]",
+    }
+
+
+def test_nelder_mead_initial_simplex_comparison_matches_its_exact_context() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.16.0")
+    comparison_index = ComparisonIndex(
+        dataset_version=index.dataset_version,
+        comparisons=[
+            comparison
+            for comparison in index.comparisons
+            if comparison.comparison_id == "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+        ],
+    )
+    scenarios = [
+        _visualization_scenario(
+            generate_nelder_mead_trace(
+                dataset_version="0.16.0",
+                problem_instance_id="OBJECTIVE_QUADRATIC_2D",
+                initial_point=initial_point,
+                trace_id=trace_id,
+                scenario_id=scenario_id,
+            )
+        )
+        for initial_point, trace_id, scenario_id in (
+            ([-2.5, 2.0], "nelder-mead-quadratic", "SCENARIO_NM_QUADRATIC"),
+            ([2.4, -2.4], "nelder-mead-quadratic-shifted", "SCENARIO_NM_QUADRATIC_SHIFTED"),
+        )
+    ]
+
+    context = _nelder_mead_context()
+    validate_comparison_benchmark_contexts(comparison_index, [context], scenarios)
+    context["initialization"]["points"][1] = [2.0, -2.0]
+    with pytest.raises(ValueError, match="initial points differ"):
+        validate_comparison_benchmark_contexts(comparison_index, [context], scenarios)
 
 
 def test_budget_allocation_case_matches_the_canonical_knapsack_lesson() -> None:
@@ -317,6 +375,34 @@ def _bo_context() -> dict[str, object]:
         "initialization": {"policy": "fixed_initial_design", "points": [-2.6, 0.0, 2.6]},
         "seed_status": "fixed",
         "seed_value": 2604,
+    }
+
+
+def _nelder_mead_context() -> dict[str, object]:
+    generator = {
+        "implementation_mapping_status": "not_applicable",
+        "generator_id": "educational.nelder_mead.v1",
+        "generator_version": "1.0.0",
+    }
+    return {
+        "context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
+        "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+        "evaluation_budget": 80,
+        "oracle_budget": {"unit": "oracle_evaluations", "limit": 80},
+        "runtime": {
+            "comparison_scope": "exact",
+            "generator_id": "educational.nelder_mead.v1",
+            "generator_version": "1.0.0",
+        },
+        "implementation_versions": generator,
+        "stopping": {"policy": "simplex_tolerance_or_fixed_oracle_budget", "value": 80},
+        "initialization": {
+            "policy": "member_initial_points",
+            "points": [[-2.5, 2.0], [2.4, -2.4]],
+            "initial_simplex_scale": 0.8,
+        },
+        "seed_status": "not_applicable",
+        "seed_value": None,
     }
 
 

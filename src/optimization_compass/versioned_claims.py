@@ -490,6 +490,77 @@ def _benchmark_context_fixtures(
             "last_verified": release_date,
         }
     )
+    nelder_mead_instance = connection.execute(
+        "SELECT source_ids_json FROM problem_instances WHERE problem_instance_id = ?",
+        ("OBJECTIVE_QUADRATIC_2D",),
+    ).fetchone()
+    if nelder_mead_instance is None:
+        raise ValueError("educational Nelder-Mead benchmark instance does not resolve")
+    results.append(
+        {
+            "context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
+            "context_version": "1.0.0",
+            "category": "QP",
+            "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+            "problem_variant": "fixed ill-conditioned quadratic for initial-simplex sensitivity",
+            "dimension": 2,
+            "sparsity_json": _json({"status": "reported", "structure": "diagonal quadratic"}),
+            "hardware_json": _json(
+                {
+                    "status": "not_applicable",
+                    "reason": "deterministic educational generator; no wall-clock comparison",
+                }
+            ),
+            "runtime_json": _json(
+                {
+                    "comparison_scope": "exact",
+                    "runtime": "deterministic_educational_generator",
+                    "generator_id": "educational.nelder_mead.v1",
+                    "generator_version": "1.0.0",
+                    "precision": "float64",
+                }
+            ),
+            "oracle_budget_json": _json({"unit": "oracle_evaluations", "limit": 80}),
+            "evaluation_budget": 80,
+            "time_budget_seconds": None,
+            "tolerance_json": _json({"simplex_tolerance": 0.0001}),
+            "stopping_json": _json(
+                {"policy": "simplex_tolerance_or_fixed_oracle_budget", "value": 80}
+            ),
+            "initialization_json": _json(
+                {
+                    "policy": "member_initial_points",
+                    "points": [[-2.5, 2.0], [2.4, -2.4]],
+                    "initial_simplex_scale": 0.8,
+                }
+            ),
+            "seed_status": "not_applicable",
+            "seed_value": None,
+            "tuning_policy": (
+                "fixed Nelder-Mead coefficients and simplex scale; only initial point changes"
+            ),
+            "implementation_versions_json": _json(
+                {
+                    "implementation_mapping_status": "not_applicable",
+                    "generator_id": "educational.nelder_mead.v1",
+                    "generator_version": "1.0.0",
+                }
+            ),
+            "outcome_metrics_json": _json(
+                ["objective", "simplex_diameter", "simplex_vertices", "terminal_status"]
+            ),
+            "status_mapping_json": _json(
+                {
+                    "converged": "complete",
+                    "budget_exhausted": "incomplete",
+                    "error": "failed",
+                    "ranking": "forbidden",
+                }
+            ),
+            "source_ids_json": str(nelder_mead_instance["source_ids_json"]),
+            "last_verified": release_date,
+        }
+    )
     return results
 
 

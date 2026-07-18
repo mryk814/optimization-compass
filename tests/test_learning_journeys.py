@@ -73,7 +73,7 @@ def test_parameter_estimation_journey_connects_primary_sensitivity_and_compariso
     }
 
 
-def test_expensive_black_box_journey_reuses_bo_scenarios_and_comparison() -> None:
+def test_expensive_black_box_journey_reuses_bo_scenarios_and_related_comparisons() -> None:
     index = load_index()
     journey = next(item for item in index.journeys if item.journey_id == "hyperparameter-search")
 
@@ -88,7 +88,8 @@ def test_expensive_black_box_journey_reuses_bo_scenarios_and_comparison() -> Non
     )
     assert {item.role for item in journey.scenarios} == {"primary", "sensitivity"}
     assert {item.comparison_id for item in journey.comparisons} == {
-        "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+        "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
     }
     assessment = next(
         item for item in index.assessments if item.journey_id == "hyperparameter-search"

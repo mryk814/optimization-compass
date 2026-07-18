@@ -23,7 +23,7 @@ import {
   parseSurrogateUncertaintyPayload,
   type SurrogateUncertaintyPayload,
 } from "../../contracts/surrogate-uncertainty";
-import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame } from "../../contracts/trace";
+import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame, type TracePoint } from "../../contracts/trace";
 import {
   parseVisualizationScenarioIndex,
   type VisualizationScenario,
@@ -63,6 +63,10 @@ type LoadedBase = {
 };
 type Loaded = LoadedBase & ({
   renderer: "trajectory";
+  traces: AlgorithmTrace[];
+  scenarios: VisualizationScenario[];
+} | {
+  renderer: "simplex";
   traces: AlgorithmTrace[];
   scenarios: VisualizationScenario[];
 } | {
@@ -157,6 +161,8 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
       <ComparisonContract comparison={comparison} />
       {loaded.renderer === "trajectory" ? (
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+      ) : loaded.renderer === "simplex" ? (
+        <SimplexGeometryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "metric-history" ? (
         <MetricHistoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "surrogate" ? (
@@ -328,6 +334,184 @@ function TrajectoryComparison({ comparison, traces, scenarios }: { comparison: C
       </p>
     </>
   );
+}
+
+function SimplexGeometryComparison({ comparison, traces, scenarios }: { comparison: ComparisonSet; traces: AlgorithmTrace[]; scenarios: VisualizationScenario[] }) {
+  const timeline = useMemo(() => {
+    const template = traces[0].frames[0];
+    const firstEvaluation = Math.min(...traces.map((trace) => trace.frames[0].oracle_evaluations));
+    return Array.from({ length: comparison.budget.value - firstEvaluation + 1 }, (_, offset) => {
+      const evaluation = firstEvaluation + offset;
+      return {
+      ...template,
+      frame_index: evaluation,
+      iteration: evaluation,
+      oracle_evaluations: evaluation,
+      elapsed_steps: evaluation,
+      elapsed_time_ms: evaluation * 120,
+      event_type: evaluation === 0 ? "initialize" : "comparison-tick",
+      event_label_ja: evaluation === firstEvaluation ? "比較を開始" : "初期simplexを同期比較",
+      event_label_en: evaluation === firstEvaluation ? "Start comparison" : "Align initial-simplex comparison",
+      };
+    });
+  }, [comparison.budget.value, traces]);
+  const playback = usePlayback(comparison.comparison_id, timeline);
+  const evaluation = playback.currentFrame.oracle_evaluations;
+  const spec = useMemo(() => objectivePlotSpec(traces[0].objective), [traces]);
+  const contours = useMemo(() => contourSegments(spec, 22, 18), [spec]);
+  return (
+    <>
+      <ScenarioLessonPanel scenario={scenarios[0]} />
+      <PlaybackControls playback={playback} />
+      <div className="comparison-grid simplex-comparison-grid">
+        {traces.map((trace, index) => (
+          <SimplexComparisonMemberCard
+            comparisonMember={comparison.members.find((member) => member.artifact.artifact_id === trace.trace_id)!}
+            contours={contours}
+            evaluation={evaluation}
+            key={trace.trace_id}
+            scenario={scenarios[index]}
+            spec={spec}
+            trace={trace}
+          />
+        ))}
+      </div>
+      <ObjectiveHistory comparison={comparison} evaluation={evaluation} traces={traces} />
+      <p className="atlas-note comparison-ranking-warning">
+        これは初期条件の教育用contrastです。どちらが一般に速い・頑健とは判定せず、同じevaluation時点で単体の位置と操作を読みます。
+      </p>
+    </>
+  );
+}
+
+function SimplexComparisonMemberCard({
+  comparisonMember,
+  contours,
+  evaluation,
+  scenario,
+  spec,
+  trace,
+}: {
+  comparisonMember: ComparisonMember;
+  contours: ReturnType<typeof contourSegments>;
+  evaluation: number;
+  scenario: VisualizationScenario;
+  spec: ObjectivePlotSpec;
+  trace: AlgorithmTrace;
+}) {
+  const frame = latestFrame(trace.frames, evaluation);
+  const vertices = frame ? rankedSimplexVertices(frame) : [];
+  const centroid = frame?.points.find((point) => point.role === "centroid");
+  const candidate = frame?.points.find((point) => point.role === "trial-point");
+  const operation = frame?.vectors.find((vector) => vector.role === "movement");
+  const best = vertices[0]?.point;
+  const initial = initialPoint(trace);
+  return (
+    <article className="comparison-card simplex-comparison-card">
+      <header>
+        <div><h2>{comparisonMember.label_ja}</h2><small>{comparisonMember.label_en}</small></div>
+        <span>{trace.terminal_status}</span>
+      </header>
+      <p className="method-parameters">{parameterText(comparisonMember.parameters)}</p>
+      <p className="comparison-event">
+        {frame ? `${frame.event_label_ja ?? frame.event_type} · evaluation ${frame.oracle_evaluations}` : "evaluation 0 · 未評価"}
+      </p>
+      <figure className="explanatory-figure comparison-figure">
+        <svg
+          className={`comparison-plot simplex-comparison-plot operation-${frame?.event_type ?? "initialize"}`}
+          viewBox="0 0 300 194"
+          role="img"
+          aria-label={`${comparisonMember.label_ja}の等高線、simplex頂点、重心、候補点`}
+        >
+          <defs>
+            <marker id={`simplex-operation-arrow-${comparisonMember.member_id}`} markerHeight="7" markerWidth="7" orient="auto" refX="6" refY="3.5">
+              <path d="M0,0 L7,3.5 L0,7 z" className="nm-arrow-head" />
+            </marker>
+          </defs>
+          <rect className="objective-background" x="0" y="0" width="300" height="194" rx="8" />
+          <g className="objective-contours" aria-hidden="true">
+            {contours.map((segment, index) => <line key={`${segment.level}-${index}`}
+              x1={mapX(segment.start.x, spec.bounds, trajectoryPlot.left, trajectoryPlot.right)}
+              y1={mapY(segment.start.y, spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)}
+              x2={mapX(segment.end.x, spec.bounds, trajectoryPlot.left, trajectoryPlot.right)}
+              y2={mapY(segment.end.y, spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)} />)}
+          </g>
+          <line className="plot-axis" x1={trajectoryPlot.left} x2={trajectoryPlot.right} y1={trajectoryPlot.bottom} y2={trajectoryPlot.bottom} />
+          <line className="plot-axis" x1={trajectoryPlot.left} x2={trajectoryPlot.left} y1={trajectoryPlot.top} y2={trajectoryPlot.bottom} />
+          <g className="nm-initial-marker"><circle cx={mapX(initial[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right)} cy={mapY(initial[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)} r="4" /><text x={mapX(initial[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right) + 6} y={mapY(initial[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom) - 5}>start</text></g>
+          {vertices.length === 3 && <polygon className="nm-simplex" points={vertices.map(({ point }) => simplexCoordinates(point, spec)).join(" ")} />}
+          {operation && <line className="nm-operation-vector" markerEnd={`url(#simplex-operation-arrow-${comparisonMember.member_id})`}
+            x1={mapX(operation.origin[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right)} y1={mapY(operation.origin[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)}
+            x2={mapX(operation.origin[0] + operation.components[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right)} y2={mapY(operation.origin[1] + operation.components[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)} />}
+          {vertices.map((vertex) => <SimplexVertexMarker key={vertex.point.point_id} spec={spec} vertex={vertex} />)}
+          {centroid && <SimplexCentroidMarker point={centroid} spec={spec} />}
+          {candidate && <SimplexCandidateMarker accepted={frame?.decision === "accepted"} point={candidate} spec={spec} />}
+        </svg>
+        <figcaption>{simplexSummary(frame, vertices, centroid, candidate)}</figcaption>
+      </figure>
+      <dl className="comparison-metrics">
+        <div><dt>best f(x)</dt><dd>{frame ? objectiveMetric(frame) : "未評価"}</dd></div>
+        <div><dt>simplex diameter</dt><dd>{simplexDiameter(vertices).toFixed(3)}</dd></div>
+        <div><dt>best vertex</dt><dd>{best ? best.coordinates.map((value) => value.toFixed(3)).join(", ") : "未評価"}</dd></div>
+      </dl>
+      <ObjectiveGoalCues
+        bestValue={bestSoFarValue(trace.frames, evaluation)}
+        currentPoint={best?.coordinates}
+        initialPoint={initial}
+        knownReferenceDisplay={scenario.lesson.known_reference_display}
+        objective={trace.objective}
+        terminalReason={trace.terminal_summary_ja}
+      />
+    </article>
+  );
+}
+
+type RankedSimplexVertex = { point: TracePoint; rank: "best" | "second-worst" | "worst" };
+
+function rankedSimplexVertices(frame: TraceFrame): RankedSimplexVertex[] {
+  return frame.points
+    .filter((point): point is TracePoint & { value: number } => point.role === "simplex-vertex" && point.value !== null)
+    .sort((left, right) => left.value - right.value)
+    .map((point, index) => ({ point, rank: index === 0 ? "best" : index === 1 ? "second-worst" : "worst" }));
+}
+
+function simplexCoordinates(point: TracePoint, spec: ObjectivePlotSpec): string {
+  return `${mapX(point.coordinates[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right)},${mapY(point.coordinates[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom)}`;
+}
+
+function SimplexVertexMarker({ spec, vertex }: { spec: ObjectivePlotSpec; vertex: RankedSimplexVertex }) {
+  const x = mapX(vertex.point.coordinates[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right);
+  const y = mapY(vertex.point.coordinates[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom);
+  const label = vertex.rank === "best" ? "B" : vertex.rank === "second-worst" ? "S" : "W";
+  return <g className={`nm-vertex nm-vertex-${vertex.rank}`}>
+    {vertex.rank === "best" ? <circle cx={x} cy={y} r="5" /> : vertex.rank === "second-worst" ? <rect x={x - 4.5} y={y - 4.5} width="9" height="9" /> : <polygon points={`${x},${y - 6} ${x - 6},${y + 5} ${x + 6},${y + 5}`} />}
+    <text x={x + 7} y={y - 6}>{label}</text>
+  </g>;
+}
+
+function SimplexCentroidMarker({ point, spec }: { point: TracePoint; spec: ObjectivePlotSpec }) {
+  const x = mapX(point.coordinates[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right);
+  const y = mapY(point.coordinates[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom);
+  return <g className="nm-centroid"><line x1={x - 4} x2={x + 4} y1={y} y2={y} /><line x1={x} x2={x} y1={y - 4} y2={y + 4} /></g>;
+}
+
+function SimplexCandidateMarker({ accepted, point, spec }: { accepted: boolean; point: TracePoint; spec: ObjectivePlotSpec }) {
+  const x = mapX(point.coordinates[0], spec.bounds, trajectoryPlot.left, trajectoryPlot.right);
+  const y = mapY(point.coordinates[1], spec.bounds, trajectoryPlot.top, trajectoryPlot.bottom);
+  return <g className={`nm-candidate ${accepted ? "candidate-accepted" : "candidate-rejected"}`}><polygon points={`${x},${y - 5} ${x + 5},${y} ${x},${y + 5} ${x - 5},${y}`} /></g>;
+}
+
+function simplexDiameter(vertices: readonly RankedSimplexVertex[]): number {
+  return Math.max(0, ...vertices.flatMap((vertex, index) => vertices.slice(index + 1).map((other) => Math.hypot(
+    vertex.point.coordinates[0] - other.point.coordinates[0],
+    vertex.point.coordinates[1] - other.point.coordinates[1],
+  ))));
+}
+
+function simplexSummary(frame: TraceFrame | undefined, vertices: readonly RankedSimplexVertex[], centroid: TracePoint | undefined, candidate: TracePoint | undefined): string {
+  if (!frame) return "まだ評価されていません。";
+  const best = vertices[0]?.point;
+  return `${frame.event_label_ja ?? frame.event_type}。best ${best ? `(${best.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "未評価"}、simplex diameter ${simplexDiameter(vertices).toFixed(3)}、重心 ${centroid ? `(${centroid.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "なし"}、候補点 ${candidate ? `(${candidate.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "なし"}。`;
 }
 
 function ScenarioComparison({ artifact, comparison, scenario }: { artifact: LearningSliceArtifact; comparison: ComparisonSet; scenario: VisualizationScenario }) {
@@ -705,7 +889,7 @@ function ObjectiveHistory({
   return (
     <figure className="objective-history explanatory-figure">
       <h2>目的値 vs oracle evaluations</h2>
-      <svg viewBox="0 0 760 216" role="img" aria-label="3手法の目的関数値を同じoracle evaluation軸で比較">
+      <svg viewBox="0 0 760 216" role="img" aria-label={`${traces.length}件のmemberの目的関数値を同じoracle evaluation軸で比較`}>
         <rect className="objective-background" x="0" y="0" width="760" height="216" rx="8" />
         <line className="plot-axis" x1={historyPlot.left} x2={historyPlot.right} y1={historyPlot.bottom} y2={historyPlot.bottom} />
         <line className="plot-axis" x1={historyPlot.left} x2={historyPlot.left} y1={historyPlot.top} y2={historyPlot.bottom} />
@@ -761,10 +945,11 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
   );
   if (!comparison) throw new EntityNotFoundError("比較ID", comparisonId);
   const families = new Set(comparison.members.map((member) => member.artifact.renderer_family));
+  const isSimplexComparison = families.size === 1 && families.has("simplex_geometry");
   const isTraceComparison = [...families].every((family) => (
     family === "continuous_trajectory" || family === "generic_metric_history"
   ));
-  if (isTraceComparison) {
+  if (isTraceComparison || isSimplexComparison) {
     const traces = await Promise.all(comparison.members.map(async (member) => {
       const traceResponse = await fetch(`${siteBaseUrl()}data/${member.artifact.payload_path}`, { signal });
       if (!traceResponse.ok) throw new Error(`Trace request failed (${traceResponse.status}).`);
@@ -787,7 +972,7 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
     return {
       comparison,
       comparisons: index.comparisons,
-      renderer: families.has("generic_metric_history") ? "metric-history" : "trajectory",
+      renderer: isSimplexComparison ? "simplex" : families.has("generic_metric_history") ? "metric-history" : "trajectory",
       traces,
       scenarios,
     };

@@ -164,7 +164,8 @@
       ],
       "case_id": "hyperparameter-search",
       "comparison_ids": [
-        "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+        "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
       ],
       "conditional_methods": [
         {
