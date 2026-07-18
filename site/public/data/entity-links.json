@@ -3420,6 +3420,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.uncertainty-models",
+      "entity_id": "concept.uncertainty-models",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "不確実性モデル・リスク・保証範囲",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.expensive-black-box",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.stochastic-ml",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.variable-domain",
       "entity_id": "concept.variable-domain",
       "entity_type": "content",
