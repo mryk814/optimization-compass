@@ -141,10 +141,18 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     educational_knapsack = next(
         row for row in contexts if row["context_id"] == "BENCH_KNAPSACK_BNB_EDUCATIONAL_9"
     )
+    educational_nelder_mead = next(
+        row for row in contexts if row["context_id"] == "BENCH_NELDER_MEAD_QUADRATIC_80"
+    )
     assert all(
         comparison_eligibility(dict(row)).ranking_eligible
         for row in contexts
-        if row["context_id"] not in {"BENCH_BO_EDUCATIONAL_10", "BENCH_KNAPSACK_BNB_EDUCATIONAL_9"}
+        if row["context_id"]
+        not in {
+            "BENCH_BO_EDUCATIONAL_10",
+            "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+            "BENCH_NELDER_MEAD_QUADRATIC_80",
+        }
     )
     assert comparison_eligibility(dict(educational_bo)) == ComparisonEligibility(
         False, "context_forbids_ranking"
@@ -164,6 +172,12 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     assert comparison_eligibility(dict(educational_knapsack)) == ComparisonEligibility(
         False, "context_forbids_ranking"
     )
+    assert comparison_eligibility(dict(educational_nelder_mead)) == ComparisonEligibility(
+        False, "context_forbids_ranking"
+    )
+    assert educational_nelder_mead["problem_instance_id"] == "OBJECTIVE_QUADRATIC_2D"
+    assert educational_nelder_mead["evaluation_budget"] == 80
+    assert educational_nelder_mead["seed_value"] is None
     assert educational_knapsack["problem_instance_id"] == "INSTANCE_BINARY_KNAPSACK_4"
     assert educational_knapsack["evaluation_budget"] == 9
     assert educational_knapsack["seed_value"] == 0

@@ -143,6 +143,76 @@
       ]
     },
     {
+      "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+      "aliases": ["COMPARE_NM_INITIAL_SIMPLEX"],
+      "mode": "initial_condition_sensitivity",
+      "journey_id": "hyperparameter-search",
+      "case_id": "hyperparameter-search",
+      "problem_definition_id": "PROBLEM_QUADRATIC_CONTINUOUS",
+      "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+      "benchmark_context_id": "BENCH_NELDER_MEAD_QUADRATIC_80",
+      "title_ja": "初期simplexでNelder–Meadの経路を読む",
+      "title_en": "Read Nelder-Mead paths from the initial simplex",
+      "comparison_question": "目的・係数・評価予算を固定し、初期simplexの位置だけを変えると、反射・収縮と目的値の経路はどう変わる？",
+      "formulation_summary": "f(x, y) = 100x² + y² を、同じNelder–Mead係数とsimplex scale=0.8で最小化する。",
+      "fixed_factors": [
+        "目的関数 f(x, y) = 100x² + y²",
+        "Nelder–Mead係数 α=1, γ=2, ρ=0.5, σ=0.5",
+        "initial simplex scale 0.8",
+        "oracle evaluation budget 80",
+        "simplex tolerance 1e-4"
+      ],
+      "changed_factors": ["初期simplexの位置"],
+      "seed_policy": "deterministic / not applicable",
+      "budget": {"metric": "oracle_evaluations", "value": 80},
+      "stopping_policy": "simplex tolerance <= 1e-4 or 80 oracle evaluations",
+      "tuning_policy": "係数とscaleを事前固定し、run後に調整しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "objective", "label_ja": "best objective", "direction": "minimize", "unit": "objective value"},
+        {"metric_id": "simplex_diameter", "label_ja": "simplex diameter", "direction": "minimize", "unit": "decision-coordinate distance"},
+        {"metric_id": "position", "label_ja": "best vertex", "direction": "none", "unit": "decision coordinates"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。",
+      "caveat": "初期条件の感度を読む教育用contrastです。2つの開始位置がこの二次目的で収束したことは、別の目的や次元での頑健性・速度・手法順位を示しません。",
+      "takeaway": "頂点・重心・候補点を同じevaluationで追うと、同じ更新則でも初期simplexが探索する領域と操作列を変えることが分かります。",
+      "limitations": [
+        "決定的な2次元二次目的と2つの固定開始位置だけを扱う。",
+        "wall-clock、関数評価の不均一コスト、大域的なbasin、実装差を比較しない。"
+      ],
+      "source_ids": ["S001", "S002"],
+      "last_verified": "2026-07-18",
+      "members": [
+        {
+          "member_id": "standard-initial-simplex",
+          "role": "reference_initial_condition",
+          "method_id": "M_NELDER_MEAD",
+          "scenario_id": "SCENARIO_NM_QUADRATIC",
+          "label_ja": "標準の初期simplex",
+          "label_en": "Standard initial simplex",
+          "parameters": {"initial_point": "[-2.5, 2.0]", "initial_simplex_scale": 0.8},
+          "budget": {"metric": "oracle_evaluations", "value": 80},
+          "artifact": {"artifact_id": "nelder-mead-quadratic", "artifact_kind": "executable_trace", "renderer_family": "simplex_geometry", "renderer_contract_version": "1.0.0", "payload_path": "traces/nelder-mead-quadratic.json"}
+        },
+        {
+          "member_id": "shifted-initial-simplex",
+          "role": "initial_condition_sensitivity",
+          "method_id": "M_NELDER_MEAD",
+          "scenario_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+          "label_ja": "移動した初期simplex",
+          "label_en": "Shifted initial simplex",
+          "parameters": {"initial_point": "[2.4, -2.4]", "initial_simplex_scale": 0.8},
+          "budget": {"metric": "oracle_evaluations", "value": 80},
+          "artifact": {"artifact_id": "nelder-mead-quadratic-shifted", "artifact_kind": "executable_trace", "renderer_family": "simplex_geometry", "renderer_contract_version": "1.0.0", "payload_path": "traces/nelder-mead-quadratic-shifted.json"}
+        }
+      ]
+    },
+    {
       "comparison_id": "COMPARE_CONSTRAINED_FAILURE",
       "canonical_url": "/compare/COMPARE_CONSTRAINED_FAILURE",
       "identity_status": "canonical",

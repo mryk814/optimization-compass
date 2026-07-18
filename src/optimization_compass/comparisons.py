@@ -22,6 +22,7 @@ from optimization_compass.visualization_scenarios import VisualizationScenario
 _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "search_tree": (SEARCH_TREE_GENERATOR_ID, SEARCH_TREE_GENERATOR_VERSION),
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
+    "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER = {
     "search_tree": {
@@ -45,6 +46,7 @@ RendererFamily = Literal[
     "generic_metric_history",
     "search_tree",
     "surrogate_uncertainty",
+    "simplex_geometry",
     "feasible_region",
     "pareto_front",
 ]
@@ -82,6 +84,7 @@ class ComparisonArtifact(ComparisonModel):
                 "generic_metric_history",
                 "search_tree",
                 "surrogate_uncertainty",
+                "simplex_geometry",
                 "feasible_region",
             }
             and self.artifact_kind != "executable_trace"
@@ -283,8 +286,14 @@ def _validate_exact_comparison_context(
         runtime.get("generator_version"),
     ) != next(iter(expected_generators)):
         raise ValueError("educational comparison context uses an unknown generator")
-    if context.get("seed_status") != "fixed" or context.get("seed_value") is None:
-        raise ValueError("exact educational comparison context requires one fixed seed")
+    if context.get("seed_status") == "fixed" and context.get("seed_value") is None:
+        raise ValueError("fixed educational comparison context requires a seed value")
+    if context.get("seed_status") == "not_applicable" and context.get("seed_value") is not None:
+        raise ValueError(
+            "seed-not-applicable educational comparison context must omit a seed value"
+        )
+    if context.get("seed_status") not in {"fixed", "not_applicable"}:
+        raise ValueError("exact educational comparison context has an unsupported seed status")
     if len(renderer_families) != 1:
         raise ValueError("exact educational comparison must use one renderer family")
     expected_initialization = _EDUCATIONAL_INITIALIZATION_BY_RENDERER.get(
@@ -295,6 +304,9 @@ def _validate_exact_comparison_context(
     ):
         raise ValueError("exact benchmark initialization differs from canonical generator")
     initial_points = initialization.get("points")
+    member_initial_points = initialization.get("policy") == "member_initial_points"
+    if member_initial_points and not isinstance(initial_points, list):
+        raise ValueError("member-initial-point comparison context requires points")
     member_parameter = runtime.get("member_parameter")
     expected_member_values = stopping.get("member_values")
     observed_member_values: list[object] = []
@@ -325,7 +337,10 @@ def _validate_exact_comparison_context(
             or scenario.experiment.budget.value != context["evaluation_budget"]
             or scenario.experiment.seed.status != context["seed_status"]
             or scenario.experiment.seed.value != context["seed_value"]
-            or scenario.experiment.initial_condition.point != initial_points
+            or (
+                not member_initial_points
+                and scenario.experiment.initial_condition.point != initial_points
+            )
             or run.implementation_mapping_status != implementation["implementation_mapping_status"]
         ):
             raise ValueError(f"comparison member differs from exact context: {member.member_id}")
@@ -336,6 +351,19 @@ def _validate_exact_comparison_context(
                 raise ValueError(
                     f"comparison member stop limit differs from scenario: {member.member_id}"
                 )
+    if member_initial_points:
+        observed_initial_points = [
+            scenario.experiment.initial_condition.point
+            for member in comparison.members
+            if (scenario := scenarios_by_id.get(member.scenario_id)) is not None
+        ]
+        if sorted(
+            json.dumps(point, ensure_ascii=False, separators=(",", ":"))
+            for point in observed_initial_points
+        ) != sorted(
+            json.dumps(point, ensure_ascii=False, separators=(",", ":")) for point in initial_points
+        ):
+            raise ValueError("comparison member initial points differ from exact context")
     if isinstance(member_parameter, str) and sorted(
         json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         for value in observed_member_values
