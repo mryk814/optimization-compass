@@ -6,8 +6,8 @@ title_ja: Direct Multiple Shooting
 title_en: Direct Multiple Shooting
 summary: 時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。
 source_ids: [S042, S043, S050, S076]
-prerequisites: []
-related_ids: [direct-shooting, direct-collocation, sqp]
+prerequisites: [concept.trajectory-variable, concept.dynamics-defect, concept.time-discretization]
+related_ids: [concept.path-terminal-constraints, concept.receding-horizon, direct-shooting, direct-collocation, sqp]
 aliases: [/learn/multiple-shooting]
 status: published
 last_reviewed: 2026-07-18
@@ -149,3 +149,7 @@ print(result.success, result.x, np.linalg.norm(continuity_constraints(result.x))
 - solver時間がreal-time deadlineを超える
 
 single shootingとの違いは[Direct Shooting](#/learn/direct-shooting)、状態を多項式近似で扱う定式化は[Direct Collocation](#/learn/direct-collocation)、生成される制約付きNLPの解き方は[SQP](#/learn/sqp)で確認できます。
+
+## 次に読む
+
+[trajectory variable](#/learn/concept.trajectory-variable)でsegmentごとのstateとcontrolを確認し、[dynamics defect](#/learn/concept.dynamics-defect)でcontinuity constraintを残差として読みます。[時間discretization](#/learn/concept.time-discretization)でsegment幅と積分器の影響を確認したら、path制約をmesh全体へ置く[Direct Collocation](#/learn/direct-collocation)と比較します。ロボットの長いhorizonや不安定なdynamicsを読むときは、segment分割が感度と初期軌道にどう効いたかを先に記録します。

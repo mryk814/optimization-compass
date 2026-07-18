@@ -6,7 +6,8 @@ title_ja: Direct Shooting
 title_en: Direct Shooting
 summary: 時間ごとのcontrolを最適化変数にし、初期状態からdynamicsを前進simulationして得たtrajectoryのcostと制約を改善する最適制御法です。
 source_ids: [S042, S043, S050, S076]
-related_ids: [direct-collocation]
+prerequisites: [concept.trajectory-variable, concept.time-discretization]
+related_ids: [concept.dynamics-defect, concept.path-terminal-constraints, concept.receding-horizon, direct-collocation]
 status: published
 last_reviewed: 2026-07-18
 ---
@@ -126,3 +127,7 @@ print(result.success, rollout(result.x)[-1], result.fun)
 Direct Collocationはstateもdecision variableにし、dynamics defectをconstraintとして課します。変数は増えますが、長いhorizonやpath constraintで疎構造を使いやすくなります。
 
 [Direct Collocation](#/learn/direct-collocation)と、変数数だけでなくrollout安定性、defect、sparsity、warm startで比較してください。
+
+## 次に読む
+
+まず[trajectory variable](#/learn/concept.trajectory-variable)でcontrol列とrolloutされたstate列を分けて読み、[時間discretization](#/learn/concept.time-discretization)でcontrolの保持方法とstep sizeを確認します。path制約やterminal conditionが主役なら[path・terminal制約](#/learn/concept.path-terminal-constraints)、horizonが長くrollout感度が問題なら[Direct Multiple Shooting](#/learn/multiple-shooting)へ切り替えます。観測ごとに先頭のcontrolだけを使う運用は[receding horizon](#/learn/concept.receding-horizon)で確認します。
