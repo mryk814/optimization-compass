@@ -4,7 +4,7 @@ kind: method
 method_id: M_ADAM
 title_ja: Adam
 title_en: Adam
-summary: 勾配の一次momentと二次momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
+summary: 勾配の一次モーメント（first moment）と二次モーメント（second moment）を座標ごとに推定し、初期値による偏りの補正（bias correction）付きの適応的なstepでパラメータ（parameter）を更新する確率的一次法です。
 source_ids: [S047, S048, S049, S070]
 prerequisites: [method.gradient-descent]
 related_ids: [momentum-sgd, method.gradient-descent, bfgs]
@@ -15,11 +15,19 @@ status: published
 last_reviewed: 2026-07-16
 ---
 
-勾配の一次momentと二次momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
+勾配の一次モーメント（first moment）と二次モーメント（second moment）を座標ごとに推定し、初期値による偏りの補正（bias correction）付きの適応的なstepでパラメータ（parameter）を更新する確率的一次法です。
 
-## 更新状態
+## 30秒でつかむ
 
-時刻 $t$ のgradientを $g_t$ とすると、Adamは概ね
+Adamは、勾配の向きを一次モーメントで平滑化し、座標ごとの勾配scaleを二次モーメントで見積もって、適応的なstepを作ります。
+
+- **見るもの**: 目的関数値、勾配、一次モーメントと二次モーメント、適応的なstep
+- **動かすもの**: 現在のパラメータ、moment state、global learning rate
+- **前進の判断**: 目的関数値またはvalidation metricが改善し、gradient normとupdate normが安定して小さくなること
+
+## 仕組み
+
+時刻 $t$ の勾配（gradient）を $g_t$ とすると、Adamは概ね
 
 $$
 m_t=\beta_1m_{t-1}+(1-\beta_1)g_t
@@ -37,19 +45,29 @@ $$
 
 と進みます。
 
-$m_t$は方向の平滑化、$v_t$は座標ごとのgradient scaleを表します。
+$m_t$ は方向の平滑化、$v_t$ は座標ごとのgradient scaleを表します。
 
-## 「自動でlearning rateを決める」わけではない
+## まず確認すること
 
-Adamは座標ごとのstepを正規化しますが、global learning rate $\eta$、schedule、$\beta_1$、$\beta_2$、$\epsilon$は依然として重要です。さらに、
+Adamは座標ごとのstepを正規化しますが、自動的にlearning rateを決めるわけではありません。全体のlearning rate（global learning rate）$\eta$、schedule、$\beta_1$、$\beta_2$、$\epsilon$は依然として重要です。
 
-- coupled L2 penalty
-- decoupled weight decay
+さらに、次のvariantによって挙動が変わります。
+
+- 損失に加えるL2 penalty（coupled L2 penalty）
+- 分離したweight decay（decoupled weight decay）
 - AMSGrad
 - clipping
 - mixed precision
 
 などのvariantで挙動が変わります。
+
+## 向いている条件
+
+- stochastic gradientを使う大規模学習
+- 座標ごとのgradient scaleが違う
+- sparseまたはnonstationaryなgradient
+- 初期の実用的なbaselineを早く作りたい
+- exactな局所最適化よりtraining budgetが支配的
 
 ## Python
 
@@ -99,23 +117,6 @@ print(x, np.linalg.norm(gradient(x)))
 
 training lossだけ下がりvalidationが悪化する場合、optimizerの停止条件とmodel generalizationを分けて考えます。
 
-## 向いている条件
-
-- stochastic gradientを使う大規模学習
-- 座標ごとのgradient scaleが違う
-- sparseまたはnonstationaryなgradient
-- 初期の実用的なbaselineを早く作りたい
-- exactな局所最適化よりtraining budgetが支配的
-
-## Momentum SGDとの比較
-
-- Adamは座標ごとの二次momentでscaleを変える
-- Momentumは一つのvelocityを蓄積する
-- Adamの初期改善が速くても、最終generalizationが常に優れるとは限らない
-- weight decay実装の違いを揃える
-
-同じepoch数ではなく、batch order、update count、schedule、regularization、seedを揃えます。
-
 ## 失敗・切替の兆候
 
 - learning rateが大きくlossが不安定
@@ -129,3 +130,16 @@ training lossだけ下がりvalidationが悪化する場合、optimizerの停止
 ::: warning
 Adamの適応stepは、最適性certificateや大域保証ではありません。終了時のstatusはbudget、gradient、validation、再現性を含めて報告します。
 :::
+
+## コラム: Momentum SGDとの比較
+
+- Adamは座標ごとの二次momentでscaleを変える
+- Momentumは一つのvelocityを蓄積する
+- Adamの初期改善が速くても、最終generalizationが常に優れるとは限らない
+- weight decay実装の違いを揃える
+
+同じepoch数ではなく、batch order、update count、schedule、regularization、seedを揃えます。
+
+## 次に読む
+
+[勾配降下法](#/learn/gradient-descent)で一次法の基本的なstepを確認し、座標ごとのscale調整や確率勾配での挙動をAdamと比較します。
