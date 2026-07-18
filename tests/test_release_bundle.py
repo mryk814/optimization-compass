@@ -26,8 +26,8 @@ def staged_release(tmp_path_factory: pytest.TempPathFactory) -> Path:
     return build_staged_release(
         BASE_DATABASE,
         root / "staged",
-        target_version="0.3.0",
-        release_date="2026-07-14",
+        target_version="0.15.2",
+        release_date="2026-07-18",
     ).output_directory
 
 
@@ -38,13 +38,13 @@ def test_complete_bundle_is_byte_deterministic_and_self_verifying(
         staged_release,
         tmp_path / "first",
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     )
     second = build_release_bundle(
         staged_release,
         tmp_path / "second",
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     )
 
     assert first.sha256 == second.sha256
@@ -58,7 +58,7 @@ def test_bundle_verification_rejects_tampered_member(staged_release: Path, tmp_p
         staged_release,
         tmp_path / "original",
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     ).path
     tampered = tmp_path / "tampered.zip"
     with (
@@ -82,7 +82,7 @@ def test_bundle_verification_binds_index_to_canonical_manifest(
         staged_release,
         tmp_path / "original-manifest",
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     ).path
     tampered = tmp_path / "manifest-substitution.zip"
     with (
@@ -106,7 +106,7 @@ def test_bundle_write_failure_removes_partial_archive_and_allows_retry(
     staged_release: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     output = tmp_path / "write-failure"
-    archive = output / "optimization_method_selection_database_v0.3.0_bundle.zip"
+    archive = output / "optimization_method_selection_database_v0.15.2_bundle.zip"
     real_write = release_bundle_module._write_zip_member
     writes = 0
 
@@ -128,7 +128,7 @@ def test_bundle_write_failure_removes_partial_archive_and_allows_retry(
             staged_release,
             output,
             source_commit=SOURCE_COMMIT,
-            tag="v0.3.0",
+            tag="v0.15.2",
         )
     assert not archive.exists()
 
@@ -137,7 +137,7 @@ def test_bundle_write_failure_removes_partial_archive_and_allows_retry(
         staged_release,
         output,
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     )
     assert retried.path == archive
     assert verify_release_bundle(archive) == retried
@@ -146,8 +146,8 @@ def test_bundle_write_failure_removes_partial_archive_and_allows_retry(
 @pytest.mark.parametrize(
     ("source_commit", "tag", "message"),
     [
-        ("short", "v0.3.0", "source commit"),
-        (SOURCE_COMMIT, "dataset-v0.3.0", "release tag"),
+        ("short", "v0.15.2", "source commit"),
+        (SOURCE_COMMIT, "dataset-v0.15.2", "release tag"),
     ],
 )
 def test_bundle_build_requires_explicit_unambiguous_source_identity(
@@ -171,7 +171,7 @@ def test_bundle_verification_rejects_corrupt_zip(staged_release: Path, tmp_path:
         staged_release,
         tmp_path / "valid",
         source_commit=SOURCE_COMMIT,
-        tag="v0.3.0",
+        tag="v0.15.2",
     ).path
     corrupt = tmp_path / "corrupt.zip"
     shutil.copy2(bundle, corrupt)
@@ -187,7 +187,7 @@ def test_bundle_build_rejects_output_inside_repository(staged_release: Path) -> 
             staged_release,
             ROOT / ".release-bundle-test",
             source_commit=SOURCE_COMMIT,
-            tag="v0.3.0",
+            tag="v0.15.2",
         )
 
 
@@ -208,10 +208,10 @@ def test_preverified_bundle_uses_shared_guard_with_the_explicit_repository_root(
         release_bundle_module._build_preverified_release_bundle(
             tmp_path / "release-tree",
             output,
-            version="0.3.0",
+            version="0.15.2",
             release_date="2026-07-17",
             source_commit=SOURCE_COMMIT,
-            tag="v0.3.0",
+            tag="v0.15.2",
             manifest_path=tmp_path / "release-tree/manifest.json",
             repository_root=repository_root,
         )
