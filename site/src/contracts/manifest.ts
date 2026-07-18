@@ -44,7 +44,7 @@ export interface SiteLicenseManifest {
 }
 
 export interface SiteManifest {
-  version: "1.3.0";
+  version: "1.4.0";
   dataset_version: string;
   generated_at: string;
   views: ManifestView[];
@@ -60,6 +60,7 @@ export interface SiteManifest {
   implementation_claims: ManifestAsset;
   benchmark_contexts: ManifestAsset;
   failure_modes: ManifestAsset;
+  failure_discovery: ManifestAsset;
   search_index: ManifestAsset;
   retrieval_documents: ManifestAsset;
   search_benchmark: ManifestAsset;
@@ -88,6 +89,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
       "implementation_claims",
       "benchmark_contexts",
       "failure_modes",
+      "failure_discovery",
       "search_index",
       "retrieval_documents",
       "search_benchmark",
@@ -96,7 +98,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     ],
     "SiteManifest",
   );
-  if (data.version !== "1.3.0") throw new Error("Unsupported SiteManifest version.");
+  if (data.version !== "1.4.0") throw new Error("Unsupported SiteManifest version.");
 
   const views = array(data.views, "views").map((value, index): ManifestView => {
     const view = record(value, `views[${index}]`);
@@ -159,6 +161,9 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   const failureModes = record(data.failure_modes, "failure_modes");
   exactKeys(failureModes, ["version", "path"], "failure_modes");
   if (failureModes.version !== "1.0.0") throw new Error("failure_modes.version is unsupported.");
+  const failureDiscovery = record(data.failure_discovery, "failure_discovery");
+  exactKeys(failureDiscovery, ["version", "path"], "failure_discovery");
+  if (failureDiscovery.version !== "1.0.0") throw new Error("failure_discovery.version is unsupported.");
   const searchIndex = record(data.search_index, "search_index");
   exactKeys(searchIndex, ["version", "path"], "search_index");
   if (searchIndex.version !== "1.0.0") throw new Error("search_index.version is unsupported.");
@@ -186,7 +191,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
   }
 
   return {
-    version: "1.3.0",
+    version: "1.4.0",
     dataset_version: nonEmptyString(data.dataset_version, "dataset_version"),
     generated_at: nonEmptyString(data.generated_at, "generated_at"),
     views,
@@ -240,6 +245,10 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     failure_modes: {
       version: "1.0.0",
       path: safeRelativePath(failureModes.path, "failure_modes.path"),
+    },
+    failure_discovery: {
+      version: "1.0.0",
+      path: safeRelativePath(failureDiscovery.path, "failure_discovery.path"),
     },
     search_index: {
       version: "1.0.0",

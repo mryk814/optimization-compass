@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
-import rawFailureModes from "../../../public/data/failure-modes.json";
+import rawFailureDiscovery from "../../../public/data/failure-discovery.json";
 import App from "../../App";
 import type { EntityLinkIndex } from "../../contracts/entity-links";
 
@@ -16,8 +16,8 @@ beforeEach(() => {
   window.location.hash = "#/failures";
   vi.stubGlobal("fetch", vi.fn().mockImplementation(async (input: string | URL | Request) => {
     const url = String(input);
-    if (url.endsWith("data/failure-modes.json")) {
-      return { ok: true, json: async () => rawFailureModes };
+    if (url.endsWith("data/failure-discovery.json")) {
+      return { ok: true, json: async () => rawFailureDiscovery };
     }
     return {
       ok: true,

@@ -1,6 +1,6 @@
 export const SEARCH_ENTITY_TYPES = [
   "case", "comparison", "content", "feature", "feature_value", "glossary",
-  "implementation", "journey", "method", "problem", "scenario", "source", "trace", "view",
+  "implementation", "journey", "method", "problem", "scenario", "source", "trace", "view", "failure",
 ] as const;
 
 export const SEARCH_INTENTS = [
@@ -75,7 +75,7 @@ const FIELD_WEIGHTS: Record<SearchField, number> = {
 };
 
 const TYPE_PRIORITY = new Map<SearchEntityType, number>(
-  ["method", "problem", "case", "implementation", "journey", "content", "glossary", "comparison", "scenario", "trace", "source", "feature", "feature_value", "view"]
+  ["method", "problem", "case", "implementation", "journey", "content", "glossary", "comparison", "scenario", "trace", "source", "failure", "feature", "feature_value", "view"]
     .map((type, index) => [type as SearchEntityType, index]),
 );
 

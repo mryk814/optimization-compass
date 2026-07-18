@@ -38,10 +38,13 @@ def test_exported_search_and_retrieval_contracts_are_closed(
         "comparison",
         "source",
         "glossary",
+        "failure",
     } <= entity_types
     assert len(index.documents) > 500
     assert (tmp_path / "search-index.json").stat().st_size < 2 * 1024 * 1024
     assert len(retrieval.chunks) > len(index.documents)
+    failure_hits = search_documents(index, "noise", entity_types={"failure"})
+    assert failure_hits[0].document_id == "failure:structured:FM003"
     assert all(chunk.source_ids for chunk in retrieval.chunks if chunk.authority == "canonical")
     assert any(
         chunk.document_id.startswith("content:") and not chunk.chunk_id.endswith(":overview")

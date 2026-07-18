@@ -1,0 +1,1163 @@
+{
+  "contract_version": "1.0.0",
+  "dataset_version": "0.18.4",
+  "entries": [
+    {
+      "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
+      "case_context": {
+        "constraints": "パラメータの上下限 $0\\le a\\le5$、$0\\le k\\le3$、$-1\\le c\\le2$。固定教材ではこの直方体（box）以外の制約は置かない。",
+        "decision_variables": "指数減衰モデル（exponential-decay model）$\\hat y(t;a,k,c)=a\\exp(-kt)+c$ のパラメータ（parameter）ベクトル $x=(a,k,c)\\in X$。",
+        "objective": "20個の観測時刻 $t_i$ における残差 $r_i(x)=\\hat y(t_i;x)-y_i$ の二乗和 $f(x)=\\sum_i r_i(x)^2$ を最小化する。",
+        "question": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。"
+      },
+      "case_id": "EC013",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC013:M_NELDER_MEAD",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-17",
+      "method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM022"
+      ],
+      "scenario_ids": [
+        "SCENARIO_EXPONENTIAL_FIT_LBFGSB",
+        "SCENARIO_EXPONENTIAL_FIT_LM",
+        "SCENARIO_EXPONENTIAL_FIT_TRF",
+        "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S065",
+        "S096"
+      ],
+      "summary": "残差とJacobianの構造を捨て、診断可能性と評価効率を落とす",
+      "symptoms": [],
+      "title_en": "Why Nelder-Mead simplex is excluded for Estimate nonlinear model parameters",
+      "title_ja": "観測データから非線形モデルのパラメータを推定するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC017%3AM_WEIGHTED_SUM",
+      "case_context": {
+        "constraints": "固定教材では $0\\le x\\le2$、$0\\le y\\le2$。実務では設計の上下限に加え、安全上の $g_j(x)\\le0$ を実行可能条件として追加する。",
+        "decision_variables": "実務では設計寸法と運転条件のベクトル x。固定教材では $x=(x,y)$ の2変数で、物理量そのものではなく無次元化した代理変数とする。",
+        "objective": "実問題では費用（cost）$f_1(x)$ と性能損失（performance loss）$f_2(x)$ を同時に最小化する。固定教材では $f_1=x^2+y^2$、$f_2=(x-2)^2+(y-2)^2$。",
+        "question": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。"
+      },
+      "case_id": "EC017",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC017:M_WEIGHTED_SUM",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-17",
+      "method_ids": [
+        "M_WEIGHTED_SUM"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+        "SCENARIO_BIOBJECTIVE_QUADRATIC"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "summary": "非凸フロント（front）の一部を取得できず、重みだけでトレードオフ全体を代表できない",
+      "symptoms": [],
+      "title_en": "Why Weighted-sum scalarization is excluded for Explore a cost-performance Pareto trade-off",
+      "title_ja": "コストと性能のパレートトレードオフを探索するでは重み付き和scalarizationを選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC019%3AM_BRANCH_CUT",
+      "case_context": {
+        "constraints": "各stopをちょうど一度訪問し、車両容量を $\\sum_i demand_i z_{v,i}\\le Q_v$、到着時刻 $a_i$ を時間窓 $[e_i,l_i]$ 内、経路の勤務時間を $H_v$ 以下にする。",
+        "decision_variables": "配送経路の順序 $\\pi$ と車両割当 $z_{v,i}$。$\\pi$ はstopの順列、$z_{v,i}=1$ はstop i を車両 v が訪問することを表す。",
+        "objective": "経路ごとの移動時間と時間窓からの遅れを合わせ、$f(\\pi,z)=\\sum travel\\_time+\\alpha\\sum lateness$ を最小化する。",
+        "question": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。"
+      },
+      "case_id": "EC019",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC019:M_BRANCH_CUT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-15",
+      "method_ids": [
+        "M_BRANCH_CUT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S023",
+        "S024",
+        "S054"
+      ],
+      "summary": "1000件の配送先と短い期限では、最適性証明より早く良質な実行可能解を得ることを優先する",
+      "symptoms": [],
+      "title_en": "Why Branch and cut is excluded for Build time-window delivery routes under a deadline",
+      "title_ja": "時間窓付き配送ルートを10分以内に組むではbranch-and-cutを選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC020%3AM_BFGS",
+      "case_context": {
+        "constraints": "離散化した動力学（dynamics）$x_{k+1}=F(x_k,u_k)$、状態・入力の上下限、各meshでの障害物（obstacle）回避 $g_{obs}(x_k)\\le0$、初期状態 $x_0=x_{init}$ と終端条件を課す。",
+        "decision_variables": "状態列（state sequence）$x_0,\\ldots,x_N$、制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$、必要なら終端時刻 $T$。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作る。",
+        "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
+        "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
+      },
+      "case_id": "EC020",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC020:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-15",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S076"
+      ],
+      "summary": "軌道、動力学の欠陥、疎性を平坦なベクトルのブラックボックス目的関数へ隠してしまう",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Optimize a trajectory with nonlinear dynamics",
+      "title_ja": "非線形動力学を含む軌道を最適化するではBFGS法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC025%3AM_DIFFERENTIAL_EVOLUTION",
+      "case_context": {
+        "constraints": "線形化した動力学 $x_{k+1}=A_kx_k+B_k\\Delta u_k+c_k$、初期状態 $x_0=x_{current}$、入力・状態の上下限を線形制約として課す。",
+        "decision_variables": "予測horizonの状態列 $x_0,\\ldots,x_N$ と制御入力の増分（control increment）$\\Delta u_0,\\ldots,\\Delta u_{N-1}$。実機の現在状態はパラメータ（parameter）として毎周期更新する。",
+        "objective": "参照値との差と入力変更を、凸二次目的（convex quadratic objective）$f=\\sum\\lVert x_k-r_k\\rVert_Q^2+\\sum\\lVert\\Delta u_k\\rVert_R^2$ として最小化する。",
+        "question": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。"
+      },
+      "case_id": "EC025",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC025:M_DIFFERENTIAL_EVOLUTION",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-15",
+      "method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S012",
+        "S043",
+        "S076"
+      ],
+      "summary": "個体群評価では100Hzの期限、初期解の引き継ぎ、残差監視を満たしにくい",
+      "symptoms": [],
+      "title_en": "Why Differential evolution is excluded for Solve a repeated MPC QP at 100 Hz",
+      "title_ja": "100Hzで反復MPCの二次計画問題を解くでは差分進化を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC026%3AM_DIFFERENTIAL_EVOLUTION",
+      "case_context": {
+        "constraints": "離散PDE残差 $R_{PDE}(z,\\theta,q)=0$、境界条件、設計パラメータの上下限 $\\theta_{min}\\le\\theta\\le\\theta_{max}$ を課し、inner solverが失敗した候補の扱いも明示する。",
+        "decision_variables": "PDEの状態 $z$、境界制御 $q$、低次元の設計パラメータ $\\theta$。reduced formulation（縮約定式化）では $z$ はPDE solveで決まり、$\\theta$ と $q$ だけを最適化器（optimizer）が動かす。",
+        "objective": "PDE solve $z(\\theta,q)$ から得る性能指標 $J(z,\\theta,q)$ と正則化（regularization）$R(\\theta,q)$ を使い、$f=J+\\lambda R$ を最小化する。",
+        "question": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+      },
+      "case_id": "EC026",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC026:M_DIFFERENTIAL_EVOLUTION",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-15",
+      "method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S017",
+        "S019",
+        "S056"
+      ],
+      "summary": "数百万自由度と高価なPDE計算に、個体群評価の予算が合わない",
+      "symptoms": [],
+      "title_en": "Why Differential evolution is excluded for Solve a large PDE-constrained design problem matrix-free",
+      "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解くでは差分進化を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Abudget-allocation%3AM_NELDER_MEAD",
+      "case_context": {
+        "constraints": "費用 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_D+3x_C\\le7$ と $x_i\\in\\{0,1\\}$。",
+        "decision_variables": "施策 i を採用するとき1、採用しないとき0の二値変数（binary variable）$x_i$。固定教材では $x=(x_A,x_B,x_D,x_C)$ の4変数。",
+        "objective": "施策ごとの期待効果 $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_D+5x_C$ を最大化する。",
+        "question": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。"
+      },
+      "case_id": "budget-allocation",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:budget-allocation:M_NELDER_MEAD",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-17",
+      "method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM022"
+      ],
+      "scenario_ids": [
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S002",
+        "S021",
+        "S022",
+        "S079"
+      ],
+      "summary": "離散変数と大域保証の要求に合わない",
+      "symptoms": [],
+      "title_en": "Why Nelder-Mead simplex is excluded for Budget allocation",
+      "title_ja": "限られた予算を施策へ配分するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Aconstrained-design%3AM_BFGS",
+      "case_context": {
+        "constraints": "非線形強度制約 $(x-1)^2+(y-1)^2\\le1$ と上下限 $-1\\le x\\le3$、$-1\\le y\\le3$。円の外側は目的値が低くても実行不可能（infeasible）である。",
+        "decision_variables": "2つの連続設計パラメータ（design parameter）$x,y$。固定教材では設計点 $(x,y)\\in\\mathbb{R}^2$ を選ぶ。",
+        "objective": "重量に対応する $f(x,y)=x^2+y^2$ を最小化する。目的を下げる方向と、制約（constraint）を破らないことを別々に確認する。",
+        "question": "強度の非線形制約（constraint）を満たす設計の中で、重量を最小化したい。"
+      },
+      "case_id": "constrained-design",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:constrained-design:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-15",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_CONSTRAINED_DISK",
+        "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S064"
+      ],
+      "summary": "非線形constraintを無視すると目的値が低くても実行不可能な設計を返す",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Find a lightweight design under a strength constraint",
+      "title_ja": "強度制約を守りながら軽量設計を探すではBFGS法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Ahyperparameter-search%3AM_BFGS",
+      "case_context": {
+        "constraints": "$\\eta$ と $\\lambda$ の上下限に加え、実務では評価予算（evaluation budget）$\\sum_k cost(x_k)\\le budget$ を置く。固定教材では評価回数を最大10回とする。",
+        "decision_variables": "学習率（learning rate）$\\eta$ と正則化係数（regularization coefficient）$\\lambda$。固定教材ではこの組を1個の正規化変数 $x\\in[-3,3]$ に写像する。",
+        "objective": "設定 x を1回評価して得る検証損失 $y=f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックス（black-box）として観測する。",
+        "question": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
+      },
+      "case_id": "hyperparameter-search",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:hyperparameter-search:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-17",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S002",
+        "S034",
+        "S035",
+        "S056",
+        "S059",
+        "S075"
+      ],
+      "summary": "観測値しか得られないblack-boxで、信頼できるgradientを前提にすると更新根拠を確認できない",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Hyperparameter search",
+      "title_ja": "高価な実験の設定を探すではBFGS法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Aportfolio-allocation%3AM_NELDER_MEAD",
+      "case_context": {
+        "constraints": "全資産への配分を $\\sum_i w_i=1$ とし、空売り禁止 $0\\le w_i$、集中投資上限 $w_i\\le0.6$、必要なら売買回転（turnover）の制約を課す。",
+        "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。現金を含める場合は $w_{cash}$ も同じベクトルへ加える。",
+        "objective": "期待収益を増やし、共分散リスク（covariance risk）$w^\\mathsf{T}\\Sigma w$ と取引コスト（transaction cost）を抑える。代表的には $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w+\\kappa\\,cost(w)$ を最小化する。",
+        "question": "リスクを抑えながら期待収益と運用制約を両立したい。"
+      },
+      "case_id": "portfolio-allocation",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:portfolio-allocation:M_NELDER_MEAD",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-14",
+      "method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM022"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S001",
+        "S054"
+      ],
+      "summary": "共分散構造と制約を明示的に活かしにくい",
+      "symptoms": [],
+      "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation",
+      "title_ja": "ポートフォリオの配分を決めるではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Ashift-scheduling%3AM_GRADIENT_DESCENT",
+      "case_context": {
+        "constraints": "各枠の必要人数を $\\sum_s x_{s,t}\\ge d_t$ とし、資格のないスタッフの配置 $x_{s,t}=0$、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
+        "decision_variables": "スタッフ s と曜日・勤務帯 t の組ごとの二値変数（binary variable）$x_{s,t}$。固定教材では4名×9枠の36変数。",
+        "objective": "希望勤務帯の違反とスタッフ間の勤務数の偏りをペナルティ（penalty）として最小化する。$f(x)=\\sum p_{s,t}x_{s,t}+\\lambda\\,\\operatorname{fairness}(x)$。",
+        "question": "必要人数を満たしながら、希望と公平性を反映したい。"
+      },
+      "case_id": "shift-scheduling",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:shift-scheduling:M_GRADIENT_DESCENT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-14",
+      "method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S054",
+        "S055"
+      ],
+      "summary": "シフト割当は離散・論理制約が中心",
+      "symptoms": [],
+      "title_en": "Why Gradient descent is excluded for Shift scheduling",
+      "title_ja": "スタッフのシフトを組むでは最急降下法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Atopology-cantilever%3AM_BFGS",
+      "case_context": {
+        "constraints": "平均密度を0.5以下に保つ体積率制約 $mean(ρ)≤0.5$ と、各密度の上下限を課す。",
+        "decision_variables": "各有限要素の密度 $ρₑ$。$ρₑ=1$は材料、$ρₑ$が小さい値は空孔に近い状態を表す。",
+        "objective": "線形弾性の状態方程式 $K(ρ)u=F$を解き、$f(ρ)=c(ρ)=Fᵀu$ を最小化する。SIMPでは剛性を $Eₑ=Emin+ρₑᵖ(E₀−Emin)$ で補間する。",
+        "question": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+      },
+      "case_id": "topology-cantilever",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:topology-cantilever:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_SIMP_OC"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S097",
+        "S098",
+        "S099",
+        "S100",
+        "S101"
+      ],
+      "summary": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Reduce material in a cantilever",
+      "title_ja": "片持ちはりの材料配置を軽くするではBFGS法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM003",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "replication/CRN"
+      ],
+      "disposition": "excluded",
+      "entry_id": "structured:FM003",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM003",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_BFGS",
+        "M_NEWTON",
+        "M_SLSQP"
+      ],
+      "mitigations": [
+        {
+          "action": "sample average、SPSA、noise-aware method",
+          "applicability": "必要評価数がbudget超ならBO/DFO",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S059"
+      ],
+      "summary": "gradient符号がreplicateで変わる",
+      "symptoms": [
+        "gradient符号がreplicateで変わる"
+      ],
+      "title_en": "Noise-dominated derivative",
+      "title_ja": "noiseが微分を支配"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM007",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "nondimensionalization"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM007",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM007",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_BFGS",
+        "M_CMA_ES",
+        "M_COBYLA",
+        "M_SLSQP"
+      ],
+      "mitigations": [
+        {
+          "action": "変数変換/solver scaling",
+          "applicability": "改善しなければpreconditioned/HVP法",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE"
+      ],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S056"
+      ],
+      "summary": "stepが一部変数だけ動く",
+      "symptoms": [
+        "stepが一部変数だけ動く"
+      ],
+      "title_en": "Poor variable scaling",
+      "title_ja": "変数scale不良"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM009",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "condition estimate"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM009",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM009",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_GAUSS_NEWTON",
+        "M_INTERIOR_POINT_NLP",
+        "M_NEWTON"
+      ],
+      "mitigations": [
+        {
+          "action": "scaling、regularization、preconditioner",
+          "applicability": "first-order/prox/reparameterize",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE"
+      ],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S056"
+      ],
+      "summary": "極端に遅い、方向不安定",
+      "symptoms": [
+        "極端に遅い、方向不安定"
+      ],
+      "title_en": "Ill conditioning",
+      "title_ja": "悪条件"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM011",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "phase-I"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM011",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM011",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_ACTIVE_SET",
+        "M_INTERIOR_POINT_NLP",
+        "M_SQP"
+      ],
+      "mitigations": [
+        {
+          "action": "feasible generator、slacks",
+          "applicability": "MADS/ALM/phase-Iへ",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S017",
+        "S056"
+      ],
+      "summary": "constraint violationが減らない",
+      "symptoms": [
+        "constraint violationが減らない"
+      ],
+      "title_en": "Bad or infeasible start",
+      "title_ja": "初期可行点問題"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM014",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "IIS/phase-I"
+      ],
+      "disposition": "excluded",
+      "entry_id": "structured:FM014",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM014",
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [],
+      "mitigations": [
+        {
+          "action": "isolate constraints、relax with costs",
+          "applicability": "optimization前にmodel修正",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "fatal",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "critical",
+      "source_ids": [
+        "S016",
+        "S021",
+        "S024"
+      ],
+      "summary": "infeasible status、phase-I正",
+      "symptoms": [
+        "infeasible status、phase-I正"
+      ],
+      "title_en": "Inconsistent constraints",
+      "title_ja": "不整合制約"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM015",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "original-function recompute"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM015",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM015",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_COBYLA",
+        "M_INTERIOR_POINT_NLP",
+        "M_SLSQP"
+      ],
+      "mitigations": [
+        {
+          "action": "tighten/scale、report residual",
+          "applicability": "別solverでcross-check",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "fatal",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "critical",
+      "source_ids": [
+        "S002",
+        "S017"
+      ],
+      "summary": "successだが元式で不可行",
+      "symptoms": [
+        "successだが元式で不可行"
+      ],
+      "title_en": "Ignored constraint violation",
+      "title_ja": "constraint violation見落とし"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM016",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "multistart/lower bound"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM016",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM016",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_BFGS",
+        "M_INTERIOR_POINT_NLP",
+        "M_SQP"
+      ],
+      "mitigations": [
+        {
+          "action": "明示的にlocal label",
+          "applicability": "証明必要ならglobal/certificate solver",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "fatal",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "critical",
+      "source_ids": [
+        "S055",
+        "S056"
+      ],
+      "summary": "初期値で異なる解",
+      "symptoms": [
+        "初期値で異なる解"
+      ],
+      "title_en": "Local solution mistaken for global",
+      "title_ja": "局所解を大域解と誤認"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM022",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "eval ledger"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM022",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM022",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_COBYQA",
+        "M_MADS",
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [
+        {
+          "action": "dimension reduction/gradient estimation",
+          "applicability": "L-BFGS/SPSA/structure法へ",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S031",
+        "S060"
+      ],
+      "summary": "改善前にbudget枯渇",
+      "symptoms": [
+        "改善前にbudget枯渇"
+      ],
+      "title_en": "DFO dimension-budget mismatch",
+      "title_ja": "DFOの次元budget不整合"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM024",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "residual vs noise/decision value"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM024",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM024",
+      "feature_ids": [
+        "F_EVALUATION_RELIABILITY"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [],
+      "mitigations": [
+        {
+          "action": "scale-aware tolerance",
+          "applicability": "早期停止/適切精度へ",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
+      ],
+      "scope": "method_theory",
+      "severity": "warning",
+      "source_ids": [
+        "S056"
+      ],
+      "summary": "末尾精度に大量時間",
+      "symptoms": [
+        "末尾精度に大量時間"
+      ],
+      "title_en": "Overly strict tolerances",
+      "title_ja": "過度に厳しいtolerance"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM025",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "raw status保存"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM025",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM025",
+      "feature_ids": [],
+      "implementation_ids": [
+        "I_ACADOS",
+        "I_AX",
+        "I_BOTORCH",
+        "I_CASADI",
+        "I_CBC",
+        "I_CERES",
+        "I_CLARABEL",
+        "I_CPLEX",
+        "I_CVXOPT",
+        "I_CVXPY",
+        "I_DEAP",
+        "I_DRAKE",
+        "I_EXCEL_SOLVER",
+        "I_GLPK",
+        "I_GUROBI",
+        "I_HIGHS_NATIVE",
+        "I_IPOPT",
+        "I_JAXOPT",
+        "I_JUMP",
+        "I_KNITRO",
+        "I_MANOPT_JL",
+        "I_MANOPT_MATLAB",
+        "I_MINIZINC",
+        "I_MOSEK",
+        "I_NEVERGRAD",
+        "I_NLOPT",
+        "I_NOMAD",
+        "I_OPTAX",
+        "I_OPTIMJL",
+        "I_OPTUNA",
+        "I_ORTOOLS_CPSAT",
+        "I_ORTOOLS_GLOP",
+        "I_ORTOOLS_PDLP",
+        "I_ORTOOLS_ROUTING",
+        "I_OSQP",
+        "I_PETSC_TAO",
+        "I_PYCMA",
+        "I_PYMANOPT",
+        "I_PYMOO",
+        "I_PYOMO",
+        "I_PYTORCH_OPTIM",
+        "I_RAY_TUNE",
+        "I_SCIP",
+        "I_SCIPY_BASINHOPPING",
+        "I_SCIPY_BFGS",
+        "I_SCIPY_COBYLA",
+        "I_SCIPY_COBYQA",
+        "I_SCIPY_DIFFERENTIAL_EVOLUTION",
+        "I_SCIPY_DIRECT",
+        "I_SCIPY_DUAL_ANNEALING",
+        "I_SCIPY_LBFGSB",
+        "I_SCIPY_LEAST_SQUARES_LM",
+        "I_SCIPY_LEAST_SQUARES_TRF",
+        "I_SCIPY_LINPROG_HIGHS",
+        "I_SCIPY_MILP_HIGHS",
+        "I_SCIPY_NELDER_MEAD",
+        "I_SCIPY_POWELL",
+        "I_SCIPY_SHGO",
+        "I_SCIPY_SLSQP",
+        "I_SCIPY_TRUST_CONSTR",
+        "I_SCS",
+        "I_SMAC3",
+        "I_SNOPT",
+        "I_TENSORFLOW_OPTIM"
+      ],
+      "last_verified": "2026-07-18",
+      "method_ids": [],
+      "mitigations": [
+        {
+          "action": "status taxonomy mapping",
+          "applicability": "残差とcross-solverで検証",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "fatal",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "implementation_specific",
+      "severity": "critical",
+      "source_ids": [
+        "S002",
+        "S016",
+        "S017"
+      ],
+      "summary": "limit到達をsuccess扱い、inaccurate無視",
+      "symptoms": [
+        "limit到達をsuccess扱い、inaccurate無視"
+      ],
+      "title_en": "Misread solver status",
+      "title_ja": "status code誤読"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM033",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "CV/diagnostics"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM033",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM033",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_BAYESIAN_OPT_GP",
+        "M_SMAC_RF"
+      ],
+      "mitigations": [
+        {
+          "action": "transform、model change、trust region",
+          "applicability": "random/CMA/MADSへfallback",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S035",
+        "S059"
+      ],
+      "summary": "予測順位/uncertainty不良",
+      "symptoms": [
+        "予測順位/uncertainty不良"
+      ],
+      "title_en": "Surrogate model mismatch",
+      "title_ja": "surrogate misspecification"
+    },
+    {
+      "canonical_route": "/failures?entry=structured%3AFM037",
+      "case_context": null,
+      "case_id": null,
+      "confidence": "high",
+      "diagnostics": [
+        "diversity metric"
+      ],
+      "disposition": "warning",
+      "entry_id": "structured:FM037",
+      "entry_kind": "structured_failure",
+      "failure_mode_id": "FM037",
+      "feature_ids": [],
+      "implementation_ids": [],
+      "last_verified": "2026-07-18",
+      "method_ids": [
+        "M_CMA_ES",
+        "M_GENETIC_ALGORITHM",
+        "M_NSGA_II"
+      ],
+      "mitigations": [
+        {
+          "action": "restart/mutation/niching",
+          "applicability": "MADS/BO/multistartへ",
+          "tradeoff": "May change runtime, guarantees, or solution interpretation."
+        }
+      ],
+      "recoverability": "recoverable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "method_theory",
+      "severity": "high",
+      "source_ids": [
+        "S032",
+        "S039"
+      ],
+      "summary": "全個体近接、改善停止",
+      "symptoms": [
+        "全個体近接、改善停止"
+      ],
+      "title_en": "Population diversity loss",
+      "title_ja": "population多様性喪失"
+    }
+  ],
+  "generated_at": "2026-07-18T00:00:00Z",
+  "summary": {
+    "case_exclusion_count": 12,
+    "entries_with_scenarios": 10,
+    "structured_failure_count": 12,
+    "total_entries": 24
+  }
+}

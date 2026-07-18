@@ -290,6 +290,18 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "path": "failure-modes.json",
         "version": "1.0.0",
     }
+    assert manifest_payload["failure_discovery"] == {
+        "path": "failure-discovery.json",
+        "version": "1.0.0",
+    }
+    failure_discovery = json.loads((first_output / "failure-discovery.json").read_bytes())
+    assert failure_discovery["summary"] == {
+        "case_exclusion_count": 12,
+        "entries_with_scenarios": 10,
+        "structured_failure_count": 12,
+        "total_entries": 24,
+    }
+    assert any(item["entry_kind"] == "case_exclusion" for item in failure_discovery["entries"])
     assert manifest_payload["search_index"] == {"path": "search-index.json", "version": "1.0.0"}
     assert manifest_payload["retrieval_documents"] == {
         "path": "retrieval-documents.json",
