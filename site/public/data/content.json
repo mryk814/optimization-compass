@@ -311,6 +311,69 @@
       "visualization_ids": []
     },
     {
+      "canonical_entity_id": "F_STRUCTURE_PDE_CONSTRAINED",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.pde-constrained-optimization",
+      "html": "<p>PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。</p>\n<h2 id=\"まず-設計-と-状態-を分ける\" tabindex=\"-1\">まず「設計」と「状態」を分ける</h2>\n<p>PDEを含む問題では、最適化が直接動かす設計変数と、設計から計算される状態変数を分けます。設計変数は材料密度、形状、境界入力などです。状態変数は変位、温度、圧力など、PDEを解いて得るfieldです。</p>\n<p>典型的な形は次のとおりです。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mo>min</mo><mrow><mi>m</mi><mo>&#x0002C;</mo><mi>u</mi></mrow></msub><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mspace width=\"1em\" /><mtext>subject&#x000A0;to</mtext><mspace width=\"1em\" /><mi>R</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mspace width=\"1em\" /><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>m</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>ここで<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi></mrow></math>がdesign、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi></mrow></math>がstate、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi></mrow></math>が状態方程式、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>c</mi></mrow></math>が目的とは別に守る制約です。設計を1回更新するたびに、状態solve、目的・制約の評価、必要なら感度計算が続きます。</p>\n<p>たとえばトポロジー最適化では、密度fieldから剛性を作り、変位fieldをstate solveで求めます。complianceの改善は設計更新の結果ですが、状態方程式を正しく解けたことやvolume constraintを守ったこととは別の事実です。<a href=\"#/learn/topology-optimization\">トポロジー最適化</a>では、この設計fieldと状態fieldの対応を具体的に追えます。</p>\n<h2 id=\"離散化すると-残差-と-離散制約-になる\" tabindex=\"-1\">離散化すると「残差」と「離散制約」になる</h2>\n<p>連続なPDEをmesh上で解くと、状態方程式は離散化された残差として表されます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>R</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mi>h</mi></msub><mo>&#x0002C;</mo><msub><mi>m</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002E;</mo></mrow></math></div>\n<p>添字<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math>はmeshや近似空間に依存することを表します。実際の計算では、残差のnormが許容値より小さいか、solverが指定したtoleranceまで到達したかを確認します。これは固定したmesh上でのstate solveの収束です。</p>\n<p>一方、最適化にはvolume、応力、境界、設計変数のboundsなど、別の制約があります。たとえば</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><msub><mi>R</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mi>h</mi></msub><mo>&#x0002C;</mo><msub><mi>m</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo fence=\"false\" stretchy=\"false\">&#x02016;</mo><mo>&#x02264;</mo><msub><mi>&#x003C4;</mi><mrow><mi>s</mi><mi>t</mi><mi>a</mi><mi>t</mi><mi>e</mi></mrow></msub><mo>&#x0002C;</mo><mspace width=\"2em\" /><msub><mi>c</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mi>h</mi></msub><mo>&#x0002C;</mo><msub><mi>m</mi><mi>h</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><msub><mi>&#x003C4;</mi><mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow></math></div>\n<p>のように、状態残差と最適化制約を別々に記録します。残差が小さくてもvolumeを超えていれば最適化の候補としては不適切です。逆に、制約値がよく見えてもstate solveが未収束なら、その目的値や感度はまだ確定していません。</p>\n<h2 id=\"solverの収束と最適化の可行性は別の判定\" tabindex=\"-1\">solverの収束と最適化の可行性は別の判定</h2>\n<p>「solverが収束した」と「最適化問題で可行な点を得た」は同じではありません。次の3段階を分けると、反復のどこで問題が起きたかを追えます。</p>\n<table>\n<thead>\n<tr>\n<th>判定</th>\n<th>主に見るもの</th>\n<th>何が分かるか</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>state solve</td>\n<td>state residual、solver status、state tolerance</td>\n<td>固定した設計とmeshでPDEを解けたか</td>\n</tr>\n<tr>\n<td>optimization feasibility</td>\n<td>design bounds、volume、state/path constraintのviolation</td>\n<td>設計と状態が制約を満たすか</td>\n</tr>\n<tr>\n<td>optimization progress</td>\n<td>objective、gradient norm、KKT residual、design change</td>\n<td>最適化の停止条件に近づいたか</td>\n</tr>\n</tbody>\n</table>\n<p>この3つを1つの<code>success</code>フラグに潰さないでください。state solveが失敗した評価は、低い目的値を返した評価と同じではありません。失敗の条件、再試行、inexact solveとして扱ったかを別に記録します。</p>\n<p>感度を使う場合も順番は変わりません。state solveのあとにdirect sensitivityやadjoint solveを行い、gradient checkとadjoint residualを確認します。<a href=\"#/learn/adjoint-sensitivity\">adjoint sensitivity</a>は、設計変数が多いときに状態方程式を介した感度を計算する考え方を説明します。</p>\n<h2 id=\"境界条件はstateとadjointの両方で確認する\" tabindex=\"-1\">境界条件はstateとadjointの両方で確認する</h2>\n<p>境界条件（boundary conditions）は、PDEの解がどのような値や流束を境界で持つかを定めます。固定値を指定する境界（Dirichlet boundary condition）と、流束や荷重を指定する境界（Neumann boundary condition）などを、どの境界へ適用したかとともに記録します。</p>\n<p>境界条件を変えるとstateの意味が変わります。設計の比較で荷重、固定支持、流入条件が揃っていなければ、目的値の差を手法や設計の差として読めません。adjoint sensitivityを使うときは、stateだけでなくadjoint側の境界条件と固定自由度の扱いも確認します。</p>\n<p>ここで見るべきは境界上の値だけではありません。</p>\n<ul>\n<li><p>境界条件が意図した自由度へ適用されているか</p>\n</li>\n<li><p>境界条件とloadの単位・scaleが揃っているか</p>\n</li>\n<li><p>境界近くのstate residualやgradientが不自然に大きくないか</p>\n</li>\n<li><p>meshを変えたとき、境界の表現が変わっていないか</p>\n</li>\n</ul>\n<p>境界条件のミスは、solverを収束させたまま別の物理問題を解かせることがあります。</p>\n<h2 id=\"mesh-refinementは別の検証である\" tabindex=\"-1\">mesh refinementは別の検証である</h2>\n<p>固定したmeshでstate residualを小さくしても、連続モデルの解が十分に近いとは限りません。mesh refinementは、meshを細かくして得られる解、目的、制約、感度の変化を調べる検証です。</p>\n<p>次の2つは混ぜません。</p>\n<table>\n<thead>\n<tr>\n<th>検証</th>\n<th>変更するもの</th>\n<th>解釈</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>state solveの収束</td>\n<td>設計とmeshを固定し、solver iterationを進める</td>\n<td>離散化した方程式を数値的に解けたか</td>\n</tr>\n<tr>\n<td>mesh refinement</td>\n<td>mesh、自由度、必要なら設計表現を変える</td>\n<td>解がmeshの解像度に依存していないか</td>\n</tr>\n</tbody>\n</table>\n<p>meshを細かくすると、状態の自由度だけでなく設計fieldの表現、感度、計算費も変わります。目的値が変わったとき、それがsolver toleranceの不足なのか、mesh依存性なのか、設計の局所解なのかを分けて確認します。トポロジー最適化でfilterやprojectionを使う場合も、mesh sizeとfilter radiusの関係を固定したまま比較できているかを確認します。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>離散化したPDEの残差が小さく、最適化制約を満たしていても、連続モデルや実物の安全性が自動的に保証されるわけではありません。mesh refinement、境界条件、model mismatch、必要な物理制約を別に検証します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/concept.constraint-class\">制約class</a>で、状態方程式を含む制約と可行性の扱いを整理します。<a href=\"#/learn/density-filter\">density filter</a>では、mesh上のfield更新とmesh依存性を確認できます。計算費やstate solveの失敗を含む比較は、問題ごとのbudget、tolerance、failed evaluationを揃えてから行います。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [],
+      "related_ids": [
+        "topology-optimization",
+        "adjoint-sensitivity",
+        "concept.constraint-class",
+        "concept.variable-domain",
+        "density-filter"
+      ],
+      "seo_description": "PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。",
+      "seo_title": "PDE制約付き最適化",
+      "source_ids": [
+        "S054",
+        "S056",
+        "S097",
+        "S098",
+        "S101"
+      ],
+      "status": "published",
+      "summary": "PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。",
+      "title_en": "PDE-Constrained Optimization",
+      "title_ja": "PDE制約付き最適化",
+      "toc": [
+        {
+          "heading_id": "まず-設計-と-状態-を分ける",
+          "label": "まず「設計」と「状態」を分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "離散化すると-残差-と-離散制約-になる",
+          "label": "離散化すると「残差」と「離散制約」になる",
+          "level": 2
+        },
+        {
+          "heading_id": "solverの収束と最適化の可行性は別の判定",
+          "label": "solverの収束と最適化の可行性は別の判定",
+          "level": 2
+        },
+        {
+          "heading_id": "境界条件はstateとadjointの両方で確認する",
+          "label": "境界条件はstateとadjointの両方で確認する",
+          "level": 2
+        },
+        {
+          "heading_id": "mesh-refinementは別の検証である",
+          "label": "mesh refinementは別の検証である",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "MF_OPTIMAL_CONTROL",
       "canonical_entity_type": "method",
       "comparison_ids": [],
