@@ -3099,6 +3099,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.manifold",
+      "entity_id": "concept.manifold",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "多様体値変数",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "多様体値変数では、球面・直交行列・回転などの集合を解空間として扱い、接空間のstepとretractionで幾何構造を保ちます。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.path-terminal-constraints",
       "entity_id": "concept.path-terminal-constraints",
       "entity_type": "content",
