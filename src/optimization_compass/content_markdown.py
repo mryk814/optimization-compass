@@ -60,7 +60,7 @@ def render_inline_markdown(source: str) -> str:
     """Render trusted short metadata with the same math pipeline as articles."""
     if not source.strip():
         raise ValueError("inline Markdown source must not be blank")
-    return _markdown_parser().renderInline(source).strip()
+    return str(_markdown_parser().renderInline(source).strip())
 
 
 def _reject_dangerous_authored_urls(source: str, path: Path) -> None:
