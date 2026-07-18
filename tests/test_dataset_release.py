@@ -12,7 +12,6 @@ import optimization_compass.dataset_release as dataset_release_module
 from optimization_compass.dataset_release import (
     BASE_DATASET_SHA256,
     BASE_DATASET_VERSION,
-    TARGET_DATASET_VERSION,
     ReleaseValidationError,
     build_staged_release,
     publish_release,
@@ -49,12 +48,22 @@ def test_live_checks_detect_mutation_after_stored_pass(tmp_path: Path) -> None:
 def test_staging_preserves_published_dataset_and_is_reproducible(tmp_path: Path) -> None:
     before = sha256(BASE_DATABASE)
 
-    first = build_staged_release(BASE_DATABASE, tmp_path / "first")
-    second = build_staged_release(BASE_DATABASE, tmp_path / "second")
+    first = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "first",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
+    second = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "second",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
 
     assert before == BASE_DATASET_SHA256
     assert sha256(BASE_DATABASE) == before
-    assert first.version == TARGET_DATASET_VERSION
+    assert first.version == "0.15.2"
     assert tree_hash(first.output_directory) == tree_hash(second.output_directory)
     assert first.tree_sha256 == second.tree_sha256
 
@@ -134,7 +143,12 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
     assert base_result.ok is False
     assert "missing-stored:CHK012" in base_result.status_mismatches
 
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "staged")
+    staged = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "staged",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
     connection = sqlite3.connect(staged.database_path)
     connection.execute("DELETE FROM release_checks WHERE check_id = 'CHK015'")
     connection.execute(
@@ -166,7 +180,12 @@ def test_database_verification_rejects_missing_extra_checks_and_atlas_tables(
 def test_require_atlas_rejects_database_with_entire_atlas_contract_removed(
     tmp_path: Path,
 ) -> None:
-    staged = build_staged_release(BASE_DATABASE, tmp_path / "staged")
+    staged = build_staged_release(
+        BASE_DATABASE,
+        tmp_path / "staged",
+        target_version="0.15.2",
+        release_date="2026-07-18",
+    )
     stripped = tmp_path / "stripped.sqlite"
     shutil.copy2(staged.database_path, stripped)
     connection = sqlite3.connect(stripped)
@@ -344,14 +363,13 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
     )
     data_dir, runtime, version_file, site_data, readme = _published_fixture(tmp_path)
 
+    version_file.write_text(
+        "0.15.2\nsha256=ignored-for-same-version-check\n",
+        encoding="utf-8",
+    )
     with pytest.raises(ReleaseValidationError, match="new release version"):
         _publish_release(
-            build_staged_release(
-                BASE_DATABASE,
-                tmp_path / "current",
-                target_version=BASE_DATASET_VERSION,
-                release_date="2026-07-13",
-            ).output_directory,
+            staged.output_directory,
             data_dir,
             runtime,
             version_file,
@@ -359,6 +377,11 @@ def test_publish_rejects_version_filename_manifest_and_runtime_mismatches(
             readme,
             "# next release\n",
         )
+
+    version_file.write_text(
+        f"{BASE_DATASET_VERSION}\nsha256={BASE_DATASET_SHA256}\n",
+        encoding="utf-8",
+    )
 
     runtime.write_bytes(runtime.read_bytes() + b"tampered")
     with pytest.raises(ReleaseValidationError, match="runtime hash"):
