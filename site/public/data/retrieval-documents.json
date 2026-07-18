@@ -1773,7 +1773,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1796,7 +1798,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1819,7 +1823,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1842,7 +1848,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1865,7 +1873,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1875,7 +1885,7 @@
       "source_ids": [
         "S101"
       ],
-      "text": "gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。 complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。",
+      "text": "gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。 complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。 形状変数を扱う場合は、感度の検査対象が密度fieldから境界やgeometry parameterへ移ります。 geometry update、mesh quality、state solveを同じ反復の記録に残し、無効なmeshを通った感度を物理的な勾配として扱わないようにします。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -1888,7 +1898,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1911,7 +1923,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -1921,7 +1935,7 @@
       "source_ids": [
         "S101"
       ],
-      "text": "SIMP密度法 で感度を使う更新を確認し、 density filter で離散fieldの正則化を読みます。",
+      "text": "形状最適化の設計変数 でparameterizationの意味を確認し、 SIMP密度法 で感度を使う更新を確認します。 density filter は離散fieldの正則化、 形状更新の失敗モード はmeshとstateの切り分けを扱います。",
       "title": "次に読む"
     },
     {
@@ -1934,7 +1948,9 @@
       "relation_context": [
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_ADJOINT_SENSITIVITY",
@@ -8063,7 +8079,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8086,7 +8104,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8109,7 +8129,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8132,7 +8154,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8142,7 +8166,7 @@
       "source_ids": [
         "S099"
       ],
-      "text": "filter radiusを変えると結果が大きく変わる場合、mesh、projection、penalizationの影響を分けて確認します。 filterを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。",
+      "text": "filter radiusを変えると結果が大きく変わる場合、mesh、projection、penalizationの影響を分けて確認します。 filterを入れれば製造可能になるわけではないため、後段で実際の製造制約を評価します。 目的値が改善しても、mesh refinementで荷重経路や境界が変わるならmesh dependenceが残っています。 形状更新の失敗モード でgeometry validityとmesh qualityを先に確認してください。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -8155,7 +8179,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8178,7 +8204,9 @@
       "relation_context": [
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "content:topology-optimization",
         "method:M_DENSITY_FILTER",
@@ -8188,7 +8216,7 @@
       "source_ids": [
         "S099"
       ],
-      "text": "有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。 density filterは近傍半径と距離重みを使い、各要素の更新を周囲のfieldと結びます。 典型的な平均は、 ρ ~ e = ∑ i w e i ρ i ∑ i w e i , w e i = max ( 0 , r min − dist ( e , i ) ) の形です。 実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。 近傍平均は、単に画像をぼかす処理ではありません。 設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。 したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。 python weights = build_neighbor_weights ( mesh , radius ) filtered_density = weighted_average ( density , weights ) filtered_sensitivity = weighted_average ( raw_sensitivity , weights )",
+      "text": "有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。 density filterは近傍半径と距離重みを使い、各要素の更新を周囲のfieldと結びます。 典型的な平均は、 ρ ~ e = ∑ i w e i ρ i ∑ i w e i , w e i = max ( 0 , r min − dist ( e , i ) ) の形です。 実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。 近傍平均は、単に画像をぼかす処理ではありません。 設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。 したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。 mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。 density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。 python weights = build_neighbor_weights ( mesh , radius ) filtered_density = weighted_average ( density , weights ) filtered_sensitivity = weighted_average ( raw_sensitivity , weights )",
       "title": "隣接要素を独立に更新しない"
     },
     {
@@ -14025,6 +14053,174 @@
       ],
       "text": "premature convergenceでpopulationが同一化 crossoverが可行構造を破壊 penalty scaleがobjectiveを圧倒、または弱すぎる 評価が高価すぎてpopulationを維持できない 専用DP、flow、matching、CP-SATで強い構造を使える 単一seed・単一parameter設定だけで優劣を断定 Note GAを使う前に、問題固有の近傍探索、dynamic programming、constraint programmingで構造を直接使えないか確認します。",
       "title": "避ける／切り替える条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:checkerboardとmesh-dependence",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "境界を直接更新しない密度fieldでは、checkerboardのような離散artifactが現れる場合があります。complianceが改善していても、交互配置がmeshの局所構造に依存していれば、形状として解釈する前にfilterや解像度を確認します。 meshを細かくしたときに目的値だけでなく、荷重経路、境界、gray fraction、checkerboard scoreが変わるなら、mesh dependenceが残っています。 density filter はartifactを抑える手段の一つですが、物理的な最小部材寸法や製造性を単独で保証しません。",
+      "title": "checkerboardとmesh dependence"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:mesh-qualityとinversion",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "mesh nodeを動かす更新では、隣接要素の体積やJacobianが変わります。要素が極端につぶれると物理solveのconditionが悪化し、orientationが反転すると、そもそも意図した要素として扱えない場合があります。 更新候補を受け入れる前に、次を確認します。 geometryが自己交差していない 要素の最小qualityが許容範囲にある inversionや負のJacobianがない 境界条件と材料領域の対応が保たれている この検査を通過しても、PDEの解が正しいとは限りません。qualityの閾値は要素型、物理モデル、実装に依存するため、数値を普遍的な安全基準として扱いません。",
+      "title": "mesh qualityとinversion"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状更新の失敗は、目的関数の悪化だけでなく、無効なgeometry、mesh qualityの低下、state solveの不整合として切り分けます。",
+      "title": "形状更新の失敗モード"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:まず失敗の層を分ける",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化の一反復には、geometry、mesh、physics、optimizationの層があります。どこで壊れたかを分けないと、更新幅だけを小さくして原因を残します。 層 観測する失敗 典型的な確認 geometry 自己交差、重複境界、許容範囲外 境界の距離、交差、形状parameter mesh 要素のつぶれ、反転、負のJacobian 最小quality、aspect ratio、要素orientation physics state solveの発散、残差の増大 state residual、線形solveのstatus optimization 感度の不整合、更新の振動 gradient check、update norm、constraint violation 評価が失敗したときは、最初にこの層を記録します。geometryが無効なら物理solveを「悪い目的値」として学習させず、別の失敗状態として扱います。",
+      "title": "まず失敗の層を分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:切り分けの順序",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "geometry validityを確認し、無効な候補を物理評価から除外する。 mesh qualityとinversionを確認し、必要なら更新幅やmesh-motionを見直す。 state residualと制約違反を確認し、物理solveの失敗を分ける。 gradient checkとmesh refinementで、感度と離散化の影響を確認する。 それでも改善しなければ、parameterizationが必要な形状を表現できているかを見直す。 この順序は、評価ができた候補だけで目的値を比較するためのものです。失敗候補を大きな罰則値に置き換える場合も、元の失敗理由を別のledgerに残します。 Warning mesh qualityが高いこと、または離散問題の目的値が改善したことだけから、連続体の可行性、物理的な妥当性、global optimumを結論づけないでください。mesh、state、geometryの検証を同じ更新履歴に残します。",
+      "title": "切り分けの順序"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:geometry-update-failure-modes:次に読む",
+      "dataset_version": "0.18.4",
+      "document_id": "content:geometry-update-failure-modes",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化の設計変数 で表現と更新経路を確認し、 adjoint sensitivity でgradient checkとstate residualを読みます。 トポロジー最適化 では、density fieldとshapeを混同しない見方を扱います。",
+      "title": "次に読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -22738,6 +22934,174 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:shape-optimization:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。",
+      "title": "形状最適化の設計変数"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-optimization:一回の更新で通る経路",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状変数を q 、形状とmeshから作る物理モデルを R ( u , q ) = 0 、目的関数を J ( u , q ) とします。 一回の更新は、概ね次の順に進みます。 q から境界とmeshを作り、幾何の妥当性を確認する。 妥当なmeshでstate u を解く。 目的、制約、感度を記録する。 更新候補を受け入れる前に、geometryとmesh qualityを再確認する。 目的関数だけを返すblack-box評価にすると、幾何の失敗と物理状態の失敗が同じ「評価失敗」に隠れます。診断では、geometry update、mesh quality、state residual、目的、制約違反を別の値として保存します。",
+      "title": "一回の更新で通る経路"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-optimization:形状の表現が保証する範囲",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "低次元の形状parameterは、更新を安定させやすい一方で、表現できる形状を狭めます。自由度を増やすと表現力は広がりますが、meshの変形や感度のnoiseが増える場合があります。 形状変数のboundsを守っても、自己交差しないこと、要素が反転しないこと、物理制約を満たすことまでは保証しません。geometry validityを独立した制約または事前チェックとして扱います。 Warning 離散mesh上で目的関数が改善しても、連続体の形状が改善したことや、細かいmeshでも同じ設計になることは示されません。mesh refinement、geometry validity、物理制約を分けて再評価してください。",
+      "title": "形状の表現が保証する範囲"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-optimization:形状変数は-何を動かすか-を表す",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化で更新するのは、単なる数値列ではありません。境界の位置、断面寸法、節点の移動量、または形状を表す係数が設計変数になります。 同じ設計領域でも、どの表現を選ぶかで更新できる形状と失敗の仕方が変わります。 設計変数の表現 更新する対象 最初に確認すること 境界のparameter 境界上の寸法や節点 boundsと滑らかさ、固定境界 形状basisの係数 splineや低次元の形状 表現できる形状の範囲 mesh nodeの移動量 離散化meshの座標 要素品質、境界の交差 密度field 要素ごとの材料分布 形状との変換、filter、gray density 最後の密度fieldは、境界を直接動かす形状変数とは異なります。 トポロジー最適化 は材料分布を設計する問題として始まり、SIMPではその分布を連続fieldで表します。したがって、密度fieldの改善をそのまま滑らかな形状の改善とは読みません。",
+      "title": "形状変数は「何を動かすか」を表す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-optimization:次に読む",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "形状更新の失敗モード でgeometry validityとmesh qualityの切り分けを確認し、 adjoint sensitivity で状態方程式を介した感度を読みます。密度fieldのartifactは density filter が扱います。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-optimization:診断値",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S101"
+      ],
+      "text": "geometry updateの最大変位と境界の最小距離 要素の最小qualityと、反転要素・負のJacobianの数 state residualと制約違反 目的関数、感度、finite-differenceまたはgradient check mesh refinement後の目的・制約・形状の変化 目的だけが改善し、mesh qualityやconstraint violationが悪化するなら、その更新は採用せず、更新幅、parameterization、mesh-motion、または再meshの方針を見直します。",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:shgo:constraint",
       "dataset_version": "0.18.4",
       "document_id": "content:shgo",
@@ -22946,8 +23310,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -22972,8 +23338,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -22998,8 +23366,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -23010,7 +23380,7 @@
         "S097",
         "S098"
       ],
-      "text": "checkerboard scoreが下がらない、gray fractionが残り続ける、mesh変更で荷重経路が変わる場合は、 density filter やprojectionの設定を見直します。 更新の制約処理が複雑なら、 MMA との比較が有効です。",
+      "text": "checkerboard scoreが下がらない、gray fractionが残り続ける、mesh変更で荷重経路が変わる場合は、 density filter やprojectionの設定を見直します。 形状parameterを更新している場合は、 形状更新の失敗モード でinversion、mesh quality、state residualも確認します。 更新の制約処理が複雑なら、 MMA との比較が有効です。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -23024,8 +23394,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -23050,8 +23422,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -23062,7 +23436,7 @@
         "S097",
         "S098"
       ],
-      "text": "状態方程式 K ( ρ ) u = F を解き、complianceと密度感度を計算します。 感度から密度を更新したら、次の反復で再び状態を解きます。 体積率が目標に近いか gray fractionが減っているか filter後の感度を使っているか meshを変えたとき設計が大きく変わらないか complianceの単調な改善だけでは終了判定に足りません。 SIMPで見えている密度は、完成した部材形状そのものではありません。 連続な設計変数を使いやすくするためのrelaxationであり、penalization、filter、projection、meshの選択によって最終fieldの読み方が変わります。 特に中間密度が残る場合は、単にpを大きくするのではなく、state residual、感度のgradient check、volume制約、mesh refinementを分けて確認します。 python stiffness = emin + density ** penalty * ( e0 - emin ) state = solve_linear_system ( assemble_stiffness ( stiffness ), load ) compliance = load @ state",
+      "text": "状態方程式 K ( ρ ) u = F を解き、complianceと密度感度を計算します。 感度から密度を更新したら、次の反復で再び状態を解きます。 体積率が目標に近いか gray fractionが減っているか filter後の感度を使っているか meshを変えたとき設計が大きく変わらないか complianceの単調な改善だけでは終了判定に足りません。 SIMPで見えている密度は、完成した部材形状そのものではありません。 連続な設計変数を使いやすくするためのrelaxationであり、penalization、filter、projection、meshの選択によって最終fieldの読み方が変わります。 特に中間密度が残る場合は、単にpを大きくするのではなく、state residual、感度のgradient check、volume制約、mesh refinementを分けて確認します。 境界を直接更新する形状最適化とは、設計変数と失敗モードが異なります。 SIMPのcheckerboardやgray densityを、geometry updateの成功と読み替えないでください。 python stiffness = emin + density ** penalty * ( e0 - emin ) state = solve_linear_system ( assemble_stiffness ( stiffness ), load ) compliance = load @ state",
       "title": "更新で見るもの"
     },
     {
@@ -23076,8 +23450,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -23102,8 +23478,10 @@
         "comparison:COMPARE_TOPOLOGY_OC_MMA",
         "content:concept.constraint-class",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:mma",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:topology-optimization",
         "method:M_SIMP_TOPOLOGY",
         "source:S097",
@@ -24636,7 +25014,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",
@@ -24654,7 +25034,7 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:topology-optimization:theaterで確認する",
+      "chunk_id": "content:topology-optimization:shape-optimizationとの違い",
       "dataset_version": "0.18.4",
       "document_id": "content:topology-optimization",
       "license": "CC-BY-4.0",
@@ -24664,7 +25044,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",
@@ -24676,7 +25058,37 @@
         "S098",
         "S101"
       ],
-      "text": "片持ちはりのfield evolution では、density、state、sensitivityを同じ反復番号で見比べます。 checkerboard failure を開くと、complianceだけを追う読み方が破綻する箇所を確認できます。",
+      "text": "形状最適化は境界や形状parameterを更新しますが、SIMPのような密度法は要素ごとの密度fieldを更新します。 密度fieldから境界を取り出す後処理を加えても、元の連続境界を直接最適化したことにはなりません。 表現が違えば、更新できる設計と現れるmesh dependenceも変わります。",
+      "title": "shape optimizationとの違い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:topology-optimization:theaterで確認する",
+      "dataset_version": "0.18.4",
+      "document_id": "content:topology-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_TOPOLOGY_OC_MMA",
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:optimality-criteria-topology",
+        "content:shape-optimization",
+        "content:simp-topology",
+        "source:S097",
+        "source:S098",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S097",
+        "S098",
+        "S101"
+      ],
+      "text": "片持ちはりのfield evolution では、density、state、sensitivityを同じ反復番号で見比べます。 checkerboard failure を開くと、complianceだけを追う読み方が破綻する箇所を確認できます。 形状更新の失敗モード では、inversionや負のJacobian、checkerboard、mesh dependenceを同じ目的値にまとめない診断順を確認できます。",
       "title": "Theaterで確認する"
     },
     {
@@ -24692,7 +25104,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",
@@ -24704,7 +25118,7 @@
         "S098",
         "S101"
       ],
-      "text": "密度法の解は連続体の形状そのものではありません。 SIMPのpenalizationは中間密度を抑えますが、0と1だけの設計を無条件に返すわけではありません。 また、教育用の小さなmeshで得た形状を、実構造の強度、座屈、製造性へそのまま読み替えることもできません。",
+      "text": "密度法の解は連続体の形状そのものではありません。 SIMPのpenalizationは中間密度を抑えますが、0と1だけの設計を無条件に返すわけではありません。 また、教育用の小さなmeshで得た形状を、実構造の強度、座屈、製造性へそのまま読み替えることもできません。 形状更新を含む場合は、geometry validity、mesh quality、state residualを別々に確認します。",
       "title": "何を保証しないか"
     },
     {
@@ -24720,7 +25134,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",
@@ -24748,7 +25164,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",
@@ -24776,7 +25194,9 @@
         "content:concept.constraint-class",
         "content:concept.variable-domain",
         "content:density-filter",
+        "content:geometry-update-failure-modes",
         "content:optimality-criteria-topology",
+        "content:shape-optimization",
         "content:simp-topology",
         "source:S097",
         "source:S098",

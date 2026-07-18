@@ -2142,7 +2142,17 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
           "target_type": "content"
         },
         {
@@ -3683,7 +3693,17 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
           "target_type": "content"
         },
         {
@@ -5135,6 +5155,67 @@
         }
       ],
       "summary": "個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/geometry-update-failure-modes",
+      "entity_id": "geometry-update-failure-modes",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "形状更新の失敗モード",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "形状更新の失敗は、目的関数の悪化だけでなく、無効なgeometry、mesh qualityの低下、state solveの不整合として切り分けます。"
     },
     {
       "aliases": [],
@@ -7012,6 +7093,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/shape-optimization",
+      "entity_id": "shape-optimization",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "形状最適化の設計変数",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "density-filter",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。"
+    },
+    {
+      "aliases": [],
       "canonical_url": null,
       "entity_id": "shgo",
       "entity_type": "content",
@@ -7101,12 +7243,22 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "mma",
           "target_type": "content"
         },
         {
           "relation_type": "related_content",
           "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
           "target_type": "content"
         },
         {
@@ -7499,7 +7651,17 @@
         },
         {
           "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
           "target_id": "optimality-criteria-topology",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
           "target_type": "content"
         },
         {

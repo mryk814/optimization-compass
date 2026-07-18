@@ -2859,6 +2859,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "geometry-update-failure-modes",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "hungarian-algorithm",
       "asset_type": "content",
       "policy": "warning",
@@ -3022,6 +3028,12 @@
     },
     {
       "asset_id": "sgd",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "shape-optimization",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
