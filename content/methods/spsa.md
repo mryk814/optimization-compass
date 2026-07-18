@@ -68,7 +68,7 @@ $$
 - 厳密なstationarityや大域certificateが必要
 - bounds外の評価が危険でprojectionも意味を壊す
 
-## 最初に見る診断値と切替サイン
+## うまくいったサインと切替サイン
 
 見る値:
 

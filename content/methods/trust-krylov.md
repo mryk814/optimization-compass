@@ -105,13 +105,17 @@ print(result.success, result.fun, result.nit, result.message)
 - gradient norm
 - negative curvature detection
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - 半径が縮み続ける → model、scaling、HVPを確認する
 - step拒否が多い → 二次近似の範囲が悪いかnoiseを疑う
 - Krylov反復が上限に張り付く → preconditioningや低精度solveを検討する
 - 曲率を使っても改善しない → L-BFGSや一階法とのcostを比較する
 - 初期値で解が変わる → local methodであることを受け入れるかglobal探索へ切り替える
+
+## コラム: Krylov空間は全Hessianを作らない
+
+Krylov法は全固有vectorを先に求めるのではなく、現在の勾配と曲率に関係する方向を反復的に作ります。HVPのコストと内部反復を含めて、trust-region Newton-CGやNewton-CGと比較します。
 
 ## 次に読む
 

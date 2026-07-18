@@ -93,11 +93,15 @@ print(result.success, result.fun, np.linalg.norm(result.jac), result.nit)
 - gradient normが下がり、stepが極端に小さくならない → 継続候補
 - restartがほぼ毎回起きる → 共役方向の利点が出ていない
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - line search failureが続く → scaling、gradient、別globalizationを確認する
 - 進行は安定するが遅い → L-BFGSやtrust-regionと比較する
 - 初期値ごとに別解へ入る → multi-startやglobal-search familyを検討する
+
+## コラム: restartは失敗ではない
+
+非線形共役勾配法では、restartによって古い方向の影響を捨てることがあります。restartの頻度は、手法が壊れたかどうかではなく、共役性を保ちにくい地形かどうかを読む診断材料です。
 
 ## 次に読む
 

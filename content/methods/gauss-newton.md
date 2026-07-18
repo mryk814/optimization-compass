@@ -110,13 +110,17 @@ print(parameters, np.linalg.norm(residuals(parameters)))
 - trust radiusまたはdamping
 - 初期値ごとのparameter差
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - stepが大きく振動する → Levenberg–Marquardtやtrust-regionへ切り替える
 - rank deficiencyがある → parameterization、regularization、固定parameterを見直す
 - 一部観測だけ残差が大きい → model mismatch、outlier、weightを確認する
 - 二乗和は小さいがparameterが不安定 → identifiabilityを疑う
 - constraintsが本質 → constrained least-squares対応または一般NLPへ切り替える
+
+## コラム: 最小二乗の局所性を見落とさない
+
+残差の二乗和が下がっても、モデルの識別性や観測の偏りまで解決したとは限りません。残差patternとparameterの安定性を分けて確認します。
 
 ## 次に読む
 

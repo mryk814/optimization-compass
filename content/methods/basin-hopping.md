@@ -97,7 +97,7 @@ print(result.x, result.fun, result.message)
 - step sizeとtemperature
 - seed間のsuccess率
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - 同じbasinばかり再訪 → step sizeやproposalを調整
 - local solveがbudgetの大半を消費 → cheaper local methodか別global searchへ

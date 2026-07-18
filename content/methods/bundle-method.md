@@ -105,7 +105,7 @@ print(model_value(cuts, trial))
 - stabilization parameter
 - cutのactive数
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 切替サイン:
 

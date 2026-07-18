@@ -111,13 +111,17 @@ print(result.success, result.x, result.fun, result.nit)
 - curvature $p^T H p$
 - step normとobjective change
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - 内部CGが毎回上限まで走る → preconditioning、tolerance、L-BFGSを検討する
 - 負の曲率やline-search failureが多い → trust-region Newton-CGへ切り替える
 - HVP計算がobjective評価より重い → 一階法・準Newton法と比較する
 - gradient checkが不一致 → algorithm変更より先に微分実装を修正する
 - 解近傍で速いが初期点から不安定 → globalizing strategyを見直す
+
+## コラム: HVPのコストを含めて比較する
+
+Newton-CGの利点はHessian行列を明示的に作らず曲率を使えることです。一方で、HVPの回数と内部CGの反復が増えると、単純な一階法や準Newton法が有利になる場合があります。
 
 ## 次に読む
 

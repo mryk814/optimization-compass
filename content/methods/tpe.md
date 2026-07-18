@@ -78,7 +78,7 @@ $$
 
 best-so-far、提案分布、失敗trial、seed間のばらつきは、同じtrial budgetと停止条件で比較します。
 
-## 失敗・切替の兆候
+## うまくいったサインと切替サイン
 
 - 良い群のsampleが少なすぎる → startup数やbudgetを増やす
 - 同じカテゴリへ偏り続ける → prior、multivariate設定、space設計を見直す
