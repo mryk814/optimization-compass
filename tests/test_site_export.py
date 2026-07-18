@@ -322,6 +322,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     non_ranking_context_ids = {
         "BENCH_BO_EDUCATIONAL_10",
         "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+        "BENCH_NELDER_MEAD_QUADRATIC_80",
     }
     assert {
         context_id

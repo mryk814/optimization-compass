@@ -99,7 +99,7 @@
         "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
       ],
-      "comparison_ids": ["COMPARE_BO_ACQUISITION_NOISE_BASELINE"],
+      "comparison_ids": ["COMPARE_BO_ACQUISITION_NOISE_BASELINE", "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"],
       "source_ids": ["S002", "S034", "S035", "S056", "S059", "S075"],
       "difficulty": "intermediate",
       "status": "published",
