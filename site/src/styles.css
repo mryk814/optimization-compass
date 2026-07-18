@@ -1351,6 +1351,11 @@ caption {
   .problem-primer-terms article:last-child {
     border-bottom: 0;
   }
+
+  .problem-primer-terms math,
+  .scenario-case-formulation math {
+    font-size: 0.78em;
+  }
 }
 
 .page-orientation > section,
@@ -1608,7 +1613,7 @@ caption {
 .theater-card h2 { margin: .45rem 0 0; font-size: .95rem; }
 .theater-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
 .theater-card small { margin-top: auto; color: #285740; font-size: .68rem; font-weight: 700; }
-.content-detail { width: 100%; max-width: 52rem; min-width: 0; overflow-wrap: anywhere; }
+.content-detail { width: 100%; max-width: 74rem; min-width: 0; overflow-wrap: anywhere; }
 .gallery-detail { width: 100%; max-width: 74rem; min-width: 0; overflow-wrap: anywhere; }
 
 /* Renderer-family learning slices */
@@ -1694,7 +1699,7 @@ caption {
 @media (prefers-reduced-motion: reduce) {
   .learning-renderer *, .learning-renderer *::before, .learning-renderer *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
-.compiled-content-layout { display: grid; grid-template-columns: minmax(0, 1fr) 11rem; gap: 1.2rem; align-items: start; margin-top: .9rem; }
+.compiled-content-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(10rem, 13rem); gap: clamp(1rem, 3vw, 2rem); align-items: start; margin-top: .9rem; }
 .content-toc { position: sticky; top: .75rem; grid-column: 2; grid-row: 1; padding: .65rem; border-left: 2px solid #d7ddd5; color: #59645d; font-size: .68rem; }
 .content-toc strong { color: #34453b; font-size: .7rem; }
 .content-toc ol { display: grid; gap: .25rem; margin: .45rem 0 0; padding: 0; list-style: none; }
@@ -1702,7 +1707,7 @@ caption {
 .content-toc .toc-level-3 { padding-left: .65rem; }
 .content-toc .toc-level-4, .content-toc .toc-level-5, .content-toc .toc-level-6 { padding-left: 1.1rem; }
 .content-toc button { padding: 0; border: 0; background: transparent; color: #496453; font: inherit; text-align: left; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
-.markdown-body { grid-column: 1; grid-row: 1; min-width: 0; }
+.markdown-body { grid-column: 1; grid-row: 1; width: 100%; min-width: 0; }
 .markdown-body h2, .gallery-section h2 { scroll-margin-top: 1rem; margin: 1.2rem 0 .35rem; color: #6b4a35; font-size: 1rem; }
 .markdown-body h2:first-child { margin-top: 0; }
 .markdown-body h3 { scroll-margin-top: 1rem; margin: .95rem 0 .3rem; color: #6b4a35; font-size: .84rem; }

@@ -64,7 +64,7 @@ export function OptimizationProblemPrimer({
               <code>{field.symbol}</code>
               <div>
                 <strong>{field.label_ja} <small>({field.label_en})</small></strong>
-                <p>{caseValues[field.field_id] ?? field.beginner_description}</p>
+                <p>{caseValues[field.field_id] ? <span dangerouslySetInnerHTML={{ __html: caseValues[field.field_id] ?? "" }} /> : field.beginner_description}</p>
               </div>
             </article>
           ))}

@@ -7,6 +7,7 @@ from typing import Any, Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.content_markdown import render_inline_markdown
 from optimization_compass.content_models import ContentPage
 from optimization_compass.evidence import (
     EXPECTED_CURRENTNESS_BY_SOURCE_TYPE,
@@ -339,9 +340,6 @@ def build_learning_journey_index(
                 *(str(source_id) for page in linked_pages for source_id in page.source_ids),
             }
         )
-        feature_values = {
-            str(item["feature_id"]): str(item["value"]) for item in case.get("feature_values", [])
-        }
         journey_rows.append(
             LearningJourney(
                 journey_id=case_id,
@@ -360,12 +358,10 @@ def build_learning_journey_index(
                     {scenario.problem_instance_id for scenario in scenarios}
                 ),
                 formulation=JourneyFormulation(
-                    variable_domain_summary=feature_values.get(
-                        "F_VARIABLE_DOMAIN", "not_explicitly_classified"
-                    ),
-                    decision_variables=str(case["decision_variables"]),
-                    objective=str(case["objective"]),
-                    constraints=str(case["constraints"]),
+                    variable_domain_summary=render_inline_markdown(str(case["variable_domain"])),
+                    decision_variables=render_inline_markdown(str(case["decision_variables"])),
+                    objective=render_inline_markdown(str(case["objective"])),
+                    constraints=render_inline_markdown(str(case["constraints"])),
                 ),
                 scenarios=scenario_references,
                 comparisons=comparison_references,

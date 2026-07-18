@@ -1540,10 +1540,10 @@
         "M_NELDER_MEAD"
       ],
       "formulation": {
-        "constraints": "parameter bounds [0, 0, -1] ≤ [a, k, c] ≤ [5, 3, 2]。",
-        "decision_variables": "指数減衰model y=a exp(-kt)+c の3個の連続parameter [a, k, c]。",
-        "objective": "20個のnoiseなし合成観測に対する残差vectorの二乗和を最小化する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "パラメータの上下限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><mi>a</mi><mo>&#x02264;</mo><mn>5</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><mi>k</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>1</mn><mo>&#x02264;</mo><mi>c</mi><mo>&#x02264;</mo><mn>2</mn></mrow></math>。固定教材ではこの直方体（box）以外の制約は置かない。",
+        "decision_variables": "指数減衰モデル（exponential-decay model）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mover accent=\"true\"><mi>y</mi><mo>&#x0005E;</mo></mover><mo stretchy=\"false\">&#x00028;</mo><mi>t</mi><mi>;</mi><mi>a</mi><mo>&#x0002C;</mo><mi>k</mi><mo>&#x0002C;</mo><mi>c</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>a</mi><mi>exp</mi><mo stretchy=\"false\">&#x00028;</mo><mo>&#x02212;</mo><mi>k</mi><mi>t</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>c</mi></mrow></math> のパラメータ（parameter）ベクトル <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>a</mi><mo>&#x0002C;</mo><mi>k</mi><mo>&#x0002C;</mo><mi>c</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>X</mi></mrow></math>。",
+        "objective": "20個の観測時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>t</mi><mi>i</mi></msub></mrow></math> における残差 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>r</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mover accent=\"true\"><mi>y</mi><mo>&#x0005E;</mo></mover><mo stretchy=\"false\">&#x00028;</mo><msub><mi>t</mi><mi>i</mi></msub><mi>;</mi><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><msub><mi>y</mi><mi>i</mi></msub></mrow></math> の二乗和 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>r</mi><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化する。",
+        "variable_domain_summary": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>5</mn><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>2</mn><mo stretchy=\"false\">]</mo><mo>&#x02282;</mo><msup><mi>&#x0211D;</mi><mn>3</mn></msup></mrow></math>。a は振幅、k は減衰率、c はオフセット（offset）で、上下限（bounds）はパラメータの物理的な許容範囲を表す。"
       },
       "implementation_ids": [
         "I_CERES",
@@ -1552,7 +1552,7 @@
       ],
       "journey_id": "EC013",
       "last_reviewed": "2026-07-17",
-      "learning_objective": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
+      "learning_objective": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。",
       "limitations": [
         "TheaterとCompareはsolver非依存の共通診断probeです。TRF・LM・L-BFGS-Bの実行結果ではなく、Compareの3 lineは意図的に同一です。",
         "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
@@ -1603,7 +1603,7 @@
       "status": "complete",
       "takeaway": "残差pattern、Jacobian rank、scale、bounds、外れ値、初期値感度を確認し、二乗和だけでparameterの一意性を断定しません。",
       "title_en": "Estimate nonlinear model parameters",
-      "title_ja": "観測データから非線形model parameterを推定する"
+      "title_ja": "観測データから非線形モデルのパラメータを推定する"
     },
     {
       "candidate_method_ids": [
@@ -1631,10 +1631,10 @@
         "M_WEIGHTED_SUM"
       ],
       "formulation": {
-        "constraints": "設計boundsと安全上のfeasibility条件。",
-        "decision_variables": "設計寸法と運転条件。",
-        "objective": "実problemではcostと性能lossの2目的を同時に最小化する。TheaterとCompareの固定教材では、0≤x,y≤2上のf₁=x²+y²とf₂=(x−2)²+(y−2)²を最小化する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>2</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><mi>y</mi><mo>&#x02264;</mo><mn>2</mn></mrow></math>。実務では設計の上下限に加え、安全上の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn></mrow></math> を実行可能条件として追加する。",
+        "decision_variables": "実務では設計寸法と運転条件のベクトル x。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> の2変数で、物理量そのものではなく無次元化した代理変数とする。",
+        "objective": "実問題では費用（cost）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と性能損失（performance loss）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を同時に最小化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub><mo>&#x0003D;</mo><msup><mi>x</mi><mn>2</mn></msup><mo>&#x0002B;</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math>。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>2</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>2</mn></msup><mo>&#x02223;</mo><mn>0</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>2</mn><mo>&#x0002C;</mo><mn>0</mn><mo>&#x02264;</mo><mi>y</mi><mo>&#x02264;</mo><mn>2</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。実務では寸法・運転条件の上下限（bounds）と実行可能領域（feasible set）を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi></mrow></math> に置く。"
       },
       "implementation_ids": [
         "I_CVXPY",
@@ -1642,10 +1642,10 @@
       ],
       "journey_id": "EC017",
       "last_reviewed": "2026-07-17",
-      "learning_objective": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
+      "learning_objective": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。",
       "limitations": [
-        "実problemのCaseと、解析的な2変数凸二次教材を同一視しません。教材のdecision [x,y] は設計寸法と運転条件そのものではなく、trade-offを読むための無次元化した代理変数です。",
-        "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"
+        "実問題のCaseと、解析的な2変数凸二次教材を同一視しません。教材の意思決定変数 [x,y] は設計寸法と運転条件そのものではなく、トレードオフを読むための無次元化した代理変数です。",
+        "有限の個体群（population）と評価予算で得る近似フロントであり、真のパレートフロントや選好の妥当性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA038",
@@ -1674,9 +1674,9 @@
         "S068"
       ],
       "status": "complete",
-      "takeaway": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontとpreferenceで選んだ1点を区別します。",
+      "takeaway": "目的の向き、正規化（normalization）、基準点（reference point）、seed、評価予算を記録し、近似フロントと選好で選んだ1点を区別します。",
       "title_en": "Explore a cost-performance Pareto trade-off",
-      "title_ja": "costと性能のPareto trade-offを探索する"
+      "title_ja": "コストと性能のパレートトレードオフを探索する"
     },
     {
       "candidate_method_ids": [
@@ -1708,10 +1708,10 @@
         "M_BRANCH_CUT"
       ],
       "formulation": {
-        "constraints": "車両容量、時間窓、勤務時間、各stopの一度だけの訪問。",
-        "decision_variables": "各車両が訪問するstopの順序と割当。",
-        "objective": "総移動時間と遅延penaltyを小さくする。",
-        "variable_domain_summary": "graph"
+        "constraints": "各stopをちょうど一度訪問し、車両容量を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><mi>d</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>n</mi><msub><mi>d</mi><mi>i</mi></msub><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub><mo>&#x02264;</mo><msub><mi>Q</mi><mi>v</mi></msub></mrow></math>、到着時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></math> を時間窓 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><msub><mi>e</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>l</mi><mi>i</mi></msub><mo stretchy=\"false\">]</mo></mrow></math> 内、経路の勤務時間を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>v</mi></msub></mrow></math> 以下にする。",
+        "decision_variables": "配送経路の順序 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C0;</mi></mrow></math> と車両割当 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C0;</mi></mrow></math> はstopの順列、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はstop i を車両 v が訪問することを表す。",
+        "objective": "経路ごとの移動時間と時間窓からの遅れを合わせ、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C0;</mi><mo>&#x0002C;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02211;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>v</mi><mi>e</mi><mi>l</mi><mi>&#x0005F;</mi><mi>t</mi><mi>i</mi><mi>m</mi><mi>e</mi><mo>&#x0002B;</mo><mi>&#x003B1;</mi><mo>&#x02211;</mo><mi>l</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>e</mi><mi>s</mi><mi>s</mi></mrow></math> を最小化する。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mtext>depot&#x000A0;1個とstop&#x000A0;4個を1台へ割り当てる配送経路の集合</mtext><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。順序は順列（permutation）、車両割当は離散で、連続ベクトルの直方体（box）ではない。"
       },
       "implementation_ids": [
         "I_GUROBI",
@@ -1719,9 +1719,9 @@
       ],
       "journey_id": "EC019",
       "last_reviewed": "2026-07-15",
-      "learning_objective": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
+      "learning_objective": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。",
       "limitations": [
-        "deadline停止時の解は品質gapが未証明で、交通・service timeの変動もこの固定例には含みません。"
+        "期限停止時の解は品質の差が未証明で、交通やサービス時間の変動もこの固定例には含みません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA031",
@@ -1735,9 +1735,9 @@
         "S054"
       ],
       "status": "partial",
-      "takeaway": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。",
+      "takeaway": "距離行列（distance matrix）、タイムゾーン（time zone）、サービス時間（service time）を検証し、期限停止時は実行可能性と未証明の最適性の差を分けて報告します。",
       "title_en": "Build time-window delivery routes under a deadline",
-      "title_ja": "時間窓付き配送routeを10分以内に組む"
+      "title_ja": "時間窓付き配送ルートを10分以内に組む"
     },
     {
       "candidate_method_ids": [
@@ -1769,10 +1769,10 @@
         "M_BFGS"
       ],
       "formulation": {
-        "constraints": "離散化したdynamics、state/control bounds、obstacleと終端条件。",
-        "decision_variables": "各time stepのstate、control、必要なら最終時刻。",
-        "objective": "tracking error、control effort、所要時間を最小化する。",
-        "variable_domain_summary": "trajectory"
+        "constraints": "離散化した動力学（dynamics）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、状態・入力の上下限、各meshでの障害物（obstacle）回避 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>g</mi><mrow><mi>o</mi><mi>b</mi><mi>s</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mn>0</mn></mrow></math>、初期状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>i</mi><mi>n</mi><mi>i</mi><mi>t</mi></mrow></msub></mrow></math> と終端条件を課す。",
+        "decision_variables": "状態列（state sequence）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub></mrow></math>、制御入力列（control sequence）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub></mrow></math>、必要なら終端時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi></mrow></math>。単一shooting（single shooting）では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi></mrow></math> 列だけを直接選び、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math> 列は前進計算（rollout）で作る。",
+        "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><msub><mi>x</mi><mrow><mi>r</mi><mi>e</mi><mi>f</mi><mo>&#x0002C;</mo><mi>k</mi></mrow></msub><msubsup><mo>&#x02016;</mo><mi>Q</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><msub><mi>u</mi><mi>k</mi></msub><msubsup><mo>&#x02016;</mo><mi>R</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mi>&#x003C1;</mi><mi>T</mi></mrow></math> を最小化する。",
+        "variable_domain_summary": "mesh数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi><mo>&#x0003D;</mo><mn>20</mn></mrow></math> の固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo>&#x0002C;</mo><mi>T</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02223;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mi>n</mi></msup><mo>&#x0002C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo stretchy=\"false\">]</mo><mo>&#x0002C;</mo><mi>T</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><msub><mi>T</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>T</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo stretchy=\"false\">]</mo><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。"
       },
       "implementation_ids": [
         "I_ACADOS",
@@ -1781,9 +1781,9 @@
       ],
       "journey_id": "EC020",
       "last_reviewed": "2026-07-15",
-      "learning_objective": "非線形動力学とpath constraintを守る軌道を設計したい。",
+      "learning_objective": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
       "limitations": [
-        "離散mesh上のfeasibilityであり、連続時間の安全性や動力学modelの正確さは保証しません。"
+        "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA042",
@@ -1796,7 +1796,7 @@
         "S076"
       ],
       "status": "partial",
-      "takeaway": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。",
+      "takeaway": "mesh、積分器（integrator）、初期軌道、欠陥、前進計算（rollout）の検証結果を保存し、離散化artifactを物理的な改善と誤読しません。",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
       "title_ja": "非線形動力学を含む軌道を最適化する"
     },
@@ -1830,10 +1830,10 @@
         "M_DIFFERENTIAL_EVOLUTION"
       ],
       "formulation": {
-        "constraints": "線形化dynamics、input/state bounds、初期state。",
-        "decision_variables": "予測horizon上のstateとcontrol increment。",
-        "objective": "tracking errorとcontrol effortの凸二次costを最小化する。",
-        "variable_domain_summary": "trajectory"
+        "constraints": "線形化した動力学 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>A</mi><mi>k</mi></msub><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>B</mi><mi>k</mi></msub><mi>&#x00394;</mi><msub><mi>u</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>c</mi><mi>k</mi></msub></mrow></math>、初期状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>c</mi><mi>u</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow></math>、入力・状態の上下限を線形制約として課す。",
+        "decision_variables": "予測horizonの状態列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub></mrow></math> と制御入力の増分（control increment）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x00394;</mi><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>&#x00394;</mi><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub></mrow></math>。実機の現在状態はパラメータ（parameter）として毎周期更新する。",
+        "objective": "参照値との差と入力変更を、凸二次目的（convex quadratic objective）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><msub><mi>r</mi><mi>k</mi></msub><msubsup><mo>&#x02016;</mo><mi>Q</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><mi>&#x00394;</mi><msub><mi>u</mi><mi>k</mi></msub><msubsup><mo>&#x02016;</mo><mi>R</mi><mn>2</mn></msubsup></mrow></math> として最小化する。",
+        "variable_domain_summary": "予測horizon <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi></mrow></math> の固定QPでは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mrow><mi>n</mi><mo stretchy=\"false\">&#x00028;</mo><mi>N</mi><mo>&#x0002B;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>m</mi><mi>N</mi></mrow></msup></mrow></math> の状態・制御入力増分ベクトル。ただし上下限（bounds）と線形制約で実行可能領域（feasible set）を切り出す。"
       },
       "implementation_ids": [
         "I_ACADOS",
@@ -1841,9 +1841,9 @@
       ],
       "journey_id": "EC025",
       "last_reviewed": "2026-07-15",
-      "learning_objective": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
+      "learning_objective": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。",
       "limitations": [
-        "平均solve時間だけでは100Hzを保証できず、worst-case latencyとcold startを実機で検証する必要があります。"
+        "平均計算時間だけでは100Hzを保証できず、最悪遅延と初期解なしの状態を実機で検証する必要があります。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA043",
@@ -1860,9 +1860,9 @@
         "S076"
       ],
       "status": "partial",
-      "takeaway": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。",
+      "takeaway": "初期解の引き継ぎ、行列分解の再利用、主・双対残差（primal/dual residual）、最悪遅延（worst-case latency）、初期解なしの代替経路を同時に監視します。",
       "title_en": "Solve a repeated MPC QP at 100 Hz",
-      "title_ja": "100Hzで反復MPCのQPを解く"
+      "title_ja": "100Hzで反復MPCの二次計画問題を解く"
     },
     {
       "candidate_method_ids": [
@@ -1894,10 +1894,10 @@
         "M_DIFFERENTIAL_EVOLUTION"
       ],
       "formulation": {
-        "constraints": "PDE residual、境界条件、design bounds、solver failure。",
-        "decision_variables": "distributed field、境界control、低次元design parameter。",
-        "objective": "PDE solutionから計算する性能指標とregularizationを最小化する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "離散PDE残差 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mrow><mi>P</mi><mi>D</mi><mi>E</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、境界条件、設計パラメータの上下限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></math> を課し、inner solverが失敗した候補の扱いも明示する。",
+        "decision_variables": "PDEの状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math>、境界制御 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math>、低次元の設計パラメータ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math>。reduced formulation（縮約定式化）では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math> はPDE solveで決まり、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> だけを最適化器（optimizer）が動かす。",
+        "objective": "PDE solve <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> から得る性能指標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と正則化（regularization）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を使い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mi>J</mi><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mi>R</mi></mrow></math> を最小化する。",
+        "variable_domain_summary": "mesh上の状態（state）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>h</mi></mrow></msub></mrow></msup></mrow></math>、境界制御（boundary control）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>b</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>d</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub></mrow></msup></mrow></math>、設計パラメータ（design parameter）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msup><mo stretchy=\"false\">]</mo><mi>p</mi></msup></mrow></math> の直積 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi></mrow></math>。連続PDEの関数空間そのものではなく、離散mesh上の領域である。"
       },
       "implementation_ids": [
         "I_IPOPT",
@@ -1905,9 +1905,9 @@
       ],
       "journey_id": "EC026",
       "last_reviewed": "2026-07-15",
-      "learning_objective": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。",
+      "learning_objective": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
       "limitations": [
-        "結果は離散PDE・inner tolerance・preconditionerに依存し、連続modelでの最適性は保証しません。"
+        "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA045",
@@ -1920,9 +1920,9 @@
         "S056"
       ],
       "status": "partial",
-      "takeaway": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。",
+      "takeaway": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
-      "title_ja": "PDE制約付き大規模設計をmatrix-freeで解く"
+      "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
     },
     {
       "candidate_method_ids": [
@@ -1950,10 +1950,10 @@
         "M_NELDER_MEAD"
       ],
       "formulation": {
-        "constraints": "選択した施策の費用合計を予算以下にする。固定教材では 4x_A+3x_B+2x_D+3x_C≤7。",
-        "decision_variables": "各施策 i を選ぶとき1、選ばないとき0となるbinary変数 x_i。固定教材では [x_A,x_B,x_D,x_C]∈{0,1}⁴。",
-        "objective": "選択した施策の期待効果を最大化する。固定教材では max 9x_A+6x_B+4x_D+5x_C。",
-        "variable_domain_summary": "binary"
+        "constraints": "費用 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow></math> の合計を予算 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi></mrow></math> 以下にする。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x02264;</mo><mn>7</mn></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。",
+        "decision_variables": "施策 i を採用するとき1、採用しないとき0の二値変数（binary variable）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>C</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> の4変数。",
+        "objective": "施策ごとの期待効果 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>v</mi><mi>i</mi></msub></mrow></math> の合計を最大化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>9</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>C</mi></msub></mrow></math> を最大化する。",
+        "variable_domain_summary": "実務では施策集合 i ごとに <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>4</mn></msup></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mi>C</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。"
       },
       "implementation_ids": [
         "I_ORTOOLS_CPSAT"
@@ -1962,7 +1962,7 @@
       "last_reviewed": "2026-07-17",
       "learning_objective": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
       "limitations": [
-        "4施策・固定費用・固定期待効果の教育用0-1 knapsackです。施策間相互作用、効果の不確実性、実solverのcut・presolve性能、大規模instanceでの一般性能は示しません。"
+        "4施策・固定費用・固定期待効果の教育用0-1ナップサック問題です。施策間相互作用、効果の不確実性、実solverのカットや前処理、大規模インスタンスでの一般性能は示しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA032",
@@ -1997,7 +1997,7 @@
         "S079"
       ],
       "status": "complete",
-      "takeaway": "Caseは施策選択、Theaterは同じ数式の4品目instanceとして読みます。incumbent、global bound、gap、feasibility、停止理由を一緒に記録します。",
+      "takeaway": "Caseは施策選択、Theaterは同じ数式を4品目の問題インスタンス（instance）にしたものとして読みます。最良既知解（incumbent）、大域下界（global bound）、最適性の差（gap）、実行可能性（feasibility）、停止理由を一緒に記録します。",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する"
     },
@@ -2027,10 +2027,10 @@
         "M_BFGS"
       ],
       "formulation": {
-        "constraints": "許容領域を表す非線形不等式とdesign bounds。",
-        "decision_variables": "2つの連続design parameter。",
-        "objective": "重量に対応する二次目的を最小化する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "非線形強度制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo>&#x02212;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x02264;</mo><mn>1</mn></mrow></math> と上下限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>1</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>1</mn><mo>&#x02264;</mo><mi>y</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>。円の外側は目的値が低くても実行不可能（infeasible）である。",
+        "decision_variables": "2つの連続設計パラメータ（design parameter）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi></mrow></math>。固定教材では設計点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>2</mn></msup></mrow></math> を選ぶ。",
+        "objective": "重量に対応する <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msup><mi>x</mi><mn>2</mn></msup><mo>&#x0002B;</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></math> を最小化する。目的を下げる方向と、制約（constraint）を破らないことを別々に確認する。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>3</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup></mrow></math>。実際に選べる領域はさらに円内 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo>&#x02212;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x02264;</mo><mn>1</mn></mrow></math> で切り出されるため、実行可能領域（feasible set）は直方体（box）全体ではない。"
       },
       "implementation_ids": [
         "I_IPOPT",
@@ -2038,9 +2038,9 @@
       ],
       "journey_id": "constrained-design",
       "last_reviewed": "2026-07-15",
-      "learning_objective": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
+      "learning_objective": "強度の非線形制約（constraint）を満たす設計の中で、重量を最小化したい。",
       "limitations": [
-        "2変数の教材modelで得た可行性は、実設計の強度modelや安全余裕を保証しません。"
+        "2変数の教材モデルで得た実行可能性は、実設計の強度モデルや安全余裕を保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA009",
@@ -2074,7 +2074,7 @@
         "S087"
       ],
       "status": "complete",
-      "takeaway": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
+      "takeaway": "目的値と最大制約違反量（constraint violation）を分けて保存し、アクティブ制約（active constraint）と終了状態を確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"
     },
@@ -2108,10 +2108,10 @@
         "M_BFGS"
       ],
       "formulation": {
-        "constraints": "hyperparameter boundsと合計10回のevaluation budget。",
-        "decision_variables": "bounds内のlearning rateと正則化係数。固定教材では1つの正規化変数 x に写像する。",
-        "objective": "各設定で観測した検証損失を最小化する。固定教材では未知の波状black-box値を観測する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B7;</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math> の上下限に加え、実務では評価予算（evaluation budget）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>k</mi></msub><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mi>b</mi><mi>u</mi><mi>d</mi><mi>g</mi><mi>e</mi><mi>t</mi></mrow></math> を置く。固定教材では評価回数を最大10回とする。",
+        "decision_variables": "学習率（learning rate）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B7;</mi></mrow></math> と正則化係数（regularization coefficient）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math>。固定教材ではこの組を1個の正規化変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> に写像する。",
+        "objective": "設定 x を1回評価して得る検証損失 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0.16</mn><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1.7</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.45</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>2.2</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.12</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>5.3</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> をブラックボックス（black-box）として観測する。",
+        "variable_domain_summary": "実務では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>5</mn></mrow></msup><mo>&#x0002C;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>1</mn></mrow></msup><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>6</mn></mrow></msup><mo>&#x0002C;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>1</mn></mrow></msup><mo stretchy=\"false\">]</mo></mrow></math> のようなハイパーパラメータの直方体。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> の1次元変数 x。"
       },
       "implementation_ids": [
         "I_BOTORCH",
@@ -2119,9 +2119,9 @@
       ],
       "journey_id": "hyperparameter-search",
       "last_reviewed": "2026-07-17",
-      "learning_objective": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。",
+      "learning_objective": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。",
       "limitations": [
-        "固定seed・1次元・RBF kernel・10 evaluationの教材であり、別dataset、search space、noise条件でのBOやbaselineの優位性を示しません。"
+        "固定seed・1次元・RBFカーネル（kernel）・10回評価の教材であり、別データセット、探索空間（search space）、ノイズ条件でのベイズ最適化（BO）やベースライン（baseline）の優位性を示しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA039",
@@ -2168,7 +2168,7 @@
         "S075"
       ],
       "status": "complete",
-      "takeaway": "実務Caseと1次元の固定教材を分け、観測noise、best-so-far、不確実性、budget到達を一緒に記録します。",
+      "takeaway": "実務のCaseと1次元の固定教材を分け、観測ノイズ（noise）、現時点の最良値（best-so-far）、不確実性、評価予算（budget）の到達を一緒に記録します。",
       "title_en": "Hyperparameter search",
       "title_ja": "高価な実験の設定を探す"
     },
@@ -2202,10 +2202,10 @@
         "M_NELDER_MEAD"
       ],
       "formulation": {
-        "constraints": "比率の上下限、合計1、集中投資上限。",
-        "decision_variables": "各資産の保有比率。",
-        "objective": "期待収益とリスクのトレードオフを最小化する。",
-        "variable_domain_summary": "continuous"
+        "constraints": "全資産への配分を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> とし、空売り禁止 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub></mrow></math>、集中投資上限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn></mrow></math>、必要なら売買回転（turnover）の制約を課す。",
+        "decision_variables": "各資産の保有比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>3</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。現金を含める場合は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mrow><mi>c</mi><mi>a</mi><mi>s</mi><mi>h</mi></mrow></msub></mrow></math> も同じベクトルへ加える。",
+        "objective": "期待収益を増やし、共分散リスク（covariance risk）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>w</mi><mi>&#x1D5B3;</mi></msup><mi>&#x003A3;</mi><mi>w</mi></mrow></math> と取引コスト（transaction cost）を抑える。代表的には <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>&#x003B3;</mi><msup><mi>w</mi><mi>&#x1D5B3;</mi></msup><mi>&#x003A3;</mi><mi>w</mi><mo>&#x02212;</mo><msup><mi>&#x003BC;</mi><mi>&#x1D5B3;</mi></msup><mi>w</mi><mo>&#x0002B;</mo><mi>&#x003BA;</mi><mspace width=\"0.167em\" /><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。",
+        "variable_domain_summary": "4資産の固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>w</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>4</mn></msup><mo>&#x02223;</mo><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow></math> は資産 i の保有比率。"
       },
       "implementation_ids": [
         "I_CVXPY"
@@ -2214,7 +2214,7 @@
       "last_reviewed": "2026-07-14",
       "learning_objective": "リスクを抑えながら期待収益と運用制約を両立したい。",
       "limitations": [
-        "期待収益と共分散の推定に依存し、取引costや将来分布の変化を保証範囲に含めません。"
+        "期待収益と共分散の推定に依存し、取引コスト（cost）や将来分布の変化を保証範囲に含めません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA052",
@@ -2267,10 +2267,10 @@
         "M_GRADIENT_DESCENT"
       ],
       "formulation": {
-        "constraints": "資格、休憩、連続勤務、必要人数。",
-        "decision_variables": "各スタッフを各時間帯へ割り当てる。",
-        "objective": "希望違反と偏りのペナルティを最小化する。",
-        "variable_domain_summary": "binary"
+        "constraints": "各枠の必要人数を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>s</mi></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x02265;</mo><msub><mi>d</mi><mi>t</mi></msub></mrow></math> とし、資格のないスタッフの配置 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
+        "decision_variables": "スタッフ s と曜日・勤務帯 t の組ごとの二値変数（binary variable）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub></mrow></math>。固定教材では4名×9枠の36変数。",
+        "objective": "希望勤務帯の違反とスタッフ間の勤務数の偏りをペナルティ（penalty）として最小化する。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02211;</mo><msub><mi>p</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mspace width=\"0.167em\" /><mo>fairness</mo><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mrow><mn>4</mn><mo>&#x000D7;</mo><mn>9</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はスタッフ s を曜日・勤務帯 t に割り当てることを表す。"
       },
       "implementation_ids": [
         "I_ORTOOLS_CPSAT"
@@ -2297,7 +2297,7 @@
         "S079"
       ],
       "status": "partial",
-      "takeaway": "hard constraintとsoft constraintを最初に分離します。",
+      "takeaway": "必ず守る制約（hard constraint）と、できれば満たしたい制約（soft constraint）を最初に分離します。",
       "title_en": "Shift scheduling",
       "title_ja": "スタッフのシフトを組む"
     }

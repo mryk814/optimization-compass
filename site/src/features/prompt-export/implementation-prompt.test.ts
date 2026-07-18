@@ -81,7 +81,7 @@ describe("ImplementationPromptPack", () => {
     const pack = createImplementationPromptPack(draft, draft.initial_form);
 
     expect(pack.intent).toBe(item.question);
-    expect(pack.user_problem.decision_variables).toBe(item.decision_variables);
+    expect(pack.user_problem.decision_variables).toBe(`X: ${item.variable_domain}\nx: ${item.decision_variables}`);
     expect(pack.user_problem.objective).toBe(item.objective);
     expect(pack.user_problem.constraints).toBe(item.constraints);
     expect(pack.environment.programming_language).toBe("unknown");

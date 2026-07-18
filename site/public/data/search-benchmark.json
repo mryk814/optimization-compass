@@ -4,7 +4,7 @@
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
-    "top_3_relevance": 0.9,
+    "top_3_relevance": 1.0,
     "zero_result_rate": 0.09090909090909091
   },
   "queries": [
@@ -74,8 +74,8 @@
       "query_id": "routing-natural-language",
       "result_count": 3,
       "top_document_ids": [
-        "problem:PA031",
         "case:EC019",
+        "problem:PA031",
         "case:portfolio-allocation"
       ]
     },
@@ -93,11 +93,11 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 54,
+      "result_count": 55,
       "top_document_ids": [
+        "case:hyperparameter-search",
         "method:MF_STOCHASTIC_ML",
-        "method:M_GRADIENT_DESCENT",
-        "method:M_SUBGRADIENT"
+        "method:M_GRADIENT_DESCENT"
       ]
     },
     {

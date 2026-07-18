@@ -57,6 +57,15 @@ UI instructions and generated explanatory text follow the same boundary: their c
 input supplies Japanese prose, and generators do not translate it. Stable IDs, URL identifiers, schema
 keys, and API fields remain unlocalized.
 
+For short case descriptions and other structured explanatory text, write Japanese as the sentence
+language. Keep an academic English term only when it improves searchability or disambiguation, and
+put it at first use in parentheses after the Japanese term: `制約（constraint）`, `追従誤差（tracking
+error）`. Do not switch languages mid-sentence for ordinary words or write bare fragments such as
+`costを最小化する`; use `コスト（cost）を最小化する` instead. Variables, sets, objectives, and
+constraints must be enclosed in inline TeX `$...$`; the site export converts them through the same
+MathML renderer used by lesson pages. Keep the raw TeX in the seed/source file and never hand-edit
+the generated site data.
+
 ## Body style
 
 Prose style — sentence tone, terminology spelling, and canonical section headings — is

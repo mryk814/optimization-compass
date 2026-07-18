@@ -102,6 +102,7 @@ const featuredGallery = {
       status: "published",
       last_reviewed: "2026-07-16",
       question: "観測データに合うモデルパラメータを推定したい。",
+      variable_domain: "X=[0,5]×[0,3]×[−1,2]⊂ℝ³。",
       decision_variables: "モデルの連続パラメータ。",
       objective: "観測残差を小さくする。",
       constraints: "物理的に妥当な上下限。",

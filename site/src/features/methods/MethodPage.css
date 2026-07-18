@@ -6,6 +6,12 @@
   color: #4f493d;
 }
 
+.method-learning .markdown-body,
+.method-learning .markdown-body p,
+.method-learning .markdown-body li {
+  max-width: none;
+}
+
 .method-technical-details {
   margin-top: 1.4rem;
   border: 1px solid #d4d9d5;
