@@ -154,6 +154,15 @@ CHECKS: tuple[ValidationCheck, ...] = (
         command=None,
     ),
     ValidationCheck(
+        code="data.manifest",
+        description="Declarative migration and specialized-input manifest validation.",
+        next_action=(
+            "Update data/build-manifest.json from the canonical repository inputs;"
+            " do not edit generated release artifacts."
+        ),
+        command=None,
+    ),
+    ValidationCheck(
         code="data.stage",
         description="Deterministic staged dataset rebuild.",
         next_action=(
@@ -205,6 +214,7 @@ _TIER_B_CODES: tuple[str, ...] = (
     "python.types",
     "python.tests",
     "data.integrity",
+    "data.manifest",
     "content.pages",
     "content.licensing",
     "data.stage",
@@ -271,6 +281,12 @@ TASKS: dict[str, ValidationTask] = {
             gate="tier-c",
             check_codes=("python.lint", "python.types", "python.problem-tests"),
         ),
+        ValidationTask(
+            name="manifest",
+            description="Build-input manifest and migration registration checks. PR gate: tier-b.",
+            gate="tier-b",
+            check_codes=("data.manifest",),
+        ),
     )
 }
 
@@ -313,8 +329,26 @@ def _run_data_integrity() -> tuple[bool, str]:
     return bool(result["ok"]), json.dumps(result, ensure_ascii=False)
 
 
+def _run_build_manifest() -> tuple[bool, str]:
+    from optimization_compass.build_manifest import BuildManifestError, validate_build_manifest
+
+    try:
+        manifest = validate_build_manifest()
+    except BuildManifestError as error:
+        return False, str(error)
+    return True, json.dumps(
+        {
+            "manifest_version": manifest.manifest_version,
+            "schema_migrations": [migration.id for migration in manifest.schema_migrations],
+            "specialized_inputs": list(manifest.specialized_inputs),
+        },
+        ensure_ascii=False,
+    )
+
+
 _CALLABLE_CHECKS: dict[str, Callable[[], tuple[bool, str]]] = {
-    "data.integrity": _run_data_integrity
+    "data.integrity": _run_data_integrity,
+    "data.manifest": _run_build_manifest,
 }
 
 

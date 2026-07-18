@@ -102,6 +102,7 @@ npm --prefix site test -- --run
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy src
+uv run optimization-compass validate manifest
 uv run optimization-compass verify-data
 uv run python scripts/verify_content.py
 uv run python scripts/verify_licensing.py

@@ -46,6 +46,7 @@ def test_tier_compositions_match_agents_documentation() -> None:
         "python.types",
         "python.tests",
         "data.integrity",
+        "data.manifest",
         "content.pages",
         "content.licensing",
         "data.stage",
@@ -70,6 +71,24 @@ def test_tiers_are_strictly_nested() -> None:
 
 def test_problem_task_gate_is_tier_c() -> None:
     assert TASKS["problem"].gate == "tier-c"
+
+
+def test_manifest_task_is_a_focused_tier_b_check() -> None:
+    assert TASKS["manifest"].check_codes == ("data.manifest",)
+    assert TASKS["manifest"].gate == "tier-b"
+
+
+def test_manifest_validation_returns_machine_readable_result() -> None:
+    result = runner.invoke(app, ["validate", "manifest", "--format", "json"])
+
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["contract_version"] == CONTRACT_VERSION
+    assert payload["task"] == "manifest"
+    assert payload["status"] == "pass"
+    assert payload["checks"][0]["code"] == "data.manifest"
+    assert payload["checks"][0]["status"] == "pass"
+    assert '"schema_migrations"' in payload["checks"][0]["message"]
 
 
 def test_unknown_task_raises_and_exits_with_usage_error() -> None:

@@ -434,11 +434,15 @@ Generated release and site files may also change after a validated publish step.
 
 ### Important warning
 
-Creating `data/migrations/<file>.sql` is not sufficient by itself. The deterministic dataset builder currently registers migration inputs explicitly. Verify that the new migration is applied and included among protected build inputs.
+Creating `data/migrations/<file>.sql` is not sufficient by itself. Add the migration to
+`data/build-manifest.json` with its ordered three-digit ID and SHA-256, then run
+`uv run optimization-compass validate manifest`. The staged builder validates the manifest before
+applying any migration and rejects missing, unregistered, reordered, or changed files.
 
 ### Validate
 
-Run the full Python, data, licensing, parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
+Run `uv run optimization-compass validate manifest`, followed by the full Python, data, licensing,
+parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
 
 ## 13. Recipe: add a visualization scenario
 
@@ -497,7 +501,7 @@ uv run python scripts/rebuild_dataset.py --stage
 Stage mode:
 
 - starts from the pinned base database;
-- applies registered migrations and seeds;
+- validates `data/build-manifest.json` and its declared specialized inputs, then applies its ordered migrations;
 - exports all distributions and site data;
 - validates cross-format and release identity;
 - builds twice and compares deterministic tree hashes;
@@ -524,7 +528,7 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 | Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
 | Release/schema/recommendation | complete repository validation | yes | yes | yes |
 
-The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`); each prints the PR gate it does not replace. `--list` shows a task's checks, `--format json` emits stable rule codes.
+The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`, `validate manifest`); each prints the PR gate it does not replace. `--list` shows a task's checks, `--format json` emits stable rule codes.
 
 Common commands:
 
@@ -569,7 +573,7 @@ The current system deliberately validates many cross-links, but authoring entry 
 - Gallery and comparisons use separate JSON seeds;
 - executable problems require JSON plus Python;
 - some failure and versioned-claim metadata is code-backed;
-- migrations are explicitly registered;
+- migration inputs are declared and hash-checked in `data/build-manifest.json`;
 - release identity and generated artifacts must move atomically.
 
-This guide makes the current workflow explicit. Future improvements may introduce declarative catalogs, scaffolding commands, validation aliases, and automatic migration manifests. Until then, do not hide these boundaries by manually editing generated output.
+This guide makes the current workflow explicit. Declarative catalogs and broader release-golden automation remain future work; do not hide these boundaries by manually editing generated output.

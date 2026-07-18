@@ -1,0 +1,65 @@
+{
+  "manifest_version": "1.0.0",
+  "schema_migrations": [
+    {
+      "id": "003",
+      "path": "data/migrations/003_atlas_metadata.sql",
+      "sha256": "af10a366fc4caa9d6a0c1aa8d5dcd240f12d196c5184fad9202ca18385b59699"
+    },
+    {
+      "id": "004",
+      "path": "data/migrations/004_learning_coverage.sql",
+      "sha256": "9cd239d4135aea2bc696873c3f5fd28400336b7444e550e009ecd26347935b7f"
+    },
+    {
+      "id": "005",
+      "path": "data/migrations/005_atomic_predicates.sql",
+      "sha256": "02b04fb5cc1c969e7308480ad1e363fd461de75a35827f4f4bccf04836e6ce04"
+    },
+    {
+      "id": "006",
+      "path": "data/migrations/006_problem_instances.sql",
+      "sha256": "096a6c4ed7a1962f06a8278303e44e4d720a09885d594f6c9488d55d2498842c"
+    },
+    {
+      "id": "007",
+      "path": "data/migrations/007_semantic_view_presets.sql",
+      "sha256": "ff09281b62b1dcda09d62954a09ac9089c4598df9d1351ce8b05a8be519015ef"
+    },
+    {
+      "id": "008",
+      "path": "data/migrations/008_versioned_claims_and_benchmark_context.sql",
+      "sha256": "8d346e0d0f4dc3d2440c608763875e24ec1c503d3109e0e867df15cf97f749b7"
+    },
+    {
+      "id": "009",
+      "path": "data/migrations/009_structured_failure_modes.sql",
+      "sha256": "c18ae798ff314e980dc7ba42858f3892e34db4d0074a5da76b65c6e631c52dc2"
+    },
+    {
+      "id": "010",
+      "path": "data/migrations/010_learning_graph_and_aliases.sql",
+      "sha256": "a924c39137d7a79633ff05d9fda72827eadce867f06550594101bf9e7ae022f7"
+    },
+    {
+      "id": "011",
+      "path": "data/migrations/011_trust_region_reflective_defaults.sql",
+      "sha256": "24353ec96e9509b2cfe75e83120745b4f385a1c20c32f975dab54561aca9cbab"
+    },
+    {
+      "id": "012",
+      "path": "data/migrations/012_typed_default_method_claims.sql",
+      "sha256": "03d5c1f1ec7fc45d84f18909cf512aabe1c2c1c9ef565d9963727fbbc0c15fd8"
+    },
+    {
+      "id": "013",
+      "path": "data/migrations/013_topology_optimization.sql",
+      "sha256": "ec1b6d9b00d494884a7733a82a75f163bf5b606d10b0fb763b2a06622f33e68c"
+    }
+  ],
+  "specialized_inputs": [
+    "data/seeds/atlas_metadata.json",
+    "data/seeds/atomic_predicates.json",
+    "src/optimization_compass/resources/problem-suite.json"
+  ]
+}
