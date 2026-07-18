@@ -132,11 +132,11 @@ export const purposeLabels: Record<VisualizationPurpose, string> = {
 };
 
 export const rendererLabels: Record<RendererFamily, string> = {
-  simplex_geometry: "単体形状 (Simplex geometry)",
-  continuous_trajectory: "連続軌跡 (Continuous trajectory)",
-  generic_metric_history: "指標の履歴 (Metric history)",
-  search_tree: "探索木 (Search tree)",
-  surrogate_uncertainty: "代理モデルの不確実性 (Surrogate uncertainty)",
-  feasible_region: "実行可能領域 (Feasible region)",
-  pareto_front: "パレート前線 (Pareto front)",
+  simplex_geometry: "単体形状",
+  continuous_trajectory: "連続軌跡",
+  generic_metric_history: "指標の履歴",
+  search_tree: "探索木",
+  surrogate_uncertainty: "代理モデルの不確実性",
+  feasible_region: "実行可能領域",
+  pareto_front: "パレート前線",
 };

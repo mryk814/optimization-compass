@@ -15,7 +15,6 @@ import {
 import { PlaybackControls } from "../playback/PlaybackControls";
 import { usePlayback } from "../playback/usePlayback";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
-import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel } from "../visualization/GuidedStoryPanel";
 import { LinkedSurfaceView } from "../visualization/LinkedSurfaceView";
 import { ScenarioContextPanel } from "./ScenarioContextPanel";
@@ -72,9 +71,9 @@ export function NelderMeadVisualization({
     <article className="atlas-page nm-theater">
       <header className="atlas-page-header nm-page-header">
         <div>
-          <p className="eyebrow">Method Theater · 実行Trace</p>
-          <h1>Nelder–Meadの幾何操作</h1>
-          <p>等高線と単体の役割を重ね、候補を受理・却下した理由まで追います。</p>
+          <p className="eyebrow">動きを見る · 1回の実行</p>
+          <h1>Nelder–Meadの一手を追う</h1>
+          <p>再生すると、単体がどの頂点を基準に動き、候補を受理・却下したかが順に表示されます。</p>
         </div>
         <div className="visualization-badges" aria-label="可視化artifact情報">
           <span>AlgorithmTrace {trace.contract_version}</span>
@@ -108,8 +107,15 @@ export function NelderMeadVisualization({
         </label>
       </section>
 
+      <section className="theater-first-action theater-first-action-detail" aria-labelledby="nm-first-action-title">
+        <div>
+          <p className="eyebrow">最初に押すところ</p>
+          <h2 id="nm-first-action-title">再生して、単体の動きを追う</h2>
+          <p>最初は図の細部を読む必要はありません。再生を止めながら、どの点が動き、判断がどう変わったかを見ます。</p>
+        </div>
+        <PlaybackControls playback={playback} />
+      </section>
       <ScenarioContextPanel scenario={scenario} />
-      <ScenarioLessonPanel scenario={scenario} />
       <GuidedStoryPanel
         activeStep={guidedStep}
         onStepChange={setGuidedStep}
@@ -130,8 +136,6 @@ export function NelderMeadVisualization({
         objective={trace.objective}
         terminalReason={trace.terminal_summary_ja}
       />
-      <PlaybackControls playback={playback} />
-
       <div className="nm-layout">
         <figure className="explanatory-figure">
           <svg

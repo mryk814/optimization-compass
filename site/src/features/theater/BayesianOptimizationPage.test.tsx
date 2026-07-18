@@ -37,8 +37,9 @@ function renderPage(entry = "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLO
 describe("BayesianOptimizationPage", () => {
   test("renders the generated trace, rationale, equal-budget table, and keyboard playback", async () => {
     renderPage();
-    expect(await screen.findByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
-    expect(await screen.findByText(/Expected Improvementによる次候補の選択/u)).toBeVisible();
+    expect(await screen.findByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
+    expect(await screen.findByText(/再生を押すと、観測/u)).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: "再生して、次の評価点が選ばれるまでを見る" })).toBeVisible();
     expect(await screen.findByText(/最適化方向: minimize/u)).toBeVisible();
     expect(screen.getByText(/optimizerが参照しない真の目的関数/u)).toBeVisible();
     expect(screen.getByRole("img", { name: /surrogateの平均/u })).toBeVisible();

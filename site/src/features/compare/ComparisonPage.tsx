@@ -45,7 +45,6 @@ import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningSliceRenderer } from "../learning-slices/renderer-registry";
 import { SearchTreeRenderer } from "../search-tree/SearchTreeRenderer";
 import { ObjectiveGoalCues } from "../visualization/ObjectiveGoalCues";
-import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GenericMetricHistory } from "../visualization/GenericMetricHistory";
 import { SurrogatePlot } from "../visualization/SurrogatePlot";
 import {
@@ -112,9 +111,9 @@ export function ComparisonPage() {
     <section className="atlas-page comparison-page">
       <header className="atlas-page-header comparison-page-header">
         <div>
-          <p className="eyebrow">比較 · 条件をそろえて読む</p>
+          <p className="eyebrow">比較 · 何をそろえ、何が違うかを見る</p>
           <h1>{loaded?.comparison.title_ja ?? "比較条件を読み込み中"}</h1>
-          <p>{loaded?.comparison.comparison_question ?? "何を固定し、何だけを変えた比較かを確認します。"}</p>
+          <p>{loaded ? readableComparisonText(loaded.comparison.comparison_question) : "何を同じにして、何を変えた比較かを確認します。"}</p>
         </div>
       </header>
       <PageOrientation
@@ -139,6 +138,7 @@ export function ComparisonPage() {
 
 function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPresetChange(comparisonId: string): void }) {
   const { comparison, comparisons } = loaded;
+  const primaryScenario = "scenario" in loaded ? loaded.scenario : loaded.scenarios[0];
   const links = useEntityLinks();
   const entity = (type: "case" | "method" | "scenario" | "trace", id: string) => (
     links.status === "ready" ? findEntity(links.index, type, id) : undefined
@@ -153,18 +153,18 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
           </select>
         </label>
       </section>
-      <div className="visualization-badges comparison-artifact-badges" aria-label="比較データの情報">
-        <span>{comparison.mode}</span>
-        <span>{[...new Set(comparison.members.map((member) => member.artifact.renderer_family))].join(" + ")}</span>
-        <span>{comparison.identity_status} · {comparison.comparability}</span>
+      <div className="visualization-badges comparison-artifact-badges" aria-label="比較データの概要">
+        <span>{comparisonModeLabel(comparison.mode)}</span>
+        <span>{[...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))].join(" + ")}</span>
+        <span>{identityStatusLabel(comparison.identity_status)} · {comparabilityLabel(comparison.comparability)}</span>
       </div>
-      <ComparisonContract comparison={comparison} />
+      <ComparisonContract comparison={comparison} scenario={primaryScenario} />
       {loaded.renderer === "trajectory" ? (
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "simplex" ? (
         <SimplexGeometryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "metric-history" ? (
-        <MetricHistoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
+        <MetricHistoryComparison comparison={comparison} traces={loaded.traces} />
       ) : loaded.renderer === "surrogate" ? (
         <SurrogateComparison comparison={comparison} payloads={loaded.payloads} scenarios={loaded.scenarios} />
       ) : loaded.renderer === "search-tree" ? (
@@ -221,7 +221,6 @@ function SearchTreeComparison({
         <h2 id="search-tree-comparison-heading">同じ評価回数で探索状態を比べる</h2>
         <p>各比較対象について、現在の評価回数以下で最後に記録されたイベントを表示します。</p>
       </header>
-      <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <div className="comparison-grid search-tree-comparison-grid">
         {artifacts.map((artifact, index) => {
@@ -264,25 +263,42 @@ function SearchTreeComparison({
   );
 }
 
-function ComparisonContract({ comparison }: { comparison: ComparisonSet }) {
+function ComparisonContract({ comparison, scenario }: { comparison: ComparisonSet; scenario: VisualizationScenario }) {
   return (
     <section className="comparison-contract-v2" aria-label="比較条件">
-      <header><span>{comparison.mode}</span><h2>{comparison.comparison_question}</h2><p>{comparison.formulation_summary}</p></header>
+      <header className="comparison-contract-lead">
+        <span>{comparisonModeLabel(comparison.mode)}</span>
+        <h2>この比較で確かめること</h2>
+        <p className="comparison-question">{readableComparisonText(comparison.comparison_question)}</p>
+        <p>{readableComparisonText(comparison.formulation_summary)}</p>
+      </header>
       <div className="comparison-factor-grid">
-        <article><h3>同じ条件</h3><ul>{comparison.fixed_factors.map((factor) => <li key={factor}>{factor}</li>)}</ul></article>
-        <article><h3>変えた条件</h3><ul>{comparison.changed_factors.map((factor) => <li key={factor}>{factor}</li>)}</ul></article>
-        <article><h3>見る指標</h3><ul>{comparison.metrics.map((metric) => <li key={metric.metric_id}><strong>{metric.label_ja}</strong> · {metric.direction} · {metric.unit}</li>)}</ul></article>
+        <article className="comparison-factor-fixed"><h3>ここまで同じ</h3><ul>{comparison.fixed_factors.map((factor) => <li key={factor}>{readableComparisonText(factor)}</li>)}</ul></article>
+        <article className="comparison-factor-changed"><h3>ここだけ違う</h3><ul>{comparison.changed_factors.map((factor) => <li key={factor}>{readableComparisonText(factor)}</li>)}</ul></article>
+        <article className="comparison-factor-observe">
+          <h3>まず見る</h3>
+          <ul>{comparison.metrics.map((metric) => <li key={metric.metric_id}><strong>{metric.label_ja}</strong><span>{metricDirectionLabel(metric.direction)} · {metricUnitLabel(metric.unit)}</span></li>)}</ul>
+          {scenario.lesson.success_signals.length > 0 && <p><strong>良い変化</strong>{scenario.lesson.success_signals.map((item) => item.label_ja).join(" · ")}</p>}
+          {scenario.lesson.failure_signals.length > 0 && <p><strong>違いが出るところ</strong>{scenario.lesson.failure_signals.map((item) => item.label_ja).join(" · ")}</p>}
+        </article>
       </div>
-      <dl className="comparison-policy-grid">
-        <div><dt>Budget / sync</dt><dd>{comparison.budget.metric} = {comparison.budget.value}</dd></div>
-        <div><dt>Seed</dt><dd>{comparison.seed_policy}</dd></div>
-        <div><dt>Stopping</dt><dd>{comparison.stopping_policy}</dd></div>
-        <div><dt>Tuning</dt><dd>{comparison.tuning_policy}</dd></div>
-        <div><dt>Ranking</dt><dd>{comparison.ranking_eligible ? "eligible in this context" : "forbidden"}</dd></div>
-        <div><dt>Benchmark context</dt><dd>{comparison.benchmark_context_id}</dd></div>
-      </dl>
-      <p className="comparison-fairness"><strong>Fairness</strong> {comparison.fairness_note}</p>
-      <p className="comparison-caveat">{comparison.caveat}</p>
+      <div className="comparison-member-strip" aria-label="比較する対象">
+        <strong>比べる対象</strong>
+        {comparison.members.map((member) => <span key={member.member_id}>{member.label_ja}</span>)}
+      </div>
+      <details className="comparison-policy-details">
+        <summary>評価条件の詳細を開く</summary>
+        <dl className="comparison-policy-grid">
+          <div><dt>評価予算・同期</dt><dd>{comparison.budget.metric} = {comparison.budget.value}</dd></div>
+          <div><dt>乱数seed</dt><dd>{comparison.seed_policy}</dd></div>
+          <div><dt>停止条件</dt><dd>{comparison.stopping_policy}</dd></div>
+          <div><dt>パラメータ調整</dt><dd>{comparison.tuning_policy}</dd></div>
+          <div><dt>順位づけ</dt><dd>{comparison.ranking_eligible ? "この条件内で可" : "しない"}</dd></div>
+          <div><dt>ベンチマーク</dt><dd>{comparison.benchmark_context_id}</dd></div>
+        </dl>
+        <p className="comparison-fairness"><strong>公平性</strong> {readableComparisonText(comparison.fairness_note)}</p>
+      </details>
+      <p className="comparison-caveat"><strong>読み方の注意</strong> {readableComparisonText(comparison.caveat)}</p>
     </section>
   );
 }
@@ -308,7 +324,6 @@ function TrajectoryComparison({ comparison, traces, scenarios }: { comparison: C
   const contours = useMemo(() => contourSegments(spec, 22, 18), [spec]);
   return (
     <>
-      <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <div className="comparison-grid">
         {traces.map((trace, index) => (
@@ -361,7 +376,6 @@ function SimplexGeometryComparison({ comparison, traces, scenarios }: { comparis
   const contours = useMemo(() => contourSegments(spec, 22, 18), [spec]);
   return (
     <>
-      <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <div className="comparison-grid simplex-comparison-grid">
         {traces.map((trace, index) => (
@@ -537,7 +551,6 @@ function ScenarioComparison({ artifact, comparison, scenario }: { artifact: Lear
           );
         })}
       </div>
-      <ScenarioLessonPanel scenario={scenario} />
       <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
       <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
     </section>
@@ -547,11 +560,9 @@ function ScenarioComparison({ artifact, comparison, scenario }: { artifact: Lear
 function MetricHistoryComparison({
   comparison,
   traces,
-  scenarios,
 }: {
   comparison: ComparisonSet;
   traces: AlgorithmTrace[];
-  scenarios: VisualizationScenario[];
 }) {
   const timeline = useMemo(() => {
     const template = traces[0].frames[0];
@@ -575,7 +586,6 @@ function MetricHistoryComparison({
   ]));
   return (
     <>
-      <ScenarioLessonPanel scenario={scenarios[0]} />
       <PlaybackControls playback={playback} />
       <p className="atlas-note comparison-probe-note">
         <strong>線が同じなのは意図どおりです。</strong> 3本とも1つのsolver非依存診断probeであり、solver別の実行結果ではありません。
@@ -647,7 +657,6 @@ function SurrogateComparison({
         <h2 id="surrogate-comparison-title">同じ評価回数で観測と選択理由を読む</h2>
         <p>基準条件から1要因だけを変えた比較対象と、同じ初期設計を使うrandom baselineを同期します。</p>
       </header>
-      <ScenarioLessonPanel scenario={scenarios[referenceIndex]} />
       <label className="surrogate-comparison-slider">
         <span>Oracle evaluations: {evaluation}/{comparison.budget.value}</span>
         <input
@@ -1233,6 +1242,64 @@ function searchTreeTerminalLabel(state: "ongoing" | "optimality_proven" | "budge
     optimality_proven: "最適性証明済み",
     budget_exhausted: "予算停止・未証明",
   }[state];
+}
+
+function comparisonModeLabel(mode: string): string {
+  return {
+    method_contrast: "手法の違い",
+    parameter_sensitivity: "条件の違い",
+    initial_condition_sensitivity: "初期条件の違い",
+    failure_contrast: "失敗の違い",
+    result_tradeoff: "結果のトレードオフ",
+    strategy_contrast: "戦略の違い",
+  }[mode] ?? mode;
+}
+
+function rendererFamilyLabel(family: string): string {
+  return {
+    simplex_geometry: "単体形状",
+    continuous_trajectory: "連続軌跡",
+    generic_metric_history: "指標の履歴",
+    search_tree: "探索木",
+    surrogate_uncertainty: "代理モデルの不確実性",
+    feasible_region: "実行可能領域",
+    pareto_front: "パレート前線",
+  }[family] ?? family;
+}
+
+function metricDirectionLabel(direction: string): string {
+  return direction === "minimize" ? "小さいほど良い" : direction === "maximize" ? "大きいほど良い" : direction;
+}
+
+function metricUnitLabel(unit: string): string {
+  return {
+    "objective value": "目的関数値",
+    status: "終了状態",
+    "objective value / evaluation": "目的関数値 / 評価回数",
+  }[unit] ?? unit;
+}
+
+function readableComparisonText(value: string): string {
+  return value
+    .replaceAll("failure signal", "失敗の兆候")
+    .replaceAll("learning rate", "学習率")
+    .replaceAll("parameter sensitivity", "条件感度")
+    .replaceAll("initial simplex", "初期単体")
+    .replaceAll("proposal policy", "候補選択方針")
+    .replaceAll("observation noise", "観測ノイズ")
+    .replaceAll("random baseline", "ランダム基準")
+    .replaceAll("Expected Improvement", "期待改善量")
+    .replaceAll("acquisition", "獲得関数")
+    .replaceAll("budget", "評価予算")
+    .replaceAll("solver", "ソルバー");
+}
+
+function identityStatusLabel(status: string): string {
+  return status === "canonical" ? "登録済みの比較" : status === "derived" ? "派生した比較" : status;
+}
+
+function comparabilityLabel(status: string): string {
+  return status === "comparable" ? "比較可能" : status === "comparable_with_caveat" ? "注意つきで比較可能" : status === "contrast_only" ? "対比として読む" : status;
 }
 
 function searchTreeFeasibilityLabel(payload: ReturnType<typeof parseSearchTreeFramePayload>): string {

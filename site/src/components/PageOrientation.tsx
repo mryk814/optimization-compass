@@ -17,7 +17,7 @@ export function PageOrientation({ purpose, readingSteps, limits, next }: PageOri
     <aside className="page-orientation-shell" aria-label="このページの使い方">
       <details className="page-orientation-disclosure">
         <summary>
-          <span className="page-orientation-eyebrow">Page guide</span>
+              <span className="page-orientation-eyebrow">読み方</span>
           <span className="page-orientation-summary-title">このページでの読み方</span>
           <span className="page-orientation-summary-hint">目的・読む順番・前提・次に進む先</span>
         </summary>

@@ -19,7 +19,6 @@ import { useEntityLinks } from "../../state/entity-links";
 import { atlasStateFromSearch, patchJourneyState } from "../../state/journey-navigation";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
-import { ScenarioLessonPanel } from "../visualization/ScenarioLessonPanel";
 import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
 import { SurrogatePlot } from "../visualization/SurrogatePlot";
 import { ScenarioContextPanel } from "./ScenarioContextPanel";
@@ -103,11 +102,11 @@ export function BayesianOptimizationPage() {
   return (
     <section className="atlas-page bo-theater">
       <header className="atlas-page-header">
-        <p className="eyebrow">Method Theater · 実行Trace</p>
-        <h1>Bayesian Optimization Theater</h1>
+        <p className="eyebrow">動きを見る · 1回の実行</p>
+        <h1>ベイズ最適化の1回の実行</h1>
         <p>
-           評価コストの高いblack-box最適化を、観測 → surrogate更新 → Expected
-           Improvementによる次候補の選択、という順に再生します。
+           再生を押すと、観測 → surrogateの更新 → 次の評価点の選択、という順に進みます。
+           まずは「なぜこの点を選ぶのか」を追ってください。
         </p>
       </header>
       <div className="bo-presets" aria-label="実験preset">
@@ -254,8 +253,52 @@ function Theater({
           評価 {frame.oracle_evaluations}/{budget}回 · ξ={payload.exploration_xi}
         </span>
       </section>
+      <section className="theater-first-action theater-first-action-detail" aria-labelledby="bo-first-action-title">
+        <div>
+          <p className="eyebrow">最初に押すところ</p>
+          <h2 id="bo-first-action-title">再生して、次の評価点が選ばれるまでを見る</h2>
+          <p>1回ずつ進めると、観測結果をもとに候補点が選ばれる理由が表示されます。迷ったら再生ボタンから始めてください。</p>
+        </div>
+        <div className="bo-playback" role="group" aria-label="再生コントロール">
+          <button
+            type="button"
+            aria-label="1フレーム戻る"
+            disabled={frameIndex === 0}
+            onClick={() => move(-1)}
+          >
+            ←
+          </button>
+          <button className="primary-action-button" type="button" onClick={() => setPlaying((value) => !value)}>
+            {playing ? "一時停止" : "再生"}
+          </button>
+          <button
+            type="button"
+            aria-label="1フレーム進む"
+            disabled={frameIndex === payload.frames.length - 1}
+            onClick={() => move(1)}
+          >
+            →
+          </button>
+          <label>
+            評価位置{" "}
+            <input
+              aria-label="評価位置"
+              type="range"
+              min={0}
+              max={payload.frames.length - 1}
+              value={frameIndex}
+              onChange={(event) => {
+                setPlaying(false);
+                setFrameIndex(Number(event.target.value));
+              }}
+            />
+          </label>
+          <span aria-live="polite">
+             フレーム {frameIndex + 1}/{payload.frames.length} · {speed}倍
+          </span>
+        </div>
+      </section>
       <ScenarioContextPanel scenario={scenario} />
-      <ScenarioLessonPanel scenario={scenario} />
       <GuidedStoryPanel
         activeStep={guidedStep}
         onStepChange={setGuidedStep}
@@ -289,44 +332,6 @@ function Theater({
           </div>
         </dl>
       </section>
-      <div className="bo-playback" role="group" aria-label="再生コントロール">
-        <button
-          type="button"
-          aria-label="1フレーム戻る"
-          disabled={frameIndex === 0}
-          onClick={() => move(-1)}
-        >
-          ←
-        </button>
-        <button type="button" onClick={() => setPlaying((value) => !value)}>
-          {playing ? "一時停止" : "再生"}
-        </button>
-        <button
-          type="button"
-          aria-label="1フレーム進む"
-          disabled={frameIndex === payload.frames.length - 1}
-          onClick={() => move(1)}
-        >
-          →
-        </button>
-        <label>
-          評価位置{" "}
-          <input
-            aria-label="評価位置"
-            type="range"
-            min={0}
-            max={payload.frames.length - 1}
-            value={frameIndex}
-            onChange={(event) => {
-              setPlaying(false);
-              setFrameIndex(Number(event.target.value));
-            }}
-          />
-        </label>
-        <span aria-live="polite">
-           フレーム {frameIndex + 1}/{payload.frames.length} · {speed}倍
-        </span>
-      </div>
       <div
         className="bo-layout"
         data-guided-focus={guidedStep?.focus_target}

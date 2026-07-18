@@ -13,7 +13,7 @@ describe("TheaterIndexPage", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => structuredClone(scenarios) }));
     render(<MemoryRouter><EntityLinkProvider initialIndex={parseEntityLinkIndex(entityLinks)}><TheaterIndexPage /></EntityLinkProvider></MemoryRouter>);
 
-    expect(screen.getByRole("heading", { level: 1, name: "Method Theater" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 1, name: "手法の動きを見る" })).toBeVisible();
     expect(await screen.findByText("24 / 24 シナリオ")).toBeVisible();
     expect(screen.getByRole("link", { name: /共通診断probe · TRF適用条件/u })).toHaveAttribute("href", "/traces/exponential-fit-trf");
     expect(screen.getAllByRole("link", { name: /Nelder–Meadの幾何操作/u })[0]).toHaveAttribute("href", "/traces/nelder-mead-quadratic");
