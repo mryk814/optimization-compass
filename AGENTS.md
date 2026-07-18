@@ -74,6 +74,16 @@ For high or critical changes, inspect similar merged work and document the autho
 7. Inspect generated diffs. Unexpected unrelated generated changes are a stop signal.
 8. In the PR, state changed IDs, sources, behavioral impact, generated artifacts, and validation results.
 
+## Release sequencing lessons
+
+These are recurring operational rules, not topology-specific exceptions:
+
+- Treat a published dataset version as immutable. Decide and bump the version before the first `--publish`; if the generated artifact changes after publication, use a new patch version rather than trying to republish the old one.
+- Finalize generator and serialization code before preparing the release bundle. Regenerate `site/public/data` with the same CLI used by CI, and make numeric payload serialization platform-stable when `math`/libm output is hashed.
+- Record the exact source commit used to build the staged release. Do not make output-affecting generator, migration, fixture, or content changes after preparing the bundle without rebuilding the release metadata and bundle.
+- When the dataset version changes, search the repository for the previous version and update parity fixtures and other committed expectations before pushing. PR CI is the fastest place to catch stale version literals.
+- A green PR is not the publication finish line: after merge, verify the main-branch Pages workflow, browser/accessibility job, deploy smoke, public `deployment.json`, public `data/release.json`, release asset digest, and issue state.
+
 ## Validation tiers
 
 Each tier is runnable as one cross-platform command: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`; tier C = tier B plus site typecheck and browser E2E). `--list` prints a tier's checks without running them; `--format json` emits machine-readable results with stable rule codes. The composition is owned by `src/optimization_compass/validation_tasks.py` and tested against the lists below. POSIX users may call the same commands through `make tier-a` etc.
