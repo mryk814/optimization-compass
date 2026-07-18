@@ -4,6 +4,11 @@ import { Link } from "react-router-dom";
 import { parseComparisonIndex, type ComparisonSet } from "../../contracts/comparisons";
 import { siteBaseUrl } from "../../data/base-url";
 import { comparisonRoute } from "./compare-routes";
+import {
+  buildComparisonCatalog,
+  comparisonModeLabel,
+  rendererFamilyLabel,
+} from "./compare-catalog";
 import { PageOrientation } from "../../components/PageOrientation";
 
 export function CompareLabIndexPage() {
@@ -22,6 +27,7 @@ export function CompareLabIndexPage() {
     );
     return () => controller.abort();
   }, []);
+  const catalog = buildComparisonCatalog(comparisons);
 
   return (
     <section className="atlas-page compare-lab-index-page">
@@ -38,19 +44,31 @@ export function CompareLabIndexPage() {
       />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {!error && comparisons.length === 0 && <p role="status">比較条件を読み込み中…</p>}
-      <div className="theater-card-grid compare-card-grid" aria-label="比較のメニュー">
-        {comparisons.map((comparison) => (
-          <Link className="theater-card compare-card" key={comparison.comparison_id} to={comparisonRoute(comparison.comparison_id)}>
-            <span>{comparisonModeLabel(comparison.mode)} · {comparison.budget.value}回でそろえる</span>
-            <h2>{comparison.title_ja}</h2>
-            <p>{readableComparisonText(comparison.comparison_question)}</p>
-            <div className="compare-card-contract" aria-label="比較の要点">
-              <span><strong>同じ</strong>{comparison.fixed_factors.length}項目</span>
-              <span><strong>違う</strong>{comparison.changed_factors.length}項目</span>
-              <span><strong>見る</strong>{comparison.metrics.map((metric) => metric.label_ja).join(" / ")}</span>
+      <div className="compare-catalog" aria-label="比較の問い別メニュー">
+        {catalog.map((section) => (
+          <section className="compare-catalog-section" key={section.mode} aria-labelledby={`compare-catalog-${section.mode}`}>
+            <header>
+              <p className="eyebrow">{section.label} · {section.comparisons.length}件</p>
+              <h2 id={`compare-catalog-${section.mode}`}>{section.label}から読む</h2>
+              <p>{section.description}</p>
+            </header>
+            <div className="theater-card-grid compare-card-grid">
+              {section.comparisons.map((comparison) => (
+                <Link className="theater-card compare-card" key={comparison.comparison_id} to={comparisonRoute(comparison.comparison_id)}>
+                  <span>{comparisonModeLabel(comparison.mode)} · {comparison.budget.value}回でそろえる</span>
+                  <h3>{comparison.title_ja}</h3>
+                  <p>{readableComparisonText(comparison.comparison_question)}</p>
+                  <small className="compare-card-renderer">表示: {[...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))].join(" + ")}</small>
+                  <div className="compare-card-contract" aria-label="比較の要点">
+                    <span><strong>同じ</strong>{comparison.fixed_factors.length}項目</span>
+                    <span><strong>違う</strong>{comparison.changed_factors.length}項目</span>
+                    <span><strong>見る</strong>{comparison.metrics.map((metric) => metric.label_ja).join(" / ")}</span>
+                  </div>
+                  <small>比較対象 {comparison.members.length}件 · この比較を読む →</small>
+                </Link>
+              ))}
             </div>
-            <small>比較対象 {comparison.members.length}件 · この比較を読む →</small>
-          </Link>
+          </section>
         ))}
       </div>
     </section>
@@ -61,17 +79,6 @@ async function loadComparisons(signal: AbortSignal) {
   const response = await fetch(`${siteBaseUrl()}data/comparisons.json`, { signal });
   if (!response.ok) throw new Error(`Comparison request failed (${response.status}).`);
   return parseComparisonIndex(await response.json());
-}
-
-function comparisonModeLabel(mode: string): string {
-  return {
-    method_contrast: "手法の違い",
-    parameter_sensitivity: "条件の違い",
-    initial_condition_sensitivity: "初期条件の違い",
-    failure_contrast: "失敗の違い",
-    result_tradeoff: "結果のトレードオフ",
-    strategy_contrast: "戦略の違い",
-  }[mode] ?? mode;
 }
 
 function readableComparisonText(value: string): string {
