@@ -645,6 +645,117 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/bilevel-regularized-regression",
+      "entity_id": "bilevel-regularized-regression",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "正則化を選びながら非負回帰を解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:jacobian",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:sum_of_squares",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_SLSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA033",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/budget-allocation",
       "entity_id": "budget-allocation",
       "entity_type": "case",
@@ -14691,6 +14802,102 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "bilevel-regularized-regression",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "正則化を選びながら非負回帰を解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S030",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S087",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_SLSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA033",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "budget-allocation",
       "entity_type": "journey",
       "external_url": null,
@@ -16985,6 +17192,11 @@
         },
         {
           "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "constrained-design",
           "target_type": "case"
         },
@@ -18434,6 +18646,11 @@
       "external_url": null,
       "label": "NLP内点法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
         {
           "relation_type": "case",
           "target_id": "constrained-design",
@@ -20583,6 +20800,11 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "constrained-design",
           "target_type": "case"
         },
@@ -21669,8 +21891,18 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC013",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "bilevel-regularized-regression",
           "target_type": "journey"
         }
       ],
