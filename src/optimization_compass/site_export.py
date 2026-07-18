@@ -208,7 +208,9 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         database_sha256=repository.database_sha256(),
     )
     release_catalog = load_release_catalog(RELEASE_CATALOG_PATH)
-    validate_release_catalog(release_catalog, expected_current_identity=release_identity)
+    validate_release_catalog(release_catalog)
+    if release_catalog.current_version == release_identity.dataset_version:
+        validate_release_catalog(release_catalog, expected_current_identity=release_identity)
     generated_at = datetime.combine(
         date.fromisoformat(release["release_date"]), time.min, tzinfo=UTC
     )
