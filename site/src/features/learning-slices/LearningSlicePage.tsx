@@ -50,7 +50,10 @@ export function LearningSlicePage() {
         </div>
       </header>
       <ScenarioContextPanel scenario={scenario} />
-      <LearningSliceRenderer artifact={artifact} />
+      <LearningSliceRenderer
+        artifact={artifact}
+        initialRunRole={scenario.purpose === "failure_contrast" ? "failure_contrast" : scenario.purpose === "sensitivity" ? "comparison" : "primary"}
+      />
       <ScenarioLessonPanel scenario={scenario} />
       <section className="learning-slice-links" aria-label="関連する入口">
         <h2>同じデータからたどる</h2>
