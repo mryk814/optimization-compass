@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 
 import paretoPayload from "../../../public/data/visualizations/biobjective-quadratic-pareto-front.json";
 import feasiblePayload from "../../../public/data/visualizations/constrained-disk-feasible-region.json";
+import topologyPayload from "../../../public/data/visualizations/topology-optimization-field-evolution.json";
 import { parseLearningSliceArtifact } from "../../contracts/learning-slices";
 import { projectTriObjective } from "./renderers";
 import { LearningSliceRenderer } from "./renderer-registry";
@@ -50,5 +51,16 @@ describe("learning-slice renderer registry", () => {
     const rotated = projectTriObjective([1, 2, 3], [8, 8, 8], 405);
     expect(first.x).not.toBe(rotated.x);
     expect(Number.isFinite(first.y)).toBe(true);
+  });
+
+  test("renders the field pilot with static facts and event markers", () => {
+    const artifact = parseLearningSliceArtifact(topologyPayload);
+    render(<LearningSliceRenderer artifact={artifact} />);
+
+    expect(screen.getByRole("heading", { name: "静的な要点" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "イベントマーカー" })).toBeVisible();
+    expect(screen.getAllByText(/checkerboard score/u).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText(/状態方程式/u)).toBeVisible();
+    expect(document.querySelectorAll(".topology-field")).toHaveLength(3);
   });
 });
