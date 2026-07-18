@@ -53,21 +53,20 @@ source commit, matching tag, and external output directory fails before changing
 | Artifact class | Git working tree | Complete release asset | Notes |
 |---|---|---|---|
 | Authoring inputs, migrations, seeds, content, registries | retained | optional source archive | Canonical editable inputs |
-| Pinned 0.2.0 base SQLite | retained temporarily | retained | Required by the current staged build |
+| Pinned 0.2.0 base SQLite | retained | retained | Required by the current staged build |
 | Current runtime SQLite and `DATASET_VERSION` | retained | retained | Python runtime authority |
 | Current generated Pages data | retained | retained | Current site only |
 | Current manifest, release identity, report, schema | retained | retained | Compact verification and documentation |
-| Full JSON/JSONL/CSV/Excel and versioned site-data | not added after 0.12.0 | retained | Download distribution |
+| Historical full JSON/JSONL/CSV/Excel, SQLite, and versioned site-data | removed after remote verification | retained | Complete downloads are GitHub Release assets |
 | Historical compact catalog | retained | bundled at publication time | Generated public discovery input |
 | Licenses and attribution | retained at project root | included in every bundle | Never fetched separately for verification |
 | Small focused fixtures | retained | not required | Tests must not become historical bundles |
 
 ## Publication and failure boundaries
 
-This ADR separates deterministic local preparation from external publication. A later migration step
-will upload and verify historical bundles, populate the catalog, remove historical working-tree copies,
-and enable immutable GitHub Releases. This first step does not delete a historical file, create or move a
-tag, publish an asset, or enable a repository setting.
+This ADR separates deterministic local preparation from external publication. The migration step uploads
+and verifies historical bundles before removing their tracked working-tree copies. Immutable GitHub
+Releases remain a separate final setting change after the public surface is verified.
 
 Bundle preparation happens before atomic source promotion. If staging, packing, catalog validation, or
 target preparation fails, tracked targets remain unchanged. If replacement fails, data, runtime,
@@ -83,9 +82,9 @@ external publication is investigated.
 ## Repository growth gate
 
 `scripts/repository_size.py` reports both checkout bytes and Git-index blob bytes. The latter is stable
-across line-ending settings and is the CI gate. PR A grandfathers the exact 0.2.0–0.12.0 distribution
-set and rejects a new tracked version or growth beyond that baseline. The migration PR will lower the
-allowlist and byte ceiling after remote assets have been independently verified.
+across line-ending settings and is the CI gate. After the 14 historical assets were independently
+verified, the migration retains only the pinned 0.2.0 SQLite build input and lowers the allowlist and
+byte ceiling to that exact Git blob size.
 
 ## Consequences
 
@@ -108,9 +107,9 @@ classes may expand an LF-normalized Git blob, and the result must match the mani
 SHA-256. Undeclared mismatches fail. Dataset 0.2.0 uses a separate legacy profile and supplements its
 unchanged artifact set with plan-pinned license blobs from a later reconstruction commit.
 
-Phase A does not upload, mutate the tracked catalog, remove a historical distribution, lower the size
-baseline, change Pages, create or move a tag, or change repository release settings. Those operations
-remain gated on remote verification in a later phase. New releases use draft upload, authenticated
+Phase A did not upload, mutate the tracked catalog, remove a historical distribution, lower the size
+baseline, change Pages, create or move a tag, or change repository release settings. The later migration
+performed those operations only after remote verification. New releases use draft upload, authenticated
 download verification against candidate outer bytes and inner identity, publication, and then
 anonymous verification. Their annotated tags are created without force at the reviewed source commit,
 and draft creation names that commit as its explicit target. Existing public 0.3.0 and 0.3.1

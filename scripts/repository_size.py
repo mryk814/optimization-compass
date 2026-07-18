@@ -12,25 +12,13 @@ from optimization_compass.release_identity import ReleaseIdentityError, validate
 HISTORICAL_RELEASE_VERSIONS = frozenset(
     {
         "0.2.0",
-        "0.3.0",
-        "0.3.1",
-        "0.3.2",
-        "0.4.0",
-        "0.5.0",
-        "0.5.1",
-        "0.6.0",
-        "0.7.0",
-        "0.8.0",
-        "0.9.0",
-        "0.10.0",
-        "0.11.0",
-        "0.12.0",
     }
 )
 
-# Filled from the Git index on the PR-A baseline. The gate uses blob bytes, not checkout
-# line endings, so it is stable across platforms. A later migration may lower this ceiling.
-HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES = 334_703_071
+# Only the pinned 0.2.0 SQLite build input remains in Git after the verified historical
+# migration. The gate uses blob bytes, not checkout line endings, so it is stable across
+# platforms.
+HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES = 3_506_176
 
 _RELEASE_PATH_PATTERN = re.compile(
     r"^data/optimization_method_selection_database_v(?P<version>[0-9]+\.[0-9]+\.[0-9]+)(?P<suffix>.*)$"

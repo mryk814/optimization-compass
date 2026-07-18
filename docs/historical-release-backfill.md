@@ -136,3 +136,12 @@ If any asset or remote verification fails, leave the tracked catalog, historical
 baseline unchanged. Keep a new failed upload in draft; do not alter an existing public release to mimic
 that rollback. If a same-name remote asset already exists with different bytes, stop and never overwrite
 it. Published immutable mistakes require a new dataset version and tag.
+
+## Post-publication cleanup
+
+After `historical-verify-remote` succeeds for all 14 versions, the source tree retains only the compact
+catalog metadata and the pinned `v0.2.0.sqlite` build input. Remove the other historical distribution
+files from the working tree using an explicit reviewed path list; do not remove compact manifests,
+reports, schemas, the pinned SQLite, or any current release files. Then run the repository-size gate,
+the staged rebuild twice, the content/site tests, and the Pages build before changing any repository
+release setting. The resulting size ceiling is the exact Git blob size of the pinned SQLite.

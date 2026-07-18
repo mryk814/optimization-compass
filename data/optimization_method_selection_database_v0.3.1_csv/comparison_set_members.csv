@@ -1,4 +1,0 @@
-comparison_set_id,member_id,method_id,profile_id,label,display_order,parameters_json
-\SCOMPARE_FIRST_ORDER_ROSENBROCK,\Sadam,\SM_ADAM,\SPROFILE_ADAM_2D,\SAdam,\I3,"\S{""beta1"":0.9,""beta2"":0.999,""learning_rate"":0.03}"
-\SCOMPARE_FIRST_ORDER_ROSENBROCK,\Sgradient-descent,\SM_GRADIENT_DESCENT,\SPROFILE_GRADIENT_DESCENT_2D,\SGradient descent,\I1,"\S{""learning_rate"":0.001}"
-\SCOMPARE_FIRST_ORDER_ROSENBROCK,\Smomentum,\SM_MOMENTUM_SGD,\SPROFILE_MOMENTUM_2D,\SMomentum,\I2,"\S{""learning_rate"":0.001,""momentum"":0.9}"
