@@ -150,8 +150,8 @@
     {
       "canonical_route": "/failures?entry=case%3AEC020%3AM_BFGS",
       "case_context": {
-        "constraints": "離散化した動力学（dynamics）$x_{k+1}=F(x_k,u_k)$、状態・入力の上下限、各meshでの障害物（obstacle）回避 $g_{obs}(x_k)\\le0$、初期状態 $x_0=x_{init}$ と終端条件を課す。",
-        "decision_variables": "状態列（state sequence）$x_0,\\ldots,x_N$、制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$、必要なら終端時刻 $T$。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作る。",
+        "constraints": "Direct Collocationの固定教材では、dynamics defect $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、path制約は各mesh／collocation pointでの障害物回避 $g_{obs}(x_k)\\le0$、状態bounds $x_k\\in[x_{min},x_{max}]$、control bounds $u_k\\in[u_{min},u_{max}]$ として課す。",
+        "decision_variables": "Direct Collocationでは、状態列（state sequence）$x_0,\\ldots,x_N$ と制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置き、必要なら終端時刻 $T$ も選ぶ。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作るため、同じtrajectoryでもdecision objectが異なる。",
         "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
         "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
       },
@@ -171,7 +171,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-19",
       "method_ids": [
         "M_BFGS"
       ],
