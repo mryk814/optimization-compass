@@ -23,6 +23,7 @@ RendererFamily = Literal[
     "surrogate_uncertainty",
     "feasible_region",
     "pareto_front",
+    "field_evolution",
 ]
 ScenarioIdentityStatus = Literal["canonical", "derived", "generated_only"]
 
@@ -35,6 +36,7 @@ CANONICAL_SCENARIO_IDS = frozenset(
         "SCENARIO_NM_ROSENBROCK",
         "SCENARIO_CONSTRAINED_DISK",
         "SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "SCENARIO_TOPOLOGY_SIMP_OC",
     }
 )
 
@@ -47,6 +49,7 @@ DERIVED_SCENARIO_BASE_IDS = {
     "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE": "SCENARIO_GD_QUADRATIC",
     "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE": "SCENARIO_MOMENTUM_QUADRATIC",
     "SCENARIO_ADAM_QUADRATIC_DIVERGENCE": "SCENARIO_ADAM_QUADRATIC",
+    "SCENARIO_TOPOLOGY_CHECKERBOARD": "SCENARIO_TOPOLOGY_SIMP_OC",
 }
 
 
@@ -227,7 +230,11 @@ class VisualizationRun(TraceModel):
 class VisualizationArtifact(TraceModel):
     artifact_kind: ArtifactKind
     artifact_contract: Literal[
-        "AlgorithmTrace", "SurrogateUncertainty", "FeasibleRegion", "ParetoFront"
+        "AlgorithmTrace",
+        "SurrogateUncertainty",
+        "FeasibleRegion",
+        "ParetoFront",
+        "TopologyFieldEvolution",
     ]
     artifact_contract_version: Literal["1.0.0", "1.1.0"]
     renderer_family: RendererFamily

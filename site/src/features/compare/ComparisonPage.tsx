@@ -1094,7 +1094,7 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       scenarios: loadedMembers.map((item) => item.scenario),
     };
   }
-  if (family !== "feasible_region" && family !== "pareto_front") {
+  if (family !== "feasible_region" && family !== "pareto_front" && family !== "field_evolution") {
     throw new Error(`Comparison renderer is not implemented: ${family}.`);
   }
   const scenarioId = comparison.members[0].scenario_id;
@@ -1264,6 +1264,7 @@ function rendererFamilyLabel(family: string): string {
     surrogate_uncertainty: "代理モデルの不確実性",
     feasible_region: "実行可能領域",
     pareto_front: "パレート前線",
+    field_evolution: "設計fieldの進化",
   }[family] ?? family;
 }
 

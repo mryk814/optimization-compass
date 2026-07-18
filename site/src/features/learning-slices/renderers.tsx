@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import type { FeasibleRegionArtifact, ParetoFrontArtifact, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
+import type { FeasibleRegionArtifact, ParetoFrontArtifact, TopologyFieldArtifact, TopologyFieldStep, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
 
 const SIZE = 360;
 const LEFT = 70;
@@ -99,6 +99,65 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
       <ul className="plot-legend" aria-label="可視化の凡例"><li><span className="legend-dot dominated" />支配された点 (dominated)</li><li><span className="legend-swatch pareto" />非支配点・パレート前線</li><li><span className="legend-dot selected" />重みで選択した点</li><li><span className="legend-dot ideal" />理想点・最悪点の参照</li></ul>
       <p className="weighted-sum-warning"><strong>重み付き和 (Weighted sum) の注意:</strong> {artifact.weighted_sum_limitation_ja}</p>
     </section>
+  );
+}
+
+export function TopologyFieldRenderer({ artifact }: { artifact: TopologyFieldArtifact }) {
+  const [selectedRunId, setSelectedRunId] = useState(artifact.runs[0].run_id);
+  const [selectedStep, setSelectedStep] = useState(artifact.runs[0].steps.length - 1);
+  const selectedRun = artifact.runs.find((run) => run.run_id === selectedRunId) ?? artifact.runs[0];
+  const stepIndex = Math.min(selectedStep, selectedRun.steps.length - 1);
+  const current = selectedRun.steps[stepIndex];
+  const changeRun = (runId: string) => {
+    const next = artifact.runs.find((run) => run.run_id === runId) ?? artifact.runs[0];
+    setSelectedRunId(next.run_id);
+    setSelectedStep(Math.min(next.steps.length - 1, stepIndex));
+  };
+  return (
+    <section className="learning-renderer topology-renderer" aria-labelledby="topology-heading">
+      <div className="learning-renderer-heading"><div><p className="eyebrow">設計fieldの進化 (field_evolution) · 1.0.0</p><h2 id="topology-heading">密度、状態、感度を同じ反復で読む</h2></div><strong>volume {format(artifact.volume_fraction_target)}</strong></div>
+      <p className="projection-disclosure"><strong>見る順番:</strong> 密度fieldで荷重経路を見て、状態と感度を重ね、最後にcomplianceとcheckerboardを確認します。</p>
+      <div className="topology-controls">
+        <label htmlFor="topology-run">経路 <select id="topology-run" onChange={(event) => changeRun(event.target.value)} value={selectedRun.run_id}>{artifact.runs.map((run) => <option key={run.run_id} value={run.run_id}>{run.label_ja}</option>)}</select></label>
+        <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.steps[selectedRun.steps.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.steps.length - 1} min="0" onChange={(event) => setSelectedStep(Number(event.target.value))} type="range" value={stepIndex} /></label>
+      </div>
+      <div className="topology-field-grid">
+        <FieldGrid label="設計密度 density" values={current.density} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="density" />
+        <FieldGrid label="状態 state" values={current.displacement_field} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="state" />
+        <FieldGrid label="filter後の感度" values={current.sensitivity_filtered} columns={artifact.grid.columns} rows={artifact.grid.rows} mode="sensitivity" />
+      </div>
+      <dl className="comparison-policy-grid topology-metrics" aria-label="トポロジー最適化の現在値">
+        <div><dt>体積率</dt><dd>{format(current.volume_fraction)} / {format(artifact.volume_fraction_target)}</dd></div>
+        <div><dt>compliance</dt><dd>{format(current.compliance)}</dd></div>
+        <div><dt>gray fraction</dt><dd>{format(current.gray_fraction)}</dd></div>
+        <div><dt>checkerboard score</dt><dd>{format(current.checkerboard_score)}</dd></div>
+        <div><dt>projection beta</dt><dd>{format(current.projection_beta)}</dd></div>
+      </dl>
+      <ul className="plot-legend topology-legend" aria-label="設計fieldの凡例"><li><span className="legend-swatch density-low" />低密度</li><li><span className="legend-swatch density-high" />高密度</li><li><span className="legend-swatch sensitivity" />感度の大きいセル</li></ul>
+      <p><strong>{current.label_ja}</strong>。{stepIndex === selectedRun.steps.length - 1 ? selectedRun.termination_reason_ja : "反復を進めて密度fieldと指標の対応を確認します。"}</p>
+      <details><summary>数値を文章で読む</summary><p>{artifact.text_alternative_ja}</p><ul>{artifact.method_distinctions_ja.map((item) => <li key={item}>{item}</li>)}</ul></details>
+      <p className="atlas-note">{artifact.limitations_ja}</p>
+    </section>
+  );
+}
+
+function FieldGrid({ label, values, columns, rows, mode }: { label: string; values: number[]; columns: number; rows: number; mode: "density" | "state" | "sensitivity" }) {
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  const range = maximum - minimum || 1;
+  const color = (value: number) => {
+    const normalized = (value - minimum) / range;
+    if (mode === "density") return `hsl(${210 - normalized * 150} 80% ${92 - normalized * 55}%)`;
+    if (mode === "state") return `hsl(198 72% ${95 - normalized * 45}%)`;
+    return `hsl(28 85% ${94 - normalized * 46}%)`;
+  };
+  return (
+    <figure className="topology-field-card">
+      <figcaption>{label}</figcaption>
+      <svg aria-label={label} className="topology-field" role="img" viewBox={`0 0 ${columns * 32} ${rows * 32}`}>
+        {values.map((value, index) => <rect fill={color(value)} height="30" key={index} rx="2" width="30" x={(index % columns) * 32} y={Math.floor(index / columns) * 32} />)}
+      </svg>
+    </figure>
   );
 }
 

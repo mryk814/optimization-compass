@@ -73,6 +73,7 @@ export function scenarioRoute(scenario: VisualizationScenario): string {
       return `/theater/bayesian-optimization/${scenario.scenario_id}`;
     case "feasible_region":
     case "pareto_front":
+    case "field_evolution":
       return `/theater/learning/${scenario.scenario_id}`;
   }
 }
@@ -112,6 +113,7 @@ function scenarioDomain(scenario: VisualizationScenario): TheaterDomain {
   if (renderer === "surrogate_uncertainty") return "black-box";
   if (renderer === "feasible_region") return "constrained";
   if (renderer === "pareto_front") return "multi-objective";
+  if (renderer === "field_evolution") return "constrained";
   return "continuous";
 }
 
@@ -139,4 +141,5 @@ export const rendererLabels: Record<RendererFamily, string> = {
   surrogate_uncertainty: "代理モデルの不確実性",
   feasible_region: "実行可能領域",
   pareto_front: "パレート前線",
+  field_evolution: "設計fieldの進化",
 };

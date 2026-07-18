@@ -355,6 +355,48 @@
       "limitations": ["結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"]
     },
     {
+      "case_id": "topology-cantilever",
+      "title_ja": "片持ちはりの材料配置を軽くする",
+      "title_en": "Reduce material in a cantilever",
+      "domain": "engineering",
+      "problem_archetype_id": "PA045",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "simulation"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "analytic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "linear"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {"Q01": "continuous", "Q02": "simulation_only", "Q03": "general_nonlinear", "Q04": "linear", "Q05": "analytic_gradient", "Q06": "minutes", "Q07": "deterministic_reliable", "Q08": "10_to_100", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "other", "Q12": "repeated_similar"},
+      "candidate_methods": [
+        {"method_id": "M_SIMP_TOPOLOGY", "reason": "要素密度を連続緩和し、体積率制約のもとでminimum-compliance設計を反復できるため"},
+        {"method_id": "M_OC_TOPOLOGY", "reason": "密度感度から体積制約を満たす更新を組み立てやすいため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_MMA", "reason": "密度更新の凸近似を使い、制約や設計変数が増える場合に比較候補になるため"},
+        {"method_id": "M_DENSITY_FILTER", "reason": "checkerboardとmesh依存性を抑える正則化を組み込むため"},
+        {"method_id": "M_ADJOINT_SENSITIVITY", "reason": "状態方程式を解いた後の感度計算を大規模fieldへ拡張するため"}
+      ],
+      "excluded_methods": [{"method_id": "M_BFGS", "reason": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため"}],
+      "implementation_ids": [],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "VIEW_METHOD_MECHANISM", "SCENARIO_TOPOLOGY_SIMP_OC", "SCENARIO_TOPOLOGY_CHECKERBOARD"],
+      "comparison_ids": ["COMPARE_TOPOLOGY_OC_MMA"],
+      "source_ids": ["S097", "S098", "S099", "S100", "S101"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-18",
+      "question": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。",
+      "variable_domain": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。実務ではmeshと材料補間の定義が設計結果を左右する。",
+      "decision_variables": "各有限要素の密度ρₑ。ρₑ=1は材料、ρₑが小さい値は空孔に近い状態を表す。",
+      "objective": "線形弾性の状態方程式 K(ρ)u=Fを解き、compliance c(ρ)=Fᵀuを最小化する。SIMPでは剛性をEₑ=Emin+ρₑᵖ(E₀−Emin)で補間する。",
+      "constraints": "平均密度を0.5以下に保つ体積率制約 mean(ρ)≤0.5と、各密度の上下限を課す。",
+      "map_node_id": "answer:Q01:continuous",
+      "python_example": "import numpy as np\n\nrows, columns = 4, 8\nrho = np.full((rows, columns), 0.5)\nvolume_target = 0.5\nfor iteration in range(12):\n    sensitivity = -rho**2\n    filtered = sensitivity.copy()\n    rho = np.clip(rho * np.exp(0.15 * filtered), 0.001, 1.0)\n    rho *= volume_target / rho.mean()\nprint(float(rho.mean()))",
+      "practical_notes": "最終密度だけでなく、state solve、感度のraw・filter後、volume fraction、gray fraction、checkerboard指標、meshとfilter radiusを一緒に保存します。complianceが下がっても、離散化artifactや製造制約が解決したとは限りません。",
+      "limitations": ["8×4要素の決定的な教育用instanceであり、実際のFEM実装の収束、強度・座屈、製造性、mesh refinement後の同一topology、局所解からの独立性や大域最適性を保証しません。"]
+    },
+    {
       "case_id": "constrained-design",
       "title_ja": "強度制約を守りながら軽量設計を探す",
       "title_en": "Find a lightweight design under a strength constraint",

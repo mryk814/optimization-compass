@@ -23,13 +23,15 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "search_tree": (SEARCH_TREE_GENERATOR_ID, SEARCH_TREE_GENERATOR_VERSION),
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
+    "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER = {
     "search_tree": {
         "policy": "fixed_empty_assignment_with_heuristic_incumbent",
         "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
         "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
-    }
+    },
+    "field_evolution": {"policy": "fixed_density_field", "points": [0.5] * 32},
 }
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
@@ -49,6 +51,7 @@ RendererFamily = Literal[
     "simplex_geometry",
     "feasible_region",
     "pareto_front",
+    "field_evolution",
 ]
 
 
@@ -86,6 +89,7 @@ class ComparisonArtifact(ComparisonModel):
                 "surrogate_uncertainty",
                 "simplex_geometry",
                 "feasible_region",
+                "field_evolution",
             }
             and self.artifact_kind != "executable_trace"
         ):

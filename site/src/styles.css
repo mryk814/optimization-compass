@@ -1705,9 +1705,25 @@ caption {
 .weighted-sum-warning { padding: .75rem; border-left: 3px solid #bd7936; background: #fff6e9; }
 .learning-slice-links { display: flex; flex-wrap: wrap; gap: .65rem 1rem; align-items: baseline; }
 .learning-slice-links h2 { flex-basis: 100%; }
+.topology-controls { display: grid; grid-template-columns: minmax(12rem, .55fr) minmax(18rem, 1fr); gap: .8rem; margin: .75rem 0; padding: .65rem; border: 1px solid #d7e0d8; border-radius: .55rem; background: #f3f6f1; }
+.topology-controls label { display: grid; gap: .25rem; color: #536159; font-size: .75rem; }
+.topology-controls select { min-height: 2rem; padding: .25rem .4rem; border: 1px solid #b9c9bd; border-radius: .35rem; background: #fff; color: #263c30; }
+.topology-controls input[type="range"] { width: 100%; accent-color: #287154; }
+.topology-field-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; }
+.topology-field-card { min-width: 0; margin: 0; padding: .55rem; border: 1px solid #d6dfd7; border-radius: .55rem; background: #fbfcf9; }
+.topology-field-card figcaption { margin-bottom: .35rem; color: #334b3d; font-size: .7rem; font-weight: 750; }
+.topology-field { display: block; width: 100%; border: 1px solid #dbe3dc; border-radius: .35rem; background: #f7f9f5; }
+.topology-field rect { stroke: rgba(38, 60, 48, .16); stroke-width: 1; }
+.topology-metrics { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: .7rem; }
+.topology-legend { margin: .7rem 0; }
+.density-low { height: .7rem; background: hsl(210 80% 92%); border: 1px solid #c8d8dc; }
+.density-high { height: .7rem; background: hsl(60 80% 37%); border: 1px solid #516e2f; }
+.legend-swatch.sensitivity { height: .7rem; background: hsl(28 85% 48%); border: 1px solid #8f552b; }
 
 @media (max-width: 760px) {
   .learning-plot-layout { grid-template-columns: 1fr; }
+  .topology-field-grid { grid-template-columns: 1fr; }
+  .topology-controls, .topology-metrics { grid-template-columns: 1fr; }
   .learning-renderer { padding: .65rem; }
   .learning-renderer-heading { display: block; }
   .learning-plot { max-height: none; }

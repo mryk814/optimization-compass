@@ -1,0 +1,63 @@
+---
+content_id: adjoint-sensitivity
+kind: method
+method_id: M_ADJOINT_SENSITIVITY
+title_ja: adjoint sensitivity
+title_en: Adjoint Sensitivity Analysis
+summary: adjoint sensitivityは、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加solveで計算する方法です。
+source_ids: [S101]
+prerequisites: [topology-optimization, concept.constraint-class]
+related_ids: [simp-topology, density-filter, optimality-criteria-topology]
+visualization_ids: [topology-optimization-field-evolution]
+comparison_ids: []
+aliases: [/learn/adjoint-sensitivity]
+status: published
+last_reviewed: 2026-07-18
+---
+
+adjoint sensitivityは、状態方程式の解を使って、設計変数が目的関数へ与える感度を少ない追加solveで計算する方法です。
+
+## 状態を経由する設計感度
+
+状態方程式を
+
+$$
+R(u,m)=0
+$$
+
+とし、目的関数を $J(u,m)$ とします。
+設計変数 $m$ を少し変えたときの $dJ/dm$ を直接求めると、設計変数の数だけ状態の変化を追う必要があります。
+
+adjoint変数 $\lambda$ を導入し、
+
+$$
+\left(\frac{\partial R}{\partial u}\right)^T\lambda=\left(\frac{\partial J}{\partial u}\right)^T
+$$
+
+を解くと、状態方程式と目的関数の微分を組み合わせて設計感度を計算できます。
+
+トポロジー最適化では、密度fieldの要素数が増えても、感度計算を設計変数数に比例する回数だけ繰り返さずに済む構造が重要です。
+
+## 何を確認するか
+
+adjoint sensitivityは、単独の更新則ではありません。
+状態solveが収束していること、残差とJacobianが正しく定義されていること、感度の符号が有限差分と整合することが前提です。
+
+- state residual
+- adjoint residual
+- raw sensitivityとfilter後の感度
+- finite-differenceまたはgradient check
+
+## 向く条件・避ける条件
+
+状態方程式があり、設計変数が多く、目的関数の数が少ない問題に向きます。
+接触や離散的な材料切替のように微分が不連続な場合は、滑らかな近似とその限界を明示します。
+
+## 失敗・切替の兆候
+
+gradient checkが合わない、state residualが大きい、meshを変えると感度の分布だけが大きく変わる場合は、更新則より先に状態方程式、境界条件、微分実装を点検します。
+complianceの値がもっともらしくても、感度が誤っていればfield更新は誤った方向へ進みます。
+
+## 次に読む
+
+[SIMP密度法](#/learn/simp-topology)で感度を使う更新を確認し、[density filter](#/learn/density-filter)で離散fieldの正則化を読みます。
