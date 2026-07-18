@@ -202,29 +202,61 @@ Replace every placeholder and verify the entity and source IDs before committing
 
 Start as `draft` if relations or sources are incomplete. Publication should not be used to bypass Coverage or evidence requirements.
 
-## 8. Task-oriented scaffold: start a Gallery case without inventing facts
+## 8. Task-oriented scaffolds: review before authoring
 
-Phase 5 provides a review-first scaffold for the lowest-risk structured-data task:
-an existing-entity Gallery case. The command requires the author to supply the case
-ID, checks it against the current Gallery authority, and prints a machine-readable
-plan without writing by default.
+Phase 5 provides review-first scaffolds for each concrete authoring path. Every
+command requires an author-supplied ID, prints a machine-readable plan without
+writing by default, and can optionally write draft files outside canonical and
+generated paths.
 
 ```bash
-# Inspect the plan; no files are created.
+# Existing-entity method article (content authority).
+uv run optimization-compass scaffold content method --id example-article
+
+# Existing-entity Gallery case.
 uv run optimization-compass scaffold gallery-case --id example-case
 
-# Write a draft template and README under scaffolds/ (still not canonical data).
-uv run optimization-compass scaffold gallery-case --id example-case --write
+# Coordinated metadata + executable behavior for a problem instance.
+uv run optimization-compass scaffold problem-instance --id example-instance
 
-# Or choose another separate draft directory (keep this on one line in PowerShell).
-uv run optimization-compass scaffold gallery-case --id example-case --write --output path/to/gallery-case-draft
+# Comparison using existing traces and renderer families.
+uv run optimization-compass scaffold comparison --id example-comparison
+
+# New canonical method (maintainer-reviewed, high risk).
+uv run optimization-compass scaffold method --id M_EXAMPLE
+
+# Visualization scenario using an existing artifact contract where possible.
+uv run optimization-compass scaffold scenario --id SCENARIO_EXAMPLE
 ```
 
-The scaffold never allocates a stable ID, fabricates sources or claims, overwrites
-an existing draft directory, or writes `data/seeds/site_gallery.json` and generated
-outputs. Replace every `TODO`, review all canonical IDs and sources, then copy the
-reviewed entry into the authority and run `uv run optimization-compass validate gallery`.
-The focused command is an iteration subset; the PR gate remains `tier-b`.
+To write a review pack, use `--write`; choose a separate empty directory with
+`--output` when the default `scaffolds/<task>/<id>/` location is not suitable:
+
+```bash
+uv run optimization-compass scaffold gallery-case --id example-case --write
+uv run optimization-compass scaffold content method --id example-article --write --output path/to/article-draft
+```
+
+The shared scaffold contract never allocates a stable ID, fabricates sources,
+claims, relations, defaults, or benchmark results, overwrites a non-empty draft
+directory, or writes an authority or generated output. Replace every `TODO`,
+independently review all IDs and sources, then copy the reviewed material into the
+authority named in the plan. The generated README lists required inputs, forbidden
+outputs, the focused validation task, and the PR gate/checklist.
+
+| Command | Editable authority | Focused validation | PR gate |
+| --- | --- | --- | --- |
+| `scaffold content method` | `content/methods/<content-id>.md` | `validate content` | `tier-a` |
+| `scaffold gallery-case` | `data/seeds/site_gallery.json` | `validate gallery` | `tier-b` |
+| `scaffold problem-instance` | `problem-suite.json` + `problem_registry.py` | `validate problem` | `tier-c` |
+| `scaffold comparison` | `data/seeds/site_comparisons.json` | `validate comparison` | `tier-b` |
+| `scaffold method` | registered canonical build inputs | `validate tier-c` | `tier-c` |
+| `scaffold scenario` | scenario contract/generator inputs | `validate tier-c` | `tier-c` |
+
+The focused command is an iteration subset only when the registry provides one;
+the README and manifest always state the required PR gate. A scaffold is not a
+substitute for evidence review, canonical identity checks, or the full release
+workflow.
 
 ## 9. Recipe: add a Gallery case using existing entities
 
