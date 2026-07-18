@@ -1018,6 +1018,132 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/multi-fidelity-simulator",
+      "entity_id": "multi-fidelity-simulator",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_HYPERBAND_ASHA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:very_expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:global_candidate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_RAY_TUNE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/portfolio-allocation",
       "entity_id": "portfolio-allocation",
       "entity_type": "case",
@@ -14574,6 +14700,117 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "multi-fidelity-simulator",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_HYPERBAND_ASHA",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_RAY_TUNE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "hyperband-asha",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "portfolio-allocation",
       "entity_type": "journey",
       "external_url": null,
@@ -16290,6 +16527,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
           "target_type": "comparison"
@@ -17733,6 +17975,11 @@
       "label": "Hyperband/ASHA",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -18527,6 +18774,11 @@
         {
           "relation_type": "case",
           "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
           "target_type": "case"
         },
         {
@@ -20843,7 +21095,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "非常に高価な低次元評価",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        }
+      ],
       "summary": "非常に高価な低次元評価。変数=continuous、目的=simulation、制約=bounds。"
     },
     {
@@ -21638,6 +21901,11 @@
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
           "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -21678,6 +21946,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
           "target_type": "journey"
         }
       ],
@@ -21725,6 +21998,11 @@
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
           "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
         }
       ],
       "summary": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む"
@@ -21770,6 +22048,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
           "target_type": "journey"
         }
       ],

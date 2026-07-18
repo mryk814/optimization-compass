@@ -1,6 +1,68 @@
 {
   "cases": [
     {
+      "case_id": "multi-fidelity-simulator",
+      "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける",
+      "title_en": "Allocate a budget across low- and high-fidelity simulation",
+      "domain": "engineering",
+      "problem_archetype_id": "PA014",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "simulation"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "bounds"},
+        {"feature_id": "F_EVALUATION_COST", "value": "very_expensive"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "global_candidate"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "simulation_only",
+        "Q03": "unknown",
+        "Q04": "bounds",
+        "Q05": "unreliable_or_none",
+        "Q06": "hours_or_more",
+        "Q07": "timeout_possible",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "no_certificate_needed",
+        "Q11": "none_known",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {"method_id": "M_BAYESIAN_OPT_GP", "reason": "高 fidelity の評価を節約しながら、低 fidelity の観測も含めた surrogate と不確実性から次の simulator call を選ぶため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_HYPERBAND_ASHA", "reason": "fidelity が simulation resource の段階に対応し、中間結果から継続・停止を判断できる場合に resource allocation として組み合わせる"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_NELDER_MEAD", "reason": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい"}
+      ],
+      "implementation_ids": ["I_BOTORCH", "I_OPTUNA", "I_RAY_TUNE"],
+      "visualization_ids": [
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ],
+      "comparison_ids": [],
+      "source_ids": ["S035", "S038", "S059", "S069", "S075"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
+      "variable_domain": "実務では設計変数 x と fidelity \u2113 を分け、固定教材では $X=[-3,3]$、$\\ell\\in\\{L,H\\}$。x は設計値、\u2113 は同じ設計をどの精度で評価するかを表す policy variable。",
+      "decision_variables": "設計変数 x と simulator call ごとの fidelity \u2113。固定教材では $x\\in[-3,3]$、low fidelity の cost を $c_L=1$、high fidelity の cost を $c_H=12$ とする。",
+      "objective": "高 fidelity の真の目的 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。low fidelity は $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。low fidelity の順位が high fidelity と一致する保証は置かない。",
+      "constraints": "設計変数は $-3\\le x\\le3$。成功した call の cost 合計を $B=36$（high-fidelity-equivalent では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は failure、high fidelity で $x<-2.2$ は timeout/censored として status と cost だけを ledger に残し、目的値の大きな値へ置換しない。",
+      "map_node_id": "answer:Q06:hours_or_more",
+      "python_example": "import math\n\n\ndef simulator(x: float, fidelity: str) -> dict[str, object]:\n    if not -3.0 <= x <= 3.0:\n        raise ValueError(\"x is outside the design domain\")\n    cost = {\"low\": 1.0, \"high\": 12.0}[fidelity]\n    if x > 2.4:\n        return {\"status\": \"failed\", \"fidelity\": fidelity, \"cost\": cost, \"value\": None}\n    if fidelity == \"high\" and x < -2.2:\n        return {\"status\": \"censored\", \"fidelity\": fidelity, \"cost\": cost, \"value\": None}\n    high = 0.16 * (x - 1.7) ** 2 + 0.45 * math.sin(2.2 * x) + 0.12 * math.sin(5.3 * x)\n    bias = 0.18 * math.sin(1.4 * x + 0.3) if fidelity == \"low\" else 0.0\n    deterministic_noise = 0.03 * math.sin(7.0 * x) if fidelity == \"low\" else 0.01 * math.sin(7.0 * x)\n    return {\"status\": \"ok\", \"fidelity\": fidelity, \"cost\": cost, \"value\": high + bias + deterministic_noise}\n\n\nprint(simulator(0.5, \"low\"))\nprint(simulator(0.5, \"high\"))",
+      "practical_notes": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。既存の Bayesian Optimization Theater はこの高 fidelity 側の surrogate・acquisition の読み方を示しますが、low/high 選択、cost accounting、failure/censoring はまだ表示しません。",
+      "limitations": [
+        "固定された1次元・決定論的な教育用 simulator であり、実際の物理 simulator の fidelity 間誤差、noise 分布、runtime、failure 原因を表しません。",
+        "low fidelity の bias は意図的に順位を保存しないため、少ない high-fidelity call や discrepancy model の妥当性を保証しません。multi-fidelity ledger を再生する Theater と high-fidelity-equivalent cost を揃えた Compare は後続作業です。"
+      ]
+    },
+    {
       "case_id": "budget-allocation",
       "title_ja": "限られた予算を施策へ配分する",
       "title_en": "Budget allocation",

@@ -443,6 +443,59 @@
       "title_ja": "高価な実験の設定を探すではBFGS法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Amulti-fidelity-simulator%3AM_NELDER_MEAD",
+      "case_context": {
+        "constraints": "設計変数は $-3\\le x\\le3$。成功した call の cost 合計を $B=36$（high-fidelity-equivalent では $\\sum_k c_{\\ell_k}/12$）以下にする。$x>2.4$ は failure、high fidelity で $x<-2.2$ は timeout/censored として status と cost だけを ledger に残し、目的値の大きな値へ置換しない。",
+        "decision_variables": "設計変数 x と simulator call ごとの fidelity ℓ。固定教材では $x\\in[-3,3]$、low fidelity の cost を $c_L=1$、high fidelity の cost を $c_H=12$ とする。",
+        "objective": "高 fidelity の真の目的 $f_H(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ を最小化する。low fidelity は $f_L(x)=f_H(x)+0.18\\sin(1.4x+0.3)$ とし、観測は $y_\\ell=f_\\ell(x)+\\varepsilon_\\ell$。low fidelity の順位が high fidelity と一致する保証は置かない。",
+        "question": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
+      },
+      "case_id": "multi-fidelity-simulator",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:multi-fidelity-simulator:M_NELDER_MEAD",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM022"
+      ],
+      "scenario_ids": [
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "summary": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
+      "symptoms": [],
+      "title_en": "Why Nelder-Mead simplex is excluded for Allocate a budget across low- and high-fidelity simulation",
+      "title_ja": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Aportfolio-allocation%3AM_NELDER_MEAD",
       "case_context": {
         "constraints": "全資産への配分を $\\sum_i w_i=1$ とし、空売り禁止 $0\\le w_i$、集中投資上限 $w_i\\le0.6$、必要なら売買回転（turnover）の制約を課す。",
@@ -1155,9 +1208,9 @@
   ],
   "generated_at": "2026-07-18T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 12,
-    "entries_with_scenarios": 10,
+    "case_exclusion_count": 13,
+    "entries_with_scenarios": 11,
     "structured_failure_count": 12,
-    "total_entries": 24
+    "total_entries": 25
   }
 }

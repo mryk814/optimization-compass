@@ -915,13 +915,14 @@
           ]
         },
         "gallery": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "budget-allocation",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "portfolio-allocation"
           ]
         },
@@ -948,7 +949,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 42,
+          "count": 43,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -986,6 +987,7 @@
             "hyperparameter-search",
             "mads",
             "method.nelder-mead",
+            "multi-fidelity-simulator",
             "nelder-mead-quadratic",
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
@@ -2351,11 +2353,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "multi-fidelity-simulator"
           ]
         },
         "implementation": {
@@ -2380,7 +2383,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 40,
+          "count": 41,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2419,6 +2422,7 @@
             "family.expensive-black-box",
             "hyperband-asha",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "pbt",
             "random-search",
             "smac",
@@ -3725,11 +3729,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "multi-fidelity-simulator"
           ]
         },
         "implementation": {
@@ -3752,7 +3757,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3775,7 +3780,8 @@
             "S069",
             "S075",
             "bayesian-optimization",
-            "hyperparameter-search"
+            "hyperparameter-search",
+            "multi-fidelity-simulator"
           ]
         },
         "recommendation": {
@@ -6176,12 +6182,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "multi-fidelity-simulator"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -6201,7 +6207,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6216,7 +6222,8 @@
             "S059",
             "S069",
             "S075",
-            "hyperband-asha"
+            "hyperband-asha",
+            "multi-fidelity-simulator"
           ]
         },
         "recommendation": {
@@ -7492,13 +7499,14 @@
           ]
         },
         "gallery": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "budget-allocation",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "portfolio-allocation"
           ]
         },
@@ -7521,7 +7529,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 22,
+          "count": 23,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7542,6 +7550,7 @@
             "dummy-educational",
             "hyperparameter-search",
             "method.nelder-mead",
+            "multi-fidelity-simulator",
             "nelder-mead-quadratic",
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
@@ -12127,12 +12136,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "multi-fidelity-simulator"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12143,19 +12152,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "multi-fidelity-simulator"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "multi-fidelity-simulator"
           ]
         },
         "recommendation": {
@@ -15602,7 +15612,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15615,6 +15625,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "topology-cantilever"
           ]
         },
@@ -15705,7 +15716,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15718,6 +15729,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "topology-cantilever"
           ]
         },
@@ -15807,7 +15819,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15820,6 +15832,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "topology-cantilever"
           ]
         },
@@ -15993,7 +16006,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16006,6 +16019,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "topology-cantilever"
           ]
         },
@@ -16172,7 +16186,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16185,6 +16199,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "topology-cantilever"
           ]
         },
@@ -16459,7 +16474,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16472,6 +16487,7 @@
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
+            "multi-fidelity-simulator",
             "portfolio-allocation",
             "shift-scheduling",
             "topology-cantilever"

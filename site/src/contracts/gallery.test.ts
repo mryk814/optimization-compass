@@ -9,7 +9,7 @@ describe("gallery contract", () => {
     const canonicalIds = new Set(["EC013", "EC017", "EC019", "EC020", "EC025", "EC026"]);
 
     expect(index.contract_version).toBe("2.0.0");
-    expect(index.cases).toHaveLength(12);
+    expect(index.cases).toHaveLength(13);
     expect(index.cases.find((item) => item.case_id === "constrained-design")?.visualization_ids)
       .toContain("constrained-disk-feasible-region");
     expect(index.cases.every((item) => item.candidate_methods.length > 0)).toBe(true);
