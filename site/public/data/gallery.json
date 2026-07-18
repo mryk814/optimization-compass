@@ -417,6 +417,68 @@
     {
       "candidate_methods": [
         {
+          "method_id": "MF_LP_QP_CONIC",
+          "reason": "scenario lossのCVaRを補助変数の線形・錐形式へ展開し、simplex制約と合わせて可行性・最適性を確認しやすいため"
+        }
+      ],
+      "case_id": "portfolio-cvar-allocation",
+      "comparison_ids": [],
+      "conditional_methods": [
+        {
+          "method_id": "M_PROJECTED_GRADIENT",
+          "reason": "CVaRを滑らかな近似へ置き換える、またはscenario lossの勾配を使う場合にsimplexへの射影と組み合わせる"
+        }
+      ],
+      "constraints": "空売りを禁止し、simplex制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
+      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
+      "difficulty": "intermediate",
+      "domain": "finance",
+      "excluded_methods": [
+        {
+          "method_id": "M_NELDER_MEAD",
+          "reason": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        }
+      ],
+      "implementation_ids": [
+        "I_CVXPY"
+      ],
+      "last_reviewed": "2026-07-19",
+      "limitations": [
+        "8個のtraining scenarioと4個のheld-out scenario、4資産、固定return、固定alpha=0.75の教育用instanceであり、scenario生成過程、時系列依存、推定誤差、実際の取引コストや流動性を表さない。",
+        "CVaRのtail objectiveを最適化しただけで、chance constraintの確率保証、robust optimizationのset内保証、DROのambiguity set内保証、母集団・将来データへの性能保証は得られない。",
+        "sample sizeが小さいためtailの順位と保守性は不安定であり、scenario数、alpha、risk weight、取引コスト、held-out期間を揃えた再検証が必要である。"
+      ],
+      "map_node_id": "answer:Q01:continuous",
+      "objective": "scenario $s$ のlossを $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
+      "practical_notes": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
+      "problem_archetype_id": "PA036",
+      "python_example": "import cvxpy as cp\nimport numpy as np\n\nreturns_train = np.array([[0.08, 0.02, -0.01, 0.04], [-0.03, 0.05, 0.01, 0.02], [0.04, -0.02, 0.03, 0.01], [0.01, 0.00, -0.04, 0.03], [-0.06, 0.03, -0.02, 0.01], [0.02, -0.04, 0.02, 0.00], [0.03, 0.01, 0.00, -0.05], [-0.02, 0.02, 0.04, 0.01]])\nreturns_test = np.array([[0.01, 0.00, -0.02, 0.03], [-0.04, 0.02, 0.01, 0.00], [0.02, -0.01, 0.02, -0.03], [0.00, 0.03, -0.01, 0.02]])\nalpha, risk_weight = 0.75, 0.5\nw = cp.Variable(4)\neta = cp.Variable()\nloss = -returns_train @ w\ncvar = eta + cp.sum(cp.pos(loss - eta)) / ((1 - alpha) * len(returns_train))\nproblem = cp.Problem(cp.Minimize(cp.sum(loss) / len(returns_train) + risk_weight * cvar), [w >= 0, w <= 0.6, cp.sum(w) == 1])\nproblem.solve()\nprint(problem.status, w.value, cvar.value)\nprint(\"held-out mean loss\", float(np.mean(-returns_test @ w.value)))",
+      "question": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "question_answers": {
+        "Q01": "continuous"
+      },
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "status": "published",
+      "title_en": "Portfolio allocation with CVaR",
+      "title_ja": "scenarioのtail riskを抑えて配分する",
+      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid w_i\\ge0,\\ \\sum_i w_i=1,\\ 0\\le w_i\\le0.6\\}$。$w$ はsimplex上の配分ベクトルである。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
           "method_id": "M_TRUST_REGION_REFLECTIVE",
           "reason": "parameter boundsを直接扱いながら残差vectorとJacobianを保持し、rank・optimality・active boundsを診断できるため"
         }

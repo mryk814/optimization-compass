@@ -637,13 +637,14 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bilevel-regularized-regression",
             "constrained-design",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "portfolio-cvar-allocation"
           ]
         },
         "implementation": {
@@ -675,7 +676,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 46,
+          "count": 47,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -722,6 +723,7 @@
             "family.constrained-nlp",
             "interior-point-nlp",
             "portfolio-allocation",
+            "portfolio-cvar-allocation",
             "projected-gradient",
             "slsqp",
             "sqp"
@@ -917,7 +919,7 @@
           ]
         },
         "gallery": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -925,7 +927,8 @@
             "budget-allocation",
             "hyperparameter-search",
             "multi-fidelity-simulator",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "portfolio-cvar-allocation"
           ]
         },
         "implementation": {
@@ -951,7 +954,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 44,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -996,6 +999,7 @@
             "nelder-mead-rosenbrock-shifted",
             "pattern-search",
             "portfolio-allocation",
+            "portfolio-cvar-allocation",
             "powell",
             "spsa"
           ]
@@ -1592,12 +1596,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "portfolio-cvar-allocation"
           ]
         },
         "implementation": {
@@ -1632,7 +1637,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 46,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1679,6 +1684,7 @@
             "lp-qp-conic",
             "pdlp",
             "portfolio-allocation",
+            "portfolio-cvar-allocation",
             "primal-dual-conic",
             "primal-simplex"
           ]
@@ -7507,7 +7513,7 @@
           ]
         },
         "gallery": {
-          "count": 5,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7515,7 +7521,8 @@
             "budget-allocation",
             "hyperparameter-search",
             "multi-fidelity-simulator",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "portfolio-cvar-allocation"
           ]
         },
         "implementation": {
@@ -7537,7 +7544,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 23,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7563,7 +7570,8 @@
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
             "nelder-mead-rosenbrock-shifted",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "portfolio-cvar-allocation"
           ]
         },
         "recommendation": {
@@ -8910,12 +8918,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "portfolio-cvar-allocation"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -8935,7 +8943,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8949,6 +8957,7 @@
             "S056",
             "S064",
             "S066",
+            "portfolio-cvar-allocation",
             "projected-gradient"
           ]
         },
@@ -13926,12 +13935,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "portfolio-cvar-allocation"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13942,19 +13951,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "portfolio-cvar-allocation"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "portfolio-cvar-allocation"
           ]
         },
         "recommendation": {
@@ -16492,7 +16502,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16508,6 +16518,7 @@
             "hyperparameter-search",
             "multi-fidelity-simulator",
             "portfolio-allocation",
+            "portfolio-cvar-allocation",
             "shift-scheduling",
             "topology-cantilever"
           ]

@@ -1316,6 +1316,72 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/portfolio-cvar-allocation",
+      "entity_id": "portfolio-cvar-allocation",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "scenarioのtail riskを抑えて配分する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA036",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/shift-scheduling",
       "entity_id": "shift-scheduling",
       "entity_type": "case",
@@ -15463,6 +15529,97 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "portfolio-cvar-allocation",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "scenarioのtail riskを抑えて配分する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA036",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "shift-scheduling",
       "entity_type": "journey",
       "external_url": null,
@@ -16055,6 +16212,11 @@
         {
           "relation_type": "case",
           "target_id": "portfolio-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
           "target_type": "case"
         },
         {
@@ -19348,6 +19510,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
@@ -20157,6 +20324,11 @@
       "external_url": null,
       "label": "射影勾配法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S017",
@@ -21935,7 +22107,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "単体上の最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "journey"
+        }
+      ],
       "summary": "単体上の最適化。変数=continuous、目的=general_nonlinear、制約=manifold。"
     },
     {

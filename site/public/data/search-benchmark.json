@@ -72,7 +72,7 @@
       "intents": [],
       "query": "配送順を決めたい",
       "query_id": "routing-natural-language",
-      "result_count": 3,
+      "result_count": 4,
       "top_document_ids": [
         "case:EC019",
         "problem:PA031",

@@ -1681,6 +1681,148 @@
           ],
           "state": "missing",
           "target_ids": [
+            "/gallery/portfolio-cvar-allocation",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "portfolio-cvar-allocation"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CVXPY"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_LP_QP_CONIC",
+            "M_NELDER_MEAD",
+            "M_PROJECTED_GRADIENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/portfolio-cvar-allocation",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source",
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S004",
+            "S010",
+            "S012",
+            "S014",
+            "S054",
+            "S055",
+            "S056",
+            "S066"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "lp-qp-conic",
+            "projected-gradient"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "portfolio-cvar-allocation",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
             "/gallery/shift-scheduling",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
@@ -2827,6 +2969,72 @@
     },
     {
       "candidate_method_ids": [
+        "MF_LP_QP_CONIC"
+      ],
+      "canonical_url": "/gallery/portfolio-cvar-allocation",
+      "case_id": "portfolio-cvar-allocation",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_PROJECTED_GRADIENT"
+      ],
+      "content_ids": [
+        "lp-qp-conic",
+        "projected-gradient"
+      ],
+      "dataset_version": "0.18.4",
+      "domain": "finance",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "空売りを禁止し、simplex制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn></mrow></math>、集中投資上限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn></mrow></math> を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
+        "decision_variables": "各資産の保有比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>3</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
+        "objective": "scenario <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math> のlossを <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>L</mi><mi>s</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><msubsup><mi>r</mi><mi>s</mi><mi>&#x1D5B3;</mi></msubsup><mi>w</mi></mrow></math> とし、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>8</mn></mrow></mfrac><msub><mo>&#x02211;</mo><mrow><mi>s</mi><mo>&#x02208;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><msub><mi>L</mi><mi>s</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mspace width=\"0.167em\" /><mi>C</mi><mi>V</mi><mi>a</mi><msub><mi>R</mi><mi>&#x003B1;</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>L</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B1;</mi><mo>&#x0003D;</mo><mn>0.75</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi><mo>&#x0003D;</mo><mn>0.5</mn></mrow></math> を最小化する。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi><mi>V</mi><mi>a</mi><msub><mi>R</mi><mi>&#x003B1;</mi></msub><mo>&#x0003D;</mo><msub><mo>min</mo><mi>&#x003B7;</mi></msub><mo stretchy=\"false\">&#x0007B;</mo><mi>&#x003B7;</mi><mo>&#x0002B;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B1;</mi><mo stretchy=\"false\">&#x00029;</mo><mn>8</mn></mrow></mfrac><msub><mo>&#x02211;</mo><mi>s</mi></msub><mo>max</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>L</mi><mi>s</mi></msub><mo>&#x02212;</mo><mi>&#x003B7;</mi><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> と定義する。",
+        "variable_domain_summary": "4資産の固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>w</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>4</mn></msup><mo>&#x02223;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi></mrow></math> はsimplex上の配分ベクトルである。"
+      },
+      "implementation_ids": [
+        "I_CVXPY"
+      ],
+      "journey_id": "portfolio-cvar-allocation",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "limitations": [
+        "8個のtraining scenarioと4個のheld-out scenario、4資産、固定return、固定alpha=0.75の教育用instanceであり、scenario生成過程、時系列依存、推定誤差、実際の取引コストや流動性を表さない。",
+        "CVaRのtail objectiveを最適化しただけで、chance constraintの確率保証、robust optimizationのset内保証、DROのambiguity set内保証、母集団・将来データへの性能保証は得られない。",
+        "sample sizeが小さいためtailの順位と保守性は不安定であり、scenario数、alpha、risk weight、取引コスト、held-out期間を揃えた再検証が必要である。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA036",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S004",
+        "S010",
+        "S012",
+        "S014",
+        "S054",
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "status": "partial",
+      "takeaway": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
+      "title_en": "Portfolio allocation with CVaR",
+      "title_ja": "scenarioのtail riskを抑えて配分する"
+    },
+    {
+      "candidate_method_ids": [
         "M_CP_SAT"
       ],
       "canonical_url": "/gallery/shift-scheduling",
@@ -3463,12 +3671,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "projected-gradient",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "proximal-gradient",
       "asset_type": "content",
       "policy": "warning",
@@ -3708,9 +3910,9 @@
     "status_counts": {
       "complete": 5,
       "draft": 0,
-      "partial": 9
+      "partial": 10
     },
     "target_complete_journeys": 5,
-    "total_journeys": 14
+    "total_journeys": 15
   }
 }

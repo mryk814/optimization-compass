@@ -340,10 +340,10 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     }
     failure_discovery = json.loads((first_output / "failure-discovery.json").read_bytes())
     assert failure_discovery["summary"] == {
-        "case_exclusion_count": 14,
+        "case_exclusion_count": 15,
         "entries_with_scenarios": 11,
         "structured_failure_count": 12,
-        "total_entries": 26,
+        "total_entries": 27,
     }
     assert any(item["entry_kind"] == "case_exclusion" for item in failure_discovery["entries"])
     assert manifest_payload["release_catalog"] == {

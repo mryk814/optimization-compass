@@ -587,6 +587,47 @@
       "title_ja": "ポートフォリオの配分を決めるではNelder–Mead単体法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Aportfolio-cvar-allocation%3AM_NELDER_MEAD",
+      "case_context": {
+        "constraints": "空売りを禁止し、simplex制約 $\\sum_i w_i=1$、$w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材では取引コスト・turnover制約を入れず、実務では別途追加して再評価する。",
+        "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。固定教材では、8個のtraining return scenarioから配分を決め、4個のheld-out scenarioでは解を再評価する。",
+        "objective": "scenario $s$ のlossを $L_s(w)=-r_s^\\mathsf{T}w$ とし、固定教材では $f(w)=\\frac{1}{8}\\sum_{s\\in train}L_s(w)+\\lambda\\,CVaR_\\alpha(L(w))$、$\\alpha=0.75$、$\\lambda=0.5$ を最小化する。$CVaR_\\alpha=\\min_\\eta\\{\\eta+\\frac{1}{(1-\\alpha)8}\\sum_s\\max(L_s-\\eta,0)\\}$ と定義する。",
+        "question": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+      },
+      "case_id": "portfolio-cvar-allocation",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:portfolio-cvar-allocation:M_NELDER_MEAD",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM022"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "summary": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため",
+      "symptoms": [],
+      "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation with CVaR",
+      "title_ja": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Ashift-scheduling%3AM_GRADIENT_DESCENT",
       "case_context": {
         "constraints": "各枠の必要人数を $\\sum_s x_{s,t}\\ge d_t$ とし、資格のないスタッフの配置 $x_{s,t}=0$、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
@@ -1259,9 +1300,9 @@
   ],
   "generated_at": "2026-07-18T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 14,
+    "case_exclusion_count": 15,
     "entries_with_scenarios": 11,
     "structured_failure_count": 12,
-    "total_entries": 26
+    "total_entries": 27
   }
 }

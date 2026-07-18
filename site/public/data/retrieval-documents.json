@@ -461,6 +461,34 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:portfolio-cvar-allocation:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "case:portfolio-cvar-allocation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_CVXPY",
+        "journey:portfolio-cvar-allocation",
+        "method:MF_LP_QP_CONIC",
+        "method:M_NELDER_MEAD",
+        "method:M_PROJECTED_GRADIENT",
+        "problem:PA036",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "title": "scenarioのtail riskを抑えて配分する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:shift-scheduling:overview",
       "dataset_version": "0.18.4",
       "document_id": "case:shift-scheduling",
@@ -28516,6 +28544,29 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:portfolio-cvar-allocation:M_NELDER_MEAD:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "failure:case:portfolio-cvar-allocation:M_NELDER_MEAD",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:portfolio-cvar-allocation",
+        "failure:structured:FM022",
+        "method:M_NELDER_MEAD",
+        "source:S054",
+        "source:S055",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056"
+      ],
+      "text": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため",
+      "title": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:shift-scheduling:M_GRADIENT_DESCENT:overview",
       "dataset_version": "0.18.4",
       "document_id": "failure:case:shift-scheduling:M_GRADIENT_DESCENT",
@@ -35009,6 +35060,44 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:portfolio-cvar-allocation:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "journey:portfolio-cvar-allocation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:portfolio-cvar-allocation",
+        "content:lp-qp-conic",
+        "content:projected-gradient",
+        "implementation:I_CVXPY",
+        "method:MF_LP_QP_CONIC",
+        "method:M_NELDER_MEAD",
+        "method:M_PROJECTED_GRADIENT",
+        "problem:PA036",
+        "source:S004",
+        "source:S010",
+        "source:S012",
+        "source:S014",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S004",
+        "S010",
+        "S012",
+        "S014",
+        "S054",
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。",
+      "title": "scenarioのtail riskを抑えて配分する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:shift-scheduling:overview",
       "dataset_version": "0.18.4",
       "document_id": "journey:shift-scheduling",
@@ -35301,6 +35390,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:portfolio-allocation",
+        "case:portfolio-cvar-allocation",
         "content:lp-qp-conic",
         "source:S004",
         "source:S010",
@@ -36916,6 +37006,7 @@
         "case:hyperparameter-search",
         "case:multi-fidelity-simulator",
         "case:portfolio-allocation",
+        "case:portfolio-cvar-allocation",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "content:method.nelder-mead",
@@ -37323,6 +37414,7 @@
       "document_id": "method:M_PROJECTED_GRADIENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:portfolio-cvar-allocation",
         "content:projected-gradient",
         "implementation:I_JAXOPT",
         "implementation:I_PETSC_TAO",
@@ -38539,7 +38631,10 @@
       "dataset_version": "0.18.4",
       "document_id": "problem:PA036",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:portfolio-cvar-allocation",
+        "journey:portfolio-cvar-allocation"
+      ],
       "source_ids": [
         "S055",
         "S066"
