@@ -8,7 +8,7 @@
       "entity_id": "EC013",
       "entity_type": "case",
       "external_url": null,
-      "label": "観測データから非線形model parameterを推定する",
+      "label": "観測データから非線形モデルのパラメータを推定する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -146,7 +146,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。"
+      "summary": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。"
     },
     {
       "aliases": [],
@@ -154,7 +154,7 @@
       "entity_id": "EC017",
       "entity_type": "case",
       "external_url": null,
-      "label": "costと性能のPareto trade-offを探索する",
+      "label": "コストと性能のパレートトレードオフを探索する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -252,7 +252,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。"
+      "summary": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。"
     },
     {
       "aliases": [],
@@ -260,7 +260,7 @@
       "entity_id": "EC019",
       "entity_type": "case",
       "external_url": null,
-      "label": "時間窓付き配送routeを10分以内に組む",
+      "label": "時間窓付き配送ルートを10分以内に組む",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -348,7 +348,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。"
+      "summary": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。"
     },
     {
       "aliases": [],
@@ -449,7 +449,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "非線形動力学とpath constraintを守る軌道を設計したい。"
+      "summary": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
     },
     {
       "aliases": [],
@@ -457,7 +457,7 @@
       "entity_id": "EC025",
       "entity_type": "case",
       "external_url": null,
-      "label": "100Hzで反復MPCのQPを解く",
+      "label": "100Hzで反復MPCの二次計画問題を解く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -545,7 +545,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。"
+      "summary": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。"
     },
     {
       "aliases": [],
@@ -553,7 +553,7 @@
       "entity_id": "EC026",
       "entity_type": "case",
       "external_url": null,
-      "label": "PDE制約付き大規模設計をmatrix-freeで解く",
+      "label": "PDE制約付き大規模設計を行列なし（matrix-free）で解く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -641,7 +641,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。"
+      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
     },
     {
       "aliases": [],
@@ -868,7 +868,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。"
+      "summary": "強度の非線形制約（constraint）を満たす設計の中で、重量を最小化したい。"
     },
     {
       "aliases": [],
@@ -1009,7 +1009,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。"
+      "summary": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
     },
     {
       "aliases": [],
@@ -12303,7 +12303,7 @@
       "entity_id": "EC013",
       "entity_type": "journey",
       "external_url": null,
-      "label": "観測データから非線形model parameterを推定する",
+      "label": "観測データから非線形モデルのパラメータを推定する",
       "relations": [
         {
           "relation_type": "alternate",
@@ -12421,7 +12421,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。"
+      "summary": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。"
     },
     {
       "aliases": [],
@@ -12429,7 +12429,7 @@
       "entity_id": "EC017",
       "entity_type": "journey",
       "external_url": null,
-      "label": "costと性能のPareto trade-offを探索する",
+      "label": "コストと性能のパレートトレードオフを探索する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -12507,7 +12507,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。"
+      "summary": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。"
     },
     {
       "aliases": [],
@@ -12515,7 +12515,7 @@
       "entity_id": "EC019",
       "entity_type": "journey",
       "external_url": null,
-      "label": "時間窓付き配送routeを10分以内に組む",
+      "label": "時間窓付き配送ルートを10分以内に組む",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -12588,7 +12588,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。"
+      "summary": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。"
     },
     {
       "aliases": [],
@@ -12669,7 +12669,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "非線形動力学とpath constraintを守る軌道を設計したい。"
+      "summary": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
     },
     {
       "aliases": [],
@@ -12677,7 +12677,7 @@
       "entity_id": "EC025",
       "entity_type": "journey",
       "external_url": null,
-      "label": "100Hzで反復MPCのQPを解く",
+      "label": "100Hzで反復MPCの二次計画問題を解く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -12765,7 +12765,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。"
+      "summary": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。"
     },
     {
       "aliases": [],
@@ -12773,7 +12773,7 @@
       "entity_id": "EC026",
       "entity_type": "journey",
       "external_url": null,
-      "label": "PDE制約付き大規模設計をmatrix-freeで解く",
+      "label": "PDE制約付き大規模設計を行列なし（matrix-free）で解く",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -12841,7 +12841,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。"
+      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
     },
     {
       "aliases": [],
@@ -13063,7 +13063,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。"
+      "summary": "強度の非線形制約（constraint）を満たす設計の中で、重量を最小化したい。"
     },
     {
       "aliases": [],
@@ -13189,7 +13189,7 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。"
+      "summary": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
     },
     {
       "aliases": [],
