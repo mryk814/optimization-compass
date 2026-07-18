@@ -17,8 +17,8 @@
           "reason": "線形緩和が強い小規模modelならMIP familyも比較する"
         }
       ],
-      "constraints": "選択した施策の費用合計を予算以下にする。固定教材では 4x_A+3x_B+2x_D+3x_C≤7。",
-      "decision_variables": "各施策 i を選ぶとき1、選ばないとき0となるbinary変数 x_i。固定教材では [x_A,x_B,x_D,x_C]∈{0,1}⁴。",
+      "constraints": "費用 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_D+3x_C\\le7$ と $x_i\\in\\{0,1\\}$。",
+      "decision_variables": "施策 i を採用するとき1、採用しないとき0の二値変数（binary variable）$x_i$。固定教材では $x=(x_A,x_B,x_D,x_C)$ の4変数。",
       "difficulty": "intro",
       "domain": "business",
       "excluded_methods": [
@@ -58,11 +58,11 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "4施策・固定費用・固定期待効果の教育用0-1 knapsackです。施策間相互作用、効果の不確実性、実solverのcut・presolve性能、大規模instanceでの一般性能は示しません。"
+        "4施策・固定費用・固定期待効果の教育用0-1ナップサック問題です。施策間相互作用、効果の不確実性、実solverのカットや前処理、大規模インスタンスでの一般性能は示しません。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "選択した施策の期待効果を最大化する。固定教材では max 9x_A+6x_B+4x_D+5x_C。",
-      "practical_notes": "Caseは施策選択、Theaterは同じ数式の4品目instanceとして読みます。incumbent、global bound、gap、feasibility、停止理由を一緒に記録します。",
+      "objective": "施策ごとの期待効果 $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_D+5x_C$ を最大化する。",
+      "practical_notes": "Caseは施策選択、Theaterは同じ数式を4品目の問題インスタンス（instance）にしたものとして読みます。最良既知解（incumbent）、大域下界（global bound）、最適性の差（gap）、実行可能性（feasibility）、停止理由を一緒に記録します。",
       "problem_archetype_id": "PA032",
       "python_example": "from ortools.sat.python import cp_model\n\nitems = {\"A\": (4, 9), \"B\": (3, 6), \"D\": (2, 4), \"C\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in items}\nmodel.add(sum(weight * x[name] for name, (weight, _) in items.items()) <= 7)\nmodel.maximize(sum(value * x[name] for name, (_, value) in items.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), solver.objective_value)",
       "question": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
@@ -89,6 +89,7 @@
       "status": "published",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する",
+      "variable_domain": "実務では施策集合 i ごとに $x_i\\in\\{0,1\\}$。固定教材では $X=\\{0,1\\}^4$、$x=(x_A,x_B,x_D,x_C)$。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
@@ -107,11 +108,11 @@
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
-          "reason": "線形割当として十分に表せる場合はMIPも候補になる"
+          "reason": "線形割当として十分に表せる場合は混合整数計画（MIP）も候補になる"
         }
       ],
-      "constraints": "資格、休憩、連続勤務、必要人数。",
-      "decision_variables": "各スタッフを各時間帯へ割り当てる。",
+      "constraints": "各枠の必要人数を $\\sum_s x_{s,t}\\ge d_t$ とし、資格のないスタッフの配置 $x_{s,t}=0$、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
+      "decision_variables": "スタッフ s と曜日・勤務帯 t の組ごとの二値変数（binary variable）$x_{s,t}$。固定教材では4名×9枠の36変数。",
       "difficulty": "intro",
       "domain": "operations",
       "excluded_methods": [
@@ -134,8 +135,8 @@
         "固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "希望違反と偏りのペナルティを最小化する。",
-      "practical_notes": "hard constraintとsoft constraintを最初に分離します。",
+      "objective": "希望勤務帯の違反とスタッフ間の勤務数の偏りをペナルティ（penalty）として最小化する。$f(x)=\\sum p_{s,t}x_{s,t}+\\lambda\\,\\operatorname{fairness}(x)$。",
+      "practical_notes": "必ず守る制約（hard constraint）と、できれば満たしたい制約（soft constraint）を最初に分離します。",
       "problem_archetype_id": "PA006",
       "python_example": "from ortools.sat.python import cp_model\nmodel = cp_model.CpModel()",
       "question": "必要人数を満たしながら、希望と公平性を反映したい。",
@@ -149,6 +150,7 @@
       "status": "published",
       "title_en": "Shift scheduling",
       "title_ja": "スタッフのシフトを組む",
+      "variable_domain": "固定教材では $X=\\{0,1\\}^{4\\times9}$。$x_{s,t}=1$ はスタッフ s を曜日・勤務帯 t に割り当てることを表す。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -170,8 +172,8 @@
           "reason": "低次元・低noiseで局所探索を許容する場合に比較する"
         }
       ],
-      "constraints": "hyperparameter boundsと合計10回のevaluation budget。",
-      "decision_variables": "bounds内のlearning rateと正則化係数。固定教材では1つの正規化変数 x に写像する。",
+      "constraints": "$\\eta$ と $\\lambda$ の上下限に加え、実務では評価予算（evaluation budget）$\\sum_k cost(x_k)\\le budget$ を置く。固定教材では評価回数を最大10回とする。",
+      "decision_variables": "学習率（learning rate）$\\eta$ と正則化係数（regularization coefficient）$\\lambda$。固定教材ではこの組を1個の正規化変数 $x\\in[-3,3]$ に写像する。",
       "difficulty": "intermediate",
       "domain": "machine-learning",
       "excluded_methods": [
@@ -212,14 +214,14 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "固定seed・1次元・RBF kernel・10 evaluationの教材であり、別dataset、search space、noise条件でのBOやbaselineの優位性を示しません。"
+        "固定seed・1次元・RBFカーネル（kernel）・10回評価の教材であり、別データセット、探索空間（search space）、ノイズ条件でのベイズ最適化（BO）やベースライン（baseline）の優位性を示しません。"
       ],
       "map_node_id": "answer:Q06:hours_or_more",
-      "objective": "各設定で観測した検証損失を最小化する。固定教材では未知の波状black-box値を観測する。",
-      "practical_notes": "実務Caseと1次元の固定教材を分け、観測noise、best-so-far、不確実性、budget到達を一緒に記録します。",
+      "objective": "設定 x を1回評価して得る検証損失 $y=f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をブラックボックス（black-box）として観測する。",
+      "practical_notes": "実務のCaseと1次元の固定教材を分け、観測ノイズ（noise）、現時点の最良値（best-so-far）、不確実性、評価予算（budget）の到達を一緒に記録します。",
       "problem_archetype_id": "PA039",
       "python_example": "import optuna\n\nsampler = optuna.samplers.GPSampler(seed=2604)\nstudy = optuna.create_study(direction=\"minimize\", sampler=sampler)",
-      "question": "1回の学習に時間がかかるmodelで、少ない試行から連続hyperparameterを改善したい。",
+      "question": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "experiment_only",
@@ -245,6 +247,7 @@
       "status": "published",
       "title_en": "Hyperparameter search",
       "title_ja": "高価な実験の設定を探す",
+      "variable_domain": "実務では $X=[10^{-5},10^{-1}]\\times[10^{-6},10^{-1}]$ のようなハイパーパラメータの直方体。固定教材では $X=[-3,3]$ の1次元変数 x。",
       "visualization_ids": [
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
@@ -256,7 +259,7 @@
       "candidate_methods": [
         {
           "method_id": "MF_LP_QP_CONIC",
-          "reason": "二次riskと線形の配分制約を凸modelとして明示し、大域解を確認できるため"
+          "reason": "二次リスク（risk）と線形の配分制約を凸モデルとして明示し、大域解を確認できるため"
         }
       ],
       "case_id": "portfolio-allocation",
@@ -264,11 +267,11 @@
       "conditional_methods": [
         {
           "method_id": "M_SLSQP",
-          "reason": "非線形制約を追加し凸modelでなくなる場合に検討する"
+          "reason": "非線形制約を追加して凸モデルでなくなる場合に検討する"
         }
       ],
-      "constraints": "比率の上下限、合計1、集中投資上限。",
-      "decision_variables": "各資産の保有比率。",
+      "constraints": "全資産への配分を $\\sum_i w_i=1$ とし、空売り禁止 $0\\le w_i$、集中投資上限 $w_i\\le0.6$、必要なら売買回転（turnover）の制約を課す。",
+      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。現金を含める場合は $w_{cash}$ も同じベクトルへ加える。",
       "difficulty": "intermediate",
       "domain": "finance",
       "excluded_methods": [
@@ -288,10 +291,10 @@
       ],
       "last_reviewed": "2026-07-14",
       "limitations": [
-        "期待収益と共分散の推定に依存し、取引costや将来分布の変化を保証範囲に含めません。"
+        "期待収益と共分散の推定に依存し、取引コスト（cost）や将来分布の変化を保証範囲に含めません。"
       ],
       "map_node_id": "answer:Q01:continuous",
-      "objective": "期待収益とリスクのトレードオフを最小化する。",
+      "objective": "期待収益を増やし、共分散リスク（covariance risk）$w^\\mathsf{T}\\Sigma w$ と取引コスト（transaction cost）を抑える。代表的には $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w+\\kappa\\,cost(w)$ を最小化する。",
       "practical_notes": "過去データの不確実性と、実運用での取引コストを別に検証します。",
       "problem_archetype_id": "PA052",
       "python_example": "import cvxpy as cp\nw = cp.Variable(n)\nproblem = cp.Problem(cp.Minimize(risk), constraints)",
@@ -306,6 +309,7 @@
       "status": "published",
       "title_en": "Portfolio allocation",
       "title_ja": "ポートフォリオの配分を決める",
+      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_i w_i=1\\}$。$w_i$ は資産 i の保有比率。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -331,8 +335,8 @@
           "reason": "残差専用solverを使えず、scalar二乗和とそのgradientへ畳んでboundsだけは保持するfallbackが必要な場合"
         }
       ],
-      "constraints": "parameter bounds [0, 0, -1] ≤ [a, k, c] ≤ [5, 3, 2]。",
-      "decision_variables": "指数減衰model y=a exp(-kt)+c の3個の連続parameter [a, k, c]。",
+      "constraints": "パラメータの上下限 $0\\le a\\le5$、$0\\le k\\le3$、$-1\\le c\\le2$。固定教材ではこの直方体（box）以外の制約は置かない。",
+      "decision_variables": "指数減衰モデル（exponential-decay model）$\\hat y(t;a,k,c)=a\\exp(-kt)+c$ のパラメータ（parameter）ベクトル $x=(a,k,c)\\in X$。",
       "difficulty": "intermediate",
       "domain": "science",
       "excluded_methods": [
@@ -378,11 +382,11 @@
         "局所解とparameter識別性は初期値・rank・残差modelに依存し、低い二乗和だけでは一意性を示せません。"
       ],
       "map_node_id": "answer:Q11:least_squares",
-      "objective": "20個のnoiseなし合成観測に対する残差vectorの二乗和を最小化する。",
+      "objective": "20個の観測時刻 $t_i$ における残差 $r_i(x)=\\hat y(t_i;x)-y_i$ の二乗和 $f(x)=\\sum_i r_i(x)^2$ を最小化する。",
       "practical_notes": "残差pattern、Jacobian rank、scale、bounds、外れ値、初期値感度を確認し、二乗和だけでparameterの一意性を断定しません。",
       "problem_archetype_id": "PA033",
       "python_example": "import numpy as np\nfrom scipy.optimize import least_squares\n\nt = np.linspace(0.0, 5.0, 20)\ntruth = np.array([1.8, 0.7, 0.25])\ny = truth[0] * np.exp(-truth[1] * t) + truth[2]\ndef residual(p):\n    return p[0] * np.exp(-p[1] * t) + p[2] - y\nresult = least_squares(residual, x0=[1.0, 0.4, 0.0], bounds=([0, 0, -1], [5, 3, 2]), method=\"trf\")\nprint(result.x, np.linalg.norm(result.fun), result.optimality)",
-      "question": "複数の観測に合うmodel parameterを、残差patternも確認しながら推定したい。",
+      "question": "複数の観測に合うモデルのパラメータを、残差のパターンも確認しながら推定したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "residual_vector",
@@ -407,7 +411,8 @@
       ],
       "status": "published",
       "title_en": "Estimate nonlinear model parameters",
-      "title_ja": "観測データから非線形model parameterを推定する",
+      "title_ja": "観測データから非線形モデルのパラメータを推定する",
+      "variable_domain": "$X=[0,5]\\times[0,3]\\times[-1,2]\\subset\\mathbb{R}^3$。a は振幅、k は減衰率、c はオフセット（offset）で、上下限（bounds）はパラメータの物理的な許容範囲を表す。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_EXPONENTIAL_FIT_TRF",
@@ -420,7 +425,7 @@
       "candidate_methods": [
         {
           "method_id": "M_NSGA_II",
-          "reason": "微分なしの2目的simulationを並列評価し、weightを固定せず近似Pareto集合を探索できるため"
+          "reason": "微分なしの2目的シミュレーション（simulation）を並列評価し、重みを固定せず近似パレート集合を探索できるため"
         }
       ],
       "case_id": "EC017",
@@ -430,17 +435,17 @@
       "conditional_methods": [
         {
           "method_id": "M_EPSILON_CONSTRAINT",
-          "reason": "preferenceを閾値として表せ、各scalar subproblemを信頼できるsolverで解ける場合"
+          "reason": "選好（preference）を閾値として表せ、各スカラー部分問題（scalar subproblem）を信頼できるsolverで解ける場合"
         }
       ],
-      "constraints": "設計boundsと安全上のfeasibility条件。",
-      "decision_variables": "設計寸法と運転条件。",
+      "constraints": "固定教材では $0\\le x\\le2$、$0\\le y\\le2$。実務では設計の上下限に加え、安全上の $g_j(x)\\le0$ を実行可能条件として追加する。",
+      "decision_variables": "実務では設計寸法と運転条件のベクトル x。固定教材では $x=(x,y)$ の2変数で、物理量そのものではなく無次元化した代理変数とする。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_WEIGHTED_SUM",
-          "reason": "非凸frontの一部を取得できず、weightだけでtrade-off全体を代表できない"
+          "reason": "非凸フロント（front）の一部を取得できず、重みだけでトレードオフ全体を代表できない"
         }
       ],
       "feature_values": [
@@ -475,15 +480,15 @@
       ],
       "last_reviewed": "2026-07-17",
       "limitations": [
-        "実problemのCaseと、解析的な2変数凸二次教材を同一視しません。教材のdecision [x,y] は設計寸法と運転条件そのものではなく、trade-offを読むための無次元化した代理変数です。",
-        "有限のpopulationとbudgetで得る近似frontであり、真のPareto frontや選好の妥当性は保証しません。"
+        "実問題のCaseと、解析的な2変数凸二次教材を同一視しません。教材の意思決定変数 [x,y] は設計寸法と運転条件そのものではなく、トレードオフを読むための無次元化した代理変数です。",
+        "有限の個体群（population）と評価予算で得る近似フロントであり、真のパレートフロントや選好の妥当性は保証しません。"
       ],
       "map_node_id": "answer:Q03:multiobjective",
-      "objective": "実problemではcostと性能lossの2目的を同時に最小化する。TheaterとCompareの固定教材では、0≤x,y≤2上のf₁=x²+y²とf₂=(x−2)²+(y−2)²を最小化する。",
-      "practical_notes": "目的方向、normalization、reference point、seed、evaluation budgetを記録し、近似frontとpreferenceで選んだ1点を区別します。",
+      "objective": "実問題では費用（cost）$f_1(x)$ と性能損失（performance loss）$f_2(x)$ を同時に最小化する。固定教材では $f_1=x^2+y^2$、$f_2=(x-2)^2+(y-2)^2$。",
+      "practical_notes": "目的の向き、正規化（normalization）、基準点（reference point）、seed、評価予算を記録し、近似フロントと選好で選んだ1点を区別します。",
       "problem_archetype_id": "PA038",
       "python_example": "from pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.optimize import minimize\nfrom pymoo.problems import get_problem\n\nresult = minimize(get_problem(\"zdt1\"), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F)",
-      "question": "costと性能を一つのweightへ固定せず、選べるtrade-off集合を見たい。",
+      "question": "コストと性能を一つの重み（weight）へ固定せず、選べるトレードオフ集合を見たい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -505,7 +510,8 @@
       ],
       "status": "published",
       "title_en": "Explore a cost-performance Pareto trade-off",
-      "title_ja": "costと性能のPareto trade-offを探索する",
+      "title_ja": "コストと性能のパレートトレードオフを探索する",
+      "variable_domain": "固定教材では $X=[0,2]^2=\\{(x,y)\\in\\mathbb{R}^2\\mid0\\le x\\le2,0\\le y\\le2\\}$。実務では寸法・運転条件の上下限（bounds）と実行可能領域（feasible set）を $X$ に置く。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "biobjective-quadratic-pareto-front"
@@ -515,7 +521,7 @@
       "candidate_methods": [
         {
           "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
-          "reason": "1000 stopsと10分のdeadlineで、最適性証明より早い良質可行routeを優先できるため"
+          "reason": "1000件の配送先と10分の期限（deadline）では、最適性証明より早く良質な実行可能ルートを得ることを優先できるため"
         }
       ],
       "case_id": "EC019",
@@ -523,17 +529,17 @@
       "conditional_methods": [
         {
           "method_id": "M_CP_SAT",
-          "reason": "instanceが小さく、論理制約と時間窓をCP modelへ自然に書ける場合"
+          "reason": "問題インスタンス（instance）が小さく、論理制約と時間窓を制約充足モデル（CP model）へ自然に書ける場合"
         }
       ],
-      "constraints": "車両容量、時間窓、勤務時間、各stopの一度だけの訪問。",
-      "decision_variables": "各車両が訪問するstopの順序と割当。",
+      "constraints": "各stopをちょうど一度訪問し、車両容量を $\\sum_i demand_i z_{v,i}\\le Q_v$、到着時刻 $a_i$ を時間窓 $[e_i,l_i]$ 内、経路の勤務時間を $H_v$ 以下にする。",
+      "decision_variables": "配送経路の順序 $\\pi$ と車両割当 $z_{v,i}$。$\\pi$ はstopの順列、$z_{v,i}=1$ はstop i を車両 v が訪問することを表す。",
       "difficulty": "intermediate",
       "domain": "logistics",
       "excluded_methods": [
         {
           "method_id": "M_BRANCH_CUT",
-          "reason": "1000 stopsと短いdeadlineでは最適性証明より早い良質可行解を優先する"
+          "reason": "1000件の配送先と短い期限では、最適性証明より早く良質な実行可能解を得ることを優先する"
         }
       ],
       "feature_values": [
@@ -568,14 +574,14 @@
       ],
       "last_reviewed": "2026-07-15",
       "limitations": [
-        "deadline停止時の解は品質gapが未証明で、交通・service timeの変動もこの固定例には含みません。"
+        "期限停止時の解は品質の差が未証明で、交通やサービス時間の変動もこの固定例には含みません。"
       ],
       "map_node_id": "answer:Q11:scheduling_routing",
-      "objective": "総移動時間と遅延penaltyを小さくする。",
-      "practical_notes": "distance matrix、time zone、service timeを検証し、deadline停止時は可行性と未証明gapを分けて報告します。",
+      "objective": "経路ごとの移動時間と時間窓からの遅れを合わせ、$f(\\pi,z)=\\sum travel\\_time+\\alpha\\sum lateness$ を最小化する。",
+      "practical_notes": "距離行列（distance matrix）、タイムゾーン（time zone）、サービス時間（service time）を検証し、期限停止時は実行可能性と未証明の最適性の差を分けて報告します。",
       "problem_archetype_id": "PA031",
       "python_example": "from ortools.constraint_solver import pywrapcp\n\nmanager = pywrapcp.RoutingIndexManager(4, 1, 0)\nrouting = pywrapcp.RoutingModel(manager)\nprint(routing.Size())",
-      "question": "1000件の配送先と時間窓を満たす良いrouteを、10分以内に得たい。",
+      "question": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。",
       "question_answers": {
         "Q01": "structured_or_unknown",
         "Q02": "explicit_algebraic",
@@ -597,7 +603,8 @@
       ],
       "status": "published",
       "title_en": "Build time-window delivery routes under a deadline",
-      "title_ja": "時間窓付き配送routeを10分以内に組む",
+      "title_ja": "時間窓付き配送ルートを10分以内に組む",
+      "variable_domain": "固定教材では $X=\\{\\text{depot 1個とstop 4個を1台へ割り当てる配送経路の集合}\\}$。順序は順列（permutation）、車両割当は離散で、連続ベクトルの直方体（box）ではない。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -606,7 +613,7 @@
       "candidate_methods": [
         {
           "method_id": "M_DIRECT_COLLOCATION",
-          "reason": "state・control・dynamics defectを疎な非線形programへ同時に転写できるため"
+          "reason": "状態・制御入力・動力学の欠陥（dynamics defect）を疎な非線形計画問題へ同時に転写できるため"
         }
       ],
       "case_id": "EC020",
@@ -614,17 +621,17 @@
       "conditional_methods": [
         {
           "method_id": "M_MULTIPLE_SHOOTING",
-          "reason": "長horizonでsingle shootingが不安定だが、区間積分を活用したい場合"
+          "reason": "長い予測区間（horizon）で単一shooting（single shooting）が不安定だが、区間積分を活用したい場合"
         }
       ],
-      "constraints": "離散化したdynamics、state/control bounds、obstacleと終端条件。",
-      "decision_variables": "各time stepのstate、control、必要なら最終時刻。",
+      "constraints": "離散化した動力学（dynamics）$x_{k+1}=F(x_k,u_k)$、状態・入力の上下限、各meshでの障害物（obstacle）回避 $g_{obs}(x_k)\\le0$、初期状態 $x_0=x_{init}$ と終端条件を課す。",
+      "decision_variables": "状態列（state sequence）$x_0,\\ldots,x_N$、制御入力列（control sequence）$u_0,\\ldots,u_{N-1}$、必要なら終端時刻 $T$。単一shooting（single shooting）では $u$ 列だけを直接選び、$x$ 列は前進計算（rollout）で作る。",
       "difficulty": "intermediate",
       "domain": "control",
       "excluded_methods": [
         {
           "method_id": "M_BFGS",
-          "reason": "trajectory、dynamics defect、sparsityをflat vectorのblack-box objectiveへ隠す"
+          "reason": "軌道、動力学の欠陥、疎性を平坦なベクトルのブラックボックス目的関数へ隠してしまう"
         }
       ],
       "feature_values": [
@@ -660,14 +667,14 @@
       ],
       "last_reviewed": "2026-07-15",
       "limitations": [
-        "離散mesh上のfeasibilityであり、連続時間の安全性や動力学modelの正確さは保証しません。"
+        "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。"
       ],
       "map_node_id": "answer:Q11:optimal_control",
-      "objective": "tracking error、control effort、所要時間を最小化する。",
-      "practical_notes": "mesh、integrator、initial trajectory、defect、rollout validationを保存し、離散化artifactを物理的改善と誤読しません。",
+      "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
+      "practical_notes": "mesh、積分器（integrator）、初期軌道、欠陥、前進計算（rollout）の検証結果を保存し、離散化artifactを物理的な改善と誤読しません。",
       "problem_archetype_id": "PA042",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
-      "question": "非線形動力学とpath constraintを守る軌道を設計したい。",
+      "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
       "question_answers": {
         "Q01": "structured_or_unknown",
         "Q02": "automatic_differentiation_graph",
@@ -690,6 +697,7 @@
       "status": "published",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
       "title_ja": "非線形動力学を含む軌道を最適化する",
+      "variable_domain": "mesh数 $N=20$ の固定教材では $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1},T)\\mid x_k\\in\\mathbb{R}^n,u_k\\in[u_{min},u_{max}],T\\in[T_{min},T_{max}]\\}$。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -698,7 +706,7 @@
       "candidate_methods": [
         {
           "method_id": "M_ADMM_QP",
-          "reason": "同じ凸QP構造でwarm startとfactorization再利用を行い、反復solveを短縮できるため"
+          "reason": "同じ凸二次計画（QP）構造で初期解の引き継ぎ（warm start）と行列分解の再利用を行い、反復計算を短縮できるため"
         }
       ],
       "case_id": "EC025",
@@ -706,17 +714,17 @@
       "conditional_methods": [
         {
           "method_id": "M_ACTIVE_SET_QP",
-          "reason": "active setがstep間で安定し、warm startと小規模dense構造を活かせる場合"
+          "reason": "アクティブ集合（active set）がstep間で安定し、初期解の引き継ぎと小規模な密行列構造を活かせる場合"
         }
       ],
-      "constraints": "線形化dynamics、input/state bounds、初期state。",
-      "decision_variables": "予測horizon上のstateとcontrol increment。",
+      "constraints": "線形化した動力学 $x_{k+1}=A_kx_k+B_k\\Delta u_k+c_k$、初期状態 $x_0=x_{current}$、入力・状態の上下限を線形制約として課す。",
+      "decision_variables": "予測horizonの状態列 $x_0,\\ldots,x_N$ と制御入力の増分（control increment）$\\Delta u_0,\\ldots,\\Delta u_{N-1}$。実機の現在状態はパラメータ（parameter）として毎周期更新する。",
       "difficulty": "intermediate",
       "domain": "control",
       "excluded_methods": [
         {
           "method_id": "M_DIFFERENTIAL_EVOLUTION",
-          "reason": "population評価では100Hz deadline、warm start、残差監視を満たしにくい"
+          "reason": "個体群評価では100Hzの期限、初期解の引き継ぎ、残差監視を満たしにくい"
         }
       ],
       "feature_values": [
@@ -751,14 +759,14 @@
       ],
       "last_reviewed": "2026-07-15",
       "limitations": [
-        "平均solve時間だけでは100Hzを保証できず、worst-case latencyとcold startを実機で検証する必要があります。"
+        "平均計算時間だけでは100Hzを保証できず、最悪遅延と初期解なしの状態を実機で検証する必要があります。"
       ],
       "map_node_id": "answer:Q12:online_or_realtime",
-      "objective": "tracking errorとcontrol effortの凸二次costを最小化する。",
-      "practical_notes": "warm start、factorization再利用、primal/dual residual、worst-case latency、cold fallbackを同時に監視します。",
+      "objective": "参照値との差と入力変更を、凸二次目的（convex quadratic objective）$f=\\sum\\lVert x_k-r_k\\rVert_Q^2+\\sum\\lVert\\Delta u_k\\rVert_R^2$ として最小化する。",
+      "practical_notes": "初期解の引き継ぎ、行列分解の再利用、主・双対残差（primal/dual residual）、最悪遅延（worst-case latency）、初期解なしの代替経路を同時に監視します。",
       "problem_archetype_id": "PA043",
       "python_example": "import numpy as np\nimport osqp\nfrom scipy import sparse\n\nproblem = osqp.OSQP()\nproblem.setup(P=sparse.eye(2, format=\"csc\"), q=np.array([-1.0, -1.0]), A=sparse.eye(2, format=\"csc\"), l=np.zeros(2), u=np.ones(2), verbose=False)\nprint(problem.solve().x)",
-      "question": "同じ構造でparameterだけ変わるMPC QPを、100Hz deadline内で繰り返し解きたい。",
+      "question": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。",
       "question_answers": {
         "Q01": "structured_or_unknown",
         "Q02": "explicit_algebraic",
@@ -780,7 +788,8 @@
       ],
       "status": "published",
       "title_en": "Solve a repeated MPC QP at 100 Hz",
-      "title_ja": "100Hzで反復MPCのQPを解く",
+      "title_ja": "100Hzで反復MPCの二次計画問題を解く",
+      "variable_domain": "予測horizon $N$ の固定QPでは $X=\\mathbb{R}^{n(N+1)+mN}$ の状態・制御入力増分ベクトル。ただし上下限（bounds）と線形制約で実行可能領域（feasible set）を切り出す。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -789,7 +798,7 @@
       "candidate_methods": [
         {
           "method_id": "M_NEWTON_CG",
-          "reason": "Hessian-vector積を使って巨大なHessianを保持せず、局所Newton stepを計算できるため"
+          "reason": "Hessian-vector積を使って巨大なヘッセ行列（Hessian）を保持せず、局所ニュートンステップを計算できるため"
         }
       ],
       "case_id": "EC026",
@@ -797,17 +806,17 @@
       "conditional_methods": [
         {
           "method_id": "M_TRUST_KRYLOV",
-          "reason": "Hessian-vector積を使え、Newton stepの信頼領域制御が必要な場合"
+          "reason": "Hessian-vector積を使え、ニュートンステップの信頼領域制御が必要な場合"
         }
       ],
-      "constraints": "PDE residual、境界条件、design bounds、solver failure。",
-      "decision_variables": "distributed field、境界control、低次元design parameter。",
+      "constraints": "離散PDE残差 $R_{PDE}(z,\\theta,q)=0$、境界条件、設計パラメータの上下限 $\\theta_{min}\\le\\theta\\le\\theta_{max}$ を課し、inner solverが失敗した候補の扱いも明示する。",
+      "decision_variables": "PDEの状態 $z$、境界制御 $q$、低次元の設計パラメータ $\\theta$。reduced formulation（縮約定式化）では $z$ はPDE solveで決まり、$\\theta$ と $q$ だけを最適化器（optimizer）が動かす。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
         {
           "method_id": "M_DIFFERENTIAL_EVOLUTION",
-          "reason": "数百万自由度と高価なPDE solveにpopulation評価budgetが合わない"
+          "reason": "数百万自由度と高価なPDE計算に、個体群評価の予算が合わない"
         }
       ],
       "feature_values": [
@@ -842,14 +851,14 @@
       ],
       "last_reviewed": "2026-07-15",
       "limitations": [
-        "結果は離散PDE・inner tolerance・preconditionerに依存し、連続modelでの最適性は保証しません。"
+        "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"
       ],
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
-      "objective": "PDE solutionから計算する性能指標とregularizationを最小化する。",
-      "practical_notes": "adjoint consistency、mesh independence、inner solve tolerance、preconditioner、failed solveを最適化履歴と一緒に記録します。",
+      "objective": "PDE solve $z(\\theta,q)$ から得る性能指標 $J(z,\\theta,q)$ と正則化（regularization）$R(\\theta,q)$ を使い、$f=J+\\lambda R$ を最小化する。",
+      "practical_notes": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。",
       "problem_archetype_id": "PA045",
       "python_example": "from petsc4py import PETSc\n\ntao = PETSc.TAO().create()\ntao.setType(\"nls\")\nprint(tao.getType())",
-      "question": "数百万自由度のPDE制約付き設計を、adjointとHessian-vector積で改善したい。",
+      "question": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "simulation_only",
@@ -871,7 +880,8 @@
       ],
       "status": "published",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
-      "title_ja": "PDE制約付き大規模設計をmatrix-freeで解く",
+      "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く",
+      "variable_domain": "mesh上の状態（state）$z\\in\\mathbb{R}^{n_{mesh}}$、境界制御（boundary control）$q\\in\\mathbb{R}^{n_{boundary}}$、設計パラメータ（design parameter）$\\theta\\in[\\theta_{min},\\theta_{max}]^p$ の直積 $X$。連続PDEの関数空間そのものではなく、離散mesh上の領域である。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
       ]
@@ -893,8 +903,8 @@
           "reason": "大規模・疎で、barrier法とsparse derivativeを活かせる場合"
         }
       ],
-      "constraints": "許容領域を表す非線形不等式とdesign bounds。",
-      "decision_variables": "2つの連続design parameter。",
+      "constraints": "非線形強度制約 $(x-1)^2+(y-1)^2\\le1$ と上下限 $-1\\le x\\le3$、$-1\\le y\\le3$。円の外側は目的値が低くても実行不可能（infeasible）である。",
+      "decision_variables": "2つの連続設計パラメータ（design parameter）$x,y$。固定教材では設計点 $(x,y)\\in\\mathbb{R}^2$ を選ぶ。",
       "difficulty": "intermediate",
       "domain": "engineering",
       "excluded_methods": [
@@ -935,14 +945,14 @@
       ],
       "last_reviewed": "2026-07-15",
       "limitations": [
-        "2変数の教材modelで得た可行性は、実設計の強度modelや安全余裕を保証しません。"
+        "2変数の教材モデルで得た実行可能性は、実設計の強度モデルや安全余裕を保証しません。"
       ],
       "map_node_id": "answer:Q04:nonlinear",
-      "objective": "重量に対応する二次目的を最小化する。",
-      "practical_notes": "目的値と最大constraint violationを分けて保存し、active constraintと終了statusを確認します。",
+      "objective": "重量に対応する $f(x,y)=x^2+y^2$ を最小化する。目的を下げる方向と、制約（constraint）を破らないことを別々に確認する。",
+      "practical_notes": "目的値と最大制約違反量（constraint violation）を分けて保存し、アクティブ制約（active constraint）と終了状態を確認します。",
       "problem_archetype_id": "PA009",
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nobjective = lambda x: float(x @ x)\nconstraint = {\"type\": \"ineq\", \"fun\": lambda x: 1.0 - (x[0]-1.0)**2 - (x[1]-1.0)**2}\nresult = minimize(objective, np.array([1.8, 1.8]), constraints=constraint, method=\"SLSQP\")\nprint(result.x, result.fun)",
-      "question": "強度の非線形constraintを満たす設計の中で、重量を最小化したい。",
+      "question": "強度の非線形制約（constraint）を満たす設計の中で、重量を最小化したい。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "explicit_algebraic",
@@ -967,6 +977,7 @@
       "status": "published",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す",
+      "variable_domain": "固定教材では $X=[-1,3]^2$。実際に選べる領域はさらに円内 $(x-1)^2+(y-1)^2\\le1$ で切り出されるため、実行可能領域（feasible set）は直方体（box）全体ではない。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "constrained-disk-feasible-region"

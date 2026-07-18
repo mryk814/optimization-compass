@@ -11,6 +11,7 @@ from optimization_compass.comparisons import (
     load_comparison_seed,
     validate_comparison_benchmark_contexts,
 )
+from optimization_compass.content_markdown import render_inline_markdown
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -218,9 +219,44 @@ def test_ec017_formulation_distinguishes_the_real_case_from_the_fixed_lesson() -
     gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
     case = next(item for item in gallery["cases"] if item["case_id"] == "EC017")
 
-    assert "f₁=x²+y²" in case["objective"]
-    assert "f₂=(x−2)²+(y−2)²" in case["objective"]
+    assert "$f_1=x^2+y^2$" in case["objective"]
+    assert "$f_2=(x-2)^2+(y-2)^2$" in case["objective"]
     assert any("同一視しません" in limitation for limitation in case["limitations"])
+
+
+def test_each_gallery_case_states_a_case_specific_variable_domain() -> None:
+    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+
+    cases = gallery["cases"]
+    assert len(cases) >= 11
+    for case in cases:
+        assert "X" in case["variable_domain"], case["case_id"]
+        assert any(marker in case["objective"] for marker in ("f(", "f=", "$f_")), case["case_id"]
+        assert any(marker in case["constraints"] for marker in ("\\le", "=", "上下限")), case[
+            "case_id"
+        ]
+
+
+def test_gallery_formulation_prose_is_japanese_first_and_tex_delimited() -> None:
+    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+    forbidden_fragments = (
+        "tracking errorと",
+        "control effect",
+        "sankey dynamics",
+        "input state bounds",
+        "shock state",
+        "costを",
+    )
+    for case in gallery["cases"]:
+        for field in ("variable_domain", "decision_variables", "objective", "constraints"):
+            value = case[field]
+            assert "$" in value, (case["case_id"], field)
+            assert "$" not in render_inline_markdown(value), (case["case_id"], field)
+            assert any("\u3040" <= char <= "\u9fff" for char in value), (case["case_id"], field)
+            assert not any(fragment in value for fragment in forbidden_fragments), (
+                case["case_id"],
+                field,
+            )
 
 
 def test_rejects_unfair_budget_alignment() -> None:

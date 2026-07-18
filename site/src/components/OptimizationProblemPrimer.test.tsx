@@ -34,4 +34,9 @@ describe("OptimizationProblemPrimer", () => {
     expect(screen.getByText("誤差を最小化")).toBeVisible();
     expect(screen.getByText("合計100%")).toBeVisible();
   });
+
+  test("mounts exported MathML in a case formulation", () => {
+    const { container } = render(<OptimizationProblemPrimer caseFormulation={{ decisionVariables: "変数 <math><mi>x</mi></math>", variableDomain: "範囲", objective: "目的", constraints: "制約" }} />);
+    expect(container.querySelector("math mi")?.textContent).toBe("x");
+  });
 });

@@ -508,7 +508,7 @@ export function createGalleryPromptDraft(input: GalleryPromptInput): Implementat
   };
   const form = blankForm();
   form.intent = item.question;
-  form.decision_variables = item.decision_variables;
+  form.decision_variables = `X: ${item.variable_domain}\nx: ${item.decision_variables}`;
   form.objective = item.objective;
   form.constraints = item.constraints;
   return {

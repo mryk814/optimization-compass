@@ -4,7 +4,7 @@ export interface GalleryCase {
   candidate_methods: { method_id: string; reason: string }[]; conditional_methods: { method_id: string; reason: string }[];
   excluded_methods: { method_id: string; reason: string }[]; implementation_ids: string[];
   visualization_ids: string[]; comparison_ids: string[]; source_ids: string[]; difficulty: "intro" | "intermediate";
-  status: "published" | "draft"; last_reviewed: string; question: string; decision_variables: string;
+  status: "published" | "draft"; last_reviewed: string; question: string; variable_domain: string; decision_variables: string;
   objective: string; constraints: string; map_node_id: string; python_example: string; practical_notes: string;
   limitations: string[];
 }
@@ -26,7 +26,7 @@ export function parseGalleryIndex(raw: unknown): GalleryIndex {
       conditional_methods: methodReasons(item.conditional_methods, "conditional_methods"),
       excluded_methods: array(item.excluded_methods, "excluded_methods").map((value) => { const row = object(value, "excluded method"); return { method_id: nonEmpty(row.method_id, "method_id"), reason: nonEmpty(row.reason, "reason") }; }),
       implementation_ids: strings(item.implementation_ids, "implementation_ids"), visualization_ids: strings(item.visualization_ids, "visualization_ids"), comparison_ids: strings(item.comparison_ids, "comparison_ids"), source_ids: strings(item.source_ids, "source_ids"),
-      difficulty, status: contentStatus(item.status), last_reviewed: nonEmpty(item.last_reviewed, "last_reviewed"), question: nonEmpty(item.question, "question"), decision_variables: nonEmpty(item.decision_variables, "decision_variables"), objective: nonEmpty(item.objective, "objective"), constraints: nonEmpty(item.constraints, "constraints"), map_node_id: nonEmpty(item.map_node_id, "map_node_id"), python_example: nonEmpty(item.python_example, "python_example"), practical_notes: nonEmpty(item.practical_notes, "practical_notes"), limitations: nonEmptyStrings(item.limitations, "limitations"),
+      difficulty, status: contentStatus(item.status), last_reviewed: nonEmpty(item.last_reviewed, "last_reviewed"), question: nonEmpty(item.question, "question"), variable_domain: nonEmpty(item.variable_domain, "variable_domain"), decision_variables: nonEmpty(item.decision_variables, "decision_variables"), objective: nonEmpty(item.objective, "objective"), constraints: nonEmpty(item.constraints, "constraints"), map_node_id: nonEmpty(item.map_node_id, "map_node_id"), python_example: nonEmpty(item.python_example, "python_example"), practical_notes: nonEmpty(item.practical_notes, "practical_notes"), limitations: nonEmptyStrings(item.limitations, "limitations"),
     } satisfies GalleryCase;
   });
   if (new Set(cases.map((item) => item.case_id)).size !== cases.length) throw new Error("Duplicate gallery case ID.");

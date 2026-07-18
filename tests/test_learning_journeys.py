@@ -40,7 +40,8 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
 
     assert pilot.case_id == "constrained-design"
     assert pilot.problem_archetype_id == "PA009"
-    assert pilot.formulation.variable_domain_summary == "continuous"
+    assert pilot.formulation.variable_domain_summary.startswith("固定教材では ")
+    assert "<math" in pilot.formulation.variable_domain_summary
     scenario_roles = {item.role: item for item in pilot.scenarios}
     assert set(scenario_roles) == {"primary", "failure_contrast"}
     assert scenario_roles["primary"].scenario_id == "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"

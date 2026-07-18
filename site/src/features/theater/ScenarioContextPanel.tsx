@@ -64,9 +64,9 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
       {context?.journey ? <div className="scenario-case-formulation">
         <h3>Case: {context.journey.title_ja}</h3>
         <p>{context.journey.learning_objective}</p>
-        <p><strong>x</strong> {context.journey.formulation.decision_variables}</p>
-        <p><strong>f(x)</strong> {context.journey.formulation.objective}</p>
-        <p><strong>制約</strong> {context.journey.formulation.constraints}</p>
+        <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>
+        <p><strong>f(x)</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.objective }} /></p>
+        <p><strong>制約</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.constraints }} /></p>
       </div> : <p className="atlas-note">この教材runはCase journeyへ未接続です。問題instanceの範囲で読みます。</p>}
       <nav className="scenario-context-links" aria-label="同じjourneyの導線">
         {context?.journey && <JourneyLink to={context.journey.canonical_url}>Caseへ戻る</JourneyLink>}
