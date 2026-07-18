@@ -105,3 +105,5 @@ endpoint. Dataset 0.15.1 remains immutable and is superseded by 0.16.0.
     encoding='utf-8',
     newline='\n',
 )
+
+# Rerun after aligning the product-version assertion with canonical implementation data.
