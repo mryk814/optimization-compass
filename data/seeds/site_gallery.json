@@ -492,6 +492,41 @@
       "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nobjective = lambda x: float(x @ x)\nconstraint = {\"type\": \"ineq\", \"fun\": lambda x: 1.0 - (x[0]-1.0)**2 - (x[1]-1.0)**2}\nresult = minimize(objective, np.array([1.8, 1.8]), constraints=constraint, method=\"SLSQP\")\nprint(result.x, result.fun)",
       "practical_notes": "目的値と最大制約違反量（constraint violation）を分けて保存し、アクティブ制約（active constraint）と終了状態を確認します。",
       "limitations": ["2変数の教材モデルで得た実行可能性は、実設計の強度モデルや安全余裕を保証しません。"]
+    },
+    {
+      "case_id": "bilevel-regularized-regression",
+      "title_ja": "正則化を選びながら非負回帰を解く",
+      "title_en": "Tune regularization around a nonnegative regression solve",
+      "domain": "science",
+      "problem_archetype_id": "PA033",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "sum_of_squares"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "jacobian"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "bounds"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {"Q01": "continuous", "Q02": "residual_vector", "Q03": "sum_of_squares", "Q04": "bounds", "Q05": "jacobian_or_hvp", "Q06": "seconds", "Q07": "deterministic_reliable", "Q08": "10_to_100", "Q09": "local_is_fine", "Q10": "no_certificate_needed", "Q11": "least_squares", "Q12": "one_off"},
+      "candidate_methods": [{"method_id": "M_SLSQP", "reason": "小規模なinnerの非負制約を保ちながら、primal feasibility・stationarity・complementarityを外側の更新と分けて再検証できるため"}],
+      "conditional_methods": [{"method_id": "M_INTERIOR_POINT_NLP", "reason": "innerが大規模・疎になり、KKT系とbarrier continuationを使える場合。ただし有限barrierではrelaxed complementarityとして記録する"}],
+      "excluded_methods": [{"method_id": "M_BFGS", "reason": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない"}],
+      "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
+      "source_ids": ["S017", "S029", "S030", "S055", "S056", "S064"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。",
+      "variable_domain": "外側の正則化係数 $\\lambda\\in[0.01,1]$ と、内側の回帰係数 $w\\in X=\\mathbb{R}_+^2$ を別々に持つ。固定教材では $X_{train}=\\{(1,0),(1,1),(1,2)\\}$、$X_{valid}=\\{(1,0.5),(1,1.5)\\}$ とする。",
+      "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ でinner problemを解き、得られた $w^*(\\lambda)$ をvalidationへ渡す。",
+      "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的値だけでinnerの解品質を表さない。",
+      "constraints": "innerは $w\\ge0$。exact complementarityでは、推定乗数 $\\mu\\ge0$ として stationarity $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、primal violation $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各 residual の $\\ell_\\infty$ norm $\\le10^{-8}$、innerは最大100 iteration、未収束候補はouter gradientへ渡さない。",
+      "map_node_id": "answer:Q11:least_squares",
+      "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\nX_train = np.array([[1.0, 0.0], [1.0, 1.0], [1.0, 2.0]])\ny_train = np.array([0.2, 1.0, 1.8])\n\ndef inner_solve(lam: float, start: np.ndarray) -> tuple[np.ndarray, dict[str, float]]:\n    def gradient(w: np.ndarray) -> np.ndarray:\n        return X_train.T @ (X_train @ w - y_train) + lam * w\n\n    result = minimize(\n        lambda w: 0.5 * np.sum((X_train @ w - y_train) ** 2) + 0.5 * lam * np.sum(w ** 2),\n        start,\n        jac=gradient,\n        method=\"SLSQP\",\n        bounds=[(0.0, None), (0.0, None)],\n        options={\"ftol\": 1e-10, \"maxiter\": 100},\n    )\n    w = result.x\n    grad = gradient(w)\n    mu = np.where(w <= 1e-8, np.maximum(grad, 0.0), 0.0)\n    residuals = {\n        \"primal\": float(np.max(np.maximum(-w, 0.0))),\n        \"stationarity\": float(np.max(np.abs(grad - mu))),\n        \"complementarity\": float(np.max(np.abs(w * mu))),\n    }\n    if max(residuals.values()) > 1e-8:\n        raise RuntimeError(\"inner KKT residual exceeds tolerance\")\n    return w, residuals\n\nw, diagnostics = inner_solve(0.2, np.array([0.1, 0.8]))\nprint(w, diagnostics)",
+      "practical_notes": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
+      "limitations": ["固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データのvalidation性能、外側のglobal最適性、実装間の速度順位を示さない。", "ridge項と固定データではinner解を追いやすいが、一般のbilevel問題で解の選択が一意とは限らない。optimistic／pessimisticのどちらを採るかを明記し、KKT stationarityを得てもglobal optimumとは解釈しない。", "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。", "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"]
     }
   ]
 }

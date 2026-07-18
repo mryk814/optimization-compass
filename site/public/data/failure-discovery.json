@@ -284,6 +284,57 @@
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解くでは差分進化を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Abilevel-regularized-regression%3AM_BFGS",
+      "case_context": {
+        "constraints": "innerは $w\\ge0$。exact complementarityでは、推定乗数 $\\mu\\ge0$ として stationarity $\\nabla_w f_{inner}(w;\\lambda)-\\mu=0$、$w_i\\mu_i=0$、primal violation $\\max_i(-w_i,0)=0$ を同時に満たす。固定教材の判定は各 residual の $\\ell_\\infty$ norm $\\le10^{-8}$、innerは最大100 iteration、未収束候補はouter gradientへ渡さない。",
+        "decision_variables": "外側の変数は正則化係数（regularization coefficient）$\\lambda$、内側の変数は非負の回帰係数 $w=(w_0,w_1)$。外側の各候補 $\\lambda$ でinner problemを解き、得られた $w^*(\\lambda)$ をvalidationへ渡す。",
+        "objective": "内側では $f_{inner}(w;\\lambda)=\\frac12\\lVert X_{train}w-y_{train}\\rVert^2+\\frac{\\lambda}{2}\\lVert w\\rVert^2$ を最小化し、外側では $f(\\lambda)=\\frac12\\lVert X_{valid}w^*(\\lambda)-y_{valid}\\rVert^2$ を最小化する。外側の目的値だけでinnerの解品質を表さない。",
+        "question": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。"
+      },
+      "case_id": "bilevel-regularized-regression",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:bilevel-regularized-regression:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "summary": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Tune regularization around a nonnegative regression solve",
+      "title_ja": "正則化を選びながら非負回帰を解くではBFGS法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Abudget-allocation%3AM_NELDER_MEAD",
       "case_context": {
         "constraints": "費用 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_D+3x_C\\le7$ と $x_i\\in\\{0,1\\}$。",
@@ -1208,9 +1259,9 @@
   ],
   "generated_at": "2026-07-18T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 13,
+    "case_exclusion_count": 14,
     "entries_with_scenarios": 11,
     "structured_failure_count": 12,
-    "total_entries": 25
+    "total_entries": 26
   }
 }

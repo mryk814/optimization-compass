@@ -228,6 +228,46 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:bilevel-regularized-regression:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "case:bilevel-regularized-regression",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:bounds",
+        "feature_value:F_DERIVATIVE_ACCESS:jacobian",
+        "feature_value:F_EVALUATION_COST:moderate",
+        "feature_value:F_OBJECTIVE_FORM:sum_of_squares",
+        "feature_value:F_SOLUTION_GOAL:local_stationary",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_IPOPT",
+        "implementation:I_SCIPY_SLSQP",
+        "journey:bilevel-regularized-regression",
+        "method:M_BFGS",
+        "method:M_INTERIOR_POINT_NLP",
+        "method:M_SLSQP",
+        "problem:PA033",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S056",
+        "source:S064",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "text": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。",
+      "title": "正則化を選びながら非負回帰を解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:budget-allocation:overview",
       "dataset_version": "0.18.4",
       "document_id": "case:budget-allocation",
@@ -28300,6 +28340,37 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:bilevel-regularized-regression:M_BFGS:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "failure:case:bilevel-regularized-regression:M_BFGS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:bilevel-regularized-regression",
+        "failure:structured:FM003",
+        "failure:structured:FM007",
+        "failure:structured:FM016",
+        "method:M_BFGS",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S056",
+        "source:S064"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "text": "unconstrained updateでは非負制約とKKT complementarityを保てず、outer objectiveが下がってもinnerのfeasibleなstationary pointとは確認できない",
+      "title": "正則化を選びながら非負回帰を解くではBFGS法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:budget-allocation:M_NELDER_MEAD:overview",
       "dataset_version": "0.18.4",
       "document_id": "failure:case:budget-allocation:M_NELDER_MEAD",
@@ -34687,6 +34758,45 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:bilevel-regularized-regression:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "journey:bilevel-regularized-regression",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:bilevel-regularized-regression",
+        "content:interior-point-nlp",
+        "content:slsqp",
+        "implementation:I_IPOPT",
+        "implementation:I_SCIPY_SLSQP",
+        "method:M_BFGS",
+        "method:M_INTERIOR_POINT_NLP",
+        "method:M_SLSQP",
+        "problem:PA033",
+        "source:S002",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "source:S056",
+        "source:S064",
+        "source:S087"
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064",
+        "S087"
+      ],
+      "text": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。",
+      "title": "正則化を選びながら非負回帰を解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:budget-allocation:overview",
       "dataset_version": "0.18.4",
       "document_id": "journey:budget-allocation",
@@ -35760,6 +35870,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC020",
+        "case:bilevel-regularized-regression",
         "case:constrained-design",
         "case:hyperparameter-search",
         "case:topology-cantilever",
@@ -36478,6 +36589,7 @@
       "document_id": "method:M_INTERIOR_POINT_NLP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:bilevel-regularized-regression",
         "case:constrained-design",
         "content:interior-point-nlp",
         "implementation:I_CASADI",
@@ -37509,6 +37621,7 @@
       "document_id": "method:M_SLSQP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:bilevel-regularized-regression",
         "case:constrained-design",
         "case:portfolio-allocation",
         "comparison:COMPARE_CONSTRAINED_FAILURE",
@@ -38377,7 +38490,9 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC013",
-        "journey:EC013"
+        "case:bilevel-regularized-regression",
+        "journey:EC013",
+        "journey:bilevel-regularized-regression"
       ],
       "source_ids": [
         "S003",

@@ -637,10 +637,11 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "bilevel-regularized-regression",
             "constrained-design",
             "portfolio-allocation"
           ]
@@ -674,7 +675,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 46,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -714,6 +715,7 @@
             "S087",
             "active-set",
             "augmented-lagrangian",
+            "bilevel-regularized-regression",
             "constrained-continuous",
             "constrained-design",
             "constrained-disk-feasible-region",
@@ -2070,13 +2072,14 @@
           ]
         },
         "gallery": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "EC020",
             "EC026",
+            "bilevel-regularized-regression",
             "constrained-design",
             "hyperparameter-search",
             "shift-scheduling",
@@ -2107,7 +2110,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 44,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2140,6 +2143,7 @@
             "S057",
             "S065",
             "bfgs",
+            "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
             "exponential-fit-lbfgsb",
@@ -3853,11 +3857,12 @@
           ]
         },
         "gallery": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
+            "bilevel-regularized-regression",
             "constrained-design",
             "hyperparameter-search",
             "topology-cantilever"
@@ -3881,7 +3886,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3894,6 +3899,7 @@
             "S056",
             "S057",
             "bfgs",
+            "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
             "hyperparameter-search",
@@ -6370,10 +6376,11 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "bilevel-regularized-regression",
             "constrained-design"
           ]
         },
@@ -6400,7 +6407,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6418,6 +6425,7 @@
             "S056",
             "S064",
             "S087",
+            "bilevel-regularized-regression",
             "constrained-design",
             "interior-point-nlp"
           ]
@@ -9872,10 +9880,11 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "bilevel-regularized-regression",
             "constrained-design",
             "portfolio-allocation"
           ]
@@ -9897,7 +9906,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9910,6 +9919,7 @@
             "S030",
             "S056",
             "S064",
+            "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
             "portfolio-allocation",
@@ -13671,11 +13681,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC013"
+            "EC013",
+            "bilevel-regularized-regression"
           ]
         },
         "implementation": {
@@ -13687,20 +13698,22 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "EC013"
-          ]
-        },
-        "map": {
           "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
-            "None"
+            "bilevel-regularized-regression"
+          ]
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC013",
+            "None",
+            "bilevel-regularized-regression"
           ]
         },
         "recommendation": {
@@ -15612,7 +15625,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15622,6 +15635,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
@@ -15716,7 +15730,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15726,6 +15740,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
@@ -15819,7 +15834,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15829,6 +15844,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
@@ -16006,7 +16022,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16016,6 +16032,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
@@ -16186,7 +16203,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16196,6 +16213,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
@@ -16474,7 +16492,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16484,6 +16502,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",

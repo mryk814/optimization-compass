@@ -801,6 +801,149 @@
     {
       "dimensions": {
         "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/bilevel-regularized-regression",
+            "/methods/M_BFGS",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S030",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bilevel-regularized-regression"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_IPOPT",
+            "I_SCIPY_SLSQP"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_INTERIOR_POINT_NLP",
+            "M_SLSQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/bilevel-regularized-regression",
+            "/methods/M_BFGS",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S030",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source",
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S017",
+            "S029",
+            "S030",
+            "S055",
+            "S056",
+            "S064",
+            "S087"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "interior-point-nlp",
+            "slsqp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "bilevel-regularized-regression",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
@@ -2212,6 +2355,74 @@
     },
     {
       "candidate_method_ids": [
+        "M_SLSQP"
+      ],
+      "canonical_url": "/gallery/bilevel-regularized-regression",
+      "case_id": "bilevel-regularized-regression",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_INTERIOR_POINT_NLP"
+      ],
+      "content_ids": [
+        "interior-point-nlp",
+        "slsqp"
+      ],
+      "dataset_version": "0.18.4",
+      "domain": "science",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "innerは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x02265;</mo><mn>0</mn></mrow></math>。exact complementarityでは、推定乗数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BC;</mi><mo>&#x02265;</mo><mn>0</mn></mrow></math> として stationarity <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02207;</mo><mi>w</mi></msub><msub><mi>f</mi><mrow><mi>i</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>r</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mi>;</mi><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><mi>&#x003BC;</mi><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><msub><mi>&#x003BC;</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、primal violation <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>max</mo><mi>i</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mo>&#x02212;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math> を同時に満たす。固定教材の判定は各 residual の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x02113;</mi><mo>&#x0221E;</mo></msub></mrow></math> norm <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02264;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>8</mn></mrow></msup></mrow></math>、innerは最大100 iteration、未収束候補はouter gradientへ渡さない。",
+        "decision_variables": "外側の変数は正則化係数（regularization coefficient）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math>、内側の変数は非負の回帰係数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>0</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>1</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。外側の各候補 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi></mrow></math> でinner problemを解き、得られた <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>w</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> をvalidationへ渡す。",
+        "objective": "内側では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mrow><mi>i</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>r</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mi>;</mi><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&#x02016;</mo><msub><mi>X</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><mi>w</mi><mo>&#x02212;</mo><msub><mi>y</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><msup><mo>&#x02016;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mfrac><mrow><mi>&#x003BB;</mi></mrow><mrow><mn>2</mn></mrow></mfrac><mo>&#x02016;</mo><mi>w</mi><msup><mo>&#x02016;</mo><mn>2</mn></msup></mrow></math> を最小化し、外側では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&#x02016;</mo><msub><mi>X</mi><mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>d</mi></mrow></msub><msup><mi>w</mi><mo>&#x0002A;</mo></msup><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003BB;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02212;</mo><msub><mi>y</mi><mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>d</mi></mrow></msub><msup><mo>&#x02016;</mo><mn>2</mn></msup></mrow></math> を最小化する。外側の目的値だけでinnerの解品質を表さない。",
+        "variable_domain_summary": "外側の正則化係数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BB;</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0.01</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">]</mo></mrow></math> と、内側の回帰係数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><msubsup><mi>&#x0211D;</mi><mo>&#x0002B;</mo><mn>2</mn></msubsup></mrow></math> を別々に持つ。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>X</mi><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>2</mn><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>X</mi><mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>d</mi></mrow></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>0.5</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>1.5</mn><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_IPOPT",
+        "I_SCIPY_SLSQP"
+      ],
+      "journey_id": "bilevel-regularized-regression",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "外側で正則化係数を選び、内側の非負回帰を十分な精度で解いて検証損失を下げたい。",
+      "limitations": [
+        "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。",
+        "ridge項と固定データではinner解を追いやすいが、一般のbilevel問題で解の選択が一意とは限らない。optimistic／pessimisticのどちらを採るかを明記し、KKT stationarityを得てもglobal optimumとは解釈しない。",
+        "固定した2係数・小規模・決定論的な回帰データの教育用Caseであり、実データのvalidation性能、外側のglobal最適性、実装間の速度順位を示さない。",
+        "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA033",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S029",
+        "S030",
+        "S055",
+        "S056",
+        "S064",
+        "S087"
+      ],
+      "status": "partial",
+      "takeaway": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
+      "title_en": "Tune regularization around a nonnegative regression solve",
+      "title_ja": "正則化を選びながら非負回帰を解く"
+    },
+    {
+      "candidate_method_ids": [
         "M_CP_SAT"
       ],
       "canonical_url": "/gallery/budget-allocation",
@@ -3497,9 +3708,9 @@
     "status_counts": {
       "complete": 5,
       "draft": 0,
-      "partial": 8
+      "partial": 9
     },
     "target_complete_journeys": 5,
-    "total_journeys": 13
+    "total_journeys": 14
   }
 }
