@@ -6,6 +6,7 @@ from pydantic import ValidationError
 from optimization_compass.surrogate_uncertainty import (
     Observation,
     canonical_renderer_bytes,
+    generate_evaluation_ledger_scenario,
     generate_surrogate_scenario,
 )
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
@@ -73,6 +74,23 @@ def test_surrogate_variants_are_sensitivity_scenarios() -> None:
     assert len({item.scenario.scenario_id for item in variants}) == 3
     assert all(item.scenario.lesson.misconception for item in variants)
     assert all(item.scenario.lesson.failure_signals for item in variants)
+
+
+def test_evaluation_ledger_scenario_preserves_cost_fidelity_and_failure_statuses() -> None:
+    first = generate_evaluation_ledger_scenario(dataset_version="0.3.0")
+    second = generate_evaluation_ledger_scenario(dataset_version="0.3.0")
+    ledger = first.payload.evaluation_ledger
+
+    assert first.payload_bytes == second.payload_bytes
+    assert first.scenario.scenario_id == "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
+    assert first.scenario.artifact.artifact_contract_version == "1.1.0"
+    assert ledger is not None
+    assert {call.fidelity for call in ledger.calls} == {"low", "high"}
+    assert {call.status for call in ledger.calls} == {"ok", "failed", "censored", "timeout"}
+    assert ledger.calls[-1].accumulated_cost == ledger.budget_cost == 36.0
+    assert ledger.calls[-1].accumulated_high_fidelity_equivalent_cost == 3.0
+    assert ledger.calls[-1].best_so_far is not None
+    assert "cost-aligned Compare" in first.scenario.lesson.limitations_en
 
 
 def test_established_scenario_identity_and_artifact_path_remain_stable() -> None:
