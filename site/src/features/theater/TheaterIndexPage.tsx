@@ -7,11 +7,33 @@ import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
 import {
   buildTheaterCatalog,
+  primaryObservableLabels,
   purposeLabels,
   rendererLabels,
   type TheaterCatalogEntry,
   type TheaterDomain,
 } from "./scenario-catalog";
+
+const structureReadingLenses = [
+  {
+    title: "Nested solve",
+    titleJa: "内側の solve と外側の更新",
+    body: "外側の目的値の改善だけでなく、内側の solve accuracy と停止条件を別の軸で追います。",
+    observables: "outer progress · inner residual · solve tolerance",
+  },
+  {
+    title: "Equilibrium / complementarity",
+    titleJa: "平衡と complementarity",
+    body: "目的値、残差、可行性を分けて表示し、exact な条件と penalty / smoothing の近似を混同しません。",
+    observables: "residual · constraint violation · smoothing parameter",
+  },
+  {
+    title: "Hybrid / mode",
+    titleJa: "Hybrid と mode transition",
+    body: "連続軌跡だけでなく、active mode の列、switching event、mode chattering を追います。",
+    observables: "mode sequence · switching event · chattering",
+  },
+] as const;
 
 export function TheaterIndexPage() {
   const links = useEntityLinks();
@@ -59,6 +81,24 @@ export function TheaterIndexPage() {
         purpose="シナリオごとの一手を再生し、何を観測し、なぜ停止したかを追います。"
         readingSteps={["まず代表例を1つ開きます。", "再生して、観測・更新・停止の順に追います。", "条件を変えた違いを見たいときは、比較ページへ進みます。"]}
       />
+      <section className="theater-structure-guide" aria-labelledby="theater-structure-guide-title">
+        <header>
+          <p className="eyebrow">構造で読む</p>
+          <h2 id="theater-structure-guide-title">nested・equilibrium・hybrid の run で分けて見る値</h2>
+          <p>同じ「目的値の履歴」でも、内側の solve、平衡条件、離散 mode が隠れていると読み方が変わります。Theater では、目的値と一緒に構造固有の観測量と限界を置きます。</p>
+        </header>
+        <div className="theater-structure-guide-grid">
+          {structureReadingLenses.map((lens) => (
+            <article key={lens.title}>
+              <span>{lens.title}</span>
+              <h3>{lens.titleJa}</h3>
+              <p>{lens.body}</p>
+              <small>見る値: {lens.observables}</small>
+            </article>
+          ))}
+        </div>
+        <p className="atlas-note">この3つは今後のシナリオで使う読み方の整理です。公開済みカードには、その run が宣言した primary observables だけを表示します。</p>
+      </section>
       {featured && (
         <section className="theater-first-action" aria-labelledby="theater-first-action-title">
           <div>
@@ -97,6 +137,7 @@ export function TheaterIndexPage() {
                   <span>{purposeLabels[entry.scenario.purpose]} · {comparisonRoleLabel(entry.scenario.lesson.comparison_role)}</span>
                   <h3>{entry.scenario.title_ja}</h3>
                   <p>{entry.scenario.lesson.learning_objective.ja}</p>
+                  <small className="theater-card-observables">観測: {primaryObservableLabels(entry).join(" · ")}</small>
                   <small>{entry.journey ? `ケース: ${entry.journey.label}` : `問題: ${entry.scenario.problem_instance_id}`}</small>
                   <small>{difficultyLabel(entry.difficulty)} · 公開済み · 評価 {entry.scenario.experiment.budget.value}回 →</small>
                 </Link>)}

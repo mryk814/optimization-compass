@@ -30,6 +30,10 @@ export interface TheaterCatalogEntry {
   comparisons: LinkedEntity[];
 }
 
+export function primaryObservableLabels(entry: TheaterCatalogEntry): string[] {
+  return entry.scenario.lesson.primary_observables.map((observable) => observable.label_ja);
+}
+
 export function buildTheaterCatalog(
   scenarios: VisualizationScenario[],
   links: EntityLinkIndex,
