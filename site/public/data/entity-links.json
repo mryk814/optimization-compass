@@ -3243,7 +3243,17 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
           "target_type": "source"
         },
         {
@@ -3272,7 +3282,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "評価費と予算は、目的関数を何回・どの並列度・どの信頼度で測れるかを表し、探索よりも先に最適化の実行可能な戦略を決めます。"
+      "summary": "評価費と予算は、目的関数を何回・どの並列度・どのfidelityで測れるかを記録し、評価ledgerから探索と比較の公平性を決めます。"
     },
     {
       "aliases": [],
