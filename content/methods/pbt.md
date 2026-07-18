@@ -9,10 +9,32 @@ source_ids: [S038, S069]
 prerequisites: []
 related_ids: [hyperband-asha, random-search, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。
+
+## 30秒でつかむ
+
+PBTは、固定したconfigurationを一度ずつ比較するのではなく、**学習途中のworkerを比較し、良い系譜を継承しながらhyperparameter scheduleを変化させる**方法です。
+
+- 見ているもの: validation metric、worker state、hyperparameter、lineage
+- 動かしているもの: weight、optimizer state、hyperparameterの摂動
+- 前進の判断: 同じtotal training budgetで、良い系譜が残り続けるか
+- 別に確認するもの: worker間のresource利用率、exploit / explore頻度、再現性
+- 恐れていること: population collapse、誤った継承、系譜の欠落、noiseへの過反応
+
+最終workerのhyperparameterだけでは、結果を再現する情報になりません。
+
+## まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| worker | 同じarchitectureでweightを継承できるか |
+| metric | 一定間隔でvalidationできるか |
+| interval | exploit / exploreの頻度が学習速度に合うか |
+| budget | populationと学習時間を同じ条件で比較できるか |
+| lineage | source、継承時点、摂動後の値を保存できるか |
 
 ## 何を並走させているか
 

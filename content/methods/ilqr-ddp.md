@@ -9,10 +9,33 @@ source_ids: [S042, S043, S050, S076]
 prerequisites: []
 related_ids: [multiple-shooting, direct-collocation, dynamic-programming, family.optimal-control]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、**いきなり大きな非線形問題を解くのではなく、現在の軌道の近くで小さなLQR問題を解き、そのfeedback則で実際のtrajectoryを更新したい**というものです。
+
+- 見ているもの: rollout trajectory、cost、local quadratic model、feedback gain
+- 動かしているもの: control sequenceと局所近似
+- 前進の判断: forward pass後のcost改善とrollout安定性
+- 別に確認するもの: constraint violation、離散化への依存、backward / forward passの実時間
+- 恐れていること: 不良な$Q_{uu}$、初期軌道依存、強い非線形性、一般path constraintの扱いにくさ
+
+costが下がること、制約を満たすこと、real-time deadlineに間に合うことは別の判定です。
+
+## まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| dynamics | 1次または2次の微分を計算できるか |
+| initial trajectory | 現在のstateとcontrolの軌道を用意できるか |
+| cost | 局所2次近似で改善を判定できるか |
+| constraints | box制約か、一般のpath制約まで必要か |
+| regularization | $Q_{uu}$が正定値でない場合の処理があるか |
+| real-time | backward / forward passの時間がdeadlineに合うか |
 
 ## backward passとforward passで何をしているか
 
@@ -54,7 +77,7 @@ DDP（differential dynamic programming）は、dynamicsの2次項（stateとcont
 - 良い初期軌道の推測を用意できる
 - feedback則（$K_k$）を制御則としてそのまま使いたい
 
-避ける／切り替える条件:
+## 避ける／切り替える条件
 
 - dynamicsが未同定、または強くstochasticでmodel mismatchが大きい
 - 不連続なevent（衝突、切り替えなど）をmeshやhybrid構造で明示していない
@@ -104,11 +127,13 @@ print("maximum control:", max(abs(value) for value in controls))
 
 ## 診断値
 
+- costの変化とline searchの採用率
 - defect_norm（forward rollout後のdynamics整合性）
 - constraint_violation
 - KKT residual（制約付き変種を使う場合）
 - mesh_error（離散化を変えたときの解の変化）
 - rollout_stability
+- backward / forward passのwall timeとiteration数
 
 ## 失敗・切替の兆候
 

@@ -10,10 +10,34 @@ prerequisites: []
 related_ids: [direct-shooting, direct-collocation, sqp]
 aliases: [/learn/multiple-shooting]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。
+
+## 30秒でつかむ
+
+この手法の気持ちは、**長いrolloutを一つにつなげて感度を伝えるのではなく、短いsegmentごとにstateを置き、境界のずれだけをconstraintとして管理したい**というものです。
+
+- 見ているもの: segmentごとのrollout、cost、continuity defect、constraint violation
+- 動かしているもの: segment開始state、control、NLPの制約
+- 前進の判断: costの改善と、segment境界・path constraintの成立
+- 別に確認するもの: segment数を変えたときの解、積分器の安定性、solver時間
+- 恐れていること: 初期軌道の不整合、defectの停滞、過大なNLP、real-time deadline超過
+
+stateを変数に増やすことで、single shootingの長時間感度を抑えやすくなります。
+ただし、continuity制約を解く負担は残ります。
+
+## まず確認すること
+
+| 項目 | 確認内容 |
+|---|---|
+| segment | 長さと分割位置がdynamicsの変化を表せるか |
+| initialization | 各segmentのstateとcontrolに初期軌道を置けるか |
+| integrator | segment内のdynamicsを安定して積分できるか |
+| constraints | continuity、path、terminal constraintを分けて記録できるか |
+| solver | sparseなNLPを扱えるか |
+| real-time | 並列積分とwarm startを含むsolve timeがdeadlineに合うか |
 
 ## 何を変数にし、何を制約にしているか
 
@@ -107,11 +131,13 @@ print(result.success, result.x, np.linalg.norm(continuity_constraints(result.x))
 
 ## 診断値
 
+- objective costとbest feasible cost
 - defect_norm（continuity制約の残差）
 - KKT residual
 - constraint_violation
 - mesh_error（segment分割を変えたときの解の変化）
 - rollout_stability
+- solver wall timeとiteration数
 
 ## 失敗・切替の兆候
 
@@ -120,5 +146,6 @@ print(result.success, result.x, np.linalg.norm(continuity_constraints(result.x))
 - segment数や分割位置（mesh）を変えると解が大きく変化する
 - 初期軌道の推測が悪く、solverが可行点へ到達しない
 - 積分器のtoleranceを厳しくすると解や制約違反が大きく変わる
+- solver時間がreal-time deadlineを超える
 
 single shootingとの違いは[Direct Shooting](#/learn/direct-shooting)、状態を多項式近似で扱う定式化は[Direct Collocation](#/learn/direct-collocation)、生成される制約付きNLPの解き方は[SQP](#/learn/sqp)で確認できます。
