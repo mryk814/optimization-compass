@@ -24370,6 +24370,32 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化では、形状parameterの感度とPDE状態を介した目的の感度を分け、geometryとmeshが妥当な候補だけを更新比較に使います。",
+      "title": "形状parameterと感度"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:shgo:constraint",
       "dataset_version": "0.18.4",
       "document_id": "content:shgo",
