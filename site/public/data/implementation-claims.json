@@ -3820,15 +3820,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_CURRENT_RELEASE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "current_release",
       "product_version": "9.15 (2026-01-12)",
       "release_tag": "9.15 (2026-01-12)",
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "9.15 (2026-01-12)",
       "value_status": "verified",
@@ -3838,15 +3838,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_GPU_DISTRIBUTED_SUPPORT",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "gpu_distributed_support",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "no",
       "value_status": "verified",
@@ -3856,15 +3856,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_IMPORTANT_OPTION_DEFAULTS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "important_option_defaults",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "tolerances;limits;scaling;verbosity;method_specific_options",
       "value_status": "verified",
@@ -3874,15 +3874,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_LICENSE_SPDX",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "license_spdx",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "Apache-2.0",
       "value_status": "verified",
@@ -3892,15 +3892,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_MAINTENANCE_STATUS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "maintenance_status",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "active_docs_verified",
       "value_status": "verified",
@@ -3910,15 +3910,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_PLATFORM_ARCHITECTURE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "platform_architecture",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "cross_platform",
       "value_status": "verified",
@@ -3928,15 +3928,15 @@
       "claim_id": "CLAIM_ORTOOLS_CPSAT_SUPPORTED_PROBLEM_CLASSES",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "supported_problem_classes",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S022",
       "subject_id": "I_ORTOOLS_CPSAT",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "M_CP_SAT;M_CDCL_SAT",
       "value_status": "verified",
@@ -3946,15 +3946,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_CURRENT_RELEASE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "current_release",
       "product_version": "9.15 (2026-01-12)",
       "release_tag": "9.15 (2026-01-12)",
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "9.15 (2026-01-12)",
       "value_status": "verified",
@@ -3964,15 +3964,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_GPU_DISTRIBUTED_SUPPORT",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "gpu_distributed_support",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "no",
       "value_status": "verified",
@@ -3982,15 +3982,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_IMPORTANT_OPTION_DEFAULTS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "important_option_defaults",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "tolerances;limits;scaling;verbosity;method_specific_options",
       "value_status": "verified",
@@ -4000,15 +4000,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_LICENSE_SPDX",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "license_spdx",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "Apache-2.0",
       "value_status": "verified",
@@ -4018,15 +4018,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_MAINTENANCE_STATUS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "maintenance_status",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "active_docs_verified",
       "value_status": "verified",
@@ -4036,15 +4036,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_PLATFORM_ARCHITECTURE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "platform_architecture",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "cross_platform",
       "value_status": "verified",
@@ -4054,15 +4054,15 @@
       "claim_id": "CLAIM_ORTOOLS_GLOP_SUPPORTED_PROBLEM_CLASSES",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "supported_problem_classes",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_GLOP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "M_SIMPLEX;M_DUAL_SIMPLEX",
       "value_status": "verified",
@@ -4072,15 +4072,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_CURRENT_RELEASE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "current_release",
       "product_version": "9.15 (2026-01-12)",
       "release_tag": "9.15 (2026-01-12)",
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "9.15 (2026-01-12)",
       "value_status": "verified",
@@ -4090,15 +4090,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_GPU_DISTRIBUTED_SUPPORT",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "gpu_distributed_support",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "no",
       "value_status": "verified",
@@ -4108,15 +4108,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_IMPORTANT_OPTION_DEFAULTS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "important_option_defaults",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "tolerances;limits;scaling;verbosity;method_specific_options",
       "value_status": "verified",
@@ -4126,15 +4126,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_LICENSE_SPDX",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "license_spdx",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "Apache-2.0",
       "value_status": "verified",
@@ -4144,15 +4144,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_MAINTENANCE_STATUS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "maintenance_status",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "active_docs_verified",
       "value_status": "verified",
@@ -4162,15 +4162,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_PLATFORM_ARCHITECTURE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "platform_architecture",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "cross_platform",
       "value_status": "verified",
@@ -4180,15 +4180,15 @@
       "claim_id": "CLAIM_ORTOOLS_PDLP_SUPPORTED_PROBLEM_CLASSES",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "supported_problem_classes",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S078",
       "subject_id": "I_ORTOOLS_PDLP",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "M_PDLP",
       "value_status": "verified",
@@ -4198,15 +4198,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_CURRENT_RELEASE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "current_release",
       "product_version": "9.15 (2026-01-12)",
       "release_tag": "9.15 (2026-01-12)",
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "9.15 (2026-01-12)",
       "value_status": "verified",
@@ -4216,15 +4216,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_GPU_DISTRIBUTED_SUPPORT",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "gpu_distributed_support",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "no",
       "value_status": "verified",
@@ -4234,15 +4234,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_IMPORTANT_OPTION_DEFAULTS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "important_option_defaults",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "tolerances;limits;scaling;verbosity;method_specific_options",
       "value_status": "verified",
@@ -4252,15 +4252,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_LICENSE_SPDX",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "license_spdx",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "Apache-2.0",
       "value_status": "verified",
@@ -4270,15 +4270,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_MAINTENANCE_STATUS",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "maintenance_status",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "active_docs_verified",
       "value_status": "verified",
@@ -4288,15 +4288,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_PLATFORM_ARCHITECTURE",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "platform_architecture",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "cross_platform",
       "value_status": "verified",
@@ -4306,15 +4306,15 @@
       "claim_id": "CLAIM_ORTOOLS_ROUTING_SUPPORTED_PROBLEM_CLASSES",
       "commit_sha": null,
       "confidence": "high",
-      "last_verified": "2026-07-17",
+      "last_verified": "2026-07-18",
       "predicate": "supported_problem_classes",
       "product_version": null,
       "release_tag": null,
       "replaced_by": null,
-      "source_date": "2026-07-17",
+      "source_date": "2026-07-18",
       "source_id": "S023",
       "subject_id": "I_ORTOOLS_ROUTING",
-      "valid_from": "2026-07-17",
+      "valid_from": "2026-07-18",
       "valid_to": null,
       "value": "M_LOCAL_SEARCH_COMBINATORIAL;M_CP_SEARCH",
       "value_status": "verified",
@@ -8190,13 +8190,13 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.16.0",
+  "dataset_version": "0.17.0",
   "freshness": {
-    "as_of": "2026-07-17",
+    "as_of": "2026-07-18",
     "claim_count": 450,
     "claims": [
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8205,7 +8205,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8214,7 +8214,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8223,7 +8223,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8232,7 +8232,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8241,7 +8241,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8250,7 +8250,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_ACADOS_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8259,7 +8259,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8268,7 +8268,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8277,7 +8277,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8286,7 +8286,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8295,7 +8295,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8304,7 +8304,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8313,7 +8313,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_AX_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8322,7 +8322,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8331,7 +8331,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8340,7 +8340,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8349,7 +8349,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8358,7 +8358,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8367,7 +8367,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8376,7 +8376,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_BOTORCH_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8385,7 +8385,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8394,7 +8394,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8403,7 +8403,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8412,7 +8412,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8421,7 +8421,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8430,7 +8430,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8439,7 +8439,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CASADI_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8448,7 +8448,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8457,7 +8457,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8466,7 +8466,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8475,7 +8475,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8484,7 +8484,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8493,7 +8493,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8502,7 +8502,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CBC_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8511,7 +8511,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8520,7 +8520,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8529,7 +8529,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8538,7 +8538,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8547,7 +8547,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8556,7 +8556,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8565,7 +8565,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CERES_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8574,7 +8574,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8583,7 +8583,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8592,7 +8592,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8601,7 +8601,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8610,7 +8610,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8619,7 +8619,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8628,7 +8628,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CLARABEL_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8637,7 +8637,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8646,7 +8646,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8655,7 +8655,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8664,7 +8664,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8673,7 +8673,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8682,7 +8682,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8691,7 +8691,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CPLEX_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8700,7 +8700,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8709,7 +8709,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8718,7 +8718,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8727,7 +8727,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8736,7 +8736,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8745,7 +8745,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8754,7 +8754,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8763,7 +8763,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8772,7 +8772,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8781,7 +8781,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8790,7 +8790,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8799,7 +8799,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8808,7 +8808,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8817,7 +8817,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_CVXPY_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8826,7 +8826,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8835,7 +8835,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8844,7 +8844,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8853,7 +8853,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8862,7 +8862,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8871,7 +8871,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8880,7 +8880,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DEAP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8889,7 +8889,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8898,7 +8898,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8907,7 +8907,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8916,7 +8916,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8925,7 +8925,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8934,7 +8934,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8943,7 +8943,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_DRAKE_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8952,7 +8952,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8961,7 +8961,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8970,7 +8970,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8979,7 +8979,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8988,7 +8988,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -8997,7 +8997,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9006,7 +9006,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_EXCEL_SOLVER_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9015,7 +9015,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9024,7 +9024,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9033,7 +9033,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9042,7 +9042,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9051,7 +9051,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9060,7 +9060,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9069,7 +9069,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GLPK_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9078,7 +9078,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9087,7 +9087,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9096,7 +9096,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9105,7 +9105,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9114,7 +9114,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9123,7 +9123,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9132,7 +9132,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_GUROBI_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9141,7 +9141,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9150,7 +9150,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9159,7 +9159,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9168,7 +9168,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9177,7 +9177,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9186,7 +9186,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9195,7 +9195,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_HIGHS_NATIVE_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9204,7 +9204,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9213,7 +9213,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9222,7 +9222,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9231,7 +9231,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9240,7 +9240,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9249,7 +9249,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9258,7 +9258,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_IPOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9267,7 +9267,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9276,7 +9276,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9285,7 +9285,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9294,7 +9294,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9303,7 +9303,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9312,7 +9312,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9321,7 +9321,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JAXOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9330,7 +9330,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9339,7 +9339,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9348,7 +9348,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9357,7 +9357,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9366,7 +9366,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9375,7 +9375,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9384,7 +9384,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_JUMP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9393,7 +9393,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9402,7 +9402,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9411,7 +9411,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9420,7 +9420,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9429,7 +9429,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9438,7 +9438,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9447,7 +9447,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_KNITRO_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9456,7 +9456,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9465,7 +9465,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9474,7 +9474,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9483,7 +9483,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9492,7 +9492,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9501,7 +9501,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9510,7 +9510,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_JL_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9519,7 +9519,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9528,7 +9528,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9537,7 +9537,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9546,7 +9546,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9555,7 +9555,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9564,7 +9564,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9573,7 +9573,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MANOPT_MATLAB_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9582,7 +9582,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9591,7 +9591,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9600,7 +9600,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9609,7 +9609,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9618,7 +9618,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9627,7 +9627,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9636,7 +9636,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MINIZINC_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9645,7 +9645,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9654,7 +9654,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9663,7 +9663,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9672,7 +9672,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9681,7 +9681,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9690,7 +9690,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9699,7 +9699,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_MOSEK_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9708,7 +9708,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9717,7 +9717,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9726,7 +9726,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9735,7 +9735,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9744,7 +9744,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9753,7 +9753,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9762,7 +9762,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NEVERGRAD_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9771,7 +9771,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9780,7 +9780,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9789,7 +9789,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9798,7 +9798,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9807,7 +9807,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9816,7 +9816,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9825,7 +9825,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NLOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9834,7 +9834,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9843,7 +9843,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9852,7 +9852,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9861,7 +9861,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9870,7 +9870,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9879,7 +9879,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9888,7 +9888,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_NOMAD_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9897,7 +9897,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9906,7 +9906,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9915,7 +9915,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9924,7 +9924,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9933,7 +9933,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9942,7 +9942,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9951,7 +9951,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTAX_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9960,7 +9960,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9969,7 +9969,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9978,7 +9978,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9987,7 +9987,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -9996,7 +9996,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10005,7 +10005,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10014,7 +10014,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTIMJL_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10023,7 +10023,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10032,7 +10032,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10041,7 +10041,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10050,7 +10050,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10059,7 +10059,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10068,7 +10068,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10077,7 +10077,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OPTUNA_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10089,7 +10089,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_CURRENT_RELEASE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "current_release",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10098,7 +10098,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "gpu_distributed_support",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10107,7 +10107,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "important_option_defaults",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10116,7 +10116,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_LICENSE_SPDX",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "license_spdx",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10125,7 +10125,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_MAINTENANCE_STATUS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "maintenance_status",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10134,7 +10134,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "platform_architecture",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10143,7 +10143,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_CPSAT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "supported_problem_classes",
         "subject_id": "I_ORTOOLS_CPSAT",
         "value_status": "verified"
@@ -10152,7 +10152,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_CURRENT_RELEASE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "current_release",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10161,7 +10161,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "gpu_distributed_support",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10170,7 +10170,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "important_option_defaults",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10179,7 +10179,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_LICENSE_SPDX",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "license_spdx",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10188,7 +10188,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_MAINTENANCE_STATUS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "maintenance_status",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10197,7 +10197,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "platform_architecture",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10206,7 +10206,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_GLOP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "supported_problem_classes",
         "subject_id": "I_ORTOOLS_GLOP",
         "value_status": "verified"
@@ -10215,7 +10215,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_CURRENT_RELEASE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "current_release",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10224,7 +10224,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "gpu_distributed_support",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10233,7 +10233,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "important_option_defaults",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10242,7 +10242,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_LICENSE_SPDX",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "license_spdx",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10251,7 +10251,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_MAINTENANCE_STATUS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "maintenance_status",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10260,7 +10260,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "platform_architecture",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10269,7 +10269,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_PDLP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "supported_problem_classes",
         "subject_id": "I_ORTOOLS_PDLP",
         "value_status": "verified"
@@ -10278,7 +10278,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_CURRENT_RELEASE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "current_release",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10287,7 +10287,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "gpu_distributed_support",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10296,7 +10296,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "important_option_defaults",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10305,7 +10305,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_LICENSE_SPDX",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "license_spdx",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10314,7 +10314,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_MAINTENANCE_STATUS",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "maintenance_status",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10323,7 +10323,7 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "platform_architecture",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
@@ -10332,13 +10332,13 @@
         "age_days": 0,
         "claim_id": "CLAIM_ORTOOLS_ROUTING_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
-        "last_verified": "2026-07-17",
+        "last_verified": "2026-07-18",
         "predicate": "supported_problem_classes",
         "subject_id": "I_ORTOOLS_ROUTING",
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10347,7 +10347,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10356,7 +10356,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10365,7 +10365,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10374,7 +10374,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10383,7 +10383,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10392,7 +10392,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_OSQP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10401,7 +10401,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10410,7 +10410,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10419,7 +10419,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10428,7 +10428,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10437,7 +10437,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10446,7 +10446,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10455,7 +10455,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PETSC_TAO_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10464,7 +10464,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10473,7 +10473,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10482,7 +10482,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10491,7 +10491,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10500,7 +10500,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10509,7 +10509,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10518,7 +10518,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYCMA_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10527,7 +10527,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10536,7 +10536,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10545,7 +10545,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10554,7 +10554,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10563,7 +10563,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10572,7 +10572,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10581,7 +10581,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMANOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10590,7 +10590,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10599,7 +10599,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10608,7 +10608,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10617,7 +10617,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10626,7 +10626,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10635,7 +10635,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10644,7 +10644,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYMOO_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10653,7 +10653,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10662,7 +10662,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10671,7 +10671,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10680,7 +10680,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10689,7 +10689,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10698,7 +10698,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10707,7 +10707,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYOMO_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10716,7 +10716,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10725,7 +10725,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10734,7 +10734,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10743,7 +10743,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10752,7 +10752,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10761,7 +10761,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10770,7 +10770,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_PYTORCH_OPTIM_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10779,7 +10779,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10788,7 +10788,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10797,7 +10797,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10806,7 +10806,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10815,7 +10815,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10824,7 +10824,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10833,7 +10833,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_RAY_TUNE_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10842,7 +10842,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10851,7 +10851,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10860,7 +10860,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10869,7 +10869,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10878,7 +10878,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10887,7 +10887,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10896,7 +10896,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BASINHOPPING_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10905,7 +10905,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10914,7 +10914,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10923,7 +10923,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10932,7 +10932,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10941,7 +10941,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10950,7 +10950,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10959,7 +10959,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_BFGS_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10968,7 +10968,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10977,7 +10977,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10986,7 +10986,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -10995,7 +10995,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11004,7 +11004,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11013,7 +11013,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11022,7 +11022,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYLA_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11031,7 +11031,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11040,7 +11040,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11049,7 +11049,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11058,7 +11058,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11067,7 +11067,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11076,7 +11076,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11085,7 +11085,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_COBYQA_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11094,7 +11094,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11103,7 +11103,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11112,7 +11112,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11121,7 +11121,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11130,7 +11130,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11139,7 +11139,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11148,7 +11148,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIFFERENTIAL_EVOLUTION_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11157,7 +11157,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11166,7 +11166,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11175,7 +11175,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11184,7 +11184,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11193,7 +11193,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11202,7 +11202,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11211,7 +11211,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DIRECT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11220,7 +11220,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11229,7 +11229,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11238,7 +11238,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11247,7 +11247,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11256,7 +11256,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11265,7 +11265,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11274,7 +11274,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_DUAL_ANNEALING_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11283,7 +11283,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11292,7 +11292,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11301,7 +11301,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11310,7 +11310,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11319,7 +11319,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11328,7 +11328,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11337,7 +11337,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LBFGSB_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11346,7 +11346,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11355,7 +11355,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11364,7 +11364,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11373,7 +11373,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11382,7 +11382,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11391,7 +11391,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11400,7 +11400,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_LM_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11409,7 +11409,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11418,7 +11418,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_CURVE_FIT_BOUNDS",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11427,7 +11427,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_DEFAULT_LEAST_SQUARES",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11436,7 +11436,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11445,7 +11445,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11454,7 +11454,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11463,7 +11463,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11472,7 +11472,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11481,7 +11481,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 1,
+        "age_days": 2,
         "claim_id": "CLAIM_SCIPY_LEAST_SQUARES_TRF_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-16",
@@ -11490,7 +11490,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11499,7 +11499,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11508,7 +11508,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11517,7 +11517,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11526,7 +11526,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11535,7 +11535,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11544,7 +11544,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_LINPROG_HIGHS_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11553,7 +11553,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11562,7 +11562,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11571,7 +11571,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11580,7 +11580,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11589,7 +11589,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11598,7 +11598,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11607,7 +11607,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_MILP_HIGHS_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11616,7 +11616,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11625,7 +11625,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11634,7 +11634,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11643,7 +11643,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11652,7 +11652,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11661,7 +11661,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11670,7 +11670,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_NELDER_MEAD_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11679,7 +11679,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11688,7 +11688,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11697,7 +11697,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11706,7 +11706,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11715,7 +11715,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11724,7 +11724,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11733,7 +11733,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_POWELL_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11742,7 +11742,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11751,7 +11751,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11760,7 +11760,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11769,7 +11769,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11778,7 +11778,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11787,7 +11787,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11796,7 +11796,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SHGO_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11805,7 +11805,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11814,7 +11814,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11823,7 +11823,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11832,7 +11832,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11841,7 +11841,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11850,7 +11850,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11859,7 +11859,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_SLSQP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11868,7 +11868,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11877,7 +11877,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11886,7 +11886,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11895,7 +11895,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11904,7 +11904,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11913,7 +11913,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11922,7 +11922,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIPY_TRUST_CONSTR_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11931,7 +11931,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11940,7 +11940,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11949,7 +11949,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11958,7 +11958,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11967,7 +11967,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11976,7 +11976,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11985,7 +11985,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCIP_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -11994,7 +11994,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12003,7 +12003,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12012,7 +12012,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12021,7 +12021,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12030,7 +12030,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12039,7 +12039,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12048,7 +12048,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SCS_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12057,7 +12057,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12066,7 +12066,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12075,7 +12075,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12084,7 +12084,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12093,7 +12093,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12102,7 +12102,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12111,7 +12111,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SMAC3_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12120,7 +12120,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12129,7 +12129,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12138,7 +12138,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12147,7 +12147,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12156,7 +12156,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12165,7 +12165,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12174,7 +12174,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_SNOPT_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12183,7 +12183,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_CURRENT_RELEASE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12192,7 +12192,7 @@
         "value_status": "explicit_unknown"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_GPU_DISTRIBUTED_SUPPORT",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12201,7 +12201,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_IMPORTANT_OPTION_DEFAULTS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12210,7 +12210,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_LICENSE_SPDX",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12219,7 +12219,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_MAINTENANCE_STATUS",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12228,7 +12228,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_PLATFORM_ARCHITECTURE",
         "freshness_status": "current",
         "last_verified": "2026-07-13",
@@ -12237,7 +12237,7 @@
         "value_status": "verified"
       },
       {
-        "age_days": 4,
+        "age_days": 5,
         "claim_id": "CLAIM_TENSORFLOW_OPTIM_SUPPORTED_PROBLEM_CLASSES",
         "freshness_status": "current",
         "last_verified": "2026-07-13",

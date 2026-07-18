@@ -132,7 +132,7 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.16.0",
+  "dataset_version": "0.17.0",
   "feature_values": [
     {
       "feature_id": "F_CONSTRAINT_CLASS",
@@ -819,7 +819,7 @@
       ]
     }
   ],
-  "generated_at": "2026-07-17T00:00:00Z",
+  "generated_at": "2026-07-18T00:00:00Z",
   "implementations": [
     {
       "implementation_id": "I_ACADOS",

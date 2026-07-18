@@ -1,6 +1,6 @@
 {
   "axis": "guarantee_outcome",
-  "dataset_version": "0.16.0",
+  "dataset_version": "0.17.0",
   "description": "実行可能解・局所解・gap・大域証明・Pareto集合という到達点の違いを整理する。",
   "edges": [
     {
@@ -2497,7 +2497,7 @@
   "focus_fallback_entity_types": [
     "feature"
   ],
-  "generated_at": "2026-07-17T00:00:00Z",
+  "generated_at": "2026-07-18T00:00:00Z",
   "limitations": "保証の種類だけでは、計算時間や数値誤差、前提条件までは比較できません。",
   "max_depth": 2,
   "nodes": [

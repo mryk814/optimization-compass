@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.16.0",
+  "dataset_version": "0.17.0",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
