@@ -325,7 +325,7 @@ def build_staged_release(
     from optimization_compass.db import KnowledgeRepository
     from optimization_compass.site_export import export_site_data
 
-    export_site_data(site_data_directory, KnowledgeRepository(database_path))
+    export_site_data(site_data_directory, KnowledgeRepository(database_path), staged=True)
     release_identity = DatasetReleaseIdentity(
         schema_version=1,
         dataset_version=target_version,

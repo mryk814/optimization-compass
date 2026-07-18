@@ -156,7 +156,11 @@ def release_catalog_snapshot(
         matching.release_date != release_identity.release_date
         or matching.database_sha256 != release_identity.database_sha256
     ):
-        raise ReleaseCatalogError("catalog current entry does not match expected release identity")
+        if matching.version != catalog.current_version:
+            raise ReleaseCatalogError(
+                "catalog current entry does not match expected release identity"
+            )
+        matching = None
     releases = tuple(
         entry
         for entry in catalog.releases
