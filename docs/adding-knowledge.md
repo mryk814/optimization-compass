@@ -202,7 +202,31 @@ Replace every placeholder and verify the entity and source IDs before committing
 
 Start as `draft` if relations or sources are incomplete. Publication should not be used to bypass Coverage or evidence requirements.
 
-## 8. Recipe: add a Gallery case using existing entities
+## 8. Task-oriented scaffold: start a Gallery case without inventing facts
+
+Phase 5 provides a review-first scaffold for the lowest-risk structured-data task:
+an existing-entity Gallery case. The command requires the author to supply the case
+ID, checks it against the current Gallery authority, and prints a machine-readable
+plan without writing by default.
+
+```bash
+# Inspect the plan; no files are created.
+uv run optimization-compass scaffold gallery-case --id example-case
+
+# Write a draft template and README under scaffolds/ (still not canonical data).
+uv run optimization-compass scaffold gallery-case --id example-case --write
+
+# Or choose another separate draft directory (keep this on one line in PowerShell).
+uv run optimization-compass scaffold gallery-case --id example-case --write --output path/to/gallery-case-draft
+```
+
+The scaffold never allocates a stable ID, fabricates sources or claims, overwrites
+an existing draft directory, or writes `data/seeds/site_gallery.json` and generated
+outputs. Replace every `TODO`, review all canonical IDs and sources, then copy the
+reviewed entry into the authority and run `uv run optimization-compass validate gallery`.
+The focused command is an iteration subset; the PR gate remains `tier-b`.
+
+## 9. Recipe: add a Gallery case using existing entities
 
 This is the recommended first structured-data contribution.
 
@@ -255,7 +279,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 9. Recipe: add or revise a comparison
+## 10. Recipe: add or revise a comparison
 
 ### Edit
 
@@ -292,7 +316,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 10. Recipe: add a problem definition or instance
+## 11. Recipe: add a problem definition or instance
 
 A problem instance has two coordinated parts.
 
@@ -343,7 +367,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 11. Recipe: add a new method, implementation, or source
+## 12. Recipe: add a new method, implementation, or source
 
 This is currently a maintainer flow because canonical knowledge additions are partly expressed as SQL migrations.
 
@@ -384,7 +408,7 @@ Creating `data/migrations/<file>.sql` is not sufficient by itself. The determini
 
 Run the full Python, data, licensing, parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
 
-## 12. Recipe: add a visualization scenario
+## 13. Recipe: add a visualization scenario
 
 A complete visualization is not just an animation. It combines:
 
@@ -430,7 +454,7 @@ site/e2e/**
 
 Run full Python tests, deterministic stage, frontend parity, frontend tests/build, and browser E2E.
 
-## 13. Deterministic staging and publishing
+## 14. Deterministic staging and publishing
 
 ### Staging
 
@@ -455,7 +479,7 @@ Publishing is a separate atomic operation using a previously validated staged di
 
 Do not publish as an incidental step in a prose, Gallery, or ordinary content PR. Follow the current release issue/workflow and release documentation.
 
-## 14. Validation matrix
+## 15. Validation matrix
 
 | Change | Minimum focused checks | Full stage | Site parity/build | Browser E2E |
 |---|---|---:|---:|---:|
@@ -488,7 +512,7 @@ npm --prefix site run build
 npm --prefix site run test:e2e
 ```
 
-## 15. Pull request expectations
+## 16. Pull request expectations
 
 Use [`knowledge-change-checklist.md`](knowledge-change-checklist.md) when preparing a PR.
 
@@ -505,7 +529,7 @@ At minimum, state:
 
 Keep canonical data, prose, executable behavior, UI, and generated release output separable when practical.
 
-## 16. Known authoring friction
+## 17. Known authoring friction
 
 The current system deliberately validates many cross-links, but authoring entry points are distributed:
 

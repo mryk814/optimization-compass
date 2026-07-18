@@ -14,6 +14,7 @@ from optimization_compass.agent_service import (
 )
 from optimization_compass.coverage import CoverageReport, diff_coverage
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.scaffold import ScaffoldError, scaffold_gallery_case
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import (
     TASKS,
@@ -26,6 +27,8 @@ from optimization_compass.validation_tasks import (
 )
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
+scaffold_app = typer.Typer(no_args_is_help=True, help="Create review-first authoring templates.")
+app.add_typer(scaffold_app, name="scaffold")
 service = DeterministicGuidanceService()
 
 
@@ -177,6 +180,29 @@ def coverage_diff_command(
         f"- Removed expectations: {len(delta.removed_expectation_ids)}\n"
         f"- Status transitions: {sum(delta.transitions.values())}"
     )
+
+
+@scaffold_app.command("gallery-case")
+def scaffold_gallery_case_command(
+    requested_id: Annotated[str, typer.Option("--id", help="Reviewed Gallery case ID.")],
+    write: Annotated[bool, typer.Option(help="Write the draft files after planning.")] = False,
+    output: Annotated[
+        Path | None,
+        typer.Option(
+            "--output", file_okay=False, help="Separate draft directory (requires --write)."
+        ),
+    ] = None,
+) -> None:
+    """Plan or write a Gallery case scaffold without inventing facts."""
+    try:
+        manifest = scaffold_gallery_case(
+            requested_id,
+            write=write,
+            output_directory=output,
+        )
+    except ScaffoldError as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(json.dumps(manifest, ensure_ascii=False, indent=2))
 
 
 @app.command()
