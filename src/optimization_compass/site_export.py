@@ -32,7 +32,7 @@ from optimization_compass.parameter_estimation import (
     generate_parameter_estimation_traces,
 )
 from optimization_compass.problem_registry import get_runtime_problem
-from optimization_compass.release_catalog import load_release_catalog, validate_release_catalog
+from optimization_compass.release_catalog import load_release_catalog, release_catalog_snapshot
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
 from optimization_compass.search_index import (
     build_search_artifacts,
@@ -207,8 +207,10 @@ def export_site_data(output_dir: Path, repository: KnowledgeRepository) -> SiteM
         release_date=release["release_date"],
         database_sha256=repository.database_sha256(),
     )
-    release_catalog = load_release_catalog(RELEASE_CATALOG_PATH)
-    validate_release_catalog(release_catalog, expected_current_identity=release_identity)
+    release_catalog = release_catalog_snapshot(
+        load_release_catalog(RELEASE_CATALOG_PATH),
+        release_identity,
+    )
     generated_at = datetime.combine(
         date.fromisoformat(release["release_date"]), time.min, tzinfo=UTC
     )
