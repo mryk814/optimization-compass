@@ -14,7 +14,7 @@ aliases: [/learn/lp-qp-conic]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。
@@ -55,6 +55,33 @@ convex構造をblack-box objectiveへ包むと、
 - warm start
 
 を利用しにくくなります。専用solverが受け取れる係数modelとして保つこと自体が重要です。
+
+## Solver family
+
+- simplex / dual simplex: basis、warm start、LP再最適化
+- interior-point / barrier: 大規模・疎な凸problem
+- operator splitting: QPやconic problemの反復solve
+- first-order conic: 中精度・巨大problem
+- modeling layer: CVXPY等がcanonicalizationしてbackendへ渡す
+
+modeling libraryとsolverを混同しません。どのbackend、version、optionが使われたかを保存します。
+
+## Alternative-first
+
+- linear least squares → QR / SVD
+- shortest path / max flow / matching → graph algorithm
+- separable closed form → 解析解
+- pure linear system → factorization
+- LP relaxationだけではinteger条件を満たさない → MILP / CP-SAT
+
+## 向いている条件
+
+- 係数・matrixとしてmodel化できる
+- convexityが成立する
+- certificateやdual情報が重要
+- sparse structureを使いたい
+- repeated solveやwarm startがある
+- high accuracyまたは明確なstatusが必要
 
 ## Python: 生産LP
 
@@ -98,17 +125,7 @@ convex problemで適切な正則性があれば、primal objectiveとdual object
 
 により、数値的なdual値の読み方は変わります。
 
-## Solver family
-
-- simplex / dual simplex: basis、warm start、LP再最適化
-- interior-point / barrier: 大規模・疎な凸problem
-- operator splitting: QPやconic problemの反復solve
-- first-order conic: 中精度・巨大problem
-- modeling layer: CVXPY等がcanonicalizationしてbackendへ渡す
-
-modeling libraryとsolverを混同しません。どのbackend、version、optionが使われたかを保存します。
-
-## Statusと診断
+## 診断値
 
 - primal feasibility residual
 - dual feasibility residual
@@ -123,23 +140,6 @@ modeling libraryとsolverを混同しません。どのbackend、version、optio
 
 `infeasible`、`unbounded`、`infeasible_or_unbounded`、`iteration_limit`は異なる状態です。目的値だけを読みません。
 
-## Alternative-first
-
-- linear least squares → QR / SVD
-- shortest path / max flow / matching → graph algorithm
-- separable closed form → 解析解
-- pure linear system → factorization
-- LP relaxationだけではinteger条件を満たさない → MILP / CP-SAT
-
-## 向いている条件
-
-- 係数・matrixとしてmodel化できる
-- convexityが成立する
-- certificateやdual情報が重要
-- sparse structureを使いたい
-- repeated solveやwarm startがある
-- high accuracyまたは明確なstatusが必要
-
 ## 失敗・切替の兆候
 
 - $P$が非正半定値なのにconvex QPとして扱う
@@ -153,5 +153,7 @@ modeling libraryとsolverを混同しません。どのbackend、version、optio
 ::: warning
 solver間比較ではmodel canonicalization、tolerance、presolve、hardware、warm startを揃えます。反復回数だけでは一反復の仕事量が違うため公平ではありません。
 :::
+
+## 次に読む
 
 LP basis再最適化は[Dual Simplex](#/learn/dual-simplex)、MILP探索との接続は[Branch-and-Cut](#/learn/branch-and-cut)で確認できます。

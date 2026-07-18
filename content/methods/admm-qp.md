@@ -4,18 +4,18 @@ kind: method
 method_id: M_ADMM_QP
 title_ja: Operator-splitting QP（ADMM型）
 title_en: ADMM / Operator-Splitting QP
-summary: 凸QPを固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。
+summary: 凸二次計画（convex QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。
 source_ids: [S012, S062, S055, S010]
 prerequisites: [concept.convexity]
 related_ids: [admm, lp-qp-conic, proximal-gradient]
 aliases: [/learn/admm-qp]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-凸QPを固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。
+凸二次計画（convex QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。
 
-## 一般ADMMとどう違うか
+## 何を固定して反復するか
 
 [ADMM](#/learn/admm)は$f$と$g$の分け方を問題ごとに設計する汎用framework ですが、QP専用solverは分割構造をあらかじめ固定します。代表形は
 
@@ -35,9 +35,11 @@ $$
 
 $P$、$A$、penalty parameter $\rho$が固定なら、KKT行列は反復間で変わりません。そのため最初の反復で1度だけfactorization（Cholesky や $LDL^T$）を計算し、以降の反復では前進後退代入だけで済ませられます。これがinterior-point法のように反復ごとに行列を作り直す方式との大きな違いです。
 
-## 中精度で十分な場合と高精度が必要な場合
+## まず確認すること
 
-operator splittingは1反復が軽く、warm startや同じ問題構造の逐次再解（model predictive control、portfolio rebalancingの定期再最適化など）に強い一方、高精度な最適解へ収束させるには反復数がかさむことがあります。厳密なbasisやcertificate、高いduality gap精度が要る場合は[primal-dual barrier法](#/learn/barrier-lp-qp)など別方式を検討します。逆に、同じ疎構造のQPを繰り返し中精度で解くならfactorization再利用の利点が大きくなります。
+operator splittingは1反復が軽く、warm startや同じ問題構造の逐次再解（model predictive control、portfolio rebalancingの定期再最適化など）に強い一方、高精度な最適解へ収束させるには反復数がかさむことがあります。厳密なbasisやcertificate、高いduality gap精度が要る場合は[primal-dual barrier法](#/learn/barrier-lp-qp)など別方式を検討します。
+
+同じ疎構造のQPを繰り返し中精度で解くなら、factorization再利用の利点が大きくなります。
 
 ## 向いている条件
 
@@ -115,5 +117,7 @@ print(x, z, primal_residual, dual_residual, 0.5 * x @ p @ x + q @ x)
 - 係数のscaleが桁違いで数値warningが出る
 - 同じ精度要求に対し反復数が増え続ける
 - 非凸な$P$を凸QPとして与えてしまっている
+
+## 次に読む
 
 分割構造を自分で設計したい場合は[ADMM](#/learn/admm)、単一のproxで済む問題は[近接勾配法](#/learn/proximal-gradient)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)で確認できます。

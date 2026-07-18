@@ -4,18 +4,18 @@ kind: method
 method_id: M_BARRIER_LP_QP
 title_ja: Primal-dual barrier法（LP/QP）
 title_en: Primal-Dual Barrier Method for LP/QP
-summary: 不等式制約をlog barrierへ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。
+summary: 不等式制約を対数障壁（log barrier）へ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。
 source_ids: [S016, S004, S055, S056]
 prerequisites: [concept.convexity]
 related_ids: [primal-simplex, dual-simplex, interior-point-nlp, lp-qp-conic]
 aliases: [/learn/barrier-lp-qp]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-不等式制約をlog barrierへ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。
+不等式制約を対数障壁（log barrier）へ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。
 
-## 中心pathとは何か
+## 何を追って中心pathを進むか
 
 LP標準形 $\min_x c^Tx$ subject to $Ax=b,\ x\ge0$ を考えると、barrier法は非負制約をlog barrierで置き換えます。
 
@@ -29,7 +29,7 @@ $\mu>0$を固定した解の集合を$\mu\to0$へ動かした軌跡が中心path
 
 各反復では、primal変数$x$、dual変数$y$、slack/dual変数$s$を同時に更新するNewton方程式を解きます。線形化されたKKT systemは対称かつ疎になることが多く、$\mu$を下げながらcomplementarity $x^Ts$を0へ近づけます。QPでも同様に、目的関数の二次項を含めたKKT systemを同じ枠組みで扱います。反復ごとにこの線形系を作り直して解く点が、[operator-splitting QP](#/learn/admm-qp)のようにfactorizationを固定して使い回す方式との違いです。
 
-## Simplexとの違いを何で見分けるか
+## Simplexとの違い
 
 primal/dual simplexは頂点（basis）を辿って移動しますが、barrier法は多面体の内部を進み、頂点上のbasisを直接維持しません。
 
@@ -98,5 +98,7 @@ print(result.success, result.x, -result.fun, result.status, result.message)
 - coefficient scaleが桁違いでnumerical warningが出る
 - infeasibleまたはunboundedの状態を目的値だけで見落とす
 - crossover後のbasisが数値的に不安定
+
+## 次に読む
 
 LP basisを保った再最適化は[Primal Simplex](#/learn/primal-simplex)と[Dual Simplex](#/learn/dual-simplex)、非線形制約への一般化は[非線形内点法](#/learn/interior-point-nlp)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)で確認できます。

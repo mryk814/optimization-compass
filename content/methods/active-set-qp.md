@@ -4,17 +4,17 @@ kind: method
 method_id: M_ACTIVE_SET_QP
 title_ja: Active-set QP
 title_en: Active-Set QP
-summary: 凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
+summary: 凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
 source_ids: [S012, S016, S055, S056]
 prerequisites: [concept.convexity]
 related_ids: [active-set, admm-qp, barrier-lp-qp, lp-qp-conic]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
+凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
 
-## Working setとは何か
+## 何を見てworking setを更新するか
 
 凸QPの標準形
 
@@ -22,7 +22,7 @@ $$
 \min_x\; \tfrac{1}{2}x^TPx+q^Tx \quad\text{subject to}\quad Ax\le b
 $$
 
-を考えます（$P\succeq0$）。最適解では、不等式制約の一部だけが等号 $A_ix=b_i$ で成立し、残りは余裕を持ちます。active-set QPは、現時点で等号になっていると推定した制約の集合をworking set $W_k$ として扱い、$W_k$を等式制約とみなした等式制約付きQPを解きます。得られた候補点でKKT条件（stationarity、multiplier符号、feasibility、complementarity）を確認し、
+を考えます（$P\succeq0$）。最適解では、不等式制約の一部だけが等号 $A_ix=b_i$ で成立し、残りは余裕を持ちます。active-set QPは、現時点で等号になっていると推定した制約の集合をworking set $W_k$ として扱い、$W_k$を等式制約とみなした等式制約付きQPを解きます。候補点ではKKT条件（stationarity、multiplier符号、feasibility、complementarity）を確認します。
 
 - 満たされない不等式制約があればworking setへ追加する
 - multiplierの符号が不適切な制約があればworking setから外す
@@ -139,5 +139,7 @@ working setの候補を総当たりで列挙しているため、制約数が増
 - 制約数が多くfactorization更新のcostが支配的になる
 - 非凸QP（$P$が不定）をそのまま扱っている
 - infeasibleまたはunboundedの証明を目的値だけで見落とす
+
+## 次に読む
 
 一般の非線形制約に対するactive-set法との違いは[Active-set法](#/learn/active-set)、同じ凸QPをfactorization再利用の反復法で解く考え方は[operator-splitting QP](#/learn/admm-qp)、barrier型との対比は[primal-dual barrier法](#/learn/barrier-lp-qp)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)で確認できます。
