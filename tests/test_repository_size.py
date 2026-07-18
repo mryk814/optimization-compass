@@ -111,9 +111,7 @@ def test_default_policy_retains_only_pinned_legacy_sqlite() -> None:
     assert {"0.2.0"} == REPOSITORY_SIZE.HISTORICAL_RELEASE_VERSIONS
     assert REPOSITORY_SIZE.HISTORICAL_RELEASE_DISTRIBUTION_BASELINE_BYTES == 3_506_176
     assert (
-        release_distribution_version(
-            "data/optimization_method_selection_database_v0.2.0.sqlite"
-        )
+        release_distribution_version("data/optimization_method_selection_database_v0.2.0.sqlite")
         == "0.2.0"
     )
 
