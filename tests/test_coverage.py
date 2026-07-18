@@ -211,3 +211,28 @@ def test_gallery_candidate_objects_restore_method_coverage_without_reverse_links
         "budget-allocation",
         "shift-scheduling",
     }
+
+
+def test_coverage_reports_orphaned_failure_discovery_references(tmp_path: Path) -> None:
+    artifact_root = tmp_path / "site-data"
+    shutil.copytree(ROOT / "site/public/data", artifact_root)
+    failure_path = artifact_root / "failure-discovery.json"
+    payload = json.loads(failure_path.read_text(encoding="utf-8"))
+    exclusion = next(
+        entry for entry in payload["entries"] if entry["entry_kind"] == "case_exclusion"
+    )
+    exclusion["case_id"] = "CASE_MISSING"
+    failure_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    baseline = load_report()
+    report = build_coverage_report(
+        KnowledgeRepository(),
+        artifact_root,
+        dataset_version=baseline.dataset_version,
+        generated_at=baseline.generated_at,
+    )
+
+    assert any(
+        issue.code == "failure_discovery_missing_case" and issue.entity_id == exclusion["entry_id"]
+        for issue in report.integrity_issues
+    )

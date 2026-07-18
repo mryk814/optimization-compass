@@ -15,7 +15,7 @@ import { loadSearchIndex } from "./search-data";
 const TYPE_LABELS: Record<SearchEntityType, string> = {
   method: "手法", problem: "問題", implementation: "実装", content: "教材", case: "ケース",
   journey: "学習ジャーニー", scenario: "シナリオ", trace: "可視化", comparison: "比較", source: "根拠", glossary: "用語", feature: "特徴",
-  feature_value: "特徴値", view: "マップ",
+  feature_value: "特徴値", view: "マップ", failure: "失敗・除外",
 };
 
 const INTENT_LABELS: Record<SearchIntent, string> = {

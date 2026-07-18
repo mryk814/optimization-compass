@@ -37,6 +37,7 @@ SearchEntityType = Literal[
     "source",
     "trace",
     "view",
+    "failure",
 ]
 SearchField = Literal["canonical_label", "alias", "title", "summary", "keyword", "related"]
 
@@ -64,6 +65,7 @@ INTENT_BY_TYPE: dict[SearchEntityType, tuple[SearchIntent, ...]] = {
     "source": ("check_evidence",),
     "trace": ("compare_visualize", "understand_method"),
     "view": ("classify_problem", "compare_visualize"),
+    "failure": ("classify_problem", "understand_method"),
 }
 
 _PUNCTUATION = re.compile(r"[\s\-_‐‑‒–—―/・,、。:：;；()（）\[\]{}]+", re.UNICODE)
@@ -93,7 +95,7 @@ _STOP_TOKENS = {
 _HTML_TAG = re.compile(r"<[^>]+>")
 _CONTENT_SECTION = re.compile(r'<h2 id="([^"]+)"[^>]*>(.*?)</h2>(.*?)(?=<h2 id=|\Z)', re.DOTALL)
 _CANONICAL_ROUTE = re.compile(
-    r"^/(?:compare|gallery|learn|map|methods|search|sources|theater|traces)(?:[/?]|$)"
+    r"^/(?:compare|failures|gallery|learn|map|methods|search|sources|theater|traces)(?:[/?]|$)"
 )
 
 
@@ -275,9 +277,10 @@ def search_documents(
         "scenario": 8,
         "trace": 9,
         "source": 10,
-        "feature": 11,
-        "feature_value": 12,
-        "view": 13,
+        "failure": 11,
+        "feature": 12,
+        "feature_value": 13,
+        "view": 14,
     }
     document_type = {document.document_id: document.entity_type for document in index.documents}
     return sorted(
@@ -302,6 +305,7 @@ def build_search_artifacts(
     comparison_index: dict[str, Any],
     scenario_index: dict[str, Any],
     source_index: dict[str, Any],
+    failure_discovery_index: dict[str, Any],
 ) -> tuple[SearchIndex, RetrievalExport]:
     aliases = _aliases_by_target(learning_graph)
     metadata = _repository_metadata(repository)
@@ -312,6 +316,9 @@ def build_search_artifacts(
     )
     source_keys = {str(source["source_id"]) for source in source_index["sources"]}
     entity_keys = {(entity.entity_type, entity.entity_id) for entity in entity_links.entities}
+    known_document_ids = {
+        f"{entity.entity_type}:{entity.entity_id}" for entity in entity_links.entities
+    }
     documents: list[SearchDocument] = []
     for entity in entity_links.entities:
         key = (entity.entity_type, entity.entity_id)
@@ -347,6 +354,7 @@ def build_search_artifacts(
         documents.append(document)
 
     for row in repository.fetch_all("SELECT * FROM glossary ORDER BY term_id"):
+        glossary_id = str(row["term_id"])
         source_ids = sorted(split_ids(str(row.get("source_ids") or "")))
         missing_sources = set(source_ids) - source_keys
         if missing_sources:
@@ -360,10 +368,10 @@ def build_search_artifacts(
         )
         documents.append(
             SearchDocument(
-                document_id=f"glossary:{row['term_id']}",
+                document_id=f"glossary:{glossary_id}",
                 entity_type="glossary",
-                entity_id=str(row["term_id"]),
-                canonical_route=f"/search?entity={quote(f'glossary:{row["term_id"]}', safe='')}",
+                entity_id=glossary_id,
+                canonical_route=f"/search?entity={quote(f'glossary:{glossary_id}', safe='')}",
                 title_ja=str(row["term_ja"]),
                 title_en=str(row["term_en"]),
                 summary=str(row.get("definition") or ""),
@@ -371,6 +379,78 @@ def build_search_artifacts(
                 source_ids=source_ids,
                 related_document_ids=[],
                 last_reviewed=str(row.get("last_verified") or "") or None,
+                fields=fields,
+                tokens=_tokenize_fields(fields),
+            )
+        )
+
+    failure_entries = failure_discovery_index["entries"]
+    failure_document_ids = {f"failure:{entry['entry_id']}" for entry in failure_entries}
+    for entry in failure_entries:
+        failure_related_ids: set[str] = {f"method:{method_id}" for method_id in entry["method_ids"]}
+        failure_related_ids.update(
+            f"case:{case_id}" for case_id in ([entry["case_id"]] if entry["case_id"] else [])
+        )
+        failure_related_ids.update(
+            f"scenario:{scenario_id}" for scenario_id in entry["scenario_ids"]
+        )
+        failure_related_ids.update(f"source:{source_id}" for source_id in entry["source_ids"])
+        failure_related_ids.update(
+            f"failure:structured:{failure_id}" for failure_id in entry["related_failure_mode_ids"]
+        )
+        fields = SearchFields(
+            canonical_label=_unique(
+                [
+                    str(entry["entry_id"]),
+                    str(entry.get("failure_mode_id") or ""),
+                    str(entry["title_ja"]),
+                    str(entry["title_en"]),
+                ]
+            ),
+            alias=[],
+            title=_unique([str(entry["title_ja"]), str(entry["title_en"])]),
+            summary=_unique([str(entry["summary"])]),
+            keyword=_unique(
+                [
+                    str(entry["entry_kind"]),
+                    str(entry["disposition"]),
+                    *map(str, entry["symptoms"]),
+                    *map(str, entry["diagnostics"]),
+                    *[str(item["action"]) for item in entry["mitigations"]],
+                ]
+            ),
+            related=_unique(
+                [
+                    *map(str, entry["method_ids"]),
+                    *map(str, entry["case_id"] and [entry["case_id"]] or []),
+                    *map(str, entry["feature_ids"]),
+                ]
+            ),
+        )
+        documents.append(
+            SearchDocument(
+                document_id=f"failure:{entry['entry_id']}",
+                entity_type="failure",
+                entity_id=str(entry["entry_id"]),
+                canonical_route=str(entry["canonical_route"]),
+                external_url=None,
+                title_ja=str(entry["title_ja"]),
+                title_en=str(entry["title_en"]),
+                summary=str(entry["summary"]),
+                intents=list(INTENT_BY_TYPE["failure"]),
+                domains=sorted(
+                    {
+                        str(entry["entry_kind"]),
+                        str(entry["disposition"]),
+                        str(entry["scope"]),
+                    }
+                ),
+                source_ids=sorted(map(str, entry["source_ids"])),
+                related_document_ids=sorted(
+                    failure_related_ids & (known_document_ids | failure_document_ids)
+                ),
+                last_reviewed=str(entry["last_verified"]),
+                content_status="published",
                 fields=fields,
                 tokens=_tokenize_fields(fields),
             )

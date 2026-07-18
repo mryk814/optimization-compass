@@ -10,6 +10,7 @@ from typing import Any, Literal, cast
 from pydantic import BaseModel, ConfigDict, Field
 
 from optimization_compass.db import KnowledgeRepository
+from optimization_compass.failure_discovery import FailureDiscoveryIndex
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
 
 CoverageStatus = Literal["available", "partial", "missing", "not_applicable"]
@@ -230,12 +231,16 @@ def _load_artifacts(root: Path) -> dict[str, Any]:
         "sources": "sources.json",
         "recommendation": "recommendation/site-data.json",
         "visualization_scenarios": "visualization-scenarios.json",
+        "failure_discovery": "failure-discovery.json",
     }
     artifacts = {
         key: json.loads((root / relative).read_text(encoding="utf-8"))
         for key, relative in paths.items()
     }
     artifacts["scenario_contracts"] = _load_scenario_contracts(root, artifacts)
+    artifacts["failure_discovery_contract"] = FailureDiscoveryIndex.model_validate(
+        artifacts["failure_discovery"]
+    )
     return artifacts
 
 
@@ -639,4 +644,55 @@ def _integrity_issues(
         )
         for item in broken_comparison_aliases
     )
+    failure_index: FailureDiscoveryIndex = artifacts["failure_discovery_contract"]
+    case_ids = {str(item["case_id"]) for item in artifacts["gallery"]["cases"]}
+    method_ids = {
+        str(row["method_id"]) for row in repository.fetch_all("SELECT method_id FROM methods")
+    }
+    source_ids = {str(item["source_id"]) for item in artifacts["sources"]["sources"]}
+    scenario_ids = {str(item["scenario_id"]) for item in artifacts["scenario_contracts"]}
+    for entry in failure_index.entries:
+        if entry.case_id is not None and entry.case_id not in case_ids:
+            issues.append(
+                IntegrityIssue(
+                    code="failure_discovery_missing_case",
+                    severity="error",
+                    entity_type="failure_discovery",
+                    entity_id=entry.entry_id,
+                    detail=f"Case {entry.case_id} is not present in the published Gallery.",
+                )
+            )
+        missing_methods = sorted(set(entry.method_ids) - method_ids)
+        if missing_methods:
+            issues.append(
+                IntegrityIssue(
+                    code="failure_discovery_missing_method",
+                    severity="error",
+                    entity_type="failure_discovery",
+                    entity_id=entry.entry_id,
+                    detail="Unknown method IDs: " + ", ".join(missing_methods),
+                )
+            )
+        missing_sources = sorted(set(entry.source_ids) - source_ids)
+        if missing_sources:
+            issues.append(
+                IntegrityIssue(
+                    code="failure_discovery_missing_source",
+                    severity="error",
+                    entity_type="failure_discovery",
+                    entity_id=entry.entry_id,
+                    detail="Unknown source IDs: " + ", ".join(missing_sources),
+                )
+            )
+        missing_scenarios = sorted(set(entry.scenario_ids) - scenario_ids)
+        if missing_scenarios:
+            issues.append(
+                IntegrityIssue(
+                    code="failure_discovery_missing_scenario",
+                    severity="error",
+                    entity_type="failure_discovery",
+                    entity_id=entry.entry_id,
+                    detail="Unknown scenario IDs: " + ", ".join(missing_scenarios),
+                )
+            )
     return issues

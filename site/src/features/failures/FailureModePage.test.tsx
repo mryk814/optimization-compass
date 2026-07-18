@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from "@testing-library/rea
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, describe, expect, test, vi } from "vitest";
 
-import rawFailureModes from "../../../public/data/failure-modes.json";
+import rawFailureDiscovery from "../../../public/data/failure-discovery.json";
 import type { EntityLinkIndex } from "../../contracts/entity-links";
 import { EntityLinkProvider } from "../../state/entity-links";
 import { FailureModePage } from "./FailureModePage";
@@ -23,7 +23,7 @@ describe("FailureModePage", () => {
   test("starts from symptoms and keeps detailed relations collapsed", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => rawFailureModes,
+      json: async () => rawFailureDiscovery,
     }));
 
     render(
@@ -39,16 +39,16 @@ describe("FailureModePage", () => {
       name: "noiseが微分を支配",
     })).closest("article");
     expect(card).not.toBeNull();
-    expect(within(card!).getByText("gradient符号がreplicateで変わる")).toBeVisible();
+    expect(within(card!).getAllByText("gradient符号がreplicateで変わる")[0]).toBeVisible();
     expect(within(card!).getByText("replication/CRN")).toBeVisible();
     expect(within(card!).getByText("sample average、SPSA、noise-aware method")).toBeVisible();
-    expect(within(card!).getByText("影響する手法・可視化・根拠")).not.toHaveAttribute("open");
+    expect(within(card!).getByText("適用範囲・関連情報・根拠")).not.toHaveAttribute("open");
   });
 
   test("filters the canonical failure list by symptom or title", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => rawFailureModes,
+      json: async () => rawFailureDiscovery,
     }));
 
     render(
@@ -61,10 +61,10 @@ describe("FailureModePage", () => {
 
     await screen.findByRole("heading", { level: 2, name: "noiseが微分を支配" });
     fireEvent.change(screen.getByRole("searchbox", { name: "失敗の兆候を検索" }), {
-      target: { value: "悪条件" },
+      target: { value: "noise" },
     });
 
-    expect(screen.getByRole("heading", { level: 2, name: "悪条件" })).toBeVisible();
-    expect(screen.queryByRole("heading", { level: 2, name: "noiseが微分を支配" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: "noiseが微分を支配" })).toBeVisible();
+    expect(screen.queryByRole("heading", { level: 2, name: "悪条件" })).not.toBeInTheDocument();
   });
 });
