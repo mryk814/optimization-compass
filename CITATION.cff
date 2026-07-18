@@ -7,12 +7,12 @@ type: dataset
 abstract: "A versioned, evidence-linked dataset that connects optimization problem structure, candidate and excluded methods, implementations, examples, comparisons, and educational visualizations."
 authors:
   - name: "TAKUYA OTANI"
-version: "0.16.0"
-date-released: "2026-07-17"
-commit: "f5405c7c525476a65d3703beba1a5f28a331cabe"
+version: "0.17.0"
+date-released: "2026-07-18"
+commit: "213fc346fd5887ba9e1b5a1b8c3b516ba7acb900"
 license: "CC-BY-4.0"
 repository-code: "https://github.com/mryk814/optimization-compass"
-repository-artifact: "https://github.com/mryk814/optimization-compass/releases/download/v0.16.0/optimization_method_selection_database_v0.16.0_bundle.zip"
+repository-artifact: "https://github.com/mryk814/optimization-compass/releases/download/v0.17.0/optimization_method_selection_database_v0.17.0_bundle.zip"
 url: "https://mryk814.github.io/optimization-compass/"
 keywords:
   - "optimization"
