@@ -5267,6 +5267,29 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:concept.simplex:euclidean-stepで失われるもの",
+      "dataset_version": "0.17.0",
+      "document_id": "content:concept.simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:family.manifold",
+        "content:mirror-descent",
+        "content:projected-gradient",
+        "source:S055",
+        "source:S056",
+        "source:S066"
+      ],
+      "source_ids": [
+        "S055",
+        "S056",
+        "S066"
+      ],
+      "text": "無制約の勾配step y = x − η ∇ f ( x ) は、一般に負の成分を作ります。成分の和も1からずれます。たとえば [-0.1, 0.6, 0.5] は合計こそ1でも、確率・配合比としては不正です。 y / y.sum() のような正規化も万能ではありません。負の成分を直せず、和が0に近いと不安定です。最も近いsimplex上の点を選ぶ操作でもありません。解釈できる比率を各反復で保ちたいなら、更新後にどの方法で集合へ戻すかを最初に決めます。 方策 常に保つもの 境界の0を表せるか 主な注意 Euclidean projection 非負・和1 はい projectionの費用とactive faceを確認 softmax parameterization 正・和1 通常はいいえ logitに同じ定数を足しても解が同じ entropy mirror update 正・和1（正の初期値なら） 通常はいいえ log / underflow、mirror mapとstep schedule penaltyだけを加える 反復中の可行性は保証しない 場合による penalty係数と残る違反を別に診断",
+      "title": "Euclidean stepで失われるもの"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:concept.simplex:mirror-descentは比率のgeometryを使う",
       "dataset_version": "0.17.0",
       "document_id": "content:concept.simplex",
@@ -5284,7 +5307,7 @@
         "S056",
         "S066"
       ],
-      "text": "Mirror Descent ではnegative entropyのようなmirror mapを使い、simplex上でmultiplicativeな更新を作れます。正の初期値から始めるexponentiated-gradient型の更新は、正の成分と和1を保つため、確率・online allocationでEuclidean距離より自然な場合があります。 ただし、entropy geometryが常に優れるわけではありません。boundaryの0を表す必要がある、logを取る成分がunderflowする、選んだmirror mapでdual側の計算が難しい、といったときはprojectionや別のparameterizationを比較します。方法名だけでなく、mirror map・初期点・step scheduleを記録します。",
+      "text": "Mirror Descent では、negative entropyのようなmirror mapを使い、simplex上でmultiplicativeな更新を作れます。正の初期値から始めるexponentiated-gradient型の更新は、正の成分と和1を保ちます。そのため、確率・online allocationではEuclidean距離より自然な場合があります。 ただし、entropy geometryが常に優れるわけではありません。boundaryの0が必要な場合、logを取る成分がunderflowする場合、選んだmirror mapでdual側の計算が難しい場合は、projectionや別のparameterizationを比較します。方法名だけでなく、mirror map・初期点・step scheduleを記録します。",
       "title": "Mirror Descentは比率のgeometryを使う"
     },
     {
@@ -5313,7 +5336,7 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.simplex:projectionとparameterizationは別の選択",
+      "chunk_id": "content:concept.simplex:projectionとparameterizationを分けて選ぶ",
       "dataset_version": "0.17.0",
       "document_id": "content:concept.simplex",
       "license": "CC-BY-4.0",
@@ -5330,13 +5353,13 @@
         "S056",
         "S066"
       ],
-      "text": "Euclidean projectionは、更新候補 y に最も近いsimplex上の点を求めます。 Π Δ ( y ) = \\arg min x ∈ Δ n − 1 ‖ x − y ‖ 2 2 . この方法では、最適解がある成分をちょうど0にするなら、その境界へ到達できます。したがって「混合物から成分を完全に外す」「配分先をゼロにする」ことが解として必要なら、projectionは自然な候補です。 射影勾配法 では、このprojectionを各勾配stepの後に行います。 一方、logit z ∈ ℝ n をsoftmaxで変換するparameterizationは x i = exp ( z i ) ∑ j exp ( z j ) により内部点を保ちます。 z に同じ定数を加えても x は変わらないため、logit自体の一意性はありません。また有限のlogitでは x i = 0 を厳密には表せません。これは欠点ではなく、境界の解を必要とするかどうかで選ぶべき性質です。",
-      "title": "Projectionとparameterizationは別の選択"
+      "text": "Euclidean projectionは、更新候補 y に最も近いsimplex上の点を求めます。 Π Δ ( y ) = \\arg min x ∈ Δ n − 1 ‖ x − y ‖ 2 2 . この方法では、最適解がある成分をちょうど0にするなら、その境界へ到達できます。「混合物から成分を完全に外す」「配分先をゼロにする」ことが必要なら、projectionは自然な候補です。 射影勾配法 では、このprojectionを各勾配stepの後に行います。 一方、logit z ∈ ℝ n をsoftmaxで変換するparameterizationは x i = exp ( z i ) ∑ j exp ( z j ) により内部点を保ちます。 z に同じ定数を加えても x は変わらないため、logit自体の一意性はありません。有限のlogitでは x i = 0 を厳密には表せません。これは欠点ではありません。境界の解を必要とするかどうかで選ぶ性質です。",
+      "title": "Projectionとparameterizationを分けて選ぶ"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.simplex:python-simplexへのeuclidean-projection",
+      "chunk_id": "content:concept.simplex:python",
       "dataset_version": "0.17.0",
       "document_id": "content:concept.simplex",
       "license": "CC-BY-4.0",
@@ -5354,30 +5377,7 @@
         "S066"
       ],
       "text": "次の関数は、任意の実ベクトルをsum=1かつ非負な点へ射影します。更新後に sum と最小成分を確認するところまでを、最小の検証単位にします。 python import numpy as np def project_to_simplex ( values : np . ndarray ) -> np . ndarray : descending = np . sort ( values )[:: - 1 ] offsets = np . cumsum ( descending ) - 1.0 indices = np . arange ( 1 , values . size + 1 ) active = np . nonzero ( descending - offsets / indices > 0.0 )[ 0 ] threshold = offsets [ active [ - 1 ]] / indices [ active [ - 1 ]] return np . maximum ( values - threshold , 0.0 ) candidate = np . array ([ - 0.30 , 0.85 , 1.20 , - 0.05 ]) probability = project_to_simplex ( candidate ) print ( probability ) assert np . all ( probability >= - 1e-12 ) assert np . isclose ( probability . sum (), 1.0 ) これはsimplex制約を保つための部品です。目的関数が凸か、勾配が正しいか、step sizeが適切かは別に確認します。projection後の可行性だけから大域最適性を結論付けません。",
-      "title": "Python: simplexへのEuclidean projection"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
-      "chunk_id": "content:concept.simplex:このページのsimplexは-比率の集合",
-      "dataset_version": "0.17.0",
-      "document_id": "content:concept.simplex",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:family.manifold",
-        "content:mirror-descent",
-        "content:projected-gradient",
-        "source:S055",
-        "source:S056",
-        "source:S066"
-      ],
-      "source_ids": [
-        "S055",
-        "S056",
-        "S066"
-      ],
-      "text": "n 成分のprobability simplexは、次の集合です。 Δ n − 1 = { x ∈ ℝ n ∣ x i ≥ 0 , ∑ i = 1 n x i = 1 } . 成分は各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は n ではなく、和が1という等式制約を除いた n − 1 です。 ここでいうsimplexは、LPのbasisを辿る Primal Simplex法 や、Nelder–Meadの探索点を並べた 単体 とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。",
-      "title": "このページのsimplexは「比率の集合」"
+      "title": "Python"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -5405,7 +5405,7 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.simplex:素朴なeuclidean-stepが壊すもの",
+      "chunk_id": "content:concept.simplex:直感-比率の集合",
       "dataset_version": "0.17.0",
       "document_id": "content:concept.simplex",
       "license": "CC-BY-4.0",
@@ -5422,13 +5422,13 @@
         "S056",
         "S066"
       ],
-      "text": "無制約の勾配step y = x − η ∇ f ( x ) は、一般に負の成分を作り、和も1からずらします。たとえば [-0.1, 0.6, 0.5] は合計こそ1でも、確率・配合比としては不正です。 y / y.sum() のような正規化も万能ではありません。負の成分を直せず、和が0に近いと不安定で、最も近いsimplex上の点を選ぶ操作でもありません。解釈できる比率を各反復で保ちたいなら、更新後にどの方法で集合へ戻すかを最初に決めます。 方策 常に保つもの 境界の0を表せるか 主な注意 Euclidean projection 非負・和1 はい projectionの費用とactive faceを確認 softmax parameterization 正・和1 通常はいいえ logitに同じ定数を足しても解が同じ entropy mirror update 正・和1（正の初期値なら） 通常はいいえ log / underflow、mirror mapとstep schedule penaltyだけを加える 反復中の可行性は保証しない 場合による penalty係数と残る違反を別に診断",
-      "title": "素朴なEuclidean stepが壊すもの"
+      "text": "n 成分のprobability simplexは、非負の成分の和が1になる集合です。 Δ n − 1 = { x ∈ ℝ n ∣ x i ≥ 0 , ∑ i = 1 n x i = 1 } . 成分は、各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は n ではありません。和が1という等式制約を除いた n − 1 です。 ここでいうsimplexは、LPのbasisを辿る Primal Simplex法 や、Nelder–Meadの探索点を並べた 単体 とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。",
+      "title": "直感: 比率の集合"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.simplex:見るべき診断値と切替サイン",
+      "chunk_id": "content:concept.simplex:診断値と切替の兆候",
       "dataset_version": "0.17.0",
       "document_id": "content:concept.simplex",
       "license": "CC-BY-4.0",
@@ -5445,8 +5445,8 @@
         "S056",
         "S066"
       ],
-      "text": "成分和の誤差と最小成分（数値上の可行性） 0に張り付く成分とactive faceの変化 projection distanceまたはBregman stepの大きさ objective、projected-gradient mapping、またはregret step size、line search、underflow / overflow 0成分を許すべき問題なのにsoftmax内部点に張り付いていないか 切替の目安は明確です。projectionが支配的な計算時間になるなら、parameterization・分解・別のprimal-dual法を検討します。softmaxで必要な0配分へ近づけないなら、境界を表せるprojectionへ戻します。成分が頻繁に0と正を行き来するなら、step size、scale、目的のnoise、または配分の粗さを見直します。 Warning simplex上の可行解は「配分として成立する」ことを意味しますが、実験・生産・制御の下限量、整数ロット、時間変化する制約までは含みません。元の問題にある制約を別途評価します。",
-      "title": "見るべき診断値と切替サイン"
+      "text": "成分和の誤差と最小成分（数値上の可行性） 0に張り付く成分とactive faceの変化 projection distanceまたはBregman stepの大きさ objective、projected-gradient mapping、またはregret step size、line search、underflow / overflow 0成分を許すべき問題なのにsoftmax内部点に張り付いていないか 切替の目安は次のとおりです。projectionが計算時間を支配するなら、parameterization・分解・別のprimal-dual法を検討します。softmaxで必要な0配分へ近づけないなら、境界を表せるprojectionへ戻します。成分が頻繁に0と正を行き来するなら、step size、scale、目的のnoise、または配分の粗さを見直します。 Warning simplex上の可行解は「配分として成立する」ことを意味しますが、実験・生産・制御の下限量、整数ロット、時間変化する制約までは含みません。元の問題にある制約を別途評価します。",
+      "title": "診断値と切替の兆候"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14231,7 +14231,7 @@
         "S001",
         "S002"
       ],
-      "text": "この手法の気持ちは、現在地の坂を読み、最も下りやすい向きへ少しずつ進むことです。 見るもの : 現在の目的関数値と勾配、試したstepの結果 動かすもの : 現在点とstep size 前進の判断 : 目的関数値が下がり、gradient normも小さくなること",
+      "text": "この手法は、現在地の坂を読み、最も下りやすい向きへ少しずつ進みます。 見るもの : 現在の目的関数値、勾配、試したstepの結果 動かすもの : 現在点とstep size 前進の判断 : 目的関数値が下がり、gradient normが小さくなること 勾配を使えることが、この手法を選ぶ出発点です。目的関数が滑らかでも、勾配のscaleや制約の扱いが合わなければ、stepは安定しません。",
       "title": "30秒でつかむ"
     },
     {
@@ -14279,7 +14279,7 @@
         "S001",
         "S002"
       ],
-      "text": "python import numpy as np def objective ( x : np . ndarray ) -> float : return float (( x [ 0 ] - 1.0 ) ** 2 + 20.0 * ( x [ 1 ] + 2.0 ) ** 2 ) def gradient ( x : np . ndarray ) -> np . ndarray : return np . array ([ 2.0 * ( x [ 0 ] - 1.0 ), 40.0 * ( x [ 1 ] + 2.0 )]) x = np . array ([ 4.0 , 3.0 ]) learning_rate = 0.04 for _ in range ( 2_000 ): g = gradient ( x ) if np . linalg . norm ( g ) < 1e-8 : break candidate = x - learning_rate * g if objective ( candidate ) > objective ( x ): learning_rate *= 0.5 continue x = candidate print ( x , objective ( x ), np . linalg . norm ( gradient ( x ))) この例の簡易backtrackingは教育用です。実務ではWolfe条件など、利用するline-search contractを明示します。",
+      "text": "次の例は、二次関数に対してgradient descentを実行する最小例です。簡易backtrackingで、候補点の目的関数値が増えたときだけlearning rateを半分にします。 python import numpy as np def objective ( x : np . ndarray ) -> float : return float (( x [ 0 ] - 1.0 ) ** 2 + 20.0 * ( x [ 1 ] + 2.0 ) ** 2 ) def gradient ( x : np . ndarray ) -> np . ndarray : return np . array ([ 2.0 * ( x [ 0 ] - 1.0 ), 40.0 * ( x [ 1 ] + 2.0 )]) x = np . array ([ 4.0 , 3.0 ]) learning_rate = 0.04 for _ in range ( 2_000 ): g = gradient ( x ) if np . linalg . norm ( g ) < 1e-8 : break candidate = x - learning_rate * g if objective ( candidate ) > objective ( x ): learning_rate *= 0.5 continue x = candidate print ( x , objective ( x ), np . linalg . norm ( gradient ( x ))) この例の簡易backtrackingは教育用です。実務ではWolfe条件など、利用するline-search contractを明示します。",
       "title": "Python"
     },
     {
@@ -14303,7 +14303,7 @@
         "S001",
         "S002"
       ],
-      "text": "更新は x k + 1 = x k − η k ∇ f ( x k ) です。勾配 ∇ f ( x k ) は現在点で最も急に増える局所方向なので、その反対は局所的な下降方向です。ただし、有限のstepを取った先でも目的値が下がるかはstep size η k と目的関数の曲率に依存します。",
+      "text": "勾配 ∇ f ( x k ) は、現在点で最も急に増える局所方向です。その反対へstepを取るため、更新は x k + 1 = x k − η k ∇ f ( x k ) です。ただし、有限のstepを取った先で目的値が下がるかは、step size η k と目的関数の曲率に依存します。",
       "title": "一手の意味"
     },
     {
@@ -14327,32 +14327,8 @@
         "S001",
         "S002"
       ],
-      "text": "項目 確認すること variable 連続変数であるか、projection可能な単純制約か objective 局所的に滑らかで有限値を返すか gradient analytic、automatic differentiation、検証済み数値微分か scale 座標ごとの単位や曲率が極端に違わないか goal 局所停留点でよいか、凸性により大域解を期待できるか 勾配を計算できることと、勾配が正しいことは別です。実装前に有限差分とのdirectional derivative checkを行います。",
+      "text": "項目 確認すること variable 連続変数であるか、projection可能な単純制約か objective 局所的に滑らかで有限値を返すか gradient analytic、automatic differentiation、検証済み数値微分のいずれかか scale 座標ごとの単位や曲率が極端に違わないか goal 局所停留点でよいか、凸性により大域解を期待できるか 勾配を計算できることと、勾配が正しいことは別です。実装前に有限差分とのdirectional derivative checkを行います。",
       "title": "何が必要か"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
-      "chunk_id": "content:method.gradient-descent:停止条件と診断",
-      "dataset_version": "0.17.0",
-      "document_id": "content:method.gradient-descent",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "comparison:COMPARE_GRADIENT_FAMILY",
-        "content:bfgs",
-        "content:concept.convexity",
-        "content:proximal-gradient",
-        "content:trust-region-newton-cg",
-        "method:M_GRADIENT_DESCENT",
-        "source:S001",
-        "source:S002"
-      ],
-      "source_ids": [
-        "S001",
-        "S002"
-      ],
-      "text": "目的値の変化だけで停止すると、scaleが小さいだけの点を収束と誤認することがあります。最低限、次を記録します。 gradient norm projected gradient norm（boundsがある場合） step norm objective valueとbest-so-far function / gradient evaluation数 learning rate NaN / overflow / line-search status iteration / wall-clock budget 凸問題でも、停止許容値が粗ければ高精度解ではありません。非凸問題ではgradient normが小さくても局所解、saddle、flat regionの可能性があります。",
-      "title": "停止条件と診断"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14375,8 +14351,32 @@
         "S001",
         "S002"
       ],
-      "text": "smoothな連続最適化 gradientが安価・信頼できる 一反復を軽くして大規模化したい convex問題、または局所解でよい非凸問題 stochastic gradient変種へ移行できるmachine-learning問題",
+      "text": "smoothな連続最適化 gradientが安価で信頼できる 一反復を軽くして大規模化したい convex問題、または局所解でよい非凸問題 stochastic gradient変種へ移行できるmachine-learning問題",
       "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.gradient-descent:失敗・切替の兆候",
+      "dataset_version": "0.17.0",
+      "document_id": "content:method.gradient-descent",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:proximal-gradient",
+        "content:trust-region-newton-cg",
+        "method:M_GRADIENT_DESCENT",
+        "source:S001",
+        "source:S002"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "目的関数値が下がらず振動する → learning rateを下げ、scaleとline searchを確認する zig-zagが長く続く → scaling、preconditioning、Momentum、BFGS系を比較する gradient normが小さいのに目的値が改善しない → saddleやflat regionの可能性を確認する boundsや一般制約の違反が残る → projectionや制約対応のある手法へ切り替える Warning 同じ反復回数でも、目的評価、gradient評価、line searchの追加評価は異なります。手法比較ではoracle budgetと停止条件を揃えます。",
+      "title": "失敗・切替の兆候"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14399,8 +14399,56 @@
         "S001",
         "S002"
       ],
-      "text": "小さすぎる: 安定でも収束が遅い 大きすぎる: 谷を飛び越えて振動または発散する 一方向では適切でも、条件数の悪い谷では他方向に大きすぎる 固定stepが難しい: line search、schedule、preconditioningを検討する 細長い谷でzig-zagする現象は、勾配方向が最適点への直線方向とは限らないことを示します。 Gradient family comparison ではMomentumやAdamと同じ初期点・budgetで確認できます。",
+      "text": "小さすぎると、安定でも収束が遅くなります。 大きすぎると、谷を飛び越えて振動または発散します。 一方向では適切でも、条件数の悪い谷では他方向に大きすぎる場合があります。 固定stepが難しい場合は、line search、schedule、preconditioningを検討します。 細長い谷でzig-zagする現象は、勾配方向が最適点への直線方向とは限らないことを示します。 Gradient family comparison では、MomentumやAdamと同じ初期点・budgetで確認できます。",
       "title": "学習率を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.gradient-descent:次に読む",
+      "dataset_version": "0.17.0",
+      "document_id": "content:method.gradient-descent",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:proximal-gradient",
+        "content:trust-region-newton-cg",
+        "method:M_GRADIENT_DESCENT",
+        "source:S001",
+        "source:S002"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "曲率情報を使ってzig-zagを抑えたい場合は BFGS 、制約や非滑らか正則化がある場合は 近接勾配法 を参照してください。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.gradient-descent:診断値",
+      "dataset_version": "0.17.0",
+      "document_id": "content:method.gradient-descent",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:proximal-gradient",
+        "content:trust-region-newton-cg",
+        "method:M_GRADIENT_DESCENT",
+        "source:S001",
+        "source:S002"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "目的値の変化だけで停止すると、scaleが小さいだけの点を収束と誤認することがあります。最低限、次を記録します。 gradient norm projected gradient norm（boundsがある場合） step norm objective valueとbest-so-far function / gradient evaluation数 learning rate NaN / overflow / line-search status iteration / wall-clock budget 凸問題でも、停止許容値が粗ければ高精度解ではありません。非凸問題では、gradient normが小さくても局所解、saddle、flat regionの可能性があります。",
+      "title": "診断値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14423,7 +14471,7 @@
         "S001",
         "S002"
       ],
-      "text": "離散・カテゴリ変数 不連続や評価失敗が頻発 gradient noiseがstepを支配 強い一般制約を無視している 条件数が悪く極端に遅い → scaling、preconditioning、BFGS系 非滑らか正則化がある → 近接勾配法 曲率情報を使える → BFGS やtrust-region法 Warning 同じ反復回数でも、目的評価、gradient評価、line searchの追加評価は異なります。手法比較ではoracle budgetと停止条件を揃えます。",
+      "text": "離散・カテゴリ変数 不連続や評価失敗が頻発する gradient noiseがstepを支配する 強い一般制約を無視している 条件数が悪く極端に遅い → scaling、preconditioning、BFGS系を検討する 非滑らか正則化がある → 近接勾配法 へ切り替える 曲率情報を使える → BFGS やtrust-region法を比較する",
       "title": "避ける／切り替える条件"
     },
     {

@@ -72,6 +72,10 @@ Prose style — sentence tone, terminology spelling, and canonical section headi
 defined in [`.agents/skills/article-style/SKILL.md`](../.agents/skills/article-style/SKILL.md).
 Read it before writing or revising article text. The rules below cover structure only.
 
+The reading order, visual hierarchy, body measure, and progressive-disclosure policy are
+defined in [`docs/content-reading-principles.md`](content-reading-principles.md). Read it
+alongside the prose style guide when revising an existing page or adding a new one.
+
 - The page shell owns `h1`; start sections with `##` and do not skip heading levels.
 - Keep the first paragraph short enough to work as a card and SEO description.
 - Ordered/unordered lists, blockquotes, tables, inline code, emphasis, and links use
