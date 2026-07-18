@@ -1249,6 +1249,11 @@
           "relation_type": "visualization",
           "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
           "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "target_type": "view"
         }
       ],
       "summary": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。"
@@ -15323,6 +15328,11 @@
       "label": "低／高 fidelity シミュレータを予算内で使い分ける",
       "relations": [
         {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "candidate_method",
           "target_id": "M_BAYESIAN_OPT_GP",
           "target_type": "method"
@@ -17332,6 +17342,11 @@
         {
           "relation_type": "visualization",
           "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
           "target_type": "trace"
         }
       ],
@@ -22820,6 +22835,52 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "低／高 fidelity simulator の評価ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_CONSTRAINED_DISK",
       "entity_type": "scenario",
       "external_url": null,
@@ -24618,6 +24679,27 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+      "entity_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "低／高 fidelity simulator の評価ledger",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/adam-quadratic",
       "entity_id": "adam-quadratic",
       "entity_type": "trace",
@@ -25369,6 +25451,16 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "relations": [],
       "summary": ""
     },

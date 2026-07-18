@@ -530,7 +530,8 @@
         "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
-        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],
       "scope": "case_specific",
       "severity": "not_applicable",

@@ -101,9 +101,11 @@ def test_canonical_visualization_scenarios_cover_expensive_and_discrete_slices()
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
     ]
     assert expectation.route_ids == [
-        "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
     ]
 
 

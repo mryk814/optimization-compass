@@ -3033,6 +3033,7 @@ main:focus {
 .bo-figure,
 .bo-explanation,
 .bo-comparison,
+.bo-ledger,
 .bo-limitations,
 .bo-text-alternative,
 .bo-route-card { margin: 0; padding: 0.7rem; border: 1px solid #d4d9d1; border-radius: 0.65rem; background: #fff; }
@@ -3055,6 +3056,25 @@ main:focus {
 .bo-explanation dl div { display: flex; justify-content: space-between; gap: 0.8rem; padding: 0.35rem 0; border-top: 1px solid #e5e7e2; }
 .bo-explanation dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 .bo-comparison { margin-top: 0.8rem; }
+.bo-ledger { margin-top: 0.8rem; }
+.bo-ledger h2 { margin: 0; font-size: 1rem; }
+.bo-ledger-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem 0.8rem; margin: 0.6rem 0; }
+.bo-ledger-summary div { padding: 0.4rem 0.55rem; border-radius: 0.35rem; background: #f3f6f2; }
+.bo-ledger-summary dt { color: #68736c; font-size: 0.65rem; }
+.bo-ledger-summary dd { margin: 0.15rem 0 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bo-ledger-table-wrap { overflow-x: auto; }
+.bo-ledger table { width: 100%; min-width: 42rem; border-collapse: collapse; font-size: 0.7rem; }
+.bo-ledger th,
+.bo-ledger td { padding: 0.28rem 0.4rem; border-bottom: 1px solid #e1e4de; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bo-ledger th:first-child,
+.bo-ledger td:first-child,
+.bo-ledger th:nth-child(3),
+.bo-ledger td:nth-child(3),
+.bo-ledger th:nth-child(5),
+.bo-ledger td:nth-child(5) { text-align: left; }
+.bo-ledger-status-failed td:nth-child(5),
+.bo-ledger-status-censored td:nth-child(5),
+.bo-ledger-status-timeout td:nth-child(5) { color: #9b4e2d; font-weight: 700; }
 .bo-score strong { padding: 0.35rem 0.55rem; border-radius: 0.35rem; background: #edf3ed; font-variant-numeric: tabular-nums; }
 .bo-comparison table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
 .bo-comparison th,
@@ -3397,6 +3417,7 @@ main:focus {
   .bo-figure,
   .bo-explanation,
   .bo-comparison,
+  .bo-ledger,
   .bo-limitations,
   .bo-text-alternative { min-width: 0; padding: 0.55rem; }
 

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import payload from "../../public/data/visualizations/bo-explore-noiseless.json";
+import ledgerPayload from "../../public/data/visualizations/bo-multi-fidelity-ledger.json";
 import { parseSurrogateUncertaintyPayload } from "./surrogate-uncertainty";
 
 describe("SurrogateUncertainty renderer payload", () => {
@@ -18,5 +19,16 @@ describe("SurrogateUncertainty renderer payload", () => {
   test("rejects unknown fields and invalid versions", () => {
     expect(() => parseSurrogateUncertaintyPayload({ ...payload, legacy: true })).toThrow(/unknown/u);
     expect(() => parseSurrogateUncertaintyPayload({ ...payload, contract_version: "2.0.0" })).toThrow(/unsupported/iu);
+  });
+
+  test("parses the bounded multi-fidelity evaluation ledger extension", () => {
+    const parsed = parseSurrogateUncertaintyPayload(ledgerPayload);
+    expect(parsed.contract_version).toBe("1.1.0");
+    expect(parsed.evaluation_ledger?.calls).toHaveLength(14);
+    expect(new Set(parsed.evaluation_ledger?.calls.map((call) => call.status))).toEqual(
+      new Set(["ok", "failed", "censored", "timeout"]),
+    );
+    expect(parsed.evaluation_ledger?.calls.at(-1)?.accumulated_cost).toBe(36);
+    expect(parsed.evaluation_ledger?.calls.at(-1)?.best_so_far).not.toBeNull();
   });
 });

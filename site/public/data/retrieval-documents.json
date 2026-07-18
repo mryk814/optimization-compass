@@ -420,7 +420,8 @@
         "view:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
         "view:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "view:SCENARIO_BO_1D_EXPLORE_NOISELESS",
-        "view:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        "view:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "view:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S035",
@@ -28504,6 +28505,7 @@
         "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
         "source:S035",
         "source:S038",
         "source:S059",
@@ -34997,6 +34999,7 @@
         "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
         "source:S034",
         "source:S035",
         "source:S038",
@@ -35936,7 +35939,8 @@
         "trace:ARTIFACT_BO_EXPLOIT_NOISELESS",
         "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
@@ -39204,6 +39208,32 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:multi-fidelity-simulator",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む",
+      "title": "低／高 fidelity simulator の評価ledger"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "scenario:SCENARIO_CONSTRAINED_DISK:overview",
       "dataset_version": "0.18.4",
       "document_id": "scenario:SCENARIO_CONSTRAINED_DISK",
@@ -41129,6 +41159,27 @@
       ],
       "text": "観測からsurrogateとacquisitionを更新して次の評価点を選ぶ流れを読む",
       "title": "高価な1次元black-box: explore / small_noise"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER:overview",
+      "dataset_version": "0.18.4",
+      "document_id": "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む",
+      "title": "低／高 fidelity simulator の評価ledger"
     },
     {
       "attribution": "Optimization Compass contributors",
