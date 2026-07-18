@@ -3020,6 +3020,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.chance-risk-contract",
+      "entity_id": "concept.chance-risk-contract",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "Chance constraint・CVaR・robustness",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.constraint-class",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.uncertainty-models",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.stochastic-ml",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        }
+      ],
+      "summary": "Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.constraint-class",
       "entity_id": "concept.constraint-class",
       "entity_type": "content",
