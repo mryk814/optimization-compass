@@ -254,6 +254,7 @@ export function parseSiteManifest(input: unknown): SiteManifest {
     failure_discovery: {
       version: "1.0.0",
       path: safeRelativePath(failureDiscovery.path, "failure_discovery.path"),
+    },
     release_catalog: {
       version: "1.0.0",
       path: safeRelativePath(releaseCatalog.path, "release_catalog.path"),
