@@ -4,50 +4,61 @@ kind: method
 method_id: M_SMAC_RF
 title_ja: SMAC（random forest surrogate）
 title_en: SMAC with Random Forest Surrogate
-summary: Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。
+summary: SMACは、ガウス過程（Gaussian process）の代わりにランダムフォレスト（random forest）を予測用のsurrogateとして使う、逐次モデルベース最適化（sequential model-based optimization）です。カテゴリ変数（categorical）や条件付きparameterを含むsearch spaceを扱いやすい点に特徴があります。
 source_ids: [S037, S059, S075]
 prerequisites: []
 related_ids: [bayesian-optimization, tpe, random-search, family.expensive-black-box]
 aliases: [/learn/smac]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
-Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。
+SMACは、ガウス過程（Gaussian process）の代わりにランダムフォレスト（random forest）を予測用のsurrogateとして使う、逐次モデルベース最適化（sequential model-based optimization）です。カテゴリ変数（categorical）や条件付きparameterを含むsearch spaceを扱いやすい点に特徴があります。
 
-## 何をsurrogateにしているか
+## 何をsurrogateに使うか
 
-[Bayesian Optimization](#/learn/bayesian-optimization)は多くの場合Gaussian processをsurrogateに使いますが、SMAC（Sequential Model-based Algorithm Configuration）はrandom forestをsurrogateとして使います。観測済みのparameterと評価値の組をrunhistoryとして蓄積し、random forestをそのrunhistoryで学習します。
+[Bayesian Optimization](#/learn/bayesian-optimization)では、多くの場合、ガウス過程（Gaussian process）をsurrogateに使います。
+SMAC（Sequential Model-based Algorithm Configuration）は、random forestをsurrogateとして使います。
+評価したparameterと評価値の組は、runhistoryとして蓄積されます。
+SMACはこの記録を使ってrandom forestを学習します。
 
-random forestは各木の予測のばらつきから不確実性の目安を得られるため、Gaussian processと同様に予測平均と不確実性の両方をacquisitionへ渡せます。決定的な違いは、random forestが連続変数だけでなくcategorical変数や、あるparameterが別のparameterの値によってのみ意味を持つ条件付きparameterを、木構造の分岐として自然に扱える点です。
+random forestでは、各木の予測のばらつきから不確実性の目安を得られます。
+そのため、Gaussian processと同じように、予測平均と不確実性を獲得関数（acquisition）に渡せます。
+違いは、連続変数だけでなく、カテゴリ変数や条件付きparameterも木構造の分岐として扱いやすいことです。
 
 ## GP-BOとの使い分け
 
-search spaceの形が、GP-BOとrandom forest surrogateのどちらを検討するかの主な手がかりです。
+search spaceの形が、GP-BOとrandom forest surrogateのどちらを検討するかの手がかりになります。
 
-- 連続変数中心で次元が低〜中程度なら、kernelによる距離の定義が自然なGaussian process系のBayesian Optimizationが選択肢になります。
-- categorical変数や条件付きparameterが多く混在するalgorithm configurationやhyperparameter optimizationでは、木構造で分岐を表現できるrandom forest系（SMAC）が選択肢になります。
+- 連続変数が中心で次元が低〜中程度なら、kernelで距離を定義しやすいGaussian process系のBayesian Optimizationが候補になります。
+- カテゴリ変数や条件付きparameterが多いalgorithm configurationやhyperparameter optimizationでは、木構造で分岐を表せるrandom forest系（SMAC）が候補になります。
 
-どちらも「良い手法」という一般順位ではなく、search spaceの表現しやすさで選び分けます。
+優劣の一般順位ではありません。
+search spaceをどちらが表現しやすいかで選び分けます。
 
 ## runhistoryとincumbentが持つ役割
 
-SMACは評価した点とその結果をrunhistoryとして保存し続けます。runhistoryはsurrogateの学習dataであると同時に、途中経過を再現・再開するための記録でもあります。
+SMACは、評価した点とその結果をrunhistoryに保存し続けます。
+runhistoryはsurrogateの学習データ（data）であると同時に、途中経過を再現・再開するための記録でもあります。
 
-これまでの評価の中で最良の設定はincumbentと呼ばれます。incumbentはsurrogateの予測ではなく、実際に評価された観測値に基づく候補です。次に評価する候補はacquisitionによってsurrogateから選ばれますが、探索の過程でincumbentが更新されるたびに、以降の探索はその時点のbest-so-farを基準に進みます。
+これまでに評価した設定のうち、最も評価値がよいものをincumbentと呼びます。
+incumbentはsurrogateの予測ではなく、実際の観測値から選ばれた候補です。
+次に評価する候補は、acquisitionがsurrogateから選びます。
+探索が進んでincumbentが更新されると、その後は更新されたbest-so-farを基準に進みます。
 
 ## 向いている条件
 
-- categorical・整数・条件付きparameterが混在するalgorithm configuration
+- カテゴリ変数（categorical）、整数、条件付きparameterが混在するalgorithm configuration
 - 評価コストが高く、runhistoryを再利用する価値がある
-- 連続変数だけの低次元search spaceに限定されない
-- 失敗trialやtimeoutを記録・活用したい
+- 連続変数だけの低次元search spaceに限られない
+- 失敗したtrialやtimeoutを記録・活用したい
 
-連続変数中心の低次元search spaceで、kernelによる不確実性をそのまま解釈したい場合は[Gaussian-process BO](#/learn/bayesian-optimization)を検討します。評価が安価で大量に並列実行できる場合は[Random Search](#/learn/random-search)や[TPE](#/learn/tpe)との比較も有効です。
+連続変数が中心の低次元search spaceで、kernelによる不確実性を直接解釈したい場合は[Gaussian-process BO](#/learn/bayesian-optimization)を検討します。
+評価が安価で大量に並列実行できる場合は、[Random Search](#/learn/random-search)や[TPE](#/learn/tpe)との比較も有効です。
 
 ## Python
 
-次はSMAC3で1変数のconfiguration spaceを作り、deterministicな目的関数を限られたtrial数で最小化する最小例です。
+次はSMAC3で1変数のconfiguration spaceを作り、決定的な目的関数（deterministic objective function）を限られたtrial数で最小化する最小例です。
 
 ```python
 from ConfigSpace import Configuration, ConfigurationSpace, Float
@@ -70,7 +81,8 @@ incumbent = smac.optimize()
 print(dict(incumbent), objective(incumbent))
 ```
 
-実装は[SMAC3](https://automl.github.io/SMAC3/latest/)の公式documentationを参照し、search spaceの定義方法、facade（scenarioの種類）、runhistoryの保存形式は利用versionに対応する説明で確認します。
+実装については、[SMAC3](https://automl.github.io/SMAC3/latest/)の公式documentationを参照してください。
+search spaceの定義方法、facade（scenarioの種類）、runhistoryの保存形式は、利用するversionに対応する説明で確認します。
 
 ## 診断値
 
@@ -88,4 +100,6 @@ print(dict(incumbent), objective(incumbent))
 - 評価が安価すぎてsurrogate構築のoverheadが見合わない
 - runhistoryが少なすぎてrandom forestの分散推定が不安定
 
-連続低次元でGaussian processによる不確実性を直接扱いたい場合は[Bayesian Optimization](#/learn/bayesian-optimization)、条件付き空間で密度比を使う別のsurrogateは[TPE](#/learn/tpe)、何も仮定しないbaselineは[Random Search](#/learn/random-search)、高価なblack-box探索全体の選び分けは[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。
+連続変数中心の低次元でGaussian processによる不確実性を直接扱いたい場合は、[Bayesian Optimization](#/learn/bayesian-optimization)を検討します。
+条件付き空間で密度比を使う別のsurrogateは[TPE](#/learn/tpe)、何も仮定しないbaselineは[Random Search](#/learn/random-search)です。
+高価なblack-box探索全体の選び分けは、[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。
