@@ -3587,6 +3587,57 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/learn/concept.so3-rotation-representation",
+      "entity_id": "concept.so3-rotation-representation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SO(3)の回転表現",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "SO(3)の回転は行列、quaternion、Lie algebraで表せますが、表現ごとに可行性の保ち方、誤差の測り方、特異点の扱いが異なります。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/learn/concept.time-discretization",
       "entity_id": "concept.time-discretization",
       "entity_type": "content",
