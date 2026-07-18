@@ -1675,17 +1675,17 @@ def _pareto_preference_scenario(
 
 
 def _canonical_bytes(model: TraceModel, *, canonicalize_floats: bool = False) -> bytes:
-    payload = model.model_dump(mode="json")
+    payload: object = model.model_dump(mode="json")
     if canonicalize_floats:
         payload = _canonicalize_floats(payload)
-    payload = json.dumps(
+    serialized = json.dumps(
         payload,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
         allow_nan=False,
     )
-    return (payload + "\n").encode("utf-8")
+    return (serialized + "\n").encode("utf-8")
 
 
 def _canonicalize_floats(value: object) -> object:
