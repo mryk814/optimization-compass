@@ -4,16 +4,16 @@ kind: method
 method_id: M_DUAL_SIMPLEX
 title_ja: Dual Simplex法
 title_en: Dual Simplex Method
-summary: dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
+summary: 双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
 source_ids: [S004, S016, S055]
 prerequisites: [lp-qp-conic]
 related_ids: [lp-qp-conic, branch-and-cut]
 aliases: [/learn/dual-simplex]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
+双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。
 
 ## Primal simplexとの対比
 
@@ -35,6 +35,46 @@ LPを標準形で考えると、
 - sparseな大規模LP
 
 ユーザーがalgorithmを直接選ばなくても、LP/MIP solverが内部で自動選択する場合があります。
+
+## 診断値
+
+- primal feasibility residual
+- dual feasibility residual
+- objective value
+- basis status
+- simplex iteration数
+- degeneracy / stalling
+- presolve reduction
+- infeasible / unbounded status
+- numerical warning
+
+LPの`infeasible`と`unbounded`は別の状態です。modeling error、単位、bounds、signを確認し、solver statusを単に「失敗」とまとめません。
+
+## Degeneracyとpivotの停滞
+
+複数のbasisが同じvertexを表すdegeneracyでは、pivotしてもobjectiveが変わらないことがあります。anti-cycling、pricing、perturbationなどは実装依存です。
+
+::: note
+simplex iteration数をinterior-point iteration数と直接比較しません。一反復の計算内容、factorization、crossover、warm startの有無が異なります。
+:::
+
+## 向く条件・避ける条件
+
+向いている:
+
+- LP構造が明示される
+- basis warm startが有効
+- 制約追加後の再最適化
+- MIP node LP
+- exactなblack-box探索ではなく係数modelを解く
+
+避ける／切り替える:
+
+- nonlinear / nonconvexな関係を無理にLP化
+- coefficient scaleが極端
+- denseな巨大LPでbarrier法が適する
+- black-box objective
+- integer条件をLP解だけで満たしたと誤解
 
 ## Python
 
@@ -60,46 +100,8 @@ result = linprog(
 print(result.success, result.x, result.fun, result.message)
 ```
 
-`highs-ds`はHiGHSのdual simplex solverを指定します。実装version、presolve、scaling、toleranceは結果の診断に含めます。
+`highs-ds`はHiGHSのdual simplex solverを指定します。実装version、presolve、scaling、toleranceは診断値として記録します。
 
-## 結果を読む
-
-- primal feasibility residual
-- dual feasibility residual
-- objective value
-- basis status
-- simplex iteration数
-- degeneracy / stalling
-- presolve reduction
-- infeasible / unbounded status
-- numerical warning
-
-LPの`infeasible`と`unbounded`は別の状態です。modeling error、単位、bounds、signを確認し、solver statusを単に「失敗」とまとめません。
-
-## Degeneracy
-
-複数のbasisが同じvertexを表すdegeneracyでは、pivotしてもobjectiveが変わらないことがあります。anti-cycling、pricing、perturbationなどは実装依存です。
-
-::: note
-simplex iteration数をinterior-point iteration数と直接比較しません。一反復の計算内容、factorization、crossover、warm startの有無が異なります。
-:::
-
-## 向く条件・避ける条件
-
-向いている:
-
-- LP構造が明示される
-- basis warm startが有効
-- 制約追加後の再最適化
-- MIP node LP
-- exactなblack-box探索ではなく係数modelを解く
-
-避ける／切り替える:
-
-- nonlinear / nonconvexな関係を無理にLP化
-- coefficient scaleが極端
-- denseな巨大LPでbarrier法が適する
-- black-box objective
-- integer条件をLP解だけで満たしたと誤解
+## 次に読む
 
 LP/QP/conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)、MILP内での利用は[Branch-and-Cut](#/learn/branch-and-cut)で確認できます。

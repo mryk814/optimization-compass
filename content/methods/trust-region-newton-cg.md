@@ -10,7 +10,7 @@ prerequisites: [newton-method]
 related_ids: [newton-method, bfgs, least-squares]
 aliases: [/learn/trust-region-newton-cg]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 局所二次モデルを信頼半径の内側だけで使い、CGでNewton方向を近似する大域化された二階法です。
@@ -23,7 +23,7 @@ last_reviewed: 2026-07-17
 - **動かすもの**: 現在点、試行step、trust radius
 - **前進の判断**: 試行stepが受理され、gradient normが下がること
 
-## Trust regionの考え方
+## 仕組み
 
 Newton stepを無条件に採用せず、現在点の周囲
 
@@ -31,7 +31,8 @@ $$
 \|p\| \le \Delta_k
 $$
 
-で二次modelを最小化します。$\Delta_k$ は「このmodelをどこまで信用するか」を表す半径です。
+で二次modelを最小化します。
+$\Delta_k$ は「このmodelをどこまで信用するか」を表す半径です。
 
 試行stepの後、実際の改善とmodelが予測した改善の比
 
@@ -39,11 +40,15 @@ $$
 \rho_k = \frac{f(x_k)-f(x_k+p_k)}{m_k(0)-m_k(p_k)}
 $$
 
-を見ます。予測がよく当たればstepを採用して半径を広げ、外れれば棄却して半径を縮めます。
+を見ます。
+予測がよく当たればstepを採用して半径を広げ、外れれば棄却して半径を縮めます。
 
 ## Newton-CGで何を省いているか
 
-Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-region部分問題を近似します。必要なのはHessian-vector積 $\nabla^2 f(x)v$ で、巨大なHessian行列を明示しなくても動かせます。
+Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-region部分問題を近似します。
+必要なのはHessian-vector積 $\nabla^2 f(x)v$ で、巨大なHessian行列を明示しなくても動かせます。
+
+## まず確認すること
 
 向いている条件:
 
@@ -53,17 +58,13 @@ Hessianを完全にfactorizeする代わりに、conjugate gradientでtrust-regi
 - line search Newtonが不安定
 - negative curvatureも検出しながら進みたい
 
-## 診断値
+避ける／切り替える条件:
 
-- gradient norm
-- trust radius $\Delta_k$
-- actual / predicted reduction ratio $\rho_k$
-- accepted / rejected step数
-- inner CG iteration数
-- negative-curvatureまたはboundary termination
-- function / gradient / HVP evaluation数
-
-半径が縮み続ける場合、微分が誤っている、modelが不連続を跨いでいる、scaleが悪い、または目的関数評価にnoiseがある可能性があります。
+- 目的関数が不連続または強いnoiseを含む
+- gradient / HVPを信頼できない
+- 1回のHVPが目的評価より極端に高価
+- 単純なboundsだけでL-BFGS-Bが十分
+- 一般制約が中心で、制約付きtrust-region実装を用意していない
 
 ## Python
 
@@ -104,13 +105,25 @@ print(result.success, result.x, result.fun, result.message)
 ```
 
 ::: note
-反復回数だけでBFGSと比較しません。HVP、gradient、目的関数の各評価費を分け、同じ停止条件と初期点で比較します。
+反復回数だけでBFGSと比較しません。
+HVP、gradient、目的関数の各評価費を分け、同じ停止条件と初期点で比較します。
 :::
 
-## 避ける／切り替える条件
+## 診断値
 
-- 目的関数が不連続または強いnoiseを含む
-- gradient / HVPを信頼できない
-- 1回のHVPが目的評価より極端に高価
-- 単純なboundsだけでL-BFGS-Bが十分
-- 一般制約が中心で、制約付きtrust-region実装を用意していない
+- gradient norm
+- trust radius $\Delta_k$
+- actual / predicted reduction ratio $\rho_k$
+- accepted / rejected step数
+- inner CG iteration数
+- negative-curvatureまたはboundary termination
+- function / gradient / HVP evaluation数
+
+## 失敗・切替の兆候
+
+半径が縮み続ける場合、微分が誤っている、modelが不連続を跨いでいる、scaleが悪い、または目的関数評価にnoiseがある可能性があります。
+
+## 次に読む
+
+Hessianを明示せずに曲率を使う設計をさらに比較するなら、[Newton-CG](#/learn/newton-cg)と[Trust-krylov](#/learn/trust-krylov)を同じHVP budgetで確認します。
+一次または準Newton法との交換条件は[BFGS](#/learn/bfgs)で確認できます。

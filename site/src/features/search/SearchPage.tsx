@@ -78,8 +78,8 @@ export function SearchPage() {
   return (
     <section className="atlas-page search-page">
       <header className="atlas-page-header search-header">
-        <div><p className="eyebrow">Global Search</p><h1>Atlas全体から探す</h1></div>
-        <p>手法名だけでなく、「勾配なしで高価な実験」のような状況、日本語・英語・略語からも探せます。</p>
+        <div><p className="eyebrow">全文検索</p><h1>Atlas全体から探す</h1></div>
+        <p>手法名だけでなく、「勾配なしで高価な実験」のような状況も、日本語・英語・略語で探せます。</p>
         <Link className="text-link" to="/failures">失敗の兆候・診断から探す →</Link>
       </header>
       <div className="global-search-bar">
@@ -114,17 +114,17 @@ export function SearchPage() {
         <fieldset><legend>対象</legend><div className="search-filter-chips">{availableTypes.map(({ type, count }) => <label key={type} className={selectedTypes.has(type) ? "search-chip is-selected" : "search-chip"}><input checked={selectedTypes.has(type)} onChange={() => toggleType(type)} type="checkbox" /><span>{TYPE_LABELS[type]} <small>{count}</small></span></label>)}</div></fieldset>
         <label className="search-intent">目的<select aria-label="検索の目的" onChange={(event) => updateParams((next) => { event.target.value ? next.set("intent", event.target.value) : next.delete("intent"); next.delete("entity"); })} value={intent ?? ""}><option value="">すべて</option>{SEARCH_INTENTS.map((value) => <option key={value} value={value}>{INTENT_LABELS[value]}</option>)}</select></label>
       </div>
-      {error && <p className="atlas-error" role="alert">検索indexを読み込めませんでした: {error.message}</p>}
-      {!index && !error && <p id="search-status" aria-live="polite">検索indexを読み込み中…</p>}
-      {index && <p id="search-status" className="search-result-summary" aria-live="polite">{query ? `${hits.length}件` : directDocument ? "用語を表示中" : `${index.documents.length}件を検索できます`}{selectedTypes.size || intent ? " · filter適用中" : ""}</p>}
-      {index && (query || directEntity) && visibleHits.length === 0 && <div className="search-empty"><h2>一致する項目がありません</h2><p>表記を短くするか、対象・目的filterを外してみてください。</p></div>}
+      {error && <p className="atlas-error" role="alert">検索データを読み込めませんでした: {error.message}</p>}
+      {!index && !error && <p id="search-status" aria-live="polite">検索データを読み込み中…</p>}
+      {index && <p id="search-status" className="search-result-summary" aria-live="polite">{query ? `${hits.length}件` : directDocument ? "用語を表示中" : `${index.documents.length}件を検索できます`}{selectedTypes.size || intent ? " · 絞り込み中" : ""}</p>}
+      {index && (query || directEntity) && visibleHits.length === 0 && <div className="search-empty"><h2>一致する項目が見つかりません</h2><p>検索語を短くするか、対象・目的の絞り込みを外してください。</p></div>}
       <div className="search-results">{visibleHits.map(({ document, matchedFields }) => <article key={document.document_id} className="search-result-card">
         <div className="search-result-heading"><span className={`search-type search-type-${document.entity_type}`}>{TYPE_LABELS[document.entity_type]}</span><h2><Link to={document.canonical_route}>{document.title_ja}</Link></h2>{document.title_en !== document.title_ja && <p lang="en">{document.title_en}</p>}</div>
         {document.summary && <p className="search-result-copy">{document.summary}</p>}
         <div className="search-result-meta">{matchedFields.length > 0 && <span>一致: {matchedFields.map((field) => FIELD_LABELS[field]).join("・")}</span>}<code>{document.entity_id}</code>{document.last_reviewed && <span>確認 {document.last_reviewed}</span>}</div>
         <div className="search-result-actions"><Link className="text-link" to={document.canonical_route}>開く →</Link>{document.external_url && <a className="text-link" href={document.external_url} rel="noreferrer" target="_blank">公式資料 ↗</a>}{document.source_ids.slice(0, 3).map((sourceId) => <Link key={sourceId} className="search-source-link" to={`/sources/${sourceId}`}>{sourceId}</Link>)}</div>
       </article>)}</div>
-      {hits.length > visibleHits.length && <p className="search-result-limit">上位{visibleHits.length}件を表示しています。検索語やfilterで絞り込めます。</p>}
+      {hits.length > visibleHits.length && <p className="search-result-limit">上位{visibleHits.length}件を表示中。検索語や絞り込みでさらに絞れます。</p>}
     </section>
   );
 }

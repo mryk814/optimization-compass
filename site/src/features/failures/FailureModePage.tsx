@@ -59,13 +59,13 @@ export function FailureModePage() {
     <section className="atlas-page failure-page">
       <header className="atlas-page-header failure-header">
         <div>
-          <p className="eyebrow">Failure signals</p>
+          <p className="eyebrow">失敗の兆候</p>
           <h1>失敗の兆候から探す</h1>
           <p>
             何が起きているかから、確認項目・対処候補・影響する手法・根拠へ進みます。
           </p>
         </div>
-        <Link className="text-link" to="/search">名前やCaseから探す →</Link>
+        <Link className="text-link" to="/search">名前やケースから探す →</Link>
       </header>
 
       <div className="failure-controls">
@@ -83,10 +83,10 @@ export function FailureModePage() {
           重大度
           <select value={severity} onChange={(event) => setSeverity(event.target.value)}>
             <option value="all">すべて</option>
-            <option value="critical">critical</option>
-            <option value="high">high</option>
-            <option value="warning">warning</option>
-            <option value="info">info</option>
+            <option value="critical">重大</option>
+            <option value="high">高</option>
+            <option value="warning">注意</option>
+            <option value="info">情報</option>
           </select>
         </label>
         <label>
@@ -117,7 +117,7 @@ export function FailureModePage() {
           <article className="failure-card" id={item.failure_mode_id} key={item.failure_mode_id}>
             <header>
               <div className="failure-badges">
-                <span className={`failure-severity is-${item.severity}`}>{item.severity}</span>
+              <span className={`failure-severity is-${item.severity}`}>{severityLabel(item.severity)}</span>
                 <span>{scopeLabel(item.failure_scope)}</span>
                 <span>{item.recoverability}</span>
               </div>
@@ -144,7 +144,7 @@ export function FailureModePage() {
               <summary>影響する手法・可視化・根拠</summary>
               <div className="failure-detail-grid">
                 <section>
-                  <h3>影響するentity</h3>
+                  <h3>影響する対象</h3>
                   <ul>
                     {item.affected_entities.map((affected) => (
                       <li key={`${affected.entity_type}:${affected.entity_id}`}>
@@ -158,8 +158,8 @@ export function FailureModePage() {
                   </ul>
                 </section>
                 <section>
-                  <h3>関連scenario</h3>
-                  {item.scenario_ids.length === 0 ? <p>公開scenarioは未接続です。</p> : (
+                  <h3>関連シナリオ</h3>
+                  {item.scenario_ids.length === 0 ? <p>公開シナリオは未接続です。</p> : (
                     <ul>
                       {item.scenario_ids.map((scenarioId) => (
                         <li key={scenarioId}>
@@ -221,6 +221,13 @@ function scopeLabel(scope: FailureModeRecord["failure_scope"]): string {
   if (scope === "method_theory") return "手法理論";
   if (scope === "implementation_specific") return "実装固有";
   return "混合";
+}
+
+function severityLabel(severity: FailureModeRecord["severity"]): string {
+  if (severity === "critical") return "重大";
+  if (severity === "high") return "高";
+  if (severity === "warning") return "注意";
+  return "情報";
 }
 
 function EntityReference({

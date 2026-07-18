@@ -136,10 +136,10 @@ function Question({
   return (
     <fieldset className={hasAnswer ? "diagnose-question diagnose-question-answered" : "diagnose-question"}>
       <legend><span aria-hidden="true">{question.sequence}</span>{title}</legend>
-      <span className="diagnose-formulation-cue">定式化のどこ？ {diagnosisFieldCue(question.question_id)}</span>
+      <span className="diagnose-formulation-cue">定式化のどこを見る？ {diagnosisFieldCue(question.question_id)}</span>
       {title !== question.question_ja && (
         <details className="diagnose-question-technical">
-          <summary>技術用語で確認</summary>
+          <summary>専門用語で確認</summary>
           <p>{question.question_ja}</p>
         </details>
       )}
@@ -166,7 +166,7 @@ function Question({
           該当なし
         </button>
         <button className="diagnose-clear-answer" disabled={answer === undefined} onClick={() => onChange("clear")} type="button">
-          選択解除
+          選択を解除
         </button>
       </div>
     </fieldset>
@@ -195,7 +195,7 @@ function ResultCard({
     <article className="diagnose-result-card">
       <div className="diagnose-result-heading">
         <h3>{canonicalMethod?.canonical_url ? <Link to={canonicalMethod.canonical_url}>{item.name}</Link> : item.name}</h3>
-        {onMap && <button onClick={() => onMap(item.entity_id)} type="button">地図で見る</button>}
+        {onMap && <button onClick={() => onMap(item.entity_id)} type="button">地図で確認</button>}
       </div>
       {item.summary && <p>{item.summary}</p>}
       {item.reasons.length > 0 && <ul>{item.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>}
@@ -234,7 +234,7 @@ function ResultBand({
   return (
     <section className="diagnose-result-band">
       <h2>{title}</h2>
-      {items.length === 0 ? <p className="diagnose-empty">該当なし</p> : items.map((item) => <ResultCard data={data} item={item} key={item.entity_id} onMap={onMap} />)}
+      {items.length === 0 ? <p className="diagnose-empty">該当する候補はありません</p> : items.map((item) => <ResultCard data={data} item={item} key={item.entity_id} onMap={onMap} />)}
     </section>
   );
 }
@@ -263,7 +263,7 @@ function Results({
         <ul>{result.followups.map((item, index) => <li key={`${item.question_id}:${index}`}>{item.explanation}</li>)}</ul>
       </section>
       <section className="diagnose-trace">
-        <h2>判定トレース</h2>
+        <h2>判定の流れ</h2>
         <p>{result.trace.map((item) => item.rule_id).join(" · ") || "一致規則なし"}</p>
         <SourceLinks data={data} sourceIds={[...new Set(result.trace.flatMap((item) => item.source_ids))]} />
       </section>
@@ -294,7 +294,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
   if (atlas.error) {
     return (
       <section className="diagnose-error" role="alert">
-        <h2>URL の状態を復元できません</h2>
+        <h2>URLの状態を復元できませんでした</h2>
         <p>{atlas.error.message}</p>
         <button onClick={atlas.reset} type="button">状態をリセット</button>
       </section>
@@ -306,7 +306,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
       {atlasNavigation.error && <p className="diagnose-error" role="alert">{atlasNavigation.error.message}</p>}
       <div className="diagnose-progress" role="status">
         <strong>{answeredCount} / {data.questions.length} 回答済み</strong>
-        <span>全部答えなくても大丈夫です。分からない項目は飛ばせます。</span>
+        <span>すべて答えなくて大丈夫です。分からない項目は飛ばせます。</span>
       </div>
       <div className="diagnose-layout">
         <section className="diagnose-form" aria-label="診断条件">
@@ -330,10 +330,10 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
         </section>
         <aside className="diagnose-result-pane">
           <div className="diagnose-result-toolbar">
-            <button onClick={() => navigateMap()} type="button">地図上で見る</button>
+            <button onClick={() => navigateMap()} type="button">地図を開く</button>
             <PromptExportLauncher source={{ kind: "diagnose", state: atlas.state, result, manifest, data }} />
           </div>
-          {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxを選ぶ流れを見る</strong><p>観測からsurrogateとExpected Improvementが更新される様子を固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
+          {expensiveBlackBox && <aside className="bo-route-card"><strong>高価なblack-boxの選び方を見る</strong><p>観測から予測モデル（surrogate）とExpected Improvementがどう更新されるかを、固定予算で再生できます。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></aside>}
           <Results data={data} onMethodMap={methodMap} result={result} />
         </aside>
       </div>
@@ -353,7 +353,7 @@ export function DiagnosePage() {
   }, []);
   return (
     <section className="diagnose-page">
-      <header className="diagnose-header"><p className="eyebrow">Offline Diagnosis</p><h1>診断</h1><p>答えられる範囲で条件を選ぶと、候補と避けたい手法を整理できます。</p></header>
+      <header className="diagnose-header"><p className="eyebrow">問題診断</p><h1>診断</h1><p>答えられる条件を選ぶと、候補と避けたい手法を整理できます。</p></header>
       <OptimizationProblemPrimer />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}

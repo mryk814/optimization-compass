@@ -44,9 +44,9 @@ export function OptimizationProblemPrimer({
       <header className="problem-primer-header">
         <p className="problem-primer-eyebrow">Formulation / 共通のものさし</p>
         <h2 id="optimization-problem-primer-title">
-          {caseFormulation ? "このケースを定式化すると" : "まず、現実の問題をこの形に置きます"}
+          {caseFormulation ? "このケースを定式化すると" : "現実の問題を、この形にそろえる"}
         </h2>
-        <p>何を決め、何を良くし、何を守るかをそろえてから手法を選びます。</p>
+        <p>この3つをそろえてから、手法を選びます。</p>
       </header>
 
       <div className="problem-primer-main">
@@ -54,8 +54,8 @@ export function OptimizationProblemPrimer({
           <div aria-label={formulationPrimer.formula_aria_label_ja} className="problem-primer-equation" role="img">
             <span>minimize</span><strong>f(x)</strong><small>x ∈ X</small>
           </div>
-          <p><span>subject to</span><strong>gᵢ(x) ≤ 0　hⱼ(x) = 0</strong></p>
-          <small>最大化（maximize）は目的の向きを明記します。</small>
+          <p><span>subject to / 制約</span><strong>gᵢ(x) ≤ 0　hⱼ(x) = 0</strong></p>
+          <small>最大化（maximize）の場合は、目的の向きを明記します。</small>
         </div>
 
         <div className="problem-primer-terms">
@@ -72,7 +72,7 @@ export function OptimizationProblemPrimer({
       </div>
 
       <details className="problem-primer-glossary">
-        <summary>用語をもう少し正確に見る</summary>
+        <summary>用語の意味を確認する</summary>
         {formulationPrimer.terminology_groups.map((group) => (
           <section key={group.group_id}>
             <h3>{group.title_ja}</h3>
@@ -98,7 +98,7 @@ export function CanonicalTermReferences({ questionIds }: { questionIds: string[]
   if (terms.length === 0) return null;
   return (
     <details className="canonical-term-references">
-      <summary>この項目の言葉を確認</summary>
+      <summary>この項目の用語を確認</summary>
       <dl>{terms.map((term) => <div key={term.term_id}><dt>{term.term_ja} <small>({term.term_en})</small></dt><dd>{term.definition}</dd></div>)}</dl>
     </details>
   );

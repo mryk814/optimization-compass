@@ -39,26 +39,26 @@ export function GalleryPage() {
   return (
     <section className="atlas-page gallery-page">
       <header className="atlas-page-header">
-        <p className="eyebrow">Problem Gallery</p>
+        <p className="eyebrow">問題事例</p>
         <h1>ケースギャラリー</h1>
-        <p>現実の問いから、定式化・1 run・比較・実装へ進む学習journeyです。</p>
+        <p>現実の問いから、定式化・1回の実行・比較・実装へ進む学習の流れです。</p>
       </header>
       <PageOrientation
-        limits="Galleryは代表的な問題設定を学ぶためのcurated casesです。教材instanceや固定runを、そのまま実問題の保証として扱いません。"
+        limits="ここでは代表的な問題設定を学びます。教材用の問題や固定した実行を、そのまま実問題の保証として扱いません。"
         next={[
           { label: "この条件で診断する", to: "/diagnose" },
-          { label: "問題構造Mapを見る", to: "/map" },
+          { label: "問題構造マップを見る", to: "/map" },
           { label: "手法の教材を読む", to: "/learn" },
         ]}
-        purpose="実問題の問いを共通の記号で定式化し、Theater・Compare・実装へ同じケース文脈で進みます。"
+        purpose="実問題の問いを共通の記号で定式化し、Theater・Compare・実装へ同じケースの条件で進みます。"
         readingSteps={[
-          "Domainで近い問題設定を絞ります。",
+          "問題領域で近い問題設定を絞ります。",
           "ケース詳細で定式化と見るべき判断を読みます。",
-          "Theaterで1 runを追い、Compareで条件差を確かめます。",
+          "Theaterで1回の実行を追い、Compareで条件差を確かめます。",
         ]}
       />
       <label className="gallery-filter">
-        Domain
+        問題領域
         <select value={domain} onChange={(event) => setDomain(event.target.value)}>
           {domains.map((item) => (
             <option key={item} value={item}>{item === "all" ? "すべて" : item}</option>
@@ -72,7 +72,7 @@ export function GalleryPage() {
             <span>{item.domain} · {item.difficulty}</span>
             <h2>{item.title_ja}</h2>
             <p>{item.question}</p>
-            <small>候補 {item.candidate_methods.length}件 · Reviewed {item.last_reviewed}</small>
+            <small>候補 {item.candidate_methods.length}件 · 確認日 {item.last_reviewed}</small>
           </Link>
         ))}
       </div>
@@ -123,9 +123,9 @@ export function GalleryCasePage() {
     <section className="atlas-page gallery-detail">
       <header className="gallery-detail-header">
         <div>
-          <p className="eyebrow">Case learning journey</p>
+          <p className="eyebrow">ケースの学習の流れ</p>
           <h1>{item?.title_ja ?? "ケース詳細"}</h1>
-          <p className="route-parameter">Case ID: <strong>{caseId}</strong></p>
+          <p className="route-parameter">ケースID: <strong>{caseId}</strong></p>
         </div>
         {journey && <JourneyStatus journey={journey} />}
       </header>
@@ -134,7 +134,7 @@ export function GalleryCasePage() {
         <>
           <section aria-labelledby="real-question-title" className="gallery-question-panel">
             <div>
-              <p className="eyebrow">1. Real-world question</p>
+              <p className="eyebrow">1. 現実の問い</p>
               <h2 id="real-question-title">現実には、何を決めたい？</h2>
               <p>{item.question}</p>
             </div>
@@ -154,15 +154,15 @@ export function GalleryCasePage() {
 
           <section aria-labelledby="context-levels-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">3. Context</p>
+              <p className="eyebrow">3. 問題の粒度</p>
               <h2 id="context-levels-title">同じ問題でも、3つの粒度を分ける</h2>
             </header>
             <div className="gallery-context-grid">
               <ContextCard label="現実の問題" title="あなたが解きたい問い">
                 <p>{journey.learning_objective}</p>
-                <small>現場のdata・制約・budgetは、教材には自動で引き継がれません。</small>
+                <small>現場のデータ・制約・予算は、教材には自動で引き継がれません。</small>
               </ContextCard>
-              <ContextCard label="Teaching instance" title="教材用に小さく固定した問題">
+              <ContextCard label="教材用の問題" title="教材用に小さく固定した問題">
                 {journey.problem_instance_ids.length > 0 ? (
                   <ul>
                     {journey.problem_instance_ids.map((id) => (
@@ -173,10 +173,10 @@ export function GalleryCasePage() {
                       </li>
                     ))}
                   </ul>
-                ) : <p className="gallery-missing">まだ教材instanceが接続されていません。</p>}
+                ) : <p className="gallery-missing">まだ教材用の問題が接続されていません。</p>}
                 <p>問題型: <EntityReference entity={problemArchetype} fallback={journey.problem_archetype_id} /></p>
               </ContextCard>
-              <ContextCard label="Fixed run" title="条件を固定した1回の実行">
+              <ContextCard label="固定した実行" title="条件を固定した1回の実行">
                 {primaryScenario ? (
                   <EntityRouteLink
                     atlasState={state}
@@ -185,15 +185,15 @@ export function GalleryCasePage() {
                     journeyPatch={{ scenarioId: primaryScenario.scenario_id }}
                     to={primaryScenario.canonical_url}
                   />
-                ) : <p className="gallery-missing">このケースのprimary runは未接続です。</p>}
-                <small>runの結果は、手法全体の優劣や実問題での成功保証ではありません。</small>
+                ) : <p className="gallery-missing">このケースの主な実行は未接続です。</p>}
+                <small>実行結果は、手法全体の優劣や実問題での成功保証ではありません。</small>
               </ContextCard>
             </div>
           </section>
 
           <section aria-labelledby="inspect-title" className="gallery-hub-section gallery-inspect-panel">
             <header className="gallery-section-heading">
-              <p className="eyebrow">4. Judgment</p>
+              <p className="eyebrow">4. 判断のポイント</p>
               <h2 id="inspect-title">このケースで見るべきこと</h2>
             </header>
             <div className="gallery-inspect-grid">
@@ -205,8 +205,8 @@ export function GalleryCasePage() {
 
           <section aria-labelledby="journey-actions-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">5–6. Observe & compare</p>
-              <h2 id="journey-actions-title">次の画面へ、同じcase文脈で進む</h2>
+              <p className="eyebrow">5–6. 観察と比較</p>
+              <h2 id="journey-actions-title">次の画面でも、このケースの条件を使う</h2>
             </header>
             <div className="gallery-action-grid">
               <JourneyAction
@@ -215,9 +215,9 @@ export function GalleryCasePage() {
                 fallbackTo="/theater"
                 href={primaryScenario?.canonical_url}
                 journeyPatch={primaryScenario ? { scenarioId: primaryScenario.scenario_id } : undefined}
-                missing="primary Theaterが未接続です。Theater一覧から近い動きを探せます。"
+                missing="主なTheaterが未接続です。Theater一覧から近い動きを探せます。"
                 state={state}
-                title="固定した1 runを追う"
+                title="固定した1回の実行を追う"
               >
                 初期値・反復・制約違反・停止理由を、順番に観察します。
               </JourneyAction>
@@ -227,7 +227,7 @@ export function GalleryCasePage() {
                 fallbackTo="/compare"
                 href={canonicalComparison?.canonical_url}
                 journeyPatch={canonicalComparison ? { comparisonId: canonicalComparison.comparison_id } : undefined}
-                missing="canonical Compareが未接続です。比較一覧から条件差を確認できます。"
+                missing="比較ページが未接続です。比較一覧から条件差を確認できます。"
                 state={state}
                 title="固定条件と変えた条件を比べる"
               >
@@ -236,7 +236,7 @@ export function GalleryCasePage() {
             </div>
             {alternateScenarios.length > 0 && (
               <div className="gallery-alternate-runs">
-                <strong>補助run</strong>
+                <strong>補助の実行</strong>
                 {alternateScenarios.map((scenario) => (
                   <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: scenario.scenario_id }} key={scenario.scenario_id} to={scenario.canonical_url}>
                     {scenarioRoleLabel(scenario.role)}: {entity("scenario", scenario.scenario_id)?.label ?? scenario.scenario_id}
@@ -248,7 +248,7 @@ export function GalleryCasePage() {
 
           <section aria-labelledby="method-roles-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">7. Method roles</p>
+              <p className="eyebrow">7. 手法の役割</p>
               <h2 id="method-roles-title">候補・条件付き・除外を理由で分ける</h2>
             </header>
             <div className="gallery-method-grid">
@@ -301,16 +301,16 @@ export function GalleryCasePage() {
             </div>
             <div>
               <header className="gallery-section-heading">
-                <p className="eyebrow">Evidence & next</p>
-                <h2>根拠・限界・次の道</h2>
+                <p className="eyebrow">根拠と次の導線</p>
+                <h2>根拠・限界・次の導線</h2>
               </header>
               <ResourceList atlasState={state} ids={journey.content_ids} type="content" entity={entity} />
               <nav aria-label="このケースの次の導線" className="gallery-next-links">
                 <Link to={{ pathname: "/map", search: stateQuery }}>問題構造Mapで位置を確認</Link>
                 <Link to={{ pathname: "/diagnose", search: stateQuery }}>この特徴で診断する</Link>
-                <Link to="/gallery">別のcaseを選ぶ</Link>
+                <Link to="/gallery">別のケースを選ぶ</Link>
               </nav>
-              <small>Last reviewed {journey.last_reviewed}</small>
+              <small>確認日 {journey.last_reviewed}</small>
               <EvidenceLinks atlasState={state} sourceIds={sourceIds} />
             </div>
           </section>
@@ -322,7 +322,7 @@ export function GalleryCasePage() {
 
 function JourneyStatus({ journey }: { journey: LearningJourney }) {
   return (
-    <aside aria-label="学習journeyの接続状況" className={`gallery-journey-status is-${journey.status}`}>
+    <aside aria-label="学習の流れの接続状況" className={`gallery-journey-status is-${journey.status}`}>
       <strong>{journey.status === "complete" ? "Journey complete" : "Journey partial"}</strong>
       {journey.completion_reasons.length > 0 && (
         <ul>{journey.completion_reasons.map((reason) => <li key={reason}>{journeyCompletionLabel(reason)}</li>)}</ul>
@@ -391,7 +391,7 @@ function MethodGroup({
         <ul>
           {ids.map((id) => {
             const target = method("method", id);
-            const reason = reasons.get(id) || target?.summary || "このcaseの定式化と前提に合う主要候補です。";
+            const reason = reasons.get(id) || target?.summary || "このケースの定式化と前提に合う主要候補です。";
             return (
               <li key={id}>
                 <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
@@ -445,13 +445,13 @@ function EntityReference({ atlasState, entity, fallback, journeyPatch }: { atlas
 }
 
 export function journeyCompletionLabel(reason: string): string {
-  if (reason === "missing_primary_scenario") return "primary Theater 未接続";
-  if (reason === "missing_comparison") return "canonical Compare 未接続";
+  if (reason === "missing_primary_scenario") return "主なTheater未接続";
+  if (reason === "missing_comparison") return "比較ページ未接続";
   return reason.replaceAll("_", " ");
 }
 
 function scenarioRoleLabel(role: LearningJourney["scenarios"][number]["role"]): string {
-  if (role === "failure_contrast") return "失敗contrast";
+  if (role === "failure_contrast") return "失敗の比較";
   if (role === "sensitivity") return "感度確認";
   return "別条件";
 }
@@ -488,7 +488,7 @@ async function loadGalleryCase(caseId: string) {
     throw new Error("Gallery and learning journey dataset versions do not match.");
   }
   const journey = journeys.journeys.find((candidate) => candidate.case_id === caseId);
-  if (!journey) throw new Error(`ケース ${caseId} のlearning journeyが見つかりません。`);
+  if (!journey) throw new Error(`ケース ${caseId} の学習の流れが見つかりません。`);
   return { item, journey, datasetVersion: gallery.dataset_version };
 }
 

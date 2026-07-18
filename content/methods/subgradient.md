@@ -10,10 +10,20 @@ prerequisites: [concept.convexity, method.gradient-descent]
 related_ids: [proximal-gradient, mirror-descent, fista]
 aliases: [/learn/subgradient]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 凸だが非微分可能な点でも利用できる劣勾配を使い、step scheduleとbest-so-farを管理して目的値を改善する一次法です。
+
+## 30秒でつかむ
+
+Subgradient法は、微分できない点を避けるのではなく、凸関数を下から支えるsubgradientを一つ選んで進みます。
+毎回のobjectiveが下がるとは限らないため、best-so-farとstep scheduleを主な手がかりにします。
+
+- 見ているもの: current / best-so-far objective、subgradient、lower boundとgap
+- 動かしているもの: 現在点、step schedule、必要ならprojection
+- 前進の判断: best-so-farまたはgapが改善し、stepが理論上の条件に沿うこと
+- 恐れていること: saw-tooth、fixed stepの振動、遅いrate、scaleの不一致
 
 ## 劣勾配とは何か
 
@@ -77,7 +87,7 @@ print(best_x, best_value)
 
 非滑らかな点で0を選ぶruleは一例です。oracleが返すsubgradientの選び方も再現条件に含めます。
 
-## 診断値
+## 最初に見る診断値
 
 - current / best-so-far objective
 - step size
@@ -98,14 +108,14 @@ print(best_x, best_value)
 - exact高精度より粗い解やlower-bound progressが重要
 - Lagrangian dualの更新
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- proximableな構造がある → [近接勾配法](#/learn/proximal-gradient)
-- smoothで条件数が支配 → gradient / quasi-Newton
-- 非凸でsubgradient理論をそのまま適用
-- fixed stepの振動を収束と誤認
-- stoppingをcurrent objectiveだけで判定
-- scaleが違う座標へ同じEuclidean step
+- proximableな構造がある → [近接勾配法](#/learn/proximal-gradient)を比較する
+- smoothで条件数が支配 → gradient / quasi-Newtonを比較する
+- 非凸でsubgradient理論をそのまま適用 → 理論の適用範囲を見直す
+- fixed stepの振動を収束と誤認 → best-so-far、gap、stepを確認する
+- stoppingをcurrent objectiveだけで判定 → best-so-farまたはlower boundを併用する
+- scaleが違う座標へ同じEuclidean step → scalingまたはparameterizationを見直す
 
 ::: warning
 劣勾配法の理論rateは一般に遅く、高精度解には多数の反復が必要です。「微分不要法」ではなく、凸解析のsubgradient oracleを使う方法として位置付けます。

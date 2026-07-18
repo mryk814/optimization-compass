@@ -37,15 +37,16 @@ function renderPage(entry = "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLO
 describe("BayesianOptimizationPage", () => {
   test("renders the generated trace, rationale, equal-budget table, and keyboard playback", async () => {
     renderPage();
-    expect(await screen.findByRole("heading", { level: 1, name: "Bayesian Optimization Theater" })).toBeVisible();
-    expect(await screen.findByText(/Expected Improvementで次点選択/u)).toBeVisible();
-    expect(await screen.findByText(/方向 \/ Direction: minimize/u)).toBeVisible();
+    expect(await screen.findByRole("heading", { level: 1, name: "ベイズ最適化の1回の実行" })).toBeVisible();
+    expect(await screen.findByText(/再生を押すと、観測/u)).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: "再生して、次の評価点が選ばれるまでを見る" })).toBeVisible();
+    expect(await screen.findByText(/最適化方向: minimize/u)).toBeVisible();
     expect(screen.getByText(/optimizerが参照しない真の目的関数/u)).toBeVisible();
-    expect(screen.getByRole("img", { name: /surrogate平均/u })).toBeVisible();
+    expect(screen.getByRole("img", { name: /surrogateの平均/u })).toBeVisible();
     expect(screen.getByRole("table", { name: /best-so-far/u })).toBeVisible();
     const player = screen.getByLabelText(/左右矢印で移動/u);
     fireEvent.keyDown(player, { key: "ArrowRight" });
-    expect(screen.getByText("Frame 2/8 · 1×")).toBeVisible();
+    expect(screen.getByText("フレーム 2/8 · 1倍")).toBeVisible();
     fireEvent.keyDown(player, { key: " " });
     expect(screen.getByRole("button", { name: "一時停止" })).toBeVisible();
   });
@@ -53,7 +54,7 @@ describe("BayesianOptimizationPage", () => {
   test("switches to the small-noise generated preset", async () => {
     renderPage();
     await screen.findByText(/noise σ=0/u);
-    fireEvent.change(screen.getByRole("combobox", { name: "観測noise" }), { target: { value: "small_noise" } });
+    fireEvent.change(screen.getByRole("combobox", { name: /観測ノイズ/u }), { target: { value: "small_noise" } });
     await waitFor(() => expect(screen.getByText(/noise σ=0.08/u)).toBeVisible());
     expect(screen.getByLabelText("current route")).toHaveTextContent(
       "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",

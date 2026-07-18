@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [cma-es, differential-evolution, particle-swarm]
 aliases: [/learn/genetic-algorithm]
 status: published
-last_reviewed: 2026-07-15
+last_reviewed: 2026-07-18
 ---
 
 個体の表現、selection、crossover、mutationを組み合わせ、離散・混合・black-box空間から良い候補を探索するpopulation法です。
@@ -42,7 +42,15 @@ last_reviewed: 2026-07-15
 
 operatorが問題構造を壊さないことが、汎用parameter調整より重要な場合があります。
 
-## Python: 小さなbinary選択
+## 向いている条件
+
+- 離散・カテゴリ・混合変数を自然にencodingできる
+- differentiabilityを期待できない
+- evaluationを並列化できる
+- 近傍が複雑で複数basinを探索したい
+- 最適性証明より良い候補集合が重要
+
+## Python
 
 ```python
 import random
@@ -97,15 +105,7 @@ print(best, score(best))
 - seed間の分散
 - evaluation budget
 
-## 向いている条件
-
-- 離散・カテゴリ・混合変数を自然にencodingできる
-- differentiabilityを期待できない
-- evaluationを並列化できる
-- 近傍が複雑で複数basinを探索したい
-- 最適性証明より良い候補集合が重要
-
-## 失敗・避ける条件
+## 避ける／切り替える条件
 
 - premature convergenceでpopulationが同一化
 - crossoverが可行構造を破壊

@@ -25,7 +25,7 @@ export function LearningRelations({ entityType, entityId }: { entityType: Learni
   if (groups.length === 0) return null;
   return (
     <section aria-label="学習グラフ" className="learning-relations">
-      <h2>Learning path</h2>
+      <h2>学習経路 (Learning path)</h2>
       <div className="learning-relation-grid">
         {groups.map((group) => (
           <section key={group.title}>

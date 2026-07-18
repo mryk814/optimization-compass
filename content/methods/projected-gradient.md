@@ -10,10 +10,19 @@ prerequisites: [method.gradient-descent, constrained-continuous]
 related_ids: [method.gradient-descent, proximal-gradient, mirror-descent, active-set]
 aliases: [/learn/projected-gradient]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
+
+## 30秒でつかむ
+
+Projected Gradientは、勾配で下った点をそのまま採用せず、実行可能集合へ戻して次の反復を続けます。
+
+- 見ているもの: feasible objective、projected-gradient mapping、projection distance
+- 動かしているもの: 現在点、step size、active face、projection
+- 前進の判断: mapping normと目的値が下がり、projection後の点が実行可能であること
+- 恐れていること: projectionの高コスト、悪いstep、単純なclipによる制約の取り違え
 
 ## 更新式
 
@@ -89,7 +98,7 @@ print(x, objective(x), np.linalg.norm(mapping))
 
 projectionが高価ならproximal、primal-dual、interior-point、parameterizationを検討します。
 
-## 診断値
+## 最初に見る診断値
 
 - objective / best feasible objective
 - projected-gradient mapping norm

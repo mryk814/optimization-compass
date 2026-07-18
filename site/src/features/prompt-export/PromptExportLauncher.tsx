@@ -75,7 +75,7 @@ export function PromptExportLauncher({ source }: { source: PromptSource }) {
       <button disabled={loading} onClick={() => void open()} ref={triggerRef} type="button">
         {loading ? "プロンプトを準備中…" : "実装用プロンプトを作る"}
       </button>
-      {error && <p className="prompt-export-error" role="alert">{error.message}</p>}
+      {error && <p className="prompt-export-error" role="alert">プロンプトの準備に失敗しました。{error.message}</p>}
       {draft && <PromptExportDialog draft={draft} onClose={close} />}
     </div>
   );

@@ -48,7 +48,7 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
   if (!selected) {
     return (
       <div aria-live="polite" className="map-detail-empty">
-        地図から項目を選択してください。
+        地図から項目を選ぶと、ここに詳細を表示します。
       </div>
     );
   }
@@ -88,8 +88,8 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
   );
   if (selected.node_id.startsWith("method:")) methodIds.add(selected.node_id.slice("method:".length));
   const learningSliceLinks: { label: string; to: string }[] = [];
-  if (methodIds.has("M_SLSQP")) learningSliceLinks.push({ label: "feasible regionで制約違反を見る", to: THEATER_ROUTES.constrainedContinuous });
-  if (methodIds.has("M_NSGA_II") || methodIds.has("M_WEIGHTED_SUM")) learningSliceLinks.push({ label: "Pareto frontでtrade-offを見る", to: THEATER_ROUTES.multiObjective });
+  if (methodIds.has("M_SLSQP")) learningSliceLinks.push({ label: "feasible regionで制約違反を確認", to: THEATER_ROUTES.constrainedContinuous });
+  if (methodIds.has("M_NSGA_II") || methodIds.has("M_WEIGHTED_SUM")) learningSliceLinks.push({ label: "Pareto frontでトレードオフを確認", to: THEATER_ROUTES.multiObjective });
 
   return (
     <article aria-live="polite" className="map-detail-card">
@@ -101,12 +101,12 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
       <CanonicalTermReferences questionIds={selected.answer_bindings.map((binding) => binding.question_id)} />
       {[...methodIds].map((methodId) => <MethodPredicates data={data} key={methodId} methodId={methodId} />)}
-      {hasBayesianOptimization && <section className="bo-route-card"><strong>点選択を可視化</strong><p>surrogateの予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
-      {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>Learning slice</strong><p>canonical problemとrenderer familyで可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}
+      {hasBayesianOptimization && <section className="bo-route-card"><strong>点の選び方を可視化</strong><p>予測モデル（surrogate）の予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
+      {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>学習用の可視化</strong><p>問題設定と表示形式に沿って可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}
 
       {children.length > 0 && (
         <section className="map-detail-section">
-          <h3>次の項目</h3>
+          <h3>関連項目</h3>
           <ul className="map-child-preview">
             {children.map((child) => <li key={child.node_id}>{child.label || child.node_id}</li>)}
           </ul>
@@ -115,7 +115,7 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
 
       {selected.answer_bindings.length > 0 && (
         <section className="map-detail-section">
-          <h3>回答の対応</h3>
+          <h3>診断回答との対応</h3>
           <ul className="map-binding-list">
             {selected.answer_bindings.map((binding) => (
               <li key={`${binding.question_id}:${binding.answer_value}`}>
@@ -123,10 +123,10 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
               </li>
             ))}
           </ul>
-          <p className="map-binding-note">探索中の選択です。診断回答は変更していません。</p>
+          <p className="map-binding-note">これは地図上の選択です。診断の回答は変わりません。</p>
           {onContinueDiagnosis && (
             <button className="map-action-button" onClick={onContinueDiagnosis} type="button">
-              この条件で診断を続ける
+              この条件で診断する
             </button>
           )}
         </section>
@@ -143,7 +143,7 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
 
       {missingReferences.length > 0 && (
         <section className="map-detail-section map-reference-warning">
-          <h3>参照エラー</h3>
+          <h3>参照できません</h3>
           <p>{missingReferences.join("、")}</p>
         </section>
       )}

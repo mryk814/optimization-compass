@@ -22,8 +22,8 @@ describe("gallery Atlas state", () => {
 
 describe("gallery learning journey status", () => {
   test("translates missing canonical routes into reader-facing labels", () => {
-    expect(journeyCompletionLabel("missing_primary_scenario")).toBe("primary Theater 未接続");
-    expect(journeyCompletionLabel("missing_comparison")).toBe("canonical Compare 未接続");
+    expect(journeyCompletionLabel("missing_primary_scenario")).toBe("主なTheater未接続");
+    expect(journeyCompletionLabel("missing_comparison")).toBe("比較ページ未接続");
   });
 
   test("carries explicit candidate reasons and case limitations into the page model", () => {

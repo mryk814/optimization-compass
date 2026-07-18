@@ -4,18 +4,18 @@ kind: method
 method_id: M_CP_SEARCH
 title_ja: 制約プログラミング探索
 title_en: Constraint Programming Search
-summary: global constraint propagationとbranchingで有限domainを探索します。
+summary: 有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。
 source_ids: [S022, S053]
 prerequisites: []
 related_ids: [cp-sat, cdcl-sat, family.constraint-programming]
 aliases: [/learn/cp-search]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-global constraint propagationとbranchingで有限domainを探索します。
+有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。
 
-## domainをどう削っているか
+## domainをどう削るか
 
 制約プログラミング探索では、各変数が取り得る値の集合（domain）を明示的に持ちます。各制約は「この制約を満たせない値をdomainから消してよいか」を判定するpropagatorとして働き、矛盾なく消せる値を繰り返し取り除きます。domainがすべて単一値になれば解、どこかのdomainが空になれば矛盾です。全変数のdomainを縮められなくなった時点で、1つの変数を選んで値を仮決定し（branching）、再びpropagationへ戻ります。
 
@@ -92,5 +92,7 @@ print(solution)
 - 整数scaleが過大で、変数のdomainが不必要に大きい
 - symmetryにより等価な部分木を繰り返し探索する
 - 一部制約だけ強い伝播を持つglobal constraintへ書き換えられていない
+
+## 次に読む
 
 CDCLの学習節と非時系列バックトラックとの違いは[CDCL SAT](#/learn/cdcl-sat)、propagationと探索を統合した実装は[CP-SAT](#/learn/cp-sat)、制約プログラミング・SAT全体の選び分けは[制約プログラミング・SATの選び分け](#/learn/family.constraint-programming)で確認できます。

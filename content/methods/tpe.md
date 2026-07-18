@@ -8,7 +8,7 @@ summary: 観測済みtrialを良い群と悪い群に分け、条件付きsearch
 source_ids: [S034]
 related_ids: [family.expensive-black-box, bayesian-optimization]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 観測済みtrialを良い群と悪い群に分け、条件付きsearch spaceでも良い群に現れやすいparameterを提案する逐次探索です。
@@ -20,6 +20,7 @@ last_reviewed: 2026-07-16
 - 見ているもの: trial履歴、objective、parameter、trial status
 - 動かしているもの: 良い群・悪い群の密度modelと次の提案
 - 前進の判断: best-so-far改善と良い群へのdensity ratio
+- 別に確認するもの: trial budget、parallelism、failed / pruned trialの扱い
 - 恐れていること: 少ない履歴、条件付きparameterの誤表現、失敗trialの偏り
 
 Gaussian-process BOと同じ「履歴を使う逐次探索」ですが、model化する向きと得意なsearch spaceが異なります。
@@ -63,7 +64,7 @@ $$
 - search spaceが時間とともに変わり比較不能
 - 大域最適性certificateが必要
 
-## うまくいったサインと切替サイン
+## 診断値
 
 見る値:
 
@@ -75,7 +76,9 @@ $$
 - seed間のbest分布
 - random-search baselineとの差
 
-切替サイン:
+best-so-far、提案分布、失敗trial、seed間のばらつきは、同じtrial budgetと停止条件で比較します。
+
+## うまくいったサインと切替サイン
 
 - 良い群のsampleが少なすぎる → startup数やbudgetを増やす
 - 同じカテゴリへ偏り続ける → prior、multivariate設定、space設計を見直す

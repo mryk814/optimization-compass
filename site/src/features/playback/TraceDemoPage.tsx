@@ -98,9 +98,9 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
           <p>{entry.title_en}</p>
         </div>
         <dl className="trace-identity">
-          <div><dt>Method</dt><dd>{trace.method_id}</dd></div>
-          <div><dt>Objective</dt><dd>{trace.objective_id}</dd></div>
-          <div><dt>Dataset</dt><dd>{trace.dataset_version}</dd></div>
+          <div><dt>手法 (Method)</dt><dd>{trace.method_id}</dd></div>
+          <div><dt>目的関数 (Objective)</dt><dd>{trace.objective_id}</dd></div>
+          <div><dt>データセット (Dataset)</dt><dd>{trace.dataset_version}</dd></div>
         </dl>
       </header>
       {scenario && <>
@@ -135,8 +135,8 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
         data-viewport-preset={guidedStep?.viewport_preset}
       >
         {(showAll || visibleLayers.has("current_point") || visibleLayers.has("parameter_estimate")) && <section>
-          <h2>Points</h2>
-          {frame.points.length === 0 ? <p>点データなし</p> : (
+          <h2>点 (Points)</h2>
+          {frame.points.length === 0 ? <p>点データはありません</p> : (
             <ul>
               {frame.points.map((point) => (
                 <li key={point.point_id}>
@@ -149,8 +149,8 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
           )}
         </section>}
         {(showAll || visibleLayers.has("gradient") || visibleLayers.has("update_vector")) && <section>
-          <h2>Vectors</h2>
-          {frame.vectors.length === 0 ? <p>ベクトルなし</p> : (
+          <h2>ベクトル (Vectors)</h2>
+          {frame.vectors.length === 0 ? <p>ベクトルデータはありません</p> : (
             <ul>
               {frame.vectors.map((vector) => (
                 <li key={vector.vector_id}>
@@ -162,8 +162,8 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
           )}
         </section>}
         {(showAll || visibleLayers.has("objective_value") || frame.metrics.some((metric) => visibleLayers.has(metric.metric_id))) && <section>
-          <h2>Metrics</h2>
-          {frame.metrics.length === 0 ? <p>指標なし</p> : (
+          <h2>指標 (Metrics)</h2>
+          {frame.metrics.length === 0 ? <p>指標データはありません</p> : (
             <ul>
               {frame.metrics.map((metric) => (
                 <li key={metric.metric_id}>

@@ -10,10 +10,20 @@ prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [fista, admm]
 aliases: [/learn/proximal-gradient]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 滑らかな項には勾配stepを使い、非滑らかな項にはproximal operatorを使う複合凸最適化法です。
+
+## 30秒でつかむ
+
+Proximal Gradientは、smoothな部分を勾配で下げたあと、非滑らかな正則化や単純制約をproxへ渡します。
+二つの構造を一つの微分可能な目的へ無理に平滑化しないことが主線です。
+
+- 見ているもの: objective、proximal-gradient mapping、support / active set
+- 動かしているもの: 現在点、step size、gradient、prox
+- 前進の判断: mapping normと目的値が下がり、supportが安定すること
+- 恐れていること: proxの高コスト、stepの保守性、強いnoise、coupling constraint
 
 ## 対象となる形
 
@@ -45,11 +55,11 @@ $$
 
 L1正則化ならsoft-thresholding、box制約なら区間へのprojectionになります。難しい非滑らか項を持っていても、proxが簡単なら汎用NLPへ無理に平滑化せず構造を使えます。
 
-## Step sizeと停止
+## Step sizeと停止をどう判断するか
 
 $f$ の勾配が $L$-Lipschitzなら、固定stepは $\eta\le 1/L$ が目安です。$L$が不明ならbacktrackingを使います。
 
-確認する値:
+最初に見る値:
 
 - objective value
 - proximal-gradient mapping norm
@@ -98,13 +108,13 @@ print(x)
 - 勾配とproxを別々に実装できる
 - exactなHessian solveより多数の軽い反復が適する
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- prox自体が高価な最適化問題になる
-- $f$ が非滑らか、または勾配が強いnoiseを含む
-- 変数scaleにより単一step sizeが極端に保守的
-- 強いcoupling constraintを単純projectionで表せない
-- basic法の収束が遅い → [FISTA](#/learn/fista)、restart、preconditioningを検討
+- prox自体が高価な最適化問題になる → decompositionや専用solverと比較する
+- $f$ が非滑らか、または勾配が強いnoiseを含む → subgradientまたはstochastic methodを検討する
+- 変数scaleにより単一step sizeが極端に保守的 → scaling、backtracking、preconditioningを確認する
+- 強いcoupling constraintを単純projectionで表せない → primal-dualまたはconstrained solverを検討する
+- basic法の収束が遅い → [FISTA](#/learn/fista)、restart、preconditioningを検討する
 
 ::: note
 FISTAの反復数が少なくても、必ずしも実時間が短いとは限りません。勾配とproxの実コスト、restart、停止条件を揃えて比較します。

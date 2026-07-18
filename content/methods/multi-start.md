@@ -14,7 +14,7 @@ last_reviewed: 2026-07-16
 
 複数の初期点から局所法を独立に実行し、最良の解を採用する最も単純な大域化戦略です。
 
-## 何を繰り返しているか
+## 30秒でつかむ
 
 Multi-startは、探索領域から複数の初期点 $x_0^{(1)}, \dots, x_0^{(k)}$ を選び、それぞれから同じ局所法（BFGSなど）を独立に実行します。得られた局所解 $x^{*(1)}, \dots, x^{*(k)}$ のうち目的値が最良のものを採用します。
 
@@ -108,5 +108,7 @@ print("distinct solutions:", len(seen_solutions), "duplicates:", duplicate_count
 - 評価予算を消費してもbest-so-farがほとんど改善しない
 - 一部の初期点で局所法自体が収束条件を満たさない
 - 高次元化により初期点sampling密度が急速に不足する
+
+## 次に読む
 
 複数の候補点からの局所探索という考え方をランダムな飛び移りへ発展させたものは[Basin Hopping](#/learn/basin-hopping)、大域探索全体の選び分けは[大域探索・多峰性問題の選び分け](#/learn/family.global-search)で確認できます。

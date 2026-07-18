@@ -7,7 +7,7 @@ describe("OptimizationProblemPrimer", () => {
   test("connects the canonical formula to plain-language terms", () => {
     render(<OptimizationProblemPrimer />);
 
-    expect(screen.getByRole("heading", { name: "まず、現実の問題をこの形に置きます" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "現実の問題を、この形にそろえる" })).toBeVisible();
     expect(screen.getByLabelText(/xがXに属する範囲でf\(x\)を最小化/u)).toBeVisible();
     expect(screen.getByText("決めるもの")).toBeVisible();
     expect(screen.getByText(/良くしたいもの/u)).toBeVisible();
@@ -19,7 +19,7 @@ describe("OptimizationProblemPrimer", () => {
     const { container } = render(<OptimizationProblemPrimer />);
     const primer = within(container);
 
-    fireEvent.click(primer.getByText("用語をもう少し正確に見る"));
+    fireEvent.click(primer.getByText("用語の意味を確認する"));
     expect(primer.getByText(/二つの候補の間の値も選べる/u)).toBeVisible();
     expect(primer.getByText(/Continuous variable/u)).toBeVisible();
     expect(primer.getByText(/Integer variable/u)).toBeVisible();

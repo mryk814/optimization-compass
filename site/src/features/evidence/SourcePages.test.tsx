@@ -23,14 +23,14 @@ describe("source pages", () => {
   test("lists source title and verification date", async () => {
     render(<MemoryRouter><SourceIndexPage /></MemoryRouter>);
     expect(await screen.findByRole("link", { name: "Official docs" })).toHaveAttribute("href", "/sources/S1");
-    expect(screen.getByText(/Last verified 2026-07-13/u)).toBeVisible();
+    expect(screen.getByText(/確認日 2026-07-13/u)).toBeVisible();
   });
 
   test("shows official metadata and backlink to the evidence target", async () => {
     render(<MemoryRouter initialEntries={["/sources/S1"]}><Routes><Route path="/sources/:sourceId" element={<SourceDetailPage />} /></Routes></MemoryRouter>);
     expect(await screen.findByRole("heading", { level: 1, name: "Official docs" })).toBeVisible();
     expect(screen.getByText("2026-07-13")).toBeVisible();
-    expect(screen.getAllByText("unknown")).toHaveLength(2);
+    expect(screen.getByText("不明")).toBeVisible();
     expect(screen.getByRole("link", { name: /Nelder–Mead/u })).toHaveAttribute("href", "/methods/M1");
     expect(screen.getByRole("link", { name: "公式資料を開く" })).toHaveAttribute("href", "https://example.com/docs");
   });

@@ -36,7 +36,7 @@ describe("LinkedSurfaceView", () => {
   it("moves the shared trace frame from a trajectory point", () => {
     const onFrameSelect = vi.fn();
     render(<LinkedSurfaceView currentFrameIndex={0} onFrameSelect={onFrameSelect} trace={{ objective, frames } as unknown as AlgorithmTrace} />);
-    fireEvent.click(screen.getByRole("button", { name: "frame 2へ移動" }));
+    fireEvent.click(screen.getByRole("button", { name: "フレーム 2へ移動" }));
     expect(onFrameSelect).toHaveBeenCalledWith(1);
     expect(screen.getByRole("group", { name: "3D探索軌跡" })).toHaveAttribute("data-current-frame", "0");
   });

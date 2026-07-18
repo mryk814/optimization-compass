@@ -8,7 +8,7 @@ summary: 多数目的でcrowding distanceだけでは分布を保ちにくいと
 source_ids: [S039]
 related_ids: [multi-objective, epsilon-constraint]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 多数目的でcrowding distanceだけでは分布を保ちにくいとき、reference directionへ解を対応付けてPareto候補の広がりを維持する進化的手法です。
@@ -20,6 +20,7 @@ last_reviewed: 2026-07-16
 - 見ているもの: objective vector、Pareto rank、reference directionとの距離
 - 動かしているもの: population、association、selection
 - 前進の判断: 非支配候補の質とreference方向のcoverage
+- 別に確認するもの: direction数、generation数、total evaluation budget
 - 恐れていること: objective scaling、方向数の爆発、実行不可能解の偏り
 
 NSGA-IIの単純な上位版ではありません。目的数と意思決定上必要な分布に応じて選びます。
@@ -59,7 +60,7 @@ reference directionは「真のPareto front」ではありません。どのtrad
 - objective scaleやdirectionが未整理
 - 最終選択のpreferenceを全く議論しない
 
-## うまくいったサインと切替サイン
+## 診断値
 
 見る値:
 
@@ -70,6 +71,8 @@ reference directionは「真のPareto front」ではありません。どのtrad
 - objective normalizationの範囲
 - seed間のcoverage差
 - population diversity
+
+## うまくいったサインと切替サイン
 
 切替サイン:
 
@@ -95,6 +98,7 @@ print(result.F.shape)
 ```
 
 実務ではproblem、reference directions、population、seed、evaluation budgetを保存します。
+reference directionのcoverageと、最終的なpreferenceによる選択は別に評価します。
 
 ## コラム: 可視化できないことを前提にする
 

@@ -4,15 +4,15 @@ kind: method
 method_id: M_SQP
 title_ja: 逐次二次計画法（SQP）
 title_en: Sequential Quadratic Programming
-summary: 各反復で目的の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
+summary: 各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
 source_ids: [S030, S056, S064]
 prerequisites: [bfgs]
 related_ids: [slsqp, interior-point-nlp, family.constrained-nlp]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-各反復で目的の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
+各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。
 
 ## 各反復で何を解いているか
 
@@ -24,7 +24,7 @@ $$
 
 を、線形化した等式・不等式制約のもとで解く形になります。$B_k$はLagrangianのHessian、またはBFGS型の準Newton近似です。QPを解くとstepの方向$p_k$と、制約のLagrange乗数の推定値が同時に得られます。この乗数は次の反復のLagrangian Hessian近似や停止判定に使われます。
 
-## KKT条件と停止判定
+## 何を見て停止するか
 
 SQPはKarush-Kuhn-Tucker（KKT）条件、つまり
 
@@ -35,7 +35,7 @@ SQPはKarush-Kuhn-Tucker（KKT）条件、つまり
 
 への収束を目安に停止判定します。二次収束が理論的に期待できるのは局所的にKKT点近傍かつ制約想定（constraint qualification）が成り立つ場合で、非凸問題では見つかる点が局所解にとどまります。
 
-## globalizationとmerit関数
+## Stepを受理する条件
 
 QP subproblemの解をそのまま採用すると、目的が悪化したり制約違反が増えたりする場合があります。実用的なSQP実装は、objective improvementとconstraint violationを同時に評価するmerit関数（$\ell_1$penaltyなど）やfilter法でstepを受理・棄却し、必要ならstep lengthを縮小します。この調整（globalization）がないと、QP近似が良くない領域で発散する可能性があります。
 
@@ -112,5 +112,7 @@ print(result.success, result.x, result.fun, inequality(result.x), result.message
 - poor_scaling（変数・制約のscaleが極端）
 - KKT残差が反復を重ねても減らない
 - 正則化やstep縮小の反復回数が増大し続ける
+
+## 次に読む
 
 Hessian近似の基本となる準Newton法は[BFGS法](#/learn/bfgs)、同じSQP枠組みの具体的な一実装は[SLSQP](#/learn/slsqp)で確認できます。

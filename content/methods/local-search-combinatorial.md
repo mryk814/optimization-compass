@@ -4,25 +4,29 @@ kind: method
 method_id: M_LOCAL_SEARCH_COMBINATORIAL
 title_ja: 組合せlocal search
 title_en: Combinatorial Local Search
-summary: swapや2-optなど離散的な近傍moveを定義し、改善が見つかる限りそれを繰り返して可行解を改善するheuristicです。
+summary: 離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。
 source_ids: [S054, S023]
 prerequisites: []
 related_ids: [simulated-annealing, genetic-algorithm, family.discrete-structure]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-swapや2-optなど離散的な近傍moveを定義し、改善が見つかる限りそれを繰り返して可行解を改善するheuristicです。
+離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。
 
 ## 近傍をどう定義するか
 
-組合せlocal searchは、現在の解に小さな変更（move）を加えて得られる解の集合を近傍として定義し、その中から目的値を改善するmoveを見つけては適用する、という操作を繰り返します。代表的な近傍は次のとおりです。
+組合せlocal searchは、現在の解に小さな変更（move）を加えて得られる解の集合を近傍として定義します。
+その中から目的値を改善するmoveを見つけては適用します。
+代表的な近傍は次のとおりです。
 
 - swap: 2つの要素の割り当てや順序を入れ替える
 - 2-opt: 経路の一部を反転させ、交差する2辺を組み替える
 - insertion: 1つの要素を別の位置へ移動する
 
-近傍の定義そのものが、この手法の性能を決める中心的な設計要素です。近傍が狭すぎると改善の機会を見逃し、広すぎると1回の反復で近傍全体を評価するcostが増えます。同じ問題でも、近傍の取り方次第で到達する解の質と探索速度が大きく変わります。
+近傍の定義そのものが、この手法の性能を決める設計要素です。
+近傍が狭すぎると改善の機会を見逃し、広すぎると1回の反復で近傍全体を評価するcostが増えます。
+同じ問題でも、近傍の取り方次第で到達する解の質と探索速度が大きく変わります。
 
 ## 局所最適で止まる性質と脱出戦略
 
@@ -93,6 +97,8 @@ print(tour, tour_length(tour, points))
 
 ## 診断値
 
+改善の有無だけでなく、近傍の広さと探索の停滞を記録します。
+
 - states（現在の解と近傍候補が表す状態）
 - edges（tourやscheduleが持つ辺・順序関係の数）
 - labels（改善move・受理moveの記録）
@@ -105,5 +111,7 @@ print(tour, tour_length(tour, points))
 - 近傍1回あたりの評価costが問題規模に対して大きくなりすぎている
 - 到達した解の質を保証するboundが得られず、運用上の説明ができない
 - side constraintsが増え、近傍moveのたびに可行性を保つ処理が複雑化している
+
+## 次に読む
 
 近傍の外側を確率的に探索する考え方は[Simulated Annealing](#/learn/simulated-annealing)、集団で複数解を並行して探索する考え方は[遺伝的algorithm](#/learn/genetic-algorithm)で確認できます。離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。

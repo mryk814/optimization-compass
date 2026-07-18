@@ -10,12 +10,21 @@ prerequisites: [method.gradient-descent]
 related_ids: [proximal-gradient, fista, least-squares]
 aliases: [/learn/coordinate-descent]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 全変数を同時に動かさず、一つまたは小さなblockだけを更新して安価な部分問題を反復する大規模最適化法です。
 
-## 一回に何を解くか
+## 30秒でつかむ
+
+一度に全変数を動かす必要がなければ、各座標や小さなblockの問題へ分けることで、一回の計算を軽くできます。
+
+- 見ているもの: 部分問題の改善、全体のobjective、duality gap
+- 動かしているもの: 一つの座標またはblock、active set、更新順序
+- 前進の判断: full sweepごとのobjectiveまたはgapが減り、更新が安定すること
+- 恐れていること: 座標間のcoupling、悪いscaling、更新のstaleness
+
+## 部分問題をどう解くか
 
 現在点 $x$ の座標 $j$ だけを変えるとき、
 
@@ -26,6 +35,13 @@ $$
 という1次元部分問題を解きます。更新順はcyclic、random、greedy、block単位などがあります。
 
 Lassoのように各座標更新がsoft-thresholdingで閉形式になる問題では、汎用勾配法より構造を直接使えます。
+
+## まず確認すること
+
+- 座標またはblockを固定した部分問題が安価に解けるか
+- L1正則化やseparable penaltyなど、座標分解を活かせる構造があるか
+- cyclic、randomized、greedyのどの選択ruleを使うか
+- constraintやcache更新を含めて、1 coordinate updateと1 full sweepのどちらを反復単位とするか
 
 ## Python: Lassoのcoordinate update
 
@@ -70,7 +86,7 @@ print(x)
 
 同じcoordinate descentでも選択ruleとpartial solve accuracyで挙動が変わります。
 
-## 診断値
+## 最初に見る診断値
 
 - objective / duality gap
 - coordinate update norm
@@ -92,14 +108,14 @@ print(x)
 - data matrixのcolumn accessが効率的
 - warm startでregularization pathを解く
 
-## 避ける／切り替える条件
+## 失敗・切替の兆候
 
-- 変数間couplingが強く一座標ずつでは極端に遅い
-- coordinate scalingが悪い
-- nonseparable constraintを更新ごとに破る
-- 部分問題が元問題と同じくらい高価
-- asynchronous updateのstalenessが大きい
-- stoppingを「一周した」だけで判定
+- 変数間couplingが強く一座標ずつでは極端に遅い → block化またはfull-vector法を検討する
+- coordinate scalingが悪い → 変数をscalingし、selection ruleを見直す
+- nonseparable constraintを更新ごとに破る → feasibleな部分問題、projection、proxを検討する
+- 部分問題が元問題と同じくらい高価 → 部分問題の再利用性とcacheを見直す
+- asynchronous updateのstalenessが大きい → 同期化またはblock設計を見直す
+- stoppingを「一周した」だけで判定 → objective、gap、全体の更新量で判定する
 
 ::: note
 iterationはcoordinate updateかfull sweepかを明記します。Gradient Descentの一反復とcoordinate update一回を直接比較しません。

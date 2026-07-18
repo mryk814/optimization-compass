@@ -40,7 +40,7 @@ export function ProblemFormulation({
       </header>
       <div aria-label={formulation.ariaLabel} className="home-formula" role="group">
         <div className="home-formula-line">
-          <span>variables</span>
+          <span>variables / 変数</span>
           <code>{formulation.variables}</code>
         </div>
         <div className="home-formula-line">
@@ -48,7 +48,7 @@ export function ProblemFormulation({
           <code>{formulation.objective}</code>
         </div>
         <div className="home-formula-line home-formula-constraints">
-          <span>subject to</span>
+          <span>subject to / 制約</span>
           <div>
             {formulation.constraints.map((constraint) => (
               <code key={constraint}>{constraint}</code>
@@ -57,10 +57,10 @@ export function ProblemFormulation({
         </div>
       </div>
       <p className="home-formulation-reading">
-        <strong>読み下し</strong>
-        <span>選ぶもの: {decisionVariablesSummary}</span>
-        <span>目的: {objectiveSummary}</span>
-        <span>制約: {constraintsSummary}</span>
+        <strong>式を言葉で読むと</strong>
+        <span>決めるもの: {decisionVariablesSummary}</span>
+        <span>良くしたいもの: {objectiveSummary}</span>
+        <span>守る条件: {constraintsSummary}</span>
       </p>
     </section>
   );

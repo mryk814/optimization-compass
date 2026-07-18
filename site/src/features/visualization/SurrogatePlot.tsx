@@ -42,10 +42,10 @@ export function SurrogatePlot({
         aria-labelledby="bo-plot-title bo-plot-desc"
       >
         <title id="bo-plot-title">
-          surrogate平均、不確実性、観測、Expected Improvement
+          surrogateの平均、不確実性、観測、Expected Improvement
         </title>
         <desc id="bo-plot-desc">
-          上段は真の目的関数を破線、model予測を実線、不確実性を帯で示します。下段はacquisition値で、次候補は縦線です。
+          上段は教材用の真の目的関数を破線、surrogateの予測を実線、不確実性を帯で示します。下段はacquisition値で、次候補は縦線です。
         </desc>
         <rect
           className="bo-chart-bg"
@@ -87,25 +87,25 @@ export function SurrogatePlot({
           />
         ))}
         <text x="54" y="46">
-          objective / surrogate
+          目的関数 / surrogate
         </text>
         <text x="54" y="286">
           Expected Improvement
         </text>
         <g className="bo-legend">
           <text x="430" y="46">
-            ― model mean
+          ― surrogate平均
           </text>
           <text x="430" y="64">
-            ┄ true objective (教材のみ)
+            ┄ 真の目的関数 (教材のみ)
           </text>
           <text x="430" y="82">
-            ● observed
+            ● 観測値
           </text>
         </g>
       </svg>
       <figcaption>
-        model予測（実線）と教材用の真の目的関数（破線）は別物です。
+         surrogateの予測（実線）と教材用の真の目的関数（破線）は別物です。
       </figcaption>
     </figure>
   );

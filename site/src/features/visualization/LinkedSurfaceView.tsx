@@ -36,8 +36,8 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
   const current = [...history].reverse().find((point) => point.frameIndex <= currentFrameIndex);
   const path = history.map(({ projected }) => `${projected.x.toFixed(2)},${projected.y.toFixed(2)}`).join(" ");
   const pointLabel = current
-    ? `frame ${current.frameIndex + 1}: (${format(current.x)}, ${format(current.y)}), f=${format(current.z)}`
-    : `frame ${currentFrameIndex + 1}: 表示できる2次元点なし`;
+    ? `フレーム ${current.frameIndex + 1}: (${format(current.x)}, ${format(current.y)}), f=${format(current.z)}`
+    : `フレーム ${currentFrameIndex + 1}: 表示できる2次元点がありません`;
 
   const activateFrame = (event: KeyboardEvent<SVGGElement>, frameIndex: number) => {
     if (event.key !== "Enter" && event.key !== " ") return;
@@ -49,12 +49,12 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
     <section className="linked-surface-card" aria-labelledby="linked-surface-heading">
       <header>
         <div>
-          <p className="eyebrow">Linked 3D · same trace frame</p>
+          <p className="eyebrow">Linked 3D · 同じTraceのフレーム</p>
           <h2 id="linked-surface-heading">目的関数の地形と探索位置</h2>
-          <p>上の再生frameと同じ点を、等高線の2D表示に加えて高さ f(x, y) でも確認できます。</p>
+          <p>上の再生と同じ点を、等高線の2D表示に加えて高さ f(x, y) でも確認できます。</p>
         </div>
         <label className="surface-camera-control">
-          <span>Camera azimuth <output>{azimuth}°</output></span>
+          <span>カメラ方位 <output>{azimuth}°</output></span>
           <input
             aria-label="3D表示のカメラ方位"
             max="405"
@@ -77,7 +77,7 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
           viewBox="0 0 600 330"
         >
           <desc id="linked-surface-description">
-            {spec.expression}を直交投影したsurface。高さはlog1pで正規化。{pointLabel}。軌跡上の点を選ぶと同じTraceのframeへ移動します。
+            {spec.expression}を直交投影した曲面 (surface) です。高さはlog1pで正規化しています。{pointLabel}。軌跡上の点を選ぶと同じTraceのフレームへ移動します。
           </desc>
           <rect className="surface-background" height="330" rx="12" width="600" />
           <g className="surface-mesh" aria-hidden="true">
@@ -92,7 +92,7 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
               const isFuture = point.frameIndex > currentFrameIndex;
               return (
                 <g
-                  aria-label={`frame ${point.frameIndex + 1}へ移動`}
+                  aria-label={`フレーム ${point.frameIndex + 1}へ移動`}
                   className={`${isCurrent ? "is-current" : ""} ${isFuture ? "is-future" : ""}`}
                   data-frame-index={point.frameIndex}
                   key={point.frameIndex}
@@ -114,7 +114,7 @@ export function LinkedSurfaceView({ trace, currentFrameIndex, onFrameSelect }: L
         </svg>
         <figcaption>
           <strong>{pointLabel}</strong>
-          <span>Projection: orthographic · height: log1p normalized · 2D contour remains the precise fallback.</span>
+          <span>直交投影 (orthographic) · 高さはlog1pで正規化 · 正確な確認には2D等高線を使います。</span>
         </figcaption>
       </figure>
     </section>

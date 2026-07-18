@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [cma-es, genetic-algorithm, particle-swarm]
 aliases: [/learn/differential-evolution]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 個体間の差分vectorから候補を作り、crossoverとselectionでbounded連続空間を探索するpopulation法です。

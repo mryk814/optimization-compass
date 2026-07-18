@@ -4,16 +4,16 @@ kind: method
 method_id: M_AUGMENTED_LAGRANGIAN
 title_ja: 拡張Lagrangian法
 title_en: Augmented Lagrangian Method
-summary: 制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。
+summary: 制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。
 source_ids: [S018, S029, S055, S056]
 prerequisites: [constrained-continuous]
 related_ids: [constrained-continuous, slsqp, interior-point-nlp, admm]
 aliases: [/learn/augmented-lagrangian]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。
+制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。
 
 ## Equality constraintの代表形
 
@@ -36,6 +36,22 @@ $$
 します。
 
 pure penalty法のように$\rho$を無限に大きくする必要を減らし、multiplierがconstraintの感度を表します。
+
+## Inequality constraint
+
+inequalityにはslack、projected multiplier update、positive-part penaltyなどを使う変種があります。単純に$g(x)^2$をpenaltyへ入れると、満たされている不等式まで罰する可能性があります。
+
+## ADMMとの関係
+
+ADMMは分離構造を持つaugmented Lagrangianを交互更新します。しかし、一般のaugmented-Lagrangian methodとADMMの収束条件・更新順・対象problemは同じではありません。
+
+## 向いている条件
+
+- equalityまたは一般制約をouter-inner構造で扱う
+- constraintを分離して既存unconstrained solverを再利用したい
+- pure penaltyのill-conditioningを緩和したい
+- warm startや近いproblemの反復solve
+- derivative-free inner solverと組み合わせるvariant
 
 ## Python: 小さな等式制約
 
@@ -78,7 +94,7 @@ print(x, objective(x), constraint(x), multiplier)
 
 これは教育用outer loopです。実装ではinner solve tolerance、inequality treatment、multiplier safeguards、penalty update ruleを明示します。
 
-## Inner solveとouter solve
+## 診断値
 
 各outer iterationでinner problemを高精度に解きすぎると費用を浪費し、粗すぎるとmultiplier updateが不安定になります。
 
@@ -93,22 +109,6 @@ print(x, objective(x), constraint(x), multiplier)
 - objective
 - stationarity
 - termination reason
-
-## Inequality constraint
-
-inequalityにはslack、projected multiplier update、positive-part penaltyなどを使う変種があります。単純に$g(x)^2$をpenaltyへ入れると、満たされている不等式まで罰する可能性があります。
-
-## ADMMとの関係
-
-ADMMは分離構造を持つaugmented Lagrangianを交互更新します。しかし、一般のaugmented-Lagrangian methodとADMMの収束条件・更新順・対象problemは同じではありません。
-
-## 向いている条件
-
-- equalityまたは一般制約をouter-inner構造で扱う
-- constraintを分離して既存unconstrained solverを再利用したい
-- pure penaltyのill-conditioningを緩和したい
-- warm startや近いproblemの反復solve
-- derivative-free inner solverと組み合わせるvariant
 
 ## 失敗・切替の兆候
 

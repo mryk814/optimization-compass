@@ -18,7 +18,7 @@ export function FeasibleRegionRenderer({ artifact }: { artifact: FeasibleRegionA
   const primaryPoints = primary.steps.slice(0, step + 1).map((item) => item.point);
   return (
     <section className="learning-renderer" aria-labelledby="feasible-heading">
-      <div className="learning-renderer-heading"><div><p className="eyebrow">feasible_region · 1.0.0</p><h2 id="feasible-heading">目的値と実行可能性を同時に読む</h2></div><strong>{artifact.objective_direction} ↓</strong></div>
+      <div className="learning-renderer-heading"><div><p className="eyebrow">実行可能領域 (feasible_region) · 1.0.0</p><h2 id="feasible-heading">目的値と実行可能性を同時に読む</h2></div><strong>{artifact.objective_direction} ↓</strong></div>
       <div className="learning-plot-layout">
         <svg aria-label={artifact.text_alternative_ja} className="learning-plot" role="img" viewBox="0 0 520 440">
           <defs><clipPath id="feasible-clip"><rect height={SIZE} width={SIZE} x={LEFT} y={TOP} /></clipPath></defs>
@@ -37,17 +37,17 @@ export function FeasibleRegionRenderer({ artifact }: { artifact: FeasibleRegionA
           <line className="plot-axis" x1={LEFT} x2={LEFT + SIZE} y1={TOP + SIZE} y2={TOP + SIZE} />
           <line className="plot-axis" x1={LEFT} x2={LEFT} y1={TOP} y2={TOP + SIZE} />
           <text className="plot-label" x={LEFT + SIZE - 8} y={TOP + SIZE + 28}>x →</text><text className="plot-label" x={LEFT - 38} y={TOP + 12}>y ↑</text>
-          <text className="plot-annotation" x={x(1)} y={y(1)}>feasible</text><text className="plot-annotation" x={x(0.35) + 12} y={y(0.35) - 10}>known optimum</text>
+          <text className="plot-annotation" x={x(1)} y={y(1)}>実行可能</text><text className="plot-annotation" x={x(0.35) + 12} y={y(0.35) - 10}>既知の最適点</text>
         </svg>
         <div className="learning-plot-panel">
           <label htmlFor="feasible-step">現在の反復 <strong>{step} / {primary.steps.length - 1}</strong></label>
           <input id="feasible-step" max={primary.steps.length - 1} min="0" onChange={(event) => setStep(Number(event.target.value))} type="range" value={step} />
-          <dl><div><dt>Current</dt><dd>({current.point.map(format).join(", ")})</dd></div><div><dt>Objective</dt><dd>{format(current.objective)}</dd></div><div><dt>Violation</dt><dd>{format(current.violation)}</dd></div><div><dt>Status</dt><dd>{current.active_constraint ? "active constraint" : current.feasible ? "feasible" : "infeasible"}</dd></div></dl>
+          <dl><div><dt>現在点 (Current)</dt><dd>({current.point.map(format).join(", ")})</dd></div><div><dt>目的値 (Objective)</dt><dd>{format(current.objective)}</dd></div><div><dt>違反量 (Violation)</dt><dd>{format(current.violation)}</dd></div><div><dt>状態 (Status)</dt><dd>{current.active_constraint ? "制約が有効" : current.feasible ? "実行可能" : "実行不可能"}</dd></div></dl>
           <p><strong>終了理由:</strong> {step === primary.steps.length - 1 ? primary.termination_reason_ja : "Traceを進めて確認します。"}</p>
         </div>
       </div>
-      <ul className="plot-legend" aria-label="可視化の凡例"><li><span className="legend-swatch feasible" />feasible region</li><li><span className="legend-swatch primary" />constraint-aware</li><li><span className="legend-swatch failure" />unconstrained failure</li><li><span className="legend-dot reference" />known optimum / best feasible</li></ul>
-      <details><summary>SLSQP / projected / penalty / interior-pointの違い</summary><ul>{artifact.method_distinctions_ja.map((item) => <li key={item}>{item}</li>)}</ul></details>
+      <ul className="plot-legend" aria-label="可視化の凡例"><li><span className="legend-swatch feasible" />実行可能領域 (feasible region)</li><li><span className="legend-swatch primary" />制約を考慮した経路 (constraint-aware)</li><li><span className="legend-swatch failure" />制約を無視した失敗経路 (unconstrained failure)</li><li><span className="legend-dot reference" />既知の最適点・最良の実行可能点</li></ul>
+      <details><summary>制約付き手法の違い (SLSQP / projected / penalty / interior-point)</summary><ul>{artifact.method_distinctions_ja.map((item) => <li key={item}>{item}</li>)}</ul></details>
     </section>
   );
 }
@@ -67,13 +67,13 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
   const selectedTri = useMemo(() => selectTriObjectivePoint(artifact.triobjective_lens, weightPercent), [artifact.triobjective_lens, weightPercent]);
   return (
     <section className="learning-renderer" aria-labelledby="pareto-heading">
-      <div className="learning-renderer-heading"><div><p className="eyebrow">pareto_front · 1.1.0</p><h2 id="pareto-heading">単一bestではなくtrade-off集合を選ぶ</h2></div><strong>f₁ ↓ · f₂ ↓</strong></div>
-      <p className="projection-disclosure"><strong>2D precision fallback:</strong> まず f₁ × f₂ の支配関係を読み、下の3Dとparallel coordinatesで第3目的を照合します。</p>
-      <dl className="comparison-policy-grid pareto-coverage-summary" aria-label="Pareto coverage集計">
-        <div><dt>Sampled</dt><dd>{artifact.points.length}</dd></div>
-        <div><dt>Dominated</dt><dd>{dominatedCount}</dd></div>
-        <div><dt>Non-dominated sampled</dt><dd>{nonDominatedCount}</dd></div>
-        <div><dt>Analytic reference</dt><dd>{artifact.pareto_front.length} · {artifact.reference.status}</dd></div>
+      <div className="learning-renderer-heading"><div><p className="eyebrow">パレート前線 (pareto_front) · 1.1.0</p><h2 id="pareto-heading">単一の最良解ではなく、トレードオフ集合を選ぶ</h2></div><strong>f₁ ↓ · f₂ ↓</strong></div>
+      <p className="projection-disclosure"><strong>2Dでの確認:</strong> まず f₁ × f₂ の支配関係を読み、下の3Dとparallel coordinatesで第3目的を照合します。</p>
+      <dl className="comparison-policy-grid pareto-coverage-summary" aria-label="パレート前線の集計">
+        <div><dt>サンプル数</dt><dd>{artifact.points.length}</dd></div>
+        <div><dt>支配された点</dt><dd>{dominatedCount}</dd></div>
+        <div><dt>非支配のサンプル点</dt><dd>{nonDominatedCount}</dd></div>
+        <div><dt>解析的な参照前線</dt><dd>{artifact.pareto_front.length} · {artifact.reference.status}</dd></div>
       </dl>
       <div className="learning-plot-layout">
         <svg aria-label={artifact.text_alternative_ja} className="learning-plot" role="img" viewBox="0 0 520 440">
@@ -89,15 +89,15 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
           <text className="plot-annotation" x={LEFT + 12} y={TOP + 20}>ideal (not feasible)</text><text className="plot-annotation" x={LEFT + SIZE - 78} y={TOP + SIZE - 10}>nadir ref.</text>
         </svg>
         <div className="learning-plot-panel">
-          <label htmlFor="preference-weight">f₁のweight <strong>{(weightPercent / 100).toFixed(2)}</strong></label>
+          <label htmlFor="preference-weight">f₁の重み (weight) <strong>{(weightPercent / 100).toFixed(2)}</strong></label>
           <input id="preference-weight" max="90" min="10" onChange={(event) => setWeightPercent(Number(event.target.value))} step="5" type="range" value={weightPercent} />
-          <dl><div><dt>Selected f₁</dt><dd>{format(selected.objectives[0])}</dd></div><div><dt>Selected f₂</dt><dd>{format(selected.objectives[1])}</dd></div><div><dt>Decision</dt><dd>({selected.decision.map(format).join(", ")})</dd></div><div><dt>Reference</dt><dd>known exact front</dd></div></dl>
-          <p><strong>単一bestではありません。</strong> weightはfront上の意思決定を一つ選ぶpreferenceです。</p>
+           <dl><div><dt>選択した f₁</dt><dd>{format(selected.objectives[0])}</dd></div><div><dt>選択した f₂</dt><dd>{format(selected.objectives[1])}</dd></div><div><dt>決定変数</dt><dd>({selected.decision.map(format).join(", ")})</dd></div><div><dt>参照</dt><dd>既知の正確な前線</dd></div></dl>
+           <p><strong>単一の最良解ではありません。</strong>重みは前線上から意思決定を一つ選ぶための設定です。</p>
         </div>
       </div>
       <TriObjectiveLensView lens={artifact.triobjective_lens} selected={selectedTri} weightPercent={weightPercent} />
-      <ul className="plot-legend" aria-label="可視化の凡例"><li><span className="legend-dot dominated" />dominated</li><li><span className="legend-swatch pareto" />non-dominated / Pareto front</li><li><span className="legend-dot selected" />selected by preference</li><li><span className="legend-dot ideal" />ideal / nadir reference</li></ul>
-      <p className="weighted-sum-warning"><strong>Weighted sumの注意:</strong> {artifact.weighted_sum_limitation_ja}</p>
+      <ul className="plot-legend" aria-label="可視化の凡例"><li><span className="legend-dot dominated" />支配された点 (dominated)</li><li><span className="legend-swatch pareto" />非支配点・パレート前線</li><li><span className="legend-dot selected" />重みで選択した点</li><li><span className="legend-dot ideal" />理想点・最悪点の参照</li></ul>
+      <p className="weighted-sum-warning"><strong>重み付き和 (Weighted sum) の注意:</strong> {artifact.weighted_sum_limitation_ja}</p>
     </section>
   );
 }
@@ -125,12 +125,12 @@ function TriObjectiveLensView({
     <section className="triobjective-lens" aria-labelledby="triobjective-heading">
       <header>
         <div>
-          <p className="eyebrow">3-objective lens · sampled_grid</p>
-          <h3 id="triobjective-heading">3目的のtrade-offを同じ選択で読む</h3>
-          <p>f₁ weight {weightPercent / 100} の選択点を、3D・2D fallback・parallel coordinatesで共有します。</p>
+          <p className="eyebrow">3目的の表示 · sampled_grid</p>
+          <h3 id="triobjective-heading">3目的のトレードオフを同じ選択で読む</h3>
+          <p>f₁の重み {weightPercent / 100} で選んだ点を、3D・2D・parallel coordinatesで共有します。</p>
         </div>
         <label className="surface-camera-control">
-          <span>Camera azimuth <output>{azimuth}°</output></span>
+          <span>カメラ方位 <output>{azimuth}°</output></span>
           <input aria-label="3目的表示のカメラ方位" max="405" min="225" onChange={(event) => setAzimuth(Number(event.target.value))} step="5" type="range" value={azimuth} />
         </label>
       </header>
@@ -144,22 +144,22 @@ function TriObjectiveLensView({
             </g>
             <g className="surface-axis-labels" aria-hidden="true"><text x="462" y="258">f₁</text><text x="58" y="258">f₂</text><text x="260" y="24">f₃</text></g>
           </svg>
-          <figcaption>Projection: orthographic · axis values normalized by sampled nadir · exact values remain in the panels below.</figcaption>
+          <figcaption>直交投影 (orthographic) · 軸の値はサンプルの最悪点で正規化 · 正確な値は下のパネルに示します。</figcaption>
         </figure>
         <figure>
-          <svg aria-label="3目的のparallel coordinates fallback" className="parallel-objectives" role="img" viewBox="0 0 520 260">
+          <svg aria-label="3目的のparallel coordinates表示" className="parallel-objectives" role="img" viewBox="0 0 520 260">
             {parallelX.map((x, axis) => <g key={x}><line x1={x} x2={x} y1="34" y2="224" /><text x={x} y="20">f{axis + 1} ↓</text><text x={x} y="244">{format(lens.reference.nadir[axis])}</text></g>)}
             <g className="parallel-front">{parallelPoints.map((point) => <polyline key={point.point_id} points={point.objectives.map((value, axis) => `${parallelX[axis]},${parallelY(value, axis)}`).join(" ")} />)}</g>
             <polyline className="parallel-selected" points={selectedParallel} />
           </svg>
-          <figcaption>Parallel coordinates fallback: 上ほど各目的が小さい。橙線が現在のpreference選択です。</figcaption>
+          <figcaption>Parallel coordinates: 上ほど各目的が小さく、橙線が現在の重みで選んだ点です。</figcaption>
         </figure>
       </div>
       <dl className="triobjective-values">
         {selected.objectives.map((value, axis) => <div key={lens.axis_labels[axis]}><dt>{lens.axis_labels[axis]}</dt><dd>{format(value)}</dd></div>)}
       </dl>
       <p className="atlas-note">{lens.limitations_ja}</p>
-      <details><summary>3目的lensの数式定義</summary><ul>{lens.objective_expressions.map((expression) => <li key={expression}>{expression}</li>)}</ul></details>
+      <details><summary>3目的表示の数式定義</summary><ul>{lens.objective_expressions.map((expression) => <li key={expression}>{expression}</li>)}</ul></details>
     </section>
   );
 }

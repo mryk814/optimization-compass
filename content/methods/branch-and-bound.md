@@ -4,7 +4,7 @@ kind: method
 method_id: M_BRANCH_BOUND
 title_ja: Branch-and-Bound（分枝限定法）
 title_en: Branch and Bound
-summary: 問題を部分空間へ分枝し、incumbentとrelaxation boundを比較して改善不能なsubtreeを証拠付きで除外する厳密探索法です。
+summary: 離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。
 source_ids: [S021, S022, S079]
 prerequisites: []
 related_ids: [branch-and-cut, cp-sat, dynamic-programming]
@@ -13,12 +13,12 @@ comparison_ids: []
 aliases: [/learn/branch-and-bound]
 visualization_aliases: []
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-問題を部分空間へ分枝し、incumbentとrelaxation boundを比較して改善不能なsubtreeを証拠付きで除外する厳密探索法です。
+離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。
 
-## 探索木の一node
+## 探索木の1 node
 
 各nodeは、元問題へ追加の固定条件やboundsを加えた部分問題です。nodeで次を計算します。
 
@@ -30,7 +30,7 @@ last_reviewed: 2026-07-16
 
 minimizationでは、nodeのlower boundが現在のincumbent以上なら、そのsubtreeは改善できないためpruneできます。
 
-## naive enumerationとの違い
+## 全列挙をどこまで省けるか
 
 naive enumerationは全割当を調べます。Branch-and-Boundは、
 
@@ -40,13 +40,21 @@ naive enumerationは全割当を調べます。Branch-and-Boundは、
 
 な領域をまとめて捨てます。調べなかった枝について「なぜ改善不能か」をboundで説明できることが重要です。
 
-## best feasible・bound・gap
+## boundとgapをどう読むか
 
 - **incumbent / best feasible**: 現時点で見つかった最良実行可能解
 - **global bound**: 未探索領域を含む理論上の限界
 - **gap**: incumbentとboundの差
 
 探索完了またはgap tolerance達成なら、定義したmodelに対して最適性を主張できます。time / node / memory budgetで止まった場合、incumbentは実行可能候補でも最適性は未証明です。
+
+## まず確認すること
+
+- 部分問題ごとにfeasible解またはboundを計算できるか
+- minimization / maximizationのboundの向きを取り違えていないか
+- 最適性の証明まで必要か、time / node / memory budget内の可行解で足りるか
+
+ここが決まると、boundの強さとincumbentを見ながら、探索を続けるか止めるかを判断できます。
 
 ## Python: 0-1 knapsackの教育用探索
 
@@ -139,5 +147,7 @@ branching variable、node selection、heuristicは性能へ強く影響します
 ::: warning
 探索木が小さい一例だけでsolver一般の性能を評価しません。problem instance、formulation、presolve、cut、heuristic、hardware、time limitを揃えます。
 :::
+
+## 次に読む
 
 現代的MILP solverでcutを統合する枠組みは[Branch-and-Cut](#/learn/branch-and-cut)、論理・scheduling制約中心なら[CP-SAT](#/learn/cp-sat)も比較します。

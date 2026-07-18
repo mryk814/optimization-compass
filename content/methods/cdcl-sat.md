@@ -4,18 +4,18 @@ kind: method
 method_id: M_CDCL_SAT
 title_ja: CDCL SAT
 title_en: Conflict-Driven Clause Learning SAT
-summary: conflictからclauseを学習してBoolean satisfiabilityを探索します。
+summary: Boolean制約のconflictからclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。
 source_ids: [S022, S053]
 prerequisites: []
 related_ids: [cp-sat, branch-and-bound, family.discrete-structure]
 aliases: [/learn/cdcl-sat]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
-conflictからclauseを学習してBoolean satisfiabilityを探索します。
+Boolean制約のconflictからclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。
 
-## 何を割り当てているか
+## SATの割当と伝播
 
 CDCL SATは、Boolean変数の集合に真偽値を割り当てて、CNF（連言標準形）で書かれた節の集合をすべて満たすかどうかを判定します。単純な全列挙と違い、各stepでunit propagationを行います。ある節でリテラルが1つを除いてすべて偽になっていれば、残る1つのリテラルの値は強制されます。これを繰り返して割当を広げ、決定変数の追加（分岐）が必要になった箇所だけ探索を分けます。
 
@@ -109,5 +109,7 @@ DPLLは分岐と単純なバックトラックだけで、CDCLの核心である
 - 整数・Boolean scaleが過大でencodingが巨大になる
 - symmetryにより等価な割当を繰り返し探索する
 - `UNKNOWN`（打ち切り）を`UNSAT`と誤読する
+
+## 次に読む
 
 最適化の枠組みごと必要なら[CP-SAT](#/learn/cp-sat)、単純な列挙の比較対象としては[Branch-and-Bound](#/learn/branch-and-bound)、離散最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)で確認できます。

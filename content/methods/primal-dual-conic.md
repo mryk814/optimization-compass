@@ -4,15 +4,15 @@ kind: method
 method_id: M_PRIMAL_DUAL_CONIC
 title_ja: Primal-dual錐内点法
 title_en: Primal-Dual Conic Interior-Point
-summary: LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。
+summary: LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新してconic標準形の凸問題を解く内点法です。
 source_ids: [S013, S014, S028, S010, S055]
 prerequisites: [concept.convexity]
 related_ids: [barrier-lp-qp, lp-qp-conic, interior-point-nlp]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
-LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。
+LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新してconic標準形の凸問題を解く内点法です。
 
 ## Coneで表現できる凸問題の広さ
 
@@ -102,5 +102,7 @@ print("x:", x.value, "cone radius:", t.value)
 - coneの選び方が問題の凸構造を正しく表現できていない
 - 係数のscaleが極端でNewton system solveにnumerical warningが出る
 - modeling層のcanonicalizationがsolverの対応coneと合わない
+
+## 次に読む
 
 LP/QP専用のbarrier法との対比は[Primal-dual barrier法（LP/QP）](#/learn/barrier-lp-qp)、conic問題を含むLP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)、非線形制約への一般化は[非線形内点法](#/learn/interior-point-nlp)で確認できます。

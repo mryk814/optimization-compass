@@ -111,7 +111,7 @@ describe("ProblemFormulation", () => {
     ).toBeVisible();
     expect(screen.getByText("f(x, y) = x²+y²")).toBeVisible();
     expect(screen.getByText("(x−1)²+(y−1)² ≤ 1")).toBeVisible();
-    expect(screen.getByText(/選ぶもの: 2つの連続design parameter/u)).toBeVisible();
+    expect(screen.getByText(/決めるもの: 2つの連続design parameter/u)).toBeVisible();
   });
 });
 

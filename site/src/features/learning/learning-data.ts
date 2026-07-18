@@ -10,6 +10,6 @@ export function loadLearningGraph(_signal?: AbortSignal) {
 
 async function fetchLearningGraph() {
   const response = await fetch(`${siteBaseUrl()}data/learning-graph.json`);
-  if (!response.ok) throw new Error(`Learning graph request failed (${response.status}).`);
+  if (!response.ok) throw new Error(`学習グラフの読み込みに失敗しました (${response.status})。`);
   return parseLearningGraphIndex(await response.json());
 }

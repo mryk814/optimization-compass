@@ -8,7 +8,7 @@ summary: 関数値と制約値から局所的な二次近似modelを育て、微
 source_ids: [S002, S056]
 related_ids: [family.local-dfo, cobyla, mads]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 関数値と制約値から局所的な二次近似modelを育て、微分なしでboundsや一般制約を扱うtrust-region型の局所法です。

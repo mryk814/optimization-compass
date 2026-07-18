@@ -9,7 +9,7 @@ source_ids: [S009, S007, S008]
 prerequisites: []
 related_ids: [dual-annealing, basin-hopping, family.global-search]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 温度parameterに応じて悪化する移動も確率的に受理し、局所解からの脱出を狙う確率的大域探索heuristicです。
@@ -115,5 +115,7 @@ print(best_x, best_f)
 ::: warning
 「Simulated Annealingを実行した」だけでは結果の再現条件として不十分です。初期点、cooling schedule、step size、seedを一緒に記録します。
 :::
+
+## 次に読む
 
 より発展したvisiting distributionとlocal searchの組み合わせは[Dual Annealing](#/learn/dual-annealing)、ランダム摂動と局所法を交互に行う近い戦略は[Basin Hopping](#/learn/basin-hopping)、大域探索全体の選び分けは[大域探索・多峰性問題の選び分け](#/learn/family.global-search)で確認できます。

@@ -9,7 +9,7 @@ source_ids: [S021, S024, S025]
 prerequisites: []
 related_ids: [branch-and-bound, outer-approximation-minlp, family.discrete-structure]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 非凸MINLPの大域最適化のため、整数変数だけでなく連続変数の区間でも分岐し、各領域で凸緩和から下界を作りながら木を刈り込む厳密探索法です。
@@ -28,28 +28,32 @@ $$
 
 のような不等式で$w\approx xy$を近似すると、region上の緩和問題（LPまたは凸QP）を解くだけで、元の非凸問題の下界が得られます。区間が狭いほどこの緩和はきつくなり、下界と実行可能解（incumbent）の差（gap）が小さくなります。
 
-## 整数B&Bとの対比とbound gapによる大域性の証明
+## bound gapで大域性を判断する
 
-整数B&Bは離散変数の値を固定していくため、最終的に整数割当が尽きれば探索が完了します。空間branch-and-boundは連続区間を扱うため、区間をどこまでも細分できてしまい、有限回で「尽きる」とは限りません。そのため、大域最適性は「探索を終えた」ことではなく、
+整数B&Bは離散変数の値を固定していくため、最終的に整数割当が尽きれば探索が完了します。空間branch-and-boundは連続区間を扱うため、区間をどこまでも細分でき、有限回で探索が尽きるとは限りません。
+
+そこで、大域最適性は「探索を終えた」ことではなく、次のbound gapで判断します。
 
 $$
 \text{global bound} \le \text{incumbent} \le \text{global bound} + \text{gap tolerance}
 $$
 
-という**bound gapが許容範囲に収まったこと**で証明します。緩和が緩ければ下界が悪化し、逆に緩和がきつければ計算costが増えるという trade-off があり、区間を狭めるほど緩和の質は上がりますが、木のnode数も増えます。
+**bound gapが許容範囲に収まったこと**が、大域最適性の証明になります。緩和が緩いと下界が悪化します。緩和をきつくすると計算costが増えます。区間を狭めるほど緩和の質は上がりますが、木のnode数も増えます。
 
 ## 木が爆発する限界
 
-McCormick包絡などの緩和は、変数次元が増えるほど、また非凸性が強い（非線形項が多い、非単調な関数を含む）ほど緩みやすくなります。緩和が緩いと、ある区間の下界がincumbentを超えられず枝刈りできないため、さらに細かく分岐する必要が生まれます。この結果、次元数や非凸項の数に対して木が指数的に増える場合があります。実務では[SCIP](https://www.scipopt.org/doc/html/)のようなオープンソースsolverや、[Gurobi](https://docs.gurobi.com/projects/optimizer/en/current/)、[CPLEX](https://www.ibm.com/docs/en/icos)などの商用solverが、変数選択・区間分割の戦略、cut、presolveを組み合わせて木の増大を抑えています。
+McCormick包絡などの緩和は、変数次元が増えるほど、また非凸性が強い（非線形項が多い、非単調な関数を含む）ほど緩みやすくなります。緩和が緩いと、ある区間の下界がincumbentを超えられず枝刈りできません。さらに細かく分岐する必要が生まれ、次元数や非凸項の数に対して木が指数的に増える場合があります。
+
+実務では、[SCIP](https://www.scipopt.org/doc/html/)のようなオープンソースsolverや、[Gurobi](https://docs.gurobi.com/projects/optimizer/en/current/)、[CPLEX](https://www.ibm.com/docs/en/icos)などの商用solverが、変数選択・区間分割の戦略、cut、presolveを組み合わせて木の増大を抑えています。
 
 ## 向いている条件
 
-- 非凸MINLPで大域最適性の証明（gap付きのcertificate）が必要
-- 非線形項がMcCormick包絡などの凸緩和で扱える構造を持つ
-- 変数次元や非凸項の数が、solverが現実的な時間で扱える範囲に収まる
-- black-boxではなく、緩和に使える関数の代数的な形が分かっている
+- 非凸MINLPで大域最適性の証明（gap付きのcertificate）が必要な場合
+- 非線形項がMcCormick包絡などの凸緩和で扱える構造を持つ場合
+- 変数次元や非凸項の数が、solverが現実的な時間で扱える範囲に収まる場合
+- black-boxではなく、緩和に使える関数の代数的な形が分かっている場合
 
-noiseを含むblack-box評価しかできない問題や、緩和のしようがない極端な非凸性を持つ問題では、gapを閉じるまでの木が非現実的に大きくなることがあります。そうした場合はheuristicや[Outer Approximation](#/learn/outer-approximation-minlp)（対象がconvex MINLPの場合）を検討します。
+noiseを含むblack-box評価しかできない問題や、緩和のしようがない極端な非凸性を持つ問題では、gapを閉じるまでの木が非現実的に大きくなることがあります。その場合はheuristicや[Outer Approximation](#/learn/outer-approximation-minlp)（対象がconvex MINLPの場合）を検討します。
 
 ## Python
 
@@ -127,5 +131,7 @@ print(best, nodes)
 - 長時間incumbentが得られない
 - 区間分割が特定の変数だけで進み他の非凸項の緩和が改善しない
 - black-boxや不連続な評価をそのまま緩和しようとしている
+
+## 次に読む
 
 整数変数のみを分岐する基本形は[Branch-and-Bound](#/learn/branch-and-bound)、convex MINLPで整数と連続を分離して解く方式は[MINLPのOuter Approximation](#/learn/outer-approximation-minlp)、離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)で確認できます。

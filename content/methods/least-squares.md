@@ -19,7 +19,17 @@ last_reviewed: 2026-07-16
 
 観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。
 
-## Scalar lossへ潰す前に残差を定義する
+## 30秒でつかむ
+
+観測ごとの残差を保ったまま、Jacobianと診断値を使ってparameterを局所推定します。
+
+- 見ているもの: residual vector、Jacobian、weights、bounds
+- 前進の判断: costの低下、residual pattern、Jacobianの状態
+- 注意すること: 小さいcostだけではmodelの正しさやparameterの一意性は決まりません
+
+## 仕組み
+
+### 残差を定義する
 
 観測 $y_i$ とmodel予測 $m_i(x)$ の差を
 
@@ -35,7 +45,7 @@ $$
 
 を解きます。残差vectorを直接solverへ渡すと、Jacobian $J=\partial r/\partial x$、sparsity、観測別診断を利用できます。
 
-## Gauss–NewtonとLevenberg–Marquardt
+### Gauss–NewtonとLevenberg–Marquardt
 
 Gauss–NewtonはHessianを概ね $J^TJ$ で近似し、
 
@@ -51,7 +61,7 @@ $$
 
 とすることで、modelが悪い領域ではstepを抑えます。実装によりtrust-region解釈やscale付きdampingが異なります。
 
-## 現実の問いを残差へ分ける
+## まず確認すること
 
 | 項目 | 例 |
 |---|---|
@@ -62,6 +72,23 @@ $$
 | diagnostics | residual pattern、Jacobian rank、parameter相関 |
 
 小さい二乗和だけではmodelが正しいとは言えません。residualに系統的patternが残れば、parameterではなくmodel構造が不足している可能性があります。
+
+## 向いている条件・避ける条件
+
+向いている条件:
+
+- 観測ごとのresidualとJacobianを作れる
+- weights、bounds、正値性などを残差とともに扱う必要がある
+- residual patternやJacobian rankを診断したい
+
+避ける／切り替える条件:
+
+- 線形least squares → QR / SVDを先に使う
+- root findingが本来の問い → 二乗和化で解が変わらないか確認
+- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)
+- 強い一般制約 → constrained NLP
+- residual/Jacobianを作れないblack-box → derivative-free法
+- ill-conditioning → scaling、regularization、実験設計を見直す
 
 ## Python
 
@@ -105,7 +132,9 @@ result = least_squares(
 print(result.success, result.x, result.cost, result.optimality, result.nfev)
 ```
 
-## Weightとrobust loss
+## 診断値
+
+### Weightとrobust loss
 
 観測ごとのnoise分散が異なるなら、同じ単位の残差として扱う前に標準化します。外れ値がある場合、Huberやsoft-L1などのrobust lossを使えますが、
 
@@ -115,7 +144,7 @@ print(result.success, result.x, result.cost, result.optimality, result.nfev)
 
 を残します。robust lossは外れ値の原因を自動説明しません。
 
-## 診断値
+### 収集する値
 
 - residual vectorと分布
 - cost / RMS / weighted RMS
@@ -127,7 +156,7 @@ print(result.success, result.x, result.cost, result.optimality, result.nfev)
 - accepted / rejected step
 - termination reason
 
-## 識別可能性
+### 識別可能性
 
 異なるparameter組がほぼ同じ予測を作る場合、costが小さくてもparameterは一意に決まりません。
 
@@ -144,12 +173,17 @@ print(result.success, result.x, result.cost, result.optimality, result.nfev)
 optimizerの成功statusを統計的妥当性と混同しません。parameter uncertainty、model mismatch、measurement processを別に評価します。
 :::
 
-## Alternative-firstと切替
+## 失敗・切替の兆候
 
-- 線形least squares → QR / SVDを先に使う
-- root findingが本来の問い → 二乗和化で解が変わらないか確認
-- bounds中心・大規模 → [Trust Region Reflective](#/learn/trust-region-reflective)
-- 無制約・小規模 → LM
-- 強い一般制約 → constrained NLP
-- residual/Jacobianを作れないblack-box → derivative-free法
-- ill-conditioning → scaling、regularization、実験設計を見直す
+小さいcostでも、residualに系統的patternが残るなら、parameterではなくmodel構造が不足している可能性があります。
+
+異なるparameter組がほぼ同じ予測を作る場合、costが小さくてもparameterは一意に決まりません。
+
+::: warning
+optimizerの成功statusを統計的妥当性と混同しません。
+parameter uncertainty、model mismatch、measurement processを別に評価します。
+:::
+
+## 次に読む
+
+bounds中心・大規模な問題では[Trust Region Reflective](#/learn/trust-region-reflective)へ進みます。

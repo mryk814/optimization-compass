@@ -13,12 +13,12 @@ describe("learning-slice renderer registry", () => {
     render(<LearningSliceRenderer artifact={artifact} />);
 
     expect(screen.getByRole("img", { name: artifact.text_alternative_ja })).toBeVisible();
-    expect(screen.getByText("active constraint")).toBeVisible();
+    expect(screen.getByText("制約が有効")).toBeVisible();
 
     fireEvent.change(screen.getByRole("slider", { name: /現在の反復/u }), {
       target: { value: "0" },
     });
-    expect(screen.getByText("infeasible")).toBeVisible();
+    expect(screen.getByText("実行不可能")).toBeVisible();
     expect(screen.getByText("Traceを進めて確認します。")).toBeVisible();
   });
 
@@ -27,23 +27,22 @@ describe("learning-slice renderer registry", () => {
     if (artifact.renderer_family !== "pareto_front") throw new Error("Pareto fixture is invalid");
     render(<LearningSliceRenderer artifact={artifact} />);
 
-    expect(screen.getByRole("heading", { name: /単一bestではなく/u })).toBeVisible();
-    expect(screen.getByText(/Weighted sumの注意/u)).toBeVisible();
-    expect(screen.getByRole("heading", { name: /3目的のtrade-off/u })).toBeVisible();
+    expect(screen.getByRole("heading", { name: /単一の最良解ではなく/u })).toBeVisible();
+    expect(screen.getByText(/重み付き和 \(Weighted sum\) の注意/u)).toBeVisible();
+    expect(screen.getByRole("heading", { name: /3目的のトレードオフ/u })).toBeVisible();
     expect(screen.getByTestId("triobjective-scatter")).toBeVisible();
-    expect(screen.getByRole("img", { name: "3目的のparallel coordinates fallback" })).toBeVisible();
-    expect(screen.getByText(/sampled teaching lens/u)).toBeInTheDocument();
-    const coverage = screen.getByLabelText("Pareto coverage集計");
-    expect(coverage).toHaveTextContent(`Sampled${artifact.points.length}`);
-    expect(coverage).toHaveTextContent(`Dominated${artifact.points.filter((point) => point.dominated).length}`);
-    expect(coverage).toHaveTextContent(`Non-dominated sampled${artifact.points.filter((point) => !point.dominated).length}`);
-    expect(coverage).toHaveTextContent(`Analytic reference${artifact.pareto_front.length} · known_exact`);
-    const before = screen.getByText("Selected f₁").nextElementSibling?.textContent;
+    expect(screen.getByRole("img", { name: "3目的のparallel coordinates表示" })).toBeVisible();
+    const coverage = screen.getByLabelText("パレート前線の集計");
+    expect(coverage).toHaveTextContent(`サンプル数${artifact.points.length}`);
+    expect(coverage).toHaveTextContent(`支配された点${artifact.points.filter((point) => point.dominated).length}`);
+    expect(coverage).toHaveTextContent(`非支配のサンプル点${artifact.points.filter((point) => !point.dominated).length}`);
+    expect(coverage).toHaveTextContent(`解析的な参照前線${artifact.pareto_front.length} · known_exact`);
+    const before = screen.getByText("選択した f₁").nextElementSibling?.textContent;
 
-    fireEvent.change(screen.getByRole("slider", { name: /f₁のweight/u }), {
+    fireEvent.change(screen.getByRole("slider", { name: /f₁の重み/u }), {
       target: { value: "80" },
     });
-    expect(screen.getByText("Selected f₁").nextElementSibling?.textContent).not.toBe(before);
+    expect(screen.getByText("選択した f₁").nextElementSibling?.textContent).not.toBe(before);
   });
 
   test("rotates the tri-objective projection without changing objective data", () => {

@@ -17,10 +17,10 @@ export function GenericMetricHistory({
 }) {
   const ids = metricIds ?? orderedMetricIds(traces);
   return (
-    <section className="metric-history" aria-label="metric history">
+    <section className="metric-history" aria-label="指標の履歴">
       <header>
-        <h2>Metric history</h2>
-        <p>同じoracle evaluationで残差・gradient・rankを揃えて読みます。</p>
+        <h2>指標の履歴 (Metric history)</h2>
+        <p>同じ評価回数 (oracle evaluation) で、残差・gradient・rankを揃えて読みます。</p>
       </header>
       <div className="metric-history-grid">
         {ids.map((metricId) => (
@@ -73,7 +73,7 @@ function MetricPanel({
   return (
     <figure className="metric-history-panel explanatory-figure">
       <h3>{sample.label_ja} <small>{sample.label_en}</small></h3>
-      <svg viewBox="0 0 760 204" role="img" aria-label={`${sample.label_ja}をoracle evaluationで比較`}>
+      <svg viewBox="0 0 760 204" role="img" aria-label={`${sample.label_ja}を評価回数ごとに比較`}>
         <rect className="objective-background" height="204" rx="8" width="760" x="0" y="0" />
         <line className="plot-axis" x1={plot.left} x2={plot.right} y1={plot.bottom} y2={plot.bottom} />
         <line className="plot-axis" x1={plot.left} x2={plot.left} y1={plot.top} y2={plot.bottom} />
@@ -89,11 +89,11 @@ function MetricPanel({
             </g>
           );
         })}
-        <text className="plot-axis-label" x={plot.right - 104} y={plot.bottom - 7}>oracle evaluations</text>
-        <text className="plot-axis-label" x={plot.left + 6} y={plot.top + 10}>{logScale ? "log₁₀ scale" : sample.unit ?? "value"}</text>
+        <text className="plot-axis-label" x={plot.right - 104} y={plot.bottom - 7}>評価回数</text>
+        <text className="plot-axis-label" x={plot.left + 6} y={plot.top + 10}>{logScale ? "log₁₀スケール" : sample.unit ?? "値"}</text>
       </svg>
       <details className="text-alternative" open>
-        <summary>evaluation {evaluation} の値</summary>
+        <summary>評価 {evaluation}回時点の値</summary>
         <ul>
           {series.map(({ trace, values }) => {
             const latest = values.filter((item) => item.evaluation <= evaluation).at(-1);

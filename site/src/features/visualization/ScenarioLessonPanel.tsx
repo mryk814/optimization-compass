@@ -9,7 +9,7 @@ export function ScenarioLessonPanel({ scenario, showNarration = true }: Scenario
   const lesson = scenario.lesson;
   return (
     <section className="scenario-lesson-panel" aria-labelledby={`lesson-${scenario.scenario_id}`}>
-      <p className="eyebrow">見るポイント / Reading cues</p>
+      <p className="eyebrow">見るポイント (Reading cues)</p>
       <h2 id={`lesson-${scenario.scenario_id}`}>{lesson.learning_objective.ja}</h2>
       <p>{lesson.expected_phenomenon_ja}</p>
       {lesson.misconception && (
@@ -19,22 +19,22 @@ export function ScenarioLessonPanel({ scenario, showNarration = true }: Scenario
       )}
       <dl className="scenario-observables">
         <div>
-          <dt>Primary observables</dt>
+          <dt>主に観測する値 (Primary observables)</dt>
           <dd>{lesson.primary_observables.map((item) => item.label_ja).join(" · ")}</dd>
         </div>
         <div>
-          <dt>Success signals</dt>
+          <dt>うまくいったサイン (Success signals)</dt>
           <dd>{lesson.success_signals.map((item) => item.label_ja).join(" · ")}</dd>
         </div>
         {lesson.failure_signals.length > 0 && (
           <div>
-            <dt>Failure / contrast signals</dt>
+            <dt>失敗・対比のサイン (Failure / contrast signals)</dt>
             <dd>{lesson.failure_signals.map((item) => item.label_ja).join(" · ")}</dd>
           </div>
         )}
       </dl>
       {showNarration && (
-        <ol className="scenario-narration" aria-label="narration milestones">
+        <ol className="scenario-narration" aria-label="説明の節目">
           {lesson.narration_steps.map((step) => (
             <li key={step.milestone_id}>
               <small>{step.milestone_id}</small>
@@ -44,10 +44,10 @@ export function ScenarioLessonPanel({ scenario, showNarration = true }: Scenario
         </ol>
       )}
       <details className="scenario-derived-text">
-        <summary>Static summary / Text alternative / Caption</summary>
-        <p><strong>Summary:</strong> {scenarioStaticSummary(scenario)}</p>
-        <p><strong>Text alternative:</strong> {scenarioTextAlternative(scenario)}</p>
-        <p><strong>Caption:</strong> {scenarioDerivedMediaCaption(scenario)}</p>
+        <summary>静的要約・テキスト代替・キャプション</summary>
+        <p><strong>要約:</strong> {scenarioStaticSummary(scenario)}</p>
+        <p><strong>テキスト代替:</strong> {scenarioTextAlternative(scenario)}</p>
+        <p><strong>キャプション:</strong> {scenarioDerivedMediaCaption(scenario)}</p>
       </details>
     </section>
   );

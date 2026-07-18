@@ -1816,7 +1816,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "凸QPで「どの不等式制約が解で等号になるか」というworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
+      "summary": "凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。"
     },
     {
       "aliases": [],
@@ -1872,7 +1872,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "勾配の一次momentと二次momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。"
+      "summary": "勾配の一次モーメント（first moment）と二次モーメント（second moment）を座標ごとに推定し、初期値による偏りの補正（bias correction）付きの適応的なstepでパラメータ（parameter）を更新する確率的一次法です。"
     },
     {
       "aliases": [],
@@ -1918,7 +1918,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Adamのadaptive updateとweight decayを分離し、gradientによる更新とparameterを縮めるregularizationを別の操作として扱う学習optimizerです。"
+      "summary": "Adamの適応的な更新（adaptive update）と重み減衰（weight decay）を分離し、勾配（gradient）による更新とパラメータを縮める正則化（regularization）を別の操作として扱う学習optimizerです。"
     },
     {
       "aliases": [],
@@ -2030,7 +2030,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "凸QPを固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。"
+      "summary": "凸二次計画（convex QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。"
     },
     {
       "aliases": [],
@@ -2086,7 +2086,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "制約違反へpenaltyを加えつつmultiplierを更新し、極端なpenaltyだけに依存せず実行可能性と目的改善を両立する方法です。"
+      "summary": "制約違反にpenaltyを加えつつmultiplierを更新し、極端に大きなpenaltyだけに依存せず、実行可能性と目的改善を両立する方法です。"
     },
     {
       "aliases": [],
@@ -2147,7 +2147,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約をlog barrierへ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。"
+      "summary": "不等式制約を対数障壁（log barrier）へ置き換え、中心path（central path）に沿ってNewton stepで進むLP/QP専用の内点法です。"
     },
     {
       "aliases": [],
@@ -2300,7 +2300,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "勾配の変化から逆Hessianの近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
+      "summary": "勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
     },
     {
       "aliases": [],
@@ -2356,7 +2356,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "問題を部分空間へ分枝し、incumbentとrelaxation boundを比較して改善不能なsubtreeを証拠付きで除外する厳密探索法です。"
+      "summary": "離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。"
     },
     {
       "aliases": [],
@@ -2417,7 +2417,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "branch-and-boundへcut生成を組み込み、連続緩和を強化しながらMILPのincumbentとboundを詰める厳密探索法です。"
+      "summary": "MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。"
     },
     {
       "aliases": [],
@@ -2499,7 +2499,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "conflictからclauseを学習してBoolean satisfiabilityを探索します。"
+      "summary": "Boolean制約のconflictからclauseを学習し、SATまたはUNSATの判定を証明まで進める探索法です。"
     },
     {
       "aliases": [],
@@ -3306,7 +3306,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "Boolean・整数・論理・scheduling制約を伝播とSAT学習を含む探索で扱い、実行可能解・bound・停止statusを追う離散最適化法です。"
+      "summary": "Boolean・整数・論理・scheduling制約を、伝播・SAT学習・探索の組合せで解き、実行可能解とboundから停止statusを読む離散最適化法です。"
     },
     {
       "aliases": [],
@@ -3347,7 +3347,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "global constraint propagationとbranchingで有限domainを探索します。"
+      "summary": "有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。"
     },
     {
       "aliases": [],
@@ -3424,7 +3424,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "graphの非負edge costを累積し、確定済み距離またはadmissible heuristicを使って最短路を厳密に探索します。"
+      "summary": "非負のedge costを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。"
     },
     {
       "aliases": [],
@@ -3649,7 +3649,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "dual可行性を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。"
+      "summary": "双対可行性（dual feasibility）を保ちながらprimal infeasibilityを解消し、LPのbasisを効率よく再最適化するsimplex変種です。"
     },
     {
       "aliases": [],
@@ -3685,7 +3685,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "状態と段階に分解し、同じ部分問題の解を再利用してBellman再帰を解くstructure-firstな厳密法です。"
+      "summary": "問題をstateとstageに分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。"
     },
     {
       "aliases": [],
@@ -4815,7 +4815,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "二部グラフの最小費用完全matching（割当問題）を多項式時間で厳密に解く、専用構造に特化したアルゴリズムです。"
+      "summary": "二部グラフの完全matchingとして表せる割当問題を、専用構造を使って多項式時間で厳密に解くアルゴリズムです。"
     },
     {
       "aliases": [],
@@ -4968,7 +4968,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかNLPを解く方法です。"
+      "summary": "不等式制約へbarrierを導入し、primal・dual・slack・complementarityを同時に更新して大規模な滑らかなNLPを解く方法です。"
     },
     {
       "aliases": [],
@@ -5147,7 +5147,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "swapや2-optなど離散的な近傍moveを定義し、改善が見つかる限りそれを繰り返して可行解を改善するheuristicです。"
+      "summary": "離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。"
     },
     {
       "aliases": [],
@@ -5402,7 +5402,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Euclidean距離ではなく問題に合うBregman geometryを使い、simplex・確率分布・非一様scale上で劣勾配stepを行う一次法です。"
+      "summary": "ユークリッド距離ではなく問題に合うBregman幾何（Bregman geometry）を使い、単体（simplex）、確率分布、非一様なscale上で劣勾配stepを行う一次法です。"
     },
     {
       "aliases": [],
@@ -5673,7 +5673,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "最小費用流問題が持つnetwork構造を利用し、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
+      "summary": "最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。"
     },
     {
       "aliases": [],
@@ -6184,7 +6184,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新する内点法でconic標準形の凸問題を解く方法です。"
+      "summary": "LPのbarrier法を二次錐や半正定値錐へ一般化し、primal・dual・slackを同時に更新してconic標準形の凸問題を解く内点法です。"
     },
     {
       "aliases": [],
@@ -6235,7 +6235,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "実行可能なbasisを保ちながら被約費用を手がかりに隣接basisへ移動し、LPの目的値を単調に改善していくsimplex法です。"
+      "summary": "LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。"
     },
     {
       "aliases": [],
@@ -6735,7 +6735,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "Gaussian processの代わりにrandom forestをsurrogateに使い、categorical・条件付きparameterを含むsearch spaceを扱いやすくしたsequential model-based optimizationです。"
+      "summary": "SMACは、ガウス過程（Gaussian process）の代わりにランダムフォレスト（random forest）を予測用のsurrogateとして使う、逐次モデルベース最適化（sequential model-based optimization）です。カテゴリ変数（categorical）や条件付きparameterを含むsearch spaceを扱いやすい点に特徴があります。"
     },
     {
       "aliases": [],
@@ -6868,7 +6868,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "各反復で目的の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。"
+      "summary": "各反復で目的関数の二次modelと制約の線形化からQP subproblemを解き、探索方向を得る制約付きNLPのアルゴリズム枠組みです。"
     },
     {
       "aliases": [],
@@ -7175,7 +7175,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "標準的なGaussian-process BOが高次元で性能を落とす理由に対し、局所trust regionで探索を絞るTuRBOと、有効次元の少なさを仮定するSAASBOという2つの緩和方向をとる高次元Bayesian最適化手法群です。"
+      "summary": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
     },
     {
       "aliases": [],

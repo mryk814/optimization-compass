@@ -24,7 +24,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
     <div className="compiled-content-layout">
       {page.toc.length > 1 && (
         <nav aria-label="この教材の目次" className="content-toc">
-          <strong>On this page</strong>
+          <strong>このページの項目</strong>
           <ol>
             {page.toc.map((heading) => (
               <li className={`toc-level-${heading.level}`} key={heading.heading_id}>

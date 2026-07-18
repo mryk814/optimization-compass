@@ -58,8 +58,8 @@ describe("PlaybackControls", () => {
 
   test("steps, seeks, changes speed, reverses, and stays within bounds", () => {
     renderHarness();
-    expect(screen.getByLabelText("iteration")).toHaveTextContent("0");
-    expect(screen.getByLabelText("decision")).toHaveTextContent("該当なし");
+    expect(screen.getByLabelText("反復")).toHaveTextContent("0");
+    expect(screen.getByLabelText("判定")).toHaveTextContent("該当なし");
     expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
       "説明は未登録です（trace.future-event）",
     );

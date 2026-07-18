@@ -16,7 +16,7 @@ export function NotFoundPage({
 }: NotFoundPageProps) {
   return (
     <section className="page-panel not-found-page">
-      <p className="eyebrow">Not Found</p>
+      <p className="eyebrow">ページが見つかりません</p>
       <h1>ページが見つかりません</h1>
       <p>{detail}</p>
       <div className="not-found-actions">
@@ -24,7 +24,7 @@ export function NotFoundPage({
           Atlasへ戻る
         </Link>
         <Link className="text-link" to="/map">
-          Mapを見る
+          問題構造を見る
         </Link>
       </div>
     </section>

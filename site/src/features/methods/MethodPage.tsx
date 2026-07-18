@@ -144,15 +144,15 @@ export function MethodPage() {
 
   return (
     <section className="page-panel method-detail-page">
-      <p className="eyebrow">Method</p>
+      <p className="eyebrow">手法 (Method)</p>
       <h1>{method?.label ?? "手法を読み込み中…"}</h1>
       {method?.summary && <p className="content-lead">{method.summary}</p>}
-      <p className="route-parameter">Method ID: <strong>{methodId}</strong></p>
+      <p className="route-parameter">手法ID (Method ID): <strong>{methodId}</strong></p>
       <PageOrientation
         limits="教材は手法の考え方と登録済みの前提を説明します。データセットや実装、問題条件によって適否は変わります。"
         next={[{ label: "Mapで関連する問題型を見る", to: "/map" }, { label: "Compareで動きを比べる", to: "/compare" }, { label: "Theaterで一手を再生する", to: "/theater" }]}
         purpose="手法が何を仮定し、どのように動き、どこで使えるかを教材・地図・根拠から確認します。"
-        readingSteps={["最初に要約と前提を読み、手法の適用範囲をつかみます。", "教材の手順・可視化・最小例でmechanismを確認します。", "MapやCompareで、問題条件や他手法との関係を照合します。"]}
+        readingSteps={["最初に要約と前提を読み、手法の適用範囲をつかみます。", "教材の手順・可視化・最小例で機構 (mechanism) を確認します。", "MapやCompareで、問題条件や他手法との関係を照合します。"]}
       />
       {loadError && <p role="alert">{loadError.message}</p>}
       {view && <MapAction methodId={methodId} view={view} />}
@@ -230,7 +230,7 @@ function MethodRelations({
   groups: Record<"visualizations" | "comparisons" | "implementations" | "cases" | "sources", LinkedEntity[]>;
 }) {
   const sections = [
-    ["visualizations", "Method Theater / Trace"],
+      ["visualizations", "Method Theater / Trace"],
     ["comparisons", "比較"],
     ["implementations", "実装"],
     ["cases", "関連ケース"],

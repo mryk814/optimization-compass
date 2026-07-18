@@ -44,7 +44,7 @@ export function SearchTreeTheaterPage() {
   }, [artifactId]);
   if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
   if (error) return <section className="trace-page"><h1>Search-tree Theaterを開けません</h1><p role="alert">{error.message}</p></section>;
-  if (!loaded) return <p role="status">Search-tree artifactを読み込み中…</p>;
+  if (!loaded) return <p role="status">探索木の表示データを読み込み中…</p>;
   return <SearchTreePlayer key={loaded.artifact.artifact_id} {...loaded} />;
 }
 
@@ -108,7 +108,7 @@ function SearchTreePlayer({ artifact, index, scenario, scenarioIndex }: Loaded) 
       <footer className="trace-summary">
         <span>{artifact.trace.terminal_status}</span>
         <p>{artifact.trace.terminal_summary_ja}</p>
-        <small>Sources: {scenario.source_ids.join(", ")} · Reviewed {scenario.last_verified}</small>
+        <small>根拠: {scenario.source_ids.join(", ")} · 確認日 {scenario.last_verified}</small>
       </footer>
     </article>
   );

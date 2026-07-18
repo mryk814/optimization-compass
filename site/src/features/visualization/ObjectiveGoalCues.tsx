@@ -27,17 +27,17 @@ export function ObjectiveGoalCues({
     : "canonical objective default";
   return (
     <section aria-label="最適化の目標と現在値" className="visualization-goal-cues">
-      <h2>目標と現在地 / Goal cues</h2>
+      <h2>目標と現在地 (Goal cues)</h2>
       <dl>
-        <div><dt>方向 / Direction</dt><dd>{direction} <small>({directionNote})</small></dd></div>
-        <div><dt>初期点 / Initial</dt><dd>{formatPoint(initialPoint)}</dd></div>
-        <div><dt>現在点 / Current</dt><dd>{currentPoint ? formatPoint(currentPoint) : "このframeでは未取得"}</dd></div>
-        <div><dt>best-so-far</dt><dd>{bestValue === undefined || bestValue === null ? "未取得" : formatValue(bestValue)}</dd></div>
+        <div><dt>方向 (Direction)</dt><dd>{direction} <small>({directionNote})</small></dd></div>
+        <div><dt>初期点 (Initial)</dt><dd>{formatPoint(initialPoint)}</dd></div>
+        <div><dt>現在点 (Current)</dt><dd>{currentPoint ? formatPoint(currentPoint) : "このフレームでは未取得"}</dd></div>
+        <div><dt>現在までの最良値 (best-so-far)</dt><dd>{bestValue === undefined || bestValue === null ? "未取得" : formatValue(bestValue)}</dd></div>
         <div>
-          <dt>既知の最適点 / Known optimum</dt>
+          <dt>既知の最適点 (Known optimum)</dt>
           <dd>{knownReferenceText(knownReferenceDisplay, optimumPoint, optimumValue)}</dd>
         </div>
-        <div><dt>終了理由 / Terminal</dt><dd>{terminalReason}</dd></div>
+        <div><dt>終了理由 (Terminal)</dt><dd>{terminalReason}</dd></div>
       </dl>
     </section>
   );

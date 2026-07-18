@@ -43,7 +43,15 @@ MADSは候補点を評価する処理を大きく二つに分けます。
 | 診断 | mesh size、poll success、constraint violation | simplex diameter、operation |
 | 理論 | 仮定下のClarke stationarity型 | 一般多次元では限定的 |
 
-## 教育用の制御loop
+## 向いている条件
+
+- 低〜中次元のblack-box
+- gradientがない、信用できない、またはsimulationが分岐する
+- black-box constraintや評価失敗がある
+- 局所改善とstationarityの目安が欲しい
+- parallel pollを利用できる
+
+## Python
 
 次はAPIではなく、状態遷移を示すsyntactically validな骨格です。
 
@@ -92,14 +100,6 @@ def mads_loop(
 - failed evaluation数
 - cache hit
 - stopping reason
-
-## 向いている条件
-
-- 低〜中次元のblack-box
-- gradientがない、信用できない、またはsimulationが分岐する
-- black-box constraintや評価失敗がある
-- 局所改善とstationarityの目安が欲しい
-- parallel pollを利用できる
 
 ## 避ける／切り替える条件
 
