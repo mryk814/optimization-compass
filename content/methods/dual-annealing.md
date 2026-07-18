@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [shgo, direct-global, differential-evolution]
 aliases: [/learn/dual-annealing]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。
@@ -22,6 +22,47 @@ last_reviewed: 2026-07-17
 高いtemperatureでは悪化するstepも一定確率で受け入れ、local basinから抜けます。temperatureを下げるにつれて探索を局所化します。
 
 Dual Annealingはgeneralized simulated annealingのvisiting distributionとacceptance ruleを使い、必要に応じてlocal minimizerを組み合わせます。
+
+## Local searchの有無
+
+`no_local_search=False`では、最終結果や評価回数にlocal minimizerが含まれます。
+
+比較時は、
+
+- annealing evaluation
+- local-search evaluation
+- local solverとtolerance
+- local search開始条件
+
+を分けます。local refinementを含むDual Annealingと、含まないpopulation法を同じiteration数で比較しません。
+
+## Temperatureと分布
+
+- initial temperature: 初期jump scale
+- visit parameter: long-tail jumpの性質
+- accept parameter: 悪化stepの受容
+- restart temperature ratio: re-annealingのタイミング
+
+parameterは相互作用し、problem scaleやboundsへ依存します。
+
+## 向いている条件
+
+- bounded continuous nonconvex problem
+- multiple basins
+- gradientを要求しない
+- local solverとhybrid化したい
+- moderate dimension
+- stochastic explorationを許容
+
+## 避ける／切り替える条件
+
+- 1評価が極端に高価
+- high dimension
+- noiseでacceptanceが乱れる
+- boundsが広すぎる
+- general constraintが中心
+- reproducibilityにseedを記録しない
+- optimality certificateが必要
 
 ## Python
 
@@ -47,28 +88,6 @@ print(result.success, result.x, result.fun, result.nfev, result.message)
 
 SciPy versionにより乱数引数やoption名が変わる可能性があるため、利用versionの公式documentationを確認します。
 
-## Local searchの有無
-
-`no_local_search=False`では、最終結果や評価回数にlocal minimizerが含まれます。
-
-比較時は、
-
-- annealing evaluation
-- local-search evaluation
-- local solverとtolerance
-- local search開始条件
-
-を分けます。local refinementを含むDual Annealingと、含まないpopulation法を同じiteration数で比較しません。
-
-## Temperatureと分布
-
-- initial temperature: 初期jump scale
-- visit parameter: long-tail jumpの性質
-- accept parameter: 悪化stepの受容
-- restart temperature ratio: re-annealingのタイミング
-
-parameterは相互作用し、problem scaleやboundsへ依存します。
-
 ## 診断値
 
 - best-so-far objective
@@ -83,25 +102,6 @@ parameterは相互作用し、problem scaleやboundsへ依存します。
 - termination reason
 
 current stateが悪化してもbest-so-farは保持します。確率的探索ではcurrentとincumbentを分けます。
-
-## 向いている条件
-
-- bounded continuous nonconvex problem
-- multiple basins
-- gradientを要求しない
-- local solverとhybrid化したい
-- moderate dimension
-- stochastic explorationを許容
-
-## 避ける／切り替える条件
-
-- 1評価が極端に高価
-- high dimension
-- noiseでacceptanceが乱れる
-- boundsが広すぎる
-- general constraintが中心
-- reproducibilityにseedを記録しない
-- optimality certificateが必要
 
 ::: warning
 annealing scheduleが終了したことは大域最適性の証明ではありません。複数seed、同じevaluation budget、local-search有無を揃えて候補品質を評価します。

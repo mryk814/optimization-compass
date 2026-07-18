@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [direct-global, dual-annealing, differential-evolution]
 aliases: [/learn/shgo]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 bounded search spaceをsimplicial complexでsampleし、topological情報からlocal-minimum候補を抽出して局所solverへ渡す大域探索法です。
@@ -20,6 +20,38 @@ bounded search spaceをsimplicial complexでsampleし、topological情報からl
 SHGOは領域内のsample点とその近傍関係からsimplicial complexを構成し、目的関数の離散的なtopologyを使って有望なlocal-minimum basinを識別します。候補点からlocal optimizationを行い、複数の局所解を集めます。
 
 random restartだけでなく、search space全体の構造をsampleから推定する点が特徴です。
+
+## Sampling budget
+
+性能は、
+
+- sample数
+- iteration数
+- sampling method
+- local solver
+- constraint評価
+- dimension
+
+に依存します。低次元では領域構造を捉えやすい一方、dimension増加でsimplicial samplingの費用が急増します。
+
+## Constraint
+
+SHGO実装はconstraint付きproblemを扱えますが、
+
+- feasible regionが細い
+- disconnected
+- constraint evaluationが高価
+- equality toleranceが厳しい
+
+場合、sampleからfeasible候補を得にくいことがあります。feasible fractionを記録します。
+
+## 向いている条件
+
+- bounded low-dimensional problem
+- multimodalなcontinuous objective
+- 複数local minimaを列挙したい
+- 勾配がなくてもlocal solverを組み合わせられる
+- deterministicに近いstructured samplingを使いたい
 
 ## Python
 
@@ -49,30 +81,6 @@ print(getattr(result, "xl", None), getattr(result, "funl", None))
 
 返却されるlocal minima一覧やoptionはSciPy versionの公式documentationで確認します。
 
-## Sampling budget
-
-性能は、
-
-- sample数
-- iteration数
-- sampling method
-- local solver
-- constraint評価
-- dimension
-
-に依存します。低次元では領域構造を捉えやすい一方、dimension増加でsimplicial samplingの費用が急増します。
-
-## Constraint
-
-SHGO実装はconstraint付きproblemを扱えますが、
-
-- feasible regionが細い
-- disconnected
-- constraint evaluationが高価
-- equality toleranceが厳しい
-
-場合、sampleからfeasible候補を得にくいことがあります。feasible fractionを記録します。
-
 ## 診断値
 
 - global best / local minima一覧
@@ -86,14 +94,6 @@ SHGO実装はconstraint付きproblemを扱えますが、
 - dimension / bounds volume
 
 local minima数が増え続ける場合、sample densityが不足しているか、noiseで偽のbasinが生じている可能性があります。
-
-## 向いている条件
-
-- bounded low-dimensional problem
-- multimodalなcontinuous objective
-- 複数local minimaを列挙したい
-- 勾配がなくてもlocal solverを組み合わせられる
-- deterministicに近いstructured samplingを使いたい
 
 ## 避ける／切り替える条件
 

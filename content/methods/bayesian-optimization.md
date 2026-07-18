@@ -14,7 +14,7 @@ aliases: [/learn/bayesian-optimization]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-18
 ---
 
 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
@@ -75,7 +75,25 @@ acquisitionの最良点は、目的関数の最適点だと証明された場所
 
 実務ではtrue objective curveは見えません。見えるのは観測とmodelだけです。
 
-## Python: 小さな1次元surrogate loop
+## 向いている条件
+
+- 1評価が数分〜数日かかるsimulationや実験
+- evaluation数が数十〜数百程度に制限される
+- 低〜中次元のsearch space
+- 過去観測を次点選択へ活用したい
+- gradientを直接得られない
+- observation noiseや失敗をmodel化できる
+
+## 避ける／切り替える条件
+
+- 評価が安価で大量並列可能 → random / population searchが単純な場合
+- 極端な高次元 → kernelやacquisition最適化が難しい
+- conditional / categorical space → encodingやspecialized surrogateが必要
+- nonstationary objective → fixed kernelが過去を誤解する
+- evaluation failureを欠損として無視 → feasibility modelが必要
+- model uncertaintyを実世界の安全保証と誤認
+
+## Python
 
 ```python
 import numpy as np
@@ -112,24 +130,6 @@ print(observed_x[best_index], observed_y[best_index])
 ```
 
 これはzero-mean、fixed kernel、noiselessに近い教育例です。実務ではmean function、kernel hyperparameter、noise、numerical stability、acquisition optimizerを明示します。
-
-## 向いている条件
-
-- 1評価が数分〜数日かかるsimulationや実験
-- evaluation数が数十〜数百程度に制限される
-- 低〜中次元のsearch space
-- 過去観測を次点選択へ活用したい
-- gradientを直接得られない
-- observation noiseや失敗をmodel化できる
-
-## 避ける／切り替える条件
-
-- 評価が安価で大量並列可能 → random / population searchが単純な場合
-- 極端な高次元 → kernelやacquisition最適化が難しい
-- conditional / categorical space → encodingやspecialized surrogateが必要
-- nonstationary objective → fixed kernelが過去を誤解する
-- evaluation failureを欠損として無視 → feasibility modelが必要
-- model uncertaintyを実世界の安全保証と誤認
 
 ## 診断値
 

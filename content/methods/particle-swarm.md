@@ -10,7 +10,7 @@ prerequisites: [concept.derivative-free]
 related_ids: [cma-es, differential-evolution, genetic-algorithm]
 aliases: [/learn/particle-swarm]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 各粒子のbest経験と群全体のbestを使って速度を更新し、連続black-box空間を集団で探索する手法です。
@@ -47,7 +47,15 @@ $$
 
 群のbestだけでなく、粒子間距離や座標ごとの分散を表示すると状態を読みやすくなります。
 
-## Python: 教育用PSO
+## 向いている条件
+
+- bounded continuous black-box
+- gradientが得られない
+- evaluationを並列化できる
+- moderate dimension
+- 滑らかさに依存しないglobal candidate探索
+
+## Python
 
 ```python
 import numpy as np
@@ -98,14 +106,6 @@ print(best, personal_value.min())
 - feasible fraction
 - seed間の結果分散
 - evaluation budget
-
-## 向いている条件
-
-- bounded continuous black-box
-- gradientが得られない
-- evaluationを並列化できる
-- moderate dimension
-- 滑らかさに依存しないglobal candidate探索
 
 ## 避ける／切り替える条件
 

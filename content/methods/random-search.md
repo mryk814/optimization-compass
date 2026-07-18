@@ -10,7 +10,7 @@ prerequisites: []
 related_ids: [tpe, hyperband-asha, bayesian-optimization, family.expensive-black-box]
 aliases: [/learn/random-search]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-18
 ---
 
 search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。
@@ -86,5 +86,7 @@ print(best_x, best_value, history[-1])
 - 明らかに相関の強いparameter間の関係を無視して非効率にsamplingし続けている
 
 model-based法へ切り替えた後にsurrogateのcross validationが悪い、uncertaintyが較正されていない、acquisitionが同じ点ばかり提案するといった兆候が出た場合は、model化がうまくいっていないサインです。その場合はrandom searchのbaselineに一度戻して比較する方が安全です。
+
+## 次に読む
 
 履歴を使ってsuggestionを絞り込む手法は[TPE](#/learn/tpe)や[ベイズ最適化](#/learn/bayesian-optimization)、中間成績で評価resourceを再配分する手法は[Hyperband / ASHA](#/learn/hyperband-asha)、高価なblack-box全体の選び分けは[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)で確認できます。
