@@ -30,6 +30,7 @@ _ARCHIVE_SUFFIXES = frozenset({".zip", ".tar", ".tgz", ".gz", ".bz2", ".xz", ".7
 _APPROVED_DATA_FILES = frozenset(
     {
         "data/README.md",
+        "data/build-manifest.json",
         "data/releases/catalog.json",
         "data/releases/publication-authority.json",
         "data/releases/historical-backfill.json",

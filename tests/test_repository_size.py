@@ -158,6 +158,7 @@ def test_gate_allows_only_expected_small_authoring_and_compact_data(tmp_path: Pa
         tmp_path,
         {
             "data/README.md": b"readme",
+            "data/build-manifest.json": b"{}",
             "data/licenses/NOTICE.txt": b"notice",
             "data/migrations/012_next.sql": b"select 1;",
             "data/seeds/example.json": b"{}",
