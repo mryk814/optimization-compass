@@ -146,3 +146,12 @@ Prefer one reviewable concern per PR. Separate when practical:
 - generated release artifacts.
 
 Every commit must include a DCO sign-off. See [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`docs/adding-knowledge.md`](docs/adding-knowledge.md).
+
+## Lessons from issue-scale maintenance
+
+- When the release catalog contains historical entries, staging tests must use an unpublished target
+  version; reusing an already-published version correctly fails identity validation.
+- Site exports for a not-yet-published staged release embed a predecessor-only catalog snapshot. The
+  published site may include the new current entry only after the external bundle and catalog update.
+- After changing a test or generated-data policy, run both `ruff check .` and `ruff format --check .`
+  before relying on the longer Pages smoke job; a focused test pass alone is not sufficient.
