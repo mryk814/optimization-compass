@@ -25,7 +25,7 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
 }
-_EDUCATIONAL_INITIALIZATION_BY_RENDERER = {
+_EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {
         "policy": "fixed_empty_assignment_with_heuristic_incumbent",
         "heuristic_incumbent_assignment": SEARCH_TREE_HEURISTIC_INCUMBENT_ASSIGNMENT,
