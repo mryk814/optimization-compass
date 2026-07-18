@@ -349,8 +349,7 @@ def generate_topology_field_artifact(dataset_version: str) -> TopologyFieldArtif
         problem_instance_id="INSTANCE_TOPOLOGY_CANTILEVER_2D",
         objective_expression="min c(ρ)=Fᵀu, K(ρ)u=F, Eₑ=Emin+ρₑᵖ(E₀−Emin)",
         state_equation=(
-            "K(ρ)u=F; compliance c=Fᵀu; "
-            "sensitivity is obtained through the state/adjoint relation"
+            "K(ρ)u=F; compliance c=Fᵀu; sensitivity is obtained through the state/adjoint relation"
         ),
         grid=TopologyGrid(columns=columns, rows=rows),
         volume_fraction_target=target_volume,
