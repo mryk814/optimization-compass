@@ -29,7 +29,7 @@ export interface SurrogateFrame {
 }
 
 export interface SurrogateUncertaintyPayload {
-  contract_version: "1.0.0";
+  contract_version: "1.0.0" | "1.1.0";
   strategy: "exploit" | "explore";
   noise_preset: "noiseless" | "small_noise";
   noise_std: number;
@@ -39,12 +39,38 @@ export interface SurrogateUncertaintyPayload {
   truth_disclosure_ja: string;
   frames: SurrogateFrame[];
   random_history: Observation[];
+  evaluation_ledger?: EvaluationLedger;
+}
+
+export type EvaluationFidelity = "low" | "high";
+export type EvaluationStatus = "ok" | "failed" | "censored" | "timeout";
+
+export interface EvaluationLedgerEntry {
+  call_id: number;
+  x: number;
+  fidelity: EvaluationFidelity;
+  cost: number;
+  status: EvaluationStatus;
+  observed_value: number | null;
+  accumulated_cost: number;
+  accumulated_high_fidelity_equivalent_cost: number;
+  best_so_far: number | null;
+}
+
+export interface EvaluationLedger {
+  contract_version: "1.0.0";
+  fidelity_costs: { low: number; high: number };
+  budget_cost: number;
+  high_fidelity_equivalent_budget: number;
+  calls: EvaluationLedgerEntry[];
 }
 
 export function parseSurrogateUncertaintyPayload(value: unknown): SurrogateUncertaintyPayload {
   const data = object(value, "SurrogateUncertaintyPayload");
-  exact(data, ["contract_version", "strategy", "noise_preset", "noise_std", "exploration_xi", "domain", "objective_expression", "truth_disclosure_ja", "frames", "random_history"], "SurrogateUncertaintyPayload");
-  if (data.contract_version !== "1.0.0") throw new Error("Unsupported SurrogateUncertainty contract.");
+  if (data.contract_version !== "1.0.0" && data.contract_version !== "1.1.0") throw new Error("Unsupported SurrogateUncertainty contract.");
+  const contractVersion = data.contract_version;
+  const fields = ["contract_version", "strategy", "noise_preset", "noise_std", "exploration_xi", "domain", "objective_expression", "truth_disclosure_ja", "frames", "random_history"] as const;
+  exact(data, contractVersion === "1.1.0" ? [...fields, "evaluation_ledger"] : fields, "SurrogateUncertaintyPayload");
   const frames = array(data.frames, "frames", parseFrame);
   const randomHistory = array(data.random_history, "random_history", parseObservation);
   if (frames.length === 0) throw new Error("frames must not be empty.");
@@ -54,8 +80,11 @@ export function parseSurrogateUncertaintyPayload(value: unknown): SurrogateUncer
   if (randomHistory.length !== frames.at(-1)?.oracle_evaluations) throw new Error("random comparison budget differs from the renderer frames.");
   const domain = numberArray(data.domain, "domain");
   if (domain.length !== 2 || domain[0] >= domain[1]) throw new Error("domain must be an increasing pair.");
+  const evaluationLedger = contractVersion === "1.1.0"
+    ? parseEvaluationLedger(data.evaluation_ledger, "evaluation_ledger")
+    : undefined;
   return {
-    contract_version: "1.0.0",
+    contract_version: contractVersion,
     strategy: literal(data.strategy, ["exploit", "explore"] as const, "strategy"),
     noise_preset: literal(data.noise_preset, ["noiseless", "small_noise"] as const, "noise_preset"),
     noise_std: nonNegative(data.noise_std, "noise_std"),
@@ -65,6 +94,54 @@ export function parseSurrogateUncertaintyPayload(value: unknown): SurrogateUncer
     truth_disclosure_ja: string(data.truth_disclosure_ja, "truth_disclosure_ja"),
     frames,
     random_history: randomHistory,
+    ...(evaluationLedger ? { evaluation_ledger: evaluationLedger } : {}),
+  };
+}
+
+function parseEvaluationLedger(value: unknown, field: string): EvaluationLedger {
+  const data = object(value, field);
+  exact(data, ["contract_version", "fidelity_costs", "budget_cost", "high_fidelity_equivalent_budget", "calls"], field);
+  const costs = object(data.fidelity_costs, `${field}.fidelity_costs`);
+  exact(costs, ["low", "high"], `${field}.fidelity_costs`);
+  const fidelityCosts = { low: positive(costs.low, `${field}.fidelity_costs.low`), high: positive(costs.high, `${field}.fidelity_costs.high`) };
+  const calls = array(data.calls, `${field}.calls`, parseEvaluationLedgerEntry);
+  if (calls.length === 0) throw new Error(`${field}.calls must not be empty.`);
+  let accumulatedCost = 0;
+  let accumulatedHighEquivalent = 0;
+  let bestHigh: number | null = null;
+  calls.forEach((call, index) => {
+    if (call.call_id !== index + 1) throw new Error(`${field}.calls must use consecutive call IDs.`);
+    if (call.cost !== fidelityCosts[call.fidelity]) throw new Error(`${field}.calls[${index}].cost does not match fidelity.`);
+    accumulatedCost += call.cost;
+    accumulatedHighEquivalent += call.cost / fidelityCosts.high;
+    if (Math.abs(call.accumulated_cost - accumulatedCost) > 1e-9) throw new Error(`${field}.calls[${index}] accumulated cost is inconsistent.`);
+    if (Math.abs(call.accumulated_high_fidelity_equivalent_cost - accumulatedHighEquivalent) > 1e-7) throw new Error(`${field}.calls[${index}] equivalent cost is inconsistent.`);
+    if (call.status === "ok" && call.observed_value === null) throw new Error(`${field}.calls[${index}] successful calls require a value.`);
+    if (call.status !== "ok" && call.observed_value !== null) throw new Error(`${field}.calls[${index}] unsuccessful calls require null value.`);
+    if (call.fidelity === "high" && call.status === "ok") bestHigh = bestHigh === null ? call.observed_value : Math.min(bestHigh, call.observed_value!);
+    if (call.best_so_far !== bestHigh) throw new Error(`${field}.calls[${index}] best-so-far is inconsistent.`);
+  });
+  const budgetCost = positive(data.budget_cost, `${field}.budget_cost`);
+  if (accumulatedCost > budgetCost + 1e-9) throw new Error(`${field} calls exceed budget_cost.`);
+  const equivalentBudget = positive(data.high_fidelity_equivalent_budget, `${field}.high_fidelity_equivalent_budget`);
+  if (Math.abs(equivalentBudget - budgetCost / fidelityCosts.high) > 1e-7) throw new Error(`${field} equivalent budget is inconsistent.`);
+  if (data.contract_version !== "1.0.0") throw new Error(`${field}.contract_version is unsupported.`);
+  return { contract_version: "1.0.0", fidelity_costs: fidelityCosts, budget_cost: budgetCost, high_fidelity_equivalent_budget: equivalentBudget, calls };
+}
+
+function parseEvaluationLedgerEntry(value: unknown, field: string): EvaluationLedgerEntry {
+  const data = object(value, field);
+  exact(data, ["call_id", "x", "fidelity", "cost", "status", "observed_value", "accumulated_cost", "accumulated_high_fidelity_equivalent_cost", "best_so_far"], field);
+  return {
+    call_id: integer(data.call_id, `${field}.call_id`, 1),
+    x: number(data.x, `${field}.x`),
+    fidelity: literal(data.fidelity, ["low", "high"] as const, `${field}.fidelity`),
+    cost: positive(data.cost, `${field}.cost`),
+    status: literal(data.status, ["ok", "failed", "censored", "timeout"] as const, `${field}.status`),
+    observed_value: nullableNumber(data.observed_value, `${field}.observed_value`),
+    accumulated_cost: positive(data.accumulated_cost, `${field}.accumulated_cost`),
+    accumulated_high_fidelity_equivalent_cost: nonNegative(data.accumulated_high_fidelity_equivalent_cost, `${field}.accumulated_high_fidelity_equivalent_cost`),
+    best_so_far: nullableNumber(data.best_so_far, `${field}.best_so_far`),
   };
 }
 
@@ -122,6 +199,11 @@ function number(value: unknown, field: string): number {
 function nonNegative(value: unknown, field: string): number {
   const candidate = number(value, field);
   if (candidate < 0) throw new Error(`${field} must be non-negative.`);
+  return candidate;
+}
+function positive(value: unknown, field: string): number {
+  const candidate = number(value, field);
+  if (candidate <= 0) throw new Error(`${field} must be positive.`);
   return candidate;
 }
 function integer(value: unknown, field: string, minimum: number): number {

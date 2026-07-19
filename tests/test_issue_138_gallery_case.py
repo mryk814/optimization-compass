@@ -37,5 +37,6 @@ def test_multi_fidelity_simulator_case_declares_cost_and_failure_policy() -> Non
         "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
         "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
     ]
     compile(case["python_example"], "multi-fidelity-simulator", "exec")

@@ -21,6 +21,7 @@ import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { GuidedStoryPanel, type GuidedPlaybackController } from "../visualization/GuidedStoryPanel";
 import { SurrogatePlot } from "../visualization/SurrogatePlot";
+import { EvaluationLedgerPanel } from "./EvaluationLedgerPanel";
 import { ScenarioContextPanel } from "./ScenarioContextPanel";
 
 type Strategy = "exploit" | "explore";
@@ -72,7 +73,8 @@ export function BayesianOptimizationPage() {
         await json(`${base}${scenario.artifact.payload_path}`),
       );
       const payloadPresetId = `BO_${payload.strategy.toUpperCase()}_${payload.noise_preset.toUpperCase()}`;
-      if (scenario.experiment.parameter_preset_id !== payloadPresetId)
+      const expectedPresetId = payload.evaluation_ledger ? "BO_MULTIFIDELITY_LEDGER" : payloadPresetId;
+      if (scenario.experiment.parameter_preset_id !== expectedPresetId)
         throw new Error("renderer payloadのpresetがscenarioと一致しません。");
       if (
         payload.frames.at(-1)?.oracle_evaluations !==
@@ -109,30 +111,32 @@ export function BayesianOptimizationPage() {
            まずは「なぜこの点を選ぶのか」を追ってください。
         </p>
       </header>
-      <div className="bo-presets" aria-label="実験preset">
-        <label>
-          探索方針
-          <select
-            aria-label="探索方針"
-            value={strategy}
-            onChange={(event) => selectScenario(event.target.value as Strategy, noise)}
-          >
-            <option value="exploit">活用寄り (exploit)</option>
-            <option value="explore">探索寄り (explore)</option>
-          </select>
-        </label>
-        <label>
-          観測ノイズ (noise)
-          <select
-            aria-label="観測ノイズ"
-            value={noise}
-            onChange={(event) => selectScenario(strategy, event.target.value as NoisePreset)}
-          >
-            <option value="noiseless">ノイズなし</option>
-            <option value="small_noise">小さいノイズ</option>
-          </select>
-        </label>
-      </div>
+      {requestedScenarioId !== "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER" && (
+        <div className="bo-presets" aria-label="実験preset">
+          <label>
+            探索方針
+            <select
+              aria-label="探索方針"
+              value={strategy}
+              onChange={(event) => selectScenario(event.target.value as Strategy, noise)}
+            >
+              <option value="exploit">活用寄り (exploit)</option>
+              <option value="explore">探索寄り (explore)</option>
+            </select>
+          </label>
+          <label>
+            観測ノイズ (noise)
+            <select
+              aria-label="観測ノイズ"
+              value={noise}
+              onChange={(event) => selectScenario(strategy, event.target.value as NoisePreset)}
+            >
+              <option value="noiseless">ノイズなし</option>
+              <option value="small_noise">小さいノイズ</option>
+            </select>
+          </label>
+        </div>
+      )}
       {error && (
         <p role="alert" className="atlas-error">
           {error.message}
@@ -218,6 +222,7 @@ function Theater({
       ? findEntity(links.index, "method", "M_RANDOM_SEARCH")
       : undefined;
   const budget = scenario.experiment.budget.value;
+  const ledger = payload.evaluation_ledger;
   const guidedPlayback: GuidedPlaybackController = {
     currentFrameIndex: frameIndex,
     isPlaying: playing,
@@ -252,6 +257,11 @@ function Theater({
         <span>
           評価 {frame.oracle_evaluations}/{budget}回 · ξ={payload.exploration_xi}
         </span>
+        {ledger && (
+          <span>
+            cost {ledger.calls[frame.oracle_evaluations - 1]?.accumulated_cost.toFixed(0) ?? "0"}/{ledger.budget_cost.toFixed(0)}
+          </span>
+        )}
       </section>
       <section className="theater-first-action theater-first-action-detail" aria-labelledby="bo-first-action-title">
         <div>
@@ -367,7 +377,8 @@ function Theater({
           <p className="atlas-note">{payload.truth_disclosure_ja}</p>
         </aside>
       </div>
-      {visibleLayers.has("incumbent_history") && <Comparison
+      {ledger && <EvaluationLedgerPanel ledger={ledger} visibleCalls={frame.oracle_evaluations} />}
+      {!ledger && visibleLayers.has("incumbent_history") && <Comparison
         boHistory={boHistory}
         randomHistory={randomHistory}
         count={frame.oracle_evaluations}
@@ -386,18 +397,32 @@ function Theater({
           です。
         </p>
         <p>{frame.explanation_ja}</p>
-        <p>
-           同じ評価回数で、BOの最良値は{frame.incumbent_value.toFixed(3)}、random
-           searchの最良値は{frame.random_incumbent_value.toFixed(3)}です。
-        </p>
+        {ledger ? (
+          <p>
+            表示中のledgerは{frame.oracle_evaluations} call、累積costは{ledger.calls[frame.oracle_evaluations - 1]?.accumulated_cost.toFixed(0)}、
+            high fidelity best-so-farは{ledger.calls[frame.oracle_evaluations - 1]?.best_so_far?.toFixed(3) ?? "未観測"}です。
+          </p>
+        ) : (
+          <p>
+            同じ評価回数で、BOの最良値は{frame.incumbent_value.toFixed(3)}、random
+            searchの最良値は{frame.random_incumbent_value.toFixed(3)}です。
+          </p>
+        )}
       </details>
       <section className="bo-limitations">
         <h2>この可視化の限界</h2>
         <p>{scenario.lesson.limitations_ja}</p>
-        <p>
-           比較条件: 同じ目的関数・問題領域 (domain)・seed・評価予算 {budget}回。
-           比較線は優越性の証明ではなく、この固定runの履歴です。
-        </p>
+        {ledger ? (
+          <p>
+            このrunはsimulator call 14回、total cost {ledger.budget_cost}、high-fidelity-equivalent budget {ledger.high_fidelity_equivalent_budget}を固定しています。
+            fidelity policyや失敗処理を含むcost-aligned Compareはまだ実装していません。
+          </p>
+        ) : (
+          <p>
+            比較条件: 同じ目的関数・問題領域 (domain)・seed・評価予算 {budget}回。
+            比較線は優越性の証明ではなく、この固定runの履歴です。
+          </p>
+        )}
         <p>
           {method?.canonical_url ? (
             <Link className="text-link" to={method.canonical_url}>

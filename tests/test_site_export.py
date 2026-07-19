@@ -542,7 +542,7 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         for scenario in scenario_index.scenarios
         if scenario.artifact.renderer_family == "surrogate_uncertainty"
     ]
-    assert len(surrogate_scenarios) == 4
+    assert len(surrogate_scenarios) == 5
     assert {scenario.purpose for scenario in surrogate_scenarios} == {"mechanism", "sensitivity"}
     for scenario in surrogate_scenarios:
         payload = (first_output / scenario.artifact.payload_path).read_bytes()
@@ -554,6 +554,20 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         assert "evaluation_budget" not in decoded
         assert "source_ids" not in decoded
         assert "limitations_ja" not in decoded
+    ledger_scenario = next(
+        item
+        for item in surrogate_scenarios
+        if item.scenario_id == "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
+    )
+    ledger_payload = json.loads((first_output / ledger_scenario.artifact.payload_path).read_bytes())
+    assert ledger_payload["contract_version"] == "1.1.0"
+    assert ledger_payload["evaluation_ledger"]["budget_cost"] == 36.0
+    assert {call["status"] for call in ledger_payload["evaluation_ledger"]["calls"]} == {
+        "ok",
+        "failed",
+        "censored",
+        "timeout",
+    }
     shrink_trace = AlgorithmTrace.model_validate_json(
         (first_output / "traces/nelder-mead-rosenbrock-shifted.json").read_bytes()
     )

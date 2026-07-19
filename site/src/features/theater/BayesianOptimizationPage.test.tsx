@@ -6,6 +6,7 @@ import manifest from "../../../public/data/manifest.json";
 import scenarios from "../../../public/data/visualization-scenarios.json";
 import exploreNoiseless from "../../../public/data/visualizations/bo-explore-noiseless.json";
 import exploreSmallNoise from "../../../public/data/visualizations/bo-explore-small_noise.json";
+import ledgerPayload from "../../../public/data/visualizations/bo-multi-fidelity-ledger.json";
 import { BayesianOptimizationPage } from "./BayesianOptimizationPage";
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
@@ -20,9 +21,10 @@ function renderPage(entry = "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLO
     const url = String(input);
     const body = url.endsWith("data/manifest.json") ? manifest
       : url.endsWith("visualization-scenarios.json") ? scenarios
-        : url.endsWith("bo-explore-noiseless.json") ? exploreNoiseless
-          : url.endsWith("bo-explore-small_noise.json") ? exploreSmallNoise
-            : undefined;
+            : url.endsWith("bo-explore-noiseless.json") ? exploreNoiseless
+              : url.endsWith("bo-explore-small_noise.json") ? exploreSmallNoise
+                : url.endsWith("bo-multi-fidelity-ledger.json") ? ledgerPayload
+                : undefined;
     return body ? { ok: true, json: async () => structuredClone(body) } : { ok: false, status: 404 };
   }));
   return render(
@@ -66,5 +68,17 @@ describe("BayesianOptimizationPage", () => {
 
     expect(await screen.findByRole("heading", { level: 1, name: "ページが見つかりません" })).toBeVisible();
     expect(screen.getByText(/scenario ID「SCENARIO_BO_1D_EXPLOIT_UNKNOWN」/u)).toBeVisible();
+  });
+
+  test("renders the multi-fidelity evaluation ledger without a cost-aligned Compare", async () => {
+    renderPage("/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER");
+    expect(await screen.findByRole("heading", { level: 2, name: "Simulator evaluation ledger" })).toBeVisible();
+    const ledgerTable = screen.getByRole("table", { name: "Simulator evaluation ledger" });
+    expect(ledgerTable).toBeVisible();
+    fireEvent.change(screen.getByLabelText("評価位置"), { target: { value: "11" } });
+    expect(ledgerTable).toHaveTextContent("14/14");
+    expect(screen.getByText("censored")).toBeVisible();
+    expect(screen.queryByRole("heading", { level: 2, name: /同じ予算での比較/u })).toBeNull();
+    expect(screen.getByText(/cost-aligned Compareではありません/u)).toBeVisible();
   });
 });

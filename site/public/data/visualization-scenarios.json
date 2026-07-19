@@ -4151,6 +4151,231 @@
     },
     {
       "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.1.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "evaluation_ledger",
+          "fidelity",
+          "call_cost",
+          "evaluation_status",
+          "accumulated_budget",
+          "best_so_far",
+          "posterior_uncertainty"
+        ],
+        "payload_bytes": 122003,
+        "payload_path": "visualizations/bo-multi-fidelity-ledger.json",
+        "payload_sha256": "32bb14e6c8116d972613124ff592cfcc64a78cb27e56b26e6647b8116aa8d1e9",
+        "renderer_contract_version": "1.1.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.4",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 14
+        },
+        "initial_condition": {
+          "point": [
+            -2.9,
+            -2.6,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_MULTIFIDELITY_LEDGER",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 14,
+          "max_total_cost": 36
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Evaluation ledger for a low/high-fidelity simulator",
+          "ja": "低／高 fidelity simulatorのevaluation ledger"
+        },
+        "expected_phenomenon_en": "Cheap low-fidelity calls advance separately from accumulated cost and the high-fidelity best-so-far",
+        "expected_phenomenon_ja": "安いlow fidelityを重ねても、累積costとhigh fidelityのbest-so-farは別の軸で進む",
+        "failure_signals": [
+          {
+            "label_en": "Failed, censored, and timeout calls are not replaced by objective values",
+            "label_ja": "failed・censored・timeoutを目的値に置換しない",
+            "observable_ids": [
+              "evaluation_ledger",
+              "evaluation_status"
+            ],
+            "signal_id": "ledger_does_not_replace_failure_with_objective"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "This fixed run does not establish continuous optimality or validate a fidelity correction model",
+          "note_ja": "連続問題の最適性やfidelity補正の妥当性はこの固定runから判定しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Track fidelity, cost, and status for each simulator call and read the high-fidelity best-so-far",
+          "ja": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む"
+        },
+        "limitations_en": "A fixed-seed one-dimensional educational policy. It does not model cross-fidelity surrogate correction, parallel/asynchronous execution, real runtime, retries, or physical simulator failure causes, and does not claim a cost-aligned Compare or complete #138.",
+        "limitations_ja": "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、cost-aligned Compareや#138全体の完了を主張しない。",
+        "misconception": {
+          "en": "Treat low-fidelity calls and failed calls as equivalent to successful high-fidelity evaluations",
+          "ja": "low fidelityの回数や失敗をhigh fidelityの成功評価と同じものとして数える"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity"
+            ],
+            "title_en": "Inspect the first calls and fidelity",
+            "title_ja": "最初のcallとfidelityを見る"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "call_cost",
+              "accumulated_budget"
+            ],
+            "title_en": "Accumulate low-fidelity cost",
+            "title_ja": "low fidelityのcostを累積する"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "evaluation_status",
+              "best_so_far"
+            ],
+            "title_en": "Separate failure status from values",
+            "title_ja": "失敗statusを値と分ける"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "accumulated_budget",
+              "best_so_far"
+            ],
+            "title_en": "Inspect high-fidelity results within budget",
+            "title_ja": "予算内のhigh fidelity結果を確認する"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_SURROGATE_MODEL",
+          "CONCEPT_EVALUATION_COST"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "evaluation ledger",
+            "label_ja": "評価ledger",
+            "observable_id": "evaluation_ledger"
+          },
+          {
+            "label_en": "fidelity",
+            "label_ja": "fidelity",
+            "observable_id": "fidelity"
+          },
+          {
+            "label_en": "call cost",
+            "label_ja": "call cost",
+            "observable_id": "call_cost"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "評価status",
+            "observable_id": "evaluation_status"
+          },
+          {
+            "label_en": "accumulated budget",
+            "label_ja": "累積budget",
+            "observable_id": "accumulated_budget"
+          },
+          {
+            "label_en": "high-fidelity best-so-far",
+            "label_ja": "high fidelity best-so-far",
+            "observable_id": "best_so_far"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "surrogate uncertainty",
+            "label_ja": "surrogate不確実性",
+            "observable_id": "posterior_uncertainty"
+          }
+        ],
+        "static_summary": {
+          "en": "Show low/high fidelity, call cost, accumulated budget, failed/censored/timeout status, and high-fidelity best-so-far in one ledger.",
+          "ja": "低／高 fidelity、call cost、累積budget、failed・censored・timeout、high fidelity best-so-farを同じledgerで示す。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Each call preserves fidelity, cost, and status",
+            "label_ja": "callごとのfidelity・cost・statusが残る",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "call_cost",
+              "evaluation_status"
+            ],
+            "signal_id": "ledger_preserves_fidelity_cost_status"
+          },
+          {
+            "label_en": "Only successful high-fidelity calls update best-so-far",
+            "label_ja": "high fidelity成功だけでbest-so-farを更新する",
+            "observable_ids": [
+              "accumulated_budget",
+              "best_so_far"
+            ],
+            "signal_id": "ledger_separates_high_fidelity_best"
+          }
+        ],
+        "text_alternative": {
+          "en": "Read calls in order and inspect fidelity, cost, status, accumulated budget, and high-fidelity best-so-far in the table; no Compare winner is shown.",
+          "ja": "callを順に読み、fidelity、cost、status、累積budget、high fidelity best-so-farを表で確認する。Compareの勝敗は表示しない。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_MULTIFIDELITY_LEDGER_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "title_en": "Evaluation ledger for a low/high-fidelity simulator",
+      "title_ja": "低／高 fidelity simulator の評価ledger"
+    },
+    {
+      "artifact": {
         "artifact_contract": "FeasibleRegion",
         "artifact_contract_version": "1.0.0",
         "artifact_kind": "executable_trace",

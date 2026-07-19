@@ -31,6 +31,8 @@ from optimization_compass.visualization_scenarios import (
 
 Strategy = Literal["exploit", "explore"]
 NoisePreset = Literal["noiseless", "small_noise"]
+Fidelity = Literal["low", "high"]
+EvaluationStatus = Literal["ok", "failed", "censored", "timeout"]
 SURROGATE_GENERATOR_ID = "educational.surrogate_uncertainty.v1"
 SURROGATE_GENERATOR_VERSION = "1.0.0"
 CANONICAL_FLOAT_SIGNIFICANT_DIGITS = 8
@@ -72,8 +74,78 @@ class SurrogateFrame(RendererModel):
     explanation_ja: str = Field(min_length=1)
 
 
-class SurrogateUncertaintyPayload(RendererModel):
+class EvaluationLedgerEntry(RendererModel):
+    call_id: int = Field(gt=0)
+    x: float
+    fidelity: Fidelity
+    cost: float = Field(gt=0)
+    status: EvaluationStatus
+    observed_value: float | None
+    accumulated_cost: float = Field(gt=0)
+    accumulated_high_fidelity_equivalent_cost: float = Field(ge=0)
+    best_so_far: float | None
+
+
+class EvaluationLedger(RendererModel):
     contract_version: Literal["1.0.0"] = "1.0.0"
+    fidelity_costs: dict[Fidelity, float]
+    budget_cost: float = Field(gt=0)
+    high_fidelity_equivalent_budget: float = Field(gt=0)
+    calls: list[EvaluationLedgerEntry] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_calls(self) -> Self:
+        if set(self.fidelity_costs) != {"low", "high"}:
+            raise ValueError("evaluation ledger must declare low and high fidelity costs")
+        if any(cost <= 0 for cost in self.fidelity_costs.values()):
+            raise ValueError("evaluation ledger fidelity costs must be positive")
+        if [call.call_id for call in self.calls] != list(range(1, len(self.calls) + 1)):
+            raise ValueError("evaluation ledger call IDs must be consecutive")
+        accumulated = 0.0
+        high_equivalent = 0.0
+        best_high: float | None = None
+        for call in self.calls:
+            if call.cost != self.fidelity_costs[call.fidelity]:
+                raise ValueError("evaluation ledger call cost must match its fidelity")
+            accumulated += call.cost
+            high_equivalent += call.cost / self.fidelity_costs["high"]
+            if abs(call.accumulated_cost - accumulated) > 1e-9:
+                raise ValueError("evaluation ledger accumulated cost is inconsistent")
+            if abs(call.accumulated_high_fidelity_equivalent_cost - high_equivalent) > 1e-7:
+                raise ValueError("evaluation ledger high-fidelity-equivalent cost is inconsistent")
+            if call.status == "ok" and call.observed_value is None:
+                raise ValueError("successful evaluation ledger calls require an observed value")
+            if call.status != "ok" and call.observed_value is not None:
+                raise ValueError(
+                    "non-successful evaluation ledger calls must have null observed value"
+                )
+            if call.fidelity == "high" and call.status == "ok":
+                if call.observed_value is None:
+                    raise ValueError("successful high fidelity calls require an observed value")
+                best_high = (
+                    call.observed_value
+                    if best_high is None
+                    else min(best_high, call.observed_value)
+                )
+            if call.best_so_far != best_high:
+                raise ValueError(
+                    "evaluation ledger best-so-far must use successful high fidelity calls"
+                )
+        if accumulated > self.budget_cost + 1e-9:
+            raise ValueError("evaluation ledger exceeds its cost budget")
+        if (
+            abs(
+                self.high_fidelity_equivalent_budget
+                - self.budget_cost / self.fidelity_costs["high"]
+            )
+            > 1e-7
+        ):
+            raise ValueError("evaluation ledger equivalent budget is inconsistent")
+        return self
+
+
+class SurrogateUncertaintyPayload(RendererModel):
+    contract_version: Literal["1.0.0", "1.1.0"] = "1.0.0"
     strategy: Strategy
     noise_preset: NoisePreset
     noise_std: float = Field(ge=0)
@@ -83,6 +155,7 @@ class SurrogateUncertaintyPayload(RendererModel):
     truth_disclosure_ja: str = Field(min_length=1)
     frames: list[SurrogateFrame] = Field(min_length=1)
     random_history: list[Observation] = Field(min_length=1)
+    evaluation_ledger: EvaluationLedger | None = None
 
     @model_validator(mode="after")
     def validate_frames(self) -> Self:
@@ -93,6 +166,10 @@ class SurrogateUncertaintyPayload(RendererModel):
             raise ValueError("random comparison must use the same evaluation budget")
         if any(frame.oracle_evaluations != frame.frame_index + 3 for frame in self.frames):
             raise ValueError("frames must advance one oracle evaluation at a time")
+        if self.contract_version == "1.1.0" and self.evaluation_ledger is None:
+            raise ValueError("SurrogateUncertainty 1.1.0 requires an evaluation ledger")
+        if self.contract_version == "1.0.0" and self.evaluation_ledger is not None:
+            raise ValueError("SurrogateUncertainty 1.0.0 cannot include an evaluation ledger")
         return self
 
 
@@ -104,7 +181,12 @@ class GeneratedSurrogateScenario:
 
 
 def canonical_renderer_bytes(model: RendererModel) -> bytes:
-    payload = _canonicalize_floats(model.model_dump(mode="json"))
+    serialized_payload: object = model.model_dump(mode="json")
+    if isinstance(serialized_payload, dict):
+        serialized_payload = {
+            key: value for key, value in serialized_payload.items() if value is not None
+        }
+    payload = _canonicalize_floats(serialized_payload)
     value = json.dumps(
         payload,
         ensure_ascii=False,
@@ -624,6 +706,373 @@ def generate_surrogate_scenario(
     )
 
 
+def _multi_fidelity_observation(
+    x: float, fidelity: Fidelity
+) -> tuple[EvaluationStatus, float | None]:
+    if fidelity == "low" and x < -2.8:
+        return "timeout", None
+    if fidelity == "low" and x > 2.4:
+        return "failed", None
+    if fidelity == "high" and x < -2.2:
+        return "censored", None
+    high = _truth(x)
+    bias = 0.18 * math.sin(1.4 * x + 0.3) if fidelity == "low" else 0.0
+    deterministic_noise = (
+        0.03 * math.sin(7.0 * x) if fidelity == "low" else 0.01 * math.sin(7.0 * x)
+    )
+    return "ok", high + bias + deterministic_noise
+
+
+def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSurrogateScenario:
+    """Generate the bounded multi-fidelity teaching run for the Gallery case."""
+    fidelity_costs: dict[Fidelity, float] = {"low": 1.0, "high": 12.0}
+    call_plan: list[tuple[float, Fidelity]] = [
+        (-2.9, "low"),
+        (-2.6, "low"),
+        (0.0, "low"),
+        (2.6, "low"),
+        (1.1, "low"),
+        (0.6, "low"),
+        (2.2, "low"),
+        (-1.5, "low"),
+        (0.3, "low"),
+        (1.4, "low"),
+        (2.45, "low"),
+        (-0.4, "low"),
+        (-2.4, "high"),
+        (1.7, "high"),
+    ]
+    grid = [round(-3.0 + index * 6.0 / 80.0, 6) for index in range(81)]
+    observations: list[Observation] = []
+    ledger: list[EvaluationLedgerEntry] = []
+    frames: list[SurrogateFrame] = []
+    accumulated_cost = 0.0
+    accumulated_high_equivalent = 0.0
+    best_high: float | None = None
+    for index, (x, fidelity) in enumerate(call_plan):
+        status, observed_value = _multi_fidelity_observation(x, fidelity)
+        cost = fidelity_costs[fidelity]
+        accumulated_cost += cost
+        accumulated_high_equivalent += cost / fidelity_costs["high"]
+        if fidelity == "high" and status == "ok":
+            if observed_value is None:
+                raise ValueError("successful high fidelity calls require an observed value")
+            best_high = observed_value if best_high is None else min(best_high, observed_value)
+        ledger.append(
+            EvaluationLedgerEntry(
+                call_id=index + 1,
+                x=x,
+                fidelity=fidelity,
+                cost=cost,
+                status=status,
+                observed_value=observed_value,
+                accumulated_cost=accumulated_cost,
+                accumulated_high_fidelity_equivalent_cost=accumulated_high_equivalent,
+                best_so_far=best_high,
+            )
+        )
+        if status == "ok":
+            if observed_value is None:
+                raise ValueError("successful calls require an observed value")
+            observations.append(Observation(x=x, value=_truth(x), observed_value=observed_value))
+        if index < 2:
+            continue
+        posterior = _posterior(observations, grid, 0.0)
+        incumbent = min(observations, key=lambda item: item.observed_value)
+        observed_xs = {round(item.x, 6) for item in observations}
+        points = [
+            PredictivePoint(
+                x=grid_x,
+                true_value=_truth(grid_x),
+                mean=mean,
+                lower=mean - 1.96 * sigma,
+                upper=mean + 1.96 * sigma,
+                acquisition=(
+                    0.0
+                    if round(grid_x, 6) in observed_xs
+                    else _expected_improvement(mean, sigma, incumbent.observed_value, 0.18)
+                ),
+            )
+            for grid_x, (mean, sigma) in zip(grid, posterior, strict=True)
+        ]
+        next_call = call_plan[index + 1] if index + 1 < len(call_plan) else None
+        selected = None
+        if next_call is not None:
+            selected = next(
+                (point for point in points if abs(point.x - next_call[0]) < 1e-5),
+                None,
+            )
+        if selected and next_call is not None:
+            explanation = (
+                f"次のledger callは {next_call[1]} fidelity の x={next_call[0]:.2f}。"
+                f" surrogate上のEIは {selected.acquisition:.3f} ですが、"
+                "この固定教材はfidelity policyとstatus記録を読むためのrunです。"
+            )
+        else:
+            explanation = "ledgerの予算を使い切りました。high fidelityのbest-so-farを確認します。"
+        frames.append(
+            SurrogateFrame(
+                frame_index=len(frames),
+                oracle_evaluations=index + 1,
+                observations=list(observations),
+                predictive_summary=points,
+                selected_point=selected.x if selected else None,
+                selected_mean=selected.mean if selected else None,
+                selected_uncertainty=(selected.upper - selected.mean) if selected else None,
+                selected_acquisition=selected.acquisition if selected else None,
+                incumbent_x=incumbent.x,
+                incumbent_value=incumbent.observed_value,
+                random_incumbent_value=min(_truth(item[0]) for item in call_plan[: index + 1]),
+                explanation_ja=explanation,
+            )
+        )
+    random_history = [
+        Observation(x=x, value=_truth(x), observed_value=_truth(x)) for x, _ in call_plan
+    ]
+    payload = SurrogateUncertaintyPayload(
+        contract_version="1.1.0",
+        strategy="explore",
+        noise_preset="noiseless",
+        noise_std=0.0,
+        exploration_xi=0.18,
+        domain=[-3.0, 3.0],
+        objective_expression=str(_PROBLEM.instance.display["expression"]),
+        truth_disclosure_ja=(
+            "破線の真のhigh fidelity目的関数は教材用の答え合わせです。"
+            "ledgerの失敗・censored・timeoutは目的値へ置換していません。"
+        ),
+        frames=frames,
+        random_history=random_history,
+        evaluation_ledger=EvaluationLedger(
+            fidelity_costs=fidelity_costs,
+            budget_cost=36.0,
+            high_fidelity_equivalent_budget=3.0,
+            calls=ledger,
+        ),
+    )
+    payload_bytes = canonical_renderer_bytes(payload)
+    scenario_id = "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
+    initial_design = [item[0] for item in call_plan[:3]]
+    scenario = VisualizationScenario(
+        contract_version="1.2.0",
+        dataset_version=dataset_version,
+        scenario_id=scenario_id,
+        identity_status="generated_only",
+        canonical_scenario_id=None,
+        title_ja="低／高 fidelity simulator の評価ledger",
+        title_en="Evaluation ledger for a low/high-fidelity simulator",
+        purpose="mechanism",
+        problem_definition_id="PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+        problem_instance_id="OBJECTIVE_EDUCATIONAL_WAVY_1D",
+        lesson=VisualizationLesson(
+            learning_objective=LocalizedText(
+                ja=(
+                    "simulator callごとのfidelity・cost・statusを追い、"
+                    "high fidelityのbest-so-farを読む"
+                ),
+                en=(
+                    "Track fidelity, cost, and status for each simulator call and read "
+                    "the high-fidelity best-so-far"
+                ),
+            ),
+            misconception=LocalizedText(
+                ja="low fidelityの回数や失敗をhigh fidelityの成功評価と同じものとして数える",
+                en=(
+                    "Treat low-fidelity calls and failed calls as equivalent to "
+                    "successful high-fidelity evaluations"
+                ),
+            ),
+            expected_phenomenon_ja=(
+                "安いlow fidelityを重ねても、累積costとhigh fidelityのbest-so-farは別の軸で進む"
+            ),
+            expected_phenomenon_en=(
+                "Cheap low-fidelity calls advance separately from accumulated cost and "
+                "the high-fidelity best-so-far"
+            ),
+            success_signals=[
+                VisualizationSignal(
+                    signal_id="ledger_preserves_fidelity_cost_status",
+                    label_ja="callごとのfidelity・cost・statusが残る",
+                    label_en="Each call preserves fidelity, cost, and status",
+                    observable_ids=[
+                        "evaluation_ledger",
+                        "fidelity",
+                        "call_cost",
+                        "evaluation_status",
+                    ],
+                ),
+                VisualizationSignal(
+                    signal_id="ledger_separates_high_fidelity_best",
+                    label_ja="high fidelity成功だけでbest-so-farを更新する",
+                    label_en="Only successful high-fidelity calls update best-so-far",
+                    observable_ids=["accumulated_budget", "best_so_far"],
+                ),
+            ],
+            failure_signals=[
+                VisualizationSignal(
+                    signal_id="ledger_does_not_replace_failure_with_objective",
+                    label_ja="failed・censored・timeoutを目的値に置換しない",
+                    label_en=(
+                        "Failed, censored, and timeout calls are not replaced by objective values"
+                    ),
+                    observable_ids=["evaluation_ledger", "evaluation_status"],
+                )
+            ],
+            primary_observables=[
+                VisualizationObservable(
+                    observable_id="evaluation_ledger",
+                    label_ja="評価ledger",
+                    label_en="evaluation ledger",
+                ),
+                VisualizationObservable(
+                    observable_id="fidelity", label_ja="fidelity", label_en="fidelity"
+                ),
+                VisualizationObservable(
+                    observable_id="call_cost", label_ja="call cost", label_en="call cost"
+                ),
+                VisualizationObservable(
+                    observable_id="evaluation_status",
+                    label_ja="評価status",
+                    label_en="evaluation status",
+                ),
+                VisualizationObservable(
+                    observable_id="accumulated_budget",
+                    label_ja="累積budget",
+                    label_en="accumulated budget",
+                ),
+                VisualizationObservable(
+                    observable_id="best_so_far",
+                    label_ja="high fidelity best-so-far",
+                    label_en="high-fidelity best-so-far",
+                ),
+            ],
+            secondary_observables=[
+                VisualizationObservable(
+                    observable_id="posterior_uncertainty",
+                    label_ja="surrogate不確実性",
+                    label_en="surrogate uncertainty",
+                )
+            ],
+            narration_steps=[
+                VisualizationNarrationStep(
+                    milestone_id="start",
+                    title_ja="最初のcallとfidelityを見る",
+                    title_en="Inspect the first calls and fidelity",
+                    observable_ids=["evaluation_ledger", "fidelity"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="first_change",
+                    title_ja="low fidelityのcostを累積する",
+                    title_en="Accumulate low-fidelity cost",
+                    observable_ids=["call_cost", "accumulated_budget"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="失敗statusを値と分ける",
+                    title_en="Separate failure status from values",
+                    observable_ids=["evaluation_status", "best_so_far"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="termination",
+                    title_ja="予算内のhigh fidelity結果を確認する",
+                    title_en="Inspect high-fidelity results within budget",
+                    observable_ids=["accumulated_budget", "best_so_far"],
+                ),
+            ],
+            comparison_role="primary_example",
+            prerequisite_concept_ids=["CONCEPT_SURROGATE_MODEL", "CONCEPT_EVALUATION_COST"],
+            recommended_next_scenario_ids=["SCENARIO_BO_1D_EXPLORE_NOISELESS"],
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja="連続問題の最適性やfidelity補正の妥当性はこの固定runから判定しない",
+                note_en=(
+                    "This fixed run does not establish continuous optimality or validate "
+                    "a fidelity correction model"
+                ),
+            ),
+            static_summary=LocalizedText(
+                ja=(
+                    "低／高 fidelity、call cost、累積budget、failed・censored・timeout、"
+                    "high fidelity best-so-farを同じledgerで示す。"
+                ),
+                en=(
+                    "Show low/high fidelity, call cost, accumulated budget, "
+                    "failed/censored/timeout status, and high-fidelity best-so-far in one ledger."
+                ),
+            ),
+            text_alternative=LocalizedText(
+                ja=(
+                    "callを順に読み、fidelity、cost、status、累積budget、"
+                    "high fidelity best-so-farを表で確認する。Compareの勝敗は表示しない。"
+                ),
+                en=(
+                    "Read calls in order and inspect fidelity, cost, status, accumulated "
+                    "budget, and high-fidelity best-so-far in the table; no Compare winner "
+                    "is shown."
+                ),
+            ),
+            derived_media_caption=LocalizedText(
+                ja="低／高 fidelity simulatorのevaluation ledger",
+                en="Evaluation ledger for a low/high-fidelity simulator",
+            ),
+            limitations_ja=(
+                "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、"
+                "parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、"
+                "cost-aligned Compareや#138全体の完了を主張しない。"
+            ),
+            limitations_en=(
+                "A fixed-seed one-dimensional educational policy. It does not model "
+                "cross-fidelity surrogate correction, parallel/asynchronous execution, "
+                "real runtime, retries, or physical simulator failure causes, and does not "
+                "claim a cost-aligned Compare or complete #138."
+            ),
+        ),
+        experiment=VisualizationExperiment(
+            oracle_policy=["objective_value"],
+            initial_condition=VisualizationInitialCondition(point=initial_design),
+            parameter_preset_id="BO_MULTIFIDELITY_LEDGER",
+            seed=VisualizationSeed(status="fixed", value=2604),
+            budget=VisualizationBudget(metric="oracle_evaluations", value=len(call_plan)),
+            stopping={"max_oracle_evaluations": len(call_plan), "max_total_cost": 36},
+            tuning_policy="fixed_preset",
+        ),
+        runs=[
+            VisualizationRun(
+                run_id="RUN_BO_MULTIFIDELITY_LEDGER_2604",
+                method_id="M_BAYESIAN_OPT_GP",
+                profile_id="PROFILE_BAYESIAN_OPT_GP_1D",
+                implementation_mapping_status="not_applicable",
+                implementation_id=None,
+                artifact_id="ARTIFACT_BO_MULTIFIDELITY_LEDGER",
+            )
+        ],
+        artifact=VisualizationArtifact(
+            artifact_kind="executable_trace",
+            artifact_contract="SurrogateUncertainty",
+            artifact_contract_version="1.1.0",
+            renderer_family="surrogate_uncertainty",
+            renderer_contract_version="1.1.0",
+            observable_ids=[
+                "evaluation_ledger",
+                "fidelity",
+                "call_cost",
+                "evaluation_status",
+                "accumulated_budget",
+                "best_so_far",
+                "posterior_uncertainty",
+            ],
+            payload_path="visualizations/bo-multi-fidelity-ledger.json",
+            payload_bytes=len(payload_bytes),
+            payload_sha256=sha256(payload_bytes).hexdigest(),
+        ),
+        source_ids=["S035", "S038", "S059", "S069", "S075"],
+        last_verified="2026-07-19",
+    )
+    return GeneratedSurrogateScenario(
+        scenario=scenario, payload=payload, payload_bytes=payload_bytes
+    )
+
+
 def write_surrogate_scenarios(
     output_dir: Path, *, dataset_version: str
 ) -> list[VisualizationScenario]:
@@ -639,4 +1088,9 @@ def write_surrogate_scenarios(
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(generated.payload_bytes)
             scenarios.append(generated.scenario)
+    generated = generate_evaluation_ledger_scenario(dataset_version=dataset_version)
+    target = output_dir / generated.scenario.artifact.payload_path
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(generated.payload_bytes)
+    scenarios.append(generated.scenario)
     return scenarios

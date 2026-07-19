@@ -1396,6 +1396,7 @@
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_HYPERBAND_ASHA",
             "/methods/M_NELDER_MEAD",
@@ -1448,6 +1449,7 @@
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_HYPERBAND_ASHA",
             "/methods/M_NELDER_MEAD",
@@ -1481,7 +1483,8 @@
             "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
             "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "SCENARIO_BO_1D_EXPLORE_NOISELESS",
-            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
           ]
         },
         "terminology_prerequisite": {
@@ -2853,7 +2856,7 @@
       "last_reviewed": "2026-07-19",
       "learning_objective": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
       "limitations": [
-        "low fidelity の bias は意図的に順位を保存しないため、少ない high-fidelity call や discrepancy model の妥当性を保証しません。multi-fidelity ledger を再生する Theater と high-fidelity-equivalent cost を揃えた Compare は後続作業です。",
+        "low fidelity の bias は意図的に順位を保存しないため、少ない high-fidelity call や discrepancy model の妥当性を保証しません。この ledger Theater は固定された教育用 run の再生であり、high-fidelity-equivalent cost を揃えた Compare は未実装です。",
         "固定された1次元・決定論的な教育用 simulator であり、実際の物理 simulator の fidelity 間誤差、noise 分布、runtime、failure 原因を表しません。"
       ],
       "prerequisite_journey_ids": [],
@@ -2889,6 +2892,13 @@
           "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
           "role": "sensitivity",
           "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
         }
       ],
       "source_ids": [
@@ -2900,7 +2910,7 @@
         "S075"
       ],
       "status": "partial",
-      "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。既存の Bayesian Optimization Theater はこの高 fidelity 側の surrogate・acquisition の読み方を示しますが、low/high 選択、cost accounting、failure/censoring はまだ表示しません。",
+      "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。既存の Bayesian Optimization Theater は高 fidelity 側の surrogate・acquisition の読み方を示し、追加の ledger Theater は low/high 選択、cost accounting、failure/censoring を表示します。",
       "title_en": "Allocate a budget across low- and high-fidelity simulation",
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
     },
