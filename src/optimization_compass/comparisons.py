@@ -24,6 +24,7 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
+    "generic_metric_history": ("educational.optimal_control.v1", "1.1.0"),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {

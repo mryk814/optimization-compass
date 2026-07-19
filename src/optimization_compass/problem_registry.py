@@ -255,6 +255,35 @@ def _optimal_control(instance: ProblemInstance, point: Sequence[float]) -> float
     return float(running_cost + terminal_cost)
 
 
+def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
+    mesh_nodes = instance.parameters.get("mesh_nodes")
+    if isinstance(mesh_nodes, bool) or not isinstance(mesh_nodes, int):
+        raise ValueError(f"invalid pendulum mesh for {instance.problem_instance_id}")
+    expected_dimension = 3 * mesh_nodes
+    if len(point) != expected_dimension:
+        raise ValueError(
+            f"{instance.problem_instance_id} expects {expected_dimension} trajectory values"
+        )
+    theta = point[:mesh_nodes]
+    omega = point[mesh_nodes : 2 * mesh_nodes]
+    controls = point[2 * mesh_nodes :]
+    target = instance.parameters.get("terminal_target")
+    if not isinstance(target, list) or len(target) != 2:
+        raise ValueError(f"invalid pendulum target for {instance.problem_instance_id}")
+    weights = instance.parameters.get("running_weights")
+    if not isinstance(weights, dict):
+        raise ValueError(f"invalid pendulum weights for {instance.problem_instance_id}")
+    control_weight = _number(weights.get("control"))
+    terminal_weight = _number(weights.get("terminal"))
+    target_theta, target_omega = (_number(value) for value in target)
+    control_cost = control_weight * sum(float(control) ** 2 for control in controls)
+    terminal_cost = terminal_weight * (
+        (float(theta[-1]) - target_theta) ** 2 + (float(omega[-1]) - target_omega) ** 2
+    )
+    return float(control_cost + terminal_cost)
+
+
 def exponential_decay_residuals(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
     """Return residuals for the fixed noiseless exponential-decay lesson."""
     a, k, c = point
@@ -335,4 +364,5 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
+    "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
 }

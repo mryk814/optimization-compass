@@ -3,7 +3,7 @@
 - Published concept guides: `21`
 - Meeting the concept floor: `21`
 - Below the concept floor: `0`
-- Prose review warnings: `491`
+- Prose review warnings: `489`
 
 ## Concept publication floor
 
@@ -34,8 +34,8 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 319
-- `sentence.long`: 171
+- `sentence.commas`: 318
+- `sentence.long`: 170
 
 | Content | Warnings |
 |---|---:|
@@ -100,7 +100,7 @@
 | `family.local-dfo` | 5 |
 | `family.manifold` | 7 |
 | `family.multi-objective` | 4 |
-| `family.optimal-control` | 10 |
+| `family.optimal-control` | 8 |
 | `family.smooth-local` | 6 |
 | `family.stochastic-ml` | 5 |
 | `family.trust-region` | 2 |
