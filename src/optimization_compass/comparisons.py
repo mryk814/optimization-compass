@@ -26,6 +26,7 @@ from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
 )
+from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenario
 
 _EDUCATIONAL_GENERATORS_BY_RENDERER = {
@@ -222,6 +223,7 @@ def validate_comparison_benchmark_contexts(
     *,
     problem_definition_ids: Iterable[str] | None = None,
     problem_instance_ids: Iterable[str] | None = None,
+    traces: Iterable[AlgorithmTrace] = (),
 ) -> None:
     contexts_by_id = {str(context["context_id"]): context for context in contexts}
     scenarios_by_id = {scenario.scenario_id: scenario for scenario in scenarios}
@@ -231,6 +233,7 @@ def validate_comparison_benchmark_contexts(
     known_problem_instances = (
         set(problem_instance_ids) if problem_instance_ids is not None else None
     )
+    traces_by_id = {trace.trace_id: trace for trace in traces}
     exact_context_ids = {
         context_id
         for context_id, context in contexts_by_id.items()
@@ -261,8 +264,19 @@ def validate_comparison_benchmark_contexts(
             )
         if comparison.benchmark_context_id not in exact_context_ids:
             continue
+        if context.get("problem_instance_id") != comparison.problem_instance_id:
+            raise ValueError(
+                "exact comparison benchmark context uses a different problem instance: "
+                f"{comparison.comparison_id} expects {comparison.problem_instance_id}, "
+                f"{comparison.benchmark_context_id} uses {context.get('problem_instance_id')}"
+            )
         referenced_exact_context_ids.add(comparison.benchmark_context_id)
-        _validate_exact_comparison_context(comparison, context, scenarios_by_id)
+        _validate_exact_comparison_context(
+            comparison,
+            context,
+            scenarios_by_id,
+            traces_by_id,
+        )
     unreferenced = exact_context_ids - referenced_exact_context_ids
     if unreferenced:
         raise ValueError(f"exact benchmark context is not referenced: {sorted(unreferenced)}")
@@ -272,6 +286,7 @@ def _validate_exact_comparison_context(
     comparison: ComparisonSet,
     context: Mapping[str, Any],
     scenarios_by_id: Mapping[str, VisualizationScenario],
+    traces_by_id: Mapping[str, AlgorithmTrace],
 ) -> None:
     runtime = context["runtime"]
     implementation = context["implementation_versions"]
@@ -321,11 +336,16 @@ def _validate_exact_comparison_context(
             ),
             None,
         )
+        trace = traces_by_id.get(member.artifact.artifact_id)
+        expected_generator = (
+            (trace.generator_id, trace.generator_version)
+            if trace is not None
+            else _EDUCATIONAL_GENERATORS_BY_PROFILE.get(run.profile_id)
+            if run is not None
+            else None
+        ) or _EDUCATIONAL_GENERATORS_BY_RENDERER.get(scenario.artifact.renderer_family)
         if run is None:
             raise ValueError(f"comparison member run does not resolve: {member.member_id}")
-        expected_generator = _EDUCATIONAL_GENERATORS_BY_PROFILE.get(
-            run.profile_id
-        ) or _EDUCATIONAL_GENERATORS_BY_RENDERER.get(scenario.artifact.renderer_family)
         if expected_generator is None:
             raise ValueError(
                 "educational comparison renderer has no registered generator: "

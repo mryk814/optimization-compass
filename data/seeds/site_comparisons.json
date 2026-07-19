@@ -715,6 +715,68 @@
       ]
     }
     ,{
+      "comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+      "canonical_url": "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+      "aliases": [],
+      "mode": "parameter_sensitivity",
+      "journey_id": "EC026",
+      "case_id": "EC026",
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "benchmark_context_id": "BENCH_PDE_STATE_TOLERANCE_6",
+      "title_ja": "同じdesign更新でstate/adjoint toleranceとsolve costを読む",
+      "title_en": "Read state/adjoint tolerance and solve cost under the same design updates",
+      "comparison_question": "固定mesh・design更新・call budgetの下でstate/adjoint toleranceだけを変えると、離散objective、残差、線形反復costはどう変わる？",
+      "formulation_summary": "8×4の同じcantilever離散problemでreduced-spaceのdesign→state→adjoint ledgerを6 call実行する。",
+      "fixed_factors": ["同じINSTANCE_TOPOLOGY_CANTILEVER_2Dと8×4 mesh", "同じ初期density fieldと6回のdesign更新", "同じstate/adjoint solver familyとpreconditioner policy", "同じfailure mapping: failed evaluationをobjective penaltyへ変換しない", "同じ6 state-solve-call budget"],
+      "changed_factors": ["state/adjoint relative toleranceだけ: 1e-8 対 1e-3"],
+      "seed_policy": "決定的ledgerのためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 6},
+      "stopping_policy": "6 state solve callsで停止し、outer objective toleranceでは早期停止しない。",
+      "tuning_policy": "toleranceをrun前に固定し、結果を見たpost-run tuningをしない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "objective_value", "label_ja": "離散objective", "direction": "minimize", "unit": "normalized compliance"},
+        {"metric_id": "state_residual", "label_ja": "state残差", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "adjoint_residual", "label_ja": "adjoint残差", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "state_linear_iterations", "label_ja": "state線形反復", "direction": "minimize", "unit": "iterations"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "problem、mesh、design更新、call budget、solver/preconditioner policy、failure mappingを固定し、state/adjoint toleranceだけを変える。",
+      "caveat": "決定的な教育用ledgerであり、実solverを実行したwall-clock比較ではない。loose runの低い離散objectiveを連続modelでの改善と読まない。",
+      "takeaway": "inner toleranceはcostだけでなくstate/adjoint整合性とouter progressの解釈を変えるため、objectiveとは別に残差とsolve costを保存する。",
+      "limitations": ["固定8×4 meshの合成ledgerであり、mesh refinement、実runtime、preconditionerの一般性能を比較しない。", "連続PDEの可行性・最適性、実装間順位、transient/multiphysics couplingの収束を保証しない。"],
+      "source_ids": ["S019", "S097", "S101", "S110"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "tight-state-tolerance",
+          "role": "primary",
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+          "label_ja": "tight state/adjoint tolerance",
+          "label_en": "Tight state/adjoint tolerance",
+          "parameters": {"state_tolerance": 1e-8, "adjoint_tolerance": 1e-8, "failure_policy": "explicit_failed_evaluation"},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "pde-state-tolerance-tight", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pde-state-tolerance-tight.json"}
+        },
+        {
+          "member_id": "loose-state-tolerance",
+          "role": "sensitivity_variant",
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+          "label_ja": "loose state/adjoint tolerance",
+          "label_en": "Loose state/adjoint tolerance",
+          "parameters": {"state_tolerance": 0.001, "adjoint_tolerance": 0.001, "failure_policy": "explicit_failed_evaluation"},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "pde-state-tolerance-loose", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pde-state-tolerance-loose.json"}
+        }
+      ]
+    }
+    ,{
       "comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
       "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
       "identity_status": "canonical",

@@ -65,6 +65,11 @@
       "id": "015",
       "path": "data/migrations/015_uncertainty_portfolio.sql",
       "sha256": "2e3a3fa54253dfe3e819d759b12c8e5c210032f16c91f87d281e242b7c972d2f"
+    },
+    {
+      "id": "016",
+      "path": "data/migrations/016_pde_simulation_contract.sql",
+      "sha256": "72c495362ec61c5fd42b7a40dfd2437ce2147616dde00f29cd76c5c92e96a6ba"
     }
   ],
   "specialized_inputs": [

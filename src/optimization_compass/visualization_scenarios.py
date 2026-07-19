@@ -38,6 +38,7 @@ CANONICAL_SCENARIO_IDS = frozenset(
         "SCENARIO_BIOBJECTIVE_QUADRATIC",
         "SCENARIO_TOPOLOGY_SIMP_OC",
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+        "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
     }
 )
 
@@ -54,6 +55,8 @@ DERIVED_SCENARIO_BASE_IDS = {
     "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON": "SCENARIO_TOPOLOGY_SIMP_OC",
     "SCENARIO_PENDULUM_SWING_UP_MESH_40": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
     "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+    "SCENARIO_PDE_STATE_TOLERANCE_LOOSE": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+    "SCENARIO_PDE_STATE_SOLVE_FAILURE": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
 }
 
 
@@ -212,6 +215,8 @@ class VisualizationExperiment(TraceModel):
             "objective_vector",
             "residual_vector",
             "jacobian",
+            "state_solve",
+            "adjoint_solve",
         ]
     ] = Field(min_length=1)
     initial_condition: VisualizationInitialCondition
