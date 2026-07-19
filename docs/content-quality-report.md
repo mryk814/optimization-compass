@@ -16,7 +16,7 @@
 | `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 67 | 5940 | 9 | 3 | 0 | pass |
 | `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
-| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4834 | 8 | 5 | 0 | pass |
+| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 5906 | 9 | 5 | 0 | pass |
 | `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 63 | 3238 | 6 | 2 | 0 | pass |
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |

@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_thirteen_closed_representative_instances() -> None:
+def test_problem_suite_has_fifteen_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 13
+    assert len(suite.instances) == 15
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -34,6 +34,8 @@ def test_problem_suite_has_thirteen_closed_representative_instances() -> None:
         "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
         "INSTANCE_OPTIMAL_CONTROL_EC020",
+        "INSTANCE_BILEVEL_REGRESSION_2COEF",
+        "INSTANCE_HYBRID_CHATTERING_LEDGER",
     } <= {item.problem_instance_id for item in suite.instances}
     assert all(item.display.get("range") for item in suite.instances)
     assert all(item.display.get("axis_labels") for item in suite.instances)
@@ -87,13 +89,27 @@ def test_registry_reproduces_optimal_control_educational_objective() -> None:
     assert problem.objective_value([0.0] * 60) == pytest.approx(1.0)
 
 
+def test_registry_executes_nested_and_hybrid_teaching_instances() -> None:
+    nested = get_runtime_problem("INSTANCE_BILEVEL_REGRESSION_2COEF")
+    hybrid = get_runtime_problem("INSTANCE_HYBRID_CHATTERING_LEDGER")
+
+    assert nested.objective_value([0.2]) == pytest.approx(0.0009048546)
+    assert hybrid.objective_value([0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0]) == 0.0
+
+
 def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path) -> None:
     release = build_staged_release(BASE_DATABASE, tmp_path / "release")
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 12
-    assert len(catalog.instances) == 13
+    assert len(catalog.definitions) == 14
+    assert len(catalog.instances) == 15
+    context = next(
+        item
+        for item in repository.benchmark_contexts()
+        if item["context_id"] == "BENCH_BILEVEL_REGRESSION_EDUCATIONAL_6"
+    )
+    assert context["problem_instance_id"] == "INSTANCE_BILEVEL_REGRESSION_2COEF"
     assert (release.site_data_directory / "problems.json").read_text(encoding="utf-8")
 
 

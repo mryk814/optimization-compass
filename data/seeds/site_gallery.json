@@ -571,8 +571,12 @@
         }
       ],
       "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
-      "comparison_ids": [],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BILEVEL_REGRESSION_EXACT",
+        "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+      ],
+      "comparison_ids": ["COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"],
       "source_ids": ["S017", "S029", "S030", "S055", "S056", "S064"],
       "difficulty": "intermediate",
       "status": "published",

@@ -24,6 +24,18 @@ from optimization_compass.learning_journey_policy import load_learning_journey_a
 from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
+from optimization_compass.nested_solve import (
+    BILEVEL_EXACT_SCENARIO_ID,
+    BILEVEL_EXACT_TRACE_ID,
+    BILEVEL_PROBLEM_DEFINITION_ID,
+    BILEVEL_RELAXED_SCENARIO_ID,
+    BILEVEL_RELAXED_TRACE_ID,
+    HYBRID_CHATTERING_SCENARIO_ID,
+    HYBRID_CHATTERING_TRACE_ID,
+    HYBRID_PROBLEM_DEFINITION_ID,
+    generate_bilevel_regression_traces,
+    generate_hybrid_chattering_trace,
+)
 from optimization_compass.parameter_estimation import (
     LBFGSB_SCENARIO_ID,
     LM_SCENARIO_ID,
@@ -866,6 +878,8 @@ def _write_dummy_trace(
     generated_traces.append(
         _generate_optimal_control_history_trace(dataset_version=dataset_version)
     )
+    generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
+    generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -947,6 +961,23 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
             if locale == "en"
             else "Direct collocation · state/control診断"
         )
+    nested_titles = {
+        BILEVEL_EXACT_TRACE_ID: (
+            "Bilevel regression · exact inner diagnostics",
+            "Bilevel回帰 · exact inner診断",
+        ),
+        BILEVEL_RELAXED_TRACE_ID: (
+            "Bilevel regression · finite-relaxation failure",
+            "Bilevel回帰 · finite relaxationの残差",
+        ),
+        HYBRID_CHATTERING_TRACE_ID: (
+            "Hybrid mode discovery · chattering ledger",
+            "Hybrid mode discovery · chattering診断",
+        ),
+    }
+    if trace_id in nested_titles:
+        title_en, title_ja = nested_titles[trace_id]
+        return title_ja if locale == "ja" else title_en
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -1259,7 +1290,296 @@ def _trace_lesson(
     is_nelder_mead: bool,
     is_search_tree: bool,
     is_optimal_control: bool,
+    is_bilevel: bool,
+    is_hybrid: bool,
 ) -> VisualizationLesson:
+    if is_bilevel:
+        is_relaxed = trace.scenario_id == BILEVEL_RELAXED_SCENARIO_ID
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "outer progress、inner solve、complementarityを別々の履歴として読む",
+                "Read outer progress, the inner solve, and complementarity as separate histories",
+            ),
+            misconception=_localized(
+                "outer objectiveが下がればinnerの解品質とexact complementarityも確認できた",
+                "A lower outer objective establishes inner-solve quality and exact complementarity",
+            ),
+            expected_phenomenon_ja=(
+                "有限relaxationではouter objectiveが下がってもcomplementarity residualが残る"
+                if is_relaxed
+                else "outer updateの前にinner toleranceとKKT residualを別々に確認する"
+            ),
+            expected_phenomenon_en=(
+                "A finite relaxation can lower the outer objective while leaving a "
+                "complementarity residual"
+                if is_relaxed
+                else (
+                    "Check the inner tolerance and KKT residuals separately before each "
+                    "outer update"
+                )
+            ),
+            success_signals=[
+                _signal(
+                    "nested_diagnostics_visible",
+                    "outer objective、inner residual、complementarity residualを"
+                    "同じouter evaluationで確認できる",
+                    "Outer objective, inner residual, and complementarity residual are "
+                    "visible at each outer evaluation",
+                    "outer_objective",
+                    "inner_residual",
+                    "complementarity_residual",
+                )
+            ],
+            failure_signals=[
+                _signal(
+                    "relaxation_is_not_exact",
+                    (
+                        "有限relaxationでcomplementarity residualが残り、exactとは判定できない"
+                        if is_relaxed
+                        else (
+                            "小さいstationarity residualだけではCQ、解写像の滑らかさ、"
+                            "global最適性を確認できない"
+                        )
+                    ),
+                    (
+                        "A finite-relaxation residual remains, so exact complementarity "
+                        "is not established"
+                        if is_relaxed
+                        else (
+                            "A small stationarity residual does not establish a constraint "
+                            "qualification, a smooth solution map, or global optimality"
+                        )
+                    ),
+                    "stationarity_residual",
+                    "complementarity_residual",
+                )
+            ],
+            primary_observables=[
+                _observable("outer_objective", "outer objective", "outer objective"),
+                _observable("inner_objective", "inner objective", "inner objective"),
+                _observable("inner_residual", "inner residual", "inner residual"),
+                _observable(
+                    "complementarity_residual",
+                    "complementarity residual",
+                    "complementarity residual",
+                ),
+            ],
+            secondary_observables=[
+                _observable("inner_iterations", "inner iteration数", "inner iterations"),
+                _observable(
+                    "stationarity_residual",
+                    "stationarity residual",
+                    "stationarity residual",
+                ),
+                _observable(
+                    "relaxation_parameter",
+                    "relaxation parameter",
+                    "relaxation parameter",
+                ),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "outerとinnerの目的関数を分けて確認",
+                    "Separate the outer and inner objectives",
+                    "outer_objective",
+                    "inner_objective",
+                ),
+                _step(
+                    "first_change",
+                    "inner toleranceを満たしてからouterを更新",
+                    "Update the outer variable only after the inner tolerance passes",
+                    "inner_residual",
+                    "inner_iterations",
+                ),
+                _step(
+                    "pattern_visible",
+                    "stationarityとcomplementarityを別々に確認",
+                    "Read stationarity and complementarity separately",
+                    "stationarity_residual",
+                    "complementarity_residual",
+                ),
+                _step(
+                    "termination",
+                    "relaxation・CQ・stationarityの保証範囲を限定",
+                    "Bound the claims from relaxation, constraint qualifications, and stationarity",
+                    "complementarity_residual",
+                    "relaxation_parameter",
+                ),
+            ],
+            comparison_role="failure_contrast" if is_relaxed else "primary_example",
+            prerequisite_concept_ids=[
+                "F_STRUCTURE_BILEVEL",
+                "F_DERIVATIVE_INNER_ITERATION",
+                "F_STRUCTURE_COMPLEMENTARITY",
+            ],
+            recommended_next_scenario_ids=(
+                [BILEVEL_EXACT_SCENARIO_ID]
+                if is_relaxed
+                else [BILEVEL_RELAXED_SCENARIO_ID, HYBRID_CHATTERING_SCENARIO_ID]
+            ),
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja=(
+                    "固定ledgerはglobal bilevel optimum、MPEC stationarity class、"
+                    "CQ成立を表示しない。"
+                ),
+                note_en=(
+                    "The fixed ledger does not show a global bilevel optimum, an MPEC "
+                    "stationarity class, or a verified constraint qualification."
+                ),
+            ),
+            static_summary=_localized(
+                "outer objective、inner objective、inner residual、stationarity、"
+                "complementarityをouter evaluationごとに並べる。",
+                "Align outer and inner objectives, inner residual, stationarity, and "
+                "complementarity by outer evaluation.",
+            ),
+            text_alternative=_localized(
+                "各outer evaluationのinner iteration数、inner residual、"
+                "stationarity residual、complementarity residual、"
+                "relaxation parameterを列挙する。",
+                "List inner iterations, inner residual, stationarity residual, "
+                "complementarity residual, and the relaxation parameter at each outer "
+                "evaluation.",
+            ),
+            derived_media_caption=_localized(
+                "非負回帰のbilevel outer/inner診断ledger",
+                "Bilevel outer/inner diagnostic ledger for nonnegative regression",
+            ),
+            limitations_ja=(
+                "固定した2係数・6 outer updateの教育用ledgerであり、実solver executionではない。"
+                "小さいresidualはglobal最適性、CQ、solution mapの滑らかさを保証せず、"
+                "有限relaxationをexact complementarityとみなさない。"
+            ),
+            limitations_en=(
+                "A fixed two-coefficient, six-outer-update teaching ledger rather than a "
+                "solver execution. Small residuals do not establish global optimality, a "
+                "constraint qualification, or a smooth solution map, and finite relaxation "
+                "is not exact complementarity."
+            ),
+        )
+    if is_hybrid:
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "目的関数とdynamics defectが改善してもmode chatteringを独立して止める",
+                "Stop mode chattering independently even when objective and dynamics "
+                "defect improve",
+            ),
+            misconception=_localized(
+                "連続状態と目的関数が滑らかならmode sequenceも妥当である",
+                "A smooth state and objective imply a valid mode sequence",
+            ),
+            expected_phenomenon_ja=(
+                "relaxed mode indicatorの切替間隔が縮み、mode switch数が増え続ける"
+            ),
+            expected_phenomenon_en=(
+                "Switch intervals shrink and the switch count keeps increasing for a "
+                "relaxed mode indicator"
+            ),
+            success_signals=[
+                _signal(
+                    "mode_diagnostics_visible",
+                    "active mode、切替数、切替間隔を目的関数と分けて確認できる",
+                    "Active mode, switch count, and switch interval remain separate from "
+                    "the objective",
+                    "mode_sequence",
+                    "mode_switch_count",
+                    "switching_interval",
+                )
+            ],
+            failure_signals=[
+                _signal(
+                    "chattering_visible",
+                    "目的関数が下がっても切替間隔が縮み続ける",
+                    "Switch intervals continue shrinking even as the objective decreases",
+                    "objective_value",
+                    "mode_switch_count",
+                    "switching_interval",
+                )
+            ],
+            primary_observables=[
+                _observable("mode_sequence", "active mode", "active mode"),
+                _observable("mode_switch_count", "mode切替数", "mode switch count"),
+                _observable("switching_interval", "切替間隔", "switching interval"),
+            ],
+            secondary_observables=[
+                _observable("dynamics_defect", "dynamics defect", "dynamics defect"),
+                _observable("objective_value", "目的関数値", "objective value"),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "初期modeと目的関数を確認",
+                    "Inspect the initial mode and objective",
+                    "mode_sequence",
+                    "objective_value",
+                ),
+                _step(
+                    "first_change",
+                    "最初のmode switchを確認",
+                    "Inspect the first mode switch",
+                    "mode_sequence",
+                    "mode_switch_count",
+                ),
+                _step(
+                    "pattern_visible",
+                    "切替間隔が縮むpatternを確認",
+                    "Inspect the shrinking switch-interval pattern",
+                    "mode_switch_count",
+                    "switching_interval",
+                ),
+                _step(
+                    "termination",
+                    "目的改善とは別にchatteringで停止",
+                    "Stop for chattering independently of objective progress",
+                    "objective_value",
+                    "switching_interval",
+                ),
+            ],
+            comparison_role="failure_contrast",
+            prerequisite_concept_ids=[
+                "F_CONSTRAINT_LOGICAL",
+                "F_NUM_DISCRETE_VARIABLES",
+                "F_STRUCTURE_TRAJECTORY",
+            ],
+            recommended_next_scenario_ids=[BILEVEL_EXACT_SCENARIO_ID],
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja="mode scheduleのglobal最適性やcontact/frictionの物理的妥当性は表示しない。",
+                note_en=(
+                    "The display does not establish global optimality of the mode schedule "
+                    "or physical validity of contact or friction."
+                ),
+            ),
+            static_summary=_localized(
+                "mode indicator、切替数、切替間隔、dynamics defect、目的関数を"
+                "同じevaluationで並べる。",
+                "Align the mode indicator, switch count, switch interval, dynamics defect, "
+                "and objective by evaluation.",
+            ),
+            text_alternative=_localized(
+                "各evaluationのactive modeと累積切替数を列挙し、切替間隔が短くなる"
+                "一方で目的関数とdynamics defectが下がる固定failure ledgerを示す。",
+                "List the active mode and cumulative switches at each evaluation in a "
+                "fixed failure ledger where switch intervals shrink while objective and "
+                "dynamics defect decrease.",
+            ),
+            derived_media_caption=_localized(
+                "mode discovery relaxationのchattering診断ledger",
+                "Chattering diagnostic ledger for a mode-discovery relaxation",
+            ),
+            limitations_ja=(
+                "固定した合成mode sequenceの教育用ledgerであり、hybrid solver execution、"
+                "contact/friction model、物理simulationではない。"
+                "mode discoveryの一般性能やtrajectoryの可行性を保証しない。"
+            ),
+            limitations_en=(
+                "A fixed synthetic mode-sequence teaching ledger, not a hybrid solver "
+                "execution, contact/friction model, or physical simulation. It does not "
+                "establish general mode-discovery performance or trajectory feasibility."
+            ),
+        )
     if is_optimal_control:
         return VisualizationLesson(
             learning_objective=_localized(
@@ -1823,6 +2143,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"
     is_optimal_control = trace.profile_id == "PROFILE_OPTIMAL_CONTROL_GENERIC"
+    is_bilevel = trace.profile_id == "PROFILE_BILEVEL_REGRESSION_LEDGER"
+    is_hybrid = trace.profile_id == "PROFILE_HYBRID_MODE_LEDGER"
     is_divergence = trace.trace_id.endswith("-divergence")
     point = [0.0, 0.0, 0.0, 0.0] if is_search_tree else trace.initial_state.get("point")
     if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
@@ -1840,7 +2162,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         "search_tree"
         if is_search_tree
         else "generic_metric_history"
-        if is_parameter_estimation or is_optimal_control
+        if is_parameter_estimation or is_optimal_control or is_bilevel or is_hybrid
         else "simplex_geometry"
         if is_nelder_mead
         else "continuous_trajectory"
@@ -1848,6 +2170,24 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     observable_ids = (
         ["search_nodes", "global_bound", "incumbent", "prune_reason"]
         if is_search_tree
+        else [
+            "outer_objective",
+            "inner_objective",
+            "inner_residual",
+            "inner_iterations",
+            "complementarity_residual",
+            "stationarity_residual",
+            "relaxation_parameter",
+        ]
+        if is_bilevel
+        else [
+            "mode_sequence",
+            "mode_switch_count",
+            "switching_interval",
+            "dynamics_defect",
+            "objective_value",
+        ]
+        if is_hybrid
         else [
             "state_norm",
             "control_effort",
@@ -1869,7 +2209,11 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         else ["objective_value", "current_point", "gradient", "update_vector"]
     )
     purpose: Literal["mechanism", "comparison", "failure_contrast", "sensitivity"] = (
-        "sensitivity"
+        "failure_contrast"
+        if trace.scenario_id in {BILEVEL_RELAXED_SCENARIO_ID, HYBRID_CHATTERING_SCENARIO_ID}
+        else "mechanism"
+        if trace.scenario_id == BILEVEL_EXACT_SCENARIO_ID
+        else "sensitivity"
         if trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
         else "mechanism"
         if trace.scenario_id == PRIMARY_SCENARIO_ID
@@ -1897,6 +2241,10 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         problem_definition_id=(
             "PROBLEM_BINARY_KNAPSACK"
             if is_search_tree
+            else BILEVEL_PROBLEM_DEFINITION_ID
+            if is_bilevel
+            else HYBRID_PROBLEM_DEFINITION_ID
+            if is_hybrid
             else "PROBLEM_NONLINEAR_LEAST_SQUARES"
             if is_parameter_estimation
             else "PROBLEM_OPTIMAL_CONTROL"
@@ -1910,11 +2258,17 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             is_nelder_mead=is_nelder_mead,
             is_search_tree=is_search_tree,
             is_optimal_control=is_optimal_control,
+            is_bilevel=is_bilevel,
+            is_hybrid=is_hybrid,
         ),
         guided_story=_trace_guided_story(trace),
         experiment=VisualizationExperiment(
             oracle_policy=(
-                ["residual_vector", "jacobian"]
+                ["objective_value", "constraint_value", "constraint_jacobian"]
+                if is_bilevel
+                else ["objective_value", "constraint_value"]
+                if is_hybrid
+                else ["residual_vector", "jacobian"]
                 if is_parameter_estimation
                 else ["objective_value"]
                 if is_nelder_mead or is_search_tree
@@ -1951,7 +2305,13 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
-        last_verified=("2026-07-17" if is_parameter_estimation or is_search_tree else "2026-07-15"),
+        last_verified=(
+            "2026-07-19"
+            if is_bilevel or is_hybrid
+            else "2026-07-17"
+            if is_parameter_estimation or is_search_tree
+            else "2026-07-15"
+        ),
     )
 
 

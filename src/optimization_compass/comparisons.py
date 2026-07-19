@@ -7,6 +7,7 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.nested_solve import BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -24,6 +25,7 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
+    "generic_metric_history": (BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {
