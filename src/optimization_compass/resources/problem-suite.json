@@ -204,6 +204,23 @@
       "feature_ids": ["F_VARIABLE_TRAJECTORY", "F_CONSTRAINT_DYNAMICS", "F_OBJECTIVE_SIMULATION", "F_STRUCTURE_OPTIMAL_CONTROL"],
       "source_ids": ["S042", "S043", "S050", "S076"],
       "last_verified": "2026-07-19"
+    },
+    {
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "name_ja": "パラメータ化形状最適化",
+      "name_en": "Parameterized shape optimization",
+      "mathematical_family": "shape_optimization",
+      "variable_domain": "continuous",
+      "objective_form": "simulation",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "gradient", "constraint_value"],
+      "constraint_class": "bounds_and_linear_inequality",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 6},
+      "known_reference_semantics": "The educational instance has no exact continuous-shape reference; objective values are deterministic outputs of a fixed discretized quasi-1D model, and the finite parametrization biases which shapes are expressible.",
+      "related_problem_ids": ["PA009", "PA045"],
+      "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_OBJECTIVE_SIMULATION", "F_OBJECTIVE_NONCONVEX", "F_DERIVATIVE_ANALYTIC_GRADIENT", "F_DERIVATIVE_NUMERICAL", "F_CONSTRAINT_BOUNDS", "F_CONSTRAINT_LINEAR_INEQUALITY", "F_STRUCTURE_PDE_CONSTRAINED", "F_GUARANTEE_LOCAL_OK"],
+      "source_ids": ["S054", "S056", "S101"],
+      "last_verified": "2026-07-19"
     }
   ],
   "instances": [
@@ -491,6 +508,28 @@
       "limitations_ja": "20区間の固定meshによる教育用instanceです。連続時間の可行性・最適性、制御入力の実機安全性、solver family間の性能差を保証しません。",
       "limitations_en": "A fixed 20-interval educational instance; it does not establish continuous-time feasibility or optimality, physical actuator safety, or solver-family performance differences.",
       "source_ids": ["S042", "S043", "S050", "S076"],
+      "last_verified": "2026-07-19"
+    },
+    {
+      "problem_instance_id": "INSTANCE_SHAPE_DIFFUSER_QUASI1D",
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "name_ja": "準1次元diffuserの壁面形状最適化",
+      "name_en": "Quasi-1D diffuser wall-shape optimization",
+      "registry_key": "problem.shape.diffuser.v1",
+      "dimension": 6,
+      "parameters": {"length": 1.0, "segments": 7, "inlet_half_width": 1.0, "outlet_half_width": 2.0, "flow_rate": 1.0, "slope_penalty": 0.05, "area_budget": 1.9, "minimum_half_width": 0.2},
+      "bounds": {"half_width": [0.2, 2.5]},
+      "constraints": [{"constraint_id": "area_budget", "expression": "∫h(x)dx ≤ 1.9", "sense": "lte", "rhs": 1.9}],
+      "initialization_candidates": [{"candidate_id": "linear_taper", "half_widths": [1.1428571428571428, 1.2857142857142856, 1.4285714285714286, 1.5714285714285714, 1.7142857142857144, 1.8571428571428572]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "not_meaningful",
+      "known_reference": null,
+      "display": {"range": {"half_width": [0.0, 2.5], "objective": [0.0, 4.0]}, "axis_labels": ["x position", "half width", "objective"], "units": ["normalized length", "normalized length", "normalized"], "expression": "min J(h)=∫(Q/h)²dx + β∫(dh/dx)²dx, h(0)=1, h(1)=2, ∫h dx ≤ 1.9, 0.2 ≤ h ≤ 2.5"},
+      "intended_phenomena": ["parameterized_geometry", "reduced_objective", "state_solve", "analytic_parameter_sensitivity", "finite_difference_check", "geometry_validity", "design_space_bias", "discretization_dependence"],
+      "limitations_ja": "7区間の固定gridによる決定的な教育用instanceです。壁面半幅の区分線形parametrizationと、質量保存u=Q/hに基づく散逸+勾配penaltyの縮約目的で、parameter微分・有限差分・geometry妥当性の読み分けを学ぶためのものです。Navier–Stokes等の実流体solverではなく、剥離・乱流・圧縮性・実設計性能を保証しません。下限0.2の違反はbound制約違反として扱い、半幅が非正になる点は無効なgeometryとして評価を拒否します。連続形状の可行性・最適性は主張しません。",
+      "limitations_en": "A deterministic educational instance on a fixed 7-segment grid: a piecewise-linear half-width parametrization with a reduced dissipation-plus-slope-penalty objective derived from mass conservation u=Q/h. It teaches parameter derivatives, finite-difference checks, and geometry-validity separation; it is not a Navier-Stokes solver and does not establish separation, turbulence, compressibility, or real-design performance. Violating the 0.2 lower bound is a bound-constraint violation, while non-positive half-widths are rejected as invalid geometry. No continuous-shape feasibility or optimality is claimed.",
+      "source_ids": ["S054", "S056", "S101"],
       "last_verified": "2026-07-19"
     }
   ]

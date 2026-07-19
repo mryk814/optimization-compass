@@ -16,7 +16,7 @@ test("Theater catalogからfailure runを選びCaseとCompareへ戻れる", asyn
   if (!publishedCount) throw new Error("Published scenario count is missing.");
 
   await page.getByLabel("見る目的").selectOption("failure_contrast");
-  await expect(scenarioCount).toHaveText(`6 / ${publishedCount} シナリオ`);
+  await expect(scenarioCount).toHaveText(`7 / ${publishedCount} シナリオ`);
   const failureRun = page.getByRole("link", { name: /実行可能領域と制約を無視した失敗を比べる/u });
   await expect(failureRun).toBeVisible();
   await failureRun.click();

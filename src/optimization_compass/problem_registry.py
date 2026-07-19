@@ -223,6 +223,65 @@ def _topology_compliance_gradient(instance: ProblemInstance, point: Sequence[flo
     return gradient
 
 
+def _diffuser_geometry(
+    instance: ProblemInstance, point: Sequence[float]
+) -> tuple[list[float], float, float, float]:
+    """Return wall nodes and model constants for the quasi-1D diffuser lesson.
+
+    The registry keeps a reduced dissipation-plus-slope-penalty objective on a
+    fixed grid; a non-positive half-width is rejected as invalid geometry
+    rather than clamped, so bound violations and geometry validity stay
+    distinguishable.
+    """
+    parameters = instance.parameters
+    segments = parameters.get("segments")
+    if isinstance(segments, bool) or not isinstance(segments, int) or segments < 2:
+        raise ValueError(f"invalid diffuser segment count for {instance.problem_instance_id}")
+    if len(point) != segments - 1:
+        raise ValueError(f"{instance.problem_instance_id} expects {segments - 1} wall half-widths")
+    nodes = [
+        _number(parameters.get("inlet_half_width")),
+        *(float(value) for value in point),
+        _number(parameters.get("outlet_half_width")),
+    ]
+    if any(value <= 0.0 for value in nodes):
+        raise ValueError(
+            f"{instance.problem_instance_id} received a non-positive half-width; "
+            "the geometry is invalid"
+        )
+    step = _number(parameters.get("length")) / segments
+    flow_rate = _number(parameters.get("flow_rate"))
+    slope_penalty = _number(parameters.get("slope_penalty"))
+    return nodes, step, flow_rate, slope_penalty
+
+
+def _diffuser_dissipation(instance: ProblemInstance, point: Sequence[float]) -> float:
+    nodes, step, flow_rate, slope_penalty = _diffuser_geometry(instance, point)
+    objective = 0.0
+    for left, right in zip(nodes, nodes[1:], strict=False):
+        midpoint = 0.5 * (left + right)
+        slope = (right - left) / step
+        objective += step * (flow_rate / midpoint) ** 2 + slope_penalty * slope * slope * step
+    return objective
+
+
+def _diffuser_dissipation_gradient(
+    instance: ProblemInstance, point: Sequence[float]
+) -> list[float]:
+    nodes, step, flow_rate, slope_penalty = _diffuser_geometry(instance, point)
+    gradient = [0.0] * len(point)
+    for index, (left, right) in enumerate(zip(nodes, nodes[1:], strict=False)):
+        midpoint = 0.5 * (left + right)
+        slope = (right - left) / step
+        for node, sign in ((index, -1.0), (index + 1, 1.0)):
+            variable = node - 1
+            if 0 <= variable < len(point):
+                gradient[variable] += (
+                    -step * flow_rate**2 / midpoint**3 + sign * 2.0 * slope_penalty * slope
+                )
+    return gradient
+
+
 def _optimal_control(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Return a scalar objective for the fixed-mesh optimal-control lesson."""
     mesh_intervals = instance.parameters.get("mesh_intervals")
@@ -335,4 +394,5 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
+    "problem.shape.diffuser.v1": (_diffuser_dissipation, _diffuser_dissipation_gradient),
 }
