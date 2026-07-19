@@ -15,8 +15,8 @@ test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", asy
   await expect(page.getByLabel("目的関数", { exact: true })).toHaveValue("OBJECTIVE_QUADRATIC_2D");
   await expect(page.getByRole("combobox", { name: "初期simplex", exact: true })).toHaveValue("standard");
   const shapeLegend = page.locator(".shape-legend");
-  await expect(shapeLegend.getByText("Best", { exact: true })).toBeVisible();
-  await expect(shapeLegend.getByText("Worst", { exact: true })).toBeVisible();
+  await expect(shapeLegend.getByText("最良点 (Best)", { exact: true })).toBeVisible();
+  await expect(shapeLegend.getByText("最悪点 (Worst)", { exact: true })).toBeVisible();
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await controls.getByRole("button", { name: "1フレーム進む" }).click();
   await expect(page.locator(".nm-candidate")).toBeVisible();
@@ -55,7 +55,7 @@ test("gradient comparisonが同じevaluationで同期しreloadする", async ({ 
   await expect(page.getByRole("heading", { level: 2, name: "勾配降下法" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "モメンタム法" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Adam" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "目的値 vs oracle evaluations" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "目的値と評価回数の比較" })).toBeVisible();
   await evaluation.fill("7");
 
   const eventLines = page.locator(".comparison-event");
@@ -80,19 +80,22 @@ test("旧canonical comparison IDのdeep linkが現行の比較へ解決する", 
   await expect(page.getByRole("combobox", { name: "比較preset", exact: true })).toHaveValue(
     "COMPARE_GRADIENT_FAMILY",
   );
-  await expect(page.getByRole("heading", { level: 2, name: /同じ初期点と評価回数/u })).toBeVisible();
+  const comparisonConditions = page.getByRole("region", { name: "比較条件" });
+  await expect(comparisonConditions.getByRole("heading", { level: 2, name: "この比較で確かめること" })).toBeVisible();
+  await expect(comparisonConditions.getByText(/同じ初期点と評価回数/u)).toBeVisible();
 });
 
 test("制約failure comparisonでfixed・changed・feasibilityを読める", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
 
   await expect(page.getByRole("heading", { level: 1, name: "制約を守るrunと無視するrunを比べる" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "違うもの / Changed" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "見る指標 / Metrics" })).toBeVisible();
+  const comparisonConditions = page.getByRole("region", { name: "比較条件" });
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここまで同じ" })).toBeVisible();
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここだけ違う" })).toBeVisible();
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "まず見る" })).toBeVisible();
+  await expect(comparisonConditions.getByText("制約違反", { exact: true })).toBeVisible();
   await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
-  await expect(page.getByText("制約違反", { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /Case: 強度制約/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /ケース: 強度制約/u })).toBeVisible();
   await expect(page.getByRole("link", { name: /Theater: 実行可能領域/u })).toBeVisible();
 });
 
@@ -100,14 +103,24 @@ test("Pareto result comparisonでpreferenceだけを変えられる", async ({ p
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_PARETO_PREFERENCE");
 
   await expect(page.getByRole("heading", { level: 1, name: "Pareto front上でpreferenceを変える" })).toBeVisible();
-  await expect(page.getByText("preference weight", { exact: false }).first()).toBeVisible();
-  await expect(page.getByRole("slider", { name: /f₁のweight/u })).toBeVisible();
-  await expect(page.getByLabel("Pareto coverage集計")).toContainText("Sampled81");
+  const comparisonConditions = page.getByRole("region", { name: "比較条件" });
+  await expect(comparisonConditions.getByText("f1とf2のpreference weight", { exact: true })).toBeVisible();
+  const paretoRenderer = page.getByRole("region", { name: "単一の最良解ではなく、トレードオフ集合を選ぶ" });
+  const preference = paretoRenderer.getByRole("slider", { name: /^f₁の重み \(weight\)/u });
+  await expect(preference).toHaveValue("50");
+  const selectedObjectives = paretoRenderer.locator(".triobjective-values dd");
+  const objectivesBefore = await selectedObjectives.allTextContents();
+  await preference.press("ArrowRight");
+  await expect(preference).toHaveValue("55");
+  await expect.poll(async () => selectedObjectives.allTextContents()).not.toEqual(objectivesBefore);
+  await expect(paretoRenderer.getByText(/f₁の重み 0\.55 で選んだ点/u)).toBeVisible();
+  await expect(page.getByLabel("パレート前線の集計")).toContainText("サンプル数81");
   await expect(page.getByLabel("f₂優先weightの選択結果")).toContainText("Decision(1.6, 1.6)");
   await expect(page.getByLabel("均衡weightの選択結果")).toContainText("f₁2");
   await expect(page.getByLabel("f₁優先weightの選択結果")).toContainText("f₂5.12");
-  await expect(page.getByText("ranking=forbidden", { exact: false })).toHaveCount(0);
-  await expect(page.getByText("forbidden", { exact: true })).toBeVisible();
+  await comparisonConditions.getByText("評価条件の詳細を開く", { exact: true }).click();
+  const rankingPolicy = comparisonConditions.getByText("順位づけ", { exact: true }).locator("..");
+  await expect(rankingPolicy).toContainText("しない");
 });
 
 test("Learn検索からmethod detailとrelated visualizationへ進む", async ({ page, baseURL }) => {
@@ -115,9 +128,16 @@ test("Learn検索からmethod detailとrelated visualizationへ進む", async ({
   await page.getByRole("textbox", { name: "検索" }).fill("Nelder");
   await page.getByRole("link", { name: /Nelder–Mead単体法/u }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Nelder–Mead単体法" })).toBeVisible();
-  await page.getByRole("link", { name: "Nelder–Meadの幾何操作" }).first().click();
+  const traceRelations = page.getByRole("heading", { level: 2, name: "Method Theater / Trace" }).locator("..");
+  const canonicalTrace = traceRelations.locator(
+    'a[href*="nelder-mead-quadratic"]:not([href*="shifted"])',
+  );
+  await expect(canonicalTrace).toHaveCount(1);
+  await expect(canonicalTrace).toHaveRole("link");
+  await expect(canonicalTrace).toHaveText("Nelder–Meadの幾何操作");
+  await canonicalTrace.click();
   await expect(page).toHaveURL(/#\/traces\/nelder-mead-quadratic$/u);
-  await expect(page.getByRole("heading", { level: 1, name: "Nelder–Meadの幾何操作" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Nelder–Meadの一手を追う" })).toBeVisible();
   await expect(page.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
 });
 
@@ -130,7 +150,8 @@ test("追加教材を検索しcanonical methodと実行例を読める", async (
   await expect(page.getByRole("region", { name: "教材" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "現実の問いをmodelへ移す" })).toBeVisible();
   await expect(page.locator("pre code")).toContainText("cp_model.CpModel");
-  await expect(page.getByRole("link", { name: "Branch-and-Cut" })).toHaveAttribute(
+  const milpAlternative = page.getByRole("listitem").filter({ hasText: "強い線形緩和を持つMILP" });
+  await expect(milpAlternative.getByRole("link", { name: "Branch-and-Cut" })).toHaveAttribute(
     "href",
     "#/learn/branch-and-cut",
   );
