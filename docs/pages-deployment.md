@@ -9,17 +9,21 @@ site along separate paths.
 `validate_pages_artifact` checks out the workflow commit once and performs the complete gate:
 
 1. install the locked Python and Node.js dependencies;
-2. invoke the authoritative `uv run optimization-compass validate tier-b` registry, including the full Python suite;
-3. delete and regenerate `site/public/data`, then require zero tracked drift;
-4. run database, content, licensing, deterministic staged rebuild, parity, site unit, typecheck, and production-build checks through that registry;
-5. verify README facts, repository size, source health, and zero generated drift;
-6. retain `site/dist` as the pull-request browser artifact;
-7. stamp `site/dist/deployment.json` and verify the exact directory locally; and
-8. upload that directory once as the `github-pages` artifact.
+2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `pr-fast`, or `tier-b`; pushes, scheduled runs, and manual runs select `tier-b`;
+3. for Tier B, delete and regenerate `site/public/data`, then require zero tracked drift;
+4. run the selected registry task; unknown paths fail safe to Tier B rather than silently receiving a fast gate;
+5. verify README facts and repository size for every task, and source health plus zero generated
+   drift for Tier B;
+6. retain `site/dist` for non-documentation pull-request and nightly browser jobs;
+7. on `main`, stamp `site/dist/deployment.json` and verify the exact directory locally; and
+8. on `main`, upload that directory once as the `github-pages` artifact.
 
-The full Python regression suite is part of every pull-request and main-branch Tier B gate. The
-browser job runs tagged critical journeys on pull requests. On `main`, the same critical journeys
-plus the axe route matrix block publication. A scheduled/manual nightly job runs the full
+The full Python regression suite is required for backend, canonical data, schema, generator,
+release, backend-test, and unknown-path pull requests, and for every main/scheduled/manual Tier B
+run. Content, site, workflow, validation-contract, and documentation-only pull requests use the
+smaller authoritative task that owns their surface. The browser job runs tagged critical journeys on non-doc pull
+requests. On `main`, the same critical journeys plus the axe route matrix block publication. A
+scheduled/manual nightly job runs the full
 desktop/mobile Playwright suite against the validated artifact and stays visibly red until every
 quarantined legacy expectation has been repaired.
 

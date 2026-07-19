@@ -18,8 +18,11 @@ jobs:
     outputs:
       commit_sha: ${{ steps.identity.outputs.commit_sha }}
       dataset_version: ${{ steps.identity.outputs.dataset_version }}
+      validation_task: ${{ steps.validation.outputs.task }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: "3.12"
@@ -40,6 +43,19 @@ jobs:
       - name: Install site dependencies
         run: npm ci
         working-directory: site
+      - name: Select the authoritative validation task
+        id: validation
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            TASK="$(uv run optimization-compass select-validation-task --base-ref "origin/$BASE_REF" --format task)"
+          else
+            TASK="tier-b"
+          fi
+          echo "task=$TASK" >> "$GITHUB_OUTPUT"
+          echo "Selected validation task: $TASK"
       - name: Audit Python and npm dependencies
         run: |
           uv run --frozen pip-audit --skip-editable
@@ -57,20 +73,27 @@ jobs:
           if-no-files-found: error
           retention-days: 30
       - name: Regenerate site data from the validated database
+        if: steps.validation.outputs.task == 'tier-b'
         run: |
           rm -rf site/public/data
           uv run optimization-compass export-site-data --output site/public/data
           git diff --exit-code -- site/public/data
-      - name: Run authoritative Tier B validation
-        run: uv run optimization-compass validate tier-b
-      - name: Verify repository release facts and generated drift
+      - name: Run the selected authoritative validation task
+        run: uv run optimization-compass validate "${{ steps.validation.outputs.task }}"
+      - name: Build browser artifact for Tier A
+        if: steps.validation.outputs.task == 'tier-a'
+        run: npm --prefix site run build
+      - name: Verify repository release facts
         run: |
           uv run python scripts/sync_readme_facts.py --check
           uv run python scripts/repository_size.py --check
+      - name: Verify source health and generated drift
+        if: steps.validation.outputs.task == 'tier-b'
+        run: |
           uv run python scripts/source_health.py --output "$RUNNER_TEMP/source-health"
           git diff --exit-code -- data site/public/data src/optimization_compass/resources
       - name: Upload validated browser artifact
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && steps.validation.outputs.task != 'docs'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: validated-site-${{ github.sha }}
@@ -110,7 +133,7 @@ jobs:
 
   browser_e2e:
     name: Browser E2E and accessibility
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: (github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')) && needs.validate_pages_artifact.outputs.validation_task != 'docs'
     needs: validate_pages_artifact
     runs-on: ubuntu-latest
     steps:

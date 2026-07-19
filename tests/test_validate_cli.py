@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
+from optimization_compass import cli as cli_module
 from optimization_compass import validation_tasks
 from optimization_compass.cli import app
 from optimization_compass.validation_tasks import (
@@ -20,6 +21,7 @@ from optimization_compass.validation_tasks import (
     find_repository_root,
     run_task,
     task_plan,
+    validation_task_for_paths,
 )
 
 runner = CliRunner()
@@ -71,6 +73,55 @@ def test_tiers_are_strictly_nested() -> None:
 
 def test_problem_task_gate_is_tier_c() -> None:
     assert TASKS["problem"].gate == "tier-c"
+
+
+@pytest.mark.parametrize(
+    ("paths", "expected"),
+    [
+        (["README.md", "docs/pages-deployment.md"], "docs"),
+        (["content/methods/example.md"], "tier-a"),
+        (["site/src/App.tsx", ".github/workflows/ci.yml"], "pr-fast"),
+        (["tests/test_validate_cli.py", "tests/test_pages_workflow.py"], "pr-fast"),
+        (["tests/test_engine.py"], "tier-b"),
+        (["src/optimization_compass/engine.py"], "tier-b"),
+        (["data/seeds/site_gallery.json"], "tier-b"),
+        (["unclassified.file"], "tier-b"),
+    ],
+)
+def test_changed_paths_select_the_smallest_safe_pr_gate(paths: list[str], expected: str) -> None:
+    plan = validation_task_for_paths(paths)
+    assert plan.task == expected
+    assert plan.gate == expected
+
+
+def test_mixed_changes_escalate_to_the_highest_required_gate() -> None:
+    plan = validation_task_for_paths(
+        ["content/methods/example.md", "site/src/App.tsx", "src/optimization_compass/engine.py"]
+    )
+    assert plan.task == "tier-b"
+    assert set(plan.reason_codes) == {
+        "backend_or_data_authority",
+        "content_authority",
+        "site_or_repository_contract",
+    }
+
+
+def test_select_validation_task_cli_is_machine_readable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        cli_module,
+        "changed_paths_from_git",
+        lambda _base_ref, _root: ["site/src/App.tsx"],
+    )
+    result = runner.invoke(
+        app,
+        ["select-validation-task", "--base-ref", "origin/main", "--format", "json"],
+    )
+    assert result.exit_code == 0
+    payload = json.loads(result.stdout)
+    assert payload["task"] == "pr-fast"
+    assert payload["changed_paths"] == ["site/src/App.tsx"]
 
 
 def test_manifest_task_is_a_focused_tier_b_check() -> None:

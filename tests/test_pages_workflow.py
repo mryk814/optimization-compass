@@ -70,7 +70,8 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
         "uv run --frozen pip-audit --skip-editable",
         "npm --prefix site audit --audit-level=high",
         "scripts/dependency_report.py",
-        "uv run optimization-compass validate tier-b",
+        "uv run optimization-compass select-validation-task",
+        'uv run optimization-compass validate "${{ steps.validation.outputs.task }}"',
         "uv run python scripts/sync_readme_facts.py --check",
         "uv run optimization-compass export-site-data --output site/public/data",
         "git diff --exit-code -- site/public/data",
@@ -89,20 +90,27 @@ def test_validated_artifact_pipeline_contains_every_required_gate() -> None:
     assert "uv run pytest --cov" not in workflow
 
 
-def test_all_validation_events_reject_stale_generated_site_data_and_release_drift() -> None:
+def test_risk_selected_validation_and_generated_drift_share_one_authority() -> None:
     workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
 
     regeneration = _workflow_step(workflow, "Regenerate site data from the validated database")
-    assert "if:" not in regeneration
+    assert "if: steps.validation.outputs.task == 'tier-b'" in regeneration
     assert "rm -rf site/public/data" in regeneration
     assert "uv run optimization-compass export-site-data --output site/public/data" in regeneration
     assert "git diff --exit-code -- site/public/data" in regeneration
 
-    tier_b = _workflow_step(workflow, "Run authoritative Tier B validation")
-    assert "if:" not in tier_b
-    assert "uv run optimization-compass validate tier-b" in tier_b
+    selection = _workflow_step(workflow, "Select the authoritative validation task")
+    assert 'TASK="tier-b"' in selection
+    assert "select-validation-task" in selection
 
-    drift = _workflow_step(workflow, "Verify repository release facts and generated drift")
+    selected_gate = _workflow_step(workflow, "Run the selected authoritative validation task")
+    assert (
+        'uv run optimization-compass validate "${{ steps.validation.outputs.task }}"'
+        in selected_gate
+    )
+
+    drift = _workflow_step(workflow, "Verify source health and generated drift")
+    assert "if: steps.validation.outputs.task == 'tier-b'" in drift
     assert (
         "git diff --exit-code -- data site/public/data src/optimization_compass/resources" in drift
     )
@@ -120,7 +128,8 @@ def test_publication_and_deployment_steps_remain_main_only() -> None:
         assert f"if: {MAIN_ONLY_CONDITION}" in step
 
     browser_job = workflow[workflow.index("  browser_e2e:\n") : workflow.index("  deploy:\n")]
-    assert f"if: {PR_AND_MAIN_CONDITION}" in browser_job
+    assert PR_AND_MAIN_CONDITION in browser_job
+    assert "needs.validate_pages_artifact.outputs.validation_task != 'docs'" in browser_job
     assert "name: Run pull-request critical journeys" in browser_job
     assert "name: Run main critical journeys and axe scans" in browser_job
 

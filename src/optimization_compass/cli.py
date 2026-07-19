@@ -30,9 +30,11 @@ from optimization_compass.validation_tasks import (
     CheckResult,
     UnknownTaskError,
     ValidationCheck,
+    changed_paths_from_git,
     find_repository_root,
     run_task,
     task_plan,
+    validation_task_for_paths,
 )
 
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
@@ -157,6 +159,29 @@ def validate(
             )
     if result.status != "pass":
         raise typer.Exit(code=1)
+
+
+@app.command("select-validation-task")
+def select_validation_task(
+    base_ref: Annotated[str, typer.Option(help="Git base ref used for a three-dot diff")],
+    format: Annotated[str, typer.Option(help="task, human, or json")] = "human",
+) -> None:
+    """Select the authoritative PR validation task from changed repository paths."""
+    if format not in {"task", "human", "json"}:
+        raise typer.BadParameter("format must be task, human, or json")
+    root = find_repository_root()
+    try:
+        plan = validation_task_for_paths(changed_paths_from_git(base_ref, root))
+    except RuntimeError as error:
+        raise typer.BadParameter(str(error)) from error
+    if format == "task":
+        typer.echo(plan.task)
+    elif format == "json":
+        typer.echo(plan.model_dump_json(indent=2))
+    else:
+        typer.echo(f"selected {plan.task}: {', '.join(plan.reason_codes)}")
+        for path in plan.changed_paths:
+            typer.echo(f"  {path}")
 
 
 @app.command("export-site-data")
