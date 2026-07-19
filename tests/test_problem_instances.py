@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_thirteen_closed_representative_instances() -> None:
+def test_problem_suite_has_fourteen_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 13
+    assert len(suite.instances) == 14
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -34,6 +34,7 @@ def test_problem_suite_has_thirteen_closed_representative_instances() -> None:
         "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
         "INSTANCE_OPTIMAL_CONTROL_EC020",
+        "INSTANCE_SHAPE_DIFFUSER_QUASI1D",
     } <= {item.problem_instance_id for item in suite.instances}
     assert all(item.display.get("range") for item in suite.instances)
     assert all(item.display.get("axis_labels") for item in suite.instances)
@@ -87,13 +88,46 @@ def test_registry_reproduces_optimal_control_educational_objective() -> None:
     assert problem.objective_value([0.0] * 60) == pytest.approx(1.0)
 
 
+def test_registry_reproduces_shape_diffuser_educational_objective() -> None:
+    problem = get_runtime_problem("INSTANCE_SHAPE_DIFFUSER_QUASI1D")
+
+    assert problem.objective_value([1.0] * 6) == pytest.approx(1.2706349206349206)
+
+
+def test_shape_diffuser_analytic_gradient_matches_central_differences() -> None:
+    problem = get_runtime_problem("INSTANCE_SHAPE_DIFFUSER_QUASI1D")
+    candidate = problem.instance.initialization_candidates[0]["half_widths"]
+    assert isinstance(candidate, list)
+    point = [float(value) for value in candidate]
+
+    analytic = problem.objective_gradient(point)
+
+    step = 1e-6
+    for index, derivative in enumerate(analytic):
+        forward = list(point)
+        backward = list(point)
+        forward[index] += step
+        backward[index] -= step
+        upper = problem.objective_value(forward)
+        lower = problem.objective_value(backward)
+        assert isinstance(upper, float) and isinstance(lower, float)
+        assert derivative == pytest.approx((upper - lower) / (2.0 * step), abs=1e-6)
+
+
+def test_shape_diffuser_rejects_non_positive_half_width_as_invalid_geometry() -> None:
+    problem = get_runtime_problem("INSTANCE_SHAPE_DIFFUSER_QUASI1D")
+
+    with pytest.raises(ValueError, match="invalid"):
+        problem.objective_value([1.0, 1.0, 0.0, 1.0, 1.0, 1.0])
+
+
 def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path) -> None:
     release = build_staged_release(BASE_DATABASE, tmp_path / "release")
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 12
-    assert len(catalog.instances) == 13
+    assert len(catalog.definitions) == 13
+    assert len(catalog.instances) == 14
     assert (release.site_data_directory / "problems.json").read_text(encoding="utf-8")
 
 

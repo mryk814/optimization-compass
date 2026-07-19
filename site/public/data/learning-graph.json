@@ -984,7 +984,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.7",
   "edges": [
     {
       "audience": "learner",
