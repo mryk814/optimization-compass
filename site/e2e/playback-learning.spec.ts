@@ -10,7 +10,7 @@ function requiredBaseURL(baseURL: string | undefined): string {
 test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/nelder-mead");
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
-  const iteration = controls.getByLabel("iteration");
+  const iteration = controls.getByLabel("反復");
   await expect(controls).toBeVisible();
   await expect(page.getByLabel("目的関数", { exact: true })).toHaveValue("OBJECTIVE_QUADRATIC_2D");
   await expect(page.getByRole("combobox", { name: "初期simplex", exact: true })).toHaveValue("standard");
@@ -35,14 +35,14 @@ test("Nelder–Mead controlsがplay、pause、step、reloadを保持する", asy
   await controls.getByRole("button", { name: "1フレーム戻る" }).click();
   await controls.getByLabel("再生速度").selectOption("2");
   await controls.getByRole("button", { name: "逆再生にする" }).click();
-  const frameBeforeReload = await controls.getByText(/Frame \d+\//u).textContent();
+  const frameBeforeReload = await controls.getByText(/フレーム \d+\//u).textContent();
 
   await page.reload();
   const reloadedControls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await expect(reloadedControls.getByLabel("再生速度")).toHaveValue("2");
   await expect(reloadedControls.getByRole("button", { name: "順再生にする" })).toBeVisible();
   await expect(reloadedControls.getByRole("button", { name: "再生", exact: true })).toBeVisible();
-  await expect(reloadedControls.getByText(/Frame \d+\//u)).toHaveText(frameBeforeReload ?? "");
+  await expect(reloadedControls.getByText(/フレーム \d+\//u)).toHaveText(frameBeforeReload ?? "");
 });
 
 test("gradient comparisonが同じevaluationで同期しreloadする", async ({ page, baseURL }) => {

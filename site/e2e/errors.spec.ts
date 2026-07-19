@@ -19,7 +19,7 @@ for (const route of unknownRoutes) {
     await gotoAtlasRoute(page, requiredBaseURL(baseURL), route);
     await expect(page.getByRole("heading", { level: 1, name: "ページが見つかりません" })).toBeVisible();
     await expect(page.getByRole("link", { name: "Atlasへ戻る" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Mapを見る" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "問題構造を見る" })).toHaveAttribute("href", /#\/map$/u);
   });
 }
 
