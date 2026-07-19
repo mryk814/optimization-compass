@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "expectations": [
     {
       "applicability": "expected",
@@ -196,23 +196,27 @@
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "optimal-control-ec020-history"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_OPTIMAL_CONTROL_HISTORY",
       "purpose": "mechanism",
       "rationale": "状態・制御・制約残差の時間発展を学ぶ。",
-      "reason_codes": [
-        "scenario_not_built"
-      ],
+      "reason_codes": [],
       "renderer_family": "generic_metric_history",
-      "route_ids": [],
-      "scenario_ids": [],
+      "route_ids": [
+        "/traces/optimal-control-ec020-history"
+      ],
+      "scenario_ids": [
+        "SCENARIO_OPTIMAL_CONTROL_EC020"
+      ],
       "slice_id": "SLICE_OPTIMAL_CONTROL",
       "source_ids": [
         "S042",
         "S043"
       ],
-      "status": "missing",
+      "status": "available",
       "subject_id": "MF_OPTIMAL_CONTROL",
       "subject_type": "method"
     },
@@ -291,7 +295,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-07-18T00:00:00Z",
+  "generated_at": "2026-07-19T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -1995,7 +1999,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2016,7 +2020,8 @@
             "direct-shooting",
             "family.optimal-control",
             "ilqr-ddp",
-            "multiple-shooting"
+            "multiple-shooting",
+            "optimal-control-ec020-history"
           ]
         },
         "recommendation": {
@@ -2040,12 +2045,12 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "optimal-control-ec020-history"
+          ]
         }
       },
       "label": "Optimal control and trajectory optimization",
@@ -5330,7 +5335,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5342,7 +5347,8 @@
             "S043",
             "S050",
             "S076",
-            "direct-collocation"
+            "direct-collocation",
+            "optimal-control-ec020-history"
           ]
         },
         "recommendation": {
@@ -5365,12 +5371,12 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "optimal-control-ec020-history"
+          ]
         }
       },
       "label": "Direct collocation",
@@ -16599,8 +16605,8 @@
   "summary": {
     "baseline": "not_provided",
     "status_counts": {
-      "available": 5,
-      "missing": 2,
+      "available": 6,
+      "missing": 1,
       "not_applicable": 0,
       "partial": 4
     },

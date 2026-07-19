@@ -37,6 +37,15 @@ test("all current renderer families consume the shared educational metadata", as
   await page.screenshot({ path: testInfo.outputPath("bo-lesson-panel.png"), fullPage: true });
 });
 
+test("optimal control historyはstate/controlと制約診断を同じ履歴で読める", async ({ page, baseURL }) => {
+  await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/traces/optimal-control-ec020-history");
+  await expect(page.getByRole("heading", { level: 1, name: "Direct collocation · state/control診断" })).toBeVisible();
+  await expect(page.getByText("state norm", { exact: false }).first()).toBeVisible();
+  await expect(page.getByText("dynamics defect", { exact: false }).first()).toBeVisible();
+  await expect(page.getByText("path violation", { exact: false }).first()).toBeVisible();
+  await expect(page.getByText(/連続時間の可行性/u).first()).toBeVisible();
+});
+
 test("Nelder-Mead guided story applies the authored frame, speed, and focus cue", async ({
   page,
   baseURL,

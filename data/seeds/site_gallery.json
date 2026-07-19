@@ -359,7 +359,7 @@
       "conditional_methods": [{"method_id": "M_MULTIPLE_SHOOTING", "reason": "長い予測区間（horizon）で単一shooting（single shooting）が不安定だが、区間積分を活用したい場合"}],
       "excluded_methods": [{"method_id": "M_BFGS", "reason": "軌道、動力学の欠陥、疎性を平坦なベクトルのブラックボックス目的関数へ隠してしまう"}],
       "implementation_ids": ["I_CASADI", "I_ACADOS", "I_DRAKE"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_OPTIMAL_CONTROL_EC020"],
       "comparison_ids": [],
       "source_ids": ["S042", "S043", "S076"],
       "difficulty": "intermediate",

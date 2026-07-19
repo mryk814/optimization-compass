@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "diagnosis_mappings": [
     {
       "cue_ja": "x ∈ X：決める値の種類",
@@ -196,7 +196,7 @@
     }
   ],
   "formula_aria_label_ja": "xがXに属する範囲でf(x)を最小化し、g_i(x)が0以下、h_j(x)が0に等しい制約を守る",
-  "generated_at": "2026-07-18T00:00:00Z",
+  "generated_at": "2026-07-19T00:00:00Z",
   "terminology_groups": [
     {
       "group_id": "variable_domains",

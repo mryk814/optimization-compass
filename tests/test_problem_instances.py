@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_twelve_closed_representative_instances() -> None:
+def test_problem_suite_has_thirteen_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 12
+    assert len(suite.instances) == 13
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -33,6 +33,7 @@ def test_problem_suite_has_twelve_closed_representative_instances() -> None:
         "INSTANCE_CONSTRAINED_DISK_2D",
         "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
+        "INSTANCE_OPTIMAL_CONTROL_EC020",
     } <= {item.problem_instance_id for item in suite.instances}
     assert all(item.display.get("range") for item in suite.instances)
     assert all(item.display.get("axis_labels") for item in suite.instances)
@@ -80,13 +81,19 @@ def test_registry_reproduces_biobjective_reference_endpoints() -> None:
     assert problem.objective_value([2.0, 2.0]) == pytest.approx((8.0, 0.0))
 
 
+def test_registry_reproduces_optimal_control_educational_objective() -> None:
+    problem = get_runtime_problem("INSTANCE_OPTIMAL_CONTROL_EC020")
+
+    assert problem.objective_value([0.0] * 60) == pytest.approx(1.0)
+
+
 def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path) -> None:
     release = build_staged_release(BASE_DATABASE, tmp_path / "release")
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 11
-    assert len(catalog.instances) == 12
+    assert len(catalog.definitions) == 12
+    assert len(catalog.instances) == 13
     assert (release.site_data_directory / "problems.json").read_text(encoding="utf-8")
 
 

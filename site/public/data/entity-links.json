@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "entities": [
     {
       "aliases": [],
@@ -442,6 +442,11 @@
           "relation_type": "problem",
           "target_id": "PA042",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -14691,6 +14696,11 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA042",
           "target_type": "problem"
@@ -18286,6 +18296,11 @@
           "relation_type": "learning",
           "target_id": "direct-collocation",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "optimal-control-ec020-history",
+          "target_type": "trace"
         }
       ],
       "summary": "状態・controlをmesh上で変数化しdynamics defectをcollocation制約化。"
@@ -23385,6 +23400,37 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Direct collocation · state/control診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "optimal-control-ec020-history",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
       "entity_type": "scenario",
       "external_url": null,
@@ -25310,6 +25356,27 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/optimal-control-ec020-history",
+      "entity_id": "optimal-control-ec020-history",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Direct collocation · state/control診断",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
       "entity_id": "topology-optimization-field-evolution",
       "entity_type": "trace",
@@ -25507,6 +25574,16 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_OPTIMAL_CONTROL_EC020",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
       "entity_type": "view",
       "external_url": null,
@@ -25597,5 +25674,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-07-18T00:00:00Z"
+  "generated_at": "2026-07-19T00:00:00Z"
 }

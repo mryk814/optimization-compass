@@ -262,8 +262,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "version": "1.0.0",
     }
     problem_catalog = json.loads((first_output / "problems.json").read_bytes())
-    assert len(problem_catalog["definitions"]) == 11
-    assert len(problem_catalog["instances"]) == 12
+    assert len(problem_catalog["definitions"]) == 12
+    assert len(problem_catalog["instances"]) == 13
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
     search_tree_index = json.loads(search_tree_index_bytes)
     assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
@@ -341,7 +341,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     failure_discovery = json.loads((first_output / "failure-discovery.json").read_bytes())
     assert failure_discovery["summary"] == {
         "case_exclusion_count": 15,
-        "entries_with_scenarios": 11,
+        "entries_with_scenarios": 12,
         "structured_failure_count": 12,
         "total_entries": 27,
     }
@@ -537,6 +537,20 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         scenario_by_artifact["gradient_descent-quadratic"].artifact.renderer_family
         == "continuous_trajectory"
     )
+    control_scenario = scenario_by_artifact["optimal-control-ec020-history"]
+    assert control_scenario.artifact.renderer_family == "generic_metric_history"
+    assert control_scenario.runs[0].method_id == "M_DIRECT_COLLOCATION"
+    assert control_scenario.problem_instance_id == "INSTANCE_OPTIMAL_CONTROL_EC020"
+    control_trace = AlgorithmTrace.model_validate_json(
+        (first_output / "traces/optimal-control-ec020-history.json").read_bytes()
+    )
+    assert {metric.metric_id for metric in control_trace.frames[0].metrics} == {
+        "state_norm",
+        "control_effort",
+        "dynamics_defect",
+        "path_violation",
+        "objective_value",
+    }
     surrogate_scenarios = [
         scenario
         for scenario in scenario_index.scenarios

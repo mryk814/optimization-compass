@@ -1,16 +1,16 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.4`
-- Generated: `2026-07-18T00:00:00+00:00`
+- Dataset: `0.18.5`
+- Generated: `2026-07-19T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
 ## Expected learning artifacts
 
 | Status | Count |
 |---|---:|
-| available | 5 |
+| available | 6 |
 | partial | 4 |
-| missing | 2 |
+| missing | 1 |
 | not_applicable | 0 |
 
 ## Priority slices

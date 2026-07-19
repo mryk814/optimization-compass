@@ -862,7 +862,8 @@
       "title_ja": "非線形動力学を含む軌道を最適化する",
       "variable_domain": "mesh（knot）数 $N=20$ の固定教材では $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1},T)\\mid x_k\\in\\mathbb{R}^n,u_k\\in[u_{min},u_{max}],T\\in[T_{min},T_{max}]\\}$。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_OPTIMAL_CONTROL_EC020"
       ]
     },
     {
@@ -1354,5 +1355,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.4"
+  "dataset_version": "0.18.5"
 }

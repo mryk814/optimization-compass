@@ -412,11 +412,11 @@
           "target_ids": []
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_OPTIMAL_CONTROL_EC020"
+          ]
         },
         "cross_surface_links": {
           "reason_codes": [
@@ -425,6 +425,7 @@
           "state": "missing",
           "target_ids": [
             "/gallery/EC020",
+            "/traces/optimal-control-ec020-history",
             "/methods/M_BFGS",
             "/methods/M_DIRECT_COLLOCATION",
             "/methods/M_MULTIPLE_SHOOTING",
@@ -460,17 +461,18 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_OPTIMAL_CONTROL_EC020"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/EC020",
+            "/traces/optimal-control-ec020-history",
             "/methods/M_BFGS",
             "/methods/M_DIRECT_COLLOCATION",
             "/methods/M_MULTIPLE_SHOOTING",
@@ -482,9 +484,7 @@
         },
         "source_review": {
           "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_comparison_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -495,11 +495,11 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_OPTIMAL_CONTROL_EC020"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -519,11 +519,8 @@
       "missing_dimensions": [
         "alternate_scenario",
         "canonical_comparison",
-        "canonical_problem_instance",
         "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
+        "source_review"
       ],
       "status": "partial"
     },
@@ -894,8 +891,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -1463,8 +1459,7 @@
         },
         "source_review": {
           "reason_codes": [
-            "missing_comparison_source",
-            "stale_case_review"
+            "missing_comparison_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -1750,8 +1745,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -2084,8 +2078,8 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.4",
-  "generated_at": "2026-07-18T00:00:00Z",
+  "dataset_version": "0.18.5",
+  "generated_at": "2026-07-19T00:00:00Z",
   "journeys": [
     {
       "candidate_method_ids": [
@@ -2109,7 +2103,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2200,7 +2194,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -2277,7 +2271,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -2325,12 +2319,7 @@
         "missing_comparison",
         "missing_comparison_source",
         "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_failure_or_sensitivity_scenario"
       ],
       "conditional_method_ids": [
         "M_MULTIPLE_SHOOTING"
@@ -2339,7 +2328,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2363,8 +2352,18 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA042",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_OPTIMAL_CONTROL_EC020"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/optimal-control-ec020-history",
+          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+          "problem_instance_id": "INSTANCE_OPTIMAL_CONTROL_EC020",
+          "role": "primary",
+          "scenario_id": "SCENARIO_OPTIMAL_CONTROL_EC020"
+        }
+      ],
       "source_ids": [
         "S042",
         "S043",
@@ -2400,7 +2399,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2464,7 +2463,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2515,8 +2514,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
@@ -2525,7 +2523,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2588,7 +2586,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2665,7 +2663,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2746,7 +2744,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2826,8 +2824,7 @@
       "completion_reasons": [
         "missing_comparison",
         "missing_comparison_source",
-        "missing_cross_surface_link",
-        "stale_case_review"
+        "missing_cross_surface_link"
       ],
       "conditional_method_ids": [
         "M_HYPERBAND_ASHA"
@@ -2836,7 +2833,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2938,7 +2935,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2994,8 +2991,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_PROJECTED_GRADIENT"
@@ -3004,7 +3000,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -3069,7 +3065,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -3137,7 +3133,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.4",
+      "dataset_version": "0.18.5",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"

@@ -156,3 +156,9 @@ Every commit must include a DCO sign-off. See [`CONTRIBUTING.md`](CONTRIBUTING.m
   published site may include the new current entry only after the external bundle and catalog update.
 - After changing a test or generated-data policy, run both `ruff check .` and `ruff format --check .`
   before relying on the longer Pages smoke job; a focused test pass alone is not sufficient.
+- A change to `resources/problem-suite.json` is a release-boundary change: update the release
+  authority, build and publish the staged SQLite/site tree, then regenerate `CITATION.cff` and the
+  dataset card. The normal site export intentionally rejects a seed/runtime SQLite mismatch.
+- For browser diagnosis, prefer `CI=1` with a unique `PLAYWRIGHT_PORT` so Playwright uses one worker;
+  a many-worker local run can turn existing route failures into resource/timeout noise. Record new
+  focused E2E results separately from the repository's pre-existing full-suite failures.
