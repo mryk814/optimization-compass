@@ -879,7 +879,7 @@
           "PROFILE_SO3_ATTITUDE_ALIGNMENT"
         ],
         "generator_id": "educational.so3_attitude.v1",
-        "generator_version": "1.0.0",
+        "generator_version": "1.0.1",
         "implementation_mapping_status": "not_applicable"
       },
       "initialization": {
@@ -925,7 +925,7 @@
         ],
         "comparison_scope": "exact",
         "generator_id": "educational.so3_attitude.v1",
-        "generator_version": "1.0.0",
+        "generator_version": "1.0.1",
         "precision": "float64",
         "runtime": "deterministic_educational"
       },
@@ -1205,7 +1205,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.9",
+  "dataset_version": "0.18.10",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

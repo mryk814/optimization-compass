@@ -1,5 +1,5 @@
 {
-  "current_version": "0.18.9",
+  "current_version": "0.18.10",
   "releases": [
     {
       "archival": null,
@@ -392,6 +392,20 @@
       "source_commit": "77b0d1d524ef066d2e5c874aee2c472e6207b52c",
       "tag": "v0.18.9",
       "version": "0.18.9"
+    },
+    {
+      "archival": null,
+      "bundle": {
+        "sha256": "dfc1bce1c09728a5f03fe1b3623a25e240898cedf74b44ee1404ddf26d195c2b",
+        "size_bytes": 4678712,
+        "url": "https://github.com/mryk814/optimization-compass/releases/download/v0.18.10/optimization_method_selection_database_v0.18.10_bundle.zip"
+      },
+      "database_sha256": "9162a8e516c459a972ece9d0377e88499da60aa1c8fb68d9ed78d1133b41049b",
+      "manifest_sha256": "aafb8f759c024d6ef62093e3357aa45a6d4e6af28b26b276b5bd404acc24d55f",
+      "release_date": "2026-07-19",
+      "source_commit": "72b5ac1d344642dbf24462e7eb26d5964a5da1bc",
+      "tag": "v0.18.10",
+      "version": "0.18.10"
     }
   ],
   "schema_version": 1
