@@ -114,6 +114,27 @@ test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async (
   await expect(page.getByText(/フレーム 2\/8/u)).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-bayesian-optimization");
+
+  await page.setViewportSize({ width: 320, height: 812 });
+  await expect(player).toBeFocused();
+  await expectNoHorizontalOverflow(page);
+
+  const formulaContainer = page.locator(".scenario-case-formulation");
+  await expect(formulaContainer.locator("math").filter({ hasText: "0.16" })).toBeVisible();
+  await expect(formulaContainer).toHaveAttribute("tabindex", "0");
+  const formulaLayout = await formulaContainer.evaluate((container) => {
+    const parent = container.parentElement;
+    if (!parent) throw new Error("Scenario context panel is required.");
+    return {
+      containerWidth: container.getBoundingClientRect().width,
+      parentWidth: parent.getBoundingClientRect().width,
+      scrollWidth: container.scrollWidth,
+      overflowX: getComputedStyle(container).overflowX,
+    };
+  });
+  expect(formulaLayout.containerWidth).toBeLessThanOrEqual(formulaLayout.parentWidth + 1);
+  expect(formulaLayout.scrollWidth).toBeGreaterThan(formulaLayout.containerWidth);
+  expect(formulaLayout.overflowX).toBe("auto");
 });
 
 test("375px Coverageが横にはみ出さずfilterできる", async ({ page, baseURL }, testInfo) => {
