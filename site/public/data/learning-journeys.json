@@ -432,7 +432,8 @@
             "/sources/S042",
             "/sources/S043",
             "/sources/S050",
-            "/sources/S076"
+            "/sources/S076",
+            "/sources/S102"
           ]
         },
         "formulation": {
@@ -479,7 +480,8 @@
             "/sources/S042",
             "/sources/S043",
             "/sources/S050",
-            "/sources/S076"
+            "/sources/S076",
+            "/sources/S102"
           ]
         },
         "source_review": {
@@ -491,7 +493,8 @@
             "S042",
             "S043",
             "S050",
-            "S076"
+            "S076",
+            "S102"
           ]
         },
         "static_text_alternative": {
@@ -669,40 +672,47 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+            "SCENARIO_PDE_STATE_TOLERANCE_LOOSE"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PDE_STATE_TOLERANCE_COST"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_TOPOLOGY_CANTILEVER_2D"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/EC026",
+            "/traces/pde-state-solve-failure",
+            "/traces/pde-state-tolerance-loose",
+            "/traces/pde-state-tolerance-tight",
+            "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "/methods/M_NEWTON_CG",
             "/methods/M_TRUST_KRYLOV",
             "/sources/S002",
             "/sources/S017",
             "/sources/S019",
-            "/sources/S056"
+            "/sources/S056",
+            "/sources/S097",
+            "/sources/S101",
+            "/sources/S110",
+            "/sources/S111"
           ]
         },
         "formulation": {
@@ -730,45 +740,56 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/EC026",
+            "/traces/pde-state-solve-failure",
+            "/traces/pde-state-tolerance-loose",
+            "/traces/pde-state-tolerance-tight",
+            "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "/methods/M_NEWTON_CG",
             "/methods/M_TRUST_KRYLOV",
             "/sources/S002",
             "/sources/S017",
             "/sources/S019",
-            "/sources/S056"
+            "/sources/S056",
+            "/sources/S097",
+            "/sources/S101",
+            "/sources/S110",
+            "/sources/S111"
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
             "S019",
-            "S056"
+            "S056",
+            "S097",
+            "S101",
+            "S110",
+            "S111"
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+            "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+            "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -785,47 +806,172 @@
         }
       },
       "journey_id": "EC026",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+            "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PENDULUM_COLLOCATION_MESH"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_PENDULUM_SWING_UP_EC020"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC029",
+            "/traces/pendulum-collocation-coarse",
+            "/traces/pendulum-collocation-refined",
+            "/traces/pendulum-model-rollout-failure",
+            "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+            "/methods/M_BFGS",
+            "/methods/M_DIRECT_COLLOCATION",
+            "/methods/M_MULTIPLE_SHOOTING",
+            "/sources/S042",
+            "/sources/S043",
+            "/sources/S050",
+            "/sources/S076",
+            "/sources/S102"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC029"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ACADOS",
+            "I_CASADI",
+            "I_DRAKE"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_DIRECT_COLLOCATION",
+            "M_MULTIPLE_SHOOTING"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PENDULUM_SWING_UP_MESH_20"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC029",
+            "/traces/pendulum-collocation-coarse",
+            "/traces/pendulum-collocation-refined",
+            "/traces/pendulum-model-rollout-failure",
+            "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+            "/methods/M_BFGS",
+            "/methods/M_DIRECT_COLLOCATION",
+            "/methods/M_MULTIPLE_SHOOTING",
+            "/sources/S042",
+            "/sources/S043",
+            "/sources/S050",
+            "/sources/S076",
+            "/sources/S102"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S042",
+            "S043",
+            "S050",
+            "S076",
+            "S102"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+            "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+            "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "direct-collocation",
+            "multiple-shooting"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC029",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BILEVEL_REGRESSION_2COEF"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/bilevel-regularized-regression",
+            "/traces/bilevel-regression-exact-inner",
+            "/traces/bilevel-regression-relaxed-complementarity",
+            "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
             "/methods/M_BFGS",
             "/methods/M_INTERIOR_POINT_NLP",
             "/methods/M_SLSQP",
@@ -864,17 +1010,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BILEVEL_REGRESSION_EXACT"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/bilevel-regularized-regression",
+            "/traces/bilevel-regression-exact-inner",
+            "/traces/bilevel-regression-relaxed-complementarity",
+            "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
             "/methods/M_BFGS",
             "/methods/M_INTERIOR_POINT_NLP",
             "/methods/M_SLSQP",
@@ -889,11 +1038,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -906,11 +1052,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BILEVEL_REGRESSION_EXACT",
+            "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -927,16 +1074,8 @@
         }
       },
       "journey_id": "bilevel-regularized-regression",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1655,33 +1794,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/portfolio-cvar-allocation",
+            "/traces/portfolio-cvar-8-4",
+            "/traces/portfolio-nominal-8-4",
+            "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_PROJECTED_GRADIENT",
@@ -1689,10 +1829,10 @@
             "/sources/S010",
             "/sources/S012",
             "/sources/S014",
-            "/sources/S054",
             "/sources/S055",
             "/sources/S056",
-            "/sources/S066"
+            "/sources/S066",
+            "/sources/S103"
           ]
         },
         "formulation": {
@@ -1719,17 +1859,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_CVAR_8_4"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/portfolio-cvar-allocation",
+            "/traces/portfolio-cvar-8-4",
+            "/traces/portfolio-nominal-8-4",
+            "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_PROJECTED_GRADIENT",
@@ -1737,35 +1880,33 @@
             "/sources/S010",
             "/sources/S012",
             "/sources/S014",
-            "/sources/S054",
             "/sources/S055",
             "/sources/S056",
-            "/sources/S066"
+            "/sources/S066",
+            "/sources/S103"
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S004",
             "S010",
             "S012",
             "S014",
-            "S054",
             "S055",
             "S056",
-            "S066"
+            "S066",
+            "S103"
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_CVAR_8_4",
+            "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -1782,14 +1923,162 @@
         }
       },
       "journey_id": "portfolio-cvar-allocation",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_DIFFUSER_SHAPE_3P"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/shape-diffuser",
+            "/traces/shape-diffuser-invalid-geometry",
+            "/traces/shape-diffuser-valid-update",
+            "/traces/shape-topology-representation-contrast",
+            "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SIMP_TOPOLOGY",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087",
+            "/sources/S097",
+            "/sources/S101",
+            "/sources/S104",
+            "/sources/S105",
+            "/sources/S106"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "shape-diffuser"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_IPOPT",
+            "I_SCIPY_SLSQP"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_ADJOINT_SENSITIVITY",
+            "M_INTERIOR_POINT_NLP",
+            "M_SIMP_TOPOLOGY",
+            "M_SLSQP"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/shape-diffuser",
+            "/traces/shape-diffuser-invalid-geometry",
+            "/traces/shape-diffuser-valid-update",
+            "/traces/shape-topology-representation-contrast",
+            "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+            "/methods/M_ADJOINT_SENSITIVITY",
+            "/methods/M_INTERIOR_POINT_NLP",
+            "/methods/M_SIMP_TOPOLOGY",
+            "/methods/M_SLSQP",
+            "/sources/S002",
+            "/sources/S017",
+            "/sources/S029",
+            "/sources/S056",
+            "/sources/S064",
+            "/sources/S087",
+            "/sources/S097",
+            "/sources/S101",
+            "/sources/S104",
+            "/sources/S105",
+            "/sources/S106"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "invalid_source_currentness"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S017",
+            "S029",
+            "S056",
+            "S064",
+            "S087",
+            "S097",
+            "S101",
+            "S104",
+            "S105",
+            "S106"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+            "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+            "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "adjoint-sensitivity",
+            "interior-point-nlp",
+            "slsqp"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "shape-diffuser",
       "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
+        "source_review"
       ],
       "status": "partial"
     },
@@ -1943,6 +2232,144 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_SO3_PROJECTED_ALIGNMENT"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_SO3_ATTITUDE_FIXED_3"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/so3-attitude-alignment",
+            "/traces/so3-projected-alignment",
+            "/traces/so3-riemannian-alignment",
+            "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
+            "/methods/M_BFGS",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/methods/M_RIEMANNIAN_GRADIENT",
+            "/methods/M_RIEMANNIAN_TRUST_REGION",
+            "/sources/S044",
+            "/sources/S045",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S071",
+            "/sources/S107"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "so3-attitude-alignment"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_MANOPT_JL",
+            "I_MANOPT_MATLAB",
+            "I_PYMANOPT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_PROJECTED_GRADIENT",
+            "M_RIEMANNIAN_GRADIENT",
+            "M_RIEMANNIAN_TRUST_REGION"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/so3-attitude-alignment",
+            "/traces/so3-projected-alignment",
+            "/traces/so3-riemannian-alignment",
+            "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
+            "/methods/M_BFGS",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/methods/M_RIEMANNIAN_GRADIENT",
+            "/methods/M_RIEMANNIAN_TRUST_REGION",
+            "/sources/S044",
+            "/sources/S045",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S071",
+            "/sources/S107"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S044",
+            "S045",
+            "S055",
+            "S056",
+            "S066",
+            "S071",
+            "S107"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+            "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "projected-gradient",
+            "riemannian-gradient",
+            "riemannian-trust-region"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "so3-attitude-alignment",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
             "SCENARIO_TOPOLOGY_CHECKERBOARD"
           ]
         },
@@ -2079,7 +2506,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "generated_at": "2026-07-19T00:00:00Z",
   "journeys": [
     {
@@ -2104,7 +2531,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2195,7 +2622,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -2272,7 +2699,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -2288,7 +2715,7 @@
         "I_ORTOOLS_ROUTING"
       ],
       "journey_id": "EC019",
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-19",
       "learning_objective": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。",
       "limitations": [
         "期限停止時の解は品質の差が未証明で、交通やサービス時間の変動もこの固定例には含みません。"
@@ -2329,7 +2756,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2369,7 +2796,8 @@
         "S042",
         "S043",
         "S050",
-        "S076"
+        "S076",
+        "S102"
       ],
       "status": "partial",
       "takeaway": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
@@ -2400,7 +2828,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2446,17 +2874,13 @@
       ],
       "canonical_url": "/gallery/EC026",
       "case_id": "EC026",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
+          "comparison_id": "COMPARE_PDE_STATE_TOLERANCE_COST"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_TRUST_KRYLOV"
       ],
@@ -2464,7 +2888,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -2480,25 +2904,136 @@
         "I_PETSC_TAO"
       ],
       "journey_id": "EC026",
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-19",
       "learning_objective": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
       "limitations": [
+        "固定meshのsteady教材からtransient checkpointing、multiphysics coupling、実hardware costの一般性能は推論しません。",
         "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA045",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_TOPOLOGY_CANTILEVER_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/pde-state-solve-failure",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE"
+        },
+        {
+          "canonical_url": "/traces/pde-state-tolerance-loose",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE"
+        },
+        {
+          "canonical_url": "/traces/pde-state-tolerance-tight",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+        }
+      ],
       "source_ids": [
         "S002",
         "S017",
         "S019",
-        "S056"
+        "S056",
+        "S097",
+        "S101",
+        "S110",
+        "S111"
       ],
-      "status": "partial",
-      "takeaway": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。",
+      "status": "complete",
+      "takeaway": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。失敗したstate solveは大きなobjective値へ暗黙変換せず、solver reason、残差、消費したstate/adjoint solve costをfailed evaluationとして保持します。transient問題ではtime-step数、checkpoint policy、forward再計算回数、adjoint storageを追加し、一方向・双方向multiphysicsではfieldごとの残差とcoupling iterationを分けます。",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
+    },
+    {
+      "candidate_method_ids": [
+        "M_DIRECT_COLLOCATION"
+      ],
+      "canonical_url": "/gallery/EC029",
+      "case_id": "EC029",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+          "comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_MULTIPLE_SHOOTING"
+      ],
+      "content_ids": [
+        "direct-collocation",
+        "multiple-shooting"
+      ],
+      "dataset_version": "0.18.9",
+      "domain": "control",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mover><mi>&#x003B8;</mi><mo>&#x002D9;</mo></mover><mo>&#x0003D;</mo><mi>&#x003C9;</mi></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mover><mi>&#x003C9;</mi><mo>&#x002D9;</mo></mover><mo>&#x0003D;</mo><mi>u</mi><mo>&#x02212;</mo><mn>0.05</mn><mi>&#x003C9;</mi><mo>&#x02212;</mo><mn>9.81</mn><mi>sin</mi><mi>&#x003B8;</mi></mrow></math> のHermite–Simpson defectを各区間で0にする。初期条件は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、終端条件は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>N</mi></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C0;</mi><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、path／bound制約はmesh／collocation pointで <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x0007C;</mo><mi>&#x003C9;</mi><mo stretchy=\"false\">&#x0007C;</mo><mo>&#x02264;</mo><mn>8</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x0007C;</mo><mi>u</mi><mo stretchy=\"false\">&#x0007C;</mo><mo>&#x02264;</mo><mn>8</mn></mrow></math> とする。node feasibilityと区間再構成後のviolationは別の診断値として保存する。",
+        "decision_variables": "Direct Collocationでは角度・角速度のstate列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub></mrow></math> とtorque列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub></mrow></math> をmesh上のdecision objectとして同時に置く。single shootingではtorque列だけを選び、state列はrolloutで作るため、同じpendulumでもdecision objectが異なる。",
+        "objective": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mn>0.01</mn><msubsup><mo>&#x02211;</mo><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn></mrow><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msubsup><msubsup><mi>u</mi><mi>k</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mn>20</mn><mo>&#x02016;</mo><msub><mi>x</mi><mi>N</mi></msub><mo>&#x02212;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C0;</mi><mo>&#x0002C;</mo><mn>0</mn><mo stretchy=\"false\">&#x00029;</mo><msubsup><mo>&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math> を最小化する。Theaterではobjective、terminal error、constraint residualを別々に読む。",
+        "variable_domain_summary": "mesh（knot）数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi><mo>&#x0003D;</mo><mn>20</mn></mrow></math> の固定教材では、state <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>&#x003B8;</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>&#x003C9;</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>N</mi></mrow></math>、control <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mi>k</mi></msub></mrow></math> を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></math> に置く。decision setは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02223;</mo><mo stretchy=\"false\">&#x0007C;</mo><msub><mi>&#x003C9;</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x0007C;</mo><mo>&#x02264;</mo><mn>8</mn><mo>&#x0002C;</mo><mo stretchy=\"false\">&#x0007C;</mo><msub><mi>u</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x0007C;</mo><mo>&#x02264;</mo><mn>8</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> で、horizonは2秒に固定する。"
+      },
+      "implementation_ids": [
+        "I_ACADOS",
+        "I_CASADI",
+        "I_DRAKE"
+      ],
+      "journey_id": "EC029",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
+      "limitations": [
+        "node／collocation pointの実行可能性は区間内や連続時間の可行性を保証しません。実機安全性、dynamics modelの正確さ、大域最適性、solver family間の一般性能も保証しません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA042",
+      "problem_instance_ids": [
+        "INSTANCE_PENDULUM_SWING_UP_EC020"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/pendulum-collocation-coarse",
+          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+          "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20"
+        },
+        {
+          "canonical_url": "/traces/pendulum-collocation-refined",
+          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+          "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40"
+        },
+        {
+          "canonical_url": "/traces/pendulum-model-rollout-failure",
+          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+          "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+        }
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076",
+        "S102"
+      ],
+      "status": "complete",
+      "takeaway": "N=20とN=40で、同じdynamics、2秒horizon、初期・終端・path制約、初期trajectory、8 evaluation予算、dynamics defect tolerance $10^{-3}$、node path tolerance $10^{-4}$、terminal tolerance $10^{-3}$ を固定する。max dynamics defect、node path violation、再構成path violation、terminal error、objectiveを別々に保存する。gravityを10%変えたvalidation rolloutは独立failure Theaterで確認する。MPCは[receding horizon](#/learn/concept.receding-horizon)と[Case EC025](#/gallery/EC025)、contact／hybridは[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、safety filterは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
+      "title_en": "Swing up a pendulum under constraints",
+      "title_ja": "pendulumを制約内で振り上げる"
     },
     {
       "candidate_method_ids": [
@@ -2506,17 +3041,13 @@
       ],
       "canonical_url": "/gallery/bilevel-regularized-regression",
       "case_id": "bilevel-regularized-regression",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_INTERIOR_POINT_NLP"
       ],
@@ -2524,7 +3055,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2550,8 +3081,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA033",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_BILEVEL_REGRESSION_2COEF"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/bilevel-regression-exact-inner",
+          "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
+          "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BILEVEL_REGRESSION_EXACT"
+        },
+        {
+          "canonical_url": "/traces/bilevel-regression-relaxed-complementarity",
+          "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
+          "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+        }
+      ],
       "source_ids": [
         "S002",
         "S017",
@@ -2562,7 +3110,7 @@
         "S064",
         "S087"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "実務ではouterのiteration、innerのiteration数、inner tolerance、warm start、objective、primal violation、stationarity residual、complementarity residualを別々に記録する。主経路は、active setを固定でき、縮約KKT/Jacobianが非特異な区間でimplicit differentiationすること。active setが変わる場合は有限差分をgradient検算に使い、inner未収束ならouter updateを止める。exact complementarityと、$\\phi_\\tau(w_i,\\mu_i)=0$ や $w_i\\mu_i\\le\\tau$ を使うrelaxed complementarityを分け、relaxationでは $\\tau:10^{-2}\\to10^{-8}$ のcontinuation履歴を残す。読み進める先は[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、[制約class](#/learn/concept.constraint-class)、[制約付きNLP](#/learn/family.constrained-nlp)。",
       "title_en": "Tune regularization around a nonnegative regression solve",
       "title_ja": "正則化を選びながら非負回帰を解く"
@@ -2587,7 +3135,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2664,7 +3212,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2745,7 +3293,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -2835,7 +3383,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2951,7 +3499,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -2998,17 +3546,13 @@
       ],
       "canonical_url": "/gallery/portfolio-cvar-allocation",
       "case_id": "portfolio-cvar-allocation",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_PROJECTED_GRADIENT"
       ],
@@ -3016,7 +3560,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -3040,22 +3584,131 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA036",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/portfolio-cvar-8-4",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4"
+        },
+        {
+          "canonical_url": "/traces/portfolio-nominal-8-4",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+        }
+      ],
       "source_ids": [
         "S004",
         "S010",
         "S012",
         "S014",
-        "S054",
         "S055",
         "S056",
-        "S066"
+        "S066",
+        "S103"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
       "title_en": "Portfolio allocation with CVaR",
       "title_ja": "scenarioのtail riskを抑えて配分する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_SLSQP"
+      ],
+      "canonical_url": "/gallery/shape-diffuser",
+      "case_id": "shape-diffuser",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
+        }
+      ],
+      "completion_reasons": [
+        "invalid_source_currentness"
+      ],
+      "conditional_method_ids": [
+        "M_ADJOINT_SENSITIVITY",
+        "M_INTERIOR_POINT_NLP"
+      ],
+      "content_ids": [
+        "adjoint-sensitivity",
+        "interior-point-nlp",
+        "slsqp"
+      ],
+      "dataset_version": "0.18.9",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_SIMP_TOPOLOGY"
+      ],
+      "formulation": {
+        "constraints": "parameter boundsに加え、geometry最小gap <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>g</mi><mrow><mi>g</mi><mi>a</mi><mi>p</mi></mrow></msub><mo>&#x0003E;</mo><mn>0.4</mn></mrow></math>、自己交差なし、mesh最小quality <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>h</mi></mrow></msub><mo>&#x02265;</mo><mn>0.2</mn></mrow></math>、反転cell数0、state residual <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02016;</mo><mi>R</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02016;</mo><mo>&#x02264;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>6</mn></mrow></msup></mrow></math>、fixed topologyを別々に検査します。",
+        "decision_variables": "optimizerが直接更新するのは3つのparameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> です。geometry座標、mesh node、state <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi></mrow></math> はparameterから生成またはsolveされる従属量です。level-setやdensity fieldは接続変更を許せますが、このCaseのparameterizationは入口1つ・出口1つのtopologyを固定します。",
+        "objective": "低costな決定論的state proxyとして <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>r</mi><mo>&#x02212;</mo><mn>1.45</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.4</mn><msup><mi>c</mi><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.2</mn><msup><mi>s</mi><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.05</mn><mo stretchy=\"false\">&#x00028;</mo><mi>r</mi><mo>&#x02212;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化します。この式はlayer分離を学ぶ教材であり、CFDのpressure lossではありません。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>1.0</mn><mo>&#x0002C;</mo><mn>1.8</mn><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>0.3</mn><mo>&#x0002C;</mo><mn>0.3</mn><mo stretchy=\"false\">]</mo><mo>&#x000D7;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>0.25</mn><mo>&#x0002C;</mo><mn>0.25</mn><mo stretchy=\"false\">]</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><mi>r</mi><mo>&#x0002C;</mo><mi>c</mi><mo>&#x0002C;</mo><mi>s</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>X</mi></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>r</mi></mrow></math>は出口高さ比、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>c</mi></mrow></math>は壁面曲率、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math>はthroat位置のshiftです。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math>からgeometry <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003A9;</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、mesh <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、physical state <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を順に作ります。"
+      },
+      "implementation_ids": [
+        "I_IPOPT",
+        "I_SCIPY_SLSQP"
+      ],
+      "journey_id": "shape-diffuser",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。",
+      "limitations": [
+        "3 parameter・21 geometry sample・reduced state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実diffuser性能を示しません。",
+        "shapeとtopologyのcontrastは設計表現の違いを読むためのもので、目的値、速度、解品質のrankingではありません。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA057",
+      "problem_instance_ids": [
+        "INSTANCE_DIFFUSER_SHAPE_3P"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/shape-diffuser-invalid-geometry",
+          "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY"
+        },
+        {
+          "canonical_url": "/traces/shape-diffuser-valid-update",
+          "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+          "role": "primary",
+          "scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE"
+        },
+        {
+          "canonical_url": "/traces/shape-topology-representation-contrast",
+          "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
+        }
+      ],
+      "source_ids": [
+        "S002",
+        "S017",
+        "S029",
+        "S056",
+        "S064",
+        "S087",
+        "S097",
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "status": "partial",
+      "takeaway": "各evaluationでparameter、geometry、mesh、physical state、目的を別recordにします。有限差分またはadjoint sensitivityはvalid geometryと収束済みstateの後に検査します。mesh motionでqualityを保てなければremeshingへ切り替えます。level-setはtopology changeを許す別表現です。follow-upは、構造ではstress／buckling、CFDではviscous loss、thermalではheat-transfer surface、acousticではwave scattering、photonicではMaxwell stateとfabrication constraintを同じlayer contractへ接続します。",
+      "title_en": "Update a two-dimensional diffuser wall shape",
+      "title_ja": "2D diffuserの壁面shapeを更新する"
     },
     {
       "candidate_method_ids": [
@@ -3081,7 +3734,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -3123,6 +3776,87 @@
     },
     {
       "candidate_method_ids": [
+        "M_RIEMANNIAN_GRADIENT"
+      ],
+      "canonical_url": "/gallery/so3-attitude-alignment",
+      "case_id": "so3-attitude-alignment",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_PROJECTED_GRADIENT",
+        "M_RIEMANNIAN_TRUST_REGION"
+      ],
+      "content_ids": [
+        "projected-gradient",
+        "riemannian-gradient",
+        "riemannian-trust-region"
+      ],
+      "dataset_version": "0.18.9",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>R</mi><mrow><mi mathvariant=\"sans-serif\">T</mi></mrow></msup><mi>R</mi><mo>&#x0003D;</mo><mi>I</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo movablelimits=\"true\">det</mo><mi>R</mi><mo>&#x0003D;</mo><mn>1</mn></mrow></math>。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
+        "decision_variables": "body frameからreference frameへのrotation matrix <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi></mrow></math>。固定教材はidentityから開始し、target axis <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>2</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002F;</mo><msqrt><mrow><mn>14</mn></mrow></msqrt></mrow></math>、angle <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>2.8</mn></mrow></math> radのrotationへ12 updateで近づける。",
+        "objective": "三つのnoiseless basis correspondenceをまとめたtarget <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mo>&#x022C6;</mo></msub></mrow></math> に対し、chordal loss <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>R</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&#x02016;</mo><mi>R</mi><mo>&#x02212;</mo><msub><mi>R</mi><mo>&#x022C6;</mo></msub><msubsup><mo>&#x02016;</mo><mi>F</mi><mn>2</mn></msubsup></mrow></math> を最小化する。評価ではgeodesic residual <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi><mo stretchy=\"false\">&#x00028;</mo><mi>R</mi><mo>&#x0002C;</mo><msub><mi>R</mi><mo>&#x022C6;</mo></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02016;</mo><mi>log</mi><mo stretchy=\"false\">&#x00028;</mo><msup><mi>R</mi><mrow><mi mathvariant=\"sans-serif\">T</mi></mrow></msup><msub><mi>R</mi><mo>&#x022C6;</mo></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02016;</mo></mrow></math>も別に記録する。",
+        "variable_domain_summary": "固定教材のfeasible setは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>R</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><mn>3</mn><mo>&#x000D7;</mo><mn>3</mn></mrow></msup><mo>&#x02223;</mo><msup><mi>R</mi><mrow><mi mathvariant=\"sans-serif\">T</mi></mrow></msup><mi>R</mi><mo>&#x0003D;</mo><mi>I</mi><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><mo movablelimits=\"true\">det</mo><mi>R</mi><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。ambient成分は9個だがintrinsic degree of freedomは3である。"
+      },
+      "implementation_ids": [
+        "I_MANOPT_JL",
+        "I_MANOPT_MATLAB",
+        "I_PYMANOPT"
+      ],
+      "journey_id": "so3-attitude-alignment",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
+      "limitations": [
+        "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。",
+        "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
+        "固定3対応・noiseなし・固定stepの教材であり、複数rotation graph、外れ値、欠測、sensor calibration、実装速度を表さない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA037",
+      "problem_instance_ids": [
+        "INSTANCE_SO3_ATTITUDE_FIXED_3"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/so3-projected-alignment",
+          "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+          "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT"
+        },
+        {
+          "canonical_url": "/traces/so3-riemannian-alignment",
+          "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+          "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+          "role": "primary",
+          "scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
+        }
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S055",
+        "S056",
+        "S066",
+        "S071",
+        "S107"
+      ],
+      "status": "complete",
+      "takeaway": "[SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)を先に読み、objective、geodesic residual、orthogonality error、determinant error、projection correctionまたはtangent stepを別々に保存する。quaternionを使う場合は$q$と$-q$の同値を処理し、near-piではlog mapとchartの条件を点検する。",
+      "title_en": "Align a near-pi attitude on SO(3)",
+      "title_ja": "SO(3)上でnear-piのattitudeを合わせる"
+    },
+    {
+      "candidate_method_ids": [
         "M_OC_TOPOLOGY",
         "M_SIMP_TOPOLOGY"
       ],
@@ -3149,7 +3883,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -3378,6 +4112,12 @@
     },
     {
       "asset_id": "concept.so3-rotation-representation",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "concept.spd-matrix-geometry",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -3713,18 +4453,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "riemannian-gradient",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "riemannian-trust-region",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "sgd",
       "asset_type": "content",
       "policy": "warning",
@@ -3845,6 +4573,12 @@
       "reason_code": "scenario_without_journey"
     },
     {
+      "asset_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+      "asset_type": "scenario",
+      "policy": "warning",
+      "reason_code": "scenario_without_journey"
+    },
+    {
       "asset_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "asset_type": "scenario",
       "policy": "warning",
@@ -3911,6 +4645,12 @@
       "reason_code": "public_artifact_without_journey"
     },
     {
+      "asset_id": "hybrid-mode-chattering-ledger",
+      "asset_type": "visualization_artifact",
+      "policy": "warning",
+      "reason_code": "public_artifact_without_journey"
+    },
+    {
       "asset_id": "momentum-quadratic",
       "asset_type": "visualization_artifact",
       "policy": "warning",
@@ -3956,11 +4696,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 6,
+      "complete": 11,
       "draft": 0,
-      "partial": 9
+      "partial": 7
     },
     "target_complete_journeys": 5,
-    "total_journeys": 15
+    "total_journeys": 18
   }
 }

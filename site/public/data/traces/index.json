@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -154,6 +154,26 @@
       "trace_id": "exponential-fit-lbfgsb"
     },
     {
+      "method_id": "M_PROJECTED_GRADIENT",
+      "objective_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "path": "so3-projected-alignment.json",
+      "profile_id": "PROFILE_SO3_ATTITUDE_ALIGNMENT",
+      "scenario_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+      "title_en": "SO(3) · ambient step + QR projection",
+      "title_ja": "SO(3) · ambient step + QR projection",
+      "trace_id": "so3-projected-alignment"
+    },
+    {
+      "method_id": "M_RIEMANNIAN_GRADIENT",
+      "objective_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "path": "so3-riemannian-alignment.json",
+      "profile_id": "PROFILE_SO3_ATTITUDE_ALIGNMENT",
+      "scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "title_en": "SO(3) · Lie algebra update",
+      "title_ja": "SO(3) · Lie algebra update",
+      "trace_id": "so3-riemannian-alignment"
+    },
+    {
       "method_id": "M_DIRECT_COLLOCATION",
       "objective_id": "INSTANCE_OPTIMAL_CONTROL_EC020",
       "path": "optimal-control-ec020-history.json",
@@ -162,6 +182,146 @@
       "title_en": "Direct collocation · state/control diagnostics",
       "title_ja": "Direct collocation · state/control診断",
       "trace_id": "optimal-control-ec020-history"
+    },
+    {
+      "method_id": "M_DIRECT_COLLOCATION",
+      "objective_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "path": "pendulum-collocation-coarse.json",
+      "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "title_en": "Pendulum swing-up · N=20 mesh diagnostics",
+      "title_ja": "Pendulum swing-up · N=20 mesh診断",
+      "trace_id": "pendulum-collocation-coarse"
+    },
+    {
+      "method_id": "M_DIRECT_COLLOCATION",
+      "objective_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "path": "pendulum-collocation-refined.json",
+      "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+      "title_en": "Pendulum swing-up · N=40 mesh sensitivity",
+      "title_ja": "Pendulum swing-up · N=40 mesh感度",
+      "trace_id": "pendulum-collocation-refined"
+    },
+    {
+      "method_id": "M_DIRECT_COLLOCATION",
+      "objective_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "path": "pendulum-model-rollout-failure.json",
+      "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+      "title_en": "Pendulum swing-up · model-mismatch rollout",
+      "title_ja": "Pendulum swing-up · modelずれrollout",
+      "trace_id": "pendulum-model-rollout-failure"
+    },
+    {
+      "method_id": "MF_LP_QP_CONIC",
+      "objective_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "path": "portfolio-nominal-8-4.json",
+      "profile_id": "PROFILE_PORTFOLIO_UNCERTAINTY",
+      "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "title_en": "Nominal allocation · training / held-out diagnostics",
+      "title_ja": "nominal配分 · training / held-out診断",
+      "trace_id": "portfolio-nominal-8-4"
+    },
+    {
+      "method_id": "MF_LP_QP_CONIC",
+      "objective_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "path": "portfolio-cvar-8-4.json",
+      "profile_id": "PROFILE_PORTFOLIO_UNCERTAINTY",
+      "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "title_en": "CVaR allocation · training / held-out diagnostics",
+      "title_ja": "CVaR配分 · training / held-out診断",
+      "trace_id": "portfolio-cvar-8-4"
+    },
+    {
+      "method_id": "M_ADJOINT_SENSITIVITY",
+      "objective_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "path": "pde-state-tolerance-tight.json",
+      "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+      "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "title_en": "PDE state solve · tight tolerance",
+      "title_ja": "PDE state solve · tight tolerance",
+      "trace_id": "pde-state-tolerance-tight"
+    },
+    {
+      "method_id": "M_ADJOINT_SENSITIVITY",
+      "objective_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "path": "pde-state-tolerance-loose.json",
+      "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+      "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+      "title_en": "PDE state solve · loose tolerance",
+      "title_ja": "PDE state solve · loose tolerance",
+      "trace_id": "pde-state-tolerance-loose"
+    },
+    {
+      "method_id": "M_ADJOINT_SENSITIVITY",
+      "objective_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "path": "pde-state-solve-failure.json",
+      "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+      "scenario_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+      "title_en": "PDE state solve · failure ledger",
+      "title_ja": "PDE state solve · failure ledger",
+      "trace_id": "pde-state-solve-failure"
+    },
+    {
+      "method_id": "M_SLSQP",
+      "objective_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "path": "bilevel-regression-exact-inner.json",
+      "profile_id": "PROFILE_BILEVEL_REGRESSION_LEDGER",
+      "scenario_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+      "title_en": "Bilevel regression · exact inner diagnostics",
+      "title_ja": "Bilevel回帰 · exact inner診断",
+      "trace_id": "bilevel-regression-exact-inner"
+    },
+    {
+      "method_id": "M_SLSQP",
+      "objective_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "path": "bilevel-regression-relaxed-complementarity.json",
+      "profile_id": "PROFILE_BILEVEL_REGRESSION_LEDGER",
+      "scenario_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+      "title_en": "Bilevel regression · finite-relaxation failure",
+      "title_ja": "Bilevel回帰 · finite relaxationの残差",
+      "trace_id": "bilevel-regression-relaxed-complementarity"
+    },
+    {
+      "method_id": "M_DIRECT_COLLOCATION",
+      "objective_id": "INSTANCE_HYBRID_CHATTERING_LEDGER",
+      "path": "hybrid-mode-chattering-ledger.json",
+      "profile_id": "PROFILE_HYBRID_MODE_LEDGER",
+      "scenario_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+      "title_en": "Hybrid mode discovery · chattering ledger",
+      "title_ja": "Hybrid mode discovery · chattering診断",
+      "trace_id": "hybrid-mode-chattering-ledger"
+    },
+    {
+      "method_id": "M_SLSQP",
+      "objective_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "path": "shape-diffuser-valid-update.json",
+      "profile_id": "PROFILE_SHAPE_DIFFUSER_GENERIC",
+      "scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "title_en": "shape-diffuser-valid-update",
+      "title_ja": "shape-diffuser-valid-update",
+      "trace_id": "shape-diffuser-valid-update"
+    },
+    {
+      "method_id": "M_SLSQP",
+      "objective_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "path": "shape-diffuser-invalid-geometry.json",
+      "profile_id": "PROFILE_SHAPE_DIFFUSER_GENERIC",
+      "scenario_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+      "title_en": "shape-diffuser-invalid-geometry",
+      "title_ja": "shape-diffuser-invalid-geometry",
+      "trace_id": "shape-diffuser-invalid-geometry"
+    },
+    {
+      "method_id": "M_SIMP_TOPOLOGY",
+      "objective_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "path": "shape-topology-representation-contrast.json",
+      "profile_id": "PROFILE_TOPOLOGY_REPRESENTATION_GENERIC",
+      "scenario_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+      "title_en": "shape-topology-representation-contrast",
+      "title_ja": "shape-topology-representation-contrast",
+      "trace_id": "shape-topology-representation-contrast"
     },
     {
       "method_id": "M_BRANCH_BOUND",

@@ -984,7 +984,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "edges": [
     {
       "audience": "learner",
@@ -1795,6 +1795,133 @@
       "status": "current",
       "target_id": "PA045",
       "target_type": "problem"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "intermediate",
+      "display_order": 51,
+      "edge_id": "LEARN_MANIFOLD_RGRAD",
+      "last_verified": "2026-07-19",
+      "rationale": "多様体の接空間とretractionを理解してからRiemann勾配stepを読む。",
+      "relation": "prerequisite_for",
+      "source_id": "F_VARIABLE_MANIFOLD",
+      "source_ids": [
+        "S044",
+        "S071"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_RIEMANNIAN_GRADIENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "learner",
+      "difficulty": "advanced",
+      "display_order": 52,
+      "edge_id": "LEARN_MANIFOLD_RTR",
+      "last_verified": "2026-07-19",
+      "rationale": "metric、接空間、retractionを前提にtrust-region modelとHessianを読む。",
+      "relation": "prerequisite_for",
+      "source_id": "F_VARIABLE_MANIFOLD",
+      "source_ids": [
+        "S045",
+        "S071"
+      ],
+      "source_type": "feature",
+      "status": "current",
+      "target_id": "M_RIEMANNIAN_TRUST_REGION",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 53,
+      "edge_id": "LEARN_PROJECTED_RGRAD",
+      "last_verified": "2026-07-19",
+      "rationale": "ambient candidateのprojectionと接空間step plus retractionを同一視しない。",
+      "relation": "contrast_with",
+      "source_id": "M_PROJECTED_GRADIENT",
+      "source_ids": [
+        "S055",
+        "S071"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_RIEMANNIAN_GRADIENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 54,
+      "edge_id": "LEARN_MIRROR_PROJECTED",
+      "last_verified": "2026-07-19",
+      "rationale": "simplex interiorのmirror geometryとEuclidean projectionのboundary処理を区別する。",
+      "relation": "contrast_with",
+      "source_id": "M_MIRROR_DESCENT",
+      "source_ids": [
+        "S055",
+        "S061",
+        "S066"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "M_PROJECTED_GRADIENT",
+      "target_type": "method"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 55,
+      "edge_id": "LEARN_RGRAD_PA037",
+      "last_verified": "2026-07-19",
+      "rationale": "SO(3) attitude alignmentをmanifold-valued variableの具体例として扱う。",
+      "relation": "applied_in",
+      "source_id": "M_RIEMANNIAN_GRADIENT",
+      "source_ids": [
+        "S071",
+        "S107"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "PA037",
+      "target_type": "problem"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "intermediate",
+      "display_order": 59,
+      "edge_id": "LEARN_RGRAD_PYMANOPT",
+      "last_verified": "2026-07-19",
+      "rationale": "Pymanoptのversioned manifoldとoptimizer APIへ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_RIEMANNIAN_GRADIENT",
+      "source_ids": [
+        "S044",
+        "S091"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_PYMANOPT",
+      "target_type": "implementation"
+    },
+    {
+      "audience": "practitioner",
+      "difficulty": "advanced",
+      "display_order": 60,
+      "edge_id": "LEARN_RTR_MANOPT",
+      "last_verified": "2026-07-19",
+      "rationale": "Manoptのrotation factoryとtrust-region実装へ接続する。",
+      "relation": "implemented_by",
+      "source_id": "M_RIEMANNIAN_TRUST_REGION",
+      "source_ids": [
+        "S045",
+        "S092"
+      ],
+      "source_type": "method",
+      "status": "current",
+      "target_id": "I_MANOPT_MATLAB",
+      "target_type": "implementation"
     }
   ],
   "entities": [
@@ -1864,6 +1991,14 @@
     },
     {
       "canonical_url": null,
+      "entity_id": "F_VARIABLE_MANIFOLD",
+      "entity_type": "feature",
+      "external_url": null,
+      "label_en": "Manifold",
+      "label_ja": "manifold"
+    },
+    {
+      "canonical_url": null,
       "entity_id": "I_BOTORCH",
       "entity_type": "implementation",
       "external_url": "https://botorch.org/",
@@ -1880,6 +2015,14 @@
     },
     {
       "canonical_url": null,
+      "entity_id": "I_MANOPT_MATLAB",
+      "entity_type": "implementation",
+      "external_url": "https://www.manopt.org/",
+      "label_en": "Manopt",
+      "label_ja": "Manopt"
+    },
+    {
+      "canonical_url": null,
       "entity_id": "I_ORTOOLS_CPSAT",
       "entity_type": "implementation",
       "external_url": "https://developers.google.com/optimization/cp/cp_solver",
@@ -1893,6 +2036,14 @@
       "external_url": "https://cma-es.github.io/apidocs-pycma/",
       "label_en": "CMA-ES",
       "label_ja": "pycma"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "I_PYMANOPT",
+      "entity_type": "implementation",
+      "external_url": "https://pymanopt.org/",
+      "label_en": "Pymanopt",
+      "label_ja": "Pymanopt"
     },
     {
       "canonical_url": null,
@@ -2055,6 +2206,14 @@
       "label_ja": "Levenberg–Marquardt法"
     },
     {
+      "canonical_url": "/methods/M_MIRROR_DESCENT",
+      "entity_id": "M_MIRROR_DESCENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Mirror descent",
+      "label_ja": "mirror descent"
+    },
+    {
       "canonical_url": "/methods/M_MMA",
       "entity_id": "M_MMA",
       "entity_type": "method",
@@ -2119,6 +2278,22 @@
       "label_ja": "random search"
     },
     {
+      "canonical_url": "/methods/M_RIEMANNIAN_GRADIENT",
+      "entity_id": "M_RIEMANNIAN_GRADIENT",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Riemannian gradient descent",
+      "label_ja": "Riemann勾配法"
+    },
+    {
+      "canonical_url": "/methods/M_RIEMANNIAN_TRUST_REGION",
+      "entity_id": "M_RIEMANNIAN_TRUST_REGION",
+      "entity_type": "method",
+      "external_url": null,
+      "label_en": "Riemannian trust-region",
+      "label_ja": "Riemann trust-region法"
+    },
+    {
       "canonical_url": "/methods/M_SGD",
       "entity_id": "M_SGD",
       "entity_type": "method",
@@ -2181,6 +2356,14 @@
       "external_url": null,
       "label_en": "Nonlinear least squares",
       "label_ja": "非線形最小二乗"
+    },
+    {
+      "canonical_url": null,
+      "entity_id": "PA037",
+      "entity_type": "problem",
+      "external_url": null,
+      "label_en": "SO(3)/SE(3) optimization",
+      "label_ja": "SO(3)/SE(3)上の最適化"
     },
     {
       "canonical_url": null,

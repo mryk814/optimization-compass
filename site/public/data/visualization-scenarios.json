@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215662,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "3c97929d1507fec27dc0e6d1b9652b4ded0a3463c1475d4decc9305dce1162ee",
+        "payload_sha256": "15276f389b2e6fa1d77c7cd2c880f8bf06919cece3e85531bbec6fdc9754dd96",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210211,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "8a8fca05e55101cecd0628cf9d77b16890b2affcb14cdfc6e2300714f1a5080c",
+        "payload_sha256": "db92a9536537c088795f9d70380fe13bf7ecdd7d0852199471a41c08a6532169",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -442,13 +442,13 @@
         ],
         "payload_bytes": 208170,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "e1e8f1b78621d5b75e44945999aa8c5bb6492751b493fb3d31349ac3fe901faa",
+        "payload_sha256": "639a1cdbd4eec2b45f442ac36e400cd8bb266ee8bb7ffcb277b4fea01d1f9252",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -615,13 +615,13 @@
         ],
         "payload_bytes": 204202,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "6d6553be19e352845326acd6790ff579ef9cbcd5c4be3a740bea8cfdde4ce62b",
+        "payload_sha256": "0f773bfcc721a50a66cdf71183b47133e7db82d714bac3f61ae970f8255c5f84",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -789,13 +789,13 @@
         ],
         "payload_bytes": 72534,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "2f8301913c227c41d31eef787adb9a70e1d8661411a78cd72788e9229c0eb545",
+        "payload_sha256": "e07efcecdfd309ff78412149806534d9d09daee974f15223b2d8cbdf1be290c9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1055,13 +1055,13 @@
         ],
         "payload_bytes": 66443,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "557e2f9b42b8b87c5cf2622b0fbe3c97c7896eddbf946357406db5b6daaa79f8",
+        "payload_sha256": "0812cac538de4889d52c8f7cdd9784a4b4fbcc7df51369abd1ffd3313c8666bc",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1237,13 +1237,13 @@
         ],
         "payload_bytes": 65995,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "25fd6a151ed7ee91132ea00d7fdd409da68990a8cb434558604070f13077162a",
+        "payload_sha256": "dc6f702a4ac6b3e31da6ffa029a149e1e528db7af6865d1c38a8a993614ce43a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1419,13 +1419,13 @@
         ],
         "payload_bytes": 53138,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "76cf22e560e73981376a3c0bc361a9b451beb9edcb81bddeb70f0199d5d0416c",
+        "payload_sha256": "9cc4e8d3805fc1f5b95d08740419677dc36476db85e9c5d134747403d13e9b7a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1615,13 +1615,13 @@
         ],
         "payload_bytes": 66386,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "f00baf43f01b7b06a438e5dce71d45ada907164b5a8e75ee8d0cedf366b9f5d1",
+        "payload_sha256": "a1ed64f57904357e03a3b94050604a70b23a3d4989e7b6de20c7378f6e3a0e8b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1811,13 +1811,13 @@
         ],
         "payload_bytes": 66017,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "903896b18bf399fac86f51021aa1b3f2655011c364f77a5dd8d493abb78f2d8c",
+        "payload_sha256": "d6055cfbf33b6b883279db7b8863bdb1f16626ccca88ed3d9d526e5495f23243",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2008,13 +2008,13 @@
         ],
         "payload_bytes": 22749,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "cc9ecc18d6d0a113a18a4347e25088e9ef40f1588dba41785b022cd2c115abf9",
+        "payload_sha256": "24e7f926278bafbde21aba41d40a14e244c1f9209937688f59380a00816bb37f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2196,13 +2196,13 @@
         ],
         "payload_bytes": 22451,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "4424c973b69d1dfa3afb2f0ff314ba45f0c024e29644d4fb6a7fdcdc1696bb5f",
+        "payload_sha256": "2c016a71da5d183065d386c956535f14a68d4de028174ef099bf1c23d434bac4",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2398,13 +2398,13 @@
         ],
         "payload_bytes": 22735,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "507abeb58093383454b457dac79e4ea6f55c30178290c5fa419d2c26bb0cf519",
+        "payload_sha256": "f216a69a08e860ce3517fd661b916ea13ceb3eaf8b3459d3c10a62eb986c7002",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2586,13 +2586,13 @@
         ],
         "payload_bytes": 22741,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "d66fa9820fef51705df875fab6e064cbf80404183fcee0e56595565cf0c21b03",
+        "payload_sha256": "d86c43e3257bc252ccc0d42ad3ac3d4ef79a5a2b0eb116fd69951038d44e25eb",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2766,6 +2766,407 @@
         "artifact_contract_version": "1.0.0",
         "artifact_kind": "executable_trace",
         "observable_ids": [
+          "objective_value",
+          "geodesic_residual",
+          "orthogonality_error",
+          "determinant_error"
+        ],
+        "payload_bytes": 41622,
+        "payload_path": "traces/so3-projected-alignment.json",
+        "payload_sha256": "e9b2bc66c51039b77736e8f67095230fbcd1b26a20476e81320bf85e7b68c6c8",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "SO3_PROJECTED_FIXED",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "max_oracle_evaluations": 12
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "Feasibility diagnostics for SO(3) attitude alignment",
+          "ja": "SO(3) attitude alignmentのfeasibility診断"
+        },
+        "expected_phenomenon_en": "Both remain on SO(3), but projection correction and a tangent-space step have different meanings.",
+        "expected_phenomenon_ja": "どちらもSO(3)上に戻るが、projection correctionと接空間stepの意味は異なる。",
+        "failure_signals": [
+          {
+            "label_en": "projection correction is mistaken for a tangent-space step",
+            "label_ja": "projection correctionを接空間stepと同一視してしまう",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual",
+              "orthogonality_error"
+            ],
+            "signal_id": "projection_equivalence_misread"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "The fixed target rotation is a zero-loss teaching reference, not a general ranking.",
+          "note_ja": "固定target rotationは目的値0の教材referenceであり、一般性能rankingではない。",
+          "policy": "show"
+        },
+        "learning_objective": {
+          "en": "Separate objective progress from orthogonality, determinant, and geodesic diagnostics.",
+          "ja": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+        },
+        "limitations_en": "A noiseless fixed-three-correspondence lesson with a fixed step; it does not establish robust rotation averaging, general near-pi chart stability, runtime, or general local-solution guarantees.",
+        "limitations_ja": "固定3対応・noiseなし・固定stepの教材であり、rotation averagingのrobustness、near-pi chartの一般的安定性、実装速度、局所解の一般保証を示さない。",
+        "misconception": {
+          "en": "A feasible projected point makes an ambient update equivalent to a manifold update.",
+          "ja": "projection後にfeasibleなら、ambient updateとmanifold updateは同じ一歩である。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual"
+            ],
+            "title_en": "Inspect the near-pi initial residual",
+            "title_ja": "near-pi初期残差を確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "title_en": "Read the first feasibility map",
+            "title_ja": "最初のfeasibility mapを読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual"
+            ],
+            "title_en": "Separate objective and geodesic residual",
+            "title_ja": "objectiveとgeodesic residualを分離"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "objective_value",
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "title_en": "Separate feasible iterates from convergence claims",
+            "title_ja": "feasible iterateと収束claimを分離"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.manifold",
+          "concept.so3-rotation-representation"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "geodesic residual",
+            "label_ja": "geodesic residual",
+            "observable_id": "geodesic_residual"
+          },
+          {
+            "label_en": "orthogonality error",
+            "label_ja": "直交性残差",
+            "observable_id": "orthogonality_error"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "determinant error",
+            "label_ja": "determinant残差",
+            "observable_id": "determinant_error"
+          }
+        ],
+        "static_summary": {
+          "en": "Follow loss and SO(3) structure residuals over twelve updates to one near-pi target.",
+          "ja": "同じnear-pi targetへ向かう12 updateで、lossとSO(3)構造残差を追う。"
+        },
+        "success_signals": [
+          {
+            "label_en": "structure residuals and objective progress remain jointly visible",
+            "label_ja": "構造残差と目的関数を同じevaluationで確認できる",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual",
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "signal_id": "feasibility_and_progress_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "Starting at identity, twelve updates reduce geodesic residual while preserving orthogonality and determinant.",
+          "ja": "identityから開始し、12 updateでgeodesic residualを縮めながら直交性とdeterminantを保つ。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+      "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "so3-projected-alignment",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_PROJECTED_GRADIENT",
+          "profile_id": "PROFILE_SO3_ATTITUDE_ALIGNMENT",
+          "run_id": "RUN_SO3_PROJECTED_ALIGNMENT"
+        }
+      ],
+      "scenario_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071",
+        "S107"
+      ],
+      "title_en": "Attitude alignment by ambient step and QR projection",
+      "title_ja": "ambient stepとQR projectionによるattitude alignment"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "objective_value",
+          "geodesic_residual",
+          "orthogonality_error",
+          "determinant_error"
+        ],
+        "payload_bytes": 41717,
+        "payload_path": "traces/so3-riemannian-alignment.json",
+        "payload_sha256": "86a6bf631f1bced0434a1b22aabc0147bff524637d4eb79b67ba3381e30ce4e1",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "SO3_RIEMANNIAN_FIXED",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "max_oracle_evaluations": 12
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "canonical",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Feasibility diagnostics for SO(3) attitude alignment",
+          "ja": "SO(3) attitude alignmentのfeasibility診断"
+        },
+        "expected_phenomenon_en": "Both remain on SO(3), but projection correction and a tangent-space step have different meanings.",
+        "expected_phenomenon_ja": "どちらもSO(3)上に戻るが、projection correctionと接空間stepの意味は異なる。",
+        "failure_signals": [],
+        "known_reference_display": {
+          "note_en": "The fixed target rotation is a zero-loss teaching reference, not a general ranking.",
+          "note_ja": "固定target rotationは目的値0の教材referenceであり、一般性能rankingではない。",
+          "policy": "show"
+        },
+        "learning_objective": {
+          "en": "Separate objective progress from orthogonality, determinant, and geodesic diagnostics.",
+          "ja": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+        },
+        "limitations_en": "A noiseless fixed-three-correspondence lesson with a fixed step; it does not establish robust rotation averaging, general near-pi chart stability, runtime, or general local-solution guarantees.",
+        "limitations_ja": "固定3対応・noiseなし・固定stepの教材であり、rotation averagingのrobustness、near-pi chartの一般的安定性、実装速度、局所解の一般保証を示さない。",
+        "misconception": {
+          "en": "A feasible projected point makes an ambient update equivalent to a manifold update.",
+          "ja": "projection後にfeasibleなら、ambient updateとmanifold updateは同じ一歩である。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual"
+            ],
+            "title_en": "Inspect the near-pi initial residual",
+            "title_ja": "near-pi初期残差を確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "title_en": "Read the first feasibility map",
+            "title_ja": "最初のfeasibility mapを読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual"
+            ],
+            "title_en": "Separate objective and geodesic residual",
+            "title_ja": "objectiveとgeodesic residualを分離"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "objective_value",
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "title_en": "Separate feasible iterates from convergence claims",
+            "title_ja": "feasible iterateと収束claimを分離"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.manifold",
+          "concept.so3-rotation-representation"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "geodesic residual",
+            "label_ja": "geodesic residual",
+            "observable_id": "geodesic_residual"
+          },
+          {
+            "label_en": "orthogonality error",
+            "label_ja": "直交性残差",
+            "observable_id": "orthogonality_error"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_SO3_PROJECTED_ALIGNMENT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "determinant error",
+            "label_ja": "determinant残差",
+            "observable_id": "determinant_error"
+          }
+        ],
+        "static_summary": {
+          "en": "Follow loss and SO(3) structure residuals over twelve updates to one near-pi target.",
+          "ja": "同じnear-pi targetへ向かう12 updateで、lossとSO(3)構造残差を追う。"
+        },
+        "success_signals": [
+          {
+            "label_en": "structure residuals and objective progress remain jointly visible",
+            "label_ja": "構造残差と目的関数を同じevaluationで確認できる",
+            "observable_ids": [
+              "objective_value",
+              "geodesic_residual",
+              "orthogonality_error",
+              "determinant_error"
+            ],
+            "signal_id": "feasibility_and_progress_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "Starting at identity, twelve updates reduce geodesic residual while preserving orthogonality and determinant.",
+          "ja": "identityから開始し、12 updateでgeodesic residualを縮めながら直交性とdeterminantを保つ。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+      "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "so3-riemannian-alignment",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_RIEMANNIAN_GRADIENT",
+          "profile_id": "PROFILE_SO3_ATTITUDE_ALIGNMENT",
+          "run_id": "RUN_SO3_RIEMANNIAN_ALIGNMENT"
+        }
+      ],
+      "scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071",
+        "S107"
+      ],
+      "title_en": "Attitude alignment by a Lie-algebra step",
+      "title_ja": "Lie algebra stepによるattitude alignment"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
           "state_norm",
           "control_effort",
           "dynamics_defect",
@@ -2774,13 +3175,13 @@
         ],
         "payload_bytes": 14303,
         "payload_path": "traces/optimal-control-ec020-history.json",
-        "payload_sha256": "16b923e761019982167ae97f0910fbfba50c081b1d12a7900a0284b05b1a1e4a",
+        "payload_sha256": "98ca32dd77590b7f44719a788e57a7c3d4d8ce7b436e4356aac6ab3725fc9ddc",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2965,6 +3366,2945 @@
         "artifact_contract_version": "1.0.0",
         "artifact_kind": "executable_trace",
         "observable_ids": [
+          "state_norm",
+          "control_effort",
+          "dynamics_defect",
+          "path_violation",
+          "objective_value"
+        ],
+        "payload_bytes": 16112,
+        "payload_path": "traces/pendulum-collocation-coarse.json",
+        "payload_sha256": "5c26411c3b91ba68f19e787f1641fe79b383c001f3e55bf081eb6cacf72379b4",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 8
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "VIEW_OPTIMAL_CONTROL_HISTORY",
+        "seed": {
+          "status": "fixed",
+          "value": 2026
+        },
+        "stopping": {
+          "dynamics_defect_tolerance": 0.001,
+          "max_oracle_evaluations": 8
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "canonical",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "N=20 diagnostics for pendulum direct collocation",
+          "ja": "pendulum direct collocationのN=20診断履歴"
+        },
+        "expected_phenomenon_en": "Lower objective and node defects do not necessarily remove reconstructed between-point path violations",
+        "expected_phenomenon_ja": "objectiveとnode上のdefectが下がっても、区間再構成のpath違反が同時に消えるとは限らない",
+        "failure_signals": [
+          {
+            "label_en": "Small mesh defects still require interval reconstruction and high-fidelity simulation",
+            "label_ja": "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "mesh_feasibility_limit"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Continuous-time optimality and safety are not shown; validate them with refinement and reconstruction.",
+          "note_ja": "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read state, control, dynamics defects, and path violations on one evaluation axis",
+          "ja": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+        },
+        "limitations_en": "A fixed N=20 educational mesh history; it does not guarantee continuous-time feasibility, hardware safety, model validity, or general solver performance",
+        "limitations_ja": "N=20の固定meshによる教育用履歴であり、連続時間の可行性・実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない",
+        "misconception": {
+          "en": "An NLP success status guarantees feasibility between mesh points and continuous-time safety",
+          "ja": "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "state_norm",
+              "control_effort"
+            ],
+            "title_en": "Inspect the initial trajectory and control",
+            "title_ja": "初期trajectoryとcontrolを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "dynamics_defect",
+              "objective_value"
+            ],
+            "title_en": "Follow the first dynamics-defect change",
+            "title_ja": "最初のdynamics defectの変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "path_violation",
+              "objective_value"
+            ],
+            "title_en": "Separate path violations from objective progress",
+            "title_ja": "path violationとobjectiveを分けて読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "title_en": "Inspect the mesh result and continuous-time limitation",
+            "title_ja": "mesh上の結果と連続時間の限界を確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_TRAJECTORY_VARIABLE",
+          "CONCEPT_DYNAMICS_DEFECT"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "state norm",
+            "label_ja": "state norm",
+            "observable_id": "state_norm"
+          },
+          {
+            "label_en": "control effort",
+            "label_ja": "control effort",
+            "observable_id": "control_effort"
+          },
+          {
+            "label_en": "dynamics defect",
+            "label_ja": "dynamics defect",
+            "observable_id": "dynamics_defect"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "path violation",
+            "label_ja": "path violation",
+            "observable_id": "path_violation"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          }
+        ],
+        "static_summary": {
+          "en": "Align pendulum state, control, dynamics defects, and reconstructed path violations for the N=20 history.",
+          "ja": "pendulum swing-upのstate、control、dynamics defect、再構成path violationをN=20の評価履歴として並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/control and dynamics/path diagnostics are visible at the same evaluation",
+            "label_ja": "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+            "observable_ids": [
+              "state_norm",
+              "control_effort",
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "trajectory_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List state norm, control effort, dynamics defect, path violation, and objective at each evaluation.",
+          "ja": "各evaluationのstate norm、control effort、dynamics defect、path violation、objectiveを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "pendulum-collocation-coarse",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+          "run_id": "RUN_PENDULUM_COLLOCATION_COARSE"
+        }
+      ],
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "title_en": "Pendulum swing-up · N=20 mesh diagnostics",
+      "title_ja": "Pendulum swing-up · N=20 mesh診断"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "state_norm",
+          "control_effort",
+          "dynamics_defect",
+          "path_violation",
+          "objective_value"
+        ],
+        "payload_bytes": 16088,
+        "payload_path": "traces/pendulum-collocation-refined.json",
+        "payload_sha256": "3c2acc0f00578fb592a3f9480665bf5b738bb6009ca74e876ca67192deaaaad7",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 8
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "VIEW_OPTIMAL_CONTROL_HISTORY",
+        "seed": {
+          "status": "fixed",
+          "value": 2026
+        },
+        "stopping": {
+          "dynamics_defect_tolerance": 0.001,
+          "max_oracle_evaluations": 8
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "N=40 diagnostics for pendulum direct collocation",
+          "ja": "pendulum direct collocationのN=40診断履歴"
+        },
+        "expected_phenomenon_en": "A finer mesh changes reconstructed path violation, but a finite mesh does not establish continuous-time feasibility",
+        "expected_phenomenon_ja": "meshを細かくすると再構成path違反が変わるが、有限meshだけで連続時間可行とは判定できない",
+        "failure_signals": [
+          {
+            "label_en": "Small mesh defects still require interval reconstruction and high-fidelity simulation",
+            "label_ja": "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "mesh_feasibility_limit"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Continuous-time optimality and safety are not shown; validate them with refinement and reconstruction.",
+          "note_ja": "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read state, control, dynamics defects, and path violations on one evaluation axis",
+          "ja": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+        },
+        "limitations_en": "A fixed N=40 educational mesh history; it does not guarantee continuous-time feasibility, hardware safety, model validity, or general solver performance",
+        "limitations_ja": "N=40の固定meshによる教育用履歴であり、連続時間の可行性・実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない",
+        "misconception": {
+          "en": "An NLP success status guarantees feasibility between mesh points and continuous-time safety",
+          "ja": "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "state_norm",
+              "control_effort"
+            ],
+            "title_en": "Inspect the initial trajectory and control",
+            "title_ja": "初期trajectoryとcontrolを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "dynamics_defect",
+              "objective_value"
+            ],
+            "title_en": "Follow the first dynamics-defect change",
+            "title_ja": "最初のdynamics defectの変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "path_violation",
+              "objective_value"
+            ],
+            "title_en": "Separate path violations from objective progress",
+            "title_ja": "path violationとobjectiveを分けて読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "title_en": "Inspect the mesh result and continuous-time limitation",
+            "title_ja": "mesh上の結果と連続時間の限界を確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_TRAJECTORY_VARIABLE",
+          "CONCEPT_DYNAMICS_DEFECT"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "state norm",
+            "label_ja": "state norm",
+            "observable_id": "state_norm"
+          },
+          {
+            "label_en": "control effort",
+            "label_ja": "control effort",
+            "observable_id": "control_effort"
+          },
+          {
+            "label_en": "dynamics defect",
+            "label_ja": "dynamics defect",
+            "observable_id": "dynamics_defect"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PENDULUM_SWING_UP_MESH_20"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "path violation",
+            "label_ja": "path violation",
+            "observable_id": "path_violation"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          }
+        ],
+        "static_summary": {
+          "en": "Align pendulum state, control, dynamics defects, and reconstructed path violations for the N=40 history.",
+          "ja": "pendulum swing-upのstate、control、dynamics defect、再構成path violationをN=40の評価履歴として並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/control and dynamics/path diagnostics are visible at the same evaluation",
+            "label_ja": "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+            "observable_ids": [
+              "state_norm",
+              "control_effort",
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "trajectory_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List state norm, control effort, dynamics defect, path violation, and objective at each evaluation.",
+          "ja": "各evaluationのstate norm、control effort、dynamics defect、path violation、objectiveを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "pendulum-collocation-refined",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+          "run_id": "RUN_PENDULUM_COLLOCATION_REFINED"
+        }
+      ],
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "title_en": "Pendulum swing-up · N=40 mesh sensitivity",
+      "title_ja": "Pendulum swing-up · N=40 mesh感度"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "state_norm",
+          "control_effort",
+          "dynamics_defect",
+          "path_violation",
+          "objective_value"
+        ],
+        "payload_bytes": 15785,
+        "payload_path": "traces/pendulum-model-rollout-failure.json",
+        "payload_sha256": "9bf23d8741586443e7b1cdc97f708b0fcf7c82e9849be2014f6cd8f71b63dd00",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 8
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "VIEW_OPTIMAL_CONTROL_HISTORY",
+        "seed": {
+          "status": "fixed",
+          "value": 2026
+        },
+        "stopping": {
+          "dynamics_defect_tolerance": 0.001,
+          "max_oracle_evaluations": 8
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-15",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "N=20 diagnostics for pendulum direct collocation",
+          "ja": "pendulum direct collocationのN=20診断履歴"
+        },
+        "expected_phenomenon_en": "A validation rollout under model mismatch can retain path and terminal error even when the NLP defect is small",
+        "expected_phenomenon_ja": "modelを変えたvalidation rolloutでは、NLPのdefectが小さくてもpath違反と終端誤差が残る",
+        "failure_signals": [
+          {
+            "label_en": "Path and terminal error remain in the model-mismatch rollout",
+            "label_ja": "modelずれrolloutでpath違反と終端誤差が残る",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "model_validation_failure"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Continuous-time optimality and safety are not shown; validate them with refinement and reconstruction.",
+          "note_ja": "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read state, control, dynamics defects, and path violations on one evaluation axis",
+          "ja": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+        },
+        "limitations_en": "A fixed N=20 educational mesh history; it does not guarantee continuous-time feasibility, hardware safety, model validity, or general solver performance",
+        "limitations_ja": "N=20の固定meshによる教育用履歴であり、連続時間の可行性・実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない",
+        "misconception": {
+          "en": "An NLP success status guarantees feasibility between mesh points and continuous-time safety",
+          "ja": "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "state_norm",
+              "control_effort"
+            ],
+            "title_en": "Inspect the initial trajectory and control",
+            "title_ja": "初期trajectoryとcontrolを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "dynamics_defect",
+              "objective_value"
+            ],
+            "title_en": "Follow the first dynamics-defect change",
+            "title_ja": "最初のdynamics defectの変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "path_violation",
+              "objective_value"
+            ],
+            "title_en": "Separate path violations from objective progress",
+            "title_ja": "path violationとobjectiveを分けて読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "title_en": "Inspect the mesh result and continuous-time limitation",
+            "title_ja": "mesh上の結果と連続時間の限界を確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_TRAJECTORY_VARIABLE",
+          "CONCEPT_DYNAMICS_DEFECT"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "state norm",
+            "label_ja": "state norm",
+            "observable_id": "state_norm"
+          },
+          {
+            "label_en": "control effort",
+            "label_ja": "control effort",
+            "observable_id": "control_effort"
+          },
+          {
+            "label_en": "dynamics defect",
+            "label_ja": "dynamics defect",
+            "observable_id": "dynamics_defect"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PENDULUM_SWING_UP_MESH_20"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "path violation",
+            "label_ja": "path violation",
+            "observable_id": "path_violation"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          }
+        ],
+        "static_summary": {
+          "en": "Align pendulum state, control, dynamics defects, and reconstructed path violations for the N=20 history.",
+          "ja": "pendulum swing-upのstate、control、dynamics defect、再構成path violationをN=20の評価履歴として並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/control and dynamics/path diagnostics are visible at the same evaluation",
+            "label_ja": "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+            "observable_ids": [
+              "state_norm",
+              "control_effort",
+              "dynamics_defect",
+              "path_violation"
+            ],
+            "signal_id": "trajectory_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List state norm, control effort, dynamics defect, path violation, and objective at each evaluation.",
+          "ja": "各evaluationのstate norm、control effort、dynamics defect、path violation、objectiveを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "pendulum-model-rollout-failure",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+          "run_id": "RUN_PENDULUM_MODEL_ROLLOUT_FAILURE"
+        }
+      ],
+      "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "title_en": "Pendulum swing-up · model-mismatch rollout",
+      "title_ja": "Pendulum swing-up · modelずれrollout"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "mean_loss",
+          "cvar_75",
+          "worst_loss",
+          "best_loss"
+        ],
+        "payload_bytes": 6636,
+        "payload_path": "traces/portfolio-nominal-8-4.json",
+        "payload_sha256": "141e2dd6eed7a5d556a8fcf09eede541511c92a471b3eeb9658e8b579eb293cf",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            0.45,
+            0.0,
+            0.0,
+            0.55
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "PORTFOLIO_NOMINAL_FIXED_8_4",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 12
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "baseline",
+        "derived_media_caption": {
+          "en": "Portfolio allocation: empirical training and held-out risk",
+          "ja": "portfolio allocation: trainingとheld-outのempirical risk"
+        },
+        "expected_phenomenon_en": "Mean, tail, worst, and best loss change between eight training and four held-out scenarios, exposing sample dependence.",
+        "expected_phenomenon_ja": "training 8件とheld-out 4件でmean・tail・worst/best lossが変わり、sample依存性が見える。",
+        "failure_signals": [
+          {
+            "label_en": "training-only contrast is mistaken for a future guarantee",
+            "label_ja": "training上の差を将来保証と読んでしまう",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss"
+            ],
+            "signal_id": "training_only_inference"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Population risk is unknown; only empirical summaries of the fixed samples are shown.",
+          "note_ja": "母集団riskの既知値はなく、固定sampleのempirical summaryだけを表示する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Evaluate one allocation on training and held-out samples without turning in-sample risk reduction into a future guarantee.",
+          "ja": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+        },
+        "limitations_en": "A fixed 8/4 teaching sample that provides no confidence interval, population-risk statement, or guarantee for future returns.",
+        "limitations_ja": "固定8/4件の教材であり、confidence interval、母集団risk、将来returnへの保証を与えない。",
+        "misconception": {
+          "en": "Lower training CVaR guarantees the same out-of-sample ordering.",
+          "ja": "training CVaRが小さければout-of-sampleでも同じ順位になる。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75"
+            ],
+            "title_en": "Inspect the shared sample contract",
+            "title_ja": "共通sample契約を確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss"
+            ],
+            "title_en": "Read the training summary",
+            "title_ja": "training集計を読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss",
+              "best_loss"
+            ],
+            "title_en": "Read the held-out shift",
+            "title_ja": "held-outで差を読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75"
+            ],
+            "title_en": "Bound the claim scope",
+            "title_ja": "claim scopeを限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.uncertainty-models",
+          "concept.chance-risk-contract",
+          "concept.simplex"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "mean loss",
+            "label_ja": "平均loss",
+            "observable_id": "mean_loss"
+          },
+          {
+            "label_en": "CVaR 75%",
+            "label_ja": "CVaR 75%",
+            "observable_id": "cvar_75"
+          },
+          {
+            "label_en": "worst loss",
+            "label_ja": "最大loss",
+            "observable_id": "worst_loss"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PORTFOLIO_CVAR_8_4"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "best loss",
+            "label_ja": "最小loss",
+            "observable_id": "best_loss"
+          }
+        ],
+        "static_summary": {
+          "en": "Read training and held-out mean, CVaR, worst, and best loss for one fixed allocation over twelve loss evaluations.",
+          "ja": "固定配分のtraining / held-out mean、CVaR、worst/best lossを12回のloss評価軸で読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "training and held-out summaries remain separate",
+            "label_ja": "trainingとheld-outを別集計できる",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss",
+              "best_loss"
+            ],
+            "signal_id": "split_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "Evaluation 8 reports eight training scenarios; evaluation 12 reports four disjoint held-out scenarios.",
+          "ja": "evaluation 8でtraining 8件、evaluation 12で独立したheld-out 4件のsummaryを表示する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "portfolio-nominal-8-4",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "MF_LP_QP_CONIC",
+          "profile_id": "PROFILE_PORTFOLIO_UNCERTAINTY",
+          "run_id": "RUN_PORTFOLIO_NOMINAL_8_4"
+        }
+      ],
+      "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "source_ids": [
+        "S010",
+        "S055",
+        "S103"
+      ],
+      "title_en": "Nominal allocation: training / held-out diagnostics",
+      "title_ja": "nominal配分のtraining / held-out診断"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "mean_loss",
+          "cvar_75",
+          "worst_loss",
+          "best_loss"
+        ],
+        "payload_bytes": 7040,
+        "payload_path": "traces/portfolio-cvar-8-4.json",
+        "payload_sha256": "d8c96db906fa136a3a6285d1b4871b38fcc31a14f59d83fb146b18d3789ba46c",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 12
+        },
+        "initial_condition": {
+          "point": [
+            0.3,
+            0.4,
+            0.0,
+            0.3
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "PORTFOLIO_CVAR_FIXED_8_4",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 12
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Portfolio allocation: empirical training and held-out risk",
+          "ja": "portfolio allocation: trainingとheld-outのempirical risk"
+        },
+        "expected_phenomenon_en": "Mean, tail, worst, and best loss change between eight training and four held-out scenarios, exposing sample dependence.",
+        "expected_phenomenon_ja": "training 8件とheld-out 4件でmean・tail・worst/best lossが変わり、sample依存性が見える。",
+        "failure_signals": [],
+        "known_reference_display": {
+          "note_en": "Population risk is unknown; only empirical summaries of the fixed samples are shown.",
+          "note_ja": "母集団riskの既知値はなく、固定sampleのempirical summaryだけを表示する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Evaluate one allocation on training and held-out samples without turning in-sample risk reduction into a future guarantee.",
+          "ja": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+        },
+        "limitations_en": "A fixed 8/4 teaching sample that provides no confidence interval, population-risk statement, or guarantee for future returns.",
+        "limitations_ja": "固定8/4件の教材であり、confidence interval、母集団risk、将来returnへの保証を与えない。",
+        "misconception": {
+          "en": "Lower training CVaR guarantees the same out-of-sample ordering.",
+          "ja": "training CVaRが小さければout-of-sampleでも同じ順位になる。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75"
+            ],
+            "title_en": "Inspect the shared sample contract",
+            "title_ja": "共通sample契約を確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss"
+            ],
+            "title_en": "Read the training summary",
+            "title_ja": "training集計を読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss",
+              "best_loss"
+            ],
+            "title_en": "Read the held-out shift",
+            "title_ja": "held-outで差を読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75"
+            ],
+            "title_en": "Bound the claim scope",
+            "title_ja": "claim scopeを限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.uncertainty-models",
+          "concept.chance-risk-contract",
+          "concept.simplex"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "mean loss",
+            "label_ja": "平均loss",
+            "observable_id": "mean_loss"
+          },
+          {
+            "label_en": "CVaR 75%",
+            "label_ja": "CVaR 75%",
+            "observable_id": "cvar_75"
+          },
+          {
+            "label_en": "worst loss",
+            "label_ja": "最大loss",
+            "observable_id": "worst_loss"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "best loss",
+            "label_ja": "最小loss",
+            "observable_id": "best_loss"
+          }
+        ],
+        "static_summary": {
+          "en": "Read training and held-out mean, CVaR, worst, and best loss for one fixed allocation over twelve loss evaluations.",
+          "ja": "固定配分のtraining / held-out mean、CVaR、worst/best lossを12回のloss評価軸で読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "training and held-out summaries remain separate",
+            "label_ja": "trainingとheld-outを別集計できる",
+            "observable_ids": [
+              "mean_loss",
+              "cvar_75",
+              "worst_loss",
+              "best_loss"
+            ],
+            "signal_id": "split_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "Evaluation 8 reports eight training scenarios; evaluation 12 reports four disjoint held-out scenarios.",
+          "ja": "evaluation 8でtraining 8件、evaluation 12で独立したheld-out 4件のsummaryを表示する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "portfolio-cvar-8-4",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "MF_LP_QP_CONIC",
+          "profile_id": "PROFILE_PORTFOLIO_UNCERTAINTY",
+          "run_id": "RUN_PORTFOLIO_CVAR_8_4"
+        }
+      ],
+      "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "source_ids": [
+        "S010",
+        "S055",
+        "S103"
+      ],
+      "title_en": "CVaR allocation: training / held-out diagnostics",
+      "title_ja": "CVaR配分のtraining / held-out診断"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "objective_value",
+          "state_residual",
+          "adjoint_residual",
+          "state_linear_iterations",
+          "adjoint_linear_iterations",
+          "evaluation_status"
+        ],
+        "payload_bytes": 13732,
+        "payload_path": "traces/pde-state-tolerance-tight.json",
+        "payload_sha256": "69f43e40d7347e5c7751645643d90550b7a4a5241a317eceee7d7cd7a7fe19bf",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.5,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "state_solve",
+          "adjoint_solve"
+        ],
+        "parameter_preset_id": "PDE_STATE_TOLERANCE_TIGHT",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "state_solve_calls": 6,
+          "state_tolerance": 1e-08
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "canonical",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "State/adjoint cost ledger for PDE-constrained optimization",
+          "ja": "PDE制約付き最適化のstate/adjoint cost ledger"
+        },
+        "expected_phenomenon_en": "A tight tolerance controls state/adjoint residuals at higher linear-iteration cost",
+        "expected_phenomenon_ja": "tight toleranceはstate/adjoint残差を抑える一方、線形反復costが増える",
+        "failure_signals": [
+          {
+            "label_en": "A state-solve failure remains failed instead of becoming a synthetic objective penalty",
+            "label_ja": "state solve失敗にobjective penaltyを捏造せずfailed statusを残す",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "signal_id": "failed_evaluation_is_explicit"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No continuous-PDE optimum is shown; only fixed-mesh residuals and costs are contrasted.",
+          "note_ja": "連続PDEの最適解は示さず、固定mesh上の残差とcostだけを比較する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read design updates, state solves, adjoint solves, and failure status on one simulator-call axis",
+          "ja": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+        },
+        "limitations_en": "A deterministic 8x4 fixed-mesh lesson; it does not establish continuous-model accuracy, mesh independence, real runtime, general preconditioner performance, or outer-optimizer ranking.",
+        "limitations_ja": "8×4固定meshの決定的教材であり、連続modelの精度、mesh独立性、実runtime、preconditionerの一般性能、outer optimizerの順位を保証しない。",
+        "misconception": {
+          "en": "Replacing a failed state solve with a large objective removes the need to inspect failure cause and gradient consistency",
+          "ja": "state solveの失敗を大きなobjective値へ置き換えれば、失敗原因と勾配整合性を確認しなくてよい"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "objective_value",
+              "state_residual",
+              "adjoint_residual"
+            ],
+            "title_en": "Separate design, state, and adjoint roles",
+            "title_ja": "design・state・adjointの役割を分ける"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "title_en": "Read the first state/adjoint solve cost",
+            "title_ja": "最初のstate/adjoint solve costを読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations"
+            ],
+            "title_en": "Read the tolerance trade-off between residual and cost",
+            "title_ja": "toleranceとresidual/costのtrade-offを読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "title_en": "Inspect termination status and claim scope",
+            "title_ja": "終了statusとclaim scopeを確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.pde-constrained-optimization"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "discrete objective",
+            "label_ja": "離散objective",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state残差",
+            "observable_id": "state_residual"
+          },
+          {
+            "label_en": "adjoint residual",
+            "label_ja": "adjoint残差",
+            "observable_id": "adjoint_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PDE_STATE_TOLERANCE_LOOSE"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "state linear iterations",
+            "label_ja": "state線形反復",
+            "observable_id": "state_linear_iterations"
+          },
+          {
+            "label_en": "adjoint linear iterations",
+            "label_ja": "adjoint線形反復",
+            "observable_id": "adjoint_linear_iterations"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "evaluation status",
+            "observable_id": "evaluation_status"
+          }
+        ],
+        "static_summary": {
+          "en": "Align solver tolerance, residuals, linear iterations, and failure status in a fixed-mesh design/state/adjoint ledger.",
+          "ja": "固定meshのdesign・state・adjoint ledgerで、solver tolerance、残差、線形反復、失敗statusを並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/adjoint residuals and their linear iterations remain separate from the objective",
+            "label_ja": "state/adjoint残差とそれぞれの線形反復数をobjectiveから分けて確認できる",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "signal_id": "state_and_adjoint_cost_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List discrete objective, state/adjoint residuals, linear iterations, and failure status for every simulator call.",
+          "ja": "各simulator callの離散objective、state/adjoint残差、線形反復数、failure statusを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "pde-state-tolerance-tight",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+          "run_id": "RUN_PDE_STATE_TOLERANCE_TIGHT"
+        }
+      ],
+      "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "source_ids": [
+        "S019",
+        "S097",
+        "S101",
+        "S110"
+      ],
+      "title_en": "PDE state solve · tight tolerance",
+      "title_ja": "PDE state solve · tight tolerance"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "objective_value",
+          "state_residual",
+          "adjoint_residual",
+          "state_linear_iterations",
+          "adjoint_linear_iterations",
+          "evaluation_status"
+        ],
+        "payload_bytes": 13211,
+        "payload_path": "traces/pde-state-tolerance-loose.json",
+        "payload_sha256": "fcc3f766ea5b1b38ac9d788c1800fb684925ce0a19aa87cc5d242361cf555caf",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.5,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "state_solve",
+          "adjoint_solve"
+        ],
+        "parameter_preset_id": "PDE_STATE_TOLERANCE_LOOSE",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "state_solve_calls": 6,
+          "state_tolerance": 0.001
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "State/adjoint cost ledger for PDE-constrained optimization",
+          "ja": "PDE制約付き最適化のstate/adjoint cost ledger"
+        },
+        "expected_phenomenon_en": "A loose tolerance reduces linear iterations without guaranteeing state/adjoint consistency alongside discrete-objective progress",
+        "expected_phenomenon_ja": "loose toleranceは線形反復を減らす一方、離散objectiveの改善とstate/adjoint整合性を同時には保証しない",
+        "failure_signals": [
+          {
+            "label_en": "A state-solve failure remains failed instead of becoming a synthetic objective penalty",
+            "label_ja": "state solve失敗にobjective penaltyを捏造せずfailed statusを残す",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "signal_id": "failed_evaluation_is_explicit"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No continuous-PDE optimum is shown; only fixed-mesh residuals and costs are contrasted.",
+          "note_ja": "連続PDEの最適解は示さず、固定mesh上の残差とcostだけを比較する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read design updates, state solves, adjoint solves, and failure status on one simulator-call axis",
+          "ja": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+        },
+        "limitations_en": "A deterministic 8x4 fixed-mesh lesson; it does not establish continuous-model accuracy, mesh independence, real runtime, general preconditioner performance, or outer-optimizer ranking.",
+        "limitations_ja": "8×4固定meshの決定的教材であり、連続modelの精度、mesh独立性、実runtime、preconditionerの一般性能、outer optimizerの順位を保証しない。",
+        "misconception": {
+          "en": "Replacing a failed state solve with a large objective removes the need to inspect failure cause and gradient consistency",
+          "ja": "state solveの失敗を大きなobjective値へ置き換えれば、失敗原因と勾配整合性を確認しなくてよい"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "objective_value",
+              "state_residual",
+              "adjoint_residual"
+            ],
+            "title_en": "Separate design, state, and adjoint roles",
+            "title_ja": "design・state・adjointの役割を分ける"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "title_en": "Read the first state/adjoint solve cost",
+            "title_ja": "最初のstate/adjoint solve costを読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations"
+            ],
+            "title_en": "Read the tolerance trade-off between residual and cost",
+            "title_ja": "toleranceとresidual/costのtrade-offを読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "title_en": "Inspect termination status and claim scope",
+            "title_ja": "終了statusとclaim scopeを確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.pde-constrained-optimization"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "discrete objective",
+            "label_ja": "離散objective",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state残差",
+            "observable_id": "state_residual"
+          },
+          {
+            "label_en": "adjoint residual",
+            "label_ja": "adjoint残差",
+            "observable_id": "adjoint_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "state linear iterations",
+            "label_ja": "state線形反復",
+            "observable_id": "state_linear_iterations"
+          },
+          {
+            "label_en": "adjoint linear iterations",
+            "label_ja": "adjoint線形反復",
+            "observable_id": "adjoint_linear_iterations"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "evaluation status",
+            "observable_id": "evaluation_status"
+          }
+        ],
+        "static_summary": {
+          "en": "Align solver tolerance, residuals, linear iterations, and failure status in a fixed-mesh design/state/adjoint ledger.",
+          "ja": "固定meshのdesign・state・adjoint ledgerで、solver tolerance、残差、線形反復、失敗statusを並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/adjoint residuals and their linear iterations remain separate from the objective",
+            "label_ja": "state/adjoint残差とそれぞれの線形反復数をobjectiveから分けて確認できる",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "signal_id": "state_and_adjoint_cost_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List discrete objective, state/adjoint residuals, linear iterations, and failure status for every simulator call.",
+          "ja": "各simulator callの離散objective、state/adjoint残差、線形反復数、failure statusを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "pde-state-tolerance-loose",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+          "run_id": "RUN_PDE_STATE_TOLERANCE_LOOSE"
+        }
+      ],
+      "scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+      "source_ids": [
+        "S019",
+        "S097",
+        "S101",
+        "S110"
+      ],
+      "title_en": "PDE state solve · loose tolerance",
+      "title_ja": "PDE state solve · loose tolerance"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "objective_value",
+          "state_residual",
+          "adjoint_residual",
+          "state_linear_iterations",
+          "adjoint_linear_iterations",
+          "evaluation_status"
+        ],
+        "payload_bytes": 9135,
+        "payload_path": "traces/pde-state-solve-failure.json",
+        "payload_sha256": "589aa016da3c87d0a75581fbcea3da7cf13eb959c8f9078bc16b0a7eb66b2ab5",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 4
+        },
+        "initial_condition": {
+          "point": [
+            0.5,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "state_solve",
+          "adjoint_solve"
+        ],
+        "parameter_preset_id": "PDE_STATE_SOLVE_FAILURE",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "state_solve_calls": 4,
+          "state_tolerance": 1e-06
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "State/adjoint cost ledger for PDE-constrained optimization",
+          "ja": "PDE制約付き最適化のstate/adjoint cost ledger"
+        },
+        "expected_phenomenon_en": "A preconditioner failure produces no objective and retains state/adjoint residuals and solver status",
+        "expected_phenomenon_ja": "preconditioner failureではobjectiveを作らず、state/adjoint残差とsolver statusを保持する",
+        "failure_signals": [
+          {
+            "label_en": "A state-solve failure remains failed instead of becoming a synthetic objective penalty",
+            "label_ja": "state solve失敗にobjective penaltyを捏造せずfailed statusを残す",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "signal_id": "failed_evaluation_is_explicit"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No continuous-PDE optimum is shown; only fixed-mesh residuals and costs are contrasted.",
+          "note_ja": "連続PDEの最適解は示さず、固定mesh上の残差とcostだけを比較する。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read design updates, state solves, adjoint solves, and failure status on one simulator-call axis",
+          "ja": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+        },
+        "limitations_en": "A deterministic 8x4 fixed-mesh lesson; it does not establish continuous-model accuracy, mesh independence, real runtime, general preconditioner performance, or outer-optimizer ranking.",
+        "limitations_ja": "8×4固定meshの決定的教材であり、連続modelの精度、mesh独立性、実runtime、preconditionerの一般性能、outer optimizerの順位を保証しない。",
+        "misconception": {
+          "en": "Replacing a failed state solve with a large objective removes the need to inspect failure cause and gradient consistency",
+          "ja": "state solveの失敗を大きなobjective値へ置き換えれば、失敗原因と勾配整合性を確認しなくてよい"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "objective_value",
+              "state_residual",
+              "adjoint_residual"
+            ],
+            "title_en": "Separate design, state, and adjoint roles",
+            "title_ja": "design・state・adjointの役割を分ける"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "title_en": "Read the first state/adjoint solve cost",
+            "title_ja": "最初のstate/adjoint solve costを読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations"
+            ],
+            "title_en": "Read the tolerance trade-off between residual and cost",
+            "title_ja": "toleranceとresidual/costのtrade-offを読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "evaluation_status",
+              "state_residual"
+            ],
+            "title_en": "Inspect termination status and claim scope",
+            "title_ja": "終了statusとclaim scopeを確認"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.pde-constrained-optimization"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "discrete objective",
+            "label_ja": "離散objective",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state残差",
+            "observable_id": "state_residual"
+          },
+          {
+            "label_en": "adjoint residual",
+            "label_ja": "adjoint残差",
+            "observable_id": "adjoint_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "state linear iterations",
+            "label_ja": "state線形反復",
+            "observable_id": "state_linear_iterations"
+          },
+          {
+            "label_en": "adjoint linear iterations",
+            "label_ja": "adjoint線形反復",
+            "observable_id": "adjoint_linear_iterations"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "evaluation status",
+            "observable_id": "evaluation_status"
+          }
+        ],
+        "static_summary": {
+          "en": "Align solver tolerance, residuals, linear iterations, and failure status in a fixed-mesh design/state/adjoint ledger.",
+          "ja": "固定meshのdesign・state・adjoint ledgerで、solver tolerance、残差、線形反復、失敗statusを並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "State/adjoint residuals and their linear iterations remain separate from the objective",
+            "label_ja": "state/adjoint残差とそれぞれの線形反復数をobjectiveから分けて確認できる",
+            "observable_ids": [
+              "state_residual",
+              "adjoint_residual",
+              "state_linear_iterations",
+              "adjoint_linear_iterations"
+            ],
+            "signal_id": "state_and_adjoint_cost_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List discrete objective, state/adjoint residuals, linear iterations, and failure status for every simulator call.",
+          "ja": "各simulator callの離散objective、state/adjoint残差、線形反復数、failure statusを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "pde-state-solve-failure",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "profile_id": "PROFILE_SIMULATION_CONSTRAINED_LEDGER",
+          "run_id": "RUN_PDE_STATE_SOLVE_FAILURE"
+        }
+      ],
+      "scenario_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+      "source_ids": [
+        "S019",
+        "S097",
+        "S101",
+        "S110"
+      ],
+      "title_en": "PDE state solve · failure ledger",
+      "title_ja": "PDE state solve · failure ledger"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "outer_objective",
+          "inner_objective",
+          "inner_residual",
+          "inner_iterations",
+          "complementarity_residual",
+          "stationarity_residual",
+          "relaxation_parameter"
+        ],
+        "payload_bytes": 15257,
+        "payload_path": "traces/bilevel-regression-exact-inner.json",
+        "payload_sha256": "e4e084efb54a99fbe8227caeee4b952aeb0f86bc565295173637c9caf2eeb7dd",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.8
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "VIEW_BILEVEL_REGRESSION_HISTORY",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "inner_tolerance": 1e-08,
+          "max_oracle_evaluations": 6,
+          "outer_step_tolerance": 0.0001
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Bilevel outer/inner diagnostic ledger for nonnegative regression",
+          "ja": "非負回帰のbilevel outer/inner診断ledger"
+        },
+        "expected_phenomenon_en": "Check the inner tolerance and KKT residuals separately before each outer update",
+        "expected_phenomenon_ja": "outer updateの前にinner toleranceとKKT residualを別々に確認する",
+        "failure_signals": [
+          {
+            "label_en": "A small stationarity residual does not establish a constraint qualification, a smooth solution map, or global optimality",
+            "label_ja": "小さいstationarity residualだけではCQ、解写像の滑らかさ、global最適性を確認できない",
+            "observable_ids": [
+              "stationarity_residual",
+              "complementarity_residual"
+            ],
+            "signal_id": "relaxation_is_not_exact"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "The fixed ledger does not show a global bilevel optimum, an MPEC stationarity class, or a verified constraint qualification.",
+          "note_ja": "固定ledgerはglobal bilevel optimum、MPEC stationarity class、CQ成立を表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read outer progress, the inner solve, and complementarity as separate histories",
+          "ja": "outer progress、inner solve、complementarityを別々の履歴として読む"
+        },
+        "limitations_en": "A fixed two-coefficient, six-outer-update teaching ledger rather than a solver execution. Small residuals do not establish global optimality, a constraint qualification, or a smooth solution map, and finite relaxation is not exact complementarity.",
+        "limitations_ja": "固定した2係数・6 outer updateの教育用ledgerであり、実solver executionではない。小さいresidualはglobal最適性、CQ、solution mapの滑らかさを保証せず、有限relaxationをexact complementarityとみなさない。",
+        "misconception": {
+          "en": "A lower outer objective establishes inner-solve quality and exact complementarity",
+          "ja": "outer objectiveが下がればinnerの解品質とexact complementarityも確認できた"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "outer_objective",
+              "inner_objective"
+            ],
+            "title_en": "Separate the outer and inner objectives",
+            "title_ja": "outerとinnerの目的関数を分けて確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "inner_residual",
+              "inner_iterations"
+            ],
+            "title_en": "Update the outer variable only after the inner tolerance passes",
+            "title_ja": "inner toleranceを満たしてからouterを更新"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "stationarity_residual",
+              "complementarity_residual"
+            ],
+            "title_en": "Read stationarity and complementarity separately",
+            "title_ja": "stationarityとcomplementarityを別々に確認"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "complementarity_residual",
+              "relaxation_parameter"
+            ],
+            "title_en": "Bound the claims from relaxation, constraint qualifications, and stationarity",
+            "title_ja": "relaxation・CQ・stationarityの保証範囲を限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_STRUCTURE_BILEVEL",
+          "F_DERIVATIVE_INNER_ITERATION",
+          "F_STRUCTURE_COMPLEMENTARITY"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "outer objective",
+            "label_ja": "outer objective",
+            "observable_id": "outer_objective"
+          },
+          {
+            "label_en": "inner objective",
+            "label_ja": "inner objective",
+            "observable_id": "inner_objective"
+          },
+          {
+            "label_en": "inner residual",
+            "label_ja": "inner residual",
+            "observable_id": "inner_residual"
+          },
+          {
+            "label_en": "complementarity residual",
+            "label_ja": "complementarity residual",
+            "observable_id": "complementarity_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "SCENARIO_HYBRID_MODE_CHATTERING"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "inner iterations",
+            "label_ja": "inner iteration数",
+            "observable_id": "inner_iterations"
+          },
+          {
+            "label_en": "stationarity residual",
+            "label_ja": "stationarity residual",
+            "observable_id": "stationarity_residual"
+          },
+          {
+            "label_en": "relaxation parameter",
+            "label_ja": "relaxation parameter",
+            "observable_id": "relaxation_parameter"
+          }
+        ],
+        "static_summary": {
+          "en": "Align outer and inner objectives, inner residual, stationarity, and complementarity by outer evaluation.",
+          "ja": "outer objective、inner objective、inner residual、stationarity、complementarityをouter evaluationごとに並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Outer objective, inner residual, and complementarity residual are visible at each outer evaluation",
+            "label_ja": "outer objective、inner residual、complementarity residualを同じouter evaluationで確認できる",
+            "observable_ids": [
+              "outer_objective",
+              "inner_residual",
+              "complementarity_residual"
+            ],
+            "signal_id": "nested_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List inner iterations, inner residual, stationarity residual, complementarity residual, and the relaxation parameter at each outer evaluation.",
+          "ja": "各outer evaluationのinner iteration数、inner residual、stationarity residual、complementarity residual、relaxation parameterを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
+      "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "bilevel-regression-exact-inner",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SLSQP",
+          "profile_id": "PROFILE_BILEVEL_REGRESSION_LEDGER",
+          "run_id": "RUN_BILEVEL_REGRESSION_EXACT_INNER"
+        }
+      ],
+      "scenario_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+      "source_ids": [
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "title_en": "Bilevel regression · exact inner diagnostics",
+      "title_ja": "Bilevel回帰 · exact inner診断"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "outer_objective",
+          "inner_objective",
+          "inner_residual",
+          "inner_iterations",
+          "complementarity_residual",
+          "stationarity_residual",
+          "relaxation_parameter"
+        ],
+        "payload_bytes": 15969,
+        "payload_path": "traces/bilevel-regression-relaxed-complementarity.json",
+        "payload_sha256": "e1b8826afca10e64b9d38635d3c90243e3cdf36a9392194f37ea542edbb31eb8",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.8
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "VIEW_BILEVEL_REGRESSION_HISTORY",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "inner_tolerance": 1e-08,
+          "max_oracle_evaluations": 6,
+          "outer_step_tolerance": 0.0001
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Bilevel outer/inner diagnostic ledger for nonnegative regression",
+          "ja": "非負回帰のbilevel outer/inner診断ledger"
+        },
+        "expected_phenomenon_en": "A finite relaxation can lower the outer objective while leaving a complementarity residual",
+        "expected_phenomenon_ja": "有限relaxationではouter objectiveが下がってもcomplementarity residualが残る",
+        "failure_signals": [
+          {
+            "label_en": "A finite-relaxation residual remains, so exact complementarity is not established",
+            "label_ja": "有限relaxationでcomplementarity residualが残り、exactとは判定できない",
+            "observable_ids": [
+              "stationarity_residual",
+              "complementarity_residual"
+            ],
+            "signal_id": "relaxation_is_not_exact"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "The fixed ledger does not show a global bilevel optimum, an MPEC stationarity class, or a verified constraint qualification.",
+          "note_ja": "固定ledgerはglobal bilevel optimum、MPEC stationarity class、CQ成立を表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read outer progress, the inner solve, and complementarity as separate histories",
+          "ja": "outer progress、inner solve、complementarityを別々の履歴として読む"
+        },
+        "limitations_en": "A fixed two-coefficient, six-outer-update teaching ledger rather than a solver execution. Small residuals do not establish global optimality, a constraint qualification, or a smooth solution map, and finite relaxation is not exact complementarity.",
+        "limitations_ja": "固定した2係数・6 outer updateの教育用ledgerであり、実solver executionではない。小さいresidualはglobal最適性、CQ、solution mapの滑らかさを保証せず、有限relaxationをexact complementarityとみなさない。",
+        "misconception": {
+          "en": "A lower outer objective establishes inner-solve quality and exact complementarity",
+          "ja": "outer objectiveが下がればinnerの解品質とexact complementarityも確認できた"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "outer_objective",
+              "inner_objective"
+            ],
+            "title_en": "Separate the outer and inner objectives",
+            "title_ja": "outerとinnerの目的関数を分けて確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "inner_residual",
+              "inner_iterations"
+            ],
+            "title_en": "Update the outer variable only after the inner tolerance passes",
+            "title_ja": "inner toleranceを満たしてからouterを更新"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "stationarity_residual",
+              "complementarity_residual"
+            ],
+            "title_en": "Read stationarity and complementarity separately",
+            "title_ja": "stationarityとcomplementarityを別々に確認"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "complementarity_residual",
+              "relaxation_parameter"
+            ],
+            "title_en": "Bound the claims from relaxation, constraint qualifications, and stationarity",
+            "title_ja": "relaxation・CQ・stationarityの保証範囲を限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_STRUCTURE_BILEVEL",
+          "F_DERIVATIVE_INNER_ITERATION",
+          "F_STRUCTURE_COMPLEMENTARITY"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "outer objective",
+            "label_ja": "outer objective",
+            "observable_id": "outer_objective"
+          },
+          {
+            "label_en": "inner objective",
+            "label_ja": "inner objective",
+            "observable_id": "inner_objective"
+          },
+          {
+            "label_en": "inner residual",
+            "label_ja": "inner residual",
+            "observable_id": "inner_residual"
+          },
+          {
+            "label_en": "complementarity residual",
+            "label_ja": "complementarity residual",
+            "observable_id": "complementarity_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BILEVEL_REGRESSION_EXACT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "inner iterations",
+            "label_ja": "inner iteration数",
+            "observable_id": "inner_iterations"
+          },
+          {
+            "label_en": "stationarity residual",
+            "label_ja": "stationarity residual",
+            "observable_id": "stationarity_residual"
+          },
+          {
+            "label_en": "relaxation parameter",
+            "label_ja": "relaxation parameter",
+            "observable_id": "relaxation_parameter"
+          }
+        ],
+        "static_summary": {
+          "en": "Align outer and inner objectives, inner residual, stationarity, and complementarity by outer evaluation.",
+          "ja": "outer objective、inner objective、inner residual、stationarity、complementarityをouter evaluationごとに並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Outer objective, inner residual, and complementarity residual are visible at each outer evaluation",
+            "label_ja": "outer objective、inner residual、complementarity residualを同じouter evaluationで確認できる",
+            "observable_ids": [
+              "outer_objective",
+              "inner_residual",
+              "complementarity_residual"
+            ],
+            "signal_id": "nested_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List inner iterations, inner residual, stationarity residual, complementarity residual, and the relaxation parameter at each outer evaluation.",
+          "ja": "各outer evaluationのinner iteration数、inner residual、stationarity residual、complementarity residual、relaxation parameterを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
+      "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "bilevel-regression-relaxed-complementarity",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SLSQP",
+          "profile_id": "PROFILE_BILEVEL_REGRESSION_LEDGER",
+          "run_id": "RUN_BILEVEL_REGRESSION_RELAXED_COMPLEMENTARITY"
+        }
+      ],
+      "scenario_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+      "source_ids": [
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "title_en": "Bilevel regression · finite-relaxation failure",
+      "title_ja": "Bilevel回帰 · finite relaxationの残差"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "mode_sequence",
+          "mode_switch_count",
+          "switching_interval",
+          "dynamics_defect",
+          "objective_value"
+        ],
+        "payload_bytes": 10966,
+        "payload_path": "traces/hybrid-mode-chattering-ledger.json",
+        "payload_sha256": "9f840bbaeebd75b41be28e64a383cc71bca2deff90e8c38f1db29b9ecdae2152",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 7
+        },
+        "initial_condition": {
+          "point": [
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "VIEW_HYBRID_MODE_CHATTERING",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "max_oracle_evaluations": 7,
+          "minimum_switch_interval": 0.01
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Chattering diagnostic ledger for a mode-discovery relaxation",
+          "ja": "mode discovery relaxationのchattering診断ledger"
+        },
+        "expected_phenomenon_en": "Switch intervals shrink and the switch count keeps increasing for a relaxed mode indicator",
+        "expected_phenomenon_ja": "relaxed mode indicatorの切替間隔が縮み、mode switch数が増え続ける",
+        "failure_signals": [
+          {
+            "label_en": "Switch intervals continue shrinking even as the objective decreases",
+            "label_ja": "目的関数が下がっても切替間隔が縮み続ける",
+            "observable_ids": [
+              "objective_value",
+              "mode_switch_count",
+              "switching_interval"
+            ],
+            "signal_id": "chattering_visible"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "The display does not establish global optimality of the mode schedule or physical validity of contact or friction.",
+          "note_ja": "mode scheduleのglobal最適性やcontact/frictionの物理的妥当性は表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Stop mode chattering independently even when objective and dynamics defect improve",
+          "ja": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める"
+        },
+        "limitations_en": "A fixed synthetic mode-sequence teaching ledger, not a hybrid solver execution, contact/friction model, or physical simulation. It does not establish general mode-discovery performance or trajectory feasibility.",
+        "limitations_ja": "固定した合成mode sequenceの教育用ledgerであり、hybrid solver execution、contact/friction model、物理simulationではない。mode discoveryの一般性能やtrajectoryの可行性を保証しない。",
+        "misconception": {
+          "en": "A smooth state and objective imply a valid mode sequence",
+          "ja": "連続状態と目的関数が滑らかならmode sequenceも妥当である"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "mode_sequence",
+              "objective_value"
+            ],
+            "title_en": "Inspect the initial mode and objective",
+            "title_ja": "初期modeと目的関数を確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "mode_sequence",
+              "mode_switch_count"
+            ],
+            "title_en": "Inspect the first mode switch",
+            "title_ja": "最初のmode switchを確認"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "mode_switch_count",
+              "switching_interval"
+            ],
+            "title_en": "Inspect the shrinking switch-interval pattern",
+            "title_ja": "切替間隔が縮むpatternを確認"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "objective_value",
+              "switching_interval"
+            ],
+            "title_en": "Stop for chattering independently of objective progress",
+            "title_ja": "目的改善とは別にchatteringで停止"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_CONSTRAINT_LOGICAL",
+          "F_NUM_DISCRETE_VARIABLES",
+          "F_STRUCTURE_TRAJECTORY"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "active mode",
+            "label_ja": "active mode",
+            "observable_id": "mode_sequence"
+          },
+          {
+            "label_en": "mode switch count",
+            "label_ja": "mode切替数",
+            "observable_id": "mode_switch_count"
+          },
+          {
+            "label_en": "switching interval",
+            "label_ja": "切替間隔",
+            "observable_id": "switching_interval"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BILEVEL_REGRESSION_EXACT"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "dynamics defect",
+            "label_ja": "dynamics defect",
+            "observable_id": "dynamics_defect"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          }
+        ],
+        "static_summary": {
+          "en": "Align the mode indicator, switch count, switch interval, dynamics defect, and objective by evaluation.",
+          "ja": "mode indicator、切替数、切替間隔、dynamics defect、目的関数を同じevaluationで並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Active mode, switch count, and switch interval remain separate from the objective",
+            "label_ja": "active mode、切替数、切替間隔を目的関数と分けて確認できる",
+            "observable_ids": [
+              "mode_sequence",
+              "mode_switch_count",
+              "switching_interval"
+            ],
+            "signal_id": "mode_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List the active mode and cumulative switches at each evaluation in a fixed failure ledger where switch intervals shrink while objective and dynamics defect decrease.",
+          "ja": "各evaluationのactive modeと累積切替数を列挙し、切替間隔が短くなる一方で目的関数とdynamics defectが下がる固定failure ledgerを示す。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_HYBRID_MODE_DISCOVERY",
+      "problem_instance_id": "INSTANCE_HYBRID_CHATTERING_LEDGER",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "hybrid-mode-chattering-ledger",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "profile_id": "PROFILE_HYBRID_MODE_LEDGER",
+          "run_id": "RUN_HYBRID_MODE_CHATTERING_LEDGER"
+        }
+      ],
+      "scenario_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+      "source_ids": [
+        "S042",
+        "S043",
+        "S056",
+        "S076"
+      ],
+      "title_en": "Hybrid mode discovery · chattering ledger",
+      "title_ja": "Hybrid mode discovery · chattering診断"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "parameter_update_norm",
+          "geometry_min_gap",
+          "mesh_min_quality",
+          "inverted_cells",
+          "state_residual",
+          "objective_value",
+          "representation_freedom"
+        ],
+        "payload_bytes": 16606,
+        "payload_path": "traces/shape-diffuser-valid-update.json",
+        "payload_sha256": "f4a8dfd88b4dc92d65fc6d9e5399b622ee59e0ada4b2c4df7798704268343a18",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            1.15,
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_SHAPE_DIFFUSER_3P",
+        "seed": {
+          "status": "fixed",
+          "value": 134
+        },
+        "stopping": {
+          "geometry_min_gap": 0.4,
+          "max_oracle_evaluations": 6,
+          "mesh_min_quality": 0.2,
+          "state_residual_tolerance": 1e-06
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "canonical",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Geometry, mesh, and state diagnostics for a 2D diffuser shape",
+          "ja": "2D diffuser shapeのgeometry・mesh・state診断履歴"
+        },
+        "expected_phenomenon_en": "Accept an update only after parameter, geometry, mesh, state, and objective checks remain distinct",
+        "expected_phenomenon_ja": "parameter更新後もgeometry、mesh、state、目的を別々に確認して候補を受理する",
+        "failure_signals": [
+          {
+            "label_en": "Detect self-intersection, gap closure, and inverted cells before reading objective improvement",
+            "label_ja": "自己交差、gap消失、反転cellを目的改善より先に検出する",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "inverted_cells"
+            ],
+            "signal_id": "invalid_geometry_or_mesh"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Do not display a reduced-proxy parameter solution as the optimum of a continuous PDE or another parameterization",
+          "note_ja": "低cost proxyの既知parameter解を連続PDEや別parameterizationの最適解として表示しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Separate parameters, geometry, mesh, physical state, and objective on one evaluation axis",
+          "ja": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+        },
+        "limitations_en": "A deterministic three-parameter lesson with a low-cost state proxy; it does not establish CFD, continuous-domain feasibility, mesh independence, real performance, or a general shape-versus-topology ranking",
+        "limitations_ja": "3 parameterと低cost state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実性能、shape／topologyの一般rankingを保証しない",
+        "misconception": {
+          "en": "An improved discrete objective implies valid geometry, a valid mesh, and improved continuous-domain performance",
+          "ja": "離散目的が改善すればgeometryとmeshも有効で、連続体性能も改善している"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap"
+            ],
+            "title_en": "Inspect the initial parameters and geometry",
+            "title_ja": "初期parameterとgeometryを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality"
+            ],
+            "title_en": "Follow the first geometry and mesh change",
+            "title_ja": "最初のgeometry／mesh変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_value",
+              "geometry_min_gap",
+              "inverted_cells"
+            ],
+            "title_en": "Separate objective progress from validity diagnostics",
+            "title_ja": "目的とvalidity診断を分ける"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "mesh_min_quality",
+              "state_residual",
+              "representation_freedom"
+            ],
+            "title_en": "Classify acceptance, failure, or representation difference",
+            "title_ja": "受理、failure、表現差を判定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_STRUCTURE_PDE_CONSTRAINED",
+          "F_VARIABLE_DOMAIN"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "minimum geometry gap",
+            "label_ja": "geometry最小gap",
+            "observable_id": "geometry_min_gap"
+          },
+          {
+            "label_en": "minimum mesh quality",
+            "label_ja": "mesh最小quality",
+            "observable_id": "mesh_min_quality"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state residual",
+            "observable_id": "state_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+          "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "parameter update norm",
+            "label_ja": "parameter update norm",
+            "observable_id": "parameter_update_norm"
+          },
+          {
+            "label_en": "inverted cells",
+            "label_ja": "反転cell数",
+            "observable_id": "inverted_cells"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "representation freedom",
+            "label_ja": "表現自由度",
+            "observable_id": "representation_freedom"
+          }
+        ],
+        "static_summary": {
+          "en": "Align parameters, geometry gap, mesh quality, state residual, and objective for each diffuser update.",
+          "ja": "diffuser更新ごとにparameter、geometry gap、mesh quality、state residual、目的を並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Parameter updates and geometry, mesh, and state diagnostics remain separately visible",
+            "label_ja": "parameter更新とgeometry、mesh、stateの診断を別々に確認できる",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "state_residual"
+            ],
+            "signal_id": "layered_shape_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List update norm, gap, quality, inverted cells, state residual, objective, and representation freedom at every evaluation.",
+          "ja": "各evaluationのupdate norm、gap、quality、反転cell、state residual、目的、表現自由度を列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "shape-diffuser-valid-update",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SLSQP",
+          "profile_id": "PROFILE_SHAPE_DIFFUSER_GENERIC",
+          "run_id": "RUN_SHAPE_DIFFUSER_VALID_UPDATE"
+        }
+      ],
+      "scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "source_ids": [
+        "S097",
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "title_en": "2D diffuser · valid shape update",
+      "title_ja": "2D diffuser · 有効なshape更新"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "parameter_update_norm",
+          "geometry_min_gap",
+          "mesh_min_quality",
+          "inverted_cells",
+          "state_residual",
+          "objective_value",
+          "representation_freedom"
+        ],
+        "payload_bytes": 16504,
+        "payload_path": "traces/shape-diffuser-invalid-geometry.json",
+        "payload_sha256": "e9adc278676e3af6014ff1e3dc3b8dce22e5e9a824efc4d74e9e1203e0681a81",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            1.15,
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_SHAPE_DIFFUSER_3P",
+        "seed": {
+          "status": "fixed",
+          "value": 134
+        },
+        "stopping": {
+          "geometry_min_gap": 0.4,
+          "max_oracle_evaluations": 6,
+          "mesh_min_quality": 0.2,
+          "state_residual_tolerance": 1e-06
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Geometry, mesh, and state diagnostics for a 2D diffuser shape",
+          "ja": "2D diffuser shapeのgeometry・mesh・state診断履歴"
+        },
+        "expected_phenomenon_en": "A lower objective proxy does not rescue a candidate that violates geometry-gap and mesh-quality checks",
+        "expected_phenomenon_ja": "目的proxyが下がってもgeometry最小gapとmesh qualityが閾値を破れば候補は無効になる",
+        "failure_signals": [
+          {
+            "label_en": "Detect self-intersection, gap closure, and inverted cells before reading objective improvement",
+            "label_ja": "自己交差、gap消失、反転cellを目的改善より先に検出する",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "inverted_cells"
+            ],
+            "signal_id": "invalid_geometry_or_mesh"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Do not display a reduced-proxy parameter solution as the optimum of a continuous PDE or another parameterization",
+          "note_ja": "低cost proxyの既知parameter解を連続PDEや別parameterizationの最適解として表示しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Separate parameters, geometry, mesh, physical state, and objective on one evaluation axis",
+          "ja": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+        },
+        "limitations_en": "A deterministic three-parameter lesson with a low-cost state proxy; it does not establish CFD, continuous-domain feasibility, mesh independence, real performance, or a general shape-versus-topology ranking",
+        "limitations_ja": "3 parameterと低cost state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実性能、shape／topologyの一般rankingを保証しない",
+        "misconception": {
+          "en": "An improved discrete objective implies valid geometry, a valid mesh, and improved continuous-domain performance",
+          "ja": "離散目的が改善すればgeometryとmeshも有効で、連続体性能も改善している"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap"
+            ],
+            "title_en": "Inspect the initial parameters and geometry",
+            "title_ja": "初期parameterとgeometryを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality"
+            ],
+            "title_en": "Follow the first geometry and mesh change",
+            "title_ja": "最初のgeometry／mesh変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_value",
+              "geometry_min_gap",
+              "inverted_cells"
+            ],
+            "title_en": "Separate objective progress from validity diagnostics",
+            "title_ja": "目的とvalidity診断を分ける"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "mesh_min_quality",
+              "state_residual",
+              "representation_freedom"
+            ],
+            "title_en": "Classify acceptance, failure, or representation difference",
+            "title_ja": "受理、failure、表現差を判定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_STRUCTURE_PDE_CONSTRAINED",
+          "F_VARIABLE_DOMAIN"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "minimum geometry gap",
+            "label_ja": "geometry最小gap",
+            "observable_id": "geometry_min_gap"
+          },
+          {
+            "label_en": "minimum mesh quality",
+            "label_ja": "mesh最小quality",
+            "observable_id": "mesh_min_quality"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state residual",
+            "observable_id": "state_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "parameter update norm",
+            "label_ja": "parameter update norm",
+            "observable_id": "parameter_update_norm"
+          },
+          {
+            "label_en": "inverted cells",
+            "label_ja": "反転cell数",
+            "observable_id": "inverted_cells"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "representation freedom",
+            "label_ja": "表現自由度",
+            "observable_id": "representation_freedom"
+          }
+        ],
+        "static_summary": {
+          "en": "Align parameters, geometry gap, mesh quality, state residual, and objective for each diffuser update.",
+          "ja": "diffuser更新ごとにparameter、geometry gap、mesh quality、state residual、目的を並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Parameter updates and geometry, mesh, and state diagnostics remain separately visible",
+            "label_ja": "parameter更新とgeometry、mesh、stateの診断を別々に確認できる",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "state_residual"
+            ],
+            "signal_id": "layered_shape_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List update norm, gap, quality, inverted cells, state residual, objective, and representation freedom at every evaluation.",
+          "ja": "各evaluationのupdate norm、gap、quality、反転cell、state residual、目的、表現自由度を列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "shape-diffuser-invalid-geometry",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SLSQP",
+          "profile_id": "PROFILE_SHAPE_DIFFUSER_GENERIC",
+          "run_id": "RUN_SHAPE_DIFFUSER_INVALID_GEOMETRY"
+        }
+      ],
+      "scenario_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+      "source_ids": [
+        "S097",
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "title_en": "2D diffuser · geometry and mesh failure",
+      "title_ja": "2D diffuser · geometry／mesh failure"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "parameter_update_norm",
+          "geometry_min_gap",
+          "mesh_min_quality",
+          "inverted_cells",
+          "state_residual",
+          "objective_value",
+          "representation_freedom"
+        ],
+        "payload_bytes": 16658,
+        "payload_path": "traces/shape-topology-representation-contrast.json",
+        "payload_sha256": "18944bcdacc9653bd40a21e5f90ab17d76450aaef2190e7fc81eb6c532190ac2",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.9",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            1.15,
+            0.0,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value",
+          "constraint_jacobian"
+        ],
+        "parameter_preset_id": "PRESET_SHAPE_DIFFUSER_3P",
+        "seed": {
+          "status": "fixed",
+          "value": 134
+        },
+        "stopping": {
+          "geometry_min_gap": 0.4,
+          "max_oracle_evaluations": 6,
+          "mesh_min_quality": 0.2,
+          "state_residual_tolerance": 1e-06
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "derived",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "baseline",
+        "derived_media_caption": {
+          "en": "Geometry, mesh, and state diagnostics for a 2D diffuser shape",
+          "ja": "2D diffuser shapeのgeometry・mesh・state診断履歴"
+        },
+        "expected_phenomenon_en": "A density field can change connectivity and therefore does not share the same design space as fixed-topology shape parameters",
+        "expected_phenomenon_ja": "density fieldは接続変更を許すため、fixed-topology shape parameterと同じ設計空間ではない",
+        "failure_signals": [
+          {
+            "label_en": "Detect self-intersection, gap closure, and inverted cells before reading objective improvement",
+            "label_ja": "自己交差、gap消失、反転cellを目的改善より先に検出する",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "inverted_cells"
+            ],
+            "signal_id": "invalid_geometry_or_mesh"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "Do not display a reduced-proxy parameter solution as the optimum of a continuous PDE or another parameterization",
+          "note_ja": "低cost proxyの既知parameter解を連続PDEや別parameterizationの最適解として表示しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Separate parameters, geometry, mesh, physical state, and objective on one evaluation axis",
+          "ja": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+        },
+        "limitations_en": "A deterministic three-parameter lesson with a low-cost state proxy; it does not establish CFD, continuous-domain feasibility, mesh independence, real performance, or a general shape-versus-topology ranking",
+        "limitations_ja": "3 parameterと低cost state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実性能、shape／topologyの一般rankingを保証しない",
+        "misconception": {
+          "en": "An improved discrete objective implies valid geometry, a valid mesh, and improved continuous-domain performance",
+          "ja": "離散目的が改善すればgeometryとmeshも有効で、連続体性能も改善している"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap"
+            ],
+            "title_en": "Inspect the initial parameters and geometry",
+            "title_ja": "初期parameterとgeometryを確認"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "geometry_min_gap",
+              "mesh_min_quality"
+            ],
+            "title_en": "Follow the first geometry and mesh change",
+            "title_ja": "最初のgeometry／mesh変化を追う"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "objective_value",
+              "geometry_min_gap",
+              "inverted_cells"
+            ],
+            "title_en": "Separate objective progress from validity diagnostics",
+            "title_ja": "目的とvalidity診断を分ける"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "mesh_min_quality",
+              "state_residual",
+              "representation_freedom"
+            ],
+            "title_en": "Classify acceptance, failure, or representation difference",
+            "title_ja": "受理、failure、表現差を判定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "F_STRUCTURE_PDE_CONSTRAINED",
+          "F_VARIABLE_DOMAIN"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "minimum geometry gap",
+            "label_ja": "geometry最小gap",
+            "observable_id": "geometry_min_gap"
+          },
+          {
+            "label_en": "minimum mesh quality",
+            "label_ja": "mesh最小quality",
+            "observable_id": "mesh_min_quality"
+          },
+          {
+            "label_en": "state residual",
+            "label_ja": "state residual",
+            "observable_id": "state_residual"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "parameter update norm",
+            "label_ja": "parameter update norm",
+            "observable_id": "parameter_update_norm"
+          },
+          {
+            "label_en": "inverted cells",
+            "label_ja": "反転cell数",
+            "observable_id": "inverted_cells"
+          },
+          {
+            "label_en": "objective value",
+            "label_ja": "目的関数値",
+            "observable_id": "objective_value"
+          },
+          {
+            "label_en": "representation freedom",
+            "label_ja": "表現自由度",
+            "observable_id": "representation_freedom"
+          }
+        ],
+        "static_summary": {
+          "en": "Align parameters, geometry gap, mesh quality, state residual, and objective for each diffuser update.",
+          "ja": "diffuser更新ごとにparameter、geometry gap、mesh quality、state residual、目的を並べる。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Parameter updates and geometry, mesh, and state diagnostics remain separately visible",
+            "label_ja": "parameter更新とgeometry、mesh、stateの診断を別々に確認できる",
+            "observable_ids": [
+              "parameter_update_norm",
+              "geometry_min_gap",
+              "mesh_min_quality",
+              "state_residual"
+            ],
+            "signal_id": "layered_shape_diagnostics_visible"
+          }
+        ],
+        "text_alternative": {
+          "en": "List update norm, gap, quality, inverted cells, state residual, objective, and representation freedom at every evaluation.",
+          "ja": "各evaluationのupdate norm、gap、quality、反転cell、state residual、目的、表現自由度を列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "purpose": "comparison",
+      "runs": [
+        {
+          "artifact_id": "shape-topology-representation-contrast",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_SIMP_TOPOLOGY",
+          "profile_id": "PROFILE_TOPOLOGY_REPRESENTATION_GENERIC",
+          "run_id": "RUN_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
+        }
+      ],
+      "scenario_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+      "source_ids": [
+        "S097",
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "title_en": "Shape/topology representation contrast",
+      "title_ja": "shape／topology表現contrast"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
           "search_nodes",
           "global_bound",
           "incumbent",
@@ -2972,13 +6312,13 @@
         ],
         "payload_bytes": 102176,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "7e684d5e6a712dd04c5c7f8610d81f8658505da0fa4fa60752795645057137f8",
+        "payload_sha256": "37e7de0628b0a1769f80493f98e23e4cf6ae36ed14cee8b5befe6f4d759fda9f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3235,13 +6575,13 @@
         ],
         "payload_bytes": 39756,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "0eb110e3258cf796f4b57ff266c931fafa4dab1b6110a604a744f4336789b64c",
+        "payload_sha256": "40fd2fc69f3046d961e1a0c730413c3e032f84717be7e360c7b680b7ce4e64d0",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3437,7 +6777,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3652,7 +6992,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3867,7 +7207,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4154,7 +7494,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4370,7 +7710,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4595,7 +7935,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4821,7 +8161,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5046,13 +8386,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "08826cb74565a07b11819d493647369f7730cad10a1c78ac882d7b2f545af792",
+        "payload_sha256": "4012ed6bd6b148eb6b4d1eccbc3a398a9394d07a9ebc6af10559744dec004ce6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5241,13 +8581,13 @@
         ],
         "payload_bytes": 4227,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "08826cb74565a07b11819d493647369f7730cad10a1c78ac882d7b2f545af792",
+        "payload_sha256": "4012ed6bd6b148eb6b4d1eccbc3a398a9394d07a9ebc6af10559744dec004ce6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5453,13 +8793,13 @@
         ],
         "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "1d9857020fcef8028769a7abd454e20556cceefdf1891ed675394ada59ec3392",
+        "payload_sha256": "7f8f50a48ad70b59f7dba2437e88aae9709db4bdda28229208bb25948f634c84",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5631,13 +8971,13 @@
         ],
         "payload_bytes": 23935,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "1d9857020fcef8028769a7abd454e20556cceefdf1891ed675394ada59ec3392",
+        "payload_sha256": "7f8f50a48ad70b59f7dba2437e88aae9709db4bdda28229208bb25948f634c84",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5824,13 +9164,13 @@
         ],
         "payload_bytes": 79630,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "7fef6bf94f53fd7bf96fb2e46f11c44d78e0ed38f37b1c1106b78b9def9aa0fa",
+        "payload_sha256": "4a0464d89c3c8b6725da634143533d506b7bf3673872325b02cbcbfb62ce9860",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6122,13 +9462,13 @@
         ],
         "payload_bytes": 79630,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "7fef6bf94f53fd7bf96fb2e46f11c44d78e0ed38f37b1c1106b78b9def9aa0fa",
+        "payload_sha256": "4a0464d89c3c8b6725da634143533d506b7bf3673872325b02cbcbfb62ce9860",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6376,13 +9716,13 @@
         ],
         "payload_bytes": 79630,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "7fef6bf94f53fd7bf96fb2e46f11c44d78e0ed38f37b1c1106b78b9def9aa0fa",
+        "payload_sha256": "4a0464d89c3c8b6725da634143533d506b7bf3673872325b02cbcbfb62ce9860",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.6",
+      "dataset_version": "0.18.9",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",

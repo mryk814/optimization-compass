@@ -1,6 +1,6 @@
 {
   "axis": "guarantee_outcome",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "description": "実行可能解・局所解・gap・大域証明・Pareto集合という到達点の違いを整理する。",
   "edges": [
     {

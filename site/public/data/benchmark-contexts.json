@@ -259,6 +259,93 @@
       "tuning_policy": "documented defaults; no per-instance winner tuning"
     },
     {
+      "category": "LP",
+      "context_id": "BENCH_PORTFOLIO_CVAR_FIXED_8_4",
+      "context_version": "1.0.0",
+      "dimension": 4,
+      "evaluation_budget": 12,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.portfolio_uncertainty.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "held_out_sample_count": 4,
+        "points": [
+          [
+            0.45,
+            0.0,
+            0.0,
+            0.55
+          ],
+          [
+            0.3,
+            0.4,
+            0.0,
+            0.3
+          ]
+        ],
+        "policy": "member_initial_points",
+        "sample_policy": "fixed_disjoint_8_training_4_held_out",
+        "training_sample_count": 8
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 12,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "mean_loss",
+        "cvar_75",
+        "worst_loss",
+        "best_loss"
+      ],
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "problem_variant": "fixed_four_asset_capped_simplex_with_disjoint_training_and_held_out_returns",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.portfolio_uncertainty.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_grid"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S055",
+        "S103"
+      ],
+      "sparsity": {
+        "decision": "dense_four_asset_vector",
+        "scenario_loss_matrix": "12x4"
+      },
+      "status_mapping": {
+        "completed": "empirical_training_and_held_out_summary",
+        "probability_guarantee": "not_applicable",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "fixed_training_then_held_out",
+        "value": 12
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "alpha": 0.75,
+        "confidence_target": "not_applicable_no_probability_guarantee",
+        "grid_step": 0.05,
+        "max_asset_weight": 0.6
+      },
+      "tuning_policy": "alpha=0.75, CVaR weight=0.5, 0.05 grid, and samples fixed before held-out evaluation"
+    },
+    {
       "category": "MIP",
       "context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
       "context_version": "1.0.0",
@@ -411,6 +498,80 @@
     },
     {
       "category": "NLP",
+      "context_id": "BENCH_BILEVEL_REGRESSION_EDUCATIONAL_6",
+      "context_version": "1.0.0",
+      "dimension": 1,
+      "evaluation_budget": 6,
+      "hardware": {
+        "hardware": "educational",
+        "os": "platform-neutral",
+        "precision": "float64"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.bilevel_regression_ledger.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.8
+        ],
+        "policy": "fixed_outer_initialization"
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 6,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "outer_objective",
+        "inner_residual",
+        "stationarity_residual",
+        "complementarity_residual",
+        "relaxation_parameter"
+      ],
+      "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "problem_variant": "exact_kkt_vs_finite_relaxation_teaching_ledger",
+      "ranking_eligibility": {
+        "ranking_eligible": true,
+        "reason": "context_complete"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.bilevel_regression_ledger.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S055",
+        "S056",
+        "S064"
+      ],
+      "sparsity": {
+        "inner_dimension": 2,
+        "inner_structure": "dense",
+        "outer_dimension": 1
+      },
+      "status_mapping": {
+        "exact": "fixed teaching residual checks passed",
+        "finite_relaxation": "stopped without exact-complementarity claim"
+      },
+      "stopping": {
+        "policy": "fixed_outer_budget",
+        "value": 6
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "exact_complementarity_residual": 1e-08,
+        "inner_residual": 1e-08,
+        "stationarity_residual": 1e-08
+      },
+      "tuning_policy": "fixed outer sequence, warm-started inner policy, tolerance, and derivative route; no post-run tuning"
+    },
+    {
+      "category": "NLP",
       "context_id": "BENCH_NLP",
       "context_version": "1.0.0",
       "dimension": 2,
@@ -470,6 +631,332 @@
         "relative": 1e-06
       },
       "tuning_policy": "documented defaults; no per-instance winner tuning"
+    },
+    {
+      "category": "NLP",
+      "context_id": "BENCH_PDE_STATE_TOLERANCE_6",
+      "context_version": "1.0.0",
+      "dimension": 32,
+      "evaluation_budget": 6,
+      "hardware": {
+        "reason": "no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.simulation_constrained.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.5,
+          0.0
+        ],
+        "policy": "fixed_density_field_and_design_update_sequence"
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 6,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "objective_value",
+        "state_residual",
+        "adjoint_residual",
+        "state_linear_iterations",
+        "adjoint_linear_iterations",
+        "evaluation_status"
+      ],
+      "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+      "problem_variant": "fixed 8x4 cantilever; reduced-space state/adjoint tolerance sensitivity only",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.simulation_constrained.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable",
+        "precision": "float64"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S019",
+        "S097",
+        "S101",
+        "S110"
+      ],
+      "sparsity": {
+        "field_grid": "8x4",
+        "state_solve": "deterministic_teaching_ledger"
+      },
+      "status_mapping": {
+        "converged": "eligible_teaching_frame",
+        "diverged_pc_failed": "failed_evaluation_no_objective_penalty",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "fixed_state_solve_call_budget",
+        "value": 6
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "changed_factor": "state_and_adjoint_relative_tolerance",
+        "loose": 0.001,
+        "tight": 1e-08
+      },
+      "tuning_policy": "tolerances fixed before the run; no post-run or per-member tuning"
+    },
+    {
+      "category": "NLP",
+      "context_id": "BENCH_PENDULUM_COLLOCATION_MESH_8",
+      "context_version": "1.0.0",
+      "dimension": 60,
+      "evaluation_budget": 8,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.optimal_control.v1",
+        "generator_version": "1.1.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.0,
+          0.0
+        ],
+        "policy": "fixed_state_and_control_guess"
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 8,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "objective_value",
+        "dynamics_defect",
+        "node_path_violation",
+        "reconstructed_path_violation",
+        "terminal_error"
+      ],
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "problem_variant": "fixed two-second torque-limited pendulum swing-up; mesh sensitivity only",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.optimal_control.v1",
+        "generator_version": "1.1.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "fixed",
+      "seed_value": 2026,
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "sparsity": {
+        "coarse_mesh_nodes": 20,
+        "refined_mesh_nodes": 40,
+        "structure": "block_sparse_collocation"
+      },
+      "status_mapping": {
+        "feasibility": "node_and_collocation_only",
+        "ranking": "forbidden",
+        "terminal_status": "teaching_trace"
+      },
+      "stopping": {
+        "policy": "fixed_oracle_budget_and_common_tolerances",
+        "value": 8
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "dynamics_defect": 0.001,
+        "node_path_violation": 0.0001,
+        "terminal_error": 0.001
+      },
+      "tuning_policy": "same dynamics, horizon, boundary/path constraints, initial guess, budget, and tolerances; mesh intervals only change"
+    },
+    {
+      "category": "NLP",
+      "context_id": "BENCH_SHAPE_TOPOLOGY_REPRESENTATION_6",
+      "context_version": "1.0.0",
+      "dimension": 3,
+      "evaluation_budget": 6,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.shape_optimization.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          1.15,
+          0.0,
+          0.0
+        ],
+        "policy": "fixed_shape_parameters"
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 6,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "objective_value",
+        "geometry_min_gap",
+        "mesh_min_quality",
+        "state_residual",
+        "representation_freedom"
+      ],
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "problem_variant": "fixed reduced diffuser brief; representation contrast only",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.shape_optimization.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "fixed",
+      "seed_value": 134,
+      "source_ids": [
+        "S097",
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "sparsity": {
+        "geometry_samples": 21,
+        "mesh": "deterministic educational quality proxy",
+        "state": "reduced loss proxy"
+      },
+      "status_mapping": {
+        "ranking": "forbidden",
+        "shape_feasibility": "discrete_geometry_and_mesh_only",
+        "terminal_status": "teaching_trace"
+      },
+      "stopping": {
+        "policy": "fixed_representation_audit_budget",
+        "value": 6
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "geometry_min_gap": 0.4,
+        "mesh_min_quality": 0.2,
+        "state_residual": 1e-06
+      },
+      "tuning_policy": "same physical brief, envelope, initial outer boundary, budget, diagnostics, tolerances, and seed; design representation only changes"
+    },
+    {
+      "category": "NLP",
+      "context_id": "BENCH_SO3_ATTITUDE_FIXED_12",
+      "context_version": "1.0.0",
+      "dimension": 9,
+      "evaluation_budget": 12,
+      "hardware": {
+        "reason": "deterministic educational generator; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "artifact_profile_ids": [
+          "PROFILE_SO3_ATTITUDE_ALIGNMENT"
+        ],
+        "generator_id": "educational.so3_attitude.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "policy": "fixed_matrix",
+        "target_angle_radians": 2.8,
+        "target_axis": [
+          0.2672612419124244,
+          0.5345224838248488,
+          0.8017837257372732
+        ]
+      },
+      "last_verified": "2026-07-19",
+      "oracle_budget": {
+        "limit": 12,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "objective_value",
+        "geodesic_residual",
+        "orthogonality_error",
+        "determinant_error"
+      ],
+      "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "problem_variant": "fixed_noiseless_three_correspondence_near_pi_attitude_alignment",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "artifact_profile_ids": [
+          "PROFILE_SO3_ATTITUDE_ALIGNMENT"
+        ],
+        "comparison_scope": "exact",
+        "generator_id": "educational.so3_attitude.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071",
+        "S107"
+      ],
+      "sparsity": {
+        "ambient_matrix": "3x3_dense",
+        "intrinsic_degrees_of_freedom": 3
+      },
+      "status_mapping": {
+        "completed": "fixed_budget_history",
+        "feasible_iterate": "structure_residuals_only",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "fixed_oracle_budget",
+        "value": 12
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "determinant_error": 1e-10,
+        "geodesic_residual_radians": 0.05,
+        "orthogonality_error": 1e-10
+      },
+      "tuning_policy": "step size 0.35, target, initialization, objective, budget, and diagnostics fixed before execution"
     },
     {
       "category": "NLP",
@@ -718,7 +1205,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

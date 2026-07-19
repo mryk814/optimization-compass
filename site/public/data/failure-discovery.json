@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.9",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -127,7 +127,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-19",
       "method_ids": [
         "M_BRANCH_CUT"
       ],
@@ -265,25 +265,84 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-15",
+      "last_verified": "2026-07-19",
       "method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
       ],
       "mitigations": [],
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+        "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+        "SCENARIO_PDE_STATE_TOLERANCE_TIGHT"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
         "S017",
         "S019",
-        "S056"
+        "S056",
+        "S101",
+        "S110",
+        "S111"
       ],
       "summary": "数百万自由度と高価なPDE計算に、個体群評価の予算が合わない",
       "symptoms": [],
       "title_en": "Why Differential evolution is excluded for Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解くでは差分進化を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC029%3AM_BFGS",
+      "case_context": {
+        "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson defectを各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、path／bound制約はmesh／collocation pointで $|\\omega|\\le8$、$|u|\\le8$ とする。node feasibilityと区間再構成後のviolationは別の診断値として保存する。",
+        "decision_variables": "Direct Collocationでは角度・角速度のstate列 $x_0,\\ldots,x_N$ とtorque列 $u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置く。single shootingではtorque列だけを選び、state列はrolloutで作るため、同じpendulumでもdecision objectが異なる。",
+        "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。Theaterではobjective、terminal error、constraint residualを別々に読む。",
+        "question": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+      },
+      "case_id": "EC029",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC029:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "summary": "dynamics defectとpath／terminal制約を平坦な無制約目的へ隠してしまう",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Swing up a pendulum under constraints",
+      "title_ja": "pendulumを制約内で振り上げるではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Abilevel-regularized-regression%3AM_BFGS",
@@ -320,7 +379,10 @@
         "FM007",
         "FM016"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_BILEVEL_REGRESSION_EXACT",
+        "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -619,18 +681,70 @@
       "related_failure_mode_ids": [
         "FM022"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_PORTFOLIO_CVAR_8_4",
+        "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
-        "S054",
+        "S010",
         "S055",
-        "S056"
+        "S103"
       ],
       "summary": "scenarioごとのlossとCVaRのtail、simplex制約を更新・診断の契約として明示しにくいため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation with CVaR",
       "title_ja": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Ashape-diffuser%3AM_SIMP_TOPOLOGY",
+      "case_context": {
+        "constraints": "parameter boundsに加え、geometry最小gap $g_{gap}>0.4$、自己交差なし、mesh最小quality $q_{mesh}\\ge0.2$、反転cell数0、state residual $\\lVert R(u,q)\\rVert\\le10^{-6}$、fixed topologyを別々に検査します。",
+        "decision_variables": "optimizerが直接更新するのは3つのparameter $q$ です。geometry座標、mesh node、state $u$ はparameterから生成またはsolveされる従属量です。level-setやdensity fieldは接続変更を許せますが、このCaseのparameterizationは入口1つ・出口1つのtopologyを固定します。",
+        "objective": "低costな決定論的state proxyとして $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式はlayer分離を学ぶ教材であり、CFDのpressure lossではありません。",
+        "question": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
+      },
+      "case_id": "shape-diffuser",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:shape-diffuser:M_SIMP_TOPOLOGY",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_SIMP_TOPOLOGY"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+        "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+        "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "summary": "このCaseは接続を変えないfixed-topology shape problemであり、density fieldによるtopology changeは別の設計空間だから",
+      "symptoms": [],
+      "title_en": "Why SIMP density method is excluded for Update a two-dimensional diffuser wall shape",
+      "title_ja": "2D diffuserの壁面shapeを更新するではSIMP密度法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Ashift-scheduling%3AM_GRADIENT_DESCENT",
@@ -669,6 +783,57 @@
       "symptoms": [],
       "title_en": "Why Gradient descent is excluded for Shift scheduling",
       "title_ja": "スタッフのシフトを組むでは最急降下法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Aso3-attitude-alignment%3AM_BFGS",
+      "case_context": {
+        "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
+        "decision_variables": "body frameからreference frameへのrotation matrix $R$。固定教材はidentityから開始し、target axis $(1,2,3)/\\sqrt{14}$、angle $2.8$ radのrotationへ12 updateで近づける。",
+        "objective": "三つのnoiseless basis correspondenceをまとめたtarget $R_\\star$ に対し、chordal loss $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価ではgeodesic residual $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
+        "question": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
+      },
+      "case_id": "so3-attitude-alignment",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:so3-attitude-alignment:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-19",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+        "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071",
+        "S107"
+      ],
+      "summary": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Align a near-pi attitude on SO(3)",
+      "title_ja": "SO(3)上でnear-piのattitudeを合わせるではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Atopology-cantilever%3AM_BFGS",
@@ -1305,9 +1470,9 @@
   ],
   "generated_at": "2026-07-19T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 15,
-    "entries_with_scenarios": 12,
+    "case_exclusion_count": 18,
+    "entries_with_scenarios": 18,
     "structured_failure_count": 12,
-    "total_entries": 27
+    "total_entries": 30
   }
 }
