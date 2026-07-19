@@ -402,17 +402,20 @@ objective; optional chance or robust constraints.
 
 **Theater/Compare**
 
-- weight movement on a simplex;
-- scenario loss distribution and tail highlighting;
-- held-out violation/performance distribution;
-- efficient frontier between nominal performance and tail risk;
-- sample-size and confidence sensitivity.
+- implemented: fixed nominal/CVaR allocations with training and held-out empirical risk summaries;
+- implemented: a contrast-only Compare with aligned samples, tail level, confidence claim, grid, and
+  loss-evaluation budget;
+- later renderer work: scenario cloud and tail highlighting, efficient frontier, uncertainty-set
+  growth, and sample-size/confidence sensitivity.
 
-**Promotion blockers**
+**Canonical backlog**
 
-- uncertainty/risk vocabulary;
-- statistical-claim validation policy;
-- simplex renderer shared with #136.
+- the uncertainty/risk vocabulary and statistical-claim gate are published;
+- the journey reuses `AlgorithmTrace` and `generic_metric_history`, so it does not require a new
+  renderer family;
+- dedicated robust, stochastic, SAA, chance-constrained, CVaR, and DRO method/source records remain
+  a versioned dataset-release task; see
+  [the canonical method and source audit](uncertainty-method-source-audit.md).
 
 **Primary/official sources**
 
