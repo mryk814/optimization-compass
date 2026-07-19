@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
+import pytest
+
+import optimization_compass.site_export as site_export
 from optimization_compass.content_models import load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.search_index import (
@@ -21,8 +25,24 @@ def test_search_normalization_handles_width_punctuation_and_japanese() -> None:
 
 
 def test_exported_search_and_retrieval_contracts_are_closed(
-    tmp_path: Path, repository: KnowledgeRepository
+    tmp_path: Path, repository: KnowledgeRepository, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    repository_root = Path(__file__).parents[1]
+    content_directory = tmp_path / "content"
+    shutil.copytree(repository_root / "content", content_directory)
+    draft = (content_directory / "concepts/convexity.md").read_text(encoding="utf-8")
+    draft = draft.replace(
+        "content_id: concept.convexity",
+        "content_id: concept.test-draft-exclusion",
+        1,
+    ).replace("status: published", "status: draft", 1)
+    (content_directory / "concepts/test-draft-exclusion.md").write_text(
+        draft,
+        encoding="utf-8",
+        newline="\n",
+    )
+    monkeypatch.setattr(site_export, "CONTENT_DIRECTORY", content_directory)
+
     export_site_data(tmp_path, repository)
     index = SearchIndex.model_validate_json((tmp_path / "search-index.json").read_bytes())
     retrieval = RetrievalExport.model_validate_json(
@@ -55,10 +75,10 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     assert all("frame:" not in chunk.chunk_id for chunk in retrieval.chunks)
     draft_ids = {
         page.content_id
-        for page in load_content(Path(__file__).parents[1] / "content")
+        for page in load_content(content_directory)
         if page.status == "draft"
     }
-    assert draft_ids
+    assert draft_ids == {"concept.test-draft-exclusion"}
     assert not draft_ids & {
         document.entity_id for document in index.documents if document.entity_type == "content"
     }
