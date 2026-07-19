@@ -1,0 +1,337 @@
+/*
+ * Atlas typography contract
+ *
+ * Component styles own composition. This file owns the shared reading roles so
+ * dense screens cannot regain space by shrinking explanatory text.
+ */
+:root {
+  --type-body: 1rem;
+  --type-support: 1rem;
+  --type-meta: 0.875rem;
+  --type-label: 0.875rem;
+  --type-chart: 13px;
+  --type-chart-compact: 12px;
+  --type-math-scale: 1.25em;
+  --leading-body: 1.8;
+  --leading-support: 1.65;
+  --leading-meta: 1.5;
+  --measure-reading: 42rem;
+  --measure-lead: 48rem;
+}
+
+/* Primary reading line: summaries, questions, explanations, and decisions. */
+.atlas-page-header p:not(.eyebrow),
+.content-lead,
+.gallery-question-panel p:not(.eyebrow),
+.gallery-context-grid p,
+.gallery-context-grid li,
+.gallery-method-grid p,
+.gallery-inspect-grid p,
+.gallery-inspect-grid li,
+.gallery-journey-action p,
+.gallery-section h3,
+.gallery-context-grid h3,
+.gallery-method-grid h3,
+.theater-first-action p:not(.eyebrow),
+.theater-card p,
+.theater-structure-guide > header p:last-child,
+.theater-structure-guide-grid p,
+.comparison-contract-v2 .comparison-question,
+.scenario-comparison > header p,
+.comparison-scenario-members h3,
+.comparison-scenario-members p,
+.comparison-return-links h2,
+.problem-primer-header > p:last-child,
+.problem-primer-formula > p,
+.problem-primer-terms p,
+.problem-primer-glossary dd,
+.canonical-term-references dd,
+.map-page-header p,
+.map-detail-summary,
+.coverage-language-note {
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+}
+
+/* Repeated cards are reading surfaces, not fine print. */
+.content-card p,
+.gallery-card p,
+.search-result-copy,
+.comparison-factor-grid ul,
+.comparison-limitations,
+.comparison-contract-v2 header p,
+.comparison-factor-observe p,
+.comparison-fairness,
+.comparison-contract-v2 > .comparison-caveat,
+.nm-explanation p,
+.bo-route-card p,
+.atlas-note,
+.comparison-contract,
+.page-orientation p,
+.page-orientation ol,
+.page-orientation ul {
+  font-size: var(--type-support);
+  line-height: var(--leading-support);
+}
+
+/* Secondary metadata stays readable at the browser's default zoom. */
+.nav-link,
+.page-back-row button,
+.journey-navigation,
+.page-orientation h3,
+.page-orientation-summary-hint,
+.content-toc,
+.content-toc strong,
+.brand-mark,
+.site-footer,
+.site-footer a,
+.site-footer span,
+.content-search,
+.gallery-filter,
+.content-card > span,
+.gallery-card > span,
+.content-card small,
+.gallery-card small,
+.gallery-detail small,
+.content-detail > small,
+.gallery-detail > small,
+.theater-card > span,
+.theater-card small,
+.theater-family > header small,
+.compare-card-contract,
+.compare-catalog-section > header p,
+.comparison-factor-grid h3,
+.comparison-factor-observe li span,
+.comparison-member-strip strong,
+.comparison-member-strip span,
+.comparison-contract-v2 > header > span,
+.comparison-policy-details summary,
+.comparison-policy-grid dt,
+.comparison-policy-grid dd,
+.comparison-scenario-members span,
+.comparison-return-links a,
+.comparison-search-tree-metrics dt,
+.comparison-search-tree-metrics dd,
+.comparison-event,
+.comparison-metrics,
+.gallery-journey-status,
+.gallery-context-grid article > span,
+.gallery-context-grid small,
+.gallery-inspect-grid strong,
+.gallery-journey-action > span,
+.gallery-journey-action > strong,
+.gallery-alternate-runs,
+.gallery-resource-list,
+.gallery-resource-list p,
+.gallery-disclosure summary,
+.gallery-next-links a,
+.theater-first-action .primary-action span,
+.theater-first-action .primary-action strong,
+.theater-card-primary::after,
+.theater-structure-guide-grid article > span,
+.theater-structure-guide-grid small,
+.scenario-context-panel header span,
+.scenario-context-grid dt,
+.problem-primer-equation span,
+.problem-primer-equation small,
+.problem-primer-formula small,
+.problem-primer-terms strong,
+.problem-primer-terms strong small,
+.problem-primer-glossary h3,
+.problem-primer-glossary dt,
+.problem-primer-glossary dt small,
+.canonical-term-references dt,
+.canonical-term-references dt small,
+.map-state-panel,
+.map-warning-list,
+.map-diagnostics,
+.map-view-selector label,
+.map-view-selector div,
+.map-toolbar button,
+.map-toolbar output,
+.map-legend,
+.map-legend h2,
+.map-view-help,
+.map-detail-empty,
+.map-breadcrumb,
+.map-detail-heading > span,
+.map-detail-section h3,
+.map-child-preview,
+.map-binding-list code,
+.map-entity-item,
+.map-entity-item code,
+.map-binding-note,
+.visualization-goal-cues dt,
+.visualization-goal-cues dd,
+.bo-goal-cues dt,
+.bo-goal-cues dd,
+.bo-presets label,
+.bo-contract,
+.bo-figure figcaption,
+.bo-ledger-summary dt,
+.bo-ledger table,
+.bo-comparison table,
+.visualization-badges span,
+.plot-legend,
+.coverage-filters label,
+.coverage-pill,
+.coverage-table-wrap table,
+.journey-orphans {
+  font-size: var(--type-meta);
+  line-height: var(--leading-meta);
+}
+
+.route-parameter {
+  font-size: var(--type-meta) !important;
+  line-height: var(--leading-meta);
+}
+
+.evidence-links a,
+.evidence-links > span {
+  font-size: var(--type-meta);
+  line-height: var(--leading-meta);
+}
+
+/* Math keeps its script levels while making the smallest indices readable. */
+.problem-primer math,
+.scenario-case-formulation math {
+  font-size: var(--type-math-scale);
+}
+
+/* Short identifiers may be one step smaller; prose must not use this role. */
+.eyebrow,
+.page-orientation-eyebrow,
+.problem-primer-eyebrow,
+.map-tree-type,
+.code-language {
+  font-size: var(--type-label) !important;
+  line-height: var(--leading-meta);
+}
+
+/* Reading measure is independent of the wider data and visualization canvas. */
+.compiled-content-layout {
+  grid-template-columns: minmax(0, var(--measure-reading)) minmax(10rem, 13rem);
+}
+
+.markdown-body {
+  max-inline-size: var(--measure-reading);
+}
+
+.atlas-page-header p:not(.eyebrow),
+.content-lead,
+.gallery-question-panel p:not(.eyebrow),
+.theater-structure-guide > header {
+  max-inline-size: var(--measure-lead);
+}
+
+/* Map zoom changes density without making its labels illegible. */
+.map-tree {
+  font-size: clamp(
+    var(--type-chart-compact),
+    calc(var(--type-meta) * var(--map-zoom)),
+    1.05rem
+  );
+  line-height: var(--leading-meta);
+}
+
+/* SVG labels form a separate compact role and still scale with browser zoom. */
+.plot-axis-labels text,
+.plot-label,
+.plot-annotation,
+.surface-axis-labels text,
+.history-series text,
+.parallel-objectives text,
+.nm-plot text,
+.bo-figure text {
+  font-size: var(--type-chart);
+}
+
+.plot-range-label {
+  font-size: var(--type-chart-compact);
+}
+
+/* Controls need enough type and space; wrapping owns narrow-screen density. */
+.nav-link,
+.page-back-row button,
+.content-search,
+.gallery-filter,
+.gallery-disclosure summary,
+.gallery-next-links a,
+.gallery-journey-action > strong,
+.comparison-policy-details summary,
+.comparison-return-links a,
+.theater-first-action .primary-action span,
+.theater-first-action .primary-action strong,
+.theater-catalog-filters label,
+.visualization-switches label,
+.visualization-switches select,
+.learning-plot-panel label,
+.learning-renderer details > summary,
+.problem-primer-glossary > summary,
+.canonical-term-references > summary,
+.map-view-selector label,
+.bo-presets label,
+.coverage-filters label,
+.journey-orphans summary,
+.map-action-button,
+.map-toolbar button,
+.map-pane-switch button {
+  min-height: 2.75rem;
+  font-size: var(--type-body);
+  line-height: var(--leading-meta);
+}
+
+@media (max-width: 56rem) {
+  .comparison-factor-grid,
+  .comparison-policy-grid,
+  .gallery-context-grid,
+  .gallery-method-grid,
+  .theater-structure-guide-grid,
+  .bo-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .comparison-factor-grid article,
+  .comparison-factor-grid article:first-child {
+    border-top: 1px solid #dce4dc;
+    border-left: 0;
+  }
+
+  .gallery-context-grid article:last-child,
+  .gallery-method-grid > article:last-child {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 48rem) {
+  .map-workspace {
+    display: block;
+  }
+
+  .map-pane-switch {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .map-tree-pane[data-active="false"],
+  .map-detail-pane[data-active="false"] {
+    display: none;
+  }
+
+  .map-tree-pane,
+  .map-detail-pane {
+    width: 100%;
+    max-height: min(62vh, 34rem);
+  }
+}
+
+@media (max-width: 44rem) {
+  .compiled-content-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .markdown-body {
+    max-inline-size: none;
+  }
+}
