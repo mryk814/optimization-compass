@@ -109,6 +109,7 @@ def test_risk_selected_validation_and_generated_drift_share_one_authority() -> N
         'uv run optimization-compass validate "${{ steps.validation.outputs.task }}"'
         in selected_gate
     )
+    assert "Fast-fail stale content reports" not in workflow
 
     drift = _workflow_step(workflow, "Verify source health and generated drift")
     assert "if: steps.validation.outputs.task == 'tier-b'" in drift
