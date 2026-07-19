@@ -24,6 +24,7 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
+    "generic_metric_history": ("educational.shape_optimization.v1", "1.0.0"),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {
@@ -32,6 +33,10 @@ _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
         "heuristic_incumbent_value": SEARCH_TREE_HEURISTIC_INCUMBENT_VALUE,
     },
     "field_evolution": {"policy": "fixed_density_field", "points": [0.5] * 32},
+    "generic_metric_history": {
+        "policy": "fixed_shape_parameters",
+        "points": [1.15, 0.0, 0.0],
+    },
 }
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]

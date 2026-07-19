@@ -318,6 +318,30 @@ def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[fl
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
 
 
+def _diffuser_shape(_instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the reduced deterministic objective for the shape lesson.
+
+    This is an analytic pressure-loss proxy, not a CFD solve. Geometry, mesh,
+    and reduced-state diagnostics remain separate in the Theater traces.
+    """
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return float(
+        (outlet_height_ratio - 1.45) ** 2
+        + 0.4 * wall_curvature**2
+        + 0.2 * throat_shift**2
+        + 0.05 * (outlet_height_ratio - 1.0) ** 2
+    )
+
+
+def _diffuser_shape_gradient(_instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return [
+        2.0 * (outlet_height_ratio - 1.45) + 0.1 * (outlet_height_ratio - 1.0),
+        0.8 * wall_curvature,
+        0.4 * throat_shift,
+    ]
+
+
 _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.quadratic.isotropic.v1": (_quadratic, _quadratic_gradient),
     "problem.quadratic.ill_conditioned.v1": (_quadratic, _quadratic_gradient),
@@ -334,5 +358,6 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
         _exponential_decay_gradient,
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
+    "problem.shape.diffuser_3p.v1": (_diffuser_shape, _diffuser_shape_gradient),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
 }

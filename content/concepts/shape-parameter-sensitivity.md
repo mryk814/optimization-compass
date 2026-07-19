@@ -6,9 +6,11 @@ canonical_entity_id: F_DERIVATIVE_ANALYTIC_GRADIENT
 title_ja: 形状parameterと縮約感度
 title_en: Shape Parameters and Reduced Sensitivities
 summary: 形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。
-source_ids: [S054, S056, S101]
+source_ids: [S054, S056, S101, S102, S104]
 prerequisites: [shape-optimization, adjoint-sensitivity]
 related_ids: [geometry-update-failure-modes, concept.pde-constrained-optimization, concept.variable-domain, topology-optimization]
+visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry]
+comparison_ids: [COMPARE_SHAPE_TOPOLOGY_REPRESENTATION]
 aliases: [/learn/shape-parameter-sensitivity]
 status: published
 last_reviewed: 2026-07-19
@@ -97,6 +99,8 @@ state solveが未収束なら、目的値とadjointの入力も同じ状態で�
 ::: warning
 gradient checkの成功や目的値の改善だけでは、連続体での妥当性を示せません。mesh refinementと物理制約の感度を別に確認します。
 :::
+
+[2D diffuser Case](#/gallery/shape-diffuser)では、3 parameterの有限差分／adjoint discussionをgeometry・mesh・state診断と同じ経路で確認できます。
 
 ## 次に読む
 

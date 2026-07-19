@@ -6,11 +6,11 @@ canonical_entity_id: F_STRUCTURE_PDE_CONSTRAINED
 title_ja: 形状更新の失敗モード
 title_en: Geometry-Update Failure Modes
 summary: 形状更新の失敗は、目的関数の悪化だけでなく、無効なgeometry、mesh qualityの低下、state solveの不整合として切り分けます。
-source_ids: [S054, S055, S056, S101]
+source_ids: [S054, S055, S056, S101, S102, S104]
 prerequisites: [shape-optimization, concept.constraint-class]
 related_ids: [shape-optimization, topology-optimization, adjoint-sensitivity, density-filter]
-visualization_ids: [topology-optimization-field-evolution]
-comparison_ids: []
+visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry]
+comparison_ids: [COMPARE_SHAPE_TOPOLOGY_REPRESENTATION]
 aliases: [/learn/geometry-update-failure-modes]
 status: published
 last_reviewed: 2026-07-19
@@ -59,6 +59,8 @@ meshを細かくしたときに目的値だけでなく、荷重経路、境界�
 5. それでも改善しなければ、parameterizationが必要な形状を表現できているかを見直す。
 
 この順序は、評価ができた候補だけで目的値を比較するためのものです。失敗候補を大きな罰則値に置き換える場合も、元の失敗理由を別のledgerに残します。
+
+[2D diffuser failure Theater](#/theater/learning/SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY)では、目的proxyが改善しても自己交差と反転cellで候補を棄却する経路を確認できます。
 
 ::: warning
 mesh qualityが高いこと、または離散問題の目的値が改善したことだけから、連続体の可行性、物理的な妥当性、global optimumを結論づけないでください。mesh、state、geometryの検証を同じ更新履歴に残します。

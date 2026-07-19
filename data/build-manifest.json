@@ -55,6 +55,11 @@
       "id": "013",
       "path": "data/migrations/013_topology_optimization.sql",
       "sha256": "ec1b6d9b00d494884a7733a82a75f163bf5b606d10b0fb763b2a06622f33e68c"
+    },
+    {
+      "id": "014",
+      "path": "data/migrations/014_shape_optimization.sql",
+      "sha256": "2fc4f2e2adcfb7a5b49ca1990a185d23df09254fd0bd06f4dfffb839fd816428"
     }
   ],
   "specialized_inputs": [
