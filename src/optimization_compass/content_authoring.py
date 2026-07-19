@@ -234,7 +234,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
             render_report(rows), encoding="utf-8", newline="\n"
         )
     published_concepts = [item for item in published_pages if item.kind == "concept"]
-    concept_rows = [inspect_concept(item, routes) for item in published_concepts]
+    concept_rows = [inspect_concept(item, known_routes) for item in published_concepts]
     (root / "docs/content-quality-report.md").write_text(
         render_content_quality_report(concept_rows, pages),
         encoding="utf-8",
