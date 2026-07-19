@@ -318,6 +318,31 @@ def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[fl
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
 
 
+def _so3_target(instance: ProblemInstance) -> list[float]:
+    target = instance.parameters.get("target_rotation")
+    if (
+        not isinstance(target, list)
+        or len(target) != 9
+        or not all(
+            isinstance(value, int | float) and not isinstance(value, bool) for value in target
+        )
+    ):
+        raise ValueError(f"invalid SO(3) target for {instance.problem_instance_id}")
+    return [float(value) for value in target]
+
+
+def _so3_attitude(instance: ProblemInstance, point: Sequence[float]) -> float:
+    target = _so3_target(instance)
+    return 0.5 * sum(
+        (value - reference) ** 2 for value, reference in zip(point, target, strict=True)
+    )
+
+
+def _so3_attitude_gradient(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    target = _so3_target(instance)
+    return [value - reference for value, reference in zip(point, target, strict=True)]
+
+
 _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.quadratic.isotropic.v1": (_quadratic, _quadratic_gradient),
     "problem.quadratic.ill_conditioned.v1": (_quadratic, _quadratic_gradient),
@@ -335,4 +360,5 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
+    "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),
 }

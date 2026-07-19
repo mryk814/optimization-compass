@@ -11,6 +11,13 @@ from optimization_compass.comparisons import (
     load_comparison_seed,
     validate_comparison_benchmark_contexts,
 )
+from optimization_compass.constraint_geometry import (
+    PROFILE_ID as SO3_PROFILE_ID,
+)
+from optimization_compass.constraint_geometry import (
+    build_so3_scenario,
+    generate_so3_traces,
+)
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.coverage import build_coverage_report, write_coverage_report
 from optimization_compass.db import KnowledgeRepository
@@ -863,6 +870,7 @@ def _write_dummy_trace(
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
     generated_traces.extend(generate_parameter_estimation_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_so3_traces(dataset_version=dataset_version))
     generated_traces.append(
         _generate_optimal_control_history_trace(dataset_version=dataset_version)
     )
@@ -947,6 +955,10 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
             if locale == "en"
             else "Direct collocation · state/control診断"
         )
+    if trace_id == "so3-projected-alignment":
+        return "SO(3) · ambient step + QR projection"
+    if trace_id == "so3-riemannian-alignment":
+        return "SO(3) · Lie algebra update"
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -1819,6 +1831,8 @@ def _trace_lesson(
 
 
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
+    if trace.profile_id == SO3_PROFILE_ID:
+        return build_so3_scenario(trace)
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"
