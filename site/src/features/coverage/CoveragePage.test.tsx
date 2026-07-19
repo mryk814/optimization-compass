@@ -23,6 +23,8 @@ describe("CoveragePage", () => {
     expect(screen.getByText(/言語Coverage:/u)).toBeVisible();
     expect(screen.getByText(/現在は日本語の説明を基準に監査します/u)).toBeVisible();
     expect(screen.getByRole("heading", { name: "学習経路の接続状況" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "Contract integrity" })).toBeVisible();
+    expect(screen.getByText(/これは学習経路が完了しているという意味ではありません/u)).toBeVisible();
     expect(screen.getByText(/^\d+\/5 complete$/u)).toHaveTextContent(`${rawJourneys.summary.status_counts.complete}/5`);
     expect(screen.getByRole("region", { name: "学習経路の接続状況一覧" })).toBeVisible();
     expect(screen.getByText(/未接続の成果物:/u)).toBeVisible();

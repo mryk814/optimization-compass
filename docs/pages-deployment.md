@@ -9,27 +9,33 @@ site along separate paths.
 `validate_pages_artifact` checks out the workflow commit once and performs the complete gate:
 
 1. install the locked Python and Node.js dependencies;
-2. run Python lint, formatting, mypy, and the focused API/CLI/recommendation/artifact smoke suite;
-3. delete and regenerate `site/public/data`, then require zero tracked drift;
-4. run database, content, licensing, deterministic two-stage rebuild, and generated-data checks;
-5. run Python/TypeScript recommendation parity;
-6. run site typecheck and unit tests, then build `site/dist`;
-7. stamp `site/dist/deployment.json` and verify the exact directory locally; and
-8. upload that directory once as the `github-pages` artifact.
+2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `pr-fast`, or `tier-b`; pushes, scheduled runs, and manual runs select `tier-b`;
+3. for Tier B, delete and regenerate `site/public/data`, then require zero tracked drift;
+4. run the selected registry task; unknown paths fail safe to Tier B rather than silently receiving a fast gate;
+5. verify README facts and repository size for every task, and source health plus zero generated
+   drift for Tier B;
+6. retain `site/dist` for non-documentation pull-request and nightly browser jobs;
+7. on `main`, stamp `site/dist/deployment.json` and verify the exact directory locally; and
+8. on `main`, upload that directory once as the `github-pages` artifact.
 
-The exhaustive Python regression suite intentionally stays outside the per-commit deployment path.
-Run `uv run pytest` manually when changing dataset release, rollback, format-mutation, or schema
-enforcement behavior. The normal main-branch path still regenerates and verifies the real dataset,
-tests and builds the site, exercises production browser journeys, and smokes the deployed result.
+The full Python regression suite is required for backend, canonical data, schema, generator,
+release, backend-test, and unknown-path pull requests, and for every main/scheduled/manual Tier B
+run. Content, site, workflow, validation-contract, and documentation-only pull requests use the
+smaller authoritative task that owns their surface. The browser job runs tagged critical journeys on non-doc pull
+requests. On `main`, the same critical journeys plus the axe route matrix block publication. A
+scheduled/manual nightly job runs the full
+desktop/mobile Playwright suite against the validated artifact and stays visibly red until every
+quarantined legacy expectation has been repaired.
 
 The deployment identity records the workflow commit SHA, dataset version, release date, database
 SHA-256, and Pages base path. Its commit SHA is `${{ github.sha }}` for the checked-out workflow
 commit; its dataset fields come from the built `data/release.json`. A mismatch in any generated
 JSON asset, built HTML reference, or license path rejects the artifact before upload.
 
-Pull requests run the same artifact pipeline and retain the Pages-format `github-pages` artifact,
-but the deploy job is skipped. Downloading that artifact yields `artifact.tar`; extract it and run
-the same generic seam used by CI:
+Pull requests run the same validation/build pipeline and retain `site/dist` as
+`validated-site-<commit SHA>`, but the Pages-format artifact and deploy job remain main-only.
+The browser job downloads that artifact without rebuilding it. On `main`, it instead downloads the
+Pages-format `github-pages` artifact, extracts `artifact.tar`, and tests the exact publishable tree:
 
 ```bash
 python scripts/pages_artifact.py verify-local \
@@ -38,13 +44,17 @@ python scripts/pages_artifact.py verify-local \
   --expected-dataset-version <x.y.z>
 ```
 
-The browser E2E job `needs: validate_pages_artifact`, downloads the `github-pages` artifact from
-the same workflow run, extracts its single `artifact.tar`, and verifies that exact directory instead
-of rebuilding it. The deploy job requires this browser job in addition to validation, so a failed
-journey, console assertion, responsive check, or axe scan blocks publication. Workflow structure
-tests keep the artifact name and single-upload contract explicit.
+The browser E2E job `needs: validate_pages_artifact` and never rebuilds the site. The deploy job
+requires this browser job in addition to validation, so a failed journey, console assertion,
+responsive check, or axe scan blocks publication. Workflow structure tests keep both artifact
+paths and the single Pages upload contract explicit.
 Failure evidence is retained as `playwright-failure-<commit SHA>` with screenshots, traces, console
 logs, JUnit output, and the HTML report.
+
+The full suite runs daily at 02:30 JST and on `workflow_dispatch`. Known failures are never silently
+skipped: the nightly job fails, retains `playwright-nightly-failure-<commit SHA>`, and each failure
+family must have an owner, cause classification, target date, and explicit exit condition in GitHub
+Issues. Removing a spec from the suite is not a quarantine mechanism.
 
 ## Deployment and post-deploy smoke
 

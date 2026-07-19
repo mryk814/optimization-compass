@@ -86,6 +86,14 @@ class TaskPlan(_FrozenModel):
     checks: tuple[ValidationCheck, ...]
 
 
+class ChangeValidationPlan(_FrozenModel):
+    contract_version: str
+    task: str
+    gate: str
+    changed_paths: tuple[str, ...]
+    reason_codes: tuple[str, ...]
+
+
 CHECKS: tuple[ValidationCheck, ...] = (
     ValidationCheck(
         code="python.lint",
@@ -130,6 +138,18 @@ CHECKS: tuple[ValidationCheck, ...] = (
             "pytest",
             "tests/test_problem_instances.py",
             "tests/test_engine.py",
+        ),
+    ),
+    ValidationCheck(
+        code="repository.contract-tests",
+        description="Validation-registry and workflow contract tests.",
+        next_action="Fix the validation authority or workflow contract; do not duplicate gates.",
+        command=(
+            _PYTHON_TOKEN,
+            "-m",
+            "pytest",
+            "tests/test_validate_cli.py",
+            "tests/test_pages_workflow.py",
         ),
     ),
     ValidationCheck(
@@ -223,6 +243,16 @@ _TIER_B_CODES: tuple[str, ...] = (
     "site.build",
 )
 _TIER_C_CODES: tuple[str, ...] = (*_TIER_B_CODES, "site.types", "site.e2e")
+_PR_FAST_CODES: tuple[str, ...] = (
+    "python.lint",
+    "python.format",
+    "python.types",
+    "repository.contract-tests",
+    "content.pages",
+    "content.licensing",
+    "site.unit",
+    "site.build",
+)
 
 TASKS: dict[str, ValidationTask] = {
     task.name: task
@@ -256,6 +286,18 @@ TASKS: dict[str, ValidationTask] = {
             description="The authoritative full gate (identical to tier-c).",
             gate="all",
             check_codes=_TIER_C_CODES,
+        ),
+        ValidationTask(
+            name="docs",
+            description="Fast documentation and repository-policy contract checks.",
+            gate="docs",
+            check_codes=("repository.contract-tests",),
+        ),
+        ValidationTask(
+            name="pr-fast",
+            description="Fast PR gate for site, E2E, workflow, and test-contract changes.",
+            gate="pr-fast",
+            check_codes=_PR_FAST_CODES,
         ),
         ValidationTask(
             name="content",
@@ -306,6 +348,74 @@ def task_plan(task_name: str) -> TaskPlan:
         gate=task.gate,
         checks=tuple(_CHECKS_BY_CODE[code] for code in task.check_codes),
     )
+
+
+def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValidationPlan:
+    """Select the smallest authoritative PR gate for a set of repository paths."""
+    normalized_paths: set[str] = set()
+    for raw_path in paths:
+        path = raw_path.replace("\\", "/")
+        normalized_paths.add(path[2:] if path.startswith("./") else path)
+    normalized = tuple(sorted(normalized_paths))
+    task = "docs"
+    reasons: set[str] = set()
+    for path in normalized:
+        if (
+            path.startswith("site/public/data/")
+            or path.startswith(("src/", "data/", "scripts/"))
+            or path in {"pyproject.toml", "uv.lock", "Makefile"}
+        ):
+            task = "tier-b"
+            reasons.add("backend_or_data_authority")
+            continue
+        if path in {
+            "tests/test_validate_cli.py",
+            "tests/test_pages_workflow.py",
+        } or path.startswith(("site/", ".github/")):
+            if task != "tier-b":
+                task = "pr-fast"
+            reasons.add("site_or_repository_contract")
+            continue
+        if path.startswith("tests/"):
+            task = "tier-b"
+            reasons.add("backend_test_authority")
+            continue
+        if path.startswith("content/"):
+            if task not in {"tier-b", "pr-fast"}:
+                task = "tier-a"
+            reasons.add("content_authority")
+            continue
+        if path.startswith("docs/") or path in {
+            "README.md",
+            "CONTRIBUTING.md",
+            "CHANGELOG.md",
+        }:
+            reasons.add("documentation_only")
+            continue
+        task = "tier-b"
+        reasons.add("unknown_path_safe_default")
+    if not normalized:
+        reasons.add("no_changed_paths")
+    return ChangeValidationPlan(
+        contract_version=CONTRACT_VERSION,
+        task=task,
+        gate=TASKS[task].gate,
+        changed_paths=normalized,
+        reason_codes=tuple(sorted(reasons)),
+    )
+
+
+def changed_paths_from_git(base_ref: str, root: Path) -> list[str]:
+    completed = subprocess.run(
+        ["git", "diff", "--name-only", "--diff-filter=ACMR", f"{base_ref}...HEAD"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        raise RuntimeError(completed.stderr.strip() or f"git diff failed for {base_ref}")
+    return [line for line in completed.stdout.splitlines() if line]
 
 
 def find_repository_root(start: Path | None = None) -> Path:

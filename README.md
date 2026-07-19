@@ -161,11 +161,16 @@ npm --prefix site run build
 現在は、新しい基盤の数よりも**完全に辿れるProblem journey**を増やすことを優先しています。
 
 - [Problem-first product direction](docs/product-direction/problem-first-atlas.md)
-- [代表Case journey](https://github.com/mryk814/optimization-compass/issues/122)
-- [journey completeness](https://github.com/mryk814/optimization-compass/issues/123)
-- [README release facts](https://github.com/mryk814/optimization-compass/issues/149)
-- [Problem-first Home](https://github.com/mryk814/optimization-compass/issues/150)
-- [Failure / exclusion discovery](https://github.com/mryk814/optimization-compass/issues/151)
+- [Atlas深化の現行Epic](https://github.com/mryk814/optimization-compass/issues/43)
+- 品質ゲート: [educational metadata E2E](https://github.com/mryk814/optimization-compass/issues/233) / [Not Found・keyboard E2E](https://github.com/mryk814/optimization-compass/issues/234) / [journey context E2E](https://github.com/mryk814/optimization-compass/issues/235)
+- [Shape optimization](https://github.com/mryk814/optimization-compass/issues/134)
+- [PDE / simulation-constrained optimization](https://github.com/mryk814/optimization-compass/issues/135)
+- [Optimal control / robotics journey](https://github.com/mryk814/optimization-compass/issues/137)
+- [Multi-fidelity / expensive simulator](https://github.com/mryk814/optimization-compass/issues/138)
+- [Robust / stochastic / chance / DRO](https://github.com/mryk814/optimization-compass/issues/139)
+- [Bilevel / complementarity / hybrid](https://github.com/mryk814/optimization-compass/issues/140)
+
+完了済みのIssueは履歴として各Epicから参照し、この一覧には現在openの作業だけを載せます。
 
 ## License
 

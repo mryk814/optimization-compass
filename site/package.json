@@ -12,6 +12,7 @@
     "preview:e2e": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
     "test:e2e": "npm run build && npm run test:e2e:artifact",
     "test:e2e:artifact": "playwright test",
+    "test:e2e:critical": "playwright test --grep @critical --project=chromium-desktop",
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
