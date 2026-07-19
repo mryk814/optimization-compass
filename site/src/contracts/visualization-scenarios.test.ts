@@ -30,8 +30,9 @@ describe("VisualizationScenario parser", () => {
       (scenario) => scenario.artifact.renderer_family === "surrogate_uncertainty",
     );
 
-    expect(boScenarios).toHaveLength(5);
-    expect(boScenarios.filter((scenario) => scenario.purpose === "mechanism")).toHaveLength(2);
+    expect(boScenarios).toHaveLength(7);
+    expect(boScenarios.filter((scenario) => scenario.purpose === "mechanism")).toHaveLength(3);
+    expect(boScenarios.filter((scenario) => scenario.purpose === "failure_contrast")).toHaveLength(1);
     expect(boScenarios.every((scenario) => scenario.artifact.payload_path.startsWith("visualizations/"))).toBe(true);
   });
 

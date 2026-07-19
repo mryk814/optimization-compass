@@ -7,6 +7,9 @@ import budgetArtifact from "../../../public/data/search-trees/binary-knapsack-bn
 import searchTreeIndex from "../../../public/data/search-trees/index.json";
 import manifest from "../../../public/data/manifest.json";
 import paretoArtifact from "../../../public/data/visualizations/biobjective-quadratic-pareto-front.json";
+import multiFidelityLedger from "../../../public/data/visualizations/bo-multi-fidelity-ledger.json";
+import highFidelityBaseline from "../../../public/data/visualizations/bo-high-fidelity-baseline.json";
+import comparisons from "../../../public/data/comparisons.json";
 import scenarios from "../../../public/data/visualization-scenarios.json";
 import type { ComparisonIndex } from "../../contracts/comparisons";
 import type { VisualizationScenarioIndex } from "../../contracts/visualization-scenarios";
@@ -281,6 +284,52 @@ function renderParetoPage({
     </MemoryRouter>,
   );
 }
+
+function renderCostAlignedSurrogatePage() {
+  vi.stubGlobal("fetch", vi.fn(async (input: string | URL | Request) => {
+    const url = String(input);
+    const body = url.endsWith("data/manifest.json") ? manifest
+      : url.endsWith("data/comparisons.json") ? comparisons
+        : url.endsWith("visualization-scenarios.json") ? scenarios
+          : url.endsWith("bo-multi-fidelity-ledger.json") ? multiFidelityLedger
+            : url.endsWith("bo-high-fidelity-baseline.json") ? highFidelityBaseline
+              : undefined;
+    return body
+      ? { ok: true, json: async () => structuredClone(body) }
+      : { ok: false, status: 404 };
+  }));
+  return render(
+    <MemoryRouter initialEntries={["/compare/COMPARE_BO_MULTIFIDELITY_COST"]}>
+      <Routes>
+        <Route path="/compare/:comparisonId" element={<ComparisonPage />} />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+describe("ComparisonPage high-fidelity-equivalent cost renderer", () => {
+  test("aligns mixed and high-only ledgers by paid cost instead of iteration", async () => {
+    renderCostAlignedSurrogatePage();
+
+    expect(await screen.findByRole("heading", {
+      level: 1,
+      name: "同じhigh-fidelity-equivalent costでfidelity配分を比べる",
+    })).toBeVisible();
+    const mixed = within(screen.getByLabelText("mixed low/high fidelityのcost同期指標"));
+    const highOnly = within(screen.getByLabelText("high fidelity onlyのcost同期指標"));
+    expect(mixed.getByText("14")).toBeVisible();
+    expect(highOnly.getByText("3")).toBeVisible();
+    expect(mixed.getByText("12 / 2")).toBeVisible();
+    expect(highOnly.getByText("0 / 3")).toBeVisible();
+
+    fireEvent.change(screen.getByLabelText("BO比較のhigh-fidelity-equivalent cost"), {
+      target: { value: "1" },
+    });
+    expect(within(screen.getByLabelText("mixed low/high fidelityのcost同期指標")).getByText("12")).toBeVisible();
+    const alignedHighOnly = within(screen.getByLabelText("high fidelity onlyのcost同期指標"));
+    expect(alignedHighOnly.getByText("ledger calls").nextElementSibling).toHaveTextContent("1");
+  });
+});
 
 describe("ComparisonPage search-tree renderer", () => {
   test("aligns both members to the latest event at one evaluation and renders unique trees", async () => {

@@ -1364,15 +1364,16 @@
           "target_ids": [
             "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
             "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
-            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "SCENARIO_BO_1D_LOW_FIDELITY_BIAS"
           ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_BO_MULTIFIDELITY_COST"
+          ]
         },
         "canonical_problem_instance": {
           "reason_codes": [],
@@ -1382,17 +1383,18 @@
           ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/multi-fidelity-simulator",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+            "/compare/COMPARE_BO_MULTIFIDELITY_COST",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_HYPERBAND_ASHA",
             "/methods/M_NELDER_MEAD",
@@ -1445,7 +1447,10 @@
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
             "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+            "/compare/COMPARE_BO_MULTIFIDELITY_COST",
             "/methods/M_BAYESIAN_OPT_GP",
             "/methods/M_HYPERBAND_ASHA",
             "/methods/M_NELDER_MEAD",
@@ -1458,10 +1463,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S034",
             "S035",
@@ -1479,6 +1482,8 @@
             "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
             "SCENARIO_BO_1D_EXPLORE_NOISELESS",
             "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+            "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
             "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
           ]
         },
@@ -1497,12 +1502,8 @@
         }
       },
       "journey_id": "multi-fidelity-simulator",
-      "missing_dimensions": [
-        "canonical_comparison",
-        "cross_surface_links",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2820,12 +2821,13 @@
       ],
       "canonical_url": "/gallery/multi-fidelity-simulator",
       "case_id": "multi-fidelity-simulator",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_BO_MULTIFIDELITY_COST",
+          "comparison_id": "COMPARE_BO_MULTIFIDELITY_COST"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_HYPERBAND_ASHA"
       ],
@@ -2853,7 +2855,7 @@
       "last_reviewed": "2026-07-19",
       "learning_objective": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
       "limitations": [
-        "low fidelity の bias は意図的に順位を保存しないため、少ない high-fidelity call や discrepancy model の妥当性を保証しません。この ledger Theater は固定された教育用 run の再生であり、high-fidelity-equivalent cost を揃えた Compare は未実装です。",
+        "low fidelity の bias は意図的に順位を保存しません。固定Compareとfailure Theaterはdiscrepancyの検出方法を教える最小例であり、少ないhigh-fidelity call、特定kernel、補正model、fidelity policyの妥当性や一般的優劣を保証しません。",
         "固定された1次元・決定論的な教育用 simulator であり、実際の物理 simulator の fidelity 間誤差、noise 分布、runtime、failure 原因を表しません。"
       ],
       "prerequisite_journey_ids": [],
@@ -2891,6 +2893,20 @@
           "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
         },
         {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS"
+        },
+        {
           "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
           "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
           "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
@@ -2906,8 +2922,8 @@
         "S069",
         "S075"
       ],
-      "status": "partial",
-      "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。既存の Bayesian Optimization Theater は高 fidelity 側の surrogate・acquisition の読み方を示し、追加の ledger Theater は low/high 選択、cost accounting、failure/censoring を表示します。",
+      "status": "complete",
+      "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。Compare は initial design、noise、fidelity cost、parallel workers=1、固定tuning、失敗をnullのまま記録してcostを課しretryしないpolicyを固定し、high-fidelity-equivalent costで同期します。独立failure Theaterでは同じ2候補のlow/high観測を照合し、low-fidelity biasによる順位反転を示します。",
       "title_en": "Allocate a budget across low- and high-fidelity simulation",
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
     },
@@ -3940,9 +3956,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 5,
+      "complete": 6,
       "draft": 0,
-      "partial": 10
+      "partial": 9
     },
     "target_complete_journeys": 5,
     "total_journeys": 15

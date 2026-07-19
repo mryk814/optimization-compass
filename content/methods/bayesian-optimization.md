@@ -5,16 +5,16 @@ method_id: M_BAYESIAN_OPT_GP
 title_ja: ベイズ最適化
 title_en: Bayesian Optimization
 summary: 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
-source_ids: [S034, S035]
+source_ids: [S034, S035, S059, S075]
 prerequisites: []
 related_ids: [differential-evolution, cma-es]
-visualization_ids: [ARTIFACT_BO_EXPLORE_NOISELESS, ARTIFACT_BO_EXPLORE_SMALL_NOISE]
-comparison_ids: [COMPARE_BO_ACQUISITION_NOISE_BASELINE]
+visualization_ids: [ARTIFACT_BO_EXPLORE_NOISELESS, ARTIFACT_BO_EXPLORE_SMALL_NOISE, ARTIFACT_BO_MULTIFIDELITY_LEDGER, ARTIFACT_BO_LOW_FIDELITY_BIAS]
+comparison_ids: [COMPARE_BO_ACQUISITION_NOISE_BASELINE, COMPARE_BO_MULTIFIDELITY_COST]
 aliases: [/learn/bayesian-optimization]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-19
 ---
 
 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
@@ -132,6 +132,25 @@ print(observed_x[best_index], observed_y[best_index])
 ```
 
 これはzero-mean、fixed kernel、noiselessに近い教育例です。実務ではmean function、kernel hyperparameter、noise、numerical stability、acquisition optimizerを明示します。
+
+## 理論・実装default・評価policy・推薦を分ける
+
+Bayesian Optimizationという手法の核は、観測からsurrogateを更新し、acquisitionで次の評価候補を決めることです。その核と、特定libraryが選ぶdefault kernel、input transform、noise処理、acquisition optimizer、初期化点数は同じものではありません。BoTorchの公式資料には既知のfidelity costを使うcost-awareな構成例がありますが、libraryを選んだだけでcost model、target fidelity、補正modelが確定するわけではありません。library versionとdefault値は実装記録として残し、普遍的な推奨値にはしません。
+
+評価policyはさらに別です。initial design、low/high fidelityのcost、parallel worker数、batch / asynchronous、retry、failed・censored・timeoutの扱い、停止条件をrun前に固定します。最後に、methodの推薦優先度はproblemの変数型、budget、noise、失敗構造と比較証拠から決めます。固定runのbest-so-farやlibrary defaultだけで推薦順位を上げません。
+
+| 層 | 固定・記録するもの | ここから言えないこと |
+| --- | --- | --- |
+| method | surrogateとacquisitionの役割 | 特定kernelが常に適切 |
+| implementation | library version、kernel、transform、optimizer default | defaultが一般的推奨 |
+| evaluation policy | initial design、cost、parallelism、failure、retry、stopping | iteration数だけで公平 |
+| recommendation | problem条件と複数seedの比較証拠 | 単一教材の勝者が常に第一候補 |
+
+## Surrogateとfidelity discrepancyを監査する
+
+low fidelityはhigh fidelityの真値ではありません。共通点を両fidelityで評価し、残差、候補順位、high fidelityでの再確認を別々に記録します。[low-fidelity biasのfailure Theater](#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS)では、同じ2候補の順位がlow/highで反転します。これは特定のbiasを持つ最小教材であり、実問題での発生頻度や補正modelの性能を示しません。
+
+input / output scalingを変えたときにposteriorや提案が大きく崩れる、cross-validation residualが領域ごとに偏る、uncertaintyが小さいのにhigh fidelity誤差が大きい場合は、kernel mismatchやmodel discrepancyを疑います。failed領域の近傍を繰り返し提案する場合は、失敗を大きな目的値へ置換せず、status、feasibility model、探索空間、retry policyを監査します。
 
 ## 診断値
 

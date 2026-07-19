@@ -556,8 +556,12 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         for scenario in scenario_index.scenarios
         if scenario.artifact.renderer_family == "surrogate_uncertainty"
     ]
-    assert len(surrogate_scenarios) == 5
-    assert {scenario.purpose for scenario in surrogate_scenarios} == {"mechanism", "sensitivity"}
+    assert len(surrogate_scenarios) == 7
+    assert {scenario.purpose for scenario in surrogate_scenarios} == {
+        "failure_contrast",
+        "mechanism",
+        "sensitivity",
+    }
     for scenario in surrogate_scenarios:
         payload = (first_output / scenario.artifact.payload_path).read_bytes()
         assert len(payload) == scenario.artifact.payload_bytes
@@ -582,6 +586,14 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         "censored",
         "timeout",
     }
+    bias_scenario = next(
+        item
+        for item in surrogate_scenarios
+        if item.scenario_id == "SCENARIO_BO_1D_LOW_FIDELITY_BIAS"
+    )
+    bias_payload = json.loads((first_output / bias_scenario.artifact.payload_path).read_bytes())
+    assert bias_payload["evaluation_ledger"]["calls"][0]["fidelity"] == "low"
+    assert bias_payload["evaluation_ledger"]["calls"][2]["fidelity"] == "high"
     shrink_trace = AlgorithmTrace.model_validate_json(
         (first_output / "traces/nelder-mead-rosenbrock-shifted.json").read_bytes()
     )

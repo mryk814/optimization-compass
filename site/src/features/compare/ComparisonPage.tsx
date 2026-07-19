@@ -21,6 +21,7 @@ import {
 } from "../../contracts/search-tree";
 import {
   parseSurrogateUncertaintyPayload,
+  type EvaluationLedgerEntry,
   type SurrogateUncertaintyPayload,
 } from "../../contracts/surrogate-uncertainty";
 import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame, type TracePoint } from "../../contracts/trace";
@@ -637,6 +638,21 @@ function SurrogateComparison({
   payloads: SurrogateUncertaintyPayload[];
   scenarios: VisualizationScenario[];
 }) {
+  if (comparison.synchronization_axis === "high_fidelity_equivalent_cost") {
+    return <EvaluationCostComparison comparison={comparison} payloads={payloads} />;
+  }
+  return <OracleEvaluationSurrogateComparison comparison={comparison} payloads={payloads} scenarios={scenarios} />;
+}
+
+function OracleEvaluationSurrogateComparison({
+  comparison,
+  payloads,
+  scenarios,
+}: {
+  comparison: ComparisonSet;
+  payloads: SurrogateUncertaintyPayload[];
+  scenarios: VisualizationScenario[];
+}) {
   const minimumEvaluation = scenarios[0].experiment.initial_condition.point.length;
   const [evaluation, setEvaluation] = useState(minimumEvaluation);
   const snapshots = comparison.members.map((member, index) => (
@@ -702,6 +718,97 @@ function SurrogateComparison({
       <p className="atlas-note comparison-ranking-warning">この固定条件の比較から、手法、獲得関数、ノイズ処理、random baselineの一般的な優劣や因果効果は推論できません。</p>
     </section>
   );
+}
+
+function EvaluationCostComparison({
+  comparison,
+  payloads,
+}: {
+  comparison: ComparisonSet;
+  payloads: SurrogateUncertaintyPayload[];
+}) {
+  const highCost = payloads[0].evaluation_ledger?.fidelity_costs.high;
+  if (!highCost || payloads.some((payload) => !payload.evaluation_ledger)) {
+    throw new Error("Cost-aligned surrogate comparison requires an evaluation ledger for every member.");
+  }
+  const step = 1 / highCost;
+  const [equivalentCost, setEquivalentCost] = useState(comparison.budget.value);
+  const snapshots = payloads.map((payload) => ledgerSnapshot(payload, equivalentCost));
+  return (
+    <section className="surrogate-comparison" aria-labelledby="surrogate-cost-comparison-title">
+      <header>
+        <h2 id="surrogate-cost-comparison-title">同じhigh-fidelity-equivalent costでledgerを読む</h2>
+        <p>iteration数ではなく支払ったcost以下の最後のcallへ同期し、成功したhigh fidelityと失敗statusを分けて表示します。</p>
+      </header>
+      <label className="surrogate-comparison-slider">
+        <span>High-fidelity-equivalent cost: {equivalentCost.toFixed(2)}/{comparison.budget.value.toFixed(2)}</span>
+        <input
+          aria-label="BO比較のhigh-fidelity-equivalent cost"
+          max={comparison.budget.value}
+          min={step}
+          onChange={(event) => setEquivalentCost(Number(event.target.value))}
+          step={step}
+          type="range"
+          value={equivalentCost}
+        />
+      </label>
+      <div className="comparison-grid surrogate-comparison-members">
+        {comparison.members.map((member, index) => {
+          const snapshot = snapshots[index];
+          return (
+            <article className="comparison-card" key={member.member_id}>
+              <header><div><h3>{member.label_ja}</h3><small>{member.label_en}</small></div><span>{member.role}</span></header>
+              <p className="method-parameters">{parameterText(member.parameters)}</p>
+              <dl className="comparison-metrics" aria-label={`${member.label_ja}のcost同期指標`}>
+                <div><dt>ledger calls</dt><dd>{snapshot.calls.length}</dd></div>
+                <div><dt>累積cost</dt><dd>{snapshot.last?.accumulated_cost.toFixed(2) ?? "未評価"}</dd></div>
+                <div><dt>low / high</dt><dd>{snapshot.lowCalls} / {snapshot.highCalls}</dd></div>
+                <div><dt>成功したhigh fidelity</dt><dd>{snapshot.successfulHighCalls}</dd></div>
+                <div><dt>failed・censored・timeout</dt><dd>{snapshot.nonOkCalls}</dd></div>
+                <div><dt>high fidelity best-so-far</dt><dd>{snapshot.last?.best_so_far?.toFixed(4) ?? "未到達"}</dd></div>
+              </dl>
+            </article>
+          );
+        })}
+      </div>
+      <details className="text-alternative" open>
+        <summary>同期値を文章で読む</summary>
+        <ul>{comparison.members.map((member, index) => {
+          const snapshot = snapshots[index];
+          return <li key={member.member_id}><strong>{member.label_ja}</strong>: equivalent cost {snapshot.last?.accumulated_high_fidelity_equivalent_cost.toFixed(2) ?? "0.00"}、call {snapshot.calls.length}、成功high fidelity {snapshot.successfulHighCalls}、non-ok {snapshot.nonOkCalls}。</li>;
+        })}</ul>
+      </details>
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+      <p className="atlas-note comparison-ranking-warning">この固定call planのcontrastから、fidelity policy、surrogate、methodの一般的順位や因果効果は推論できません。</p>
+    </section>
+  );
+}
+
+type LedgerSnapshot = {
+  calls: EvaluationLedgerEntry[];
+  last: EvaluationLedgerEntry | undefined;
+  lowCalls: number;
+  highCalls: number;
+  successfulHighCalls: number;
+  nonOkCalls: number;
+};
+
+function ledgerSnapshot(
+  payload: SurrogateUncertaintyPayload,
+  equivalentCost: number,
+): LedgerSnapshot {
+  const calls = payload.evaluation_ledger?.calls.filter(
+    (call) => call.accumulated_high_fidelity_equivalent_cost <= equivalentCost + 1e-7,
+  ) ?? [];
+  return {
+    calls,
+    last: calls.at(-1),
+    lowCalls: calls.filter((call) => call.fidelity === "low").length,
+    highCalls: calls.filter((call) => call.fidelity === "high").length,
+    successfulHighCalls: calls.filter((call) => call.fidelity === "high" && call.status === "ok").length,
+    nonOkCalls: calls.filter((call) => call.status !== "ok").length,
+  };
 }
 
 type SurrogateSnapshot = {

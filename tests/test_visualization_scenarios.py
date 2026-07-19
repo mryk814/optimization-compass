@@ -7,6 +7,8 @@ from optimization_compass.surrogate_uncertainty import (
     Observation,
     canonical_renderer_bytes,
     generate_evaluation_ledger_scenario,
+    generate_high_fidelity_baseline_scenario,
+    generate_low_fidelity_bias_scenario,
     generate_surrogate_scenario,
 )
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
@@ -83,6 +85,7 @@ def test_evaluation_ledger_scenario_preserves_cost_fidelity_and_failure_statuses
 
     assert first.payload_bytes == second.payload_bytes
     assert first.scenario.scenario_id == "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
+    assert first.scenario.experiment.parameter_preset_id == "BO_1D_MULTIFIDELITY_LEDGER"
     assert first.scenario.artifact.artifact_contract_version == "1.1.0"
     assert ledger is not None
     assert {call.fidelity for call in ledger.calls} == {"low", "high"}
@@ -90,7 +93,46 @@ def test_evaluation_ledger_scenario_preserves_cost_fidelity_and_failure_statuses
     assert ledger.calls[-1].accumulated_cost == ledger.budget_cost == 36.0
     assert ledger.calls[-1].accumulated_high_fidelity_equivalent_cost == 3.0
     assert ledger.calls[-1].best_so_far is not None
-    assert "cost-aligned Compare" in first.scenario.lesson.limitations_en
+    assert "does not establish" in first.scenario.lesson.limitations_en
+
+
+def test_cost_aligned_baseline_uses_the_same_initial_design_and_budget() -> None:
+    mixed = generate_evaluation_ledger_scenario(dataset_version="0.3.0")
+    baseline = generate_high_fidelity_baseline_scenario(dataset_version="0.3.0")
+    mixed_ledger = mixed.payload.evaluation_ledger
+    baseline_ledger = baseline.payload.evaluation_ledger
+
+    assert mixed_ledger is not None and baseline_ledger is not None
+    assert [call.x for call in mixed_ledger.calls[:3]] == [call.x for call in baseline_ledger.calls]
+    assert {call.fidelity for call in baseline_ledger.calls} == {"high"}
+    assert mixed_ledger.budget_cost == baseline_ledger.budget_cost == 36.0
+    assert (
+        mixed_ledger.high_fidelity_equivalent_budget
+        == baseline_ledger.high_fidelity_equivalent_budget
+        == 3.0
+    )
+    assert mixed_ledger.calls[-1].accumulated_cost == baseline_ledger.calls[-1].accumulated_cost
+    assert baseline.scenario.lesson.comparison_role == "baseline"
+    assert (
+        baseline.scenario.experiment.parameter_preset_id
+        == baseline.scenario.scenario_id.removeprefix("SCENARIO_")
+    )
+
+
+def test_low_fidelity_bias_scenario_reverses_the_two_candidate_ordering() -> None:
+    generated = generate_low_fidelity_bias_scenario(dataset_version="0.3.0")
+    ledger = generated.payload.evaluation_ledger
+
+    assert ledger is not None
+    values = {(call.x, call.fidelity): call.observed_value for call in ledger.calls}
+    assert values[(-1.1, "low")] < values[(0.5, "low")]
+    assert values[(-1.1, "high")] > values[(0.5, "high")]
+    assert generated.scenario.purpose == "failure_contrast"
+    assert generated.scenario.lesson.comparison_role == "failure_contrast"
+    assert [signal.signal_id for signal in generated.scenario.lesson.failure_signals] == [
+        "low_high_candidate_order_reverses"
+    ]
+    assert "observed_value" in generated.scenario.artifact.observable_ids
 
 
 def test_established_scenario_identity_and_artifact_path_remain_stable() -> None:

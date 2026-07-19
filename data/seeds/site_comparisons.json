@@ -513,6 +513,83 @@
       ]
     },
     {
+      "comparison_id": "COMPARE_BO_MULTIFIDELITY_COST",
+      "canonical_url": "/compare/COMPARE_BO_MULTIFIDELITY_COST",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_BO_MULTIFIDELITY_COST",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "multi-fidelity-simulator",
+      "case_id": "multi-fidelity-simulator",
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "benchmark_context_id": "BENCH_BO",
+      "title_ja": "同じhigh-fidelity-equivalent costでfidelity配分を比べる",
+      "title_en": "Compare fidelity allocation at equal high-fidelity-equivalent cost",
+      "comparison_question": "同じ初期design・simulator・noise・failure policy・36 costで、mixed fidelityとhigh fidelityだけの配分はledger上でどう異なる？",
+      "formulation_summary": "x∈[-3,3] の同じ1次元simulatorを、low cost=1、high cost=12、総cost=36（high-fidelity-equivalent cost=3）で評価する。",
+      "fixed_factors": [
+        "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D and domain [-3, 3]",
+        "initial design x=[-2.9, -2.6, 0.0]",
+        "low/high observation functions and deterministic noise functions",
+        "low fidelity cost 1 and high fidelity cost 12",
+        "total cost budget 36 and high-fidelity-equivalent budget 3",
+        "base seed 2604 and fixed preset with no post-run tuning",
+        "parallel workers 1 and synchronous call order",
+        "failed/censored/timeout status is recorded with null objective, charged cost, and no retry"
+      ],
+      "changed_factors": [
+        "fidelity allocation and the resulting fixed call plan only: mixed low/high versus high fidelity only"
+      ],
+      "seed_policy": "seed 2604、simulator式、deterministic noiseを固定する。",
+      "budget": {"metric": "high_fidelity_equivalent_cost", "value": 3},
+      "stopping_policy": "累積cost 36または固定call planの終端で停止し、失敗callもcostを消費する。",
+      "tuning_policy": "fidelity配分を含むcall planをrun前に固定し、結果を見てkernel、noise、acquisition、retryを変更しない。",
+      "synchronization_axis": "high_fidelity_equivalent_cost",
+      "metrics": [
+        {"metric_id": "accumulated_high_fidelity_equivalent_cost", "label_ja": "high-fidelity-equivalent cost", "direction": "none", "unit": "high-fidelity equivalents"},
+        {"metric_id": "accumulated_cost", "label_ja": "累積cost", "direction": "none", "unit": "cost units"},
+        {"metric_id": "successful_high_fidelity_calls", "label_ja": "成功したhigh fidelity call", "direction": "none", "unit": "calls"},
+        {"metric_id": "best_so_far", "label_ja": "high fidelity best-so-far", "direction": "minimize", "unit": "observed objective"},
+        {"metric_id": "non_ok_calls", "label_ja": "failed・censored・timeout", "direction": "none", "unit": "calls"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じinitial design、simulator、noise、fidelity cost、総cost、parallelism、tuning、failure/no-retry policyを固定し、high-fidelity-equivalent cost以下の最後のledger callで同期する。",
+      "caveat": "BENCH_BOは一般的な文脈参照であり、この固定比較の正確な条件はcomparison descriptorと生成artifactが所有する。単一seed・固定call planの差からmethodやfidelity policyの一般的順位を推論できない。",
+      "takeaway": "iteration数ではなく支払ったcostで揃え、成功したhigh fidelity、失敗status、best-so-farを別々に読む。",
+      "limitations": [
+        "1次元の固定教材であり、learned discrepancy model、batch/asynchronous実行、実wall-clockを扱わない。",
+        "high-fidelity-only側の最初の2点がcensoredとなる固定例であり、結果差は一般的なpolicy効果や因果効果ではない。"
+      ],
+      "source_ids": ["S035", "S038", "S059", "S069", "S075"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "mixed-fidelity-ledger",
+          "role": "mixed_fidelity_reference",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "label_ja": "mixed low/high fidelity",
+          "label_en": "Mixed low/high fidelity",
+          "parameters": {"history_source": "evaluation_ledger", "fidelity_policy": "fixed_mixed", "initial_design": "[-2.9, -2.6, 0.0]", "noise_policy": "shared_deterministic", "fidelity_costs": "low=1,high=12", "parallel_workers": 1, "tuning_policy": "fixed_preset", "failure_policy": "record_null_charge_cost_no_retry"},
+          "budget": {"metric": "high_fidelity_equivalent_cost", "value": 3},
+          "artifact": {"artifact_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/bo-multi-fidelity-ledger.json"}
+        },
+        {
+          "member_id": "high-fidelity-only-baseline",
+          "role": "high_fidelity_baseline",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "label_ja": "high fidelity only",
+          "label_en": "High fidelity only",
+          "parameters": {"history_source": "evaluation_ledger", "fidelity_policy": "fixed_high_only", "initial_design": "[-2.9, -2.6, 0.0]", "noise_policy": "shared_deterministic", "fidelity_costs": "low=1,high=12", "parallel_workers": 1, "tuning_policy": "fixed_preset", "failure_policy": "record_null_charge_cost_no_retry"},
+          "budget": {"metric": "high_fidelity_equivalent_cost", "value": 3},
+          "artifact": {"artifact_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.1.0", "payload_path": "visualizations/bo-high-fidelity-baseline.json"}
+        }
+      ]
+    },
+    {
       "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET",
       "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
       "identity_status": "canonical",

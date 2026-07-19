@@ -723,25 +723,13 @@ def _multi_fidelity_observation(
     return "ok", high + bias + deterministic_noise
 
 
-def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSurrogateScenario:
-    """Generate the bounded multi-fidelity teaching run for the Gallery case."""
+def _generate_evaluation_ledger_payload(
+    call_plan: list[tuple[float, Fidelity]],
+) -> tuple[SurrogateUncertaintyPayload, bytes]:
+    """Generate one deterministic ledger payload under the shared simulator policy."""
     fidelity_costs: dict[Fidelity, float] = {"low": 1.0, "high": 12.0}
-    call_plan: list[tuple[float, Fidelity]] = [
-        (-2.9, "low"),
-        (-2.6, "low"),
-        (0.0, "low"),
-        (2.6, "low"),
-        (1.1, "low"),
-        (0.6, "low"),
-        (2.2, "low"),
-        (-1.5, "low"),
-        (0.3, "low"),
-        (1.4, "low"),
-        (2.45, "low"),
-        (-0.4, "low"),
-        (-2.4, "high"),
-        (1.7, "high"),
-    ]
+    if len(call_plan) < 3:
+        raise ValueError("evaluation ledger scenarios require at least three calls")
     grid = [round(-3.0 + index * 6.0 / 80.0, 6) for index in range(81)]
     observations: list[Observation] = []
     ledger: list[EvaluationLedgerEntry] = []
@@ -851,6 +839,28 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
         ),
     )
     payload_bytes = canonical_renderer_bytes(payload)
+    return payload, payload_bytes
+
+
+def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSurrogateScenario:
+    """Generate the bounded multi-fidelity teaching run for the Gallery case."""
+    call_plan: list[tuple[float, Fidelity]] = [
+        (-2.9, "low"),
+        (-2.6, "low"),
+        (0.0, "low"),
+        (2.6, "low"),
+        (1.1, "low"),
+        (0.6, "low"),
+        (2.2, "low"),
+        (-1.5, "low"),
+        (0.3, "low"),
+        (1.4, "low"),
+        (2.45, "low"),
+        (-0.4, "low"),
+        (-2.4, "high"),
+        (1.7, "high"),
+    ]
+    payload, payload_bytes = _generate_evaluation_ledger_payload(call_plan)
     scenario_id = "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
     initial_design = [item[0] for item in call_plan[:3]]
     scenario = VisualizationScenario(
@@ -1018,19 +1028,19 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
             limitations_ja=(
                 "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、"
                 "parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、"
-                "cost-aligned Compareや#138全体の完了を主張しない。"
+                "この固定run単独からfidelity policyやmethodの優劣を主張しない。"
             ),
             limitations_en=(
                 "A fixed-seed one-dimensional educational policy. It does not model "
                 "cross-fidelity surrogate correction, parallel/asynchronous execution, "
-                "real runtime, retries, or physical simulator failure causes, and does not "
-                "claim a cost-aligned Compare or complete #138."
+                "real runtime, retries, or physical simulator failure causes, and this fixed "
+                "run alone does not establish a fidelity-policy or method ranking."
             ),
         ),
         experiment=VisualizationExperiment(
             oracle_policy=["objective_value"],
             initial_condition=VisualizationInitialCondition(point=initial_design),
-            parameter_preset_id="BO_MULTIFIDELITY_LEDGER",
+            parameter_preset_id=scenario_id.removeprefix("SCENARIO_"),
             seed=VisualizationSeed(status="fixed", value=2604),
             budget=VisualizationBudget(metric="oracle_evaluations", value=len(call_plan)),
             stopping={"max_oracle_evaluations": len(call_plan), "max_total_cost": 36},
@@ -1073,6 +1083,247 @@ def generate_evaluation_ledger_scenario(*, dataset_version: str) -> GeneratedSur
     )
 
 
+def _evaluation_ledger_variant(
+    *,
+    dataset_version: str,
+    call_plan: list[tuple[float, Fidelity]],
+    scenario_id: str,
+    artifact_id: str,
+    payload_path: str,
+    title_ja: str,
+    title_en: str,
+    purpose: Literal["mechanism", "failure_contrast"],
+    comparison_role: Literal["baseline", "failure_contrast"],
+    learning_objective_ja: str,
+    learning_objective_en: str,
+    misconception_ja: str,
+    misconception_en: str,
+    expected_phenomenon_ja: str,
+    expected_phenomenon_en: str,
+    summary_ja: str,
+    summary_en: str,
+    limitations_ja: str,
+    limitations_en: str,
+) -> GeneratedSurrogateScenario:
+    base = generate_evaluation_ledger_scenario(dataset_version=dataset_version)
+    payload, payload_bytes = _generate_evaluation_ledger_payload(call_plan)
+    lesson = base.scenario.lesson.model_copy(
+        update={
+            "learning_objective": LocalizedText(ja=learning_objective_ja, en=learning_objective_en),
+            "misconception": LocalizedText(ja=misconception_ja, en=misconception_en),
+            "expected_phenomenon_ja": expected_phenomenon_ja,
+            "expected_phenomenon_en": expected_phenomenon_en,
+            "comparison_role": comparison_role,
+            "static_summary": LocalizedText(ja=summary_ja, en=summary_en),
+            "text_alternative": LocalizedText(ja=summary_ja, en=summary_en),
+            "derived_media_caption": LocalizedText(ja=title_ja, en=title_en),
+            "limitations_ja": limitations_ja,
+            "limitations_en": limitations_en,
+        }
+    )
+    scenario = base.scenario.model_copy(
+        update={
+            "scenario_id": scenario_id,
+            "title_ja": title_ja,
+            "title_en": title_en,
+            "purpose": purpose,
+            "lesson": lesson,
+            "experiment": base.scenario.experiment.model_copy(
+                update={
+                    "initial_condition": VisualizationInitialCondition(
+                        point=[item[0] for item in call_plan[:3]]
+                    ),
+                    "parameter_preset_id": scenario_id.removeprefix("SCENARIO_"),
+                    "budget": VisualizationBudget(
+                        metric="oracle_evaluations", value=len(call_plan)
+                    ),
+                    "stopping": {
+                        "max_oracle_evaluations": len(call_plan),
+                        "max_total_cost": 36,
+                    },
+                }
+            ),
+            "runs": [
+                base.scenario.runs[0].model_copy(
+                    update={
+                        "run_id": f"RUN_{scenario_id.removeprefix('SCENARIO_')}_2604",
+                        "artifact_id": artifact_id,
+                    }
+                )
+            ],
+            "artifact": base.scenario.artifact.model_copy(
+                update={
+                    "payload_path": payload_path,
+                    "payload_bytes": len(payload_bytes),
+                    "payload_sha256": sha256(payload_bytes).hexdigest(),
+                }
+            ),
+        }
+    )
+    scenario = VisualizationScenario.model_validate(scenario.model_dump(mode="json"))
+    return GeneratedSurrogateScenario(
+        scenario=scenario, payload=payload, payload_bytes=payload_bytes
+    )
+
+
+def generate_high_fidelity_baseline_scenario(*, dataset_version: str) -> GeneratedSurrogateScenario:
+    """Generate the cost-aligned high-fidelity-only Compare member."""
+    return _evaluation_ledger_variant(
+        dataset_version=dataset_version,
+        call_plan=[(-2.9, "high"), (-2.6, "high"), (0.0, "high")],
+        scenario_id="SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        artifact_id="ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+        payload_path="visualizations/bo-high-fidelity-baseline.json",
+        title_ja="high fidelityだけで使う同一cost budget",
+        title_en="Same cost budget spent on high fidelity only",
+        purpose="mechanism",
+        comparison_role="baseline",
+        learning_objective_ja=(
+            "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+        ),
+        learning_objective_en=(
+            "Read a high-fidelity-only ledger under the same initial design and cost budget"
+        ),
+        misconception_ja=(
+            "3回のhigh fidelity callと14回のmixed-fidelity callをiteration数だけで比較する"
+        ),
+        misconception_en=(
+            "Compare three high-fidelity calls with fourteen mixed-fidelity calls by "
+            "iteration count alone"
+        ),
+        expected_phenomenon_ja=(
+            "同じ36 costでもfidelity配分によりcall数と成功・censoredの内訳が変わる"
+        ),
+        expected_phenomenon_en=(
+            "The same cost of 36 yields different call and status counts when fidelity "
+            "allocation changes"
+        ),
+        summary_ja=(
+            "固定した3点をhigh fidelityだけで評価し、"
+            "36 costと3 high-fidelity-equivalentを使い切る。"
+        ),
+        summary_en=(
+            "Evaluate the same three fixed points only at high fidelity, consuming cost 36 "
+            "and three high-fidelity equivalents."
+        ),
+        limitations_ja=(
+            "固定3点の教育用baselineであり、"
+            "high-fidelity-only policyやmethodの一般的性能を示さない。"
+        ),
+        limitations_en=(
+            "A fixed three-point teaching baseline; it does not establish general "
+            "performance of a high-fidelity-only policy or method."
+        ),
+    )
+
+
+def generate_low_fidelity_bias_scenario(*, dataset_version: str) -> GeneratedSurrogateScenario:
+    """Generate the independent Theater failure lesson for fidelity discrepancy."""
+    generated = _evaluation_ledger_variant(
+        dataset_version=dataset_version,
+        call_plan=[(-1.1, "low"), (0.5, "low"), (-1.1, "high"), (0.5, "high")],
+        scenario_id="SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+        artifact_id="ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        payload_path="visualizations/bo-low-fidelity-bias.json",
+        title_ja="low-fidelity biasで候補順位が反転する",
+        title_en="Low-fidelity bias reverses candidate ordering",
+        purpose="failure_contrast",
+        comparison_role="failure_contrast",
+        learning_objective_ja=(
+            "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+        ),
+        learning_objective_en=(
+            "Match low/high observations at two points and detect an ordering reversal "
+            "caused by fidelity discrepancy"
+        ),
+        misconception_ja="low fidelityで良い候補はhigh fidelityでも必ず良いとみなす",
+        misconception_en=(
+            "Assume a candidate ranked well at low fidelity must also rank well at high fidelity"
+        ),
+        expected_phenomenon_ja=(
+            "low fidelityではx=-1.1が良く見えるが、high fidelityではx=0.5の方が良い"
+        ),
+        expected_phenomenon_en="Low fidelity favors x=-1.1, while high fidelity favors x=0.5",
+        summary_ja=(
+            "2候補を両fidelityで再評価すると順位が反転する。low fidelityだけで推薦を確定しない。"
+        ),
+        summary_en=(
+            "Re-evaluating two candidates at both fidelities reverses their ordering; "
+            "do not finalize a recommendation from low fidelity alone."
+        ),
+        limitations_ja=(
+            "意図的な1次元biasの最小教材であり、"
+            "実simulatorのdiscrepancy modelや発生頻度を表さない。"
+        ),
+        limitations_en=(
+            "A minimal one-dimensional example with intentional bias; it does not "
+            "represent a real simulator discrepancy model or event frequency."
+        ),
+    )
+    observed_value = VisualizationObservable(
+        observable_id="observed_value",
+        label_ja="fidelity別の観測値",
+        label_en="observed value by fidelity",
+    )
+    lesson = generated.scenario.lesson.model_copy(
+        update={
+            "failure_signals": [
+                VisualizationSignal(
+                    signal_id="low_high_candidate_order_reverses",
+                    label_ja="同じ2候補の順位がlow/high fidelityで反転する",
+                    label_en="The same two candidates reverse order across fidelities",
+                    observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
+                )
+            ],
+            "primary_observables": [
+                *generated.scenario.lesson.primary_observables,
+                observed_value,
+            ],
+            "narration_steps": [
+                VisualizationNarrationStep(
+                    milestone_id="start",
+                    title_ja="2候補のlow fidelity観測を比べる",
+                    title_en="Compare low-fidelity observations at two candidates",
+                    observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="first_change",
+                    title_ja="同じ候補をhigh fidelityで確認する",
+                    title_en="Check the same candidates at high fidelity",
+                    observable_ids=["evaluation_ledger", "fidelity", "observed_value"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="low/highの候補順位が反転する箇所を読む",
+                    title_en="Read where candidate ordering reverses across fidelities",
+                    observable_ids=["fidelity", "observed_value"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="termination",
+                    title_ja="high fidelity確認前に推薦を確定しない",
+                    title_en="Do not finalize the recommendation before high-fidelity checks",
+                    observable_ids=["evaluation_ledger", "best_so_far"],
+                ),
+            ],
+        }
+    )
+    artifact = generated.scenario.artifact.model_copy(
+        update={
+            "observable_ids": [
+                *generated.scenario.artifact.observable_ids,
+                observed_value.observable_id,
+            ]
+        }
+    )
+    scenario = generated.scenario.model_copy(update={"lesson": lesson, "artifact": artifact})
+    scenario = VisualizationScenario.model_validate(scenario.model_dump(mode="json"))
+    return GeneratedSurrogateScenario(
+        scenario=scenario,
+        payload=generated.payload,
+        payload_bytes=generated.payload_bytes,
+    )
+
+
 def write_surrogate_scenarios(
     output_dir: Path, *, dataset_version: str
 ) -> list[VisualizationScenario]:
@@ -1088,9 +1339,14 @@ def write_surrogate_scenarios(
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(generated.payload_bytes)
             scenarios.append(generated.scenario)
-    generated = generate_evaluation_ledger_scenario(dataset_version=dataset_version)
-    target = output_dir / generated.scenario.artifact.payload_path
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(generated.payload_bytes)
-    scenarios.append(generated.scenario)
+    for generator in (
+        generate_evaluation_ledger_scenario,
+        generate_high_fidelity_baseline_scenario,
+        generate_low_fidelity_bias_scenario,
+    ):
+        generated = generator(dataset_version=dataset_version)
+        target = output_dir / generated.scenario.artifact.payload_path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(generated.payload_bytes)
+        scenarios.append(generated.scenario)
     return scenarios

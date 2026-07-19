@@ -118,6 +118,38 @@ def test_bo_comparison_matches_its_exact_educational_context() -> None:
         validate_comparison_benchmark_contexts(bo_index, [context], scenarios)
 
 
+def test_multifidelity_comparison_aligns_every_owning_policy_at_equal_cost() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.13.0")
+    comparison = next(
+        item for item in index.comparisons if item.comparison_id == "COMPARE_BO_MULTIFIDELITY_COST"
+    )
+
+    assert comparison.mode == "strategy_contrast"
+    assert (
+        comparison.budget.metric
+        == comparison.synchronization_axis
+        == ("high_fidelity_equivalent_cost")
+    )
+    assert comparison.budget.value == 3
+    assert comparison.comparability == "contrast_only"
+    assert comparison.ranking_eligible is False
+    members = comparison.members
+    assert {member.parameters["fidelity_policy"] for member in members} == {
+        "fixed_mixed",
+        "fixed_high_only",
+    }
+    for factor in (
+        "initial_design",
+        "noise_policy",
+        "fidelity_costs",
+        "parallel_workers",
+        "tuning_policy",
+        "failure_policy",
+    ):
+        assert len({member.parameters[factor] for member in members}) == 1
+    assert {member.artifact.renderer_contract_version for member in members} == {"1.1.0"}
+
+
 def test_hpo_method_reasons_have_direct_canonical_sources() -> None:
     gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
     case = next(item for item in gallery["cases"] if item["case_id"] == "hyperparameter-search")

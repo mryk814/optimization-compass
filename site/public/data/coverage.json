@@ -61,6 +61,7 @@
       "artifact_ids": [
         "ARTIFACT_BO_EXPLORE_NOISELESS",
         "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+        "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
         "ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "artifact_kind": "executable_trace",
@@ -71,6 +72,7 @@
       "renderer_family": "surrogate_uncertainty",
       "route_ids": [
         "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "/theater/bayesian-optimization/SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
         "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],
       "scenario_ids": [
@@ -78,6 +80,8 @@
         "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
         "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],
       "slice_id": "SLICE_EXPENSIVE_BLACK_BOX",
@@ -2357,11 +2361,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+            "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "COMPARE_BO_MULTIFIDELITY_COST"
           ]
         },
         "content": {
@@ -2410,7 +2415,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 42,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2430,8 +2435,11 @@
             "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+            "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+            "ARTIFACT_BO_LOW_FIDELITY_BIAS",
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "COMPARE_BO_MULTIFIDELITY_COST",
             "I_AX",
             "I_BOTORCH",
             "I_NEVERGRAD",
@@ -2496,7 +2504,7 @@
           ]
         },
         "visualization": {
-          "count": 9,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2508,6 +2516,8 @@
             "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
+            "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+            "ARTIFACT_BO_LOW_FIDELITY_BIAS",
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER"
           ]
         }
@@ -3742,11 +3752,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+            "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "COMPARE_BO_MULTIFIDELITY_COST"
           ]
         },
         "content": {
@@ -3786,7 +3797,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 22,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3795,8 +3806,11 @@
             "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
             "ARTIFACT_BO_EXPLORE_NOISELESS",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+            "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+            "ARTIFACT_BO_LOW_FIDELITY_BIAS",
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "COMPARE_BO_MULTIFIDELITY_COST",
             "I_AX",
             "I_BOTORCH",
             "I_OPTUNA",
@@ -3849,7 +3863,7 @@
           ]
         },
         "visualization": {
-          "count": 5,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3857,6 +3871,8 @@
             "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
             "ARTIFACT_BO_EXPLORE_NOISELESS",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+            "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+            "ARTIFACT_BO_LOW_FIDELITY_BIAS",
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER"
           ]
         }
