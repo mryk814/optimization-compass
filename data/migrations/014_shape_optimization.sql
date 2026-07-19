@@ -9,7 +9,7 @@ INSERT INTO sources (
   accessed_date, url, supported_claim, source_quality, notes, currentness_status
 ) VALUES
 (
-  'S102', 'original_paper',
+  'S104', 'original_paper',
   'cashocs: A Computational, Adjoint-Based Shape Optimization and Optimal Control Software',
   'Sebastian Blauth', '2020-10-05', '2026-07-19',
   'https://arxiv.org/abs/2010.02048',
@@ -18,7 +18,7 @@ INSERT INTO sources (
   'historical_primary'
 ),
 (
-  'S103', 'original_paper',
+  'S105', 'original_paper',
   'Version 2.0 -- cashocs: A Computational, Adjoint-Based Shape Optimization and Optimal Control Software',
   'Sebastian Blauth', '2023-06-16', '2026-07-19',
   'https://arxiv.org/abs/2306.09828',
@@ -27,7 +27,7 @@ INSERT INTO sources (
   'verified_current'
 ),
 (
-  'S104', 'official_documentation',
+  'S106', 'official_documentation',
   'Remeshing with cashocs',
   'cashocs project', NULL, '2026-07-19',
   'https://cashocs.readthedocs.io/en/stable/user/demos/shape_optimization/demo_remeshing/',
@@ -56,7 +56,7 @@ INSERT INTO problem_archetypes (
   'conditional', 'ALT_SPECIALIZED;ALT_DECOMPOSITION',
   'structural;CFD;thermal;acoustic;photonic',
   'parameter、geometry、mesh、state、sensitivity、topology-changeの許否を分けて確認する。',
-  'S101;S102;S103;S104', 'high', '2026-07-19'
+  'S101;S104;S105;S106', 'high', '2026-07-19'
 );
 
 PRAGMA foreign_keys = OFF;
@@ -83,7 +83,7 @@ INSERT INTO benchmark_contexts (
   '{"generator_id":"educational.shape_optimization.v1","generator_version":"1.0.0","implementation_mapping_status":"not_applicable"}',
   '["objective_value","geometry_min_gap","mesh_min_quality","state_residual","representation_freedom"]',
   '{"ranking":"forbidden","shape_feasibility":"discrete_geometry_and_mesh_only","terminal_status":"teaching_trace"}',
-  '["S097","S101","S102","S103","S104"]', '2026-07-19'
+  '["S097","S101","S104","S105","S106"]', '2026-07-19'
 );
 
 PRAGMA foreign_keys = ON;

@@ -6,7 +6,7 @@ canonical_entity_id: F_STRUCTURE_PDE_CONSTRAINED
 title_ja: 形状更新の失敗モード
 title_en: Geometry-Update Failure Modes
 summary: 形状更新の失敗は、目的関数の悪化だけでなく、無効なgeometry、mesh qualityの低下、state solveの不整合として切り分けます。
-source_ids: [S054, S055, S056, S101, S102, S104]
+source_ids: [S054, S055, S056, S101, S104, S106]
 prerequisites: [shape-optimization, concept.constraint-class]
 related_ids: [shape-optimization, topology-optimization, adjoint-sensitivity, density-filter]
 visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry]

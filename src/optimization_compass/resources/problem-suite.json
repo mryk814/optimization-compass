@@ -202,7 +202,7 @@
       "known_reference_semantics": "The educational instance uses a reduced deterministic state proxy. Its parameter optimum is not a guarantee for a continuous PDE, a refined mesh, or a different shape representation.",
       "related_problem_ids": ["PA057", "PA045"],
       "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_OBJECTIVE_SIMULATION", "F_CONSTRAINT_PDE", "F_DERIVATIVE_ANALYTIC_GRADIENT", "F_DERIVATIVE_INNER_ITERATION", "F_STRUCTURE_PDE_CONSTRAINED", "F_GUARANTEE_LOCAL_OK"],
-      "source_ids": ["S101", "S102", "S103", "S104"],
+      "source_ids": ["S101", "S104", "S105", "S106"],
       "last_verified": "2026-07-19"
     },
     {
@@ -507,7 +507,7 @@
       "intended_phenomena": ["parameter_geometry_mesh_state_separation", "fixed_topology_shape_update", "geometry_validity", "mesh_quality", "state_residual", "adjoint_gradient_check", "representation_bias"],
       "limitations_ja": "3 parameterの壁面と低costな決定論的state proxyを使う教材です。CFD、境界層、乱流、連続体の可行性、mesh-independentな目的値、実diffuser性能、global optimumを保証しません。",
       "limitations_en": "A lesson with a three-parameter wall and a low-cost deterministic state proxy; it does not establish CFD, boundary-layer or turbulence behavior, continuous-domain feasibility, mesh-independent objectives, real diffuser performance, or a global optimum.",
-      "source_ids": ["S101", "S102", "S103", "S104"],
+      "source_ids": ["S101", "S104", "S105", "S106"],
       "last_verified": "2026-07-19"
     },
     {

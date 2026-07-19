@@ -750,7 +750,7 @@
       "caveat": "SLSQPやSIMPの実solverは実行していません。決定的metric historyはparameter、geometry、mesh、stateとtopology-change許可の違いを読む教材であり、wall-clock、解品質、一般性能を示しません。",
       "takeaway": "shape parameterは接続を固定した低次元の形を探索し、density／level-set系は接続変更を表現できます。表現力の差とsolver性能の差を混同しません。",
       "limitations": ["3 parameter・21 geometry sample・reduced state proxyの小さな教材です。", "structural、CFD、thermal、acoustic、photonicの実PDE、mesh refinement、manufacturing constraintは後続Caseで検証します。"],
-      "source_ids": ["S097", "S101", "S102", "S103", "S104"],
+      "source_ids": ["S097", "S101", "S104", "S105", "S106"],
       "last_verified": "2026-07-19",
       "members": [
         {

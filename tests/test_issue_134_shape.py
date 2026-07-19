@@ -127,6 +127,9 @@ def test_shape_sources_and_content_routes_are_canonical() -> None:
     assert "https://arxiv.org/abs/2010.02048" in migration
     assert "https://arxiv.org/abs/2306.09828" in migration
     assert "cashocs.readthedocs.io" in migration
+    assert {"S104", "S105", "S106"} <= {
+        row.split("'", 2)[1] for row in migration.splitlines() if row.strip().startswith("'S")
+    }
 
     for content_id in (
         "shape-optimization",
@@ -136,3 +139,4 @@ def test_shape_sources_and_content_routes_are_canonical() -> None:
         text = (ROOT / f"content/concepts/{content_id}.md").read_text(encoding="utf-8")
         assert "shape-diffuser" in text or "shape-diffuser-valid-update" in text
         assert "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in text
+        assert "S104" in text

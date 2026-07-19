@@ -887,7 +887,7 @@ def _shape_trace(
         terminal_status=terminal_status,
         terminal_summary_ja=terminal_summary_ja,
         terminal_summary_en=terminal_summary_en,
-        source_ids=["S097", "S101", "S102", "S103", "S104"],
+        source_ids=["S097", "S101", "S104", "S105", "S106"],
     )
 
 

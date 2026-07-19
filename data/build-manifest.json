@@ -59,7 +59,7 @@
     {
       "id": "014",
       "path": "data/migrations/014_shape_optimization.sql",
-      "sha256": "2fc4f2e2adcfb7a5b49ca1990a185d23df09254fd0bd06f4dfffb839fd816428"
+      "sha256": "3e5609ec155730cc3f8a2fa9d154d9705d5166de03f74815888cbb80b6a15f41"
     }
   ],
   "specialized_inputs": [

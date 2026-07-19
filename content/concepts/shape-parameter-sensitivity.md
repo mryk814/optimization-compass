@@ -6,7 +6,7 @@ canonical_entity_id: F_DERIVATIVE_ANALYTIC_GRADIENT
 title_ja: 形状parameterと縮約感度
 title_en: Shape Parameters and Reduced Sensitivities
 summary: 形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。
-source_ids: [S054, S056, S101, S102, S104]
+source_ids: [S054, S056, S101, S104, S106]
 prerequisites: [shape-optimization, adjoint-sensitivity]
 related_ids: [geometry-update-failure-modes, concept.pde-constrained-optimization, concept.variable-domain, topology-optimization]
 visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry]

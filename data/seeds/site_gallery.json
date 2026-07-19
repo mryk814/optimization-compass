@@ -468,7 +468,7 @@
       "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE", "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY", "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"],
       "comparison_ids": ["COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"],
-      "source_ids": ["S101", "S102", "S103", "S104"],
+      "source_ids": ["S101", "S104", "S105", "S106"],
       "difficulty": "intermediate",
       "status": "published",
       "last_reviewed": "2026-07-19",

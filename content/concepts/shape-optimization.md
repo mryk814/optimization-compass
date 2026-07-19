@@ -6,7 +6,7 @@ canonical_entity_id: F_VARIABLE_DOMAIN
 title_ja: 形状最適化の設計変数
 title_en: Shape Optimization Design Variables
 summary: 形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。
-source_ids: [S054, S055, S056, S101, S102, S103, S104]
+source_ids: [S054, S055, S056, S101, S104, S105, S106]
 prerequisites: [concept.variable-domain, topology-optimization]
 related_ids: [geometry-update-failure-modes, topology-optimization, adjoint-sensitivity, density-filter]
 visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry, shape-topology-representation-contrast]
