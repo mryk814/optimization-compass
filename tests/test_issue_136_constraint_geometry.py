@@ -60,7 +60,7 @@ def _so3_context() -> dict[str, object]:
 
 
 def test_so3_generators_reduce_loss_while_preserving_rotation_structure() -> None:
-    traces = generate_so3_traces(dataset_version="0.18.7")
+    traces = generate_so3_traces(dataset_version="0.18.8")
 
     assert {trace.profile_id for trace in traces} == {PROFILE_ID}
     assert {trace.evaluation_budget for trace in traces} == {EVALUATION_BUDGET}
@@ -80,7 +80,7 @@ def test_so3_generators_reduce_loss_while_preserving_rotation_structure() -> Non
 def test_so3_primary_scenario_is_canonical_and_projection_is_derived() -> None:
     scenarios = {
         trace.scenario_id: build_so3_scenario(trace)
-        for trace in generate_so3_traces(dataset_version="0.18.7")
+        for trace in generate_so3_traces(dataset_version="0.18.8")
     }
 
     assert scenario_identity(RIEMANNIAN_SCENARIO_ID) == (
@@ -101,7 +101,7 @@ def test_so3_primary_scenario_is_canonical_and_projection_is_derived() -> None:
 
 
 def test_so3_comparison_matches_the_exact_fixed_context() -> None:
-    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.7")
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.8")
     comparison = next(
         item
         for item in index.comparisons

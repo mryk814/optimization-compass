@@ -15,9 +15,9 @@ from optimization_compass.visualization_scenarios import scenario_identity
 ROOT = Path(__file__).parents[1]
 
 
-def test_ec027_declares_the_pendulum_direct_collocation_flagship() -> None:
+def test_ec029_declares_the_pendulum_direct_collocation_flagship() -> None:
     payload = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
-    case = next(item for item in payload["cases"] if item["case_id"] == "EC027")
+    case = next(item for item in payload["cases"] if item["case_id"] == "EC029")
 
     assert [item["method_id"] for item in case["candidate_methods"]] == ["M_DIRECT_COLLOCATION"]
     assert "dynamics defect" in case["candidate_methods"][0]["reason"]
@@ -63,7 +63,7 @@ def test_existing_ec020_case_instance_scenario_and_trace_identity_are_unchanged(
     payload = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
     case = next(item for item in payload["cases"] if item["case_id"] == "EC020")
     instances = {item.problem_instance_id: item for item in load_problem_suite().instances}
-    trace = _generate_optimal_control_history_trace(dataset_version="0.18.7")
+    trace = _generate_optimal_control_history_trace(dataset_version="0.18.8")
 
     assert case["title_ja"] == "非線形動力学を含む軌道を最適化する"
     assert case["title_en"] == "Optimize a trajectory with nonlinear dynamics"
@@ -89,7 +89,7 @@ def test_existing_ec020_case_instance_scenario_and_trace_identity_are_unchanged(
 
 
 def test_optimal_control_theater_has_primary_sensitivity_and_independent_failure() -> None:
-    traces = _generate_optimal_control_traces(dataset_version="0.18.7")
+    traces = _generate_optimal_control_traces(dataset_version="0.18.8")
     scenarios = {trace.scenario_id: _visualization_scenario(trace) for trace in traces}
 
     assert set(scenarios) == {
@@ -126,7 +126,7 @@ def test_optimal_control_theater_has_primary_sensitivity_and_independent_failure
 
 def test_pendulum_mesh_compare_is_aligned_contrast_only() -> None:
     index = load_comparison_seed(
-        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.7"
+        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.8"
     )
     comparison = next(
         item

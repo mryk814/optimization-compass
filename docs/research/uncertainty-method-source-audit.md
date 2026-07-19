@@ -15,7 +15,7 @@ The published Atlas has two feature-backed concept pages, the `portfolio-cvar-al
 have dedicated canonical method IDs for robust optimization, two- or multistage stochastic programming,
 sample-average approximation, chance-constrained optimization, CVaR optimization, or DRO.
 
-The 0.18.7 release slice stages `S103`, the original Rockafellar–Uryasev CVaR paper, for the CVaR
+The 0.18.8 release slice stages `S103`, the original Rockafellar–Uryasev CVaR paper, for the CVaR
 representation used by the Case. The catalog still has no primary sources for robust optimization,
 SAA, chance-constraint guarantees, two-/multistage stochastic programming, or DRO. `S054` is a general
 problem-type guide; `S055` and `S056` are broad textbooks and should not be presented as direct evidence

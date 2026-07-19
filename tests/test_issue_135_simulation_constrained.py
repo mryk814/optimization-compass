@@ -22,7 +22,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def test_simulation_constrained_journey_separates_cost_residual_and_failure() -> None:
-    traces = generate_simulation_constrained_traces(dataset_version="0.18.7")
+    traces = generate_simulation_constrained_traces(dataset_version="0.18.8")
     by_scenario = {trace.scenario_id: trace for trace in traces}
 
     assert set(by_scenario) == {
@@ -52,7 +52,7 @@ def test_simulation_constrained_journey_separates_cost_residual_and_failure() ->
 def test_simulation_scenarios_keep_canonical_identity_and_problem_authority() -> None:
     scenarios = [
         _visualization_scenario(trace)
-        for trace in generate_simulation_constrained_traces(dataset_version="0.18.7")
+        for trace in generate_simulation_constrained_traces(dataset_version="0.18.8")
     ]
     by_id = {scenario.scenario_id: scenario for scenario in scenarios}
 
@@ -84,7 +84,7 @@ def test_ec026_links_primary_failure_and_tolerance_compare() -> None:
 
 def test_pde_tolerance_compare_fixes_every_factor_except_inner_tolerance() -> None:
     index = load_comparison_seed(
-        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.7"
+        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.8"
     )
     comparison = next(
         item
@@ -107,7 +107,7 @@ def test_pde_tolerance_compare_fixes_every_factor_except_inner_tolerance() -> No
 
 def test_exact_benchmark_contexts_must_match_the_comparison_problem_instance() -> None:
     index = load_comparison_seed(
-        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.7"
+        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.8"
     )
     comparison = next(
         item for item in index.comparisons if item.comparison_id == "COMPARE_GRADIENT_FAMILY"

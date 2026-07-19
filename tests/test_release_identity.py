@@ -19,7 +19,7 @@ def test_repository_release_authority_is_the_target_version_source() -> None:
     authority = load_release_authority(RELEASE_AUTHORITY_PATH)
 
     assert authority == RELEASE_AUTHORITY
-    assert authority.dataset_version == "0.18.7"
+    assert authority.dataset_version == "0.18.8"
     assert authority.base_dataset_version == "0.2.0"
 
 

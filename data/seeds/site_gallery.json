@@ -448,7 +448,7 @@
       "limitations": ["結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。", "固定meshのsteady教材からtransient checkpointing、multiphysics coupling、実hardware costの一般性能は推論しません。"]
     },
     {
-      "case_id": "EC027",
+      "case_id": "EC029",
       "title_ja": "pendulumを制約内で振り上げる",
       "title_en": "Swing up a pendulum under constraints",
       "domain": "control",

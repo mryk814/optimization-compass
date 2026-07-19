@@ -85,6 +85,11 @@
       "id": "019",
       "path": "data/migrations/019_constraint_geometry.sql",
       "sha256": "98074cce2328afb729549601ba8d0d1f85088f10e1715b44834c2aa10383d435"
+    },
+    {
+      "id": "020",
+      "path": "data/migrations/020_pendulum_example_case.sql",
+      "sha256": "29d25e2880cffbdd555b29d8fc20069265bccac52903e2c11b38b93ede3b3f0d"
     }
   ],
   "specialized_inputs": [
