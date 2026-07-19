@@ -61,7 +61,7 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
         <div><dt>手法 (Method)</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
         <div><dt>観測する値 (Observables)</dt><dd>{scenario.lesson.primary_observables.map((item) => item.label_ja).join(" / ")}</dd></div>
       </dl>
-      {context?.journey ? <div className="scenario-case-formulation">
+      {context?.journey ? <div className="scenario-case-formulation" tabIndex={0}>
         <h3>ケース: {context.journey.title_ja}</h3>
         <p>{context.journey.learning_objective}</p>
         <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>

@@ -207,6 +207,13 @@
   font-size: var(--type-math-scale);
 }
 
+/* Keep readable MathML sizing while containing long formulas inside the article. */
+.scenario-case-formulation {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* Short identifiers may be one step smaller; prose must not use this role. */
 .eyebrow,
 .page-orientation-eyebrow,
