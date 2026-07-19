@@ -492,6 +492,28 @@
       "limitations_en": "A fixed 20-interval educational instance; it does not establish continuous-time feasibility or optimality, physical actuator safety, or solver-family performance differences.",
       "source_ids": ["S042", "S043", "S050", "S076"],
       "last_verified": "2026-07-19"
+    },
+    {
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "name_ja": "トルク制約付きpendulum swing-up",
+      "name_en": "Torque-limited pendulum swing-up",
+      "registry_key": "problem.optimal_control.pendulum_swing_up.v1",
+      "dimension": 60,
+      "parameters": {"mesh_nodes": 20, "horizon_seconds": 2.0, "state_dimension": 2, "control_dimension": 1, "dynamics": "theta_dot=omega; omega_dot=(u-b*omega-m*g*l*sin(theta))/(m*l^2)", "model": {"mass": 1.0, "length": 1.0, "gravity": 9.81, "damping": 0.05}, "running_weights": {"control": 0.01, "terminal": 20.0}, "initial_state": [0.0, 0.0], "terminal_target": [3.141592653589793, 0.0]},
+      "bounds": {"angle": [-6.283185307179586, 6.283185307179586], "angular_velocity": [-8.0, 8.0], "control": [-8.0, 8.0]},
+      "constraints": [{"constraint_id": "dynamics_defect", "expression": "Hermite-Simpson defect(theta[k],omega[k],u[k],theta[k+1],omega[k+1],u[k+1])=0", "sense": "eq"}, {"constraint_id": "initial_state", "expression": "[theta[0],omega[0]]=[0,0]", "sense": "eq"}, {"constraint_id": "terminal_target", "expression": "[theta[N],omega[N]]=[pi,0]", "sense": "eq"}, {"constraint_id": "path_bounds", "expression": "|omega(t_k)|<=8 and |u(t_k)|<=8 at enforced mesh/collocation points", "sense": "lte"}],
+      "initialization_candidates": [{"candidate_id": "linear_angle_zero_velocity", "point": [0.0]}],
+      "seed_status": "fixed",
+      "seed_value": 2026,
+      "known_reference_status": "unknown",
+      "known_reference": null,
+      "display": {"range": {"time": [0.0, 2.0], "state_norm": [0.0, 8.5], "control_effort": [0.0, 8.0], "dynamics_defect": [0.0, 0.5], "path_violation": [0.0, 0.5], "objective_value": [0.0, 30.0]}, "axis_labels": ["time [s]", "diagnostic value"], "units": ["s", "mixed normalized diagnostics"], "expression": "min 0.01 sum(u_k^2)+20||(theta_N,omega_N)-(pi,0)||^2 subject to pendulum dynamics, (theta_0,omega_0)=(0,0), |omega|<=8, |u|<=8"},
+      "intended_phenomena": ["pendulum_swing_up", "trajectory_variable", "dynamics_defect", "terminal_constraint", "path_constraint", "mesh_refinement", "model_validation_rollout"],
+      "limitations_ja": "2秒・20 nodeの決定的な教育用pendulum instanceです。node／collocation pointの可行性は区間内や連続時間の可行性を保証せず、実機の安全性、model妥当性、大域最適性、solver family間の性能差も示しません。",
+      "limitations_en": "A deterministic two-second, 20-node pendulum lesson. Feasibility at nodes or collocation points does not establish between-point or continuous-time feasibility, hardware safety, model validity, global optimality, or solver-family performance.",
+      "source_ids": ["S042", "S050", "S102"],
+      "last_verified": "2026-07-19"
     }
   ]
 }

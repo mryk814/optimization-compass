@@ -602,27 +602,31 @@ def _generate_optimal_control_history_trace(*, dataset_version: str) -> Algorith
             oracle_evaluations=index,
             elapsed_steps=index,
             elapsed_time_ms=float(index * 120),
-            event_type="initialize"
-            if index == 0
-            else "update"
-            if index < len(values) - 1
-            else "stop",
+            event_type=(
+                "initialize" if index == 0 else "update" if index < len(values) - 1 else "stop"
+            ),
             decision="not_applicable" if index == 0 or index == len(values) - 1 else "accepted",
-            explanation_key="initial_trajectory"
-            if index == 0
-            else "trajectory_update"
-            if index < len(values) - 1
-            else "mesh_result",
-            event_label_ja="初期trajectory"
-            if index == 0
-            else "trajectoryを更新"
-            if index < len(values) - 1
-            else "固定meshで停止",
-            event_label_en="Initial trajectory"
-            if index == 0
-            else "Update trajectory"
-            if index < len(values) - 1
-            else "Stop on fixed mesh",
+            explanation_key=(
+                "initial_trajectory"
+                if index == 0
+                else "trajectory_update"
+                if index < len(values) - 1
+                else "mesh_result"
+            ),
+            event_label_ja=(
+                "初期trajectory"
+                if index == 0
+                else "trajectoryを更新"
+                if index < len(values) - 1
+                else "固定meshで停止"
+            ),
+            event_label_en=(
+                "Initial trajectory"
+                if index == 0
+                else "Update trajectory"
+                if index < len(values) - 1
+                else "Stop on fixed mesh"
+            ),
             keyframe=index in {0, 4, len(values) - 1},
             points=[],
             vectors=[],
@@ -712,6 +716,230 @@ def _generate_optimal_control_history_trace(*, dataset_version: str) -> Algorith
         ),
         source_ids=["S042", "S043"],
     )
+
+
+def _optimal_control_trace(
+    *,
+    dataset_version: str,
+    trace_id: str,
+    scenario_id: str,
+    mesh_nodes: int,
+    values: list[tuple[float, float, float, float, float, float, float]],
+    terminal_summary_ja: str,
+    terminal_summary_en: str,
+) -> AlgorithmTrace:
+    frames = [
+        TraceFrame(
+            frame_index=index,
+            iteration=index,
+            oracle_evaluations=index,
+            elapsed_steps=index,
+            elapsed_time_ms=float(index * 120),
+            event_type="initialize"
+            if index == 0
+            else "update"
+            if index < len(values) - 1
+            else "stop",
+            decision="not_applicable" if index == 0 or index == len(values) - 1 else "accepted",
+            explanation_key="initial_trajectory"
+            if index == 0
+            else "trajectory_update"
+            if index < len(values) - 1
+            else "mesh_result",
+            event_label_ja="初期trajectory"
+            if index == 0
+            else "trajectoryを更新"
+            if index < len(values) - 1
+            else "固定meshで停止",
+            event_label_en="Initial trajectory"
+            if index == 0
+            else "Update trajectory"
+            if index < len(values) - 1
+            else "Stop on fixed mesh",
+            keyframe=index in {0, 4, len(values) - 1},
+            points=[],
+            vectors=[],
+            metrics=[
+                TraceMetric(
+                    metric_id="state_norm",
+                    label_ja="state norm",
+                    label_en="state norm",
+                    value=state,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="control_effort",
+                    label_ja="control effort",
+                    label_en="control effort",
+                    value=control,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="dynamics_defect",
+                    label_ja="dynamics defect",
+                    label_en="dynamics defect",
+                    value=defect,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="path_violation",
+                    label_ja="再構成path violation",
+                    label_en="reconstructed path violation",
+                    value=reconstructed_violation,
+                    unit=None,
+                ),
+                TraceMetric(
+                    metric_id="objective_value",
+                    label_ja="目的関数値",
+                    label_en="objective value",
+                    value=objective,
+                    unit=None,
+                ),
+            ],
+            payload={
+                "mesh_nodes": mesh_nodes,
+                "state": state,
+                "control": control,
+                "dynamics_defect": defect,
+                "node_path_violation": node_violation,
+                "reconstructed_path_violation": reconstructed_violation,
+                "terminal_error": terminal_error,
+            },
+        )
+        for index, (
+            state,
+            control,
+            defect,
+            node_violation,
+            reconstructed_violation,
+            objective,
+            terminal_error,
+        ) in enumerate(values)
+    ]
+    return AlgorithmTrace(
+        contract_version="1.0.0",
+        dataset_version=dataset_version,
+        data_version="1.0.0",
+        trace_id=trace_id,
+        method_id="M_DIRECT_COLLOCATION",
+        profile_id="PROFILE_OPTIMAL_CONTROL_GENERIC",
+        objective_id="INSTANCE_PENDULUM_SWING_UP_EC020",
+        scenario_id=scenario_id,
+        generator_id="educational.optimal_control.v1",
+        generator_version="1.1.0",
+        implementation_mapping_status="not_applicable",
+        implementation_id=None,
+        objective={
+            "kind": "pendulum_terminal_error_plus_control_effort",
+            "mesh_nodes": mesh_nodes,
+        },
+        preset={
+            "preset_id": "VIEW_OPTIMAL_CONTROL_HISTORY",
+            "discretization": "direct_collocation",
+        },
+        parameters={
+            "mesh_nodes": mesh_nodes,
+            "horizon_seconds": 2.0,
+            "dynamics_model": "torque_limited_pendulum",
+            "path_tolerance": 1e-4,
+            "terminal_tolerance": 1e-3,
+        },
+        initial_state={"point": [0.0, 0.0], "state_dimension": 2, "control_dimension": 1},
+        seed={"status": "fixed", "value": 2026},
+        evaluation_budget=len(values) - 1,
+        stopping={"max_oracle_evaluations": len(values) - 1, "dynamics_defect_tolerance": 1e-3},
+        environment={"runtime": "educational", "version": "1.0.0"},
+        fairness_statement=(
+            "同じpendulum dynamics・2秒horizon・初期/終端/path制約・初期trajectory・"
+            "8 evaluation予算・停止toleranceを使う教育用履歴であり、一般性能を比較しない。"
+        ),
+        frames=frames,
+        terminal_status="converged",
+        terminal_summary_ja=terminal_summary_ja,
+        terminal_summary_en=terminal_summary_en,
+        source_ids=["S042", "S050", "S102"],
+    )
+
+
+def _generate_optimal_control_traces(*, dataset_version: str) -> list[AlgorithmTrace]:
+    coarse_values = [
+        (3.60, 4.80, 0.42, 0.18, 0.24, 22.0, 1.10),
+        (3.72, 5.20, 0.21, 0.10, 0.16, 14.0, 0.72),
+        (3.85, 5.70, 0.11, 0.052, 0.10, 8.6, 0.42),
+        (3.96, 6.10, 0.055, 0.021, 0.064, 5.0, 0.20),
+        (4.02, 6.35, 0.021, 0.008, 0.041, 3.0, 0.082),
+        (4.06, 6.50, 0.008, 0.002, 0.027, 2.2, 0.031),
+        (4.08, 6.58, 0.003, 0.0007, 0.019, 1.9, 0.012),
+        (4.09, 6.62, 0.0014, 0.0002, 0.015, 1.78, 0.003),
+        (4.10, 6.64, 0.0008, 0.00008, 0.012, 1.72, 0.0009),
+    ]
+    refined_values = [
+        (3.60, 4.80, 0.40, 0.17, 0.20, 22.0, 1.10),
+        (3.73, 5.25, 0.18, 0.082, 0.12, 13.8, 0.70),
+        (3.87, 5.75, 0.082, 0.035, 0.067, 8.2, 0.38),
+        (3.98, 6.15, 0.034, 0.012, 0.033, 4.7, 0.17),
+        (4.04, 6.40, 0.013, 0.004, 0.016, 2.8, 0.066),
+        (4.08, 6.53, 0.005, 0.0012, 0.008, 2.0, 0.024),
+        (4.10, 6.60, 0.002, 0.0004, 0.0045, 1.78, 0.008),
+        (4.11, 6.64, 0.0010, 0.00015, 0.0028, 1.67, 0.002),
+        (4.12, 6.66, 0.0006, 0.00006, 0.0020, 1.63, 0.0007),
+    ]
+    rollout_failure_values = [
+        (3.60, 4.80, 0.42, 0.18, 0.24, 22.0, 1.10),
+        (3.75, 5.30, 0.19, 0.08, 0.16, 13.0, 0.78),
+        (3.90, 5.85, 0.08, 0.03, 0.12, 7.5, 0.55),
+        (4.01, 6.25, 0.032, 0.011, 0.10, 4.2, 0.40),
+        (4.07, 6.50, 0.012, 0.003, 0.11, 2.7, 0.31),
+        (4.10, 6.62, 0.004, 0.0009, 0.12, 2.0, 0.26),
+        (4.12, 6.69, 0.0018, 0.0003, 0.13, 1.75, 0.23),
+        (4.13, 6.72, 0.0010, 0.0001, 0.14, 1.66, 0.22),
+        (4.14, 6.74, 0.0007, 0.00005, 0.15, 1.62, 0.22),
+    ]
+    return [
+        _optimal_control_trace(
+            dataset_version=dataset_version,
+            trace_id="pendulum-collocation-coarse",
+            scenario_id="SCENARIO_PENDULUM_SWING_UP_MESH_20",
+            mesh_nodes=20,
+            values=coarse_values,
+            terminal_summary_ja=(
+                "N=20のnode／collocation条件はtolerance内ですが、区間再構成のpath違反が残るため、連続時間可行とは判定しません。"
+            ),
+            terminal_summary_en=(
+                "The N=20 node and collocation checks meet tolerance, but reconstructed "
+                "path violations remain, so continuous-time feasibility is not claimed."
+            ),
+        ),
+        _optimal_control_trace(
+            dataset_version=dataset_version,
+            trace_id="pendulum-collocation-refined",
+            scenario_id="SCENARIO_PENDULUM_SWING_UP_MESH_40",
+            mesh_nodes=40,
+            values=refined_values,
+            terminal_summary_ja=(
+                "N=40で再構成path違反は小さくなりましたが、有限meshのcontrastであり連続時間保証ではありません。"
+            ),
+            terminal_summary_en=(
+                "The reconstructed path violation is smaller at N=40, but this finite-mesh "
+                "contrast is not a continuous-time guarantee."
+            ),
+        ),
+        _optimal_control_trace(
+            dataset_version=dataset_version,
+            trace_id="pendulum-model-rollout-failure",
+            scenario_id="SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+            mesh_nodes=20,
+            values=rollout_failure_values,
+            terminal_summary_ja=(
+                "NLP上のdefectは小さい一方、gravityを10%変えたvalidation rolloutでは"
+                "path違反と終端誤差が残りました。"
+            ),
+            terminal_summary_en=(
+                "The NLP defect is small, while a validation rollout with 10% gravity "
+                "mismatch retains path violation and terminal error."
+            ),
+        ),
+    ]
 
 
 def _write_dummy_trace(
@@ -866,6 +1094,7 @@ def _write_dummy_trace(
     generated_traces.append(
         _generate_optimal_control_history_trace(dataset_version=dataset_version)
     )
+    generated_traces.extend(_generate_optimal_control_traces(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -947,6 +1176,22 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
             if locale == "en"
             else "Direct collocation · state/control診断"
         )
+    optimal_control_titles = {
+        "pendulum-collocation-coarse": (
+            "Pendulum swing-up · N=20 mesh診断",
+            "Pendulum swing-up · N=20 mesh diagnostics",
+        ),
+        "pendulum-collocation-refined": (
+            "Pendulum swing-up · N=40 mesh感度",
+            "Pendulum swing-up · N=40 mesh sensitivity",
+        ),
+        "pendulum-model-rollout-failure": (
+            "Pendulum swing-up · modelずれrollout",
+            "Pendulum swing-up · model-mismatch rollout",
+        ),
+    }
+    if trace_id in optimal_control_titles:
+        return optimal_control_titles[trace_id][0 if locale == "ja" else 1]
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -1260,6 +1505,170 @@ def _trace_lesson(
     is_search_tree: bool,
     is_optimal_control: bool,
 ) -> VisualizationLesson:
+    if is_optimal_control and trace.objective_id == "INSTANCE_PENDULUM_SWING_UP_EC020":
+        is_refined_mesh = trace.scenario_id == "SCENARIO_PENDULUM_SWING_UP_MESH_40"
+        is_model_mismatch = trace.scenario_id == "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+        mesh_nodes = trace.parameters.get("mesh_nodes")
+        if isinstance(mesh_nodes, bool) or not isinstance(mesh_nodes, int):
+            raise ValueError(f"optimal-control trace {trace.trace_id} has no mesh interval count")
+        comparison_role: Literal[
+            "primary_example", "sensitivity_variant", "failure_contrast", "baseline"
+        ]
+        if is_model_mismatch:
+            expected_ja = (
+                "modelを変えたvalidation rolloutでは、NLPのdefectが小さくても"
+                "path違反と終端誤差が残る"
+            )
+            expected_en = (
+                "A validation rollout under model mismatch can retain path and terminal "
+                "error even when the NLP defect is small"
+            )
+            signal_id = "model_validation_failure"
+            signal_ja = "modelずれrolloutでpath違反と終端誤差が残る"
+            signal_en = "Path and terminal error remain in the model-mismatch rollout"
+            comparison_role = "failure_contrast"
+            recommended = ["SCENARIO_PENDULUM_SWING_UP_MESH_20"]
+        else:
+            expected_ja = (
+                "meshを細かくすると再構成path違反が変わるが、"
+                "有限meshだけで連続時間可行とは判定できない"
+                if is_refined_mesh
+                else "objectiveとnode上のdefectが下がっても、"
+                "区間再構成のpath違反が同時に消えるとは限らない"
+            )
+            expected_en = (
+                "A finer mesh changes reconstructed path violation, but a finite mesh "
+                "does not establish continuous-time feasibility"
+                if is_refined_mesh
+                else "Lower objective and node defects do not necessarily remove "
+                "reconstructed between-point path violations"
+            )
+            signal_id = "mesh_feasibility_limit"
+            signal_ja = "mesh上のdefectが小さくても区間内の再構成・高精度simulationが別途必要になる"
+            signal_en = (
+                "Small mesh defects still require interval reconstruction and "
+                "high-fidelity simulation"
+            )
+            comparison_role = "sensitivity_variant" if is_refined_mesh else "primary_example"
+            recommended = (
+                ["SCENARIO_PENDULUM_SWING_UP_MESH_20"]
+                if is_refined_mesh
+                else [
+                    "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+                    "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+                ]
+            )
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "state・control・dynamics defect・path violationを同じ評価軸で読む",
+                "Read state, control, dynamics defects, and path violations on one evaluation axis",
+            ),
+            misconception=_localized(
+                "NLPがsuccessならmeshの間でもtrajectoryが可行で、連続時間の安全性も保証される",
+                "An NLP success status guarantees feasibility between mesh points and "
+                "continuous-time safety",
+            ),
+            expected_phenomenon_ja=expected_ja,
+            expected_phenomenon_en=expected_en,
+            success_signals=[
+                _signal(
+                    "trajectory_diagnostics_visible",
+                    "state・controlとdynamics defect・path violationを同じevaluationで確認できる",
+                    "State/control and dynamics/path diagnostics are visible at the same "
+                    "evaluation",
+                    "state_norm",
+                    "control_effort",
+                    "dynamics_defect",
+                    "path_violation",
+                )
+            ],
+            failure_signals=[
+                _signal(
+                    signal_id,
+                    signal_ja,
+                    signal_en,
+                    "dynamics_defect",
+                    "path_violation",
+                )
+            ],
+            primary_observables=[
+                _observable("state_norm", "state norm", "state norm"),
+                _observable("control_effort", "control effort", "control effort"),
+                _observable("dynamics_defect", "dynamics defect", "dynamics defect"),
+            ],
+            secondary_observables=[
+                _observable("path_violation", "path violation", "path violation"),
+                _observable("objective_value", "目的関数値", "objective value"),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "初期trajectoryとcontrolを確認",
+                    "Inspect the initial trajectory and control",
+                    "state_norm",
+                    "control_effort",
+                ),
+                _step(
+                    "first_change",
+                    "最初のdynamics defectの変化を追う",
+                    "Follow the first dynamics-defect change",
+                    "dynamics_defect",
+                    "objective_value",
+                ),
+                _step(
+                    "pattern_visible",
+                    "path violationとobjectiveを分けて読む",
+                    "Separate path violations from objective progress",
+                    "path_violation",
+                    "objective_value",
+                ),
+                _step(
+                    "termination",
+                    "mesh上の結果と連続時間の限界を確認",
+                    "Inspect the mesh result and continuous-time limitation",
+                    "dynamics_defect",
+                    "path_violation",
+                ),
+            ],
+            comparison_role=comparison_role,
+            prerequisite_concept_ids=["CONCEPT_TRAJECTORY_VARIABLE", "CONCEPT_DYNAMICS_DEFECT"],
+            recommended_next_scenario_ids=recommended,
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja=(
+                    "連続時間の最適性・安全性は表示しない。mesh refinementと再構成で別途検証する。"
+                ),
+                note_en=(
+                    "Continuous-time optimality and safety are not shown; validate them "
+                    "with refinement and reconstruction."
+                ),
+            ),
+            static_summary=_localized(
+                "pendulum swing-upのstate、control、dynamics defect、"
+                f"再構成path violationをN={mesh_nodes}の評価履歴として並べる。",
+                "Align pendulum state, control, dynamics defects, and reconstructed "
+                f"path violations for the N={mesh_nodes} history.",
+            ),
+            text_alternative=_localized(
+                "各evaluationのstate norm、control effort、dynamics defect、path violation、"
+                "objectiveを列挙する。",
+                "List state norm, control effort, dynamics defect, path violation, and "
+                "objective at each evaluation.",
+            ),
+            derived_media_caption=_localized(
+                f"pendulum direct collocationのN={mesh_nodes}診断履歴",
+                f"N={mesh_nodes} diagnostics for pendulum direct collocation",
+            ),
+            limitations_ja=(
+                f"N={mesh_nodes}の固定meshによる教育用履歴であり、連続時間の可行性・"
+                "実機安全性・動力学modelの妥当性やsolverの一般性能を保証しない"
+            ),
+            limitations_en=(
+                f"A fixed N={mesh_nodes} educational mesh history; it does not guarantee "
+                "continuous-time feasibility, hardware safety, model validity, or "
+                "general solver performance"
+            ),
+        )
     if is_optimal_control:
         return VisualizationLesson(
             learning_objective=_localized(
@@ -1869,8 +2278,11 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         else ["objective_value", "current_point", "gradient", "update_vector"]
     )
     purpose: Literal["mechanism", "comparison", "failure_contrast", "sensitivity"] = (
-        "sensitivity"
-        if trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
+        "failure_contrast"
+        if trace.scenario_id == "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+        else "sensitivity"
+        if trace.scenario_id
+        in {POOR_INITIALIZATION_SCENARIO_ID, "SCENARIO_PENDULUM_SWING_UP_MESH_40"}
         else "mechanism"
         if trace.scenario_id == PRIMARY_SCENARIO_ID
         else "comparison"
@@ -1916,6 +2328,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             oracle_policy=(
                 ["residual_vector", "jacobian"]
                 if is_parameter_estimation
+                else ["objective_value", "constraint_value", "constraint_jacobian"]
+                if is_optimal_control and trace.objective_id == "INSTANCE_PENDULUM_SWING_UP_EC020"
                 else ["objective_value"]
                 if is_nelder_mead or is_search_tree
                 else ["objective_value", "gradient"]

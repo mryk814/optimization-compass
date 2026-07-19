@@ -713,6 +713,69 @@
           "artifact": {"artifact_id": "topology-optimization-field-evolution", "artifact_kind": "executable_trace", "renderer_family": "field_evolution", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/topology-optimization-field-evolution.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+      "canonical_url": "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+      "aliases": [],
+      "mode": "parameter_sensitivity",
+      "journey_id": "EC027",
+      "case_id": "EC027",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "benchmark_context_id": "BENCH_PENDULUM_COLLOCATION_MESH_8",
+      "title_ja": "pendulum collocationのcoarse meshとrefined meshを比べる",
+      "title_en": "Contrast coarse and refined collocation meshes for pendulum swing-up",
+      "comparison_question": "同じpendulum dynamics・境界／path制約・初期trajectory・評価予算・停止toleranceで、meshをN=20からN=40へ変えるとnode残差と区間再構成の違反はどう変わる？",
+      "formulation_summary": "min 0.01 Σuₖ²+20||(θ_N,ω_N)−(π,0)||² subject to pendulum dynamics, (θ₀,ω₀)=(0,0), |ω|≤8, |u|≤8。",
+      "fixed_factors": ["pendulum model m=1, l=1, g=9.81, damping=0.05", "horizon 2 seconds", "initial state (theta, omega)=(0,0)", "terminal target (theta, omega)=(pi,0)", "path and bound constraints |omega|<=8 and |u|<=8", "linear-angle and zero-velocity initial trajectory", "oracle evaluation budget 8", "dynamics defect tolerance 0.001", "node path tolerance 0.0001", "terminal tolerance 0.001", "seed 2026"],
+      "changed_factors": ["mesh nodes only: N=20 versus N=40"],
+      "seed_policy": "deterministic educational generatorのseed 2026を固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 8},
+      "stopping_policy": "両memberとも8 evaluation、dynamics defect 0.001、node path violation 0.0001、terminal error 0.001のうち先に満たす条件で停止する。",
+      "tuning_policy": "dynamics、horizon、初期／終端／path制約、初期trajectory、予算、toleranceを固定し、mesh interval数だけを変える。run後のparameter調整はしない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "objective_value", "label_ja": "目的関数値", "direction": "minimize", "unit": "objective value"},
+        {"metric_id": "dynamics_defect", "label_ja": "max dynamics defect", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "node_path_violation", "label_ja": "node path violation", "direction": "minimize", "unit": "constraint violation"},
+        {"metric_id": "reconstructed_path_violation", "label_ja": "再構成path violation", "direction": "minimize", "unit": "constraint violation"},
+        {"metric_id": "terminal_error", "label_ja": "終端誤差", "direction": "minimize", "unit": "state norm"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じdynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変えます。",
+      "caveat": "決定的な教育用metric historyによるmesh感度です。実際のCasADi／Drake solverを実行しておらず、N=40が一般に優れるというranking、wall-clock性能、連続時間可行性を示しません。",
+      "takeaway": "node上の残差が同じtolerance内でも、区間再構成のviolationはmeshで変わります。refinement後も高精度rolloutで別途検証します。",
+      "limitations": ["2状態・1入力・2秒のpendulum teaching instanceだけを扱います。", "有限meshのcontrastから連続時間の安全性、model妥当性、大域最適性、実機性能を推論しません。"],
+      "source_ids": ["S042", "S050", "S102"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "pendulum-collocation-coarse",
+          "role": "coarse_mesh",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "label_ja": "coarse mesh N=20",
+          "label_en": "Coarse mesh N=20",
+          "parameters": {"mesh_nodes": 20, "horizon_seconds": 2.0},
+          "budget": {"metric": "oracle_evaluations", "value": 8},
+          "artifact": {"artifact_id": "pendulum-collocation-coarse", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pendulum-collocation-coarse.json"}
+        },
+        {
+          "member_id": "pendulum-collocation-refined",
+          "role": "refined_mesh",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "label_ja": "refined mesh N=40",
+          "label_en": "Refined mesh N=40",
+          "parameters": {"mesh_nodes": 40, "horizon_seconds": 2.0},
+          "budget": {"metric": "oracle_evaluations", "value": 8},
+          "artifact": {"artifact_id": "pendulum-collocation-refined", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pendulum-collocation-refined.json"}
+        }
+      ]
     }
   ]
 }

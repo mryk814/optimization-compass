@@ -551,6 +551,17 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
         "path_violation",
         "objective_value",
     }
+    pendulum_trace = AlgorithmTrace.model_validate_json(
+        (first_output / "traces/pendulum-collocation-coarse.json").read_bytes()
+    )
+    assert pendulum_trace.objective_id == "INSTANCE_PENDULUM_SWING_UP_EC020"
+    assert {
+        "node_path_violation",
+        "reconstructed_path_violation",
+        "terminal_error",
+    } <= set(pendulum_trace.frames[-1].payload)
+    assert scenario_by_artifact["pendulum-collocation-refined"].purpose == "sensitivity"
+    assert scenario_by_artifact["pendulum-model-rollout-failure"].purpose == ("failure_contrast")
     surrogate_scenarios = [
         scenario
         for scenario in scenario_index.scenarios
