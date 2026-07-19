@@ -1,6 +1,6 @@
 {
   "axis": "method_mechanism",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "description": "更新則や探索の仕組みで代表的な最適化手法を見渡す。",
   "edges": [
     {
@@ -2597,7 +2597,7 @@
   "focus_fallback_entity_types": [
     "method"
   ],
-  "generated_at": "2026-07-18T00:00:00Z",
+  "generated_at": "2026-07-19T00:00:00Z",
   "limitations": "同じ手法が複数の仕組みを持つ場合でも、ここでは学習上の代表分類を一つ示します。",
   "max_depth": 2,
   "nodes": [

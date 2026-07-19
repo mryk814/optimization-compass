@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -35,7 +35,7 @@
       "source_type": "vendor_manual"
     }
   ],
-  "generated_at": "2026-07-18T00:00:00Z",
+  "generated_at": "2026-07-19T00:00:00Z",
   "sources": [
     {
       "access_note": "公開条件・再利用条件は公式公開元で確認してください。",

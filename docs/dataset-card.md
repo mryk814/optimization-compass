@@ -11,14 +11,14 @@ A versioned, evidence-linked dataset that connects optimization problem structur
 
 | Field | Value |
 |---|---|
-| Dataset version | `0.18.4` |
-| Release date | `2026-07-18` |
-| Source commit | [`738bd5bf48dc81d4000e2781f6a0d7b377960896`](https://github.com/mryk814/optimization-compass/commit/738bd5bf48dc81d4000e2781f6a0d7b377960896) |
-| Source tag | [`v0.18.4`](https://github.com/mryk814/optimization-compass/releases/tag/v0.18.4) |
-| Database SHA-256 | `2afc84ae4ba7f0a3dc7121cbf5d7ef0378e7ad2932094ec47b46a70b006df59d` |
-| Manifest SHA-256 | `48c04c5a73879f0e79a12377215b5e10ea93dd7e65ec0dbe184d132c42ef6dfe` |
-| Complete bundle | [download](https://github.com/mryk814/optimization-compass/releases/download/v0.18.4/optimization_method_selection_database_v0.18.4_bundle.zip) (4,257,035 bytes) |
-| Bundle SHA-256 | `2e0a93b6e462c10f48613c1f5596c994e738a2ab0d94da0e1ac095f16b27b959` |
+| Dataset version | `0.18.5` |
+| Release date | `2026-07-19` |
+| Source commit | [`63f9bf6dd40094d88f8d9e73280fd14c1848e4f0`](https://github.com/mryk814/optimization-compass/commit/63f9bf6dd40094d88f8d9e73280fd14c1848e4f0) |
+| Source tag | [`v0.18.5`](https://github.com/mryk814/optimization-compass/releases/tag/v0.18.5) |
+| Database SHA-256 | `6d1854c816108fb5a3fa04e936e60321583a7428c7dbdbb2acec4c5e32e22c28` |
+| Manifest SHA-256 | `13138c779a88652f9c526a1226789cfc0b3855c6671f7ce21cabaa50fda801e1` |
+| Complete bundle | [download](https://github.com/mryk814/optimization-compass/releases/download/v0.18.5/optimization_method_selection_database_v0.18.5_bundle.zip) (4,400,037 bytes) |
+| Bundle SHA-256 | `d992074b11b355166e856956b48104477879a1b7b91414bdde8251b74f51d79d` |
 | Citable archive | 未登録（この版はGitHub Release bundleでhash検証できます） |
 
 The complete bundle contains the released SQLite, JSON, JSONL, CSV, Excel, SQL schema,
@@ -59,7 +59,7 @@ imply complete English-language articles.
 - Attribution: Optimization Compass dataset, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors, licensed under CC BY 4.0, https://github.com/mryk814/optimization-compass
 - Third-party papers, documentation, repositories, standards, product names, and linked works retain
   their own rights. See the bundle's `licenses/NOTICE.txt` and the source audit at
-  [https://github.com/mryk814/optimization-compass/blob/738bd5bf48dc81d4000e2781f6a0d7b377960896/THIRD_PARTY_SOURCE_AUDIT.md](https://github.com/mryk814/optimization-compass/blob/738bd5bf48dc81d4000e2781f6a0d7b377960896/THIRD_PARTY_SOURCE_AUDIT.md).
+  [https://github.com/mryk814/optimization-compass/blob/63f9bf6dd40094d88f8d9e73280fd14c1848e4f0/THIRD_PARTY_SOURCE_AUDIT.md](https://github.com/mryk814/optimization-compass/blob/63f9bf6dd40094d88f8d9e73280fd14c1848e4f0/THIRD_PARTY_SOURCE_AUDIT.md).
 
 ## Citation
 

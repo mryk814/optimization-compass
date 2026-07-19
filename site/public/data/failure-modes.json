@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "failure_modes": [
     {
       "affected_entities": [
@@ -36,7 +36,7 @@
       "failure_category": "noise",
       "failure_mode_id": "FM003",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "sample average、SPSA、noise-aware method",
@@ -116,7 +116,7 @@
       "failure_category": "numerical",
       "failure_mode_id": "FM007",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "変数変換/solver scaling",
@@ -192,7 +192,7 @@
       "failure_category": "numerical",
       "failure_mode_id": "FM009",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "scaling、regularization、preconditioner",
@@ -268,7 +268,7 @@
       "failure_category": "constraint",
       "failure_mode_id": "FM011",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "feasible generator、slacks",
@@ -331,7 +331,7 @@
       "failure_category": "constraint",
       "failure_mode_id": "FM014",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "isolate constraints、relax with costs",
@@ -407,7 +407,7 @@
       "failure_category": "reporting",
       "failure_mode_id": "FM015",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "tighten/scale、report residual",
@@ -482,7 +482,7 @@
       "failure_category": "guarantee",
       "failure_mode_id": "FM016",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "明示的にlocal label",
@@ -557,7 +557,7 @@
       "failure_category": "budget",
       "failure_mode_id": "FM022",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "dimension reduction/gradient estimation",
@@ -622,7 +622,7 @@
       "failure_category": "stopping",
       "failure_mode_id": "FM024",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "scale-aware tolerance",
@@ -1064,7 +1064,7 @@
       "failure_category": "reporting",
       "failure_mode_id": "FM025",
       "failure_scope": "implementation_specific",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "status taxonomy mapping",
@@ -1134,7 +1134,7 @@
       "failure_category": "surrogate",
       "failure_mode_id": "FM033",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "transform、model change、trust region",
@@ -1209,7 +1209,7 @@
       "failure_category": "evolutionary",
       "failure_mode_id": "FM037",
       "failure_scope": "method_theory",
-      "last_verified": "2026-07-18",
+      "last_verified": "2026-07-19",
       "mitigations": [
         {
           "action": "restart/mutation/niching",

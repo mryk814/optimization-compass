@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "definitions": [
     {
       "available_oracles": [
@@ -265,6 +265,42 @@
         "S066"
       ],
       "variable_domain": "continuous"
+    },
+    {
+      "available_oracles": [
+        "objective_value",
+        "constraint_value"
+      ],
+      "constraint_class": "dynamics_equality",
+      "dimensionality_policy": {
+        "dimension": 60,
+        "kind": "fixed"
+      },
+      "feature_ids": [
+        "F_VARIABLE_TRAJECTORY",
+        "F_CONSTRAINT_DYNAMICS",
+        "F_OBJECTIVE_SIMULATION",
+        "F_STRUCTURE_OPTIMAL_CONTROL"
+      ],
+      "known_reference_semantics": "The fixed mesh is an educational transcription; continuous-time feasibility and optimality require mesh refinement and trajectory reconstruction.",
+      "last_verified": "2026-07-19",
+      "mathematical_family": "optimal_control",
+      "name_en": "Discretized optimal control problem",
+      "name_ja": "離散化された最適制御問題",
+      "objective_direction": "minimize",
+      "objective_form": "simulation",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "related_problem_ids": [
+        "PA042",
+        "PA044"
+      ],
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
+      ],
+      "variable_domain": "trajectory"
     },
     {
       "available_oracles": [
@@ -1033,6 +1069,115 @@
         "S041",
         "S056",
         "S096"
+      ]
+    },
+    {
+      "bounds": {
+        "control": [
+          -4.0,
+          4.0
+        ],
+        "state": [
+          -2.0,
+          2.0
+        ]
+      },
+      "constraints": [
+        {
+          "constraint_id": "dynamics_defect",
+          "expression": "x[k+1]-x[k]-h*v[k]=0; v[k+1]-v[k]-h*u[k]=0",
+          "sense": "eq"
+        },
+        {
+          "constraint_id": "terminal_target",
+          "expression": "[x[N],v[N]]=[1,0]",
+          "sense": "eq"
+        }
+      ],
+      "dimension": 60,
+      "display": {
+        "axis_labels": [
+          "normalized time",
+          "diagnostic value"
+        ],
+        "expression": "min ∫(‖state‖²+0.01‖control‖²)dt with ẋ=v, v̇=u and terminal target [1,0]",
+        "range": {
+          "control_effort": [
+            0.0,
+            8.0
+          ],
+          "dynamics_defect": [
+            0.0,
+            1.0
+          ],
+          "objective_value": [
+            0.0,
+            20.0
+          ],
+          "path_violation": [
+            0.0,
+            1.0
+          ],
+          "state_norm": [
+            0.0,
+            2.0
+          ],
+          "time": [
+            0.0,
+            1.0
+          ]
+        },
+        "units": [
+          "dimensionless",
+          "normalized"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "zero_trajectory",
+          "point": [
+            0.0
+          ]
+        }
+      ],
+      "intended_phenomena": [
+        "trajectory_variable",
+        "dynamics_defect",
+        "path_constraint",
+        "terminal_constraint",
+        "mesh_refinement"
+      ],
+      "known_reference": null,
+      "known_reference_status": "unknown",
+      "last_verified": "2026-07-19",
+      "limitations_en": "A fixed 20-interval educational instance; it does not establish continuous-time feasibility or optimality, physical actuator safety, or solver-family performance differences.",
+      "limitations_ja": "20区間の固定meshによる教育用instanceです。連続時間の可行性・最適性、制御入力の実機安全性、solver family間の性能差を保証しません。",
+      "name_en": "EC020 trajectory and control for a second-order system",
+      "name_ja": "EC020 二次系の軌道・制御",
+      "parameters": {
+        "control_dimension": 1,
+        "dynamics": "x_dot=v; v_dot=u",
+        "mesh_intervals": 20,
+        "running_weights": {
+          "control": 0.01,
+          "state": 1.0
+        },
+        "state_dimension": 2,
+        "terminal_target": [
+          1.0,
+          0.0
+        ]
+      },
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_OPTIMAL_CONTROL_EC020",
+      "registry_key": "problem.optimal_control.ec020.v1",
+      "seed_status": "fixed",
+      "seed_value": 2026,
+      "source_ids": [
+        "S042",
+        "S043",
+        "S050",
+        "S076"
       ]
     },
     {

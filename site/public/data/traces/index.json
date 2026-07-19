@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -152,6 +152,16 @@
       "title_en": "Shared diagnostic probe · scalar fallback applicability",
       "title_ja": "共通診断probe · scalar fallback条件",
       "trace_id": "exponential-fit-lbfgsb"
+    },
+    {
+      "method_id": "M_DIRECT_COLLOCATION",
+      "objective_id": "INSTANCE_OPTIMAL_CONTROL_EC020",
+      "path": "optimal-control-ec020-history.json",
+      "profile_id": "PROFILE_OPTIMAL_CONTROL_GENERIC",
+      "scenario_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+      "title_en": "Direct collocation · state/control diagnostics",
+      "title_ja": "Direct collocation · state/control診断",
+      "trace_id": "optimal-control-ec020-history"
     },
     {
       "method_id": "M_BRANCH_BOUND",

@@ -1,6 +1,6 @@
 {
   "axis": "available_information",
-  "dataset_version": "0.18.4",
+  "dataset_version": "0.18.5",
   "description": "目的値・微分・ノイズ・評価費など、solverが利用できる情報を見渡す。",
   "edges": [
     {
@@ -2542,7 +2542,7 @@
   "focus_fallback_entity_types": [
     "feature"
   ],
-  "generated_at": "2026-07-18T00:00:00Z",
+  "generated_at": "2026-07-19T00:00:00Z",
   "limitations": "情報が利用可能でも、精度・費用・実装品質によって実用性は変わります。",
   "max_depth": 2,
   "nodes": [
