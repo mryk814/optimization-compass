@@ -69,6 +69,16 @@ from optimization_compass.search_tree import (
     generate_search_tree_artifact,
     render_search_tree_svg,
 )
+from optimization_compass.shape_optimization import (
+    PROFILE_ID as SHAPE_OPTIMIZATION_PROFILE_ID,
+)
+from optimization_compass.shape_optimization import (
+    TOPOLOGY_PROFILE_ID as SHAPE_TOPOLOGY_PROFILE_ID,
+)
+from optimization_compass.shape_optimization import (
+    build_shape_optimization_scenario,
+    generate_shape_optimization_traces,
+)
 from optimization_compass.simulation_constrained import (
     FAILURE_SCENARIO_ID as PDE_FAILURE_SCENARIO_ID,
 )
@@ -1141,6 +1151,7 @@ def _write_dummy_trace(
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
     generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
+    generated_traces.extend(generate_shape_optimization_traces(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -2460,6 +2471,8 @@ def _trace_lesson(
 
 
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
+    if trace.profile_id in {SHAPE_OPTIMIZATION_PROFILE_ID, SHAPE_TOPOLOGY_PROFILE_ID}:
+        return build_shape_optimization_scenario(trace)
     if trace.profile_id == PORTFOLIO_UNCERTAINTY_PROFILE_ID:
         return build_portfolio_uncertainty_scenario(trace)
     if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:

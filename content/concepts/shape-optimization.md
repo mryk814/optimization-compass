@@ -6,11 +6,11 @@ canonical_entity_id: F_VARIABLE_DOMAIN
 title_ja: 形状最適化の設計変数
 title_en: Shape Optimization Design Variables
 summary: 形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。
-source_ids: [S054, S055, S056, S101]
+source_ids: [S054, S055, S056, S101, S104, S105, S106]
 prerequisites: [concept.variable-domain, topology-optimization]
 related_ids: [geometry-update-failure-modes, topology-optimization, adjoint-sensitivity, density-filter]
-visualization_ids: [topology-optimization-field-evolution]
-comparison_ids: []
+visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry, shape-topology-representation-contrast]
+comparison_ids: [COMPARE_SHAPE_TOPOLOGY_REPRESENTATION]
 aliases: [/learn/shape-optimization]
 status: published
 last_reviewed: 2026-07-19
@@ -63,6 +63,22 @@ last_reviewed: 2026-07-19
 - mesh refinement後の目的・制約・形状の変化
 
 目的だけが改善し、mesh qualityやconstraint violationが悪化するなら、その更新は採用せず、更新幅、parameterization、mesh-motion、または再meshの方針を見直します。
+
+## applicationへ広げるときのmap
+
+[2D diffuser Case](#/gallery/shape-diffuser)は、parameter、geometry、mesh、physical stateを分ける最小contractです。physical stateを置き換えるときも、この順序は維持します。
+
+| domain | physical stateと目的 | 追加で確認する制約 |
+| --- | --- | --- |
+| structural | displacement／stress、compliance | stress、buckling、支持・荷重境界 |
+| CFD | velocity／pressure、loss | 境界層、流量、乱流model |
+| thermal | temperature／heat flux、熱抵抗 | 温度上限、熱源、接触熱抵抗 |
+| acoustic | pressure wave、散乱・透過 | 周波数帯、放射境界、共振 |
+| photonic | Maxwell state、透過・反射 | 波長帯、材料分散、fabrication rule |
+
+いずれも離散stateの目的改善だけでは、連続modelや別meshでの性能を保証しません。geometry validity、mesh refinement、state residual、物理制約を同じlayer contractで再評価します。
+
+[shape／topology表現Compare](#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION)では、同じ物理briefの下でfixed-topology parameterと接続変更を許すfieldをcontrast-onlyで確認できます。
 
 ## 次に読む
 

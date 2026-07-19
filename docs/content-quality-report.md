@@ -3,7 +3,7 @@
 - Published concept guides: `21`
 - Meeting the concept floor: `21`
 - Below the concept floor: `0`
-- Prose review warnings: `515`
+- Prose review warnings: `518`
 
 ## Concept publication floor
 
@@ -26,16 +26,16 @@
 | `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 61 | 4298 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 56 | 2157 | 5 | 2 | 0 | pass |
-| `geometry-update-failure-modes` | 75 | 1960 | 5 | 3 | 0 | pass |
-| `shape-optimization` | 54 | 1781 | 5 | 3 | 0 | pass |
-| `shape-parameter-sensitivity` | 100 | 2516 | 7 | 3 | 0 | pass |
+| `geometry-update-failure-modes` | 75 | 2097 | 5 | 3 | 0 | pass |
+| `shape-optimization` | 54 | 2578 | 6 | 3 | 0 | pass |
+| `shape-parameter-sensitivity` | 100 | 2635 | 7 | 3 | 0 | pass |
 | `topology-optimization` | 66 | 1639 | 6 | 3 | 0 | pass |
 
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 333
-- `sentence.long`: 181
+- `sentence.commas`: 335
+- `sentence.long`: 182
 
 | Content | Warnings |
 |---|---:|
@@ -147,7 +147,7 @@
 | `riemannian-gradient` | 5 |
 | `riemannian-trust-region` | 3 |
 | `sgd` | 7 |
-| `shape-optimization` | 5 |
+| `shape-optimization` | 8 |
 | `shape-parameter-sensitivity` | 0 |
 | `shgo` | 2 |
 | `simp-topology` | 10 |

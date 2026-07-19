@@ -75,6 +75,11 @@
       "id": "017",
       "path": "data/migrations/017_nested_hybrid_problem_contexts.sql",
       "sha256": "28e1ef2a8378f86803d1ccd9e107b790bfb53b86b79a3662f6374d7d9f27170d"
+    },
+    {
+      "id": "018",
+      "path": "data/migrations/018_shape_optimization.sql",
+      "sha256": "598589099d46ab3c66cacccf49b6107d77f0f4022d716c754b4b3cbe82f58a71"
     }
   ],
   "specialized_inputs": [

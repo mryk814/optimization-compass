@@ -975,6 +975,69 @@
           "artifact": {"artifact_id": "bilevel-regression-relaxed-complementarity", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/bilevel-regression-relaxed-complementarity.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "canonical_url": "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "shape-diffuser",
+      "case_id": "shape-diffuser",
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "benchmark_context_id": "BENCH_SHAPE_TOPOLOGY_REPRESENTATION_6",
+      "title_ja": "fixed-topology shapeとtopology-changing fieldを比べる",
+      "title_en": "Contrast fixed-topology shape and topology-changing field representations",
+      "comparison_question": "同じ物理briefと外側envelopeで、3 parameter shapeとdensity fieldは何を動かし、どのtopology changeを許す？",
+      "formulation_summary": "同じdiffuser design briefで、q=(r,c,s)のfixed-topology境界更新と、接続変更を許すdensity fieldを表現contractとして比べる。",
+      "fixed_factors": ["same reduced diffuser physical brief", "same inlet and outer design envelope", "same initial outer boundary", "same reduced state proxy contract", "same geometry, mesh, state, and objective diagnostics", "same oracle evaluation budget 6", "same geometry minimum-gap tolerance 0.4", "same mesh minimum-quality tolerance 0.2", "same state residual tolerance 1e-6", "same seed 134"],
+      "changed_factors": ["design representation only: three bounded shape parameters with fixed topology versus a density field that permits connectivity change"],
+      "seed_policy": "deterministic educational generatorのseed 134を固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 6},
+      "stopping_policy": "両memberとも6 evaluationで停止し、geometry gap、mesh quality、state residualを同じ閾値で記録する。",
+      "tuning_policy": "物理brief、外側envelope、初期外形、予算、診断、tolerance、seedを固定し、design representationだけを変える。run後のparameter調整はしない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "geometry_min_gap", "label_ja": "geometry最小gap", "direction": "maximize", "unit": "normalized length"},
+        {"metric_id": "mesh_min_quality", "label_ja": "mesh最小quality", "direction": "maximize", "unit": "normalized quality"},
+        {"metric_id": "state_residual", "label_ja": "state residual", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "representation_freedom", "label_ja": "表現自由度", "direction": "none", "unit": "diagnostic count"},
+        {"metric_id": "objective_value", "label_ja": "教育用objective proxy", "direction": "none", "unit": "diagnostic only"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じ物理briefと診断contractを使いますが、design spaceが異なるためobjective値や到達shapeを性能順位として比較しません。",
+      "caveat": "SLSQPやSIMPの実solverは実行していません。決定的metric historyはparameter、geometry、mesh、stateとtopology-change許可の違いを読む教材であり、wall-clock、解品質、一般性能を示しません。",
+      "takeaway": "shape parameterは接続を固定した低次元の形を探索し、density／level-set系は接続変更を表現できます。表現力の差とsolver性能の差を混同しません。",
+      "limitations": ["3 parameter・21 geometry sample・reduced state proxyの小さな教材です。", "structural、CFD、thermal、acoustic、photonicの実PDE、mesh refinement、manufacturing constraintは後続Caseで検証します。"],
+      "source_ids": ["S097", "S101", "S104", "S105", "S106"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "shape-fixed-topology",
+          "role": "fixed_topology_shape_parameters",
+          "method_id": "M_SLSQP",
+          "scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+          "label_ja": "3 parameter shape",
+          "label_en": "Three-parameter shape",
+          "parameters": {"representation": "three_parameter_fixed_topology", "design_dimension": 3, "topology_change_allowed": false},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "shape-diffuser-valid-update", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/shape-diffuser-valid-update.json"}
+        },
+        {
+          "member_id": "topology-density-field",
+          "role": "topology_changing_density_field",
+          "method_id": "M_SIMP_TOPOLOGY",
+          "scenario_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+          "label_ja": "density field topology",
+          "label_en": "Density-field topology",
+          "parameters": {"representation": "density_field_topology_change", "design_dimension": 32, "topology_change_allowed": true},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "shape-topology-representation-contrast", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/shape-topology-representation-contrast.json"}
+        }
+      ]
     }
   ]
 }

@@ -342,6 +342,25 @@ def _exponential_decay_gradient(instance: ProblemInstance, point: Sequence[float
     ]
 
 
+def _diffuser_shape(_instance: ProblemInstance, point: Sequence[float]) -> float:
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return float(
+        (outlet_height_ratio - 1.45) ** 2
+        + 0.4 * wall_curvature**2
+        + 0.2 * throat_shift**2
+        + 0.05 * (outlet_height_ratio - 1.0) ** 2
+    )
+
+
+def _diffuser_shape_gradient(_instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return [
+        2.0 * (outlet_height_ratio - 1.45) + 0.1 * (outlet_height_ratio - 1.0),
+        0.8 * wall_curvature,
+        0.4 * throat_shift,
+    ]
+
+
 def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[float, float]:
     x, y = point
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
@@ -438,6 +457,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.assignment.linear.v1": (_assignment, None),
     "problem.constrained_disk.v1": (_constrained_disk, None),
     "problem.topology.cantilever.v1": (_topology_compliance, _topology_compliance_gradient),
+    "problem.shape.diffuser_3p.v1": (_diffuser_shape, _diffuser_shape_gradient),
     "problem.nonlinear_least_squares.exponential_decay.v1": (
         _exponential_decay,
         _exponential_decay_gradient,

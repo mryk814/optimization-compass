@@ -189,6 +189,23 @@
       "last_verified": "2026-07-18"
     },
     {
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "name_ja": "parameter化された領域の形状最適化",
+      "name_en": "Shape optimization on a parameterized domain",
+      "mathematical_family": "shape_optimization",
+      "variable_domain": "shape",
+      "objective_form": "simulation",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "gradient", "geometry_validity", "mesh_quality", "state_residual"],
+      "constraint_class": "geometry_mesh_state",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 3},
+      "known_reference_semantics": "The educational instance uses a reduced deterministic state proxy. Its parameter optimum is not a guarantee for a continuous PDE, a refined mesh, or a different shape representation.",
+      "related_problem_ids": ["PA057", "PA045"],
+      "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_OBJECTIVE_SIMULATION", "F_CONSTRAINT_PDE", "F_DERIVATIVE_ANALYTIC_GRADIENT", "F_DERIVATIVE_INNER_ITERATION", "F_STRUCTURE_PDE_CONSTRAINED", "F_GUARANTEE_LOCAL_OK"],
+      "source_ids": ["S101", "S104", "S105", "S106"],
+      "last_verified": "2026-07-19"
+    },
+    {
       "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
       "name_ja": "非負inner回帰を持つbilevel正則化選択",
       "name_en": "Bilevel regularization selection with an inner nonnegative regression",
@@ -521,6 +538,28 @@
       "limitations_en": "A deterministic 8x4 educational instance for following the FEM state equation, filtering, projection, and OC/MMA roles; it does not establish real-design strength, buckling, manufacturability, continuous-model guarantees, or general performance.",
       "source_ids": ["S097", "S098", "S099", "S100", "S101"],
       "last_verified": "2026-07-18"
+    },
+    {
+      "problem_instance_id": "INSTANCE_DIFFUSER_SHAPE_3P",
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "name_ja": "3 parameter二次元diffuser形状",
+      "name_en": "Three-parameter two-dimensional diffuser shape",
+      "registry_key": "problem.shape.diffuser_3p.v1",
+      "dimension": 3,
+      "parameters": {"parameter_names": ["outlet_height_ratio", "wall_curvature", "throat_shift"], "geometry_samples": 21, "inlet_half_height": 1.0, "domain_length": 1.0, "reduced_state_model": "deterministic pressure-loss proxy", "topology_change_allowed": false},
+      "bounds": {"lower": [1.0, -0.3, -0.25], "upper": [1.8, 0.3, 0.25], "units": ["ratio", "normalized curvature", "normalized position"]},
+      "constraints": [{"constraint_id": "parameter_bounds", "type": "bounds", "lower": [1.0, -0.3, -0.25], "upper": [1.8, 0.3, 0.25]}, {"constraint_id": "geometry_validity", "expression": "minimum upper-lower wall gap > 0.4 and no self-intersection", "sense": "gt", "rhs": 0.4}, {"constraint_id": "mesh_quality", "expression": "educational minimum cell-quality proxy >= 0.2 and inverted_cells = 0", "sense": "gte", "rhs": 0.2}, {"constraint_id": "state_residual", "expression": "reduced state residual <= 1e-6", "sense": "lte", "rhs": 0.000001}, {"constraint_id": "fixed_topology", "expression": "one connected inlet and one connected outlet remain", "sense": "eq"}],
+      "initialization_candidates": [{"candidate_id": "mild_diffuser", "point": [1.15, 0.0, 0.0]}],
+      "seed_status": "fixed",
+      "seed_value": 134,
+      "known_reference_status": "not_meaningful",
+      "known_reference": null,
+      "display": {"range": {"outlet_height_ratio": [1.0, 1.8], "wall_curvature": [-0.3, 0.3], "throat_shift": [-0.25, 0.25], "objective_value": [0.0, 0.3], "geometry_min_gap": [-0.2, 2.0], "mesh_min_quality": [-0.2, 1.0], "state_residual": [0.0, 0.01]}, "axis_labels": ["shape parameter", "diagnostic value"], "units": ["normalized", "normalized"], "expression": "min (r-1.45)²+0.4c²+0.2s²+0.05(r-1)² subject to valid fixed-topology geometry, mesh-quality, and reduced-state checks"},
+      "intended_phenomena": ["parameter_geometry_mesh_state_separation", "fixed_topology_shape_update", "geometry_validity", "mesh_quality", "state_residual", "adjoint_gradient_check", "representation_bias"],
+      "limitations_ja": "3 parameterの壁面と低costな決定論的state proxyを使う教材です。CFD、境界層、乱流、連続体の可行性、mesh-independentな目的値、実diffuser性能、global optimumを保証しません。",
+      "limitations_en": "A lesson with a three-parameter wall and a low-cost deterministic state proxy; it does not establish CFD, boundary-layer or turbulence behavior, continuous-domain feasibility, mesh-independent objectives, real diffuser performance, or a global optimum.",
+      "source_ids": ["S101", "S104", "S105", "S106"],
+      "last_verified": "2026-07-19"
     },
     {
       "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
