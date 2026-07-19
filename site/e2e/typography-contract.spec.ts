@@ -103,6 +103,12 @@ const surfaces = [
     metadata: ".coverage-pill",
     control: ".coverage-filters label",
   },
+  {
+    route: "/traces/so3-riemannian-alignment",
+    primary: ".metric-history > header p",
+    metadata: ".scenario-context-grid dt",
+    control: ".playback-actions button",
+  },
 ] as const;
 
 test(

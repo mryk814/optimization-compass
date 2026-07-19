@@ -69,6 +69,8 @@
 .comparison-factor-observe p,
 .comparison-fairness,
 .comparison-contract-v2 > .comparison-caveat,
+.metric-history > header p,
+.trace-summary p,
 .nm-explanation p,
 .bo-route-card p,
 .atlas-note,
@@ -123,6 +125,20 @@
 .comparison-search-tree-metrics dd,
 .comparison-event,
 .comparison-metrics,
+.comparison-card header small,
+.comparison-card header > span,
+.method-parameters,
+.playback-status,
+.playback-seek,
+.playback-evaluation-seek,
+.text-alternative,
+.metric-history-panel h3 small,
+.trace-identity,
+.scenario-narration small,
+.trace-snapshot li,
+.trace-snapshot p,
+.trace-summary > span,
+.trace-summary small,
 .gallery-journey-status,
 .gallery-context-grid article > span,
 .gallery-context-grid small,
@@ -299,6 +315,29 @@
 .map-pane-switch button {
   min-height: 2.75rem;
   font-size: var(--type-body);
+  line-height: var(--leading-meta);
+}
+
+/* Trace playback is a reading surface, not a compact dashboard. */
+.metric-history-panel h3 {
+  font-size: var(--type-body);
+  line-height: var(--leading-support);
+}
+
+.trace-snapshot h2 {
+  font-size: var(--type-body);
+  line-height: var(--leading-support);
+}
+
+.playback-actions button,
+.playback-actions select {
+  min-height: 2.75rem;
+  font-size: var(--type-body);
+  line-height: var(--leading-meta);
+}
+
+.playback-actions label {
+  font-size: var(--type-meta);
   line-height: var(--leading-meta);
 }
 
