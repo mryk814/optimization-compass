@@ -300,7 +300,7 @@ def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
 
 
 def test_portfolio_comparison_resolves_canonical_problem_and_exact_context() -> None:
-    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.8")
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.9")
     portfolio_index = ComparisonIndex(
         dataset_version=index.dataset_version,
         comparisons=[
@@ -311,7 +311,7 @@ def test_portfolio_comparison_resolves_canonical_problem_and_exact_context() -> 
     )
     scenarios = [
         build_portfolio_uncertainty_scenario(trace)
-        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.8")
+        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.9")
     ]
 
     validate_comparison_benchmark_contexts(
@@ -344,7 +344,7 @@ def test_portfolio_comparison_resolves_canonical_problem_and_exact_context() -> 
 def test_portfolio_comparison_rejects_unknown_canonical_problem_identity(
     known_definitions: set[str], known_instances: set[str], message: str
 ) -> None:
-    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.8")
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.9")
     portfolio_index = ComparisonIndex(
         dataset_version=index.dataset_version,
         comparisons=[
@@ -355,7 +355,7 @@ def test_portfolio_comparison_rejects_unknown_canonical_problem_identity(
     )
     scenarios = [
         build_portfolio_uncertainty_scenario(trace)
-        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.8")
+        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.9")
     ]
 
     with pytest.raises(ValueError, match=message):

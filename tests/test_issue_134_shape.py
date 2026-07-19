@@ -64,7 +64,7 @@ def test_shape_gallery_separates_parameter_geometry_mesh_and_state() -> None:
 
 
 def test_shape_theater_has_valid_primary_and_independent_geometry_failure() -> None:
-    traces = generate_shape_optimization_traces(dataset_version="0.18.8")
+    traces = generate_shape_optimization_traces(dataset_version="0.18.9")
     scenarios = {trace.scenario_id: build_shape_optimization_scenario(trace) for trace in traces}
 
     assert set(scenarios) == {
@@ -93,7 +93,7 @@ def test_shape_theater_has_valid_primary_and_independent_geometry_failure() -> N
 
 def test_shape_topology_compare_is_exact_aligned_and_contrast_only() -> None:
     index = load_comparison_seed(
-        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.8"
+        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.9"
     )
     comparison = next(
         item

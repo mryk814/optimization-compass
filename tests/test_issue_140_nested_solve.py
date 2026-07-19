@@ -36,7 +36,7 @@ def _metric_values(trace: AlgorithmTrace, metric_id: str) -> list[float]:
 
 
 def test_bilevel_ledgers_separate_outer_inner_and_complementarity() -> None:
-    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.8")
+    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.9")
 
     shared_parameters = {
         "outer_step_policy",
@@ -63,8 +63,8 @@ def test_bilevel_ledgers_separate_outer_inner_and_complementarity() -> None:
 
 
 def test_nested_scenarios_use_the_existing_metric_history_contract() -> None:
-    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.8")
-    hybrid = generate_hybrid_chattering_trace(dataset_version="0.18.8")
+    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.9")
+    hybrid = generate_hybrid_chattering_trace(dataset_version="0.18.9")
 
     scenarios = [_visualization_scenario(trace) for trace in (exact, relaxed, hybrid)]
     by_id = {scenario.scenario_id: scenario for scenario in scenarios}
@@ -84,7 +84,7 @@ def test_nested_scenarios_use_the_existing_metric_history_contract() -> None:
 
 
 def test_hybrid_failure_ledger_stops_on_chattering_not_objective_progress() -> None:
-    trace = generate_hybrid_chattering_trace(dataset_version="0.18.8")
+    trace = generate_hybrid_chattering_trace(dataset_version="0.18.9")
 
     assert (
         _metric_values(trace, "objective_value")[-1] < _metric_values(trace, "objective_value")[0]
@@ -99,7 +99,7 @@ def test_hybrid_failure_ledger_stops_on_chattering_not_objective_progress() -> N
 
 
 def test_bilevel_compare_and_learning_routes_are_linked() -> None:
-    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.8")
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.9")
     comparison = next(
         item
         for item in index.comparisons
@@ -140,7 +140,7 @@ def test_bilevel_compare_and_learning_routes_are_linked() -> None:
     assert HYBRID_CHATTERING_SCENARIO_ID in article
     assert comparison.comparison_id in article
 
-    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.8")
+    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.9")
     resolved = _case_scenarios(case, [_visualization_scenario(trace) for trace in (exact, relaxed)])
     assert {item.scenario_id for item in resolved} == {
         BILEVEL_EXACT_SCENARIO_ID,
@@ -155,14 +155,14 @@ def test_bilevel_comparison_resolves_canonical_problem_and_exact_context() -> No
     )
     assert any(item.problem_instance_id == BILEVEL_PROBLEM_INSTANCE_ID for item in suite.instances)
 
-    full_index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.8")
+    full_index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.9")
     comparison = next(
         item
         for item in full_index.comparisons
         if item.comparison_id == "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"
     )
-    index = ComparisonIndex(dataset_version="0.18.8", comparisons=[comparison])
-    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.8")
+    index = ComparisonIndex(dataset_version="0.18.9", comparisons=[comparison])
+    exact, relaxed = generate_bilevel_regression_traces(dataset_version="0.18.9")
     scenarios = [_visualization_scenario(trace) for trace in (exact, relaxed)]
     generator = {
         "generator_id": BILEVEL_GENERATOR_ID,

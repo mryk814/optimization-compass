@@ -90,6 +90,11 @@
       "id": "020",
       "path": "data/migrations/020_pendulum_example_case.sql",
       "sha256": "29d25e2880cffbdd555b29d8fc20069265bccac52903e2c11b38b93ede3b3f0d"
+    },
+    {
+      "id": "021",
+      "path": "data/migrations/021_canonical_learning_scenarios.sql",
+      "sha256": "2ada8ae663ad92ef85a6fab1947cdc7d66df42c11f1cd42faa1880368a20c03d"
     }
   ],
   "specialized_inputs": [

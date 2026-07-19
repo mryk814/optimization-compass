@@ -56,5 +56,5 @@ def test_transient_network_result_is_not_reported_as_broken(
     report = build_source_health_report(
         repository, as_of=date(2026, 7, 15), check_network=True, checker=checker
     )
-    assert len(report.links) == 101
+    assert len(report.links) == 110
     assert {item.status for item in report.links} == {"transient"}
