@@ -74,13 +74,14 @@ def test_explicit_release_delta_reports_transitions() -> None:
     before_payload = json.loads(load_report().model_dump_json())
     after_payload = deepcopy(before_payload)
     after_payload["dataset_version"] = "0.4.0"
-    missing = next(
+    incomplete = next(
         expectation
         for expectation in after_payload["expectations"]
-        if expectation["status"] == "missing"
+        if expectation["status"] in {"missing", "partial"}
     )
-    missing["status"] = "available"
-    after_payload["summary"]["status_counts"]["missing"] -= 1
+    previous_status = incomplete["status"]
+    incomplete["status"] = "available"
+    after_payload["summary"]["status_counts"][previous_status] -= 1
     after_payload["summary"]["status_counts"]["available"] += 1
     delta = diff_coverage(
         CoverageReport.model_validate_json(json.dumps(before_payload)),

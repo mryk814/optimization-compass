@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.5",
+  "dataset_version": "0.18.6",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -167,11 +167,11 @@
       "intents": [],
       "query": "細長い谷 一次法 比較",
       "query_id": "visual-comparison",
-      "result_count": 3,
+      "result_count": 4,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
-        "comparison:COMPARE_PARETO_PREFERENCE",
-        "trace:constrained-disk-feasible-region"
+        "trace:topology-optimization-field-evolution",
+        "comparison:COMPARE_PARETO_PREFERENCE"
       ]
     },
     {

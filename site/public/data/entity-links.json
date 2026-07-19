@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.5",
+  "dataset_version": "0.18.6",
   "entities": [
     {
       "aliases": [],
@@ -23477,6 +23477,47 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "同じ条件でOCとMMAの更新を比較する",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "topology-optimization-field-evolution",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S098",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S099",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S100",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        }
+      ],
+      "summary": "同じ問題・初期密度・予算でOCとMMAの更新差を読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "entity_type": "scenario",
       "external_url": null,
@@ -25426,6 +25467,11 @@
         {
           "relation_type": "scenario",
           "target_id": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
           "target_type": "scenario"
         },
         {

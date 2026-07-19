@@ -9,7 +9,7 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("Theater catalogからfailure runを選びCaseとCompareへ戻れる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  await expect(page.getByText("28 / 28 シナリオ")).toBeVisible();
+  await expect(page.getByText("29 / 29 シナリオ")).toBeVisible();
   await page.getByLabel("見る目的").selectOption("failure_contrast");
   await expect(page.getByText("6 / 27 シナリオ")).toBeVisible();
   await page.getByRole("link", { name: /実行可能領域と制約を無視した失敗を比べる/u }).click();
