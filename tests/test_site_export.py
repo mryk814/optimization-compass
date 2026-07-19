@@ -379,17 +379,24 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "BO",
     }
     contexts_by_id = {item["context_id"]: item for item in context_payload["contexts"]}
-    non_ranking_context_ids = {
+    legacy_non_ranking_context_ids = {
         "BENCH_BO_EDUCATIONAL_10",
         "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
         "BENCH_NELDER_MEAD_QUADRATIC_80",
     }
-    assert {
+    forbidden_context_ids = {
+        context_id
+        for context_id, item in contexts_by_id.items()
+        if item["status_mapping"].get("ranking") == "forbidden"
+    }
+    assert forbidden_context_ids == {
         context_id
         for context_id, item in contexts_by_id.items()
         if not item["ranking_eligibility"]["ranking_eligible"]
-    } == non_ranking_context_ids
-    for context_id in non_ranking_context_ids:
+    }
+    assert legacy_non_ranking_context_ids <= forbidden_context_ids
+    assert "BENCH_PDE_STATE_TOLERANCE_6" in forbidden_context_ids
+    for context_id in forbidden_context_ids:
         context = contexts_by_id[context_id]
         assert context["ranking_eligibility"] == {
             "ranking_eligible": False,
@@ -399,14 +406,14 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert all(
         item["ranking_eligibility"]["ranking_eligible"]
         for context_id, item in contexts_by_id.items()
-        if context_id not in non_ranking_context_ids
+        if context_id not in forbidden_context_ids
     )
     failure_payload = json.loads((first_output / "failure-modes.json").read_bytes())
     assert len(failure_payload["failure_modes"]) == 12
     assert sum(bool(item["scenario_ids"]) for item in failure_payload["failure_modes"]) == 4
     assert all(item["diagnostics"] for item in failure_payload["failure_modes"])
     source_payload = json.loads((first_output / "sources.json").read_bytes())
-    assert len(source_payload["sources"]) == 101
+    assert len(source_payload["sources"]) == 110
     assert sum(len(source["evidence_targets"]) for source in source_payload["sources"]) == 4207
     link_payload = json.loads((first_output / "entity-links.json").read_bytes())
     search_trace = next(
