@@ -1,6 +1,6 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.6`
+- Dataset: `0.18.7`
 - Generated: `2026-07-19T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
@@ -26,4 +26,7 @@
 
 ## Integrity issues
 
-- None
+- `broken_scenario_alias` `SCENARIO_PDE_STATE_TOLERANCE_TIGHT`: A derived generated scenario points to a canonical scenario missing from the database.
+- `broken_scenario_alias` `SCENARIO_PENDULUM_SWING_UP_MESH_20`: A derived generated scenario points to a canonical scenario missing from the database.
+- `broken_scenario_alias` `SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE`: A derived generated scenario points to a canonical scenario missing from the database.
+- `broken_scenario_alias` `SCENARIO_SO3_RIEMANNIAN_ALIGNMENT`: A derived generated scenario points to a canonical scenario missing from the database.
