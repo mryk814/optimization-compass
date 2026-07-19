@@ -255,6 +255,35 @@ def _optimal_control(instance: ProblemInstance, point: Sequence[float]) -> float
     return float(running_cost + terminal_cost)
 
 
+def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
+    mesh_nodes = instance.parameters.get("mesh_nodes")
+    if isinstance(mesh_nodes, bool) or not isinstance(mesh_nodes, int):
+        raise ValueError(f"invalid pendulum mesh for {instance.problem_instance_id}")
+    expected_dimension = 3 * mesh_nodes
+    if len(point) != expected_dimension:
+        raise ValueError(
+            f"{instance.problem_instance_id} expects {expected_dimension} trajectory values"
+        )
+    theta = point[:mesh_nodes]
+    omega = point[mesh_nodes : 2 * mesh_nodes]
+    controls = point[2 * mesh_nodes :]
+    target = instance.parameters.get("terminal_target")
+    if not isinstance(target, list) or len(target) != 2:
+        raise ValueError(f"invalid pendulum target for {instance.problem_instance_id}")
+    weights = instance.parameters.get("running_weights")
+    if not isinstance(weights, dict):
+        raise ValueError(f"invalid pendulum weights for {instance.problem_instance_id}")
+    control_weight = _number(weights.get("control"))
+    terminal_weight = _number(weights.get("terminal"))
+    target_theta, target_omega = (_number(value) for value in target)
+    control_cost = control_weight * sum(float(control) ** 2 for control in controls)
+    terminal_cost = terminal_weight * (
+        (float(theta[-1]) - target_theta) ** 2 + (float(omega[-1]) - target_omega) ** 2
+    )
+    return float(control_cost + terminal_cost)
+
+
 def exponential_decay_residuals(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
     """Return residuals for the fixed noiseless exponential-decay lesson."""
     a, k, c = point
@@ -313,9 +342,133 @@ def _exponential_decay_gradient(instance: ProblemInstance, point: Sequence[float
     ]
 
 
+def _diffuser_shape(_instance: ProblemInstance, point: Sequence[float]) -> float:
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return float(
+        (outlet_height_ratio - 1.45) ** 2
+        + 0.4 * wall_curvature**2
+        + 0.2 * throat_shift**2
+        + 0.05 * (outlet_height_ratio - 1.0) ** 2
+    )
+
+
+def _diffuser_shape_gradient(_instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    outlet_height_ratio, wall_curvature, throat_shift = point
+    return [
+        2.0 * (outlet_height_ratio - 1.45) + 0.1 * (outlet_height_ratio - 1.0),
+        0.8 * wall_curvature,
+        0.4 * throat_shift,
+    ]
+
+
 def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[float, float]:
     x, y = point
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
+
+
+def _portfolio_cvar(instance: ProblemInstance, point: Sequence[float]) -> float:
+    returns = instance.parameters.get("training_returns")
+    alpha = _number(instance.parameters.get("alpha"))
+    risk_weight = _number(instance.parameters.get("risk_weight"))
+    if not isinstance(returns, list) or not returns:
+        raise ValueError(f"invalid portfolio returns for {instance.problem_instance_id}")
+    losses: list[float] = []
+    for row in returns:
+        if (
+            not isinstance(row, list)
+            or len(row) != instance.dimension
+            or not all(
+                isinstance(value, int | float) and not isinstance(value, bool) for value in row
+            )
+        ):
+            raise ValueError(f"invalid portfolio return row for {instance.problem_instance_id}")
+        losses.append(-sum(float(value) * weight for value, weight in zip(row, point, strict=True)))
+    tail_count = max(1, round((1.0 - alpha) * len(losses)))
+    if abs(tail_count - (1.0 - alpha) * len(losses)) > 1e-9:
+        raise ValueError(f"portfolio CVaR tail is not integral for {instance.problem_instance_id}")
+    empirical_cvar = sum(sorted(losses, reverse=True)[:tail_count]) / tail_count
+    return float(sum(losses) / len(losses) + risk_weight * empirical_cvar)
+
+
+def _bilevel_regression(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Evaluate the fixed reduced outer objective after an exact two-variable inner solve."""
+    (regularization,) = point
+    train_x = _matrix(instance.parameters.get("train_x"), rows=3, columns=2, owner=instance)
+    train_y = _vector(instance.parameters.get("train_y"), length=3, owner=instance)
+    validation_x = _matrix(
+        instance.parameters.get("validation_x"), rows=2, columns=2, owner=instance
+    )
+    validation_y = _vector(instance.parameters.get("validation_y"), length=2, owner=instance)
+
+    gram_00 = sum(row[0] * row[0] for row in train_x) + regularization
+    gram_01 = sum(row[0] * row[1] for row in train_x)
+    gram_11 = sum(row[1] * row[1] for row in train_x) + regularization
+    rhs_0 = sum(row[0] * target for row, target in zip(train_x, train_y, strict=True))
+    rhs_1 = sum(row[1] * target for row, target in zip(train_x, train_y, strict=True))
+    determinant = gram_00 * gram_11 - gram_01 * gram_01
+    if determinant <= 0.0:
+        raise ValueError(f"inner ridge system is singular: {instance.problem_instance_id}")
+    coefficients = [
+        max(0.0, (rhs_0 * gram_11 - rhs_1 * gram_01) / determinant),
+        max(0.0, (gram_00 * rhs_1 - gram_01 * rhs_0) / determinant),
+    ]
+    residuals = [
+        sum(value * coefficient for value, coefficient in zip(row, coefficients, strict=True))
+        - target
+        for row, target in zip(validation_x, validation_y, strict=True)
+    ]
+    return 0.5 * sum(residual * residual for residual in residuals)
+
+
+def _hybrid_mode_relaxation(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Evaluate fractionality and the declared mode-switch regularizer."""
+    switch_penalty = _number(instance.parameters.get("switch_penalty"))
+    fractionality = sum(value * (1.0 - value) for value in point)
+    switching = sum(
+        (current - previous) ** 2 for previous, current in zip(point, point[1:], strict=False)
+    )
+    return float(fractionality + switch_penalty * switching)
+
+
+def _vector(value: object, *, length: int, owner: ProblemInstance) -> list[float]:
+    if (
+        not isinstance(value, list)
+        or len(value) != length
+        or not all(isinstance(item, int | float) for item in value)
+    ):
+        raise ValueError(f"invalid vector data for {owner.problem_instance_id}")
+    return [float(item) for item in value]
+
+
+def _matrix(value: object, *, rows: int, columns: int, owner: ProblemInstance) -> list[list[float]]:
+    if not isinstance(value, list) or len(value) != rows:
+        raise ValueError(f"invalid matrix data for {owner.problem_instance_id}")
+    return [_vector(row, length=columns, owner=owner) for row in value]
+
+
+def _so3_target(instance: ProblemInstance) -> list[float]:
+    target = instance.parameters.get("target_rotation")
+    if (
+        not isinstance(target, list)
+        or len(target) != 9
+        or not all(
+            isinstance(value, int | float) and not isinstance(value, bool) for value in target
+        )
+    ):
+        raise ValueError(f"invalid SO(3) target for {instance.problem_instance_id}")
+    return [float(value) for value in target]
+
+
+def _so3_attitude(instance: ProblemInstance, point: Sequence[float]) -> float:
+    target = _so3_target(instance)
+    return 0.5 * sum(
+        (value - reference) ** 2 for value, reference in zip(point, target, strict=True)
+    )
+
+
+def _so3_attitude_gradient(instance: ProblemInstance, point: Sequence[float]) -> list[float]:
+    target = _so3_target(instance)
+    return [value - reference for value, reference in zip(point, target, strict=True)]
 
 
 _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
@@ -329,10 +482,16 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.assignment.linear.v1": (_assignment, None),
     "problem.constrained_disk.v1": (_constrained_disk, None),
     "problem.topology.cantilever.v1": (_topology_compliance, _topology_compliance_gradient),
+    "problem.shape.diffuser_3p.v1": (_diffuser_shape, _diffuser_shape_gradient),
     "problem.nonlinear_least_squares.exponential_decay.v1": (
         _exponential_decay,
         _exponential_decay_gradient,
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
+    "problem.bilevel_regression.two_coefficient.v1": (_bilevel_regression, None),
+    "problem.hybrid_mode.chattering_ledger.v1": (_hybrid_mode_relaxation, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
+    "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
+    "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
+    "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),
 }

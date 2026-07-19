@@ -55,6 +55,46 @@
       "id": "013",
       "path": "data/migrations/013_topology_optimization.sql",
       "sha256": "ec1b6d9b00d494884a7733a82a75f163bf5b606d10b0fb763b2a06622f33e68c"
+    },
+    {
+      "id": "014",
+      "path": "data/migrations/014_optimal_control_pendulum.sql",
+      "sha256": "6a94d4b3d2879008a4375f186ef713f1620382cd7d08a1a52fa66b42ac08eba4"
+    },
+    {
+      "id": "015",
+      "path": "data/migrations/015_uncertainty_portfolio.sql",
+      "sha256": "7ae2f1e90a84fa8a5f5ef91c08dbf66986f43409aaee63db067b38df0d437d7d"
+    },
+    {
+      "id": "016",
+      "path": "data/migrations/016_pde_simulation_contract.sql",
+      "sha256": "72c495362ec61c5fd42b7a40dfd2437ce2147616dde00f29cd76c5c92e96a6ba"
+    },
+    {
+      "id": "017",
+      "path": "data/migrations/017_nested_hybrid_problem_contexts.sql",
+      "sha256": "28e1ef2a8378f86803d1ccd9e107b790bfb53b86b79a3662f6374d7d9f27170d"
+    },
+    {
+      "id": "018",
+      "path": "data/migrations/018_shape_optimization.sql",
+      "sha256": "598589099d46ab3c66cacccf49b6107d77f0f4022d716c754b4b3cbe82f58a71"
+    },
+    {
+      "id": "019",
+      "path": "data/migrations/019_constraint_geometry.sql",
+      "sha256": "58ca778180b372975047b6f72262f46c69f138f64f45df16c856f7e445047c86"
+    },
+    {
+      "id": "020",
+      "path": "data/migrations/020_pendulum_example_case.sql",
+      "sha256": "29d25e2880cffbdd555b29d8fc20069265bccac52903e2c11b38b93ede3b3f0d"
+    },
+    {
+      "id": "021",
+      "path": "data/migrations/021_canonical_learning_scenarios.sql",
+      "sha256": "2ada8ae663ad92ef85a6fab1947cdc7d66df42c11f1cd42faa1880368a20c03d"
     }
   ],
   "specialized_inputs": [

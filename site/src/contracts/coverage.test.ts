@@ -8,7 +8,9 @@ describe("CoverageReport parser", () => {
     expect(Object.keys(report.summary.status_counts)).toEqual([
       "available", "partial", "missing", "not_applicable",
     ]);
-    expect(report.subjects).toHaveLength(171);
+    expect(report.subjects).toHaveLength(
+      Object.values(report.summary.subject_counts).reduce((total, count) => total + count, 0),
+    );
     expect(report.priorities).toHaveLength(6);
   });
 

@@ -32,7 +32,7 @@
 | `density-filter` | `M_DENSITY_FILTER` | 76 | 1691 | 5 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 70 | 1703 | 6 | 1 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 69 | 2414 | 8 | 1 | pass |
-| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4844 | 9 | 1 | pass |
+| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4978 | 9 | 1 | pass |
 | `direct-global` | `M_DIRECT` | 85 | 3002 | 11 | 1 | pass |
 | `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 3703 | 10 | 1 | pass |
 | `dual-annealing` | `M_SIMULATED_ANNEALING` | 72 | 2171 | 7 | 1 | pass |
@@ -50,7 +50,7 @@
 | `family.local-dfo` | `MF_DFO_LOCAL` | 75 | 2636 | 7 | 1 | pass |
 | `family.manifold` | `MF_MANIFOLD` | 96 | 3166 | 7 | 1 | pass |
 | `family.multi-objective` | `MF_MULTI_OBJECTIVE` | 99 | 3057 | 7 | 1 | pass |
-| `family.optimal-control` | `MF_OPTIMAL_CONTROL` | 129 | 4135 | 9 | 1 | pass |
+| `family.optimal-control` | `MF_OPTIMAL_CONTROL` | 129 | 4865 | 10 | 1 | pass |
 | `family.smooth-local` | `MF_SMOOTH_LOCAL` | 64 | 2764 | 7 | 1 | pass |
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 68 | 3376 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 80 | 3344 | 7 | 1 | pass |

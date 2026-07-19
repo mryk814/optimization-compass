@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.10",
   "expectations": [
     {
       "applicability": "expected",
@@ -17,8 +17,13 @@
         "/theater/learning/SCENARIO_CONSTRAINED_DISK"
       ],
       "scenario_ids": [
+        "SCENARIO_BILEVEL_REGRESSION_EXACT",
+        "SCENARIO_BILEVEL_REGRESSION_RELAXED",
         "SCENARIO_CONSTRAINED_DISK",
-        "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH"
+        "SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH",
+        "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+        "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+        "SCENARIO_SO3_PROJECTED_ALIGNMENT"
       ],
       "slice_id": "SLICE_CONSTRAINED_CONTINUOUS",
       "source_ids": [
@@ -201,7 +206,8 @@
     {
       "applicability": "expected",
       "artifact_ids": [
-        "optimal-control-ec020-history"
+        "optimal-control-ec020-history",
+        "pendulum-collocation-coarse"
       ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_OPTIMAL_CONTROL_HISTORY",
@@ -210,10 +216,15 @@
       "reason_codes": [],
       "renderer_family": "generic_metric_history",
       "route_ids": [
-        "/traces/optimal-control-ec020-history"
+        "/traces/optimal-control-ec020-history",
+        "/traces/pendulum-collocation-coarse"
       ],
       "scenario_ids": [
-        "SCENARIO_OPTIMAL_CONTROL_EC020"
+        "SCENARIO_HYBRID_MODE_CHATTERING",
+        "SCENARIO_OPTIMAL_CONTROL_EC020",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
       ],
       "slice_id": "SLICE_OPTIMAL_CONTROL",
       "source_ids": [
@@ -267,6 +278,7 @@
         "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD"
       ],
       "scenario_ids": [
+        "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
         "SCENARIO_TOPOLOGY_SIMP_OC"
       ],
@@ -293,6 +305,10 @@
         "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "scenario_ids": [
+        "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+        "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+        "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+        "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
         "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "SCENARIO_TOPOLOGY_SIMP_OC"
@@ -634,11 +650,14 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_CONSTRAINED_FAILURE"
+            "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+            "COMPARE_CONSTRAINED_FAILURE",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN"
           ]
         },
         "content": {
@@ -657,14 +676,16 @@
           ]
         },
         "gallery": {
-          "count": 4,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bilevel-regularized-regression",
             "constrained-design",
             "portfolio-allocation",
-            "portfolio-cvar-allocation"
+            "portfolio-cvar-allocation",
+            "shape-diffuser",
+            "so3-attitude-alignment"
           ]
         },
         "implementation": {
@@ -696,7 +717,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 47,
+          "count": 57,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -707,7 +728,10 @@
             "/methods/M_PROJECTED_GRADIENT",
             "/methods/M_SLSQP",
             "/methods/M_SQP",
+            "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
             "COMPARE_CONSTRAINED_FAILURE",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -736,6 +760,8 @@
             "S087",
             "active-set",
             "augmented-lagrangian",
+            "bilevel-regression-exact-inner",
+            "bilevel-regression-relaxed-complementarity",
             "bilevel-regularized-regression",
             "constrained-continuous",
             "constrained-design",
@@ -745,7 +771,12 @@
             "portfolio-allocation",
             "portfolio-cvar-allocation",
             "projected-gradient",
+            "shape-diffuser",
+            "shape-diffuser-invalid-geometry",
+            "shape-diffuser-valid-update",
             "slsqp",
+            "so3-attitude-alignment",
+            "so3-projected-alignment",
             "sqp"
           ]
         },
@@ -788,11 +819,16 @@
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "constrained-disk-feasible-region"
+            "bilevel-regression-exact-inner",
+            "bilevel-regression-relaxed-complementarity",
+            "constrained-disk-feasible-region",
+            "shape-diffuser-invalid-geometry",
+            "shape-diffuser-valid-update",
+            "so3-projected-alignment"
           ]
         }
       },
@@ -1593,12 +1629,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+          ]
         },
         "content": {
           "count": 8,
@@ -1657,7 +1693,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 46,
+          "count": 49,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1669,6 +1705,7 @@
             "/methods/M_PDLP",
             "/methods/M_PRIMAL_DUAL_CONIC",
             "/methods/M_SIMPLEX",
+            "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "EC025",
             "I_ACADOS",
             "I_CLARABEL",
@@ -1704,7 +1741,9 @@
             "lp-qp-conic",
             "pdlp",
             "portfolio-allocation",
+            "portfolio-cvar-8-4",
             "portfolio-cvar-allocation",
+            "portfolio-nominal-8-4",
             "primal-dual-conic",
             "primal-simplex"
           ]
@@ -1747,12 +1786,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "portfolio-cvar-8-4",
+            "portfolio-nominal-8-4"
+          ]
         }
       },
       "label": "Linear, quadratic, and conic optimization",
@@ -1762,12 +1802,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+          ]
         },
         "content": {
           "count": 3,
@@ -1780,12 +1820,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-attitude-alignment"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -1806,13 +1846,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/MF_MANIFOLD",
             "/methods/M_RIEMANNIAN_GRADIENT",
             "/methods/M_RIEMANNIAN_TRUST_REGION",
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN",
             "I_MANOPT_JL",
             "I_MANOPT_MATLAB",
             "I_PYMANOPT",
@@ -1821,7 +1862,9 @@
             "S071",
             "family.manifold",
             "riemannian-gradient",
-            "riemannian-trust-region"
+            "riemannian-trust-region",
+            "so3-attitude-alignment",
+            "so3-riemannian-alignment"
           ]
         },
         "recommendation": {
@@ -1843,12 +1886,12 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-riemannian-alignment"
+          ]
         }
       },
       "label": "Riemannian manifold optimization",
@@ -1966,12 +2009,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PENDULUM_COLLOCATION_MESH"
+          ]
         },
         "content": {
           "count": 5,
@@ -1986,11 +2029,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC020"
+            "EC020",
+            "EC029"
           ]
         },
         "implementation": {
@@ -2012,7 +2056,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 19,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2021,7 +2065,9 @@
             "/methods/M_DIRECT_SHOOTING",
             "/methods/M_ILQR_DDP",
             "/methods/M_MULTIPLE_SHOOTING",
+            "COMPARE_PENDULUM_COLLOCATION_MESH",
             "EC020",
+            "EC029",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -2029,12 +2075,17 @@
             "S043",
             "S050",
             "S076",
+            "S102",
             "direct-collocation",
             "direct-shooting",
             "family.optimal-control",
+            "hybrid-mode-chattering-ledger",
             "ilqr-ddp",
             "multiple-shooting",
-            "optimal-control-ec020-history"
+            "optimal-control-ec020-history",
+            "pendulum-collocation-coarse",
+            "pendulum-collocation-refined",
+            "pendulum-model-rollout-failure"
           ]
         },
         "recommendation": {
@@ -2047,22 +2098,27 @@
           ]
         },
         "source": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S042",
             "S043",
             "S050",
-            "S076"
+            "S076",
+            "S102"
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "optimal-control-ec020-history"
+            "hybrid-mode-chattering-ledger",
+            "optimal-control-ec020-history",
+            "pendulum-collocation-coarse",
+            "pendulum-collocation-refined",
+            "pendulum-model-rollout-failure"
           ]
         }
       },
@@ -2099,17 +2155,19 @@
           ]
         },
         "gallery": {
-          "count": 8,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "EC020",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "constrained-design",
             "hyperparameter-search",
             "shift-scheduling",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -2137,7 +2195,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 47,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2156,6 +2214,7 @@
             "EC013",
             "EC020",
             "EC026",
+            "EC029",
             "I_EXCEL_SOLVER",
             "I_JAXOPT",
             "I_NLOPT",
@@ -2185,6 +2244,7 @@
             "newton-method",
             "nonlinear-cg",
             "shift-scheduling",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -2529,10 +2589,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_PDE_STATE_TOLERANCE_COST",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA"
           ]
         },
@@ -2549,10 +2611,11 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "shape-diffuser",
             "topology-cantilever"
           ]
         },
@@ -2573,7 +2636,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 19,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2583,6 +2646,8 @@
             "/methods/M_MMA",
             "/methods/M_OC_TOPOLOGY",
             "/methods/M_SIMP_TOPOLOGY",
+            "COMPARE_PDE_STATE_TOLERANCE_COST",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA",
             "S097",
             "S098",
@@ -2593,6 +2658,11 @@
             "density-filter",
             "mma",
             "optimality-criteria-topology",
+            "pde-state-solve-failure",
+            "pde-state-tolerance-loose",
+            "pde-state-tolerance-tight",
+            "shape-diffuser",
+            "shape-topology-representation-contrast",
             "simp-topology",
             "topology-cantilever",
             "topology-optimization-field-evolution"
@@ -2619,10 +2689,14 @@
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "pde-state-solve-failure",
+            "pde-state-tolerance-loose",
+            "pde-state-tolerance-tight",
+            "shape-topology-representation-contrast",
             "topology-optimization-field-evolution"
           ]
         }
@@ -3159,12 +3233,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PDE_STATE_TOLERANCE_COST"
+          ]
         },
         "content": {
           "count": 1,
@@ -3175,10 +3249,11 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "shape-diffuser",
             "topology-cantilever"
           ]
         },
@@ -3199,13 +3274,18 @@
           "target_ids": []
         },
         "map": {
-          "count": 5,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADJOINT_SENSITIVITY",
+            "COMPARE_PDE_STATE_TOLERANCE_COST",
             "S101",
             "adjoint-sensitivity",
+            "pde-state-solve-failure",
+            "pde-state-tolerance-loose",
+            "pde-state-tolerance-tight",
+            "shape-diffuser",
             "topology-cantilever",
             "topology-optimization-field-evolution"
           ]
@@ -3227,10 +3307,13 @@
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "pde-state-solve-failure",
+            "pde-state-tolerance-loose",
+            "pde-state-tolerance-tight",
             "topology-optimization-field-evolution"
           ]
         }
@@ -3900,14 +3983,16 @@
           ]
         },
         "gallery": {
-          "count": 5,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
+            "EC029",
             "bilevel-regularized-regression",
             "constrained-design",
             "hyperparameter-search",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -3929,13 +4014,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BFGS",
             "COMPARE_CONSTRAINED_FAILURE",
             "EC020",
+            "EC029",
             "I_OPTIMJL",
             "I_SCIPY_BFGS",
             "S002",
@@ -3946,6 +4032,7 @@
             "constrained-design",
             "constrained-disk-feasible-region",
             "hyperparameter-search",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -5319,12 +5406,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PENDULUM_COLLOCATION_MESH"
+          ]
         },
         "content": {
           "count": 1,
@@ -5335,11 +5422,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC020"
+            "EC020",
+            "EC029"
           ]
         },
         "implementation": {
@@ -5360,20 +5448,27 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIRECT_COLLOCATION",
+            "COMPARE_PENDULUM_COLLOCATION_MESH",
             "EC020",
+            "EC029",
             "I_CASADI",
             "I_DRAKE",
             "S042",
             "S043",
             "S050",
             "S076",
+            "S102",
             "direct-collocation",
-            "optimal-control-ec020-history"
+            "hybrid-mode-chattering-ledger",
+            "optimal-control-ec020-history",
+            "pendulum-collocation-coarse",
+            "pendulum-collocation-refined",
+            "pendulum-model-rollout-failure"
           ]
         },
         "recommendation": {
@@ -5385,22 +5480,27 @@
           ]
         },
         "source": {
-          "count": 4,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S042",
             "S043",
             "S050",
-            "S076"
+            "S076",
+            "S102"
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "optimal-control-ec020-history"
+            "hybrid-mode-chattering-ledger",
+            "optimal-control-ec020-history",
+            "pendulum-collocation-coarse",
+            "pendulum-collocation-refined",
+            "pendulum-model-rollout-failure"
           ]
         }
       },
@@ -6420,12 +6520,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bilevel-regularized-regression",
-            "constrained-design"
+            "constrained-design",
+            "shape-diffuser"
           ]
         },
         "implementation": {
@@ -6451,7 +6552,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 17,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6471,7 +6572,8 @@
             "S087",
             "bilevel-regularized-regression",
             "constrained-design",
-            "interior-point-nlp"
+            "interior-point-nlp",
+            "shape-diffuser"
           ]
         },
         "recommendation": {
@@ -7359,11 +7461,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC020"
+            "EC020",
+            "EC029"
           ]
         },
         "implementation": {
@@ -7385,12 +7488,13 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MULTIPLE_SHOOTING",
             "EC020",
+            "EC029",
             "I_ACADOS",
             "I_CASADI",
             "I_DRAKE",
@@ -8940,12 +9044,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+          ]
         },
         "content": {
           "count": 1,
@@ -8956,11 +9060,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "portfolio-cvar-allocation"
+            "portfolio-cvar-allocation",
+            "so3-attitude-alignment"
           ]
         },
         "implementation": {
@@ -8981,11 +9086,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_PROJECTED_GRADIENT",
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN",
             "I_JAXOPT",
             "I_PETSC_TAO",
             "S017",
@@ -8996,7 +9102,9 @@
             "S064",
             "S066",
             "portfolio-cvar-allocation",
-            "projected-gradient"
+            "projected-gradient",
+            "so3-attitude-alignment",
+            "so3-projected-alignment"
           ]
         },
         "recommendation": {
@@ -9022,12 +9130,12 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-projected-alignment"
+          ]
         }
       },
       "label": "Projected gradient",
@@ -9241,12 +9349,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+          ]
         },
         "content": {
           "count": 1,
@@ -9257,12 +9365,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-attitude-alignment"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -9283,18 +9391,21 @@
           "target_ids": []
         },
         "map": {
-          "count": 8,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_RIEMANNIAN_GRADIENT",
+            "COMPARE_SO3_PROJECTED_RIEMANNIAN",
             "I_MANOPT_JL",
             "I_MANOPT_MATLAB",
             "I_PYMANOPT",
             "S044",
             "S045",
             "S071",
-            "riemannian-gradient"
+            "riemannian-gradient",
+            "so3-attitude-alignment",
+            "so3-riemannian-alignment"
           ]
         },
         "recommendation": {
@@ -9316,12 +9427,12 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-riemannian-alignment"
+          ]
         }
       },
       "label": "Riemannian gradient descent",
@@ -9347,12 +9458,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-attitude-alignment"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -9373,7 +9484,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9384,7 +9495,8 @@
             "S044",
             "S045",
             "S071",
-            "riemannian-trust-region"
+            "riemannian-trust-region",
+            "so3-attitude-alignment"
           ]
         },
         "recommendation": {
@@ -9725,10 +9837,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA"
           ]
         },
@@ -9741,10 +9854,11 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "shape-diffuser",
             "topology-cantilever"
           ]
         },
@@ -9765,15 +9879,18 @@
           "target_ids": []
         },
         "map": {
-          "count": 8,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_SIMP_TOPOLOGY",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA",
             "S097",
             "S098",
             "S099",
+            "shape-diffuser",
+            "shape-topology-representation-contrast",
             "simp-topology",
             "topology-cantilever",
             "topology-optimization-field-evolution"
@@ -9798,10 +9915,11 @@
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "shape-topology-representation-contrast",
             "topology-optimization-field-evolution"
           ]
         }
@@ -9911,11 +10029,13 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_CONSTRAINED_FAILURE"
+            "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+            "COMPARE_CONSTRAINED_FAILURE",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
           ]
         },
         "content": {
@@ -9927,13 +10047,14 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bilevel-regularized-regression",
             "constrained-design",
-            "portfolio-allocation"
+            "portfolio-allocation",
+            "shape-diffuser"
           ]
         },
         "implementation": {
@@ -9953,12 +10074,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_SLSQP",
+            "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
             "COMPARE_CONSTRAINED_FAILURE",
+            "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "I_SCIPY_SLSQP",
             "S002",
             "S017",
@@ -9966,10 +10089,15 @@
             "S030",
             "S056",
             "S064",
+            "bilevel-regression-exact-inner",
+            "bilevel-regression-relaxed-complementarity",
             "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
             "portfolio-allocation",
+            "shape-diffuser",
+            "shape-diffuser-invalid-geometry",
+            "shape-diffuser-valid-update",
             "slsqp"
           ]
         },
@@ -9998,11 +10126,15 @@
           ]
         },
         "visualization": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "constrained-disk-feasible-region"
+            "bilevel-regression-exact-inner",
+            "bilevel-regression-relaxed-complementarity",
+            "constrained-disk-feasible-region",
+            "shape-diffuser-invalid-geometry",
+            "shape-diffuser-valid-update"
           ]
         }
       },
@@ -14054,12 +14186,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "so3-attitude-alignment"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -14070,19 +14202,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "so3-attitude-alignment"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "so3-attitude-alignment"
           ]
         },
         "recommendation": {
@@ -14463,11 +14596,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC020"
+            "EC020",
+            "EC029"
           ]
         },
         "implementation": {
@@ -14479,19 +14613,21 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "EC020"
-          ]
-        },
-        "map": {
           "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
+            "EC029"
+          ]
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC020",
+            "EC029",
             "None"
           ]
         },
@@ -15673,7 +15809,87 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "shape-diffuser"
+          ]
+        },
+        "implementation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "journey": {
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "shape-diffuser"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "shape-diffuser"
+          ]
+        },
+        "recommendation": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "source": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "visualization": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        }
+      },
+      "label": "Shape optimization on a parameterized domain",
+      "subject_id": "PA057",
+      "subject_type": "problem"
+    },
+    {
+      "dimensions": {
+        "comparison": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "content": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "gallery": {
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15683,11 +15899,13 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "shape-diffuser",
             "topology-cantilever"
           ]
         },
@@ -15778,7 +15996,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15788,11 +16006,14 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "shape-diffuser",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -15882,7 +16103,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15892,11 +16113,14 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "shape-diffuser",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -16070,7 +16294,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16080,11 +16304,14 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "shape-diffuser",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -16251,7 +16478,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 12,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16261,11 +16488,14 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "shape-diffuser",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -16540,7 +16770,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16550,6 +16780,7 @@
             "EC020",
             "EC025",
             "EC026",
+            "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
@@ -16557,7 +16788,9 @@
             "multi-fidelity-simulator",
             "portfolio-allocation",
             "portfolio-cvar-allocation",
+            "shape-diffuser",
             "shift-scheduling",
+            "so3-attitude-alignment",
             "topology-cantilever"
           ]
         },
@@ -16638,7 +16871,7 @@
     "subject_counts": {
       "feature_family": 10,
       "method": 105,
-      "problem": 56
+      "problem": 57
     }
   }
 }

@@ -6,9 +6,11 @@ canonical_entity_id: F_VARIABLE_MANIFOLD
 title_ja: SO(3)の行列・接空間表現
 title_en: Matrix and Tangent Representations on SO(3)
 summary: SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。
-source_ids: [S044, S045, S071]
+source_ids: [S044, S045, S071, S107]
 prerequisites: [concept.manifold]
 related_ids: [concept.manifold, concept.variable-domain, family.manifold, riemannian-gradient, riemannian-trust-region]
+visualization_ids: [so3-projected-alignment, so3-riemannian-alignment]
+comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 status: published
 last_reviewed: 2026-07-19
 ---
@@ -103,6 +105,16 @@ Frobenius normによる差とgeodesic distanceは異なる量です。
 ::: warning
 各iterateがSO(3)上にあることは、局所解や大域最適性の保証ではありません。構造残差と最適化の停止条件を別に記録します。
 :::
+
+## Case・Theater・Compareで読む
+
+[SO(3)姿勢合わせCase](#/gallery/so3-attitude-alignment)で、二つの更新経路を同じ教材問題へ接続します。
+一方はambientなprojected update、もう一方は接空間からのRiemannian updateです。
+[projected Theater](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)で、projectionを含む更新経路と構造残差を確認します。
+[Riemannian Theater](#/theater/learning/SCENARIO_SO3_RIEMANNIAN_ALIGNMENT)では、接空間のstepと構造残差を追います。
+[projection／Riemannian Compare](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、二つのrunを同じ評価budgetへ同期します。
+objectiveと直交性残差を分けて読みます。
+projection distanceとRiemannian gradient normも別の診断値です。
 
 ## 次に読む
 

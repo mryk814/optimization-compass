@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.10",
   "entities": [
     {
       "aliases": [],
@@ -566,6 +566,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_TRUST_KRYLOV",
           "target_type": "method"
@@ -583,6 +588,21 @@
         {
           "relation_type": "evidence",
           "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S111",
           "target_type": "source"
         },
         {
@@ -642,11 +662,147 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
         }
       ],
       "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC029",
+      "entity_id": "EC029",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "pendulumを制約内で振り上げる",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MULTIPLE_SHOOTING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:dynamics",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:automatic_differentiation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:trajectory",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CASADI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_DRAKE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA042",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -660,6 +816,11 @@
           "relation_type": "candidate_method",
           "target_id": "M_SLSQP",
           "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
         },
         {
           "relation_type": "conditional_method",
@@ -750,6 +911,16 @@
           "relation_type": "problem",
           "target_id": "PA033",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -1353,13 +1524,18 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_PROJECTED_GRADIENT",
           "target_type": "method"
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
+          "target_id": "S010",
           "target_type": "source"
         },
         {
@@ -1369,7 +1545,7 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S056",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -1399,11 +1575,147 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
         }
       ],
       "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/shape-diffuser",
+      "entity_id": "shape-diffuser",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "2D diffuserの壁面shapeを更新する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:implicit",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:analytic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_SLSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA057",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
     },
     {
       "aliases": [],
@@ -1465,6 +1777,127 @@
         }
       ],
       "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/so3-attitude-alignment",
+      "entity_id": "so3-attitude-alignment",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_RIEMANNIAN_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RIEMANNIAN_TRUST_REGION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:manifold",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:analytic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:sum_of_squares",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:manifold",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_MANOPT_JL",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_MANOPT_MATLAB",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMANOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA037",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -1596,6 +2029,67 @@
         }
       ],
       "summary": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "entity_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "bilevel-regression-exact-inner",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "bilevel-regression-relaxed-complementarity",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
     },
     {
       "aliases": [],
@@ -2230,6 +2724,341 @@
         }
       ],
       "summary": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_PDE_STATE_TOLERANCE_COST",
+      "entity_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_PDE_STATE_TOLERANCE_COST",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC026",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pde-state-tolerance-loose",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pde-state-tolerance-tight",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+      "entity_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_PENDULUM_COLLOCATION_MESH",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "entity_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "entity_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "shape-diffuser-valid-update",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "shape-topology-representation-contrast",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "entity_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_RIEMANNIAN_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "so3-projected-alignment",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "so3-riemannian-alignment",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
     },
     {
       "aliases": [],
@@ -3340,6 +4169,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
           "relation_type": "related_content",
           "target_id": "concept.constraint-class",
           "target_type": "content"
@@ -3652,6 +4486,11 @@
       "label": "入れ子・均衡・相補性・hybrid構造",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -3664,6 +4503,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
           "target_type": "source"
         },
         {
@@ -3690,6 +4534,21 @@
           "relation_type": "related_content",
           "target_id": "family.optimal-control",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "bilevel-regression-exact-inner",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "bilevel-regression-relaxed-complementarity",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "hybrid-mode-chattering-ledger",
+          "target_type": "trace"
         }
       ],
       "summary": "入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。"
@@ -3759,6 +4618,16 @@
       "label": "PDE制約付き最適化",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -3781,6 +4650,16 @@
         {
           "relation_type": "evidence",
           "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S111",
           "target_type": "source"
         },
         {
@@ -3807,6 +4686,21 @@
           "relation_type": "related_content",
           "target_id": "topology-optimization",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-solve-failure",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-tolerance-loose",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-tolerance-tight",
+          "target_type": "trace"
         }
       ],
       "summary": "PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。"
@@ -3912,6 +4806,11 @@
       "label": "SO(3)の行列・接空間表現",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S044",
           "target_type": "source"
@@ -3924,6 +4823,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
           "target_type": "source"
         },
         {
@@ -3950,9 +4854,70 @@
           "relation_type": "related_content",
           "target_id": "riemannian-trust-region",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-projected-alignment",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-riemannian-alignment",
+          "target_type": "trace"
         }
       ],
       "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.spd-matrix-geometry",
+      "entity_id": "concept.spd-matrix-geometry",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SPD matrixの表現と境界",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S108",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.simplex",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "SPD matrixでは対称性・最小固有値・condition numberを診断し、各parametrizationとRiemannian updateが表す範囲を区別します。"
     },
     {
       "aliases": [],
@@ -4075,6 +5040,11 @@
       "label": "不確実性モデル・リスク・保証範囲",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -4087,6 +5057,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -4113,6 +5088,16 @@
           "relation_type": "related_content",
           "target_id": "lp-qp-conic",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
         }
       ],
       "summary": "不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。"
@@ -4509,6 +5494,11 @@
       "label": "Direct Collocation",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S042",
           "target_type": "source"
@@ -4526,6 +5516,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
           "target_type": "source"
         },
         {
@@ -4567,6 +5562,21 @@
           "relation_type": "related_content",
           "target_id": "least-squares",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-model-rollout-failure",
+          "target_type": "trace"
         }
       ],
       "summary": "状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。"
@@ -5547,6 +6557,11 @@
       "label": "最適制御・軌道最適化の選び分け",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S042",
           "target_type": "source"
@@ -5564,6 +6579,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
           "target_type": "source"
         },
         {
@@ -5615,6 +6635,21 @@
           "relation_type": "related_content",
           "target_id": "multiple-shooting",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-model-rollout-failure",
+          "target_type": "trace"
         }
       ],
       "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。"
@@ -5939,6 +6974,11 @@
       "label": "形状更新の失敗モード",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -5956,6 +6996,16 @@
         {
           "relation_type": "evidence",
           "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
           "target_type": "source"
         },
         {
@@ -5985,7 +7035,12 @@
         },
         {
           "relation_type": "visualization",
-          "target_id": "topology-optimization-field-evolution",
+          "target_id": "shape-diffuser-invalid-geometry",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-valid-update",
           "target_type": "trace"
         }
       ],
@@ -7924,6 +8979,11 @@
       "label": "形状最適化の設計変数",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -7941,6 +9001,21 @@
         {
           "relation_type": "evidence",
           "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
           "target_type": "source"
         },
         {
@@ -7970,7 +9045,17 @@
         },
         {
           "relation_type": "visualization",
-          "target_id": "topology-optimization-field-evolution",
+          "target_id": "shape-diffuser-invalid-geometry",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-valid-update",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-topology-representation-contrast",
           "target_type": "trace"
         }
       ],
@@ -7985,6 +9070,11 @@
       "label": "形状parameterと縮約感度",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -7997,6 +9087,16 @@
         {
           "relation_type": "evidence",
           "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
           "target_type": "source"
         },
         {
@@ -8028,6 +9128,16 @@
           "relation_type": "related_content",
           "target_id": "topology-optimization",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-invalid-geometry",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-valid-update",
+          "target_type": "trace"
         }
       ],
       "summary": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。"
@@ -14787,6 +15897,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
           "target_id": "M_BFGS",
           "target_type": "method"
@@ -14944,6 +16059,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_TRUST_KRYLOV",
           "target_type": "method"
@@ -14969,9 +16089,34 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S111",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
           "target_id": "M_DIFFERENTIAL_EVOLUTION",
           "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+          "target_type": "scenario"
         },
         {
           "relation_type": "implementation",
@@ -14994,12 +16139,128 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA045",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+          "target_type": "scenario"
         }
       ],
       "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC029",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "pendulumを制約内で振り上げる",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MULTIPLE_SHOOTING",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ACADOS",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CASADI",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_DRAKE",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "direct-collocation",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multiple-shooting",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA042",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
     },
     {
       "aliases": [],
@@ -15018,6 +16279,11 @@
           "relation_type": "case",
           "target_id": "bilevel-regularized-regression",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
         },
         {
           "relation_type": "conditional_method",
@@ -15070,6 +16336,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_IPOPT",
           "target_type": "implementation"
@@ -15088,6 +16359,11 @@
           "relation_type": "learning",
           "target_id": "slsqp",
           "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+          "target_type": "scenario"
         },
         {
           "relation_type": "problem",
@@ -15701,6 +16977,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_PROJECTED_GRADIENT",
           "target_type": "method"
@@ -15727,11 +17008,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S055",
           "target_type": "source"
         },
@@ -15743,6 +17019,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -15766,12 +17047,163 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA036",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "scenario"
         }
       ],
       "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "shape-diffuser",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "2D diffuserの壁面shapeを更新する",
+      "relations": [
+        {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_INTERIOR_POINT_NLP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S029",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S087",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_IPOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_SLSQP",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "interior-point-nlp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "slsqp",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA057",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。"
     },
     {
       "aliases": [],
@@ -15868,6 +17300,127 @@
         }
       ],
       "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "so3-attitude-alignment",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "SO(3)上でnear-piのattitudeを合わせる",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_RIEMANNIAN_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RIEMANNIAN_TRUST_REGION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_MANOPT_JL",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_MANOPT_MATLAB",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMANOPT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA037",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。"
     },
     {
       "aliases": [],
@@ -16376,6 +17929,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S004",
           "target_type": "source"
@@ -16419,6 +17977,16 @@
           "relation_type": "learning",
           "target_id": "lp-qp-conic",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
         }
       ],
       "summary": "LP、凸QP、SOCP、SDP等の凸構造を利用し、simplex、barrier、operator splitting等で解く手法群。"
@@ -16495,6 +18063,11 @@
       "label": "最適制御・軌道最適化",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S042",
           "target_type": "source"
@@ -16515,9 +18088,29 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
           "relation_type": "learning",
           "target_id": "family.optimal-control",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-model-rollout-failure",
+          "target_type": "trace"
         }
       ],
       "summary": "動力学制約をshooting、collocation、Riccati型再帰等で離散化・解法に組み込む手法群。"
@@ -16989,8 +18582,18 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "topology-cantilever",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -17001,6 +18604,21 @@
           "relation_type": "learning",
           "target_id": "adjoint-sensitivity",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-solve-failure",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-tolerance-loose",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-tolerance-tight",
+          "target_type": "trace"
         },
         {
           "relation_type": "visualization",
@@ -17530,6 +19148,11 @@
         },
         {
           "relation_type": "case",
+          "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "bilevel-regularized-regression",
           "target_type": "case"
         },
@@ -17541,6 +19164,11 @@
         {
           "relation_type": "case",
           "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
           "target_type": "case"
         },
         {
@@ -18414,6 +20042,16 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S042",
           "target_type": "source"
@@ -18434,6 +20072,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_CASADI",
           "target_type": "implementation"
@@ -18450,7 +20093,27 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "hybrid-mode-chattering-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "optimal-control-ec020-history",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pendulum-model-rollout-failure",
           "target_type": "trace"
         }
       ],
@@ -18997,6 +20660,11 @@
         {
           "relation_type": "case",
           "target_id": "constrained-design",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "shape-diffuser",
           "target_type": "case"
         },
         {
@@ -19547,6 +21215,11 @@
         {
           "relation_type": "case",
           "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC029",
           "target_type": "case"
         },
         {
@@ -20511,6 +22184,16 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S017",
           "target_type": "source"
@@ -20559,6 +22242,11 @@
           "relation_type": "learning",
           "target_id": "projected-gradient",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-projected-alignment",
+          "target_type": "trace"
         }
       ],
       "summary": "gradient step後に実行可能集合へ射影する。"
@@ -20725,6 +22413,16 @@
       "label": "Riemann勾配法",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S044",
           "target_type": "source"
@@ -20758,6 +22456,11 @@
           "relation_type": "learning",
           "target_id": "riemannian-gradient",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-riemannian-alignment",
+          "target_type": "trace"
         }
       ],
       "summary": "接空間のRiemann gradient方向へ進みretractionで多様体へ戻す。"
@@ -20772,6 +22475,11 @@
       "external_url": null,
       "label": "Riemann trust-region法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S044",
@@ -21036,8 +22744,18 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "topology-cantilever",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
         },
         {
           "relation_type": "comparison",
@@ -21063,6 +22781,11 @@
           "relation_type": "learning",
           "target_id": "simp-topology",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-topology-representation-contrast",
+          "target_type": "trace"
         },
         {
           "relation_type": "visualization",
@@ -21167,8 +22890,23 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_CONSTRAINED_FAILURE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
           "target_type": "comparison"
         },
         {
@@ -21213,7 +22951,27 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "bilevel-regression-exact-inner",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "bilevel-regression-relaxed-complementarity",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-invalid-geometry",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-diffuser-valid-update",
           "target_type": "trace"
         }
       ],
@@ -22309,7 +24067,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "SO(3)/SE(3)上の最適化",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "journey"
+        }
+      ],
       "summary": "SO(3)/SE(3)上の最適化。変数=manifold、目的=sum_of_squares、制約=manifold。"
     },
     {
@@ -22388,8 +24157,18 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC020",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
           "target_type": "journey"
         }
       ],
@@ -22581,6 +24360,27 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "PA057",
+      "entity_type": "problem",
+      "external_url": null,
+      "label": "形状依存領域の最適化",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "shape-diffuser",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "parameterからgeometryとmeshを作り、shape-dependentなstate equationを解く最適化。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_ADAM_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
@@ -22639,6 +24439,88 @@
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Bilevel回帰 · exact inner診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "bilevel-regression-exact-inner",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Bilevel回帰 · finite relaxationの残差",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "bilevel-regression-relaxed-complementarity",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "bilevel-regularized-regression",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "outer progress、inner solve、complementarityを別々の履歴として読む"
     },
     {
       "aliases": [],
@@ -23477,6 +25359,42 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Hybrid mode discovery · chattering診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "hybrid-mode-chattering-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        }
+      ],
+      "summary": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
@@ -23680,6 +25598,579 @@
         }
       ],
       "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "PDE state solve · failure ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pde-state-solve-failure",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "PDE state solve · loose tolerance",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pde-state-tolerance-loose",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "PDE state solve · tight tolerance",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pde-state-tolerance-tight",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S019",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S110",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC026",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Pendulum swing-up · N=20 mesh診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Pendulum swing-up · N=40 mesh感度",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Pendulum swing-up · modelずれrollout",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "pendulum-model-rollout-failure",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC029",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "state・control・dynamics defect・path violationを同じ評価軸で読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "CVaR配分のtraining / held-out診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "nominal配分のtraining / held-out診断",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-cvar-allocation",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "同じ配分をtrainingとheld-outで評価し、in-sampleのrisk低下を将来保証と読み替えない。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "2D diffuser · geometry／mesh failure",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "shape-diffuser-invalid-geometry",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "2D diffuser · 有効なshape更新",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "shape-diffuser-valid-update",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "shape／topology表現contrast",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "shape-topology-representation-contrast",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S097",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S104",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S105",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S106",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shape-diffuser",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "parameter、geometry、mesh、physical state、目的を同じevaluation軸で分けて読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "ambient stepとQR projectionによるattitude alignment",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "so3-projected-alignment",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "Lie algebra stepによるattitude alignment",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "so3-riemannian-alignment",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S107",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "so3-attitude-alignment",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "目的関数の改善と、直交性・determinant・geodesic residualを分けて読む。"
     },
     {
       "aliases": [],
@@ -24831,6 +27322,96 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/sources/S102",
+      "entity_id": "S102",
+      "entity_type": "source",
+      "external_url": "https://underactuated.mit.edu/trajopt.html",
+      "label": "Trajectory Optimization",
+      "relations": [],
+      "summary": "Direct collocation formulation, pendulum swing-up example, trajectory reconstruction, mesh refinement, and limits of local finite-dimensional solves."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S103",
+      "entity_id": "S103",
+      "entity_type": "source",
+      "external_url": "https://uryasev.ams.stonybrook.edu/wp-content/uploads/2019/03/optimization_cvar.pdf",
+      "label": "Optimization of Conditional Value-at-Risk",
+      "relations": [],
+      "summary": "CVaR optimization representation and its use in portfolio selection."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S104",
+      "entity_id": "S104",
+      "entity_type": "source",
+      "external_url": "https://arxiv.org/abs/2010.02048",
+      "label": "cashocs: A Computational, Adjoint-Based Shape Optimization and Optimal Control Software",
+      "relations": [],
+      "summary": "PDE-constrained shape optimization, automated adjoint systems, and shape derivatives."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S105",
+      "entity_id": "S105",
+      "entity_type": "source",
+      "external_url": "https://arxiv.org/abs/2306.09828",
+      "label": "Version 2.0 -- cashocs: A Computational, Adjoint-Based Shape Optimization and Optimal Control Software",
+      "relations": [],
+      "summary": "Level-set topology optimization and the distinction between shape and topology workflows."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S106",
+      "entity_id": "S106",
+      "entity_type": "source",
+      "external_url": "https://cashocs.readthedocs.io/en/stable/user/demos/shape_optimization/demo_remeshing/",
+      "label": "Remeshing with cashocs",
+      "relations": [],
+      "summary": "Shape-optimization remeshing workflow and explicit mesh-quality monitoring."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S107",
+      "entity_id": "S107",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s11263-012-0601-0",
+      "label": "Rotation Averaging",
+      "relations": [],
+      "summary": "SO(3) rotation averaging, chordal and geodesic distance choices, and near-pi geometry limitations."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S108",
+      "entity_id": "S108",
+      "entity_type": "source",
+      "external_url": "https://doi.org/10.1007/s11263-005-3222-z",
+      "label": "A Riemannian Framework for Tensor Computing",
+      "relations": [],
+      "summary": "Riemannian treatment of symmetric positive-definite tensors and intrinsic statistics."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S110",
+      "entity_id": "S110",
+      "entity_type": "source",
+      "external_url": "https://petsc.org/release/manualpages/KSP/KSPConvergedReason/",
+      "label": "KSPConvergedReason",
+      "relations": [],
+      "summary": "PETSc distinguishes positive convergence reasons from explicit divergence reasons including iteration limit, breakdown, NaN/Inf, and preconditioner failure."
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/sources/S111",
+      "entity_id": "S111",
+      "entity_type": "source",
+      "external_url": "https://www.dolfin-adjoint.org/_/downloads/en/stable/pdf/",
+      "label": "FEniCS Adjoint Documentation",
+      "relations": [],
+      "summary": "Time-dependent adjoints may use checkpointing to trade storage for forward recomputation, and adjoint correctness requires explicit verification."
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
       "entity_id": "ARTIFACT_BO_EXPLOIT_NOISELESS",
       "entity_type": "trace",
@@ -25137,6 +27718,58 @@
         {
           "relation_type": "visualizes",
           "target_id": "M_ADAM",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/bilevel-regression-exact-inner",
+      "entity_id": "bilevel-regression-exact-inner",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Bilevel回帰 · exact inner診断",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/bilevel-regression-relaxed-complementarity",
+      "entity_id": "bilevel-regression-relaxed-complementarity",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Bilevel回帰 · finite relaxationの残差",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SLSQP",
           "target_type": "method"
         }
       ],
@@ -25554,6 +28187,27 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/hybrid-mode-chattering-ledger",
+      "entity_id": "hybrid-mode-chattering-ledger",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Hybrid mode discovery · chattering診断",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/momentum-quadratic",
       "entity_id": "momentum-quadratic",
       "entity_type": "trace",
@@ -25723,6 +28377,329 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/pde-state-solve-failure",
+      "entity_id": "pde-state-solve-failure",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "PDE state solve · failure ledger",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/pde-state-tolerance-loose",
+      "entity_id": "pde-state-tolerance-loose",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "PDE state solve · loose tolerance",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/pde-state-tolerance-tight",
+      "entity_id": "pde-state-tolerance-tight",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "PDE state solve · tight tolerance",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADJOINT_SENSITIVITY",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/pendulum-collocation-coarse",
+      "entity_id": "pendulum-collocation-coarse",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Pendulum swing-up · N=20 mesh診断",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/pendulum-collocation-refined",
+      "entity_id": "pendulum-collocation-refined",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Pendulum swing-up · N=40 mesh感度",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/pendulum-model-rollout-failure",
+      "entity_id": "pendulum-model-rollout-failure",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "Pendulum swing-up · modelずれrollout",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/portfolio-cvar-8-4",
+      "entity_id": "portfolio-cvar-8-4",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "CVaR配分 · training / held-out診断",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/portfolio-nominal-8-4",
+      "entity_id": "portfolio-nominal-8-4",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "nominal配分 · training / held-out診断",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/shape-diffuser-invalid-geometry",
+      "entity_id": "shape-diffuser-invalid-geometry",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "shape-diffuser-invalid-geometry",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/shape-diffuser-valid-update",
+      "entity_id": "shape-diffuser-valid-update",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "shape-diffuser-valid-update",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SLSQP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/shape-topology-representation-contrast",
+      "entity_id": "shape-topology-representation-contrast",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "shape-topology-representation-contrast",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/so3-projected-alignment",
+      "entity_id": "so3-projected-alignment",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "SO(3) · ambient step + QR projection",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/so3-riemannian-alignment",
+      "entity_id": "so3-riemannian-alignment",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "SO(3) · Lie algebra update",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_RIEMANNIAN_GRADIENT",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
       "entity_id": "topology-optimization-field-evolution",
       "entity_type": "trace",
@@ -25810,6 +28787,26 @@
           "target_type": "method"
         }
       ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+      "relations": [],
       "summary": ""
     },
     {
@@ -25949,6 +28946,136 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_OPTIMAL_CONTROL_EC020",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PDE_STATE_SOLVE_FAILURE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "relations": [],
       "summary": ""
     },

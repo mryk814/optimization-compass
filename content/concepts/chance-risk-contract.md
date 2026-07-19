@@ -6,7 +6,7 @@ canonical_entity_id: F_CONSTRAINT_CHANCE
 title_ja: Chance constraint・CVaR・robustness
 title_en: Chance Constraints, CVaR, and Robustness
 summary: Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。
-source_ids: [S054, S055, S056]
+source_ids: [S054, S055, S056, S103]
 prerequisites: [concept.uncertainty-models, concept.constraint-class]
 related_ids: [concept.simplex, family.stochastic-ml, lp-qp-conic]
 status: published
@@ -64,6 +64,8 @@ chance constraintが「制約違反の頻度をどこまで許すか」を問う
 | 両方 | CVaR objective + robust constraint | tailの大きさとset内の最悪可行性を別々に読む |
 
 CVaRの値を比較するときは、lossの向き、tail水準、sample数、scenarioの重み、最適化に使ったsampleと評価用sampleを固定します。値が小さいことだけで、異なる分布や異なるtail水準の結果を順位付けしません。
+
+chance constraintの`α`を違反確率、CVaRの`α`をquantileまたはtail levelとして書く流儀があります。同じ記号でも意味は別です。さらに、どちらも推定値のconfidence levelとは限りません。Case・Theater・Compareでは`violation_probability`、`tail_level`、`confidence_level`を別fieldとして読みます。
 
 ## robust・stochastic・DROを同じ軸で混ぜない
 

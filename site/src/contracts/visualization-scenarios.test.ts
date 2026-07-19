@@ -24,6 +24,19 @@ describe("VisualizationScenario parser", () => {
     expect(() => parseVisualizationScenarioIndex({ ...fixture, renderer_registry: {} })).toThrow(/unknown/u);
   });
 
+  test("accepts explicit state and adjoint solve oracle policies", () => {
+    const scenario = fixture.scenarios[0];
+    const parsed = parseVisualizationScenarioIndex({
+      ...fixture,
+      scenarios: [{
+        ...scenario,
+        experiment: { ...scenario.experiment, oracle_policy: ["state_solve", "adjoint_solve"] },
+      }],
+    });
+
+    expect(parsed.scenarios[0].experiment.oracle_policy).toEqual(["state_solve", "adjoint_solve"]);
+  });
+
   test("parses BO scenarios from the single generated scenario authority", () => {
     const parsed = parseVisualizationScenarioIndex(generated);
     const boScenarios = parsed.scenarios.filter(

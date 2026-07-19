@@ -18,7 +18,7 @@ from optimization_compass.dataset_release import (
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
-STAGED_TEST_VERSION = "0.18.6"
+STAGED_TEST_VERSION = "0.18.10"
 STAGED_TEST_DATE = "2026-07-19"
 
 

@@ -6,9 +6,11 @@ canonical_entity_id: F_STRUCTURE_BILEVEL
 title_ja: 入れ子・均衡・相補性・hybrid構造
 title_en: Nested, Equilibrium, Complementarity, and Hybrid Structures
 summary: 入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。
-source_ids: [S054, S055, S056]
+source_ids: [S054, S055, S056, S064]
 prerequisites: [concept.constraint-class, concept.dynamics-defect, concept.trajectory-variable]
 related_ids: [family.constrained-nlp, family.optimal-control]
+visualization_ids: [bilevel-regression-exact-inner, bilevel-regression-relaxed-complementarity, hybrid-mode-chattering-ledger]
+comparison_ids: [COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT]
 status: published
 last_reviewed: 2026-07-19
 ---
@@ -107,6 +109,28 @@ hybrid systemでは、連続状態$x(t)$と離散mode$m(t)$が同時に現れま
 | stationarity | stationarity residual、constraint qualification、active set | 停止条件の意味と未保証の範囲 |
 
 inner residualが小さくてもouter objectiveが改善するとは限りません。逆に、outer objectiveが改善してもinner solveが粗ければ、outer gradientやequilibriumの評価が変わります。異なる種類の残差を単位やtoleranceをそろえずに比較しません。
+
+## TheaterとCompareで読む
+
+[bilevel正則化回帰Case](#/gallery/bilevel-regularized-regression)で、外側の係数更新と内側のridge回帰を分けて確認します。
+
+[exact innerのTheater](#/theater/learning/SCENARIO_BILEVEL_REGRESSION_EXACT)は、固定した6回のouter updateを追います。
+outerとinnerのobjectiveを分け、inner iteration数も表示します。
+さらにinner residual、stationarity residual、complementarity residualを同じevaluation軸に並べます。
+outerの1点はinnerの1 iterationではありません。
+inner toleranceを満たしてからouter updateへ進んだことも確認します。
+
+[finite relaxationのTheater](#/theater/learning/SCENARIO_BILEVEL_REGRESSION_RELAXED)は同じouter budgetとinner policyを使います。
+inner toleranceとderivative routeも固定します。
+変更するのはcomplementarity treatmentだけで、$\tau=10^{-2}$の有限relaxationを使います。
+[Compare](#/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT)では、relaxed側のouter objectiveがより低くても残差を確認します。
+complementarity residualが残るrunを、exact KKTの達成や順位へ読み替えません。
+
+[mode chatteringのTheater](#/theater/learning/SCENARIO_HYBRID_MODE_CHATTERING)は、既存contractで表せる最小のsecondary failure sliceです。
+目的関数とdynamics defectが下がる一方で、active modeが交互に切り替わります。
+switching intervalも縮む固定ledgerです。
+これはcontact/friction solverや物理simulationではなく、一般的なmode discovery性能も示しません。
+active contactや摩擦力の表示には、canonical authorityと実行可能artifactが別途必要です。
 
 ::: warning
 教育用の小さなrunで得たstationarity、exactness、mode sequenceは、一般のbilevel、MPEC、接触問題、hybrid systemのglobal guaranteeではありません。inner solve policy、解の選択規則、relaxation、mode discovery、constraint qualificationを明記してから結果を解釈します。

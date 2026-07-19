@@ -7,6 +7,32 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.constraint_geometry import (
+    GENERATOR_ID as SO3_GENERATOR_ID,
+)
+from optimization_compass.constraint_geometry import (
+    GENERATOR_VERSION as SO3_GENERATOR_VERSION,
+)
+from optimization_compass.constraint_geometry import (
+    PROFILE_ID as SO3_PROFILE_ID,
+)
+from optimization_compass.nested_solve import (
+    BILEVEL_GENERATOR_ID,
+    BILEVEL_GENERATOR_VERSION,
+    BILEVEL_PROFILE_ID,
+    HYBRID_GENERATOR_ID,
+    HYBRID_GENERATOR_VERSION,
+    HYBRID_PROFILE_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_ID as PORTFOLIO_GENERATOR_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_VERSION as PORTFOLIO_GENERATOR_VERSION,
+)
+from optimization_compass.portfolio_uncertainty import (
+    PROFILE_ID as PORTFOLIO_PROFILE_ID,
+)
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -17,6 +43,7 @@ from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
 )
+from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenario
 
 _EDUCATIONAL_GENERATORS_BY_RENDERER = {
@@ -24,6 +51,13 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "surrogate_uncertainty": (SURROGATE_GENERATOR_ID, SURROGATE_GENERATOR_VERSION),
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
+    "generic_metric_history": ("educational.optimal_control.v1", "1.1.0"),
+}
+_EDUCATIONAL_GENERATORS_BY_PROFILE = {
+    BILEVEL_PROFILE_ID: (BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION),
+    HYBRID_PROFILE_ID: (HYBRID_GENERATOR_ID, HYBRID_GENERATOR_VERSION),
+    PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),
+    SO3_PROFILE_ID: (SO3_GENERATOR_ID, SO3_GENERATOR_VERSION),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {
@@ -206,9 +240,20 @@ def validate_comparison_benchmark_contexts(
     index: ComparisonIndex,
     contexts: Iterable[Mapping[str, Any]],
     scenarios: Iterable[VisualizationScenario],
+    *,
+    problem_definition_ids: Iterable[str] | None = None,
+    problem_instance_ids: Iterable[str] | None = None,
+    traces: Iterable[AlgorithmTrace] = (),
 ) -> None:
     contexts_by_id = {str(context["context_id"]): context for context in contexts}
     scenarios_by_id = {scenario.scenario_id: scenario for scenario in scenarios}
+    known_problem_definitions = (
+        set(problem_definition_ids) if problem_definition_ids is not None else None
+    )
+    known_problem_instances = (
+        set(problem_instance_ids) if problem_instance_ids is not None else None
+    )
+    traces_by_id = {trace.trace_id: trace for trace in traces}
     exact_context_ids = {
         context_id
         for context_id, context in contexts_by_id.items()
@@ -217,6 +262,21 @@ def validate_comparison_benchmark_contexts(
     }
     referenced_exact_context_ids: set[str] = set()
     for comparison in index.comparisons:
+        if (
+            known_problem_definitions is not None
+            and comparison.problem_definition_id not in known_problem_definitions
+        ):
+            raise ValueError(
+                "comparison problem definition does not resolve: "
+                f"{comparison.problem_definition_id}"
+            )
+        if (
+            known_problem_instances is not None
+            and comparison.problem_instance_id not in known_problem_instances
+        ):
+            raise ValueError(
+                f"comparison problem instance does not resolve: {comparison.problem_instance_id}"
+            )
         context = contexts_by_id.get(comparison.benchmark_context_id)
         if context is None:
             raise ValueError(
@@ -224,8 +284,19 @@ def validate_comparison_benchmark_contexts(
             )
         if comparison.benchmark_context_id not in exact_context_ids:
             continue
+        if context.get("problem_instance_id") != comparison.problem_instance_id:
+            raise ValueError(
+                "exact comparison benchmark context uses a different problem instance: "
+                f"{comparison.comparison_id} expects {comparison.problem_instance_id}, "
+                f"{comparison.benchmark_context_id} uses {context.get('problem_instance_id')}"
+            )
         referenced_exact_context_ids.add(comparison.benchmark_context_id)
-        _validate_exact_comparison_context(comparison, context, scenarios_by_id)
+        _validate_exact_comparison_context(
+            comparison,
+            context,
+            scenarios_by_id,
+            traces_by_id,
+        )
     unreferenced = exact_context_ids - referenced_exact_context_ids
     if unreferenced:
         raise ValueError(f"exact benchmark context is not referenced: {sorted(unreferenced)}")
@@ -235,6 +306,7 @@ def _validate_exact_comparison_context(
     comparison: ComparisonSet,
     context: Mapping[str, Any],
     scenarios_by_id: Mapping[str, VisualizationScenario],
+    traces_by_id: Mapping[str, AlgorithmTrace],
 ) -> None:
     runtime = context["runtime"]
     implementation = context["implementation_versions"]
@@ -275,9 +347,25 @@ def _validate_exact_comparison_context(
         scenario = scenarios_by_id.get(member.scenario_id)
         if scenario is None:
             raise ValueError(f"comparison scenario does not resolve: {member.scenario_id}")
-        expected_generator = _EDUCATIONAL_GENERATORS_BY_RENDERER.get(
-            scenario.artifact.renderer_family
+        run = next(
+            (
+                candidate
+                for candidate in scenario.runs
+                if candidate.artifact_id == member.artifact.artifact_id
+                and candidate.method_id == member.method_id
+            ),
+            None,
         )
+        trace = traces_by_id.get(member.artifact.artifact_id)
+        expected_generator = (
+            (trace.generator_id, trace.generator_version)
+            if trace is not None
+            else _EDUCATIONAL_GENERATORS_BY_PROFILE.get(run.profile_id)
+            if run is not None
+            else None
+        ) or _EDUCATIONAL_GENERATORS_BY_RENDERER.get(scenario.artifact.renderer_family)
+        if run is None:
+            raise ValueError(f"comparison member run does not resolve: {member.member_id}")
         if expected_generator is None:
             raise ValueError(
                 "educational comparison renderer has no registered generator: "

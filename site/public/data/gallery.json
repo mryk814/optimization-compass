@@ -427,7 +427,9 @@
         }
       ],
       "case_id": "portfolio-cvar-allocation",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_PROJECTED_GRADIENT",
@@ -469,16 +471,18 @@
         "Q01": "continuous"
       },
       "source_ids": [
-        "S054",
+        "S010",
         "S055",
-        "S056"
+        "S103"
       ],
       "status": "published",
       "title_en": "Portfolio allocation with CVaR",
       "title_ja": "scenarioのtail riskを抑えて配分する",
       "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid w_i\\ge0,\\ \\sum_i w_i=1,\\ 0\\le w_i\\le0.6\\}$。$w$ はsimplex上の配分ベクトルである。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+        "SCENARIO_PORTFOLIO_CVAR_8_4"
       ]
     },
     {
@@ -739,7 +743,7 @@
         "I_ORTOOLS_ROUTING",
         "I_GUROBI"
       ],
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-19",
       "limitations": [
         "期限停止時の解は品質の差が未証明で、交通やサービス時間の変動もこの固定例には含みません。"
       ],
@@ -970,7 +974,9 @@
         }
       ],
       "case_id": "EC026",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_PDE_STATE_TOLERANCE_COST"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_TRUST_KRYLOV",
@@ -1017,13 +1023,14 @@
         "I_PETSC_TAO",
         "I_IPOPT"
       ],
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-19",
       "limitations": [
-        "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"
+        "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。",
+        "固定meshのsteady教材からtransient checkpointing、multiphysics coupling、実hardware costの一般性能は推論しません。"
       ],
       "map_node_id": "answer:Q08:huge_sparse_or_distributed",
       "objective": "PDE solve $z(\\theta,q)$ から得る性能指標 $J(z,\\theta,q)$ と正則化（regularization）$R(\\theta,q)$ を使い、$f=J+\\lambda R$ を最小化する。",
-      "practical_notes": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。",
+      "practical_notes": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。失敗したstate solveは大きなobjective値へ暗黙変換せず、solver reason、残差、消費したstate/adjoint solve costをfailed evaluationとして保持します。transient問題ではtime-step数、checkpoint policy、forward再計算回数、adjoint storageを追加し、一方向・双方向multiphysicsではfieldごとの残差とcoupling iterationを分けます。",
       "problem_archetype_id": "PA045",
       "python_example": "from petsc4py import PETSc\n\ntao = PETSc.TAO().create()\ntao.setType(\"nls\")\nprint(tao.getType())",
       "question": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
@@ -1044,14 +1051,221 @@
       "source_ids": [
         "S017",
         "S019",
-        "S056"
+        "S056",
+        "S101",
+        "S110",
+        "S111"
       ],
       "status": "published",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く",
       "variable_domain": "mesh上の状態（state）$z\\in\\mathbb{R}^{n_{mesh}}$、境界制御（boundary control）$q\\in\\mathbb{R}^{n_{boundary}}$、設計パラメータ（design parameter）$\\theta\\in[\\theta_{min},\\theta_{max}]^p$ の直積 $X$。連続PDEの関数空間そのものではなく、離散mesh上の領域である。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+        "SCENARIO_PDE_STATE_TOLERANCE_LOOSE",
+        "SCENARIO_PDE_STATE_SOLVE_FAILURE"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_DIRECT_COLLOCATION",
+          "reason": "pendulumのstate・torque・Hermite–Simpson dynamics defectを疎なNLPへ同時に転写できるため"
+        }
+      ],
+      "case_id": "EC029",
+      "comparison_ids": [
+        "COMPARE_PENDULUM_COLLOCATION_MESH"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_MULTIPLE_SHOOTING",
+          "reason": "区間積分を使いながら、初期値感度をsegmentへ分けたい場合"
+        }
+      ],
+      "constraints": "$\\dot\\theta=\\omega$、$\\dot\\omega=u-0.05\\omega-9.81\\sin\\theta$ のHermite–Simpson defectを各区間で0にする。初期条件は $x_0=(0,0)$、終端条件は $x_N=(\\pi,0)$、path／bound制約はmesh／collocation pointで $|\\omega|\\le8$、$|u|\\le8$ とする。node feasibilityと区間再構成後のviolationは別の診断値として保存する。",
+      "decision_variables": "Direct Collocationでは角度・角速度のstate列 $x_0,\\ldots,x_N$ とtorque列 $u_0,\\ldots,u_{N-1}$ をmesh上のdecision objectとして同時に置く。single shootingではtorque列だけを選び、state列はrolloutで作るため、同じpendulumでもdecision objectが異なる。",
+      "difficulty": "intermediate",
+      "domain": "control",
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "dynamics defectとpath／terminal制約を平坦な無制約目的へ隠してしまう"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "trajectory"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "general_nonlinear"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "automatic_differentiation"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "dynamics"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "expensive"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "local_stationary"
+        }
+      ],
+      "implementation_ids": [
+        "I_CASADI",
+        "I_ACADOS",
+        "I_DRAKE"
+      ],
+      "last_reviewed": "2026-07-19",
+      "limitations": [
+        "node／collocation pointの実行可能性は区間内や連続時間の可行性を保証しません。実機安全性、dynamics modelの正確さ、大域最適性、solver family間の一般性能も保証しません。"
+      ],
+      "map_node_id": "answer:Q11:optimal_control",
+      "objective": "$f=0.01\\sum_{k=0}^{N-1}u_k^2+20\\lVert x_N-(\\pi,0)\\rVert_2^2$ を最小化する。Theaterではobjective、terminal error、constraint residualを別々に読む。",
+      "practical_notes": "N=20とN=40で、同じdynamics、2秒horizon、初期・終端・path制約、初期trajectory、8 evaluation予算、dynamics defect tolerance $10^{-3}$、node path tolerance $10^{-4}$、terminal tolerance $10^{-3}$ を固定する。max dynamics defect、node path violation、再構成path violation、terminal error、objectiveを別々に保存する。gravityを10%変えたvalidation rolloutは独立failure Theaterで確認する。MPCは[receding horizon](#/learn/concept.receding-horizon)と[Case EC025](#/gallery/EC025)、contact／hybridは[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、safety filterは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
+      "problem_archetype_id": "PA042",
+      "python_example": "import casadi as ca\n\ntheta, omega, torque = ca.SX.sym(\"theta\"), ca.SX.sym(\"omega\"), ca.SX.sym(\"torque\")\ndynamics = ca.vertcat(omega, torque - 0.05 * omega - 9.81 * ca.sin(theta))\npendulum = ca.Function(\"pendulum\", [ca.vertcat(theta, omega), torque], [dynamics])\nprint(pendulum([0.0, 0.0], 1.0))",
+      "question": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。",
+      "question_answers": {
+        "Q01": "structured_or_unknown",
+        "Q02": "automatic_differentiation_graph",
+        "Q03": "general_nonlinear",
+        "Q04": "dynamics_or_manifold",
+        "Q05": "autodiff",
+        "Q06": "minutes",
+        "Q07": "deterministic_reliable",
+        "Q08": "100_to_10000",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "optimal_control",
+        "Q12": "one_off"
+      },
+      "source_ids": [
+        "S042",
+        "S050",
+        "S102"
+      ],
+      "status": "published",
+      "title_en": "Swing up a pendulum under constraints",
+      "title_ja": "pendulumを制約内で振り上げる",
+      "variable_domain": "mesh（knot）数 $N=20$ の固定教材では、state $x_k=(\\theta_k,\\omega_k)$ を $k=0,\\ldots,N$、control $u_k$ を $k=0,\\ldots,N-1$ に置く。decision setは $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1})\\mid |\\omega_k|\\le8,|u_k|\\le8\\}$ で、horizonは2秒に固定する。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_SLSQP",
+          "reason": "3つのbounded shape parameterとgeometry／mesh validity制約を、gradient付きの小規模NLPとして扱えるため"
+        }
+      ],
+      "case_id": "shape-diffuser",
+      "comparison_ids": [
+        "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_INTERIOR_POINT_NLP",
+          "reason": "shape自由度やstate／geometry制約が増え、疎なJacobianとbarrier法を活かせる場合"
+        },
+        {
+          "method_id": "M_ADJOINT_SENSITIVITY",
+          "reason": "parameter数が増えたPDE stateで、目的・制約の縮約感度を少ない追加solveで組み立てる場合"
+        }
+      ],
+      "constraints": "parameter boundsに加え、geometry最小gap $g_{gap}>0.4$、自己交差なし、mesh最小quality $q_{mesh}\\ge0.2$、反転cell数0、state residual $\\lVert R(u,q)\\rVert\\le10^{-6}$、fixed topologyを別々に検査します。",
+      "decision_variables": "optimizerが直接更新するのは3つのparameter $q$ です。geometry座標、mesh node、state $u$ はparameterから生成またはsolveされる従属量です。level-setやdensity fieldは接続変更を許せますが、このCaseのparameterizationは入口1つ・出口1つのtopologyを固定します。",
+      "difficulty": "intermediate",
+      "domain": "engineering",
+      "excluded_methods": [
+        {
+          "method_id": "M_SIMP_TOPOLOGY",
+          "reason": "このCaseは接続を変えないfixed-topology shape problemであり、density fieldによるtopology changeは別の設計空間だから"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "simulation"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "analytic_gradient"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "implicit"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "moderate"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "local_stationary"
+        }
+      ],
+      "implementation_ids": [
+        "I_SCIPY_SLSQP",
+        "I_IPOPT"
+      ],
+      "last_reviewed": "2026-07-19",
+      "limitations": [
+        "3 parameter・21 geometry sample・reduced state proxyの決定論的教材であり、CFD、連続体可行性、mesh independence、実diffuser性能を示しません。",
+        "shapeとtopologyのcontrastは設計表現の違いを読むためのもので、目的値、速度、解品質のrankingではありません。"
+      ],
+      "map_node_id": "answer:Q04:implicit_or_failure",
+      "objective": "低costな決定論的state proxyとして $f(q)=J(q)=(r-1.45)^2+0.4c^2+0.2s^2+0.05(r-1)^2$ を最小化します。この式はlayer分離を学ぶ教材であり、CFDのpressure lossではありません。",
+      "practical_notes": "各evaluationでparameter、geometry、mesh、physical state、目的を別recordにします。有限差分またはadjoint sensitivityはvalid geometryと収束済みstateの後に検査します。mesh motionでqualityを保てなければremeshingへ切り替えます。level-setはtopology changeを許す別表現です。follow-upは、構造ではstress／buckling、CFDではviscous loss、thermalではheat-transfer surface、acousticではwave scattering、photonicではMaxwell stateとfabrication constraintを同じlayer contractへ接続します。",
+      "problem_archetype_id": "PA057",
+      "python_example": "import numpy as np\n\ndef loss_proxy(q: np.ndarray) -> float:\n    r, curvature, shift = q\n    return float((r - 1.45) ** 2 + 0.4 * curvature**2 + 0.2 * shift**2 + 0.05 * (r - 1.0) ** 2)\n\nq = np.array([1.15, 0.0, 0.0])\nprint(loss_proxy(q))",
+      "question": "入口を固定した2D diffuserで、自己交差やmesh inversionを避けながら壁面shapeを更新し、reduced pressure-loss proxyを下げたい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "simulation_only",
+        "Q03": "general_nonlinear",
+        "Q04": "implicit_or_failure",
+        "Q05": "autodiff",
+        "Q06": "seconds",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "local_is_fine",
+        "Q10": "feasible_solution_first",
+        "Q11": "other",
+        "Q12": "repeated_similar"
+      },
+      "source_ids": [
+        "S101",
+        "S104",
+        "S105",
+        "S106"
+      ],
+      "status": "published",
+      "title_en": "Update a two-dimensional diffuser wall shape",
+      "title_ja": "2D diffuserの壁面shapeを更新する",
+      "variable_domain": "固定教材では $X=[1.0,1.8]\\times[-0.3,0.3]\\times[-0.25,0.25]$、$q=(r,c,s)\\in X$。$r$は出口高さ比、$c$は壁面曲率、$s$はthroat位置のshiftです。$q$からgeometry $\\Omega(q)$、mesh $T(q)$、physical state $u(q)$ を順に作ります。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+        "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
+        "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST"
       ]
     },
     {
@@ -1267,7 +1481,9 @@
         }
       ],
       "case_id": "bilevel-regularized-regression",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_INTERIOR_POINT_NLP",
@@ -1354,10 +1570,112 @@
       "title_ja": "正則化を選びながら非負回帰を解く",
       "variable_domain": "外側の正則化係数 $\\lambda\\in[0.01,1]$ と、内側の回帰係数 $w\\in X=\\mathbb{R}_+^2$ を別々に持つ。固定教材では $X_{train}=\\{(1,0),(1,1),(1,2)\\}$、$X_{valid}=\\{(1,0.5),(1,1.5)\\}$ とする。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BILEVEL_REGRESSION_EXACT",
+        "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_RIEMANNIAN_GRADIENT",
+          "reason": "ambient gradientをSO(3)の接空間へ移し、Lie algebra stepとretraction／exponential mapを明示したままfeasible iterateを作れるため"
+        }
+      ],
+      "case_id": "so3-attitude-alignment",
+      "comparison_ids": [
+        "COMPARE_SO3_PROJECTED_RIEMANNIAN"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_PROJECTED_GRADIENT",
+          "reason": "ambient update後のSO(3) projection costと修正量を記録し、projectionをmanifold stepと同一視しない場合"
+        },
+        {
+          "method_id": "M_RIEMANNIAN_TRUST_REGION",
+          "reason": "一階法が停滞し、正しいRiemann Hessian-vector積とtrust-region subproblemを検証できる場合"
+        }
+      ],
+      "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
+      "decision_variables": "body frameからreference frameへのrotation matrix $R$。固定教材はidentityから開始し、target axis $(1,2,3)/\\sqrt{14}$、angle $2.8$ radのrotationへ12 updateで近づける。",
+      "difficulty": "intermediate",
+      "domain": "engineering",
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "manifold"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "sum_of_squares"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "analytic_gradient"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "manifold"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "local_stationary"
+        }
+      ],
+      "implementation_ids": [
+        "I_PYMANOPT",
+        "I_MANOPT_MATLAB",
+        "I_MANOPT_JL"
+      ],
+      "last_reviewed": "2026-07-19",
+      "limitations": [
+        "固定3対応・noiseなし・固定stepの教材であり、複数rotation graph、外れ値、欠測、sensor calibration、実装速度を表さない。",
+        "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
+        "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。"
+      ],
+      "map_node_id": "answer:Q04:dynamics_or_manifold",
+      "objective": "三つのnoiseless basis correspondenceをまとめたtarget $R_\\star$ に対し、chordal loss $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価ではgeodesic residual $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
+      "practical_notes": "[SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)を先に読み、objective、geodesic residual、orthogonality error、determinant error、projection correctionまたはtangent stepを別々に保存する。quaternionを使う場合は$q$と$-q$の同値を処理し、near-piではlog mapとchartの条件を点検する。",
+      "problem_archetype_id": "PA037",
+      "python_example": "import numpy as np\n\ndef project_so3(matrix):\n    u, _, vt = np.linalg.svd(matrix)\n    correction = np.diag([1.0, 1.0, np.linalg.det(u @ vt)])\n    return u @ correction @ vt\n\nR = np.eye(3)\nR_target = np.array([[-0.80349217, 0.00887229, 0.59524920], [0.54604838, -0.38730167, 0.74285165], [0.23713180, 0.92191035, 0.30634916]])\nfor _ in range(12):\n    ambient_gradient = R - R_target\n    R = project_so3(R - 0.35 * ambient_gradient)\nprint(np.linalg.norm(R.T @ R - np.eye(3)), np.linalg.det(R))",
+      "question": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
+      "question_answers": {
+        "Q01": "structured_or_unknown",
+        "Q02": "explicit_algebraic",
+        "Q03": "sum_of_squares",
+        "Q04": "dynamics_or_manifold",
+        "Q05": "analytic_gradient",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "manifold",
+        "Q12": "one_off"
+      },
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071",
+        "S107"
+      ],
+      "status": "published",
+      "title_en": "Align a near-pi attitude on SO(3)",
+      "title_ja": "SO(3)上でnear-piのattitudeを合わせる",
+      "variable_domain": "固定教材のfeasible setは $X=SO(3)=\\{R\\in\\mathbb{R}^{3\\times3}\\mid R^{\\mathsf T}R=I,\\ \\det R=1\\}$。ambient成分は9個だがintrinsic degree of freedomは3である。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+        "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"
       ]
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.6"
+  "dataset_version": "0.18.10"
 }
