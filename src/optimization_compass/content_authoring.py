@@ -193,7 +193,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
     )
     published_pages = [item for item in pages if item.status == "published"]
-    routes = public_content_routes(
+    known_routes = public_content_routes(
         published_pages,
         gallery_ids=(item["case_id"] for item in gallery["cases"]),
         comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
@@ -202,7 +202,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         page,
         source_path.read_text(encoding="utf-8"),
         repository,
-        known_routes=routes,
+        known_routes=known_routes,
         strict_style=True,
     )
     branch_paths = _branch_change_paths(root)
@@ -241,7 +241,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         newline="\n",
     )
 
-    routes = _require_public_artifacts(page, output)
+    public_routes = _require_public_artifacts(page, output)
     result = run_task("content-ready", root, capture=False)
     if result.status != "pass":
         raise ContentAuthoringError(
@@ -263,13 +263,13 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
     return ReadyContentReport(
         content_id=content_id,
         canonical_path=source_path.relative_to(root).as_posix(),
-        public_routes=routes,
+        public_routes=public_routes,
         generated_paths=generated,
         changed_paths=changed,
         required_pr_gate=selected.task,
         after_merge=(
             "GitHub Pages deploys automatically from main",
-            *(f"verify /#{route}" for route in routes),
+            *(f"verify /#{route}" for route in public_routes),
         ),
     )
 
