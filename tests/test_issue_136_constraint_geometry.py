@@ -17,6 +17,7 @@ from optimization_compass.constraint_geometry import (
     PROFILE_ID,
     PROJECTED_SCENARIO_ID,
     RIEMANNIAN_SCENARIO_ID,
+    TRACE_DECIMAL_PLACES,
     build_so3_scenario,
     generate_so3_traces,
 )
@@ -73,8 +74,24 @@ def test_so3_generators_reduce_loss_while_preserving_rotation_structure() -> Non
         assert _metric(trace.frames[-1], "geodesic_residual") < _metric(
             trace.frames[0], "geodesic_residual"
         )
-        assert _metric(trace.frames[-1], "orthogonality_error") < 1e-12
-        assert _metric(trace.frames[-1], "determinant_error") < 1e-12
+        assert _metric(trace.frames[-1], "orthogonality_error") <= 1e-10
+        assert _metric(trace.frames[-1], "determinant_error") <= 1e-10
+
+
+def test_so3_trace_values_are_canonicalized_before_hashing() -> None:
+    for trace in generate_so3_traces(dataset_version="0.18.10"):
+        assert trace.generator_version == "1.0.1"
+        assert trace.parameters["numeric_canonicalization"] == (
+            "round_half_even_12_decimal_places_after_each_update_and_before_export"
+        )
+        for frame in trace.frames:
+            values = [metric.value for metric in frame.metrics]
+            values.extend(coordinate for point in frame.points for coordinate in point.coordinates)
+            values.extend(point.value for point in frame.points if point.value is not None)
+            values.extend(
+                float(frame.payload[key]) for key in ("update_norm", "map_correction_norm")
+            )
+            assert all(value == round(value, TRACE_DECIMAL_PLACES) for value in values)
 
 
 def test_so3_primary_scenario_is_canonical_and_projection_is_derived() -> None:

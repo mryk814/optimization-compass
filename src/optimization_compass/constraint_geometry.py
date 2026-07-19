@@ -30,7 +30,8 @@ from optimization_compass.visualization_scenarios import (
 )
 
 GENERATOR_ID = "educational.so3_attitude.v1"
-GENERATOR_VERSION = "1.0.0"
+GENERATOR_VERSION = "1.0.1"
+TRACE_DECIMAL_PLACES = 12
 PROFILE_ID = "PROFILE_SO3_ATTITUDE_ALIGNMENT"
 PROBLEM_DEFINITION_ID = "PROBLEM_SO3_ATTITUDE_ALIGNMENT"
 PROBLEM_INSTANCE_ID = "INSTANCE_SO3_ATTITUDE_FIXED_3"
@@ -216,12 +217,21 @@ def _geodesic_residual(matrix: Matrix3, target: Matrix3) -> float:
     return math.acos(cosine)
 
 
+def _canonicalize_trace_value(value: float) -> float:
+    """Remove platform libm drift at the educational-trace boundary."""
+    return round(float(value), TRACE_DECIMAL_PLACES)
+
+
+def _canonicalize_matrix(matrix: Matrix3) -> Matrix3:
+    return tuple(_canonicalize_trace_value(value) for value in matrix)  # type: ignore[return-value]
+
+
 def _metric(metric_id: str, ja: str, en: str, value: float, unit: str) -> TraceMetric:
     return TraceMetric(
         metric_id=metric_id,
         label_ja=ja,
         label_en=en,
-        value=value,
+        value=_canonicalize_trace_value(value),
         unit=unit,
     )
 
@@ -235,7 +245,8 @@ def _frame(
     update_norm: float,
     map_correction_norm: float,
 ) -> TraceFrame:
-    objective = _objective(matrix, target)
+    matrix = _canonicalize_matrix(matrix)
+    objective = _canonicalize_trace_value(_objective(matrix, target))
     return TraceFrame(
         frame_index=index,
         iteration=index,
@@ -287,8 +298,8 @@ def _frame(
             "strategy": strategy,
             "matrix": list(matrix),
             "target_matrix": list(target),
-            "update_norm": update_norm,
-            "map_correction_norm": map_correction_norm,
+            "update_norm": _canonicalize_trace_value(update_norm),
+            "map_correction_norm": _canonicalize_trace_value(map_correction_norm),
             "claim_scope": "fixed_three_correspondence_teaching_instance",
         },
     )
@@ -317,16 +328,20 @@ def generate_so3_trace(*, dataset_version: str, strategy: Strategy) -> Algorithm
         if strategy == "projected":
             ambient_step = _matrix_scale(_subtract(target, matrix), step_size)
             candidate = _matrix_add(matrix, ambient_step)
-            next_matrix = _qr_projection(candidate)
-            update_norm = _frobenius(ambient_step)
-            map_correction_norm = _frobenius(_subtract(next_matrix, candidate))
+            next_matrix = _canonicalize_matrix(_qr_projection(candidate))
+            update_norm = _canonicalize_trace_value(_frobenius(ambient_step))
+            map_correction_norm = _canonicalize_trace_value(
+                _frobenius(_subtract(next_matrix, candidate))
+            )
         else:
             tangent = _log_vector(_multiply(_transpose(matrix), target))
             tangent_step = _scale(tangent, step_size)
-            next_matrix = _multiply(matrix, _exponential(tangent_step))
-            update_norm = math.sqrt(_dot(tangent_step, tangent_step))
+            next_matrix = _canonicalize_matrix(_multiply(matrix, _exponential(tangent_step)))
+            update_norm = _canonicalize_trace_value(math.sqrt(_dot(tangent_step, tangent_step)))
             first_order = _matrix_add(matrix, _multiply(matrix, _skew(tangent_step)))
-            map_correction_norm = _frobenius(_subtract(next_matrix, first_order))
+            map_correction_norm = _canonicalize_trace_value(
+                _frobenius(_subtract(next_matrix, first_order))
+            )
         matrix = next_matrix
         frames.append(
             _frame(
@@ -359,6 +374,9 @@ def generate_so3_trace(*, dataset_version: str, strategy: Strategy) -> Algorithm
             "representation": "rotation_matrix",
             "feasibility_map": "qr_projection" if is_projected else "lie_exponential",
             "distance_diagnostic": "geodesic_angle",
+            "numeric_canonicalization": (
+                "round_half_even_12_decimal_places_after_each_update_and_before_export"
+            ),
         },
         initial_state={"point": list(initial), "target_rotation": list(target)},
         seed={"status": "not_applicable", "value": None},

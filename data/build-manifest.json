@@ -84,7 +84,7 @@
     {
       "id": "019",
       "path": "data/migrations/019_constraint_geometry.sql",
-      "sha256": "98074cce2328afb729549601ba8d0d1f85088f10e1715b44834c2aa10383d435"
+      "sha256": "58ca778180b372975047b6f72262f46c69f138f64f45df16c856f7e445047c86"
     },
     {
       "id": "020",

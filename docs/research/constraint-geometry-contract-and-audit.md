@@ -2,7 +2,7 @@
 
 Reviewed: 2026-07-19 (JST)
 Issue: #136
-Dataset boundary: cumulative 0.18.9 staging; ordinary content publication must not publish it alone.
+Dataset boundary: cumulative 0.18.10 staging; ordinary content publication must not publish it alone.
 
 ## Canonical proposal
 
@@ -73,7 +73,7 @@ The initial angle is close enough to pi to make chart scope visible without plac
 | simplex mirror geometry | `M_MIRROR_DESCENT` | S055, S061, S066, S067 | no direct implementation mapping | content is available; implementation mapping remains follow-up |
 | first-order manifold update | `M_RIEMANNIAN_GRADIENT` | S044, S045, S071 | Pymanopt, Manopt, Manopt.jl | available |
 | second-order manifold update | `M_RIEMANNIAN_TRUST_REGION` | S044, S045, S071 | Pymanopt, Manopt, Manopt.jl | available; Hessian convention must be checked |
-| rotation averaging and distances | SO(3) flagship | S107, Hartley et al. | same manifold toolkits | staged in 0.18.9 |
+| rotation averaging and distances | SO(3) flagship | S107, Hartley et al. | same manifold toolkits | staged in 0.18.10 |
 | SPD geometry | SPD secondary | S108, Pennec et al.; S044 official manifold catalog | Pymanopt SPD manifold through I_PYMANOPT | content staged; executable Case remains follow-up |
 
 Official Pymanopt 2.2.1 documentation exposes both `SpecialOrthogonalGroup` and `SymmetricPositiveDefinite`. Official Manopt documentation records the tangent representation used by `rotationsfactory` and warns that tangent and ambient matrices must not be confused. The primary rotation-averaging paper distinguishes chordal, geodesic/angular, and quaternion distances. The SPD paper provides the geometric basis for tensor-valued SPD processing. These sources support contracts and distinctions, not performance rankings for the fixed Atlas traces.
@@ -82,7 +82,7 @@ Official Pymanopt 2.2.1 documentation exposes both `SpecialOrthogonalGroup` and 
 
 | Slice | Current state | Next canonical input | Stop condition |
 | --- | --- | --- | --- |
-| SO(3) flagship | Case, Theater, Compare, problem instance, exact context staged | integrate common comparison validator and cumulative 0.18.9 release | context, problem, profile, and generated artifact must resolve together |
+| SO(3) flagship | Case, Theater, Compare, problem instance, exact context staged | integrate common comparison validator and cumulative 0.18.10 release | context, problem, profile, and generated artifact must resolve together |
 | simplex | concept and projected/mirror method content already published | add a boundary-focused executable Case only if it does not duplicate portfolio allocation | exact-zero and interior-only claims must remain distinct |
 | SPD | secondary concept and source audit staged | add a fixed covariance-mean or covariance-fit problem definition, instance, Theater, and Compare | metric and PSD-boundary policy must be fixed first |
 | Stiefel / Grassmann | listed in manifold overview | choose one subspace-estimation Case and quotient-aware diagnostic | basis distance must not substitute for subspace distance |
