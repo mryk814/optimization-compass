@@ -36,6 +36,13 @@ Not every item applies to every PR. Mark non-applicable items explicitly rather 
 - [ ] Candidate, conditional, and excluded method sets do not overlap.
 - [ ] Failure, caveat, limitation, and switch conditions are stated where relevant.
 
+## Existing-entity content
+
+- [ ] The canonical draft was created with `author content method` or its identity was checked equivalently.
+- [ ] `status: published` is used only after placeholders, sources, relations, review date, limitations, and failure/switch signals are complete.
+- [ ] `ready content <content-id>` regenerated the public indexes and proved content, search, retrieval, entity-link, and route presence.
+- [ ] The PR is for Atlas/Pages publication; it does not bump or publish a dataset version.
+
 ## Gallery case
 
 - [ ] Problem, feature, question-answer, method, implementation, source, visualization, and comparison IDs exist.
@@ -75,7 +82,9 @@ Not every item applies to every PR. Mark non-applicable items explicitly rather 
 
 ## Validation
 
-Record the exact commands and results in the PR.
+Record the exact owning task and results in the PR. Run only the checks selected for the change surface;
+the list below is a reference, not a requirement to run every command for every PR. Published
+existing-entity content should normally use `ready content <content-id>` and `content-ready`.
 
 - [ ] `uv run ruff check .`
 - [ ] `uv run ruff format --check .`

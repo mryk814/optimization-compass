@@ -94,7 +94,8 @@ def test_risk_selected_validation_and_generated_drift_share_one_authority() -> N
     workflow = (Path(__file__).parents[1] / ".github/workflows/ci.yml").read_text(encoding="utf-8")
 
     regeneration = _workflow_step(workflow, "Regenerate site data from the validated database")
-    assert "if: steps.validation.outputs.task == 'tier-b'" in regeneration
+    assert "steps.validation.outputs.task == 'tier-b'" in regeneration
+    assert "steps.validation.outputs.task == 'content-ready'" in regeneration
     assert "rm -rf site/public/data" in regeneration
     assert "uv run optimization-compass export-site-data --output site/public/data" in regeneration
     assert "git diff --exit-code -- site/public/data" in regeneration

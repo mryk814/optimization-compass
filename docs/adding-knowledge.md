@@ -158,7 +158,57 @@ npm --prefix site test -- --run
 
 If a relation or generated index changes, also run a staged dataset build and site build.
 
-## 7. Recipe: add an article for an existing method or concept
+## 7. Content Golden Path: add an article for an existing method
+
+Ordinary content publication has one canonical lane. It does **not** publish a dataset version.
+
+```text
+author canonical draft
+  → write and run the short content checks
+  → promote frontmatter to published
+  → ready regenerates public indexes and runs the owning gate
+  → open and merge the PR
+  → main deploys GitHub Pages
+  → verify the reported public routes
+```
+
+Create a parseable draft directly in the editable authority. The command refuses unknown method
+IDs and existing content IDs:
+
+```bash
+uv run optimization-compass author content method \
+  --id example-method \
+  --method-id M_EXAMPLE
+```
+
+While writing, keep `status: draft` and use the short iteration loop:
+
+```bash
+uv run optimization-compass validate content example-method
+```
+
+Fill every placeholder, source, relation, limitation, success/failure signal, and Python example;
+update `last_reviewed`, then change the status to `published`. The handoff command owns generation
+and readiness:
+
+```bash
+uv run optimization-compass ready content example-method
+```
+
+The target-specific iteration check parses only the named article and verifies its canonical method,
+source, and content-relation IDs; it intentionally allows a draft and placeholders. `ready content`
+replaces generated indexes from canonical inputs, validates the canonical method and
+source IDs, rejects placeholders and future review dates, enforces the published method density
+floor, regenerates `site/public/data`, refreshes the density report, proves the content/search/
+retrieval/entity-link entries and routes, runs `content-ready`, and prints the exact files, PR gate,
+and post-merge URLs. If it is green, do not additionally run dataset staging or dataset publish for
+an ordinary existing-entity article.
+
+Draft pages are not public inputs: site export, search, retrieval, and entity links include only
+`status: published` content. A draft-only PR therefore remains a Tier A change without generated
+artifact churn.
+
+## 8. Recipe: add an article for an existing method or concept
 
 Use this when the canonical entity exists in the database but has no published explanatory page.
 
@@ -202,7 +252,10 @@ Replace every placeholder and verify the entity and source IDs before committing
 
 Start as `draft` if relations or sources are incomplete. Publication should not be used to bypass Coverage or evidence requirements.
 
-## 8. Task-oriented scaffolds: review before authoring
+For an existing method, prefer the Golden Path above. Concept authoring and uncertain/high-risk
+work may still start from a review pack until their canonical author command exists.
+
+## 9. Task-oriented scaffolds: review before authoring
 
 Phase 5 provides review-first scaffolds for each concrete authoring path. Every
 command requires an author-supplied ID, prints a machine-readable plan without
@@ -237,7 +290,8 @@ uv run optimization-compass scaffold gallery-case --id example-case --write
 uv run optimization-compass scaffold content method --id example-article --write --output path/to/article-draft
 ```
 
-The shared scaffold contract never allocates a stable ID, fabricates sources,
+The shared scaffold contract remains the review-first lane when identity or authority is not yet
+settled. It never allocates a stable ID, fabricates sources,
 claims, relations, defaults, or benchmark results, overwrites a non-empty draft
 directory, or writes an authority or generated output. Replace every `TODO`,
 independently review all IDs and sources, then copy the reviewed material into the
@@ -258,7 +312,7 @@ the README and manifest always state the required PR gate. A scaffold is not a
 substitute for evidence review, canonical identity checks, or the full release
 workflow.
 
-## 9. Recipe: add a Gallery case using existing entities
+## 10. Recipe: add a Gallery case using existing entities
 
 This is the recommended first structured-data contribution.
 
@@ -311,7 +365,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 10. Recipe: add or revise a comparison
+## 11. Recipe: add or revise a comparison
 
 ### Edit
 
@@ -348,7 +402,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 11. Recipe: add a problem definition or instance
+## 12. Recipe: add a problem definition or instance
 
 A problem instance has two coordinated parts.
 
@@ -399,7 +453,7 @@ npm --prefix site test -- --run
 npm --prefix site run build
 ```
 
-## 12. Recipe: add a new method, implementation, or source
+## 13. Recipe: add a new method, implementation, or source
 
 This is currently a maintainer flow because canonical knowledge additions are partly expressed as SQL migrations.
 
@@ -444,7 +498,7 @@ applying any migration and rejects missing, unregistered, reordered, or changed 
 Run `uv run optimization-compass validate manifest`, followed by the full Python, data, licensing,
 parity, frontend, build, and browser suites. A new canonical method is not a content-only change.
 
-## 13. Recipe: add a visualization scenario
+## 14. Recipe: add a visualization scenario
 
 A complete visualization is not just an animation. It combines:
 
@@ -490,7 +544,22 @@ site/e2e/**
 
 Run full Python tests, deterministic stage, frontend parity, frontend tests/build, and browser E2E.
 
-## 14. Deterministic staging and publishing
+## 15. Two publication lanes
+
+### Publish an article to the Atlas
+
+An ordinary article for an existing canonical entity uses `ready content`, a pull request, and a
+merge to `main`. The main workflow builds the exact validated Pages artifact, runs browser and
+accessibility gates, deploys it, and performs remote smoke checks. The contributor verifies the
+routes printed by `ready content`. There is no dataset version bump and no local `--publish` step.
+
+### Publish a dataset version
+
+Dataset publication changes runtime/release authority and is a separate maintainer operation. It
+requires an explicit version decision, deterministic staged bundle, GitHub Release/catalog/hash/
+citation work, and release-specific verification. Never use this lane merely to publish prose.
+
+## 16. Deterministic dataset staging and publishing
 
 ### Staging
 
@@ -515,12 +584,13 @@ Publishing is a separate atomic operation using a previously validated staged di
 
 Do not publish as an incidental step in a prose, Gallery, or ordinary content PR. Follow the current release issue/workflow and release documentation.
 
-## 15. Validation matrix
+## 17. Validation matrix
 
 | Change | Minimum focused checks | Full stage | Site parity/build | Browser E2E |
 |---|---|---:|---:|---:|
 | Prose correction | content + licensing | when generated relations change | tests | no |
-| Existing-entity article | content + licensing | recommended | tests/build | no |
+| Existing-entity draft | `validate content` / Tier A | no | tests | no |
+| Existing-entity published article | `ready content <id>` / `content-ready` | no | generated indexes + tests/build | critical journeys in PR |
 | Gallery case | content + data + site export tests | yes | tests/build | journey changes |
 | Comparison | content + site export tests | yes | parity/tests/build | route/interaction changes |
 | Problem instance | ruff + mypy + pytest | yes | tests/build | scenario changes |
@@ -528,7 +598,7 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 | Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
 | Release/schema/recommendation | complete repository validation | yes | yes | yes |
 
-The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`, `validate manifest`); each prints the PR gate it does not replace. `--list` shows a task's checks, `--format json` emits stable rule codes.
+The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`, `validate manifest`). Published content uses the complete `ready content <id>` handoff and its `content-ready` gate. `--list` shows a task's checks, `--format json` emits stable rule codes.
 
 Common commands:
 
@@ -548,7 +618,7 @@ npm --prefix site run build
 npm --prefix site run test:e2e
 ```
 
-## 16. Pull request expectations
+## 18. Pull request expectations
 
 Use [`knowledge-change-checklist.md`](knowledge-change-checklist.md) when preparing a PR.
 
@@ -565,9 +635,9 @@ At minimum, state:
 
 Keep canonical data, prose, executable behavior, UI, and generated release output separable when practical.
 
-## 17. Known authoring friction
+## 19. Known authoring friction
 
-The current system deliberately validates many cross-links, but authoring entry points are distributed:
+The Content Golden Path is unified, but higher-risk structured authoring entry points remain distributed:
 
 - knowledge rows may require SQL;
 - Gallery and comparisons use separate JSON seeds;

@@ -13,6 +13,12 @@ from optimization_compass.agent_service import (
     DeterministicGuidanceService,
     UnsupportedLanguage,
 )
+from optimization_compass.content_authoring import (
+    ContentAuthoringError,
+    author_method_draft,
+    prepare_content_for_pr,
+    validate_content_iteration,
+)
 from optimization_compass.coverage import CoverageReport, diff_coverage
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.scaffold import (
@@ -40,8 +46,14 @@ from optimization_compass.validation_tasks import (
 app = typer.Typer(no_args_is_help=True, help="Traceable optimization-method guidance.")
 scaffold_app = typer.Typer(no_args_is_help=True, help="Create review-first authoring templates.")
 content_scaffold_app = typer.Typer(no_args_is_help=True, help="Create content article templates.")
+author_app = typer.Typer(no_args_is_help=True, help="Create canonical authoring drafts.")
+author_content_app = typer.Typer(no_args_is_help=True, help="Author canonical content drafts.")
+ready_app = typer.Typer(no_args_is_help=True, help="Prepare one change for a publishable PR.")
 app.add_typer(scaffold_app, name="scaffold")
 scaffold_app.add_typer(content_scaffold_app, name="content")
+app.add_typer(author_app, name="author")
+author_app.add_typer(author_content_app, name="content")
+app.add_typer(ready_app, name="ready")
 service = DeterministicGuidanceService()
 
 
@@ -112,6 +124,10 @@ def validate(
             help="Validation task: " + ", ".join(sorted(TASKS)),
         ),
     ],
+    target_id: Annotated[
+        str | None,
+        typer.Argument(help="Optional target ID for a focused content iteration check."),
+    ] = None,
     format: Annotated[str, typer.Option(help="human or json")] = "human",
     list_only: Annotated[
         bool,
@@ -121,6 +137,22 @@ def validate(
     """Run a documented validation task or tier (AGENTS.md, ADR 0012)."""
     if format not in {"human", "json"}:
         raise typer.BadParameter("format must be human or json")
+    if target_id is not None:
+        if task != "content" or list_only:
+            raise typer.BadParameter("a target ID is supported only by `validate content <id>`")
+        try:
+            report = validate_content_iteration(target_id, root=find_repository_root())
+        except ContentAuthoringError as error:
+            typer.echo(f"FAIL: {error}", err=True)
+            raise typer.Exit(code=1) from error
+        if format == "json":
+            typer.echo(report.model_dump_json(indent=2))
+        else:
+            typer.echo(
+                f"PASS: {report.content_id} ({report.status}) at {report.canonical_path}\n"
+                f"Next publish handoff: `{report.next_command}`"
+            )
+        return
     try:
         plan = task_plan(task)
     except UnknownTaskError as error:
@@ -216,6 +248,48 @@ def coverage_diff_command(
         f"- Removed expectations: {len(delta.removed_expectation_ids)}\n"
         f"- Status transitions: {sum(delta.transitions.values())}"
     )
+
+
+@author_content_app.command("method")
+def author_content_method_command(
+    content_id: Annotated[str, typer.Option("--id", help="New canonical content ID.")],
+    method_id: Annotated[str, typer.Option("--method-id", help="Existing canonical method ID.")],
+) -> None:
+    """Create a parseable draft directly under content/methods/."""
+    root = find_repository_root()
+    try:
+        destination = author_method_draft(content_id, method_id, root=root)
+    except ContentAuthoringError as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(f"Created canonical draft: {destination.relative_to(root).as_posix()}")
+    typer.echo("Next: fill the placeholders, then run `optimization-compass validate content`.")
+    typer.echo(f"Publish handoff: `optimization-compass ready content {content_id}`.")
+
+
+@ready_app.command("content")
+def ready_content_command(
+    content_id: Annotated[str, typer.Argument(help="Canonical content ID to publish.")],
+    format: Annotated[str, typer.Option(help="human or json")] = "human",
+) -> None:
+    """Generate public indexes and prove one article is ready for a PR."""
+    if format not in {"human", "json"}:
+        raise typer.BadParameter("format must be human or json")
+    try:
+        report = prepare_content_for_pr(content_id, root=find_repository_root())
+    except ContentAuthoringError as error:
+        typer.echo(f"Not ready: {error}", err=True)
+        raise typer.Exit(code=1) from error
+    if format == "json":
+        typer.echo(report.model_dump_json(indent=2))
+        return
+    typer.echo("Ready for PR.\n")
+    typer.echo("Commit:")
+    for path in report.changed_paths:
+        typer.echo(f"- {path}")
+    typer.echo(f"\nRequired PR gate: {report.required_pr_gate}")
+    typer.echo("\nAfter merge:")
+    for instruction in report.after_merge:
+        typer.echo(f"- {instruction}")
 
 
 @scaffold_app.command("gallery-case")

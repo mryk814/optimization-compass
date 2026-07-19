@@ -23,6 +23,7 @@
 
 ## Validation
 
-- Validation tier: `tier-a` / `tier-b` / `tier-c`
-- [ ] `uv run optimization-compass validate <tier>`
+- Validation task: `docs` / `tier-a` / `content-ready` / `pr-fast` / `tier-b` / `tier-c`
+- [ ] `uv run optimization-compass validate <task>`
+- [ ] Published content: `uv run optimization-compass ready content <content-id>`
 - [ ] Golden cases reviewed

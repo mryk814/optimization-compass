@@ -13,6 +13,20 @@
 
 `src/optimization_compass/resources/knowledge.sqlite`、`site/public/data/**`、公開distribution、生成Traceやmediaは直接修正しません。canonical inputを修正し、documented buildから再生成してください。
 
+## 既存手法の記事を追加する
+
+通常の記事追加は、dataset releaseではなくContent Golden Pathを使います。
+
+```bash
+uv run optimization-compass author content method --id <content-id> --method-id <method-id>
+uv run optimization-compass validate content <content-id>
+# 執筆・source review後に status: published へ変更
+uv run optimization-compass ready content <content-id>
+```
+
+最後のコマンドが生成index、検索・retrieval・route、site build、必要なPR gateをまとめて確認し、
+commit対象とmerge後のPages確認先を表示します。dataset versionの変更や`--publish`は不要です。
+
 ## Pull request の種類
 
 - **Data correction**: 既存データの誤り、根拠URL、版、ライセンス
@@ -75,14 +89,12 @@ screenshot・logoを追加する場合は、rights holder、source、適用licen
 
 ## ローカル確認
 
+最初に`uv sync --all-extras`を行い、変更面を所有するtaskだけを実行します。PR CIも同じregistry
+から`docs`、`tier-a`、`content-ready`、`pr-fast`、`tier-b`を機械選択します。
+
 ```bash
-uv sync --all-extras
-uv run ruff check .
-uv run mypy src
-uv run pytest
-uv run optimization-compass verify-data
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
+uv run optimization-compass select-validation-task --base-ref origin/main
+uv run optimization-compass validate <selected-task>
 ```
 
 変更種類ごとの最小確認とdataset stage / site validationは [`docs/adding-knowledge.md`](docs/adding-knowledge.md) を参照してください。

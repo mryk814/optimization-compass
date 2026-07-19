@@ -391,6 +391,22 @@ Each scaffold emits a small plan:
 }
 ```
 
+## Content Golden Path amendment (2026-07-19)
+
+Review-first scaffolds remain appropriate when identity or authority is unsettled, but an article for
+an existing canonical method no longer requires a manual review-pack copy step. The repository exposes:
+
+```bash
+uv run optimization-compass author content method --id <content-id> --method-id <method-id>
+uv run optimization-compass validate content <content-id>
+uv run optimization-compass ready content <content-id>
+```
+
+`author` validates canonical identity and writes a non-public draft to the Markdown authority. `ready`
+owns the draft-to-public handoff: target-specific readiness, deterministic public-index generation,
+search/retrieval/entity-link/route proof, the owning validation task, and explicit PR/Pages instructions.
+CI calls the same validation registry. Drafts are excluded from every public generated index.
+
 ## Release and generated-golden simplification
 
 ### Derive non-contract counts
@@ -413,8 +429,9 @@ only workflow capable of completing that atomic set.
 
 ### No ordinary-PR publish
 
-Ordinary content/catalog PRs run stage validation. Publishing remains an explicit maintainer/release
-operation.
+Ordinary existing-entity content PRs use `content-ready` and Pages publication; they do not stage or
+publish a dataset version. Catalog/canonical-data PRs still run stage validation. Dataset publishing
+remains an explicit maintainer/release operation.
 
 ## Incremental implementation plan
 

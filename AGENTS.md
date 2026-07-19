@@ -88,7 +88,9 @@ These are recurring operational rules, not topology-specific exceptions:
 
 Each tier is runnable as one cross-platform command: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`; tier C = tier B plus site typecheck and browser E2E). `--list` prints a tier's checks without running them; `--format json` emits machine-readable results with stable rule codes. The composition is owned by `src/optimization_compass/validation_tasks.py` and tested against the lists below. POSIX users may call the same commands through `make tier-a` etc.
 
-Pull-request CI selects `docs`, `tier-a`, `pr-fast`, or `tier-b` from the changed paths through `optimization-compass select-validation-task`; the workflow does not maintain a second test matrix. Backend/data/schema/generator/release and unknown paths select full Tier B. Content, site/workflow/test-contract, and documentation-only changes use the smallest owning task. Pushes to `main` and scheduled/manual validation always run full Tier B; the full Playwright suite remains a visible nightly gate while its time-boxed quarantine Issues are open.
+Pull-request CI selects `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b` from the changed paths through `optimization-compass select-validation-task`; the workflow does not maintain a second test matrix. Backend/data/schema/generator/release and unknown paths select full Tier B. Draft/prose content uses Tier A; published content plus its deterministic indexes uses `content-ready`; site/workflow/test-contract and documentation-only changes use the smallest owning task. Pushes to `main` and scheduled/manual validation always run full Tier B; the full Playwright suite remains a visible nightly gate while its time-boxed quarantine Issues are open.
+
+For an existing canonical method article, use `author content method`, iterate with `validate content <content-id>`, and finish with `ready content <content-id>`. The ready command owns generated site indexes and prints the PR/Pages handoff. Ordinary content publication never runs the dataset-version publish flow.
 
 ### Tier A — prose or existing-content correction
 
