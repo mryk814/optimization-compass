@@ -50,6 +50,21 @@ from optimization_compass.search_tree import (
     generate_search_tree_artifact,
     render_search_tree_svg,
 )
+from optimization_compass.simulation_constrained import (
+    FAILURE_SCENARIO_ID as PDE_FAILURE_SCENARIO_ID,
+)
+from optimization_compass.simulation_constrained import (
+    LOOSE_SCENARIO_ID as PDE_LOOSE_SCENARIO_ID,
+)
+from optimization_compass.simulation_constrained import (
+    PROFILE_ID as SIMULATION_CONSTRAINED_PROFILE_ID,
+)
+from optimization_compass.simulation_constrained import (
+    TIGHT_SCENARIO_ID as PDE_TIGHT_SCENARIO_ID,
+)
+from optimization_compass.simulation_constrained import (
+    generate_simulation_constrained_traces,
+)
 from optimization_compass.surrogate_uncertainty import write_surrogate_scenarios
 from optimization_compass.trace_models import (
     AlgorithmTrace,
@@ -351,6 +366,7 @@ def export_site_data(
         comparison_seed,
         repository.benchmark_contexts(),
         scenario_index.scenarios,
+        generated_traces,
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))
@@ -863,6 +879,7 @@ def _write_dummy_trace(
     for generated_bundle in generated_bundles:
         generated_traces.extend(generated_bundle.member_traces)
     generated_traces.extend(generate_parameter_estimation_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.append(
         _generate_optimal_control_history_trace(dataset_version=dataset_version)
     )
@@ -915,6 +932,22 @@ def _write_dummy_trace(
 
 
 def _trace_title(trace_id: str, *, locale: str) -> str:
+    simulation_titles = {
+        "pde-state-tolerance-tight": (
+            "PDE state solve · tight tolerance",
+            "PDE state solve · tight tolerance",
+        ),
+        "pde-state-tolerance-loose": (
+            "PDE state solve · loose tolerance",
+            "PDE state solve · loose tolerance",
+        ),
+        "pde-state-solve-failure": (
+            "PDE state solve · failure ledger",
+            "PDE state solve · failure ledger",
+        ),
+    }
+    if trace_id in simulation_titles:
+        return simulation_titles[trace_id][0 if locale == "ja" else 1]
     parameter_titles = {
         "exponential-fit-trf": (
             "共通診断probe · TRF適用条件",
@@ -1260,6 +1293,152 @@ def _trace_lesson(
     is_search_tree: bool,
     is_optimal_control: bool,
 ) -> VisualizationLesson:
+    if trace.profile_id == SIMULATION_CONSTRAINED_PROFILE_ID:
+        is_failure = trace.scenario_id == PDE_FAILURE_SCENARIO_ID
+        is_loose = trace.scenario_id == PDE_LOOSE_SCENARIO_ID
+        counterpart = PDE_TIGHT_SCENARIO_ID if is_loose or is_failure else PDE_LOOSE_SCENARIO_ID
+        return VisualizationLesson(
+            learning_objective=_localized(
+                "design更新、state solve、adjoint solve、失敗statusを同じsimulator-call軸で読む",
+                "Read design updates, state solves, adjoint solves, and failure status "
+                "on one simulator-call axis",
+            ),
+            misconception=_localized(
+                "state solveの失敗を大きなobjective値へ置き換えれば、"
+                "失敗原因と勾配整合性を確認しなくてよい",
+                "Replacing a failed state solve with a large objective removes the need "
+                "to inspect failure cause and gradient consistency",
+            ),
+            expected_phenomenon_ja=(
+                "preconditioner failureではobjectiveを作らず、state/adjoint残差と"
+                "solver statusを保持する"
+                if is_failure
+                else "loose toleranceは線形反復を減らす一方、離散objectiveの改善と"
+                "state/adjoint整合性を同時には保証しない"
+                if is_loose
+                else "tight toleranceはstate/adjoint残差を抑える一方、線形反復costが増える"
+            ),
+            expected_phenomenon_en=(
+                "A preconditioner failure produces no objective and retains state/adjoint "
+                "residuals and solver status"
+                if is_failure
+                else "A loose tolerance reduces linear iterations without guaranteeing "
+                "state/adjoint consistency alongside discrete-objective progress"
+                if is_loose
+                else "A tight tolerance controls state/adjoint residuals at higher "
+                "linear-iteration cost"
+            ),
+            success_signals=[
+                _signal(
+                    "state_and_adjoint_cost_visible",
+                    "state/adjoint残差とそれぞれの線形反復数をobjectiveから分けて確認できる",
+                    "State/adjoint residuals and their linear iterations remain separate "
+                    "from the objective",
+                    "state_residual",
+                    "adjoint_residual",
+                    "state_linear_iterations",
+                    "adjoint_linear_iterations",
+                )
+            ],
+            failure_signals=[
+                _signal(
+                    "failed_evaluation_is_explicit",
+                    "state solve失敗にobjective penaltyを捏造せずfailed statusを残す",
+                    "A state-solve failure remains failed instead of becoming a synthetic "
+                    "objective penalty",
+                    "evaluation_status",
+                    "state_residual",
+                )
+            ],
+            primary_observables=[
+                _observable("objective_value", "離散objective", "discrete objective"),
+                _observable("state_residual", "state残差", "state residual"),
+                _observable("adjoint_residual", "adjoint残差", "adjoint residual"),
+            ],
+            secondary_observables=[
+                _observable("state_linear_iterations", "state線形反復", "state linear iterations"),
+                _observable(
+                    "adjoint_linear_iterations",
+                    "adjoint線形反復",
+                    "adjoint linear iterations",
+                ),
+                _observable("evaluation_status", "evaluation status", "evaluation status"),
+            ],
+            narration_steps=[
+                _step(
+                    "start",
+                    "design・state・adjointの役割を分ける",
+                    "Separate design, state, and adjoint roles",
+                    "objective_value",
+                    "state_residual",
+                    "adjoint_residual",
+                ),
+                _step(
+                    "first_change",
+                    "最初のstate/adjoint solve costを読む",
+                    "Read the first state/adjoint solve cost",
+                    "state_linear_iterations",
+                    "adjoint_linear_iterations",
+                ),
+                _step(
+                    "pattern_visible",
+                    "toleranceとresidual/costのtrade-offを読む",
+                    "Read the tolerance trade-off between residual and cost",
+                    "state_residual",
+                    "adjoint_residual",
+                    "state_linear_iterations",
+                ),
+                _step(
+                    "termination",
+                    "終了statusとclaim scopeを確認",
+                    "Inspect termination status and claim scope",
+                    "evaluation_status",
+                    "state_residual",
+                ),
+            ],
+            comparison_role=(
+                "failure_contrast"
+                if is_failure
+                else "sensitivity_variant"
+                if is_loose
+                else "primary_example"
+            ),
+            prerequisite_concept_ids=["concept.pde-constrained-optimization"],
+            recommended_next_scenario_ids=[counterpart],
+            known_reference_display=KnownReferenceDisplay(
+                policy="not_shown",
+                note_ja="連続PDEの最適解は示さず、固定mesh上の残差とcostだけを比較する。",
+                note_en=(
+                    "No continuous-PDE optimum is shown; only fixed-mesh residuals and "
+                    "costs are contrasted."
+                ),
+            ),
+            static_summary=_localized(
+                "固定meshのdesign・state・adjoint ledgerで、solver tolerance、残差、"
+                "線形反復、失敗statusを並べる。",
+                "Align solver tolerance, residuals, linear iterations, and failure status "
+                "in a fixed-mesh design/state/adjoint ledger.",
+            ),
+            text_alternative=_localized(
+                "各simulator callの離散objective、state/adjoint残差、線形反復数、"
+                "failure statusを列挙する。",
+                "List discrete objective, state/adjoint residuals, linear iterations, "
+                "and failure status for every simulator call.",
+            ),
+            derived_media_caption=_localized(
+                "PDE制約付き最適化のstate/adjoint cost ledger",
+                "State/adjoint cost ledger for PDE-constrained optimization",
+            ),
+            limitations_ja=(
+                "8×4固定meshの決定的教材であり、連続modelの精度、mesh独立性、実runtime、"
+                "preconditionerの一般性能、outer optimizerの順位を保証しない。"
+            ),
+            limitations_en=(
+                "A deterministic 8x4 fixed-mesh lesson; it does not establish "
+                "continuous-model accuracy, mesh independence, real runtime, general "
+                "preconditioner performance, or outer-optimizer ranking."
+            ),
+        )
     if is_optimal_control:
         return VisualizationLesson(
             learning_objective=_localized(
@@ -1823,6 +2002,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"
     is_optimal_control = trace.profile_id == "PROFILE_OPTIMAL_CONTROL_GENERIC"
+    is_simulation_constrained = trace.profile_id == SIMULATION_CONSTRAINED_PROFILE_ID
     is_divergence = trace.trace_id.endswith("-divergence")
     point = [0.0, 0.0, 0.0, 0.0] if is_search_tree else trace.initial_state.get("point")
     if not isinstance(point, list) or not all(isinstance(value, (int, float)) for value in point):
@@ -1840,7 +2020,7 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         "search_tree"
         if is_search_tree
         else "generic_metric_history"
-        if is_parameter_estimation or is_optimal_control
+        if is_parameter_estimation or is_optimal_control or is_simulation_constrained
         else "simplex_geometry"
         if is_nelder_mead
         else "continuous_trajectory"
@@ -1848,6 +2028,15 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     observable_ids = (
         ["search_nodes", "global_bound", "incumbent", "prune_reason"]
         if is_search_tree
+        else [
+            "objective_value",
+            "state_residual",
+            "adjoint_residual",
+            "state_linear_iterations",
+            "adjoint_linear_iterations",
+            "evaluation_status",
+        ]
+        if is_simulation_constrained
         else [
             "state_norm",
             "control_effort",
@@ -1869,7 +2058,13 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         else ["objective_value", "current_point", "gradient", "update_vector"]
     )
     purpose: Literal["mechanism", "comparison", "failure_contrast", "sensitivity"] = (
-        "sensitivity"
+        "failure_contrast"
+        if trace.scenario_id == PDE_FAILURE_SCENARIO_ID
+        else "sensitivity"
+        if trace.scenario_id == PDE_LOOSE_SCENARIO_ID
+        else "mechanism"
+        if trace.scenario_id == PDE_TIGHT_SCENARIO_ID
+        else "sensitivity"
         if trace.scenario_id == POOR_INITIALIZATION_SCENARIO_ID
         else "mechanism"
         if trace.scenario_id == PRIMARY_SCENARIO_ID
@@ -1897,6 +2092,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         problem_definition_id=(
             "PROBLEM_BINARY_KNAPSACK"
             if is_search_tree
+            else "PROBLEM_TOPOLOGY_OPTIMIZATION"
+            if is_simulation_constrained
             else "PROBLEM_NONLINEAR_LEAST_SQUARES"
             if is_parameter_estimation
             else "PROBLEM_OPTIMAL_CONTROL"
@@ -1916,6 +2113,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             oracle_policy=(
                 ["residual_vector", "jacobian"]
                 if is_parameter_estimation
+                else ["state_solve", "adjoint_solve"]
+                if is_simulation_constrained
                 else ["objective_value"]
                 if is_nelder_mead or is_search_tree
                 else ["objective_value", "gradient"]
@@ -1925,7 +2124,10 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             ),
             parameter_preset_id=preset_id,
             seed=VisualizationSeed(status=seed_status, value=seed_value),
-            budget=VisualizationBudget(metric="oracle_evaluations", value=trace.evaluation_budget),
+            budget=VisualizationBudget(
+                metric="oracle_evaluations",
+                value=trace.evaluation_budget,
+            ),
             stopping=_numeric_record(trace.stopping, owner=f"trace {trace.trace_id} stopping"),
             tuning_policy="fixed_preset",
         ),
@@ -1951,7 +2153,13 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             payload_sha256=sha256(payload).hexdigest(),
         ),
         source_ids=trace.source_ids,
-        last_verified=("2026-07-17" if is_parameter_estimation or is_search_tree else "2026-07-15"),
+        last_verified=(
+            "2026-07-19"
+            if is_simulation_constrained
+            else "2026-07-17"
+            if is_parameter_estimation or is_search_tree
+            else "2026-07-15"
+        ),
     )
 
 

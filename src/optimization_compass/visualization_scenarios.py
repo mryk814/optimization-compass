@@ -37,6 +37,7 @@ CANONICAL_SCENARIO_IDS = frozenset(
         "SCENARIO_CONSTRAINED_DISK",
         "SCENARIO_BIOBJECTIVE_QUADRATIC",
         "SCENARIO_TOPOLOGY_SIMP_OC",
+        "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
     }
 )
 
@@ -51,6 +52,8 @@ DERIVED_SCENARIO_BASE_IDS = {
     "SCENARIO_ADAM_QUADRATIC_DIVERGENCE": "SCENARIO_ADAM_QUADRATIC",
     "SCENARIO_TOPOLOGY_CHECKERBOARD": "SCENARIO_TOPOLOGY_SIMP_OC",
     "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON": "SCENARIO_TOPOLOGY_SIMP_OC",
+    "SCENARIO_PDE_STATE_TOLERANCE_LOOSE": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
+    "SCENARIO_PDE_STATE_SOLVE_FAILURE": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
 }
 
 
@@ -209,6 +212,8 @@ class VisualizationExperiment(TraceModel):
             "objective_vector",
             "residual_vector",
             "jacobian",
+            "state_solve",
+            "adjoint_solve",
         ]
     ] = Field(min_length=1)
     initial_condition: VisualizationInitialCondition
