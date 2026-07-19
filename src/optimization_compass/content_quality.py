@@ -70,6 +70,8 @@ def public_content_routes(
     """Return public routes that can be proven from canonical authoring inputs."""
     routes: set[str] = set()
     for page in pages:
+        if page.status != "published":
+            continue
         routes.add(f"#/learn/{page.content_id}")
         routes.update(f"#{alias}" for alias in page.aliases)
         if page.method_id:

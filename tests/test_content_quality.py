@@ -85,6 +85,15 @@ def test_unknown_next_route_is_reported_and_rejected() -> None:
         require_published_concept_quality([broken], routes)
 
 
+def test_draft_content_is_not_a_valid_public_next_route() -> None:
+    published = _published_pages()
+    draft = replace(published[0], status="draft")
+
+    routes = public_content_routes([draft])
+
+    assert f"#/learn/{draft.content_id}" not in routes
+
+
 def test_style_warnings_are_review_signals() -> None:
     page = next(page for page in _published_pages() if page.kind == "concept")
     noisy = replace(

@@ -49,8 +49,9 @@ def verify_content(root: Path) -> dict[str, int | str]:
     )
     _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
 
+    published_pages = [page for page in source_pages if page.status == "published"]
     content_routes = public_content_routes(
-        source_pages,
+        published_pages,
         gallery_ids=case_ids,
         comparison_ids=comparison_ids,
     )
