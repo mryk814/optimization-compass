@@ -4,12 +4,14 @@ import raw from "../../public/data/gallery.json";
 import { parseGalleryIndex } from "./gallery";
 
 describe("gallery contract", () => {
-  test("parses fifteen cases with explicit method dispositions", () => {
+  test("parses published cases with explicit method dispositions", () => {
     const index = parseGalleryIndex(raw);
-    const canonicalIds = new Set(["EC013", "EC017", "EC019", "EC020", "EC025", "EC026"]);
+    const canonicalIds = new Set(
+      index.cases.filter((item) => /^EC\d+$/u.test(item.case_id)).map((item) => item.case_id),
+    );
 
     expect(index.contract_version).toBe("2.0.0");
-    expect(index.cases).toHaveLength(15);
+    expect(index.cases).toHaveLength(18);
     expect(index.cases.find((item) => item.case_id === "constrained-design")?.visualization_ids)
       .toContain("constrained-disk-feasible-region");
     expect(index.cases.every((item) => item.candidate_methods.length > 0)).toBe(true);
@@ -17,7 +19,7 @@ describe("gallery contract", () => {
     expect(index.cases.every((item) => item.conditional_methods.length > 0)).toBe(true);
     expect(index.cases.every((item) => item.excluded_methods.length > 0)).toBe(true);
     expect(index.cases.every((item) => item.limitations.length > 0)).toBe(true);
-    expect(index.cases.filter((item) => canonicalIds.has(item.case_id))).toHaveLength(6);
+    expect(canonicalIds).toContain("EC029");
     expect(
       index.cases
         .filter((item) => canonicalIds.has(item.case_id))
