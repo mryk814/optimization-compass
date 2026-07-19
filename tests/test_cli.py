@@ -7,6 +7,7 @@ from typer.testing import CliRunner
 
 from optimization_compass import cli as cli_module
 from optimization_compass.cli import app
+from optimization_compass.content_authoring import ContentIterationReport, ReadyContentReport
 
 
 def test_supported_cli_surface_remains_registered() -> None:
@@ -24,6 +25,8 @@ def test_supported_cli_surface_remains_registered() -> None:
     ):
         assert command in result.stdout
     assert "scaffold" in result.stdout
+    assert "author" in result.stdout
+    assert "ready" in result.stdout
 
     scaffold_help = CliRunner().invoke(app, ["scaffold", "--help"])
     assert scaffold_help.exit_code == 0
@@ -32,6 +35,78 @@ def test_supported_cli_surface_remains_registered() -> None:
     content_help = CliRunner().invoke(app, ["scaffold", "content", "--help"])
     assert content_help.exit_code == 0
     assert "method" in content_help.stdout
+
+
+def test_author_content_method_reports_the_canonical_handoff(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    destination = tmp_path / "content/methods/example.md"
+    destination.parent.mkdir(parents=True)
+    destination.write_text("draft", encoding="utf-8")
+    monkeypatch.setattr(cli_module, "find_repository_root", lambda: tmp_path)
+    monkeypatch.setattr(
+        cli_module,
+        "author_method_draft",
+        lambda _content_id, _method_id, *, root: destination,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        ["author", "content", "method", "--id", "example", "--method-id", "M_EXAMPLE"],
+    )
+
+    assert result.exit_code == 0
+    assert "content/methods/example.md" in result.stdout
+    assert "ready content example" in result.stdout
+
+
+def test_ready_content_prints_the_pr_and_pages_handoff(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(cli_module, "find_repository_root", lambda: tmp_path)
+    monkeypatch.setattr(
+        cli_module,
+        "prepare_content_for_pr",
+        lambda _content_id, *, root: ReadyContentReport(
+            content_id="example",
+            canonical_path="content/methods/example.md",
+            public_routes=("/methods/M_EXAMPLE", "/learn/example"),
+            generated_paths=("site/public/data/content.json",),
+            changed_paths=("content/methods/example.md", "site/public/data/content.json"),
+            required_pr_gate="content-ready",
+            after_merge=("GitHub Pages deploys automatically from main", "verify /#/learn/example"),
+        ),
+    )
+
+    result = CliRunner().invoke(app, ["ready", "content", "example"])
+
+    assert result.exit_code == 0
+    assert "Ready for PR" in result.stdout
+    assert "content-ready" in result.stdout
+    assert "/#/learn/example" in result.stdout
+
+
+def test_validate_content_target_uses_the_short_iteration_contract(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        cli_module,
+        "validate_content_iteration",
+        lambda _content_id, *, root: ContentIterationReport(
+            content_id="example",
+            canonical_path="content/methods/example.md",
+            status="draft",
+            canonical_entity_id="M_EXAMPLE",
+            source_ids=(),
+            next_command="optimization-compass ready content example",
+        ),
+    )
+
+    result = CliRunner().invoke(app, ["validate", "content", "example"])
+
+    assert result.exit_code == 0
+    assert "PASS: example (draft)" in result.stdout
+    assert "ready content example" in result.stdout
 
 
 def test_gallery_scaffold_plans_without_writing(tmp_path: Path) -> None:

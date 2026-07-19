@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from optimization_compass.content_models import load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.search_index import (
     RetrievalExport,
@@ -27,6 +28,7 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     retrieval = RetrievalExport.model_validate_json(
         (tmp_path / "retrieval-documents.json").read_bytes()
     )
+    entity_links = json.loads((tmp_path / "entity-links.json").read_bytes())
     entity_types = {document.entity_type for document in index.documents}
     assert {
         "method",
@@ -51,6 +53,22 @@ def test_exported_search_and_retrieval_contracts_are_closed(
         for chunk in retrieval.chunks
     )
     assert all("frame:" not in chunk.chunk_id for chunk in retrieval.chunks)
+    draft_ids = {
+        page.content_id
+        for page in load_content(Path(__file__).parents[1] / "content")
+        if page.status == "draft"
+    }
+    assert draft_ids
+    assert not draft_ids & {
+        document.entity_id for document in index.documents if document.entity_type == "content"
+    }
+    assert not any(
+        chunk.document_id in {f"content:{content_id}" for content_id in draft_ids}
+        for chunk in retrieval.chunks
+    )
+    assert not draft_ids & {
+        item["entity_id"] for item in entity_links["entities"] if item["entity_type"] == "content"
+    }
 
 
 def test_alias_ranking_and_representative_benchmark(

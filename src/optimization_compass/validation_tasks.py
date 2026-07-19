@@ -153,6 +153,19 @@ CHECKS: tuple[ValidationCheck, ...] = (
         ),
     ),
     ValidationCheck(
+        code="content.publish-ready-tests",
+        description="Published content, density-report, and authoring-contract tests.",
+        next_action="Complete the target article and regenerate it through `ready content`.",
+        command=(
+            _PYTHON_TOKEN,
+            "-m",
+            "pytest",
+            "tests/test_content_models.py",
+            "tests/test_method_content_density.py",
+            "tests/test_content_authoring.py",
+        ),
+    ),
+    ValidationCheck(
         code="content.pages",
         description="Content frontmatter, relations, and generated-index consistency.",
         next_action="Fix the reported content/** page; never edit generated site data.",
@@ -253,6 +266,13 @@ _PR_FAST_CODES: tuple[str, ...] = (
     "site.unit",
     "site.build",
 )
+_CONTENT_READY_CODES: tuple[str, ...] = (
+    "content.pages",
+    "content.licensing",
+    "content.publish-ready-tests",
+    "site.unit",
+    "site.build",
+)
 
 TASKS: dict[str, ValidationTask] = {
     task.name: task
@@ -298,6 +318,12 @@ TASKS: dict[str, ValidationTask] = {
             description="Fast PR gate for site, E2E, workflow, and test-contract changes.",
             gate="pr-fast",
             check_codes=_PR_FAST_CODES,
+        ),
+        ValidationTask(
+            name="content-ready",
+            description="Publish-ready gate for content plus deterministic public indexes.",
+            gate="content-ready",
+            check_codes=_CONTENT_READY_CODES,
         ),
         ValidationTask(
             name="content",
@@ -357,6 +383,29 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
         path = raw_path.replace("\\", "/")
         normalized_paths.add(path[2:] if path.startswith("./") else path)
     normalized = tuple(sorted(normalized_paths))
+    content_paths = {path for path in normalized if path.startswith("content/")}
+    generated_content_paths = {
+        path
+        for path in normalized
+        if path.startswith("site/public/data/") or path == "docs/method-content-density-report.md"
+    }
+    content_lane_support_paths = {
+        path
+        for path in normalized
+        if path.startswith("docs/") or path in {"README.md", "CONTRIBUTING.md", "CHANGELOG.md"}
+    }
+    if (
+        content_paths
+        and generated_content_paths
+        and set(normalized) <= content_paths | generated_content_paths | content_lane_support_paths
+    ):
+        return ChangeValidationPlan(
+            contract_version=CONTRACT_VERSION,
+            task="content-ready",
+            gate=TASKS["content-ready"].gate,
+            changed_paths=normalized,
+            reason_codes=("published_content_with_generated_indexes",),
+        )
     task = "docs"
     reasons: set[str] = set()
     for path in normalized:

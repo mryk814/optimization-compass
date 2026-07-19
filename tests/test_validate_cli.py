@@ -80,6 +80,15 @@ def test_problem_task_gate_is_tier_c() -> None:
     [
         (["README.md", "docs/pages-deployment.md"], "docs"),
         (["content/methods/example.md"], "tier-a"),
+        (
+            [
+                "content/methods/example.md",
+                "site/public/data/content.json",
+                "docs/method-content-density-report.md",
+            ],
+            "content-ready",
+        ),
+        (["site/public/data/content.json"], "tier-b"),
         (["site/src/App.tsx", ".github/workflows/ci.yml"], "pr-fast"),
         (["tests/test_validate_cli.py", "tests/test_pages_workflow.py"], "pr-fast"),
         (["tests/test_engine.py"], "tier-b"),
@@ -104,6 +113,14 @@ def test_mixed_changes_escalate_to_the_highest_required_gate() -> None:
         "content_authority",
         "site_or_repository_contract",
     }
+
+
+def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() -> None:
+    task = TASKS["content-ready"]
+    assert task.gate == "content-ready"
+    assert "content.publish-ready-tests" in task.check_codes
+    assert "site.build" in task.check_codes
+    assert "python.tests" not in task.check_codes
 
 
 def test_select_validation_task_cli_is_machine_readable(

@@ -22,7 +22,7 @@ class _Frontmatter(BaseModel):
     title_ja: str = Field(min_length=1)
     title_en: str = Field(min_length=1)
     summary: str = Field(min_length=1)
-    source_ids: list[str] = Field(min_length=1)
+    source_ids: list[str] = Field(default_factory=list)
     prerequisites: list[str] = Field(default_factory=list)
     related_ids: list[str] = Field(default_factory=list)
     visualization_ids: list[str] = Field(default_factory=list)
@@ -31,7 +31,7 @@ class _Frontmatter(BaseModel):
     visualization_aliases: list[str] = Field(default_factory=list)
     comparison_aliases: list[str] = Field(default_factory=list)
     status: Literal["published", "draft"]
-    last_reviewed: date
+    last_reviewed: date | None = None
 
     @field_validator(
         "content_id",
@@ -76,6 +76,10 @@ class _Frontmatter(BaseModel):
             raise ValueError("canonical content entity type and ID must be defined together")
         if self.kind == "concept" and self.canonical_entity_id is None:
             raise ValueError("concept content requires a canonical entity")
+        if self.status == "published" and not self.source_ids:
+            raise ValueError("published content requires at least one source ID")
+        if self.status == "published" and self.last_reviewed is None:
+            raise ValueError("published content requires last_reviewed")
         return self
 
 
@@ -98,7 +102,7 @@ class ContentPage:
     visualization_aliases: tuple[tuple[str, str], ...]
     comparison_aliases: tuple[tuple[str, str], ...]
     status: str
-    last_reviewed: str
+    last_reviewed: str | None
     body: str
     html: str
     toc: tuple[ContentHeading, ...]
@@ -156,7 +160,7 @@ def parse_content(path: Path) -> ContentPage:
         visualization_aliases=_pairs(fields.visualization_aliases),
         comparison_aliases=_pairs(fields.comparison_aliases),
         status=fields.status,
-        last_reviewed=fields.last_reviewed.isoformat(),
+        last_reviewed=fields.last_reviewed.isoformat() if fields.last_reviewed else None,
         body=body,
         html=rendered.html,
         toc=rendered.toc,

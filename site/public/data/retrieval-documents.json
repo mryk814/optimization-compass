@@ -7410,31 +7410,6 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.so3-rotation-representation:overview",
-      "dataset_version": "0.18.6",
-      "document_id": "content:concept.so3-rotation-representation",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:concept.manifold",
-        "content:concept.variable-domain",
-        "content:family.manifold",
-        "content:riemannian-gradient",
-        "content:riemannian-trust-region",
-        "source:S044",
-        "source:S045",
-        "source:S071"
-      ],
-      "source_ids": [
-        "S044",
-        "S045",
-        "S071"
-      ],
-      "text": "SO(3)の回転は行列、quaternion、Lie algebraで表せますが、表現ごとに可行性の保ち方、誤差の測り方、特異点の扱いが異なります。",
-      "title": "SO(3)の回転表現"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
       "chunk_id": "content:concept.time-discretization:horizonを格子に切る",
       "dataset_version": "0.18.6",
       "document_id": "content:concept.time-discretization",
@@ -24597,32 +24572,6 @@
       ],
       "text": "geometry updateの最大変位と境界の最小距離 要素の最小qualityと、反転要素・負のJacobianの数 state residualと制約違反 目的関数、感度、finite-differenceまたはgradient check mesh refinement後の目的・制約・形状の変化 目的だけが改善し、mesh qualityやconstraint violationが悪化するなら、その更新は採用せず、更新幅、parameterization、mesh-motion、または再meshの方針を見直します。",
       "title": "診断値"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
-      "chunk_id": "content:shape-parameter-sensitivity:overview",
-      "dataset_version": "0.18.6",
-      "document_id": "content:shape-parameter-sensitivity",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:adjoint-sensitivity",
-        "content:concept.pde-constrained-optimization",
-        "content:concept.variable-domain",
-        "content:geometry-update-failure-modes",
-        "content:shape-optimization",
-        "content:topology-optimization",
-        "source:S054",
-        "source:S056",
-        "source:S101"
-      ],
-      "source_ids": [
-        "S054",
-        "S056",
-        "S101"
-      ],
-      "text": "形状最適化では、形状parameterの感度とPDE状態を介した目的の感度を分け、geometryとmeshが妥当な候補だけを更新比較に使います。",
-      "title": "形状parameterと感度"
     },
     {
       "attribution": "Optimization Compass contributors",

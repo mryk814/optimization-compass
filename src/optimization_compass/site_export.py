@@ -355,7 +355,7 @@ def export_site_data(
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))
     comparison_index = json.loads((output_dir / "comparisons.json").read_text(encoding="utf-8"))
-    content_pages = load_content(CONTENT_DIRECTORY)
+    content_pages = [page for page in load_content(CONTENT_DIRECTORY) if page.status == "published"]
     journey_inventories = {
         "case": {str(item["case_id"]) for item in gallery_index["cases"]},
         "problem": {

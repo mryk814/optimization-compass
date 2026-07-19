@@ -124,7 +124,7 @@ def build_entity_link_index(
 ) -> EntityLinkIndex:
     """Build the one canonical cross-artifact graph used by every site journey."""
 
-    content = load_content(content_directory)
+    content = [page for page in load_content(content_directory) if page.status == "published"]
     trace_routes = trace_routes or {}
     trace_source_ids = trace_source_ids or {}
     trace_view_ids = trace_view_ids or {}
