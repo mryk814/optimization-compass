@@ -1,5 +1,6 @@
 import { expect, test } from "./fixtures/test";
 import { expectNoHorizontalOverflow, gotoAtlasRoute } from "./helpers/navigation";
+import { expectFitsViewport } from "./helpers/visualization";
 
 function requiredBaseURL(baseURL: string | undefined): string {
   if (!baseURL) throw new Error("Playwright baseURL is required.");
@@ -24,17 +25,29 @@ test("three-objective preference is shared with a precise mobile fallback", asyn
   await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
   await expect(page.getByRole("img", { name: "3目的のparallel coordinates表示" })).toBeVisible();
   await expect(page.getByText(/9×9 gridから得たsampled teaching lens/u)).toBeVisible();
+  const preference = page.getByRole("slider", { name: /^f₁の重み \(weight\)/u });
+  await expect(preference).toHaveValue("50");
   const selected = page.locator(".triobjective-values dd");
   const before = await selected.allTextContents();
-  await page.getByRole("slider", { name: /f₁のweight/u }).press("ArrowRight");
+  await preference.press("ArrowRight");
+  await expect(preference).toHaveValue("55");
   await expect.poll(async () => selected.allTextContents()).not.toEqual(before);
-  await page.getByRole("slider", { name: "3目的表示のカメラ方位" }).press("ArrowRight");
+  await expect(page.getByText(/f₁の重み 0\.55 で選んだ点/u)).toBeVisible();
+  const camera = page.getByRole("slider", { name: "3目的表示のカメラ方位" });
+  await camera.press("ArrowRight");
   await expect(page.locator(".triobjective-lens output")).toHaveText("320°");
 
   await page.setViewportSize({ width: 375, height: 812 });
   await expectNoHorizontalOverflow(page);
-  await expect(page.getByTestId("triobjective-scatter")).toBeVisible();
-  await expect(page.getByRole("img", { name: "3目的のparallel coordinates表示" })).toBeVisible();
+  await expect(preference).toHaveValue("55");
+  await expect(page.locator(".triobjective-lens output")).toHaveText("320°");
+  const scatter = page.getByTestId("triobjective-scatter");
+  const parallelCoordinates = page.getByRole("img", { name: "3目的のparallel coordinates表示" });
+  await expectFitsViewport(scatter, page);
+  await expectFitsViewport(parallelCoordinates, page);
+  const [scatterBox, parallelBox] = await Promise.all([scatter.boundingBox(), parallelCoordinates.boundingBox()]);
+  if (!scatterBox || !parallelBox) throw new Error("Three-objective plots must have layout boxes.");
+  expect(parallelBox.y).toBeGreaterThan(scatterBox.y + scatterBox.height);
 });
 
 test("derived video retains captions, transcript, and independent formats", async ({ page, baseURL }) => {
