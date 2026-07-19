@@ -1038,6 +1038,79 @@
           "artifact": {"artifact_id": "shape-topology-representation-contrast", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/shape-topology-representation-contrast.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "canonical_url": "/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "so3-attitude-alignment",
+      "case_id": "so3-attitude-alignment",
+      "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+      "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "benchmark_context_id": "BENCH_SO3_ATTITUDE_FIXED_12",
+      "title_ja": "SO(3)へのprojectionとLie algebra updateを分けて読む",
+      "title_en": "Separate SO(3) projection from a Lie-algebra update",
+      "comparison_question": "target、初期rotation、objective、step size、12 updateを固定し、feasibility strategyだけを変えるとlossとSO(3)構造診断はどう変わる？",
+      "formulation_summary": "min 0.5 ||R-R_target||_F^2 subject to R^T R=I and det(R)=1。target angleは2.8 rad、初期値はidentity。",
+      "fixed_factors": [
+        "同じ固定3 correspondenceとtarget rotation",
+        "同じidentity initialization",
+        "同じchordal objectiveとgeodesic diagnostic",
+        "同じstep size 0.35",
+        "同じ12 oracle evaluation budget",
+        "同じfloat64相当の決定的generator"
+      ],
+      "changed_factors": ["feasibility strategyだけ: ambient step + QR projection 対 Lie algebra step + exponential map"],
+      "seed_policy": "決定的な固定rotationを使うためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 12},
+      "stopping_policy": "12 updateで停止し、途中のmetricを同じoracle evaluation軸へ同期する。",
+      "tuning_policy": "step size 0.35をrun前に固定し、結果を見てstrategyごとに調整しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "objective_value", "label_ja": "目的関数値", "direction": "minimize", "unit": "squared loss"},
+        {"metric_id": "geodesic_residual", "label_ja": "geodesic residual", "direction": "minimize", "unit": "radian"},
+        {"metric_id": "orthogonality_error", "label_ja": "直交性残差", "direction": "minimize", "unit": "Frobenius norm"},
+        {"metric_id": "determinant_error", "label_ja": "determinant残差", "direction": "minimize", "unit": "absolute error"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じproblem、target、initialization、objective、step、budget、diagnosticを共有し、SO(3)へ戻すstrategyだけを変える。",
+      "caveat": "QR projectionとexponential mapは一回あたりの演算も理論上のstepも異なるため、iteration数や最終lossから一般的な速度順位を付けない。",
+      "takeaway": "feasible iterateを作る点は共通でも、ambient correctionとtangent stepは別の量である。objectiveと構造残差を分けると、feasibilityと収束claimを混同しにくい。",
+      "limitations": [
+        "固定near-pi target・noiseなし・単一initializationの教育用contrastである。",
+        "quaternion sign、複数rotation averaging、outlier robustness、wall-clock、memoryを比較しない。",
+        "各iterateのSO(3) feasibilityは局所解、大域最適性、一般的なnear-pi安定性を保証しない。"
+      ],
+      "source_ids": ["S044", "S045", "S071", "S107"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "so3-projected",
+          "role": "ambient_projection",
+          "method_id": "M_PROJECTED_GRADIENT",
+          "scenario_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
+          "label_ja": "ambient step + QR projection",
+          "label_en": "Ambient step plus QR projection",
+          "parameters": {"representation": "rotation_matrix", "step_size": 0.35, "feasibility_strategy": "qr_projection", "distance_diagnostic": "geodesic_angle"},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "so3-projected-alignment", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/so3-projected-alignment.json"}
+        },
+        {
+          "member_id": "so3-riemannian",
+          "role": "lie_algebra_update",
+          "method_id": "M_RIEMANNIAN_GRADIENT",
+          "scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
+          "label_ja": "Lie algebra step + exponential map",
+          "label_en": "Lie-algebra step plus exponential map",
+          "parameters": {"representation": "rotation_matrix", "step_size": 0.35, "feasibility_strategy": "lie_exponential", "distance_diagnostic": "geodesic_angle"},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "so3-riemannian-alignment", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/so3-riemannian-alignment.json"}
+        }
+      ]
     }
   ]
 }

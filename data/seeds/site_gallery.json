@@ -665,6 +665,64 @@
         "implicit derivativeにはactive-setの安定性、LICQやMFCQなどのconstraint qualification、必要に応じてstrict complementarityと縮約KKTの非特異性が要る。これらが破れる境界ではsolution mapが非滑らかになり、outer gradientの保証はない。",
         "有限のrelaxation parameterで得た小さなcomplementarity residualはexact complementarityの証明ではない。このCaseはcontact・frictionのmode discoveryやhybridのswitching scheduleを扱わず、それらは後続のTheater／Compare／canonical contractで別途定義する。"
       ]
+    },
+    {
+      "case_id": "so3-attitude-alignment",
+      "title_ja": "SO(3)上でnear-piのattitudeを合わせる",
+      "title_en": "Align a near-pi attitude on SO(3)",
+      "domain": "engineering",
+      "problem_archetype_id": "PA037",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "manifold"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "sum_of_squares"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "analytic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "manifold"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {
+        "Q01": "structured_or_unknown",
+        "Q02": "explicit_algebraic",
+        "Q03": "sum_of_squares",
+        "Q04": "dynamics_or_manifold",
+        "Q05": "analytic_gradient",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "manifold",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {"method_id": "M_RIEMANNIAN_GRADIENT", "reason": "ambient gradientをSO(3)の接空間へ移し、Lie algebra stepとretraction／exponential mapを明示したままfeasible iterateを作れるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_PROJECTED_GRADIENT", "reason": "ambient update後のSO(3) projection costと修正量を記録し、projectionをmanifold stepと同一視しない場合"},
+        {"method_id": "M_RIEMANNIAN_TRUST_REGION", "reason": "一階法が停滞し、正しいRiemann Hessian-vector積とtrust-region subproblemを検証できる場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_BFGS", "reason": "9個のmatrix成分を無制約のまま更新するとR^T R=Iとdet(R)=1を保てず、別のparameterizationまたはconstraint処理なしにはrotationを表さないため"}
+      ],
+      "implementation_ids": ["I_PYMANOPT", "I_MANOPT_MATLAB", "I_MANOPT_JL"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_SO3_PROJECTED_ALIGNMENT", "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT"],
+      "comparison_ids": ["COMPARE_SO3_PROJECTED_RIEMANNIAN"],
+      "source_ids": ["S044", "S045", "S071", "S107"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "三つの固定vector対応から、near-piのtarget attitudeへ回転行列を合わせたい。",
+      "variable_domain": "固定教材のfeasible setは $X=SO(3)=\\{R\\in\\mathbb{R}^{3\\times3}\\mid R^{\\mathsf T}R=I,\\ \\det R=1\\}$。ambient成分は9個だがintrinsic degree of freedomは3である。",
+      "decision_variables": "body frameからreference frameへのrotation matrix $R$。固定教材はidentityから開始し、target axis $(1,2,3)/\\sqrt{14}$、angle $2.8$ radのrotationへ12 updateで近づける。",
+      "objective": "三つのnoiseless basis correspondenceをまとめたtarget $R_\\star$ に対し、chordal loss $f(R)=\\frac12\\lVert R-R_\\star\\rVert_F^2$ を最小化する。評価ではgeodesic residual $d(R,R_\\star)=\\lVert\\log(R^{\\mathsf T}R_\\star)\\rVert$も別に記録する。",
+      "constraints": "$R^{\\mathsf T}R=I$ と $\\det R=1$。projected updateはambient candidateをQRでSO(3)へ戻し、Riemannian updateはskew-symmetricなLie algebra stepをexponential mapで戻す。どちらもfeasible iterateを作るが同じ更新ではない。",
+      "map_node_id": "answer:Q04:dynamics_or_manifold",
+      "python_example": "import numpy as np\n\ndef project_so3(matrix):\n    u, _, vt = np.linalg.svd(matrix)\n    correction = np.diag([1.0, 1.0, np.linalg.det(u @ vt)])\n    return u @ correction @ vt\n\nR = np.eye(3)\nR_target = np.array([[-0.80349217, 0.00887229, 0.59524920], [0.54604838, -0.38730167, 0.74285165], [0.23713180, 0.92191035, 0.30634916]])\nfor _ in range(12):\n    ambient_gradient = R - R_target\n    R = project_so3(R - 0.35 * ambient_gradient)\nprint(np.linalg.norm(R.T @ R - np.eye(3)), np.linalg.det(R))",
+      "practical_notes": "[SO(3)の行列・接空間表現](#/learn/concept.so3-rotation-representation)を先に読み、objective、geodesic residual、orthogonality error、determinant error、projection correctionまたはtangent stepを別々に保存する。quaternionを使う場合は$q$と$-q$の同値を処理し、near-piではlog mapとchartの条件を点検する。",
+      "limitations": [
+        "固定3対応・noiseなし・固定stepの教材であり、複数rotation graph、外れ値、欠測、sensor calibration、実装速度を表さない。",
+        "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
+        "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。"
+      ]
     }
   ]
 }

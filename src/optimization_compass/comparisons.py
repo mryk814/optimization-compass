@@ -7,6 +7,15 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.constraint_geometry import (
+    GENERATOR_ID as SO3_GENERATOR_ID,
+)
+from optimization_compass.constraint_geometry import (
+    GENERATOR_VERSION as SO3_GENERATOR_VERSION,
+)
+from optimization_compass.constraint_geometry import (
+    PROFILE_ID as SO3_PROFILE_ID,
+)
 from optimization_compass.nested_solve import (
     BILEVEL_GENERATOR_ID,
     BILEVEL_GENERATOR_VERSION,
@@ -48,6 +57,7 @@ _EDUCATIONAL_GENERATORS_BY_PROFILE = {
     BILEVEL_PROFILE_ID: (BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION),
     HYBRID_PROFILE_ID: (HYBRID_GENERATOR_ID, HYBRID_GENERATOR_VERSION),
     PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),
+    SO3_PROFILE_ID: (SO3_GENERATOR_ID, SO3_GENERATOR_VERSION),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {

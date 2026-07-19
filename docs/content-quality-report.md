@@ -1,7 +1,7 @@
 # Content quality report
 
-- Published concept guides: `21`
-- Meeting the concept floor: `21`
+- Published concept guides: `22`
+- Meeting the concept floor: `22`
 - Below the concept floor: `0`
 - Prose review warnings: `518`
 
@@ -22,6 +22,7 @@
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
 | `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
 | `concept.so3-rotation-representation` | 92 | 2517 | 7 | 4 | 0 | pass |
+| `concept.spd-matrix-geometry` | 89 | 3059 | 9 | 3 | 0 | pass |
 | `concept.time-discretization` | 74 | 1945 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 61 | 4298 | 16 | 3 | 0 | pass |
@@ -71,6 +72,7 @@
 | `concept.receding-horizon` | 5 |
 | `concept.simplex` | 5 |
 | `concept.so3-rotation-representation` | 0 |
+| `concept.spd-matrix-geometry` | 0 |
 | `concept.time-discretization` | 2 |
 | `concept.trajectory-variable` | 3 |
 | `concept.uncertainty-models` | 9 |

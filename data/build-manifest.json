@@ -80,6 +80,11 @@
       "id": "018",
       "path": "data/migrations/018_shape_optimization.sql",
       "sha256": "598589099d46ab3c66cacccf49b6107d77f0f4022d716c754b4b3cbe82f58a71"
+    },
+    {
+      "id": "019",
+      "path": "data/migrations/019_constraint_geometry.sql",
+      "sha256": "98074cce2328afb729549601ba8d0d1f85088f10e1715b44834c2aa10383d435"
     }
   ],
   "specialized_inputs": [

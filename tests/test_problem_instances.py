@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_eighteen_closed_representative_instances() -> None:
+def test_problem_suite_has_nineteen_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 18
+    assert len(suite.instances) == 19
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -39,6 +39,7 @@ def test_problem_suite_has_eighteen_closed_representative_instances() -> None:
         "INSTANCE_BILEVEL_REGRESSION_2COEF",
         "INSTANCE_HYBRID_CHATTERING_LEDGER",
         "INSTANCE_DIFFUSER_SHAPE_3P",
+        "INSTANCE_SO3_ATTITUDE_FIXED_3",
     } <= {item.problem_instance_id for item in suite.instances}
     assert all(item.display.get("range") for item in suite.instances)
     assert all(item.display.get("axis_labels") for item in suite.instances)
@@ -112,8 +113,8 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 16
-    assert len(catalog.instances) == 18
+    assert len(catalog.definitions) == 17
+    assert len(catalog.instances) == 19
     context = next(
         item
         for item in repository.benchmark_contexts()

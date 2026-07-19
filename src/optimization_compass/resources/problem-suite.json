@@ -272,6 +272,23 @@
       "feature_ids": ["F_VARIABLE_SIMPLEX", "F_CONSTRAINT_SIMPLEX", "F_CONSTRAINT_BOUNDS", "F_GUARANTEE_UNCERTAINTY"],
       "source_ids": ["S055", "S103"],
       "last_verified": "2026-07-19"
+    },
+    {
+      "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+      "name_ja": "SO(3)上のattitude alignment",
+      "name_en": "Attitude alignment on SO(3)",
+      "mathematical_family": "rotation_manifold_least_squares",
+      "variable_domain": "special_orthogonal_group_so3",
+      "objective_form": "sum_of_squares",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "gradient", "constraint_value"],
+      "constraint_class": "rotation_matrix_manifold",
+      "dimensionality_policy": {"kind": "fixed", "ambient_dimension": 9, "intrinsic_dimension": 3},
+      "known_reference_semantics": "The fixed noiseless target rotation has zero chordal loss; it is a teaching reference, not a general rotation-averaging certificate.",
+      "related_problem_ids": ["PA037"],
+      "feature_ids": ["F_VARIABLE_MANIFOLD", "F_OBJECTIVE_SUM_OF_SQUARES", "F_CONSTRAINT_MANIFOLD", "F_DERIVATIVE_ANALYTIC_GRADIENT", "F_GUARANTEE_LOCAL_OK"],
+      "source_ids": ["S044", "S045", "S071", "S107"],
+      "last_verified": "2026-07-19"
     }
   ],
   "instances": [
@@ -678,6 +695,41 @@
       "limitations_ja": "固定training 8件・held-out 4件と0.05 gridの教育用instanceです。母集団risk、confidence interval、将来return、chance constraint、robust feasibility、DRO guaranteeを表しません。",
       "limitations_en": "A teaching instance with eight fixed training scenarios, four fixed held-out scenarios, and a 0.05 grid; it provides no population-risk, confidence-interval, future-return, chance-constraint, robust-feasibility, or DRO guarantee.",
       "source_ids": ["S055", "S103"],
+      "last_verified": "2026-07-19"
+    },
+    {
+      "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",
+      "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
+      "name_ja": "near-pi targetへの固定3対応attitude alignment",
+      "name_en": "Fixed three-correspondence attitude alignment to a near-pi target",
+      "registry_key": "problem.so3_attitude.fixed_3.v1",
+      "dimension": 9,
+      "parameters": {
+        "representation": "row_major_rotation_matrix",
+        "target_axis": [0.2672612419124244, 0.5345224838248488, 0.8017837257372732],
+        "target_angle_radians": 2.8,
+        "target_rotation": [-0.8034921734780396, 0.008872287271398216, 0.5952491996450812, 0.5460483814910756, -0.38730167190618425, 0.7428516541070977, 0.23713180349862953, 0.9219103521803236, 0.3063491640469078],
+        "initial_rotation": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+        "observation_policy": "three_noiseless_basis_correspondences",
+        "residual": "chordal_matrix_residual",
+        "diagnostic_distance": "geodesic_angle",
+        "step_size": 0.35
+      },
+      "bounds": {"matrix_entry": [-1.0, 1.0]},
+      "constraints": [
+        {"constraint_id": "orthogonality", "expression": "R^T R = I", "sense": "eq"},
+        {"constraint_id": "proper_rotation", "expression": "det(R) = 1", "sense": "eq"}
+      ],
+      "initialization_candidates": [{"candidate_id": "identity", "point": [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "known_exact",
+      "known_reference": {"point": [-0.8034921734780396, 0.008872287271398216, 0.5952491996450812, 0.5460483814910756, -0.38730167190618425, 0.7428516541070977, 0.23713180349862953, 0.9219103521803236, 0.3063491640469078], "value": 0.0, "reference_scope": "fixed_noiseless_three_correspondence_chordal_objective", "source_ids": ["S107"]},
+      "display": {"range": {"oracle_evaluations": [0, 12], "objective_value": [0.0, 4.0], "geodesic_residual": [0.0, 3.141592653589793], "orthogonality_error": [0.0, 1e-10]}, "axis_labels": ["oracle evaluations", "diagnostic value"], "units": ["evaluation", "mixed diagnostic"], "expression": "min 0.5 ||R-R_target||_F^2, R^T R=I, det(R)=1"},
+      "intended_phenomena": ["tangent_update", "projection_correction", "retraction", "near_pi_residual", "feasible_iterates"],
+      "limitations_ja": "固定3対応・noiseなし・固定stepの教材です。外れ値、複数rotationのgraph、quaternion sign、実装速度、一般的な収束半径を表しません。",
+      "limitations_en": "A noiseless fixed-three-correspondence lesson with a fixed step; it does not represent outliers, multi-rotation graphs, quaternion signs, runtime, or a general convergence radius.",
+      "source_ids": ["S044", "S045", "S071", "S107"],
       "last_verified": "2026-07-19"
     }
   ]

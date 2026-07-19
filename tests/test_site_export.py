@@ -262,8 +262,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "version": "1.0.0",
     }
     problem_catalog = json.loads((first_output / "problems.json").read_bytes())
-    assert len(problem_catalog["definitions"]) == 13
-    assert len(problem_catalog["instances"]) == 14
+    assert len(problem_catalog["definitions"]) == 17
+    assert len(problem_catalog["instances"]) == 19
     search_tree_index_bytes = (first_output / "search-trees/index.json").read_bytes()
     search_tree_index = json.loads(search_tree_index_bytes)
     assert {item["scenario_id"] for item in search_tree_index["artifacts"]} == {
@@ -314,7 +314,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     formulation_primer = json.loads(
         (first_output / "formulation-primer.json").read_text(encoding="utf-8")
     )
-    assert len(formulation_primer["diagnosis_mappings"]) == 12
+    assert len(formulation_primer["diagnosis_mappings"]) == 13
     assert (first_output / "formulation-primer.json").read_bytes() == (
         second_output / "formulation-primer.json"
     ).read_bytes()
