@@ -46,6 +46,7 @@ TOPOLOGY_ARTIFACT_ID: Literal["topology-optimization-field-evolution"] = (
 )
 TOPOLOGY_SCENARIO_ID = "SCENARIO_TOPOLOGY_SIMP_OC"
 TOPOLOGY_FAILURE_SCENARIO_ID = "SCENARIO_TOPOLOGY_CHECKERBOARD"
+TOPOLOGY_COMPARISON_SCENARIO_ID = "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
 
 
 class PlotBounds(TraceModel):
@@ -800,6 +801,7 @@ def write_learning_slice_scenarios(
         _pareto_preference_scenario(pareto_primary),
         topology_primary,
         _topology_failure_scenario(topology_primary),
+        _topology_comparison_scenario(topology_primary),
     ]
     links = [
         LearningSliceLink(
@@ -1186,6 +1188,67 @@ def _topology_failure_scenario(primary_scenario: VisualizationScenario) -> Visua
             "title_en": "Find the checkerboard failure without filtering",
             "purpose": "failure_contrast",
             "lesson": lesson,
+        }
+    )
+    return VisualizationScenario.model_validate(payload)
+
+
+def _topology_comparison_scenario(
+    primary_scenario: VisualizationScenario,
+) -> VisualizationScenario:
+    payload = primary_scenario.model_dump(mode="python")
+    lesson = primary_scenario.lesson.model_dump(mode="python")
+    lesson.update(
+        {
+            "learning_objective": {
+                "ja": "同じ問題・初期密度・予算でOCとMMAの更新差を読む",
+                "en": (
+                    "Read the update difference between OC and MMA under the same problem, "
+                    "start, and budget"
+                ),
+            },
+            "expected_phenomenon_ja": (
+                "OCとMMAは同じ片持ちはり問題と予算から出発しますが、"
+                "感度の扱いと更新則の違いによって密度fieldの変化が異なります。"
+            ),
+            "expected_phenomenon_en": (
+                "OC and MMA share the cantilever problem and budget, but their density fields "
+                "evolve differently because their sensitivity handling and update rules differ."
+            ),
+            "comparison_role": "sensitivity_variant",
+            "recommended_next_scenario_ids": [TOPOLOGY_FAILURE_SCENARIO_ID],
+            "static_summary": {
+                "ja": "同じ問題・初期密度・評価予算で、OCとMMAのfield更新を並べて読みます。",
+                "en": (
+                    "Read OC and MMA field updates side by side under the same problem, "
+                    "start, and budget."
+                ),
+            },
+            "text_alternative": {
+                "ja": "OCとMMAの密度field、compliance、volume fractionを反復ごとに列挙します。",
+                "en": (
+                    "List density fields, compliance, and volume fraction for OC and MMA "
+                    "at each iteration."
+                ),
+            },
+            "derived_media_caption": {
+                "ja": "同一条件で比較するOCとMMAのtopology field更新",
+                "en": "OC and MMA topology field updates under matched conditions",
+            },
+        }
+    )
+    payload.update(
+        {
+            "scenario_id": TOPOLOGY_COMPARISON_SCENARIO_ID,
+            "identity_status": "derived",
+            "canonical_scenario_id": TOPOLOGY_SCENARIO_ID,
+            "title_ja": "同じ条件でOCとMMAの更新を比較する",
+            "title_en": "Compare OC and MMA updates under matched conditions",
+            "purpose": "comparison",
+            "lesson": lesson,
+            "runs": [
+                run for run in payload["runs"] if run["method_id"] in {"M_OC_TOPOLOGY", "M_MMA"}
+            ],
         }
     )
     return VisualizationScenario.model_validate(payload)

@@ -261,8 +261,13 @@ def _load_scenario_contracts(root: Path, artifacts: dict[str, Any]) -> list[dict
             and sha256(payload_path.read_bytes()).hexdigest() == scenario.artifact.payload_sha256
         )
         for run in scenario.runs:
-            route = routes.get(run.artifact_id) or _scenario_route(
-                scenario.artifact.renderer_family, scenario.scenario_id, run.artifact_id
+            route = (
+                f"/theater/learning/{scenario.scenario_id}"
+                if scenario.artifact.renderer_family == "field_evolution"
+                else routes.get(run.artifact_id)
+                or _scenario_route(
+                    scenario.artifact.renderer_family, scenario.scenario_id, run.artifact_id
+                )
             )
             contracts.append(
                 {

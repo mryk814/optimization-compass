@@ -10,6 +10,7 @@ from optimization_compass.learning_slices import (
     PARETO_PREFERENCE_SCENARIO_ID,
     PARETO_SCENARIO_ID,
     TOPOLOGY_ARTIFACT_ID,
+    TOPOLOGY_COMPARISON_SCENARIO_ID,
     TOPOLOGY_FAILURE_SCENARIO_ID,
     TOPOLOGY_SCENARIO_ID,
     generate_feasible_region_artifact,
@@ -63,6 +64,7 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         PARETO_SCENARIO_ID,
         TOPOLOGY_SCENARIO_ID,
         TOPOLOGY_FAILURE_SCENARIO_ID,
+        TOPOLOGY_COMPARISON_SCENARIO_ID,
     }
     assert {scenario.artifact.renderer_family for scenario in scenarios} == {
         "feasible_region",
@@ -92,6 +94,18 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
     assert scenario_identity(CONSTRAINED_FEASIBLE_PATH_SCENARIO_ID) == (
         "derived",
         CONSTRAINED_SCENARIO_ID,
+    )
+
+    comparison = next(
+        scenario
+        for scenario in scenarios
+        if scenario.scenario_id == TOPOLOGY_COMPARISON_SCENARIO_ID
+    )
+    assert comparison.purpose == "comparison"
+    assert [run.method_id for run in comparison.runs] == ["M_OC_TOPOLOGY", "M_MMA"]
+    assert scenario_identity(TOPOLOGY_COMPARISON_SCENARIO_ID) == (
+        "derived",
+        TOPOLOGY_SCENARIO_ID,
     )
     constrained_link = next(item for item in links if item.artifact_id == CONSTRAINED_ARTIFACT_ID)
     assert constrained_link.route == f"/theater/learning/{CONSTRAINED_SCENARIO_ID}"
