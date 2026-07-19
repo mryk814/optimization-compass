@@ -53,6 +53,14 @@ describe("Atlas typography contract", () => {
     ".theater-first-action p:not(.eyebrow)",
     ".coverage-table-wrap table",
     ".bo-figure text",
+    ".playback-status",
+    ".playback-actions button",
+    ".metric-history-panel h3",
+    ".text-alternative",
+    ".trace-identity",
+    ".scenario-narration small",
+    ".trace-snapshot h2",
+    ".trace-summary p",
   ])("covers the shared surface %s", (selector) => {
     expect(contract).toContain(selector);
   });
