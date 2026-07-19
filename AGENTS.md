@@ -103,6 +103,7 @@ npm --prefix site test -- --run
 ### Tier B — Gallery, comparison, relations, or canonical data using existing contracts
 
 ```bash
+uv run optimization-compass validate content-reports
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy src

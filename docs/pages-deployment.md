@@ -11,7 +11,9 @@ site along separate paths.
 1. install the locked Python and Node.js dependencies;
 2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b`; pushes, scheduled runs, and manual runs select `tier-b`;
 3. for `content-ready` and Tier B, delete and regenerate `site/public/data`, then require zero tracked drift;
-4. run the selected registry task; unknown paths fail safe to Tier B rather than silently receiving a fast gate;
+4. run the selected registry task; `content-ready` and Tier B start by regenerating both committed
+   content reports through their official scripts and fail on drift before longer checks, while
+   unknown paths fail safe to Tier B rather than silently receiving a fast gate;
 5. verify README facts and repository size for every task, and source health plus zero generated
    drift for Tier B;
 6. retain `site/dist` for non-documentation pull-request and nightly browser jobs;

@@ -96,6 +96,15 @@ class ChangeValidationPlan(_FrozenModel):
 
 CHECKS: tuple[ValidationCheck, ...] = (
     ValidationCheck(
+        code="content.report-drift",
+        description="Regenerate committed content quality reports through their official scripts.",
+        next_action=(
+            "Run both content report scripts, inspect the generated diff, and commit the reports"
+            " before the full validation suite."
+        ),
+        command=(_PYTHON_TOKEN, "scripts/verify_content_reports.py"),
+    ),
+    ValidationCheck(
         code="python.lint",
         description="Ruff lint over the repository.",
         next_action="Fix the reported lint findings (uv run ruff check . --fix helps).",
@@ -243,6 +252,7 @@ _CHECKS_BY_CODE: dict[str, ValidationCheck] = {check.code: check for check in CH
 
 _TIER_A_CODES: tuple[str, ...] = ("content.pages", "content.licensing", "site.unit")
 _TIER_B_CODES: tuple[str, ...] = (
+    "content.report-drift",
     "python.lint",
     "python.format",
     "python.types",
@@ -268,6 +278,7 @@ _PR_FAST_CODES: tuple[str, ...] = (
     "site.build",
 )
 _CONTENT_READY_CODES: tuple[str, ...] = (
+    "content.report-drift",
     "content.pages",
     "content.licensing",
     "content.publish-ready-tests",
@@ -349,6 +360,12 @@ TASKS: dict[str, ValidationTask] = {
             description="Iteration checks for executable problem instances. PR gate: tier-c.",
             gate="tier-c",
             check_codes=("python.lint", "python.types", "python.problem-tests"),
+        ),
+        ValidationTask(
+            name="content-reports",
+            description="Fast generated content-report drift preflight. PR gate: tier-b.",
+            gate="tier-b",
+            check_codes=("content.report-drift",),
         ),
         ValidationTask(
             name="manifest",
