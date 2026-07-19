@@ -31,6 +31,23 @@ describe("case-bound comparison contract", () => {
     ]));
   });
 
+  test("keeps the multi-fidelity comparison cost-aligned and policy-explicit", () => {
+    const parsed = parseComparisonIndex(rawComparisons);
+    const comparison = parsed.comparisons.find(
+      (item) => item.comparison_id === "COMPARE_BO_MULTIFIDELITY_COST",
+    )!;
+
+    expect(comparison.budget).toEqual({ metric: "high_fidelity_equivalent_cost", value: 3 });
+    expect(comparison.synchronization_axis).toBe("high_fidelity_equivalent_cost");
+    expect(comparison.ranking_eligible).toBe(false);
+    expect(new Set(comparison.members.map((member) => member.parameters.failure_policy))).toEqual(
+      new Set(["record_null_charge_cost_no_retry"]),
+    );
+    expect(new Set(comparison.members.map((member) => member.parameters.parallel_workers))).toEqual(
+      new Set([1]),
+    );
+  });
+
   test("keeps initial-simplex sensitivity as a non-ranking geometry comparison", () => {
     const parsed = parseComparisonIndex(rawComparisons);
     const parsedComparison = parsed.comparisons.find(

@@ -4386,7 +4386,7 @@
         "oracle_policy": [
           "objective_value"
         ],
-        "parameter_preset_id": "BO_MULTIFIDELITY_LEDGER",
+        "parameter_preset_id": "BO_1D_MULTIFIDELITY_LEDGER",
         "seed": {
           "status": "fixed",
           "value": 2604
@@ -4428,8 +4428,8 @@
           "en": "Track fidelity, cost, and status for each simulator call and read the high-fidelity best-so-far",
           "ja": "simulator callごとのfidelity・cost・statusを追い、high fidelityのbest-so-farを読む"
         },
-        "limitations_en": "A fixed-seed one-dimensional educational policy. It does not model cross-fidelity surrogate correction, parallel/asynchronous execution, real runtime, retries, or physical simulator failure causes, and does not claim a cost-aligned Compare or complete #138.",
-        "limitations_ja": "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、cost-aligned Compareや#138全体の完了を主張しない。",
+        "limitations_en": "A fixed-seed one-dimensional educational policy. It does not model cross-fidelity surrogate correction, parallel/asynchronous execution, real runtime, retries, or physical simulator failure causes, and this fixed run alone does not establish a fidelity-policy or method ranking.",
+        "limitations_ja": "固定seed・1次元・決定論的な教育用policy。fidelity間のsurrogate補正、parallel/asynchronous実行、実runtime、retry、物理simulatorのfailure原因は扱わず、この固定run単独からfidelity policyやmethodの優劣を主張しない。",
         "misconception": {
           "en": "Treat low-fidelity calls and failed calls as equivalent to successful high-fidelity evaluations",
           "ja": "low fidelityの回数や失敗をhigh fidelityの成功評価と同じものとして数える"
@@ -4572,6 +4572,465 @@
       ],
       "title_en": "Evaluation ledger for a low/high-fidelity simulator",
       "title_ja": "低／高 fidelity simulator の評価ledger"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.1.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "evaluation_ledger",
+          "fidelity",
+          "call_cost",
+          "evaluation_status",
+          "accumulated_budget",
+          "best_so_far",
+          "posterior_uncertainty"
+        ],
+        "payload_bytes": 10722,
+        "payload_path": "visualizations/bo-high-fidelity-baseline.json",
+        "payload_sha256": "4037f8fe4c474de555876303d5b93b66e78fd26b1481721e3ebe429934e5e19d",
+        "renderer_contract_version": "1.1.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.6",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 3
+        },
+        "initial_condition": {
+          "point": [
+            -2.9,
+            -2.6,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_1D_HIGH_FIDELITY_BASELINE",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 3,
+          "max_total_cost": 36
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "baseline",
+        "derived_media_caption": {
+          "en": "Same cost budget spent on high fidelity only",
+          "ja": "high fidelityだけで使う同一cost budget"
+        },
+        "expected_phenomenon_en": "The same cost of 36 yields different call and status counts when fidelity allocation changes",
+        "expected_phenomenon_ja": "同じ36 costでもfidelity配分によりcall数と成功・censoredの内訳が変わる",
+        "failure_signals": [
+          {
+            "label_en": "Failed, censored, and timeout calls are not replaced by objective values",
+            "label_ja": "failed・censored・timeoutを目的値に置換しない",
+            "observable_ids": [
+              "evaluation_ledger",
+              "evaluation_status"
+            ],
+            "signal_id": "ledger_does_not_replace_failure_with_objective"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "This fixed run does not establish continuous optimality or validate a fidelity correction model",
+          "note_ja": "連続問題の最適性やfidelity補正の妥当性はこの固定runから判定しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read a high-fidelity-only ledger under the same initial design and cost budget",
+          "ja": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+        },
+        "limitations_en": "A fixed three-point teaching baseline; it does not establish general performance of a high-fidelity-only policy or method.",
+        "limitations_ja": "固定3点の教育用baselineであり、high-fidelity-only policyやmethodの一般的性能を示さない。",
+        "misconception": {
+          "en": "Compare three high-fidelity calls with fourteen mixed-fidelity calls by iteration count alone",
+          "ja": "3回のhigh fidelity callと14回のmixed-fidelity callをiteration数だけで比較する"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity"
+            ],
+            "title_en": "Inspect the first calls and fidelity",
+            "title_ja": "最初のcallとfidelityを見る"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "call_cost",
+              "accumulated_budget"
+            ],
+            "title_en": "Accumulate low-fidelity cost",
+            "title_ja": "low fidelityのcostを累積する"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "evaluation_status",
+              "best_so_far"
+            ],
+            "title_en": "Separate failure status from values",
+            "title_ja": "失敗statusを値と分ける"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "accumulated_budget",
+              "best_so_far"
+            ],
+            "title_en": "Inspect high-fidelity results within budget",
+            "title_ja": "予算内のhigh fidelity結果を確認する"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_SURROGATE_MODEL",
+          "CONCEPT_EVALUATION_COST"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "evaluation ledger",
+            "label_ja": "評価ledger",
+            "observable_id": "evaluation_ledger"
+          },
+          {
+            "label_en": "fidelity",
+            "label_ja": "fidelity",
+            "observable_id": "fidelity"
+          },
+          {
+            "label_en": "call cost",
+            "label_ja": "call cost",
+            "observable_id": "call_cost"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "評価status",
+            "observable_id": "evaluation_status"
+          },
+          {
+            "label_en": "accumulated budget",
+            "label_ja": "累積budget",
+            "observable_id": "accumulated_budget"
+          },
+          {
+            "label_en": "high-fidelity best-so-far",
+            "label_ja": "high fidelity best-so-far",
+            "observable_id": "best_so_far"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "surrogate uncertainty",
+            "label_ja": "surrogate不確実性",
+            "observable_id": "posterior_uncertainty"
+          }
+        ],
+        "static_summary": {
+          "en": "Evaluate the same three fixed points only at high fidelity, consuming cost 36 and three high-fidelity equivalents.",
+          "ja": "固定した3点をhigh fidelityだけで評価し、36 costと3 high-fidelity-equivalentを使い切る。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Each call preserves fidelity, cost, and status",
+            "label_ja": "callごとのfidelity・cost・statusが残る",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "call_cost",
+              "evaluation_status"
+            ],
+            "signal_id": "ledger_preserves_fidelity_cost_status"
+          },
+          {
+            "label_en": "Only successful high-fidelity calls update best-so-far",
+            "label_ja": "high fidelity成功だけでbest-so-farを更新する",
+            "observable_ids": [
+              "accumulated_budget",
+              "best_so_far"
+            ],
+            "signal_id": "ledger_separates_high_fidelity_best"
+          }
+        ],
+        "text_alternative": {
+          "en": "Evaluate the same three fixed points only at high fidelity, consuming cost 36 and three high-fidelity equivalents.",
+          "ja": "固定した3点をhigh fidelityだけで評価し、36 costと3 high-fidelity-equivalentを使い切る。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_1D_HIGH_FIDELITY_BASELINE_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "title_en": "Same cost budget spent on high fidelity only",
+      "title_ja": "high fidelityだけで使う同一cost budget"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "SurrogateUncertainty",
+        "artifact_contract_version": "1.1.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "evaluation_ledger",
+          "fidelity",
+          "call_cost",
+          "evaluation_status",
+          "accumulated_budget",
+          "best_so_far",
+          "posterior_uncertainty",
+          "observed_value"
+        ],
+        "payload_bytes": 21500,
+        "payload_path": "visualizations/bo-low-fidelity-bias.json",
+        "payload_sha256": "d66926dd1e3ee3061c388adac2545cc4d9875fc5b37b2270765f1922b6f5064b",
+        "renderer_contract_version": "1.1.0",
+        "renderer_family": "surrogate_uncertainty"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.6",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 4
+        },
+        "initial_condition": {
+          "point": [
+            -1.1,
+            0.5,
+            -1.1
+          ]
+        },
+        "oracle_policy": [
+          "objective_value"
+        ],
+        "parameter_preset_id": "BO_1D_LOW_FIDELITY_BIAS",
+        "seed": {
+          "status": "fixed",
+          "value": 2604
+        },
+        "stopping": {
+          "max_oracle_evaluations": 4,
+          "max_total_cost": 36
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-19",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Low-fidelity bias reverses candidate ordering",
+          "ja": "low-fidelity biasで候補順位が反転する"
+        },
+        "expected_phenomenon_en": "Low fidelity favors x=-1.1, while high fidelity favors x=0.5",
+        "expected_phenomenon_ja": "low fidelityではx=-1.1が良く見えるが、high fidelityではx=0.5の方が良い",
+        "failure_signals": [
+          {
+            "label_en": "The same two candidates reverse order across fidelities",
+            "label_ja": "同じ2候補の順位がlow/high fidelityで反転する",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "observed_value"
+            ],
+            "signal_id": "low_high_candidate_order_reverses"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "This fixed run does not establish continuous optimality or validate a fidelity correction model",
+          "note_ja": "連続問題の最適性やfidelity補正の妥当性はこの固定runから判定しない",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Match low/high observations at two points and detect an ordering reversal caused by fidelity discrepancy",
+          "ja": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+        },
+        "limitations_en": "A minimal one-dimensional example with intentional bias; it does not represent a real simulator discrepancy model or event frequency.",
+        "limitations_ja": "意図的な1次元biasの最小教材であり、実simulatorのdiscrepancy modelや発生頻度を表さない。",
+        "misconception": {
+          "en": "Assume a candidate ranked well at low fidelity must also rank well at high fidelity",
+          "ja": "low fidelityで良い候補はhigh fidelityでも必ず良いとみなす"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "observed_value"
+            ],
+            "title_en": "Compare low-fidelity observations at two candidates",
+            "title_ja": "2候補のlow fidelity観測を比べる"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "observed_value"
+            ],
+            "title_en": "Check the same candidates at high fidelity",
+            "title_ja": "同じ候補をhigh fidelityで確認する"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "fidelity",
+              "observed_value"
+            ],
+            "title_en": "Read where candidate ordering reverses across fidelities",
+            "title_ja": "low/highの候補順位が反転する箇所を読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "evaluation_ledger",
+              "best_so_far"
+            ],
+            "title_en": "Do not finalize the recommendation before high-fidelity checks",
+            "title_ja": "high fidelity確認前に推薦を確定しない"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "CONCEPT_SURROGATE_MODEL",
+          "CONCEPT_EVALUATION_COST"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "evaluation ledger",
+            "label_ja": "評価ledger",
+            "observable_id": "evaluation_ledger"
+          },
+          {
+            "label_en": "fidelity",
+            "label_ja": "fidelity",
+            "observable_id": "fidelity"
+          },
+          {
+            "label_en": "call cost",
+            "label_ja": "call cost",
+            "observable_id": "call_cost"
+          },
+          {
+            "label_en": "evaluation status",
+            "label_ja": "評価status",
+            "observable_id": "evaluation_status"
+          },
+          {
+            "label_en": "accumulated budget",
+            "label_ja": "累積budget",
+            "observable_id": "accumulated_budget"
+          },
+          {
+            "label_en": "high-fidelity best-so-far",
+            "label_ja": "high fidelity best-so-far",
+            "observable_id": "best_so_far"
+          },
+          {
+            "label_en": "observed value by fidelity",
+            "label_ja": "fidelity別の観測値",
+            "observable_id": "observed_value"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "surrogate uncertainty",
+            "label_ja": "surrogate不確実性",
+            "observable_id": "posterior_uncertainty"
+          }
+        ],
+        "static_summary": {
+          "en": "Re-evaluating two candidates at both fidelities reverses their ordering; do not finalize a recommendation from low fidelity alone.",
+          "ja": "2候補を両fidelityで再評価すると順位が反転する。low fidelityだけで推薦を確定しない。"
+        },
+        "success_signals": [
+          {
+            "label_en": "Each call preserves fidelity, cost, and status",
+            "label_ja": "callごとのfidelity・cost・statusが残る",
+            "observable_ids": [
+              "evaluation_ledger",
+              "fidelity",
+              "call_cost",
+              "evaluation_status"
+            ],
+            "signal_id": "ledger_preserves_fidelity_cost_status"
+          },
+          {
+            "label_en": "Only successful high-fidelity calls update best-so-far",
+            "label_ja": "high fidelity成功だけでbest-so-farを更新する",
+            "observable_ids": [
+              "accumulated_budget",
+              "best_so_far"
+            ],
+            "signal_id": "ledger_separates_high_fidelity_best"
+          }
+        ],
+        "text_alternative": {
+          "en": "Re-evaluating two candidates at both fidelities reverses their ordering; do not finalize a recommendation from low fidelity alone.",
+          "ja": "2候補を両fidelityで再評価すると順位が反転する。low fidelityだけで推薦を確定しない。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "profile_id": "PROFILE_BAYESIAN_OPT_GP_1D",
+          "run_id": "RUN_BO_1D_LOW_FIDELITY_BIAS_2604"
+        }
+      ],
+      "scenario_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "title_en": "Low-fidelity bias reverses candidate ordering",
+      "title_ja": "low-fidelity biasで候補順位が反転する"
     },
     {
       "artifact": {

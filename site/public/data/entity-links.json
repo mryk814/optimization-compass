@@ -1146,6 +1146,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_HYPERBAND_ASHA",
           "target_type": "method"
@@ -1253,6 +1258,16 @@
         {
           "relation_type": "visualization",
           "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
           "target_type": "view"
         },
         {
@@ -1663,6 +1678,77 @@
         {
           "relation_type": "member_trace",
           "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_BO_MULTIFIDELITY_COST",
+      "entity_id": "COMPARE_BO_MULTIFIDELITY_COST",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_BO_MULTIFIDELITY_COST",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
           "target_type": "trace"
         }
       ],
@@ -2775,6 +2861,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -2782,6 +2873,16 @@
         {
           "relation_type": "evidence",
           "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
           "target_type": "source"
         },
         {
@@ -2807,6 +2908,16 @@
         {
           "relation_type": "visualization",
           "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
           "target_type": "trace"
         }
       ],
@@ -15349,6 +15460,11 @@
       "relations": [
         {
           "relation_type": "alternate",
+          "target_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "alternate",
           "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
           "target_type": "scenario"
         },
@@ -15361,6 +15477,11 @@
           "relation_type": "case",
           "target_id": "multi-fidelity-simulator",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
         },
         {
           "relation_type": "conditional_method",
@@ -15401,6 +15522,11 @@
           "relation_type": "excluded_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+          "target_type": "scenario"
         },
         {
           "relation_type": "implementation",
@@ -17280,6 +17406,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -17362,6 +17493,16 @@
         {
           "relation_type": "visualization",
           "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
           "target_type": "trace"
         },
         {
@@ -22860,6 +23001,103 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "high fidelityだけで使う同一cost budget",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "low-fidelity biasで候補順位が反転する",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "multi-fidelity-simulator",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "entity_type": "scenario",
       "external_url": null,
@@ -22869,6 +23107,11 @@
           "relation_type": "artifact",
           "target_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
           "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -24776,12 +25019,64 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "entity_id": "ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "high fidelityだけで使う同一cost budget",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+      "entity_id": "ARTIFACT_BO_LOW_FIDELITY_BIAS",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "low-fidelity biasで候補順位が反転する",
+      "relations": [
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "entity_id": "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
       "entity_type": "trace",
       "external_url": null,
       "label": "低／高 fidelity simulator の評価ledger",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
@@ -25574,6 +25869,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
       "relations": [],
       "summary": ""
     },

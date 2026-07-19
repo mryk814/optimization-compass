@@ -7,6 +7,7 @@ import scenarios from "../../../public/data/visualization-scenarios.json";
 import exploreNoiseless from "../../../public/data/visualizations/bo-explore-noiseless.json";
 import exploreSmallNoise from "../../../public/data/visualizations/bo-explore-small_noise.json";
 import ledgerPayload from "../../../public/data/visualizations/bo-multi-fidelity-ledger.json";
+import lowFidelityBias from "../../../public/data/visualizations/bo-low-fidelity-bias.json";
 import { BayesianOptimizationPage } from "./BayesianOptimizationPage";
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
@@ -24,6 +25,7 @@ function renderPage(entry = "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLO
             : url.endsWith("bo-explore-noiseless.json") ? exploreNoiseless
               : url.endsWith("bo-explore-small_noise.json") ? exploreSmallNoise
                 : url.endsWith("bo-multi-fidelity-ledger.json") ? ledgerPayload
+                  : url.endsWith("bo-low-fidelity-bias.json") ? lowFidelityBias
                 : undefined;
     return body ? { ok: true, json: async () => structuredClone(body) } : { ok: false, status: 404 };
   }));
@@ -70,7 +72,7 @@ describe("BayesianOptimizationPage", () => {
     expect(screen.getByText(/scenario ID「SCENARIO_BO_1D_EXPLOIT_UNKNOWN」/u)).toBeVisible();
   });
 
-  test("renders the multi-fidelity evaluation ledger without a cost-aligned Compare", async () => {
+  test("renders the multi-fidelity evaluation ledger without claiming a policy ranking", async () => {
     renderPage("/theater/bayesian-optimization/SCENARIO_BO_1D_MULTIFIDELITY_LEDGER");
     expect(await screen.findByRole("heading", { level: 2, name: "Simulator evaluation ledger" })).toBeVisible();
     const ledgerTable = screen.getByRole("table", { name: "Simulator evaluation ledger" });
@@ -79,6 +81,15 @@ describe("BayesianOptimizationPage", () => {
     expect(ledgerTable).toHaveTextContent("14/14");
     expect(screen.getByText("censored")).toBeVisible();
     expect(screen.queryByRole("heading", { level: 2, name: /同じ予算での比較/u })).toBeNull();
-    expect(screen.getByText(/cost-aligned Compareではありません/u)).toBeVisible();
+    expect(screen.getByText(/fidelity policyの一般的順位は判定しません/u)).toBeVisible();
+  });
+
+  test("renders the independent low-fidelity bias failure scenario", async () => {
+    renderPage("/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS");
+
+    expect(await screen.findByText(/fidelity discrepancyによる順位反転を検出する/u)).toBeVisible();
+    fireEvent.change(screen.getByLabelText("評価位置"), { target: { value: "1" } });
+    expect(screen.getByRole("table", { name: "Simulator evaluation ledger" })).toHaveTextContent("4/4");
+    expect(screen.queryByRole("combobox", { name: /探索方針/u })).toBeNull();
   });
 });

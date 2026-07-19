@@ -73,7 +73,9 @@ export function BayesianOptimizationPage() {
         await json(`${base}${scenario.artifact.payload_path}`),
       );
       const payloadPresetId = `BO_${payload.strategy.toUpperCase()}_${payload.noise_preset.toUpperCase()}`;
-      const expectedPresetId = payload.evaluation_ledger ? "BO_MULTIFIDELITY_LEDGER" : payloadPresetId;
+      const expectedPresetId = payload.evaluation_ledger
+        ? scenario.scenario_id.replace(/^SCENARIO_/u, "")
+        : payloadPresetId;
       if (scenario.experiment.parameter_preset_id !== expectedPresetId)
         throw new Error("renderer payloadのpresetがscenarioと一致しません。");
       if (
@@ -111,7 +113,7 @@ export function BayesianOptimizationPage() {
            まずは「なぜこの点を選ぶのか」を追ってください。
         </p>
       </header>
-      {requestedScenarioId !== "SCENARIO_BO_1D_MULTIFIDELITY_LEDGER" && (
+      {!loaded?.payload.evaluation_ledger && (
         <div className="bo-presets" aria-label="実験preset">
           <label>
             探索方針

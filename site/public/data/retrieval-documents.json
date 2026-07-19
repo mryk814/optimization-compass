@@ -399,6 +399,7 @@
       "document_id": "case:multi-fidelity-simulator",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "feature_value:F_CONSTRAINT_CLASS:bounds",
         "feature_value:F_DERIVATIVE_ACCESS:none_available",
         "feature_value:F_EVALUATION_COST:very_expensive",
@@ -422,6 +423,8 @@
         "view:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "view:SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "view:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "view:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        "view:SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
         "view:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
@@ -589,6 +592,37 @@
       ],
       "text": "各memberをoracle evaluationsで同期する。3つのBO memberはreferenceから1要因だけを変え、random baselineも同じ初期設計・domain・base seed・budgetを使う。",
       "title": "acquisition・noise・random baselineを同じbudgetで読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "comparison:COMPARE_BO_MULTIFIDELITY_COST:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "comparison:COMPARE_BO_MULTIFIDELITY_COST",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:multi-fidelity-simulator",
+        "journey:multi-fidelity-simulator",
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075",
+        "trace:ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "同じinitial design、simulator、noise、fidelity cost、総cost、parallelism、tuning、failure/no-retry policyを固定し、high-fidelity-equivalent cost以下の最後のledger callで同期する。",
+      "title": "同じhigh-fidelity-equivalent costでfidelity配分を比べる"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3333,17 +3367,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "この手法の気持ちは、限られた評価budgetを、既知の良い場所とまだ分からない場所へ配分することです。 見るもの : 観測済みの目的関数値、surrogateの予測と不確実性、acquisition 動かすもの : 次に実評価する点と、観測後のsurrogate 前進の判断 : 同じobjective evaluation budgetでbest-so-farが改善すること",
       "title": "30秒でつかむ"
@@ -3357,17 +3398,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "代表例: expected improvement probability of improvement lower / upper confidence bound Thompson sampling knowledge gradient系 minimizationのlower confidence boundなら、概念的には a ( x ) = μ ( x ) − β σ ( x ) が小さい点を選びます。平均が良い場所を調べる 活用 と、不確実性が大きい場所を調べる 探索 を一つのcriterionへまとめます。 Warning acquisitionの最良点は、目的関数の最適点だと証明された場所ではありません。「次に評価する価値が高い」とmodelが判断した候補です。",
       "title": "Acquisitionの意味"
@@ -3381,17 +3429,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。",
       "title": "ベイズ最適化"
@@ -3405,20 +3460,58 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "python import numpy as np def objective ( x : np . ndarray ) -> np . ndarray : return ( x - 0.25 ) ** 2 + 0.1 * np . sin ( 12.0 * x ) def rbf_kernel ( left : np . ndarray , right : np . ndarray , length_scale : float ) -> np . ndarray : squared_distance = ( left [:, None ] - right [ None , :]) ** 2 return np . exp ( - 0.5 * squared_distance / length_scale ** 2 ) observed_x = np . array ([ - 1.0 , 0.8 ]) observed_y = objective ( observed_x ) grid = np . linspace ( - 1.0 , 1.0 , 401 ) for _ in range ( 12 ): kernel = rbf_kernel ( observed_x , observed_x , 0.25 ) + 1e-6 * np . eye ( len ( observed_x )) cross = rbf_kernel ( grid , observed_x , 0.25 ) weights = np . linalg . solve ( kernel , observed_y ) mean = cross @ weights solved = np . linalg . solve ( kernel , cross . T ) variance = np . maximum ( 1.0 - np . sum ( cross * solved . T , axis = 1 ), 1e-12 ) acquisition = mean - 1.5 * np . sqrt ( variance ) next_x = grid [ np . argmin ( acquisition )] observed_x = np . append ( observed_x , next_x ) observed_y = np . append ( observed_y , objective ( np . array ([ next_x ]))[ 0 ]) best_index = np . argmin ( observed_y ) print ( observed_x [ best_index ], observed_y [ best_index ]) これはzero-mean、fixed kernel、noiselessに近い教育例です。実務ではmean function、kernel hyperparameter、noise、numerical stability、acquisition optimizerを明示します。",
       "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bayesian-optimization:surrogateとfidelity-discrepancyを監査する",
+      "dataset_version": "0.18.6",
+      "document_id": "content:bayesian-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
+        "content:cma-es",
+        "content:differential-evolution",
+        "method:M_BAYESIAN_OPT_GP",
+        "source:S034",
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "low fidelityはhigh fidelityの真値ではありません。共通点を両fidelityで評価し、残差、候補順位、high fidelityでの再確認を別々に記録します。 low-fidelity biasのfailure Theater では、同じ2候補の順位がlow/highで反転します。これは特定のbiasを持つ最小教材であり、実問題での発生頻度や補正modelの性能を示しません。 input / output scalingを変えたときにposteriorや提案が大きく崩れる、cross-validation residualが領域ごとに偏る、uncertaintyが小さいのにhigh fidelity誤差が大きい場合は、kernel mismatchやmodel discrepancyを疑います。failed領域の近傍を繰り返し提案する場合は、失敗を大きな目的値へ置換せず、status、feasibility model、探索空間、retry policyを監査します。",
+      "title": "Surrogateとfidelity discrepancyを監査する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3429,17 +3522,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "初期点で目的関数を評価する 観測 ( x i , y i ) からsurrogate posteriorを更新する acquisitionをsearch space上で最適化する 選んだ点を実際に評価する budgetまたは停止条件まで繰り返す 観測、surrogate上の不確実性、次に評価する候補を区別する教育用模式図です。実務では目的関数の真の曲線は見えません。 Gaussian-process BOでは、各入力に予測平均 μ ( x ) と標準偏差 σ ( x ) を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。",
       "title": "一巡で何をしているか"
@@ -3453,17 +3553,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "Random Search、Differential Evolution、CMA-ESなどと比較する場合は、 同じproblem instanceとbounds 同じinitial designまたはそのcost 同じobjective evaluation budget 同じnoise / failure handling 複数seed wall-clock overheadも別に記録 を揃えます。単一trajectoryの勝敗を一般的なrankingにはしません。",
       "title": "公平な比較"
@@ -3477,20 +3584,58 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "1評価が数分〜数日かかるsimulationや実験 evaluation数が数十〜数百程度に制限される 低〜中次元のsearch space 過去観測を次点選択へ活用したい gradientを直接得られない observation noiseや失敗をmodel化できる",
       "title": "向いている条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:bayesian-optimization:理論・実装default・評価policy・推薦を分ける",
+      "dataset_version": "0.18.6",
+      "document_id": "content:bayesian-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
+        "content:cma-es",
+        "content:differential-evolution",
+        "method:M_BAYESIAN_OPT_GP",
+        "source:S034",
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "Bayesian Optimizationという手法の核は、観測からsurrogateを更新し、acquisitionで次の評価候補を決めることです。その核と、特定libraryが選ぶdefault kernel、input transform、noise処理、acquisition optimizer、初期化点数は同じものではありません。BoTorchの公式資料には既知のfidelity costを使うcost-awareな構成例がありますが、libraryを選んだだけでcost model、target fidelity、補正modelが確定するわけではありません。library versionとdefault値は実装記録として残し、普遍的な推奨値にはしません。 評価policyはさらに別です。initial design、low/high fidelityのcost、parallel worker数、batch / asynchronous、retry、failed・censored・timeoutの扱い、停止条件をrun前に固定します。最後に、methodの推薦優先度はproblemの変数型、budget、noise、失敗構造と比較証拠から決めます。固定runのbest-so-farやlibrary defaultだけで推薦順位を上げません。 層 固定・記録するもの ここから言えないこと method surrogateとacquisitionの役割 特定kernelが常に適切 implementation library version、kernel、transform、optimizer default defaultが一般的推奨 evaluation policy initial design、cost、parallelism、failure、retry、stopping iteration数だけで公平 recommendation problem条件と複数seedの比較証拠 単一教材の勝者が常に第一候補",
+      "title": "理論・実装default・評価policy・推薦を分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -3501,17 +3646,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "Bayesian Optimization Theater では、次を混同しないようにします。 表示 意味 observed points 実際に高価な関数を評価した結果 true objective 教育用scenarioでだけ既知の関数 surrogate mean 現在のsurrogate modelの予測 uncertainty surrogate model上の不確実性 acquisition 次点を選ぶ基準 incumbent 観測済みのbest-so-far next point 次に実評価する候補 実務ではtrue objective curveは見えません。見えるのは観測とmodelだけです。",
       "title": "画面の読み方"
@@ -3525,17 +3677,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "best-so-far vs objective evaluation数 surrogate predictive error uncertainty calibration acquisition value repeated / near-duplicate proposal failed trial数 model fitting timeとacquisition optimization time seed / initial design間の分散",
       "title": "診断値"
@@ -3549,17 +3708,24 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:cma-es",
         "content:differential-evolution",
         "method:M_BAYESIAN_OPT_GP",
         "source:S034",
         "source:S035",
+        "source:S059",
+        "source:S075",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
-        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE"
+        "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+        "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
         "S034",
-        "S035"
+        "S035",
+        "S059",
+        "S075"
       ],
       "text": "評価が安価で大量並列可能 → random / population searchが単純な場合 極端な高次元 → kernelやacquisition最適化が難しい conditional / categorical space → encodingやspecialized surrogateが必要 nonstationary objective → fixed kernelが過去を誤解する evaluation failureを欠損として無視 → feasibility modelが必要 model uncertaintyを実世界の安全保証と誤認",
       "title": "避ける／切り替える条件"
@@ -6519,7 +6685,7 @@
         "S069",
         "S075"
       ],
-      "text": "multi-fidelityの比較でiteration数だけを揃えると、low fidelityを多く使った手法とhigh fidelityを多く使った手法を公平に比べられません。少なくとも次を固定します。 比較軸 揃える内容 初期条件 initial design、bounds、seed、同一点の再評価規則 評価予算 total cost、high-fidelity-equivalent cost、wall-clock上限 実行条件 並列worker数、batch / asynchronousの方針、停止規則 fidelity 各fidelityの定義、cost、切替条件、最終確認のfidelity 失敗処理 failed / censored / timeout の記録、retry、modelへの入力方法 指標 成功したhigh fidelityのbest-so-far、成功率、status別件数 「同じ80 trial」だけでは不十分です。ある手法が12回のlow fidelityで候補を絞り、別の手法が1回のhigh fidelityに相当する費用を使っているなら、その差をcost軸に戻して表示します。single runの勝敗を一般的なrankingへ拡張せず、固定条件と未確認の前提を添えて読みます。",
+      "text": "multi-fidelityの比較でiteration数だけを揃えると、low fidelityを多く使った手法とhigh fidelityを多く使った手法を公平に比べられません。少なくとも次を固定します。 比較軸 揃える内容 初期条件 initial design、bounds、seed、同一点の再評価規則 評価予算 total cost、high-fidelity-equivalent cost、wall-clock上限 実行条件 並列worker数、batch / asynchronousの方針、停止規則 fidelity 各fidelityの定義、cost、切替条件、最終確認のfidelity 失敗処理 failed / censored / timeout の記録、retry、modelへの入力方法 指標 成功したhigh fidelityのbest-so-far、成功率、status別件数 「同じ80 trial」だけでは不十分です。ある手法が12回のlow fidelityで候補を絞り、別の手法が1回のhigh fidelityに相当する費用を使っているなら、その差をcost軸に戻して表示します。single runの勝敗を一般的なrankingへ拡張せず、固定条件と未確認の前提を添えて読みます。 high-fidelity-equivalent costを揃えたCompare では、初期design、noise、low/high cost、parallel workers=1、固定tuning、失敗をnullで記録してcostを課しretryしないpolicyを固定します。変更するのはfidelity配分だけです。 low-fidelity biasのfailure Theater では、同じ2候補を両fidelityで確認すると順位が反転します。前者は公平な物差し、後者はdiscrepancyを見逃したfailure signalであり、どちらも一般的な手法順位ではありません。",
       "title": "比較は同じ予算の物差しで読む"
     },
     {
@@ -12974,7 +13140,7 @@
         "S069",
         "S075"
       ],
-      "text": "追うべき値: best-so-farとtrial数 surrogate cross-validation error uncertainty calibration acquisition valueとselected point duplicate suggestion率 failed / infeasible trial率 batch idle time fidelity別のranking correlation 切替サイン: 同じ点や境界ばかり提案 → acquisition optimizer、kernel、encodingを見直す uncertaintyが過小で探索しない → noise model、prior、exploration parameterを見直す カテゴリ・条件付き空間が不自然 → TPE/SMACなど別surrogateへ trialが大量に並列実行可能 → batch BOまたはrandom/evolutionary baselineへ 途中metricと最終metricの相関が弱い → Hyperband型早期停止を弱める search spaceが広すぎる → domain knowledgeでbounds・parameterizationを再設計",
+      "text": "追うべき値: best-so-farとtrial数 surrogate cross-validation error uncertainty calibration acquisition valueとselected point duplicate suggestion率 failed / infeasible trial率 batch idle time fidelity別のranking correlation 切替サイン: 同じ点や境界ばかり提案 → acquisition optimizer、kernel、encodingを見直す uncertaintyが過小で探索しない → noise model、prior、exploration parameterを見直す カテゴリ・条件付き空間が不自然 → TPE/SMACなど別surrogateへ trialが大量に並列実行可能 → batch BOまたはrandom/evolutionary baselineへ 途中metricと最終metricの相関が弱い → Hyperband型早期停止を弱める search spaceが広すぎる → domain knowledgeでbounds・parameterizationを再設計 multi-fidelityでは、同じ候補をlow/highで照合した残差と順位相関も追います。low fidelityの順位が反転する、high fidelity residualが領域ごとに偏る、scaling変更で提案が不安定になるなら、discrepancy modelまたはkernelの仮定を見直します。failed領域の近傍を繰り返す場合は、目的値penaltyだけで隠さず、status、feasibility、retry、boundsを監査します。",
       "title": "うまくいったサインと切替サイン"
     },
     {
@@ -13078,6 +13244,40 @@
       ],
       "text": "比較ではinitial designと失敗trialの扱いを揃えます。 python study_contract = { \"search_space_version\" : \"v1\" , \"objective_direction\" : \"minimize\" , \"initial_design\" : \"same-8-points\" , \"trial_budget\" : 80 , \"parallel_workers\" : 4 , \"seeds\" : [ 11 , 12 , 13 ], \"failure_policy\" : \"record-and-penalize-explicitly\" , \"methods\" : [ \"GP-BO\" , \"TPE\" , \"random-search\" ], } assert study_contract [ \"trial_budget\" ] >= 1",
       "title": "小さな比較の型"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.expensive-black-box:推薦の前に4つの層を監査する",
+      "dataset_version": "0.18.6",
+      "document_id": "content:family.expensive-black-box",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "content:differential-evolution",
+        "method:MF_SURROGATE_HPO",
+        "source:S034",
+        "source:S035",
+        "source:S036",
+        "source:S037",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S036",
+        "S037",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "method : GP-BO、TPE、Hyperbandなどの更新原理と必要な仮定 implementation : library version、kernel、transform、sampler、acquisition optimizerなどのdefault evaluation policy : initial design、fidelity cost、parallelism、batch / asynchronous、failure・retry、stopping recommendation priority : problem条件と、公平なbudgetで得た比較証拠に基づく候補順 implementation defaultは再現に必要ですが、手法の定義でも普遍的な推奨でもありません。evaluation policyが違うrunをoptimizer iterationだけで並べず、同じtotal costまたはhigh-fidelity-equivalent costへ同期します。推薦は固定教材の勝敗ではなく、変数型、budget、noise、failure構造、複数seedの証拠から更新します。 同じcostでfidelity配分を読むCompare は、initial design、deterministic noise、fidelity cost、parallel workers=1、固定tuning、失敗をnullのまま記録してcostを課しretryしないpolicyを揃えます。変更するのはmixed low/highとhigh-onlyの配分だけです。この1次元・単一seedのcontrastから一般的なpolicy順位は決めません。",
+      "title": "推薦の前に4つの層を監査する"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -29137,6 +29337,8 @@
         "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        "scenario:SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
         "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
         "source:S035",
         "source:S038",
@@ -35619,6 +35821,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:multi-fidelity-simulator",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:bayesian-optimization",
         "content:hyperband-asha",
         "implementation:I_BOTORCH",
@@ -35632,6 +35835,8 @@
         "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
         "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
         "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+        "scenario:SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
         "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
         "source:S034",
         "source:S035",
@@ -36556,6 +36761,7 @@
         "case:hyperparameter-search",
         "case:multi-fidelity-simulator",
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "content:bayesian-optimization",
         "implementation:I_AX",
         "implementation:I_BOTORCH",
@@ -36573,6 +36779,8 @@
         "trace:ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
         "trace:ARTIFACT_BO_EXPLORE_NOISELESS",
         "trace:ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+        "trace:ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
         "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER"
       ],
       "source_ids": [
@@ -39842,11 +40050,65 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
+        "journey:multi-fidelity-simulator",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075",
+        "trace:ARTIFACT_BO_HIGH_FIDELITY_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む",
+      "title": "high fidelityだけで使う同一cost budget"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "scenario:SCENARIO_BO_1D_LOW_FIDELITY_BIAS:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "scenario:SCENARIO_BO_1D_LOW_FIDELITY_BIAS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "journey:multi-fidelity-simulator",
+        "source:S035",
+        "source:S038",
+        "source:S059",
+        "source:S069",
+        "source:S075",
+        "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する",
+      "title": "low-fidelity biasで候補順位が反転する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER:overview",
       "dataset_version": "0.18.6",
       "document_id": "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "journey:multi-fidelity-simulator",
         "source:S035",
         "source:S038",
@@ -41842,11 +42104,55 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_HIGH_FIDELITY_BASELINE:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "trace:ARTIFACT_BO_HIGH_FIDELITY_BASELINE",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_HIGH_FIDELITY_BASELINE"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "同じ初期designとcost budgetでhigh fidelityだけを選ぶ場合のledgerを読む",
+      "title": "high fidelityだけで使う同一cost budget"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "trace:ARTIFACT_BO_LOW_FIDELITY_BIAS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "method:M_BAYESIAN_OPT_GP",
+        "scenario:SCENARIO_BO_1D_LOW_FIDELITY_BIAS"
+      ],
+      "source_ids": [
+        "S035",
+        "S038",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "text": "同じ2点のlow/high観測を照合し、fidelity discrepancyによる順位反転を検出する",
+      "title": "low-fidelity biasで候補順位が反転する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER:overview",
       "dataset_version": "0.18.6",
       "document_id": "trace:ARTIFACT_BO_MULTIFIDELITY_LEDGER",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_BO_MULTIFIDELITY_COST",
         "method:M_BAYESIAN_OPT_GP",
         "scenario:SCENARIO_BO_1D_MULTIFIDELITY_LEDGER"
       ],

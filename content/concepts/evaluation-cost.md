@@ -137,6 +137,8 @@ multi-fidelityの比較でiteration数だけを揃えると、low fidelityを多
 
 「同じ80 trial」だけでは不十分です。ある手法が12回のlow fidelityで候補を絞り、別の手法が1回のhigh fidelityに相当する費用を使っているなら、その差をcost軸に戻して表示します。single runの勝敗を一般的なrankingへ拡張せず、固定条件と未確認の前提を添えて読みます。
 
+[high-fidelity-equivalent costを揃えたCompare](#/compare/COMPARE_BO_MULTIFIDELITY_COST)では、初期design、noise、low/high cost、parallel workers=1、固定tuning、失敗をnullで記録してcostを課しretryしないpolicyを固定します。変更するのはfidelity配分だけです。[low-fidelity biasのfailure Theater](#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS)では、同じ2候補を両fidelityで確認すると順位が反転します。前者は公平な物差し、後者はdiscrepancyを見逃したfailure signalであり、どちらも一般的な手法順位ではありません。
+
 ## 高価な評価で混同しやすい失敗
 
 - 初期designを省くと、surrogateや局所探索が偏った場所から始まる

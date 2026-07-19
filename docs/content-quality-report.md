@@ -3,7 +3,7 @@
 - Published concept guides: `21`
 - Meeting the concept floor: `21`
 - Below the concept floor: `0`
-- Prose review warnings: `491`
+- Prose review warnings: `511`
 
 ## Concept publication floor
 
@@ -14,7 +14,7 @@
 | `concept.convexity` | 61 | 1867 | 8 | 2 | 0 | pass |
 | `concept.derivative-free` | 81 | 1949 | 7 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
-| `concept.evaluation-cost` | 67 | 5533 | 9 | 3 | 0 | pass |
+| `concept.evaluation-cost` | 67 | 5940 | 9 | 3 | 0 | pass |
 | `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4834 | 8 | 5 | 0 | pass |
 | `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
@@ -34,8 +34,8 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 319
-- `sentence.long`: 171
+- `sentence.commas`: 331
+- `sentence.long`: 179
 
 | Content | Warnings |
 |---|---:|
@@ -49,7 +49,7 @@
 | `augmented-lagrangian` | 2 |
 | `barrier-lp-qp` | 2 |
 | `basin-hopping` | 3 |
-| `bayesian-optimization` | 2 |
+| `bayesian-optimization` | 13 |
 | `bfgs` | 1 |
 | `branch-and-bound` | 3 |
 | `branch-and-cut` | 2 |
@@ -63,7 +63,7 @@
 | `concept.convexity` | 0 |
 | `concept.derivative-free` | 0 |
 | `concept.dynamics-defect` | 1 |
-| `concept.evaluation-cost` | 12 |
+| `concept.evaluation-cost` | 14 |
 | `concept.manifold` | 5 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 17 |
 | `concept.path-terminal-constraints` | 1 |
@@ -94,7 +94,7 @@
 | `family.constraint-programming` | 2 |
 | `family.discrete-structure` | 5 |
 | `family.evolutionary` | 6 |
-| `family.expensive-black-box` | 6 |
+| `family.expensive-black-box` | 13 |
 | `family.global-search` | 5 |
 | `family.graph-dp` | 6 |
 | `family.local-dfo` | 5 |

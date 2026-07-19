@@ -16,7 +16,7 @@
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 73 | 2563 | 7 | 1 | pass |
 | `barrier-lp-qp` | `M_BARRIER_LP_QP` | 81 | 2977 | 9 | 1 | pass |
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2298 | 9 | 1 | pass |
-| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 3790 | 9 | 1 | pass |
+| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 5322 | 11 | 1 | pass |
 | `bfgs` | `M_BFGS` | 68 | 2051 | 8 | 1 | pass |
 | `branch-and-bound` | `M_BRANCH_BOUND` | 79 | 3630 | 9 | 1 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 80 | 2585 | 9 | 1 | pass |
@@ -44,7 +44,7 @@
 | `family.constraint-programming` | `MF_CONSTRAINT_PROGRAMMING` | 66 | 2500 | 7 | 1 | pass |
 | `family.discrete-structure` | `MF_DISCRETE_EXACT` | 68 | 3318 | 7 | 1 | pass |
 | `family.evolutionary` | `MF_EVOLUTIONARY` | 78 | 2959 | 7 | 1 | pass |
-| `family.expensive-black-box` | `MF_SURROGATE_HPO` | 103 | 3134 | 7 | 1 | pass |
+| `family.expensive-black-box` | `MF_SURROGATE_HPO` | 103 | 4198 | 8 | 1 | pass |
 | `family.global-search` | `MF_GLOBAL_SEARCH` | 73 | 3170 | 7 | 1 | pass |
 | `family.graph-dp` | `MF_GRAPH_DP` | 58 | 3033 | 7 | 1 | pass |
 | `family.local-dfo` | `MF_DFO_LOCAL` | 75 | 2636 | 7 | 1 | pass |

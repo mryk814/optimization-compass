@@ -72,7 +72,7 @@ export function EvaluationLedgerPanel({
         </table>
       </div>
       <p className="atlas-note">
-        失敗・censored・timeoutを大きな目的値へ置換していません。この固定教育runはledgerの読み方を示すもので、cost-aligned Compareではありません。
+        失敗・censored・timeoutを大きな目的値へ置換していません。この単独runはledgerの読み方を示すもので、fidelity policyの一般的順位は判定しません。
       </p>
     </section>
   );
