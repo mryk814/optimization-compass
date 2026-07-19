@@ -3,28 +3,28 @@
 - Published concept guides: `21`
 - Meeting the concept floor: `21`
 - Below the concept floor: `0`
-- Prose review warnings: `511`
+- Prose review warnings: `515`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
-| `concept.chance-risk-contract` | 93 | 4466 | 7 | 4 | 0 | pass |
+| `concept.chance-risk-contract` | 93 | 4679 | 7 | 4 | 0 | pass |
 | `concept.constraint-class` | 68 | 2110 | 5 | 2 | 0 | pass |
 | `concept.convexity` | 61 | 1867 | 8 | 2 | 0 | pass |
 | `concept.derivative-free` | 81 | 1949 | 7 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 67 | 5940 | 9 | 3 | 0 | pass |
 | `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
-| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4834 | 8 | 5 | 0 | pass |
+| `concept.nested-equilibrium-complementarity-hybrid` | 73 | 5906 | 9 | 5 | 0 | pass |
 | `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
-| `concept.pde-constrained-optimization` | 63 | 3238 | 6 | 2 | 0 | pass |
+| `concept.pde-constrained-optimization` | 63 | 5309 | 9 | 5 | 0 | pass |
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
 | `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
 | `concept.so3-rotation-representation` | 92 | 2517 | 7 | 4 | 0 | pass |
 | `concept.time-discretization` | 74 | 1945 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |
-| `concept.uncertainty-models` | 61 | 4218 | 16 | 3 | 0 | pass |
+| `concept.uncertainty-models` | 61 | 4298 | 16 | 3 | 0 | pass |
 | `concept.variable-domain` | 56 | 2157 | 5 | 2 | 0 | pass |
 | `geometry-update-failure-modes` | 75 | 1960 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 1781 | 5 | 3 | 0 | pass |
@@ -34,8 +34,8 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 331
-- `sentence.long`: 179
+- `sentence.commas`: 333
+- `sentence.long`: 181
 
 | Content | Warnings |
 |---|---:|
@@ -67,7 +67,7 @@
 | `concept.manifold` | 5 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 17 |
 | `concept.path-terminal-constraints` | 1 |
-| `concept.pde-constrained-optimization` | 11 |
+| `concept.pde-constrained-optimization` | 17 |
 | `concept.receding-horizon` | 5 |
 | `concept.simplex` | 5 |
 | `concept.so3-rotation-representation` | 0 |
@@ -100,7 +100,7 @@
 | `family.local-dfo` | 5 |
 | `family.manifold` | 7 |
 | `family.multi-objective` | 4 |
-| `family.optimal-control` | 10 |
+| `family.optimal-control` | 8 |
 | `family.smooth-local` | 6 |
 | `family.stochastic-ml` | 5 |
 | `family.trust-region` | 2 |

@@ -24,6 +24,16 @@ from optimization_compass.learning_journey_policy import load_learning_journey_a
 from optimization_compass.learning_journeys import build_learning_journey_index
 from optimization_compass.learning_slices import write_learning_slice_scenarios
 from optimization_compass.metadata_models import ViewPresetSeed
+from optimization_compass.nested_solve import (
+    BILEVEL_EXACT_TRACE_ID,
+    BILEVEL_PROFILE_ID,
+    BILEVEL_RELAXED_TRACE_ID,
+    HYBRID_CHATTERING_TRACE_ID,
+    HYBRID_PROFILE_ID,
+    build_nested_solve_scenario,
+    generate_bilevel_regression_traces,
+    generate_hybrid_chattering_trace,
+)
 from optimization_compass.parameter_estimation import (
     LBFGSB_SCENARIO_ID,
     LM_SCENARIO_ID,
@@ -1129,6 +1139,8 @@ def _write_dummy_trace(
     generated_traces.extend(_generate_optimal_control_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_portfolio_uncertainty_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
+    generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -1250,6 +1262,22 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
     }
     if trace_id in optimal_control_titles:
         return optimal_control_titles[trace_id][0 if locale == "ja" else 1]
+    nested_titles = {
+        BILEVEL_EXACT_TRACE_ID: (
+            "Bilevel回帰 · exact inner診断",
+            "Bilevel regression · exact inner diagnostics",
+        ),
+        BILEVEL_RELAXED_TRACE_ID: (
+            "Bilevel回帰 · finite relaxationの残差",
+            "Bilevel regression · finite-relaxation failure",
+        ),
+        HYBRID_CHATTERING_TRACE_ID: (
+            "Hybrid mode discovery · chattering診断",
+            "Hybrid mode discovery · chattering ledger",
+        ),
+    }
+    if trace_id in nested_titles:
+        return nested_titles[trace_id][0 if locale == "ja" else 1]
     method = trace_id.split("-", maxsplit=1)[0]
     labels = {
         "gradient_descent": ("勾配降下法", "Gradient descent"),
@@ -2434,6 +2462,8 @@ def _trace_lesson(
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
     if trace.profile_id == PORTFOLIO_UNCERTAINTY_PROFILE_ID:
         return build_portfolio_uncertainty_scenario(trace)
+    if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:
+        return build_nested_solve_scenario(trace)
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"

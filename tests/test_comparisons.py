@@ -324,7 +324,7 @@ def test_portfolio_comparison_resolves_canonical_problem_and_exact_context() -> 
 
     mismatched_context = _portfolio_context()
     mismatched_context["problem_instance_id"] = "OBJECTIVE_QUADRATIC_2D"
-    with pytest.raises(ValueError, match="benchmark context differs"):
+    with pytest.raises(ValueError, match="different problem instance"):
         validate_comparison_benchmark_contexts(
             portfolio_index,
             [mismatched_context],

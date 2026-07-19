@@ -223,7 +223,7 @@
       "implementation_ids": ["I_CVXPY"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_PORTFOLIO_NOMINAL_8_4", "SCENARIO_PORTFOLIO_CVAR_8_4"],
       "comparison_ids": ["COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"],
-      "source_ids": ["S010", "S055", "S102"],
+      "source_ids": ["S010", "S055", "S103"],
       "difficulty": "intermediate",
       "status": "published",
       "last_reviewed": "2026-07-19",
@@ -606,8 +606,12 @@
         }
       ],
       "implementation_ids": ["I_SCIPY_SLSQP", "I_IPOPT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
-      "comparison_ids": [],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BILEVEL_REGRESSION_EXACT",
+        "SCENARIO_BILEVEL_REGRESSION_RELAXED"
+      ],
+      "comparison_ids": ["COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT"],
       "source_ids": ["S017", "S029", "S030", "S055", "S056", "S064"],
       "difficulty": "intermediate",
       "status": "published",

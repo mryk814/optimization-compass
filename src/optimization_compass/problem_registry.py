@@ -371,6 +371,62 @@ def _portfolio_cvar(instance: ProblemInstance, point: Sequence[float]) -> float:
     return float(sum(losses) / len(losses) + risk_weight * empirical_cvar)
 
 
+def _bilevel_regression(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Evaluate the fixed reduced outer objective after an exact two-variable inner solve."""
+    (regularization,) = point
+    train_x = _matrix(instance.parameters.get("train_x"), rows=3, columns=2, owner=instance)
+    train_y = _vector(instance.parameters.get("train_y"), length=3, owner=instance)
+    validation_x = _matrix(
+        instance.parameters.get("validation_x"), rows=2, columns=2, owner=instance
+    )
+    validation_y = _vector(instance.parameters.get("validation_y"), length=2, owner=instance)
+
+    gram_00 = sum(row[0] * row[0] for row in train_x) + regularization
+    gram_01 = sum(row[0] * row[1] for row in train_x)
+    gram_11 = sum(row[1] * row[1] for row in train_x) + regularization
+    rhs_0 = sum(row[0] * target for row, target in zip(train_x, train_y, strict=True))
+    rhs_1 = sum(row[1] * target for row, target in zip(train_x, train_y, strict=True))
+    determinant = gram_00 * gram_11 - gram_01 * gram_01
+    if determinant <= 0.0:
+        raise ValueError(f"inner ridge system is singular: {instance.problem_instance_id}")
+    coefficients = [
+        max(0.0, (rhs_0 * gram_11 - rhs_1 * gram_01) / determinant),
+        max(0.0, (gram_00 * rhs_1 - gram_01 * rhs_0) / determinant),
+    ]
+    residuals = [
+        sum(value * coefficient for value, coefficient in zip(row, coefficients, strict=True))
+        - target
+        for row, target in zip(validation_x, validation_y, strict=True)
+    ]
+    return 0.5 * sum(residual * residual for residual in residuals)
+
+
+def _hybrid_mode_relaxation(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Evaluate fractionality and the declared mode-switch regularizer."""
+    switch_penalty = _number(instance.parameters.get("switch_penalty"))
+    fractionality = sum(value * (1.0 - value) for value in point)
+    switching = sum(
+        (current - previous) ** 2 for previous, current in zip(point, point[1:], strict=False)
+    )
+    return float(fractionality + switch_penalty * switching)
+
+
+def _vector(value: object, *, length: int, owner: ProblemInstance) -> list[float]:
+    if (
+        not isinstance(value, list)
+        or len(value) != length
+        or not all(isinstance(item, int | float) for item in value)
+    ):
+        raise ValueError(f"invalid vector data for {owner.problem_instance_id}")
+    return [float(item) for item in value]
+
+
+def _matrix(value: object, *, rows: int, columns: int, owner: ProblemInstance) -> list[list[float]]:
+    if not isinstance(value, list) or len(value) != rows:
+        raise ValueError(f"invalid matrix data for {owner.problem_instance_id}")
+    return [_vector(row, length=columns, owner=owner) for row in value]
+
+
 _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.quadratic.isotropic.v1": (_quadratic, _quadratic_gradient),
     "problem.quadratic.ill_conditioned.v1": (_quadratic, _quadratic_gradient),
@@ -387,6 +443,8 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
         _exponential_decay_gradient,
     ),
     "problem.biobjective_quadratic.v1": (_biobjective, None),
+    "problem.bilevel_regression.two_coefficient.v1": (_bilevel_regression, None),
+    "problem.hybrid_mode.chattering_ledger.v1": (_hybrid_mode_relaxation, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),

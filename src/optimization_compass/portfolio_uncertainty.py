@@ -302,7 +302,7 @@ def generate_portfolio_uncertainty_trace(*, dataset_version: str, policy: Policy
             "The allocation was selected on eight fixed training scenarios and then held fixed "
             "while mean, CVaR, worst, and best loss were summarized on four held-out scenarios."
         ),
-        source_ids=["S010", "S055", "S102"],
+        source_ids=["S010", "S055", "S103"],
     )
 
 

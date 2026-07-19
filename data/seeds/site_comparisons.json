@@ -687,7 +687,7 @@
       "caveat": "4件のheld-outは順位を推定するには小さく、CVaR目的の一般的優位、母集団risk、将来return、chance constraintの確率保証は推論できない。",
       "takeaway": "training上でmeanが同等でもtailを抑える配分は変わり得る。held-outは別集計してsample依存性を診断するが、その1回の差を一般順位にはしない。",
       "limitations": ["固定8/4件・4資産・0.05 gridの教育用contrastであり、実solver精度やwall-clockを比較しない。", "scenario生成過程、時系列依存、confidence interval、取引コスト、turnover、slippageを含まない。", "CVaR objectiveはchance constraint、robust feasibility、DRO guaranteeの代替ではない。"],
-      "source_ids": ["S010", "S055", "S102"],
+      "source_ids": ["S010", "S055", "S103"],
       "last_verified": "2026-07-19",
       "members": [
         {
@@ -898,6 +898,81 @@
           "parameters": {"mesh_nodes": 40, "horizon_seconds": 2.0},
           "budget": {"metric": "oracle_evaluations", "value": 8},
           "artifact": {"artifact_id": "pendulum-collocation-refined", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pendulum-collocation-refined.json"}
+        }
+      ]
+    },
+    {
+      "comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
+      "aliases": [],
+      "mode": "failure_contrast",
+      "journey_id": "bilevel-regularized-regression",
+      "case_id": "bilevel-regularized-regression",
+      "problem_definition_id": "PROBLEM_BILEVEL_REGRESSION",
+      "problem_instance_id": "INSTANCE_BILEVEL_REGRESSION_2COEF",
+      "benchmark_context_id": "BENCH_BILEVEL_REGRESSION_EDUCATIONAL_6",
+      "title_ja": "exact KKTと有限relaxationを残差で読み分ける",
+      "title_en": "Separate exact KKT from a finite relaxation by residuals",
+      "comparison_question": "outer objectiveがより下がっても、有限relaxationをexact complementarityと呼べる？",
+      "formulation_summary": "外側で正則化係数を選び、内側で2係数の非負回帰を解く固定bilevel教材。",
+      "fixed_factors": [
+        "problem instance INSTANCE_BILEVEL_REGRESSION_2COEF",
+        "fixed teaching outer sequence",
+        "outer oracle evaluation budget 6",
+        "inner policy warm_started_slsqp",
+        "inner tolerance 1e-8 and maximum 100 iterations",
+        "derivative route implicit_active_set"
+      ],
+      "changed_factors": [
+        "complementarity treatment only: exact_kkt_complementarity versus finite_relaxation at tau 1e-2"
+      ],
+      "seed_policy": "deterministic teaching ledger; seed not applicable",
+      "budget": {"metric": "oracle_evaluations", "value": 6},
+      "stopping_policy": "6 outer updatesの後、inner・stationarity・complementarity residualを別々に判定する。",
+      "tuning_policy": "outer sequence、inner policy、tolerance、derivative routeを事前固定し、complementarity treatmentだけを変える。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "outer_objective", "label_ja": "outer objective", "direction": "minimize", "unit": "validation loss"},
+        {"metric_id": "inner_residual", "label_ja": "inner residual", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "stationarity_residual", "label_ja": "stationarity residual", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "complementarity_residual", "label_ja": "complementarity residual", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "relaxation_parameter", "label_ja": "relaxation parameter", "direction": "minimize", "unit": "tau"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じdata、outer budget、inner policy、tolerance、implicit derivative routeを使い、exact KKTか有限relaxationかだけを変える。",
+      "caveat": "solver benchmarkではなく固定教材ledgerである。小さいstationarity residualはglobal bilevel optimum、MPECのstationarity class、constraint qualification、solution mapの滑らかさを証明しない。",
+      "takeaway": "outer objective、inner residual、stationarity、complementarity、relaxation parameterを分け、有限tauのrunをexact complementarityとみなさない。",
+      "limitations": [
+        "固定した2係数・6 outer updateだけを扱い、wall-clockや実装性能を比較しない。",
+        "optimistic/pessimistic selection、active-set変更、inner未収束時のgradient誤差はこの2 memberでは比較しない。"
+      ],
+      "source_ids": ["S055", "S056", "S064"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "exact-kkt-reference",
+          "role": "exact_reference",
+          "method_id": "M_SLSQP",
+          "scenario_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
+          "label_ja": "exact KKT complementarity",
+          "label_en": "Exact KKT complementarity",
+          "parameters": {"outer_step_policy": "fixed_teaching_sequence", "inner_policy": "warm_started_slsqp", "inner_tolerance": 1e-8, "inner_max_iterations": 100, "derivative_route": "implicit_active_set", "complementarity_treatment": "exact_kkt_complementarity", "relaxation_parameter": 0.0},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "bilevel-regression-exact-inner", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/bilevel-regression-exact-inner.json"}
+        },
+        {
+          "member_id": "finite-relaxation-failure",
+          "role": "finite_relaxation_failure",
+          "method_id": "M_SLSQP",
+          "scenario_id": "SCENARIO_BILEVEL_REGRESSION_RELAXED",
+          "label_ja": "有限relaxation τ=1e-2",
+          "label_en": "Finite relaxation tau=1e-2",
+          "parameters": {"outer_step_policy": "fixed_teaching_sequence", "inner_policy": "warm_started_slsqp", "inner_tolerance": 1e-8, "inner_max_iterations": 100, "derivative_route": "implicit_active_set", "complementarity_treatment": "finite_relaxation", "relaxation_parameter": 0.01},
+          "budget": {"metric": "oracle_evaluations", "value": 6},
+          "artifact": {"artifact_id": "bilevel-regression-relaxed-complementarity", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/bilevel-regression-relaxed-complementarity.json"}
         }
       ]
     }

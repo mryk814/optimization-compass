@@ -64,12 +64,17 @@
     {
       "id": "015",
       "path": "data/migrations/015_uncertainty_portfolio.sql",
-      "sha256": "2e3a3fa54253dfe3e819d759b12c8e5c210032f16c91f87d281e242b7c972d2f"
+      "sha256": "7ae2f1e90a84fa8a5f5ef91c08dbf66986f43409aaee63db067b38df0d437d7d"
     },
     {
       "id": "016",
       "path": "data/migrations/016_pde_simulation_contract.sql",
       "sha256": "72c495362ec61c5fd42b7a40dfd2437ce2147616dde00f29cd76c5c92e96a6ba"
+    },
+    {
+      "id": "017",
+      "path": "data/migrations/017_nested_hybrid_problem_contexts.sql",
+      "sha256": "28e1ef2a8378f86803d1ccd9e107b790bfb53b86b79a3662f6374d7d9f27170d"
     }
   ],
   "specialized_inputs": [
