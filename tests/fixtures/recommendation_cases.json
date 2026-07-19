@@ -1,6 +1,6 @@
 {
   "fixture_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.7",
   "cases": [
     {
       "case_id": "binary_linear",
@@ -1043,7 +1043,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -1762,7 +1762,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -2527,7 +2527,7 @@
           }
         ],
         "answered_question_count": 12,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -2822,7 +2822,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3150,7 +3150,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3418,7 +3418,7 @@
           }
         ],
         "answered_question_count": 3,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3849,7 +3849,7 @@
           }
         ],
         "answered_question_count": 4,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -3964,7 +3964,7 @@
           }
         ],
         "answered_question_count": 1,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     },
@@ -4019,7 +4019,7 @@
           }
         ],
         "answered_question_count": 1,
-        "dataset_version": "0.18.6",
+        "dataset_version": "0.18.7",
         "disclaimer": "候補選定支援であり、実問題での数値検証・安全性・最適性・商用条件を保証しません。"
       }
     }

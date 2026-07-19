@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.6",
+  "dataset_version": "0.18.7",
   "definitions": [
     {
       "available_oracles": [
@@ -365,6 +365,47 @@
       "source_ids": [
         "S056",
         "S063"
+      ],
+      "variable_domain": "continuous"
+    },
+    {
+      "available_oracles": [
+        "objective_value",
+        "gradient",
+        "constraint_value"
+      ],
+      "constraint_class": "bounds_and_linear_inequality",
+      "dimensionality_policy": {
+        "dimension": 6,
+        "kind": "fixed"
+      },
+      "feature_ids": [
+        "F_VARIABLE_CONTINUOUS",
+        "F_OBJECTIVE_SIMULATION",
+        "F_OBJECTIVE_NONCONVEX",
+        "F_DERIVATIVE_ANALYTIC_GRADIENT",
+        "F_DERIVATIVE_NUMERICAL",
+        "F_CONSTRAINT_BOUNDS",
+        "F_CONSTRAINT_LINEAR_INEQUALITY",
+        "F_STRUCTURE_PDE_CONSTRAINED",
+        "F_GUARANTEE_LOCAL_OK"
+      ],
+      "known_reference_semantics": "The educational instance has no exact continuous-shape reference; objective values are deterministic outputs of a fixed discretized quasi-1D model, and the finite parametrization biases which shapes are expressible.",
+      "last_verified": "2026-07-19",
+      "mathematical_family": "shape_optimization",
+      "name_en": "Parameterized shape optimization",
+      "name_ja": "パラメータ化形状最適化",
+      "objective_direction": "minimize",
+      "objective_form": "simulation",
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "related_problem_ids": [
+        "PA009",
+        "PA045"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
       ],
       "variable_domain": "continuous"
     },
@@ -1344,6 +1385,96 @@
       "seed_value": null,
       "source_ids": [
         "S056"
+      ]
+    },
+    {
+      "bounds": {
+        "half_width": [
+          0.2,
+          2.5
+        ]
+      },
+      "constraints": [
+        {
+          "constraint_id": "area_budget",
+          "expression": "∫h(x)dx ≤ 1.9",
+          "rhs": 1.9,
+          "sense": "lte"
+        }
+      ],
+      "dimension": 6,
+      "display": {
+        "axis_labels": [
+          "x position",
+          "half width",
+          "objective"
+        ],
+        "expression": "min J(h)=∫(Q/h)²dx + β∫(dh/dx)²dx, h(0)=1, h(1)=2, ∫h dx ≤ 1.9, 0.2 ≤ h ≤ 2.5",
+        "range": {
+          "half_width": [
+            0.0,
+            2.5
+          ],
+          "objective": [
+            0.0,
+            4.0
+          ]
+        },
+        "units": [
+          "normalized length",
+          "normalized length",
+          "normalized"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "linear_taper",
+          "half_widths": [
+            1.1428571428571428,
+            1.2857142857142856,
+            1.4285714285714286,
+            1.5714285714285714,
+            1.7142857142857144,
+            1.8571428571428572
+          ]
+        }
+      ],
+      "intended_phenomena": [
+        "parameterized_geometry",
+        "reduced_objective",
+        "state_solve",
+        "analytic_parameter_sensitivity",
+        "finite_difference_check",
+        "geometry_validity",
+        "design_space_bias",
+        "discretization_dependence"
+      ],
+      "known_reference": null,
+      "known_reference_status": "not_meaningful",
+      "last_verified": "2026-07-19",
+      "limitations_en": "A deterministic educational instance on a fixed 7-segment grid: a piecewise-linear half-width parametrization with a reduced dissipation-plus-slope-penalty objective derived from mass conservation u=Q/h. It teaches parameter derivatives, finite-difference checks, and geometry-validity separation; it is not a Navier-Stokes solver and does not establish separation, turbulence, compressibility, or real-design performance. Violating the 0.2 lower bound is a bound-constraint violation, while non-positive half-widths are rejected as invalid geometry. No continuous-shape feasibility or optimality is claimed.",
+      "limitations_ja": "7区間の固定gridによる決定的な教育用instanceです。壁面半幅の区分線形parametrizationと、質量保存u=Q/hに基づく散逸+勾配penaltyの縮約目的で、parameter微分・有限差分・geometry妥当性の読み分けを学ぶためのものです。Navier–Stokes等の実流体solverではなく、剥離・乱流・圧縮性・実設計性能を保証しません。下限0.2の違反はbound制約違反として扱い、半幅が非正になる点は無効なgeometryとして評価を拒否します。連続形状の可行性・最適性は主張しません。",
+      "name_en": "Quasi-1D diffuser wall-shape optimization",
+      "name_ja": "準1次元diffuserの壁面形状最適化",
+      "parameters": {
+        "area_budget": 1.9,
+        "flow_rate": 1.0,
+        "inlet_half_width": 1.0,
+        "length": 1.0,
+        "minimum_half_width": 0.2,
+        "outlet_half_width": 2.0,
+        "segments": 7,
+        "slope_penalty": 0.05
+      },
+      "problem_definition_id": "PROBLEM_SHAPE_OPTIMIZATION",
+      "problem_instance_id": "INSTANCE_SHAPE_DIFFUSER_QUASI1D",
+      "registry_key": "problem.shape.diffuser.v1",
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
       ]
     },
     {
