@@ -41,6 +41,11 @@ describe("Atlas typography contract", () => {
 
   test.each([
     ".atlas-page-header p:not(.eyebrow)",
+    ".home-formulation-reading",
+    ".home-formula-line > span",
+    ".home-primary-action",
+    ".brand-mark",
+    ".site-footer",
     ".content-card p",
     ".gallery-question-panel p:not(.eyebrow)",
     ".comparison-contract-v2 .comparison-question",

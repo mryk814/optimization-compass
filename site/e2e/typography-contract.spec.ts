@@ -62,6 +62,12 @@ async function expectNoTinyInterfaceText(page: Page): Promise<void> {
 
 const surfaces = [
   {
+    route: "/",
+    primary: ".home-formulation-reading",
+    metadata: ".home-formula-line > span",
+    control: ".home-primary-action",
+  },
+  {
     route: "/learn",
     primary: ".atlas-page-header p:not(.eyebrow)",
     metadata: ".content-card > span",
