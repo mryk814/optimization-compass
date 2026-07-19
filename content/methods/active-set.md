@@ -24,6 +24,8 @@ Active-set法は、現在のactive setを仮の等式制約として解き、blo
 - 前進の判断: equality-constrained solveが進み、primal feasibility・stationarity・multiplier sign・complementarityが整うこと
 - 恐れていること: active setの振動、degeneracy / cycling、infeasible model
 
+![多角形の可行領域の内側から候補点が辺へ進み、青緑のactiveな辺に沿って橙のblocking constraintへ近づく模式図](./media/active-set-feasible-face.png "active setを等式として扱い、候補が可行領域のfaceを移る直感を示す教育用模式図です。実際の追加・削除規則やmultiplierの符号までは図だけで決めません。")
+
 ## Active constraintとは
 
 不等式 $g_i(x)\le0$ が解で $g_i(x)=0$ になるときactiveです。active-set法は現在の候補集合 $W_k$ を等式として扱い、

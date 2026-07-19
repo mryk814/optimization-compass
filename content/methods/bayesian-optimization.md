@@ -35,6 +35,8 @@ last_reviewed: 2026-07-18
 4. 選んだ点を実際に評価する
 5. budgetまたは停止条件まで繰り返す
 
+![青緑の観測点の近くで狭く、未観測部分で広い青緑の不確実性帯と、その中の橙の次候補を示す模式図](./media/bayesian-optimization-uncertainty.png "観測、surrogate上の不確実性、次に評価する候補を区別する教育用模式図です。実務では目的関数の真の曲線は見えません。")
+
 Gaussian-process BOでは、各入力に予測平均 $\mu(x)$ と標準偏差 $\sigma(x)$ を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。
 
 ## Acquisitionの意味

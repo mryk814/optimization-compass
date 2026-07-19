@@ -18,6 +18,8 @@ last_reviewed: 2026-07-19
 
 多様体（manifold）は、各点の近くでは低次元のEuclidean空間のように見える集合です。変数$x$を単に$\mathbb{R}^n$のvectorとして更新するのではなく、$x\in\mathcal{M}$という集合の上にある点として扱います。
 
+![青緑の球面上の点から接平面へ橙のstepが伸び、曲線の矢印で球面上の新しい点へ戻る模式図](./media/manifold-tangent-retraction.png "接空間で候補を作り、retractionで多様体へ戻す教育用模式図です。sphere以外の集合やmetricの選択までは示しません。")
+
 典型的な集合と自由度は次のとおりです。
 
 | 集合 | 変数の例 | 自由度・注意 |

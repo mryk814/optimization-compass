@@ -75,6 +75,8 @@ Read it before writing or revising article text. The rules below cover structure
 The reading order, visual hierarchy, body measure, and progressive-disclosure policy are
 defined in [`docs/content-reading-principles.md`](content-reading-principles.md). Read it
 alongside the prose style guide when revising an existing page or adding a new one.
+For the decision to add a figure and the shared generated-image language, also read
+[`docs/content-visual-language.md`](content-visual-language.md).
 
 - The page shell owns `h1`; start sections with `##` and do not skip heading levels.
 - Keep the first paragraph short enough to work as a card and SEO description.
