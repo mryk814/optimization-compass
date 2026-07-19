@@ -15,12 +15,12 @@
 | `concept.derivative-free` | 81 | 1949 | 7 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 67 | 5533 | 9 | 3 | 0 | pass |
-| `concept.manifold` | 64 | 3820 | 6 | 3 | 0 | pass |
+| `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 4834 | 8 | 5 | 0 | pass |
-| `concept.path-terminal-constraints` | 62 | 1649 | 5 | 3 | 0 | pass |
+| `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
 | `concept.pde-constrained-optimization` | 63 | 3238 | 6 | 2 | 0 | pass |
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
-| `concept.simplex` | 68 | 3494 | 7 | 3 | 0 | pass |
+| `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
 | `concept.so3-rotation-representation` | 92 | 2517 | 7 | 4 | 0 | pass |
 | `concept.time-discretization` | 74 | 1945 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |

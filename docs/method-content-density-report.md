@@ -6,7 +6,7 @@
 
 | Content | Method | Summary | Body | TOC | Python | Result |
 |---|---|---:|---:|---:|---:|---|
-| `active-set` | `M_ACTIVE_SET` | 64 | 3396 | 10 | 1 | pass |
+| `active-set` | `M_ACTIVE_SET` | 64 | 3592 | 10 | 1 | pass |
 | `active-set-qp` | `M_ACTIVE_SET_QP` | 80 | 4492 | 8 | 1 | pass |
 | `adam` | `M_ADAM` | 127 | 3001 | 9 | 1 | pass |
 | `adamw` | `M_ADAMW` | 122 | 2926 | 9 | 1 | pass |
@@ -16,7 +16,7 @@
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 73 | 2563 | 7 | 1 | pass |
 | `barrier-lp-qp` | `M_BARRIER_LP_QP` | 81 | 2977 | 9 | 1 | pass |
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2298 | 9 | 1 | pass |
-| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 3628 | 9 | 1 | pass |
+| `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 3790 | 9 | 1 | pass |
 | `bfgs` | `M_BFGS` | 68 | 2051 | 8 | 1 | pass |
 | `branch-and-bound` | `M_BRANCH_BOUND` | 79 | 3630 | 9 | 1 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 80 | 2585 | 9 | 1 | pass |
