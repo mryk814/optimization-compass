@@ -65,6 +65,8 @@ chance constraintが「制約違反の頻度をどこまで許すか」を問う
 
 CVaRの値を比較するときは、lossの向き、tail水準、sample数、scenarioの重み、最適化に使ったsampleと評価用sampleを固定します。値が小さいことだけで、異なる分布や異なるtail水準の結果を順位付けしません。
 
+chance constraintの`α`を違反確率、CVaRの`α`をquantileまたはtail levelとして書く流儀があります。同じ記号でも意味は別です。さらに、どちらも推定値のconfidence levelとは限りません。Case・Theater・Compareでは`violation_probability`、`tail_level`、`confidence_level`を別fieldとして読みます。
+
 ## robust・stochastic・DROを同じ軸で混ぜない
 
 | formulation | 揺らぎの表現 | 代表的な主張 | 外側へ言えないこと |

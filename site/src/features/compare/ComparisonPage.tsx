@@ -586,11 +586,16 @@ function MetricHistoryComparison({
     member.artifact.artifact_id,
     member.label_ja,
   ]));
+  const isSharedProbe = comparison.comparison_id === "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS";
   return (
     <>
       <PlaybackControls playback={playback} />
       <p className="atlas-note comparison-probe-note">
-        <strong>線が同じなのは意図どおりです。</strong> 3本とも1つのsolver非依存診断probeであり、solver別の実行結果ではありません。
+        {isSharedProbe ? <>
+          <strong>線が同じなのは意図どおりです。</strong> 3本とも1つのsolver非依存診断probeであり、solver別の実行結果ではありません。
+        </> : <>
+          <strong>trainingとheld-outを混ぜません。</strong> evaluation 8でtraining、12で解を固定したheld-outのempirical riskを読みます。
+        </>}
       </p>
       <GenericMetricHistory
         budget={comparison.budget.value}
@@ -603,14 +608,15 @@ function MetricHistoryComparison({
         {traces.map((trace) => {
           const member = comparison.members.find((candidate) => candidate.artifact.artifact_id === trace.trace_id)!;
           const frame = latestFrame(trace.frames, evaluation);
-          const estimate = frame?.points.find((point) => point.point_id === "parameters");
+          const decision = frame?.points.find((point) => point.point_id === "parameters") ?? frame?.points[0];
+          const decisionLabel = isSharedProbe ? "[a, k, c]" : decision?.label_ja ?? "Decision";
           return (
             <article className="comparison-card" key={trace.trace_id}>
               <header><div><h2>{member.label_ja}</h2><small>{member.label_en}</small></div><span>{trace.terminal_status}</span></header>
               <p className="method-parameters">{parameterText(member.parameters)}</p>
               <dl className="comparison-metrics">
-        <div><dt>評価回数</dt><dd>{frame?.oracle_evaluations ?? 0}</dd></div>
-                <div><dt>[a, k, c]</dt><dd>{estimate?.coordinates.map((value) => value.toFixed(4)).join(", ") ?? "未評価"}</dd></div>
+                <div><dt>評価回数</dt><dd>{frame?.oracle_evaluations ?? 0}</dd></div>
+                <div><dt>{decisionLabel}</dt><dd>{decision?.coordinates.map((value) => value.toFixed(4)).join(", ") ?? "未評価"}</dd></div>
                 {comparison.metrics.map((metric) => {
                   const value = frame?.metrics.find((candidate) => candidate.metric_id === metric.metric_id);
                   return <div key={metric.metric_id}><dt>{metric.label_ja}</dt><dd>{value ? value.value.toPrecision(5) : "未評価"}</dd></div>;
@@ -623,7 +629,7 @@ function MetricHistoryComparison({
       <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
       <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
       <p className="atlas-note comparison-ranking-warning">
-        TRF・LM・L-BFGS-Bは実行していません。この表示から到達解、収束速度、経過時間、一般的なsolver順位は比較できません。
+        {comparison.caveat}
       </p>
     </>
   );

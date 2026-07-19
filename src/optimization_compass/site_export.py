@@ -31,6 +31,15 @@ from optimization_compass.parameter_estimation import (
     PRIMARY_SCENARIO_ID,
     generate_parameter_estimation_traces,
 )
+from optimization_compass.portfolio_uncertainty import (
+    CVAR_TRACE_ID,
+    NOMINAL_TRACE_ID,
+    build_portfolio_uncertainty_scenario,
+    generate_portfolio_uncertainty_traces,
+)
+from optimization_compass.portfolio_uncertainty import (
+    PROFILE_ID as PORTFOLIO_UNCERTAINTY_PROFILE_ID,
+)
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.release_catalog import (
     load_release_catalog,
@@ -1095,6 +1104,7 @@ def _write_dummy_trace(
         _generate_optimal_control_history_trace(dataset_version=dataset_version)
     )
     generated_traces.extend(_generate_optimal_control_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_portfolio_uncertainty_traces(dataset_version=dataset_version))
     generated_traces.extend(additional_traces or [])
     generated_traces = [
         trace.model_copy(
@@ -1160,6 +1170,14 @@ def _trace_title(trace_id: str, *, locale: str) -> str:
         "exponential-fit-lbfgsb": (
             "共通診断probe · scalar fallback条件",
             "Shared diagnostic probe · scalar fallback applicability",
+        ),
+        NOMINAL_TRACE_ID: (
+            "nominal配分 · training / held-out診断",
+            "Nominal allocation · training / held-out diagnostics",
+        ),
+        CVAR_TRACE_ID: (
+            "CVaR配分 · training / held-out診断",
+            "CVaR allocation · training / held-out diagnostics",
         ),
     }
     if trace_id in parameter_titles:
@@ -2228,6 +2246,8 @@ def _trace_lesson(
 
 
 def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
+    if trace.profile_id == PORTFOLIO_UNCERTAINTY_PROFILE_ID:
+        return build_portfolio_uncertainty_scenario(trace)
     is_nelder_mead = trace.profile_id == "PROFILE_NELDER_MEAD_2D"
     is_search_tree = trace.profile_id == "PROFILE_SEARCH_TREE_01"
     is_parameter_estimation = trace.objective_id == "INSTANCE_EXPONENTIAL_DECAY_FIT_3P"

@@ -653,6 +653,68 @@
       ]
     }
     ,{
+      "comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "canonical_url": "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "portfolio-cvar-allocation",
+      "case_id": "portfolio-cvar-allocation",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "benchmark_context_id": "BENCH_QP",
+      "title_ja": "同じscenarioでnominal目的とCVaR目的を読む",
+      "title_en": "Read nominal and CVaR objectives on the same scenarios",
+      "comparison_question": "uncertainty model・sample・risk level・評価budgetを固定し、training objectiveのrisk treatmentだけを変えるとin-sampleとheld-outのrisk summaryはどう変わる？",
+      "formulation_summary": "4資産のcapped simplex上で、固定training 8件から配分を選び、固定held-out 4件では解を変更せず再評価する。",
+      "fixed_factors": ["4資産のcapped simplex: w_i >= 0, sum(w)=1, w_i <= 0.6", "同じ固定training return scenario 8件", "同じ固定held-out return scenario 4件", "同じscenario順と一様weight", "同じrisk level alpha=0.75", "同じconfidence target: not applicable（確率保証を主張しない）", "同じ0.05刻みの教育用decision grid", "同じ12 loss evaluation budget"],
+      "changed_factors": ["training objectiveのrisk treatmentだけ: mean loss 対 mean loss + 0.5 CVaR_0.75"],
+      "seed_policy": "固定済み8 training / 4 held-out scenarioをその順で使うためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 12},
+      "stopping_policy": "training 8件を集計した後、解を固定したままheld-out 4件を集計し、合計12 loss evaluationで停止する。",
+      "tuning_policy": "alpha=0.75、CVaR weight=0.5、0.05 gridをrun前に固定し、held-outを見て配分やparameterを変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "mean_loss", "label_ja": "平均loss", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "cvar_75", "label_ja": "CVaR 75%", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "worst_loss", "label_ja": "最大loss", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "best_loss", "label_ja": "最小loss", "direction": "minimize", "unit": "loss"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberはuncertainty model、8/4 sample policy、alpha、confidence claim、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
+      "caveat": "4件のheld-outは順位を推定するには小さく、CVaR目的の一般的優位、母集団risk、将来return、chance constraintの確率保証は推論できない。",
+      "takeaway": "training上でmeanが同等でもtailを抑える配分は変わり得る。held-outは別集計してsample依存性を診断するが、その1回の差を一般順位にはしない。",
+      "limitations": ["固定8/4件・4資産・0.05 gridの教育用contrastであり、実solver精度やwall-clockを比較しない。", "scenario生成過程、時系列依存、confidence interval、取引コスト、turnover、slippageを含まない。", "CVaR objectiveはchance constraint、robust feasibility、DRO guaranteeの代替ではない。"],
+      "source_ids": ["S010", "S055"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "portfolio-nominal",
+          "role": "nominal_baseline",
+          "method_id": "MF_LP_QP_CONIC",
+          "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "label_ja": "nominal: training mean loss",
+          "label_en": "Nominal: training mean loss",
+          "parameters": {"uncertainty_model": "fixed_return_scenarios", "sample_policy": "fixed_disjoint_8_training_4_held_out", "risk_level": 0.75, "confidence_target": "not_applicable_no_probability_guarantee", "risk_treatment": "mean_loss", "risk_weight": 0.0, "grid_step": 0.05},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "portfolio-nominal-8-4", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-nominal-8-4.json"}
+        },
+        {
+          "member_id": "portfolio-cvar",
+          "role": "tail_risk_objective",
+          "method_id": "MF_LP_QP_CONIC",
+          "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "label_ja": "CVaR: training mean + tail risk",
+          "label_en": "CVaR: training mean plus tail risk",
+          "parameters": {"uncertainty_model": "fixed_return_scenarios", "sample_policy": "fixed_disjoint_8_training_4_held_out", "risk_level": 0.75, "confidence_target": "not_applicable_no_probability_guarantee", "risk_treatment": "mean_loss_plus_cvar", "risk_weight": 0.5, "grid_step": 0.05},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "portfolio-cvar-8-4", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-cvar-8-4.json"}
+        }
+      ]
+    }
+    ,{
       "comparison_id": "COMPARE_TOPOLOGY_OC_MMA",
       "canonical_url": "/compare/COMPARE_TOPOLOGY_OC_MMA",
       "identity_status": "canonical",

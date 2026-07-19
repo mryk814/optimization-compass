@@ -75,7 +75,7 @@ last_reviewed: 2026-07-19
 | objective | 平均的な性能と悪い結果のどちらを重く見るか | expectation、variance、worst-case、tail-riskの定義と係数 |
 | constraint | 危険な結果をどの頻度・範囲まで許すか | violationの定義、target、confidence、判定単位 |
 
-varianceを小さくする目的を置いても、制約違反の確率を直接制御したことにはなりません。逆に、chance constraintを置いても、制約違反が起きないことを保証するわけではありません。CVaRなどtail riskを使う場合も、lossの向き、tailの定義、quantile、confidence level、sampleでの評価方法を同じ契約へ書きます。
+varianceを小さくする目的を置いても、制約違反の確率を直接制御したことにはなりません。逆に、chance constraintを置いても、制約違反が起きないことを保証するわけではありません。CVaRなどtail riskを使う場合も、lossの向き、tailの定義、quantileまたはtail level、sampleでの評価方法を同じ契約へ書きます。CVaRのtail levelを、推定精度のconfidence levelと呼び替えません。
 
 ## guarantee scopeを4段階で読む
 
@@ -88,9 +88,9 @@ varianceを小さくする目的を置いても、制約違反の確率を直接
 
 ## Case journeyへつなぐ
 
-現在の[ポートフォリオ配分Case](#/gallery/portfolio-allocation)は、4資産のsimplex制約と共分散riskを読むnominalな教材です。過去データの推定誤差や将来分布の変化を扱うrobust・stochastic・chance-constrained・DROのcomplete journeyではありません。Caseの制約、目的、実装を読んだあと、次のsliceでは固定scenarioとheld-out scenarioを分けたTheater/Compareを接続します。
+現在の[ポートフォリオ配分Case](#/gallery/portfolio-allocation)は、4資産のsimplex制約と共分散riskを読むnominalな教材です。[CVaR配分Case](#/gallery/portfolio-cvar-allocation)は、そこから固定training 8件とheld-out 4件を分け、mean lossとCVaR objectiveを同じsample契約で読むTheater/Compareへ進みます。ただし、どちらも過去データの推定誤差や将来分布の変化を扱うrobust・chance-constrained・DROの保証ではありません。
 
-この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。complete journeyへ進めるには、少なくとも次を同じCase identityへ接続します。
+この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。不確実性を扱うjourneyでは、少なくとも次を同じCase identityへ接続します。
 
 - uncertainty sourceとmodel assumption
 - objective riskとconstraint riskの定義
