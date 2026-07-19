@@ -29,7 +29,11 @@ test("375px DiagnoseとGallery detailの主要導線とprompt exportが操作で
     name: "x（決めるもの）はどの種類ですか？",
   });
   await question.getByRole("button", { name: /^0-1/u }).click();
-  await expect(page.getByRole("button", { name: "地図上で見る" })).toBeVisible();
+  const openMap = page.getByRole("button", { name: "地図を開く" });
+  await expect(openMap).toBeVisible();
+  await openMap.click();
+  await expect(page).toHaveURL(/#\/map\?state=/u);
+  await expect(page.getByRole("heading", { level: 1, name: "問題構造マップ" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/gallery/hyperparameter-search");
@@ -59,28 +63,33 @@ test("375px Theater controlsが横にはみ出さずstepできる", async ({ pag
 
 test("375px Theater catalogでscenarioを絞り込める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  const scenarioCount = page.getByText(/^\d+ \/ \d+ scenarios$/u);
+  const filters = page.locator('.theater-catalog-filters[aria-label="シナリオの絞り込み"]');
+  const scenarioCount = filters.getByText(/^\d+ \/ \d+ シナリオ$/u);
   await expect(scenarioCount).toBeVisible();
-  await expect(scenarioCount).toHaveText(/^([1-9]\d*) \/ \1 scenarios$/u);
+  await expect(scenarioCount).toHaveText(/^([1-9]\d*) \/ \1 シナリオ$/u);
   const initialCount = await scenarioCount.textContent();
-  const countMatch = initialCount?.match(/^(\d+) \/ \1 scenarios$/u);
+  const countMatch = initialCount?.match(/^(\d+) \/ \1 シナリオ$/u);
   const total = countMatch?.[1];
   if (!total) throw new Error(`Unexpected scenario count: ${initialCount ?? "missing"}.`);
 
-  await page.getByLabel("問題domain").selectOption("discrete");
-  await expect(scenarioCount).toHaveText(`2 / ${total} scenarios`);
-  await expect(page.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
+  await filters.getByLabel("問題領域", { exact: true }).selectOption("discrete");
+  await expect(scenarioCount).toHaveText(`2 / ${total} シナリオ`);
+  const catalog = page.locator('[aria-label="Theaterのシナリオカタログ"]');
+  await expect(catalog.locator("a.theater-card")).toHaveCount(2);
+  await expect(catalog.getByRole("link", { name: /0-1 knapsack: 最適性証明/u })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-theater-catalog");
 });
 
 test("375px Compare Labで比較条件と非trajectory結果を読める", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/compare/COMPARE_CONSTRAINED_FAILURE");
-  await expect(page.getByRole("heading", { level: 3, name: "同じもの / Fixed" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "違うもの / Changed" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 3, name: "見る指標 / Metrics" })).toBeVisible();
+  const comparisonConditions = page.getByRole("region", { name: "比較条件" });
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここまで同じ" })).toBeVisible();
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "ここだけ違う" })).toBeVisible();
+  await expect(comparisonConditions.getByRole("heading", { level: 3, name: "まず見る" })).toBeVisible();
+  await expect(comparisonConditions.getByText("制約違反", { exact: true })).toBeVisible();
   await expect(page.getByRole("img", { name: /円の内側が実行可能領域/u })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Case: 強度制約/u })).toBeVisible();
+  await expect(page.getByRole("link", { name: /ケース: 強度制約/u })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-compare-feasible-region");
 });
@@ -139,12 +148,12 @@ test("375px BO Theaterが横にはみ出さずkeyboardでstepできる", async (
 
 test("375px Coverageが横にはみ出さずfilterできる", async ({ page, baseURL }, testInfo) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/coverage");
-  await expect(page.getByRole("heading", { name: "Atlas Coverage" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Learning journey completeness" })).toBeVisible();
-  await expect(page.getByRole("region", { name: "Learning journey completeness table" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Atlasの接続状況" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "学習経路の接続状況" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "学習経路の接続状況一覧" })).toBeVisible();
   await expect(page.getByText(/^\d+\/5 complete$/u)).toBeVisible();
   await page.getByLabel("Subject").selectOption("feature_family");
-  await expect(page.getByRole("region", { name: "Artifact inventory table" }).getByRole("row")).toHaveCount(11);
+  await expect(page.getByRole("region", { name: "成果物一覧の表" }).getByRole("row")).toHaveCount(11);
   await expectNoHorizontalOverflow(page);
   await expectNoHighImpactViolations(page, testInfo, "mobile-coverage");
 });

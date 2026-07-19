@@ -9,10 +9,17 @@ function requiredBaseURL(baseURL: string | undefined): string {
 
 test("Theater catalogからfailure runを選びCaseとCompareへ戻れる", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater");
-  await expect(page.getByText("29 / 29 シナリオ")).toBeVisible();
+  const filters = page.locator('.theater-catalog-filters[aria-label="シナリオの絞り込み"]');
+  const scenarioCount = filters.getByText(/^\d+ \/ \d+ シナリオ$/u);
+  await expect(scenarioCount).toHaveText(/^(\d+) \/ \1 シナリオ$/u);
+  const publishedCount = (await scenarioCount.textContent())?.match(/^\d+ \/ (\d+) シナリオ$/u)?.[1];
+  if (!publishedCount) throw new Error("Published scenario count is missing.");
+
   await page.getByLabel("見る目的").selectOption("failure_contrast");
-  await expect(page.getByText("6 / 27 シナリオ")).toBeVisible();
-  await page.getByRole("link", { name: /実行可能領域と制約を無視した失敗を比べる/u }).click();
+  await expect(scenarioCount).toHaveText(`6 / ${publishedCount} シナリオ`);
+  const failureRun = page.getByRole("link", { name: /実行可能領域と制約を無視した失敗を比べる/u });
+  await expect(failureRun).toBeVisible();
+  await failureRun.click();
   await expect(page.getByRole("heading", { level: 2, name: "このrunで見るもの" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 3, name: /ケース: 強度制約/u })).toBeVisible();
   await expect(page.getByRole("link", { name: "Caseへ戻る" })).toBeVisible();

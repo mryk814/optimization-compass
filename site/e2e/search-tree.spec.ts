@@ -10,7 +10,9 @@ test("0-1 Gallery caseから決定的search-treeをkeyboardで再生できる", 
   await theaterLink.click();
   await expect(page).toHaveURL(/#\/theater\/search-tree\/binary-knapsack-bnb-complete\?state=/u);
   await expect(page.getByRole("heading", { name: "0-1 knapsack: 最適性証明" })).toBeVisible();
-  await expect(page.getByText(/実行可能.*search_tree/u)).toBeVisible();
+  const artifactBadges = page.locator(".artifact-badges");
+  await expect(artifactBadges.getByText("実行Trace / Executable", { exact: true })).toBeVisible();
+  await expect(artifactBadges.getByText("search_tree 1.0.0", { exact: true })).toBeVisible();
   await expect(page.getByLabel("Best feasible")).toBeVisible();
   await expect(page.getByText("Textual tree summary")).toBeVisible();
 
