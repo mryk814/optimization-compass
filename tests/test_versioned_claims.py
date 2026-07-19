@@ -144,16 +144,21 @@ def test_comparison_requires_complete_context(connection: sqlite3.Connection) ->
     educational_nelder_mead = next(
         row for row in contexts if row["context_id"] == "BENCH_NELDER_MEAD_QUADRATIC_80"
     )
-    assert all(
-        comparison_eligibility(dict(row)).ranking_eligible
+    eligibility_by_context = {
+        row["context_id"]: comparison_eligibility(dict(row)) for row in contexts
+    }
+    forbidden_context_ids = {
+        row["context_id"]
         for row in contexts
-        if row["context_id"]
-        not in {
-            "BENCH_BO_EDUCATIONAL_10",
-            "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
-            "BENCH_NELDER_MEAD_QUADRATIC_80",
-        }
-    )
+        if json.loads(row["status_mapping_json"]).get("ranking") == "forbidden"
+    }
+    assert forbidden_context_ids == {
+        context_id
+        for context_id, eligibility in eligibility_by_context.items()
+        if not eligibility.ranking_eligible
+    }
+    assert any(eligibility.ranking_eligible for eligibility in eligibility_by_context.values())
+    assert "BENCH_PDE_STATE_TOLERANCE_6" in forbidden_context_ids
     assert comparison_eligibility(dict(educational_bo)) == ComparisonEligibility(
         False, "context_forbids_ranking"
     )

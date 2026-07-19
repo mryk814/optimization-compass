@@ -23,8 +23,8 @@ def test_shape_slice_uses_existing_canonical_entities_and_sources() -> None:
         "feature",
         "F_STRUCTURE_PDE_CONSTRAINED",
     )
-    assert set(shape.source_ids) == {"S054", "S055", "S056", "S101"}
-    assert set(failure.source_ids) == {"S054", "S055", "S056", "S101"}
+    assert set(shape.source_ids) == {"S054", "S055", "S056", "S101", "S104", "S105", "S106"}
+    assert set(failure.source_ids) == {"S054", "S055", "S056", "S101", "S104", "S106"}
 
 
 def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> None:

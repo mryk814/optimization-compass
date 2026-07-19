@@ -64,7 +64,7 @@ def test_repository_manifest_validates_all_current_migrations() -> None:
     manifest = validate_build_manifest(DEFAULT_BUILD_MANIFEST, repository_root=ROOT)
 
     assert [migration.id for migration in manifest.schema_migrations] == [
-        f"{number:03d}" for number in range(3, 18)
+        f"{number:03d}" for number in range(3, 20)
     ]
 
 
