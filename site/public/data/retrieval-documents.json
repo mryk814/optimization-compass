@@ -5826,19 +5826,116 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.convexity:30秒でつかむ",
+      "chunk_id": "content:concept.convexity:overview",
       "dataset_version": "0.18.6",
       "document_id": "content:concept.convexity",
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:method.gradient-descent",
-        "source:S001"
+        "source:S001",
+        "source:S056"
       ],
       "source_ids": [
-        "S001"
+        "S001",
+        "S056"
       ],
-      "text": "局所的な下り坂と大域的な最適性をつなぐ性質です。 2点を結ぶ線分が関数のグラフより上にあれば、関数は凸です。 f ( θ x + ( 1 − θ ) y ) ≤ θ f ( x ) + ( 1 − θ ) f ( y ) , 0 ≤ θ ≤ 1 凸関数では2点を結ぶ線分が関数のグラフより上にあります。 最適化での意味 局所最小解は大域最小解になります。 強凸性など追加条件があれば、収束率も評価できます。 非凸問題では、初期値や探索戦略の影響を別に調べます。 Note 凸集合と凸関数は別の定義です。制約集合と目的関数の両方を確認してください。",
-      "title": "30秒でつかむ"
+      "text": "凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。",
+      "title": "凸性"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:凸性がない・分からないとき",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "非凸であることは、最適化できないことを意味しません。 ただし、一つの初期点から得た停止点を大域解として扱えなくなります。 複数初期点と下界を使って解の位置付けを確認します。 既知解や問題固有の構造も判断材料になります。 凸性を証明できない場合も、安易に凸と仮定しません。 局所モデルとして凸近似を使うなら、元の目的と制約で候補を再評価します。 近似問題の最適性と元の問題の最適性を区別して記録します。",
+      "title": "凸性がない・分からないとき"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:可行集合も同時に確認する",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "可行集合 C が凸であるとは、二つの可行点を結ぶ線分がすべて C に残ることです。 線形等式と線形不等式が作る集合は凸です。 一方、整数変数や排他的な選択は離散的な可行集合を作ります。 凸な目的関数を使っていても、可行集合が非凸なら問題全体へ凸最適化の結論は適用できません。 変数変換を行った場合は、変換後の目的と可行集合をもう一度確認します。 Note 「目的が凸」と「問題が凸」は同じ主張ではありません。目的、制約、定義域を一組で記録します。",
+      "title": "可行集合も同時に確認する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:失敗・切替の兆候",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "初期点ごとに異なる停止点へ到達する場合は、非凸性かsolver設定を調べます。 feasibility residualが残る場合は、目的値だけで候補を比較しません。 Hessianの負の曲率が見つかる場合は、凸性の仮定を見直します。 凸近似の解が元の問題で悪化する場合は、近似範囲と受理条件を見直します。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:定義を式で読む",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "集合 C 上の関数 f を考えます。 任意の x , y ∈ C と 0 ≤ θ ≤ 1 に対して、次が成り立つとき f は凸です。 f ( θ x + ( 1 − θ ) y ) ≤ θ f ( x ) + ( 1 − θ ) f ( y ) 左辺は二点の間にある入力での関数値です。 右辺は二つの関数値を同じ比率で混ぜた値です。 不等式は「入力を混ぜた結果が、出力を混ぜた線分より上へ出ない」ことを表します。 一変数の滑らかな関数なら、二階微分が非負かを見る方法があります。 多変数ではHessianがpositive semidefiniteかを調べます。 ただし、微分による判定は定義域と滑らかさの条件を確認して使います。",
+      "title": "定義を式で読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:最適化で何が言えるか",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "凸目的と凸可行集合からなる問題では、局所最小解は大域最小解です。 微分可能なら、勾配と制約の条件を使って最適性を調べられます。 厳密凸性や強凸性などを追加すると、解の一意性や収束率について強い評価が可能です。 ただし、凸性だけで数値計算が簡単になるとは限りません。 悪いscaleや境界近くの解は、solverの進み方を難しくします。 実装では最適性条件と数値残差を分けて監視します。",
+      "title": "最適化で何が言えるか"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -5849,18 +5946,58 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "content:method.gradient-descent",
-        "source:S001"
+        "source:S001",
+        "source:S056"
       ],
       "source_ids": [
-        "S001"
+        "S001",
+        "S056"
       ],
-      "text": "勾配降下法 で、凸性が局所的な勾配情報と最適性の判断をどうつなぐかを確認します。",
+      "text": "勾配降下法 で、勾配情報と停止条件の関係を確認します。 射影勾配法 では、凸集合へ候補を戻す更新を学べます。",
       "title": "次に読む"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:concept.derivative-free:30秒でつかむ",
+      "chunk_id": "content:concept.convexity:直感",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "凸関数では、グラフ上の二点を結ぶ線分がグラフより下へ入りません。 ある点の近くで下げる方向がなくなったとき、その点より離れた場所にも低い谷はないと判断できます。 この性質は、目的関数だけを眺めても決まりません。 制約が作る可行集合に穴や分離があれば、問題全体は凸最適化問題ではありません。 凸関数では2点を結ぶ線分が関数のグラフより上にあります。",
+      "title": "直感"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.convexity:診断値",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.convexity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.gradient-descent",
+        "source:S001",
+        "source:S056"
+      ],
+      "source_ids": [
+        "S001",
+        "S056"
+      ],
+      "text": "診断値 読み方 objective gapまたは下界 得られた値が既知の下界へ近いか gradient norm 制約なし問題の一階停止条件へ近いか feasibility residual 候補が制約を満たしているか KKT residual 制約付き問題の局所的な最適性条件へ近いか 初期点ごとの結果 非凸性や数値的不安定性の影響が見えるか",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:overview",
       "dataset_version": "0.18.6",
       "document_id": "content:concept.derivative-free",
       "license": "CC-BY-4.0",
@@ -5868,14 +6005,82 @@
         "content:method.nelder-mead",
         "source:S001",
         "source:S002",
+        "source:S056",
         "trace:nelder-mead-quadratic"
       ],
       "source_ids": [
         "S001",
-        "S002"
+        "S002",
+        "S056"
       ],
-      "text": "微分を直接使わず、関数値の比較から探索する考え方です。 微分不能という意味だけではありません。勾配が得られない、信頼できない、または取得コストが高い場合も対象です。 向いている状況 状況 確認すること 実験・シミュレーション 1評価の時間と並列実行数 ノイズあり 再評価、ロバストな比較、停止条件 混合変数 離散変数を扱える探索演算子 関数値だけで動く局所探索 集団を使う大域探索 surrogateで評価点を選ぶ逐次探索 Warning 「導関数を使わない」は「調整不要」を意味しません。評価予算、初期設計、探索範囲を先に固定します。",
-      "title": "30秒でつかむ"
+      "text": "微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。",
+      "title": "微分を使わない最適化"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:何が-微分なし-なのか",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "solverへ勾配を渡さないことと、問題に滑らかさがないことは別です。 滑らかな目的でも、値だけを返す評価器なら微分なしの探索を選べます。 逆に、数値差分を内部で計算するsolverは利用者が勾配を渡さなくても評価回数を使います。 選択前に、評価器が返せる情報を分けます。 利用できる情報 先に確認すること 目的値だけ 同点やノイズをどう比較するか 目的値と制約値 infeasibleな候補をどう扱うか 複数回の再評価 ばらつきをどの単位で集約するか 失敗status 失敗と大きな目的値を区別できるか",
+      "title": "何が「微分なし」なのか"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:失敗・切替の兆候",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "評価budgetを使っても最良値が更新されない場合は、初期点と探索範囲を見直します。 候補の多くがinfeasibleなら、制約を扱える方法か変数表現へ切り替えます。 改善量が再評価のばらつき以下なら、再評価規則かノイズを扱う方法を検討します。 局所探索で初期点ごとの結果が大きく違うなら、多点開始か大域探索を比較します。 変数次元に対して評価budgetが小さいなら、変数を減らすか事前知識を探索へ入れます。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:探索の役割を分ける",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "局所探索は現在点の近くを詳しく調べます。 Nelder–MeadやPowell法はSciPyの公式APIでも微分を使わない局所法として選べます。 初期点の近くにある改善を探すため、大域最適性を自動では保証しません。 大域探索は離れた領域にも候補を配ります。 ただし、範囲を広げるほど同じ予算で一領域を調べる密度は下がります。 高価な評価では、既評価点を使うsurrogateで次の評価点を絞る方法もあります。 これらは「微分なし」という共通点だけで同じsolverではありません。 局所性と変数型を分けて確認します。 制約の扱いと並列性も選択条件です。",
+      "title": "探索の役割を分ける"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -5888,14 +6093,82 @@
         "content:method.nelder-mead",
         "source:S001",
         "source:S002",
+        "source:S056",
         "trace:nelder-mead-quadratic"
       ],
       "source_ids": [
         "S001",
-        "S002"
+        "S002",
+        "S056"
       ],
-      "text": "Nelder–Meadの教材 では、単体を変形する一歩を確認できます。",
+      "text": "局所的な微分なし最適化 で局所法の条件を整理できます。 大域探索 と 高価なblack-box最適化 では、探索範囲と評価budgetの違いを比較します。 Nelder–Meadの教材 では、単体を変形する一歩を確認できます。",
       "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:直感",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "勾配がないときも、候補点を評価して「どちらがよいか」は比べられます。 微分を使わない方法は、その比較から次の候補点を組み立てます。 対象は数式として微分できない関数だけではありません。 解析勾配を実装できない場合や、勾配がノイズに埋もれる場合も含みます。 勾配一回の取得が関数評価より大幅に高い場合も候補です。 「微分を使わない」は「情報を使わない」という意味ではありません。探索履歴、点の配置、評価値の差を更新へ使います。",
+      "title": "直感"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:診断値",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "診断値 読み方 best-so-far objective 予算の追加で最良値が更新されているか 評価回数と経過時間 budgetをどこで消費したか 候補点の距離 同じ狭い領域だけを繰り返していないか 再評価のばらつき 改善量がノイズより大きいか infeasible率と失敗率 探索範囲や制約処理が適切か 最良値だけでなく、評価履歴を残します。 同じ点の再評価や失敗候補が多い場合、solverの停止理由だけでは原因を判別できません。",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.derivative-free:評価budgetを先に決める",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.derivative-free",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:method.nelder-mead",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "trace:nelder-mead-quadratic"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056"
+      ],
+      "text": "微分を使わない探索では、評価回数が主な資源になります。 一回の評価時間と同時実行数を測り、停止までの上限を先に置きます。 ノイズがある場合は、再評価に使う回数も同じbudgetへ含めます。 比較実験では、solverの反復回数だけを揃えてはいけません。 一反復で必要な評価回数が方法ごとに違うためです。 目的評価、制約評価、失敗した評価を同じ規則で数えます。 Warning 評価失敗を一律に大きな目的値へ置き換えると、悪い候補と実行不能な候補が混ざります。失敗statusを別に保存してください。",
+      "title": "評価budgetを先に決める"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -7406,6 +7679,206 @@
       ],
       "text": "成分和の誤差と最小成分（数値上の可行性） 0に張り付く成分とactive faceの変化 projection distanceまたはBregman stepの大きさ objective、projected-gradient mapping、またはregret step size、line search、underflow / overflow 0成分を許すべき問題なのにsoftmax内部点に張り付いていないか 切替の目安は次のとおりです。projectionが計算時間を支配するなら、parameterization・分解・別のprimal-dual法を検討します。softmaxで必要な0配分へ近づけないなら、境界を表せるprojectionへ戻します。成分が頻繁に0と正を行き来するなら、step size、scale、目的のnoise、または配分の粗さを見直します。 Warning simplex上の可行解は「配分として成立する」ことを意味しますが、実験・生産・制御の下限量、整数ロット、時間変化する制約までは含みません。元の問題にある制約を別途評価します。",
       "title": "診断値と切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:exponential-mapとの違い",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "Lie algebraの歪対称行列 Ω を使うと、exponential mapは次の更新を与えます。 R n e w = R exp ( Ω ) この更新は S O ( 3 ) 上に残ります。 ただし、retractionは計算を軽くするために別の局所写像を使えます。 solverの一反復を比較するときは、同じstep sizeでも到達点が一致するとは限りません。 多様体上の距離もambientな行列差と区別します。 Frobenius normによる差とgeodesic distanceは異なる量です。 停止判定に使った距離と、最終評価に使う誤差を明示します。",
+      "title": "exponential mapとの違い"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。",
+      "title": "SO(3)の行列・接空間表現"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:projectionとretractionを区別する",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "projectionはambient spaceにある行列を、近い回転行列へ修正する操作として使われます。 一方、retractionは現在点の接空間から多様体へ写す局所的な操作です。 同じ行列を返す場合があっても、入力となるstepと理論上の役割は同じではありません。 PymanoptのSO(3)実装では、QRまたはpolar decompositionを使うretractionが選べます。 QRによるretractionはexponential mapの一次近似です。 exponential mapそのものと同一ではないため、methodと設定を記録します。 projectionを使う場合は、修正前後の距離を保存します。 retractionを使う場合は、接空間stepのnormを保存します。 二つを同じ「更新量」として混ぜないことが重要です。",
+      "title": "projectionとretractionを区別する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:回転行列の条件",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "三次元の回転は 3 × 3 行列として書けます。 ただし、任意の九成分が回転を表すわけではありません。 S O ( 3 ) = { R ∈ ℝ 3 × 3 ∣ R 𝖳 R = I , det R = 1 } 直交性は長さと角度を保つ条件です。 determinantが 1 である条件は鏡映を除きます。 これらの制約により、行列の九成分に対して自由度は三つです。 行列表現では、構造残差を直接監視できます。 ‖ R 𝖳 R − I ‖ F と | det R − 1 | を別に記録します。",
+      "title": "回転行列の条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:失敗・切替の兆候",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "直交性残差が増える場合は、更新後に使う写像と数値精度を確認します。 projection distanceがstep normに比べて大きい場合は、ambient updateを見直します。 objectiveが改善せずstepだけ小さくなる場合は、gradientと停止条件を確認します。 QRとpolarで結果が変わる場合は、retractionを実験条件として固定します。 geodesic distanceと行列差の判断が食い違う場合は、評価指標の意味へ戻ります。 Warning 各iterateがSO(3)上にあることは、局所解や大域最適性の保証ではありません。構造残差と最適化の停止条件を別に記録します。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:接空間で一歩を作る",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "現在点 R での接vectorは R Ω と書けます。 Ω は Ω 𝖳 = − Ω を満たす歪対称行列です。 三次元の歪対称行列は三つの独立成分を持ちます。 ambient spaceのgradientをそのまま行列へ足すと、一般には S O ( 3 ) から外れます。 Riemannian solverはgradientを接空間へ移し、そこでstepを作ります。 この分離により、探索方向と可行性を保つ写像を別に検証できます。 R t r i a l = R + R Ω R t r i a l は接方向を表しますが、有限stepでは回転行列とは限りません。 次にretractionなどを使い、接空間の候補を多様体上へ戻します。",
+      "title": "接空間で一歩を作る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:次に読む",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "多様体値変数 で、接空間とretractionの共通原則を確認できます。 Riemann多様体最適化の選び分け では、一次法とtrust-region法の使い分けを整理します。 Riemann勾配法 と Riemann trust-region法 で更新則を比較できます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.so3-rotation-representation:診断値",
+      "dataset_version": "0.18.6",
+      "document_id": "content:concept.so3-rotation-representation",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.manifold",
+        "content:concept.variable-domain",
+        "content:family.manifold",
+        "content:riemannian-gradient",
+        "content:riemannian-trust-region",
+        "source:S044",
+        "source:S045",
+        "source:S071"
+      ],
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "text": "診断値 読み方 ‖ R 𝖳 R − I ‖ F 直交性が保たれているか $ \\det R-1 tangent step norm 接空間でどれだけ動かしたか projection distance ambientな候補をどれだけ修正したか Riemannian gradient norm 多様体上の一階停止条件へ近いか objectiveとbudget 可行性を保つだけでなく改善しているか 可行性と収束は別の判定です。 構造残差が小さくても、objectiveやRiemannian gradient normが改善するとは限りません。",
+      "title": "診断値"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -24571,6 +25044,214 @@
         "S101"
       ],
       "text": "geometry updateの最大変位と境界の最小距離 要素の最小qualityと、反転要素・負のJacobianの数 state residualと制約違反 目的関数、感度、finite-differenceまたはgradient check mesh refinement後の目的・制約・形状の変化 目的だけが改善し、mesh qualityやconstraint violationが悪化するなら、その更新は採用せず、更新幅、parameterization、mesh-motion、または再meshの方針を見直します。",
+      "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:adjointで縮約感度を得る",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "adjoint法はstate方程式を利用し、縮約目的のgradientを効率よく計算します。 評価するfunctionalが少なく、parameterが多い問題で特に有利です。 各parameterを個別に摂動する有限差分より、追加solve数を抑えられます。 ただし、adjoint solveは前段の失敗を修復しません。 無効なgeometryや反転したmeshでは、正しい縮約感度を期待できません。 state solveが未収束なら、目的値とadjointの入力も同じ状態ではありません。 実装後は小さな固定問題でgradient checkを行います。 有限差分との一致はadjoint実装の確認であり、連続体model全体の正しさの証明ではありません。",
+      "title": "adjointで縮約感度を得る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:overview",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。",
+      "title": "形状parameterと縮約感度"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:候補を評価する順序",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "形状の更新候補は、一つの目的値へ早く畳み込まないようにします。 次の順序で状態を記録すると、失敗した層を後から再現できます。 q のboundsとupdate normを確認する。 境界を生成し、固定境界と自己交差を検査する。 meshを生成し、要素qualityとJacobianを検査する。 stateを解き、residualとsolver statusを保存する。 目的と制約を評価し、縮約感度を計算する。 同じ設定の有限差分でgradient checkを行う。 失敗候補を大きな目的値へ置き換える場合も、失敗statusを別に保存します。 悪いが有効な候補と、評価できなかった候補を混ぜないためです。",
+      "title": "候補を評価する順序"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:失敗・切替の兆候",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "有限差分の片側でgeometryが無効になる場合は、stepかparameterizationを見直します。 mesh qualityがupdate normに応じて急落する場合は、mesh motionか再生成へ戻ります。 state residualが候補ごとに揃わない場合は、目的の差より先にsolver設定を確認します。 gradient checkがstepを変えても改善しない場合は、微分経路と境界条件を見直します。 bounds内でも必要な形状を表せない場合は、parameterizationを切り替えます。 Warning gradient checkの成功や目的値の改善だけでは、連続体での妥当性を示せません。mesh refinementと物理制約の感度を別に確認します。",
+      "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:有限差分で経路を確かめる",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "有限差分では q を少し動かし、geometryからstateまでを再計算します。 中心差分なら q + h と q − h の両側で縮約目的を評価します。 一つのparameterを調べるたびに追加のstate solveが必要です。 差分値を感度として使う前に、両側の評価が同じ契約を満たすか確認します。 片側だけgeometryが無効なら、その差分は欠測です。 meshの細かさやsolver toleranceが違う場合も、同じ関数の差として読めません。 step h を一つだけ試して一致しても十分ではありません。 h を変えたgradient checkを行い、打切り誤差とsolver誤差の影響を分けます。",
+      "title": "有限差分で経路を確かめる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:次に読む",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "形状最適化の設計変数 でgeometryの表現を確認できます。 adjoint sensitivity では、state方程式を介した感度を学べます。 形状更新の失敗モード では、失敗を層ごとに切り分けます。",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:計算の層を分ける",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "形状を表すparameterを q とします。 q から領域 Ω ( q ) とmesh T ( q ) を作り、その上でstate u ( q ) を計算します。 stateは形状に依存する方程式 F ( u , q ) = 0 の解です。 目的関数 J ( u , q ) はparameterへ直接依存する場合があります。 同時に、parameterがstateを変える経路でも値が変わります。 stateを解いた後の目的を一つの関数として見ると、縮約目的は次のように書けます。 J ^ ( q ) = J ( u ( q ) , q ) この表記により、geometry生成とstate solveを別の層として追跡できます。 目的評価も独立した層として記録します。 数値が悪化した層を特定してから、感度や更新則を疑います。",
+      "title": "計算の層を分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:shape-parameter-sensitivity:診断値",
+      "dataset_version": "0.18.6",
+      "document_id": "content:shape-parameter-sensitivity",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:adjoint-sensitivity",
+        "content:concept.pde-constrained-optimization",
+        "content:concept.variable-domain",
+        "content:geometry-update-failure-modes",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "source:S054",
+        "source:S056",
+        "source:S101"
+      ],
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "text": "層 診断値 読み方 parameter update norm、bounds 更新幅とparameterizationが適切か geometry 最小距離、自己交差 無効な形状を次の層へ渡していないか mesh 最小quality、負のJacobian数 mesh motionや再生成が破綻していないか state residual、solver status 同じ精度でstateを解けているか sensitivity gradient check、adjoint residual 微分経路と実装が整合しているか optimization objective、constraint、budget 有効な候補の中で改善しているか",
       "title": "診断値"
     },
     {

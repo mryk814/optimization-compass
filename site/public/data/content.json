@@ -131,32 +131,58 @@
       "canonical_entity_type": "feature",
       "comparison_ids": [],
       "content_id": "concept.convexity",
-      "html": "<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>局所的な下り坂と大域的な最適性をつなぐ性質です。</p>\n<p>2点を結ぶ線分が関数のグラフより上にあれば、関数は凸です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mi>x</mi><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mi>&#x003B8;</mi><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mspace width=\"1em\" /><mn>0</mn><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><mn>1</mn></mrow></math></div>\n<figure><img src=\"./media/convexity.svg\" alt=\"凸関数と2点を結ぶ線分の模式図\" loading=\"lazy\"><figcaption>凸関数では2点を結ぶ線分が関数のグラフより上にあります。</figcaption></figure>\n<h3 id=\"最適化での意味\" tabindex=\"-1\">最適化での意味</h3>\n<ol>\n<li><p>局所最小解は大域最小解になります。</p>\n</li>\n<li><p>強凸性など追加条件があれば、収束率も評価できます。</p>\n</li>\n<li><p>非凸問題では、初期値や探索戦略の影響を別に調べます。</p>\n</li>\n</ol>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>凸集合と凸関数は別の定義です。制約集合と目的関数の両方を確認してください。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/gradient-descent\">勾配降下法</a>で、凸性が局所的な勾配情報と最適性の判断をどうつなぐかを確認します。</p>",
+      "html": "<p>凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。</p>\n<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>凸関数では、グラフ上の二点を結ぶ線分がグラフより下へ入りません。\nある点の近くで下げる方向がなくなったとき、その点より離れた場所にも低い谷はないと判断できます。</p>\n<p>この性質は、目的関数だけを眺めても決まりません。\n制約が作る可行集合に穴や分離があれば、問題全体は凸最適化問題ではありません。</p>\n<figure><img src=\"./media/convexity.svg\" alt=\"凸関数と2点を結ぶ線分の模式図\" loading=\"lazy\"><figcaption>凸関数では2点を結ぶ線分が関数のグラフより上にあります。</figcaption></figure>\n<h2 id=\"定義を式で読む\" tabindex=\"-1\">定義を式で読む</h2>\n<p>集合 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi></mrow></math> 上の関数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> を考えます。\n任意の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo>&#x02208;</mo><mi>C</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><mn>1</mn></mrow></math> に対して、次が成り立つとき <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> は凸です。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mi>x</mi><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02264;</mo><mi>&#x003B8;</mi><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>左辺は二点の間にある入力での関数値です。\n右辺は二つの関数値を同じ比率で混ぜた値です。\n不等式は「入力を混ぜた結果が、出力を混ぜた線分より上へ出ない」ことを表します。</p>\n<p>一変数の滑らかな関数なら、二階微分が非負かを見る方法があります。\n多変数ではHessianがpositive semidefiniteかを調べます。\nただし、微分による判定は定義域と滑らかさの条件を確認して使います。</p>\n<h2 id=\"可行集合も同時に確認する\" tabindex=\"-1\">可行集合も同時に確認する</h2>\n<p>可行集合 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi></mrow></math> が凸であるとは、二つの可行点を結ぶ線分がすべて <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>C</mi></mrow></math> に残ることです。\n線形等式と線形不等式が作る集合は凸です。\n一方、整数変数や排他的な選択は離散的な可行集合を作ります。</p>\n<p>凸な目的関数を使っていても、可行集合が非凸なら問題全体へ凸最適化の結論は適用できません。\n変数変換を行った場合は、変換後の目的と可行集合をもう一度確認します。</p>\n<aside class=\"callout callout-note\" role=\"note\"><p class=\"callout-label\">Note</p>\n<p>「目的が凸」と「問題が凸」は同じ主張ではありません。目的、制約、定義域を一組で記録します。</p>\n</aside>\n<h2 id=\"最適化で何が言えるか\" tabindex=\"-1\">最適化で何が言えるか</h2>\n<p>凸目的と凸可行集合からなる問題では、局所最小解は大域最小解です。\n微分可能なら、勾配と制約の条件を使って最適性を調べられます。\n厳密凸性や強凸性などを追加すると、解の一意性や収束率について強い評価が可能です。</p>\n<p>ただし、凸性だけで数値計算が簡単になるとは限りません。\n悪いscaleや境界近くの解は、solverの進み方を難しくします。\n実装では最適性条件と数値残差を分けて監視します。</p>\n<h2 id=\"凸性がない・分からないとき\" tabindex=\"-1\">凸性がない・分からないとき</h2>\n<p>非凸であることは、最適化できないことを意味しません。\nただし、一つの初期点から得た停止点を大域解として扱えなくなります。\n複数初期点と下界を使って解の位置付けを確認します。\n既知解や問題固有の構造も判断材料になります。</p>\n<p>凸性を証明できない場合も、安易に凸と仮定しません。\n局所モデルとして凸近似を使うなら、元の目的と制約で候補を再評価します。\n近似問題の最適性と元の問題の最適性を区別して記録します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<table>\n<thead>\n<tr>\n<th>診断値</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>objective gapまたは下界</td>\n<td>得られた値が既知の下界へ近いか</td>\n</tr>\n<tr>\n<td>gradient norm</td>\n<td>制約なし問題の一階停止条件へ近いか</td>\n</tr>\n<tr>\n<td>feasibility residual</td>\n<td>候補が制約を満たしているか</td>\n</tr>\n<tr>\n<td>KKT residual</td>\n<td>制約付き問題の局所的な最適性条件へ近いか</td>\n</tr>\n<tr>\n<td>初期点ごとの結果</td>\n<td>非凸性や数値的不安定性の影響が見えるか</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>初期点ごとに異なる停止点へ到達する場合は、非凸性かsolver設定を調べます。</p>\n</li>\n<li><p>feasibility residualが残る場合は、目的値だけで候補を比較しません。</p>\n</li>\n<li><p>Hessianの負の曲率が見つかる場合は、凸性の仮定を見直します。</p>\n</li>\n<li><p>凸近似の解が元の問題で悪化する場合は、近似範囲と受理条件を見直します。</p>\n</li>\n</ul>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/methods/M_GRADIENT_DESCENT\">勾配降下法</a>で、勾配情報と停止条件の関係を確認します。\n<a href=\"#/learn/projected-gradient\">射影勾配法</a>では、凸集合へ候補を戻す更新を学べます。</p>",
       "kind": "concept",
-      "last_reviewed": "2026-07-16",
+      "last_reviewed": "2026-07-19",
       "prerequisites": [],
       "related_ids": [
         "method.gradient-descent"
       ],
-      "seo_description": "局所的な下り坂と大域的な最適性をつなぐ性質です。",
+      "seo_description": "凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。",
       "seo_title": "凸性",
       "source_ids": [
-        "S001"
+        "S001",
+        "S056"
       ],
       "status": "published",
-      "summary": "局所的な下り坂と大域的な最適性をつなぐ性質です。",
+      "summary": "凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。",
       "title_en": "Convexity",
       "title_ja": "凸性",
       "toc": [
         {
-          "heading_id": "30秒でつかむ",
-          "label": "30秒でつかむ",
+          "heading_id": "直感",
+          "label": "直感",
           "level": 2
         },
         {
-          "heading_id": "最適化での意味",
-          "label": "最適化での意味",
-          "level": 3
+          "heading_id": "定義を式で読む",
+          "label": "定義を式で読む",
+          "level": 2
+        },
+        {
+          "heading_id": "可行集合も同時に確認する",
+          "label": "可行集合も同時に確認する",
+          "level": 2
+        },
+        {
+          "heading_id": "最適化で何が言えるか",
+          "label": "最適化で何が言えるか",
+          "level": 2
+        },
+        {
+          "heading_id": "凸性がない・分からないとき",
+          "label": "凸性がない・分からないとき",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
         },
         {
           "heading_id": "次に読む",
@@ -171,33 +197,54 @@
       "canonical_entity_type": "feature",
       "comparison_ids": [],
       "content_id": "concept.derivative-free",
-      "html": "<h2 id=\"30秒でつかむ\" tabindex=\"-1\">30秒でつかむ</h2>\n<p>微分を直接使わず、関数値の比較から探索する考え方です。</p>\n<blockquote>\n<p>微分不能という意味だけではありません。勾配が得られない、信頼できない、または取得コストが高い場合も対象です。</p>\n</blockquote>\n<h3 id=\"向いている状況\" tabindex=\"-1\">向いている状況</h3>\n<table>\n<thead>\n<tr>\n<th>状況</th>\n<th>確認すること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>実験・シミュレーション</td>\n<td>1評価の時間と並列実行数</td>\n</tr>\n<tr>\n<td>ノイズあり</td>\n<td>再評価、ロバストな比較、停止条件</td>\n</tr>\n<tr>\n<td>混合変数</td>\n<td>離散変数を扱える探索演算子</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><p>関数値だけで動く局所探索</p>\n</li>\n<li><p>集団を使う大域探索</p>\n</li>\n<li><p>surrogateで評価点を選ぶ逐次探索</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>「導関数を使わない」は「調整不要」を意味しません。評価予算、初期設計、探索範囲を先に固定します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/methods/M_NELDER_MEAD\">Nelder–Meadの教材</a>では、単体を変形する一歩を確認できます。</p>",
+      "html": "<p>微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。</p>\n<h2 id=\"直感\" tabindex=\"-1\">直感</h2>\n<p>勾配がないときも、候補点を評価して「どちらがよいか」は比べられます。\n微分を使わない方法は、その比較から次の候補点を組み立てます。</p>\n<p>対象は数式として微分できない関数だけではありません。\n解析勾配を実装できない場合や、勾配がノイズに埋もれる場合も含みます。\n勾配一回の取得が関数評価より大幅に高い場合も候補です。</p>\n<blockquote>\n<p>「微分を使わない」は「情報を使わない」という意味ではありません。探索履歴、点の配置、評価値の差を更新へ使います。</p>\n</blockquote>\n<h2 id=\"何が-微分なし-なのか\" tabindex=\"-1\">何が「微分なし」なのか</h2>\n<p>solverへ勾配を渡さないことと、問題に滑らかさがないことは別です。\n滑らかな目的でも、値だけを返す評価器なら微分なしの探索を選べます。\n逆に、数値差分を内部で計算するsolverは利用者が勾配を渡さなくても評価回数を使います。</p>\n<p>選択前に、評価器が返せる情報を分けます。</p>\n<table>\n<thead>\n<tr>\n<th>利用できる情報</th>\n<th>先に確認すること</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>目的値だけ</td>\n<td>同点やノイズをどう比較するか</td>\n</tr>\n<tr>\n<td>目的値と制約値</td>\n<td>infeasibleな候補をどう扱うか</td>\n</tr>\n<tr>\n<td>複数回の再評価</td>\n<td>ばらつきをどの単位で集約するか</td>\n</tr>\n<tr>\n<td>失敗status</td>\n<td>失敗と大きな目的値を区別できるか</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"探索の役割を分ける\" tabindex=\"-1\">探索の役割を分ける</h2>\n<p>局所探索は現在点の近くを詳しく調べます。\nNelder–MeadやPowell法はSciPyの公式APIでも微分を使わない局所法として選べます。\n初期点の近くにある改善を探すため、大域最適性を自動では保証しません。</p>\n<p>大域探索は離れた領域にも候補を配ります。\nただし、範囲を広げるほど同じ予算で一領域を調べる密度は下がります。\n高価な評価では、既評価点を使うsurrogateで次の評価点を絞る方法もあります。</p>\n<p>これらは「微分なし」という共通点だけで同じsolverではありません。\n局所性と変数型を分けて確認します。\n制約の扱いと並列性も選択条件です。</p>\n<h2 id=\"評価budgetを先に決める\" tabindex=\"-1\">評価budgetを先に決める</h2>\n<p>微分を使わない探索では、評価回数が主な資源になります。\n一回の評価時間と同時実行数を測り、停止までの上限を先に置きます。\nノイズがある場合は、再評価に使う回数も同じbudgetへ含めます。</p>\n<p>比較実験では、solverの反復回数だけを揃えてはいけません。\n一反復で必要な評価回数が方法ごとに違うためです。\n目的評価、制約評価、失敗した評価を同じ規則で数えます。</p>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>評価失敗を一律に大きな目的値へ置き換えると、悪い候補と実行不能な候補が混ざります。失敗statusを別に保存してください。</p>\n</aside>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<table>\n<thead>\n<tr>\n<th>診断値</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>best-so-far objective</td>\n<td>予算の追加で最良値が更新されているか</td>\n</tr>\n<tr>\n<td>評価回数と経過時間</td>\n<td>budgetをどこで消費したか</td>\n</tr>\n<tr>\n<td>候補点の距離</td>\n<td>同じ狭い領域だけを繰り返していないか</td>\n</tr>\n<tr>\n<td>再評価のばらつき</td>\n<td>改善量がノイズより大きいか</td>\n</tr>\n<tr>\n<td>infeasible率と失敗率</td>\n<td>探索範囲や制約処理が適切か</td>\n</tr>\n</tbody>\n</table>\n<p>最良値だけでなく、評価履歴を残します。\n同じ点の再評価や失敗候補が多い場合、solverの停止理由だけでは原因を判別できません。</p>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>評価budgetを使っても最良値が更新されない場合は、初期点と探索範囲を見直します。</p>\n</li>\n<li><p>候補の多くがinfeasibleなら、制約を扱える方法か変数表現へ切り替えます。</p>\n</li>\n<li><p>改善量が再評価のばらつき以下なら、再評価規則かノイズを扱う方法を検討します。</p>\n</li>\n<li><p>局所探索で初期点ごとの結果が大きく違うなら、多点開始か大域探索を比較します。</p>\n</li>\n<li><p>変数次元に対して評価budgetが小さいなら、変数を減らすか事前知識を探索へ入れます。</p>\n</li>\n</ul>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/family.local-dfo\">局所的な微分なし最適化</a>で局所法の条件を整理できます。\n<a href=\"#/learn/family.global-search\">大域探索</a>と<a href=\"#/learn/family.expensive-black-box\">高価なblack-box最適化</a>では、探索範囲と評価budgetの違いを比較します。\n<a href=\"#/methods/M_NELDER_MEAD\">Nelder–Meadの教材</a>では、単体を変形する一歩を確認できます。</p>",
       "kind": "concept",
-      "last_reviewed": "2026-07-16",
+      "last_reviewed": "2026-07-19",
       "prerequisites": [],
       "related_ids": [
         "method.nelder-mead"
       ],
-      "seo_description": "微分を直接使わず、関数値の比較から探索する考え方です。",
-      "seo_title": "Derivative-free optimization",
+      "seo_description": "微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。",
+      "seo_title": "微分を使わない最適化",
       "source_ids": [
         "S001",
-        "S002"
+        "S002",
+        "S056"
       ],
       "status": "published",
-      "summary": "微分を直接使わず、関数値の比較から探索する考え方です。",
+      "summary": "微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。",
       "title_en": "Derivative-free optimization",
-      "title_ja": "Derivative-free optimization",
+      "title_ja": "微分を使わない最適化",
       "toc": [
         {
-          "heading_id": "30秒でつかむ",
-          "label": "30秒でつかむ",
+          "heading_id": "直感",
+          "label": "直感",
           "level": 2
         },
         {
-          "heading_id": "向いている状況",
-          "label": "向いている状況",
-          "level": 3
+          "heading_id": "何が-微分なし-なのか",
+          "label": "何が「微分なし」なのか",
+          "level": 2
+        },
+        {
+          "heading_id": "探索の役割を分ける",
+          "label": "探索の役割を分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "評価budgetを先に決める",
+          "label": "評価budgetを先に決める",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
         },
         {
           "heading_id": "次に読む",
@@ -774,6 +821,74 @@
       ]
     },
     {
+      "canonical_entity_id": "F_DERIVATIVE_ANALYTIC_GRADIENT",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "shape-parameter-sensitivity",
+      "html": "<p>形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。</p>\n<h2 id=\"計算の層を分ける\" tabindex=\"-1\">計算の層を分ける</h2>\n<p>形状を表すparameterを <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> とします。\n<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> から領域 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003A9;</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> とmesh <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を作り、その上でstate <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を計算します。\nstateは形状に依存する方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math> の解です。</p>\n<p>目的関数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> はparameterへ直接依存する場合があります。\n同時に、parameterがstateを変える経路でも値が変わります。\nstateを解いた後の目的を一つの関数として見ると、縮約目的は次のように書けます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mover><mrow><mi>J</mi></mrow><mo>&#x0005E;</mo></mover><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>u</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>この表記により、geometry生成とstate solveを別の層として追跡できます。\n目的評価も独立した層として記録します。\n数値が悪化した層を特定してから、感度や更新則を疑います。</p>\n<h2 id=\"有限差分で経路を確かめる\" tabindex=\"-1\">有限差分で経路を確かめる</h2>\n<p>有限差分では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> を少し動かし、geometryからstateまでを再計算します。\n中心差分なら <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x0002B;</mo><mi>h</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x02212;</mo><mi>h</mi></mrow></math> の両側で縮約目的を評価します。\n一つのparameterを調べるたびに追加のstate solveが必要です。</p>\n<p>差分値を感度として使う前に、両側の評価が同じ契約を満たすか確認します。\n片側だけgeometryが無効なら、その差分は欠測です。\nmeshの細かさやsolver toleranceが違う場合も、同じ関数の差として読めません。</p>\n<p>step <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> を一つだけ試して一致しても十分ではありません。\n<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> を変えたgradient checkを行い、打切り誤差とsolver誤差の影響を分けます。</p>\n<h2 id=\"adjointで縮約感度を得る\" tabindex=\"-1\">adjointで縮約感度を得る</h2>\n<p>adjoint法はstate方程式を利用し、縮約目的のgradientを効率よく計算します。\n評価するfunctionalが少なく、parameterが多い問題で特に有利です。\n各parameterを個別に摂動する有限差分より、追加solve数を抑えられます。</p>\n<p>ただし、adjoint solveは前段の失敗を修復しません。\n無効なgeometryや反転したmeshでは、正しい縮約感度を期待できません。\nstate solveが未収束なら、目的値とadjointの入力も同じ状態ではありません。</p>\n<p>実装後は小さな固定問題でgradient checkを行います。\n有限差分との一致はadjoint実装の確認であり、連続体model全体の正しさの証明ではありません。</p>\n<h2 id=\"候補を評価する順序\" tabindex=\"-1\">候補を評価する順序</h2>\n<p>形状の更新候補は、一つの目的値へ早く畳み込まないようにします。\n次の順序で状態を記録すると、失敗した層を後から再現できます。</p>\n<ol>\n<li><p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> のboundsとupdate normを確認する。</p>\n</li>\n<li><p>境界を生成し、固定境界と自己交差を検査する。</p>\n</li>\n<li><p>meshを生成し、要素qualityとJacobianを検査する。</p>\n</li>\n<li><p>stateを解き、residualとsolver statusを保存する。</p>\n</li>\n<li><p>目的と制約を評価し、縮約感度を計算する。</p>\n</li>\n<li><p>同じ設定の有限差分でgradient checkを行う。</p>\n</li>\n</ol>\n<p>失敗候補を大きな目的値へ置き換える場合も、失敗statusを別に保存します。\n悪いが有効な候補と、評価できなかった候補を混ぜないためです。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<table>\n<thead>\n<tr>\n<th>層</th>\n<th>診断値</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>parameter</td>\n<td>update norm、bounds</td>\n<td>更新幅とparameterizationが適切か</td>\n</tr>\n<tr>\n<td>geometry</td>\n<td>最小距離、自己交差</td>\n<td>無効な形状を次の層へ渡していないか</td>\n</tr>\n<tr>\n<td>mesh</td>\n<td>最小quality、負のJacobian数</td>\n<td>mesh motionや再生成が破綻していないか</td>\n</tr>\n<tr>\n<td>state</td>\n<td>residual、solver status</td>\n<td>同じ精度でstateを解けているか</td>\n</tr>\n<tr>\n<td>sensitivity</td>\n<td>gradient check、adjoint residual</td>\n<td>微分経路と実装が整合しているか</td>\n</tr>\n<tr>\n<td>optimization</td>\n<td>objective、constraint、budget</td>\n<td>有効な候補の中で改善しているか</td>\n</tr>\n</tbody>\n</table>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>有限差分の片側でgeometryが無効になる場合は、stepかparameterizationを見直します。</p>\n</li>\n<li><p>mesh qualityがupdate normに応じて急落する場合は、mesh motionか再生成へ戻ります。</p>\n</li>\n<li><p>state residualが候補ごとに揃わない場合は、目的の差より先にsolver設定を確認します。</p>\n</li>\n<li><p>gradient checkがstepを変えても改善しない場合は、微分経路と境界条件を見直します。</p>\n</li>\n<li><p>bounds内でも必要な形状を表せない場合は、parameterizationを切り替えます。</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>gradient checkの成功や目的値の改善だけでは、連続体での妥当性を示せません。mesh refinementと物理制約の感度を別に確認します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/shape-optimization\">形状最適化の設計変数</a>でgeometryの表現を確認できます。\n<a href=\"#/learn/adjoint-sensitivity\">adjoint sensitivity</a>では、state方程式を介した感度を学べます。\n<a href=\"#/learn/geometry-update-failure-modes\">形状更新の失敗モード</a>では、失敗を層ごとに切り分けます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [
+        "shape-optimization",
+        "adjoint-sensitivity"
+      ],
+      "related_ids": [
+        "geometry-update-failure-modes",
+        "concept.pde-constrained-optimization",
+        "concept.variable-domain",
+        "topology-optimization"
+      ],
+      "seo_description": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。",
+      "seo_title": "形状parameterと縮約感度",
+      "source_ids": [
+        "S054",
+        "S056",
+        "S101"
+      ],
+      "status": "published",
+      "summary": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。",
+      "title_en": "Shape Parameters and Reduced Sensitivities",
+      "title_ja": "形状parameterと縮約感度",
+      "toc": [
+        {
+          "heading_id": "計算の層を分ける",
+          "label": "計算の層を分ける",
+          "level": 2
+        },
+        {
+          "heading_id": "有限差分で経路を確かめる",
+          "label": "有限差分で経路を確かめる",
+          "level": 2
+        },
+        {
+          "heading_id": "adjointで縮約感度を得る",
+          "label": "adjointで縮約感度を得る",
+          "level": 2
+        },
+        {
+          "heading_id": "候補を評価する順序",
+          "label": "候補を評価する順序",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
       "canonical_entity_id": "F_VARIABLE_SIMPLEX",
       "canonical_entity_type": "feature",
       "comparison_ids": [],
@@ -827,6 +942,74 @@
         {
           "heading_id": "診断値と切替の兆候",
           "label": "診断値と切替の兆候",
+          "level": 2
+        },
+        {
+          "heading_id": "次に読む",
+          "label": "次に読む",
+          "level": 2
+        }
+      ],
+      "visualization_ids": []
+    },
+    {
+      "canonical_entity_id": "F_VARIABLE_MANIFOLD",
+      "canonical_entity_type": "feature",
+      "comparison_ids": [],
+      "content_id": "concept.so3-rotation-representation",
+      "html": "<p>SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。</p>\n<h2 id=\"回転行列の条件\" tabindex=\"-1\">回転行列の条件</h2>\n<p>三次元の回転は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>3</mn><mo>&#x000D7;</mo><mn>3</mn></mrow></math> 行列として書けます。\nただし、任意の九成分が回転を表すわけではありません。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>R</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><mn>3</mn><mo>&#x000D7;</mo><mn>3</mn></mrow></msup><mo>&#x02223;</mo><msup><mi>R</mi><mrow><mi>&#x1D5B3;</mi></mrow></msup><mi>R</mi><mo>&#x0003D;</mo><mi>I</mi><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><mo movablelimits=\"true\">det</mo><mi>R</mi><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math></div>\n<p>直交性は長さと角度を保つ条件です。\ndeterminantが <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>1</mn></mrow></math> である条件は鏡映を除きます。\nこれらの制約により、行列の九成分に対して自由度は三つです。</p>\n<p>行列表現では、構造残差を直接監視できます。\n<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02016;</mo><msup><mi>R</mi><mrow><mi>&#x1D5B3;</mi></mrow></msup><mi>R</mi><mo>&#x02212;</mo><mi>I</mi><msub><mo>&#x02016;</mo><mi>F</mi></msub></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x0007C;</mo><mo movablelimits=\"true\">det</mo><mi>R</mi><mo>&#x02212;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007C;</mo></mrow></math> を別に記録します。</p>\n<h2 id=\"接空間で一歩を作る\" tabindex=\"-1\">接空間で一歩を作る</h2>\n<p>現在点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi></mrow></math> での接vectorは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi><mi>&#x003A9;</mi></mrow></math> と書けます。\n<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003A9;</mi></mrow></math> は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>&#x003A9;</mi><mrow><mi>&#x1D5B3;</mi></mrow></msup><mo>&#x0003D;</mo><mo>&#x02212;</mo><mi>&#x003A9;</mi></mrow></math> を満たす歪対称行列です。\n三次元の歪対称行列は三つの独立成分を持ちます。</p>\n<p>ambient spaceのgradientをそのまま行列へ足すと、一般には <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math> から外れます。\nRiemannian solverはgradientを接空間へ移し、そこでstepを作ります。\nこの分離により、探索方向と可行性を保つ写像を別に検証できます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>R</mi><mrow><mrow><mi mathvariant=\"normal\">t</mi><mi mathvariant=\"normal\">r</mi><mi mathvariant=\"normal\">i</mi><mi mathvariant=\"normal\">a</mi><mi mathvariant=\"normal\">l</mi></mrow></mrow></msub><mo>&#x0003D;</mo><mi>R</mi><mo>&#x0002B;</mo><mi>R</mi><mi>&#x003A9;</mi></mrow></math></div>\n<p><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mrow><mrow><mi mathvariant=\"normal\">t</mi><mi mathvariant=\"normal\">r</mi><mi mathvariant=\"normal\">i</mi><mi mathvariant=\"normal\">a</mi><mi mathvariant=\"normal\">l</mi></mrow></mrow></msub></mrow></math> は接方向を表しますが、有限stepでは回転行列とは限りません。\n次にretractionなどを使い、接空間の候補を多様体上へ戻します。</p>\n<h2 id=\"projectionとretractionを区別する\" tabindex=\"-1\">projectionとretractionを区別する</h2>\n<p>projectionはambient spaceにある行列を、近い回転行列へ修正する操作として使われます。\n一方、retractionは現在点の接空間から多様体へ写す局所的な操作です。\n同じ行列を返す場合があっても、入力となるstepと理論上の役割は同じではありません。</p>\n<p>PymanoptのSO(3)実装では、QRまたはpolar decompositionを使うretractionが選べます。\nQRによるretractionはexponential mapの一次近似です。\nexponential mapそのものと同一ではないため、methodと設定を記録します。</p>\n<p>projectionを使う場合は、修正前後の距離を保存します。\nretractionを使う場合は、接空間stepのnormを保存します。\n二つを同じ「更新量」として混ぜないことが重要です。</p>\n<h2 id=\"exponential-mapとの違い\" tabindex=\"-1\">exponential mapとの違い</h2>\n<p>Lie algebraの歪対称行列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003A9;</mi></mrow></math> を使うと、exponential mapは次の更新を与えます。</p>\n<div class=\"math-block\" tabindex=\"0\"><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mi>R</mi><mrow><mrow><mi mathvariant=\"normal\">n</mi><mi mathvariant=\"normal\">e</mi><mi mathvariant=\"normal\">w</mi></mrow></mrow></msub><mo>&#x0003D;</mo><mi>R</mi><mi>exp</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003A9;</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math></div>\n<p>この更新は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>S</mi><mi>O</mi><mo stretchy=\"false\">&#x00028;</mo><mn>3</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math> 上に残ります。\nただし、retractionは計算を軽くするために別の局所写像を使えます。\nsolverの一反復を比較するときは、同じstep sizeでも到達点が一致するとは限りません。</p>\n<p>多様体上の距離もambientな行列差と区別します。\nFrobenius normによる差とgeodesic distanceは異なる量です。\n停止判定に使った距離と、最終評価に使う誤差を明示します。</p>\n<h2 id=\"診断値\" tabindex=\"-1\">診断値</h2>\n<table>\n<thead>\n<tr>\n<th>診断値</th>\n<th>読み方</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02016;</mo><msup><mi>R</mi><mrow><mi>&#x1D5B3;</mi></mrow></msup><mi>R</mi><mo>&#x02212;</mo><mi>I</mi><msub><mo>&#x02016;</mo><mi>F</mi></msub></mrow></math></td>\n<td>直交性が保たれているか</td>\n</tr>\n<tr>\n<td>$</td>\n<td>\\det R-1</td>\n</tr>\n<tr>\n<td>tangent step norm</td>\n<td>接空間でどれだけ動かしたか</td>\n</tr>\n<tr>\n<td>projection distance</td>\n<td>ambientな候補をどれだけ修正したか</td>\n</tr>\n<tr>\n<td>Riemannian gradient norm</td>\n<td>多様体上の一階停止条件へ近いか</td>\n</tr>\n<tr>\n<td>objectiveとbudget</td>\n<td>可行性を保つだけでなく改善しているか</td>\n</tr>\n</tbody>\n</table>\n<p>可行性と収束は別の判定です。\n構造残差が小さくても、objectiveやRiemannian gradient normが改善するとは限りません。</p>\n<h2 id=\"失敗・切替の兆候\" tabindex=\"-1\">失敗・切替の兆候</h2>\n<ul>\n<li><p>直交性残差が増える場合は、更新後に使う写像と数値精度を確認します。</p>\n</li>\n<li><p>projection distanceがstep normに比べて大きい場合は、ambient updateを見直します。</p>\n</li>\n<li><p>objectiveが改善せずstepだけ小さくなる場合は、gradientと停止条件を確認します。</p>\n</li>\n<li><p>QRとpolarで結果が変わる場合は、retractionを実験条件として固定します。</p>\n</li>\n<li><p>geodesic distanceと行列差の判断が食い違う場合は、評価指標の意味へ戻ります。</p>\n</li>\n</ul>\n<aside class=\"callout callout-warning\" role=\"note\"><p class=\"callout-label\">Warning</p>\n<p>各iterateがSO(3)上にあることは、局所解や大域最適性の保証ではありません。構造残差と最適化の停止条件を別に記録します。</p>\n</aside>\n<h2 id=\"次に読む\" tabindex=\"-1\">次に読む</h2>\n<p><a href=\"#/learn/concept.manifold\">多様体値変数</a>で、接空間とretractionの共通原則を確認できます。\n<a href=\"#/learn/family.manifold\">Riemann多様体最適化の選び分け</a>では、一次法とtrust-region法の使い分けを整理します。\n<a href=\"#/learn/riemannian-gradient\">Riemann勾配法</a>と<a href=\"#/learn/riemannian-trust-region\">Riemann trust-region法</a>で更新則を比較できます。</p>",
+      "kind": "concept",
+      "last_reviewed": "2026-07-19",
+      "prerequisites": [
+        "concept.manifold"
+      ],
+      "related_ids": [
+        "concept.manifold",
+        "concept.variable-domain",
+        "family.manifold",
+        "riemannian-gradient",
+        "riemannian-trust-region"
+      ],
+      "seo_description": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。",
+      "seo_title": "SO(3)の行列・接空間表現",
+      "source_ids": [
+        "S044",
+        "S045",
+        "S071"
+      ],
+      "status": "published",
+      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。",
+      "title_en": "Matrix and Tangent Representations on SO(3)",
+      "title_ja": "SO(3)の行列・接空間表現",
+      "toc": [
+        {
+          "heading_id": "回転行列の条件",
+          "label": "回転行列の条件",
+          "level": 2
+        },
+        {
+          "heading_id": "接空間で一歩を作る",
+          "label": "接空間で一歩を作る",
+          "level": 2
+        },
+        {
+          "heading_id": "projectionとretractionを区別する",
+          "label": "projectionとretractionを区別する",
+          "level": 2
+        },
+        {
+          "heading_id": "exponential-mapとの違い",
+          "label": "exponential mapとの違い",
+          "level": 2
+        },
+        {
+          "heading_id": "診断値",
+          "label": "診断値",
+          "level": 2
+        },
+        {
+          "heading_id": "失敗・切替の兆候",
+          "label": "失敗・切替の兆候",
           "level": 2
         },
         {

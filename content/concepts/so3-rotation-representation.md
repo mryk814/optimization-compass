@@ -3,149 +3,109 @@ content_id: concept.so3-rotation-representation
 kind: concept
 canonical_entity_type: feature
 canonical_entity_id: F_VARIABLE_MANIFOLD
-title_ja: SO(3)の回転表現
-title_en: Rotation Representations on SO(3)
-summary: SO(3)の回転は行列、quaternion、Lie algebraで表せますが、表現ごとに可行性の保ち方、誤差の測り方、特異点の扱いが異なります。
+title_ja: SO(3)の行列・接空間表現
+title_en: Matrix and Tangent Representations on SO(3)
+summary: SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。
 source_ids: [S044, S045, S071]
 prerequisites: [concept.manifold]
 related_ids: [concept.manifold, concept.variable-domain, family.manifold, riemannian-gradient, riemannian-trust-region]
-status: draft
+status: published
 last_reviewed: 2026-07-19
 ---
 
-SO(3)の回転は行列、quaternion、Lie algebraで表せますが、表現ごとに可行性の保ち方、誤差の測り方、特異点の扱いが異なります。
+SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。
 
-## 回転は3自由度の集合
+## 回転行列の条件
 
-3次元の回転は、9個の成分を持つ行列として書けます。
-ただし、任意の9成分が回転を表すわけではありません。
+三次元の回転は $3\times3$ 行列として書けます。
+ただし、任意の九成分が回転を表すわけではありません。
 
 $$
 SO(3)=\{R\in\mathbb{R}^{3\times3}\mid R^{\mathsf{T}}R=I,\ \det R=1\}
 $$
 
-直交性と向きの条件が成分を縛るため、自由度は3です。
-この集合を通常のEuclidean空間の変数として更新すると、次の点で回転から外れます。
+直交性は長さと角度を保つ条件です。
+determinantが $1$ である条件は鏡映を除きます。
+これらの制約により、行列の九成分に対して自由度は三つです。
 
-- $R^{\mathsf{T}}R=I$ が崩れ、長さや角度を保たなくなる
-- $\det R=1$ が崩れ、鏡映を含む行列になる場合がある
-- 行列の差が小さくても、回転としての距離や誤差が小さいとは限らない
+行列表現では、構造残差を直接監視できます。
+$\lVert R^{\mathsf{T}}R-I\rVert_F$ と $|\det R-1|$ を別に記録します。
 
-したがって、回転の最適化では「3つの数をどう持つか」だけでなく、「一歩をどの空間で作るか」を決めます。
+## 接空間で一歩を作る
 
-## 行列は制約を直接確認できる
+現在点 $R$ での接vectorは $R\Omega$ と書けます。
+$\Omega$ は $\Omega^{\mathsf{T}}=-\Omega$ を満たす歪対称行列です。
+三次元の歪対称行列は三つの独立成分を持ちます。
 
-行列表現の利点は、回転の条件をそのまま診断できることです。
-反復点 $R$ について、直交性の残差 $\lVert R^{\mathsf{T}}R-I\rVert_F$ と $\det R-1$ を記録すれば、行列が $SO(3)$ からどれだけ外れたかを確認できます。
-
-一方、単純なEuclidean update
-
-$$
-R_{\mathrm{trial}}=R-\eta G
-$$
-
-は、一般にはこの集合の外へ出ます。
-そこでSVDやpolar factorを使って近い回転へ戻す方法がありますが、これはambient spaceで作った候補を修正する `projection` です。
-接空間で作ったstepを `retraction` で戻す方法や、Lie algebraを通じて `exponential map` を使う方法とは、更新則も目的関数の変化も同じではありません。
-
-projectionを使うなら、修正前後の距離 $\lVert R_{\mathrm{trial}}-R_{\mathrm{projected}}\rVert_F$ を残します。
-この距離が大きいとき、solverが作ったstepの多くを幾何の修正が消している可能性があります。
-
-## quaternionは冗長な表現を持つ
-
-単位quaternion $q\in\mathbb{R}^4$ は、次の条件で回転を表します。
+ambient spaceのgradientをそのまま行列へ足すと、一般には $SO(3)$ から外れます。
+Riemannian solverはgradientを接空間へ移し、そこでstepを作ります。
+この分離により、探索方向と可行性を保つ写像を別に検証できます。
 
 $$
-\lVert q\rVert_2=1
+R_{\mathrm{trial}}=R+R\Omega
 $$
 
-quaternionは4成分からなりますが、単位normの条件があるため自由度は3です。
-行列の直交性を毎回扱わずに済み、更新後にnormで割るだけで単位quaternionへ戻せる場合があります。
+$R_{\mathrm{trial}}$ は接方向を表しますが、有限stepでは回転行列とは限りません。
+次にretractionなどを使い、接空間の候補を多様体上へ戻します。
 
-ただし、quaternionには表現の非一意性があります。
+## projectionとretractionを区別する
 
-$$
-q\quad\text{と}\quad -q
-$$
+projectionはambient spaceにある行列を、近い回転行列へ修正する操作として使われます。
+一方、retractionは現在点の接空間から多様体へ写す局所的な操作です。
+同じ行列を返す場合があっても、入力となるstepと理論上の役割は同じではありません。
 
-は同じ回転を表します。
-そのため、時系列の差分やparameterの距離を計算する前にsign conventionをそろえないと、回転が連続なのにquaternionの差だけが大きく見えることがあります。
-normが1であることは回転としての可行性の一部を示しますが、signの整合性や目的関数の残差までは示しません。
+PymanoptのSO(3)実装では、QRまたはpolar decompositionを使うretractionが選べます。
+QRによるretractionはexponential mapの一次近似です。
+exponential mapそのものと同一ではないため、methodと設定を記録します。
 
-## Lie algebraは局所的な一歩を表す
+projectionを使う場合は、修正前後の距離を保存します。
+retractionを使う場合は、接空間stepのnormを保存します。
+二つを同じ「更新量」として混ぜないことが重要です。
 
-回転の接空間は3次元のvector $\xi\in\mathbb{R}^3$ として扱えます。
-このvectorから歪対称行列 $[\xi]_{\times}$ を作り、現在の回転に右から掛けると、接空間のstepを回転へ写せます。
+## exponential mapとの違い
 
-$$
-R_{\mathrm{new}}=R\exp([\xi]_{\times})
-$$
-
-この形では、solverが決めるstepは回転行列の9成分ではなく、現在点の近くでの3成分です。
-回転の差を
+Lie algebraの歪対称行列 $\Omega$ を使うと、exponential mapは次の更新を与えます。
 
 $$
-\xi=\log(R_{\mathrm{ref}}^{\mathsf{T}}R)^{\vee}
+R_{\mathrm{new}}=R\exp(\Omega)
 $$
 
-から読むと、`geodesic distance` と回転軸の情報を同時に扱えます。
+この更新は $SO(3)$ 上に残ります。
+ただし、retractionは計算を軽くするために別の局所写像を使えます。
+solverの一反復を比較するときは、同じstep sizeでも到達点が一致するとは限りません。
 
-ただし、Lie algebraはSO(3)全体を一つの滑らかな座標で覆うものではありません。
-回転角が $\pi$ に近づくと、軸の向きが入れ替わる複数の表現が近くなり、`log` の選択が不安定になります。
-この領域では、角度だけを見て軸の連続性を仮定するわけにはいきません。
+多様体上の距離もambientな行列差と区別します。
+Frobenius normによる差とgeodesic distanceは異なる量です。
+停止判定に使った距離と、最終評価に使う誤差を明示します。
 
-## 同じデータでも誤差の意味が変わる
+## 診断値
 
-回転推定やrotation averagingでは、基準回転 $R_{\mathrm{ref}}$ と観測回転 $R$ の差を何で測るかが結果を左右します。
+| 診断値 | 読み方 |
+| --- | --- |
+| $\lVert R^{\mathsf{T}}R-I\rVert_F$ | 直交性が保たれているか |
+| $|\det R-1|$ | 鏡映側へ外れていないか |
+| tangent step norm | 接空間でどれだけ動かしたか |
+| projection distance | ambientな候補をどれだけ修正したか |
+| Riemannian gradient norm | 多様体上の一階停止条件へ近いか |
+| objectiveとbudget | 可行性を保つだけでなく改善しているか |
 
-| 誤差 | 式 | 見ているもの |
-| --- | --- | --- |
-| chordal error | $\lVert R-R_{\mathrm{ref}}\rVert_F$ | 行列を置いたEuclidean空間での差 |
-| geodesic error | $\lVert\log(R_{\mathrm{ref}}^{\mathsf{T}}R)^{\vee}\rVert_2$ | 回転群の上での最短角度 |
-| structure residual | $\lVert R^{\mathsf{T}}R-I\rVert_F$, $\det R-1$ | 候補がSO(3)に留まっているか |
-
-chordal errorが小さいことと、geodesic errorが小さいことは、同じ診断ではありません。
-さらに、projectionで可行性を戻した候補と、Lie algebraのstepで得た候補は、同じ回転を表していても更新履歴が異なります。
-比較では、表現、update、residual、budgetを固定して記録します。
-
-## 表現を選ぶときの確認
-
-| 表現 | 向いている条件 | 先に決めること |
-| --- | --- | --- |
-| 行列 | 物理式や既存APIが行列を要求し、構造残差を直接監視したい | projectionの定義、determinantの補正、projection distance |
-| quaternion | 4成分のparameterizationと単位normの維持を使いたい | $q$ と $-q$ のsign convention、normの検査、残差の定義 |
-| Lie algebra | 現在の回転の近くで接空間のstepと角度誤差を使いたい | `exp` と `log` の範囲、near-πの扱い、左右どちらから更新するか |
-
-どれか一つが常に優れているわけではありません。
-行列projectionは実装しやすくても、stepの意味を変える場合があります。
-quaternionはnormを保ちやすくても、signをそろえない比較を誤らせます。
-Lie algebraは局所的な幾何を表しやすくても、near-πの分岐を隠せません。
-
-## 可行性と収束を分けて記録する
-
-回転表現が健全かどうかと、最適化が進んでいるかどうかは別の判定です。
-
-| 判定 | 診断値 | 判断 |
-| --- | --- | --- |
-| 行列の可行性 | $\lVert R^{\mathsf{T}}R-I\rVert_F$, $\det R-1$ | 回転行列の条件を満たすか |
-| quaternionの可行性 | $\lVert q\rVert_2-1$ | 単位quaternionから外れていないか |
-| 表現の連続性 | sign変更、axis変更、chartの切替 | 座標の不連続を解の変化と誤認していないか |
-| 幾何上の進展 | geodesic error、geodesic step | 回転としてどれだけ動いたか |
-| 最適化の停止 | Riemann gradient norm、objective、budget | 局所的な停止条件へ近づいたか |
-
-retractionやnormalizationで各iterateをfeasibleに保てても、局所解や大域最適性は保証されません。
-停止を判断するときは、構造残差、幾何上の誤差、objective、Riemann gradient normを別々に読める状態にします。
+可行性と収束は別の判定です。
+構造残差が小さくても、objectiveやRiemannian gradient normが改善するとは限りません。
 
 ## 失敗・切替の兆候
 
-- projection distanceが大きくなり続ける場合は、Euclidean updateのstep幅か、行列projectionの使い方を見直します。
-- quaternionの符号が反復ごとに反転する場合は、回転差を計算する前にsign conventionを確認します。
-- near-πで`log`の軸が急に変わる場合は、角度だけでなく軸の非一意性を記録し、別の残差やparameterizationを検討します。
-- objectiveが改善しているのにgeodesic errorが改善しない場合は、最適化した残差と評価した残差が一致しているかを確認します。
-- 構造残差が小さくてもRiemann gradient normが下がらない場合は、可行性の維持と収束を混同せず、接空間射影やgradient checkを見直します。
+- 直交性残差が増える場合は、更新後に使う写像と数値精度を確認します。
+- projection distanceがstep normに比べて大きい場合は、ambient updateを見直します。
+- objectiveが改善せずstepだけ小さくなる場合は、gradientと停止条件を確認します。
+- QRとpolarで結果が変わる場合は、retractionを実験条件として固定します。
+- geodesic distanceと行列差の判断が食い違う場合は、評価指標の意味へ戻ります。
+
+::: warning
+各iterateがSO(3)上にあることは、局所解や大域最適性の保証ではありません。構造残差と最適化の停止条件を別に記録します。
+:::
 
 ## 次に読む
 
-多様体値変数の共通原則は[多様体値変数](#/learn/concept.manifold)で確認できます。
-solverの選び分けは[Riemann多様体最適化の選び分け](#/learn/family.manifold)へ進み、一次法と二階法の違いは[Riemann勾配法](#/learn/riemannian-gradient)と[Riemann trust-region法](#/learn/riemannian-trust-region)で比較します。
-[Pymanopt](https://pymanopt.org/)と[Manopt](https://www.manopt.org/)の公式referenceでは、回転を含む多様体の実装とsolverの対応を利用versionに合わせて確認できます。
+[多様体値変数](#/learn/concept.manifold)で、接空間とretractionの共通原則を確認できます。
+[Riemann多様体最適化の選び分け](#/learn/family.manifold)では、一次法とtrust-region法の使い分けを整理します。
+[Riemann勾配法](#/learn/riemannian-gradient)と[Riemann trust-region法](#/learn/riemannian-trust-region)で更新則を比較できます。

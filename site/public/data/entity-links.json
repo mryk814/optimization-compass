@@ -3326,12 +3326,17 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
           "relation_type": "related_content",
           "target_id": "method.gradient-descent",
           "target_type": "content"
         }
       ],
-      "summary": "局所的な下り坂と大域的な最適性をつなぐ性質です。"
+      "summary": "凸性は、局所的な改善を問題全体の最適性へ結び付ける条件です。ただし、目的関数だけでなく可行集合も凸であることを確認します。"
     },
     {
       "aliases": [],
@@ -3339,7 +3344,7 @@
       "entity_id": "concept.derivative-free",
       "entity_type": "content",
       "external_url": null,
-      "label": "Derivative-free optimization",
+      "label": "微分を使わない最適化",
       "relations": [
         {
           "relation_type": "evidence",
@@ -3349,6 +3354,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
           "target_type": "source"
         },
         {
@@ -3362,7 +3372,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "微分を直接使わず、関数値の比較から探索する考え方です。"
+      "summary": "微分を使わない最適化（derivative-free optimization）は、目的関数や制約の評価値を比べ、勾配を直接入力せずに候補点を更新する考え方です。"
     },
     {
       "aliases": [],
@@ -3781,6 +3791,57 @@
         }
       ],
       "summary": "Simplexは非負の成分の和が1になる集合で、配合比・確率・資源配分を最適化するときに、可行性を保つ更新則と境界の意味を明確にします。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/concept.so3-rotation-representation",
+      "entity_id": "concept.so3-rotation-representation",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "SO(3)の行列・接空間表現",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S044",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S045",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S071",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "family.manifold",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "riemannian-trust-region",
+          "target_type": "content"
+        }
+      ],
+      "summary": "SO(3)の回転を最適化するときは、行列の可行性と接空間のstepを分けて扱います。projection、retraction、exponential mapは同じ更新ではありません。"
     },
     {
       "aliases": [],
@@ -7803,6 +7864,62 @@
         }
       ],
       "summary": "形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/learn/shape-parameter-sensitivity",
+      "entity_id": "shape-parameter-sensitivity",
+      "entity_type": "content",
+      "external_url": null,
+      "label": "形状parameterと縮約感度",
+      "relations": [
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S101",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "adjoint-sensitivity",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.pde-constrained-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "concept.variable-domain",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "geometry-update-failure-modes",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "shape-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "related_content",
+          "target_id": "topology-optimization",
+          "target_type": "content"
+        }
+      ],
+      "summary": "形状parameterを更新する最適化では、geometryとmeshの妥当性をPDE stateの収束と分けて確認します。目的感度はparameterの直接効果とstateを介した効果に分解します。"
     },
     {
       "aliases": [],

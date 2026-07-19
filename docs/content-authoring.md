@@ -92,6 +92,24 @@ For the decision to add a figure and the shared generated-image language, also r
   heading link uses its generated slug such as `#python`.
 - Raw HTML is never allowed. Add a supported construct to the pipeline instead.
 
+## Publication quality contract
+
+Published concept guides have the same visible completion contract as method guides. A concept
+requires a summary of at least 35 characters, a body of at least 1,200 characters, four `##`
+sections, and at least one valid internal route under `## 次に読む`. Broken internal links in that
+section fail content verification.
+
+`docs/content-quality-report.md` records this publication floor and review-oriented prose warnings.
+Warnings cover unusually long sentences, dense Japanese comma use, meta prose, and legacy heading
+names. They expose existing debt without making unrelated legacy articles fail. The article passed
+to `ready content` must have no warnings, so a changed article cannot add new prose debt.
+
+Regenerate the report from canonical content with:
+
+```powershell
+uv run python scripts/content_quality_report.py
+```
+
 ## Verification
 
 ```powershell

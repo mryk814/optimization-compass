@@ -11,6 +11,12 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 
 from optimization_compass.content_models import ContentPage, load_content, parse_content
+from optimization_compass.content_quality import (
+    inspect_concept,
+    public_content_routes,
+    render_content_quality_report,
+    style_warnings,
+)
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.method_content_density import inspect_page, render_report
 from optimization_compass.site_export import export_site_data
@@ -89,6 +95,8 @@ def require_publish_ready(
     repository: KnowledgeRepository,
     *,
     today: date | None = None,
+    known_routes: frozenset[str] | None = None,
+    strict_style: bool = False,
 ) -> None:
     """Validate the target-specific contract that precedes public generation."""
     errors: list[str] = []
@@ -123,6 +131,22 @@ def require_publish_ready(
                 f"(summary={density.summary_characters}, body={density.body_characters}, "
                 f"toc={density.toc_entries}, python={density.python_blocks})"
             )
+    elif known_routes is not None:
+        concept = inspect_concept(page, known_routes)
+        if not concept.meets_floor:
+            errors.append(
+                "concept explanation floor is not met "
+                f"(summary={concept.summary_characters}, body={concept.body_characters}, "
+                f"toc={concept.toc_entries}, next={len(concept.valid_next_links)}, "
+                f"invalid={','.join(concept.invalid_next_links) or '-'})"
+            )
+    if strict_style:
+        warnings = style_warnings(page)
+        if warnings:
+            summary = ", ".join(f"{warning.code}@{warning.line}" for warning in warnings[:8])
+            if len(warnings) > 8:
+                summary += f", +{len(warnings) - 8} more"
+            errors.append(f"prose style warnings remain: {summary}")
     if errors:
         raise ContentAuthoringError(f"{page.content_id} is not publish-ready: " + "; ".join(errors))
 
@@ -163,7 +187,24 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
     """Generate public artifacts, run the owning gate, and report the exact PR handoff."""
     page, source_path = _find_content(content_id, root)
     repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")
-    require_publish_ready(page, source_path.read_text(encoding="utf-8"), repository)
+    pages = load_content(root / "content")
+    gallery = json.loads((root / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+    comparisons = json.loads(
+        (root / "data/seeds/site_comparisons.json").read_text(encoding="utf-8")
+    )
+    published_pages = [item for item in pages if item.status == "published"]
+    routes = public_content_routes(
+        published_pages,
+        gallery_ids=(item["case_id"] for item in gallery["cases"]),
+        comparison_ids=(item["comparison_id"] for item in comparisons["comparisons"]),
+    )
+    require_publish_ready(
+        page,
+        source_path.read_text(encoding="utf-8"),
+        repository,
+        known_routes=routes,
+        strict_style=True,
+    )
     branch_paths = _branch_change_paths(root)
     unrelated = [
         path
@@ -192,6 +233,13 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         (root / "docs/method-content-density-report.md").write_text(
             render_report(rows), encoding="utf-8", newline="\n"
         )
+    published_concepts = [item for item in published_pages if item.kind == "concept"]
+    concept_rows = [inspect_concept(item, routes) for item in published_concepts]
+    (root / "docs/content-quality-report.md").write_text(
+        render_content_quality_report(concept_rows, pages),
+        encoding="utf-8",
+        newline="\n",
+    )
 
     routes = _require_public_artifacts(page, output)
     result = run_task("content-ready", root, capture=False)
@@ -209,7 +257,8 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
     generated = tuple(
         path
         for path in changed
-        if path.startswith("site/public/data/") or path == "docs/method-content-density-report.md"
+        if path.startswith("site/public/data/")
+        or path in {"docs/method-content-density-report.md", "docs/content-quality-report.md"}
     )
     return ReadyContentReport(
         content_id=content_id,
