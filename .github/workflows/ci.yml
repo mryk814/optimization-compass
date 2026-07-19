@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "30 17 * * *"
   workflow_dispatch:
 
 permissions:
@@ -54,60 +56,27 @@ jobs:
           path: dependency-reports/dependency-licenses.json
           if-no-files-found: error
           retention-days: 30
-      - name: Lint and type-check Python
-        run: |
-          uv run ruff check .
-          uv run mypy src
-      - name: Check Python formatting
-        run: uv run ruff format --check .
-      - name: Run Python smoke tests
-        run: |
-          uv run pytest \
-            tests/test_agent_service.py \
-            tests/test_api.py \
-            tests/test_cli.py \
-            tests/test_engine.py \
-            tests/test_data_integrity.py \
-            tests/test_pages_workflow.py \
-            tests/test_pages_artifact.py \
-            tests/test_readme_release_facts.py \
-            tests/test_dataset_release.py \
-            tests/test_release_bundle.py \
-            tests/test_release_catalog.py \
-            tests/test_site_export.py \
-            tests/test_learning_journeys.py \
-            tests/test_method_content_density.py \
-            tests/test_repository_size.py
-      - name: Verify README release facts
-        run: uv run python scripts/sync_readme_facts.py --check
       - name: Regenerate site data from the validated database
-        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: |
           rm -rf site/public/data
           uv run optimization-compass export-site-data --output site/public/data
           git diff --exit-code -- site/public/data
-      - name: Verify data, content, licenses, and deterministic release
-        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+      - name: Run authoritative Tier B validation
+        run: uv run optimization-compass validate tier-b
+      - name: Verify repository release facts and generated drift
         run: |
-          uv run optimization-compass verify-data
-          uv run python scripts/verify_content.py
-          uv run python scripts/verify_licensing.py
+          uv run python scripts/sync_readme_facts.py --check
           uv run python scripts/repository_size.py --check
           uv run python scripts/source_health.py --output "$RUNNER_TEMP/source-health"
-          uv run python scripts/rebuild_dataset.py --stage
           git diff --exit-code -- data site/public/data src/optimization_compass/resources
-      - name: Verify Python and TypeScript recommendation parity
-        run: npm run parity
-        working-directory: site
-      - name: Type-check the site
-        run: npm run typecheck
-        working-directory: site
-      - name: Test the site
-        run: npm test -- --run
-        working-directory: site
-      - name: Build the production Pages directory
-        run: npm run build
-        working-directory: site
+      - name: Upload validated browser artifact
+        if: github.event_name != 'push'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: validated-site-${{ github.sha }}
+          path: site/dist
+          if-no-files-found: error
+          retention-days: 7
       - name: Stamp deployment identity
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: identity
@@ -141,7 +110,7 @@ jobs:
 
   browser_e2e:
     name: Browser E2E and accessibility
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     needs: validate_pages_artifact
     runs-on: ubuntu-latest
     steps:
@@ -156,25 +125,76 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
         working-directory: site
+      - name: Download the validated pull-request artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: validated-site-${{ github.sha }}
+          path: site/dist
       - name: Download the validated Pages artifact from this run
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: github-pages
           path: .pages-artifact
       - name: Extract the exact artifact under test
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           rm -rf site/dist
           mkdir -p site/dist
           tar -xf .pages-artifact/artifact.tar -C site/dist
           test -f site/dist/deployment.json
-      - name: Run production browser journeys and axe scans
-        run: npm run test:e2e:artifact -- e2e/accessibility.spec.ts --project=chromium-desktop
+      - name: Run pull-request critical journeys
+        if: github.event_name == 'pull_request'
+        run: npm run test:e2e:critical
+        working-directory: site
+      - name: Run main critical journeys and axe scans
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          npm run test:e2e:critical
+          npm run test:e2e:artifact -- e2e/accessibility.spec.ts --project=chromium-desktop
         working-directory: site
       - name: Upload browser failure evidence
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: playwright-failure-${{ github.sha }}
+          path: |
+            site/test-results
+            site/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
+
+  full_browser_regression:
+    name: Nightly full browser regression
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: validate_pages_artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Install site and browser dependencies
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+        working-directory: site
+      - name: Download the validated nightly artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: validated-site-${{ github.sha }}
+          path: site/dist
+      - name: Run full desktop and mobile Playwright suite
+        run: npm run test:e2e:artifact
+        working-directory: site
+      - name: Upload nightly browser failure evidence
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-nightly-failure-${{ github.sha }}
           path: |
             site/test-results
             site/playwright-report
