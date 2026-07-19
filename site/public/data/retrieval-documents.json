@@ -1092,7 +1092,7 @@
         "S055",
         "S056"
       ],
-      "text": "Active-set法は、現在のactive setを仮の等式制約として解き、blocking constraintを追加し、multiplierの符号条件が崩れたconstraintを外す方法です。 見ているもの: active set、primal / dual residual、multiplier sign、blocking constraint 動かしているもの: W k 、search direction、step、constraintの追加・削除 前進の判断: equality-constrained solveが進み、primal feasibility・stationarity・multiplier sign・complementarityが整うこと 恐れていること: active setの振動、degeneracy / cycling、infeasible model",
+      "text": "Active-set法は、現在のactive setを仮の等式制約として解き、blocking constraintを追加し、multiplierの符号条件が崩れたconstraintを外す方法です。 見ているもの: active set、primal / dual residual、multiplier sign、blocking constraint 動かしているもの: W k 、search direction、step、constraintの追加・削除 前進の判断: equality-constrained solveが進み、primal feasibility・stationarity・multiplier sign・complementarityが整うこと 恐れていること: active setの振動、degeneracy / cycling、infeasible model active setを等式として扱い、候補が可行領域のfaceを移る直感を示す教育用模式図です。実際の追加・削除規則やmultiplierの符号までは図だけで決めません。",
       "title": "30秒でつかむ"
     },
     {
@@ -3441,7 +3441,7 @@
         "S034",
         "S035"
       ],
-      "text": "初期点で目的関数を評価する 観測 ( x i , y i ) からsurrogate posteriorを更新する acquisitionをsearch space上で最適化する 選んだ点を実際に評価する budgetまたは停止条件まで繰り返す Gaussian-process BOでは、各入力に予測平均 μ ( x ) と標準偏差 σ ( x ) を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。",
+      "text": "初期点で目的関数を評価する 観測 ( x i , y i ) からsurrogate posteriorを更新する acquisitionをsearch space上で最適化する 選んだ点を実際に評価する budgetまたは停止条件まで繰り返す 観測、surrogate上の不確実性、次に評価する候補を区別する教育用模式図です。実務では目的関数の真の曲線は見えません。 Gaussian-process BOでは、各入力に予測平均 μ ( x ) と標準偏差 σ ( x ) を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。",
       "title": "一巡で何をしているか"
     },
     {
@@ -6753,7 +6753,7 @@
         "S045",
         "S071"
       ],
-      "text": "多様体（manifold）は、各点の近くでは低次元のEuclidean空間のように見える集合です。変数 x を単に ℝ n のvectorとして更新するのではなく、 x ∈ ℳ という集合の上にある点として扱います。 典型的な集合と自由度は次のとおりです。 集合 変数の例 自由度・注意 sphere S n − 1 単位vector、正規化されたembedding n − 1 。符号やchartの選び方に注意 Stiefel manifold 直交列を持つmatrix X T X = I 。matrixの成分数より自由度が小さい Grassmann manifold 部分空間、低次元の基底 基底の取り方が違っても同じ部分空間を表す S O ( 2 ) / S O ( 3 ) 2D / 3Dの回転 行列、quaternion、Lie algebraで表せる SPD manifold 正定値covariance matrix 固有値が正。PSDの境界は別の扱いになる 確率vectorのsimplexも特殊な集合ですが、0の境界にはcornerがあります。したがって、simplexの境界まで扱うときは、滑らかな多様体として無条件に扱わず、 Simplex・確率ベクトル のprojectionやmirror geometryと照合します。",
+      "text": "多様体（manifold）は、各点の近くでは低次元のEuclidean空間のように見える集合です。変数 x を単に ℝ n のvectorとして更新するのではなく、 x ∈ ℳ という集合の上にある点として扱います。 接空間で候補を作り、retractionで多様体へ戻す教育用模式図です。sphere以外の集合やmetricの選択までは示しません。 典型的な集合と自由度は次のとおりです。 集合 変数の例 自由度・注意 sphere S n − 1 単位vector、正規化されたembedding n − 1 。符号やchartの選び方に注意 Stiefel manifold 直交列を持つmatrix X T X = I 。matrixの成分数より自由度が小さい Grassmann manifold 部分空間、低次元の基底 基底の取り方が違っても同じ部分空間を表す S O ( 2 ) / S O ( 3 ) 2D / 3Dの回転 行列、quaternion、Lie algebraで表せる SPD manifold 正定値covariance matrix 固有値が正。PSDの境界は別の扱いになる 確率vectorのsimplexも特殊な集合ですが、0の境界にはcornerがあります。したがって、simplexの境界まで扱うときは、滑らかな多様体として無条件に扱わず、 Simplex・確率ベクトル のprojectionやmirror geometryと照合します。",
       "title": "直感: 解は曲がった集合の上にある"
     },
     {
@@ -7086,7 +7086,7 @@
         "S050",
         "S076"
       ],
-      "text": "軌道最適化の制約は、同じ不等式でも時刻の範囲で意味が変わります。 種類 典型形 例 見落としやすい点 initial constraint x 0 = x m e a s u r e d 現在位置・初期速度 推定値とmodelの初期化を混同する path constraint g ( x k , u k ) ≤ 0 for all k 入力上限、温度上限、障害物回避 mesh点だけ確認して時刻の間を見ない terminal constraint h ( x N ) = 0 または g T ( x N ) ≤ 0 目標姿勢、残量、到達条件 終端costだけで到達を代用する terminal costは「終端へ近づく好み」を表せますが、terminal constraintそのものではありません。たとえば目標に少し近ければよい問題と、必ず所定の姿勢・速度で止まる必要がある問題は、定式化で区別します。",
+      "text": "軌道最適化の制約は、同じ不等式でも時刻の範囲で意味が変わります。 path制約は軌道の全区間、terminal制約は終端で評価することを示す教育用模式図です。mesh点だけの評価では点と点の間の違反を見逃し得ます。 種類 典型形 例 見落としやすい点 initial constraint x 0 = x m e a s u r e d 現在位置・初期速度 推定値とmodelの初期化を混同する path constraint g ( x k , u k ) ≤ 0 for all k 入力上限、温度上限、障害物回避 mesh点だけ確認して時刻の間を見ない terminal constraint h ( x N ) = 0 または g T ( x N ) ≤ 0 目標姿勢、残量、到達条件 終端costだけで到達を代用する terminal costは「終端へ近づく好み」を表せますが、terminal constraintそのものではありません。たとえば目標に少し近ければよい問題と、必ず所定の姿勢・速度で止まる必要がある問題は、定式化で区別します。",
       "title": "制約は「どこで守るか」まで書く"
     },
     {
@@ -7654,7 +7654,7 @@
         "S056",
         "S066"
       ],
-      "text": "n 成分のprobability simplexは、非負の成分の和が1になる集合です。 Δ n − 1 = { x ∈ ℝ n ∣ x i ≥ 0 , ∑ i = 1 n x i = 1 } . 成分は、各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は n ではありません。和が1という等式制約を除いた n − 1 です。 ここでいうsimplexは、LPのbasisを辿る Primal Simplex法 や、Nelder–Meadの探索点を並べた 単体 とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。",
+      "text": "n 成分のprobability simplexは、非負の成分の和が1になる集合です。 Δ n − 1 = { x ∈ ℝ n ∣ x i ≥ 0 , ∑ i = 1 n x i = 1 } . 成分は、各選択肢への確率、混合比、予算配分、attention weightなどを表します。自由度は n ではありません。和が1という等式制約を除いた n − 1 です。 ここでいうsimplexは、LPのbasisを辿る Primal Simplex法 や、Nelder–Meadの探索点を並べた 単体 とは別の意味です。このページは「解ベクトルが比率として存在する集合」を扱います。 外側の候補をsimplexへ戻す操作と、内部・境界の違いを示す教育用模式図です。",
       "title": "直感: 比率の集合"
     },
     {
