@@ -12,10 +12,10 @@ test("continuous 3D selection keeps the 2D contour and playback frame linked", a
   await expect(page.getByTestId("nelder-mead-explanatory-plot")).toBeVisible();
   const surface = page.getByTestId("linked-objective-surface");
   await expect(surface).toHaveAttribute("data-current-frame", "0");
-  await surface.getByRole("button", { name: "frame 2へ移動" }).click();
+  await surface.getByRole("button", { name: "フレーム 2へ移動" }).click();
   await expect(surface).toHaveAttribute("data-current-frame", "1");
   await expect(page.getByLabel("フレーム位置")).toHaveValue("1");
-  await expect(page.getByText(/Projection: orthographic/u)).toBeVisible();
+  await expect(page.getByText(/直交投影 \(orthographic\)/u)).toBeVisible();
 });
 
 test("three-objective preference is shared with a precise mobile fallback", async ({ page, baseURL }) => {
@@ -46,5 +46,5 @@ test("derived video retains captions, transcript, and independent formats", asyn
   await expect(video.locator("source")).toHaveAttribute("src", /animation\.webm/u);
   await expect(video.locator("track")).toHaveAttribute("src", /captions\.vtt/u);
   await expect(page.getByRole("link", { name: "GIFを開く" })).toHaveAttribute("href", /animation\.gif/u);
-  await expect(page.getByRole("link", { name: "Transcriptを開く" })).toHaveAttribute("href", /transcript\.txt/u);
+  await expect(page.getByRole("link", { name: "文字起こしを開く" })).toHaveAttribute("href", /transcript\.txt/u);
 });

@@ -41,6 +41,6 @@ test("右上ナビゲーションを日本語で統一する", async ({ page, ba
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
   const navigation = page.getByRole("navigation", { name: "主要ナビゲーション" });
   await expect(navigation.getByRole("link")).toHaveText([
-    "ホーム", "地図", "診断", "手法", "再生", "比較", "検索", "事例", "根拠",
+    "ホーム", "問題構造", "条件で診断", "手法を学ぶ", "動きを見る", "条件を比較", "横断検索", "事例を見る", "根拠を見る",
   ]);
 });

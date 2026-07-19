@@ -17,10 +17,10 @@ test("skip linkとprimary navigationをkeyboardだけで操作する", async ({ 
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "本文へ移動" })).toBeFocused();
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "Optimization Atlas ホーム" })).toBeFocused();
+  await expect(page.getByRole("link", { name: "Optimization Atlasのホーム" })).toBeFocused();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
-  await expect(page.getByRole("link", { name: "地図", exact: true })).toBeFocused();
+  await expect(page.getByRole("link", { name: "問題構造", exact: true })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("tree", { name: "最適化問題の構造" })).toBeVisible();
 });
@@ -47,20 +47,21 @@ test("playback controlsをkeyboardでstepする", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/theater/nelder-mead");
   const controls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   const forward = controls.getByRole("button", { name: "1フレーム進む" });
-  const iteration = controls.getByLabel("iteration");
-  const initial = await iteration.textContent();
+  const framePosition = controls.getByLabel("フレーム位置");
+  await expect(framePosition).toHaveValue("0");
   await forward.focus();
   await page.keyboard.press("Enter");
-  await expect(iteration).not.toHaveText(initial ?? "");
+  await expect(framePosition).toHaveValue("1");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
   const reducedControls = page.getByRole("region", { name: "アルゴリズム再生コントロール" });
   await expect(reducedControls.getByRole("button", { name: "自動再生オフ" })).toBeDisabled();
   await expect(reducedControls.getByText(/動きを減らす設定を検出しました/u)).toBeVisible();
+  await expect(reducedControls.getByLabel("フレーム位置")).toHaveValue("1");
   await reducedControls.getByRole("button", { name: "1フレーム進む" }).focus();
   await page.keyboard.press("Enter");
-  await expect(reducedControls.getByLabel("iteration")).toBeVisible();
+  await expect(reducedControls.getByLabel("フレーム位置")).toHaveValue("2");
 });
 
 test("Case journeyをkeyboardで進み、route変更後もfocusを失わない", async ({ page, baseURL }) => {
@@ -70,5 +71,5 @@ test("Case journeyをkeyboardで進み、route変更後もfocusを失わない",
   await page.keyboard.press("Enter");
 
   await expect(page.locator("#main-content")).toBeFocused();
-  await expect(page.getByRole("complementary", { name: "Case learning journey" })).toContainText("Step 2/4");
+  await expect(page.getByRole("complementary", { name: "ケースの学習経路" })).toContainText("Step 2/4");
 });
