@@ -337,7 +337,8 @@ def export_site_data(
     for view in views:
         _write_json(output_dir / f"views/{view.view_id}.json", view)
     _write_json(output_dir / "recommendation/site-data.json", recommendation_data)
-    _write_json(output_dir / "problems.json", repository.problem_catalog())
+    problem_catalog = repository.problem_catalog()
+    _write_json(output_dir / "problems.json", problem_catalog)
     search_tree_index, search_tree_artifacts = _write_search_tree_artifacts(
         output_dir, dataset_version=release["version"]
     )
@@ -360,6 +361,12 @@ def export_site_data(
         comparison_seed,
         repository.benchmark_contexts(),
         scenario_index.scenarios,
+        problem_definition_ids={
+            definition.problem_definition_id for definition in problem_catalog.definitions
+        },
+        problem_instance_ids={
+            instance.problem_instance_id for instance in problem_catalog.instances
+        },
     )
     _write_json(output_dir / VISUALIZATION_SCENARIO_PATH, scenario_index)
     gallery_index = json.loads((output_dir / "gallery.json").read_text(encoding="utf-8"))
