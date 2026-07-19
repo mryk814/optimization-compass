@@ -92,12 +92,12 @@ def test_publish_ready_contract_rejects_draft_and_placeholders() -> None:
         )
 
 
-def test_target_iteration_validation_accepts_a_canonical_draft() -> None:
+def test_target_iteration_validation_accepts_canonical_content() -> None:
     root = Path(__file__).parents[1]
-    draft = next(item for item in load_content(root / "content") if item.status == "draft")
+    page = next(item for item in load_content(root / "content") if item.kind == "concept")
 
-    report = validate_content_iteration(draft.content_id, root=root)
+    report = validate_content_iteration(page.content_id, root=root)
 
-    assert report.status == "draft"
-    assert report.canonical_entity_id == draft.canonical_entity_id
-    assert report.next_command.endswith(draft.content_id)
+    assert report.status == page.status
+    assert report.canonical_entity_id == page.canonical_entity_id
+    assert report.next_command.endswith(page.content_id)

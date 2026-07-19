@@ -3361,6 +3361,12 @@
       "reason_code": "published_content_without_journey"
     },
     {
+      "asset_id": "concept.so3-rotation-representation",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
       "asset_id": "concept.time-discretization",
       "asset_type": "content",
       "policy": "warning",
@@ -3710,6 +3716,12 @@
     },
     {
       "asset_id": "shape-optimization",
+      "asset_type": "content",
+      "policy": "warning",
+      "reason_code": "published_content_without_journey"
+    },
+    {
+      "asset_id": "shape-parameter-sensitivity",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"

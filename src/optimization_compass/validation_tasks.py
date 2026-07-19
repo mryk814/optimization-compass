@@ -161,6 +161,7 @@ CHECKS: tuple[ValidationCheck, ...] = (
             "-m",
             "pytest",
             "tests/test_content_models.py",
+            "tests/test_content_quality.py",
             "tests/test_method_content_density.py",
             "tests/test_content_authoring.py",
         ),
@@ -387,7 +388,8 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
     generated_content_paths = {
         path
         for path in normalized
-        if path.startswith("site/public/data/") or path == "docs/method-content-density-report.md"
+        if path.startswith("site/public/data/")
+        or path in {"docs/method-content-density-report.md", "docs/content-quality-report.md"}
     }
     content_lane_support_paths = {
         path

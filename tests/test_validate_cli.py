@@ -85,6 +85,7 @@ def test_problem_task_gate_is_tier_c() -> None:
                 "content/methods/example.md",
                 "site/public/data/content.json",
                 "docs/method-content-density-report.md",
+                "docs/content-quality-report.md",
             ],
             "content-ready",
         ),

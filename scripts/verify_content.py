@@ -5,6 +5,10 @@ from pathlib import Path
 from typing import Any
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_quality import (
+    public_content_routes,
+    require_published_concept_quality,
+)
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.release_identity import load_dataset_release_identity
@@ -44,6 +48,14 @@ def verify_content(root: Path) -> dict[str, int | str]:
         comparison_index["comparisons"], "comparison_id", "comparison sets"
     )
     _require_minimum("comparison sets", len(comparison_ids), MINIMUM_COMPARISONS)
+
+    published_pages = [page for page in source_pages if page.status == "published"]
+    content_routes = public_content_routes(
+        published_pages,
+        gallery_ids=case_ids,
+        comparison_ids=comparison_ids,
+    )
+    require_published_concept_quality(source_pages, content_routes)
 
     repository = KnowledgeRepository(root / "src/optimization_compass/resources/knowledge.sqlite")
     known_sources = {
