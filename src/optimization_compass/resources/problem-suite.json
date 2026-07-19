@@ -204,6 +204,23 @@
       "feature_ids": ["F_VARIABLE_TRAJECTORY", "F_CONSTRAINT_DYNAMICS", "F_OBJECTIVE_SIMULATION", "F_STRUCTURE_OPTIMAL_CONTROL"],
       "source_ids": ["S042", "S043", "S050", "S076"],
       "last_verified": "2026-07-19"
+    },
+    {
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "name_ja": "有限scenarioによるCVaR配分",
+      "name_en": "Finite-scenario portfolio allocation with CVaR",
+      "mathematical_family": "finite_scenario_cvar_portfolio",
+      "variable_domain": "simplex",
+      "objective_form": "piecewise_linear_convex",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "scenario_loss"],
+      "constraint_class": "simplex_and_bounds",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 4},
+      "known_reference_semantics": "The deterministic teaching reference is the best point on the declared 0.05 capped-simplex grid for the eight fixed training scenarios; it is not a population optimum or future-return guarantee.",
+      "related_problem_ids": ["PA036"],
+      "feature_ids": ["F_VARIABLE_SIMPLEX", "F_CONSTRAINT_SIMPLEX", "F_CONSTRAINT_BOUNDS", "F_GUARANTEE_UNCERTAINTY"],
+      "source_ids": ["S055", "S102"],
+      "last_verified": "2026-07-19"
     }
   ],
   "instances": [
@@ -513,6 +530,37 @@
       "limitations_ja": "2秒・20 nodeの決定的な教育用pendulum instanceです。node／collocation pointの可行性は区間内や連続時間の可行性を保証せず、実機の安全性、model妥当性、大域最適性、solver family間の性能差も示しません。",
       "limitations_en": "A deterministic two-second, 20-node pendulum lesson. Feasibility at nodes or collocation points does not establish between-point or continuous-time feasibility, hardware safety, model validity, global optimality, or solver-family performance.",
       "source_ids": ["S042", "S050", "S102"],
+      "last_verified": "2026-07-19"
+    },
+    {
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "name_ja": "4資産・training 8件・held-out 4件のCVaR配分",
+      "name_en": "Four-asset CVaR allocation with eight training and four held-out scenarios",
+      "registry_key": "problem.portfolio_cvar.fixed_8_4.v1",
+      "dimension": 4,
+      "parameters": {
+        "training_returns": [[0.08, 0.02, -0.01, 0.04], [-0.03, 0.05, 0.01, 0.02], [0.04, -0.02, 0.03, 0.01], [0.01, 0.0, -0.04, 0.03], [-0.06, 0.03, -0.02, 0.01], [0.02, -0.04, 0.02, 0.0], [0.03, 0.01, 0.0, -0.05], [-0.02, 0.02, 0.04, 0.01]],
+        "held_out_returns": [[0.01, 0.0, -0.02, 0.03], [-0.04, 0.02, 0.01, 0.0], [0.02, -0.01, 0.02, -0.03], [0.0, 0.03, -0.01, 0.02]],
+        "alpha": 0.75,
+        "risk_weight": 0.5,
+        "scenario_weights": "uniform",
+        "sample_policy": "fixed_disjoint_8_training_4_held_out",
+        "grid_step": 0.05,
+        "max_asset_weight": 0.6
+      },
+      "bounds": {"weights": [0.0, 0.6], "simplex_sum": 1.0},
+      "constraints": [{"constraint_id": "capped_simplex", "expression": "sum(w)=1, 0<=w_i<=0.6", "sense": "eq_and_bounds"}],
+      "initialization_candidates": [{"candidate_id": "uniform", "point": [0.25, 0.25, 0.25, 0.25]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "known_reference",
+      "known_reference": {"point": [0.3, 0.4, 0.0, 0.3], "value": -0.0055, "reference_scope": "fixed_training_scenarios_and_0.05_grid", "source_ids": ["S102"]},
+      "display": {"range": {"weight": [0.0, 0.6], "loss": [-0.06, 0.03], "oracle_evaluations": [0, 12]}, "axis_labels": ["loss evaluations", "empirical loss"], "units": ["scenario", "return loss"], "expression": "min mean_train(-r_s^T w)+0.5 CVaR_0.75, sum(w)=1, 0<=w_i<=0.6"},
+      "intended_phenomena": ["simplex_allocation", "tail_risk", "training_held_out_shift", "sample_dependence"],
+      "limitations_ja": "固定training 8件・held-out 4件と0.05 gridの教育用instanceです。母集団risk、confidence interval、将来return、chance constraint、robust feasibility、DRO guaranteeを表しません。",
+      "limitations_en": "A teaching instance with eight fixed training scenarios, four fixed held-out scenarios, and a 0.05 grid; it provides no population-risk, confidence-interval, future-return, chance-constraint, robust-feasibility, or DRO guarantee.",
+      "source_ids": ["S055", "S102"],
       "last_verified": "2026-07-19"
     }
   ]

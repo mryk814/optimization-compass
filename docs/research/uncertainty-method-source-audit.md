@@ -15,9 +15,11 @@ The published Atlas has two feature-backed concept pages, the `portfolio-cvar-al
 have dedicated canonical method IDs for robust optimization, two- or multistage stochastic programming,
 sample-average approximation, chance-constrained optimization, CVaR optimization, or DRO.
 
-The source catalog also has no primary uncertainty source. `S054` is a general problem-type guide;
-`S055` and `S056` are broad textbooks. They can support background vocabulary, but should not be used
-as if they were direct evidence for finite-sample, chance-constraint, CVaR, or DRO guarantees.
+The 0.18.7 release slice stages `S102`, the original Rockafellar–Uryasev CVaR paper, for the CVaR
+representation used by the Case. The catalog still has no primary sources for robust optimization,
+SAA, chance-constraint guarantees, two-/multistage stochastic programming, or DRO. `S054` is a general
+problem-type guide; `S055` and `S056` are broad textbooks and should not be presented as direct evidence
+for those missing guarantee claims.
 
 Adding the missing method or source records changes the released SQLite authority. Do that in a versioned dataset migration and release PR, not in an ordinary content journey.
 
@@ -44,7 +46,7 @@ claim-level relations in the dataset release that introduces it.
 
 | Claim family | Primary source candidate | What it may support | What it does not support by itself |
 | --- | --- | --- | --- |
-| CVaR representation | Rockafellar and Uryasev, [*Optimization of Conditional Value-at-Risk*](https://uryasev.ams.stonybrook.edu/wp-content/uploads/2019/03/optimization_cvar.pdf) | CVaR optimization representation and portfolio motivation | arbitrary out-of-sample superiority of a CVaR portfolio |
+| CVaR representation | `S102` (staged): Rockafellar and Uryasev, [*Optimization of Conditional Value-at-Risk*](https://uryasev.ams.stonybrook.edu/wp-content/uploads/2019/03/optimization_cvar.pdf) | CVaR optimization representation and portfolio motivation | arbitrary out-of-sample superiority of a CVaR portfolio |
 | SAA | Kleywegt, Shapiro, and Homem-de-Mello, [*The Sample Average Approximation Method for Stochastic Discrete Optimization*](https://doi.org/10.1137/S1052623499363220) | sample-average construction, convergence/complexity under stated assumptions | a guarantee for the Atlas fixed 8/4 sample |
 | scenario feasibility | Campi and Garatti, [*The Exact Feasibility of Randomized Solutions of Uncertain Convex Programs*](https://doi.org/10.1137/07069821X) | scenario-program feasibility results under the paper's convexity and sampling conditions | treating any finite scenario count as a distribution-free chance guarantee |
 | robust optimization | Bertsimas and Sim, [*The Price of Robustness*](https://doi.org/10.1287/opre.1030.0065) | budgeted uncertainty and a tractable robust counterpart in the paper's setting | all uncertainty-set geometries or distributional robustness |

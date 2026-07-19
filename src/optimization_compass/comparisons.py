@@ -7,6 +7,15 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_ID as PORTFOLIO_GENERATOR_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_VERSION as PORTFOLIO_GENERATOR_VERSION,
+)
+from optimization_compass.portfolio_uncertainty import (
+    PROFILE_ID as PORTFOLIO_PROFILE_ID,
+)
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -25,6 +34,9 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
     "generic_metric_history": ("educational.optimal_control.v1", "1.1.0"),
+}
+_EDUCATIONAL_GENERATORS_BY_PROFILE = {
+    PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {
@@ -207,9 +219,18 @@ def validate_comparison_benchmark_contexts(
     index: ComparisonIndex,
     contexts: Iterable[Mapping[str, Any]],
     scenarios: Iterable[VisualizationScenario],
+    *,
+    problem_definition_ids: Iterable[str] | None = None,
+    problem_instance_ids: Iterable[str] | None = None,
 ) -> None:
     contexts_by_id = {str(context["context_id"]): context for context in contexts}
     scenarios_by_id = {scenario.scenario_id: scenario for scenario in scenarios}
+    known_problem_definitions = (
+        set(problem_definition_ids) if problem_definition_ids is not None else None
+    )
+    known_problem_instances = (
+        set(problem_instance_ids) if problem_instance_ids is not None else None
+    )
     exact_context_ids = {
         context_id
         for context_id, context in contexts_by_id.items()
@@ -218,6 +239,21 @@ def validate_comparison_benchmark_contexts(
     }
     referenced_exact_context_ids: set[str] = set()
     for comparison in index.comparisons:
+        if (
+            known_problem_definitions is not None
+            and comparison.problem_definition_id not in known_problem_definitions
+        ):
+            raise ValueError(
+                "comparison problem definition does not resolve: "
+                f"{comparison.problem_definition_id}"
+            )
+        if (
+            known_problem_instances is not None
+            and comparison.problem_instance_id not in known_problem_instances
+        ):
+            raise ValueError(
+                f"comparison problem instance does not resolve: {comparison.problem_instance_id}"
+            )
         context = contexts_by_id.get(comparison.benchmark_context_id)
         if context is None:
             raise ValueError(
@@ -276,9 +312,20 @@ def _validate_exact_comparison_context(
         scenario = scenarios_by_id.get(member.scenario_id)
         if scenario is None:
             raise ValueError(f"comparison scenario does not resolve: {member.scenario_id}")
-        expected_generator = _EDUCATIONAL_GENERATORS_BY_RENDERER.get(
-            scenario.artifact.renderer_family
+        run = next(
+            (
+                candidate
+                for candidate in scenario.runs
+                if candidate.artifact_id == member.artifact.artifact_id
+                and candidate.method_id == member.method_id
+            ),
+            None,
         )
+        if run is None:
+            raise ValueError(f"comparison member run does not resolve: {member.member_id}")
+        expected_generator = _EDUCATIONAL_GENERATORS_BY_PROFILE.get(
+            run.profile_id
+        ) or _EDUCATIONAL_GENERATORS_BY_RENDERER.get(scenario.artifact.renderer_family)
         if expected_generator is None:
             raise ValueError(
                 "educational comparison renderer has no registered generator: "

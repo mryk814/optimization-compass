@@ -12,6 +12,22 @@ from optimization_compass.comparisons import (
     validate_comparison_benchmark_contexts,
 )
 from optimization_compass.content_markdown import render_inline_markdown
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_ID as PORTFOLIO_GENERATOR_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    GENERATOR_VERSION as PORTFOLIO_GENERATOR_VERSION,
+)
+from optimization_compass.portfolio_uncertainty import (
+    PROBLEM_DEFINITION_ID as PORTFOLIO_PROBLEM_DEFINITION_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    PROBLEM_INSTANCE_ID as PORTFOLIO_PROBLEM_INSTANCE_ID,
+)
+from optimization_compass.portfolio_uncertainty import (
+    build_portfolio_uncertainty_scenario,
+    generate_portfolio_uncertainty_traces,
+)
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -283,6 +299,75 @@ def test_knapsack_comparison_matches_its_exact_educational_context() -> None:
         validate_comparison_benchmark_contexts(knapsack_index, [context], scenarios)
 
 
+def test_portfolio_comparison_resolves_canonical_problem_and_exact_context() -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.7")
+    portfolio_index = ComparisonIndex(
+        dataset_version=index.dataset_version,
+        comparisons=[
+            comparison
+            for comparison in index.comparisons
+            if comparison.comparison_id == "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+        ],
+    )
+    scenarios = [
+        build_portfolio_uncertainty_scenario(trace)
+        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.7")
+    ]
+
+    validate_comparison_benchmark_contexts(
+        portfolio_index,
+        [_portfolio_context()],
+        scenarios,
+        problem_definition_ids={PORTFOLIO_PROBLEM_DEFINITION_ID},
+        problem_instance_ids={PORTFOLIO_PROBLEM_INSTANCE_ID},
+    )
+
+    mismatched_context = _portfolio_context()
+    mismatched_context["problem_instance_id"] = "OBJECTIVE_QUADRATIC_2D"
+    with pytest.raises(ValueError, match="benchmark context differs"):
+        validate_comparison_benchmark_contexts(
+            portfolio_index,
+            [mismatched_context],
+            scenarios,
+            problem_definition_ids={PORTFOLIO_PROBLEM_DEFINITION_ID},
+            problem_instance_ids={PORTFOLIO_PROBLEM_INSTANCE_ID},
+        )
+
+
+@pytest.mark.parametrize(
+    ("known_definitions", "known_instances", "message"),
+    [
+        (set(), {PORTFOLIO_PROBLEM_INSTANCE_ID}, "problem definition does not resolve"),
+        ({PORTFOLIO_PROBLEM_DEFINITION_ID}, set(), "problem instance does not resolve"),
+    ],
+)
+def test_portfolio_comparison_rejects_unknown_canonical_problem_identity(
+    known_definitions: set[str], known_instances: set[str], message: str
+) -> None:
+    index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.18.7")
+    portfolio_index = ComparisonIndex(
+        dataset_version=index.dataset_version,
+        comparisons=[
+            comparison
+            for comparison in index.comparisons
+            if comparison.comparison_id == "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+        ],
+    )
+    scenarios = [
+        build_portfolio_uncertainty_scenario(trace)
+        for trace in generate_portfolio_uncertainty_traces(dataset_version="0.18.7")
+    ]
+
+    with pytest.raises(ValueError, match=message):
+        validate_comparison_benchmark_contexts(
+            portfolio_index,
+            [_portfolio_context()],
+            scenarios,
+            problem_definition_ids=known_definitions,
+            problem_instance_ids=known_instances,
+        )
+
+
 def test_pareto_comparison_uses_three_weighted_sum_preference_members() -> None:
     index = load_comparison_seed(ROOT / "data/seeds/site_comparisons.json", "0.15.1")
     comparison = next(
@@ -465,4 +550,34 @@ def _knapsack_context() -> dict[str, object]:
         },
         "seed_status": "fixed",
         "seed_value": 0,
+    }
+
+
+def _portfolio_context() -> dict[str, object]:
+    generator = {
+        "implementation_mapping_status": "not_applicable",
+        "generator_id": PORTFOLIO_GENERATOR_ID,
+        "generator_version": PORTFOLIO_GENERATOR_VERSION,
+    }
+    return {
+        "context_id": "BENCH_PORTFOLIO_CVAR_FIXED_8_4",
+        "problem_instance_id": PORTFOLIO_PROBLEM_INSTANCE_ID,
+        "evaluation_budget": 12,
+        "oracle_budget": {"unit": "oracle_evaluations", "limit": 12},
+        "runtime": {
+            "comparison_scope": "exact",
+            "generator_id": PORTFOLIO_GENERATOR_ID,
+            "generator_version": PORTFOLIO_GENERATOR_VERSION,
+        },
+        "implementation_versions": generator,
+        "stopping": {"policy": "fixed_training_then_held_out", "value": 12},
+        "initialization": {
+            "policy": "member_initial_points",
+            "points": [[0.45, 0.0, 0.0, 0.55], [0.3, 0.4, 0.0, 0.3]],
+            "training_sample_count": 8,
+            "held_out_sample_count": 4,
+            "sample_policy": "fixed_disjoint_8_training_4_held_out",
+        },
+        "seed_status": "not_applicable",
+        "seed_value": None,
     }

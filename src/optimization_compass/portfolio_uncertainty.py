@@ -4,6 +4,7 @@ from hashlib import sha256
 from itertools import product
 from typing import Literal
 
+from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -38,36 +39,14 @@ NOMINAL_TRACE_ID = "portfolio-nominal-8-4"
 CVAR_TRACE_ID = "portfolio-cvar-8-4"
 
 Policy = Literal["nominal", "cvar"]
-
-TRAIN_RETURNS = (
-    (0.08, 0.02, -0.01, 0.04),
-    (-0.03, 0.05, 0.01, 0.02),
-    (0.04, -0.02, 0.03, 0.01),
-    (0.01, 0.00, -0.04, 0.03),
-    (-0.06, 0.03, -0.02, 0.01),
-    (0.02, -0.04, 0.02, 0.00),
-    (0.03, 0.01, 0.00, -0.05),
-    (-0.02, 0.02, 0.04, 0.01),
-)
-HELD_OUT_RETURNS = (
-    (0.01, 0.00, -0.02, 0.03),
-    (-0.04, 0.02, 0.01, 0.00),
-    (0.02, -0.01, 0.02, -0.03),
-    (0.00, 0.03, -0.01, 0.02),
-)
-ALPHA = 0.75
-RISK_WEIGHT = 0.5
-GRID_DENOMINATOR = 20
-MAX_WEIGHT_UNITS = 12
+Returns = tuple[tuple[float, ...], ...]
 
 
 def _localized(ja: str, en: str) -> LocalizedText:
     return LocalizedText(ja=ja, en=en)
 
 
-def _losses(
-    returns: tuple[tuple[float, ...], ...], weights: tuple[float, ...]
-) -> tuple[float, ...]:
+def _losses(returns: Returns, weights: tuple[float, ...]) -> tuple[float, ...]:
     return tuple(
         -sum(value * weight for value, weight in zip(row, weights, strict=True)) for row in returns
     )
@@ -77,29 +56,74 @@ def _mean(values: tuple[float, ...]) -> float:
     return sum(values) / len(values)
 
 
-def _empirical_cvar(values: tuple[float, ...]) -> float:
-    tail_count = max(1, round((1.0 - ALPHA) * len(values)))
+def _empirical_cvar(values: tuple[float, ...], alpha: float) -> float:
+    tail_count = max(1, round((1.0 - alpha) * len(values)))
+    if abs(tail_count - (1.0 - alpha) * len(values)) > 1e-9:
+        raise ValueError("fixed portfolio CVaR requires an integral tail count")
     return _mean(tuple(sorted(values, reverse=True)[:tail_count]))
 
 
-def _candidate_weights() -> list[tuple[float, ...]]:
-    units = range(MAX_WEIGHT_UNITS + 1)
+def _candidate_weights(*, grid_step: float, max_asset_weight: float) -> list[tuple[float, ...]]:
+    denominator = round(1.0 / grid_step)
+    max_weight_units = round(max_asset_weight * denominator)
+    if abs(grid_step * denominator - 1.0) > 1e-9:
+        raise ValueError("portfolio grid step must divide one exactly")
+    units = range(max_weight_units + 1)
     return [
-        tuple(value / GRID_DENOMINATOR for value in candidate)
+        tuple(value / denominator for value in candidate)
         for candidate in product(units, repeat=4)
-        if sum(candidate) == GRID_DENOMINATOR
+        if sum(candidate) == denominator
     ]
 
 
-def _select_weights(policy: Policy) -> tuple[float, ...]:
-    risk_weight = 0.0 if policy == "nominal" else RISK_WEIGHT
+def _select_weights(
+    policy: Policy,
+    *,
+    training_returns: Returns,
+    alpha: float,
+    risk_weight: float,
+    grid_step: float,
+    max_asset_weight: float,
+) -> tuple[float, ...]:
+    objective_risk_weight = 0.0 if policy == "nominal" else risk_weight
 
     def objective(weights: tuple[float, ...]) -> tuple[float, tuple[float, ...]]:
-        losses = _losses(TRAIN_RETURNS, weights)
-        value = _mean(losses) + risk_weight * _empirical_cvar(losses)
+        losses = _losses(training_returns, weights)
+        value = _mean(losses) + objective_risk_weight * _empirical_cvar(losses, alpha)
         return value, weights
 
-    return min(_candidate_weights(), key=objective)
+    return min(
+        _candidate_weights(grid_step=grid_step, max_asset_weight=max_asset_weight), key=objective
+    )
+
+
+def _number(value: object, owner: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, int | float):
+        raise ValueError(f"{owner} must be numeric")
+    return float(value)
+
+
+def _return_matrix(value: object, owner: str) -> Returns:
+    if not isinstance(value, list) or not value:
+        raise ValueError(f"{owner} must be a non-empty matrix")
+    rows: list[tuple[float, ...]] = []
+    for row in value:
+        if not isinstance(row, list) or len(row) != 4:
+            raise ValueError(f"{owner} rows must contain four returns")
+        rows.append(tuple(_number(item, owner) for item in row))
+    return tuple(rows)
+
+
+def _canonical_contract() -> tuple[Returns, Returns, float, float, float, float]:
+    parameters = get_runtime_problem(PROBLEM_INSTANCE_ID).instance.parameters
+    return (
+        _return_matrix(parameters.get("training_returns"), "training_returns"),
+        _return_matrix(parameters.get("held_out_returns"), "held_out_returns"),
+        _number(parameters.get("alpha"), "alpha"),
+        _number(parameters.get("risk_weight"), "risk_weight"),
+        _number(parameters.get("grid_step"), "grid_step"),
+        _number(parameters.get("max_asset_weight"), "max_asset_weight"),
+    )
 
 
 def _metric(metric_id: str, ja: str, en: str, value: float) -> TraceMetric:
@@ -112,10 +136,10 @@ def _metric(metric_id: str, ja: str, en: str, value: float) -> TraceMetric:
     )
 
 
-def _summary_metrics(losses: tuple[float, ...]) -> list[TraceMetric]:
+def _summary_metrics(losses: tuple[float, ...], *, alpha: float) -> list[TraceMetric]:
     return [
         _metric("mean_loss", "平均loss", "mean loss", _mean(losses)),
-        _metric("cvar_75", "CVaR 75%", "CVaR 75%", _empirical_cvar(losses)),
+        _metric("cvar_75", "CVaR 75%", "CVaR 75%", _empirical_cvar(losses, alpha)),
         _metric("worst_loss", "最大loss", "worst loss", max(losses)),
         _metric("best_loss", "最小loss", "best loss", min(losses)),
     ]
@@ -128,6 +152,8 @@ def _frame(
     split: Literal["initial", "training", "held_out"],
     weights: tuple[float, ...],
     losses: tuple[float, ...] | None,
+    alpha: float,
+    risk_weight: float,
 ) -> TraceFrame:
     labels = {
         "initial": ("比較条件を固定", "Fix comparison contract"),
@@ -162,27 +188,39 @@ def _frame(
             )
         ],
         vectors=[],
-        metrics=[] if losses is None else _summary_metrics(losses),
+        metrics=[] if losses is None else _summary_metrics(losses, alpha=alpha),
         payload={
             "split": split,
             "sample_count": 0 if losses is None else len(losses),
             "losses": [] if losses is None else [round(value, 12) for value in losses],
             "weights": list(weights),
-            "alpha": ALPHA,
-            "risk_weight": RISK_WEIGHT,
+            "alpha": alpha,
+            "risk_weight": risk_weight,
             "claim_scope": "fixed_empirical_scenarios_only",
         },
     )
 
 
 def generate_portfolio_uncertainty_trace(*, dataset_version: str, policy: Policy) -> AlgorithmTrace:
-    weights = _select_weights(policy)
-    train_losses = _losses(TRAIN_RETURNS, weights)
-    held_out_losses = _losses(HELD_OUT_RETURNS, weights)
+    train_returns, held_out_returns, alpha, risk_weight, grid_step, max_asset_weight = (
+        _canonical_contract()
+    )
+    weights = _select_weights(
+        policy,
+        training_returns=train_returns,
+        alpha=alpha,
+        risk_weight=risk_weight,
+        grid_step=grid_step,
+        max_asset_weight=max_asset_weight,
+    )
+    train_losses = _losses(train_returns, weights)
+    held_out_losses = _losses(held_out_returns, weights)
     scenario_id = NOMINAL_SCENARIO_ID if policy == "nominal" else CVAR_SCENARIO_ID
     trace_id = NOMINAL_TRACE_ID if policy == "nominal" else CVAR_TRACE_ID
     objective = (
-        "training mean loss" if policy == "nominal" else "training mean loss + 0.5 CVaR_0.75"
+        "training mean loss"
+        if policy == "nominal"
+        else f"training mean loss + {risk_weight:g} CVaR_{alpha:g}"
     )
     return AlgorithmTrace(
         contract_version="1.0.0",
@@ -200,25 +238,25 @@ def generate_portfolio_uncertainty_trace(*, dataset_version: str, policy: Policy
         objective={
             "policy": policy,
             "definition": objective,
-            "alpha": ALPHA,
-            "risk_weight": RISK_WEIGHT,
+            "alpha": alpha,
+            "risk_weight": risk_weight,
         },
         preset={
             "preset_id": f"PORTFOLIO_{policy.upper()}_FIXED_8_4",
-            "grid_step": 1 / GRID_DENOMINATOR,
+            "grid_step": grid_step,
         },
         parameters={
             "uncertainty_model": "fixed_return_scenarios",
-            "training_sample_count": len(TRAIN_RETURNS),
-            "held_out_sample_count": len(HELD_OUT_RETURNS),
+            "training_sample_count": len(train_returns),
+            "held_out_sample_count": len(held_out_returns),
             "sample_policy": "fixed_disjoint_8_training_4_held_out",
-            "risk_level": ALPHA,
+            "risk_level": alpha,
             "confidence_target": "not_applicable_no_probability_guarantee",
-            "max_asset_weight": MAX_WEIGHT_UNITS / GRID_DENOMINATOR,
+            "max_asset_weight": max_asset_weight,
         },
         initial_state={"point": list(weights), "decision_domain": "four_asset_capped_simplex"},
         seed={"status": "not_applicable", "value": None},
-        evaluation_budget=len(TRAIN_RETURNS) + len(HELD_OUT_RETURNS),
+        evaluation_budget=len(train_returns) + len(held_out_returns),
         stopping={"policy": "evaluate_fixed_training_then_held_out", "oracle_evaluations": 12},
         environment={"runtime": "deterministic_educational_grid", "version": GENERATOR_VERSION},
         fairness_statement=(
@@ -227,20 +265,32 @@ def generate_portfolio_uncertainty_trace(*, dataset_version: str, policy: Policy
             "only the training objective risk treatment changes."
         ),
         frames=[
-            _frame(frame_index=0, evaluations=0, split="initial", weights=weights, losses=None),
+            _frame(
+                frame_index=0,
+                evaluations=0,
+                split="initial",
+                weights=weights,
+                losses=None,
+                alpha=alpha,
+                risk_weight=risk_weight,
+            ),
             _frame(
                 frame_index=1,
-                evaluations=len(TRAIN_RETURNS),
+                evaluations=len(train_returns),
                 split="training",
                 weights=weights,
                 losses=train_losses,
+                alpha=alpha,
+                risk_weight=risk_weight,
             ),
             _frame(
                 frame_index=2,
-                evaluations=len(TRAIN_RETURNS) + len(HELD_OUT_RETURNS),
+                evaluations=len(train_returns) + len(held_out_returns),
                 split="held_out",
                 weights=weights,
                 losses=held_out_losses,
+                alpha=alpha,
+                risk_weight=risk_weight,
             ),
         ],
         terminal_status="completed",
@@ -252,7 +302,7 @@ def generate_portfolio_uncertainty_trace(*, dataset_version: str, policy: Policy
             "The allocation was selected on eight fixed training scenarios and then held fixed "
             "while mean, CVaR, worst, and best loss were summarized on four held-out scenarios."
         ),
-        source_ids=["S010", "S055"],
+        source_ids=["S010", "S055", "S102"],
     )
 
 
@@ -291,7 +341,7 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
         title_en="CVaR allocation: training / held-out diagnostics"
         if is_cvar
         else "Nominal allocation: training / held-out diagnostics",
-        purpose="comparison",
+        purpose="mechanism" if is_cvar else "sensitivity",
         problem_definition_id=PROBLEM_DEFINITION_ID,
         problem_instance_id=PROBLEM_INSTANCE_ID,
         lesson=VisualizationLesson(
@@ -321,7 +371,18 @@ def build_portfolio_uncertainty_scenario(trace: AlgorithmTrace) -> Visualization
                     observable_ids=["mean_loss", "cvar_75", "worst_loss", "best_loss"],
                 )
             ],
-            failure_signals=[],
+            failure_signals=(
+                []
+                if is_cvar
+                else [
+                    VisualizationSignal(
+                        signal_id="training_only_inference",
+                        label_ja="training上の差を将来保証と読んでしまう",
+                        label_en="training-only contrast is mistaken for a future guarantee",
+                        observable_ids=["mean_loss", "cvar_75", "worst_loss"],
+                    )
+                ]
+            ),
             primary_observables=observables[:3],
             secondary_observables=observables[3:],
             narration_steps=[

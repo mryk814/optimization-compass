@@ -347,6 +347,30 @@ def _biobjective(_instance: ProblemInstance, point: Sequence[float]) -> tuple[fl
     return (x * x + y * y, (x - 2.0) ** 2 + (y - 2.0) ** 2)
 
 
+def _portfolio_cvar(instance: ProblemInstance, point: Sequence[float]) -> float:
+    returns = instance.parameters.get("training_returns")
+    alpha = _number(instance.parameters.get("alpha"))
+    risk_weight = _number(instance.parameters.get("risk_weight"))
+    if not isinstance(returns, list) or not returns:
+        raise ValueError(f"invalid portfolio returns for {instance.problem_instance_id}")
+    losses: list[float] = []
+    for row in returns:
+        if (
+            not isinstance(row, list)
+            or len(row) != instance.dimension
+            or not all(
+                isinstance(value, int | float) and not isinstance(value, bool) for value in row
+            )
+        ):
+            raise ValueError(f"invalid portfolio return row for {instance.problem_instance_id}")
+        losses.append(-sum(float(value) * weight for value, weight in zip(row, point, strict=True)))
+    tail_count = max(1, round((1.0 - alpha) * len(losses)))
+    if abs(tail_count - (1.0 - alpha) * len(losses)) > 1e-9:
+        raise ValueError(f"portfolio CVaR tail is not integral for {instance.problem_instance_id}")
+    empirical_cvar = sum(sorted(losses, reverse=True)[:tail_count]) / tail_count
+    return float(sum(losses) / len(losses) + risk_weight * empirical_cvar)
+
+
 _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.quadratic.isotropic.v1": (_quadratic, _quadratic_gradient),
     "problem.quadratic.ill_conditioned.v1": (_quadratic, _quadratic_gradient),
@@ -365,4 +389,5 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.biobjective_quadratic.v1": (_biobjective, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
+    "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
 }

@@ -35,6 +35,7 @@ def test_problem_suite_has_fourteen_closed_representative_instances() -> None:
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
         "INSTANCE_OPTIMAL_CONTROL_EC020",
         "INSTANCE_PENDULUM_SWING_UP_EC020",
+        "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
     } <= {item.problem_instance_id for item in suite.instances}
     assert all(item.display.get("range") for item in suite.instances)
     assert all(item.display.get("axis_labels") for item in suite.instances)
@@ -64,6 +65,7 @@ def test_problem_suite_has_fourteen_closed_representative_instances() -> None:
             0.1715728752538099,
         ),
         ("INSTANCE_EXPONENTIAL_DECAY_FIT_3P", [1.8, 0.7, 0.25], 0.0),
+        ("INSTANCE_PORTFOLIO_CVAR_FIXED_8_4", [0.3, 0.4, 0.0, 0.3], -0.0055),
     ],
 )
 def test_registry_reproduces_scalar_known_references(
@@ -99,8 +101,8 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 12
-    assert len(catalog.instances) == 14
+    assert len(catalog.definitions) == 13
+    assert len(catalog.instances) == 15
     assert (release.site_data_directory / "problems.json").read_text(encoding="utf-8")
 
 

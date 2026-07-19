@@ -6,7 +6,7 @@ canonical_entity_id: F_CONSTRAINT_CHANCE
 title_ja: Chance constraint・CVaR・robustness
 title_en: Chance Constraints, CVaR, and Robustness
 summary: Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。
-source_ids: [S054, S055, S056]
+source_ids: [S054, S055, S056, S102]
 prerequisites: [concept.uncertainty-models, concept.constraint-class]
 related_ids: [concept.simplex, family.stochastic-ml, lp-qp-conic]
 status: published

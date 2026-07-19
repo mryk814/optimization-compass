@@ -6,18 +6,21 @@ from pathlib import Path
 import pytest
 
 from optimization_compass.comparisons import load_comparison_seed
-from optimization_compass.db import KnowledgeRepository
+from optimization_compass.dataset_release import build_staged_release
 from optimization_compass.portfolio_uncertainty import (
     CVAR_SCENARIO_ID,
     CVAR_TRACE_ID,
     NOMINAL_SCENARIO_ID,
     NOMINAL_TRACE_ID,
+    PROBLEM_DEFINITION_ID,
+    PROBLEM_INSTANCE_ID,
     build_portfolio_uncertainty_scenario,
     generate_portfolio_uncertainty_traces,
 )
-from optimization_compass.site_export import export_site_data
 from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenarioIndex
+
+BASE_DATABASE = Path("data/optimization_method_selection_database_v0.2.0.sqlite")
 
 
 def test_fixed_portfolio_traces_separate_training_and_held_out_risk() -> None:
@@ -68,6 +71,11 @@ def test_portfolio_scenarios_reuse_algorithm_trace_metric_history_contract() -> 
         "generic_metric_history"
     }
     assert {scenario.artifact.artifact_contract for scenario in scenarios} == {"AlgorithmTrace"}
+    assert {scenario.purpose for scenario in scenarios} == {"mechanism", "sensitivity"}
+    nominal = next(
+        scenario for scenario in scenarios if scenario.scenario_id == NOMINAL_SCENARIO_ID
+    )
+    assert nominal.lesson.failure_signals
     assert all("population-risk" in scenario.lesson.limitations_en for scenario in scenarios)
 
 
@@ -83,6 +91,9 @@ def test_portfolio_compare_changes_only_training_risk_treatment() -> None:
     assert comparison.ranking_eligible is False
     assert comparison.budget.metric == comparison.synchronization_axis == "oracle_evaluations"
     assert comparison.budget.value == 12
+    assert comparison.problem_definition_id == PROBLEM_DEFINITION_ID
+    assert comparison.problem_instance_id == PROBLEM_INSTANCE_ID
+    assert comparison.benchmark_context_id == "BENCH_PORTFOLIO_CVAR_FIXED_8_4"
     assert len(comparison.changed_factors) == 1
     assert "risk treatmentだけ" in comparison.changed_factors[0]
     nominal, cvar = comparison.members
@@ -133,21 +144,23 @@ def test_uncertainty_method_source_audit_records_release_boundary_and_primary_ba
         assert required in audit
 
 
-def test_site_export_contains_portfolio_traces_scenarios_and_comparison(
-    tmp_path: Path, repository: KnowledgeRepository
+def test_staged_site_export_contains_portfolio_traces_scenarios_and_comparison(
+    tmp_path: Path,
 ) -> None:
-    export_site_data(tmp_path, repository)
+    release = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    output = release.site_data_directory
 
     nominal = AlgorithmTrace.model_validate_json(
-        (tmp_path / "traces" / f"{NOMINAL_TRACE_ID}.json").read_bytes()
+        (output / "traces" / f"{NOMINAL_TRACE_ID}.json").read_bytes()
     )
     cvar = AlgorithmTrace.model_validate_json(
-        (tmp_path / "traces" / f"{CVAR_TRACE_ID}.json").read_bytes()
+        (output / "traces" / f"{CVAR_TRACE_ID}.json").read_bytes()
     )
     scenarios = VisualizationScenarioIndex.model_validate_json(
-        (tmp_path / "visualization-scenarios.json").read_bytes()
+        (output / "visualization-scenarios.json").read_bytes()
     )
-    comparisons = json.loads((tmp_path / "comparisons.json").read_text(encoding="utf-8"))
+    comparisons = json.loads((output / "comparisons.json").read_text(encoding="utf-8"))
+    journeys = json.loads((output / "learning-journeys.json").read_text(encoding="utf-8"))
 
     assert nominal.scenario_id == NOMINAL_SCENARIO_ID
     assert cvar.scenario_id == CVAR_SCENARIO_ID
@@ -157,3 +170,8 @@ def test_site_export_contains_portfolio_traces_scenarios_and_comparison(
     assert "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in {
         comparison["comparison_id"] for comparison in comparisons["comparisons"]
     }
+    journey = next(
+        item for item in journeys["journeys"] if item["journey_id"] == "portfolio-cvar-allocation"
+    )
+    assert journey["status"] == "complete"
+    assert journey["completion_reasons"] == []
