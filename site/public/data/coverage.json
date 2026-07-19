@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.5",
+  "dataset_version": "0.18.6",
   "expectations": [
     {
       "applicability": "expected",
@@ -222,18 +222,21 @@
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "topology-optimization-field-evolution"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_TOPOLOGY_COMPARISON",
       "purpose": "comparison",
       "rationale": "同じ問題、初期密度、予算でOCとMMAの更新差を比較する。",
-      "reason_codes": [
-        "scenario_contract_incomplete"
-      ],
+      "reason_codes": [],
       "renderer_family": "field_evolution",
-      "route_ids": [],
+      "route_ids": [
+        "/theater/learning/SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
+      ],
       "scenario_ids": [
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
@@ -241,29 +244,34 @@
         "S097",
         "S100"
       ],
-      "status": "partial",
+      "status": "available",
       "subject_id": "M_OC_TOPOLOGY",
       "subject_type": "method"
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "topology-optimization-field-evolution"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_TOPOLOGY_FAILURE",
       "purpose": "failure_contrast",
       "rationale": "filterなしのcheckerboard artifactをcomplianceと分けて診断する。",
-      "reason_codes": [
-        "scenario_not_built"
-      ],
+      "reason_codes": [],
       "renderer_family": "field_evolution",
-      "route_ids": [],
-      "scenario_ids": [],
+      "route_ids": [
+        "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD"
+      ],
+      "scenario_ids": [
+        "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_SIMP_OC"
+      ],
       "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
       "source_ids": [
         "S099"
       ],
-      "status": "missing",
-      "subject_id": "M_DENSITY_FILTER",
+      "status": "available",
+      "subject_id": "M_SIMP_TOPOLOGY",
       "subject_type": "method"
     },
     {
@@ -282,6 +290,7 @@
       ],
       "scenario_ids": [
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "slice_id": "SLICE_TOPOLOGY_OPTIMIZATION",
@@ -16605,10 +16614,10 @@
   "summary": {
     "baseline": "not_provided",
     "status_counts": {
-      "available": 6,
-      "missing": 1,
+      "available": 8,
+      "missing": 0,
       "not_applicable": 0,
-      "partial": 4
+      "partial": 3
     },
     "subject_counts": {
       "feature_family": 10,

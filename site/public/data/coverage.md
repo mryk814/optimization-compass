@@ -1,6 +1,6 @@
 # Atlas learning coverage
 
-- Dataset: `0.18.5`
+- Dataset: `0.18.6`
 - Generated: `2026-07-19T00:00:00+00:00`
 - Baseline: not provided (this initial snapshot does not claim a release delta)
 
@@ -8,9 +8,9 @@
 
 | Status | Count |
 |---|---:|
-| available | 6 |
-| partial | 4 |
-| missing | 1 |
+| available | 8 |
+| partial | 3 |
+| missing | 0 |
 | not_applicable | 0 |
 
 ## Priority slices
