@@ -30,6 +30,7 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     repository_root = Path(__file__).parents[1]
     content_directory = tmp_path / "content"
     shutil.copytree(repository_root / "content", content_directory)
+    shutil.copytree(repository_root / "site/public/media", tmp_path / "site/public/media")
     draft = (content_directory / "concepts/convexity.md").read_text(encoding="utf-8")
     draft = draft.replace(
         "content_id: concept.convexity",
@@ -74,9 +75,7 @@ def test_exported_search_and_retrieval_contracts_are_closed(
     )
     assert all("frame:" not in chunk.chunk_id for chunk in retrieval.chunks)
     draft_ids = {
-        page.content_id
-        for page in load_content(content_directory)
-        if page.status == "draft"
+        page.content_id for page in load_content(content_directory) if page.status == "draft"
     }
     assert draft_ids == {"concept.test-draft-exclusion"}
     assert not draft_ids & {
