@@ -6,9 +6,11 @@ canonical_entity_id: F_GUARANTEE_UNCERTAINTY
 title_ja: 不確実性モデル・リスク・保証範囲
 title_en: Uncertainty Models, Risk, and Guarantee Scope
 summary: 不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。
-source_ids: [S054, S055, S056]
+source_ids: [S054, S055, S056, S103]
 prerequisites: [concept.constraint-class, concept.simplex]
 related_ids: [family.stochastic-ml, family.expensive-black-box, lp-qp-conic]
+visualization_ids: [portfolio-nominal-8-4, portfolio-cvar-8-4]
+comparison_ids: [COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4]
 status: published
 last_reviewed: 2026-07-19
 ---
@@ -88,7 +90,10 @@ varianceを小さくする目的を置いても、制約違反の確率を直接
 
 ## Case journeyへつなぐ
 
-現在の[ポートフォリオ配分Case](#/gallery/portfolio-allocation)は、4資産のsimplex制約と共分散riskを読むnominalな教材です。[CVaR配分Case](#/gallery/portfolio-cvar-allocation)は、そこから固定training 8件とheld-out 4件を分け、mean lossとCVaR objectiveを同じsample契約で読むTheater/Compareへ進みます。ただし、どちらも過去データの推定誤差や将来分布の変化を扱うrobust・chance-constrained・DROの保証ではありません。
+現在の[ポートフォリオ配分Case](#/gallery/portfolio-allocation)は、4資産のsimplex制約と共分散riskを読むnominalな教材です。
+[CVaR配分Case](#/gallery/portfolio-cvar-allocation)は、そこから固定training 8件とheld-out 4件を分け、mean lossとCVaR objectiveを同じsample契約で読みます。
+[CVaR Theater](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)でtail lossの推移を確認し、[nominal／CVaR Compare](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)で同じsample contractに対するrisk treatmentの差を読みます。
+ただし、どちらも過去データの推定誤差や将来分布の変化を扱うrobust・chance-constrained・DROの保証ではありません。
 
 この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。不確実性を扱うjourneyでは、少なくとも次を同じCase identityへ接続します。
 

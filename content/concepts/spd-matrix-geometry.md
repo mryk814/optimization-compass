@@ -97,7 +97,7 @@ assert np.linalg.eigvalsh(reconstructed).min() > 0.0
 ## Boundaryと非一意性
 
 - Choleskyの正の対角はSPD内部を保ちますが、PSD境界を有限parameterで直接表しません。
-- fixed-rank PSD factor $X=YY^{\mathsf T}$では、$YQ$も同じ$X$を表すquotientの非一意性があります。
+- fixed-rank PSD factor $X=YY^{\mathsf T}$では、$Q$を直交行列とすると、$YQ$も同じ$X$を表すquotientの非一意性があります。
 - eigenvalue clippingはfeasibility repairであり、選んだRiemannian metricのexponential mapとは限りません。
 - condition numberが増大したら、objectiveの改善と数値的な境界接近を分けて判断します。
 
