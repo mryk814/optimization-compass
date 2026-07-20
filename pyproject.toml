@@ -12,7 +12,7 @@ authors = [{ name = "TAKUYA OTANI" }]
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = [
-  "fastapi>=0.115,<1",
+  "fastapi>=0.139.2,<1",
   "latex2mathml>=3.78,<4",
   "markdown-it-py>=4,<5",
   "mdit-py-plugins>=0.5,<1",
@@ -20,7 +20,7 @@ dependencies = [
   "pygments>=2.19,<3",
   "pydantic>=2.8,<3",
   "pyyaml>=6,<7",
-  "typer>=0.12,<1",
+  "typer>=0.27.0,<1",
   "uvicorn[standard]>=0.51.0,<1",
 ]
 
@@ -31,7 +31,7 @@ dev = [
   "pip-audit>=2.9,<3",
   "pytest>=8.3,<10",
   "pytest-cov>=5,<8",
-  "ruff>=0.8,<1",
+  "ruff>=0.15.22,<1",
   "types-pygments>=2.19,<3",
   "types-pyyaml>=6,<7",
 ]
