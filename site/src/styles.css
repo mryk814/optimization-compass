@@ -1697,16 +1697,30 @@ caption {
 .theater-card small { margin-top: auto; color: #285740; font-size: .68rem; font-weight: 700; }
 .theater-card-observables { margin-top: .45rem; color: #4d6253 !important; font-weight: 600 !important; line-height: 1.45; }
 .compare-card { min-height: 12rem; }
-.compare-card-contract { display: grid; gap: .25rem; margin: .35rem 0 .6rem; padding: .45rem .55rem; border-left: 3px solid #6c9a7f; background: #f5f8f3; color: #52605a; font-size: .68rem; line-height: 1.4; }
-.compare-card-contract span { display: flex; gap: .35rem; }
-.compare-card-contract strong { min-width: 2.2rem; color: #315c48; }
+.compare-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.compare-card-meta { display: flex; align-items: center; justify-content: space-between; gap: .4rem; color: #52605a; font-size: .68rem; }
+.compare-card-reading { padding: .18rem .42rem; border-radius: 999px; background: #edf4ee; color: #315c48; font-weight: 700; }
+.compare-card-question { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.compare-card-contract { display: grid; gap: .32rem; margin: .35rem 0 .6rem; padding: .5rem .6rem; border-left: 3px solid #6c9a7f; background: #f5f8f3; color: #52605a; font-size: .68rem; line-height: 1.4; }
+.compare-card-contract div { display: grid; grid-template-columns: 2.8rem minmax(0, 1fr); gap: .35rem; }
+.compare-card-contract dt { color: #315c48; font-weight: 800; }
+.compare-card-contract dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.compare-card-footer { display: flex; align-items: end; justify-content: space-between; gap: .65rem; margin-top: auto; }
+.compare-card-footer small { margin-top: 0; font-weight: 600; }
+.compare-card-footer strong { flex: 0 0 auto; color: #285740; font-size: .7rem; }
 .compare-catalog { display: grid; gap: 1.2rem; }
 .compare-catalog-section { display: grid; gap: .55rem; }
 .compare-catalog-section > header { display: grid; gap: .2rem; max-width: 48rem; }
 .compare-catalog-section > header p { margin: 0; color: #59645d; font-size: .78rem; line-height: 1.55; }
-.compare-catalog-section > header .eyebrow { color: #315c48; font-size: .68rem; font-weight: 700; }
+.compare-catalog-section-heading { display: flex; align-items: baseline; gap: .55rem; }
+.compare-catalog-section-heading > span { color: #6b756f; font-size: .68rem; font-weight: 700; }
 .compare-catalog-section h2 { margin: 0; font-size: 1.05rem; }
-.compare-card-renderer { margin-top: .35rem; color: #315c48; }
+.compare-catalog-more { padding-top: .1rem; }
+.compare-catalog-more > summary { width: fit-content; cursor: pointer; color: #315c48; font-size: .75rem; font-weight: 800; }
+.compare-catalog-more[open] > summary { margin-bottom: .55rem; }
+@media (max-width: 40rem) {
+  .compare-card-grid { grid-template-columns: minmax(0, 1fr); }
+}
 .content-detail { width: 100%; max-width: 60rem; min-width: 0; overflow-wrap: anywhere; }
 .gallery-detail { width: 100%; max-width: 74rem; min-width: 0; overflow-wrap: anywhere; }
 

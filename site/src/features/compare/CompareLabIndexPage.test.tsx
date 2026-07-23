@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
@@ -38,7 +38,15 @@ describe("CompareLabIndexPage", () => {
       "結果のトレードオフから読む",
       "戦略の違いから読む",
     ]);
-    expect(screen.getByText("表示: 単体形状")).toBeVisible();
-    expect(screen.getByText("表示: 実行可能領域")).toBeVisible();
+    expect(screen.getAllByText("目的関数 · ほか3項目").length).toBeGreaterThan(0);
+    expect(screen.getByText("更新則 · ほか1項目")).toBeVisible();
+    expect(screen.getAllByText("順位ではなく差を見る").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("条件内で順位を読む").length).toBeGreaterThan(0);
+    const moreMethodComparisons = screen.getByText("手法の違いの残り2件を見る");
+    expect(moreMethodComparisons).toBeVisible();
+    fireEvent.click(moreMethodComparisons);
+    expect(screen.getByText("比較対象 2件 · 単体形状で見る")).toBeVisible();
+    expect(screen.getByText("比較対象 2件 · 実行可能領域で見る")).toBeVisible();
+    expect(screen.getByText("比較対象 2件 · 設計fieldの進化で見る")).toBeVisible();
   });
 });

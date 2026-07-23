@@ -6,10 +6,11 @@ import { siteBaseUrl } from "../../data/base-url";
 import { comparisonRoute } from "./compare-routes";
 import {
   buildComparisonCatalog,
-  comparisonModeLabel,
   rendererFamilyLabel,
 } from "./compare-catalog";
 import { PageOrientation } from "../../components/PageOrientation";
+
+const visibleComparisonsPerSection = 1;
 
 export function CompareLabIndexPage() {
   const [comparisons, setComparisons] = useState<ComparisonSet[]>([]);
@@ -48,30 +49,65 @@ export function CompareLabIndexPage() {
         {catalog.map((section) => (
           <section className="compare-catalog-section" key={section.mode} aria-labelledby={`compare-catalog-${section.mode}`}>
             <header>
-              <p className="eyebrow">{section.label} · {section.comparisons.length}件</p>
-              <h2 id={`compare-catalog-${section.mode}`}>{section.label}から読む</h2>
+              <div className="compare-catalog-section-heading">
+                <h2 id={`compare-catalog-${section.mode}`}>{section.label}から読む</h2>
+                <span>{section.comparisons.length}件</span>
+              </div>
               <p>{section.description}</p>
             </header>
             <div className="theater-card-grid compare-card-grid">
-              {section.comparisons.map((comparison) => (
-                <Link className="theater-card compare-card" key={comparison.comparison_id} to={comparisonRoute(comparison.comparison_id)}>
-                  <span>{comparisonModeLabel(comparison.mode)} · {comparison.budget.value}回でそろえる</span>
-                  <h3>{comparison.title_ja}</h3>
-                  <p>{readableComparisonText(comparison.comparison_question)}</p>
-                  <small className="compare-card-renderer">表示: {[...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))].join(" + ")}</small>
-                  <div className="compare-card-contract" aria-label="比較の要点">
-                    <span><strong>同じ</strong>{comparison.fixed_factors.length}項目</span>
-                    <span><strong>違う</strong>{comparison.changed_factors.length}項目</span>
-                    <span><strong>見る</strong>{comparison.metrics.map((metric) => metric.label_ja).join(" / ")}</span>
-                  </div>
-                  <small>比較対象 {comparison.members.length}件 · この比較を読む →</small>
-                </Link>
+              {section.comparisons.slice(0, visibleComparisonsPerSection).map((comparison) => (
+                <ComparisonCard comparison={comparison} key={comparison.comparison_id} />
               ))}
             </div>
+            {section.comparisons.length > visibleComparisonsPerSection && (
+              <details className="compare-catalog-more">
+                <summary>{section.label}の残り{section.comparisons.length - visibleComparisonsPerSection}件を見る</summary>
+                <div className="theater-card-grid compare-card-grid">
+                  {section.comparisons.slice(visibleComparisonsPerSection).map((comparison) => (
+                    <ComparisonCard comparison={comparison} key={comparison.comparison_id} />
+                  ))}
+                </div>
+              </details>
+            )}
           </section>
         ))}
       </div>
     </section>
+  );
+}
+
+function ComparisonCard({ comparison }: { comparison: ComparisonSet }) {
+  const rendererLabels = [...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))];
+  return (
+    <Link className="theater-card compare-card" to={comparisonRoute(comparison.comparison_id)}>
+      <div className="compare-card-meta">
+        <span>{comparison.budget.value}回でそろえる</span>
+        <span className="compare-card-reading">
+          {comparison.ranking_eligible ? "条件内で順位を読む" : "順位ではなく差を見る"}
+        </span>
+      </div>
+      <h3>{comparison.title_ja}</h3>
+      <p className="compare-card-question">{readableComparisonText(comparison.comparison_question)}</p>
+      <dl className="compare-card-contract" aria-label="固定条件、変更条件、観察指標">
+        <div>
+          <dt>固定</dt>
+          <dd>{summarizeComparisonItems(comparison.fixed_factors, "項目")}</dd>
+        </div>
+        <div>
+          <dt>変更</dt>
+          <dd>{summarizeComparisonItems(comparison.changed_factors, "項目")}</dd>
+        </div>
+        <div>
+          <dt>観察</dt>
+          <dd>{summarizeComparisonItems(comparison.metrics.map((metric) => metric.label_ja), "指標")}</dd>
+        </div>
+      </dl>
+      <div className="compare-card-footer">
+        <small>比較対象 {comparison.members.length}件 · {rendererLabels.join(" + ")}で見る</small>
+        <strong>比較を開く →</strong>
+      </div>
+    </Link>
   );
 }
 
@@ -94,4 +130,9 @@ function readableComparisonText(value: string): string {
     .replaceAll("acquisition", "獲得関数")
     .replaceAll("budget", "評価予算")
     .replaceAll("solver", "ソルバー");
+}
+
+function summarizeComparisonItems(values: string[], unit: "項目" | "指標"): string {
+  const first = readableComparisonText(values[0]);
+  return values.length === 1 ? first : `${first} · ほか${values.length - 1}${unit}`;
 }
