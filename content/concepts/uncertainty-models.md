@@ -5,17 +5,17 @@ canonical_entity_type: feature
 canonical_entity_id: F_GUARANTEE_UNCERTAINTY
 title_ja: 不確実性モデル・リスク・保証範囲
 title_en: Uncertainty Models, Risk, and Guarantee Scope
-summary: 不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。
+summary: 不確実性を、何が揺らぐか・どう表すか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。
 source_ids: [S054, S055, S056, S103]
 prerequisites: [concept.constraint-class, concept.simplex]
 related_ids: [family.stochastic-ml, family.expensive-black-box, lp-qp-conic]
 visualization_ids: [portfolio-nominal-8-4, portfolio-cvar-8-4]
 comparison_ids: [COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-24
 ---
 
-不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。
+不確実性を、何が揺らぐか・どう表すか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。
 
 ## 30秒でつかむ
 
@@ -34,7 +34,7 @@ last_reviewed: 2026-07-19
 
 ### 不確実なparameter
 
-材料定数、需要、将来価格など、モデルへ入れる値そのものが分からない場合です。真の値が固定されていても、推定できていないことがあります。これは、観測を増やせば減る知識不足（epistemic uncertainty）として扱う場合がありますが、必ずこの二分法だけで整理できるとは限りません。
+材料定数／需要／将来価格など、modelへ入れる値そのものが分からない場合です。真の値が固定されていても、推定できていないことがあります。観測を増やせば減る知識不足（epistemic uncertainty）として扱う場合があります。ただし、必ずこの二分法だけで整理できるとは限りません。
 
 ### observation noise
 
@@ -44,7 +44,11 @@ last_reviewed: 2026-07-19
 
 制御や運用の途中で外乱が入り、決定後の状態が変わる場合です。設計時点のparameter uncertaintyだけでなく、実行中のdisturbanceとfeedback・再計画の有無を記録します。
 
-これらは同じ問題に同時に現れます。たとえば、需要の推定誤差はparameter uncertainty、注文の到着時のばらつきはobservation noise、配送中の遅延はprocess disturbanceとして別々に検証する必要があります。
+これらは同じ問題に同時に現れます。たとえば、次の3つは別々に検証する必要があります。
+
+- 需要の推定誤差はparameter uncertainty
+- 注文の到着時のばらつきはobservation noise
+- 配送中の遅延はprocess disturbance
 
 ## 次に、揺らぎの表現を選ぶ
 
@@ -58,15 +62,15 @@ last_reviewed: 2026-07-19
 
 ### distribution
 
-未知量の確率分布を仮定し、期待値や確率を目的・制約へ入れます。確率モデルの選択、推定、calibration、独立性や定常性の仮定を明示します。分布を仮定した結果は、その仮定から外れたデータに対する無条件の保証ではありません。
+未知量の確率分布を仮定し、期待値や確率を目的・制約へ入れます。確率modelの選択／推定／calibration／独立性や定常性の仮定を明示します。分布を仮定した結果は、その仮定から外れたデータに対する無条件の保証ではありません。
 
 ### empirical scenarios
 
-観測または生成した有限個のscenarioを並べ、各scenarioでの目的・制約値を比較します。これはscenario集合上の結果を確認する方法であり、未観測のout-of-sampleや真の分布に対する保証とは別です。scenario数、生成規則、seed、学習用と評価用の分割を固定して記録します。
+観測または生成した有限個のscenarioを並べ、各scenarioでの目的・制約値を比較します。これはscenario集合上の結果を確認する方法です。未観測のout-of-sampleや真の分布に対する保証とは別です。scenario数／生成規則／seed／学習用と評価用の分割を固定して記録します。
 
 ### ambiguity set
 
-分布そのものを1つに固定せず、妥当と考える分布の集合を扱う考え方です。distributionally robust optimization（DRO）を使う場合は、どの分布集合を許したか、半径や距離の意味、データからの構成方法を明記します。これは uncertainty setでparameterを囲むことと同じではありません。
+分布そのものを1つに固定せず、妥当と考える分布の集合を扱う考え方です。distributionally robust optimization（DRO）を使う場合は、許容する分布集合を明記します。半径や距離の意味と、データからの構成方法も記録します。これは uncertainty setでparameterを囲むことと同じではありません。
 
 ## riskは目的と制約で別に扱う
 
@@ -77,7 +81,7 @@ last_reviewed: 2026-07-19
 | objective | 平均的な性能と悪い結果のどちらを重く見るか | expectation、variance、worst-case、tail-riskの定義と係数 |
 | constraint | 危険な結果をどの頻度・範囲まで許すか | violationの定義、target、confidence、判定単位 |
 
-varianceを小さくする目的を置いても、制約違反の確率を直接制御したことにはなりません。逆に、chance constraintを置いても、制約違反が起きないことを保証するわけではありません。CVaRなどtail riskを使う場合も、lossの向き、tailの定義、quantileまたはtail level、sampleでの評価方法を同じ契約へ書きます。CVaRのtail levelを、推定精度のconfidence levelと呼び替えません。
+varianceを小さくする目的を置いても、制約違反の確率を直接制御したことにはなりません。逆に、chance constraintを置いても、制約違反が起きないことを保証するわけではありません。CVaRなどtail riskを使う場合は、lossの向き／tailの定義／quantileまたはtail levelを同じ契約へ書きます。sampleでの評価方法も必要です。CVaRのtail levelを、推定精度のconfidence levelと呼び替えません。
 
 ## guarantee scopeを4段階で読む
 
@@ -86,13 +90,20 @@ varianceを小さくする目的を置いても、制約違反の確率を直接
 3. **Probabilistic**: 明示した分布と確率水準のもとでの主張。分布仮定と推定誤差を別に検証する。
 4. **Empirical scenario**: 手元の有限scenarioで観測した結果。out-of-sample性能や確率保証は、別の評価設計が必要。
 
-「制約を満たした」という一文には、どの時点で、どのscenario・set・分布で、何を計算し、どのtoleranceで判定したかを添えます。離散化したscenarioや固定sampleでの可行性を、連続系・将来データ・分布外の安全保証へ拡張しません。
+「制約を満たした」という一文には、次の情報を添えます。
+
+- 判定した時点
+- 対象のscenario／set／分布
+- 計算した量
+- 判定に使ったtolerance
+
+離散化したscenarioや固定sampleでの可行性を、連続系・将来データ・分布外の安全保証へ拡張しません。
 
 ## Case journeyへつなぐ
 
 現在の[ポートフォリオ配分Case](#/gallery/portfolio-allocation)は、4資産のsimplex制約と共分散riskを読むnominalな教材です。
 [CVaR配分Case](#/gallery/portfolio-cvar-allocation)は、そこから固定training 8件とheld-out 4件を分け、mean lossとCVaR objectiveを同じsample契約で読みます。
-[CVaR Theater](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)でtail lossの推移を確認し、[nominal／CVaR Compare](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)で同じsample contractに対するrisk treatmentの差を読みます。
+[CVaR Theater](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)でtail lossの推移を確認します。[nominal／CVaR Compare](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、同じsample contractに対するrisk treatmentの差を読みます。
 ただし、どちらも過去データの推定誤差や将来分布の変化を扱うrobust・chance-constrained・DROの保証ではありません。
 
 この境界を明記することで、単一の配分結果を「将来損失の保証」と誤読せずに済みます。不確実性を扱うjourneyでは、少なくとも次を同じCase identityへ接続します。

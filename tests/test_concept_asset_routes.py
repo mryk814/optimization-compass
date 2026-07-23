@@ -47,6 +47,7 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert uncertainty.comparison_ids == ("COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",)
     assert "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4" in uncertainty.body
     assert "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in uncertainty.body
+    assert style_warnings(uncertainty) == ()
 
     so3 = pages["concept.so3-rotation-representation"]
     assert "S107" in so3.source_ids
