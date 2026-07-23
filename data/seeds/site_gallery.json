@@ -935,6 +935,76 @@
         "5候補地・固定cost・固定便益scoreの教育用選択問題であり、実際の災害需要、道路寸断、人口移動、施設容量、運営継続性、法令を表さない。",
         "目的値の最大化やgapの証明は政策の妥当性、公平性、安全性を保証しない。実運用では関係者レビュー、複数scenario、地理的被覆、脆弱性指標、実地確認を別に行う必要がある。"
       ]
+    },
+    {
+      "case_id": "irrigation-retrofit-selection",
+      "title_ja": "予算内で圃場の灌漑設備を更新する",
+      "title_en": "Select irrigation retrofits under a capital budget",
+      "domain": "agriculture",
+      "problem_archetype_id": "PA032",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "linear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "combinatorial"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "optimality_gap"}
+      ],
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "scheduling_routing",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "更新する／しないの二値判断、系統ごとの最低1件、同時施工できない組合せを論理制約のまま保ち、実行可能案と最適性gapを確認できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "節水proxyと更新costが線形で、系統・施工時期の条件も線形制約として表せる場合はMIP familyの緩和boundを使う"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "設備更新の採否と系統ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため"
+        }
+      ],
+      "implementation_ids": ["I_ORTOOLS_CPSAT"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ],
+      "comparison_ids": ["COMPARE_IRRIGATION_BNB_BUDGET"],
+      "source_ids": ["S021", "S022", "S054", "S079"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。",
+      "variable_domain": "固定教材では5区画の更新採否 $x\\in X=\\{0,1\\}^5$。$x_i=1$ は区画 $i$ の設備を更新すること、0は今期は更新しないことを表す。",
+      "decision_variables": "圃場区画 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材は作物、生育段階、土壌水分をdecision variableへ変換せず、事前に監査した更新costと節水proxyを入力する。",
+      "objective": "固定した節水proxyの合計 $9x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
+      "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、北系統から少なくとも1区画 $x_A+x_B\\ge1$、南系統から少なくとも1区画 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "map_node_id": "answer:Q01:binary",
+      "python_example": "from ortools.sat.python import cp_model\n\nsaving_proxy = [9, 7, 6, 5, 4]\ncost = [4, 3, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"field_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(saving_proxy[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
+      "practical_notes": "hard constraintと優先度proxyを分け、区画ID、送水系統、設備状態、更新cost、proxyの算定者と更新日を残す。候補案は現地の流量測定、作物ごとの必要水量、施工可能時期、保守要員、水利権を使って再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この農業caseの圃場データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "limitations": [
+        "5区画・固定cost・固定節水proxyの教育用選択問題であり、土壌、天候、作物、生育段階、流量損失、設備故障、複数期の更新計画を表さない。",
+        "proxy最大化やgapの証明は、実際の節水量、収量、採算、法令・水利条件への適合を保証しない。実運用では現地計測、複数season、関係者レビュー、施工後の効果検証が必要である。"
+      ]
     }
   ]
 }
