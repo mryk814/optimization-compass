@@ -2,7 +2,13 @@ import { describe, expect, test } from "vitest";
 
 import rawGallery from "../../../public/data/gallery.json";
 import { parseGalleryIndex } from "../../contracts/gallery";
-import { caseState, journeyCompletionLabel } from "./GalleryPage";
+import {
+  caseState,
+  countCasesByDomain,
+  domainLabel,
+  journeyCompletionLabel,
+  journeyStatusLabel,
+} from "./GalleryPage";
 
 describe("gallery Atlas state", () => {
   test("uses the version carried by the gallery release", () => {
@@ -31,5 +37,25 @@ describe("gallery learning journey status", () => {
 
     expect(item.candidate_methods[0].reason).not.toHaveLength(0);
     expect(item.limitations[0]).not.toHaveLength(0);
+  });
+
+  test("uses reader-facing domain and journey labels", () => {
+    expect(domainLabel("engineering")).toBe("設計・工学");
+    expect(domainLabel("machine-learning")).toBe("機械学習");
+    expect(domainLabel("custom-domain")).toBe("custom-domain");
+    expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
+    expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");
+    expect(journeyStatusLabel()).toBe("準備中");
+  });
+
+  test("summarizes use-case coverage by domain in descending order", () => {
+    expect(countCasesByDomain([
+      { domain: "science" },
+      { domain: "engineering" },
+      { domain: "science" },
+    ])).toEqual([
+      { domain: "science", count: 2 },
+      { domain: "engineering", count: 1 },
+    ]);
   });
 });

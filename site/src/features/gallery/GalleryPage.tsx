@@ -22,18 +22,41 @@ import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
 
 export function GalleryPage() {
   const [cases, setCases] = useState<GalleryCase[]>([]);
+  const [journeys, setJourneys] = useState<LearningJourney[]>([]);
   const [domain, setDomain] = useState("all");
+  const [query, setQuery] = useState("");
   const [error, setError] = useState<Error>();
   useEffect(() => {
-    void loadGallery().then(
-      (index) => setCases(index.cases),
+    void Promise.all([loadGallery(), loadLearningJourneys()]).then(
+      ([gallery, journeyIndex]) => {
+        if (gallery.dataset_version !== journeyIndex.dataset_version) {
+          throw new Error("Gallery and learning journey dataset versions do not match.");
+        }
+        setCases(gallery.cases);
+        setJourneys(journeyIndex.journeys);
+      },
       (caught: unknown) => setError(asError(caught)),
     );
   }, []);
   const domains = ["all", ...new Set(cases.map((item) => item.domain))];
+  const domainCounts = useMemo(() => countCasesByDomain(cases), [cases]);
+  const largestDomainCount = Math.max(1, ...domainCounts.map((item) => item.count));
+  const journeyByCase = useMemo(
+    () => new Map(journeys.map((journey) => [journey.case_id, journey])),
+    [journeys],
+  );
+  const normalizedQuery = query.trim().toLocaleLowerCase();
   const filtered = useMemo(
-    () => cases.filter((item) => domain === "all" || item.domain === domain),
-    [cases, domain],
+    () => cases.filter((item) => (
+      (domain === "all" || item.domain === domain)
+      && (
+        normalizedQuery.length === 0
+        || `${item.title_ja} ${item.title_en} ${item.question} ${item.domain}`
+          .toLocaleLowerCase()
+          .includes(normalizedQuery)
+      )
+    )),
+    [cases, domain, normalizedQuery],
   );
 
   return (
@@ -57,25 +80,73 @@ export function GalleryPage() {
           "Theaterで1回の実行を追い、Compareで条件差を確かめます。",
         ]}
       />
-      <label className="gallery-filter">
-        問題領域
-        <select value={domain} onChange={(event) => setDomain(event.target.value)}>
-          {domains.map((item) => (
-            <option key={item} value={item}>{item === "all" ? "すべて" : item}</option>
+      <section aria-labelledby="gallery-domain-overview-title" className="gallery-domain-overview">
+        <header>
+          <div>
+            <p className="eyebrow">Use case coverage</p>
+            <h2 id="gallery-domain-overview-title">どの分野から探す？</h2>
+          </div>
+          <p>棒の長さは、現在掲載している事例数です。選ぶと下のケースを絞り込みます。</p>
+        </header>
+        <div>
+          {domainCounts.map((item) => (
+            <button
+              aria-pressed={domain === item.domain}
+              key={item.domain}
+              onClick={() => setDomain(item.domain)}
+              type="button"
+            >
+              <span>{domainLabel(item.domain)}</span>
+              <span aria-hidden="true" className="gallery-domain-bar">
+                <span style={{ width: `${(item.count / largestDomainCount) * 100}%` }} />
+              </span>
+              <strong>{item.count}</strong>
+            </button>
           ))}
-        </select>
-      </label>
+        </div>
+      </section>
+      <div className="gallery-toolbar">
+        <label className="gallery-filter">
+          領域
+          <select value={domain} onChange={(event) => setDomain(event.target.value)}>
+            {domains.map((item) => (
+              <option key={item} value={item}>{domainLabel(item)}</option>
+            ))}
+          </select>
+        </label>
+        <label className="gallery-search">
+          問いで絞る
+          <input
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="配送、材料、実験…"
+            type="search"
+            value={query}
+          />
+        </label>
+        <output aria-live="polite">{filtered.length}件</output>
+      </div>
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       <div className="gallery-card-grid">
-        {filtered.map((item) => (
-          <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
-            <span>{item.domain} · {item.difficulty}</span>
-            <h2>{item.title_ja}</h2>
-            <p>{item.question}</p>
-            <small>候補 {item.candidate_methods.length}件 · 確認日 {item.last_reviewed}</small>
-          </Link>
-        ))}
+        {filtered.map((item) => {
+          const journey = journeyByCase.get(item.case_id);
+          return (
+            <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
+              <span>{domainLabel(item.domain)} · {difficultyLabel(item.difficulty)}</span>
+              <h2>{item.title_ja}</h2>
+              <p>{item.question}</p>
+              <footer>
+                <small className={`gallery-card-status is-${journey?.status ?? "draft"}`}>
+                  {journeyStatusLabel(journey?.status)}
+                </small>
+                <strong>ケースを開く →</strong>
+              </footer>
+            </Link>
+          );
+        })}
       </div>
+      {filtered.length === 0 && (
+        <p className="gallery-empty">条件に合うケースはありません。領域か検索語を変えてください。</p>
+      )}
     </section>
   );
 }
@@ -143,14 +214,21 @@ export function GalleryCasePage() {
             )}
           </section>
 
-          <OptimizationProblemPrimer
-            caseFormulation={{
-              decisionVariables: journey.formulation.decision_variables,
-              variableDomain: journey.formulation.variable_domain_summary,
-              objective: journey.formulation.objective,
-              constraints: journey.formulation.constraints,
-            }}
-          />
+          <details className="gallery-formulation-disclosure">
+            <summary>
+              <span>2. 定式化</span>
+              <strong>変数・目的・制約を確認する</strong>
+              <small>必要なときに展開</small>
+            </summary>
+            <OptimizationProblemPrimer
+              caseFormulation={{
+                decisionVariables: journey.formulation.decision_variables,
+                variableDomain: journey.formulation.variable_domain_summary,
+                objective: journey.formulation.objective,
+                constraints: journey.formulation.constraints,
+              }}
+            />
+          </details>
 
           <section aria-labelledby="context-levels-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
@@ -323,12 +401,49 @@ export function GalleryCasePage() {
 function JourneyStatus({ journey }: { journey: LearningJourney }) {
   return (
     <aside aria-label="学習の流れの接続状況" className={`gallery-journey-status is-${journey.status}`}>
-      <strong>{journey.status === "complete" ? "Journey complete" : "Journey partial"}</strong>
+      <strong>{journeyStatusLabel(journey.status)}</strong>
       {journey.completion_reasons.length > 0 && (
         <ul>{journey.completion_reasons.map((reason) => <li key={reason}>{journeyCompletionLabel(reason)}</li>)}</ul>
       )}
     </aside>
   );
+}
+
+export function domainLabel(domain: string): string {
+  const labels: Record<string, string> = {
+    all: "すべて",
+    business: "事業・施策",
+    control: "制御",
+    engineering: "設計・工学",
+    finance: "金融",
+    logistics: "物流",
+    "machine-learning": "機械学習",
+    operations: "運用・計画",
+    science: "科学・推定",
+  };
+  return labels[domain] ?? domain;
+}
+
+export function journeyStatusLabel(status?: LearningJourney["status"]): string {
+  if (status === "complete") return "定式化・実行・比較あり";
+  if (status === "partial") return "定式化あり・一部準備中";
+  return "準備中";
+}
+
+export function countCasesByDomain(
+  cases: Pick<GalleryCase, "domain">[],
+): Array<{ domain: string; count: number }> {
+  const counts = new Map<string, number>();
+  cases.forEach((item) => counts.set(item.domain, (counts.get(item.domain) ?? 0) + 1));
+  return [...counts.entries()]
+    .map(([domain, count]) => ({ domain, count }))
+    .sort((left, right) => right.count - left.count || domainLabel(left.domain).localeCompare(domainLabel(right.domain), "ja"));
+}
+
+function difficultyLabel(difficulty: GalleryCase["difficulty"]): string {
+  if (difficulty === "intro") return "入門";
+  if (difficulty === "intermediate") return "実践";
+  return "発展";
 }
 
 function ContextCard({ children, label, title }: { children: ReactNode; label: string; title: string }) {

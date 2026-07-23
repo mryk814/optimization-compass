@@ -25,9 +25,8 @@ import { DataPage } from "./features/data/DataPage";
 import { DiagnosePage } from "./features/diagnose/DiagnosePage";
 import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
 import { FailureModePage } from "./features/failures/FailureModePage";
-import { GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { domainLabel, GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
-import { ProblemFormulation } from "./features/home/ProblemFormulation";
 import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { MapPage } from "./features/map/MapPage";
@@ -47,13 +46,16 @@ import "./home.css";
 
 const primaryNavigation = [
   { label: "ホーム", to: "/", matchPaths: ["/"] },
-  { label: "問題構造", to: "/map", matchPaths: ["/map"] },
   { label: "条件で診断", to: "/diagnose", matchPaths: ["/diagnose"] },
+  { label: "事例を見る", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "手法を学ぶ", to: "/learn", matchPaths: ["/learn", "/methods"] },
   { label: "動きを見る", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
   { label: "条件を比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
+] as const;
+
+const utilityNavigation = [
+  { label: "問題構造", to: "/map", matchPaths: ["/map"] },
   { label: "横断検索", to: "/search", matchPaths: ["/search"] },
-  { label: "事例を見る", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "根拠を見る", to: "/sources", matchPaths: ["/sources"] },
 ] as const;
 
@@ -90,6 +92,10 @@ function HomePage() {
   );
   const candidate = featuredCase?.item.candidate_methods[0];
   const excluded = featuredCase?.item.excluded_methods[0];
+  const primaryScenario = featuredCase?.journey.scenarios.find(
+    (scenario) => scenario.role === "primary",
+  );
+  const comparison = featuredCase?.journey.comparisons[0];
 
   return (
     <section className="home-page">
@@ -124,7 +130,7 @@ function HomePage() {
           <>
             <header className="home-case-header">
               <div>
-                <p className="eyebrow">Case preview · {featuredCase.item.domain}</p>
+                <p className="eyebrow">Case preview · {domainLabel(featuredCase.item.domain)}</p>
                 <h2 id="home-case-title">{featuredCase.item.title_ja}</h2>
                 <p className="home-case-question">{featuredCase.item.question}</p>
               </div>
@@ -133,25 +139,46 @@ function HomePage() {
               </Link>
             </header>
 
-            <ProblemFormulation
-              constraintsSummary={featuredCase.item.constraints}
-              decisionVariablesSummary={featuredCase.item.decision_variables}
-              formulation={featuredCase.formulation}
-              objectiveSummary={featuredCase.item.objective}
-            />
+            <ol aria-label="このケースでたどる順番" className="home-case-journey">
+              <li>
+                <span>1</span>
+                <div><strong>問いを選ぶ</strong><small>いま見ているCase</small></div>
+              </li>
+              <li>
+                <span>2</span>
+                <Link to={featuredCase.canonicalUrl}>
+                  <strong>問題の形にする</strong><small>変数・目的・制約</small>
+                </Link>
+              </li>
+              <li>
+                <span>3</span>
+                <Link to={primaryScenario?.canonical_url ?? THEATER_ROUTES.index}>
+                  <strong>動きを見る</strong><small>固定した1回の実行</small>
+                </Link>
+              </li>
+              <li>
+                <span>4</span>
+                <Link to={comparison?.canonical_url ?? COMPARE_LAB_ROUTE}>
+                  <strong>条件を比べる</strong><small>固定したもの・変えたもの</small>
+                </Link>
+              </li>
+            </ol>
 
-            <div className="home-case-dispositions">
-              <article className="home-disposition-candidate">
-                <span>候補</span>
-                <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
-                <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う候補です。"}</p>
-              </article>
-              <article className="home-disposition-excluded">
-                <span>選ばない理由</span>
-                <strong>{excluded ? methodLabel(excluded.method_id) : "前提違反を確認"}</strong>
-                <p>{excluded?.reason ?? "候補だけでなく、適用を避ける条件も明示します。"}</p>
-              </article>
-            </div>
+            <details className="home-case-disclosure">
+              <summary>候補と選ばない理由を見る</summary>
+              <div className="home-case-dispositions">
+                <article className="home-disposition-candidate">
+                  <span>候補</span>
+                  <strong>{candidate ? methodLabel(candidate.method_id) : "Case内で確認"}</strong>
+                  <p>{candidate?.reason ?? "問題構造と利用可能な情報に合う候補です。"}</p>
+                </article>
+                <article className="home-disposition-excluded">
+                  <span>選ばない理由</span>
+                  <strong>{excluded ? methodLabel(excluded.method_id) : "前提違反を確認"}</strong>
+                  <p>{excluded?.reason ?? "候補だけでなく、適用を避ける条件も明示します。"}</p>
+                </article>
+              </div>
+            </details>
           </>
         )}
       </section>
@@ -254,6 +281,36 @@ function AppShell() {
               </Link>
             );
           })}
+          <details className="navigation-overflow">
+            <summary
+              className={
+                utilityNavigation.some(({ matchPaths }) => matchPaths.some((matchPath) =>
+                  pathname === matchPath || pathname.startsWith(`${matchPath}/`),
+                ))
+                  ? "nav-link nav-link-active"
+                  : "nav-link"
+              }
+            >
+              探索
+            </summary>
+            <div>
+              {utilityNavigation.map(({ label, to, matchPaths }) => {
+                const isActive = matchPaths.some((matchPath) =>
+                  pathname === matchPath || pathname.startsWith(`${matchPath}/`),
+                );
+                return (
+                  <Link
+                    aria-current={isActive ? "page" : undefined}
+                    className={isActive ? "nav-link nav-link-active" : "nav-link"}
+                    key={label}
+                    to={to}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          </details>
         </nav>
       </header>
       <main id="main-content" tabIndex={-1}>
