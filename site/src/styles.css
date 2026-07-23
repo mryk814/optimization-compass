@@ -1928,6 +1928,7 @@ caption {
 .gallery-section-heading { margin-bottom: .55rem; }
 .gallery-section-heading h2 { margin: .12rem 0 0; color: #3e4f45; font-size: 1.08rem; }
 .gallery-context-grid, .gallery-method-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; }
+.gallery-method-grid { align-items: start; }
 .gallery-context-grid article, .gallery-method-group { min-width: 0; padding: .75rem; border: 1px solid #d3dad3; border-radius: .55rem; background: #fff; }
 .gallery-context-grid article > span { color: #8b4d2c; font-size: .64rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .gallery-context-grid h3 { margin: .25rem 0 .35rem; color: #264637; font-size: .86rem; }
@@ -1937,12 +1938,15 @@ caption {
 .gallery-context-grid small { display: block; margin-top: .45rem; color: #69756d; font-size: .64rem; line-height: 1.5; }
 .gallery-missing { color: #846445 !important; }
 .gallery-inspect-panel { padding: .8rem; border: 1px solid #cdd9d0; border-radius: .6rem; background: #f8faf6; }
-.gallery-inspect-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.gallery-inspect-grid { display: grid; grid-template-columns: minmax(17rem, .75fr) minmax(0, 1.25fr); }
 .gallery-inspect-grid > div { min-width: 0; padding: .2rem .75rem; border-left: 1px solid #dce3dd; }
 .gallery-inspect-grid > div:first-child { padding-left: 0; border-left: 0; }
 .gallery-inspect-grid strong { color: #835033; font-size: .7rem; }
 .gallery-inspect-grid p, .gallery-inspect-grid li { margin: .22rem 0; color: #46534b; font-size: .75rem; line-height: 1.55; }
 .gallery-inspect-grid ul { margin: .22rem 0; padding-left: 1.05rem; }
+.gallery-note-disclosure { margin-top: .55rem; border-top: 1px solid #dce3dd; }
+.gallery-note-disclosure > summary { display: flex; align-items: center; min-height: 2.75rem; color: #315c48; font-weight: 750; cursor: pointer; }
+.gallery-note-disclosure > p { margin: 0 0 .35rem; }
 .gallery-action-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
 .gallery-journey-action { display: flex; min-height: 10rem; padding: .9rem; border: 1px solid #9eb8a8; border-radius: .65rem; background: #f4f9f4; color: inherit; text-decoration: none; flex-direction: column; }
 .gallery-journey-action:hover { border-color: #41765a; background: #eef6ef; }
@@ -1971,6 +1975,8 @@ caption {
 .gallery-disclosure { margin-top: .75rem; border: 1px solid #d4dbd4; border-radius: .45rem; background: #fff; }
 .gallery-disclosure summary { padding: .55rem .65rem; color: #315c48; font-size: .72rem; font-weight: 750; cursor: pointer; }
 .gallery-disclosure pre { max-width: 100%; overflow: auto; margin: 0; padding: .7rem; border-radius: 0 0 .4rem .4rem; background: #1f2b25; color: #f0f5ed; font-size: .7rem; line-height: 1.5; }
+.gallery-additional-note > p, .gallery-additional-note > ul { margin: 0; padding: .7rem; color: #46534b; line-height: 1.65; }
+.gallery-additional-note > ul { padding-left: 1.9rem; }
 .gallery-next-links { display: grid; gap: .4rem; margin: .75rem 0; }
 .gallery-next-links a { width: fit-content; color: #285740; font-size: .74rem; font-weight: 700; text-underline-offset: 2px; }
 .gallery-inline-math { margin: 0 .08em; padding: .05em .22em; border-radius: .2rem; background: #edf1ec; color: #294b3a; font-family: "SFMono-Regular", Consolas, monospace; font-size: .92em; }

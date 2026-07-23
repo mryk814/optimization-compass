@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
@@ -9,10 +9,13 @@ import {
   countCasesByDomain,
   domainLabel,
   GalleryNote,
+  GalleryTakeaway,
   JourneyStatus,
   journeyCompletionLabel,
   journeyStatusLabel,
   journeyStatusSummary,
+  sameStringSet,
+  splitGalleryNote,
 } from "./GalleryPage";
 
 describe("gallery Atlas state", () => {
@@ -73,6 +76,31 @@ describe("gallery learning journey status", () => {
     expect(screen.getByText("q", { selector: "code" })).toBeVisible();
     expect(screen.getByText("-q", { selector: "code" })).toBeVisible();
     expect(screen.queryByText(/\[SO\(3\)の表現\]|\$q\$/u)).not.toBeInTheDocument();
+  });
+
+  test("keeps the first takeaway sentence visible and defers the dense explanation", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <GalleryTakeaway>
+          {"最初に固定条件を確認する。次に$q$と$-q$の同値性を点検する。"}
+        </GalleryTakeaway>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText("最初に固定条件を確認する。")).toBeVisible();
+    expect(screen.getByText(/次に/u)).not.toBeVisible();
+
+    fireEvent.click(screen.getByText("判断の根拠と実務上の注意を読む"));
+
+    expect(screen.getByText(/次に/u)).toBeVisible();
+    expect(within(container).getByText("q", { selector: "code" })).toBeVisible();
+  });
+
+  test("splits dense notes without losing text and compares limitation sets without order dependence", () => {
+    expect(splitGalleryNote("要点。根拠。")).toEqual({ lead: "要点。", detail: "根拠。" });
+    expect(splitGalleryNote("要点だけ")).toEqual({ lead: "要点だけ", detail: "" });
+    expect(sameStringSet(["制約A", "制約B"], ["制約B", "制約A"])).toBe(true);
+    expect(sameStringSet(["制約A"], ["制約A", "制約B"])).toBe(false);
   });
 
   test("carries explicit candidate reasons and case limitations into the page model", () => {

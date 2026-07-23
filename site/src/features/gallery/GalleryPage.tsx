@@ -350,7 +350,7 @@ export function GalleryCasePage() {
               <h2 id="inspect-title">このケースで見るべきこと</h2>
             </header>
             <div className="gallery-inspect-grid">
-              <div><strong>持ち帰る</strong><p><GalleryNote>{journey.takeaway}</GalleryNote></p></div>
+              <div><strong>持ち帰る</strong><GalleryTakeaway>{journey.takeaway}</GalleryTakeaway></div>
               <div><strong>言い過ぎない</strong><ul>{journey.limitations.map((text) => <li key={text}>{text}</li>)}</ul></div>
             </div>
           </section>
@@ -406,16 +406,23 @@ export function GalleryCasePage() {
                 <summary>最小Python例を見る</summary>
                 <pre><code>{item.python_example}</code></pre>
               </details>
-              <p className="atlas-note"><GalleryNote>{item.practical_notes}</GalleryNote></p>
-              <div className="atlas-note">
-                <strong>このケースの限界</strong>
-                <ul>{item.limitations.map((text) => <li key={text}>{text}</li>)}</ul>
-              </div>
+              {item.practical_notes.trim() !== journey.takeaway.trim() && (
+                <details className="gallery-disclosure gallery-additional-note">
+                  <summary>追加の実務メモを見る</summary>
+                  <p><GalleryNote>{item.practical_notes}</GalleryNote></p>
+                </details>
+              )}
+              {!sameStringSet(item.limitations, journey.limitations) && (
+                <details className="gallery-disclosure gallery-additional-note">
+                  <summary>追加の限界を見る</summary>
+                  <ul>{item.limitations.map((text) => <li key={text}>{text}</li>)}</ul>
+                </details>
+              )}
             </div>
             <div>
               <header className="gallery-section-heading">
                 <p className="eyebrow">根拠と次の導線</p>
-                <h2>根拠・限界・次の導線</h2>
+                <h2>根拠・次の導線</h2>
               </header>
               <ResourceList atlasState={state} ids={journey.content_ids} type="content" entity={entity} />
               <nav aria-label="このケースの次の導線" className="gallery-next-links">
@@ -606,6 +613,37 @@ export function GalleryNote({ children }: { children: string }) {
       })}
     </>
   );
+}
+
+export function GalleryTakeaway({ children }: { children: string }) {
+  const { lead, detail } = splitGalleryNote(children);
+  return (
+    <>
+      <p><GalleryNote>{lead}</GalleryNote></p>
+      {detail && (
+        <details className="gallery-note-disclosure">
+          <summary>判断の根拠と実務上の注意を読む</summary>
+          <p><GalleryNote>{detail}</GalleryNote></p>
+        </details>
+      )}
+    </>
+  );
+}
+
+export function splitGalleryNote(text: string): { lead: string; detail: string } {
+  const sentenceEnd = text.indexOf("。");
+  if (sentenceEnd < 0 || sentenceEnd === text.length - 1) return { lead: text, detail: "" };
+  return {
+    lead: text.slice(0, sentenceEnd + 1),
+    detail: text.slice(sentenceEnd + 1).trim(),
+  };
+}
+
+export function sameStringSet(left: string[], right: string[]): boolean {
+  if (left.length !== right.length) return false;
+  const sortedLeft = [...left].sort();
+  const sortedRight = [...right].sort();
+  return sortedLeft.every((value, index) => value === sortedRight[index]);
 }
 
 function ResourceList({
