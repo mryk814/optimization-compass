@@ -49,6 +49,15 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in uncertainty.body
     assert style_warnings(uncertainty) == ()
 
+    variable_domain = pages["concept.variable-domain"]
+    for route in (
+        "#/learn/family.smooth-local",
+        "#/learn/family.discrete-structure",
+        "#/learn/family.manifold",
+    ):
+        assert route in variable_domain.body
+    assert style_warnings(variable_domain) == ()
+
     so3 = pages["concept.so3-rotation-representation"]
     assert "S107" in so3.source_ids
     assert so3.visualization_ids == (
