@@ -141,6 +141,8 @@ describe("gallery learning journey status", () => {
     expect(domainLabel("manufacturing")).toBe("製造");
     expect(domainLabel("energy")).toBe("エネルギー");
     expect(domainLabel("public-policy")).toBe("公共政策");
+    expect(domainLabel("agriculture")).toBe("農業・農地");
+    expect(domainLabel("environment")).toBe("環境・保全");
     expect(domainLabel("custom-domain")).toBe("custom-domain");
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");

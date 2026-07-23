@@ -507,11 +507,13 @@ export function JourneyStatus({
 
 export function domainLabel(domain: string): string {
   const labels: Record<string, string> = {
+    agriculture: "農業・農地",
     all: "すべて",
     business: "事業・施策",
     control: "制御",
     energy: "エネルギー",
     engineering: "設計・工学",
+    environment: "環境・保全",
     finance: "金融",
     logistics: "物流",
     "machine-learning": "機械学習",
