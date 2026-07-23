@@ -45,15 +45,14 @@ import "./styles.css";
 import "./home.css";
 
 const primaryNavigation = [
-  { label: "ホーム", to: "/", matchPaths: ["/"] },
   { label: "条件で診断", to: "/diagnose", matchPaths: ["/diagnose"] },
   { label: "事例を見る", to: "/gallery", matchPaths: ["/gallery"] },
   { label: "手法を学ぶ", to: "/learn", matchPaths: ["/learn", "/methods"] },
-  { label: "動きを見る", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
-  { label: "条件を比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
 ] as const;
 
-const utilityNavigation = [
+const exploreNavigation = [
+  { label: "動きを見る", to: THEATER_ROUTES.index, matchPaths: ["/theater", "/traces"] },
+  { label: "条件を比較", to: COMPARE_LAB_ROUTE, matchPaths: ["/compare"] },
   { label: "問題構造", to: "/map", matchPaths: ["/map"] },
   { label: "横断検索", to: "/search", matchPaths: ["/search"] },
   { label: "根拠を見る", to: "/sources", matchPaths: ["/sources"] },
@@ -226,6 +225,7 @@ async function loadFeaturedCase(signal: AbortSignal): Promise<FeaturedCase | nul
 function AppShell() {
   const { pathname } = useLocation();
   const previousPathname = useRef(pathname);
+  const navigationOverflow = useRef<HTMLDetailsElement>(null);
   const [datasetVersion, setDatasetVersion] = useState<string>();
   useEffect(() => {
     const controller = new AbortController();
@@ -243,6 +243,7 @@ function AppShell() {
   useEffect(() => {
     if (previousPathname.current === pathname) return;
     previousPathname.current = pathname;
+    navigationOverflow.current?.removeAttribute("open");
     document.getElementById("main-content")?.focus({ preventScroll: true });
   }, [pathname]);
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -265,9 +266,7 @@ function AppShell() {
         <nav className="primary-navigation" aria-label="主要ナビゲーション">
           {primaryNavigation.map(({ label, to, matchPaths }) => {
             const isActive = matchPaths.some((matchPath) =>
-              matchPath === "/"
-                ? pathname === matchPath
-                : pathname === matchPath || pathname.startsWith(`${matchPath}/`),
+              pathname === matchPath || pathname.startsWith(`${matchPath}/`),
             );
 
             return (
@@ -281,10 +280,10 @@ function AppShell() {
               </Link>
             );
           })}
-          <details className="navigation-overflow">
+          <details className="navigation-overflow" ref={navigationOverflow}>
             <summary
               className={
-                utilityNavigation.some(({ matchPaths }) => matchPaths.some((matchPath) =>
+                exploreNavigation.some(({ matchPaths }) => matchPaths.some((matchPath) =>
                   pathname === matchPath || pathname.startsWith(`${matchPath}/`),
                 ))
                   ? "nav-link nav-link-active"
@@ -294,7 +293,7 @@ function AppShell() {
               探索
             </summary>
             <div>
-              {utilityNavigation.map(({ label, to, matchPaths }) => {
+              {exploreNavigation.map(({ label, to, matchPaths }) => {
                 const isActive = matchPaths.some((matchPath) =>
                   pathname === matchPath || pathname.startsWith(`${matchPath}/`),
                 );

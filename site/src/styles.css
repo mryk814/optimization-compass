@@ -3446,23 +3446,9 @@ main:focus {
 
   .primary-navigation {
     width: 100%;
+    gap: 0.1rem;
     flex-wrap: nowrap;
-    overflow-x: auto;
     padding: 0.1rem 0 0.2rem;
-    scroll-padding-inline: 0.25rem;
-    scroll-snap-type: x proximity;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .primary-navigation::-webkit-scrollbar {
-    display: none;
-  }
-
-  .primary-navigation > .nav-link,
-  .navigation-overflow {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
   }
 
   main {

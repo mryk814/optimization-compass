@@ -223,13 +223,13 @@ describe("application routes", () => {
 
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
-    expect(links).toHaveLength(9);
-    expect(within(navigation).getByRole("link", { name: "ホーム" })).toBeVisible();
+    expect(links).toHaveLength(8);
+    expect(screen.getByRole("link", { name: "Optimization Atlasのホーム" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "条件で診断" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "事例を見る" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "手法を学ぶ" })).toBeVisible();
-    expect(within(navigation).getByRole("link", { name: "動きを見る" })).toBeVisible();
-    expect(within(navigation).getByRole("link", { name: "条件を比較" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "動きを見る" })).not.toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "条件を比較" })).not.toBeVisible();
     expect(within(navigation).getByRole("link", { name: "問題構造" })).not.toBeVisible();
     expect(within(navigation).getByRole("link", { name: "横断検索" })).not.toBeVisible();
     expect(within(navigation).getByRole("link", { name: "根拠を見る" })).not.toBeVisible();
@@ -237,6 +237,8 @@ describe("application routes", () => {
     expect(within(navigation).getByRole("link", { name: "問題構造" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "横断検索" })).toBeVisible();
     expect(within(navigation).getByRole("link", { name: "根拠を見る" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "動きを見る" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "条件を比較" })).toBeVisible();
     expect(screen.getByRole("link", { name: "条件から診断を始める" })).toBeVisible();
     expect(screen.getByRole("link", { name: "実例から探す" })).toBeVisible();
     within(screen.getByRole("navigation", { name: "次に進む入口" }))
@@ -254,11 +256,26 @@ describe("application routes", () => {
     expect(screen.getByRole("link", { name: "手法を学ぶ" })).toHaveAttribute("aria-current", "page");
   });
 
-  test("keeps Theater and Compare as separate primary navigation destinations", () => {
+  test("keeps Theater and Compare as distinct destinations inside the exploration menu", () => {
     render(<App initialEntityLinks={testLinks} />);
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
+    fireEvent.click(within(navigation).getByText("探索"));
     expect(within(navigation).getByRole("link", { name: "動きを見る" })).toHaveAttribute("href", "#/theater");
     expect(within(navigation).getByRole("link", { name: "条件を比較" })).toHaveAttribute("href", "#/compare");
+  });
+
+  test("closes the exploration menu after choosing a destination", async () => {
+    render(<App initialEntityLinks={testLinks} />);
+    const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
+    const summary = within(navigation).getByText("探索");
+    const menu = summary.closest("details");
+
+    fireEvent.click(summary);
+    expect(menu).toHaveAttribute("open");
+    fireEvent.click(within(navigation).getByRole("link", { name: "条件を比較" }));
+
+    await waitFor(() => expect(menu).not.toHaveAttribute("open"));
+    expect(window.location.hash).toBe("#/compare");
   });
 
   test("the back control uses a safe in-app fallback on a direct entry", () => {
