@@ -1703,8 +1703,13 @@ caption {
 .gallery-search { flex: 1 1 20rem; }
 .gallery-search input { min-width: 12rem; flex: 1; }
 .gallery-toolbar output { margin-left: auto; color: #536159; font-size: .72rem; font-variant-numeric: tabular-nums; }
-.gallery-domain-overview { margin: 0 0 .9rem; padding: .8rem; border: 1px solid #d8ded8; border-radius: .6rem; background: #f8faf7; }
-.gallery-domain-overview > header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .6rem; }
+.gallery-domain-overview { margin: 0 0 .9rem; overflow: hidden; border: 1px solid #d8ded8; border-radius: .6rem; background: #f8faf7; }
+.gallery-domain-overview > summary { min-height: 2.75rem; padding: 0 .8rem; color: #315c48; cursor: pointer; }
+.gallery-domain-summary-row { display: flex; min-height: 2.75rem; align-items: center; justify-content: space-between; gap: .75rem; }
+.gallery-domain-summary-row > span { font-size: .8rem; font-weight: 750; }
+.gallery-domain-summary-row small { color: #647069; font-size: .68rem; }
+.gallery-domain-content { padding: .8rem; border-top: 1px solid #d8ded8; }
+.gallery-domain-content > header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .6rem; }
 .gallery-domain-overview h2, .gallery-domain-overview p { margin: 0; }
 .gallery-domain-overview h2 { color: #213e30; font-size: 1rem; }
 .gallery-domain-overview p { color: #647069; font-size: .875rem; }
@@ -3825,7 +3830,7 @@ main:focus {
 }
 
 @media (max-width: 44rem) {
-  .gallery-domain-overview > header {
+  .gallery-domain-content > header {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.15rem;

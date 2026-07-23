@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
 import rawGallery from "../../../public/data/gallery.json";
@@ -8,6 +8,7 @@ import {
   caseState,
   countCasesByDomain,
   domainLabel,
+  GalleryDomainOverview,
   GalleryNote,
   GalleryTakeaway,
   JourneyStatus,
@@ -35,6 +36,30 @@ describe("gallery Atlas state", () => {
 });
 
 describe("gallery learning journey status", () => {
+  test("keeps coverage counts behind a disclosure while preserving domain filtering", () => {
+    const onSelect = vi.fn();
+    render(
+      <GalleryDomainOverview
+        activeDomain="all"
+        featuredItems={[
+          { domain: "engineering", count: 7 },
+          { domain: "control", count: 3 },
+        ]}
+        largestDomainCount={7}
+        onSelect={onSelect}
+        remainingItems={[{ domain: "science", count: 2 }]}
+      />,
+    );
+
+    expect(screen.getByText("3領域の掲載数")).toBeVisible();
+    expect(screen.getByRole("button", { name: /設計・工学/u })).not.toBeVisible();
+
+    fireEvent.click(screen.getByText("分野の広がりを見る"));
+    fireEvent.click(screen.getByRole("button", { name: /設計・工学/u }));
+
+    expect(onSelect).toHaveBeenCalledWith("engineering");
+  });
+
   test("translates missing canonical routes into reader-facing labels", () => {
     expect(journeyCompletionLabel("missing_primary_scenario")).toBe("主な実行例未接続");
     expect(journeyCompletionLabel("missing_comparison")).toBe("比較ページ未接続");

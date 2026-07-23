@@ -82,36 +82,6 @@ export function GalleryPage() {
           "Theaterで1回の実行を追い、Compareで条件差を確かめます。",
         ]}
       />
-      <section aria-labelledby="gallery-domain-overview-title" className="gallery-domain-overview">
-        <header>
-          <div>
-            <p className="eyebrow">Use case coverage</p>
-            <h2 id="gallery-domain-overview-title">どの分野から探す？</h2>
-          </div>
-          <p>掲載数です。選ぶとケースを絞り込みます。</p>
-        </header>
-        <div className="gallery-domain-primary">
-          <DomainButtons
-            activeDomain={domain}
-            items={featuredDomainCounts}
-            largestDomainCount={largestDomainCount}
-            onSelect={setDomain}
-          />
-        </div>
-        {remainingDomainCounts.length > 0 && (
-          <details className="gallery-domain-more">
-            <summary>ほか{remainingDomainCounts.length}領域を見る</summary>
-            <div>
-              <DomainButtons
-                activeDomain={domain}
-                items={remainingDomainCounts}
-                largestDomainCount={largestDomainCount}
-                onSelect={setDomain}
-              />
-            </div>
-          </details>
-        )}
-      </section>
       <div className="gallery-toolbar">
         <label className="gallery-filter">
           領域
@@ -132,6 +102,13 @@ export function GalleryPage() {
         </label>
         <output aria-live="polite">{filtered.length}件</output>
       </div>
+      <GalleryDomainOverview
+        activeDomain={domain}
+        featuredItems={featuredDomainCounts}
+        largestDomainCount={largestDomainCount}
+        onSelect={setDomain}
+        remainingItems={remainingDomainCounts}
+      />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       <div className="gallery-card-grid">
         {filtered.map((item) => {
@@ -155,6 +132,62 @@ export function GalleryPage() {
         <p className="gallery-empty">条件に合うケースはありません。領域か検索語を変えてください。</p>
       )}
     </section>
+  );
+}
+
+export function GalleryDomainOverview({
+  activeDomain,
+  featuredItems,
+  largestDomainCount,
+  onSelect,
+  remainingItems,
+}: {
+  activeDomain: string;
+  featuredItems: Array<{ domain: string; count: number }>;
+  largestDomainCount: number;
+  onSelect: (domain: string) => void;
+  remainingItems: Array<{ domain: string; count: number }>;
+}) {
+  const domainCount = featuredItems.length + remainingItems.length;
+  return (
+    <details className="gallery-domain-overview">
+      <summary>
+        <span className="gallery-domain-summary-row">
+          <span>分野の広がりを見る</span>
+          <small>{domainCount}領域の掲載数</small>
+        </span>
+      </summary>
+      <div className="gallery-domain-content">
+        <header>
+          <div>
+            <p className="eyebrow">Use case coverage</p>
+            <h2>どの分野から探す？</h2>
+          </div>
+          <p>棒の長さは掲載数です。選ぶとケースを絞り込みます。</p>
+        </header>
+        <div className="gallery-domain-primary">
+          <DomainButtons
+            activeDomain={activeDomain}
+            items={featuredItems}
+            largestDomainCount={largestDomainCount}
+            onSelect={onSelect}
+          />
+        </div>
+        {remainingItems.length > 0 && (
+          <details className="gallery-domain-more">
+            <summary>ほか{remainingItems.length}領域を見る</summary>
+            <div>
+              <DomainButtons
+                activeDomain={activeDomain}
+                items={remainingItems}
+                largestDomainCount={largestDomainCount}
+                onSelect={onSelect}
+              />
+            </div>
+          </details>
+        )}
+      </div>
+    </details>
   );
 }
 
