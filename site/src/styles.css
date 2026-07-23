@@ -255,10 +255,20 @@ caption {
 .home-maintainer-link { margin: 1.25rem 0 0; text-align: right; }
 .coverage-page { display: grid; gap: 2rem; width: 100%; min-width: 0; max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 4rem; box-sizing: border-box; }
 .coverage-page > *, .coverage-page > section { min-width: 0; }
+.coverage-heading, .coverage-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.coverage-heading > div, .coverage-section-heading > div { min-width: 0; }
+.coverage-heading h1, .coverage-section-heading h2 { margin-bottom: .2rem; }
+.coverage-section-heading > p { max-width: 34rem; margin: 0; color: var(--muted-text, #62625e); }
+.coverage-section-heading output { color: var(--muted-text, #62625e); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.coverage-technical-toggle, .coverage-show-all { min-height: 2.75rem; border: 1px solid #9bb4a6; border-radius: .5rem; padding: .55rem .8rem; background: #f5f9f5; color: #285740; font: inherit; font-weight: 750; cursor: pointer; }
+.coverage-technical-toggle[aria-pressed="true"] { border-color: #315c48; background: #e4eee7; }
+.coverage-summary { display: grid; gap: .85rem; }
 .journey-coverage { display: grid; gap: .85rem; padding: 1rem; border: 1px solid var(--border-color, #d8d8d2); border-radius: .75rem; background: var(--surface, #fff); }
 .journey-coverage-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
 .journey-coverage-heading h2 { margin: .1rem 0 0; }
-.journey-milestone { flex: none; border-radius: 999px; padding: .35rem .7rem; font-variant-numeric: tabular-nums; background: #f0ede4; }
+.journey-milestone { display: grid; grid-template-columns: auto auto; gap: .1rem .65rem; flex: none; min-width: 13rem; border-radius: .65rem; padding: .55rem .7rem; font-variant-numeric: tabular-nums; background: #f0ede4; }
+.journey-milestone span { color: #4f5c54; }
+.journey-milestone progress { grid-column: 1 / -1; width: 100%; height: .45rem; accent-color: #287a55; }
 .journey-met { color: #175f40; background: #e2f2e9; }
 .journey-not_met { color: #7b510a; background: #f7ecd4; }
 .journey-status-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; }
@@ -273,6 +283,7 @@ caption {
 .journey-orphans summary { cursor: pointer; }
 .journey-orphans ul { margin: .65rem 0 0; padding-left: 1.2rem; }
 .journey-orphans li + li { margin-top: .3rem; }
+.journey-orphan-summary { margin: 0; color: var(--muted-text, #62625e); }
 .journey-warning { border-left-color: #b47816; }
 .journey-standalone { border-left-color: #6f7080; }
 .coverage-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .75rem; }
@@ -282,30 +293,40 @@ caption {
 .coverage-partial { border-left-color: #b47816; }
 .coverage-missing { border-left-color: #ad3e3e; }
 .coverage-not_applicable { border-left-color: #6f7080; }
-.coverage-baseline { margin: -1.25rem 0 0; color: var(--muted-text, #62625e); font-size: .88rem; }
+.coverage-baseline { margin: 0; color: var(--muted-text, #62625e); font-size: .88rem; }
 .coverage-priority-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .8rem; }
 .coverage-priority-grid article { border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; padding: 1rem; background: var(--surface, #fff); }
 .coverage-priority-grid h3 { margin: .15rem 0 .55rem; }
+.coverage-priority-grid details + details { margin-top: .5rem; }
+.coverage-technical-details { color: var(--muted-text, #62625e); }
+.coverage-technical-details p { overflow-wrap: anywhere; }
 .coverage-priority-grid summary, .coverage-table-wrap summary { cursor: pointer; }
 .coverage-filters { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: .85rem; }
 .coverage-filters label { display: grid; gap: .25rem; font-size: .82rem; font-weight: 700; }
-.coverage-filters select { min-width: 10rem; padding: .5rem; }
+.coverage-filters input, .coverage-filters select { min-width: 10rem; min-height: 2.75rem; padding: .5rem; border: 1px solid #b8c5bc; border-radius: .4rem; background: #fff; color: inherit; font: inherit; }
+.coverage-filters input { min-width: 16rem; }
 .coverage-table-wrap { max-width: 100%; min-width: 0; overflow-x: auto; border: 1px solid var(--border-color, #d8d8d2); border-radius: .6rem; }
 .coverage-table-wrap table { width: 100%; border-collapse: collapse; }
 .coverage-table-wrap th, .coverage-table-wrap td { padding: .7rem .8rem; border-bottom: 1px solid var(--border-color, #d8d8d2); text-align: left; vertical-align: top; }
 .coverage-table-wrap th span, .coverage-table-wrap th code { display: block; }
 .coverage-table-wrap details + details { margin-top: .35rem; }
 .coverage-pill { display: inline-block; border-left: .25rem solid #777; padding: .1rem .35rem; font-size: .78rem; font-weight: 700; }
+.coverage-reason-codes { display: flex; flex-wrap: wrap; gap: .25rem .5rem; color: var(--muted-text, #62625e); }
+.coverage-show-all { display: block; margin: .85rem auto 0; }
+.coverage-empty { padding: 1rem; border: 1px dashed #c5cec7; border-radius: .5rem; color: var(--muted-text, #62625e); text-align: center; }
 .coverage-issues { padding-left: 1.25rem; }
 .coverage-issues code, .coverage-issues strong { overflow-wrap: anywhere; word-break: break-word; }
 .muted { color: var(--muted-text, #62625e); }
 @media (max-width: 600px) {
   .coverage-page { padding: 1.25rem .85rem 3rem; gap: 1.5rem; }
+  .coverage-heading, .coverage-section-heading { align-items: stretch; flex-direction: column; }
+  .coverage-technical-toggle { width: 100%; }
   .coverage-status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .journey-coverage-heading { align-items: start; flex-direction: column; }
+  .journey-milestone { width: 100%; box-sizing: border-box; }
   .journey-status-grid { grid-template-columns: 1fr; }
   .coverage-stat { display: grid; }
-  .coverage-filters label, .coverage-filters select { width: 100%; }
+  .coverage-filters label, .coverage-filters input, .coverage-filters select { width: 100%; box-sizing: border-box; }
 }
 
 .diagnose-page {

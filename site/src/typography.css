@@ -202,9 +202,11 @@
 .visualization-badges span,
 .plot-legend,
 .coverage-filters label,
+.coverage-section-heading output,
 .coverage-pill,
 .coverage-table-wrap table,
-.journey-orphans {
+.journey-orphans,
+.journey-orphan-summary {
   font-size: var(--type-meta);
   line-height: var(--leading-meta);
 }
@@ -316,6 +318,8 @@
 .map-view-selector label,
 .bo-presets label,
 .coverage-filters label,
+.coverage-technical-toggle,
+.coverage-show-all,
 .journey-orphans summary,
 .map-action-button,
 .map-toolbar button,
