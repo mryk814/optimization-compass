@@ -15,9 +15,9 @@ def test_failure_discovery_joins_structured_failures_and_case_exclusions(
         (tmp_path / "failure-discovery.json").read_bytes()
     )
 
-    assert index.summary.total_entries == 39
+    assert index.summary.total_entries == 42
     assert index.summary.structured_failure_count == 12
-    assert index.summary.case_exclusion_count == 27
+    assert index.summary.case_exclusion_count == 30
     assert {entry.entry_kind for entry in index.entries} == {
         "structured_failure",
         "case_exclusion",

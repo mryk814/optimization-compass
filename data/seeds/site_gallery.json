@@ -1510,6 +1510,195 @@
         "Gauss-NewtonとLevenberg-Marquardtはleast-squaresへ移した場合の候補である。square systemで信頼できるJacobianがあるなら、まず専用のroot solverを検討する。",
         "小さな二乗和は各方程式を要求精度で満たすことと同義ではない。residual scalingと成分ごとの許容値を確認する。"
       ]
+    },
+    {
+      "case_id": "manufacturing-process-window",
+      "title_ja": "高価な製造実験から工程条件を探す",
+      "title_en": "Tune manufacturing conditions with expensive experiments",
+      "domain": "manufacturing",
+      "problem_archetype_id": "PA014",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "simulation"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "bounds"},
+        {"feature_id": "F_EVALUATION_COST", "value": "very_expensive"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "global_candidate"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "experiment_only",
+        "Q03": "unknown",
+        "Q04": "bounds",
+        "Q05": "unreliable_or_none",
+        "Q06": "hours_or_more",
+        "Q07": "small_noise",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "no_certificate_needed",
+        "Q11": "none_known",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {"method_id": "M_BAYESIAN_OPT_GP", "reason": "1回の試作・測定が高価でgradientを直接得られない条件で、観測値と不確実性から次に試す工程条件を選べるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_RANDOM_SEARCH", "reason": "探索空間を事前に正規化でき、まず同じ試行budgetでsurrogateを使う価値を測るbaselineが必要な場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_BFGS", "reason": "試作結果だけを観測する高価なblack-boxに対し、信頼できるgradientとline searchを前提にすると追加試作の根拠を説明できないため"}
+      ],
+      "implementation_ids": ["I_BOTORCH", "I_OPTUNA"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ],
+      "comparison_ids": ["COMPARE_BO_ACQUISITION_NOISE_BASELINE"],
+      "source_ids": ["S034", "S035", "S056", "S059"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。",
+      "variable_domain": "実務では温度、送り速度、保持時間などを安全な上下限内に置く連続領域 $X\\subset\\mathbb{R}^d$。固定教材では複数条件を正規化した1変数 $x\\in[-3,3]$ とする。",
+      "decision_variables": "実務では工程温度 $T$、送り速度 $v$、保持時間 $t$。固定教材ではこの組を1個の無次元化した代理変数 $x$ へ写像し、実際の単位や装置設定とは同一視しない。",
+      "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 $f(x)$ を最小化する。固定教材では $f(x)=0.16(x-1.7)^2+0.45\\sin(2.2x)+0.12\\sin(5.3x)$ をblack-boxとして観測する。",
+      "constraints": "各工程条件の装置・安全上の上下限と、試作回数のbudgetを守る。固定教材では $-3\\le x\\le3$、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
+      "map_node_id": "answer:Q06:hours_or_more",
+      "python_example": "import math\nimport optuna\n\n\ndef quality_loss(trial: optuna.Trial) -> float:\n    x = trial.suggest_float(\"normalized_setting\", -3.0, 3.0)\n    return 0.16 * (x - 1.7) ** 2 + 0.45 * math.sin(2.2 * x) + 0.12 * math.sin(5.3 * x)\n\n\nstudy = optuna.create_study(direction=\"minimize\", sampler=optuna.samplers.GPSampler(seed=2604))\nstudy.optimize(quality_loss, n_trials=10)\nprint(study.best_params, study.best_value)",
+      "practical_notes": "各試作について材料lot、装置、operator、環境、入力条件、測定値、測定不確かさ、失敗status、wall timeを保存する。random baselineとの比較では初期点、探索範囲、試行budget、並列数、noiseの扱いを固定し、best observedとsurrogate予測を分けて読む。",
+      "limitations": [
+        "1次元・10回・決定論的な固定教材であり、実製造工程の温度履歴、材料差、装置差、測定誤差、工程driftを表さない。",
+        "固定教材の最良点は実工程の安全性、規格適合、歩留まり、再現性を保証しない。候補は確認実験と工程能力評価を経てから採用する必要がある。",
+        "Bayesian optimizationとrandom searchの結果は探索範囲、kernel、noise model、初期点、budgetに依存し、一般的な手法rankingには使わない。"
+      ]
+    },
+    {
+      "case_id": "battery-operation-tradeoff",
+      "title_ja": "蓄電池運用のコストと充放電量を両方見る",
+      "title_en": "Explore cost-throughput trade-offs in battery operation",
+      "domain": "energy",
+      "problem_archetype_id": "PA038",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "multiobjective"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "bounds"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "pareto_set"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "simulation_only",
+        "Q03": "multiobjective",
+        "Q04": "bounds",
+        "Q05": "unreliable_or_none",
+        "Q06": "seconds",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "multiple_distinct_solutions",
+        "Q10": "no_certificate_needed",
+        "Q11": "other",
+        "Q12": "parallel_evaluations"
+      },
+      "candidate_methods": [
+        {"method_id": "M_NSGA_II", "reason": "時系列simulationから得る購入costと充放電throughputを一つの重みに固定せず、複数の運用候補を近似Pareto集合として残せるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_EPSILON_CONSTRAINT", "reason": "許容できる購入costまたはthroughput上限を明示でき、各scalar subproblemを信頼できるsolverで解ける場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_BFGS", "reason": "二つの目的と状態制約をscalar化せずに通常のBFGSへ渡しても、選べるtrade-off集合や実行可能な時系列運用を得られないため"}
+      ],
+      "implementation_ids": ["I_PYMOO", "I_CVXPY"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "biobjective-quadratic-pareto-front",
+        "SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+      ],
+      "comparison_ids": ["COMPARE_PARETO_PREFERENCE"],
+      "source_ids": ["S039", "S055", "S068"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。",
+      "variable_domain": "実務では各時刻の充電・放電powerとstate of chargeを持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 $x=(x_1,x_2)\\in[0,2]^2$ とする。",
+      "decision_variables": "実務では時刻 $t$ ごとの充電power $p_t^+$、放電power $p_t^-$、state of charge $s_t$。固定教材の $x_1,x_2$ はこのscheduleを直接表さず、二つの運用傾向を読むための代理変数である。",
+      "objective": "実務では購入cost $f_1$ と、充放電量に基づくthroughput proxy $f_2$ を同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+      "constraints": "実務ではpower上下限、state of chargeの遷移・上下限、初期・終端条件を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、energy balanceやefficiencyは表さない。",
+      "map_node_id": "answer:Q03:multiobjective",
+      "python_example": "import numpy as np\nfrom pymoo.algorithms.moo.nsga2 import NSGA2\nfrom pymoo.core.problem import Problem\nfrom pymoo.optimize import minimize\n\n\nclass BatteryProxy(Problem):\n    def __init__(self):\n        super().__init__(n_var=2, n_obj=2, xl=np.zeros(2), xu=np.full(2, 2.0))\n\n    def _evaluate(self, x, out, *args, **kwargs):\n        out[\"F\"] = np.column_stack((np.sum(x**2, axis=1), np.sum((x - 2.0) ** 2, axis=1)))\n\n\nresult = minimize(BatteryProxy(), NSGA2(pop_size=40), (\"n_gen\", 50), seed=1, verbose=False)\nprint(result.F[:5])",
+      "practical_notes": "実運用では価格、負荷、再生可能発電、初期state of charge、efficiency、power上限、終端条件、予測時点を固定して比較する。Pareto frontを得た後に、選好や運用規則で1候補を選び、別期間の価格・負荷で再評価する。",
+      "limitations": [
+        "2変数の二次関数はtrade-offの読み方を示す固定教材であり、蓄電池のstate dynamics、efficiency、温度、劣化model、系統制約を表さない。",
+        "throughputは劣化の代理指標にすぎず、寿命や安全性を保証しない。実設備ではmanufacturerの運用範囲と検証済みの劣化modelを別に確認する必要がある。",
+        "有限populationと評価budgetで得る近似Pareto集合であり、真のfront、将来価格での経済性、NSGA-IIの一般的優位性を保証しない。"
+      ]
+    },
+    {
+      "case_id": "public-infrastructure-selection",
+      "title_ja": "限られた予算で防災事業を選ぶ",
+      "title_en": "Select resilience projects under a fixed budget",
+      "domain": "public-policy",
+      "problem_archetype_id": "PA032",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "linear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "combinatorial"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "optimality_gap"}
+      ],
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "other",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {"method_id": "M_CP_SAT", "reason": "事業の採否、予算、相互排他、同時実施などを整数・Boolean制約として明示し、可行解と最適性gapを確認できるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "MF_DISCRETE_EXACT", "reason": "効果と費用が線形で論理制約が少なく、強い緩和を持つMIPとして表せる場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_NELDER_MEAD", "reason": "事業の採否はbinaryで、予算・依存関係と最適性gapを連続simplexの更新として扱えないため"}
+      ],
+      "implementation_ids": ["I_ORTOOLS_CPSAT"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ],
+      "comparison_ids": ["COMPARE_KNAPSACK_BNB_BUDGET"],
+      "source_ids": ["S021", "S022", "S054", "S079"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。",
+      "variable_domain": "実務では候補事業 $i$ ごとの採否 $x_i\\in\\{0,1\\}$。固定教材では排水改修、避難所整備、監視設備、道路補強を表す $X=\\{0,1\\}^4$ とする。",
+      "decision_variables": "候補事業 $i$ を採択するとき1、採択しないとき0のbinary variable $x_i$。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
+      "objective": "事前に定義した便益score $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_C+5x_D$ を最大化するが、scoreを人命・被害額・確率と同一視しない。",
+      "constraints": "事業費 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_C+3x_D\\le7$ と $x_i\\in\\{0,1\\}$。実務では地域下限、依存関係、同時実施不可などを別制約として追加する。",
+      "map_node_id": "answer:Q01:binary",
+      "python_example": "from ortools.sat.python import cp_model\n\nprojects = {\"drainage\": (4, 9), \"shelter\": (3, 6), \"monitoring\": (2, 4), \"road\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in projects}\nmodel.add(sum(cost * x[name] for name, (cost, _) in projects.items()) <= 7)\nmodel.maximize(sum(score * x[name] for name, (_, score) in projects.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {name: solver.value(var) for name, var in x.items()})",
+      "practical_notes": "便益scoreの定義者、対象期間、地域、根拠data、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、unused budget、最適性gap、停止理由を記録する。scoreやcostを変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
+      "limitations": [
+        "4候補・単一予算・固定scoreの教育用knapsackであり、災害確率、被害推計、事業間相乗効果、着工順序、維持費を表さない。",
+        "便益scoreは意思決定の入力であり、客観的な公共価値や公平性を保証しない。score設計と制約は当事者・専門家による別の審査を必要とする。",
+        "固定instanceの最適解やgapは実計画の妥当性を保証せず、data更新、scenario分析、法令・安全要件、実施可能性の確認を置き換えない。"
+      ]
     }
   ]
 }
