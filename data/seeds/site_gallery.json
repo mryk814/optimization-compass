@@ -723,6 +723,218 @@
         "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
         "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。"
       ]
+    },
+    {
+      "case_id": "laser-process-tuning",
+      "title_ja": "少ない試作でレーザー加工条件を絞る",
+      "title_en": "Tune laser process settings with a limited trial budget",
+      "domain": "manufacturing",
+      "problem_archetype_id": "PA014",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "simulation"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "bounds"},
+        {"feature_id": "F_EVALUATION_COST", "value": "very_expensive"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "global_candidate"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "experiment_only",
+        "Q03": "unknown",
+        "Q04": "bounds",
+        "Q05": "unreliable_or_none",
+        "Q06": "minutes",
+        "Q07": "small_noise",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "no_certificate_needed",
+        "Q11": "none_known",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "reason": "試作ごとの品質lossと観測noiseをsurrogateの平均・不確実性として分け、限られた追加試作で次の連続条件を選べるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_CMA_ES",
+          "reason": "試作を十分に並列化でき、surrogateの不確実性modelよりもpopulationによる頑健な大域候補探索を優先できる予算がある場合"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "実験観測だけから信頼できるgradientを得られず、noiseを含む差分を勾配として使うと更新根拠を確認できないため"
+        }
+      ],
+      "implementation_ids": ["I_BOTORCH", "I_OPTUNA"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ],
+      "comparison_ids": ["COMPARE_LASER_BO_ACQUISITION_NOISE"],
+      "source_ids": ["S035", "S059", "S075"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。",
+      "variable_domain": "実務の候補は出力・走査速度・焦点位置の3次元box。固定教材では、それらを校正済みの1個の正規化条件 $x\\in X=[-3,3]$ に写像し、1次元の観測履歴として読む。",
+      "decision_variables": "次に試す加工条件 $x$。実務では3個の連続設定を別々に保持し、固定教材だけが表示のために1次元へ縮約する。",
+      "objective": "1回の試作後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とする。",
+      "constraints": "各設定の装置上限・下限を守り、固定教材では $-3\\le x\\le3$、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+      "map_node_id": "answer:Q02:experiment_only",
+      "python_example": "import math\n\n\ndef quality_loss(x: float) -> float:\n    if not -3.0 <= x <= 3.0:\n        raise ValueError(\"setting is outside the teaching domain\")\n    latent = 0.18 * (x - 1.2) ** 2 + 0.35 * math.sin(2.4 * x) + 0.08 * math.sin(6.0 * x)\n    measurement = 0.025 * math.sin(11.0 * x)\n    return latent + measurement\n\nobservations = [(x, quality_loss(x)) for x in (-2.0, 0.0, 2.0)]\nprint(min(observations, key=lambda item: item[1]))",
+      "practical_notes": "実務では3変数を1次元へ潰さず、設定値、材料lot、装置状態、測定系、失敗status、試作costを同じledgerへ保存する。Theaterは製造工程そのものではなく、small-noise下でacquisitionが探索と活用を切り替える読み方だけを固定1次元関数で示す。",
+      "limitations": [
+        "固定1次元・決定論的noiseの教育用関数であり、レーザー加工の熱履歴、材料依存性、欠陥機構、装置差、測定再現性をmodel化していない。",
+        "12回の固定budgetと既存BO Theaterは、実工程での良品率、安全性、候補設定の優位性を保証しない。実用化には再現試験、held-out lot、工程能力、安全限界の別検証が必要である。"
+      ]
+    },
+    {
+      "case_id": "energy-cvar-procurement",
+      "title_ja": "価格scenarioのtail costを抑えて電力を調達する",
+      "title_en": "Procure electricity while controlling scenario tail cost",
+      "domain": "energy",
+      "problem_archetype_id": "PA036",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "linear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "linear"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "optimality_gap"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "linear",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "stochastic_or_robust",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "MF_LP_QP_CONIC",
+          "reason": "scenario costのCVaRを補助変数と線形制約へ展開し、調達比率・上限制約と合わせて大域的な凸modelとして解けるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_PROJECTED_GRADIENT",
+          "reason": "CVaRを滑らかな近似へ置き換え、simplexへの射影とgradient誤差を監視できる大規模scenario集合の場合"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_NELDER_MEAD",
+          "reason": "simplex・供給上限とscenarioごとのtail costを明示せず探索すると、低い平均costでも調達制約やtailの根拠を確認できないため"
+        }
+      ],
+      "implementation_ids": ["I_CVXPY"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+        "SCENARIO_PORTFOLIO_CVAR_8_4"
+      ],
+      "comparison_ids": ["COMPARE_ENERGY_NOMINAL_CVAR_8_4"],
+      "source_ids": ["S010", "S055", "S103"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
+      "variable_domain": "固定教材では3個の調達枠への比率 $w\\in X=\\{w\\in\\mathbb{R}^3\\mid w_i\\ge0,\\ \\sum_iw_i=1,\\ w_i\\le0.7\\}$。実務では時間帯・契約・供給源を分けたより大きな配分vectorになる。",
+      "decision_variables": "各調達枠へ割り当てる需要比率 $w=(w_1,w_2,w_3)$。固定教材は需要量を1へ正規化し、絶対電力量と比率を混同しない。",
+      "objective": "scenario $s$ の単位costを $L_s(w)=p_s^\\mathsf{T}w$ とし、固定教材では平均costと $\\alpha=0.8$ の $CVaR_\\alpha(L(w))$ の加重和を最小化する。CVaRは列挙scenario上のempirical tailであり、将来価格への確率保証ではない。",
+      "constraints": "比率のsimplex制約 $\\sum_iw_i=1$、$w_i\\ge0$ と各枠の上限 $w_i\\le0.7$。固定教材では送電制約、時間結合、最小購入量、需給不一致penaltyを入れず、実務適用時は別の制約として追加する。",
+      "map_node_id": "answer:Q11:stochastic_or_robust",
+      "python_example": "import cvxpy as cp\nimport numpy as np\n\nprices = np.array([[8.0, 6.0, 9.0], [7.0, 8.0, 6.0], [11.0, 5.0, 8.0], [6.0, 10.0, 7.0], [9.0, 7.0, 12.0], [13.0, 8.0, 6.0]])\nalpha, tail_weight = 0.8, 0.4\nw = cp.Variable(3)\neta = cp.Variable()\nloss = prices @ w\ncvar = eta + cp.sum(cp.pos(loss - eta)) / ((1.0 - alpha) * len(prices))\nproblem = cp.Problem(cp.Minimize(cp.sum(loss) / len(prices) + tail_weight * cvar), [w >= 0, w <= 0.7, cp.sum(w) == 1])\nproblem.solve()\nprint(problem.status, w.value, cvar.value)",
+      "practical_notes": "価格scenarioの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったscenarioとheld-out scenarioを分ける。接続先のCVaR Theater／Compareは4資産の教材であり、この電力調達caseと同じ実データではない。共通するsimplex・scenario loss・tail riskの読み方だけを再利用する。",
+      "limitations": [
+        "3調達枠・6価格scenario・単一期間の教育用instanceであり、送電網、unit commitment、蓄電池の時間結合、需給誤差、契約条項、実市場の価格形成を表さない。",
+        "CVaRを下げても供給信頼度や将来価格への確率保証は得られない。scenario設計、sample数、alpha、tail weight、held-out期間を変えた感度確認が必要である。"
+      ]
+    },
+    {
+      "case_id": "emergency-shelter-selection",
+      "title_ja": "予算内で臨時支援拠点を選ぶ",
+      "title_en": "Select temporary support sites under a budget",
+      "domain": "public-policy",
+      "problem_archetype_id": "PA032",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "linear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "combinatorial"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "optimality_gap"}
+      ],
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "scheduling_routing",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "拠点の採否、地域ごとの最低配置、相互排他を二値・論理制約として保ち、実行可能解と最適性gapを同時に確認できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "便益とcostが線形で、被覆や公平性を線形制約として十分に表せる場合はMIP familyで緩和boundを使う"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "拠点を開く／開かない二値判断と地域配置の論理制約を連続gradient updateだけでは保持できないため"
+        }
+      ],
+      "implementation_ids": ["I_ORTOOLS_CPSAT"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ],
+      "comparison_ids": ["COMPARE_SUPPORT_SITE_BNB_BUDGET"],
+      "source_ids": ["S021", "S022", "S054", "S079"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-19",
+      "question": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。",
+      "variable_domain": "固定教材では5候補地の採否 $x\\in X=\\{0,1\\}^5$。$x_i=1$ は候補地 i を開くこと、0は開かないことを表す。",
+      "decision_variables": "候補地 $A,B,C,D,E$ ごとの二値変数 $x_i$。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益scoreと設営costを入力する。",
+      "objective": "固定した便益scoreの合計 $8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
+      "constraints": "設営cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1拠点 $x_A+x_B\\ge1$、地域2から少なくとも1拠点 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "map_node_id": "answer:Q01:binary",
+      "python_example": "from ortools.sat.python import cp_model\n\nbenefit = [8, 7, 6, 5, 4]\ncost = [4, 3, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"site_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(benefit[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
+      "practical_notes": "hard constraintと便益scoreを分け、候補地の可用性、移動時間、accessibility、地域別の最低配置、score作成者と更新日を記録する。接続先の分枝限定Theaterは4品目knapsackであり、この公共政策caseの候補地データではない。incumbent、bound、gap、停止理由の読み方だけを共有する。",
+      "limitations": [
+        "5候補地・固定cost・固定便益scoreの教育用選択問題であり、実際の災害需要、道路寸断、人口移動、施設容量、運営継続性、法令を表さない。",
+        "目的値の最大化やgapの証明は政策の妥当性、公平性、安全性を保証しない。実運用では関係者レビュー、複数scenario、地理的被覆、脆弱性指標、実地確認を別に行う必要がある。"
+      ]
     }
   ]
 }

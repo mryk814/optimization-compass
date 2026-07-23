@@ -1111,6 +1111,224 @@
           "artifact": {"artifact_id": "so3-riemannian-alignment", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/so3-riemannian-alignment.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+      "canonical_url": "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+      "aliases": [],
+      "mode": "parameter_sensitivity",
+      "journey_id": "laser-process-tuning",
+      "case_id": "laser-process-tuning",
+      "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+      "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+      "benchmark_context_id": "BENCH_BO_EDUCATIONAL_10",
+      "title_ja": "small noise下で探索係数だけを変える",
+      "title_en": "Change only the exploration coefficient under small noise",
+      "comparison_question": "同じ固定1次元教材、初期観測、small noise、10回の評価budgetで、Expected Improvementの探索係数だけを変えると提案点と不確実性の読み方はどう変わる？",
+      "formulation_summary": "製造Caseの3変数実験を直接再現せず、x∈[-3,3] の固定1次元black-boxでacquisitionの感度だけを読む。",
+      "fixed_factors": [
+        "problem instance OBJECTIVE_EDUCATIONAL_WAVY_1D",
+        "domain [-3, 3]",
+        "initial design [-2.6, 0.0, 2.6]",
+        "base seed 2604",
+        "observation noise sigma=0.08",
+        "oracle evaluation budget 10"
+      ],
+      "changed_factors": ["Expected Improvementのexploration coefficient xiだけを0.18から0へ変える"],
+      "seed_policy": "base seed 2604とnoise streamを固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 10},
+      "stopping_policy": "初期観測3点を含む10 objective evaluationsで停止する。",
+      "tuning_policy": "kernel、initial design、noise sigma=0.08を固定し、xi∈{0.18,0}だけをrun前に変える。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "observations", "label_ja": "観測数", "direction": "none", "unit": "objective evaluations"},
+        {"metric_id": "best_so_far", "label_ja": "best-so-far", "direction": "minimize", "unit": "observed objective"},
+        {"metric_id": "selected_acquisition", "label_ja": "選択点のacquisition", "direction": "none", "unit": "Expected Improvement"},
+        {"metric_id": "selected_uncertainty", "label_ja": "選択点の予測不確実性", "direction": "none", "unit": "1.96 sigma"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。",
+      "caveat": "固定seed・1次元・synthetic objectiveの感度比較であり、レーザー加工条件、BO設定、他手法の一般的優劣や実工程の良品率を推論できない。",
+      "takeaway": "同じnoiseとbudgetでも、探索係数により既知の良好領域と不確実な領域のどちらを提案するかが変わる。",
+      "limitations": [
+        "製造Caseの3変数・材料lot・装置状態を再現せず、1次元の固定教材だけを扱う。",
+        "単一seed・固定initial design・10 evaluationであり、統計的順位や工程能力を示さない。"
+      ],
+      "source_ids": ["S035", "S059", "S075"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "laser-bo-explore-small-noise",
+          "role": "exploratory_reference",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "label_ja": "探索寄りEI・small noise",
+          "label_en": "Exploratory EI with small noise",
+          "parameters": {"history_source": "bo_frames", "proposal_policy": "expected_improvement", "exploration_xi": 0.18, "noise_std": 0.08},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-explore-small_noise.json"}
+        },
+        {
+          "member_id": "laser-bo-exploit-small-noise",
+          "role": "acquisition_sensitivity",
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "label_ja": "活用寄りEI・small noise",
+          "label_en": "Exploitative EI with small noise",
+          "parameters": {"history_source": "bo_frames", "proposal_policy": "expected_improvement", "exploration_xi": 0.0, "noise_std": 0.08},
+          "budget": {"metric": "oracle_evaluations", "value": 10},
+          "artifact": {"artifact_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE", "artifact_kind": "executable_trace", "renderer_family": "surrogate_uncertainty", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/bo-exploit-small_noise.json"}
+        }
+      ]
+    },
+    {
+      "comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "canonical_url": "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "energy-cvar-procurement",
+      "case_id": "energy-cvar-procurement",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+      "benchmark_context_id": "BENCH_PORTFOLIO_CVAR_FIXED_8_4",
+      "title_ja": "同じscenarioで平均costとCVaR costを読み分ける",
+      "title_en": "Read mean cost and CVaR cost on the same scenarios",
+      "comparison_question": "電力調達Caseと同じsimplex・scenario tailの構造を、固定4資産教材でrisk treatmentだけ変えると、trainingとheld-outのsummaryはどう変わる？",
+      "formulation_summary": "電力市場を再現せず、4資産のcapped simplexと固定8/4 return scenarioでmean lossとmean loss + CVaRを比較する。",
+      "fixed_factors": [
+        "4資産のcapped simplex: w_i >= 0, sum(w)=1, w_i <= 0.6",
+        "同じ固定training return scenario 8件",
+        "同じ固定held-out return scenario 4件",
+        "同じscenario順と一様weight",
+        "同じrisk level alpha=0.75",
+        "同じ0.05刻みの教育用decision grid",
+        "同じ12 loss evaluation budget"
+      ],
+      "changed_factors": ["training objectiveのrisk treatmentだけ: mean loss 対 mean loss + 0.5 CVaR_0.75"],
+      "seed_policy": "固定済み8 training / 4 held-out scenarioを使うためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 12},
+      "stopping_policy": "training 8件を集計した後、解を固定したままheld-out 4件を集計し、合計12 loss evaluationで停止する。",
+      "tuning_policy": "alpha=0.75、CVaR weight=0.5、0.05 gridをrun前に固定し、held-outを見て変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "mean_loss", "label_ja": "平均loss", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "cvar_75", "label_ja": "CVaR 75%", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "worst_loss", "label_ja": "最大loss", "direction": "minimize", "unit": "loss"},
+        {"metric_id": "best_loss", "label_ja": "最小loss", "direction": "minimize", "unit": "loss"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberはuncertainty model、8/4 sample、alpha、decision grid、12回のloss評価を共有し、training objectiveのrisk treatmentだけを変える。",
+      "caveat": "4資産教材は電力調達データではない。固定12 scenarioの差から将来価格、供給信頼度、CVaR目的の一般的優位や確率保証を推論できない。",
+      "takeaway": "meanが近くてもtailを目的へ入れると配分は変わり得る。held-outは解を固定して別集計する。",
+      "limitations": [
+        "電力市場、需要、送電網、契約を再現せず、固定8/4件・4資産の教材だけを扱う。",
+        "CVaR objectiveはchance constraint、robust feasibility、DRO guaranteeの代替ではない。"
+      ],
+      "source_ids": ["S010", "S055", "S103"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "energy-bridge-nominal",
+          "role": "nominal_baseline",
+          "method_id": "MF_LP_QP_CONIC",
+          "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "label_ja": "nominal: training mean loss",
+          "label_en": "Nominal: training mean loss",
+          "parameters": {"uncertainty_model": "fixed_return_scenarios", "sample_policy": "fixed_disjoint_8_training_4_held_out", "risk_level": 0.75, "confidence_target": "not_applicable_no_probability_guarantee", "risk_treatment": "mean_loss", "risk_weight": 0.0, "grid_step": 0.05},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "portfolio-nominal-8-4", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-nominal-8-4.json"}
+        },
+        {
+          "member_id": "energy-bridge-cvar",
+          "role": "tail_risk_objective",
+          "method_id": "MF_LP_QP_CONIC",
+          "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "label_ja": "CVaR: training mean + tail risk",
+          "label_en": "CVaR: training mean plus tail risk",
+          "parameters": {"uncertainty_model": "fixed_return_scenarios", "sample_policy": "fixed_disjoint_8_training_4_held_out", "risk_level": 0.75, "confidence_target": "not_applicable_no_probability_guarantee", "risk_treatment": "mean_loss_plus_cvar", "risk_weight": 0.5, "grid_step": 0.05},
+          "budget": {"metric": "oracle_evaluations", "value": 12},
+          "artifact": {"artifact_id": "portfolio-cvar-8-4", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-cvar-8-4.json"}
+        }
+      ]
+    },
+    {
+      "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
+      "canonical_url": "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
+      "aliases": [],
+      "mode": "failure_contrast",
+      "journey_id": "emergency-shelter-selection",
+      "case_id": "emergency-shelter-selection",
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "benchmark_context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+      "title_ja": "支援拠点Caseから探索完了と予算停止を読む",
+      "title_en": "Read completed and budget-stopped search from the support-site case",
+      "comparison_question": "公共政策の5候補地を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
+      "formulation_summary": "支援拠点Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "fixed_factors": [
+        "problem instance INSTANCE_BINARY_KNAPSACK_4",
+        "depth-first include-first strategy",
+        "initial heuristic incumbent value 13",
+        "seed 0",
+        "oracle evaluation budget 9",
+        "fractional-knapsack upper bound"
+      ],
+      "changed_factors": ["node_stop_limitだけを9から4へ変える"],
+      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 9},
+      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "explored_nodes", "label_ja": "展開node数", "direction": "none", "unit": "nodes"},
+        {"metric_id": "incumbent", "label_ja": "best feasible値", "direction": "maximize", "unit": "objective value"},
+        {"metric_id": "global_bound", "label_ja": "大域上界", "direction": "minimize", "unit": "objective bound"},
+        {"metric_id": "absolute_gap", "label_ja": "絶対gap", "direction": "minimize", "unit": "objective gap"},
+        {"metric_id": "feasibility", "label_ja": "incumbentの可行性", "direction": "target", "unit": "status"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "caveat": "4変数教材は実際の候補地・公平性・地理を再現しない。固定探索の差からsolverや政策案の一般的順位を推論できない。",
+      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "limitations": [
+        "公共政策Caseの5候補地ではなく、4変数の決定的なknapsack教材だけを扱う。",
+        "cut生成、presolve、並列探索、wall-clock、地理的被覆、公平性を比較しない。"
+      ],
+      "source_ids": ["S021", "S022", "S079"],
+      "last_verified": "2026-07-19",
+      "members": [
+        {
+          "member_id": "support-site-bnb-complete",
+          "role": "complete_reference",
+          "method_id": "M_BRANCH_BOUND",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "label_ja": "9 node以内で証明完了",
+          "label_en": "Proof completed within 9 nodes",
+          "parameters": {"node_stop_limit": 9},
+          "budget": {"metric": "oracle_evaluations", "value": 9},
+          "artifact": {"artifact_id": "binary-knapsack-bnb-complete", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-complete.json"}
+        },
+        {
+          "member_id": "support-site-bnb-budget-stop",
+          "role": "budget_stop_sensitivity",
+          "method_id": "M_BRANCH_BOUND",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "label_ja": "4 nodeで予算停止",
+          "label_en": "Stopped at 4 nodes",
+          "parameters": {"node_stop_limit": 4},
+          "budget": {"metric": "oracle_evaluations", "value": 9},
+          "artifact": {"artifact_id": "binary-knapsack-bnb-budget", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-budget.json"}
+        }
+      ]
     }
   ]
 }
