@@ -422,11 +422,14 @@ export function domainLabel(domain: string): string {
     all: "すべて",
     business: "事業・施策",
     control: "制御",
+    energy: "エネルギー",
     engineering: "設計・工学",
     finance: "金融",
     logistics: "物流",
     "machine-learning": "機械学習",
+    manufacturing: "製造",
     operations: "運用・計画",
+    "public-policy": "公共政策",
     science: "科学・推定",
   };
   return labels[domain] ?? domain;

@@ -61,6 +61,9 @@ describe("gallery learning journey status", () => {
   test("uses reader-facing domain and journey labels", () => {
     expect(domainLabel("engineering")).toBe("設計・工学");
     expect(domainLabel("machine-learning")).toBe("機械学習");
+    expect(domainLabel("manufacturing")).toBe("製造");
+    expect(domainLabel("energy")).toBe("エネルギー");
+    expect(domainLabel("public-policy")).toBe("公共政策");
     expect(domainLabel("custom-domain")).toBe("custom-domain");
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");
