@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { PageOrientation } from "../../components/PageOrientation";
-import { parseVisualizationScenarioIndex } from "../../contracts/visualization-scenarios";
+import {
+  parseVisualizationScenarioIndex,
+  type VisualizationComparisonRole,
+} from "../../contracts/visualization-scenarios";
 import { siteBaseUrl } from "../../data/base-url";
 import { useEntityLinks } from "../../state/entity-links";
 import {
@@ -38,6 +41,7 @@ const structureReadingLenses = [
 export function TheaterIndexPage() {
   const links = useEntityLinks();
   const [scenarios, setScenarios] = useState<ReturnType<typeof parseVisualizationScenarioIndex>>();
+  const [scope, setScope] = useState<"representative" | "all">("representative");
   const [purpose, setPurpose] = useState("all");
   const [domain, setDomain] = useState<"all" | TheaterDomain>("all");
   const [error, setError] = useState<Error>();
@@ -56,14 +60,15 @@ export function TheaterIndexPage() {
   const catalog = useMemo(() => (
     scenarios && links.status === "ready" ? buildTheaterCatalog(scenarios.scenarios, links.index) : []
   ), [links, scenarios]);
-  const visible = catalog.filter((entry) => (
-    entry.publicationStatus === "published"
-    && (purpose === "all" || entry.scenario.purpose === purpose)
+  const published = catalog.filter((entry) => entry.publicationStatus === "published");
+  const matching = published.filter((entry) => (
+    (purpose === "all" || entry.scenario.purpose === purpose)
     && (domain === "all" || entry.domain === domain)
   ));
-  const featured = visible.find((entry) => (
+  const visible = scope === "all" ? matching : rendererRepresentatives(matching);
+  const featured = published.find((entry) => (
     entry.difficulty === "intro" && entry.scenario.lesson.comparison_role === "primary_example"
-  )) ?? visible[0];
+  )) ?? published[0];
   const families = visible.reduce((groups, entry) => {
     groups.set(entry.familyId, [...(groups.get(entry.familyId) ?? []), entry]);
     return groups;
@@ -81,24 +86,6 @@ export function TheaterIndexPage() {
         purpose="シナリオごとの一手を再生し、何を観測し、なぜ停止したかを追います。"
         readingSteps={["まず代表例を1つ開きます。", "再生して、観測・更新・停止の順に追います。", "条件を変えた違いを見たいときは、比較ページへ進みます。"]}
       />
-      <section className="theater-structure-guide" aria-labelledby="theater-structure-guide-title">
-        <header>
-          <p className="eyebrow">構造で読む</p>
-          <h2 id="theater-structure-guide-title">nested・equilibrium・hybrid の run で分けて見る値</h2>
-          <p>同じ「目的値の履歴」でも、内側の solve、平衡条件、離散 mode が隠れていると読み方が変わります。Theater では、目的値と一緒に構造固有の観測量と限界を置きます。</p>
-        </header>
-        <div className="theater-structure-guide-grid">
-          {structureReadingLenses.map((lens) => (
-            <article key={lens.title}>
-              <span>{lens.title}</span>
-              <h3>{lens.titleJa}</h3>
-              <p>{lens.body}</p>
-              <small>見る値: {lens.observables}</small>
-            </article>
-          ))}
-        </div>
-        <p className="atlas-note">この3つは今後のシナリオで使う読み方の整理です。公開済みカードには、その run が宣言した primary observables だけを表示します。</p>
-      </section>
       {featured && (
         <section className="theater-first-action" aria-labelledby="theater-first-action-title">
           <div>
@@ -114,15 +101,16 @@ export function TheaterIndexPage() {
       )}
       <section className="theater-catalog-tools" aria-labelledby="theater-catalog-tools-title">
         <header>
-          <p className="eyebrow">別のシナリオを探す</p>
-          <h2 id="theater-catalog-tools-title">目的や問題領域で絞る</h2>
+          <p className="eyebrow">次に見る教材を選ぶ</p>
+          <h2 id="theater-catalog-tools-title">見え方・目的・問題領域で絞る</h2>
         </header>
         <div className="theater-catalog-filters" aria-label="シナリオの絞り込み">
+          <label>表示範囲<select aria-label="表示範囲" value={scope} onChange={(event) => setScope(event.target.value as typeof scope)}><option value="representative">見え方別の代表例</option><option value="all">すべてのシナリオ</option></select></label>
           <label>見る目的<select aria-label="見る目的" value={purpose} onChange={(event) => setPurpose(event.target.value)}><option value="all">すべて</option>{Object.entries(purposeLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
           <label>問題領域<select aria-label="問題領域" value={domain} onChange={(event) => setDomain(event.target.value as typeof domain)}><option value="all">すべて</option>{["continuous", "constrained", "discrete", "black-box", "multi-objective"].map((value) => <option key={value} value={value}>{domainLabel(value)}</option>)}</select></label>
-          <span aria-live="polite">{visible.length} / {catalog.filter((entry) => entry.publicationStatus === "published").length} シナリオ</span>
+          <span aria-live="polite">{visible.length}件を表示 · 条件一致 {matching.length}件 · 公開 {published.length}件</span>
         </div>
-        <p className="atlas-note">公開済みシナリオだけを表示しています。まず代表例を見てから、条件差や失敗の対比へ進めます。</p>
+        <p className="atlas-note">最初は可視化方式ごとに代表例を1件ずつ表示します。すべての条件差や失敗例が必要なときだけ、表示範囲を広げます。</p>
       </section>
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {(!scenarios || links.status === "loading") && !error && <p role="status">シナリオカタログを読み込み中…</p>}
@@ -131,28 +119,98 @@ export function TheaterIndexPage() {
           const primary = entries.find((entry) => entry.scenario.lesson.comparison_role === "primary_example") ?? entries[0];
           return (
             <section className="theater-family" key={familyId}>
-              <header><span>{rendererLabels[primary.scenario.artifact.renderer_family]} · {domainLabel(primary.domain)}</span><h2>{primary.methods[0]?.label ?? primary.scenario.runs[0]?.method_id}</h2><small>{entries.length}シナリオ</small></header>
+              <header><span>{rendererLabels[primary.scenario.artifact.renderer_family]} · {domainLabel(primary.domain)}</span><h2>{primary.methods[0]?.label ?? primary.scenario.runs[0]?.method_id}</h2></header>
               <div className="theater-card-grid">
-                {entries.map((entry) => <Link className={`theater-card${entry === primary ? " theater-card-primary" : ""}`} key={entry.scenario.scenario_id} to={entry.route}>
-                  <span>{purposeLabels[entry.scenario.purpose]} · {comparisonRoleLabel(entry.scenario.lesson.comparison_role)}</span>
-                  <h3>{entry.scenario.title_ja}</h3>
-                  <p>{entry.scenario.lesson.learning_objective.ja}</p>
-                  <small className="theater-card-observables">観測: {primaryObservableLabels(entry).join(" · ")}</small>
-                  <small>{entry.journey ? `ケース: ${entry.journey.label}` : `問題: ${entry.scenario.problem_instance_id}`}</small>
-                  <small>{difficultyLabel(entry.difficulty)} · 公開済み · 評価 {entry.scenario.experiment.budget.value}回 →</small>
-                </Link>)}
+                {entries.map((entry) => <TheaterCard entry={entry} key={entry.scenario.scenario_id} />)}
               </div>
             </section>
           );
         })}
       </div>
-      {scenarios && links.status === "ready" && visible.length === 0 && <p className="atlas-note">該当する公開シナリオはありません。</p>}
+      {scenarios && links.status === "ready" && visible.length === 0 && (
+        <div className="theater-empty atlas-note">
+          <p role="status">この条件に合う公開シナリオはありません。</p>
+          <button type="button" onClick={() => { setScope("representative"); setPurpose("all"); setDomain("all"); }}>絞り込みを戻す</button>
+        </div>
+      )}
+      <details className="theater-structure-guide">
+        <summary>
+          <span>読み方を深める</span>
+          <strong>nested・equilibrium・hybrid の run で分けて見る値</strong>
+          <small>高度な構造で、目的値以外に追う観測量</small>
+        </summary>
+        <div className="theater-structure-guide-body">
+          <header>
+            <p>同じ「目的値の履歴」でも、内側の solve、平衡条件、離散 mode が隠れていると読み方が変わります。Theater では、目的値と一緒に構造固有の観測量と限界を置きます。</p>
+          </header>
+          <div className="theater-structure-guide-grid">
+            {structureReadingLenses.map((lens) => (
+              <article key={lens.title}>
+                <span>{lens.title}</span>
+                <h3>{lens.titleJa}</h3>
+                <p>{lens.body}</p>
+                <small>見る値: {lens.observables}</small>
+              </article>
+            ))}
+          </div>
+          <p className="atlas-note">この3つは今後のシナリオで使う読み方の整理です。公開済みカードには、その run が宣言した primary observables だけを表示します。</p>
+        </div>
+      </details>
     </section>
   );
 }
 
-function comparisonRoleLabel(role: string): string {
-  return { primary_example: "代表例", contrast: "対比", sensitivity: "条件差" }[role] ?? role;
+function TheaterCard({ entry }: { entry: TheaterCatalogEntry }) {
+  const observables = primaryObservableLabels(entry);
+  return (
+    <Link
+      className={`theater-card${entry.scenario.lesson.comparison_role === "primary_example" ? " theater-card-primary" : ""}`}
+      to={entry.route}
+    >
+      {entry.scenario.lesson.comparison_role === "primary_example" && (
+        <span className="theater-card-primary-label">まず見る代表例</span>
+      )}
+      <span>{purposeLabels[entry.scenario.purpose]} · {comparisonRoleLabel(entry.scenario.lesson.comparison_role)}</span>
+      <h3>{entry.scenario.title_ja}</h3>
+      <p>{entry.scenario.lesson.learning_objective.ja}</p>
+      <small className="theater-card-observables">観測: {summarizeLabels(observables)}</small>
+      {entry.journey && <small>ケース: {entry.journey.label}</small>}
+      <div className="theater-card-footer">
+        <small>{difficultyLabel(entry.difficulty)} · 評価 {entry.scenario.experiment.budget.value}回</small>
+        <strong>再生する →</strong>
+      </div>
+    </Link>
+  );
+}
+
+function rendererRepresentatives(entries: TheaterCatalogEntry[]): TheaterCatalogEntry[] {
+  const representatives = new Map<string, TheaterCatalogEntry>();
+  entries.forEach((entry) => {
+    const renderer = entry.scenario.artifact.renderer_family;
+    const current = representatives.get(renderer);
+    if (!current || (
+      entry.scenario.lesson.comparison_role === "primary_example"
+      && current.scenario.lesson.comparison_role !== "primary_example"
+    )) {
+      representatives.set(renderer, entry);
+    }
+  });
+  const representativeIds = new Set([...representatives.values()].map((entry) => entry.scenario.scenario_id));
+  return entries.filter((entry) => representativeIds.has(entry.scenario.scenario_id));
+}
+
+function summarizeLabels(labels: string[]): string {
+  return labels.length <= 2 ? labels.join(" · ") : `${labels.slice(0, 2).join(" · ")} · ほか${labels.length - 2}件`;
+}
+
+function comparisonRoleLabel(role: VisualizationComparisonRole): string {
+  const labels: Record<VisualizationComparisonRole, string> = {
+    primary_example: "代表例",
+    sensitivity_variant: "条件差",
+    failure_contrast: "失敗例",
+    baseline: "基準",
+  };
+  return labels[role];
 }
 
 function difficultyLabel(difficulty: TheaterCatalogEntry["difficulty"]): string {
