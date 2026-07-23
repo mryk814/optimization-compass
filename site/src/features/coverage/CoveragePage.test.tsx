@@ -20,14 +20,20 @@ describe("CoveragePage", () => {
   test("shows priority reasons and filters the full inventory", async () => {
     render(<MemoryRouter><CoveragePage /></MemoryRouter>);
     expect(await screen.findByRole("heading", { name: "Atlasの接続状況" })).toBeVisible();
-    expect(screen.getByText(/言語範囲:/u)).toBeVisible();
-    expect(screen.getByText(/日本語の説明を基準に監査します/u)).toBeVisible();
+    expect(screen.getByText(/日本語の説明を基準にし/u)).not.toBeVisible();
     expect(screen.getByRole("heading", { name: "学習経路の接続状況" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "参照整合性" })).toBeVisible();
     expect(screen.getByText(/これは学習経路が完了しているという意味ではありません/u)).toBeVisible();
     expect(screen.getByText(`${rawJourneys.summary.status_counts.complete}件完了`)).toBeVisible();
     expect(screen.getByText(/目標5件を達成/u)).toBeVisible();
-    expect(screen.getByRole("region", { name: "学習経路の接続状況一覧" })).toBeVisible();
+    expect(screen.getByRole("region", { name: "学習経路の接続状況一覧（表）" })).toBeVisible();
+    const mobileJourneyList = document.querySelector<HTMLElement>(".journey-mobile-list");
+    expect(mobileJourneyList).toBeInTheDocument();
+    const firstPartial = rawJourneys.journeys.find((journey) => journey.status === "partial");
+    expect(firstPartial).toBeDefined();
+    expect(mobileJourneyList).toHaveTextContent(firstPartial?.title_ja ?? "");
+    expect(mobileJourneyList).toHaveTextContent("次に必要な接続");
+    expect(mobileJourneyList).toHaveTextContent(`完了した学習経路${rawJourneys.summary.status_counts.complete}件`);
     expect(screen.getByText(/未接続の成果物:/u)).toBeVisible();
     expect(screen.queryByText(new RegExp(rawJourneys.orphan_assets[0].asset_id, "u"))).not.toBeInTheDocument();
     expect(screen.getByText(`${rawCoverage.subjects.length}件中24件を表示`)).toBeVisible();

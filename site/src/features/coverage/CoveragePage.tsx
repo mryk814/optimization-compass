@@ -12,6 +12,7 @@ import {
   parseLearningJourneyIndex,
   type JourneyDimensionName,
   type JourneyStatus,
+  type LearningJourney,
   type LearningJourneyIndex,
 } from "../../contracts/learning-journeys";
 import { parseSiteManifest } from "../../contracts/manifest";
@@ -123,7 +124,7 @@ function CoverageView({
       </header>
 
       <PageOrientation
-        limits="接続状況は学習経路の整備状態を監査します。件数や接続率だけで、教材の質や手法の優劣を判断しません。"
+        limits="接続状況は学習経路の整備状態を監査します。件数や接続率だけで教材の質や手法の優劣を判断しません。日本語の説明を基準にし、英語の正式用語や別名は検索用情報として扱います。"
         next={[
           { label: "教材の進捗を見る", to: "/learn" },
           { label: "Galleryのケースを見る", to: "/gallery" },
@@ -136,10 +137,6 @@ function CoverageView({
           "一覧を検索・絞り込みして、個別の不足を追います。",
         ]}
       />
-
-      <p className="coverage-language-note">
-        <strong>言語範囲:</strong> 日本語の説明を基準に監査します。英語の正式用語や別名は検索用情報であり、英語版の完備を意味しません。
-      </p>
 
       <JourneyCompleteness journeys={journeys} showTechnical={showTechnical} />
       <CoverageSummary report={report} />
@@ -395,6 +392,8 @@ function JourneyCompleteness({
   const target = journeys.summary.target_complete_journeys;
   const remaining = Math.max(0, target - completed);
   const surplus = Math.max(0, completed - target);
+  const incompleteJourneys = journeys.journeys.filter((journey) => journey.status !== "complete");
+  const completeJourneys = journeys.journeys.filter((journey) => journey.status === "complete");
 
   return (
     <section className="journey-coverage" aria-labelledby="journey-coverage-title">
@@ -421,7 +420,37 @@ function JourneyCompleteness({
           </article>
         ))}
       </div>
-      <div className="coverage-table-wrap" role="region" aria-label="学習経路の接続状況一覧" tabIndex={0}>
+      <section className="journey-mobile-list" aria-label="学習経路の接続状況一覧">
+        <div className="journey-mobile-incomplete">
+          {incompleteJourneys.map((journey) => (
+            <JourneyMobileCard
+              assessment={assessmentById.get(journey.journey_id)}
+              journey={journey}
+              key={journey.journey_id}
+              showTechnical={showTechnical}
+            />
+          ))}
+        </div>
+        {completeJourneys.length > 0 && (
+          <details className="journey-mobile-complete">
+            <summary>
+              <span>完了した学習経路</span>
+              <strong>{completeJourneys.length}件</strong>
+            </summary>
+            <div>
+              {completeJourneys.map((journey) => (
+                <JourneyMobileCard
+                  assessment={assessmentById.get(journey.journey_id)}
+                  journey={journey}
+                  key={journey.journey_id}
+                  showTechnical={showTechnical}
+                />
+              ))}
+            </div>
+          </details>
+        )}
+      </section>
+      <div className="coverage-table-wrap journey-desktop-table" role="region" aria-label="学習経路の接続状況一覧（表）" tabIndex={0}>
         <table>
           <thead>
             <tr><th>学習経路</th><th>状態</th><th>不足している接続</th></tr>
@@ -444,7 +473,7 @@ function JourneyCompleteness({
                     {assessment && assessment.missing_dimensions.length > 0
                       ? (
                         <details>
-                          <summary>{assessment.missing_dimensions.length}項目</summary>
+                           <summary>{assessment.missing_dimensions.length}領域</summary>
                           <ul>
                             {assessment.missing_dimensions.map((name) => (
                               <li key={name}>
@@ -486,6 +515,49 @@ function JourneyCompleteness({
         </details>
       )}
     </section>
+  );
+}
+
+function JourneyMobileCard({
+  journey,
+  assessment,
+  showTechnical,
+}: {
+  journey: LearningJourney;
+  assessment: LearningJourneyIndex["assessments"][number] | undefined;
+  showTechnical: boolean;
+}) {
+  const missingDimensions = assessment?.missing_dimensions ?? [];
+  return (
+    <article className={`journey-mobile-card journey-${journey.status}`}>
+      <div className="journey-mobile-card-heading">
+        <Link to={journey.canonical_url}>{journey.title_ja}</Link>
+        <span className={`coverage-pill journey-${journey.status}`}>
+          {journeyStatusLabels[journey.status]}
+        </span>
+      </div>
+      {showTechnical && <code>{journey.journey_id}</code>}
+      {missingDimensions.length > 0
+        ? (
+          <details className="journey-mobile-gaps">
+            <summary>
+              <span>次に必要な接続</span>
+              <strong>{missingDimensions.length}領域</strong>
+            </summary>
+            <ul>
+              {missingDimensions.map((name) => (
+                <li key={name}>
+                  {dimensionLabels[name]}
+                  {showTechnical && (
+                    <code>{assessment?.dimensions[name].reason_codes.join(", ")}</code>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+        : <p className="journey-mobile-complete-copy">定式化・実行例・比較まで接続済み</p>}
+    </article>
   );
 }
 
