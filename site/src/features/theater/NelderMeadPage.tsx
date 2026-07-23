@@ -75,12 +75,16 @@ export function NelderMeadVisualization({
           <h1>Nelder–Meadの一手を追う</h1>
           <p>再生すると、単体がどの頂点を基準に動き、候補を受理・却下したかが順に表示されます。</p>
         </div>
-        <div className="visualization-badges" aria-label="可視化artifact情報">
-          <span>AlgorithmTrace {trace.contract_version}</span>
-          <span>{scenario.artifact.artifact_kind}</span>
-          <span>{scenario.artifact.renderer_family} {scenario.artifact.renderer_contract_version}</span>
-        </div>
       </header>
+
+      <section className="theater-first-action theater-first-action-detail" aria-labelledby="nm-first-action-title">
+        <div>
+          <p className="eyebrow">最初に押すところ</p>
+          <h2 id="nm-first-action-title">再生して、単体の動きを追う</h2>
+          <p>最初は図の細部を読む必要はありません。再生を止めながら、どの点が動き、判断がどう変わったかを見ます。</p>
+        </div>
+        <PlaybackControls playback={playback} />
+      </section>
 
       <section className="visualization-switches" aria-label="Nelder–Meadの表示条件">
         <label>
@@ -107,15 +111,15 @@ export function NelderMeadVisualization({
         </label>
       </section>
 
-      <section className="theater-first-action theater-first-action-detail" aria-labelledby="nm-first-action-title">
-        <div>
-          <p className="eyebrow">最初に押すところ</p>
-          <h2 id="nm-first-action-title">再生して、単体の動きを追う</h2>
-          <p>最初は図の細部を読む必要はありません。再生を止めながら、どの点が動き、判断がどう変わったかを見ます。</p>
-        </div>
-        <PlaybackControls playback={playback} />
-      </section>
       <ScenarioContextPanel scenario={scenario} />
+      <details className="technical-disclosure">
+        <summary>データ仕様を確認</summary>
+        <dl>
+          <div><dt>Trace契約</dt><dd>AlgorithmTrace {trace.contract_version}</dd></div>
+          <div><dt>Artifact種別</dt><dd>{scenario.artifact.artifact_kind}</dd></div>
+          <div><dt>Renderer</dt><dd>{scenario.artifact.renderer_family} {scenario.artifact.renderer_contract_version}</dd></div>
+        </dl>
+      </details>
       <GuidedStoryPanel
         activeStep={guidedStep}
         onStepChange={setGuidedStep}
@@ -265,7 +269,7 @@ export function NelderMeadVisualization({
         </section>
       )}
 
-      <details className="text-alternative" open>
+      <details className="text-alternative">
         <summary>静的要約・テキスト代替</summary>
         <p>{staticSummary(frame, vertices, centroid, candidate)}</p>
         <ul>

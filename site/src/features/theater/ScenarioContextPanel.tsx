@@ -56,11 +56,20 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
     <section className="scenario-context-panel" aria-label="ケースとシナリオの関連情報">
       <header><span>1回の実行で機構を見る</span><h2>このrunで見るもの</h2><p>{scenario.lesson.learning_objective.ja}</p></header>
       <dl className="scenario-context-grid">
-        <div><dt>問題 (Problem)</dt><dd>{scenario.problem_definition_id}</dd></div>
-        <div><dt>問題インスタンス (Instance)</dt><dd>{scenario.problem_instance_id}</dd></div>
-        <div><dt>手法 (Method)</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
         <div><dt>観測する値 (Observables)</dt><dd>{scenario.lesson.primary_observables.map((item) => item.label_ja).join(" / ")}</dd></div>
+        <div>
+          <dt>実行の範囲</dt>
+          <dd>{new Set(scenario.runs.map((run) => run.method_id)).size}手法 · 1問題インスタンス · {scenario.runs.length}run</dd>
+        </div>
       </dl>
+      <details className="scenario-identifiers">
+        <summary>識別子を確認</summary>
+        <dl>
+          <div><dt>問題 (Problem)</dt><dd>{scenario.problem_definition_id}</dd></div>
+          <div><dt>問題インスタンス (Instance)</dt><dd>{scenario.problem_instance_id}</dd></div>
+          <div><dt>手法 (Method)</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
+        </dl>
+      </details>
       {context?.journey ? <div className="scenario-case-formulation" tabIndex={0}>
         <h3>ケース: {context.journey.title_ja}</h3>
         <p>{context.journey.learning_objective}</p>

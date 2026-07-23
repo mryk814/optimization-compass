@@ -852,9 +852,56 @@ caption {
 }
 
 .visualization-switches select:focus-visible,
-.text-alternative summary:focus-visible {
+.text-alternative summary:focus-visible,
+.technical-disclosure summary:focus-visible,
+.scenario-identifiers summary:focus-visible {
   outline: 3px solid #e2a677;
   outline-offset: 2px;
+}
+
+.technical-disclosure,
+.scenario-identifiers {
+  margin: 0.65rem 0;
+  color: #59645d;
+  font-size: 0.7rem;
+}
+
+.technical-disclosure > summary,
+.scenario-identifiers > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #315745;
+  font-weight: 750;
+}
+
+.technical-disclosure dl,
+.scenario-identifiers dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.5rem 0 0;
+}
+
+.technical-disclosure dl div,
+.scenario-identifiers dl div {
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #d8ded8;
+  border-radius: 0.4rem;
+  background: #f7f8f5;
+}
+
+.technical-disclosure dt,
+.scenario-identifiers dt {
+  color: #68736c;
+  font-size: 0.64rem;
+}
+
+.technical-disclosure dd,
+.scenario-identifiers dd {
+  overflow-wrap: anywhere;
+  margin: 0.14rem 0 0;
+  color: #263c30;
 }
 
 .decision-badge {
@@ -1071,6 +1118,8 @@ caption {
   .visualization-badges { justify-content: flex-start; margin-top: 0.55rem; }
   .visualization-switches { display: grid; grid-template-columns: minmax(0, 1fr); }
   .visualization-switches select { width: 100%; }
+  .technical-disclosure dl,
+  .scenario-identifiers dl { grid-template-columns: minmax(0, 1fr); }
   .nm-layout { grid-template-columns: minmax(0, 1fr); }
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }
   .shape-legend { grid-template-columns: minmax(0, 1fr); }
