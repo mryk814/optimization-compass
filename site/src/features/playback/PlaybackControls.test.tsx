@@ -61,7 +61,7 @@ describe("PlaybackControls", () => {
     expect(screen.getByLabelText("反復")).toHaveTextContent("0");
     expect(screen.getByLabelText("判定")).toHaveTextContent("該当なし");
     expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
-      "説明は未登録です（trace.future-event）",
+      "このフレームの補足説明はありません。",
     );
     fireEvent.click(screen.getByRole("button", { name: "1フレーム進む" }));
     expect(screen.getByLabelText("current frame")).toHaveTextContent("1");

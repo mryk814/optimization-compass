@@ -583,10 +583,6 @@ caption {
 }
 
 .trace-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem 1.25rem;
   margin-bottom: 0.75rem;
 }
 
@@ -598,34 +594,6 @@ caption {
 .trace-header h1 {
   font-size: clamp(1.4rem, 4vw, 2.1rem);
   letter-spacing: -0.035em;
-}
-
-.trace-identity {
-  min-width: min(20rem, 100%);
-  margin: 0;
-  padding: 0.55rem 0.65rem;
-  border: 1px solid #d4d6cf;
-  border-radius: 0.45rem;
-  background: #faf9f4;
-  font-size: 0.68rem;
-}
-
-.trace-identity div {
-  display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
-  gap: 0.4rem;
-}
-
-.trace-identity dt {
-  color: #6c756f;
-}
-
-.trace-identity dd {
-  min-width: 0;
-  margin: 0;
-  color: #263c30;
-  font-weight: 700;
-  overflow-wrap: anywhere;
 }
 
 .playback-controls {
@@ -711,6 +679,21 @@ caption {
   margin-top: 0.65rem;
 }
 
+.trace-snapshot-disclosure {
+  margin-top: 0.75rem;
+}
+
+.trace-snapshot-disclosure > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #315745;
+  font-weight: 750;
+}
+
+.trace-snapshot-disclosure[open] > summary {
+  margin-bottom: 0.55rem;
+}
+
 .trace-snapshot section,
 .trace-summary {
   min-width: 0;
@@ -779,14 +762,6 @@ caption {
 }
 
 @media (max-width: 40rem) {
-  .trace-header {
-    display: block;
-  }
-
-  .trace-identity {
-    margin-top: 0.55rem;
-  }
-
   .trace-snapshot {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -854,7 +829,9 @@ caption {
 .visualization-switches select:focus-visible,
 .text-alternative summary:focus-visible,
 .technical-disclosure summary:focus-visible,
-.scenario-identifiers summary:focus-visible {
+.scenario-identifiers summary:focus-visible,
+.scenario-case-formulation summary:focus-visible,
+.trace-snapshot-disclosure summary:focus-visible {
   outline: 3px solid #e2a677;
   outline-offset: 2px;
 }
@@ -894,7 +871,7 @@ caption {
 .technical-disclosure dt,
 .scenario-identifiers dt {
   color: #68736c;
-  font-size: 0.64rem;
+  font-size: inherit;
 }
 
 .technical-disclosure dd,
@@ -3758,6 +3735,8 @@ main:focus {
 .scenario-context-grid dt { color: #52605a; font-size: 0.78rem; }
 .scenario-context-grid dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; }
 .scenario-case-formulation { padding: 0.75rem; border-radius: 0.6rem; background: #fff; }
+.scenario-case-formulation > summary { cursor: pointer; color: #315745; font-weight: 750; }
+.scenario-case-formulation > div { padding-top: 0.55rem; }
 .scenario-context-links { display: flex; min-width: 0; flex-wrap: wrap; gap: 0.5rem 1rem; }
 .scenario-context-links a { min-width: 0; overflow-wrap: anywhere; }
 .scenario-run-limit { margin: 0; color: #52605a; }

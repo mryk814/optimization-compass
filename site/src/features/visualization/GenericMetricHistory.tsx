@@ -70,9 +70,14 @@ function MetricPanel({
   const span = Math.max(maximum - minimum, 1e-9);
   const x = (value: number) => plot.left + (value / budget) * (plot.right - plot.left);
   const y = (value: number) => plot.bottom - ((transform(value) - minimum) / span) * (plot.bottom - plot.top);
+  const showEnglishLabel = sample.label_en.trim().toLocaleLowerCase()
+    !== sample.label_ja.trim().toLocaleLowerCase();
   return (
     <figure className="metric-history-panel explanatory-figure">
-      <h3>{sample.label_ja} <small>{sample.label_en}</small></h3>
+      <h3>
+        {sample.label_ja}
+        {showEnglishLabel && <> <small lang="en">{sample.label_en}</small></>}
+      </h3>
       <svg viewBox="0 0 760 204" role="img" aria-label={`${sample.label_ja}を評価回数ごとに比較`}>
         <rect className="objective-background" height="204" rx="8" width="760" x="0" y="0" />
         <line className="plot-axis" x1={plot.left} x2={plot.right} y1={plot.bottom} y2={plot.bottom} />

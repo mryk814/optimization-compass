@@ -35,9 +35,9 @@ export function ScenarioLessonPanel({ scenario, showNarration = true }: Scenario
       </dl>
       {showNarration && (
         <ol className="scenario-narration" aria-label="説明の節目">
-          {lesson.narration_steps.map((step) => (
+          {lesson.narration_steps.map((step, index) => (
             <li key={step.milestone_id}>
-              <small>{step.milestone_id}</small>
+              <small>{index + 1}</small>
               <span>{step.title_ja}</span>
             </li>
           ))}

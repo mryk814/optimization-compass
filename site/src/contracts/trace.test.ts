@@ -74,7 +74,7 @@ describe("AlgorithmTrace parser", () => {
   test("unknown explanation keys use a deterministic common fallback", () => {
     const parsed = parseAlgorithmTrace(payload);
     expect(traceEventExplanation(parsed.frames[0], "ja")).toBe(
-      "説明は未登録です（trace.future-event）",
+      "このフレームの補足説明はありません。",
     );
   });
 });

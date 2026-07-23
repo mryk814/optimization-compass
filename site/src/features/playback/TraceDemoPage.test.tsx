@@ -1,4 +1,4 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
 import { createHash, webcrypto } from "node:crypto";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, describe, expect, test, vi } from "vitest";
@@ -136,6 +136,7 @@ describe("TraceDemoPage", () => {
 
     expect(screen.getByRole("status")).toHaveTextContent("読み込み中");
     expect(await screen.findByRole("heading", { level: 1, name: "AlgorithmTrace 契約デモ" })).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: "再生して、変化の順序を追う" })).toBeVisible();
     expect(screen.getByRole("region", { name: "アルゴリズム再生コントロール" })).toBeVisible();
     expect(screen.getByText("初期状態")).toBeVisible();
     expect(screen.getByLabelText("反復")).toHaveTextContent("0");
@@ -143,7 +144,11 @@ describe("TraceDemoPage", () => {
     expect(screen.getByLabelText("イベント説明")).toHaveTextContent(
       "初期状態を評価し、完全なスナップショットを作成します。",
     );
-    expect(screen.getByText("M_EDUCATIONAL")).toBeVisible();
+    const technicalDetails = screen.getByText("データ仕様を確認", { exact: true }).closest("details");
+    expect(technicalDetails).not.toHaveAttribute("open");
+    expect(within(technicalDetails as HTMLElement).getByText("M_EDUCATIONAL")).toBeInTheDocument();
+    const snapshotDetails = screen.getByText("現在フレームの数値を確認", { exact: true }).closest("details");
+    expect(snapshotDetails).not.toHaveAttribute("open");
     expect(screen.getByRole("link", { name: new RegExp(trace.source_ids[0], "u") }))
       .toHaveAttribute("href", `/sources/${trace.source_ids[0]}`);
     expect(fetchMock).toHaveBeenCalledTimes(5);

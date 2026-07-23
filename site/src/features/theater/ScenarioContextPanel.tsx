@@ -70,13 +70,16 @@ export function ScenarioContextPanel({ scenario }: { scenario: VisualizationScen
           <div><dt>手法 (Method)</dt><dd>{[...new Set(scenario.runs.map((run) => run.method_id))].join(" / ")}</dd></div>
         </dl>
       </details>
-      {context?.journey ? <div className="scenario-case-formulation" tabIndex={0}>
-        <h3>ケース: {context.journey.title_ja}</h3>
-        <p>{context.journey.learning_objective}</p>
-        <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>
-        <p><strong>f(x)</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.objective }} /></p>
-        <p><strong>制約</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.constraints }} /></p>
-      </div> : <p className="atlas-note">この教材runはケースの学習経路に未接続です。問題インスタンスの範囲で読みます。</p>}
+      {context?.journey ? <details className="scenario-case-formulation">
+        <summary>ケースの数式・制約を確認</summary>
+        <div>
+          <h3>ケース: {context.journey.title_ja}</h3>
+          <p>{context.journey.learning_objective}</p>
+          <p><strong>x</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.decision_variables }} /></p>
+          <p><strong>f(x)</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.objective }} /></p>
+          <p><strong>制約</strong> <span dangerouslySetInnerHTML={{ __html: context.journey.formulation.constraints }} /></p>
+        </div>
+      </details> : <p className="atlas-note">この教材runはケースの学習経路に未接続です。問題インスタンスの範囲で読みます。</p>}
       <nav className="scenario-context-links" aria-label="同じ学習経路への導線">
         {context?.journey && <JourneyLink to={context.journey.canonical_url}>Caseへ戻る</JourneyLink>}
         {[...comparisonLinks.entries()].map(([id, url]) => <JourneyLink journeyPatch={{ comparisonId: id }} key={id} to={url}>Compareへ: {id}</JourneyLink>)}

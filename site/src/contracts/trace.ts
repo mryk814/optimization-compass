@@ -362,8 +362,8 @@ export function traceEventExplanation(frame: TraceFrame, locale: "ja" | "en" = "
   const explanation = traceEventExplanations[frame.explanation_key];
   if (explanation) return explanation[locale];
   return locale === "ja"
-    ? `説明は未登録です（${frame.explanation_key}）`
-    : `No explanation registered (${frame.explanation_key})`;
+    ? "このフレームの補足説明はありません。"
+    : "No additional explanation is available for this frame.";
 }
 
 function parseFrame(value: unknown, index: number): TraceFrame {

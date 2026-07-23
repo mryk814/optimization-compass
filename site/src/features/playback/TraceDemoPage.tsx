@@ -89,35 +89,32 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
   const frame = playback.currentFrame;
   const visibleLayers = new Set(guidedStep?.visible_layers ?? scenario?.artifact.observable_ids ?? []);
   const showAll = guidedStep === null;
+  const showEnglishTitle = entry.title_en.trim().toLocaleLowerCase()
+    !== entry.title_ja.trim().toLocaleLowerCase();
   return (
     <article className="trace-page">
       <header className="trace-header">
         <div>
-          <p className="eyebrow">AlgorithmTrace {trace.contract_version}</p>
+          <p className="eyebrow">動きを見る · 1回の実行</p>
           <h1>{entry.title_ja}</h1>
-          <p>{entry.title_en}</p>
+          {showEnglishTitle && <p lang="en">{entry.title_en}</p>}
         </div>
-        <dl className="trace-identity">
-          <div><dt>手法 (Method)</dt><dd>{trace.method_id}</dd></div>
-          <div><dt>目的関数 (Objective)</dt><dd>{trace.objective_id}</dd></div>
-          <div><dt>データセット (Dataset)</dt><dd>{trace.dataset_version}</dd></div>
-        </dl>
       </header>
-      {scenario && <>
-        <ScenarioContextPanel scenario={scenario} />
-        <ScenarioLessonPanel scenario={scenario} />
-        <GuidedStoryPanel
-          activeStep={guidedStep}
-          onStepChange={setGuidedStep}
-          playback={playback}
-          scenario={scenario}
-        />
-      </>}
-      <PlaybackControls playback={playback} />
+
+      <section className="theater-first-action theater-first-action-detail" aria-labelledby="trace-first-action-title">
+        <div>
+          <p className="eyebrow">最初に押すところ</p>
+          <h2 id="trace-first-action-title">再生して、変化の順序を追う</h2>
+          <p>{scenario?.lesson.expected_phenomenon_ja ?? "再生を止めながら、現在の点・指標・判断がどう変わるかを確認します。"}</p>
+        </div>
+        <PlaybackControls playback={playback} />
+      </section>
+
       {scenario?.artifact.renderer_family === "generic_metric_history" && (
         <GenericMetricHistory
           budget={trace.evaluation_budget}
           evaluation={frame.oracle_evaluations}
+          labels={{ [trace.trace_id]: entry.title_ja }}
           traces={[trace]}
         />
       )}
@@ -128,53 +125,79 @@ function GenericTracePlayer({ trace, entry, scenario }: Omit<LoadedTrace, "entri
           trace={trace}
         />
       )}
-      <div
-        className="trace-snapshot"
-        aria-label="現在の完全スナップショット"
-        data-guided-focus={guidedStep?.focus_target}
-        data-viewport-preset={guidedStep?.viewport_preset}
-      >
-        {(showAll || visibleLayers.has("current_point") || visibleLayers.has("parameter_estimate")) && <section>
-          <h2>点 (Points)</h2>
-          {frame.points.length === 0 ? <p>点データはありません</p> : (
-            <ul>
-              {frame.points.map((point) => (
-                <li key={point.point_id}>
-                  <strong>{point.label_ja}</strong>
-                  <code>[{point.coordinates.join(", ")}]</code>
-                  {point.value !== null && <span>f = {point.value}</span>}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>}
-        {(showAll || visibleLayers.has("gradient") || visibleLayers.has("update_vector")) && <section>
-          <h2>ベクトル (Vectors)</h2>
-          {frame.vectors.length === 0 ? <p>ベクトルデータはありません</p> : (
-            <ul>
-              {frame.vectors.map((vector) => (
-                <li key={vector.vector_id}>
-                  <strong>{vector.label_ja}</strong>
-                  <code>[{vector.components.join(", ")}]</code>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>}
-        {(showAll || visibleLayers.has("objective_value") || frame.metrics.some((metric) => visibleLayers.has(metric.metric_id))) && <section>
-          <h2>指標 (Metrics)</h2>
-          {frame.metrics.length === 0 ? <p>指標データはありません</p> : (
-            <ul>
-              {frame.metrics.map((metric) => (
-                <li key={metric.metric_id}>
-                  <strong>{metric.label_ja}</strong>
-                  <span>{metric.value}{metric.unit ? ` ${metric.unit}` : ""}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>}
-      </div>
+
+      {scenario && <>
+        <ScenarioLessonPanel scenario={scenario} showNarration={!scenario.guided_story} />
+        <GuidedStoryPanel
+          activeStep={guidedStep}
+          onStepChange={setGuidedStep}
+          playback={playback}
+          scenario={scenario}
+        />
+        <ScenarioContextPanel scenario={scenario} />
+      </>}
+
+      <details className="trace-snapshot-disclosure">
+        <summary>現在フレームの数値を確認</summary>
+        <div
+          className="trace-snapshot"
+          aria-label="現在の完全スナップショット"
+          data-guided-focus={guidedStep?.focus_target}
+          data-viewport-preset={guidedStep?.viewport_preset}
+        >
+          {(showAll || visibleLayers.has("current_point") || visibleLayers.has("parameter_estimate")) && <section>
+            <h2>点 (Points)</h2>
+            {frame.points.length === 0 ? <p>点データはありません</p> : (
+              <ul>
+                {frame.points.map((point) => (
+                  <li key={point.point_id}>
+                    <strong>{point.label_ja}</strong>
+                    <code>[{point.coordinates.join(", ")}]</code>
+                    {point.value !== null && <span>f = {point.value}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>}
+          {(showAll || visibleLayers.has("gradient") || visibleLayers.has("update_vector")) && <section>
+            <h2>ベクトル (Vectors)</h2>
+            {frame.vectors.length === 0 ? <p>ベクトルデータはありません</p> : (
+              <ul>
+                {frame.vectors.map((vector) => (
+                  <li key={vector.vector_id}>
+                    <strong>{vector.label_ja}</strong>
+                    <code>[{vector.components.join(", ")}]</code>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>}
+          {(showAll || visibleLayers.has("objective_value") || frame.metrics.some((metric) => visibleLayers.has(metric.metric_id))) && <section>
+            <h2>指標 (Metrics)</h2>
+            {frame.metrics.length === 0 ? <p>指標データはありません</p> : (
+              <ul>
+                {frame.metrics.map((metric) => (
+                  <li key={metric.metric_id}>
+                    <strong>{metric.label_ja}</strong>
+                    <span>{metric.value}{metric.unit ? ` ${metric.unit}` : ""}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>}
+        </div>
+      </details>
+
+      <details className="technical-disclosure">
+        <summary>データ仕様を確認</summary>
+        <dl>
+          <div><dt>手法 (Method)</dt><dd>{trace.method_id}</dd></div>
+          <div><dt>目的関数 (Objective)</dt><dd>{trace.objective_id}</dd></div>
+          <div><dt>Trace契約</dt><dd>AlgorithmTrace {trace.contract_version}</dd></div>
+          <div><dt>データセット (Dataset)</dt><dd>{trace.dataset_version}</dd></div>
+        </dl>
+      </details>
+
       <footer className="trace-summary">
         <span>{trace.terminal_status}</span>
         <p>{trace.terminal_summary_ja}</p>
