@@ -5,12 +5,14 @@ method_id: M_BFGS
 title_ja: BFGS法
 title_en: BFGS method
 summary: 勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。
-source_ids: [S002, S056, S057]
+source_ids: [S002, S017, S055, S056, S057, S064]
 prerequisites: [method.gradient-descent, concept.convexity]
 related_ids: [lbfgsb, newton-method, trust-region-newton-cg]
+visualization_ids: [constrained-disk-feasible-region]
+comparison_ids: [COMPARE_CONSTRAINED_FAILURE]
 aliases: [/learn/bfgs]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-24
 ---
 
 勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。
@@ -51,12 +53,25 @@ $$
 
 高精度な局所解を少ない反復で得たいときに有力です。変数が多い場合は[L-BFGS-B](#/learn/lbfgsb)などlimited-memory法を検討します。
 
+## 制約処理はBFGSの外にある
+
+BFGSの更新式は、一般の制約を自動では扱いません。
+目的関数値が下がっても、制約違反が残る点は解ではありません。
+
+[制約を無視するfailure Theater](#/theater/learning/SCENARIO_CONSTRAINED_DISK)では、円内の可行領域とBFGSのfailure pathを同じ図で確認できます。
+[SLSQPとのfailure Compare](#/compare/COMPARE_CONSTRAINED_FAILURE)は、同じ目的・disk制約・初期点・12回のteaching budgetを使います。
+変えるのは制約を評価するかどうかです。
+
+これは可行性と目的改善を分けて読む固定教材です。
+BFGSやSLSQPの実装内部を再現するbenchmarkではなく、solverの一般性能rankingにも使いません。
+
 ## 直線探索（line search）の役割
 
 BFGSの名前は更新式を表しますが、実用上はstepの長さ（step length）を決めるline searchと組み合わせます。stepが大きすぎると目的値が悪化し、小さすぎると曲率情報を十分に得られません。
 
 ::: warning
-「BFGSを使った」だけでは再現条件として不十分です。初期点、勾配（gradient）の実装、line-search条件、停止許容値、scalingを一緒に記録します。
+「BFGSを使った」だけでは再現条件として不十分です。
+初期点／勾配の実装／line-search条件／停止許容値／scalingを一緒に記録します。
 :::
 
 ## Python
