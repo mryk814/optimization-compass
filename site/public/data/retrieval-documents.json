@@ -161,6 +161,43 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:EC021:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "case:EC021",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:unconstrained",
+        "feature_value:F_DERIVATIVE_ACCESS:stochastic_gradient",
+        "feature_value:F_EVALUATION_COST:moderate",
+        "feature_value:F_OBJECTIVE_FORM:general_nonlinear",
+        "feature_value:F_SOLUTION_GOAL:local_stationary",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_OPTAX",
+        "implementation:I_PYTORCH_OPTIM",
+        "implementation:I_TENSORFLOW_OPTIM",
+        "journey:EC021",
+        "method:M_ADAMW",
+        "method:M_BFGS",
+        "method:M_MOMENTUM_SGD",
+        "problem:PA040",
+        "source:S047",
+        "source:S048",
+        "source:S049",
+        "source:S070",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S070"
+      ],
+      "text": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。",
+      "title": "mini-batchでニューラルネットワークを学習する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:EC025:overview",
       "dataset_version": "0.18.10",
       "document_id": "case:EC025",
@@ -235,6 +272,86 @@
       ],
       "text": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
       "title": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:EC027:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "case:EC027",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:implicit",
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:expensive",
+        "feature_value:F_OBJECTIVE_FORM:simulation",
+        "feature_value:F_SOLUTION_GOAL:feasible_only",
+        "feature_value:F_VARIABLE_DOMAIN:mixed",
+        "implementation:I_NEVERGRAD",
+        "implementation:I_NOMAD",
+        "journey:EC027",
+        "method:M_BFGS",
+        "method:M_MADS",
+        "method:M_RANDOM_SEARCH",
+        "problem:PA016",
+        "source:S002",
+        "source:S018",
+        "source:S031",
+        "source:S034",
+        "source:S035",
+        "source:S060",
+        "source:S063",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "text": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "title": "途中で失敗するシミュレーションから設計を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:EC028:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "case:EC028",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "feature_value:F_CONSTRAINT_CLASS:unconstrained",
+        "feature_value:F_DERIVATIVE_ACCESS:jacobian",
+        "feature_value:F_EVALUATION_COST:moderate",
+        "feature_value:F_OBJECTIVE_FORM:equation_residual",
+        "feature_value:F_SOLUTION_GOAL:local_stationary",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_CERES",
+        "implementation:I_SCIPY_LEAST_SQUARES_TRF",
+        "journey:EC028",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "method:M_GAUSS_NEWTON",
+        "method:M_LEVENBERG_MARQUARDT",
+        "problem:PA004",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056",
+        "source:S080",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "text": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。",
+      "title": "方程式を最適化に変える前に求根として解く"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -30378,6 +30495,33 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:EC021:M_BFGS:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "failure:case:EC021:M_BFGS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC021",
+        "failure:structured:FM003",
+        "failure:structured:FM007",
+        "failure:structured:FM016",
+        "method:M_BFGS",
+        "source:S047",
+        "source:S048",
+        "source:S049",
+        "source:S070"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S070"
+      ],
+      "text": "全データの決定論的な目的・gradientとcurvature履歴を前提にする通常のBFGSは、巨大なparameterとmini-batch noiseを持つこの学習loopにそのまま合わないため",
+      "title": "mini-batchでニューラルネットワークを学習するではBFGS法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:EC025:M_DIFFERENTIAL_EVOLUTION:overview",
       "dataset_version": "0.18.10",
       "document_id": "failure:case:EC025:M_DIFFERENTIAL_EVOLUTION",
@@ -30427,6 +30571,65 @@
       ],
       "text": "数百万自由度と高価なPDE計算に、個体群評価の予算が合わない",
       "title": "PDE制約付き大規模設計を行列なし（matrix-free）で解くでは差分進化を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:EC027:M_BFGS:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "failure:case:EC027:M_BFGS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC027",
+        "failure:structured:FM003",
+        "failure:structured:FM007",
+        "failure:structured:FM016",
+        "method:M_BFGS",
+        "source:S002",
+        "source:S018",
+        "source:S031",
+        "source:S034",
+        "source:S035",
+        "source:S060",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "text": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため",
+      "title": "途中で失敗するシミュレーションから設計を探すではBFGS法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:EC028:M_DIFFERENTIAL_EVOLUTION:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "failure:case:EC028:M_DIFFERENTIAL_EVOLUTION",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC028",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056",
+        "source:S080"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "text": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
+      "title": "方程式を最適化に変える前に求根として解くでは差分進化を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -36896,6 +37099,40 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC021:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "journey:EC021",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC021",
+        "content:adamw",
+        "content:momentum-sgd",
+        "implementation:I_OPTAX",
+        "implementation:I_PYTORCH_OPTIM",
+        "implementation:I_TENSORFLOW_OPTIM",
+        "method:M_ADAMW",
+        "method:M_BFGS",
+        "method:M_MOMENTUM_SGD",
+        "problem:PA040",
+        "source:S047",
+        "source:S048",
+        "source:S049",
+        "source:S056",
+        "source:S070"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S056",
+        "S070"
+      ],
+      "text": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。",
+      "title": "mini-batchでニューラルネットワークを学習する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:EC025:overview",
       "dataset_version": "0.18.10",
       "document_id": "journey:EC025",
@@ -36974,6 +37211,82 @@
       ],
       "text": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
       "title": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC027:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "journey:EC027",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC027",
+        "content:mads",
+        "content:random-search",
+        "implementation:I_NEVERGRAD",
+        "implementation:I_NOMAD",
+        "method:M_BFGS",
+        "method:M_MADS",
+        "method:M_RANDOM_SEARCH",
+        "problem:PA016",
+        "source:S002",
+        "source:S018",
+        "source:S031",
+        "source:S034",
+        "source:S035",
+        "source:S038",
+        "source:S060",
+        "source:S063",
+        "source:S069",
+        "source:S094"
+      ],
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S038",
+        "S060",
+        "S063",
+        "S069",
+        "S094"
+      ],
+      "text": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "title": "途中で失敗するシミュレーションから設計を探す"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:EC028:overview",
+      "dataset_version": "0.18.10",
+      "document_id": "journey:EC028",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:EC028",
+        "content:gauss-newton",
+        "content:least-squares",
+        "implementation:I_CERES",
+        "implementation:I_SCIPY_LEAST_SQUARES_TRF",
+        "method:M_DIFFERENTIAL_EVOLUTION",
+        "method:M_GAUSS_NEWTON",
+        "method:M_LEVENBERG_MARQUARDT",
+        "problem:PA004",
+        "source:S002",
+        "source:S003",
+        "source:S041",
+        "source:S056",
+        "source:S080"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "text": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。",
+      "title": "方程式を最適化に変える前に求根として解く"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -38021,6 +38334,7 @@
       "document_id": "method:M_ADAMW",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:EC021",
         "content:adamw",
         "implementation:I_OPTAX",
         "implementation:I_PYTORCH_OPTIM",
@@ -38289,6 +38603,8 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC020",
+        "case:EC021",
+        "case:EC027",
         "case:EC029",
         "case:bilevel-regularized-regression",
         "case:constrained-design",
@@ -38626,6 +38942,7 @@
       "relation_context": [
         "case:EC025",
         "case:EC026",
+        "case:EC028",
         "content:differential-evolution",
         "implementation:I_NEVERGRAD",
         "implementation:I_SCIPY_DIFFERENTIAL_EVOLUTION",
@@ -38861,6 +39178,7 @@
       "document_id": "method:M_GAUSS_NEWTON",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:EC028",
         "content:gauss-newton",
         "implementation:I_CERES",
         "implementation:I_JAXOPT",
@@ -39112,6 +39430,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC013",
+        "case:EC028",
         "comparison:COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
         "content:least-squares",
         "implementation:I_CERES",
@@ -39160,6 +39479,7 @@
       "document_id": "method:M_MADS",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:EC027",
         "content:mads",
         "implementation:I_NOMAD",
         "source:S002",
@@ -39251,6 +39571,7 @@
       "document_id": "method:M_MOMENTUM_SGD",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:EC021",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:momentum-sgd",
@@ -39815,6 +40136,7 @@
       "document_id": "method:M_RANDOM_SEARCH",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:EC027",
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "content:random-search",
         "implementation:I_AX",
@@ -40473,7 +40795,10 @@
       "dataset_version": "0.18.10",
       "document_id": "problem:PA004",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:EC028",
+        "journey:EC028"
+      ],
       "source_ids": [
         "S056",
         "S080"
@@ -40669,7 +40994,10 @@
       "dataset_version": "0.18.10",
       "document_id": "problem:PA016",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:EC027",
+        "journey:EC027"
+      ],
       "source_ids": [
         "S031",
         "S035"
@@ -41065,7 +41393,10 @@
       "dataset_version": "0.18.10",
       "document_id": "problem:PA040",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:EC021",
+        "journey:EC021"
+      ],
       "source_ids": [
         "S047",
         "S048",

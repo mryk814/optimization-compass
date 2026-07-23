@@ -458,6 +458,112 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/EC021",
+      "entity_id": "EC021",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "mini-batchでニューラルネットワークを学習する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADAMW",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:unconstrained",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:stochastic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA040",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/EC025",
       "entity_id": "EC025",
       "entity_type": "case",
@@ -682,6 +788,228 @@
         }
       ],
       "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC027",
+      "entity_id": "EC027",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "途中で失敗するシミュレーションから設計を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:implicit",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:feasible_only",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:mixed",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NEVERGRAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NOMAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA016",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC028",
+      "entity_id": "EC028",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "方程式を最適化に変える前に求根として解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:unconstrained",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:jacobian",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:equation_residual",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA004",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
     },
     {
       "aliases": [],
@@ -15947,6 +16275,92 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "EC021",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "mini-batchでニューラルネットワークを学習する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADAMW",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adamw",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA040",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "EC025",
       "entity_type": "journey",
       "external_url": null,
@@ -16155,6 +16569,193 @@
         }
       ],
       "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC027",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "途中で失敗するシミュレーションから設計を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S094",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NEVERGRAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NOMAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA016",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC028",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "方程式を最適化に変える前に求根として解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA004",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
     },
     {
       "aliases": [],
@@ -18528,6 +19129,11 @@
       "label": "AdamW",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S047",
           "target_type": "source"
@@ -19144,6 +19750,16 @@
         {
           "relation_type": "case",
           "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
           "target_type": "case"
         },
         {
@@ -19883,6 +20499,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S006",
           "target_type": "source"
@@ -20339,6 +20960,11 @@
       "external_url": null,
       "label": "Gauss–Newton法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S002",
@@ -20877,6 +21503,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
           "target_type": "comparison"
@@ -20972,6 +21603,11 @@
       "external_url": null,
       "label": "mesh adaptive direct search",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S002",
@@ -21134,6 +21770,11 @@
       "external_url": null,
       "label": "momentum SGD",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_DIVERGENCE",
@@ -22304,6 +22945,11 @@
       "external_url": null,
       "label": "random search",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
@@ -23650,7 +24296,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "方程式の求根",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        }
+      ],
       "summary": "方程式の求根。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
@@ -23803,7 +24460,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "失敗・NaNを伴うsimulation",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        }
+      ],
       "summary": "失敗・NaNを伴うsimulation。変数=mixed、目的=simulation、制約=implicit。"
     },
     {
@@ -24130,7 +24798,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "neural network学習",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
+        }
+      ],
       "summary": "neural network学習。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {

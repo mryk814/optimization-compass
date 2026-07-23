@@ -17,7 +17,7 @@ describe("LearningJourney parser", () => {
     expect(pilot?.status).toBe("complete");
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
-    expect(index.summary.status_counts).toEqual({ complete: 11, partial: 7, draft: 0 });
+    expect(index.summary.status_counts).toEqual({ complete: 11, partial: 10, draft: 0 });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
     expect(parameterEstimation?.status).toBe("complete");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
