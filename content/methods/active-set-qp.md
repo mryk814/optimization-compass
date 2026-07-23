@@ -9,7 +9,7 @@ source_ids: [S012, S016, S055, S056]
 prerequisites: [concept.convexity]
 related_ids: [active-set, admm-qp, barrier-lp-qp, lp-qp-conic]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
 凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
@@ -22,7 +22,9 @@ $$
 \min_x\; \tfrac{1}{2}x^TPx+q^Tx \quad\text{subject to}\quad Ax\le b
 $$
 
-を考えます（$P\succeq0$）。最適解では、不等式制約の一部だけが等号 $A_ix=b_i$ で成立し、残りは余裕を持ちます。active-set QPは、現時点で等号になっていると推定した制約の集合をworking set $W_k$ として扱い、$W_k$を等式制約とみなした等式制約付きQPを解きます。候補点ではKKT条件（stationarity、multiplier符号、feasibility、complementarity）を確認します。
+を考えます（$P\succeq0$）。最適解では、不等式制約の一部だけが等号 $A_ix=b_i$ で成立します。残りの制約には余裕があります。
+
+active-set QPは、等号になると推定した制約をworking set $W_k$ として扱います。$W_k$を等式制約とみなし、等式制約付きQPを解きます。候補点ではKKT条件を確認します。確認対象はstationarity／multiplier符号／feasibility／complementarityです。
 
 - 満たされない不等式制約があればworking setへ追加する
 - multiplierの符号が不適切な制約があればworking setから外す
@@ -31,7 +33,7 @@ $$
 
 ## 等式制約QPを繰り返し解く仕組み
 
-working set $W_k$ を固定した1反復では、$A_{W_k}x=b_{W_k}$ の下で$\tfrac{1}{2}x^TPx+q^Tx$を最小化する等式制約QPを解きます。これはKKT系
+1反復ではworking set $W_k$ を固定します。その下で、$A_{W_k}x=b_{W_k}$を満たしながら$\tfrac{1}{2}x^TPx+q^Tx$を最小化する等式制約QPを解きます。これはKKT系
 
 $$
 \begin{bmatrix}P & A_{W_k}^T\\ A_{W_k} & 0\end{bmatrix}
@@ -40,17 +42,21 @@ $$
 \begin{bmatrix}-q\\ b_{W_k}\end{bmatrix}
 $$
 
-を解くことに帰着します。得られた解方向が現在のworking setの範囲内で実行可能なら、そのままstepを取ります。途中でinactiveな制約に触れる（blocking constraint）場合は、そこで止めてその制約をworking setへ加えます。この「1反復＝1つの等式制約QPを解く」という構造が、[一般NLPのactive-set法](#/learn/active-set)にも共通する骨格ですが、QP専用の実装ではKKT行列がQPの係数だけで決まるため、factorizationの更新（rank-1更新やSchur補行列の利用など）に特化しやすい点が異なります。
+を解くことに帰着します。得られた解方向が現在のworking setの範囲内で実行可能なら、そのままstepを取ります。途中でinactiveな制約に触れた場合は、そこで止めます。この制約がblocking constraintです。停止後、その制約をworking setへ加えます。
+
+「1反復＝1つの等式制約QPを解く」という構造は、[一般NLPのactive-set法](#/learn/active-set)にも共通します。一方、QP専用の実装ではKKT行列がQPの係数だけで決まります。そのため、rank-1更新やSchur補行列を使うfactorization更新に特化しやすい点が異なります。
 
 ## Simplex法のQP版という直感とMPCでの再解
 
-LPのsimplex法は頂点から頂点へbasisを更新しながら進みますが、active-set QPはworking setという「等号制約の組」を更新しながら進むという意味で、simplex法のQP版とみなせます。この類似性から、前回のworking setを初期値として使うwarm startが自然に働きます。特に、
+LPのsimplex法は、頂点から頂点へbasisを更新しながら進みます。active-set QPは「等号制約の組」であるworking setを更新します。この意味で、simplex法のQP版とみなせます。この類似性から、前回のworking setを初期値として使うwarm startが自然に働きます。特に、
 
 - model predictive control（MPC）で毎周期わずかに変わるQPを再解する
 - sequential quadratic programmingのsubproblemを繰り返し解く
 - boundが少しずつ変わるportfolio再最適化
 
-のように「直前の解に近いQPを何度も解く」場面では、working setがほとんど変わらないため少ない反復で収束しやすくなります。一方、制約数が多い問題では、正しいworking setに到達するまでの反復数が組合せ的に増える場合があり、大規模疎QPではoperator-splitting型やbarrier型のほうが安定することがあります。
+のように「直前の解に近いQPを何度も解く」場面では、working setがほとんど変わりません。そのため、少ない反復で収束しやすくなります。
+
+一方、制約数が多い問題では、正しいworking setに到達するまでの反復数が組合せ的に増える場合があります。大規模疎QPでは、operator-splitting型やbarrier型のほうが安定することがあります。
 
 ## 向いている条件
 
@@ -118,7 +124,7 @@ for size in range(len(a_ub) + 1):
 print(best_x, best_value)
 ```
 
-working setの候補を総当たりで列挙しているため、制約数が増えると組合せが急増します。実務ではOSQPなどのQP solverがworking setを賢く逐次更新します。利用versionのAPIやdefault parameterは[OSQP公式ドキュメント](https://osqp.org/docs/)や[HiGHSドキュメント](https://highs.dev/)で確認します。
+working setの候補を総当たりで列挙しているため、制約数が増えると組合せが急増します。実務のactive-set型solverは、working setを逐次更新して総当たりを避けます。OSQPのようなoperator-splitting型は、working setとは別の反復を使います。利用versionのAPIやdefault parameterは[OSQP公式ドキュメント](https://osqp.org/docs/)や[HiGHSドキュメント](https://highs.dev/)で確認します。
 
 ## 診断値
 
@@ -142,4 +148,4 @@ working setの候補を総当たりで列挙しているため、制約数が増
 
 ## 次に読む
 
-一般の非線形制約に対するactive-set法との違いは[Active-set法](#/learn/active-set)、同じ凸QPをfactorization再利用の反復法で解く考え方は[operator-splitting QP](#/learn/admm-qp)、barrier型との対比は[primal-dual barrier法](#/learn/barrier-lp-qp)、LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)で確認できます。
+一般の非線形制約に対する違いは、[Active-set法](#/learn/active-set)で確認できます。同じ凸QPを別の反復法で解く考え方は、[operator-splitting QP](#/learn/admm-qp)へ進みます。barrier型との対比は[primal-dual barrier法](#/learn/barrier-lp-qp)で扱います。LP・QP・conic全体の位置付けは[LP・QP・錐最適化](#/learn/lp-qp-conic)で確認できます。
