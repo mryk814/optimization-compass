@@ -5,11 +5,13 @@ method_id: M_WEIGHTED_SUM
 title_ja: 重み付き和scalarization
 title_en: Weighted-sum Scalarization
 summary: 複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。
-source_ids: [S055, S039]
+source_ids: [S039, S055, S068]
 prerequisites: [concept.convexity]
 related_ids: [epsilon-constraint, multi-objective, moead]
+visualization_ids: [biobjective-quadratic-pareto-front]
+comparison_ids: [COMPARE_PARETO_PREFERENCE]
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-24
 ---
 
 複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。
@@ -30,7 +32,8 @@ $$
 重みをすべて正にして得られた最適解は、Pareto最適解の必要条件を満たします。
 ただし、重みを掃引しても、すべてのPareto最適解に到達できるとは限りません。
 目的空間でPareto front（パレートフロント）が凸である部分は、重みの組み合わせで到達できます。
-一方、Pareto frontが非凸に凹んでいる部分の解は、どのような正の重みを選んでも、重み付き和の最適解として現れません。
+一方、Pareto frontが非凸に凹んでいる部分は別です。
+どのような正の重みを選んでも、重み付き和の最適解として現れない解があります。
 加重和の等高線は直線（超平面）であり、非凸領域の点はその直線群の接点になり得ないためです（[凸性](#/learn/concept.convexity)を参照）。
 非凸領域の候補も調べたい場合は、[ε-constraint法](#/learn/epsilon-constraint)のように制約側からthresholdを動かす方法が候補になります。
 
@@ -39,6 +42,18 @@ $$
 重み $w_i$ は、「目的$i$を1単位改善するために、ほかの目的をどれだけ犠牲にできるか」という交換率を表します。
 目的ごとのscale（単位や値の桁）が大きく異なると、同じ重みでも実質的な影響力が偏ります。
 重みを決める前に、各目的をideal点やnadir点などの基準で正規化（normalize）しておくと、重みの比が意図した優先度に近づきます。
+
+## Frontを作る計算と選ぶ判断を分ける
+
+[preference感度のTheater](#/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY)では、同じPareto frontからweightで1点を選びます。
+[preferenceを変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)は、81点のresult set・目的方向・Pareto dominanceを固定します。
+weightを0.2／0.5／0.8へ変え、front上の選択点だけを動かします。
+
+このCompareはsolverを再実行してfrontを改善する実験ではありません。
+weightは意思決定上のpreferenceであり、数学だけから客観的に決まる値でもありません。
+
+これは凸で解析的な2目的教材です。
+手法性能のbenchmarkや一般性能rankingではなく、非凸frontの欠落も解消しません。
 
 ## 向いている条件
 
