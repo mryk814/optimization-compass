@@ -7,12 +7,13 @@ title_en: Gradient Descent
 summary: 現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
 prerequisites: [concept.convexity]
 related_ids: [bfgs, proximal-gradient, trust-region-newton-cg]
-comparison_ids: [COMPARE_GRADIENT_FAMILY]
+visualization_ids: [gradient_descent-quadratic-divergence]
+comparison_ids: [COMPARE_GRADIENT_FAMILY, COMPARE_GRADIENT_DIVERGENCE]
 aliases: [/learn/method.gradient-descent]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 source_ids: [S001, S002]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
 現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。
@@ -74,7 +75,7 @@ $$
 - 小さすぎると、安定でも収束が遅くなります。
 - 大きすぎると、谷を飛び越えて振動または発散します。
 - 一方向では適切でも、条件数の悪い谷では他方向に大きすぎる場合があります。
-- 固定stepが難しい場合は、line search、schedule、preconditioningを検討します。
+- 固定stepが難しい場合は、line search／schedule／preconditioningを検討します。
 
 細長い谷でzig-zagする現象は、勾配方向が最適点への直線方向とは限らないことを示します。[Gradient family comparison](#/compare/gradient-quadratic)では、MomentumやAdamと同じ初期点・budgetで確認できます。
 
@@ -124,7 +125,8 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 - NaN / overflow / line-search status
 - iteration / wall-clock budget
 
-凸問題でも、停止許容値が粗ければ高精度解ではありません。非凸問題では、gradient normが小さくても局所解、saddle、flat regionの可能性があります。
+凸問題でも、停止許容値が粗ければ高精度解ではありません。
+非凸問題ではgradient normが小さくても、局所解／saddle／flat regionの可能性があります。
 
 ## 失敗・切替の兆候
 
@@ -133,8 +135,17 @@ print(x, objective(x), np.linalg.norm(gradient(x)))
 - gradient normが小さいのに目的値が改善しない → saddleやflat regionの可能性を確認する
 - boundsや一般制約の違反が残る → projectionや制約対応のある手法へ切り替える
 
+## 大きいlearning rateのfailureを見る
+
+[勾配降下法のfailure Trace](#/theater/learning/SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE)では、固定した二次目的でhigh learning rateの軌跡と終了statusを追えます。
+[Momentum・Adamとの感度Compare](#/compare/COMPARE_GRADIENT_DIVERGENCE)は、同じ目的・初期点・40回のoracle evaluation budgetを使います。
+
+各手法には発散を説明する固定presetを使っています。
+良いparameterを探索する比較でも、手法の一般性能rankingでもありません。
+
 ::: warning
-同じ反復回数でも、目的評価、gradient評価、line searchの追加評価は異なります。手法比較ではoracle budgetと停止条件を揃えます。
+同じ反復回数でも、目的評価／gradient評価／line searchの追加評価は異なります。
+手法比較ではoracle budgetと停止条件を揃えます。
 :::
 
 ## 次に読む
