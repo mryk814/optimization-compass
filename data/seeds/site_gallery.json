@@ -723,6 +723,180 @@
         "chordal objectiveとgeodesic residualは同じ量ではない。固定instanceで両方が低下しても、全initializationやnear-pi chartに対する一般収束を保証しない。",
         "QR projection、polar projection、retraction、exact exponential mapは同義ではない。比較はfeasibility strategyのcontrastであり、一般性能rankingには使わない。"
       ]
+    },
+    {
+      "case_id": "EC021",
+      "title_ja": "mini-batchでニューラルネットワークを学習する",
+      "title_en": "Train a neural network with mini-batches",
+      "domain": "machine-learning",
+      "problem_archetype_id": "PA040",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "general_nonlinear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "stochastic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "unconstrained"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "automatic_differentiation_graph",
+        "Q03": "general_nonlinear",
+        "Q04": "none",
+        "Q05": "stochastic_gradient",
+        "Q06": "minutes",
+        "Q07": "random_seeded",
+        "Q08": "over_10000",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "other",
+        "Q12": "gpu_available"
+      },
+      "candidate_methods": [
+        {"method_id": "M_ADAMW", "reason": "数百万parameterとmini-batchの確率勾配を扱い、weight decayをgradient updateから分離したbaselineを作れるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_MOMENTUM_SGD", "reason": "学習率schedule、momentum、weight decayを同じ評価条件で固定し、検証損失と汎化をAdamWと比較する場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_BFGS", "reason": "全データの決定論的な目的・gradientとcurvature履歴を前提にする通常のBFGSは、巨大なparameterとmini-batch noiseを持つこの学習loopにそのまま合わないため"}
+      ],
+      "implementation_ids": ["I_PYTORCH_OPTIM", "I_TENSORFLOW_OPTIM", "I_OPTAX"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
+      "source_ids": ["S047", "S048", "S049", "S070"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。",
+      "variable_domain": "実務の変数領域は、層ごとのweightとbiasを連結した $X=\\mathbb{R}^p$ で、$p$ は数百万以上になりうる。固定教材では8入力・2出力の線形層を使い、$X=\\mathbb{R}^{18}$ とする。",
+      "decision_variables": "予測modelのparameter $\\theta$。optimizerの学習率やweight decayは、$\\theta$ と同時に最適化する変数ではなく、比較前に固定する学習条件として分ける。",
+      "objective": "mini-batch $B_k$ ごとの平均損失 $\\hat L_{B_k}(\\theta)$ を観測しながら、全学習データ上の経験損失 $f(\\theta)=L(\\theta)=|D|^{-1}\\sum_{(x,y)\\in D}\\ell(h_\\theta(x),y)$ を下げる。model選択は別の検証データで行う。",
+      "constraints": "固定教材ではparameterへの明示制約を置かず、制約集合は $X=\\mathbb{R}^{18}$ とする。実務では計算時間、GPU memory、学習step数をbudgetとして記録し、gradient clippingや正則化を制約そのものと混同しない。",
+      "map_node_id": "answer:Q05:stochastic_gradient",
+      "python_example": "import torch\n\nmodel = torch.nn.Linear(8, 2)\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)\nfeatures = torch.randn(32, 8)\ntargets = torch.randint(0, 2, (32,))\noptimizer.zero_grad()\nloss = torch.nn.functional.cross_entropy(model(features), targets)\nloss.backward()\noptimizer.step()\nprint(float(loss), sum(parameter.numel() for parameter in model.parameters()))",
+      "practical_notes": "training lossだけでなく、検証損失、学習率、gradient norm、step時間、GPU memory、seedを保存する。optimizer比較ではmodel、初期weight、data order、augmentation、学習率探索budget、停止規則をそろえる。",
+      "limitations": [
+        "18 parameter・1 mini-batchのコードはAPIと観測項目を示す固定教材であり、実networkの精度、汎化、収束速度、AdamWの優位性を示さない。",
+        "低いtraining lossは検証性能、公平性、calibration、robustnessを保証しない。model選択と最終評価には学習に使っていないデータが必要である。",
+        "AdamWとmomentum SGDの結果はarchitecture、data、schedule、regularization、budgetに依存するため、一般的なrankingには使わない。"
+      ]
+    },
+    {
+      "case_id": "EC027",
+      "title_ja": "途中で失敗するシミュレーションから設計を探す",
+      "title_en": "Search a design space with failed simulations",
+      "domain": "engineering",
+      "problem_archetype_id": "PA016",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "mixed"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "simulation"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "implicit"},
+        {"feature_id": "F_EVALUATION_COST", "value": "expensive"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "feasible_only"}
+      ],
+      "question_answers": {
+        "Q01": "mixed",
+        "Q02": "simulation_only",
+        "Q03": "unknown",
+        "Q04": "implicit_or_failure",
+        "Q05": "unreliable_or_none",
+        "Q06": "minutes",
+        "Q07": "occasional_failure",
+        "Q08": "10_to_100",
+        "Q09": "global_candidate_desired",
+        "Q10": "feasible_solution_first",
+        "Q11": "none_known",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {"method_id": "M_MADS", "reason": "微分を要求せず、simulation failureを隠れた制約として扱いながら、成功した評価点の近傍を直接探索できるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_RANDOM_SEARCH", "reason": "まず失敗領域の分布とfeasible rateを測り、複雑な探索を導入する前の比較baselineを作る場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_BFGS", "reason": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため"}
+      ],
+      "implementation_ids": ["I_NOMAD", "I_NEVERGRAD"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
+      "source_ids": ["S002", "S018", "S031", "S034", "S035", "S060", "S063"],
+      "difficulty": "intermediate",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "variable_domain": "実務では連続寸法 $u\\in[0,1]^d$ と離散構成 $z\\in\\{1,\\dots,K\\}$ を合わせた混合領域 $X$。固定教材では $x=(u_1,u_2,z)\\in[0,1]^2\\times\\{0,1\\}$ とする。",
+      "decision_variables": "2つの連続設計parameter $u_1,u_2$ と、構成を選ぶ二値変数 $z$。simulationの収束設定やtimeoutは設計変数ではなく、評価契約として固定する。",
+      "objective": "simulationが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、failure種別とともに未評価またはinfeasibleとして保存する。",
+      "constraints": "上下限と離散domainに加え、solver crash、非物理解、timeoutで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的なfailure領域とする。",
+      "map_node_id": "answer:Q04:implicit_or_failure",
+      "python_example": "import nevergrad as ng\n\nspace = ng.p.Dict(\n    u1=ng.p.Scalar(lower=0.0, upper=1.0),\n    u2=ng.p.Scalar(lower=0.0, upper=1.0),\n    mode=ng.p.Choice([0, 1]),\n)\n\ndef evaluate(u1, u2, mode):\n    if u1 + u2 < 0.25:\n        raise RuntimeError(\"simulation did not converge\")\n    return (u1 - 0.65) ** 2 + (u2 - 0.35) ** 2 + 0.08 * mode\n\noptimizer = ng.optimizers.NGOpt(parametrization=space, budget=40)\nfor _ in range(40):\n    candidate = optimizer.ask()\n    try:\n        value = evaluate(**candidate.value)\n    except RuntimeError:\n        value = float(\"inf\")\n    optimizer.tell(candidate, value)\nprint(optimizer.provide_recommendation().value)",
+      "practical_notes": "成功・crash・timeout・非物理解を別statusで記録し、入力、software version、seed、wall time、終了理由を保存する。penalty値を使う実装でも、元のfailure statusを失わず、feasible rateと最良feasible値を別々に追う。",
+      "limitations": [
+        "固定した3変数と単純なfailure境界は教育用であり、実solverの収束領域、crash原因、MADSまたはNGOptの一般性能を表さない。",
+        "failureを無限penaltyで渡す短いコードはAPI例であり、すべてのoptimizerが非有限値を同じように扱うとは限らない。実装の入力契約を確認する必要がある。",
+        "実行可能点が見つからない場合はoptimizerを替えるだけでなく、simulation model、初期化、mesh、許容誤差、timeout、設計domainを点検する。"
+      ]
+    },
+    {
+      "case_id": "EC028",
+      "title_ja": "方程式を最適化に変える前に求根として解く",
+      "title_en": "Solve equations as roots before scalar optimization",
+      "domain": "science",
+      "problem_archetype_id": "PA004",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "equation_residual"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "jacobian"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "unconstrained"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "residual_vector",
+        "Q03": "equation_or_feasibility",
+        "Q04": "none",
+        "Q05": "jacobian_or_hvp",
+        "Q06": "seconds",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "least_squares",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {"method_id": "M_GAUSS_NEWTON", "reason": "方程式が過剰決定または観測誤差を含む場合に、残差vectorとJacobianを保ったleast-squaresとして解けるため"}
+      ],
+      "conditional_methods": [
+        {"method_id": "M_LEVENBERG_MARQUARDT", "reason": "残差が滑らかで初期値が十分近く、制約なしの小規模least-squaresとしてstepを安定化したい場合"}
+      ],
+      "excluded_methods": [
+        {"method_id": "M_DIFFERENTIAL_EVOLUTION", "reason": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため"}
+      ],
+      "implementation_ids": ["I_SCIPY_LEAST_SQUARES_TRF", "I_CERES"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
+      "source_ids": ["S002", "S003", "S041", "S056", "S080"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-23",
+      "question": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。",
+      "variable_domain": "固定教材では $X=\\mathbb{R}^2$。実務では物理的な範囲がある場合も、root solverがboundsを直接扱えるかを確認してからdomainを定める。",
+      "decision_variables": "二つの未知量 $x=(x_1,x_2)$。固定教材では方程式 $F_1(x)=x_1^2+x_2-1$、$F_2(x)=x_1+x_2^2-1$ を同時に満たす点を探す。",
+      "objective": "本来の目標はscalar目的の最小化ではなく、残差vector $F(x)$ をゼロにすること。least-squaresへ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
+      "constraints": "固定教材に明示制約はない。square systemでは $F(x)=0$、過剰決定系では許容残差、rank、scale、観測誤差modelを区別する。",
+      "map_node_id": "answer:Q03:equation_or_feasibility",
+      "python_example": "import numpy as np\nfrom scipy.optimize import root\n\ndef equations(x):\n    return np.array([x[0] ** 2 + x[1] - 1.0, x[0] + x[1] ** 2 - 1.0])\n\ndef jacobian(x):\n    return np.array([[2.0 * x[0], 1.0], [1.0, 2.0 * x[1]]])\n\nresult = root(equations, x0=np.array([0.7, 0.7]), jac=jacobian)\nprint(result.x, np.linalg.norm(equations(result.x)), result.success)",
+      "practical_notes": "最初にsquare、under-determined、over-determinedを区別する。残差normだけでなく各残差、Jacobian rank、scale、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
+      "limitations": [
+        "2変数・滑らか・決定論的な固定教材であり、すべての根の列挙、大域的な存在・一意性、実物理modelの妥当性を保証しない。",
+        "Gauss-NewtonとLevenberg-Marquardtはleast-squaresへ移した場合の候補である。square systemで信頼できるJacobianがあるなら、まず専用のroot solverを検討する。",
+        "小さな二乗和は各方程式を要求精度で満たすことと同義ではない。residual scalingと成分ごとの許容値を確認する。"
+      ]
     }
   ]
 }

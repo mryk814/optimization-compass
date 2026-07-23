@@ -975,11 +975,12 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
+            "EC027",
             "budget-allocation",
             "hyperparameter-search",
             "multi-fidelity-simulator",
@@ -1010,7 +1011,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 44,
+          "count": 45,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1025,6 +1026,7 @@
             "COMPARE_GRADIENT_FAMILY",
             "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "EC013",
+            "EC027",
             "I_NLOPT",
             "I_NOMAD",
             "I_OPTIMJL",
@@ -1407,12 +1409,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -1438,7 +1441,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 36,
+          "count": 37,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1451,6 +1454,7 @@
             "/methods/M_SIMULATED_ANNEALING",
             "EC025",
             "EC026",
+            "EC028",
             "I_NEVERGRAD",
             "I_NLOPT",
             "I_SCIPY_BASINHOPPING",
@@ -2155,13 +2159,15 @@
           ]
         },
         "gallery": {
-          "count": 10,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "EC020",
+            "EC021",
             "EC026",
+            "EC027",
             "EC029",
             "bilevel-regularized-regression",
             "constrained-design",
@@ -2195,7 +2201,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 47,
+          "count": 49,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2213,7 +2219,9 @@
             "COMPARE_GRADIENT_FAMILY",
             "EC013",
             "EC020",
+            "EC021",
             "EC026",
+            "EC027",
             "EC029",
             "I_EXCEL_SOLVER",
             "I_JAXOPT",
@@ -2321,12 +2329,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -2347,7 +2355,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2358,6 +2366,7 @@
             "/methods/M_SGD",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -2445,10 +2454,11 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC027",
             "hyperparameter-search",
             "multi-fidelity-simulator"
           ]
@@ -2475,7 +2485,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 46,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2500,6 +2510,7 @@
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
             "COMPARE_BO_MULTIFIDELITY_COST",
+            "EC027",
             "I_AX",
             "I_BOTORCH",
             "I_NEVERGRAD",
@@ -2730,12 +2741,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -2761,7 +2773,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 32,
+          "count": 33,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2775,6 +2787,7 @@
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
             "EC013",
             "EC026",
+            "EC028",
             "I_CERES",
             "I_JAXOPT",
             "I_OPTIMJL",
@@ -3155,12 +3168,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -3181,11 +3194,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADAMW",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -3983,11 +3997,13 @@
           ]
         },
         "gallery": {
-          "count": 7,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
+            "EC021",
+            "EC027",
             "EC029",
             "bilevel-regularized-regression",
             "constrained-design",
@@ -4014,13 +4030,15 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BFGS",
             "COMPARE_CONSTRAINED_FAILURE",
             "EC020",
+            "EC021",
+            "EC027",
             "EC029",
             "I_OPTIMJL",
             "I_SCIPY_BFGS",
@@ -5142,12 +5160,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -5168,13 +5187,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "EC025",
             "EC026",
+            "EC028",
             "I_NEVERGRAD",
             "I_SCIPY_DIFFERENTIAL_EVOLUTION",
             "S006",
@@ -5969,12 +5989,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -5994,11 +6014,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_GAUSS_NEWTON",
+            "EC028",
             "I_CERES",
             "I_JAXOPT",
             "S002",
@@ -6831,11 +6852,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC013"
+            "EC013",
+            "EC028"
           ]
         },
         "implementation": {
@@ -6856,13 +6878,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_LEVENBERG_MARQUARDT",
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
             "EC013",
+            "EC028",
             "I_CERES",
             "I_SCIPY_LEAST_SQUARES_LM",
             "S002",
@@ -7011,12 +7034,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -7035,11 +7058,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MADS",
+            "EC027",
             "I_NOMAD",
             "S002",
             "S018",
@@ -7362,12 +7386,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -7388,13 +7412,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MOMENTUM_SGD",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -9249,12 +9274,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027"
+          ]
         },
         "implementation": {
           "count": 5,
@@ -9277,7 +9302,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9287,6 +9312,7 @@
             "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "EC027",
             "I_AX",
             "I_NEVERGRAD",
             "I_OPTUNA",
@@ -11510,12 +11536,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11526,18 +11552,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC028"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028",
             "None"
           ]
         },
@@ -12488,12 +12515,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12504,18 +12531,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC027"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027",
             "None"
           ]
         },
@@ -14433,12 +14461,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -14449,18 +14477,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC021"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021",
             "None"
           ]
         },
@@ -15889,7 +15918,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 14,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15897,8 +15926,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
@@ -15996,7 +16028,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16004,8 +16036,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
@@ -16103,7 +16138,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16111,8 +16146,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
@@ -16294,7 +16332,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16302,8 +16340,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
@@ -16478,7 +16519,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16486,8 +16527,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",
@@ -16770,7 +16814,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 18,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16778,8 +16822,11 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
             "bilevel-regularized-regression",
             "budget-allocation",

@@ -6,9 +6,9 @@ describe("failure discovery contract", () => {
   test("parses structured failures and Case-specific exclusions together", () => {
     const index = parseFailureDiscoveryIndex(raw);
     expect(index.summary).toEqual({
-      total_entries: 30,
+      total_entries: 33,
       structured_failure_count: 12,
-      case_exclusion_count: 18,
+      case_exclusion_count: 21,
       entries_with_scenarios: 18,
     });
     expect(index.entries.some((entry) => entry.entry_kind === "case_exclusion")).toBe(true);

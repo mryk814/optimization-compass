@@ -198,6 +198,55 @@
       "title_ja": "非線形動力学を含む軌道を最適化するではBFGS法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3AEC021%3AM_BFGS",
+      "case_context": {
+        "constraints": "固定教材ではparameterへの明示制約を置かず、制約集合は $X=\\mathbb{R}^{18}$ とする。実務では計算時間、GPU memory、学習step数をbudgetとして記録し、gradient clippingや正則化を制約そのものと混同しない。",
+        "decision_variables": "予測modelのparameter $\\theta$。optimizerの学習率やweight decayは、$\\theta$ と同時に最適化する変数ではなく、比較前に固定する学習条件として分ける。",
+        "objective": "mini-batch $B_k$ ごとの平均損失 $\\hat L_{B_k}(\\theta)$ を観測しながら、全学習データ上の経験損失 $f(\\theta)=L(\\theta)=|D|^{-1}\\sum_{(x,y)\\in D}\\ell(h_\\theta(x),y)$ を下げる。model選択は別の検証データで行う。",
+        "question": "数百万parameterのニューラルネットワークを、GPUとmini-batchを使って安定して学習したい。"
+      },
+      "case_id": "EC021",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC021:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-23",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S070"
+      ],
+      "summary": "全データの決定論的な目的・gradientとcurvature履歴を前提にする通常のBFGSは、巨大なparameterとmini-batch noiseを持つこの学習loopにそのまま合わないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Train a neural network with mini-batches",
+      "title_ja": "mini-batchでニューラルネットワークを学習するではBFGS法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3AEC025%3AM_DIFFERENTIAL_EVOLUTION",
       "case_context": {
         "constraints": "線形化した動力学 $x_{k+1}=A_kx_k+B_k\\Delta u_k+c_k$、初期状態 $x_0=x_{current}$、入力・状態の上下限を線形制約として課す。",
@@ -291,6 +340,104 @@
       "symptoms": [],
       "title_en": "Why Differential evolution is excluded for Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解くでは差分進化を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC027%3AM_BFGS",
+      "case_context": {
+        "constraints": "上下限と離散domainに加え、solver crash、非物理解、timeoutで定義される暗黙の実行可能条件 $x\\in F_{sim}$。固定教材では $u_1+u_2<0.25$ の領域を意図的なfailure領域とする。",
+        "decision_variables": "2つの連続設計parameter $u_1,u_2$ と、構成を選ぶ二値変数 $z$。simulationの収束設定やtimeoutは設計変数ではなく、評価契約として固定する。",
+        "objective": "simulationが成功した点で性能指標 $f(x)$ を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、failure種別とともに未評価またはinfeasibleとして保存する。",
+        "question": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+      },
+      "case_id": "EC027",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC027:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-23",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "summary": "NaN、timeout、不連続なfailure境界を含む評価から、信頼できる局所gradientとline searchを構成できないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Search a design space with failed simulations",
+      "title_ja": "途中で失敗するシミュレーションから設計を探すではBFGS法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3AEC028%3AM_DIFFERENTIAL_EVOLUTION",
+      "case_context": {
+        "constraints": "固定教材に明示制約はない。square systemでは $F(x)=0$、過剰決定系では許容残差、rank、scale、観測誤差modelを区別する。",
+        "decision_variables": "二つの未知量 $x=(x_1,x_2)$。固定教材では方程式 $F_1(x)=x_1^2+x_2-1$、$F_2(x)=x_1+x_2^2-1$ を同時に満たす点を探す。",
+        "objective": "本来の目標はscalar目的の最小化ではなく、残差vector $F(x)$ をゼロにすること。least-squaresへ移る場合だけ補助目的 $f(x)=\\frac12\\lVert F(x)\\rVert_2^2$ を使い、$f$ と各残差を両方確認する。",
+        "question": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
+      },
+      "case_id": "EC028",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:EC028:M_DIFFERENTIAL_EVOLUTION",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-23",
+      "method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "summary": "平方残差へscalar化した大域heuristicを先に使うと、利用できる方程式構造とJacobianを捨て、根でない小さな残差点との違いも診断しにくいため",
+      "symptoms": [],
+      "title_en": "Why Differential evolution is excluded for Solve equations as roots before scalar optimization",
+      "title_ja": "方程式を最適化に変える前に求根として解くでは差分進化を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3AEC029%3AM_BFGS",
@@ -1470,9 +1617,9 @@
   ],
   "generated_at": "2026-07-19T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 18,
+    "case_exclusion_count": 21,
     "entries_with_scenarios": 18,
     "structured_failure_count": 12,
-    "total_entries": 30
+    "total_entries": 33
   }
 }
