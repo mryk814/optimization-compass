@@ -31,6 +31,13 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert pde.comparison_ids == ("COMPARE_PDE_STATE_TOLERANCE_COST",)
     assert style_warnings(pde) == ()
 
+    evaluation_cost = pages["concept.evaluation-cost"]
+    assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in evaluation_cost.body
+    assert (
+        "#/theater/bayesian-optimization/SCENARIO_BO_1D_LOW_FIDELITY_BIAS" in evaluation_cost.body
+    )
+    assert style_warnings(evaluation_cost) == ()
+
     uncertainty = pages["concept.uncertainty-models"]
     assert "S103" in uncertainty.source_ids
     assert uncertainty.visualization_ids == (
