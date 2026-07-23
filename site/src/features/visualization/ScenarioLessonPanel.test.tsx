@@ -17,7 +17,10 @@ describe("ScenarioLessonPanel", () => {
 
     expect(screen.getByRole("heading", { name: scenario.lesson.learning_objective.ja })).toBeVisible();
     expect(screen.getByText(/単体の頂点/u)).toBeVisible();
-    expect(screen.getByText("start")).toBeVisible();
+    for (const step of scenario.lesson.narration_steps) {
+      expect(screen.getByText(step.title_ja)).toBeVisible();
+    }
+    expect(screen.queryByText(scenario.lesson.narration_steps[0].milestone_id)).not.toBeInTheDocument();
     expect(scenarioStaticSummary(scenario)).toBe(scenario.lesson.static_summary.ja);
     expect(scenarioTextAlternative(scenario)).toBe(scenario.lesson.text_alternative.ja);
     expect(scenarioDerivedMediaCaption(scenario)).toBe(scenario.lesson.derived_media_caption.ja);
