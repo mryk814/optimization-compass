@@ -398,12 +398,20 @@ export function GalleryCasePage() {
   );
 }
 
-function JourneyStatus({ journey }: { journey: LearningJourney }) {
+export function JourneyStatus({
+  journey,
+}: {
+  journey: Pick<LearningJourney, "status" | "completion_reasons">;
+}) {
   return (
     <aside aria-label="学習の流れの接続状況" className={`gallery-journey-status is-${journey.status}`}>
       <strong>{journeyStatusLabel(journey.status)}</strong>
+      <p>{journeyStatusSummary(journey.status)}</p>
       {journey.completion_reasons.length > 0 && (
-        <ul>{journey.completion_reasons.map((reason) => <li key={reason}>{journeyCompletionLabel(reason)}</li>)}</ul>
+        <details>
+          <summary>接続状況を確認（{journey.completion_reasons.length}）</summary>
+          <ul>{journey.completion_reasons.map((reason) => <li key={reason}>{journeyCompletionLabel(reason)}</li>)}</ul>
+        </details>
       )}
     </aside>
   );
@@ -428,6 +436,12 @@ export function journeyStatusLabel(status?: LearningJourney["status"]): string {
   if (status === "complete") return "定式化・実行・比較あり";
   if (status === "partial") return "定式化あり・一部準備中";
   return "準備中";
+}
+
+export function journeyStatusSummary(status?: LearningJourney["status"]): string {
+  if (status === "complete") return "このケースは、定式化から実行・比較まで続けて読めます。";
+  if (status === "partial") return "定式化は読めます。実行・比較は順次整備中です。";
+  return "ケース本文と関連する学習素材を整備しています。";
 }
 
 export function countCasesByDomain(
@@ -560,9 +574,21 @@ function EntityReference({ atlasState, entity, fallback, journeyPatch }: { atlas
 }
 
 export function journeyCompletionLabel(reason: string): string {
-  if (reason === "missing_primary_scenario") return "主なTheater未接続";
-  if (reason === "missing_comparison") return "比較ページ未接続";
-  return reason.replaceAll("_", " ");
+  const labels: Record<string, string> = {
+    case_is_draft: "ケース本文を編集中",
+    invalid_source_currentness: "出典の現行性を要確認",
+    missing_comparison: "比較ページ未接続",
+    missing_comparison_source: "比較の出典未接続",
+    missing_cross_surface_link: "関連ページ間の導線未接続",
+    missing_failure_or_sensitivity_scenario: "失敗例・感度確認未接続",
+    missing_implementation: "実装情報未接続",
+    missing_primary_scenario: "主な実行例未接続",
+    missing_problem_instance: "実行用問題インスタンス未接続",
+    missing_scenario_source: "実行例の出典未接続",
+    missing_static_text_alternative: "可視化のテキスト説明未整備",
+    stale_case_review: "ケース内容の再確認が必要",
+  };
+  return labels[reason] ?? "接続状況を確認中";
 }
 
 function scenarioRoleLabel(role: LearningJourney["scenarios"][number]["role"]): string {

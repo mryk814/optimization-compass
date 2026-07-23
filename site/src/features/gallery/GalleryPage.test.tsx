@@ -1,3 +1,4 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 
 import rawGallery from "../../../public/data/gallery.json";
@@ -6,8 +7,10 @@ import {
   caseState,
   countCasesByDomain,
   domainLabel,
+  JourneyStatus,
   journeyCompletionLabel,
   journeyStatusLabel,
+  journeyStatusSummary,
 } from "./GalleryPage";
 
 describe("gallery Atlas state", () => {
@@ -28,8 +31,24 @@ describe("gallery Atlas state", () => {
 
 describe("gallery learning journey status", () => {
   test("translates missing canonical routes into reader-facing labels", () => {
-    expect(journeyCompletionLabel("missing_primary_scenario")).toBe("主なTheater未接続");
+    expect(journeyCompletionLabel("missing_primary_scenario")).toBe("主な実行例未接続");
     expect(journeyCompletionLabel("missing_comparison")).toBe("比較ページ未接続");
+    expect(journeyCompletionLabel("missing_static_text_alternative")).toBe("可視化のテキスト説明未整備");
+    expect(journeyCompletionLabel("unknown_internal_code")).toBe("接続状況を確認中");
+  });
+
+  test("keeps connection diagnostics behind a reader-controlled disclosure", () => {
+    render(<JourneyStatus journey={{
+      status: "partial",
+      completion_reasons: ["missing_primary_scenario", "missing_comparison"],
+    }} />);
+
+    expect(screen.getByText("定式化は読めます。実行・比較は順次整備中です。")).toBeVisible();
+    expect(screen.getByText("主な実行例未接続")).not.toBeVisible();
+
+    fireEvent.click(screen.getByText("接続状況を確認（2）"));
+
+    expect(screen.getByText("主な実行例未接続")).toBeVisible();
   });
 
   test("carries explicit candidate reasons and case limitations into the page model", () => {
@@ -46,6 +65,7 @@ describe("gallery learning journey status", () => {
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");
     expect(journeyStatusLabel()).toBe("準備中");
+    expect(journeyStatusSummary("partial")).toBe("定式化は読めます。実行・比較は順次整備中です。");
   });
 
   test("summarizes use-case coverage by domain in descending order", () => {

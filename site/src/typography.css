@@ -31,6 +31,7 @@
 .gallery-question-panel p:not(.eyebrow),
 .gallery-context-grid p,
 .gallery-context-grid li,
+.gallery-journey-status > p,
 .gallery-method-grid p,
 .gallery-inspect-grid p,
 .gallery-inspect-grid li,
@@ -77,7 +78,8 @@
 .comparison-contract,
 .page-orientation p,
 .page-orientation ol,
-.page-orientation ul {
+.page-orientation ul,
+.gallery-journey-status summary {
   font-size: var(--type-support);
   line-height: var(--leading-support);
 }
