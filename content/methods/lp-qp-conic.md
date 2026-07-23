@@ -5,16 +5,16 @@ method_id: MF_LP_QP_CONIC
 title_ja: LP・QP・錐最適化
 title_en: Linear, Quadratic, and Conic Optimization
 summary: 線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。
-source_ids: [S004, S010, S012, S014, S055]
+source_ids: [S004, S010, S012, S014, S055, S103]
 prerequisites: [concept.convexity]
 related_ids: [concept.convexity, constrained-continuous, dual-simplex, branch-and-cut]
-visualization_ids: []
-comparison_ids: []
+visualization_ids: [portfolio-nominal-8-4, portfolio-cvar-8-4]
+comparison_ids: [COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4, COMPARE_ENERGY_NOMINAL_CVAR_8_4]
 aliases: [/learn/lp-qp-conic]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
 線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。
@@ -138,7 +138,26 @@ convex problemで適切な正則性があれば、primal objectiveとdual object
 - numerical warning
 - warm-start reuse
 
-`infeasible`、`unbounded`、`infeasible_or_unbounded`、`iteration_limit`は異なる状態です。目的値だけを読みません。
+`infeasible`／`unbounded`／`infeasible_or_unbounded`／`iteration_limit`は異なる状態です。
+目的値だけを読みません。
+
+## NominalとCVaRを二分野で読む
+
+scenarioの平均だけを見る目的と、tail riskを加える目的を二つの分野で読み分けます。
+
+| 分野 | Case | Compareで変えるもの |
+|---|---|---|
+| 金融 | [scenarioのtail riskを抑えて配分する](#/gallery/portfolio-cvar-allocation) | [training objectiveのrisk treatment](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4) |
+| エネルギー | [価格scenarioのtail costを抑えて電力を調達する](#/gallery/energy-cvar-procurement) | [同じ構造を調達問題として読む](#/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4) |
+
+[nominal目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+4変数のcapped simplexとrisk level 0.75を共有します。
+sampleは8件のtrainingと4件のheld-outに固定します。
+0.05刻みのgridと12回のloss evaluation budgetも固定し、risk treatmentだけを変えます。
+
+実行Traceは固定4資産の教材です。
+エネルギー比較はsimplex・scenario・tail riskの読み方だけを再利用し、電力市場／需要／送電網／契約を再現しません。
+4件のheld-out結果から一般性能rankingや確率保証を導きません。
 
 ## 失敗・切替の兆候
 
@@ -151,7 +170,8 @@ convex problemで適切な正則性があれば、primal objectiveとdual object
 - black-box simulationを無理に係数modelへ置換
 
 ::: warning
-solver間比較ではmodel canonicalization、tolerance、presolve、hardware、warm startを揃えます。反復回数だけでは一反復の仕事量が違うため公平ではありません。
+solver間比較ではmodel canonicalization／tolerance／presolve／hardware／warm startを揃えます。
+反復回数だけでは一反復の仕事量が違うため公平ではありません。
 :::
 
 ## 次に読む
