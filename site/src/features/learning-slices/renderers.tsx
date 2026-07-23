@@ -42,7 +42,7 @@ export function FeasibleRegionRenderer({ artifact }: { artifact: FeasibleRegionA
         </svg>
         <div className="learning-plot-panel">
           <label htmlFor="feasible-step">現在の反復 <strong>{step} / {primary.steps.length - 1}</strong></label>
-          <input id="feasible-step" max={primary.steps.length - 1} min="0" onChange={(event) => setStep(Number(event.target.value))} type="range" value={step} />
+          <input id="feasible-step" max={primary.steps.length - 1} min="0" onInput={(event) => setStep(Number(event.currentTarget.value))} type="range" value={step} />
           <dl><div><dt>現在点 (Current)</dt><dd>({current.point.map(format).join(", ")})</dd></div><div><dt>目的値 (Objective)</dt><dd>{format(current.objective)}</dd></div><div><dt>違反量 (Violation)</dt><dd>{format(current.violation)}</dd></div><div><dt>状態 (Status)</dt><dd>{current.active_constraint ? "制約が有効" : current.feasible ? "実行可能" : "実行不可能"}</dd></div></dl>
           <p><strong>終了理由:</strong> {step === primary.steps.length - 1 ? primary.termination_reason_ja : "Traceを進めて確認します。"}</p>
         </div>
@@ -91,7 +91,7 @@ export function ParetoFrontRenderer({ artifact }: { artifact: ParetoFrontArtifac
         </svg>
         <div className="learning-plot-panel">
           <label htmlFor="preference-weight">f₁の重み (weight) <strong>{(weightPercent / 100).toFixed(2)}</strong></label>
-          <input id="preference-weight" max="90" min="10" onChange={(event) => setWeightPercent(Number(event.target.value))} step="5" type="range" value={weightPercent} />
+          <input id="preference-weight" max="90" min="10" onInput={(event) => setWeightPercent(Number(event.currentTarget.value))} step="5" type="range" value={weightPercent} />
            <dl><div><dt>選択した f₁</dt><dd>{format(selected.objectives[0])}</dd></div><div><dt>選択した f₂</dt><dd>{format(selected.objectives[1])}</dd></div><div><dt>決定変数</dt><dd>({selected.decision.map(format).join(", ")})</dd></div><div><dt>参照</dt><dd>既知の正確な前線</dd></div></dl>
            <p><strong>単一の最良解ではありません。</strong>重みは前線上から意思決定を一つ選ぶための設定です。</p>
         </div>
@@ -123,7 +123,7 @@ export function FieldEvolutionRenderer({ payload, initialRunRole = "primary" }: 
       {selectedRun.role === "failure_contrast" && <p className="callout-warning" role="note"><strong>Failure Theater:</strong> checkerboard riskを含む経路を先に表示しています。complianceの改善だけで、設計fieldが妥当とは判断しません。</p>}
       <div className="topology-controls">
         <label htmlFor="topology-run">経路 <select id="topology-run" onChange={(event) => changeRun(event.target.value)} value={selectedRun.run_id}>{payload.family_payload.runs.map((run) => <option key={run.run_id} value={run.run_id}>{run.label_ja}</option>)}</select></label>
-        <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.snapshots[selectedRun.snapshots.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.snapshots.length - 1} min="0" onChange={(event) => setSelectedStep(Number(event.target.value))} type="range" value={stepIndex} /></label>
+        <label htmlFor="topology-step">反復 <strong>{current.iteration} / {selectedRun.snapshots[selectedRun.snapshots.length - 1].iteration}</strong><input id="topology-step" max={selectedRun.snapshots.length - 1} min="0" onInput={(event) => setSelectedStep(Number(event.currentTarget.value))} type="range" value={stepIndex} /></label>
       </div>
       <div className="topology-field-grid">
         <FieldGrid label="設計密度 density" values={current.fields.design_field} columns={payload.family_payload.mesh.columns} rows={payload.family_payload.mesh.rows} mode="density" />
@@ -194,7 +194,7 @@ function TriObjectiveLensView({
         </div>
         <label className="surface-camera-control">
           <span>カメラ方位 <output>{azimuth}°</output></span>
-          <input aria-label="3目的表示のカメラ方位" max="405" min="225" onChange={(event) => setAzimuth(Number(event.target.value))} step="5" type="range" value={azimuth} />
+          <input aria-label="3目的表示のカメラ方位" max="405" min="225" onInput={(event) => setAzimuth(Number(event.currentTarget.value))} step="5" type="range" value={azimuth} />
         </label>
       </header>
       <div className="triobjective-grid">

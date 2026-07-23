@@ -16,7 +16,7 @@ describe("learning-slice renderer registry", () => {
     expect(screen.getByRole("img", { name: artifact.text_alternative_ja })).toBeVisible();
     expect(screen.getByText("制約が有効")).toBeVisible();
 
-    fireEvent.change(screen.getByRole("slider", { name: /現在の反復/u }), {
+    fireEvent.input(screen.getByRole("slider", { name: /現在の反復/u }), {
       target: { value: "0" },
     });
     expect(screen.getByText("実行不可能")).toBeVisible();
@@ -40,7 +40,7 @@ describe("learning-slice renderer registry", () => {
     expect(coverage).toHaveTextContent(`解析的な参照前線${artifact.pareto_front.length} · known_exact`);
     const before = screen.getByText("選択した f₁").nextElementSibling?.textContent;
 
-    fireEvent.change(screen.getByRole("slider", { name: /f₁の重み/u }), {
+    fireEvent.input(screen.getByRole("slider", { name: /f₁の重み/u }), {
       target: { value: "80" },
     });
     expect(screen.getByText("選択した f₁").nextElementSibling?.textContent).not.toBe(before);

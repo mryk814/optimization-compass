@@ -118,12 +118,6 @@ export function ComparisonPage() {
           <p>{loaded ? readableComparisonText(loaded.comparison.comparison_question) : "何を同じにして、何を変えた比較かを確認します。"}</p>
         </div>
       </header>
-      <PageOrientation
-        limits="表示される差は、このケース・問題・seed・予算の範囲に限られます。順位付けの条件を満たしていても、普遍的な手法順位ではありません。"
-        next={[{ label: "別の比較を選ぶ", to: "/compare" }, { label: "ケースへ戻る", to: loaded ? `/gallery/${loaded.comparison.case_id}` : "/gallery" }, { label: "1回の実行をTheaterで見る", to: "/theater" }]}
-        purpose="同じもの・違うもの・見る指標を先に固定し、公平に解釈できる範囲だけを比較します。"
-        readingSteps={["比較の問いとケースの定式化を確認します。", "固定条件・変更条件・指標・予算のそろい方を確認します。", "表示された差を読み、単独の実行・ケース・手法に戻って理由を確かめます。"]}
-      />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       {!loaded && !error && <p role="status">比較条件を読み込み中…</p>}
       {loaded && <ComparisonExperience loaded={loaded} onPresetChange={(nextId) => {
@@ -155,12 +149,6 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
           </select>
         </label>
       </section>
-      <div className="visualization-badges comparison-artifact-badges" aria-label="比較データの概要">
-        <span>{comparisonModeLabel(comparison.mode)}</span>
-        <span>{[...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))].join(" + ")}</span>
-        <span>{identityStatusLabel(comparison.identity_status)} · {comparabilityLabel(comparison.comparability)}</span>
-      </div>
-      <ComparisonContract comparison={comparison} scenario={primaryScenario} />
       {loaded.renderer === "trajectory" ? (
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "simplex" ? (
@@ -174,6 +162,18 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
       ) : (
         <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />
       )}
+      <div className="visualization-badges comparison-artifact-badges" aria-label="比較データの概要">
+        <span>{comparisonModeLabel(comparison.mode)}</span>
+        <span>{[...new Set(comparison.members.map((member) => rendererFamilyLabel(member.artifact.renderer_family)))].join(" + ")}</span>
+        <span>{identityStatusLabel(comparison.identity_status)} · {comparabilityLabel(comparison.comparability)}</span>
+      </div>
+      <PageOrientation
+        limits="表示される差は、このケース・問題・seed・予算の範囲に限られます。順位付けの条件を満たしていても、普遍的な手法順位ではありません。"
+        next={[{ label: "別の比較を選ぶ", to: "/compare" }, { label: "ケースへ戻る", to: `/gallery/${comparison.case_id}` }, { label: "1回の実行をTheaterで見る", to: "/theater" }]}
+        purpose="同じもの・違うもの・見る指標を先に固定し、公平に解釈できる範囲だけを比較します。"
+        readingSteps={["比較の問いを確認します。", "図で差をつかみ、固定条件・変更条件・指標・予算を照合します。", "単独の実行・ケース・手法に戻って理由を確かめます。"]}
+      />
+      <ComparisonContract comparison={comparison} scenario={primaryScenario} />
       <section className="comparison-return-links" aria-label="比較の関連導線">
         <h2>同じ条件から確認する</h2>
         <JourneyLink journeyPatch={{ comparisonId: comparison.comparison_id }} to={comparison.canonical_url}>この比較の共有URL</JourneyLink>

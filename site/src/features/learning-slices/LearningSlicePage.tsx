@@ -42,18 +42,21 @@ export function LearningSlicePage() {
       <header className="atlas-page-header">
         <p className="eyebrow">Learning slice · {artifact.renderer_family}</p>
         <h1>{scenario.title_ja}</h1>
-        <p>{scenario.title_en}</p>
-        <div className="artifact-provenance" aria-label="可視化の由来">
-          <strong>{kindLabel}</strong>
-          <span>描画方式 (Renderer family): {artifact.renderer_family}</span>
-          <span>問題 (Problem): {scenario.problem_instance_id}</span>
-        </div>
+        <details className="artifact-provenance-disclosure">
+          <summary>データと描画条件</summary>
+          <div className="artifact-provenance" aria-label="可視化の由来">
+            <strong>{kindLabel}</strong>
+            <span>{scenario.title_en}</span>
+            <span>描画方式 (Renderer family): {artifact.renderer_family}</span>
+            <span>問題 (Problem): {scenario.problem_instance_id}</span>
+          </div>
+        </details>
       </header>
-      <ScenarioContextPanel scenario={scenario} />
       <LearningSliceRenderer
         artifact={artifact}
         initialRunRole={scenario.purpose === "failure_contrast" ? "failure_contrast" : scenario.purpose === "sensitivity" ? "comparison" : "primary"}
       />
+      <ScenarioContextPanel scenario={scenario} />
       <ScenarioLessonPanel scenario={scenario} />
       <section className="learning-slice-links" aria-label="関連する入口">
         <h2>同じデータからたどる</h2>

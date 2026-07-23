@@ -1845,6 +1845,8 @@ caption {
 
 /* Renderer-family learning slices */
 .learning-slice-page { max-width: 74rem; }
+.artifact-provenance-disclosure { margin-top: .65rem; color: var(--muted); font-size: .78rem; }
+.artifact-provenance-disclosure > summary { width: fit-content; cursor: pointer; color: #315d4a; font-weight: 700; }
 .artifact-provenance { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; margin-top: 1rem; color: var(--muted); font-size: .82rem; }
 .artifact-provenance strong { padding: .3rem .55rem; border-radius: 999px; background: #e6f0e8; color: #234b38; }
 .learning-renderer { margin: 1.25rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: .8rem; background: #fff; }
