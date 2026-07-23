@@ -20,6 +20,7 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_EXACT" in nested.body
     assert "#/theater/learning/SCENARIO_BILEVEL_REGRESSION_RELAXED" in nested.body
     assert "#/theater/learning/SCENARIO_HYBRID_MODE_CHATTERING" in nested.body
+    assert style_warnings(nested) == ()
 
     pde = pages["concept.pde-constrained-optimization"]
     assert pde.visualization_ids == (
