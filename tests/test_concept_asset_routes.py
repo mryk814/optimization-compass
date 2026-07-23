@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_quality import style_warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,6 +28,7 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
         "pde-state-solve-failure",
     )
     assert pde.comparison_ids == ("COMPARE_PDE_STATE_TOLERANCE_COST",)
+    assert style_warnings(pde) == ()
 
     uncertainty = pages["concept.uncertainty-models"]
     assert "S103" in uncertainty.source_ids
