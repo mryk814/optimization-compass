@@ -8,9 +8,11 @@ summary: 勾配stepの後に実行可能集合へprojectionし、単純な凸制
 source_ids: [S055, S056, S066]
 prerequisites: [method.gradient-descent, constrained-continuous]
 related_ids: [method.gradient-descent, proximal-gradient, mirror-descent, active-set]
+visualization_ids: [so3-projected-alignment]
+comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 aliases: [/learn/projected-gradient]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
 勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
@@ -40,7 +42,7 @@ $$
 
 です。
 
-box、simplex、ball、affine subspaceなど、projectionが閉形式または安価なときに有効です。
+box／simplex／ball／affine subspaceなど、projectionが閉形式または安価なときに有効です。
 
 ## 境界上の勾配を読む
 
@@ -96,7 +98,7 @@ print(x, objective(x), np.linalg.norm(mapping))
 - PSD cone: eigenvalue decomposition
 - 複雑なnonlinear set: projectionが別の難しい最適化問題
 
-projectionが高価ならproximal、primal-dual、interior-point、parameterizationを検討します。
+projectionが高価ならproximal／primal-dual／interior-point／parameterizationを検討します。
 
 ## 最初に見る診断値
 
@@ -126,6 +128,19 @@ projectionが高価ならproximal、primal-dual、interior-point、parameterizat
 - ordinary gradient normだけで停止
 - nonsmooth regularizerをprojectionと混同
 
+## SO(3)で二つのstepを見分ける
+
+[projected updateのTheater](#/theater/learning/SCENARIO_SO3_PROJECTED_ALIGNMENT)では、ambient空間で進んだ後にQR projectionでSO(3)へ戻る流れを追えます。
+目的関数値と、直交性・determinantの残差を分けて確認します。
+
+[Riemannian updateとのCompare](#/compare/COMPARE_SO3_PROJECTED_RIEMANNIAN)は、同じtarget・初期rotation・目的関数・step size・12回のoracle evaluationを使います。
+変えるのは、ambient stepをprojectionするか、接空間のstepをexponential mapで戻すかだけです。
+
+これは固定near-pi target、noiseなし、単一初期値の教育用contrastです。
+iteration数や最終lossから一般的な速度rankingを付けるものではありません。
+
 ::: note
-indicator function $I_C$ のproxはprojectionなので、Projected GradientはProximal Gradientの特殊例として見られます。ただしUIや説明では「制約集合への射影」という役割を明示します。
+indicator function $I_C$ のproxはprojectionです。
+この意味で、Projected GradientはProximal Gradientの特殊例として見られます。
+ただしUIや説明では「制約集合への射影」という役割を明示します。
 :::
