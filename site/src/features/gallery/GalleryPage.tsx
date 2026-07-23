@@ -40,6 +40,8 @@ export function GalleryPage() {
   }, []);
   const domains = ["all", ...new Set(cases.map((item) => item.domain))];
   const domainCounts = useMemo(() => countCasesByDomain(cases), [cases]);
+  const featuredDomainCounts = domainCounts.slice(0, 3);
+  const remainingDomainCounts = domainCounts.slice(3);
   const largestDomainCount = Math.max(1, ...domainCounts.map((item) => item.count));
   const journeyByCase = useMemo(
     () => new Map(journeys.map((journey) => [journey.case_id, journey])),
@@ -86,24 +88,29 @@ export function GalleryPage() {
             <p className="eyebrow">Use case coverage</p>
             <h2 id="gallery-domain-overview-title">どの分野から探す？</h2>
           </div>
-          <p>棒の長さは、現在掲載している事例数です。選ぶと下のケースを絞り込みます。</p>
+          <p>掲載数です。選ぶとケースを絞り込みます。</p>
         </header>
-        <div>
-          {domainCounts.map((item) => (
-            <button
-              aria-pressed={domain === item.domain}
-              key={item.domain}
-              onClick={() => setDomain(item.domain)}
-              type="button"
-            >
-              <span>{domainLabel(item.domain)}</span>
-              <span aria-hidden="true" className="gallery-domain-bar">
-                <span style={{ width: `${(item.count / largestDomainCount) * 100}%` }} />
-              </span>
-              <strong>{item.count}</strong>
-            </button>
-          ))}
+        <div className="gallery-domain-primary">
+          <DomainButtons
+            activeDomain={domain}
+            items={featuredDomainCounts}
+            largestDomainCount={largestDomainCount}
+            onSelect={setDomain}
+          />
         </div>
+        {remainingDomainCounts.length > 0 && (
+          <details className="gallery-domain-more">
+            <summary>ほか{remainingDomainCounts.length}領域を見る</summary>
+            <div>
+              <DomainButtons
+                activeDomain={domain}
+                items={remainingDomainCounts}
+                largestDomainCount={largestDomainCount}
+                onSelect={setDomain}
+              />
+            </div>
+          </details>
+        )}
       </section>
       <div className="gallery-toolbar">
         <label className="gallery-filter">
@@ -151,6 +158,33 @@ export function GalleryPage() {
   );
 }
 
+function DomainButtons({
+  activeDomain,
+  items,
+  largestDomainCount,
+  onSelect,
+}: {
+  activeDomain: string;
+  items: Array<{ domain: string; count: number }>;
+  largestDomainCount: number;
+  onSelect: (domain: string) => void;
+}) {
+  return items.map((item) => (
+    <button
+      aria-pressed={activeDomain === item.domain}
+      key={item.domain}
+      onClick={() => onSelect(item.domain)}
+      type="button"
+    >
+      <span>{domainLabel(item.domain)}</span>
+      <span aria-hidden="true" className="gallery-domain-bar">
+        <span style={{ width: `${(item.count / largestDomainCount) * 100}%` }} />
+      </span>
+      <strong>{item.count}</strong>
+    </button>
+  ));
+}
+
 export function GalleryCasePage() {
   const links = useEntityLinks();
   const { caseId = "" } = useParams();
@@ -196,7 +230,6 @@ export function GalleryCasePage() {
         <div>
           <p className="eyebrow">ケースの学習の流れ</p>
           <h1>{item?.title_ja ?? "ケース詳細"}</h1>
-          <p className="route-parameter">ケースID: <strong>{caseId}</strong></p>
         </div>
         {journey && <JourneyStatus journey={journey} />}
       </header>
@@ -209,9 +242,6 @@ export function GalleryCasePage() {
               <h2 id="real-question-title">現実には、何を決めたい？</h2>
               <p>{item.question}</p>
             </div>
-            {datasetVersion && (
-              <PromptExportLauncher source={{ kind: "gallery", item, datasetVersion }} />
-            )}
           </section>
 
           <details className="gallery-formulation-disclosure">
@@ -243,11 +273,13 @@ export function GalleryCasePage() {
               <ContextCard label="教材用の問題" title="教材用に小さく固定した問題">
                 {journey.problem_instance_ids.length > 0 ? (
                   <ul>
-                    {journey.problem_instance_ids.map((id) => (
+                    {journey.problem_instance_ids.map((id, index) => (
                       <li key={id}>
                         {primaryScenario?.problem_instance_id === id ? (
-                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}><code>{id}</code></JourneyLink>
-                        ) : <code>{id}</code>}
+                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}>
+                            {journey.problem_instance_ids.length === 1 ? "教材用の問題を開く" : `教材用の問題 ${index + 1} を開く`}
+                          </JourneyLink>
+                        ) : `補助の教材用問題 ${index + 1}`}
                       </li>
                     ))}
                   </ul>
@@ -367,6 +399,9 @@ export function GalleryCasePage() {
                 <h2 id="implementation-title">実装と最小例</h2>
               </header>
               <ResourceList atlasState={state} ids={journey.implementation_ids} type="implementation" entity={entity} />
+              {datasetVersion && (
+                <PromptExportLauncher source={{ kind: "gallery", item, datasetVersion }} />
+              )}
               <details className="gallery-disclosure">
                 <summary>最小Python例を見る</summary>
                 <pre><code>{item.python_example}</code></pre>
@@ -390,6 +425,17 @@ export function GalleryCasePage() {
               </nav>
               <small>確認日 {journey.last_reviewed}</small>
               <EvidenceLinks atlasState={state} sourceIds={sourceIds} />
+              <details className="gallery-reference-disclosure">
+                <summary>参照情報を表示</summary>
+                <dl>
+                  <div><dt>Case ID</dt><dd><code>{caseId}</code></dd></div>
+                  <div><dt>Dataset</dt><dd><code>{datasetVersion}</code></dd></div>
+                  <div>
+                    <dt>Problem instance</dt>
+                    <dd>{journey.problem_instance_ids.map((id) => <code key={id}>{id}</code>)}</dd>
+                  </div>
+                </dl>
+              </details>
             </div>
           </section>
         </>
@@ -404,9 +450,11 @@ export function JourneyStatus({
   journey: Pick<LearningJourney, "status" | "completion_reasons">;
 }) {
   return (
-    <aside aria-label="学習の流れの接続状況" className={`gallery-journey-status is-${journey.status}`}>
+    <aside
+      aria-label={`学習の流れの接続状況。${journeyStatusSummary(journey.status)}`}
+      className={`gallery-journey-status is-${journey.status}`}
+    >
       <strong>{journeyStatusLabel(journey.status)}</strong>
-      <p>{journeyStatusSummary(journey.status)}</p>
       {journey.completion_reasons.length > 0 && (
         <details>
           <summary>接続状況を確認（{journey.completion_reasons.length}）</summary>

@@ -43,7 +43,9 @@ describe("gallery learning journey status", () => {
       completion_reasons: ["missing_primary_scenario", "missing_comparison"],
     }} />);
 
-    expect(screen.getByText("定式化は読めます。実行・比較は順次整備中です。")).toBeVisible();
+    expect(screen.getByLabelText(
+      "学習の流れの接続状況。定式化は読めます。実行・比較は順次整備中です。",
+    )).toBeVisible();
     expect(screen.getByText("主な実行例未接続")).not.toBeVisible();
 
     fireEvent.click(screen.getByText("接続状況を確認（2）"));

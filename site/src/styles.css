@@ -1589,7 +1589,7 @@ caption {
 .gallery-domain-overview h2, .gallery-domain-overview p { margin: 0; }
 .gallery-domain-overview h2 { color: #213e30; font-size: 1rem; }
 .gallery-domain-overview p { color: #647069; font-size: .875rem; }
-.gallery-domain-overview > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4rem; }
+.gallery-domain-primary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
 .gallery-domain-overview button { display: grid; grid-template-columns: minmax(6rem, auto) minmax(2.5rem, 1fr) 1.25rem; align-items: center; gap: .4rem; min-width: 0; min-height: 2.75rem; padding: .42rem .5rem; border: 1px solid #d5ddd6; border-radius: .45rem; background: #fff; color: #27372e; cursor: pointer; text-align: left; }
 .gallery-domain-overview button:hover { border-color: #699078; }
 .gallery-domain-overview button:focus-visible { outline: 3px solid #b16a37; outline-offset: 2px; }
@@ -1598,6 +1598,9 @@ caption {
 .gallery-domain-bar { height: .38rem; overflow: hidden; border-radius: 999px; background: #dfe6df; }
 .gallery-domain-bar span { display: block; height: 100%; border-radius: inherit; background: #41765a; }
 .gallery-domain-overview strong { font-size: .875rem; font-variant-numeric: tabular-nums; text-align: right; }
+.gallery-domain-more { margin-top: .45rem; }
+.gallery-domain-more > summary { width: fit-content; min-height: 2.25rem; color: #315c48; font-size: .78rem; font-weight: 700; cursor: pointer; }
+.gallery-domain-more > div { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4rem; padding-top: .4rem; }
 .search-page { max-width: 76rem; }
 .search-header { display: grid; grid-template-columns: minmax(18rem, .8fr) minmax(20rem, 1.2fr); align-items: end; gap: 2rem; }
 .search-header > p { max-width: 44rem; margin-bottom: .25rem; }
@@ -1846,6 +1849,13 @@ caption {
 .gallery-journey-status details { margin-top: .45rem; border-top: 1px solid rgba(107, 92, 74, .18); }
 .gallery-journey-status summary { display: flex; align-items: center; min-height: 2.75rem; color: #684f3d; font-weight: 700; cursor: pointer; }
 .gallery-journey-status ul { display: grid; gap: .35rem; margin: 0 0 .25rem; padding-left: 1.25rem; color: #6c6258; }
+.gallery-reference-disclosure { margin-top: .75rem; border-top: 1px solid #d8ded8; }
+.gallery-reference-disclosure > summary { display: flex; align-items: center; min-height: 2.75rem; color: #526159; font-size: .74rem; font-weight: 700; cursor: pointer; }
+.gallery-reference-disclosure dl { display: grid; gap: .35rem; margin: 0; }
+.gallery-reference-disclosure dl > div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: .5rem; }
+.gallery-reference-disclosure dt { color: #667169; }
+.gallery-reference-disclosure dd { display: flex; flex-wrap: wrap; gap: .35rem; min-width: 0; margin: 0; }
+.gallery-reference-disclosure code { overflow-wrap: anywhere; }
 .gallery-question-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .8rem; align-items: center; margin: 1rem 0; padding: .85rem 1rem; border-left: 4px solid #426e58; background: #f6f8f3; }
 .gallery-question-panel h2 { margin: .15rem 0 .3rem; color: #213c2e; font-size: 1.08rem; }
 .gallery-question-panel p:not(.eyebrow) { max-width: 52rem; margin: 0; color: #46534b; font-size: .86rem; line-height: 1.65; }
@@ -1903,7 +1913,7 @@ caption {
 .gallery-next-links a { width: fit-content; color: #285740; font-size: .74rem; font-weight: 700; text-underline-offset: 2px; }
 
 @media (max-width: 56rem) {
-  .gallery-domain-overview > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gallery-domain-primary, .gallery-domain-more > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gallery-context-grid, .gallery-method-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gallery-context-grid article:last-child, .gallery-method-grid > article:last-child { grid-column: 1 / -1; }
 }
@@ -3587,8 +3597,24 @@ main:focus {
     gap: 0.15rem;
   }
 
-  .gallery-domain-overview > div {
+  .gallery-domain-primary, .gallery-domain-more > div {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gallery-toolbar {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    align-items: end;
+    gap: .5rem;
+  }
+
+  .gallery-search {
+    min-width: 0;
+  }
+
+  .gallery-toolbar output {
+    align-self: center;
+    margin-top: 1.1rem;
   }
 }
 
