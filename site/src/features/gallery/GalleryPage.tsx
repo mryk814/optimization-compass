@@ -244,79 +244,10 @@ export function GalleryCasePage() {
             </div>
           </section>
 
-          <details className="gallery-formulation-disclosure">
-            <summary>
-              <span>2. 定式化</span>
-              <strong>変数・目的・制約を確認する</strong>
-              <small>必要なときに展開</small>
-            </summary>
-            <OptimizationProblemPrimer
-              caseFormulation={{
-                decisionVariables: journey.formulation.decision_variables,
-                variableDomain: journey.formulation.variable_domain_summary,
-                objective: journey.formulation.objective,
-                constraints: journey.formulation.constraints,
-              }}
-            />
-          </details>
-
-          <section aria-labelledby="context-levels-title" className="gallery-hub-section">
-            <header className="gallery-section-heading">
-              <p className="eyebrow">3. 問題の粒度</p>
-              <h2 id="context-levels-title">同じ問題でも、3つの粒度を分ける</h2>
-            </header>
-            <div className="gallery-context-grid">
-              <ContextCard label="現実の問題" title="あなたが解きたい問い">
-                <p>{journey.learning_objective}</p>
-                <small>現場のデータ・制約・予算は、教材には自動で引き継がれません。</small>
-              </ContextCard>
-              <ContextCard label="教材用の問題" title="教材用に小さく固定した問題">
-                {journey.problem_instance_ids.length > 0 ? (
-                  <ul>
-                    {journey.problem_instance_ids.map((id, index) => (
-                      <li key={id}>
-                        {primaryScenario?.problem_instance_id === id ? (
-                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}>
-                            {journey.problem_instance_ids.length === 1 ? "教材用の問題を開く" : `教材用の問題 ${index + 1} を開く`}
-                          </JourneyLink>
-                        ) : `補助の教材用問題 ${index + 1}`}
-                      </li>
-                    ))}
-                  </ul>
-                ) : <p className="gallery-missing">まだ教材用の問題が接続されていません。</p>}
-                <p>問題型: <EntityReference entity={problemArchetype} fallback={journey.problem_archetype_id} /></p>
-              </ContextCard>
-              <ContextCard label="固定した実行" title="条件を固定した1回の実行">
-                {primaryScenario ? (
-                  <EntityRouteLink
-                    atlasState={state}
-                    entity={entity("scenario", primaryScenario.scenario_id)}
-                    fallback={`Theater: ${primaryScenario.scenario_id}`}
-                    journeyPatch={{ scenarioId: primaryScenario.scenario_id }}
-                    to={primaryScenario.canonical_url}
-                  />
-                ) : <p className="gallery-missing">このケースの主な実行は未接続です。</p>}
-                <small>実行結果は、手法全体の優劣や実問題での成功保証ではありません。</small>
-              </ContextCard>
-            </div>
-          </section>
-
-          <section aria-labelledby="inspect-title" className="gallery-hub-section gallery-inspect-panel">
-            <header className="gallery-section-heading">
-              <p className="eyebrow">4. 判断のポイント</p>
-              <h2 id="inspect-title">このケースで見るべきこと</h2>
-            </header>
-            <div className="gallery-inspect-grid">
-              <div><strong>見る</strong><p>{journey.learning_objective}</p></div>
-              <div><strong>持ち帰る</strong><p>{journey.takeaway}</p></div>
-              <div><strong>言い過ぎない</strong><ul>{journey.limitations.map((text) => <li key={text}>{text}</li>)}</ul></div>
-            </div>
-          </section>
-
           <section aria-labelledby="journey-actions-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">5–6. 観察と比較</p>
-              <h2 id="journey-actions-title">次の画面でも、このケースの条件を使う</h2>
+              <p className="eyebrow">2. 次に進む</p>
+              <h2 id="journey-actions-title">実行を見てから、条件差を比べる</h2>
             </header>
             <div className="gallery-action-grid">
               <JourneyAction
@@ -356,9 +287,77 @@ export function GalleryCasePage() {
             )}
           </section>
 
+          <details className="gallery-formulation-disclosure">
+            <summary>
+              <span>3. 定式化</span>
+              <strong>変数・目的・制約を確認する</strong>
+              <small>必要なときに展開</small>
+            </summary>
+            <OptimizationProblemPrimer
+              caseFormulation={{
+                decisionVariables: journey.formulation.decision_variables,
+                variableDomain: journey.formulation.variable_domain_summary,
+                objective: journey.formulation.objective,
+                constraints: journey.formulation.constraints,
+              }}
+            />
+          </details>
+
+          <section aria-labelledby="context-levels-title" className="gallery-hub-section">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">4. 問題の粒度</p>
+              <h2 id="context-levels-title">同じ問題でも、3つの粒度を分ける</h2>
+            </header>
+            <div className="gallery-context-grid">
+              <ContextCard label="現実の問題" title="あなたが解きたい問い">
+                <p>現場のデータ・制約・予算を加え、教材の前提との差を確認します。</p>
+                <small>教材の結果を、そのまま実問題の答えにはできません。</small>
+              </ContextCard>
+              <ContextCard label="教材用の問題" title="教材用に小さく固定した問題">
+                {journey.problem_instance_ids.length > 0 ? (
+                  <ul>
+                    {journey.problem_instance_ids.map((id, index) => (
+                      <li key={id}>
+                        {primaryScenario?.problem_instance_id === id ? (
+                          <JourneyLink atlasState={state} className="text-link" journeyPatch={{ scenarioId: primaryScenario.scenario_id }} to={primaryScenario.canonical_url}>
+                            {journey.problem_instance_ids.length === 1 ? "教材用の問題を開く" : `教材用の問題 ${index + 1} を開く`}
+                          </JourneyLink>
+                        ) : `補助の教材用問題 ${index + 1}`}
+                      </li>
+                    ))}
+                  </ul>
+                ) : <p className="gallery-missing">まだ教材用の問題が接続されていません。</p>}
+                <p>問題型: <EntityReference entity={problemArchetype} fallback={journey.problem_archetype_id} /></p>
+              </ContextCard>
+              <ContextCard label="固定した実行" title="条件を固定した1回の実行">
+                {primaryScenario ? (
+                  <EntityRouteLink
+                    atlasState={state}
+                    entity={entity("scenario", primaryScenario.scenario_id)}
+                    fallback={`Theater: ${primaryScenario.scenario_id}`}
+                    journeyPatch={{ scenarioId: primaryScenario.scenario_id }}
+                    to={primaryScenario.canonical_url}
+                  />
+                ) : <p className="gallery-missing">このケースの主な実行は未接続です。</p>}
+                <small>実行結果は、手法全体の優劣や実問題での成功保証ではありません。</small>
+              </ContextCard>
+            </div>
+          </section>
+
+          <section aria-labelledby="inspect-title" className="gallery-hub-section gallery-inspect-panel">
+            <header className="gallery-section-heading">
+              <p className="eyebrow">5. 判断のポイント</p>
+              <h2 id="inspect-title">このケースで見るべきこと</h2>
+            </header>
+            <div className="gallery-inspect-grid">
+              <div><strong>持ち帰る</strong><p><GalleryNote>{journey.takeaway}</GalleryNote></p></div>
+              <div><strong>言い過ぎない</strong><ul>{journey.limitations.map((text) => <li key={text}>{text}</li>)}</ul></div>
+            </div>
+          </section>
+
           <section aria-labelledby="method-roles-title" className="gallery-hub-section">
             <header className="gallery-section-heading">
-              <p className="eyebrow">7. 手法の役割</p>
+              <p className="eyebrow">6. 手法の役割</p>
               <h2 id="method-roles-title">候補・条件付き・除外を理由で分ける</h2>
             </header>
             <div className="gallery-method-grid">
@@ -368,6 +367,7 @@ export function GalleryCasePage() {
                 ids={journey.candidate_method_ids}
                 label="候補"
                 method={entity}
+                openByDefault
                 reasons={new Map(item.candidate_methods.map((entry) => [entry.method_id, entry.reason]))}
                 state={state}
               />
@@ -395,7 +395,7 @@ export function GalleryCasePage() {
           <section aria-labelledby="implementation-title" className="gallery-hub-section gallery-resource-grid">
             <div>
               <header className="gallery-section-heading">
-                <p className="eyebrow">8. Implementation</p>
+                <p className="eyebrow">7. 実装と根拠</p>
                 <h2 id="implementation-title">実装と最小例</h2>
               </header>
               <ResourceList atlasState={state} ids={journey.implementation_ids} type="implementation" entity={entity} />
@@ -406,9 +406,9 @@ export function GalleryCasePage() {
                 <summary>最小Python例を見る</summary>
                 <pre><code>{item.python_example}</code></pre>
               </details>
-              <p className="atlas-note">{item.practical_notes}</p>
+              <p className="atlas-note"><GalleryNote>{item.practical_notes}</GalleryNote></p>
               <div className="atlas-note">
-                <strong>このcaseの限界</strong>
+                <strong>このケースの限界</strong>
                 <ul>{item.limitations.map((text) => <li key={text}>{text}</li>)}</ul>
               </div>
             </div>
@@ -553,6 +553,7 @@ function MethodGroup({
   ids,
   label,
   method,
+  openByDefault = false,
   reasons,
   state,
 }: {
@@ -561,27 +562,49 @@ function MethodGroup({
   ids: string[];
   label: string;
   method: (type: EntityType, id: string) => LinkedEntity | undefined;
+  openByDefault?: boolean;
   reasons: Map<string, string>;
   state?: AtlasStateV1;
 }) {
   return (
-    <article className={className}>
-      <h3>{label}</h3>
-      {ids.length === 0 ? <p>{empty}</p> : (
-        <ul>
-          {ids.map((id) => {
-            const target = method("method", id);
-            const reason = reasons.get(id) || target?.summary || "このケースの定式化と前提に合う主要候補です。";
-            return (
-              <li key={id}>
-                <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
-                <p>{reason}</p>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </article>
+    <details className={`gallery-method-group ${className}`} open={openByDefault}>
+      <summary>
+        <strong>{label}</strong>
+        <span>{ids.length}件</span>
+      </summary>
+      <div>
+        {ids.length === 0 ? <p>{empty}</p> : (
+          <ul>
+            {ids.map((id) => {
+              const target = method("method", id);
+              const reason = reasons.get(id) || target?.summary || "このケースの定式化と前提に合う主要候補です。";
+              return (
+                <li key={id}>
+                  <EntityReference atlasState={state} entity={target} fallback={id} journeyPatch={{ methodId: id }} />
+                  <p>{reason}</p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </details>
+  );
+}
+
+export function GalleryNote({ children }: { children: string }) {
+  const tokens = children.split(/(\[[^\]]+\]\(#[^)]+\)|\$[^$]+\$)/gu).filter(Boolean);
+  return (
+    <>
+      {tokens.map((token, index) => {
+        const link = token.match(/^\[([^\]]+)\]\(#([^)]+)\)$/u);
+        if (link) return <Link key={`${token}-${index}`} className="text-link" to={link[2]}>{link[1]}</Link>;
+        if (token.startsWith("$") && token.endsWith("$")) {
+          return <code key={`${token}-${index}`} className="gallery-inline-math">{token.slice(1, -1)}</code>;
+        }
+        return token;
+      })}
+    </>
   );
 }
 

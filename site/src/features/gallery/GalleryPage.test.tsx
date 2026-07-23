@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 
 import rawGallery from "../../../public/data/gallery.json";
 import { parseGalleryIndex } from "../../contracts/gallery";
@@ -7,6 +8,7 @@ import {
   caseState,
   countCasesByDomain,
   domainLabel,
+  GalleryNote,
   JourneyStatus,
   journeyCompletionLabel,
   journeyStatusLabel,
@@ -51,6 +53,26 @@ describe("gallery learning journey status", () => {
     fireEvent.click(screen.getByText("接続状況を確認（2）"));
 
     expect(screen.getByText("主な実行例未接続")).toBeVisible();
+  });
+
+  test("renders links and inline formulas without exposing authoring syntax", () => {
+    render(
+      <MemoryRouter>
+        <p>
+          <GalleryNote>
+            {"[SO(3)の表現](#/learn/concept.so3-rotation-representation)では$q$と$-q$を同一視する。"}
+          </GalleryNote>
+        </p>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole("link", { name: "SO(3)の表現" })).toHaveAttribute(
+      "href",
+      "/learn/concept.so3-rotation-representation",
+    );
+    expect(screen.getByText("q", { selector: "code" })).toBeVisible();
+    expect(screen.getByText("-q", { selector: "code" })).toBeVisible();
+    expect(screen.queryByText(/\[SO\(3\)の表現\]|\$q\$/u)).not.toBeInTheDocument();
   });
 
   test("carries explicit candidate reasons and case limitations into the page model", () => {
