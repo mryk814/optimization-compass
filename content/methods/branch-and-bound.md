@@ -9,11 +9,11 @@ source_ids: [S021, S022, S079]
 prerequisites: []
 related_ids: [branch-and-cut, cp-sat, dynamic-programming]
 visualization_ids: [binary-knapsack-bnb-complete, binary-knapsack-bnb-budget]
-comparison_ids: []
+comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 aliases: [/learn/branch-and-bound]
 visualization_aliases: []
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
 離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。
@@ -109,7 +109,8 @@ items = [Item(8, 4), Item(5, 3), Item(6, 5), Item(4, 2)]
 print(solve_knapsack(items, capacity=8))
 ```
 
-fractional knapsackのvalueをupper boundとして使っています。一般MILPではLP relaxation、cut、presolve、heuristicなどをsolverが組み合わせます。
+fractional knapsackのvalueをupper boundとして使っています。
+一般MILPではLP relaxation／cut／presolve／heuristicなどをsolverが組み合わせます。
 
 ## 探索戦略
 
@@ -118,7 +119,8 @@ fractional knapsackのvalueをupper boundとして使っています。一般MIL
 - breadth-first: levelごとに探索するがmemoryが増えやすい
 - hybrid: solverがphaseに応じて切替
 
-branching variable、node selection、heuristicは性能へ強く影響しますが、model formulationの強さも同じくらい重要です。
+branching variable／node selection／heuristicは性能へ強く影響します。
+model formulationの強さも同じくらい重要です。
 
 ## 診断値
 
@@ -132,7 +134,17 @@ branching variable、node selection、heuristicは性能へ強く影響します
 - termination reason
 - feasibility / integrality tolerance
 
-[Search-tree Theater](#/theater/search-tree/binary-knapsack-bnb-complete)では、optimality provenとbudget stopの結末を分けて確認できます。
+## 探索完了と予算停止を分けて見る
+
+[証明完了の探索木](#/theater/search-tree/binary-knapsack-bnb-complete)では、incumbentとglobal boundが一致するまでを追います。
+[4 nodeで止まる探索木](#/theater/search-tree/binary-knapsack-bnb-budget)では、実行可能なincumbentがあっても正のgapと未探索nodeが残る状態を確認します。
+
+[二つの停止結果を並べるCompare](#/compare/COMPARE_KNAPSACK_BNB_BUDGET)は、同じ4変数knapsackを使います。
+instance・seed・branch順・初期incumbent・fractional boundを固定します。
+9回のevaluation上限も共通にし、node stop limitだけを9から4へ変えます。
+
+これは停止条件の読み方を学ぶ固定教材です。
+CP-SATやMIP solverの速度、総当たりとの一般性能rankingを示すものではありません。
 
 ## 失敗・切替の兆候
 
@@ -145,7 +157,8 @@ branching variable、node selection、heuristicは性能へ強く影響します
 - 専用DP、flow、matchingで解ける構造を見落とす
 
 ::: warning
-探索木が小さい一例だけでsolver一般の性能を評価しません。problem instance、formulation、presolve、cut、heuristic、hardware、time limitを揃えます。
+探索木が小さい一例だけでsolver一般の性能を評価しません。
+problem instance／formulation／presolve／cut／heuristic／hardware／time limitを揃えます。
 :::
 
 ## 次に読む
