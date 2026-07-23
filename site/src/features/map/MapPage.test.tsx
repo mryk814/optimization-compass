@@ -226,8 +226,9 @@ describe("MapPage", () => {
   test("explains map states and exposes root/current/detail cues", async () => {
     renderMap();
     const tree = await loadedTree();
-    expect(screen.getByRole("heading", { level: 2, name: "地図の読み方" })).toBeVisible();
-    expect(screen.getByText(/表示倍率は文字の大きさです/u)).toBeVisible();
+    expect(screen.getByRole("heading", { level: 2, name: "この条件は、どの問題構造に位置づく？" })).toBeVisible();
+    fireEvent.click(screen.getByText("地図の読み方"));
+    expect(screen.getByText(/倍率は文字の大きさです/u)).toBeVisible();
     const root = within(tree).getAllByRole("treeitem")[0];
     expect(root).toHaveClass("map-tree-item-root");
     expect(root).toHaveAttribute("title", "root A");
@@ -243,13 +244,16 @@ describe("MapPage", () => {
     fireEvent.click(question);
     const leaf = within(tree).getByRole("treeitem", { name: /0-1/u });
     expect(leaf).toHaveAttribute("aria-level", "3");
-    expect(screen.getByRole("heading", { level: 3, name: "関連項目" })).toBeVisible();
+    expect(screen.getByText("関連項目")).toBeVisible();
     expect(screen.getAllByText("0-1").length).toBeGreaterThan(1);
     fireEvent.click(leaf);
 
     expect(leaf).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("分岐 A / 質問 / 0-1")).toBeVisible();
     expect(screen.getByText("binary summary")).toBeVisible();
+    screen.getByTestId("map-detail-pane")
+      .querySelectorAll<HTMLDetailsElement>("details:not([open]) > summary")
+      .forEach((summary) => fireEvent.click(summary));
     expect(screen.getByText("Q01 = binary")).toBeVisible();
     expect(screen.getByText("CP-SAT")).toBeVisible();
     expect(screen.getByText("branch-and-cut")).toBeVisible();
@@ -518,6 +522,7 @@ describe("MapPage", () => {
     renderMap();
     const tree = await loadedTree();
     fireEvent.click(within(tree).getAllByRole("treeitem")[0]);
+    fireEvent.click(screen.getByText("future（未分類）"));
     expect(screen.getByText("未知の対象")).toBeVisible();
     expect(screen.queryByRole("link", { name: "未知の対象" })).not.toBeInTheDocument();
   });

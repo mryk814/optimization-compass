@@ -183,6 +183,21 @@ describe("DiagnosePage", () => {
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q04).toBeUndefined();
   });
 
+  test("opens one question stage at a time and shows measurable progress", async () => {
+    renderDiagnose();
+
+    await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    const nextGroup = screen.getByText("次に、計算の性質").closest("details");
+    expect(nextGroup).not.toHaveAttribute("open");
+    expect(screen.getByRole("progressbar", { name: "診断の回答進捗" })).toHaveAttribute(
+      "value",
+      "0",
+    );
+    fireEvent.click(screen.getByText("次に、計算の性質"));
+    expect(nextGroup).toHaveAttribute("open");
+    expect(screen.getByText(/候補はまだ絞れていません/u)).toBeVisible();
+  });
+
   test("renders all result bands, implementations, problems, follow-ups, trace, and safe sources", async () => {
     const answers = {
       Q01: ["binary"], Q02: ["explicit_algebraic"], Q03: ["linear"],
@@ -206,8 +221,9 @@ describe("DiagnosePage", () => {
       expect(await screen.findByRole("heading", { name: heading })).toBeVisible();
     }
     expect(screen.getAllByText("実装候補").length).toBeGreaterThan(0);
-    expect(screen.getByRole("heading", { name: "関連する問題型" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "追加確認" })).toBeVisible();
+    expect(screen.getByText("関連する問題型")).toBeVisible();
+    fireEvent.click(screen.getByText("関連する問題型"));
+    fireEvent.click(screen.getByText("判定の詳細"));
     expect(screen.getByText(/R\d{3}/u)).toBeVisible();
     expect(screen.getAllByRole("link", { name: /根拠/u }).length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: "地図を開く" })).toBeVisible();

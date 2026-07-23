@@ -105,40 +105,42 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
       {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>学習用の可視化</strong><p>問題設定と表示形式に沿って可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}
 
       {children.length > 0 && (
-        <section className="map-detail-section">
-          <h3>関連項目</h3>
+        <details className="map-detail-section map-detail-disclosure">
+          <summary>関連項目 <span>{children.length}</span></summary>
           <ul className="map-child-preview">
             {children.map((child) => <li key={child.node_id}>{child.label || child.node_id}</li>)}
           </ul>
-        </section>
+        </details>
       )}
 
       {selected.answer_bindings.length > 0 && (
         <section className="map-detail-section">
-          <h3>診断回答との対応</h3>
-          <ul className="map-binding-list">
-            {selected.answer_bindings.map((binding) => (
-              <li key={`${binding.question_id}:${binding.answer_value}`}>
-                <code>{binding.question_id} = {binding.answer_value}</code>
-              </li>
-            ))}
-          </ul>
-          <p className="map-binding-note">これは地図上の選択です。診断の回答は変わりません。</p>
           {onContinueDiagnosis && (
             <button className="map-action-button" onClick={onContinueDiagnosis} type="button">
               この条件で診断する
             </button>
           )}
+          <details className="map-binding-details">
+            <summary>診断回答との対応を確認</summary>
+            <ul className="map-binding-list">
+              {selected.answer_bindings.map((binding) => (
+                <li key={`${binding.question_id}:${binding.answer_value}`}>
+                  <code>{binding.question_id} = {binding.answer_value}</code>
+                </li>
+              ))}
+            </ul>
+            <p className="map-binding-note">この条件を診断へ引き継ぎます。ほかの回答は変更しません。</p>
+          </details>
         </section>
       )}
 
       {[...grouped.entries()].map(([type, entities]) => (
-        <section className="map-detail-section" key={type}>
-          <h3>{entityTypeLabels[type] ?? `${type}（未分類）`}</h3>
+        <details className="map-detail-section map-detail-disclosure" key={type}>
+          <summary>{entityTypeLabels[type] ?? `${type}（未分類）`} <span>{entities.length}</span></summary>
           <ul className="map-entity-list">
             {entities.map((entity) => <EntityItem entity={entity} key={entity.entity_id} />)}
           </ul>
-        </section>
+        </details>
       ))}
 
       {missingReferences.length > 0 && (

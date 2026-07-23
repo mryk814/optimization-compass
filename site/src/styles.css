@@ -360,7 +360,8 @@ caption {
 }
 
 .diagnose-progress {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) auto;
   align-items: baseline;
   gap: 0.45rem 0.8rem;
   margin: 0 0 0.75rem;
@@ -372,14 +373,46 @@ caption {
   flex-wrap: wrap;
 }
 
+.diagnose-progress progress {
+  width: 100%;
+  height: 0.45rem;
+  accent-color: #3e7358;
+}
+
 .diagnose-progress strong {
   color: #234737;
 }
 
-.diagnose-question-group > h2 {
-  margin: 0 0 0.45rem;
+.diagnose-question-group {
+  min-width: 0;
+}
+
+.diagnose-question-group > summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d7d9df;
+  border-radius: 0.5rem;
+  background: #f7f5ef;
   color: #6b4a35;
   font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.diagnose-question-group > summary small {
+  color: #59665e;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.diagnose-question-group[open] > summary {
+  margin-bottom: 0.45rem;
+  border-color: #b9c9bd;
+  background: #eef4ed;
 }
 
 .diagnose-question-grid {
@@ -574,6 +607,10 @@ caption {
   }
 
   .diagnose-question-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .diagnose-progress {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -1127,6 +1164,37 @@ caption {
   border: 1px solid #c7d4ca;
   border-radius: 0.7rem;
   background: #f8faf6;
+}
+
+.problem-primer-disclosure {
+  margin: 0.55rem 0 0.9rem;
+  border: 1px solid #cfd9d1;
+  border-radius: 0.55rem;
+  background: #f8faf6;
+}
+
+.problem-primer-disclosure > summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  color: #28513d;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.problem-primer-disclosure > summary small {
+  color: #67736b;
+  font-size: 0.66rem;
+  font-weight: 650;
+}
+
+.problem-primer-disclosure .problem-primer {
+  margin: 0;
+  border-width: 1px 0 0;
+  border-radius: 0;
 }
 
 .problem-primer-header {
@@ -2610,6 +2678,29 @@ main:focus {
   background: #faf9f4;
 }
 
+.map-reading-question {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0 0 0.65rem;
+  padding-left: 0.7rem;
+  border-left: 3px solid #3e7358;
+}
+
+.map-reading-question p,
+.map-reading-question h2 {
+  margin: 0;
+}
+
+.map-reading-question h2 {
+  color: #1e3529;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.map-reading-question > p:last-child {
+  color: #59645d;
+  font-size: 0.72rem;
+}
+
 .map-view-selector label {
   color: #496052;
   font-size: 0.72rem;
@@ -2628,15 +2719,23 @@ main:focus {
   font-weight: 700;
 }
 
-.map-view-selector div {
+.map-view-context > div {
   display: grid;
   gap: 0.12rem;
+  margin-top: 0.35rem;
   min-width: 0;
   color: #536158;
   font-size: 0.72rem;
 }
 
-.map-view-selector strong {
+.map-view-context > summary {
+  color: #526159;
+  font-size: 0.7rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.map-view-context strong {
   color: #263c30;
 }
 
@@ -2773,10 +2872,16 @@ main:focus {
   font-size: 0.7rem;
 }
 
-.map-legend h2 {
-  margin: 0 0 0.35rem;
+.map-legend > summary {
+  width: fit-content;
   color: #6b4a35;
   font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.map-legend[open] > summary {
+  margin-bottom: 0.4rem;
 }
 
 .map-legend ul {
@@ -2809,7 +2914,7 @@ main:focus {
 .map-legend-swatch-related { box-shadow: inset 3px 0 #315bda; background: #eef3ff; }
 
 .map-view-help {
-  margin: 0 0 0.5rem;
+  margin: 0.45rem 0 0;
   color: #4f5a53;
   font-size: 0.68rem;
   line-height: 1.5;
@@ -2908,6 +3013,50 @@ main:focus {
 .map-detail-section {
   padding: 0.55rem 0;
   border-top: 1px solid #e5e6e0;
+}
+
+.map-detail-disclosure > summary,
+.map-binding-details > summary,
+.diagnose-result-disclosure > summary {
+  color: #6b4a35;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.map-detail-disclosure > summary span,
+.diagnose-result-disclosure > summary span {
+  display: inline-block;
+  min-width: 1.25rem;
+  margin-left: 0.25rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 999px;
+  background: #e8eee9;
+  color: #52655a;
+  font-size: 0.62rem;
+  text-align: center;
+}
+
+.map-detail-disclosure[open] > summary,
+.map-binding-details[open] > summary,
+.diagnose-result-disclosure[open] > summary {
+  margin-bottom: 0.4rem;
+}
+
+.map-binding-details {
+  margin-top: 0.55rem;
+}
+
+.diagnose-result-disclosure {
+  margin: 0 0 0.55rem;
+  padding: 0.6rem;
+  border: 1px solid var(--border-color, #d7d9df);
+  border-radius: 0.55rem;
+  background: #fff;
+}
+
+.diagnose-result-disclosure ul {
+  margin: 0.45rem 0 0;
 }
 
 .map-detail-section h3 {

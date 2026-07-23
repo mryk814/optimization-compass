@@ -1,7 +1,10 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 
-import { OptimizationProblemPrimer } from "./OptimizationProblemPrimer";
+import {
+  OptimizationProblemPrimer,
+  OptimizationProblemPrimerDisclosure,
+} from "./OptimizationProblemPrimer";
 
 describe("OptimizationProblemPrimer", () => {
   test("connects the canonical formula to plain-language terms", () => {
@@ -38,5 +41,14 @@ describe("OptimizationProblemPrimer", () => {
   test("mounts exported MathML in a case formulation", () => {
     const { container } = render(<OptimizationProblemPrimer caseFormulation={{ decisionVariables: "変数 <math><mi>x</mi></math>", variableDomain: "範囲", objective: "目的", constraints: "制約" }} />);
     expect(container.querySelector("math mi")?.textContent).toBe("x");
+  });
+
+  test("keeps the shared formulation out of the primary reading path until requested", () => {
+    const { container } = render(<OptimizationProblemPrimerDisclosure />);
+    const disclosure = container.querySelector("details");
+
+    expect(disclosure).not.toHaveAttribute("open");
+    fireEvent.click(within(container).getByText("共通の定式化を確認"));
+    expect(disclosure).toHaveAttribute("open");
   });
 });

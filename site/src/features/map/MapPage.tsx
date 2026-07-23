@@ -7,7 +7,7 @@ import { parseSiteData, type SiteData } from "../../contracts/site-data";
 import { encodeAtlasState, type AtlasCompatibilityCatalog, type AtlasStateV1 } from "../../state/atlas-state";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import { useAtlasState } from "../../state/useAtlasState";
-import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
+import { OptimizationProblemPrimerDisclosure } from "../../components/OptimizationProblemPrimer";
 import { MapDetail } from "./MapDetail";
 import { ancestorIds, applyAnswerBindings, matchingBindingNodeIds } from "./map-state";
 import { MapTree } from "./MapTree";
@@ -49,15 +49,18 @@ function Diagnostics({ model }: { model: MapModel }) {
 
 function MapLegend() {
   return (
-    <section aria-label="地図の読み方" className="map-legend">
-      <h2>地図の読み方</h2>
+    <details className="map-legend">
+      <summary>地図の読み方</summary>
       <ul>
         <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-root" />入口: 問題構造の起点</li>
         <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-current" />現在地: キーボード操作や「現在地へ」で移動する項目</li>
         <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-selected" />選択経路: 詳細パネルに表示中の項目と親</li>
         <li><span aria-hidden="true" className="map-legend-swatch map-legend-swatch-related" />関連候補: 診断回答に合う候補</li>
       </ul>
-    </section>
+      <p className="map-view-help" role="note">
+        倍率は文字の大きさです。地図は縦横にスクロールでき、「現在地へ」で選択中の項目に戻れます。
+      </p>
+    </details>
   );
 }
 
@@ -219,15 +222,23 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
       )}
       {atlasNavigation.error && <p className="map-state-panel" role="alert">{atlasNavigation.error.message}</p>}
       <Diagnostics model={model} />
+      <section aria-labelledby="map-reading-question" className="map-reading-question">
+        <p className="eyebrow">この図が答える問い</p>
+        <h2 id="map-reading-question">この条件は、どの問題構造に位置づく？</h2>
+        <p>左で構造をたどり、選んだ項目の意味と次の操作を右で確認します。</p>
+      </section>
       <section className="map-view-selector" aria-label="表示の種類">
         <label htmlFor="semantic-view">表示</label>
         <select id="semantic-view" onChange={(event) => switchView(event.target.value)} value={view.view_id}>
           {views.map((candidate, index) => <option key={`${candidate.view_id}:${index}`} value={candidate.view_id}>{candidate.title}</option>)}
         </select>
-        <div>
-          <strong>{view.description}</strong>
-          <span>注意: {view.limitations}</span>
-        </div>
+        <details className="map-view-context">
+          <summary>表示の説明</summary>
+          <div>
+            <strong>{view.description}</strong>
+            <span>注意: {view.limitations}</span>
+          </div>
+        </details>
       </section>
       <MapLegend />
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
@@ -238,12 +249,9 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
         <button aria-label="縮小" disabled={zoom <= 80} onClick={() => setZoom((value) => Math.max(80, value - 10))} type="button">−</button>
         <output aria-label="表示倍率">{zoom}%</output>
         <button aria-label="拡大" disabled={zoom >= 140} onClick={() => setZoom((value) => Math.min(140, value + 10))} type="button">＋</button>
-        <button aria-label="倍率をリセット" onClick={() => setZoom(100)} type="button">100%</button>
+        <button aria-label="倍率をリセット" onClick={() => setZoom(100)} type="button">リセット</button>
         <button disabled={!atlas.state.selectedNodeId} onClick={focusCurrent} type="button">現在地へ</button>
       </div>
-      <p className="map-view-help" role="note">
-        表示倍率は文字の大きさです。地図は横・縦にスクロールできます。選択中の項目へは「現在地へ」で戻れます。ノードにカーソルを合わせると概要を確認できます。
-      </p>
       <div className="map-workspace">
         <section className="map-tree-pane" data-active={activePane === "map"} data-testid="map-tree-pane">
           <MapTree
@@ -325,7 +333,7 @@ export function MapPage() {
         <h1>{loadState.status === "ready" ? loadState.view.title : requestedViewId === "problem-structure" ? "問題構造マップ" : "最適化マップ"}</h1>
         {loadState.status === "ready" && <p>{loadState.view.description}</p>}
       </header>
-      <OptimizationProblemPrimer />
+      <OptimizationProblemPrimerDisclosure />
       {loadState.status === "loading" && <p className="map-state-panel" role="status">地図を読み込み中…</p>}
       {loadState.status === "error" && (
         <section className="map-state-panel" role="alert">

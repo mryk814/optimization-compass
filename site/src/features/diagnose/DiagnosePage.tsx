@@ -16,7 +16,7 @@ import { useAtlasState } from "../../state/useAtlasState";
 import { useAtlasNavigation } from "../../state/atlas-navigation";
 import {
   diagnosisFieldCue,
-  OptimizationProblemPrimer,
+  OptimizationProblemPrimerDisclosure,
 } from "../../components/OptimizationProblemPrimer";
 import {
   DIAGNOSIS_QUESTION_TITLES,
@@ -231,10 +231,11 @@ function ResultBand({
   data: SiteData;
   onMap?(methodId: string): void;
 }) {
+  if (items.length === 0) return null;
   return (
     <section className="diagnose-result-band">
       <h2>{title}</h2>
-      {items.length === 0 ? <p className="diagnose-empty">該当する候補はありません</p> : items.map((item) => <ResultCard data={data} item={item} key={item.entity_id} onMap={onMap} />)}
+      {items.map((item) => <ResultCard data={data} item={item} key={item.entity_id} onMap={onMap} />)}
     </section>
   );
 }
@@ -248,27 +249,36 @@ function Results({
   data: SiteData;
   onMethodMap(methodId: string): void;
 }) {
+  const methodCount = result.alternatives_first.length
+    + result.first_choices.length
+    + result.conditional_choices.length
+    + result.excluded_methods.length;
   return (
     <div className="diagnose-results">
+      {methodCount === 0 && (
+        <p className="diagnose-empty">
+          候補はまだ絞れていません。分かる条件を増やすと、ここに候補と避けたい手法が現れます。
+        </p>
+      )}
       <ResultBand data={data} items={result.alternatives_first} title="代替解法" />
       <ResultBand data={data} items={result.first_choices} onMap={onMethodMap} title="第一候補" />
       <ResultBand data={data} items={result.conditional_choices} onMap={onMethodMap} title="条件付き候補" />
       <ResultBand data={data} items={result.excluded_methods} onMap={onMethodMap} title="除外候補" />
-      <section className="diagnose-result-band">
-        <h2>関連する問題型</h2>
+      {result.candidate_problem_archetypes.length > 0 && <details className="diagnose-result-disclosure">
+        <summary>関連する問題型 <span>{result.candidate_problem_archetypes.length}</span></summary>
         {result.candidate_problem_archetypes.map((item) => <ResultCard data={data} item={item} key={item.entity_id} />)}
-      </section>
-      <section className="diagnose-result-band">
-        <h2>追加確認</h2>
+      </details>}
+      {result.followups.length > 0 && <details className="diagnose-result-disclosure">
+        <summary>追加確認 <span>{result.followups.length}</span></summary>
         <ul>{result.followups.map((item, index) => <li key={`${item.question_id}:${index}`}>{item.explanation}</li>)}</ul>
-      </section>
-      <section className="diagnose-trace">
-        <h2>判定の流れ</h2>
+      </details>}
+      <details className="diagnose-result-disclosure diagnose-trace">
+        <summary>判定の詳細</summary>
         <p>{result.trace.map((item) => item.rule_id).join(" · ") || "一致規則なし"}</p>
         <SourceLinks data={data} sourceIds={[...new Set(result.trace.flatMap((item) => item.source_ids))]} />
-      </section>
-      {result.warnings.map((warning) => <p className="diagnose-warning" key={warning}>{warning}</p>)}
-      <p className="diagnose-disclaimer">{result.disclaimer}</p>
+        {result.warnings.map((warning) => <p className="diagnose-warning" key={warning}>{warning}</p>)}
+        <p className="diagnose-disclaimer">{result.disclaimer}</p>
+      </details>
     </div>
   );
 }
@@ -290,6 +300,13 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
     (answer) => answer.status === "answered" && answer.values.includes("hours_or_more"),
   ) || result.first_choices.some((item) => item.entity_id === "M_BAYESIAN_OPT_GP");
   const answeredCount = Object.keys(atlas.state.answers).length;
+  const [openGroups, setOpenGroups] = useState<Set<string>>(() => new Set(
+    QUESTION_GROUPS
+      .filter((group) => group.from === 1 || data.questions
+        .filter((question) => question.sequence >= group.from && question.sequence <= group.to)
+        .some((question) => atlas.state.answers[question.question_id] !== undefined))
+      .map((group) => group.title),
+  ));
 
   if (atlas.error) {
     return (
@@ -306,13 +323,36 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
       {atlasNavigation.error && <p className="diagnose-error" role="alert">{atlasNavigation.error.message}</p>}
       <div className="diagnose-progress" role="status">
         <strong>{answeredCount} / {data.questions.length} 回答済み</strong>
-        <span>すべて答えなくて大丈夫です。分からない項目は飛ばせます。</span>
+        <progress aria-label="診断の回答進捗" max={data.questions.length} value={answeredCount} />
+        <span>分かる項目だけで構いません。</span>
       </div>
       <div className="diagnose-layout">
         <section className="diagnose-form" aria-label="診断条件">
           {QUESTION_GROUPS.map((group) => (
-            <section className="diagnose-question-group" key={group.title}>
-              <h2>{group.title}</h2>
+            <details
+              className="diagnose-question-group"
+              key={group.title}
+              onToggle={(event) => {
+                const isOpen = event.currentTarget.open;
+                setOpenGroups((current) => {
+                  const next = new Set(current);
+                  if (isOpen) next.add(group.title);
+                  else next.delete(group.title);
+                  return next;
+                });
+              }}
+              open={openGroups.has(group.title)}
+            >
+              <summary>
+                <span>{group.title}</span>
+                <small>
+                  {data.questions
+                    .filter((question) => question.sequence >= group.from && question.sequence <= group.to)
+                    .filter((question) => atlas.state.answers[question.question_id] !== undefined).length}
+                  {" / "}
+                  {group.to - group.from + 1} 回答
+                </small>
+              </summary>
               <div className="diagnose-question-grid">
                 {data.questions
                   .filter((question) => question.sequence >= group.from && question.sequence <= group.to)
@@ -325,7 +365,7 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
                     />
                   ))}
               </div>
-            </section>
+            </details>
           ))}
         </section>
         <aside className="diagnose-result-pane">
@@ -354,7 +394,7 @@ export function DiagnosePage() {
   return (
     <section className="diagnose-page">
       <header className="diagnose-header"><p className="eyebrow">問題診断</p><h1>診断</h1><p>答えられる条件を選ぶと、候補と避けたい手法を整理できます。</p></header>
-      <OptimizationProblemPrimer />
+      <OptimizationProblemPrimerDisclosure />
       {loadState.status === "loading" && <p role="status">診断データを読み込んでいます…</p>}
       {loadState.status === "error" && <section className="diagnose-error" role="alert"><h2>診断データを読み込めませんでした</h2><p>{loadState.error.message}</p></section>}
       {loadState.status === "ready" && <LoadedDiagnose data={loadState.data} manifest={loadState.manifest} view={loadState.view} />}

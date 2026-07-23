@@ -91,6 +91,18 @@ export function OptimizationProblemPrimer({
   );
 }
 
+export function OptimizationProblemPrimerDisclosure() {
+  return (
+    <details className="problem-primer-disclosure">
+      <summary>
+        <span>共通の定式化を確認</span>
+        <small>変数・目的・制約</small>
+      </summary>
+      <OptimizationProblemPrimer />
+    </details>
+  );
+}
+
 export function CanonicalTermReferences({ questionIds }: { questionIds: string[] }) {
   const terms = [...new Map(
     questionIds.flatMap(termsForQuestion).map((term) => [term.term_id, term]),

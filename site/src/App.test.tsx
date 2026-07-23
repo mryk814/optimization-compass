@@ -121,6 +121,7 @@ function jsonResponse(value: unknown) {
 describe("application routes", () => {
   beforeEach(() => {
     window.location.hash = "#/";
+    vi.stubGlobal("scrollTo", vi.fn());
   });
 
   afterEach(() => {
@@ -134,6 +135,15 @@ describe("application routes", () => {
     render(<App initialEntityLinks={testLinks} />);
 
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+  });
+
+  test("returns to the top when the route changes", async () => {
+    render(<App initialEntityLinks={testLinks} />);
+
+    fireEvent.click(screen.getByRole("link", { name: "条件から診断を始める" }));
+
+    await waitFor(() => expect(window.location.hash).toBe("#/diagnose"));
+    expect(window.scrollTo).toHaveBeenCalledWith({ left: 0, top: 0, behavior: "auto" });
   });
 
   test("home foregrounds one problem and keeps technical reasons on demand", async () => {

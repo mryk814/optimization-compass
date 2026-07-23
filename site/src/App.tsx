@@ -244,6 +244,7 @@ function AppShell() {
     if (previousPathname.current === pathname) return;
     previousPathname.current = pathname;
     navigationOverflow.current?.removeAttribute("open");
+    window.scrollTo({ left: 0, top: 0, behavior: "auto" });
     document.getElementById("main-content")?.focus({ preventScroll: true });
   }, [pathname]);
   const skipToMain = (event: MouseEvent<HTMLAnchorElement>) => {
