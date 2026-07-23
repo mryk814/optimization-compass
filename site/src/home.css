@@ -108,6 +108,110 @@
   flex: 0 0 auto;
 }
 
+.home-case-journey {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-case-journey li {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: center;
+  padding: 0.8rem 0.85rem;
+  border-block: 1px solid #d5ded8;
+  background: #f7f9f5;
+}
+
+.home-case-journey li:first-child {
+  border-left: 1px solid #d5ded8;
+  border-radius: 0.65rem 0 0 0.65rem;
+}
+
+.home-case-journey li:last-child {
+  border-right: 1px solid #d5ded8;
+  border-radius: 0 0.65rem 0.65rem 0;
+}
+
+.home-case-journey li + li::before {
+  position: absolute;
+  z-index: 1;
+  left: -0.45rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-top: 1px solid #aebdb3;
+  border-right: 1px solid #aebdb3;
+  background: #f7f9f5;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.home-case-journey li > span {
+  display: grid;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: #315c48;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 800;
+  place-items: center;
+}
+
+.home-case-journey a,
+.home-case-journey li > div {
+  display: grid;
+  min-width: 0;
+  color: #214e39;
+  text-decoration: none;
+}
+
+.home-case-journey a:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.home-case-journey strong {
+  font-size: 1rem;
+}
+
+.home-case-journey small {
+  overflow: hidden;
+  color: #66736b;
+  font-size: 0.875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-case-disclosure {
+  border: 1px solid #d5ded8;
+  border-radius: 0.65rem;
+  background: #fbfcfa;
+}
+
+.home-case-disclosure summary {
+  min-height: 2.75rem;
+  padding: 0.7rem 0.85rem;
+  color: #315c48;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.home-case-disclosure[open] summary {
+  border-bottom: 1px solid #d5ded8;
+}
+
+.home-case-disclosure .home-case-dispositions {
+  padding: 0.75rem;
+}
+
 .home-mathematical-formulation {
   display: grid;
   gap: 0.7rem;
@@ -310,5 +414,24 @@
 
   .home-case-dispositions {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-case-journey {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-case-journey li,
+  .home-case-journey li:first-child,
+  .home-case-journey li:last-child {
+    border: 1px solid #d5ded8;
+    border-radius: 0.5rem;
+  }
+
+  .home-case-journey li + li {
+    margin-top: 0.4rem;
+  }
+
+  .home-case-journey li + li::before {
+    display: none;
   }
 }

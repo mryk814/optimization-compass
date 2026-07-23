@@ -19,18 +19,18 @@ test("Homeが実Caseを先に見せてTheaterとCompareまで進める", { tag: 
     page.getByRole("heading", { level: 1, name: "最適化したい問いを、問題の形にする" }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "条件から診断を始める" })).toBeVisible();
-  await expect(
-    page.getByRole("heading", { level: 3, name: "このケースを定式化すると" }),
-  ).toBeVisible();
-  const formulation = page.locator(".home-formula");
-  await expect(formulation).toBeVisible();
-  await expect(formulation.locator(".home-formula-line").filter({ hasText: "variables" })).toBeVisible();
-  await expect(
-    formulation.locator(".home-formula-line").filter({ hasText: /minimize|maximize|objectives/u }),
-  ).toBeVisible();
-  await expect(formulation).not.toContainText("undefined");
-  await expect(formulation).not.toContainText("[object Object]");
-  await expect(page.getByText("選ばない理由")).toBeVisible();
+  const journey = page.locator(".home-case-journey");
+  await expect(journey).toBeVisible();
+  await expect(journey.getByText("問いを選ぶ")).toBeVisible();
+  await expect(journey.getByText("問題の形にする")).toBeVisible();
+  await expect(journey.getByText("動きを見る")).toBeVisible();
+  await expect(journey.getByText("条件を比べる")).toBeVisible();
+
+  const details = page.locator(".home-case-disclosure");
+  const excludedLabel = details.locator(".home-disposition-excluded > span");
+  await expect(excludedLabel).not.toBeVisible();
+  await details.locator("summary").click();
+  await expect(excludedLabel).toBeVisible();
 
   const casePreview = page.locator(".home-case-preview");
   const caseTitle = casePreview.getByRole("heading", { level: 2 });

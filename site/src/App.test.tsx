@@ -136,7 +136,7 @@ describe("application routes", () => {
     expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
-  test("home foregrounds one problem, its formulation, and an exclusion reason", async () => {
+  test("home foregrounds one problem and keeps technical reasons on demand", async () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) return jsonResponse(featuredGallery);
@@ -158,11 +158,17 @@ describe("application routes", () => {
     expect(
       await screen.findByRole("heading", { level: 2, name: "観測に合うモデルを推定する" }),
     ).toBeVisible();
-    expect(
-      screen.getByRole("heading", { level: 3, name: "このケースを定式化すると" }),
-    ).toBeVisible();
-    expect(screen.getByText("f₁=x²+y²; f₂=(x−2)²+(y−2)²")).toBeVisible();
-    expect(screen.getByText("0 ≤ x ≤ 2")).toBeVisible();
+    expect(screen.getByRole("list", { name: "このケースでたどる順番" })).toBeVisible();
+    expect(screen.getByRole("link", { name: /問題の形にする/u })).toHaveAttribute(
+      "href",
+      "#/gallery/EC017",
+    );
+    const journey = screen.getByRole("list", { name: "このケースでたどる順番" });
+    expect(within(journey).getByRole("link", { name: /動きを見る/u })).toBeVisible();
+    expect(within(journey).getByRole("link", { name: /条件を比べる/u })).toBeVisible();
+    expect(screen.queryByText("離散的な観測欠損があり、現在の前提には合わない"))
+      .not.toBeVisible();
+    fireEvent.click(screen.getByText("候補と選ばない理由を見る"));
     expect(screen.getByText("Nelder–Mead")).toBeVisible();
     expect(screen.getByText("勾配を使わず、観測残差を直接評価できるため")).toBeVisible();
     expect(screen.getByText("選ばない理由")).toBeVisible();
@@ -218,7 +224,19 @@ describe("application routes", () => {
     const navigation = screen.getByRole("navigation", { name: "主要ナビゲーション" });
     const links = within(navigation).getAllByRole("link");
     expect(links).toHaveLength(9);
-    links.forEach((link) => expect(link).toBeVisible());
+    expect(within(navigation).getByRole("link", { name: "ホーム" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "条件で診断" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "事例を見る" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "手法を学ぶ" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "動きを見る" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "条件を比較" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "問題構造" })).not.toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "横断検索" })).not.toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "根拠を見る" })).not.toBeVisible();
+    fireEvent.click(within(navigation).getByText("探索"));
+    expect(within(navigation).getByRole("link", { name: "問題構造" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "横断検索" })).toBeVisible();
+    expect(within(navigation).getByRole("link", { name: "根拠を見る" })).toBeVisible();
     expect(screen.getByRole("link", { name: "条件から診断を始める" })).toBeVisible();
     expect(screen.getByRole("link", { name: "実例から探す" })).toBeVisible();
     within(screen.getByRole("navigation", { name: "次に進む入口" }))
