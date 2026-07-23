@@ -46,3 +46,24 @@ def test_active_set_qp_separates_working_set_and_operator_splitting() -> None:
     assert "OSQPのようなoperator-splitting型" in guide.body
     assert "working setとは別の反復を使います" in guide.body
     assert style_warnings(guide) == ()
+
+
+def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
+    pages = {page.content_id: page for page in load_content(Path("content"))}
+    guide = pages["primal-dual-conic"]
+
+    for route in (
+        "#/learn/barrier-lp-qp",
+        "#/learn/lp-qp-conic",
+        "#/learn/interior-point-nlp",
+    ):
+        assert route in guide.body
+
+    for diagnostic in (
+        "primal feasibility residual",
+        "dual feasibility residual",
+        "duality gap",
+    ):
+        assert diagnostic in guide.body
+
+    assert style_warnings(guide) == ()
