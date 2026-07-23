@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from optimization_compass.content_models import load_content
+from optimization_compass.content_quality import style_warnings
 
 
 def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_runs() -> None:
@@ -20,6 +21,10 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     assert "#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE" in bayesian_optimization.body
     assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in bayesian_optimization.body
     assert "個別のsensitivity runとbaselineは比較ページから開けます" in (bayesian_optimization.body)
+
+    family = pages["family.expensive-black-box"]
+    assert "#/compare/COMPARE_BO_MULTIFIDELITY_COST" in family.body
+    assert style_warnings(family) == ()
 
     random_search = pages["random-search"]
     assert random_search.visualization_ids == ("ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",)
