@@ -31,3 +31,21 @@ def test_expensive_black_box_guides_expose_primary_visuals_before_sensitivity_ru
     assert random_search.comparison_ids == ("COMPARE_BO_ACQUISITION_NOISE_BASELINE",)
     assert "#/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE" in random_search.body
     assert "一般的なrankingは決めません" in random_search.body
+
+    pbt = pages["pbt"]
+    for route in (
+        "#/learn/random-search",
+        "#/learn/hyperband-asha",
+        "#/learn/family.expensive-black-box",
+    ):
+        assert route in pbt.body
+    for phase in (
+        "**学習**",
+        "**評価**",
+        "**exploit**",
+        "**explore・記録**",
+    ):
+        assert phase in pbt.body
+    assert "良いscheduleを持つ系譜" in pbt.body
+    assert "exploit元／explore後の値／評価時点のmetric" in pbt.body
+    assert style_warnings(pbt) == ()

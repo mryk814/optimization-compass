@@ -4,19 +4,20 @@ kind: method
 method_id: M_PBT
 title_ja: Population Based Training
 title_en: Population-Based Training
-summary: 学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。
+summary: 並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。
 source_ids: [S038, S069]
 prerequisites: []
 related_ids: [hyperband-asha, random-search, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-24
 ---
 
-学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。
+並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。
 
 ## 30秒でつかむ
 
-PBTは、固定したconfigurationを一度ずつ比較するのではなく、**学習途中のworkerを比較し、良い系譜を継承しながらhyperparameter scheduleを変化させる**方法です。
+PBTは、固定したconfigurationを一つずつ完走させる方法ではありません。
+**学習途中のworkerを比較し、良い系譜を継承しながらhyperparameter scheduleを変えます。**
 
 - 見ているもの: validation metric、worker state、hyperparameter、lineage
 - 動かしているもの: weight、optimizer state、hyperparameterの摂動
@@ -38,22 +39,38 @@ PBTは、固定したconfigurationを一度ずつ比較するのではなく、*
 
 ## 何を並走させているか
 
-PBTは複数のworkerを同時に学習させます。各workerは自分のweightとhyperparameterを持ち、一定間隔（stepやepoch）ごとにvalidation metricで成績を評価されます。random searchやHyperbandのように、1つのworkerが最初から最後まで固定のhyperparameterで学習を続けるわけではありません。populationとして並走させ、途中経過を互いに比較しながら学習を進めます。
+PBTは複数のworkerを同時に学習させます。
+各workerは、自分のweightとhyperparameterを持ちます。
+一定のstepやepochごとにvalidation metricを測り、worker間の途中成績を比較します。
+
+random searchやHyperbandでは、1つのworkerが固定のhyperparameterで学習を続けます。
+PBTは途中経過を比較し、学習状態をworker間で受け渡します。
 
 ## exploitとexploreが何をしているか
 
-評価のたびに、成績が悪いworkerは次の2つの操作を受けます。
+1回の更新loopでは、何を保ち、何を変えたかを順番に追います。
 
-- **exploit**: 成績が良いworkerのweight（および必要ならoptimizer state）をコピーする
-- **explore**: コピーしたhyperparameterに摂動を加える、またはsearch spaceから再sampleする
+1. **学習**: 各workerを同じintervalだけ進める
+2. **評価**: validation metricで途中成績を比較する
+3. **exploit**: 下位workerへ上位workerのweightと、必要ならoptimizer stateをコピーする
+4. **explore・記録**: hyperparameterを摂動または再sampleし、継承元と変更値を残す
 
-学習を中断せずにこの継承と摂動を繰り返すため、1つのworkerの系譜（lineage）は、学習の前半と後半で異なるhyperparameterを経験します。つまりPBTが探索しているのは、固定のhyperparameter setではなく、学習の進行に応じてhyperparameterを変化させる**schedule**です。
+このloopを繰り返すと、1つのworkerの系譜（lineage）が途中で枝分かれします。
+学習の前半と後半で、異なるhyperparameterを経験する場合もあります。
+PBTが探索する対象は、固定のhyperparameter setではありません。
+学習の進行に応じて値を変える**hyperparameter schedule**です。
 
 ## 通常のHPOと結果の解釈が違う点
 
-random searchやHyperbandは、1つのtrialに1つの固定hyperparameter setを割り当て、「このconfigurationがどれだけ良いか」を比較します。PBTの結果はこれとは性質が異なります。最終的に残ったworkerの成績は、ある1つのhyperparameter setの成績ではなく、途中で何度も継承・摂動を経た系譜全体が生んだ結果です。そのため「良いhyperparameterが見つかった」と言うより、「良いhyperparameter scheduleを持つ系譜が見つかった」と解釈するほうが正確です。
+random searchやHyperbandは、trialごとに固定のhyperparameter setを割り当てます。
+そこで比べるのは「このconfigurationがどれだけ良いか」です。
 
-この違いは再現性にも影響します。最終hyperparameterだけを記録しても、そこに至った系譜（いつ、誰から、どのweightとhyperparameterを継承したか）を再現できなければ、同じ結果を再現できません。実務ではpopulation全体の履歴（exploit元、explore後の値、評価時点のmetric）を記録します。
+PBTで最後に残る成績は、継承と摂動を経た系譜全体の結果です。
+したがって「良いhyperparameter set」ではなく、「良いscheduleを持つ系譜」を見つけたと解釈します。
+
+最終hyperparameterだけでは、この結果を再現できません。
+いつ、どのworkerから、どの状態を継承したかも必要です。
+population全体について、exploit元／explore後の値／評価時点のmetricを記録します。
 
 ## 向いている条件
 
@@ -62,7 +79,7 @@ random searchやHyperbandは、1つのtrialに1つの固定hyperparameter setを
 - validation metricを一定間隔で安価に計算できる
 - workerの間でweightを転用できる（同一architecture）
 
-避ける／切り替える条件:
+## 避ける／切り替える条件
 
 - 評価や学習が安価で、大量trialを単純に並列実行できる → [Random Search](#/learn/random-search)や[Hyperband / ASHA](#/learn/hyperband-asha)で十分な場合
 - populationを同時に走らせる並列resourceがない
@@ -71,7 +88,8 @@ random searchやHyperbandは、1つのtrialに1つの固定hyperparameter setを
 
 ## Python
 
-次は学習器そのものを単純なscore関数に置き換え、下位workerが上位workerの状態を継承してlearning rateを摂動する1回分のexploit / exploreを再現します。
+次の例では、学習器を単純なscore関数に置き換えます。
+下位workerが上位workerを継承し、learning rateを摂動する1回の更新を確認します。
 
 ```python
 from dataclasses import dataclass, replace
@@ -110,7 +128,9 @@ population[target.worker_id] = replacement
 print([(worker.worker_id, validation_score(worker)) for worker in population])
 ```
 
-実務ではこの操作を学習intervalごとに繰り返し、weight、optimizer state、系譜をcheckpointへ保存します。実装は[Ray Tune](https://docs.ray.io/en/latest/tune/index.html)のPopulationBasedTrainingの公式referenceで、利用versionに対応するAPIとcheckpoint挙動を確認します。
+実務では、この操作を学習intervalごとに繰り返します。
+weight／optimizer state／系譜はcheckpointへ保存します。
+実装時は[Ray TuneのPBT guide](https://docs.ray.io/en/latest/tune/examples/pbt_guide.html)で、利用versionのAPIとcheckpoint挙動を確認します。
 
 ## 診断値
 
@@ -127,5 +147,7 @@ print([(worker.worker_id, validation_score(worker)) for worker in population])
 - explore時の摂動が大きすぎてweightの継承価値を壊す
 - validation metricがnoiseに支配され、誤ったworkerをexploitしてしまう
 - 系譜の記録が不完全で、最終結果を再現できない
+
+## 次に読む
 
 途中成績で候補を打ち切りbudgetを再配分する考え方は[Hyperband / ASHA](#/learn/hyperband-asha)、何も仮定しないbaselineは[Random Search](#/learn/random-search)で確認できます。高価なblack-box評価全体の選び分けは[高価なblack-box・HPOの選び分け](#/learn/family.expensive-black-box)にまとめています。
