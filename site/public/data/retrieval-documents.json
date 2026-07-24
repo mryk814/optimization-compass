@@ -9876,7 +9876,7 @@
         "S071",
         "S108"
       ],
-      "text": "Cholesky X = L L T と置きます。 L をlower triangularとし、対角を正に保てばSPDの内部に留まります。 例えば、対角を exp ( d i ) で表せます。 長所: positive definitenessをconstructionで保てる 注意: factorのscaleとconditionがoptimization geometryへ入る 境界: 有限の d i ではexact zero eigenvalueを直接表さない Matrix exponential 対称matrix S から X = exp ( S ) と置く方法も、SPDの内部を表します。 matrix logarithmと組み合わせるlog-Euclidean metricは一つの選択肢です。 affine-invariant Riemannian metricとは別のmetricです。 Riemannian update SPD manifoldにmetricを選び、接vectorからretractionまたはexponential mapで戻します。 metric、retraction、vector transportを実験条件として固定します。 Pymanoptの SymmetricPositiveDefinite が提供するgeometryは、利用versionの公式referenceで確認します。",
+      "text": "Cholesky X = L L T と置きます。 L をlower triangularとし、対角を正に保てばSPDの内部に留まります。 例えば、対角を exp ( d i ) で表せます。 長所: positive definitenessをconstructionで保てる 注意: factorのscaleとconditionがoptimization geometryへ入る 境界: 有限の d i ではexact zero eigenvalueを直接表さない 行列指数関数（matrix exponential） 対称matrix S から X = exp ( S ) と置く方法も、SPDの内部を表します。 matrix logarithmと組み合わせるlog-Euclidean metricは一つの選択肢です。 affine-invariant Riemannian metricとは別のmetricです。 Riemannian update SPD manifoldにmetricを選び、接vectorからretractionまたはexponential mapで戻します。 metric、retraction、vector transportを実験条件として固定します。 Pymanoptの SymmetricPositiveDefinite が提供するgeometryは、利用versionの公式referenceで確認します。",
       "title": "表現方法を選ぶ"
     },
     {

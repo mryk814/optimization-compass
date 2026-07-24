@@ -2866,7 +2866,7 @@
       "status": "published",
       "title_en": "Explore cost-throughput trade-offs in battery operation",
       "title_ja": "蓄電池運用のコストと充放電量を両方見る",
-      "variable_domain": "実務では各時刻の充電・放電powerとstate of chargeを持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 $x=(x_1,x_2)\\in[0,2]^2$ とする。",
+      "variable_domain": "実務では各時刻の充電・放電powerとstate of chargeを持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 $x=(x_1,x_2)$ を使い、変数領域を $X=[0,2]^2$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "biobjective-quadratic-pareto-front",

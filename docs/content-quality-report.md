@@ -22,7 +22,7 @@
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
 | `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
 | `concept.so3-rotation-representation` | 92 | 3062 | 8 | 4 | 0 | pass |
-| `concept.spd-matrix-geometry` | 49 | 3314 | 10 | 3 | 0 | pass |
+| `concept.spd-matrix-geometry` | 49 | 3322 | 10 | 3 | 0 | pass |
 | `concept.time-discretization` | 74 | 1945 | 5 | 3 | 0 | pass |
 | `concept.trajectory-variable` | 83 | 2074 | 5 | 3 | 0 | pass |
 | `concept.uncertainty-models` | 57 | 4511 | 16 | 3 | 0 | pass |
