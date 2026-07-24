@@ -39,13 +39,16 @@ describe("ContentIndexPage", () => {
     vi.unstubAllGlobals();
   });
 
-  test("shows useful counts and foregrounds connected method learning", async () => {
+  test("starts with connected learning and keeps the complete catalog available", async () => {
     renderPage();
 
-    expect(await screen.findByText("128件")).toBeVisible();
+    expect(await screen.findByText("25件")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "動き・比較で学ぶ 25件" }))
+      .toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByRole("article")).toHaveLength(25);
+    expect(screen.getByRole("button", { name: "すべて 128件" })).toBeVisible();
     expect(screen.getByRole("button", { name: "手法 106件" })).toBeVisible();
     expect(screen.getByRole("button", { name: "概念 22件" })).toBeVisible();
-    expect(screen.getByRole("button", { name: "動き・比較あり 25件" })).toBeVisible();
 
     const firstCard = screen.getAllByRole("article")[0];
     expect(within(firstCard).getByText("手法")).toBeVisible();
@@ -55,26 +58,26 @@ describe("ContentIndexPage", () => {
 
   test("filters by kind, connected learning, query, and empty results", async () => {
     renderPage();
-    await screen.findByText("128件");
+    await screen.findByText("25件");
 
     fireEvent.click(screen.getByRole("button", { name: "概念 22件" }));
-    expect(screen.getByText("22件")).toBeVisible();
+    expect(screen.getByText("22件")).toBeInTheDocument();
     expect(screen.getAllByRole("article")).toHaveLength(22);
 
-    fireEvent.click(screen.getByRole("button", { name: "動き・比較あり 25件" }));
-    expect(screen.getByText("25件")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "動き・比較で学ぶ 25件" }));
+    expect(screen.getByText("25件")).toBeInTheDocument();
     expect(screen.getAllByRole("article")).toHaveLength(25);
 
     fireEvent.click(screen.getByRole("button", { name: "すべて 128件" }));
     fireEvent.change(screen.getByRole("searchbox", { name: "教材を検索" }), {
       target: { value: "Chance constraint・CVaR・robustness" },
     });
-    expect(screen.getByText("1件")).toBeVisible();
+    expect(screen.getByText("1件")).toBeInTheDocument();
 
     fireEvent.change(screen.getByRole("searchbox", { name: "教材を検索" }), {
       target: { value: "該当しない検索語xyz" },
     });
-    await waitFor(() => expect(screen.getByText("0件")).toBeVisible());
+    await waitFor(() => expect(screen.getByText("0件")).toBeInTheDocument());
     expect(screen.getByText("一致する教材が見つかりません。種類か検索語を変えてください。"))
       .toBeVisible();
   });

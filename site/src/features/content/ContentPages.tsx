@@ -18,7 +18,7 @@ export function ContentIndexPage() {
   const links = useEntityLinks();
   const [pages, setPages] = useState<AtlasContentPage[]>([]);
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<ContentFilter>("all");
+  const [filter, setFilter] = useState<ContentFilter>("connected");
   const [error, setError] = useState<Error>();
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function ContentIndexPage() {
             </button>
           ))}
         </div>
-        <output aria-live="polite">{filtered.length}件</output>
+        <output aria-live="polite" className="content-result-count">{filtered.length}件</output>
       </section>
 
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
@@ -127,10 +127,10 @@ export function ContentIndexPage() {
 export type ContentFilter = "all" | ContentKind | "connected";
 
 const contentFilters: Array<{ label: string; value: ContentFilter }> = [
+  { label: "動き・比較で学ぶ", value: "connected" },
   { label: "すべて", value: "all" },
   { label: "手法", value: "method" },
   { label: "概念", value: "concept" },
-  { label: "動き・比較あり", value: "connected" },
 ];
 
 export function contentFilterCounts(

@@ -12,6 +12,7 @@ dist/
 site/node_modules/
 site/playwright-report/
 site/test-results/
+output/playwright/
 *.tsbuildinfo
 build/
 .release-stage*/
