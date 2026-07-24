@@ -1492,9 +1492,11 @@
         "I_CERES"
       ],
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+        "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
       ],
-      "comparison_ids": [],
+      "comparison_ids": ["COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"],
       "source_ids": [
         "S002",
         "S003",

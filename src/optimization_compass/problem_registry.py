@@ -306,6 +306,16 @@ def _failed_simulation(instance: ProblemInstance, point: Sequence[float]) -> flo
     return float((u1 - 0.65) ** 2 + (u2 - 0.35) ** 2 + 0.08 * mode)
 
 
+def _root_finding(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the auxiliary squared residual for the EC028 root-finding lesson."""
+    if len(point) != 2:
+        raise ValueError(f"{instance.problem_instance_id} expects two continuous variables")
+    x1, x2 = (float(value) for value in point)
+    residual_1 = x1 * x1 + x2 - 1.0
+    residual_2 = x1 + x2 * x2 - 1.0
+    return float(0.5 * (residual_1 * residual_1 + residual_2 * residual_2))
+
+
 def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
     mesh_nodes = instance.parameters.get("mesh_nodes")
@@ -545,6 +555,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.optimal_control.repeated_mpc_qp_ec025.v1": (_repeated_mpc_qp, None),
     "problem.routing.time_window_ec019.v1": (_time_window_routing, None),
     "problem.failed_simulation.ec027.v1": (_failed_simulation, None),
+    "problem.root_finding.ec028.v1": (_root_finding, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
     "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),

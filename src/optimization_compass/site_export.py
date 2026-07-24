@@ -78,6 +78,13 @@ from optimization_compass.repeated_mpc_qp import (
     build_repeated_mpc_qp_scenario,
     generate_repeated_mpc_qp_traces,
 )
+from optimization_compass.root_finding import (
+    PROFILE_ID as ROOT_FINDING_PROFILE_ID,
+)
+from optimization_compass.root_finding import (
+    build_root_finding_scenario,
+    generate_root_finding_traces,
+)
 from optimization_compass.search_index import (
     build_search_artifacts,
     evaluate_search_benchmark,
@@ -1180,6 +1187,7 @@ def _write_dummy_trace(
     generated_traces.extend(generate_repeated_mpc_qp_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_time_window_routing_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_failed_simulation_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_root_finding_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
     generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
@@ -2517,6 +2525,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         return build_time_window_routing_scenario(trace)
     if trace.profile_id == FAILED_SIMULATION_PROFILE_ID:
         return build_failed_simulation_scenario(trace)
+    if trace.profile_id == ROOT_FINDING_PROFILE_ID:
+        return build_root_finding_scenario(trace)
     if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:
         return build_nested_solve_scenario(trace)
     if trace.profile_id == SO3_PROFILE_ID:

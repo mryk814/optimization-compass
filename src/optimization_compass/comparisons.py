@@ -42,6 +42,15 @@ from optimization_compass.portfolio_uncertainty import (
 from optimization_compass.portfolio_uncertainty import (
     PROFILE_ID as PORTFOLIO_PROFILE_ID,
 )
+from optimization_compass.root_finding import (
+    GENERATOR_ID as ROOT_FINDING_GENERATOR_ID,
+)
+from optimization_compass.root_finding import (
+    GENERATOR_VERSION as ROOT_FINDING_GENERATOR_VERSION,
+)
+from optimization_compass.root_finding import (
+    PROFILE_ID as ROOT_FINDING_PROFILE_ID,
+)
 from optimization_compass.search_tree import (
     SEARCH_TREE_GENERATOR_ID,
     SEARCH_TREE_GENERATOR_VERSION,
@@ -76,6 +85,7 @@ _EDUCATIONAL_GENERATORS_BY_PROFILE = {
         FAILED_SIMULATION_GENERATOR_ID,
         FAILED_SIMULATION_GENERATOR_VERSION,
     ),
+    ROOT_FINDING_PROFILE_ID: (ROOT_FINDING_GENERATOR_ID, ROOT_FINDING_GENERATOR_VERSION),
     BILEVEL_PROFILE_ID: (BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION),
     HYBRID_PROFILE_ID: (HYBRID_GENERATOR_ID, HYBRID_GENERATOR_VERSION),
     PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),

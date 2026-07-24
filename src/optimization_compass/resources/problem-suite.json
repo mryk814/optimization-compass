@@ -308,6 +308,23 @@
       "last_verified": "2026-07-24"
     },
     {
+      "problem_definition_id": "PROBLEM_ROOT_FINDING",
+      "name_ja": "連立方程式の求根",
+      "name_en": "Root finding for simultaneous equations",
+      "mathematical_family": "nonlinear_system_of_equations",
+      "variable_domain": "continuous",
+      "objective_form": "residual_vector",
+      "objective_direction": "minimize",
+      "available_oracles": ["residual_vector", "jacobian"],
+      "constraint_class": "equation_equality",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 2},
+      "known_reference_semantics": "A root is defined by declared component-wise residual tolerances. The squared residual is an auxiliary diagnostic, not a replacement for those tolerances.",
+      "related_problem_ids": ["PA004"],
+      "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_STRUCTURE_NONLINEAR_LEAST_SQUARES", "F_DERIVATIVE_ANALYTIC_GRADIENT"],
+      "source_ids": ["S002", "S003", "S041", "S056", "S080"],
+      "last_verified": "2026-07-24"
+    },
+    {
       "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
       "name_ja": "SO(3)上のattitude alignment",
       "name_en": "Attitude alignment on SO(3)",
@@ -742,6 +759,28 @@
       "limitations_ja": "固定時間行列・4 stop・1車両・service timeなしの教育用instanceです。最適route、OR-Toolsやlocal searchの性能、交通変動、複数車両、容量、休憩、実道路の到着保証を示しません。",
       "limitations_en": "A fixed-matrix, four-stop, single-vehicle lesson without service time. It does not establish an optimal route, OR-Tools or local-search performance, traffic variation, multi-vehicle routing, capacity, breaks, or real-road arrival guarantees.",
       "source_ids": ["S022", "S023", "S024", "S079"],
+      "last_verified": "2026-07-24"
+    },
+    {
+      "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+      "problem_definition_id": "PROBLEM_ROOT_FINDING",
+      "name_ja": "EC028 2変数の連立方程式求根ledger",
+      "name_en": "EC028 two-variable simultaneous-equation root ledger",
+      "registry_key": "problem.root_finding.ec028.v1",
+      "dimension": 2,
+      "parameters": {"equations": ["x1^2+x2-1", "x1+x2^2-1"], "component_tolerance": 0.02, "scalar_loss_threshold": 0.003},
+      "bounds": {"x1": [-2.0, 2.0], "x2": [-2.0, 2.0]},
+      "constraints": [{"constraint_id": "equation_1", "expression": "x1^2+x2-1=0", "sense": "eq"}, {"constraint_id": "equation_2", "expression": "x1+x2^2-1=0", "sense": "eq"}],
+      "initialization_candidates": [{"candidate_id": "near_positive_root", "point": [0.7, 0.7]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "not_meaningful",
+      "known_reference": null,
+      "display": {"range": {"iteration": [0.0, 1.0], "residual": [-0.1, 0.2], "squared_residual": [0.0, 0.05]}, "axis_labels": ["iteration", "residual diagnostic"], "units": ["iteration", "residual / auxiliary objective"], "expression": "solve F(x)=0 for F=[x1^2+x2-1, x1+x2^2-1]; inspect component residuals and 0.5||F||_2^2 separately"},
+      "intended_phenomena": ["residual_vector", "componentwise_tolerance", "squared_residual_auxiliary", "root_vs_least_squares"],
+      "limitations_ja": "固定初期値・2変数・決定的な教育用ledgerであり、全根の列挙、SciPyやGauss-Newtonの性能、Jacobian近似、scale設定、実測誤差を表さない。",
+      "limitations_en": "A fixed-start, two-variable deterministic lesson; it does not establish enumeration of all roots, SciPy or Gauss-Newton performance, Jacobian approximation, scaling, or measurement error behavior.",
+      "source_ids": ["S002", "S003", "S041", "S056", "S080"],
       "last_verified": "2026-07-24"
     },
     {

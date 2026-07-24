@@ -115,6 +115,11 @@
       "id": "025",
       "path": "data/migrations/025_failed_simulation_ec027.sql",
       "sha256": "7e5bd7a44d0bdfbda5ecd2d4c6c6781f378269ff199735dabc1272289e0ddd23"
+    },
+    {
+      "id": "026",
+      "path": "data/migrations/026_root_finding_ec028.sql",
+      "sha256": "f74412046b7c440aa78c98bf4b8c4416a69b0857b9d0fed1fece488bd6aeea07"
     }
   ],
   "specialized_inputs": [
