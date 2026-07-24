@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.11",
+  "dataset_version": "0.18.12",
   "failure_modes": [
     {
       "affected_entities": [

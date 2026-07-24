@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.11",
+  "dataset_version": "0.18.12",
   "expectations": [
     {
       "applicability": "expected",
@@ -2056,10 +2056,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
             "COMPARE_PENDULUM_COLLOCATION_MESH"
           ]
         },
@@ -2103,7 +2104,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 26,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2112,6 +2113,7 @@
             "/methods/M_DIRECT_SHOOTING",
             "/methods/M_ILQR_DDP",
             "/methods/M_MULTIPLE_SHOOTING",
+            "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
             "COMPARE_PENDULUM_COLLOCATION_MESH",
             "EC020",
             "EC029",
@@ -5534,10 +5536,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
             "COMPARE_PENDULUM_COLLOCATION_MESH"
           ]
         },
@@ -5576,11 +5579,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 17,
+          "count": 18,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIRECT_COLLOCATION",
+            "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
             "COMPARE_PENDULUM_COLLOCATION_MESH",
             "EC020",
             "EC029",

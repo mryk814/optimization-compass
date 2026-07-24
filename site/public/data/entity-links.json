@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.11",
+  "dataset_version": "0.18.12",
   "entities": [
     {
       "aliases": [],
@@ -379,6 +379,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_MULTIPLE_SHOOTING",
           "target_type": "method"
@@ -395,7 +400,17 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
           "target_type": "source"
         },
         {
@@ -461,6 +476,16 @@
         {
           "relation_type": "visualization",
           "target_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
           "target_type": "view"
         },
         {
@@ -4454,6 +4479,67 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+      "entity_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "抽象的な軌道最適化からpendulumのmesh感度を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC020",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S042",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S050",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S102",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_DIRECT_COLLOCATION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pendulum-collocation-coarse",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "pendulum-collocation-refined",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。"
     },
     {
       "aliases": [],
@@ -18066,6 +18152,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_MULTIPLE_SHOOTING",
           "target_type": "method"
@@ -18101,6 +18192,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_ACADOS",
           "target_type": "implementation"
@@ -18134,6 +18230,11 @@
           "relation_type": "problem",
           "target_id": "PA042",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "target_type": "scenario"
         }
       ],
       "summary": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
@@ -23671,6 +23772,11 @@
           "relation_type": "case",
           "target_id": "EC029",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
         },
         {
           "relation_type": "comparison",
@@ -29756,6 +29862,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
           "target_type": "comparison"
         },
@@ -29797,6 +29908,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
           "target_type": "comparison"
         },
@@ -29814,6 +29930,11 @@
           "relation_type": "evidence",
           "target_id": "S102",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -29850,6 +29971,11 @@
           "relation_type": "evidence",
           "target_id": "S102",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -32537,6 +32663,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",
           "target_type": "comparison"
         },
@@ -32561,6 +32692,11 @@
       "external_url": null,
       "label": "Pendulum swing-up · N=40 mesh感度",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_PENDULUM_COLLOCATION_MESH",

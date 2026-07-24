@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.11",
+  "dataset_version": "0.18.12",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -186,14 +186,18 @@
         "FM016"
       ],
       "scenario_ids": [
-        "SCENARIO_OPTIMAL_CONTROL_EC020"
+        "SCENARIO_OPTIMAL_CONTROL_EC020",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
       ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
         "S042",
         "S043",
-        "S076"
+        "S050",
+        "S076",
+        "S102"
       ],
       "summary": "軌道、動力学の欠陥、疎性を平坦なベクトルのブラックボックス目的関数へ隠してしまう",
       "symptoms": [],

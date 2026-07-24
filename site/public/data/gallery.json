@@ -892,7 +892,9 @@
         }
       ],
       "case_id": "EC020",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_MULTIPLE_SHOOTING",
@@ -946,7 +948,7 @@
       ],
       "map_node_id": "answer:Q11:optimal_control",
       "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
-      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
+      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のTheater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "problem_archetype_id": "PA042",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
       "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
@@ -967,7 +969,9 @@
       "source_ids": [
         "S042",
         "S043",
-        "S076"
+        "S050",
+        "S076",
+        "S102"
       ],
       "status": "published",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
@@ -975,7 +979,9 @@
       "variable_domain": "mesh（knot）数 $N=20$ の固定教材では $X=\\{(x_0,\\ldots,x_N,u_0,\\ldots,u_{N-1},T)\\mid x_k\\in\\mathbb{R}^n,u_k\\in[u_{min},u_{max}],T\\in[T_{min},T_{max}]\\}$。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
-        "SCENARIO_OPTIMAL_CONTROL_EC020"
+        "SCENARIO_OPTIMAL_CONTROL_EC020",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
       ]
     },
     {
@@ -2977,5 +2983,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.11"
+  "dataset_version": "0.18.12"
 }
