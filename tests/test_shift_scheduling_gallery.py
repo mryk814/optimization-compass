@@ -14,12 +14,8 @@ def test_shift_scheduling_uses_the_scheduling_archetype_and_explicit_hard_constr
     assert case["question_answers"]["Q11"] == "scheduling_routing"
     assert case["map_node_id"] == "answer:Q01:binary"
     assert {item["method_id"] for item in case["candidate_methods"]} == {"M_CP_SAT"}
-    assert {item["method_id"] for item in case["conditional_methods"]} == {
-        "MF_DISCRETE_EXACT"
-    }
-    assert {item["method_id"] for item in case["excluded_methods"]} == {
-        "M_GRADIENT_DESCENT"
-    }
+    assert {item["method_id"] for item in case["conditional_methods"]} == {"MF_DISCRETE_EXACT"}
+    assert {item["method_id"] for item in case["excluded_methods"]} == {"M_GRADIENT_DESCENT"}
     ast.parse(case["python_example"])
     assert "hard constraint" in case["objective"]
     assert "夜勤後の翌日日勤" in case["constraints"]

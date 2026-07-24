@@ -10,9 +10,7 @@ from optimization_compass.comparisons import load_comparison_seed
 def test_ecosystem_restoration_case_keeps_the_teaching_scope_explicit() -> None:
     gallery = json.loads(Path("data/seeds/site_gallery.json").read_text(encoding="utf-8"))
     case = next(
-        item
-        for item in gallery["cases"]
-        if item["case_id"] == "ecosystem-restoration-selection"
+        item for item in gallery["cases"] if item["case_id"] == "ecosystem-restoration-selection"
     )
 
     assert case["domain"] == "environment"
@@ -36,9 +34,7 @@ def test_ecosystem_restoration_case_keeps_the_teaching_scope_explicit() -> None:
 def test_restoration_comparison_changes_only_the_node_stop_limit() -> None:
     index = load_comparison_seed(Path("data/seeds/site_comparisons.json"), "test")
     comparison = next(
-        item
-        for item in index.comparisons
-        if item.comparison_id == "COMPARE_RESTORATION_BNB_BUDGET"
+        item for item in index.comparisons if item.comparison_id == "COMPARE_RESTORATION_BNB_BUDGET"
     )
 
     assert comparison.journey_id == comparison.case_id == "ecosystem-restoration-selection"

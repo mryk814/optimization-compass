@@ -16,9 +16,7 @@ def test_ec019_has_a_complete_time_window_routing_teaching_instance() -> None:
     assert {item["method_id"] for item in case["candidate_methods"]} == {
         "M_LOCAL_SEARCH_COMBINATORIAL"
     }
-    assert {"S022", "S023", "S024", "S053", "S054", "S079"} <= set(
-        case["source_ids"]
-    )
+    assert {"S022", "S023", "S024", "S053", "S054", "S079"} <= set(case["source_ids"])
     ast.parse(case["python_example"])
     assert "RoutingIndexManager(5, 1, 0)" in case["python_example"]
     assert "time_windows" in case["python_example"]

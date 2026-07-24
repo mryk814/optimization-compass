@@ -10,9 +10,7 @@ from optimization_compass.comparisons import load_comparison_seed
 def test_mobile_clinic_case_is_a_bounded_healthcare_teaching_case() -> None:
     gallery = json.loads(Path("data/seeds/site_gallery.json").read_text(encoding="utf-8"))
     case = next(
-        item
-        for item in gallery["cases"]
-        if item["case_id"] == "mobile-clinic-outreach-selection"
+        item for item in gallery["cases"] if item["case_id"] == "mobile-clinic-outreach-selection"
     )
 
     assert case["domain"] == "healthcare"
