@@ -67,3 +67,29 @@ def test_primal_dual_conic_keeps_residuals_and_solver_layers_visible() -> None:
         assert diagnostic in guide.body
 
     assert style_warnings(guide) == ()
+
+
+def test_pdlp_keeps_first_order_stopping_contract_and_accuracy_scope_visible() -> None:
+    pages = {page.content_id: page for page in load_content(Path("content"))}
+    guide = pages["pdlp"]
+
+    for route in (
+        "#/learn/primal-simplex",
+        "#/learn/dual-simplex",
+        "#/learn/barrier-lp-qp",
+        "#/learn/family.composite-convex",
+    ):
+        assert route in guide.body
+
+    for diagnostic in (
+        "primal feasibility residual",
+        "dual feasibility residual",
+        "duality gap",
+        "absolute／relative scaling",
+    ):
+        assert diagnostic in guide.body
+
+    assert "PDLPを中精度だけのsolverとはみなしません" in guide.body
+    assert "basisを持つ頂点解や疎な頂点解" in guide.body
+    assert "exact certificate" not in guide.body
+    assert style_warnings(guide) == ()
