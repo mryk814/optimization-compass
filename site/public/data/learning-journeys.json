@@ -299,7 +299,8 @@
             "/sources/S023",
             "/sources/S024",
             "/sources/S053",
-            "/sources/S054"
+            "/sources/S054",
+            "/sources/S079"
           ]
         },
         "formulation": {
@@ -345,13 +346,15 @@
             "/sources/S023",
             "/sources/S024",
             "/sources/S053",
-            "/sources/S054"
+            "/sources/S054",
+            "/sources/S079"
           ]
         },
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source"
+            "missing_scenario_source",
+            "stale_case_review"
           ],
           "state": "missing",
           "target_ids": [
@@ -359,7 +362,8 @@
             "S023",
             "S024",
             "S053",
-            "S054"
+            "S054",
+            "S079"
           ]
         },
         "static_text_alternative": {
@@ -538,6 +542,151 @@
         },
         "canonical_comparison": {
           "reason_codes": [
+            "comparison_wrong_journey"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "COMPARE_GRADIENT_FAMILY"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_QUADRATIC_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC021",
+            "/traces/adam-quadratic",
+            "/traces/gradient_descent-quadratic",
+            "/traces/momentum-quadratic",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_ADAMW",
+            "/methods/M_BFGS",
+            "/methods/M_MOMENTUM_SGD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S047",
+            "/sources/S048",
+            "/sources/S049",
+            "/sources/S056",
+            "/sources/S070"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC021"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_OPTAX",
+            "I_PYTORCH_OPTIM",
+            "I_TENSORFLOW_OPTIM"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_ADAMW",
+            "M_BFGS",
+            "M_MOMENTUM_SGD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ADAM_QUADRATIC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC021",
+            "/traces/adam-quadratic",
+            "/traces/gradient_descent-quadratic",
+            "/traces/momentum-quadratic",
+            "/compare/COMPARE_GRADIENT_FAMILY",
+            "/methods/M_ADAMW",
+            "/methods/M_BFGS",
+            "/methods/M_MOMENTUM_SGD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S047",
+            "/sources/S048",
+            "/sources/S049",
+            "/sources/S056",
+            "/sources/S070"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S001",
+            "S002",
+            "S047",
+            "S048",
+            "S049",
+            "S056",
+            "S070"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ADAM_QUADRATIC",
+            "SCENARIO_GD_QUADRATIC",
+            "SCENARIO_MOMENTUM_QUADRATIC"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "adamw",
+            "momentum-sgd"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC021",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "source_review"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
             "missing_comparison"
           ],
           "state": "missing",
@@ -622,7 +771,8 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source"
+            "missing_scenario_source",
+            "stale_case_review"
           ],
           "state": "missing",
           "target_ids": [
@@ -812,6 +962,289 @@
     {
       "dimensions": {
         "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC027",
+            "/methods/M_BFGS",
+            "/methods/M_MADS",
+            "/methods/M_RANDOM_SEARCH",
+            "/sources/S002",
+            "/sources/S018",
+            "/sources/S031",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S060",
+            "/sources/S063",
+            "/sources/S069",
+            "/sources/S094"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC027"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_NEVERGRAD",
+            "I_NOMAD"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_MADS",
+            "M_RANDOM_SEARCH"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC027",
+            "/methods/M_BFGS",
+            "/methods/M_MADS",
+            "/methods/M_RANDOM_SEARCH",
+            "/sources/S002",
+            "/sources/S018",
+            "/sources/S031",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S060",
+            "/sources/S063",
+            "/sources/S069",
+            "/sources/S094"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source",
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S018",
+            "S031",
+            "S034",
+            "S035",
+            "S038",
+            "S060",
+            "S063",
+            "S069",
+            "S094"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "mads",
+            "random-search"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC027",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "cross_surface_links": {
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "/gallery/EC028",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_GAUSS_NEWTON",
+            "/methods/M_LEVENBERG_MARQUARDT",
+            "/sources/S002",
+            "/sources/S003",
+            "/sources/S041",
+            "/sources/S056",
+            "/sources/S080"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "EC028"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CERES",
+            "I_SCIPY_LEAST_SQUARES_TRF"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_DIFFERENTIAL_EVOLUTION",
+            "M_GAUSS_NEWTON",
+            "M_LEVENBERG_MARQUARDT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/EC028",
+            "/methods/M_DIFFERENTIAL_EVOLUTION",
+            "/methods/M_GAUSS_NEWTON",
+            "/methods/M_LEVENBERG_MARQUARDT",
+            "/sources/S002",
+            "/sources/S003",
+            "/sources/S041",
+            "/sources/S056",
+            "/sources/S080"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source",
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S002",
+            "S003",
+            "S041",
+            "S056",
+            "S080"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "gauss-newton",
+            "least-squares"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "EC028",
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
@@ -940,6 +1373,134 @@
       "journey_id": "EC029",
       "missing_dimensions": [],
       "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "comparison_wrong_journey"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/battery-operation-tradeoff",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_BFGS",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "battery-operation-tradeoff"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CVXPY",
+            "I_PYMOO"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_EPSILON_CONSTRAINT",
+            "M_NSGA_II"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/battery-operation-tradeoff",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_BFGS",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S039",
+            "S055",
+            "S068"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "epsilon-constraint",
+            "multi-objective"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "battery-operation-tradeoff",
+      "missing_dimensions": [
+        "canonical_comparison",
+        "source_review"
+      ],
+      "status": "partial"
     },
     {
       "dimensions": {
@@ -1175,8 +1736,10 @@
           ]
         },
         "source_review": {
-          "reason_codes": [],
-          "state": "complete",
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
           "target_ids": [
             "S002",
             "S005",
@@ -1212,8 +1775,10 @@
         }
       },
       "journey_id": "budget-allocation",
-      "missing_dimensions": [],
-      "status": "complete"
+      "missing_dimensions": [
+        "source_review"
+      ],
+      "status": "partial"
     },
     {
       "dimensions": {
@@ -1348,6 +1913,411 @@
         }
       },
       "journey_id": "constrained-design",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_RESTORATION_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/ecosystem-restoration-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_RESTORATION_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "ecosystem-restoration-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/ecosystem-restoration-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_RESTORATION_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "ecosystem-restoration-selection",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/emergency-shelter-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "emergency-shelter-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/emergency-shelter-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "emergency-shelter-selection",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_ENERGY_NOMINAL_CVAR_8_4"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/energy-cvar-procurement",
+            "/traces/portfolio-cvar-8-4",
+            "/traces/portfolio-nominal-8-4",
+            "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S103"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "energy-cvar-procurement"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_CVXPY"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_LP_QP_CONIC",
+            "M_NELDER_MEAD",
+            "M_PROJECTED_GRADIENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_CVAR_8_4"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/energy-cvar-procurement",
+            "/traces/portfolio-cvar-8-4",
+            "/traces/portfolio-nominal-8-4",
+            "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+            "/methods/MF_LP_QP_CONIC",
+            "/methods/M_NELDER_MEAD",
+            "/methods/M_PROJECTED_GRADIENT",
+            "/sources/S004",
+            "/sources/S010",
+            "/sources/S012",
+            "/sources/S014",
+            "/sources/S055",
+            "/sources/S056",
+            "/sources/S066",
+            "/sources/S103"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S004",
+            "S010",
+            "S012",
+            "S014",
+            "S055",
+            "S056",
+            "S066",
+            "S103"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_CVAR_8_4",
+            "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "lp-qp-conic",
+            "projected-gradient"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "energy-cvar-procurement",
       "missing_dimensions": [],
       "status": "complete"
     },
@@ -1494,6 +2464,566 @@
       "journey_id": "hyperparameter-search",
       "missing_dimensions": [],
       "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_IRRIGATION_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/irrigation-retrofit-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_IRRIGATION_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "irrigation-retrofit-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/irrigation-retrofit-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_IRRIGATION_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "irrigation-retrofit-selection",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_LASER_BO_ACQUISITION_NOISE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/laser-process-tuning",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_CMA_ES",
+            "/sources/S032",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S058",
+            "/sources/S059",
+            "/sources/S075"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "laser-process-tuning"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_BOTORCH",
+            "I_OPTUNA"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_BFGS",
+            "M_CMA_ES"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/laser-process-tuning",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_CMA_ES",
+            "/sources/S032",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S058",
+            "/sources/S059",
+            "/sources/S075"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S032",
+            "S034",
+            "S035",
+            "S058",
+            "S059",
+            "S075"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "cma-es"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "laser-process-tuning",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "comparison_wrong_journey"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/manufacturing-process-window",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_RANDOM_SEARCH",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S056",
+            "/sources/S059",
+            "/sources/S069",
+            "/sources/S075"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "manufacturing-process-window"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_BOTORCH",
+            "I_OPTUNA"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_BFGS",
+            "M_RANDOM_SEARCH"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/manufacturing-process-window",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_RANDOM_SEARCH",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S038",
+            "/sources/S056",
+            "/sources/S059",
+            "/sources/S069",
+            "/sources/S075"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S034",
+            "S035",
+            "S038",
+            "S056",
+            "S059",
+            "S069",
+            "S075"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "random-search"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "manufacturing-process-window",
+      "missing_dimensions": [
+        "canonical_comparison",
+        "source_review"
+      ],
+      "status": "partial"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_MOBILE_CLINIC_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/mobile-clinic-outreach-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "mobile-clinic-outreach-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/mobile-clinic-outreach-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "mobile-clinic-outreach-selection",
+      "missing_dimensions": [
+        "source_review"
+      ],
+      "status": "partial"
     },
     {
       "dimensions": {
@@ -1677,16 +3207,15 @@
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_SLSQP",
-            "/sources/S001",
             "/sources/S002",
             "/sources/S004",
             "/sources/S010",
             "/sources/S012",
             "/sources/S014",
-            "/sources/S054",
             "/sources/S055",
             "/sources/S056",
-            "/sources/S064"
+            "/sources/S064",
+            "/sources/S103"
           ]
         },
         "formulation": {
@@ -1727,35 +3256,34 @@
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_SLSQP",
-            "/sources/S001",
             "/sources/S002",
             "/sources/S004",
             "/sources/S010",
             "/sources/S012",
             "/sources/S014",
-            "/sources/S054",
             "/sources/S055",
             "/sources/S056",
-            "/sources/S064"
+            "/sources/S064",
+            "/sources/S103"
           ]
         },
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source"
+            "missing_scenario_source",
+            "stale_case_review"
           ],
           "state": "missing",
           "target_ids": [
-            "S001",
             "S002",
             "S004",
             "S010",
             "S012",
             "S014",
-            "S054",
             "S055",
             "S056",
-            "S064"
+            "S064",
+            "S103"
           ]
         },
         "static_text_alternative": {
@@ -1925,6 +3453,148 @@
       "journey_id": "portfolio-cvar-allocation",
       "missing_dimensions": [],
       "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [
+            "comparison_wrong_journey"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/public-infrastructure-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "public-infrastructure-selection"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/public-infrastructure-selection",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "public-infrastructure-selection",
+      "missing_dimensions": [
+        "canonical_comparison",
+        "source_review"
+      ],
+      "status": "partial"
     },
     {
       "dimensions": {
@@ -2178,7 +3848,8 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source"
+            "missing_scenario_source",
+            "stale_case_review"
           ],
           "state": "missing",
           "target_ids": [
@@ -2463,8 +4134,10 @@
           ]
         },
         "source_review": {
-          "reason_codes": [],
-          "state": "complete",
+          "reason_codes": [
+            "stale_case_review"
+          ],
+          "state": "missing",
           "target_ids": [
             "S097",
             "S098",
@@ -2500,7 +4173,8 @@
       },
       "journey_id": "topology-cantilever",
       "missing_dimensions": [
-        "implementation"
+        "implementation",
+        "source_review"
       ],
       "status": "partial"
     }
@@ -2690,7 +4364,8 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative"
+        "missing_static_text_alternative",
+        "stale_case_review"
       ],
       "conditional_method_ids": [
         "M_CP_SAT"
@@ -2705,20 +4380,21 @@
         "M_BRANCH_CUT"
       ],
       "formulation": {
-        "constraints": "各stopをちょうど一度訪問し、車両容量を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><mi>d</mi><mi>e</mi><mi>m</mi><mi>a</mi><mi>n</mi><msub><mi>d</mi><mi>i</mi></msub><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub><mo>&#x02264;</mo><msub><mi>Q</mi><mi>v</mi></msub></mrow></math>、到着時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></math> を時間窓 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">[</mo><msub><mi>e</mi><mi>i</mi></msub><mo>&#x0002C;</mo><msub><mi>l</mi><mi>i</mi></msub><mo stretchy=\"false\">]</mo></mrow></math> 内、経路の勤務時間を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>H</mi><mi>v</mi></msub></mrow></math> 以下にする。",
-        "decision_variables": "配送経路の順序 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C0;</mi></mrow></math> と車両割当 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C0;</mi></mrow></math> はstopの順列、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はstop i を車両 v が訪問することを表す。",
-        "objective": "経路ごとの移動時間と時間窓からの遅れを合わせ、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C0;</mi><mo>&#x0002C;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02211;</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>v</mi><mi>e</mi><mi>l</mi><mi>&#x0005F;</mi><mi>t</mi><mi>i</mi><mi>m</mi><mi>e</mi><mo>&#x0002B;</mo><mi>&#x003B1;</mi><mo>&#x02211;</mo><mi>l</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>n</mi><mi>e</mi><mi>s</mi><mi>s</mi></mrow></math> を最小化する。",
-        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mtext>depot&#x000A0;1個とstop&#x000A0;4個を1台へ割り当てる配送経路の集合</mtext><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。順序は順列（permutation）、車両割当は離散で、連続ベクトルの直方体（box）ではない。"
+        "constraints": "stop 1から4を各1回訪問し、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x0007B;</mo><msub><mi>&#x003C0;</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>&#x003C0;</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x0007D;</mo><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>2</mn><mo>&#x0002C;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>4</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> とする。到着時刻は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>e</mi><mi>i</mi></msub><mo>&#x02264;</mo><msub><mi>a</mi><mi>i</mi></msub><mo>&#x02264;</mo><msub><mi>l</mi><mi>i</mi></msub></mrow></math>、連続する訪問では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>&#x02265;</mo><msub><mi>a</mi><mi>i</mi></msub><mo>&#x0002B;</mo><msub><mi>t</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math>、depotへの帰着は30分以内とする。",
+        "decision_variables": "固定教材の訪問順序 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C0;</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>&#x003C0;</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>&#x003C0;</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と各stopへの到着時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow></math>。実務では車両割当 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>z</mi><mrow><mi>v</mi><mo>&#x0002C;</mo><mi>i</mi></mrow></msub></mrow></math>、積載量、休憩、複数depotもdecisionへ加わるが、固定教材では1台・容量制約なしに固定する。",
+        "objective": "移動時間行列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>t</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math> を使い、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C0;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>t</mi><mrow><mn>0</mn><mo>&#x0002C;</mo><msub><mi>&#x003C0;</mi><mn>1</mn></msub></mrow></msub><mo>&#x0002B;</mo><msubsup><mo>&#x02211;</mo><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mrow><mn>3</mn></mrow></msubsup><msub><mi>t</mi><mrow><msub><mi>&#x003C0;</mi><mi>k</mi></msub><mo>&#x0002C;</mo><msub><mi>&#x003C0;</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub></mrow></msub><mo>&#x0002B;</mo><msub><mi>t</mi><mrow><msub><mi>&#x003C0;</mi><mn>4</mn></msub><mo>&#x0002C;</mo><mn>0</mn></mrow></msub></mrow></math> を最小化する。時間窓違反はpenaltyへ落とさず、訪問可能性を決めるhard constraintとして扱う。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mtext>depot&#x000A0;0を出発・帰着し、stop&#x000A0;1,2,3,4を各1回訪問する順列</mtext><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。1台だけなのでdecisionは4 stopの訪問順序であり、連続ベクトルの直方体ではない。"
       },
       "implementation_ids": [
         "I_GUROBI",
         "I_ORTOOLS_ROUTING"
       ],
       "journey_id": "EC019",
-      "last_reviewed": "2026-07-19",
+      "last_reviewed": "2026-07-24",
       "learning_objective": "1000件の配送先と時間窓を満たす良い配送ルートを、10分以内に得たい。",
       "limitations": [
-        "期限停止時の解は品質の差が未証明で、交通やサービス時間の変動もこの固定例には含みません。"
+        "1秒のlocal searchで得た実行可能routeは大域最適性を保証せず、固定行列上の可行性も実道路の通行可能性・到着時刻・安全を保証しない。実運用では最新交通、車両・driver状態、現場確認で再検証する。",
+        "depot 1個・stop 4個・車両1台・固定移動時間・service timeなしの教育用instanceであり、1000 stop、複数車両、容量、pickup-delivery、休憩、交通変動を表さない。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA031",
@@ -2729,10 +4405,11 @@
         "S023",
         "S024",
         "S053",
-        "S054"
+        "S054",
+        "S079"
       ],
       "status": "partial",
-      "takeaway": "距離行列（distance matrix）、タイムゾーン（time zone）、サービス時間（service time）を検証し、期限停止時は実行可能性と未証明の最適性の差を分けて報告します。",
+      "takeaway": "距離・所要時間行列の生成時点、道路区分、タイムゾーン、service time、車両容量、driverの勤務・休憩ルールをversion管理する。探索前に各stopが少なくとも1台から到達可能かを確認し、期限停止時は未訪問stop、時間窓・容量違反、総距離、最良bound、停止理由を別々に報告する。実行可能routeが得られても最適性は未証明であり、交通予測を更新した再計算とdispatcherによる確認経路を残す。",
       "title_en": "Build time-window delivery routes under a deadline",
       "title_ja": "時間窓付き配送ルートを10分以内に組む"
     },
@@ -2806,6 +4483,95 @@
     },
     {
       "candidate_method_ids": [
+        "M_ADAMW"
+      ],
+      "canonical_url": "/gallery/EC021",
+      "case_id": "EC021",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
+          "comparison_id": "COMPARE_GRADIENT_FAMILY"
+        }
+      ],
+      "completion_reasons": [
+        "comparison_wrong_journey",
+        "missing_failure_or_sensitivity_scenario",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_MOMENTUM_SGD"
+      ],
+      "content_ids": [
+        "adamw",
+        "momentum-sgd"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "machine-learning",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "明示的なparameter制約は置かない。代わりにupdate回数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>k</mi><mo>&#x02264;</mo><mi>K</mi></mrow></math>、wall-timeまたはdata accessのbudget、early stopping、learning-rate schedule、weight decay、gradient clippingを事前に実験契約として固定する。",
+        "decision_variables": "各layerのweightとbiasをまとめた連続parameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math>。dataset split、入力特徴、label、model構造、batch sizeは比較中に固定し、optimizerのparameterへ混ぜない。",
+        "objective": "train mini-batch <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>B</mi><mi>k</mi></msub></mrow></math> のcross-entropy <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mo stretchy=\"false\">&#x0007C;</mo><msub><mi>B</mi><mi>k</mi></msub><mo stretchy=\"false\">&#x0007C;</mo></mrow></mfrac><msub><mo>&#x02211;</mo><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><msub><mi>B</mi><mi>k</mi></msub></mrow></msub><mi>&#x02113;</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>h</mi><mi>&#x003B8;</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002C;</mo><mi>y</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> をstochastic gradientで改善する。採用判断はtrain lossだけでなく、固定したvalidation splitのloss、主要metric、wall time、peak memoryで行う。",
+        "variable_domain_summary": "実務のdecision variableはnetwork parameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mi>d</mi></msup></mrow></math> で、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi></mrow></math> は数万から数十億になり得る。固定教材では4入力・8 hidden unit・3 classの小さなMLPのparameterだけを更新する。"
+      },
+      "implementation_ids": [
+        "I_OPTAX",
+        "I_PYTORCH_OPTIM",
+        "I_TENSORFLOW_OPTIM"
+      ],
+      "journey_id": "EC021",
+      "last_reviewed": "2026-07-24",
+      "learning_objective": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
+      "limitations": [
+        "固定した3 sample・4入力・8 hidden unit・3 classの1 step教材であり、実際の画像、data augmentation、distributed training、mixed precision、長期学習、hardware bottleneckを表さない。",
+        "小さな教材でlossが下がることや2次関数上の軌跡は、実データでのaccuracy、calibration、robustness、公平性、AdamWとMomentum SGDの順位を保証しない。実運用では同じsplit・budget・tuning方針と複数seedで再検証する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA040",
+      "problem_instance_ids": [
+        "OBJECTIVE_QUADRATIC_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/adam-quadratic",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_ADAM_QUADRATIC"
+        },
+        {
+          "canonical_url": "/traces/gradient_descent-quadratic",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_GD_QUADRATIC"
+        },
+        {
+          "canonical_url": "/traces/momentum-quadratic",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_MOMENTUM_QUADRATIC"
+        }
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S047",
+        "S048",
+        "S049",
+        "S056",
+        "S070"
+      ],
+      "status": "partial",
+      "takeaway": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。Adamのupdate geometryを読む補助であって、AdamWや実データでの汎化性能を比較するものではない。",
+      "title_en": "Train an image classifier with mini-batches",
+      "title_ja": "mini-batchで画像分類モデルを学習する"
+    },
+    {
+      "candidate_method_ids": [
         "M_ADMM_QP"
       ],
       "canonical_url": "/gallery/EC025",
@@ -2819,7 +4585,8 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative"
+        "missing_static_text_alternative",
+        "stale_case_review"
       ],
       "conditional_method_ids": [
         "M_ACTIVE_SET_QP"
@@ -2834,20 +4601,21 @@
         "M_DIFFERENTIAL_EVOLUTION"
       ],
       "formulation": {
-        "constraints": "線形化した動力学 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>A</mi><mi>k</mi></msub><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>B</mi><mi>k</mi></msub><mi>&#x00394;</mi><msub><mi>u</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>c</mi><mi>k</mi></msub></mrow></math>、初期状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>c</mi><mi>u</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow></math>、入力・状態の上下限を線形制約として課す。",
-        "decision_variables": "予測horizonの状態列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mi>N</mi></msub></mrow></math> と制御入力の増分（control increment）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x00394;</mi><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><mi>&#x00394;</mi><msub><mi>u</mi><mrow><mi>N</mi><mo>&#x02212;</mo><mn>1</mn></mrow></msub></mrow></math>。実機の現在状態はパラメータ（parameter）として毎周期更新する。",
-        "objective": "参照値との差と入力変更を、凸二次目的（convex quadratic objective）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><msub><mi>r</mi><mi>k</mi></msub><msubsup><mo>&#x02016;</mo><mi>Q</mi><mn>2</mn></msubsup><mo>&#x0002B;</mo><mo>&#x02211;</mo><mo>&#x02016;</mo><mi>&#x00394;</mi><msub><mi>u</mi><mi>k</mi></msub><msubsup><mo>&#x02016;</mo><mi>R</mi><mn>2</mn></msubsup></mrow></math> として最小化する。",
-        "variable_domain_summary": "予測horizon <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi></mrow></math> の固定QPでは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mrow><mi>n</mi><mo stretchy=\"false\">&#x00028;</mo><mi>N</mi><mo>&#x0002B;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>m</mi><mi>N</mi></mrow></msup></mrow></math> の状態・制御入力増分ベクトル。ただし上下限（bounds）と線形制約で実行可能領域（feasible set）を切り出す。"
+        "constraints": "scalar dynamics <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>&#x0002B;</mo><mn>1</mn></mrow></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x0002B;</mo><msub><mi>u</mi><mi>k</mi></msub></mrow></math>、初期状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>c</mi><mi>u</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow></math>、状態bounds <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>1.5</mn><mo>&#x02264;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02264;</mo><mn>1.5</mn></mrow></math>、入力bounds <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>0.4</mn><mo>&#x02264;</mo><msub><mi>u</mi><mi>k</mi></msub><mo>&#x02264;</mo><mn>0.4</mn></mrow></math> を全4stepに課す。各周期では最初の入力 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>0</mn></msub></mrow></math> だけを適用し、次の計測値で再度解く。",
+        "decision_variables": "次の4周期の予測状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mn>4</mn></msub></mrow></math> と操作量 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mn>3</mn></msub></mrow></math>。現在状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>&#x0003D;</mo><msub><mi>x</mi><mrow><mi>c</mi><mi>u</mi><mi>r</mi><mi>r</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></msub></mrow></math> と参照値 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>r</mi><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はdecisionではなく、制御周期ごとに更新するparameterである。",
+        "objective": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msubsup><mo>&#x02211;</mo><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>1</mn></mrow><mrow><mn>4</mn></mrow></msubsup><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mi>k</mi></msub><mo>&#x02212;</mo><mi>r</mi><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.1</mn><msubsup><mo>&#x02211;</mo><mrow><mi>k</mi><mo>&#x0003D;</mo><mn>0</mn></mrow><mrow><mn>3</mn></mrow></msubsup><msubsup><mi>u</mi><mi>k</mi><mn>2</mn></msubsup></mrow></math> を最小化する。第1項で参照追従、第2項で過大な操作を抑え、同じ正定値行列を周期間で再利用する。",
+        "variable_domain_summary": "固定教材では予測horizon <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>N</mi><mo>&#x0003D;</mo><mn>4</mn></mrow></math>、状態1次元・入力1次元とし、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>x</mi><mn>4</mn></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>u</mi><mn>3</mn></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mn>8</mn></msup></mrow></math>。線形動力学と状態・入力boundsが、この空間から実行可能領域を切り出す。"
       },
       "implementation_ids": [
         "I_ACADOS",
         "I_OSQP"
       ],
       "journey_id": "EC025",
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-24",
       "learning_objective": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。",
       "limitations": [
-        "平均計算時間だけでは100Hzを保証できず、最悪遅延と初期解なしの状態を実機で検証する必要があります。"
+        "このcodeは行列更新とwarm startの形を示すだけで、100Hz、閉loop安定性、recursive feasibility、安全性を保証しない。target hardware上のworst-case計測と、solver failureを含むclosed-loop試験が別途必要である。",
+        "状態1次元・入力1次元・4step・線形時不変・固定boundsの教育用instanceであり、実機の多変数model、非線形性、推定誤差、外乱、actuator遅延を表さない。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA043",
@@ -2864,7 +4632,7 @@
         "S076"
       ],
       "status": "partial",
-      "takeaway": "初期解の引き継ぎ、行列分解の再利用、主・双対残差（primal/dual residual）、最悪遅延（worst-case latency）、初期解なしの代替経路を同時に監視します。",
+      "takeaway": "100Hzは平均10msではなく各周期のdeadlineとして扱う。QPの構造・scaling・solver設定・CPU・build条件を固定し、cold startとwarm startを分けてp50、p99、最大latency、iteration数、primal/dual residual、deadline miss率を計測する。status成功後も動力学とboundsを独立に再計算し、計測値欠落・infeasible・残差未達・deadline miss時には事前検証済みのbackup controllerへ切り替える。",
       "title_en": "Solve a repeated MPC QP at 100 Hz",
       "title_ja": "100Hzで反復MPCの二次計画問題を解く"
     },
@@ -2894,10 +4662,10 @@
         "M_DIFFERENTIAL_EVOLUTION"
       ],
       "formulation": {
-        "constraints": "離散PDE残差 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mrow><mi>P</mi><mi>D</mi><mi>E</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、境界条件、設計パラメータの上下限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></math> を課し、inner solverが失敗した候補の扱いも明示する。",
-        "decision_variables": "PDEの状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math>、境界制御 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math>、低次元の設計パラメータ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math>。reduced formulation（縮約定式化）では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math> はPDE solveで決まり、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> だけを最適化器（optimizer）が動かす。",
-        "objective": "PDE solve <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> から得る性能指標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と正則化（regularization）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を使い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mi>J</mi><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mi>R</mi></mrow></math> を最小化する。",
-        "variable_domain_summary": "mesh上の状態（state）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>h</mi></mrow></msub></mrow></msup></mrow></math>、境界制御（boundary control）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>b</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>d</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub></mrow></msup></mrow></math>、設計パラメータ（design parameter）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msup><mo stretchy=\"false\">]</mo><mi>p</mi></msup></mrow></math> の直積 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi></mrow></math>。連続PDEの関数空間そのものではなく、離散mesh上の領域である。"
+        "constraints": "離散PDE残差 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mrow><mi>P</mi><mi>D</mi><mi>E</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、境界条件、設計パラメータの上下限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x02264;</mo><mi>&#x003B8;</mi><mo>&#x02264;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></math> を課します。内側解法（inner solver）が失敗した候補の扱いも明示します。",
+        "decision_variables": "この事例は縮約定式化であり、最適化器が直接更新する決定変数は境界制御 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi></mrow></math> と低次元の設計パラメータ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi></mrow></math> です。PDEの状態 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math> は各候補 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> に対する状態計算から得る導出状態場（derived state field）で、独立した決定変数ではありません。",
+        "objective": "PDEの状態計算から得る性能指標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>J</mi><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と正則化（regularization）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>R</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003B8;</mi><mo>&#x0002C;</mo><mi>q</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を使い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo>&#x0003D;</mo><mi>J</mi><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mi>R</mi></mrow></math> を最小化します。",
+        "variable_domain_summary": "メッシュ上の状態（state）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>m</mi><mi>e</mi><mi>s</mi><mi>h</mi></mrow></msub></mrow></msup></mrow></math>、境界制御（boundary control）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>q</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mrow><msub><mi>n</mi><mrow><mi>b</mi><mi>o</mi><mi>u</mi><mi>n</mi><mi>d</mi><mi>a</mi><mi>r</mi><mi>y</mi></mrow></msub></mrow></msup></mrow></math>、設計パラメータ（design parameter）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B8;</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>&#x003B8;</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><msup><mo stretchy=\"false\">]</mo><mi>p</mi></msup></mrow></math> の積空間 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi></mrow></math> を扱います。連続PDEの関数空間そのものではなく、離散メッシュ上の領域です。縮約定式化（reduced formulation）では、最適化器が直接扱う決定空間は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> で、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x0003D;</mo><mi>z</mi><mo stretchy=\"false\">&#x00028;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> は状態計算から得る従属場になります。全空間定式化（full-space formulation）で <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math> を決定変数に含める場合だけ、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>R</mi><mrow><mi>P</mi><mi>D</mi><mi>E</mi></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>z</mi><mo>&#x0002C;</mo><mi>q</mi><mo>&#x0002C;</mo><mi>&#x003B8;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math> を同時制約として明示します。"
       },
       "implementation_ids": [
         "I_IPOPT",
@@ -2905,7 +4673,7 @@
       ],
       "journey_id": "EC026",
       "last_reviewed": "2026-07-19",
-      "learning_objective": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。",
+      "learning_objective": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とヘッセ行列ベクトル積（Hessian-vector product）で改善したい。",
       "limitations": [
         "固定meshのsteady教材からtransient checkpointing、multiphysics coupling、実hardware costの一般性能は推論しません。",
         "結果は離散PDE・内部計算の許容誤差・前処理に依存し、連続モデルでの最適性は保証しません。"
@@ -2949,9 +4717,142 @@
         "S111"
       ],
       "status": "complete",
-      "takeaway": "随伴法の整合性、mesh独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。失敗したstate solveは大きなobjective値へ暗黙変換せず、solver reason、残差、消費したstate/adjoint solve costをfailed evaluationとして保持します。transient問題ではtime-step数、checkpoint policy、forward再計算回数、adjoint storageを追加し、一方向・双方向multiphysicsではfieldごとの残差とcoupling iterationを分けます。",
+      "takeaway": "随伴法の整合性、メッシュ独立性、内部計算の許容誤差、前処理（preconditioner）、計算失敗を最適化履歴と一緒に記録します。失敗した状態計算は大きな目的値へ暗黙に変換せず、解法の終了理由、残差、消費した状態・随伴計算の費用を失敗評価として保持します。非定常問題（transient）では時間刻み数、チェックポイント方針、順方向計算の再計算回数、随伴計算の保存容量を追加します。一方向・双方向の複合物理（multiphysics）では、場ごとの残差と連成反復を分けます。",
       "title_en": "Solve a large PDE-constrained design problem matrix-free",
       "title_ja": "PDE制約付き大規模設計を行列なし（matrix-free）で解く"
+    },
+    {
+      "candidate_method_ids": [
+        "M_MADS"
+      ],
+      "canonical_url": "/gallery/EC027",
+      "case_id": "EC027",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_RANDOM_SEARCH"
+      ],
+      "content_ids": [
+        "mads",
+        "random-search"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "engineering",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "上下限と離散domainに加え、solver crash、非物理解、timeoutで定義される暗黙の実行可能条件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><msub><mi>F</mi><mrow><mi>s</mi><mi>i</mi><mi>m</mi></mrow></msub></mrow></math>。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>1</mn></msub><mo>&#x0002B;</mo><msub><mi>u</mi><mn>2</mn></msub><mo>&#x0003C;</mo><mn>0.25</mn></mrow></math> の領域を意図的なfailure領域とする。",
+        "decision_variables": "2つの連続設計parameter <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>2</mn></msub></mrow></math> と、構成を選ぶ二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi></mrow></math>。simulationの収束設定やtimeoutは設計変数ではなく、評価契約として固定する。",
+        "objective": "simulationが成功した点で性能指標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。失敗点は人工的な高い目的値へ黙って置換せず、failure種別とともに未評価またはinfeasibleとして保存する。",
+        "variable_domain_summary": "実務では連続寸法 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mi>d</mi></msup></mrow></math> と離散構成 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>z</mi><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>1</mn><mo>&#x0002C;</mo><mo>&#x02026;</mo><mo>&#x0002C;</mo><mi>K</mi><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> を合わせた混合領域 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi></mrow></math>。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mn>2</mn></msub><mo>&#x0002C;</mo><mi>z</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup><mo>&#x000D7;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_NEVERGRAD",
+        "I_NOMAD"
+      ],
+      "journey_id": "EC027",
+      "last_reviewed": "2026-07-23",
+      "learning_objective": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。",
+      "limitations": [
+        "failureを無限penaltyで渡す短いコードはAPI例であり、すべてのoptimizerが非有限値を同じように扱うとは限らない。実装の入力契約を確認する必要がある。",
+        "固定した3変数と単純なfailure境界は教育用であり、実solverの収束領域、crash原因、MADSまたはNGOptの一般性能を表さない。",
+        "実行可能点が見つからない場合はoptimizerを替えるだけでなく、simulation model、初期化、mesh、許容誤差、timeout、設計domainを点検する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA016",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S038",
+        "S060",
+        "S063",
+        "S069",
+        "S094"
+      ],
+      "status": "partial",
+      "takeaway": "成功・crash・timeout・非物理解を別statusで記録し、入力、software version、seed、wall time、終了理由を保存する。penalty値を使う実装でも、元のfailure statusを失わず、feasible rateと最良feasible値を別々に追う。",
+      "title_en": "Search a design space with failed simulations",
+      "title_ja": "途中で失敗するシミュレーションから設計を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_GAUSS_NEWTON"
+      ],
+      "canonical_url": "/gallery/EC028",
+      "case_id": "EC028",
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_LEVENBERG_MARQUARDT"
+      ],
+      "content_ids": [
+        "gauss-newton",
+        "least-squares"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "science",
+      "excluded_method_ids": [
+        "M_DIFFERENTIAL_EVOLUTION"
+      ],
+      "formulation": {
+        "constraints": "固定教材に明示制約はない。square systemでは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、過剰決定系では許容残差、rank、scale、観測誤差modelを区別する。",
+        "decision_variables": "二つの未知量 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。固定教材では方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>F</mi><mn>1</mn></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02212;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>F</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002B;</mo><msubsup><mi>x</mi><mn>2</mn><mn>2</mn></msubsup><mo>&#x02212;</mo><mn>1</mn></mrow></math> を同時に満たす点を探す。",
+        "objective": "本来の目標はscalar目的の最小化ではなく、残差vector <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> をゼロにすること。least-squaresへ移る場合だけ補助目的 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>&#x02016;</mo><mi>F</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><msubsup><mo>&#x02016;</mo><mn>2</mn><mn>2</mn></msubsup></mrow></math> を使い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi></mrow></math> と各残差を両方確認する。",
+        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mn>2</mn></msup></mrow></math>。実務では物理的な範囲がある場合も、root solverがboundsを直接扱えるかを確認してからdomainを定める。"
+      },
+      "implementation_ids": [
+        "I_CERES",
+        "I_SCIPY_LEAST_SQUARES_TRF"
+      ],
+      "journey_id": "EC028",
+      "last_reviewed": "2026-07-23",
+      "learning_objective": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。",
+      "limitations": [
+        "2変数・滑らか・決定論的な固定教材であり、すべての根の列挙、大域的な存在・一意性、実物理modelの妥当性を保証しない。",
+        "Gauss-NewtonとLevenberg-Marquardtはleast-squaresへ移した場合の候補である。square systemで信頼できるJacobianがあるなら、まず専用のroot solverを検討する。",
+        "小さな二乗和は各方程式を要求精度で満たすことと同義ではない。residual scalingと成分ごとの許容値を確認する。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA004",
+      "problem_instance_ids": [],
+      "scenarios": [],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "status": "partial",
+      "takeaway": "最初にsquare、under-determined、over-determinedを区別する。残差normだけでなく各残差、Jacobian rank、scale、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
+      "title_en": "Solve equations as roots before scalar optimization",
+      "title_ja": "方程式を最適化に変える前に求根として解く"
     },
     {
       "candidate_method_ids": [
@@ -3034,6 +4935,83 @@
       "takeaway": "N=20とN=40で、同じdynamics、2秒horizon、初期・終端・path制約、初期trajectory、8 evaluation予算、dynamics defect tolerance $10^{-3}$、node path tolerance $10^{-4}$、terminal tolerance $10^{-3}$ を固定する。max dynamics defect、node path violation、再構成path violation、terminal error、objectiveを別々に保存する。gravityを10%変えたvalidation rolloutは独立failure Theaterで確認する。MPCは[receding horizon](#/learn/concept.receding-horizon)と[Case EC025](#/gallery/EC025)、contact／hybridは[入れ子・均衡・相補性・hybrid構造](#/learn/concept.nested-equilibrium-complementarity-hybrid)、safety filterは[制約付き最適化](#/learn/family.constrained-nlp)から既存のQP導線をたどる。",
       "title_en": "Swing up a pendulum under constraints",
       "title_ja": "pendulumを制約内で振り上げる"
+    },
+    {
+      "candidate_method_ids": [
+        "M_NSGA_II"
+      ],
+      "canonical_url": "/gallery/battery-operation-tradeoff",
+      "case_id": "battery-operation-tradeoff",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PARETO_PREFERENCE",
+          "comparison_id": "COMPARE_PARETO_PREFERENCE"
+        }
+      ],
+      "completion_reasons": [
+        "comparison_wrong_journey",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_EPSILON_CONSTRAINT"
+      ],
+      "content_ids": [
+        "epsilon-constraint",
+        "multi-objective"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "energy",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "実務ではpower上下限、state of chargeの遷移・上下限、初期・終端条件を置く。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02264;</mo><mn>2</mn></mrow></math> だけを課し、energy balanceやefficiencyは表さない。",
+        "decision_variables": "実務では時刻 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>t</mi></mrow></math> ごとの充電power <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msubsup><mi>p</mi><mi>t</mi><mo>&#x0002B;</mo></msubsup></mrow></math>、放電power <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msubsup><mi>p</mi><mi>t</mi><mo>&#x02212;</mo></msubsup></mrow></math>、state of charge <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>s</mi><mi>t</mi></msub></mrow></math>。固定教材の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub></mrow></math> はこのscheduleを直接表さず、二つの運用傾向を読むための代理変数である。",
+        "objective": "実務では購入cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub></mrow></math> と、充放電量に基づくthroughput proxy <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub></mrow></math> を同時に小さくする。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub><mo>&#x0003D;</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><msubsup><mi>x</mi><mn>2</mn><mn>2</mn></msubsup></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化する。",
+        "variable_domain_summary": "実務では各時刻の充電・放電powerとstate of chargeを持つ時系列領域。固定教材では二つの運用方針を表す無次元代理変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>2</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_CVXPY",
+        "I_PYMOO"
+      ],
+      "journey_id": "battery-operation-tradeoff",
+      "last_reviewed": "2026-07-23",
+      "learning_objective": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。",
+      "limitations": [
+        "2変数の二次関数はtrade-offの読み方を示す固定教材であり、蓄電池のstate dynamics、efficiency、温度、劣化model、系統制約を表さない。",
+        "throughputは劣化の代理指標にすぎず、寿命や安全性を保証しない。実設備ではmanufacturerの運用範囲と検証済みの劣化modelを別に確認する必要がある。",
+        "有限populationと評価budgetで得る近似Pareto集合であり、真のfront、将来価格での経済性、NSGA-IIの一般的優位性を保証しない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA038",
+      "problem_instance_ids": [
+        "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+          "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+          "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC"
+        }
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "status": "partial",
+      "takeaway": "実運用では価格、負荷、再生可能発電、初期state of charge、efficiency、power上限、終端条件、予測時点を固定して比較する。Pareto frontを得た後に、選好や運用規則で1候補を選び、別期間の価格・負荷で再評価する。",
+      "title_en": "Explore cost-throughput trade-offs in battery operation",
+      "title_ja": "蓄電池運用のコストと充放電量を両方見る"
     },
     {
       "candidate_method_ids": [
@@ -3127,7 +5105,9 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [],
+      "completion_reasons": [
+        "stale_case_review"
+      ],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -3150,10 +5130,11 @@
         "I_ORTOOLS_CPSAT"
       ],
       "journey_id": "budget-allocation",
-      "last_reviewed": "2026-07-17",
+      "last_reviewed": "2026-07-24",
       "learning_objective": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
       "limitations": [
-        "4施策・固定費用・固定期待効果の教育用0-1ナップサック問題です。施策間相互作用、効果の不確実性、実solverのカットや前処理、大規模インスタンスでの一般性能は示しません。"
+        "4施策・固定費用・固定期待効果の教育用0-1 knapsackであり、効果推定の不確実性、施策間相互作用、時期、対象者の重複、実行能力を表さない。",
+        "Theaterの決定的Branch-and-Bound traceはboundとgapの読み方を示す教材であり、CP-SATやMIP solverのcut、presolve、並列探索、wall-clock、大規模instanceでの一般性能を順位付けしない。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA032",
@@ -3187,8 +5168,8 @@
         "S054",
         "S079"
       ],
-      "status": "complete",
-      "takeaway": "Caseは施策選択、Theaterは同じ数式を4品目の問題インスタンス（instance）にしたものとして読みます。最良既知解（incumbent）、大域下界（global bound）、最適性の差（gap）、実行可能性（feasibility）、停止理由を一緒に記録します。",
+      "status": "partial",
+      "takeaway": "search-treeは、①nodeの部分assignment、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤incumbentとglobal boundの差、の順に読む。完全探索ではvalue 15の施策A+Bと上界15が一致して最適性を証明するが、4 node停止では可行なincumbentがあっても正のgapが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約をversion管理し、係数感度とheld-out評価を別に行う。",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する"
     },
@@ -3268,6 +5249,237 @@
       "takeaway": "目的値と最大制約違反量（constraint violation）を分けて保存し、アクティブ制約（active constraint）と終了状態を確認します。",
       "title_en": "Find a lightweight design under a strength constraint",
       "title_ja": "強度制約を守りながら軽量設計を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/ecosystem-restoration-selection",
+      "case_id": "ecosystem-restoration-selection",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_RESTORATION_BNB_BUDGET",
+          "comparison_id": "COMPARE_RESTORATION_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "environment",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "実施cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02264;</mo><mn>8</mn></mrow></math>、水域系から少なくとも1件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、陸域系から少なくとも1件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。",
+        "decision_variables": "再生候補 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi><mo>&#x0002C;</mo><mi>B</mi><mo>&#x0002C;</mo><mi>C</mi><mo>&#x0002C;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>E</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。固定教材は生物種、個体群、空間連結性をdecision variableへ変換せず、事前に監査した実施costと便益proxyを入力する。",
+        "objective": "固定教材では便益proxyの合計 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>9</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>8</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>E</mi></msub></mrow></math> を最大化する。proxyは候補を比較する教育用入力であり、生物多様性、個体群回復、将来の生態系サービスを保証する値ではない。",
+        "variable_domain_summary": "固定教材では5プロジェクトの採否 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>5</mn></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はプロジェクト <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> を今期実施すること、0は見送ることを表す。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "ecosystem-restoration-selection",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。",
+      "limitations": [
+        "5候補・固定cost・固定便益proxyの教育用選択問題であり、種間相互作用、空間連結性、気候変動、土地利用、実施失敗、長期monitoringを表さない。",
+        "proxy最大化やgapの証明は、生物多様性の回復、法令・土地権利への適合、社会的合意を保証しない。実運用では現地調査、複数指標、関係者レビュー、実施後の効果検証が必要である。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "hard constraintと便益proxyを分け、候補ID、対象地域、実施cost、許認可、前提事業、proxyの算定者・根拠・更新日を残す。候補案は現地調査、複数scenario、地域の関係者、保全の専門家、実施後monitoringで再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この環境保全caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "title_en": "Select ecosystem restoration projects under a budget",
+      "title_ja": "予算内で生態系再生プロジェクトを選ぶ"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/emergency-shelter-selection",
+      "case_id": "emergency-shelter-selection",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+          "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "public-policy",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "設営cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02264;</mo><mn>8</mn></mrow></math>、地域1から少なくとも1拠点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、地域2から少なくとも1拠点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。",
+        "decision_variables": "候補地 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi><mo>&#x0002C;</mo><mi>B</mi><mo>&#x0002C;</mo><mi>C</mi><mo>&#x0002C;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>E</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。固定教材では候補地の位置や人口を連続変数へ変換せず、あらかじめ監査した便益scoreと設営費用を入力する。",
+        "objective": "固定教材では便益scoreの合計 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>8</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>7</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>E</mi></msub></mrow></math> を最大化する。scoreは意思決定者が監査する入力であり、人命・公平性・実際の需要を一つの数値へ完全に表すものではない。",
+        "variable_domain_summary": "固定教材では5候補地の採否 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>5</mn></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は候補地 i を開くこと、0は開かないことを表す。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "emergency-shelter-selection",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。",
+      "limitations": [
+        "5候補地・固定cost・固定便益scoreの教育用選択問題であり、実際の災害需要、道路寸断、人口移動、施設容量、運営継続性、法令を表さない。",
+        "目的値の最大化やgapの証明は政策の妥当性、公平性、安全性を保証しない。実運用では関係者レビュー、複数scenario、地理的被覆、脆弱性指標、実地確認を別に行う必要がある。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "hard constraintと便益scoreを分け、候補地の可用性、移動時間、accessibility、地域別の最低配置、score作成者と更新日を記録する。接続先の分枝限定Theaterは4品目knapsackであり、この公共政策caseの候補地データではない。incumbent、bound、gap、停止理由の読み方だけを共有する。",
+      "title_en": "Select temporary support sites under a budget",
+      "title_ja": "予算内で臨時支援拠点を選ぶ"
+    },
+    {
+      "candidate_method_ids": [
+        "MF_LP_QP_CONIC"
+      ],
+      "canonical_url": "/gallery/energy-cvar-procurement",
+      "case_id": "energy-cvar-procurement",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "comparison_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_PROJECTED_GRADIENT"
+      ],
+      "content_ids": [
+        "lp-qp-conic",
+        "projected-gradient"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "energy",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "比率のsimplex制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn></mrow></math> と各枠の上限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.7</mn></mrow></math>。固定教材では送電制約、時間結合、最小購入量、需給不一致penaltyを入れず、実務適用時は別の制約として追加する。",
+        "decision_variables": "各調達枠へ割り当てる需要比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>3</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。固定教材は需要量を1へ正規化し、絶対電力量と比率を混同しない。",
+        "objective": "scenario <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math> の単位費用を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>L</mi><mi>s</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msubsup><mi>p</mi><mi>s</mi><mi>&#x1D5B3;</mi></msubsup><mi>w</mi></mrow></math> とし、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>6</mn></mrow></mfrac><msub><mo>&#x02211;</mo><mi>s</mi></msub><msub><mi>L</mi><mi>s</mi></msub><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.4</mn><mspace width=\"0.167em\" /><mi>C</mi><mi>V</mi><mi>a</mi><msub><mi>R</mi><mrow><mn>0.8</mn></mrow></msub><mo stretchy=\"false\">&#x00028;</mo><mi>L</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。CVaRは列挙scenario上のempirical tailであり、将来価格への確率保証ではない。",
+        "variable_domain_summary": "固定教材では3個の調達枠への比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>w</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>3</mn></msup><mo>&#x02223;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.7</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。実務では時間帯・契約・供給源を分けたより大きな配分vectorになる。"
+      },
+      "implementation_ids": [
+        "I_CVXPY"
+      ],
+      "journey_id": "energy-cvar-procurement",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
+      "limitations": [
+        "3調達枠・6価格scenario・単一期間の教育用instanceであり、送電網、unit commitment、蓄電池の時間結合、需給誤差、契約条項、実市場の価格形成を表さない。",
+        "CVaRを下げても供給信頼度や将来価格への確率保証は得られない。scenario設計、sample数、alpha、tail weight、held-out期間を変えた感度確認が必要である。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA036",
+      "problem_instance_ids": [
+        "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/portfolio-cvar-8-4",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PORTFOLIO_CVAR_8_4"
+        },
+        {
+          "canonical_url": "/traces/portfolio-nominal-8-4",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_UNCERTAINTY",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4"
+        }
+      ],
+      "source_ids": [
+        "S004",
+        "S010",
+        "S012",
+        "S014",
+        "S055",
+        "S056",
+        "S066",
+        "S103"
+      ],
+      "status": "complete",
+      "takeaway": "価格scenarioの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったscenarioとheld-out scenarioを分ける。接続先のCVaR Theater／Compareは4資産の教材であり、この電力調達caseと同じ実データではない。共通するsimplex・scenario loss・tail riskの読み方だけを再利用する。",
+      "title_en": "Procure electricity while controlling scenario tail cost",
+      "title_ja": "価格scenarioのtail costを抑えて電力を調達する"
     },
     {
       "candidate_method_ids": [
@@ -3362,6 +5574,347 @@
       "takeaway": "実務のCaseと1次元の固定教材を分け、観測ノイズ（noise）、現時点の最良値（best-so-far）、不確実性、評価予算（budget）の到達を一緒に記録します。",
       "title_en": "Hyperparameter search",
       "title_ja": "高価な実験の設定を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/irrigation-retrofit-selection",
+      "case_id": "irrigation-retrofit-selection",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_IRRIGATION_BNB_BUDGET",
+          "comparison_id": "COMPARE_IRRIGATION_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "agriculture",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "更新cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02264;</mo><mn>8</mn></mrow></math>、北系統から少なくとも1区画 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、南系統から少なくとも1区画 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。",
+        "decision_variables": "圃場区画 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi><mo>&#x0002C;</mo><mi>B</mi><mo>&#x0002C;</mo><mi>C</mi><mo>&#x0002C;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>E</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。固定教材は作物、生育段階、土壌水分をdecision variableへ変換せず、事前に監査した更新costと節水proxyを入力する。",
+        "objective": "固定教材では節水proxyの合計 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>9</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>7</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>E</mi></msub></mrow></math> を最大化する。proxyは候補の優先順位を検討する教育用入力であり、実測の節水量、収量、利益を保証する値ではない。",
+        "variable_domain_summary": "固定教材では5区画の更新採否 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>5</mn></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は区画 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> の設備を更新すること、0は今期は更新しないことを表す。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "irrigation-retrofit-selection",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。",
+      "limitations": [
+        "5区画・固定cost・固定節水proxyの教育用選択問題であり、土壌、天候、作物、生育段階、流量損失、設備故障、複数期の更新計画を表さない。",
+        "proxy最大化やgapの証明は、実際の節水量、収量、採算、法令・水利条件への適合を保証しない。実運用では現地計測、複数season、関係者レビュー、施工後の効果検証が必要である。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "hard constraintと優先度proxyを分け、区画ID、送水系統、設備状態、更新cost、proxyの算定者と更新日を残す。候補案は現地の流量測定、作物ごとの必要水量、施工可能時期、保守要員、水利権を使って再評価する。接続先の分枝限定Theaterは4品目knapsackであり、この農業caseの圃場データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "title_en": "Select irrigation retrofits under a capital budget",
+      "title_ja": "予算内で圃場の灌漑設備を更新する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/laser-process-tuning",
+      "case_id": "laser-process-tuning",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_CMA_ES"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "cma-es"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "manufacturing",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "各設定の装置上限・下限を守り、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>3</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>、追加試作は最大12回とする。不良・測定失敗は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+        "decision_variables": "次に試す加工条件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>。実務では3個の連続設定を別々に保持し、固定教材だけが表示のために1次元へ縮約する。",
+        "objective": "1回の試作後にだけ観測できる品質loss <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>&#x003B5;</mi></mrow></math> を最小化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0.18</mn><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1.2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.35</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>2.4</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.08</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>6</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B5;</mi><mo>&#x0003D;</mo><mn>0.025</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>11</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> とする。",
+        "variable_domain_summary": "実務の候補は出力・走査速度・焦点位置の3次元box。固定教材では、それらを校正済みの1個の正規化条件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> に写像し、1次元の観測履歴として読む。"
+      },
+      "implementation_ids": [
+        "I_BOTORCH",
+        "I_OPTUNA"
+      ],
+      "journey_id": "laser-process-tuning",
+      "last_reviewed": "2026-07-19",
+      "learning_objective": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。",
+      "limitations": [
+        "12回の固定budgetと既存BO Theaterは、実工程での良品率、安全性、候補設定の優位性を保証しない。実用化には再現試験、held-out lot、工程能力、安全限界の別検証が必要である。",
+        "固定1次元・決定論的noiseの教育用関数であり、レーザー加工の熱履歴、材料依存性、欠陥機構、装置差、測定再現性をmodel化していない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA014",
+      "problem_instance_ids": [
+        "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        }
+      ],
+      "source_ids": [
+        "S032",
+        "S034",
+        "S035",
+        "S058",
+        "S059",
+        "S075"
+      ],
+      "status": "complete",
+      "takeaway": "実務では3変数を1次元へ潰さず、設定値、材料lot、装置状態、測定系、失敗status、試作costを同じledgerへ保存する。Theaterは製造工程そのものではなく、small-noise下でacquisitionが探索と活用を切り替える読み方だけを固定1次元関数で示す。",
+      "title_en": "Tune laser process settings with a limited trial budget",
+      "title_ja": "少ない試作でレーザー加工条件を絞る"
+    },
+    {
+      "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/manufacturing-process-window",
+      "case_id": "manufacturing-process-window",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
+        }
+      ],
+      "completion_reasons": [
+        "comparison_wrong_journey",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "M_RANDOM_SEARCH"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "random-search"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "manufacturing",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "各工程条件の装置・安全上の上下限と、試作回数のbudgetを守る。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>3</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>、初期観測を含め最大10回とし、安全制約や失敗領域は含めない。",
+        "decision_variables": "実務では工程温度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>T</mi></mrow></math>、送り速度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>v</mi></mrow></math>、保持時間 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>t</mi></mrow></math>。固定教材ではこの組を1個の無次元化した代理変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math> へ写像し、実際の単位や装置設定とは同一視しない。",
+        "objective": "製品ごとに定義した寸法誤差や不良指標を測定し、その品質損失 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0.16</mn><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1.7</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.45</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>2.2</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.12</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>5.3</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> をblack-boxとして観測する。",
+        "variable_domain_summary": "実務では温度、送り速度、保持時間などを安全な上下限内に置く連続領域 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x02282;</mo><msup><mi>&#x0211D;</mi><mi>d</mi></msup></mrow></math>。固定教材では複数条件を正規化した1変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_BOTORCH",
+        "I_OPTUNA"
+      ],
+      "journey_id": "manufacturing-process-window",
+      "last_reviewed": "2026-07-23",
+      "learning_objective": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。",
+      "limitations": [
+        "1次元・10回・決定論的な固定教材であり、実製造工程の温度履歴、材料差、装置差、測定誤差、工程driftを表さない。",
+        "Bayesian optimizationとrandom searchの結果は探索範囲、kernel、noise model、初期点、budgetに依存し、一般的な手法rankingには使わない。",
+        "固定教材の最良点は実工程の安全性、規格適合、歩留まり、再現性を保証しない。候補は確認実験と工程能力評価を経てから採用する必要がある。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA014",
+      "problem_instance_ids": [
+        "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        }
+      ],
+      "source_ids": [
+        "S034",
+        "S035",
+        "S038",
+        "S056",
+        "S059",
+        "S069",
+        "S075"
+      ],
+      "status": "partial",
+      "takeaway": "各試作について材料lot、装置、operator、環境、入力条件、測定値、測定不確かさ、失敗status、wall timeを保存する。random baselineとの比較では初期点、探索範囲、試行budget、並列数、noiseの扱いを固定し、best observedとsurrogate予測を分けて読む。",
+      "title_en": "Tune manufacturing conditions with expensive experiments",
+      "title_ja": "高価な製造実験から工程条件を探す"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/mobile-clinic-outreach-selection",
+      "case_id": "mobile-clinic-outreach-selection",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "healthcare",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "運営cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02264;</mo><mn>8</mn></mrow></math>、地域群1から少なくとも1枠 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、地域群2から少なくとも1枠 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。",
+        "decision_variables": "開催候補 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi><mo>&#x0002C;</mo><mi>B</mi><mo>&#x0002C;</mo><mi>C</mi><mo>&#x0002C;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>E</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、solverが変更するdecision variableではない。",
+        "objective": "固定教材ではaccess proxyの合計 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>9</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>8</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>E</mi></msub></mrow></math> を最大化する。proxyは候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
+        "variable_domain_summary": "固定教材では5候補枠の採否 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>5</mn></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は候補枠 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> を開催すること、0は今期は開催しないことを表す。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "mobile-clinic-outreach-selection",
+      "last_reviewed": "2026-07-24",
+      "learning_objective": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。",
+      "limitations": [
+        "5候補・固定cost・固定access proxyの教育用選択問題であり、実際の需要、移動距離、予約枠、検査能力、スタッフ勤務、需要不確実性、複数期の巡回計画を表さない。",
+        "proxy最大化やgapの証明は、医療上の有効性、安全性、公平性、法令・倫理への適合を保証しない。実運用では臨床・地域のレビュー、複数のaccess指標、需要scenario、実施後の評価が必要である。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "partial",
+      "takeaway": "hard constraintとaccess proxyを分け、候補ID、対象地域、日時、運営cost、必要資格・設備、会場のaccessibility、予約・紹介先のcapacity、proxyの算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定Theaterは4品目knapsackであり、このhealthcare caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "title_en": "Select mobile clinic outreach sessions under a budget",
+      "title_ja": "予算内で巡回健診の開催候補を選ぶ"
     },
     {
       "candidate_method_ids": [
@@ -3490,7 +6043,8 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative"
+        "missing_static_text_alternative",
+        "stale_case_review"
       ],
       "conditional_method_ids": [
         "M_SLSQP"
@@ -3505,38 +6059,38 @@
         "M_NELDER_MEAD"
       ],
       "formulation": {
-        "constraints": "全資産への配分を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> とし、空売り禁止 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub></mrow></math>、集中投資上限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn></mrow></math>、必要なら売買回転（turnover）の制約を課す。",
-        "decision_variables": "各資産の保有比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>3</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。現金を含める場合は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mrow><mi>c</mi><mi>a</mi><mi>s</mi><mi>h</mi></mrow></msub></mrow></math> も同じベクトルへ加える。",
-        "objective": "期待収益を増やし、共分散リスク（covariance risk）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msup><mi>w</mi><mi>&#x1D5B3;</mi></msup><mi>&#x003A3;</mi><mi>w</mi></mrow></math> と取引コスト（transaction cost）を抑える。代表的には <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>&#x003B3;</mi><msup><mi>w</mi><mi>&#x1D5B3;</mi></msup><mi>&#x003A3;</mi><mi>w</mi><mo>&#x02212;</mo><msup><mi>&#x003BC;</mi><mi>&#x1D5B3;</mi></msup><mi>w</mi><mo>&#x0002B;</mo><mi>&#x003BA;</mi><mspace width=\"0.167em\" /><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。",
-        "variable_domain_summary": "4資産の固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>w</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>4</mn></msup><mo>&#x02223;</mo><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow></math> は資産 i の保有比率。"
+        "constraints": "全額配分 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math>、空売り禁止 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02265;</mo><mn>0</mn></mrow></math>、集中投資上限 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn></mrow></math> を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
+        "decision_variables": "4資産の保有比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>w</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>2</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>3</mn></msub><mo>&#x0002C;</mo><msub><mi>w</mi><mn>4</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。期待収益 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003BC;</mi></mrow></math>、共分散行列 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003A3;</mi></mrow></math>、risk aversion <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B3;</mi></mrow></math>、集中上限0.6は入力であり、最適化中に推定し直さない。",
+        "objective": "固定した期待収益と共分散を使い、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>w</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>&#x003B3;</mi><msup><mi>w</mi><mi>&#x1D5B3;</mi></msup><mi>&#x003A3;</mi><mi>w</mi><mo>&#x02212;</mo><msup><mi>&#x003BC;</mi><mi>&#x1D5B3;</mi></msup><mi>w</mi></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B3;</mi><mo>&#x0003D;</mo><mn>2</mn></mrow></math> を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B3;</mi></mrow></math> の感度を別に確認する。",
+        "variable_domain_summary": "固定教材では資産比率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>w</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mi>w</mi><mo>&#x02208;</mo><msup><mi>&#x0211D;</mi><mn>4</mn></msup><mo>&#x02223;</mo><mn>0</mn><mo>&#x02264;</mo><msub><mi>w</mi><mi>i</mi></msub><mo>&#x02264;</mo><mn>0.6</mn><mo>&#x0002C;</mo><mtext>&#x000A0;</mtext><msub><mo>&#x02211;</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><mo>&#x0003D;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow></math> は資産 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> の保有比率で、空売りと借入は認めない。"
       },
       "implementation_ids": [
         "I_CVXPY"
       ],
       "journey_id": "portfolio-allocation",
-      "last_reviewed": "2026-07-14",
-      "learning_objective": "リスクを抑えながら期待収益と運用制約を両立したい。",
+      "last_reviewed": "2026-07-24",
+      "learning_objective": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。",
       "limitations": [
-        "期待収益と共分散の推定に依存し、取引コスト（cost）や将来分布の変化を保証範囲に含めません。"
+        "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
+        "凸QPの大域解は入力したmodel内の保証であり、将来収益、損失上限、tail risk、実現performanceを保証しない。実運用では時系列のheld-out評価と推定不確実性の検証が必要である。"
       ],
       "prerequisite_journey_ids": [],
-      "problem_archetype_id": "PA052",
+      "problem_archetype_id": "PA018",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
-        "S001",
         "S002",
         "S004",
         "S010",
         "S012",
         "S014",
-        "S054",
         "S055",
         "S056",
-        "S064"
+        "S064",
+        "S103"
       ],
       "status": "partial",
-      "takeaway": "過去データの不確実性と、実運用での取引コストを別に検証します。",
+      "takeaway": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "title_en": "Portfolio allocation",
       "title_ja": "ポートフォリオの配分を決める"
     },
@@ -3617,6 +6171,87 @@
       "takeaway": "不確実性のsourceは将来returnのparameter uncertaintyとし、観測noiseやprocess disturbanceをこの教材へ混ぜない。8個のtraining scenarioだけを最適化に使い、4個のheld-out scenarioは解を固定した後に別集計する。CVaRはlossのtailを目的へ入れるrisk measureであり、chance constraintの違反確率保証、uncertainty setに対するrobust保証、ambiguity setに対するDRO保証ではない。結果は列挙したscenario上のempiricalな比較に限り、母集団や将来returnへの確率保証は主張しない。$\\alpha$やrisk weight、uncertainty setの幅を大きくすると保守的になり得る。8/4件ではtail推定が不安定で、scenarioを増やすほどCVaRの補助変数と制約が増えて計算費も増す。実務では時系列split、bootstrapやconfidence interval、推定誤差、slippage、turnover、再配分頻度を追加検証する。[Simplex・確率ベクトル](#/learn/concept.simplex)、[不確実性モデル・リスク・保証範囲](#/learn/concept.uncertainty-models)、[Chance constraint・CVaR・robustness](#/learn/concept.chance-risk-contract)を先に読む。",
       "title_en": "Portfolio allocation with CVaR",
       "title_ja": "scenarioのtail riskを抑えて配分する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/public-infrastructure-selection",
+      "case_id": "public-infrastructure-selection",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+          "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [
+        "comparison_wrong_journey",
+        "stale_case_review"
+      ],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.10",
+      "domain": "public-policy",
+      "excluded_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "formulation": {
+        "constraints": "事業費 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow></math> の合計を予算 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi></mrow></math> 以下にする。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x02264;</mo><mn>7</mn></mrow></math> と <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。実務では地域下限、依存関係、同時実施不可などを別制約として追加する。",
+        "decision_variables": "候補事業 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> を採択するとき1、採択しないとき0のbinary variable <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。着手時期、事業規模、地域配分は固定教材の変数に含めない。",
+        "objective": "事前に定義した便益score <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>v</mi><mi>i</mi></msub></mrow></math> の合計を最大化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>9</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub></mrow></math> を最大化するが、scoreを人命・被害額・確率と同一視しない。",
+        "variable_domain_summary": "実務では候補事業 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> ごとの採否 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。固定教材では排水改修、避難所整備、監視設備、道路補強を表す <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>4</mn></msup></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "public-infrastructure-selection",
+      "last_reviewed": "2026-07-23",
+      "learning_objective": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。",
+      "limitations": [
+        "4候補・単一予算・固定scoreの教育用knapsackであり、災害確率、被害推計、事業間相乗効果、着工順序、維持費を表さない。",
+        "便益scoreは意思決定の入力であり、客観的な公共価値や公平性を保証しない。score設計と制約は当事者・専門家による別の審査を必要とする。",
+        "固定instanceの最適解やgapは実計画の妥当性を保証せず、data更新、scenario分析、法令・安全要件、実施可能性の確認を置き換えない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "partial",
+      "takeaway": "便益scoreの定義者、対象期間、地域、根拠data、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、unused budget、最適性gap、停止理由を記録する。scoreやcostを変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
+      "title_en": "Select resilience projects under a fixed budget",
+      "title_ja": "限られた予算で防災事業を選ぶ"
     },
     {
       "candidate_method_ids": [
@@ -3725,7 +6360,8 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative"
+        "missing_static_text_alternative",
+        "stale_case_review"
       ],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
@@ -3740,22 +6376,23 @@
         "M_GRADIENT_DESCENT"
       ],
       "formulation": {
-        "constraints": "各枠の必要人数を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>s</mi></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x02265;</mo><msub><mi>d</mi><mi>t</mi></msub></mrow></math> とし、資格のないスタッフの配置 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math>、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
-        "decision_variables": "スタッフ s と曜日・勤務帯 t の組ごとの二値変数（binary variable）<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub></mrow></math>。固定教材では4名×9枠の36変数。",
-        "objective": "希望勤務帯の違反とスタッフ間の勤務数の偏りをペナルティ（penalty）として最小化する。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02211;</mo><msub><mi>p</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0002B;</mo><mi>&#x003BB;</mi><mspace width=\"0.167em\" /><mo>fairness</mo><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。",
-        "variable_domain_summary": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mrow><mn>4</mn><mo>&#x000D7;</mo><mn>9</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>t</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はスタッフ s を曜日・勤務帯 t に割り当てることを表す。"
+        "constraints": "各勤務帯の必要人数を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>s</mi></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x02265;</mo><msub><mi>r</mi><mrow><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub></mrow></math>、1日1勤務を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mo>&#x02211;</mo><mi>h</mi></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x02264;</mo><mn>1</mn></mrow></math>、資格のない割当を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x0003D;</mo><mn>0</mn></mrow></math> とする。夜勤後の翌日日勤を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>n</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi></mrow></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002B;</mo><mn>1</mn><mo>&#x0002C;</mo><mi>d</mi><mi>a</mi><mi>y</mi></mrow></msub><mo>&#x02264;</mo><mn>1</mn></mrow></math> とし、各スタッフの勤務数を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x02264;</mo><msub><mo>&#x02211;</mo><mrow><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x02264;</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow></math> で挟む。",
+        "decision_variables": "スタッフ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math>、日 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi></mrow></math>、勤務帯 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub></mrow></math> と、勤務数の最大値・最小値 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>&#x0002C;</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></math>。需要、資格、希望、休暇申請は入力であり、solverが変更するdecision variableではない。",
+        "objective": "希望適合度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>p</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub></mrow></math> を増やしながら勤務数の幅を抑えるため、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x0002C;</mo><mi>u</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mo>&#x02212;</mo><mn>10</mn><msub><mo>&#x02211;</mo><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><msub><mi>p</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>&#x02212;</mo><msub><mi>u</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を最小化する。必要人数や資格はpenaltyへ落とさずhard constraintとして扱う。",
+        "variable_domain_summary": "固定教材では4名・3日・日勤／夜勤の割当 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mrow><mn>4</mn><mo>&#x000D7;</mo><mn>3</mn><mo>&#x000D7;</mo><mn>2</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>s</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> はスタッフ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi></mrow></math> を日 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi></mrow></math> の勤務帯 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> へ割り当てること、0は割り当てないことを表す。"
       },
       "implementation_ids": [
         "I_ORTOOLS_CPSAT"
       ],
       "journey_id": "shift-scheduling",
-      "last_reviewed": "2026-07-14",
-      "learning_objective": "必要人数を満たしながら、希望と公平性を反映したい。",
+      "last_reviewed": "2026-07-24",
+      "learning_objective": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。",
       "limitations": [
-        "固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"
+        "4名・3日・2勤務帯、各枠1名、固定資格・固定希望の教育用instanceであり、実際の労働協約、複数資格、skill mix、有給、突発欠勤、需要変動、長期の公平性を表さない。",
+        "固定教材で実行可能な勤務表が得られても、実運用の法令適合、健康、安全、本人同意、公平性を保証しない。運用前に人事・現場責任者・スタッフによる確認と変更履歴の監査が必要である。"
       ],
       "prerequisite_journey_ids": [],
-      "problem_archetype_id": "PA006",
+      "problem_archetype_id": "PA026",
       "problem_instance_ids": [],
       "scenarios": [],
       "source_ids": [
@@ -3770,9 +6407,9 @@
         "S079"
       ],
       "status": "partial",
-      "takeaway": "必ず守る制約（hard constraint）と、できれば満たしたい制約（soft constraint）を最初に分離します。",
+      "takeaway": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
       "title_en": "Shift scheduling",
-      "title_ja": "スタッフのシフトを組む"
+      "title_ja": "必要人数と希望を両立してシフトを組む"
     },
     {
       "candidate_method_ids": [
@@ -3869,7 +6506,8 @@
         }
       ],
       "completion_reasons": [
-        "missing_implementation"
+        "missing_implementation",
+        "stale_case_review"
       ],
       "conditional_method_ids": [
         "M_ADJOINT_SENSITIVITY",
@@ -3889,17 +6527,18 @@
         "M_BFGS"
       ],
       "formulation": {
-        "constraints": "平均密度を0.5以下に保つ体積率制約 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>m</mi><mi>e</mi><mi>a</mi><mi>n</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>≤</mi><mn>0.5</mn></mrow></math> と、各密度の上下限を課す。",
-        "decision_variables": "各有限要素の密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mn>1</mn></mrow></math>は材料、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>ρ</mi><mi>ₑ</mi></mrow></math>が小さい値は空孔に近い状態を表す。",
-        "objective": "線形弾性の状態方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mi>u</mi><mo>&#x0003D;</mo><mi>F</mi></mrow></math>を解き、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>ρ</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>F</mi><mi>ᵀ</mi><mi>u</mi></mrow></math> を最小化する。SIMPでは剛性を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>E</mi><mi>ₑ</mi><mo>&#x0003D;</mo><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo>&#x0002B;</mo><mi>ρ</mi><mi>ₑ</mi><mi>ᵖ</mi><mo stretchy=\"false\">&#x00028;</mo><mi>E</mi><mi>₀</mi><mi>−</mi><mi>E</mi><mi>m</mi><mi>i</mi><mi>n</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> で補間する。",
-        "variable_domain_summary": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。設計変数集合は <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0.001</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mrow><mn>32</mn></mrow></msup></mrow></math> と書ける。実務ではmeshと材料補間の定義が設計結果を左右する。"
+        "constraints": "体積率 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mfrac><mrow><mn>1</mn></mrow><mrow><mn>32</mn></mrow></mfrac><msub><mo>&#x02211;</mo><mi>e</mi></msub><msub><mi>&#x003C1;</mi><mi>e</mi></msub><mo>&#x02264;</mo><mn>0.5</mn></mrow></math>、密度bounds <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0.001</mn><mo>&#x02264;</mo><msub><mi>&#x003C1;</mi><mi>e</mi></msub><mo>&#x02264;</mo><mn>1</mn></mrow></math>、状態方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>u</mi><mo>&#x0003D;</mo><mi>F</mi></mrow></math> を課す。固定教材ではfilter半径1.5要素を使い、更新前後の体積率を記録する。",
+        "decision_variables": "各有限要素の設計密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>e</mi></msub></mrow></math>。変位field <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>u</mi></mrow></math> はdecisionとして自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>K</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mi>u</mi><mo>&#x0003D;</mo><mi>F</mi></mrow></math> を解いて得るderived stateである。",
+        "objective": "compliance <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msup><mi>F</mi><mi>&#x1D5B3;</mi></msup><mi>u</mi></mrow></math> を最小化する。SIMPでは要素剛性を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>E</mi><mi>e</mi></msub><mo>&#x0003D;</mo><msub><mi>E</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002B;</mo><msubsup><mi>&#x003C1;</mi><mi>e</mi><mi>p</mi></msubsup><mo stretchy=\"false\">&#x00028;</mo><msub><mi>E</mi><mn>0</mn></msub><mo>&#x02212;</mo><msub><mi>E</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と補間し、中間密度をpenalizeしながら荷重経路を残す。",
+        "variable_domain_summary": "固定教材では32要素の設計密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>&#x003C1;</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>&#x003C1;</mi><mrow><mn>32</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0.001</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mrow><mn>32</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>e</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は材料、下限に近い値は空孔に近い状態を表す連続緩和であり、0/1配置そのものではない。"
       },
       "implementation_ids": [],
       "journey_id": "topology-cantilever",
-      "last_reviewed": "2026-07-18",
-      "learning_objective": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。",
+      "last_reviewed": "2026-07-24",
+      "learning_objective": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。",
       "limitations": [
-        "8×4要素の決定的な教育用instanceであり、実際のFEM実装の収束、強度・座屈、製造性、mesh refinement後の同一topology、局所解からの独立性や大域最適性を保証しません。"
+        "minimum-complianceと体積率だけでは強度、座屈、疲労、接触、最小部材寸法、製造性を保証しない。mesh、filter、初期密度、penalizationを変えた局所解の比較と、独立した高忠実度解析が必要である。",
+        "表示する8×4 traceはfield、感度、filter、更新の関係を学ぶ決定的referenceであり、実際のQ4 FEM解析値や物理的な変位・応力を再現するsolverではない。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA045",
@@ -3930,7 +6569,7 @@
         "S101"
       ],
       "status": "partial",
-      "takeaway": "最終密度だけでなく、state solve、感度のraw・filter後、volume fraction、gray fraction、checkerboard指標、meshとfilter radiusを一緒に保存します。complianceが下がっても、離散化artifactや製造制約が解決したとは限りません。",
+      "takeaway": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
       "title_en": "Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くする"
     }
@@ -3943,12 +6582,6 @@
       "reason_code": "comparison_without_journey"
     },
     {
-      "asset_id": "COMPARE_GRADIENT_FAMILY",
-      "asset_type": "comparison",
-      "policy": "warning",
-      "reason_code": "comparison_without_journey"
-    },
-    {
       "asset_id": "active-set",
       "asset_type": "content",
       "policy": "warning",
@@ -3956,12 +6589,6 @@
     },
     {
       "asset_id": "adam",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "adamw",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -4016,12 +6643,6 @@
     },
     {
       "asset_id": "cdcl-sat",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "cma-es",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -4297,12 +6918,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "gauss-newton",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "genetic-algorithm",
       "asset_type": "content",
       "policy": "warning",
@@ -4333,12 +6948,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "mads",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
       "asset_id": "method.gradient-descent",
       "asset_type": "content",
       "policy": "warning",
@@ -4352,12 +6961,6 @@
     },
     {
       "asset_id": "moead",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "momentum-sgd",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -4442,12 +7045,6 @@
     },
     {
       "asset_id": "proximal-gradient",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "random-search",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -4549,19 +7146,7 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "SCENARIO_ADAM_QUADRATIC",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_GD_QUADRATIC",
       "asset_type": "scenario",
       "policy": "warning",
       "reason_code": "scenario_without_journey"
@@ -4574,12 +7159,6 @@
     },
     {
       "asset_id": "SCENARIO_HYBRID_MODE_CHATTERING",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "asset_type": "scenario",
       "policy": "warning",
       "reason_code": "scenario_without_journey"
@@ -4621,19 +7200,7 @@
       "reason_code": "scenario_without_journey"
     },
     {
-      "asset_id": "adam-quadratic",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
       "asset_id": "adam-quadratic-divergence",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "gradient_descent-quadratic",
       "asset_type": "visualization_artifact",
       "policy": "warning",
       "reason_code": "public_artifact_without_journey"
@@ -4646,12 +7213,6 @@
     },
     {
       "asset_id": "hybrid-mode-chattering-ledger",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "momentum-quadratic",
       "asset_type": "visualization_artifact",
       "policy": "warning",
       "reason_code": "public_artifact_without_journey"
@@ -4696,11 +7257,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 11,
+      "complete": 15,
       "draft": 0,
-      "partial": 7
+      "partial": 15
     },
     "target_complete_journeys": 5,
-    "total_journeys": 18
+    "total_journeys": 30
   }
 }

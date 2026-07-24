@@ -676,12 +676,13 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "bilevel-regularized-regression",
             "constrained-design",
+            "energy-cvar-procurement",
             "portfolio-allocation",
             "portfolio-cvar-allocation",
             "shape-diffuser",
@@ -717,7 +718,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 57,
+          "count": 58,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -766,6 +767,7 @@
             "constrained-continuous",
             "constrained-design",
             "constrained-disk-feasible-region",
+            "energy-cvar-procurement",
             "family.constrained-nlp",
             "interior-point-nlp",
             "portfolio-allocation",
@@ -858,12 +860,17 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC019",
             "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection",
             "shift-scheduling"
           ]
         },
@@ -886,7 +893,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 19,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -907,7 +914,12 @@
             "cdcl-sat",
             "cp-sat",
             "cp-search",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
             "family.constraint-programming",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection",
             "shift-scheduling"
           ]
         },
@@ -975,16 +987,19 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
+            "EC027",
             "budget-allocation",
+            "energy-cvar-procurement",
             "hyperparameter-search",
             "multi-fidelity-simulator",
             "portfolio-allocation",
-            "portfolio-cvar-allocation"
+            "portfolio-cvar-allocation",
+            "public-infrastructure-selection"
           ]
         },
         "implementation": {
@@ -1010,7 +1025,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 44,
+          "count": 47,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1025,6 +1040,7 @@
             "COMPARE_GRADIENT_FAMILY",
             "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "EC013",
+            "EC027",
             "I_NLOPT",
             "I_NOMAD",
             "I_OPTIMJL",
@@ -1044,6 +1060,7 @@
             "cobyla",
             "cobyqa",
             "dummy-educational",
+            "energy-cvar-procurement",
             "family.local-dfo",
             "hyperparameter-search",
             "mads",
@@ -1057,6 +1074,7 @@
             "portfolio-allocation",
             "portfolio-cvar-allocation",
             "powell",
+            "public-infrastructure-selection",
             "spsa"
           ]
         },
@@ -1110,11 +1128,15 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_KNAPSACK_BNB_BUDGET"
+            "COMPARE_IRRIGATION_BNB_BUDGET",
+            "COMPARE_KNAPSACK_BNB_BUDGET",
+            "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "COMPARE_RESTORATION_BNB_BUDGET",
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET"
           ]
         },
         "content": {
@@ -1130,12 +1152,17 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC019",
             "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection",
             "shift-scheduling"
           ]
         },
@@ -1170,7 +1197,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 43,
+          "count": 52,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1179,7 +1206,11 @@
             "/methods/M_BRANCH_CUT",
             "/methods/M_OUTER_APPROX_MINLP",
             "/methods/M_SPATIAL_BRANCH_BOUND",
+            "COMPARE_IRRIGATION_BNB_BUDGET",
             "COMPARE_KNAPSACK_BNB_BUDGET",
+            "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "COMPARE_RESTORATION_BNB_BUDGET",
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET",
             "EC019",
             "I_CBC",
             "I_CPLEX",
@@ -1213,8 +1244,13 @@
             "branch-and-bound",
             "branch-and-cut",
             "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
             "family.discrete-structure",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
             "outer-approximation-minlp",
+            "public-infrastructure-selection",
             "shift-scheduling",
             "spatial-branch-and-bound"
           ]
@@ -1288,12 +1324,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "laser-process-tuning"
+          ]
         },
         "implementation": {
           "count": 4,
@@ -1315,7 +1351,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 18,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1336,6 +1372,7 @@
             "cma-es",
             "family.evolutionary",
             "genetic-algorithm",
+            "laser-process-tuning",
             "particle-swarm"
           ]
         },
@@ -1407,12 +1444,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -1438,7 +1476,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 36,
+          "count": 37,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1451,6 +1489,7 @@
             "/methods/M_SIMULATED_ANNEALING",
             "EC025",
             "EC026",
+            "EC028",
             "I_NEVERGRAD",
             "I_NLOPT",
             "I_SCIPY_BASINHOPPING",
@@ -1629,10 +1668,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
             "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
           ]
         },
@@ -1652,11 +1692,12 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
+            "energy-cvar-procurement",
             "portfolio-allocation",
             "portfolio-cvar-allocation"
           ]
@@ -1693,7 +1734,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 49,
+          "count": 52,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1705,6 +1746,7 @@
             "/methods/M_PDLP",
             "/methods/M_PRIMAL_DUAL_CONIC",
             "/methods/M_SIMPLEX",
+            "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
             "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "EC025",
             "I_ACADOS",
@@ -1734,10 +1776,12 @@
             "S056",
             "S062",
             "S078",
+            "S103",
             "active-set-qp",
             "admm-qp",
             "barrier-lp-qp",
             "dual-simplex",
+            "energy-cvar-procurement",
             "lp-qp-conic",
             "pdlp",
             "portfolio-allocation",
@@ -1768,7 +1812,7 @@
           ]
         },
         "source": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1782,7 +1826,8 @@
             "S055",
             "S056",
             "S062",
-            "S078"
+            "S078",
+            "S103"
           ]
         },
         "visualization": {
@@ -1922,11 +1967,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC017"
+            "EC017",
+            "battery-operation-tradeoff"
           ]
         },
         "implementation": {
@@ -1947,7 +1993,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 21,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1964,6 +2010,7 @@
             "S039",
             "S055",
             "S068",
+            "battery-operation-tradeoff",
             "biobjective-quadratic-pareto-front",
             "epsilon-constraint",
             "family.multi-objective",
@@ -2155,17 +2202,26 @@
           ]
         },
         "gallery": {
-          "count": 10,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "EC020",
+            "EC021",
             "EC026",
+            "EC027",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "shift-scheduling",
             "so3-attitude-alignment",
             "topology-cantilever"
@@ -2195,7 +2251,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 47,
+          "count": 59,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2213,7 +2269,9 @@
             "COMPARE_GRADIENT_FAMILY",
             "EC013",
             "EC020",
+            "EC021",
             "EC026",
+            "EC027",
             "EC029",
             "I_EXCEL_SOLVER",
             "I_JAXOPT",
@@ -2225,21 +2283,31 @@
             "I_SCIPY_LBFGSB",
             "S001",
             "S002",
+            "S017",
+            "S055",
             "S056",
             "S057",
+            "S064",
             "S065",
+            "battery-operation-tradeoff",
             "bfgs",
             "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
             "exponential-fit-lbfgsb",
             "family.smooth-local",
             "gradient_descent-quadratic",
             "gradient_descent-quadratic-divergence",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
             "lbfgs",
             "lbfgsb",
+            "manufacturing-process-window",
             "method.gradient-descent",
+            "mobile-clinic-outreach-selection",
             "newton-cg",
             "newton-method",
             "nonlinear-cg",
@@ -2270,14 +2338,17 @@
           ]
         },
         "source": {
-          "count": 5,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S001",
             "S002",
+            "S017",
+            "S055",
             "S056",
             "S057",
+            "S064",
             "S065"
           ]
         },
@@ -2321,12 +2392,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -2347,7 +2418,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2358,6 +2429,7 @@
             "/methods/M_SGD",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -2421,12 +2493,13 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-            "COMPARE_BO_MULTIFIDELITY_COST"
+            "COMPARE_BO_MULTIFIDELITY_COST",
+            "COMPARE_LASER_BO_ACQUISITION_NOISE"
           ]
         },
         "content": {
@@ -2445,11 +2518,14 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC027",
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
@@ -2475,7 +2551,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 45,
+          "count": 49,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2500,6 +2576,8 @@
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
             "COMPARE_BO_MULTIFIDELITY_COST",
+            "COMPARE_LASER_BO_ACQUISITION_NOISE",
+            "EC027",
             "I_AX",
             "I_BOTORCH",
             "I_NEVERGRAD",
@@ -2518,6 +2596,8 @@
             "family.expensive-black-box",
             "hyperband-asha",
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator",
             "pbt",
             "random-search",
@@ -2730,12 +2810,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -2761,7 +2842,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 32,
+          "count": 33,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2775,6 +2856,7 @@
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
             "EC013",
             "EC026",
+            "EC028",
             "I_CERES",
             "I_JAXOPT",
             "I_OPTIMJL",
@@ -3155,12 +3237,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -3181,11 +3263,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADAMW",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -3835,12 +3918,13 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-            "COMPARE_BO_MULTIFIDELITY_COST"
+            "COMPARE_BO_MULTIFIDELITY_COST",
+            "COMPARE_LASER_BO_ACQUISITION_NOISE"
           ]
         },
         "content": {
@@ -3852,11 +3936,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
@@ -3880,7 +3966,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 25,
+          "count": 28,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -3894,6 +3980,7 @@
             "ARTIFACT_BO_MULTIFIDELITY_LEDGER",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
             "COMPARE_BO_MULTIFIDELITY_COST",
+            "COMPARE_LASER_BO_ACQUISITION_NOISE",
             "I_AX",
             "I_BOTORCH",
             "I_OPTUNA",
@@ -3908,6 +3995,8 @@
             "S075",
             "bayesian-optimization",
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
@@ -3983,15 +4072,20 @@
           ]
         },
         "gallery": {
-          "count": 7,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC020",
+            "EC021",
+            "EC027",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "constrained-design",
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -4014,24 +4108,32 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 24,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BFGS",
             "COMPARE_CONSTRAINED_FAILURE",
             "EC020",
+            "EC021",
+            "EC027",
             "EC029",
             "I_OPTIMJL",
             "I_SCIPY_BFGS",
             "S002",
+            "S017",
+            "S055",
             "S056",
             "S057",
+            "S064",
+            "battery-operation-tradeoff",
             "bfgs",
             "bilevel-regularized-regression",
             "constrained-design",
             "constrained-disk-feasible-region",
             "hyperparameter-search",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -4051,13 +4153,16 @@
           ]
         },
         "source": {
-          "count": 3,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "S002",
+            "S017",
+            "S055",
             "S056",
-            "S057"
+            "S057",
+            "S064"
           ]
         },
         "visualization": {
@@ -4076,11 +4181,15 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_KNAPSACK_BNB_BUDGET"
+            "COMPARE_IRRIGATION_BNB_BUDGET",
+            "COMPARE_KNAPSACK_BNB_BUDGET",
+            "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "COMPARE_RESTORATION_BNB_BUDGET",
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET"
           ]
         },
         "content": {
@@ -4118,12 +4227,16 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 20,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BRANCH_BOUND",
+            "COMPARE_IRRIGATION_BNB_BUDGET",
             "COMPARE_KNAPSACK_BNB_BUDGET",
+            "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+            "COMPARE_RESTORATION_BNB_BUDGET",
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET",
             "I_EXCEL_SOLVER",
             "I_KNITRO",
             "I_SCIPY_MILP_HIGHS",
@@ -4494,12 +4607,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "laser-process-tuning"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -4519,7 +4632,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4531,7 +4644,8 @@
             "S040",
             "S058",
             "S074",
-            "cma-es"
+            "cma-es",
+            "laser-process-tuning"
           ]
         },
         "recommendation": {
@@ -4868,12 +4982,17 @@
           ]
         },
         "gallery": {
-          "count": 3,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC019",
             "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection",
             "shift-scheduling"
           ]
         },
@@ -4895,7 +5014,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4910,6 +5029,11 @@
             "binary-knapsack-bnb-complete",
             "budget-allocation",
             "cp-sat",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection",
             "shift-scheduling"
           ]
         },
@@ -5142,12 +5266,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC025",
-            "EC026"
+            "EC026",
+            "EC028"
           ]
         },
         "implementation": {
@@ -5168,13 +5293,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "EC025",
             "EC026",
+            "EC028",
             "I_NEVERGRAD",
             "I_SCIPY_DIFFERENTIAL_EVOLUTION",
             "S006",
@@ -5796,11 +5922,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC017"
+            "EC017",
+            "battery-operation-tradeoff"
           ]
         },
         "implementation": {
@@ -5820,7 +5947,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -5829,6 +5956,7 @@
             "S039",
             "S055",
             "S068",
+            "battery-operation-tradeoff",
             "epsilon-constraint"
           ]
         },
@@ -5969,12 +6097,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028"
+          ]
         },
         "implementation": {
           "count": 2,
@@ -5994,11 +6122,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_GAUSS_NEWTON",
+            "EC028",
             "I_CERES",
             "I_JAXOPT",
             "S002",
@@ -6157,10 +6286,14 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
             "shift-scheduling"
           ]
         },
@@ -6181,7 +6314,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 12,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6193,9 +6326,13 @@
             "S002",
             "S056",
             "S057",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
             "gradient_descent-quadratic",
             "gradient_descent-quadratic-divergence",
+            "irrigation-retrofit-selection",
             "method.gradient-descent",
+            "mobile-clinic-outreach-selection",
             "shift-scheduling"
           ]
         },
@@ -6831,11 +6968,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC013"
+            "EC013",
+            "EC028"
           ]
         },
         "implementation": {
@@ -6856,13 +6994,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_LEVENBERG_MARQUARDT",
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
             "EC013",
+            "EC028",
             "I_CERES",
             "I_SCIPY_LEAST_SQUARES_LM",
             "S002",
@@ -7011,12 +7150,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027"
+          ]
         },
         "implementation": {
           "count": 1,
@@ -7035,11 +7174,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MADS",
+            "EC027",
             "I_NOMAD",
             "S002",
             "S018",
@@ -7362,12 +7502,12 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 3,
@@ -7388,13 +7528,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 15,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MOMENTUM_SGD",
             "COMPARE_GRADIENT_DIVERGENCE",
             "COMPARE_GRADIENT_FAMILY",
+            "EC021",
             "I_OPTAX",
             "I_PYTORCH_OPTIM",
             "I_TENSORFLOW_OPTIM",
@@ -7655,16 +7796,18 @@
           ]
         },
         "gallery": {
-          "count": 6,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC013",
             "budget-allocation",
+            "energy-cvar-procurement",
             "hyperparameter-search",
             "multi-fidelity-simulator",
             "portfolio-allocation",
-            "portfolio-cvar-allocation"
+            "portfolio-cvar-allocation",
+            "public-infrastructure-selection"
           ]
         },
         "implementation": {
@@ -7686,7 +7829,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7705,6 +7848,7 @@
             "S063",
             "budget-allocation",
             "dummy-educational",
+            "energy-cvar-procurement",
             "hyperparameter-search",
             "method.nelder-mead",
             "multi-fidelity-simulator",
@@ -7713,7 +7857,8 @@
             "nelder-mead-rosenbrock",
             "nelder-mead-rosenbrock-shifted",
             "portfolio-allocation",
-            "portfolio-cvar-allocation"
+            "portfolio-cvar-allocation",
+            "public-infrastructure-selection"
           ]
         },
         "recommendation": {
@@ -8102,12 +8247,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
         },
         "content": {
           "count": 1,
@@ -8118,11 +8263,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC017"
+            "EC017",
+            "battery-operation-tradeoff"
           ]
         },
         "implementation": {
@@ -8143,17 +8289,19 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 11,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_NSGA_II",
+            "COMPARE_PARETO_PREFERENCE",
             "EC017",
             "I_DEAP",
             "I_PYMOO",
             "S039",
             "S055",
             "S068",
+            "battery-operation-tradeoff",
             "biobjective-quadratic-pareto-front",
             "multi-objective"
           ]
@@ -9060,10 +9208,11 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "energy-cvar-procurement",
             "portfolio-cvar-allocation",
             "so3-attitude-alignment"
           ]
@@ -9086,7 +9235,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 15,
+          "count": 16,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9101,6 +9250,7 @@
             "S056",
             "S064",
             "S066",
+            "energy-cvar-procurement",
             "portfolio-cvar-allocation",
             "projected-gradient",
             "so3-attitude-alignment",
@@ -9249,12 +9399,13 @@
           ]
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027",
+            "manufacturing-process-window"
+          ]
         },
         "implementation": {
           "count": 5,
@@ -9277,7 +9428,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 20,
+          "count": 22,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -9287,6 +9438,7 @@
             "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
             "ARTIFACT_BO_EXPLORE_SMALL_NOISE_RANDOM_BASELINE",
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+            "EC027",
             "I_AX",
             "I_NEVERGRAD",
             "I_OPTUNA",
@@ -9300,6 +9452,7 @@
             "S059",
             "S069",
             "S075",
+            "manufacturing-process-window",
             "random-search"
           ]
         },
@@ -11510,12 +11663,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11526,18 +11679,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC028"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC028",
             "None"
           ]
         },
@@ -11670,12 +11824,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "shift-scheduling"
-          ]
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "implementation": {
           "count": 0,
@@ -11686,20 +11840,19 @@
           "target_ids": []
         },
         "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "shift-scheduling"
-          ]
-        },
-        "map": {
-          "count": 2,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "None",
-            "shift-scheduling"
+            "None"
           ]
         },
         "recommendation": {
@@ -12325,10 +12478,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
@@ -12341,19 +12496,23 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
         "map": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "None",
+            "laser-process-tuning",
+            "manufacturing-process-window",
             "multi-fidelity-simulator"
           ]
         },
@@ -12488,12 +12647,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12504,18 +12663,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC027"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC027",
             "None"
           ]
         },
@@ -12650,12 +12810,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "portfolio-allocation"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -12666,19 +12826,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "portfolio-allocation"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "portfolio-allocation"
           ]
         },
         "recommendation": {
@@ -13301,12 +13462,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "shift-scheduling"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -13317,19 +13478,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "shift-scheduling"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "shift-scheduling"
           ]
         },
         "recommendation": {
@@ -13779,11 +13941,16 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "budget-allocation"
+            "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection"
           ]
         },
         "implementation": {
@@ -13795,20 +13962,30 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "budget-allocation"
+            "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection"
           ]
         },
         "map": {
-          "count": 2,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "None",
-            "budget-allocation"
+            "budget-allocation",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "irrigation-retrofit-selection",
+            "mobile-clinic-outreach-selection",
+            "public-infrastructure-selection"
           ]
         },
         "recommendation": {
@@ -14105,10 +14282,11 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "energy-cvar-procurement",
             "portfolio-cvar-allocation"
           ]
         },
@@ -14121,19 +14299,21 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "portfolio-cvar-allocation"
-          ]
-        },
-        "map": {
           "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "energy-cvar-procurement",
+            "portfolio-cvar-allocation"
+          ]
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
             "None",
+            "energy-cvar-procurement",
             "portfolio-cvar-allocation"
           ]
         },
@@ -14268,11 +14448,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC017"
+            "EC017",
+            "battery-operation-tradeoff"
           ]
         },
         "implementation": {
@@ -14284,20 +14465,22 @@
           "target_ids": []
         },
         "journey": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "EC017"
-          ]
-        },
-        "map": {
           "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
-            "None"
+            "battery-operation-tradeoff"
+          ]
+        },
+        "map": {
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017",
+            "None",
+            "battery-operation-tradeoff"
           ]
         },
         "recommendation": {
@@ -14433,12 +14616,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -14449,18 +14632,19 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "EC021"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021",
             "None"
           ]
         },
@@ -15406,12 +15590,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 1,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "portfolio-allocation"
-          ]
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
         },
         "implementation": {
           "count": 0,
@@ -15422,20 +15606,19 @@
           "target_ids": []
         },
         "journey": {
+          "count": 0,
+          "reason_codes": [
+            "no_inventory_connection"
+          ],
+          "state": "absent",
+          "target_ids": []
+        },
+        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "portfolio-allocation"
-          ]
-        },
-        "map": {
-          "count": 2,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "None",
-            "portfolio-allocation"
+            "None"
           ]
         },
         "recommendation": {
@@ -15889,7 +16072,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 14,
+          "count": 28,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -15897,15 +16080,29 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "portfolio-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
+            "shift-scheduling",
             "topology-cantilever"
           ]
         },
@@ -15996,7 +16193,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 29,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16004,15 +16201,29 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "portfolio-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
+            "shift-scheduling",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -16103,7 +16314,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 29,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16111,15 +16322,29 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "portfolio-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
+            "shift-scheduling",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -16294,7 +16519,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 29,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16302,15 +16527,29 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "portfolio-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
+            "shift-scheduling",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -16478,7 +16717,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 15,
+          "count": 29,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16486,15 +16725,29 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "portfolio-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
+            "shift-scheduling",
             "so3-attitude-alignment",
             "topology-cantilever"
           ]
@@ -16598,12 +16851,14 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 3,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC021",
+            "portfolio-allocation",
+            "shift-scheduling"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -16770,7 +17025,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 18,
+          "count": 30,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16778,16 +17033,28 @@
             "EC017",
             "EC019",
             "EC020",
+            "EC021",
             "EC025",
             "EC026",
+            "EC027",
+            "EC028",
             "EC029",
+            "battery-operation-tradeoff",
             "bilevel-regularized-regression",
             "budget-allocation",
             "constrained-design",
+            "ecosystem-restoration-selection",
+            "emergency-shelter-selection",
+            "energy-cvar-procurement",
             "hyperparameter-search",
+            "irrigation-retrofit-selection",
+            "laser-process-tuning",
+            "manufacturing-process-window",
+            "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
             "portfolio-allocation",
             "portfolio-cvar-allocation",
+            "public-infrastructure-selection",
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",

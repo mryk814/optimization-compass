@@ -274,6 +274,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S023",
           "target_type": "source"
         },
@@ -284,7 +289,17 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
           "target_type": "source"
         },
         {
@@ -455,6 +470,152 @@
         }
       ],
       "summary": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC021",
+      "entity_id": "EC021",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "mini-batchで画像分類モデルを学習する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADAMW",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:unconstrained",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONVEXITY:nonconvex",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:stochastic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DIMENSION_CONTEXT:very_high",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_NOISE_LEVEL:moderate_noise",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SMOOTHNESS:smooth",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA040",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_ADAM_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_GD_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -681,7 +842,229 @@
           "target_type": "view"
         }
       ],
-      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とヘッセ行列ベクトル積（Hessian-vector product）で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC027",
+      "entity_id": "EC027",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "途中で失敗するシミュレーションから設計を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:implicit",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:feasible_only",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:mixed",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NEVERGRAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NOMAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA016",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/EC028",
+      "entity_id": "EC028",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "方程式を最適化に変える前に求根として解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:unconstrained",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:jacobian",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:equation_residual",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA004",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
     },
     {
       "aliases": [],
@@ -803,6 +1186,122 @@
         }
       ],
       "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/battery-operation-tradeoff",
+      "entity_id": "battery-operation-tradeoff",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "蓄電池運用のコストと充放電量を両方見る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:multiobjective",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:pareto_set",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "biobjective-quadratic-pareto-front",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -1159,6 +1658,334 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/ecosystem-restoration-selection",
+      "entity_id": "ecosystem-restoration-selection",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "予算内で生態系再生プロジェクトを選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:binary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/emergency-shelter-selection",
+      "entity_id": "emergency-shelter-selection",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "予算内で臨時支援拠点を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:binary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/energy-cvar-procurement",
+      "entity_id": "energy-cvar-procurement",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA036",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/hyperparameter-search",
       "entity_id": "hyperparameter-search",
       "entity_type": "case",
@@ -1302,6 +2129,475 @@
         }
       ],
       "summary": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/irrigation-retrofit-selection",
+      "entity_id": "irrigation-retrofit-selection",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "予算内で圃場の灌漑設備を更新する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:binary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/laser-process-tuning",
+      "entity_id": "laser-process-tuning",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "少ない試作でレーザー加工条件を絞る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_CMA_ES",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:very_expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:global_candidate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/manufacturing-process-window",
+      "entity_id": "manufacturing-process-window",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "高価な製造実験から工程条件を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:very_expensive",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:simulation",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:global_candidate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/mobile-clinic-outreach-selection",
+      "entity_id": "mobile-clinic-outreach-selection",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "予算内で巡回健診の開催候補を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:binary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
     },
     {
       "aliases": [],
@@ -1469,18 +2765,63 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S001",
+          "target_id": "S010",
           "target_type": "source"
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
+          "target_id": "S055",
           "target_type": "source"
         },
         {
           "relation_type": "excluded_method",
           "target_id": "M_NELDER_MEAD",
           "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONVEXITY:convex",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:analytic_gradient",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DIMENSION_CONTEXT:very_low",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_NOISE_LEVEL:deterministic",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:quadratic",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SMOOTHNESS:smooth",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:convex_global",
+          "target_type": "feature_value"
         },
         {
           "relation_type": "feature_value",
@@ -1499,7 +2840,7 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA052",
+          "target_id": "PA018",
           "target_type": "problem"
         },
         {
@@ -1508,7 +2849,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "リスクを抑えながら期待収益と運用制約を両立したい。"
+      "summary": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。"
     },
     {
       "aliases": [],
@@ -1590,6 +2931,117 @@
         }
       ],
       "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/gallery/public-infrastructure-selection",
+      "entity_id": "public-infrastructure-selection",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "限られた予算で防災事業を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:linear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:optimality_gap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:binary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。"
     },
     {
       "aliases": [],
@@ -1723,7 +3175,7 @@
       "entity_id": "shift-scheduling",
       "entity_type": "case",
       "external_url": null,
-      "label": "スタッフのシフトを組む",
+      "label": "必要人数と希望を両立してシフトを組む",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -1737,6 +3189,16 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
         },
@@ -1746,9 +3208,59 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
           "target_id": "M_GRADIENT_DESCENT",
           "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:combinatorial",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONVEXITY:nonconvex",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:not_differentiable",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DIMENSION_CONTEXT:medium",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_NOISE_LEVEL:deterministic",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:discrete",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SMOOTHNESS:discrete_valued",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:feasible_only",
+          "target_type": "feature_value"
         },
         {
           "relation_type": "feature_value",
@@ -1767,7 +3279,7 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA006",
+          "target_id": "PA026",
           "target_type": "problem"
         },
         {
@@ -1776,7 +3288,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+      "summary": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。"
     },
     {
       "aliases": [],
@@ -2028,7 +3540,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+      "summary": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。"
     },
     {
       "aliases": [],
@@ -2127,6 +3639,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
           "target_type": "journey"
         },
         {
@@ -2254,7 +3771,7 @@
       "entity_id": "COMPARE_CONSTRAINED_FAILURE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "制約を守るrunと無視するrunを比べる",
+      "label": "COMPARE_CONSTRAINED_FAILURE",
       "relations": [
         {
           "relation_type": "case",
@@ -2302,7 +3819,68 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ問題・初期点で、目的値とfeasibilityを別々に読みます。"
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "entity_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
     },
     {
       "aliases": [],
@@ -2310,7 +3888,7 @@
       "entity_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "非線形fitでsolver条件を比べる",
+      "label": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
       "relations": [
         {
           "relation_type": "case",
@@ -2398,7 +3976,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "3 memberのframe履歴は完全に同一です。member名は同じ診断stateに対する適用条件のlensだけを表します。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -2406,7 +3984,7 @@
       "entity_id": "COMPARE_GRADIENT_DIVERGENCE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "学習率を変えたときの発散を観察する",
+      "label": "COMPARE_GRADIENT_DIVERGENCE",
       "relations": [
         {
           "relation_type": "case",
@@ -2474,7 +4052,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じ目的・初期点・budgetの下で、意図的に攻めた固定parameterによる感度を読みます。"
+      "summary": ""
     },
     {
       "aliases": [
@@ -2501,6 +4079,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -2557,15 +4140,15 @@
     },
     {
       "aliases": [],
-      "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
-      "entity_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "canonical_url": "/compare/COMPARE_IRRIGATION_BNB_BUDGET",
+      "entity_id": "COMPARE_IRRIGATION_BNB_BUDGET",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "探索完了とnode予算停止を同じ上限で比べる",
+      "label": "灌漑更新Caseから探索完了と予算停止を読む",
       "relations": [
         {
           "relation_type": "case",
-          "target_id": "budget-allocation",
+          "target_id": "irrigation-retrofit-selection",
           "target_type": "case"
         },
         {
@@ -2585,7 +4168,7 @@
         },
         {
           "relation_type": "learning_journey",
-          "target_id": "budget-allocation",
+          "target_id": "irrigation-retrofit-selection",
           "target_type": "journey"
         },
         {
@@ -2614,7 +4197,195 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じinstance・seed・branch順・初期incumbent・bound・9 evaluation上限を使い、node_stop_limitだけを変えます。"
+      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+      "entity_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "COMPARE_KNAPSACK_BNB_BUDGET",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "budget-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "budget-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+      "entity_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "small noise下で探索係数だけを変える",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLOIT_SMALL_NOISE",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "ARTIFACT_BO_EXPLORE_SMALL_NOISE",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberはproblem、initial design、seed、noise、kernel、budgetを共有し、exploration coefficientだけを変える。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+      "entity_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "巡回健診Caseから探索完了と予算停止を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [
@@ -2624,7 +4395,7 @@
       "entity_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "初期simplexでNelder–Meadの経路を読む",
+      "label": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
       "relations": [
         {
           "relation_type": "case",
@@ -2672,7 +4443,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じobjective、係数、scale、停止条件、evaluation budgetで同期し、初期simplexの位置だけを変えます。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -2680,7 +4451,7 @@
       "entity_id": "COMPARE_PARETO_PREFERENCE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "Pareto front上でpreferenceを変える",
+      "label": "COMPARE_PARETO_PREFERENCE",
       "relations": [
         {
           "relation_type": "case",
@@ -2708,6 +4479,11 @@
           "target_type": "journey"
         },
         {
+          "relation_type": "learning_journey",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
+        },
+        {
           "relation_type": "member_method",
           "target_id": "M_WEIGHTED_SUM",
           "target_type": "method"
@@ -2723,7 +4499,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "同じresult setとPareto frontを固定し、preferenceによる選択だけを比較します。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -2915,6 +4691,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/compare/COMPARE_RESTORATION_BNB_BUDGET",
+      "entity_id": "COMPARE_RESTORATION_BNB_BUDGET",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "再生プロジェクト選定Caseから探索完了と予算停止を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
       "entity_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
       "entity_type": "comparison",
@@ -3059,6 +4896,67 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+      "entity_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "支援拠点Caseから探索完了と予算停止を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_BRANCH_BOUND",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
     },
     {
       "aliases": [],
@@ -3248,6 +5146,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -3290,9 +5193,14 @@
           "relation_type": "related_content",
           "target_id": "momentum-sgd",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "adam-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
-      "summary": "勾配の一次モーメント（first moment）と二次モーメント（second moment）を座標ごとに推定し、初期値による偏りの補正（bias correction）付きの適応的なstepでパラメータ（parameter）を更新する確率的一次法です。"
+      "summary": "Adamは勾配のfirst／second momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。"
     },
     {
       "aliases": [],
@@ -3349,6 +5257,11 @@
       "label": "adjoint sensitivity",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PDE_STATE_TOLERANCE_COST",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S101",
           "target_type": "source"
@@ -3392,6 +5305,16 @@
           "relation_type": "related_content",
           "target_id": "topology-optimization",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-solve-failure",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "pde-state-tolerance-tight",
+          "target_type": "trace"
         },
         {
           "relation_type": "visualization",
@@ -3761,8 +5684,23 @@
       "label": "BFGS法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_CONSTRAINED_FAILURE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
           "target_type": "source"
         },
         {
@@ -3773,6 +5711,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
           "target_type": "source"
         },
         {
@@ -3804,6 +5747,11 @@
           "relation_type": "related_content",
           "target_id": "trust-region-newton-cg",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
         }
       ],
       "summary": "勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。"
@@ -3816,6 +5764,11 @@
       "external_url": null,
       "label": "Branch-and-Bound（分枝限定法）",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S021",
@@ -4154,6 +6107,11 @@
       "label": "Chance constraint・CVaR・robustness",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S054",
           "target_type": "source"
@@ -4197,9 +6155,19 @@
           "relation_type": "related_content",
           "target_id": "lp-qp-conic",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
         }
       ],
-      "summary": "Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。"
+      "summary": "Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。"
     },
     {
       "aliases": [],
@@ -4292,6 +6260,11 @@
       "label": "微分を使わない最適化",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S001",
           "target_type": "source"
@@ -4314,6 +6287,11 @@
         {
           "relation_type": "visualization",
           "target_id": "nelder-mead-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "nelder-mead-quadratic-shifted",
           "target_type": "trace"
         }
       ],
@@ -4551,7 +6529,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "入れ子の最適化、均衡条件、相補性、hybridのmode切替を、目的関数の種類ではなく、内側の解法・残差・離散状態として読み分けるための語彙です。"
+      "summary": "入れ子の最適化／均衡条件／相補性／hybridのmode切替を読み分ける語彙です。目的関数の種類ではなく、内側の解法／残差／離散状態を区別します。"
     },
     {
       "aliases": [],
@@ -4703,7 +6681,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。"
+      "summary": "PDE制約付き最適化では、設計変数から状態場（state field）を解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。"
     },
     {
       "aliases": [],
@@ -4917,7 +6895,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "SPD matrixでは対称性・最小固有値・condition numberを診断し、各parametrizationとRiemannian updateが表す範囲を区別します。"
+      "summary": "SPD matrixでは、正定値の内部とPSD境界を分け、表現方法と更新則が保つ範囲を診断します。"
     },
     {
       "aliases": [],
@@ -5100,7 +7078,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "不確実性を、何が揺らぐか・どうモデル化するか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。"
+      "summary": "不確実性を、何が揺らぐか・どう表すか・目的と制約のどこへ反映するか・どこまで保証するかに分けて読むための語彙です。"
     },
     {
       "aliases": [],
@@ -6044,6 +8022,11 @@
       "label": "離散・組合せ最適化の選び分け",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S005",
           "target_type": "source"
@@ -6107,6 +8090,16 @@
           "relation_type": "related_content",
           "target_id": "dynamic-programming",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
         }
       ],
       "summary": "離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。"
@@ -6246,7 +8239,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "一回の実験やsimulationが高価なとき、Bayesian Optimization、TPE、multi-fidelity、random・evolutionary baselineを選び分ける入口です。"
+      "summary": "一回の実験やsimulationが高価な問題の入口です。Bayesian Optimization／TPE／multi-fidelity／random・evolutionary baselineを選び分けます。"
     },
     {
       "aliases": [],
@@ -6652,7 +8645,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。"
+      "summary": "時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題を、変数・離散化・制約・実行頻度から各手法へつなぐ入口です。"
     },
     {
       "aliases": [],
@@ -7044,7 +9037,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "形状更新の失敗は、目的関数の悪化だけでなく、無効なgeometry、mesh qualityの低下、state solveの不整合として切り分けます。"
+      "summary": "形状更新の失敗は、目的関数の悪化とは分け、geometry・mesh・state solveのどこで壊れたかを診断します。"
     },
     {
       "aliases": [],
@@ -7207,7 +9200,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "現在の軌道の周りでdynamicsとcostを二次近似し、backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新する反復的な軌道最適化法です。"
+      "summary": "現在の軌道の周りでdynamicsとcostを二次近似する軌道最適化法です。backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新します。"
     },
     {
       "aliases": [],
@@ -7320,6 +9313,11 @@
       "label": "L-BFGS-B法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -7353,6 +9351,11 @@
           "relation_type": "related_content",
           "target_id": "trust-region-newton-cg",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "exponential-fit-lbfgsb",
+          "target_type": "trace"
         }
       ],
       "summary": "少数の曲率更新だけを保存し、上下限制約を保ちながら大規模な滑らか最適化を行う準Newton法です。"
@@ -7365,6 +9368,11 @@
       "external_url": null,
       "label": "非線形最小二乗とLevenberg–Marquardt法",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S003",
@@ -7394,6 +9402,11 @@
           "relation_type": "related_content",
           "target_id": "trust-region-reflective",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "exponential-fit-lm",
+          "target_type": "trace"
         }
       ],
       "summary": "観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。"
@@ -7448,6 +9461,16 @@
       "label": "LP・QP・錐最適化",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S004",
           "target_type": "source"
@@ -7470,6 +9493,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -7496,6 +9524,16 @@
           "relation_type": "related_content",
           "target_id": "dual-simplex",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-nominal-8-4",
+          "target_type": "trace"
         }
       ],
       "summary": "線形・凸二次・錐構造を明示したmodelを専用solverへ渡し、primal・dual・gap・infeasibility情報まで利用する凸最適化familyです。"
@@ -7556,6 +9594,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -7593,6 +9636,11 @@
           "relation_type": "related_content",
           "target_id": "trust-region-newton-cg",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "gradient_descent-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
       "summary": "現在点の勾配が示す局所的な上り方向と反対へstepを取り、滑らかな目的関数の値を反復的に下げる一次法です。"
@@ -7608,6 +9656,11 @@
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
           "target_type": "comparison"
         },
         {
@@ -7643,6 +9696,11 @@
         {
           "relation_type": "visualization",
           "target_id": "nelder-mead-quadratic",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "nelder-mead-quadratic-shifted",
           "target_type": "trace"
         }
       ],
@@ -7791,6 +9849,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -7828,6 +9891,11 @@
           "relation_type": "related_content",
           "target_id": "method.gradient-descent",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "momentum-quadratic-divergence",
+          "target_type": "trace"
         }
       ],
       "summary": "現在の勾配だけでなく過去の更新を速度として蓄積し、同じ方向の移動を強めて谷を横切る振動を抑える一次法です。"
@@ -7840,6 +9908,11 @@
       "external_url": null,
       "label": "多目的最適化とPareto front",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S039",
@@ -8448,7 +10521,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "学習を止めずに、並走するworker集団の途中成績を見て、弱いworkerが強いworkerのweightをコピーし、hyperparameterを摂動するhyperparameter optimization手法です。"
+      "summary": "並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。"
     },
     {
       "aliases": [],
@@ -8673,6 +10746,11 @@
       "label": "射影勾配法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S055",
           "target_type": "source"
@@ -8716,6 +10794,11 @@
           "relation_type": "related_content",
           "target_id": "proximal-gradient",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-projected-alignment",
+          "target_type": "trace"
         }
       ],
       "summary": "勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。"
@@ -8775,6 +10858,11 @@
       "label": "Random Search",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S034",
           "target_type": "source"
@@ -8813,6 +10901,11 @@
           "relation_type": "related_content",
           "target_id": "tpe",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE",
+          "target_type": "trace"
         }
       ],
       "summary": "search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。"
@@ -8825,6 +10918,11 @@
       "external_url": null,
       "label": "Riemann勾配法",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SO3_PROJECTED_RIEMANNIAN",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S044",
@@ -8864,6 +10962,11 @@
           "relation_type": "related_content",
           "target_id": "riemannian-trust-region",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "so3-riemannian-alignment",
+          "target_type": "trace"
         }
       ],
       "summary": "変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。"
@@ -9203,6 +11306,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_TOPOLOGY_OC_MMA",
           "target_type": "comparison"
         },
@@ -9255,6 +11363,11 @@
           "relation_type": "related_content",
           "target_id": "topology-optimization",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shape-topology-representation-contrast",
+          "target_type": "trace"
         },
         {
           "relation_type": "visualization",
@@ -9319,6 +11432,11 @@
       "label": "SLSQP",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_CONSTRAINED_FAILURE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -9352,6 +11470,11 @@
           "relation_type": "related_content",
           "target_id": "interior-point-nlp",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
         }
       ],
       "summary": "一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。"
@@ -9835,6 +11958,11 @@
       "label": "Trust Region Reflective法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S003",
           "target_type": "source"
@@ -9873,6 +12001,16 @@
           "relation_type": "related_content",
           "target_id": "trust-krylov",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "exponential-fit-trf",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "exponential-fit-trf-poor-init",
+          "target_type": "trace"
         }
       ],
       "summary": "bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法です。"
@@ -9932,6 +12070,11 @@
       "label": "重み付き和scalarization",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S039",
           "target_type": "source"
@@ -9939,6 +12082,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
           "target_type": "source"
         },
         {
@@ -9965,6 +12113,11 @@
           "relation_type": "related_content",
           "target_id": "multi-objective",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "biobjective-quadratic-pareto-front",
+          "target_type": "trace"
         }
       ],
       "summary": "複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。"
@@ -15821,6 +17974,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
           "relation_type": "excluded_method",
           "target_id": "M_BRANCH_CUT",
           "target_type": "method"
@@ -15943,6 +18101,122 @@
         }
       ],
       "summary": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC021",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "mini-batchで画像分類モデルを学習する",
+      "relations": [
+        {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_GD_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_ADAMW",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_FAMILY",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MOMENTUM_SGD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S047",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S048",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S049",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S070",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTAX",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYTORCH_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TENSORFLOW_OPTIM",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "adamw",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "momentum-sgd",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_ADAM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA040",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。"
     },
     {
       "aliases": [],
@@ -16154,7 +18428,194 @@
           "target_type": "scenario"
         }
       ],
-      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とHessian-vector積で改善したい。"
+      "summary": "数百万自由度のPDE制約付き設計を、随伴法（adjoint）とヘッセ行列ベクトル積（Hessian-vector product）で改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC027",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "途中で失敗するシミュレーションから設計を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S094",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NEVERGRAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_NOMAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA016",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "候補の一部がcrashやtimeoutになる高価なシミュレーションで、実行可能な設計を先に見つけたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "EC028",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "方程式を最適化に変える前に求根として解く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_LEVENBERG_MARQUARDT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_DIFFERENTIAL_EVOLUTION",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CERES",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_LEAST_SQUARES_TRF",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "gauss-newton",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "least-squares",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA004",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "連立方程式 $F(x)=0$ を解きたい。二乗誤差の最小化へ変える前に、求根として扱えるか確認したい。"
     },
     {
       "aliases": [],
@@ -16261,6 +18722,92 @@
         }
       ],
       "summary": "下向きで静止したpendulumを、torque・速度制約を守りながら2秒で上向き静止へ振り上げたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "battery-operation-tradeoff",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "蓄電池運用のコストと充放電量を両方見る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "翌日の蓄電池運用で、電力購入コストだけを最小化せず、充放電throughputの小さい候補も並べて選びたい。"
     },
     {
       "aliases": [],
@@ -16598,6 +19145,324 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "ecosystem-restoration-selection",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "予算内で生態系再生プロジェクトを選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "候補となる再生プロジェクトから実施案を選び、総予算内で水域系と陸域系の両方を含めながら、監査済みの生態系便益proxyを最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "emergency-shelter-selection",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "予算内で臨時支援拠点を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "候補地から臨時支援拠点を選び、設営・人員の予算内で地域ごとの最低配置を守りながら固定した便益指標を最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "energy-cvar-procurement",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "価格scenarioのtail costを抑えて電力を調達する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_PROJECTED_GRADIENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S004",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S014",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S066",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_CVXPY",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "lp-qp-conic",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "projected-gradient",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_PORTFOLIO_CVAR_8_4",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA036",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "hyperparameter-search",
       "entity_type": "journey",
       "external_url": null,
@@ -16725,6 +19590,445 @@
         }
       ],
       "summary": "勾配なし・高価な実験を扱うモデル（model）で、少ない試行から連続ハイパーパラメータを改善したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "irrigation-retrofit-selection",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "予算内で圃場の灌漑設備を更新する",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "候補となる圃場区画から灌漑設備の更新先を選び、設備予算内で各送水系統に少なくとも1件を配置しながら、監査済みの節水proxyを最大化したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "laser-process-tuning",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "少ない試作でレーザー加工条件を絞る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_CMA_ES",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S032",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S058",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cma-es",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "出力、走査速度、焦点位置の連続条件を、少ない試作回数で品質lossが小さい領域へ絞りたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "manufacturing-process-window",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "高価な製造実験から工程条件を探す",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_BAYESIAN_OPT_GP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "manufacturing-process-window",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_RANDOM_SEARCH",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S038",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S059",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S069",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S075",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_BOTORCH",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_OPTUNA",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "bayesian-optimization",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "random-search",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA014",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "試作と測定に時間がかかる製造工程で、少ない実験から品質損失の小さい温度・速度条件を探したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "mobile-clinic-outreach-selection",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "予算内で巡回健診の開催候補を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。"
     },
     {
       "aliases": [],
@@ -16882,11 +20186,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S001",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
         },
@@ -16912,11 +20211,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S054",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S055",
           "target_type": "source"
         },
@@ -16928,6 +20222,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S064",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -16952,11 +20251,11 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA052",
+          "target_id": "PA018",
           "target_type": "problem"
         }
       ],
-      "summary": "リスクを抑えながら期待収益と運用制約を両立したい。"
+      "summary": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。"
     },
     {
       "aliases": [],
@@ -17063,6 +20362,112 @@
         }
       ],
       "summary": "平均的な収益を保ちながら、複数のreturn scenarioで悪い側のtail lossを抑えて資産比率を決めたい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "public-infrastructure-selection",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "限られた予算で防災事業を選ぶ",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "MF_DISCRETE_EXACT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S016",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S021",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S023",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S054",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S079",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_ORTOOLS_CPSAT",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "cp-sat",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "family.discrete-structure",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA032",
+          "target_type": "problem"
+        }
+      ],
+      "summary": "複数の防災事業候補から、固定予算内で採択する組合せを選び、選定根拠と未採択理由を説明したい。"
     },
     {
       "aliases": [],
@@ -17211,7 +20616,7 @@
       "entity_id": "shift-scheduling",
       "entity_type": "journey",
       "external_url": null,
-      "label": "スタッフのシフトを組む",
+      "label": "必要人数と希望を両立してシフトを組む",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -17295,11 +20700,11 @@
         },
         {
           "relation_type": "problem",
-          "target_id": "PA006",
+          "target_id": "PA026",
           "target_type": "problem"
         }
       ],
-      "summary": "必要人数を満たしながら、希望と公平性を反映したい。"
+      "summary": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。"
     },
     {
       "aliases": [],
@@ -17536,7 +20941,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。"
+      "summary": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。"
     },
     {
       "aliases": [
@@ -17723,8 +21128,38 @@
         },
         {
           "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "shift-scheduling",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -17780,6 +21215,16 @@
           "relation_type": "learning",
           "target_id": "family.discrete-structure",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
         }
       ],
       "summary": "緩和下界、分枝、cut、incumbentを用いてMILP/MIQP/MINLP等を探索し、gapで品質を示す手法群。"
@@ -17920,6 +21365,11 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "portfolio-allocation",
           "target_type": "case"
         },
@@ -17927,6 +21377,11 @@
           "relation_type": "case",
           "target_id": "portfolio-cvar-allocation",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
         },
         {
           "relation_type": "comparison",
@@ -17971,6 +21426,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S062",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S103",
           "target_type": "source"
         },
         {
@@ -18528,6 +21988,11 @@
       "label": "AdamW",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S047",
           "target_type": "source"
@@ -19015,6 +22480,16 @@
         },
         {
           "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "manufacturing-process-window",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "multi-fidelity-simulator",
           "target_type": "case"
         },
@@ -19026,6 +22501,11 @@
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_MULTIFIDELITY_COST",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
           "target_type": "comparison"
         },
         {
@@ -19148,7 +22628,22 @@
         },
         {
           "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "EC029",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "battery-operation-tradeoff",
           "target_type": "case"
         },
         {
@@ -19164,6 +22659,16 @@
         {
           "relation_type": "case",
           "target_id": "hyperparameter-search",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "manufacturing-process-window",
           "target_type": "case"
         },
         {
@@ -19188,12 +22693,27 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S017",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S056",
           "target_type": "source"
         },
         {
           "relation_type": "evidence",
           "target_id": "S057",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S064",
           "target_type": "source"
         },
         {
@@ -19231,7 +22751,27 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
           "target_type": "comparison"
         },
         {
@@ -19517,6 +23057,11 @@
       "label": "CMA-ES",
       "relations": [
         {
+          "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S032",
           "target_type": "source"
@@ -19735,6 +23280,31 @@
         },
         {
           "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "shift-scheduling",
           "target_type": "case"
         },
@@ -19880,6 +23450,11 @@
         {
           "relation_type": "case",
           "target_id": "EC026",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
           "target_type": "case"
         },
         {
@@ -20269,6 +23844,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S039",
           "target_type": "source"
@@ -20339,6 +23919,11 @@
       "external_url": null,
       "label": "Gauss–Newton法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S002",
@@ -20445,6 +24030,26 @@
       "external_url": null,
       "label": "最急降下法",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
         {
           "relation_type": "case",
           "target_id": "shift-scheduling",
@@ -20877,6 +24482,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
           "target_type": "comparison"
@@ -20972,6 +24582,11 @@
       "external_url": null,
       "label": "mesh adaptive direct search",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
         {
           "relation_type": "evidence",
           "target_id": "S002",
@@ -21134,6 +24749,11 @@
       "external_url": null,
       "label": "momentum SGD",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_DIVERGENCE",
@@ -21350,6 +24970,11 @@
         },
         {
           "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "hyperparameter-search",
           "target_type": "case"
         },
@@ -21366,6 +24991,11 @@
         {
           "relation_type": "case",
           "target_id": "portfolio-cvar-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "public-infrastructure-selection",
           "target_type": "case"
         },
         {
@@ -21607,6 +25237,16 @@
           "relation_type": "case",
           "target_id": "EC017",
           "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
         },
         {
           "relation_type": "evidence",
@@ -22180,6 +25820,11 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "portfolio-cvar-allocation",
           "target_type": "case"
         },
@@ -22304,6 +25949,16 @@
       "external_url": null,
       "label": "random search",
       "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "manufacturing-process-window",
+          "target_type": "case"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
@@ -23650,7 +27305,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "方程式の求根",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        }
+      ],
       "summary": "方程式の求根。変数=continuous、目的=equation_residual、制約=unconstrained。"
     },
     {
@@ -23670,18 +27336,7 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "滑らかな低次元無制約",
-      "relations": [
-        {
-          "relation_type": "case",
-          "target_id": "shift-scheduling",
-          "target_type": "case"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
-          "target_type": "journey"
-        }
-      ],
+      "relations": [],
       "summary": "滑らかな低次元無制約。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
@@ -23775,8 +27430,28 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "laser-process-tuning",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "manufacturing-process-window",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "multi-fidelity-simulator",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -23803,7 +27478,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "失敗・NaNを伴うsimulation",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        }
+      ],
       "summary": "失敗・NaNを伴うsimulation。変数=mixed、目的=simulation、制約=implicit。"
     },
     {
@@ -23823,7 +27509,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "凸二次計画",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-allocation",
+          "target_type": "journey"
+        }
+      ],
       "summary": "凸二次計画。変数=continuous、目的=quadratic、制約=linear。"
     },
     {
@@ -23903,7 +27600,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "制約programming型scheduling",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "shift-scheduling",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
       "summary": "制約programming型scheduling。変数=mixed、目的=discrete、制約=combinatorial。"
     },
     {
@@ -23981,8 +27689,58 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "budget-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "public-infrastructure-selection",
           "target_type": "journey"
         }
       ],
@@ -24049,8 +27807,18 @@
       "relations": [
         {
           "relation_type": "case",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "portfolio-cvar-allocation",
           "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -24095,8 +27863,18 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC017",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "battery-operation-tradeoff",
           "target_type": "journey"
         }
       ],
@@ -24130,7 +27908,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "neural network学習",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC021",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
+        }
+      ],
       "summary": "neural network学習。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
@@ -24303,18 +28092,7 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "online optimization",
-      "relations": [
-        {
-          "relation_type": "case",
-          "target_id": "portfolio-allocation",
-          "target_type": "case"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "portfolio-allocation",
-          "target_type": "journey"
-        }
-      ],
+      "relations": [],
       "summary": "online optimization。変数=continuous、目的=general_nonlinear、制約=bounds。"
     },
     {
@@ -24405,6 +28183,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -24537,7 +28320,27 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
           "target_type": "comparison"
         },
         {
@@ -24559,6 +28362,31 @@
           "relation_type": "learning_journey",
           "target_id": "budget-allocation",
           "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "public-infrastructure-selection",
+          "target_type": "journey"
         }
       ],
       "summary": "上界とincumbentが探索範囲を狭める過程を読む"
@@ -24578,7 +28406,27 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
           "target_type": "comparison"
         },
         {
@@ -24599,6 +28447,31 @@
         {
           "relation_type": "learning_journey",
           "target_id": "budget-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "ecosystem-restoration-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "emergency-shelter-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "irrigation-retrofit-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "mobile-clinic-outreach-selection",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "public-infrastructure-selection",
           "target_type": "journey"
         }
       ],
@@ -24641,6 +28514,11 @@
           "relation_type": "learning_journey",
           "target_id": "EC017",
           "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
         }
       ],
       "summary": "同じPareto frontから、weightによって選択点が変わることを読む"
@@ -24676,6 +28554,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "EC017",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "battery-operation-tradeoff",
           "target_type": "journey"
         }
       ],
@@ -24726,6 +28609,16 @@
         },
         {
           "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
           "target_id": "multi-fidelity-simulator",
           "target_type": "journey"
         }
@@ -24751,6 +28644,11 @@
           "target_type": "trace"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S035",
           "target_type": "source"
@@ -24768,6 +28666,16 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
           "target_type": "journey"
         },
         {
@@ -24823,6 +28731,16 @@
         },
         {
           "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
           "target_id": "multi-fidelity-simulator",
           "target_type": "journey"
         }
@@ -24853,6 +28771,11 @@
           "target_type": "comparison"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S035",
           "target_type": "source"
@@ -24870,6 +28793,16 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "laser-process-tuning",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "manufacturing-process-window",
           "target_type": "journey"
         },
         {
@@ -25321,6 +29254,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -25419,6 +29357,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -25865,6 +29808,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
           "target_type": "comparison"
         },
@@ -25882,6 +29830,11 @@
           "relation_type": "evidence",
           "target_id": "S103",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -25906,6 +29859,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
           "target_type": "comparison"
         },
@@ -25923,6 +29881,11 @@
           "relation_type": "evidence",
           "target_id": "S103",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "energy-cvar-procurement",
+          "target_type": "journey"
         },
         {
           "relation_type": "learning_journey",
@@ -27466,6 +31429,11 @@
       "label": "高価な1次元black-box: exploit / small_noise",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "scenario",
           "target_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
           "target_type": "scenario"
@@ -27562,6 +31530,11 @@
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_LASER_BO_ACQUISITION_NOISE",
           "target_type": "comparison"
         },
         {
@@ -27785,7 +31758,27 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
           "target_type": "comparison"
         },
         {
@@ -27836,7 +31829,27 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_IRRIGATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_RESTORATION_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET",
           "target_type": "comparison"
         },
         {
@@ -28531,6 +32544,11 @@
       "relations": [
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
           "target_type": "comparison"
         },
@@ -28555,6 +32573,11 @@
       "external_url": null,
       "label": "nominal配分 · training / held-out診断",
       "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+          "target_type": "comparison"
+        },
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
@@ -28792,6 +32815,16 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_ADAM_QUADRATIC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_ADAM_QUADRATIC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_BILEVEL_REGRESSION_EXACT",
       "entity_type": "view",
       "external_url": null,
@@ -28826,6 +32859,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "relations": [],
       "summary": ""
     },
@@ -28936,6 +32989,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_GD_QUADRATIC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_GD_QUADRATIC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_MOMENTUM_QUADRATIC",
       "relations": [],
       "summary": ""
     },

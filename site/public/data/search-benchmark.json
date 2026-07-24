@@ -72,7 +72,7 @@
       "intents": [],
       "query": "配送順を決めたい",
       "query_id": "routing-natural-language",
-      "result_count": 5,
+      "result_count": 7,
       "top_document_ids": [
         "case:EC019",
         "problem:PA031",
@@ -93,7 +93,7 @@
       "intents": [],
       "query": "勾配なし 高価な実験",
       "query_id": "expensive-no-gradient",
-      "result_count": 58,
+      "result_count": 61,
       "top_document_ids": [
         "case:hyperparameter-search",
         "method:MF_STOCHASTIC_ML",
@@ -130,7 +130,7 @@
       "intents": [],
       "query": "凸性とは",
       "query_id": "convexity-concept",
-      "result_count": 15,
+      "result_count": 16,
       "top_document_ids": [
         "content:concept.convexity",
         "glossary:G021",
@@ -167,7 +167,7 @@
       "intents": [],
       "query": "細長い谷 一次法 比較",
       "query_id": "visual-comparison",
-      "result_count": 7,
+      "result_count": 9,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
         "trace:topology-optimization-field-evolution",
