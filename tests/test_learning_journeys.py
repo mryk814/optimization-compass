@@ -399,6 +399,34 @@ def test_source_review_accepts_case_review_after_dataset_release() -> None:
     assert "stale_case_review" not in issues
 
 
+def test_source_review_accepts_current_version_original_paper() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "shape-diffuser")
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    comparisons_payload = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
+    gallery_payload = json.loads(GALLERY_FIXTURE.read_text(encoding="utf-8"))
+    source_index = SourceEvidenceIndex.model_validate_json(
+        SOURCE_FIXTURE.read_text(encoding="utf-8")
+    )
+    case = next(item for item in gallery_payload["cases"] if item["case_id"] == journey.case_id)
+
+    issues = _source_review_issues(
+        journey,
+        case=case,
+        scenarios_by_id={item.scenario_id: item for item in scenarios.scenarios},
+        comparisons_by_id={
+            item["comparison_id"]: item for item in comparisons_payload["comparisons"]
+        },
+        content_pages=load_content(ROOT / "content"),
+        source_index=source_index,
+        generated_at=index.generated_at,
+    )
+
+    assert "invalid_source_currentness" not in issues
+
+
 def test_primary_scenario_keeps_failure_contrast_in_a_diagnostic_role() -> None:
     scenarios = VisualizationScenarioIndex.model_validate_json(
         SCENARIO_FIXTURE.read_text(encoding="utf-8")

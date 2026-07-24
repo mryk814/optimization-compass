@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 from optimization_compass.content_markdown import render_inline_markdown
 from optimization_compass.content_models import ContentPage
 from optimization_compass.evidence import (
-    EXPECTED_CURRENTNESS_BY_SOURCE_TYPE,
+    ACCEPTED_CURRENTNESS_BY_SOURCE_TYPE,
     SOURCE_FRESHNESS_DAYS,
     SourceEvidenceIndex,
 )
@@ -861,7 +861,7 @@ def _source_review_issues(
             issues.add("source_verified_in_future")
         elif age_days > SOURCE_FRESHNESS_DAYS[source.source_type]:
             issues.add("stale_source")
-        if source.currentness_status != EXPECTED_CURRENTNESS_BY_SOURCE_TYPE[source.source_type]:
+        if source.currentness_status not in ACCEPTED_CURRENTNESS_BY_SOURCE_TYPE[source.source_type]:
             issues.add("invalid_source_currentness")
         if not source.supported_claim.strip():
             issues.add("missing_supported_claim")

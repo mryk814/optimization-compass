@@ -34,15 +34,15 @@ SourceType = Literal[
 SourceQuality = Literal["high", "primary", "supporting"]
 SourceCurrentness = Literal["historical_primary", "not_time_sensitive", "verified_current"]
 
-EXPECTED_CURRENTNESS_BY_SOURCE_TYPE: dict[str, SourceCurrentness] = {
-    "official_documentation": "verified_current",
-    "official_issue": "verified_current",
-    "official_repository": "verified_current",
-    "vendor_manual": "verified_current",
-    "standard": "verified_current",
-    "original_paper": "historical_primary",
-    "textbook": "not_time_sensitive",
-    "university_material": "verified_current",
+ACCEPTED_CURRENTNESS_BY_SOURCE_TYPE: dict[str, frozenset[SourceCurrentness]] = {
+    "official_documentation": frozenset({"verified_current"}),
+    "official_issue": frozenset({"verified_current"}),
+    "official_repository": frozenset({"verified_current"}),
+    "vendor_manual": frozenset({"verified_current"}),
+    "standard": frozenset({"verified_current"}),
+    "original_paper": frozenset({"historical_primary", "verified_current"}),
+    "textbook": frozenset({"not_time_sensitive"}),
+    "university_material": frozenset({"verified_current"}),
 }
 
 
