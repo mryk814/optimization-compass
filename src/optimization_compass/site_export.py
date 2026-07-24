@@ -109,6 +109,13 @@ from optimization_compass.simulation_constrained import (
     generate_simulation_constrained_traces,
 )
 from optimization_compass.surrogate_uncertainty import write_surrogate_scenarios
+from optimization_compass.time_window_routing import (
+    PROFILE_ID as TIME_WINDOW_ROUTING_PROFILE_ID,
+)
+from optimization_compass.time_window_routing import (
+    build_time_window_routing_scenario,
+    generate_time_window_routing_traces,
+)
 from optimization_compass.trace_models import (
     AlgorithmTrace,
     TraceFrame,
@@ -1164,6 +1171,7 @@ def _write_dummy_trace(
     generated_traces.extend(_generate_optimal_control_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_portfolio_uncertainty_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_repeated_mpc_qp_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_time_window_routing_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
     generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
@@ -2497,6 +2505,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         return build_portfolio_uncertainty_scenario(trace)
     if trace.profile_id == REPEATED_MPC_QP_PROFILE_ID:
         return build_repeated_mpc_qp_scenario(trace)
+    if trace.profile_id == TIME_WINDOW_ROUTING_PROFILE_ID:
+        return build_time_window_routing_scenario(trace)
     if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:
         return build_nested_solve_scenario(trace)
     if trace.profile_id == SO3_PROFILE_ID:

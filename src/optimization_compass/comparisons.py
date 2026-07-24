@@ -43,6 +43,15 @@ from optimization_compass.surrogate_uncertainty import (
     SURROGATE_GENERATOR_ID,
     SURROGATE_GENERATOR_VERSION,
 )
+from optimization_compass.time_window_routing import (
+    GENERATOR_ID as TIME_WINDOW_ROUTING_GENERATOR_ID,
+)
+from optimization_compass.time_window_routing import (
+    GENERATOR_VERSION as TIME_WINDOW_ROUTING_GENERATOR_VERSION,
+)
+from optimization_compass.time_window_routing import (
+    PROFILE_ID as TIME_WINDOW_ROUTING_PROFILE_ID,
+)
 from optimization_compass.trace_models import AlgorithmTrace
 from optimization_compass.visualization_scenarios import VisualizationScenario
 
@@ -58,6 +67,10 @@ _EDUCATIONAL_GENERATORS_BY_PROFILE = {
     HYBRID_PROFILE_ID: (HYBRID_GENERATOR_ID, HYBRID_GENERATOR_VERSION),
     PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),
     SO3_PROFILE_ID: (SO3_GENERATOR_ID, SO3_GENERATOR_VERSION),
+    TIME_WINDOW_ROUTING_PROFILE_ID: (
+        TIME_WINDOW_ROUTING_GENERATOR_ID,
+        TIME_WINDOW_ROUTING_GENERATOR_VERSION,
+    ),
 }
 _EDUCATIONAL_INITIALIZATION_BY_RENDERER: dict[str, dict[str, object]] = {
     "search_tree": {

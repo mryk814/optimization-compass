@@ -274,6 +274,23 @@
       "last_verified": "2026-07-19"
     },
     {
+      "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
+      "name_ja": "時間窓付き配送routing",
+      "name_en": "Time-window vehicle routing",
+      "mathematical_family": "vehicle_routing_with_time_windows",
+      "variable_domain": "permutation",
+      "objective_form": "discrete_route_cost",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "constraint_value", "feasibility"],
+      "constraint_class": "time_windows_and_visit_once",
+      "dimensionality_policy": {"kind": "stop_permutation", "minimum": 2},
+      "known_reference_semantics": "A fixed route ledger checks feasibility for one declared route; it is not an optimizer-visible optimum or a routing certificate.",
+      "related_problem_ids": ["PA031"],
+      "feature_ids": ["F_VARIABLE_PERMUTATION", "F_STRUCTURE_ROUTING", "F_CONSTRAINT_LOGICAL"],
+      "source_ids": ["S022", "S023", "S024", "S079"],
+      "last_verified": "2026-07-24"
+    },
+    {
       "problem_definition_id": "PROBLEM_SO3_ATTITUDE_ALIGNMENT",
       "name_ja": "SO(3)上のattitude alignment",
       "name_en": "Attitude alignment on SO(3)",
@@ -664,6 +681,28 @@
       "limitations_ja": "状態1次元・入力1次元・4周期・決定的iteration-to-latency ledgerの教育用instanceです。OSQPまたはADMMの実CPU時間、100Hz達成、閉loop安定性、recursive feasibility、安全性、一般性能順位を示しません。",
       "limitations_en": "A one-state, one-input, four-cycle educational instance with a deterministic iteration-to-latency ledger. It does not establish OSQP or ADMM CPU time, 100-Hz operation, closed-loop stability, recursive feasibility, safety, or general performance ranking.",
       "source_ids": ["S012", "S043", "S076"],
+      "last_verified": "2026-07-24"
+    },
+    {
+      "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+      "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
+      "name_ja": "EC019 4 stop・1車両の時間窓付き配送",
+      "name_en": "EC019 four-stop single-vehicle time-window routing",
+      "registry_key": "problem.routing.time_window_ec019.v1",
+      "dimension": 4,
+      "parameters": {"travel_time_matrix": [[0, 4, 6, 8, 7], [4, 0, 3, 5, 6], [6, 3, 0, 4, 5], [8, 5, 4, 0, 3], [7, 6, 5, 3, 0]], "time_windows": [[0, 30], [0, 10], [3, 15], [7, 20], [10, 25]], "vehicle_count": 1, "depot": 0, "route_return_deadline": 30, "service_time_minutes": 0},
+      "bounds": {"stop_ids": [1, 4], "arrival_time_minutes": [0, 30]},
+      "constraints": [{"constraint_id": "visit_once", "expression": "route is a permutation of stops [1,2,3,4]", "sense": "permutation"}, {"constraint_id": "time_windows", "expression": "window_start[i] <= arrival[i] <= window_end[i] for every stop", "sense": "hard"}, {"constraint_id": "travel_precedence", "expression": "arrival[next] >= arrival[current] + travel_time[current,next]", "sense": "gte"}, {"constraint_id": "return_deadline", "expression": "arrival_at_depot_return <= 30", "sense": "lte"}],
+      "initialization_candidates": [{"candidate_id": "ordered_stops", "point": [1.0, 2.0, 3.0, 4.0]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "not_meaningful",
+      "known_reference": null,
+      "display": {"range": {"route_leg": [0.0, 5.0], "arrival_time": [0.0, 30.0], "window_end": [0.0, 30.0], "window_violation": [0.0, 5.0], "cumulative_travel_time": [0.0, 30.0]}, "axis_labels": ["route leg", "minutes or feasibility diagnostic"], "units": ["leg", "minutes / status"], "expression": "min travel time along a stop permutation subject to visit-once, time-window, precedence, and return-deadline constraints"},
+      "intended_phenomena": ["time_window_hard_constraint", "route_permutation", "arrival_time_ledger", "constraint_violation_diagnosis"],
+      "limitations_ja": "固定時間行列・4 stop・1車両・service timeなしの教育用instanceです。最適route、OR-Toolsやlocal searchの性能、交通変動、複数車両、容量、休憩、実道路の到着保証を示しません。",
+      "limitations_en": "A fixed-matrix, four-stop, single-vehicle lesson without service time. It does not establish an optimal route, OR-Tools or local-search performance, traffic variation, multi-vehicle routing, capacity, breaks, or real-road arrival guarantees.",
+      "source_ids": ["S022", "S023", "S024", "S079"],
       "last_verified": "2026-07-24"
     },
     {

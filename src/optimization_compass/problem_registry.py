@@ -274,6 +274,26 @@ def _repeated_mpc_qp(instance: ProblemInstance, point: Sequence[float]) -> float
     )
 
 
+def _time_window_routing(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Evaluate the fixed EC019 route ordering as deterministic travel time."""
+    route = [int(value) for value in point]
+    if sorted(route) != [1, 2, 3, 4] or any(float(value) != int(value) for value in point):
+        raise ValueError(f"{instance.problem_instance_id} expects a permutation of stops 1..4")
+    matrix = instance.parameters.get("travel_time_matrix")
+    if not isinstance(matrix, list) or len(matrix) != 5:
+        raise ValueError(f"invalid routing matrix for {instance.problem_instance_id}")
+    sequence = [0, *route, 0]
+    try:
+        return float(
+            sum(
+                float(matrix[left][right])
+                for left, right in zip(sequence[:-1], sequence[1:], strict=True)
+            )
+        )
+    except (IndexError, TypeError) as error:
+        raise ValueError(f"invalid routing matrix for {instance.problem_instance_id}") from error
+
+
 def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
     mesh_nodes = instance.parameters.get("mesh_nodes")
@@ -511,6 +531,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.hybrid_mode.chattering_ledger.v1": (_hybrid_mode_relaxation, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
     "problem.optimal_control.repeated_mpc_qp_ec025.v1": (_repeated_mpc_qp, None),
+    "problem.routing.time_window_ec019.v1": (_time_window_routing, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
     "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),
