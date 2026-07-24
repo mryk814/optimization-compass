@@ -2793,7 +2793,20 @@ main:focus {
   align-items: center;
   justify-content: flex-end;
   gap: 0.3rem;
+  flex: 0 0 auto;
+}
+
+.map-utility-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
   margin-bottom: 0.5rem;
+}
+
+.map-utility-row .map-legend {
+  min-width: 0;
+  flex: 1 1 auto;
+  margin: 0;
 }
 
 .map-toolbar button {
@@ -3138,6 +3151,30 @@ main:focus {
 .method-predicate-heading span {
   font-size: 0.75rem;
   text-transform: uppercase;
+}
+
+.method-predicate-coverage {
+  border-top: 1px solid var(--color-border, #d7dce2);
+  padding-top: 0.55rem;
+}
+
+.method-predicate-coverage summary {
+  width: fit-content;
+  color: var(--color-text-muted, #5b6470);
+  font-size: 0.75rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.method-predicate-coverage p {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.55rem 0 0;
+}
+
+.method-predicate-coverage strong {
+  color: var(--color-text, #24312a);
+  font-size: 0.75rem;
 }
 
 .method-predicates ul {
@@ -3772,12 +3809,16 @@ main:focus {
     background: #dcebe1;
   }
 
+  .map-utility-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .map-toolbar {
-    float: right;
+    align-self: flex-end;
   }
 
   .map-workspace {
-    clear: both;
     display: block;
   }
 

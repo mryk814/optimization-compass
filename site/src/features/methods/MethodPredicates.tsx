@@ -28,7 +28,6 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
     <section aria-label="構造化された適用前提" className="method-predicates">
       <div className="method-predicate-heading">
         <h2>構造化された適用前提</h2>
-        {coverage && <span>{coverage.status === "complete" ? "移行済み" : "一部移行"}</span>}
       </div>
       <p className="method-predicate-context">
         推薦・比較・実装用プロンプトで再利用する詳細データです。
@@ -43,11 +42,17 @@ export function MethodPredicates({ data, methodId }: { data: SiteData; methodId:
         ))}
       </ul>
       {coverage && (
-        <p>
-          {coverage.status === "complete"
-            ? "推薦で使う前提・非対応条件を移行済みです。"
-             : "一部を移行済みです。未移行の条件はリリースレポートで追跡しています。"}
-        </p>
+        <details className="method-predicate-coverage">
+          <summary>データ収録状況</summary>
+          <p>
+            <strong>{coverage.status === "complete" ? "移行済み" : "一部移行"}</strong>
+            <span>
+              {coverage.status === "complete"
+                ? "推薦で使う前提・非対応条件を移行済みです。"
+                : "一部を移行済みです。未移行の条件はリリースレポートで追跡しています。"}
+            </span>
+          </p>
+        </details>
       )}
     </section>
   );

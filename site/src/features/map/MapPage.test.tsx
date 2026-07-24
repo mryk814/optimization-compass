@@ -251,6 +251,8 @@ describe("MapPage", () => {
     expect(leaf).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("分岐 A / 質問 / 0-1")).toBeVisible();
     expect(screen.getByText("binary summary")).toBeVisible();
+    expect(screen.getByText("手法の適用前提")).toBeVisible();
+    screen.getAllByText("一部移行").forEach((item) => expect(item).not.toBeVisible());
     screen.getByTestId("map-detail-pane")
       .querySelectorAll<HTMLDetailsElement>("details:not([open]) > summary")
       .forEach((summary) => fireEvent.click(summary));

@@ -100,7 +100,14 @@ export function MapDetail({ model, data, selectedId, onContinueDiagnosis }: MapD
       </div>
       <p className="map-detail-summary">{selected.summary || "概要は登録されていません。"}</p>
       <CanonicalTermReferences questionIds={selected.answer_bindings.map((binding) => binding.question_id)} />
-      {[...methodIds].map((methodId) => <MethodPredicates data={data} key={methodId} methodId={methodId} />)}
+      {methodIds.size > 0 && (
+        <details className="map-detail-section map-detail-disclosure map-method-predicates">
+          <summary>手法の適用前提 <span>{methodIds.size}</span></summary>
+          {[...methodIds].map((methodId) => (
+            <MethodPredicates data={data} key={methodId} methodId={methodId} />
+          ))}
+        </details>
+      )}
       {hasBayesianOptimization && <section className="bo-route-card"><strong>点の選び方を可視化</strong><p>予測モデル（surrogate）の予測平均・不確実性・Expected Improvementを同じ図で確認します。</p><Link to={THEATER_ROUTES.bayesianOptimization}>Bayesian Optimization Theaterへ</Link></section>}
       {learningSliceLinks.map((item) => <section className="bo-route-card" key={item.to}><strong>学習用の可視化</strong><p>問題設定と表示形式に沿って可視化します。</p><Link to={item.to}>{item.label}</Link></section>)}
 

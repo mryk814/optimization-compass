@@ -240,17 +240,19 @@ function LoadedMap({ view, views, model, data }: { view: ViewSpec; views: ViewSp
           </div>
         </details>
       </section>
-      <MapLegend />
       <div aria-label="表示するペイン" className="map-pane-switch" role="group">
         <button aria-pressed={activePane === "map"} onClick={() => setActivePane("map")} type="button">地図</button>
         <button aria-pressed={activePane === "detail"} onClick={() => setActivePane("detail")} type="button">詳細</button>
       </div>
-      <div className="map-toolbar" role="toolbar" aria-label="地図表示">
-        <button aria-label="縮小" disabled={zoom <= 80} onClick={() => setZoom((value) => Math.max(80, value - 10))} type="button">−</button>
-        <output aria-label="表示倍率">{zoom}%</output>
-        <button aria-label="拡大" disabled={zoom >= 140} onClick={() => setZoom((value) => Math.min(140, value + 10))} type="button">＋</button>
-        <button aria-label="倍率をリセット" onClick={() => setZoom(100)} type="button">リセット</button>
-        <button disabled={!atlas.state.selectedNodeId} onClick={focusCurrent} type="button">現在地へ</button>
+      <div className="map-utility-row">
+        <MapLegend />
+        <div className="map-toolbar" role="toolbar" aria-label="地図表示">
+          <button aria-label="縮小" disabled={zoom <= 80} onClick={() => setZoom((value) => Math.max(80, value - 10))} type="button">−</button>
+          <output aria-label="表示倍率">{zoom}%</output>
+          <button aria-label="拡大" disabled={zoom >= 140} onClick={() => setZoom((value) => Math.min(140, value + 10))} type="button">＋</button>
+          <button aria-label="倍率をリセット" onClick={() => setZoom(100)} type="button">リセット</button>
+          <button disabled={!atlas.state.selectedNodeId} onClick={focusCurrent} type="button">現在地へ</button>
+        </div>
       </div>
       <div className="map-workspace">
         <section className="map-tree-pane" data-active={activePane === "map"} data-testid="map-tree-pane">
