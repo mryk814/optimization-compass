@@ -902,6 +902,85 @@
       ]
     },
     {
+      "comparison_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+      "canonical_url": "/compare/COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE",
+      "aliases": [],
+      "mode": "parameter_sensitivity",
+      "journey_id": "EC020",
+      "case_id": "EC020",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
+      "benchmark_context_id": "BENCH_PENDULUM_COLLOCATION_MESH_8",
+      "title_ja": "抽象的な軌道最適化からpendulumのmesh感度を読む",
+      "title_en": "Use pendulum mesh sensitivity to read a generic trajectory problem",
+      "comparison_question": "抽象的な軌道最適化Caseで区別したstate、control、dynamics defect、path violationは、固定pendulum教材のN=20とN=40でどう見え方が変わる？",
+      "formulation_summary": "EC020の一般式を直接計算する比較ではなく、min 0.01 Σuₖ²+20||(θ_N,ω_N)−(π,0)||² subject to pendulum dynamics, (θ₀,ω₀)=(0,0), |ω|≤8, |u|≤8 の固定教材へ降りて診断量を読むbridge。",
+      "fixed_factors": [
+        "teaching problem INSTANCE_PENDULUM_SWING_UP_EC020",
+        "pendulum model m=1, l=1, g=9.81, damping=0.05",
+        "horizon 2 seconds",
+        "initial state (theta, omega)=(0,0)",
+        "terminal target (theta, omega)=(pi,0)",
+        "path and bound constraints |omega|<=8 and |u|<=8",
+        "linear-angle and zero-velocity initial trajectory",
+        "oracle evaluation budget 8",
+        "dynamics defect tolerance 0.001",
+        "node path tolerance 0.0001",
+        "terminal tolerance 0.001",
+        "seed 2026"
+      ],
+      "changed_factors": ["mesh nodes only: N=20 versus N=40"],
+      "seed_policy": "deterministic educational generatorのseed 2026を固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 8},
+      "stopping_policy": "両memberとも8 evaluation、dynamics defect 0.001、node path violation 0.0001、terminal error 0.001のうち先に満たす条件で停止する。",
+      "tuning_policy": "dynamics、horizon、初期／終端／path制約、初期trajectory、予算、toleranceを固定し、mesh interval数だけを変える。run後のparameter調整はしない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "objective_value", "label_ja": "目的関数値", "direction": "minimize", "unit": "objective value"},
+        {"metric_id": "dynamics_defect", "label_ja": "max dynamics defect", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "node_path_violation", "label_ja": "node path violation", "direction": "minimize", "unit": "constraint violation"},
+        {"metric_id": "reconstructed_path_violation", "label_ja": "再構成path violation", "direction": "minimize", "unit": "constraint violation"},
+        {"metric_id": "terminal_error", "label_ja": "終端誤差", "direction": "minimize", "unit": "state norm"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "同じ固定pendulum教材、dynamics、2秒horizon、初期／終端／path制約、初期trajectory、8 evaluation予算、停止tolerance、seedを使い、mesh interval数だけを変える。",
+      "caveat": "EC020の抽象的な非線形trajectory全般を再現する結果ではありません。決定的なpendulum教材のmetric historyをbridgeとして再利用し、N=40の一般的優位、solver ranking、wall-clock性能、連続時間可行性を主張しません。",
+      "takeaway": "抽象式のままでは見えにくいnode残差と区間再構成の違反を、同じpendulumでmeshだけ変えた履歴へ降りて分けて読めます。",
+      "limitations": [
+        "EC020の一般式と同じtrajectoryや実データではなく、2状態・1入力・2秒のpendulum teaching instanceだけを扱います。",
+        "有限meshのcontrastから連続時間の安全性、model妥当性、大域最適性、実機性能を推論しません。"
+      ],
+      "source_ids": ["S042", "S050", "S102"],
+      "last_verified": "2026-07-24",
+      "members": [
+        {
+          "member_id": "ec020-bridge-collocation-coarse",
+          "role": "coarse_mesh",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+          "label_ja": "固定pendulum: coarse mesh N=20",
+          "label_en": "Fixed pendulum: coarse mesh N=20",
+          "parameters": {"mesh_nodes": 20, "horizon_seconds": 2.0},
+          "budget": {"metric": "oracle_evaluations", "value": 8},
+          "artifact": {"artifact_id": "pendulum-collocation-coarse", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pendulum-collocation-coarse.json"}
+        },
+        {
+          "member_id": "ec020-bridge-collocation-refined",
+          "role": "refined_mesh",
+          "method_id": "M_DIRECT_COLLOCATION",
+          "scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+          "label_ja": "固定pendulum: refined mesh N=40",
+          "label_en": "Fixed pendulum: refined mesh N=40",
+          "parameters": {"mesh_nodes": 40, "horizon_seconds": 2.0},
+          "budget": {"metric": "oracle_evaluations", "value": 8},
+          "artifact": {"artifact_id": "pendulum-collocation-refined", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/pendulum-collocation-refined.json"}
+        }
+      ]
+    },
+    {
       "comparison_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "identity_status": "canonical",

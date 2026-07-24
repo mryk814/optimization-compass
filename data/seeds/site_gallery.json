@@ -451,9 +451,14 @@
       "conditional_methods": [{"method_id": "M_MULTIPLE_SHOOTING", "reason": "長い予測区間（horizon）で単一shooting（single shooting）が不安定だが、区間積分を活用したい場合"}],
       "excluded_methods": [{"method_id": "M_BFGS", "reason": "軌道、動力学の欠陥、疎性を平坦なベクトルのブラックボックス目的関数へ隠してしまう"}],
       "implementation_ids": ["I_CASADI", "I_ACADOS", "I_DRAKE"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_OPTIMAL_CONTROL_EC020"],
-      "comparison_ids": [],
-      "source_ids": ["S042", "S043", "S076"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_OPTIMAL_CONTROL_EC020",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+      ],
+      "comparison_ids": ["COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"],
+      "source_ids": ["S042", "S043", "S050", "S076", "S102"],
       "difficulty": "intermediate",
       "status": "published",
       "last_reviewed": "2026-07-19",
@@ -464,7 +469,7 @@
       "constraints": "Direct Collocationの固定教材では、dynamics defect $d_k:=x_{k+1}-F_{\\Delta t}(x_k,u_k)=0$（$k=0,\\ldots,N-1$）を等式制約にする。初期条件は $x_0=x_{init}$、終端条件は $x_N=x_{goal}$（または終端残差 $h_T(x_N)=0$）、path制約は各mesh／collocation pointでの障害物回避 $g_{obs}(x_k)\\le0$、状態bounds $x_k\\in[x_{min},x_{max}]$、control bounds $u_k\\in[u_{min},u_{max}]$ として課す。",
       "map_node_id": "answer:Q11:optimal_control",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
-      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
+      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のTheater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "limitations": ["離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。"]
     },
     {

@@ -72,10 +72,18 @@ def test_existing_ec020_case_instance_scenario_and_trace_identity_are_unchanged(
         "所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+"
         "\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。"
     )
-    assert case["visualization_ids"] == [
+    assert case["visualization_ids"][:2] == [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_OPTIMAL_CONTROL_EC020",
     ]
+    assert {
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+    } <= set(case["visualization_ids"])
+    assert "SCENARIO_PENDULUM_SWING_UP_MESH_20" not in case["visualization_ids"]
+    assert case["comparison_ids"] == ["COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"]
+    assert "固定pendulum教材" in case["practical_notes"]
+    assert "同じtrajectoryや実データではない" in case["practical_notes"]
     assert instances["INSTANCE_OPTIMAL_CONTROL_EC020"].registry_key == (
         "problem.optimal_control.ec020.v1"
     )
@@ -159,6 +167,32 @@ def test_pendulum_mesh_compare_is_aligned_contrast_only() -> None:
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
     }
     assert all(member.budget == comparison.budget for member in comparison.members)
+
+
+def test_ec020_comparison_is_an_explicit_non_ranking_pendulum_bridge() -> None:
+    index = load_comparison_seed(
+        ROOT / "data/seeds/site_comparisons.json", dataset_version="0.18.11"
+    )
+    comparison = next(
+        item
+        for item in index.comparisons
+        if item.comparison_id == "COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"
+    )
+
+    assert comparison.case_id == comparison.journey_id == "EC020"
+    assert comparison.problem_instance_id == "INSTANCE_PENDULUM_SWING_UP_EC020"
+    assert comparison.benchmark_context_id == "BENCH_PENDULUM_COLLOCATION_MESH_8"
+    assert comparison.comparability == "contrast_only"
+    assert comparison.ranking_eligible is False
+    assert "bridge" in comparison.formulation_summary
+    assert "同じtrajectoryや実データではなく" in comparison.limitations[0]
+    assert {member.scenario_id for member in comparison.members} == {
+        "SCENARIO_PENDULUM_SWING_UP_MESH_20",
+        "SCENARIO_PENDULUM_SWING_UP_MESH_40",
+    }
+    assert {member.artifact.renderer_family for member in comparison.members} == {
+        "generic_metric_history"
+    }
 
 
 def test_pendulum_sources_are_primary_and_scope_is_explicit() -> None:
