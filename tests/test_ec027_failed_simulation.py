@@ -25,7 +25,10 @@ def test_failed_simulation_keeps_status_outside_the_objective() -> None:
     assert failed_frame.payload["failure_is_penalty_value"] is False
     assert all(metric.metric_id != "objective_value" for metric in failed_frame.metrics)
     assert build_failed_simulation_scenario(failure).purpose == "failure_contrast"
-    assert build_failed_simulation_scenario(feasible).artifact.renderer_family == "generic_metric_history"
+    assert (
+        build_failed_simulation_scenario(feasible).artifact.renderer_family
+        == "generic_metric_history"
+    )
 
 
 def test_ec027_links_its_own_failure_contrast() -> None:

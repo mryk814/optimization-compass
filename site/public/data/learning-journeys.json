@@ -944,33 +944,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_FAILED_SIMULATION_STATUS_LEDGER"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_FAILED_SIMULATION_EC027"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/EC027",
+            "/traces/failed-simulation-failure-ledger",
+            "/traces/failed-simulation-feasible-ledger",
+            "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
             "/methods/M_BFGS",
             "/methods/M_MADS",
             "/methods/M_RANDOM_SEARCH",
@@ -1011,17 +1012,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/EC027",
+            "/traces/failed-simulation-failure-ledger",
+            "/traces/failed-simulation-feasible-ledger",
+            "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
             "/methods/M_BFGS",
             "/methods/M_MADS",
             "/methods/M_RANDOM_SEARCH",
@@ -1038,11 +1042,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S018",
@@ -1057,11 +1058,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+            "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -1078,16 +1080,8 @@
         }
       },
       "journey_id": "EC027",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4123,7 +4117,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "generated_at": "2026-07-24T00:00:00Z",
   "journeys": [
     {
@@ -4148,7 +4142,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4239,7 +4233,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4312,7 +4306,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4388,7 +4382,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4471,7 +4465,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4563,7 +4557,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4641,7 +4635,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4712,17 +4706,13 @@
       ],
       "canonical_url": "/gallery/EC027",
       "case_id": "EC027",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_RANDOM_SEARCH"
       ],
@@ -4730,7 +4720,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4755,8 +4745,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA016",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_FAILED_SIMULATION_EC027"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/failed-simulation-failure-ledger",
+          "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+          "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
+        },
+        {
+          "canonical_url": "/traces/failed-simulation-feasible-ledger",
+          "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+          "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+          "role": "primary",
+          "scenario_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+        }
+      ],
       "source_ids": [
         "S002",
         "S018",
@@ -4769,7 +4776,7 @@
         "S069",
         "S094"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "成功・crash・timeout・非物理解を別statusで記録し、入力、software version、seed、wall time、終了理由を保存する。penalty値を使う実装でも、元のfailure statusを失わず、feasible rateと最良feasible値を別々に追う。",
       "title_en": "Search a design space with failed simulations",
       "title_ja": "途中で失敗するシミュレーションから設計を探す"
@@ -4798,7 +4805,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4857,7 +4864,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4939,7 +4946,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5013,7 +5020,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5093,7 +5100,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5171,7 +5178,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5248,7 +5255,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5325,7 +5332,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5402,7 +5409,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5483,7 +5490,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5573,7 +5580,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5650,7 +5657,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5740,7 +5747,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5832,7 +5839,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5909,7 +5916,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6025,7 +6032,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6086,7 +6093,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6164,7 +6171,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6244,7 +6251,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6332,7 +6339,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6415,7 +6422,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6500,7 +6507,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -7226,9 +7233,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 27,
+      "complete": 28,
       "draft": 0,
-      "partial": 3
+      "partial": 2
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

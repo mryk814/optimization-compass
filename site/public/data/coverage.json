@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "expectations": [
     {
       "applicability": "expected",
@@ -963,10 +963,11 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
+            "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
             "COMPARE_GRADIENT_FAMILY",
             "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
           ]
@@ -1025,7 +1026,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 47,
+          "count": 50,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1037,6 +1038,7 @@
             "/methods/M_PATTERN_SEARCH",
             "/methods/M_POWELL",
             "/methods/M_SPSA",
+            "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
             "COMPARE_GRADIENT_FAMILY",
             "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
             "EC013",
@@ -1061,6 +1063,8 @@
             "cobyqa",
             "dummy-educational",
             "energy-cvar-procurement",
+            "failed-simulation-failure-ledger",
+            "failed-simulation-feasible-ledger",
             "family.local-dfo",
             "hyperparameter-search",
             "mads",
@@ -1109,11 +1113,13 @@
           ]
         },
         "visualization": {
-          "count": 5,
+          "count": 7,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "dummy-educational",
+            "failed-simulation-failure-ledger",
+            "failed-simulation-feasible-ledger",
             "nelder-mead-quadratic",
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
@@ -7158,12 +7164,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_FAILED_SIMULATION_STATUS_LEDGER"
+          ]
         },
         "content": {
           "count": 1,
@@ -7198,11 +7204,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 10,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_MADS",
+            "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
             "EC027",
             "I_NOMAD",
             "S002",
@@ -7211,6 +7218,8 @@
             "S060",
             "S063",
             "S094",
+            "failed-simulation-failure-ledger",
+            "failed-simulation-feasible-ledger",
             "mads"
           ]
         },
@@ -7239,12 +7248,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "failed-simulation-failure-ledger",
+            "failed-simulation-feasible-ledger"
+          ]
         }
       },
       "label": "Mesh adaptive direct search",

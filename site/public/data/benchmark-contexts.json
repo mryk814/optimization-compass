@@ -197,6 +197,81 @@
       "tuning_policy": "documented defaults; no per-instance winner tuning"
     },
     {
+      "category": "DFO",
+      "context_id": "BENCH_FAILED_SIMULATION_EC027_6",
+      "context_version": "1.0.0",
+      "dimension": 3,
+      "evaluation_budget": 6,
+      "hardware": {
+        "reason": "deterministic teaching ledger; no wall-clock benchmark",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.failed_simulation.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.65,
+          0.35,
+          0.0
+        ],
+        "policy": "same_initial_state_each_member"
+      },
+      "last_verified": "2026-07-24",
+      "oracle_budget": {
+        "limit": 6,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "feasible_rate",
+        "successful_evaluations",
+        "failed_evaluations",
+        "best_feasible_objective"
+      ],
+      "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "problem_variant": "fixed six-call mixed-domain failure ledger",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.failed_simulation.v1",
+        "generator_version": "1.0.0",
+        "runtime": "deterministic_educational_failure_ledger"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "sparsity": {
+        "binary_dimension": 1,
+        "continuous_dimension": 2
+      },
+      "status_mapping": {
+        "failure": "explicit_status_no_penalty",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "six_fixed_evaluation_rows",
+        "value": 6
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "implicit_failure_region": "u1+u2<0.25"
+      },
+      "tuning_policy": "candidate order, domain, failure taxonomy, status-without-penalty policy, and budget fixed before contrast"
+    },
+    {
       "category": "LP",
       "context_id": "BENCH_LP",
       "context_version": "1.0.0",
@@ -1362,7 +1437,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

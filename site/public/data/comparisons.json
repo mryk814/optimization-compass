@@ -3363,8 +3363,135 @@
       "title_en": "Separate a feasible route from a time-window violation",
       "title_ja": "時間窓付き配送で可行routeと違反を分けて読む",
       "tuning_policy": "route、時間行列、車両数、出発時刻、service time、帰着deadlineをrun前に固定し、stop 4の終了時刻だけを変える。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_FAILED_SIMULATION_EC027_6",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 6
+      },
+      "canonical_comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+      "canonical_url": "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+      "case_id": "EC027",
+      "caveat": "MADS、Nevergrad、simulation runtime、recovery policy、実設計の品質を比較するbenchmarkではない。",
+      "changed_factors": [
+        "第5候補のstatusだけを成功からnonphysical failureへ変える"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+      "comparison_question": "同じ6候補・domain・failure policyで、1つの候補が成功からnonphysical failureへ変わると、feasible rateと最良feasible objectiveはどう読むべきか？",
+      "fairness_note": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。",
+      "fixed_factors": [
+        "INSTANCE_FAILED_SIMULATION_EC027の2連続変数・1二値mode",
+        "同じ6候補、evaluation budget、candidate順",
+        "同じimplicit failure領域、status taxonomy、no-penalty policy",
+        "同じ決定的evaluation ledger"
+      ],
+      "formulation_summary": "min successful simulation objective over two continuous variables and one binary mode; failures remain explicit statuses rather than penalties.",
+      "identity_status": "canonical",
+      "journey_id": "EC027",
+      "last_verified": "2026-07-24",
+      "limitations": [
+        "固定6評価・単純failure領域の教育用contrastである。",
+        "このcontrastからoptimizer、実装、simulation、設計案の一般的順位を推論しない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "failed-simulation-feasible-ledger",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/failed-simulation-feasible-ledger.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 6
+          },
+          "label_en": "The fifth candidate succeeds",
+          "label_ja": "第5候補は成功",
+          "member_id": "failed-simulation-feasible",
+          "method_id": "M_MADS",
+          "parameters": {
+            "failure_policy": "explicit_status_no_penalty",
+            "fifth_status": "ok"
+          },
+          "role": "feasible_primary",
+          "scenario_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+        },
+        {
+          "artifact": {
+            "artifact_id": "failed-simulation-failure-ledger",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/failed-simulation-failure-ledger.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 6
+          },
+          "label_en": "The fifth candidate is nonphysical failure",
+          "label_ja": "第5候補はnonphysical failure",
+          "member_id": "failed-simulation-nonphysical",
+          "method_id": "M_MADS",
+          "parameters": {
+            "failure_policy": "explicit_status_no_penalty",
+            "fifth_status": "nonphysical"
+          },
+          "role": "failure_variant",
+          "scenario_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "maximize",
+          "label_ja": "feasible rate",
+          "metric_id": "feasible_rate",
+          "unit": "fraction"
+        },
+        {
+          "direction": "maximize",
+          "label_ja": "成功評価数",
+          "metric_id": "successful_evaluations",
+          "unit": "calls"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "失敗評価数",
+          "metric_id": "failed_evaluations",
+          "unit": "calls"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "最良feasible objective",
+          "metric_id": "best_feasible_objective",
+          "unit": "objective"
+        }
+      ],
+      "mode": "failure_contrast",
+      "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+      "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "ranking_eligible": false,
+      "seed_policy": "固定ledgerのためseedはnot applicable。",
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "stopping_policy": "6評価を記録して停止する。failure後も残りの固定ledgerを記録する。",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "failureを大きい目的値に偽装すると、目的の悪さと評価不能が混ざる。status、feasible rate、成功した値だけからの最良値を別々に保存する。",
+      "title_en": "Separate simulation status from feasible objectives",
+      "title_ja": "失敗simulationでstatusとfeasible objectiveを分けて読む",
+      "tuning_policy": "候補列、domain、failure taxonomy、no-penalty policyをrun前に固定し、結果を見て変更しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.14"
+  "dataset_version": "0.18.15"
 }

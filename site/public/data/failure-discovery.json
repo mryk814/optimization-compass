@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -398,7 +398,10 @@
         "FM007",
         "FM016"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+        "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -2114,7 +2117,7 @@
   "generated_at": "2026-07-24T00:00:00Z",
   "summary": {
     "case_exclusion_count": 30,
-    "entries_with_scenarios": 31,
+    "entries_with_scenarios": 32,
     "structured_failure_count": 12,
     "total_entries": 42
   }

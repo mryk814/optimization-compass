@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215663,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "642b433e24361eacd90a68c376585829c8a980f92cd57ae93bc0bd229de0b22a",
+        "payload_sha256": "b16df7d93811f5438888b3a5d4757feb4d3ed522aa33f2be103ef3a40912e239",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210212,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "5555ddc0dfef415be1114ac4c033c44b7c3d56cd4dd003758f94584fcf766c8b",
+        "payload_sha256": "3e40a106875f82896e649871115292b7b2708e4e938cc26323e64ac2a041f0d5",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -442,13 +442,13 @@
         ],
         "payload_bytes": 208171,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "bfdb9d9ccba7e74bb0de69f2989751405d120436321eace8eb74cd1fbdf65c42",
+        "payload_sha256": "6ca2f51d2c5968f0b4a1d69b1470bb0f918cfad0aab292f90b9133730e1442d9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -615,13 +615,13 @@
         ],
         "payload_bytes": 204203,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "c168ec470b0d4510b2e7f89f7f73df3aae01a469723949a8d37089544778a5b8",
+        "payload_sha256": "9135af0c3ac0b57e75dddaeddecb2487e44726f276645373c154b41abc0c9556",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -789,13 +789,13 @@
         ],
         "payload_bytes": 72535,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "341b4af54729aa7e8e08ee1e3b19598b3c3405f749c1e35837812310eac0d8f3",
+        "payload_sha256": "9510684b41876e495e9433c276134412b0af178ca690a7f695ad03b0ce1d01c6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1055,13 +1055,13 @@
         ],
         "payload_bytes": 66444,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "d598d2729919affea51d86e835f2964d775fa7e79dd6e7dd39f2ad1760968bb0",
+        "payload_sha256": "d45b9dca8883d90c14e158b181f6f561e3860bf5696509c695a9353049aa5e37",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1237,13 +1237,13 @@
         ],
         "payload_bytes": 65996,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "0b22de9a03457e680e02a9d0c924d52473e53a1e69bec4dd9679ef072fd5a5a6",
+        "payload_sha256": "f23b8fb0d1c97fd45c311bbae276604f5961a90879e9343e54cad1938f40cf36",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1419,13 +1419,13 @@
         ],
         "payload_bytes": 53139,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "0de725dffdeacc4ddd9aae4c6a7af6cfb778ed263a9a983f7cc2d6de29fea39c",
+        "payload_sha256": "a0772be3e7b61560db3138ff0114d26a41728efd6de99fb12223a9a8ccec85b7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1615,13 +1615,13 @@
         ],
         "payload_bytes": 66387,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "088e98d3c1b66b484d69b334aae87b3f9db7cf9673862b496ef74582b74b6258",
+        "payload_sha256": "75898b3bb99ca585d4f44eb8a690dd673d195da73c6dbd5bf2eb4232c56be643",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1811,13 +1811,13 @@
         ],
         "payload_bytes": 66018,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "ba5f060815f0f121dd792ad8f02f7e0228eff45ad0f547593e2e6e90ba11db10",
+        "payload_sha256": "ae454af76e017eb1dbc000ae53d1f1d7f502a3f200b74d69691d7e586c393c2c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2008,13 +2008,13 @@
         ],
         "payload_bytes": 22750,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "c8da91e3468fd072fcfecd77b350bf9bee13147c1c8d3284ae22b5b3b53d6d7e",
+        "payload_sha256": "886976f39e1f1bd5d3bc97b6d027a1b3ceff5e7f9cbc93f04a2509af1cbe3b97",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2196,13 +2196,13 @@
         ],
         "payload_bytes": 22452,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "2562db1e1103d708fe264f1fe48c4d0fec37df5299b0dad0427942480de167d6",
+        "payload_sha256": "0ed020b7b2822c97b8ffe1a239098caa1e25ddc9e2052dd2a2df867cf6e11a12",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2398,13 +2398,13 @@
         ],
         "payload_bytes": 22736,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "16dbee9328c5441971758cec925bd1986dcf019d0253488b263953700adfd370",
+        "payload_sha256": "f0ccdb74e77aba86fb5288bb743e1a140130f8f461aed6fe6b5871f63beb6889",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2586,13 +2586,13 @@
         ],
         "payload_bytes": 22742,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "e4c8662ecde4dcaeca4f67d933df784e258c164745dfb52e99444b987e2b2654",
+        "payload_sha256": "19ead31412d4bc41f4b4df8d0fca3b756019a827b79c32e625f5e21892f0926e",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2773,13 +2773,13 @@
         ],
         "payload_bytes": 41553,
         "payload_path": "traces/so3-projected-alignment.json",
-        "payload_sha256": "1795fa350b78e7e817d4bfdc2dab96cba3ce1bc18521592bdbd409370a29a722",
+        "payload_sha256": "4cc340e571acd2e7fad5c648a6471b8d9955791e0dd920da0f8b90cff959630d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2979,13 +2979,13 @@
         ],
         "payload_bytes": 41895,
         "payload_path": "traces/so3-riemannian-alignment.json",
-        "payload_sha256": "b8c48e03ee448c826f8b7c5cfbfcad91830154a8f88b3542516c00c40e09b68c",
+        "payload_sha256": "747d7a318c3fe88839d124f5c42eb8ab82ace32384fafff67a92ab48c3ad6992",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3175,13 +3175,13 @@
         ],
         "payload_bytes": 14304,
         "payload_path": "traces/optimal-control-ec020-history.json",
-        "payload_sha256": "d7aff2e86dd0487c8fbfaf89e8ccff1ae80f558624660b2cd69cb8842868f336",
+        "payload_sha256": "12c2f428d05f9609d5d2a96858328b890f1f98f5cc4776b3bd41cdf2fb30efec",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3374,13 +3374,13 @@
         ],
         "payload_bytes": 16113,
         "payload_path": "traces/pendulum-collocation-coarse.json",
-        "payload_sha256": "c6b9957d22d8614cf523abf678f9a274e07d4081d35bc236b905c4b862ff3b59",
+        "payload_sha256": "577278435436e3729e33fa8544afced091dae7aecb96ab7317578dc803a2d21a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3578,13 +3578,13 @@
         ],
         "payload_bytes": 16089,
         "payload_path": "traces/pendulum-collocation-refined.json",
-        "payload_sha256": "bb146810bbe4fc7a7f924f73b46ad0bccef9bd6d5a7af6b1c68820a19df1380f",
+        "payload_sha256": "307fb9c44b023e4af4f9c66952a1117f019feb58c6de571e1f1a4c691a0eba42",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3781,13 +3781,13 @@
         ],
         "payload_bytes": 15786,
         "payload_path": "traces/pendulum-model-rollout-failure.json",
-        "payload_sha256": "a6f310720f77f59df42ea3e4ea6bedeb3f2d5b84e051bdb466db7bbd668e5cff",
+        "payload_sha256": "5fbf2f8b6d9931cc063f0b4eee850690b47c1d46ece262d14580d3fda7c52ea8",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3983,13 +3983,13 @@
         ],
         "payload_bytes": 6637,
         "payload_path": "traces/portfolio-nominal-8-4.json",
-        "payload_sha256": "7ed8f2323b24a63154e553871252b1502fb5446db419c57ee5ad6d2bd123d456",
+        "payload_sha256": "68d95d23b0e5b64e21392ed333b1d3801d32579b017b8b3fccc9d3afe4889350",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4184,13 +4184,13 @@
         ],
         "payload_bytes": 7041,
         "payload_path": "traces/portfolio-cvar-8-4.json",
-        "payload_sha256": "a7b33a1e9f42d11fed1d26bb09d204d29f300db608936464e07a3ed71088a328",
+        "payload_sha256": "bed4d4a6675c1efab9318c10b96f5f931772605dcf3cc1884a9775ccb89b8963",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4376,13 +4376,13 @@
         ],
         "payload_bytes": 8691,
         "payload_path": "traces/repeated-mpc-qp-warm-start.json",
-        "payload_sha256": "1f66e71ac4c7fee9e45f90ddd5e4e63eafdd661800ae8f9d7ccd5ddc15578ba3",
+        "payload_sha256": "9247885b5fd6c7d25360fc6bbc1877f7a5f7406fb391ee85bc120a3a1fd77fd2",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4570,13 +4570,13 @@
         ],
         "payload_bytes": 8748,
         "payload_path": "traces/repeated-mpc-qp-cold-start.json",
-        "payload_sha256": "ad95f9b13cef811173edafc79b59982709220e3ed6e1b229009181cef8e1945c",
+        "payload_sha256": "4b0731a73b068236a1662461828d3446dd0aa52e0f4b1d618a965d34b0923037",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4777,13 +4777,13 @@
         ],
         "payload_bytes": 8684,
         "payload_path": "traces/time-window-routing-feasible.json",
-        "payload_sha256": "86756b3590059e6428eb5a861aea26d887dbf6494f29b25c90e125f98dcddbe9",
+        "payload_sha256": "89cbc662d280976d1eedcf40b73c423192636e1140696d961792e1e400891eba",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4969,13 +4969,13 @@
         ],
         "payload_bytes": 8719,
         "payload_path": "traces/time-window-routing-violation.json",
-        "payload_sha256": "a0638a34082a2002cae39967f0f76bb0155b35e300bf31dbebea8a32b074fccf",
+        "payload_sha256": "676785c8f0d5a69c5ba6becb55d009fe20722e09b177b35259a6171db1b97032",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5167,6 +5167,387 @@
         "artifact_contract_version": "1.0.0",
         "artifact_kind": "executable_trace",
         "observable_ids": [
+          "feasible_rate",
+          "successful_evaluations",
+          "failed_evaluations",
+          "best_feasible_objective"
+        ],
+        "payload_bytes": 9561,
+        "payload_path": "traces/failed-simulation-feasible-ledger.json",
+        "payload_sha256": "fe88fdb3b8585815ab5982ac66633cd15445a76bf9c2983e0a2f770ce7658383",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.15",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.65,
+            0.35,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "FAILED_SIMULATION_EC027_FIXED_6",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 6
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-24",
+      "lesson": {
+        "comparison_role": "primary_example",
+        "derived_media_caption": {
+          "en": "Evaluation ledger for failed simulations",
+          "ja": "失敗simulationのevaluation ledger"
+        },
+        "expected_phenomenon_en": "Failures have no objective, so feasible rate and best feasible value change meaning under the same evaluation budget.",
+        "expected_phenomenon_ja": "失敗はobjectiveを持たず、同じevaluation budgetでもfeasible rateと最良feasible値の意味が変わる。",
+        "failure_signals": [],
+        "known_reference_display": {
+          "note_en": "No optimum is shown.",
+          "note_ja": "最適解は表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read feasible rate, failure status, and best feasible objective separately.",
+          "ja": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+        },
+        "limitations_en": "A deterministic teaching ledger, not a MADS, Nevergrad, or real-simulation benchmark.",
+        "limitations_ja": "決定的な教育用ledgerであり、MADS・Nevergrad・実simulationの性能比較ではない。",
+        "misconception": null,
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations"
+            ],
+            "title_en": "Read evaluation status first",
+            "title_ja": "評価statusを先に見る"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "successful_evaluations",
+              "best_feasible_objective"
+            ],
+            "title_en": "Aggregate successful evaluations only",
+            "title_ja": "成功評価だけを集計"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations"
+            ],
+            "title_en": "Keep failure visible",
+            "title_ja": "failureを隠さない"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "best_feasible_objective"
+            ],
+            "title_en": "Bound the scope of the best value",
+            "title_ja": "最良値のscopeを限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.black-box-optimization"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "feasible rate",
+            "label_ja": "feasible rate",
+            "observable_id": "feasible_rate"
+          },
+          {
+            "label_en": "successful evaluations",
+            "label_ja": "成功評価数",
+            "observable_id": "successful_evaluations"
+          },
+          {
+            "label_en": "failed evaluations",
+            "label_ja": "失敗評価数",
+            "observable_id": "failed_evaluations"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "best feasible objective",
+            "label_ja": "最良feasible objective",
+            "observable_id": "best_feasible_objective"
+          }
+        ],
+        "static_summary": {
+          "en": "Read success and failure as separate ledgers across six fixed calls.",
+          "ja": "6回の固定simulation callで、成功とfailureを別ledgerとして読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "separate failure from objective",
+            "label_ja": "failureをobjectiveから分離",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations",
+              "best_feasible_objective"
+            ],
+            "signal_id": "status_separate"
+          }
+        ],
+        "text_alternative": {
+          "en": "List status, successful and failed counts, feasible rate, and best feasible objective for each call.",
+          "ja": "各callのstatus、成功件数、失敗件数、feasible rate、最良feasible objectiveを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+      "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "purpose": "mechanism",
+      "runs": [
+        {
+          "artifact_id": "failed-simulation-feasible-ledger",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_MADS",
+          "profile_id": "PROFILE_FAILED_SIMULATION_EC027",
+          "run_id": "RUN_FAILED_SIMULATION_FEASIBLE_LEDGER"
+        }
+      ],
+      "scenario_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "title_en": "Failed simulation: feasible evaluation ledger",
+      "title_ja": "失敗simulation: feasible evaluation ledger"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "feasible_rate",
+          "successful_evaluations",
+          "failed_evaluations",
+          "best_feasible_objective"
+        ],
+        "payload_bytes": 9366,
+        "payload_path": "traces/failed-simulation-failure-ledger.json",
+        "payload_sha256": "1bb792f04778f00bf82e4ebc7298bfbdb6f2579ac2f541ec52abb92ec3528cbd",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.15",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 6
+        },
+        "initial_condition": {
+          "point": [
+            0.65,
+            0.35,
+            0.0
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "FAILED_SIMULATION_EC027_FIXED_6",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 6
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-24",
+      "lesson": {
+        "comparison_role": "failure_contrast",
+        "derived_media_caption": {
+          "en": "Evaluation ledger for failed simulations",
+          "ja": "失敗simulationのevaluation ledger"
+        },
+        "expected_phenomenon_en": "Failures have no objective, so feasible rate and best feasible value change meaning under the same evaluation budget.",
+        "expected_phenomenon_ja": "失敗はobjectiveを持たず、同じevaluation budgetでもfeasible rateと最良feasible値の意味が変わる。",
+        "failure_signals": [
+          {
+            "label_en": "do not synthesize a penalty",
+            "label_ja": "penaltyへ偽装しない",
+            "observable_ids": [
+              "failed_evaluations",
+              "best_feasible_objective"
+            ],
+            "signal_id": "synthetic_penalty"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No optimum is shown.",
+          "note_ja": "最適解は表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read feasible rate, failure status, and best feasible objective separately.",
+          "ja": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+        },
+        "limitations_en": "A deterministic teaching ledger, not a MADS, Nevergrad, or real-simulation benchmark.",
+        "limitations_ja": "決定的な教育用ledgerであり、MADS・Nevergrad・実simulationの性能比較ではない。",
+        "misconception": {
+          "en": "A large synthetic objective makes failed evaluations safely comparable.",
+          "ja": "失敗評価を大きい目的値にすれば、同じ最適化履歴として安全に比較できる。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations"
+            ],
+            "title_en": "Read evaluation status first",
+            "title_ja": "評価statusを先に見る"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "successful_evaluations",
+              "best_feasible_objective"
+            ],
+            "title_en": "Aggregate successful evaluations only",
+            "title_ja": "成功評価だけを集計"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations"
+            ],
+            "title_en": "Keep failure visible",
+            "title_ja": "failureを隠さない"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "best_feasible_objective"
+            ],
+            "title_en": "Bound the scope of the best value",
+            "title_ja": "最良値のscopeを限定"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.black-box-optimization"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "feasible rate",
+            "label_ja": "feasible rate",
+            "observable_id": "feasible_rate"
+          },
+          {
+            "label_en": "successful evaluations",
+            "label_ja": "成功評価数",
+            "observable_id": "successful_evaluations"
+          },
+          {
+            "label_en": "failed evaluations",
+            "label_ja": "失敗評価数",
+            "observable_id": "failed_evaluations"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "best feasible objective",
+            "label_ja": "最良feasible objective",
+            "observable_id": "best_feasible_objective"
+          }
+        ],
+        "static_summary": {
+          "en": "Read success and failure as separate ledgers across six fixed calls.",
+          "ja": "6回の固定simulation callで、成功とfailureを別ledgerとして読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "separate failure from objective",
+            "label_ja": "failureをobjectiveから分離",
+            "observable_ids": [
+              "feasible_rate",
+              "failed_evaluations",
+              "best_feasible_objective"
+            ],
+            "signal_id": "status_separate"
+          }
+        ],
+        "text_alternative": {
+          "en": "List status, successful and failed counts, feasible rate, and best feasible objective for each call.",
+          "ja": "各callのstatus、成功件数、失敗件数、feasible rate、最良feasible objectiveを列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+      "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "purpose": "failure_contrast",
+      "runs": [
+        {
+          "artifact_id": "failed-simulation-failure-ledger",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "M_MADS",
+          "profile_id": "PROFILE_FAILED_SIMULATION_EC027",
+          "run_id": "RUN_FAILED_SIMULATION_FAILURE_LEDGER"
+        }
+      ],
+      "scenario_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+      "source_ids": [
+        "S002",
+        "S018",
+        "S031",
+        "S034",
+        "S035",
+        "S060",
+        "S063"
+      ],
+      "title_en": "Failed simulation: retain failure status",
+      "title_ja": "失敗simulation: statusを残すfailure ledger"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
           "objective_value",
           "state_residual",
           "adjoint_residual",
@@ -5176,13 +5557,13 @@
         ],
         "payload_bytes": 13733,
         "payload_path": "traces/pde-state-tolerance-tight.json",
-        "payload_sha256": "63145c6f743dc02a9090b07a5666d1a89ddcb4be0286963396db44b0f23f3a32",
+        "payload_sha256": "056bf80fdd6da56c24f4de6fd9fa97b407bf44f0decf44a0e51f01c50df10809",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5386,13 +5767,13 @@
         ],
         "payload_bytes": 13212,
         "payload_path": "traces/pde-state-tolerance-loose.json",
-        "payload_sha256": "8be91f2d419a17f1ecc074356cefbb2809ca4f933e4b5622bb4985925dd216d7",
+        "payload_sha256": "2e274ccea8b4696591d66eed7a4d30d896c044050ec747ce56acecb22920724c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5596,13 +5977,13 @@
         ],
         "payload_bytes": 9136,
         "payload_path": "traces/pde-state-solve-failure.json",
-        "payload_sha256": "93ae9a7717e3aabad7221a166a4fe2bc79f486a3ff763e58a477667e89ac8067",
+        "payload_sha256": "670d937e9a7aef061d39b776ea8dc246ecd25b3bafb192c343347dfd6ffe8d7c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5807,13 +6188,13 @@
         ],
         "payload_bytes": 15258,
         "payload_path": "traces/bilevel-regression-exact-inner.json",
-        "payload_sha256": "117162181dac9dbfc84f268d6963a7a1e03dbcba5b17456a8c8af3885c6456ae",
+        "payload_sha256": "fb9f34646ca414c898f2ffc44b8423f08dc9bf9ecd69531f82841ab2491ee28e",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6023,13 +6404,13 @@
         ],
         "payload_bytes": 15970,
         "payload_path": "traces/bilevel-regression-relaxed-complementarity.json",
-        "payload_sha256": "8e40e09a35f43ad4629001bf8440e1ed099b89983cb3221cab6b1473138062ca",
+        "payload_sha256": "81c4aabfb6bc24e6dbb41b71fd0780c2b305c6c620b2fd3727bda46e0b934b4f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6236,13 +6617,13 @@
         ],
         "payload_bytes": 10967,
         "payload_path": "traces/hybrid-mode-chattering-ledger.json",
-        "payload_sha256": "63d218bdc6cc3f2a727d55884306d0d211c88699e08d2d2a1e82bad3a9b6455b",
+        "payload_sha256": "5929454a3f78c9a12085d4af7f8c59d5b8133a866b8086d01f3882bf978fd88c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6442,13 +6823,13 @@
         ],
         "payload_bytes": 16607,
         "payload_path": "traces/shape-diffuser-valid-update.json",
-        "payload_sha256": "791eedefd619b179f3721da053bffd1e171f7df055074d3f9b4e11becbfcbebc",
+        "payload_sha256": "3b426605dba6b843d02294b71b0b6c19a3d51fe2081b01c3a6dd59309984dcc8",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6667,13 +7048,13 @@
         ],
         "payload_bytes": 16505,
         "payload_path": "traces/shape-diffuser-invalid-geometry.json",
-        "payload_sha256": "c13966bb94ca4e30e9e9602f11cc48498571833a58b287b6de2463ecc5d429fe",
+        "payload_sha256": "b6e3c60dc998239366def95dee70d1d158a173f41384ac5596fbd500ab173959",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6891,13 +7272,13 @@
         ],
         "payload_bytes": 16659,
         "payload_path": "traces/shape-topology-representation-contrast.json",
-        "payload_sha256": "6277146336ee6e67b9d599263d4b07962b68c235137c487bf3b880fedeaaa3ae",
+        "payload_sha256": "e8cab037414fb5e20f2d09e586aa7266f5d80d1f71f9ea3f603708385096fb1c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7112,13 +7493,13 @@
         ],
         "payload_bytes": 102177,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "1f0f8d21670bde7ec57e1eea8344e1a2debb3d8b62f257ca251db1320c1a07d6",
+        "payload_sha256": "d1dfe3ee251f8fa50fa06c3875aed10c9448a25acbf7bcf541971c59ec76054b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7375,13 +7756,13 @@
         ],
         "payload_bytes": 39757,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "b99327766cf48417f61982172192bc36905dab4e88b70caf5ea9d7c02e98802f",
+        "payload_sha256": "50ce5685cd62f18378bc954f7e943073079c46eef9f1fc00cf6e1e6bf551fbe1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7577,7 +7958,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7792,7 +8173,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8007,7 +8388,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8294,7 +8675,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8510,7 +8891,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8735,7 +9116,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8961,7 +9342,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9186,13 +9567,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "ef15dced4961c7d6d469594d9694ae5b1edf1fd9cbfa465b5bd6303bf7ad2aaa",
+        "payload_sha256": "19dcc2f40e7233049aae195466b5b55594f4ac9985aceb27bdc2ca8700261e60",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9381,13 +9762,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "ef15dced4961c7d6d469594d9694ae5b1edf1fd9cbfa465b5bd6303bf7ad2aaa",
+        "payload_sha256": "19dcc2f40e7233049aae195466b5b55594f4ac9985aceb27bdc2ca8700261e60",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9593,13 +9974,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "9a6bae0d4e9105a9b27c87f84c862276a44ab97a1fcd9dc6f3fca9ce4ae1bd71",
+        "payload_sha256": "2a34f609c127b268c5b41a3a0845d64c3a75a7452de129ff83a04174f4851b94",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9771,13 +10152,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "9a6bae0d4e9105a9b27c87f84c862276a44ab97a1fcd9dc6f3fca9ce4ae1bd71",
+        "payload_sha256": "2a34f609c127b268c5b41a3a0845d64c3a75a7452de129ff83a04174f4851b94",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9964,13 +10345,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "37e351f7580b9f77f39b1e871495e7cea2e2ee22bba5cf5107a579a5859427ba",
+        "payload_sha256": "e115730f45d640b98f430386e653a7a158531d9a46be4707800384ef0884b7e1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10262,13 +10643,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "37e351f7580b9f77f39b1e871495e7cea2e2ee22bba5cf5107a579a5859427ba",
+        "payload_sha256": "e115730f45d640b98f430386e653a7a158531d9a46be4707800384ef0884b7e1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10516,13 +10897,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "37e351f7580b9f77f39b1e871495e7cea2e2ee22bba5cf5107a579a5859427ba",
+        "payload_sha256": "e115730f45d640b98f430386e653a7a158531d9a46be4707800384ef0884b7e1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.14",
+      "dataset_version": "0.18.15",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",

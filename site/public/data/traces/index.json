@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -272,6 +272,26 @@
       "title_en": "time-window-routing-violation",
       "title_ja": "time-window-routing-violation",
       "trace_id": "time-window-routing-violation"
+    },
+    {
+      "method_id": "M_MADS",
+      "objective_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "path": "failed-simulation-feasible-ledger.json",
+      "profile_id": "PROFILE_FAILED_SIMULATION_EC027",
+      "scenario_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+      "title_en": "failed-simulation-feasible-ledger",
+      "title_ja": "failed-simulation-feasible-ledger",
+      "trace_id": "failed-simulation-feasible-ledger"
+    },
+    {
+      "method_id": "M_MADS",
+      "objective_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "path": "failed-simulation-failure-ledger.json",
+      "profile_id": "PROFILE_FAILED_SIMULATION_EC027",
+      "scenario_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+      "title_en": "failed-simulation-failure-ledger",
+      "title_ja": "failed-simulation-failure-ledger",
+      "trace_id": "failed-simulation-failure-ledger"
     },
     {
       "method_id": "M_ADJOINT_SENSITIVITY",

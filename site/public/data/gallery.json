@@ -2509,7 +2509,9 @@
         }
       ],
       "case_id": "EC027",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_FAILED_SIMULATION_STATUS_LEDGER"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_RANDOM_SEARCH",
@@ -2596,7 +2598,9 @@
       "title_ja": "途中で失敗するシミュレーションから設計を探す",
       "variable_domain": "実務では連続寸法 $u\\in[0,1]^d$ と離散構成 $z\\in\\{1,\\dots,K\\}$ を合わせた混合領域 $X$。固定教材では $x=(u_1,u_2,z)\\in[0,1]^2\\times\\{0,1\\}$ とする。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+        "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
       ]
     },
     {
@@ -2995,5 +2999,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.14"
+  "dataset_version": "0.18.15"
 }

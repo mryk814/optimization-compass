@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.14",
+  "dataset_version": "0.18.15",
   "entities": [
     {
       "aliases": [],
@@ -918,6 +918,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_RANDOM_SEARCH",
           "target_type": "method"
@@ -1011,6 +1016,16 @@
           "relation_type": "problem",
           "target_id": "PA016",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -4057,6 +4072,87 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+      "entity_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "失敗simulationでstatusとfeasible objectiveを分けて読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC027",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "failed-simulation-failure-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "failed-simulation-feasible-ledger",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。"
     },
     {
       "aliases": [],
@@ -18798,6 +18894,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_RANDOM_SEARCH",
           "target_type": "method"
@@ -18858,6 +18959,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_NEVERGRAD",
           "target_type": "implementation"
@@ -18876,6 +18982,11 @@
           "relation_type": "learning",
           "target_id": "random-search",
           "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+          "target_type": "scenario"
         },
         {
           "relation_type": "problem",
@@ -25012,6 +25123,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -25050,6 +25166,16 @@
           "relation_type": "learning",
           "target_id": "mads",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "failed-simulation-failure-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "failed-simulation-feasible-ledger",
+          "target_type": "trace"
         }
       ],
       "summary": "meshとpoll方向を適応させ、black-box constraintsも扱うdirect search。"
@@ -29669,6 +29795,128 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "失敗simulation: statusを残すfailure ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "failed-simulation-failure-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "失敗simulation: feasible evaluation ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "failed-simulation-feasible-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S018",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S034",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S035",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC027",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "成功率、失敗status、最良feasible objectiveを混同せずに読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_GD_QUADRATIC",
       "entity_type": "scenario",
       "external_url": null,
@@ -32791,6 +33039,58 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/failed-simulation-failure-ledger",
+      "entity_id": "failed-simulation-failure-ledger",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "failed-simulation-failure-ledger",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/failed-simulation-feasible-ledger",
+      "entity_id": "failed-simulation-feasible-ledger",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "failed-simulation-feasible-ledger",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/gradient_descent-quadratic",
       "entity_id": "gradient_descent-quadratic",
       "entity_type": "trace",
@@ -33756,6 +34056,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_EXPONENTIAL_FIT_TRF_POOR_INIT",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
       "relations": [],
       "summary": ""
     },
