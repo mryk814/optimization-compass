@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.13",
+  "dataset_version": "0.18.14",
   "expectations": [
     {
       "applicability": "expected",
@@ -1566,12 +1566,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
+          ]
         },
         "content": {
           "count": 6,
@@ -1611,7 +1611,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 16,
+          "count": 19,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1621,6 +1621,7 @@
             "/methods/M_HUNGARIAN",
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
             "/methods/M_NETWORK_SIMPLEX",
+            "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
             "EC019",
             "I_ORTOOLS_ROUTING",
             "S023",
@@ -1630,7 +1631,9 @@
             "family.graph-dp",
             "hungarian-algorithm",
             "local-search-combinatorial",
-            "network-simplex"
+            "network-simplex",
+            "time-window-routing-feasible",
+            "time-window-routing-violation"
           ]
         },
         "recommendation": {
@@ -1653,12 +1656,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "time-window-routing-feasible",
+            "time-window-routing-violation"
+          ]
         }
       },
       "label": "Graph algorithms and dynamic programming",
@@ -7064,12 +7068,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
+          ]
         },
         "content": {
           "count": 1,
@@ -7104,16 +7108,19 @@
           "target_ids": []
         },
         "map": {
-          "count": 6,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
+            "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
             "EC019",
             "I_ORTOOLS_ROUTING",
             "S023",
             "S054",
-            "local-search-combinatorial"
+            "local-search-combinatorial",
+            "time-window-routing-feasible",
+            "time-window-routing-violation"
           ]
         },
         "recommendation": {
@@ -7135,12 +7142,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "time-window-routing-feasible",
+            "time-window-routing-violation"
+          ]
         }
       },
       "label": "Combinatorial local search",

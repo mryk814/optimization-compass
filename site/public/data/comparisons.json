@@ -3230,8 +3230,141 @@
       "title_en": "Read warm starts and deadline margin in a repeated MPC QP",
       "title_ja": "反復MPC QPでwarm startとdeadline余裕を読む",
       "tuning_policy": "horizon、reference、bounds、deadline、iteration-to-latency modelをrun前に固定し、結果を見て変更しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_TIME_WINDOW_ROUTING_EC019_4",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 6
+      },
+      "canonical_comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
+      "canonical_url": "/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
+      "case_id": "EC019",
+      "caveat": "これは固定routeの制約診断であり、OR-Tools、local search、配送会社、交通予測、route品質の性能比較ではない。時間窓違反を小さな目的値差やpenaltyと混同しない。",
+      "changed_factors": [
+        "stop 4の時間窓の終了だけを25分から12分へ狭める"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
+      "comparison_question": "同じ固定route・時間行列・1車両・4 stopで、stop 4の時間窓の終了だけを25分から12分へ狭めると、到着時刻・総移動時間・可行性はどう分けて読むべきか？",
+      "fairness_note": "両memberは固定route・時間行列・車両・出発時刻・service time・他の時間窓・帰着deadlineを共有し、stop 4の終了時刻だけを変える。",
+      "fixed_factors": [
+        "INSTANCE_TIME_WINDOW_ROUTING_EC019のdepot 1個・stop 4個・車両1台",
+        "同じ固定route 0→1→2→3→4→0",
+        "同じ5×5移動時間行列、出発時刻、service time 0分",
+        "stop 1から3の時間窓と30分の帰着deadline",
+        "同じ決定的route ledger"
+      ],
+      "formulation_summary": "min route travel time subject to one visit per stop, travel-time precedence, each stop time window, and a 30-minute depot return deadline.",
+      "identity_status": "canonical",
+      "journey_id": "EC019",
+      "last_verified": "2026-07-24",
+      "limitations": [
+        "固定時間行列・4 stop・1車両・service timeなしの教育用contrastであり、1000 stop、複数車両、容量、pickup-delivery、休憩、交通変動を表さない。",
+        "このcontrastからsolver、implementation、交通予測、配送案、実道路での到着保証の一般的順位を推論しない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "time-window-routing-feasible",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/time-window-routing-feasible.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 6
+          },
+          "label_en": "Stop 4 ends at 25 minutes: feasible",
+          "label_ja": "stop 4の終了25分: 可行",
+          "member_id": "time-window-route-feasible",
+          "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "parameters": {
+            "ledger": "deterministic_fixed_route",
+            "route": "0-1-2-3-4-0",
+            "stop_4_window_end": 25
+          },
+          "role": "feasible_primary",
+          "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE"
+        },
+        {
+          "artifact": {
+            "artifact_id": "time-window-routing-violation",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/time-window-routing-violation.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 6
+          },
+          "label_en": "Stop 4 ends at 12 minutes: two-minute violation",
+          "label_ja": "stop 4の終了12分: 2分違反",
+          "member_id": "time-window-route-violation",
+          "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+          "parameters": {
+            "ledger": "deterministic_fixed_route",
+            "route": "0-1-2-3-4-0",
+            "stop_4_window_end": 12
+          },
+          "role": "time_window_failure",
+          "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "none",
+          "label_ja": "到着時刻",
+          "metric_id": "arrival_time",
+          "unit": "minutes"
+        },
+        {
+          "direction": "none",
+          "label_ja": "時間窓の終了",
+          "metric_id": "window_end",
+          "unit": "minutes"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "時間窓違反",
+          "metric_id": "window_violation",
+          "unit": "minutes"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "累積移動時間",
+          "metric_id": "cumulative_travel_time",
+          "unit": "minutes"
+        },
+        {
+          "direction": "target",
+          "label_ja": "route可行性",
+          "metric_id": "route_feasibility",
+          "unit": "status"
+        }
+      ],
+      "mode": "failure_contrast",
+      "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
+      "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+      "ranking_eligible": false,
+      "seed_policy": "固定した決定論的route ledgerのためseedはnot applicable。",
+      "source_ids": [
+        "S022",
+        "S023",
+        "S024",
+        "S079"
+      ],
+      "stopping_policy": "depot出発、4 stop、depot帰着の6 frameを記録して停止する。時間窓違反が生じても終端ledgerを残す。",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "総移動時間が同じ21分でも、到着14分がstop 4の終了12分を超えればrouteは時間窓hard constraintを満たさない。可行性を確認してから、実務のroute品質・最適性・再計画を別に評価する。",
+      "title_en": "Separate a feasible route from a time-window violation",
+      "title_ja": "時間窓付き配送で可行routeと違反を分けて読む",
+      "tuning_policy": "route、時間行列、車両数、出発時刻、service time、帰着deadlineをrun前に固定し、stop 4の終了時刻だけを変える。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.13"
+  "dataset_version": "0.18.14"
 }

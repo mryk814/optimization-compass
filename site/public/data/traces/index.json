@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.13",
+  "dataset_version": "0.18.14",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -252,6 +252,26 @@
       "title_en": "repeated-mpc-qp-cold-start",
       "title_ja": "repeated-mpc-qp-cold-start",
       "trace_id": "repeated-mpc-qp-cold-start"
+    },
+    {
+      "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+      "objective_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+      "path": "time-window-routing-feasible.json",
+      "profile_id": "PROFILE_TIME_WINDOW_ROUTING",
+      "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
+      "title_en": "time-window-routing-feasible",
+      "title_ja": "time-window-routing-feasible",
+      "trace_id": "time-window-routing-feasible"
+    },
+    {
+      "method_id": "M_LOCAL_SEARCH_COMBINATORIAL",
+      "objective_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+      "path": "time-window-routing-violation.json",
+      "profile_id": "PROFILE_TIME_WINDOW_ROUTING",
+      "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION",
+      "title_en": "time-window-routing-violation",
+      "title_ja": "time-window-routing-violation",
+      "trace_id": "time-window-routing-violation"
     },
     {
       "method_id": "M_ADJOINT_SENSITIVITY",

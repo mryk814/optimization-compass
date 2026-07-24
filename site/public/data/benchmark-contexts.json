@@ -497,6 +497,85 @@
       "tuning_policy": "documented defaults; no per-instance winner tuning"
     },
     {
+      "category": "MIP",
+      "context_id": "BENCH_TIME_WINDOW_ROUTING_EC019_4",
+      "context_version": "1.0.0",
+      "dimension": 4,
+      "evaluation_budget": 6,
+      "hardware": {
+        "reason": "deterministic route ledger; no CPU, wall-clock, or traffic measurement",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.time_window_routing.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          1.0,
+          2.0,
+          3.0,
+          4.0
+        ],
+        "policy": "fixed_route",
+        "start_time_minutes": 0
+      },
+      "last_verified": "2026-07-24",
+      "oracle_budget": {
+        "limit": 6,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "arrival_time",
+        "window_end",
+        "window_violation",
+        "cumulative_travel_time",
+        "route_feasibility"
+      ],
+      "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+      "problem_variant": "fixed depot, four-stop, one-vehicle route; stop-4 time-window hard-constraint contrast",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.time_window_routing.v1",
+        "generator_version": "1.0.0",
+        "runtime": "deterministic_educational_route_ledger"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S022",
+        "S023",
+        "S024",
+        "S079"
+      ],
+      "sparsity": {
+        "route": "0-1-2-3-4-0",
+        "stops": 4,
+        "travel_time_matrix": "5x5_minutes",
+        "vehicle_count": 1
+      },
+      "status_mapping": {
+        "ranking": "forbidden",
+        "solver_benchmark": "not_applicable",
+        "time_window": "hard_constraint"
+      },
+      "stopping": {
+        "policy": "record_depot_departure_four_stops_and_return",
+        "route_legs": 5
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "return_deadline_minutes": 30.0,
+        "time_window_violation_minutes": 0.0
+      },
+      "tuning_policy": "route, travel-time matrix, vehicle count, start time, service time, return deadline, and all windows except stop-4 end fixed before comparison"
+    },
+    {
       "category": "NLP",
       "context_id": "BENCH_BILEVEL_REGRESSION_EDUCATIONAL_6",
       "context_version": "1.0.0",
@@ -1283,7 +1362,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.13",
+  "dataset_version": "0.18.14",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

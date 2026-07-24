@@ -265,33 +265,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_TIME_WINDOW_ROUTING_EC019"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/EC019",
+            "/traces/time-window-routing-feasible",
+            "/traces/time-window-routing-violation",
+            "/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
             "/methods/M_BRANCH_CUT",
             "/methods/M_CP_SAT",
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
@@ -328,17 +329,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/EC019",
+            "/traces/time-window-routing-feasible",
+            "/traces/time-window-routing-violation",
+            "/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
             "/methods/M_BRANCH_CUT",
             "/methods/M_CP_SAT",
             "/methods/M_LOCAL_SEARCH_COMBINATORIAL",
@@ -351,11 +355,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S022",
             "S023",
@@ -366,11 +367,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
+            "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -387,16 +389,8 @@
         }
       },
       "journey_id": "EC019",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4129,7 +4123,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.13",
+  "dataset_version": "0.18.14",
   "generated_at": "2026-07-24T00:00:00Z",
   "journeys": [
     {
@@ -4154,7 +4148,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4245,7 +4239,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4304,17 +4298,13 @@
       ],
       "canonical_url": "/gallery/EC019",
       "case_id": "EC019",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
+          "comparison_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_CP_SAT"
       ],
@@ -4322,7 +4312,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4346,8 +4336,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA031",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_TIME_WINDOW_ROUTING_EC019"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/time-window-routing-feasible",
+          "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
+          "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+          "role": "primary",
+          "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE"
+        },
+        {
+          "canonical_url": "/traces/time-window-routing-violation",
+          "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
+          "problem_instance_id": "INSTANCE_TIME_WINDOW_ROUTING_EC019",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION"
+        }
+      ],
       "source_ids": [
         "S022",
         "S023",
@@ -4356,7 +4363,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "距離・所要時間行列の生成時点、道路区分、タイムゾーン、service time、車両容量、driverの勤務・休憩ルールをversion管理する。探索前に各stopが少なくとも1台から到達可能かを確認し、期限停止時は未訪問stop、時間窓・容量違反、総距離、最良bound、停止理由を別々に報告する。実行可能routeが得られても最適性は未証明であり、交通予測を更新した再計算とdispatcherによる確認経路を残す。",
       "title_en": "Build time-window delivery routes under a deadline",
       "title_ja": "時間窓付き配送ルートを10分以内に組む"
@@ -4381,7 +4388,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4464,7 +4471,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4556,7 +4563,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4634,7 +4641,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4723,7 +4730,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4791,7 +4798,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4850,7 +4857,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4932,7 +4939,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5006,7 +5013,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5086,7 +5093,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5164,7 +5171,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5241,7 +5248,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5318,7 +5325,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5395,7 +5402,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5476,7 +5483,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5566,7 +5573,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5643,7 +5650,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5733,7 +5740,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5825,7 +5832,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5902,7 +5909,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6018,7 +6025,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6079,7 +6086,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6157,7 +6164,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6237,7 +6244,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6325,7 +6332,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6408,7 +6415,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6493,7 +6500,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.13",
+      "dataset_version": "0.18.14",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -7219,9 +7226,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 26,
+      "complete": 27,
       "draft": 0,
-      "partial": 4
+      "partial": 3
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

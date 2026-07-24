@@ -800,7 +800,9 @@
         }
       ],
       "case_id": "EC019",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_CP_SAT",
@@ -885,7 +887,9 @@
       "title_ja": "時間窓付き配送ルートを10分以内に組む",
       "variable_domain": "固定教材では $X=\\{\\text{depot 0を出発・帰着し、stop 1,2,3,4を各1回訪問する順列}\\}$。1台だけなのでdecisionは4 stopの訪問順序であり、連続ベクトルの直方体ではない。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_TIME_WINDOW_ROUTING_FEASIBLE",
+        "SCENARIO_TIME_WINDOW_ROUTING_VIOLATION"
       ]
     },
     {
@@ -2991,5 +2995,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.13"
+  "dataset_version": "0.18.14"
 }
