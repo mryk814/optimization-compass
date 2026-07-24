@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" role="img" aria-labelledby="title desc">
+  <title id="title">SPD境界を越えたtrialと修正後の点</title>
+  <desc id="desc">青緑のSPD領域内の点から橙の矢印が赤い領域外の点へ進み、破線の矢印で別の青緑の点へ修正される。</desc>
+  <defs>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#d97732"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#167f78"/>
+    </marker>
+  </defs>
+  <rect width="760" height="360" rx="24" fill="#f7f3e8"/>
+  <path d="M88 300 C118 188 184 99 300 54 C420 8 552 54 648 153 C692 198 715 251 720 300 Z"
+        fill="#dceee9" stroke="#173f56" stroke-width="4"/>
+  <path d="M88 300 H720" fill="none" stroke="#173f56" stroke-width="5"/>
+  <path d="M88 322 H720" fill="none" stroke="#c8574f" stroke-width="3" stroke-dasharray="10 10" opacity="0.75"/>
+  <ellipse cx="245" cy="178" rx="48" ry="30" transform="rotate(-24 245 178)"
+           fill="#167f78" opacity="0.18" stroke="#167f78" stroke-width="5"/>
+  <circle cx="245" cy="178" r="10" fill="#167f78"/>
+  <ellipse cx="514" cy="325" rx="52" ry="12" transform="rotate(8 514 325)"
+           fill="#c8574f" opacity="0.16" stroke="#c8574f" stroke-width="5"/>
+  <circle cx="514" cy="325" r="10" fill="#c8574f"/>
+  <ellipse cx="585" cy="255" rx="55" ry="18" transform="rotate(8 585 255)"
+           fill="#167f78" opacity="0.18" stroke="#167f78" stroke-width="5"/>
+  <circle cx="585" cy="255" r="10" fill="#167f78"/>
+  <path d="M285 198 C355 239 426 283 494 315" fill="none" stroke="#d97732" stroke-width="7"
+        stroke-linecap="round" marker-end="url(#arrow-orange)"/>
+  <path d="M531 310 C552 292 565 277 576 267" fill="none" stroke="#167f78" stroke-width="6"
+        stroke-dasharray="9 9" stroke-linecap="round" marker-end="url(#arrow-teal)"/>
+  <path d="M488 300 L540 350 M540 300 L488 350" stroke="#c8574f" stroke-width="6"
+        stroke-linecap="round" opacity="0.85"/>
+</svg>

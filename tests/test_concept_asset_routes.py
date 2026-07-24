@@ -114,3 +114,6 @@ def test_concepts_scope_failed_evaluations_and_quotient_ambiguity() -> None:
 
     spd = pages["concept.spd-matrix-geometry"]
     assert "$Q$を直交行列とすると" in spd.body
+    assert "./media/spd-boundary-repair.svg" in spd.body
+    assert (ROOT / "site/public/media/spd-boundary-repair.svg").is_file()
+    assert style_warnings(spd) == ()
