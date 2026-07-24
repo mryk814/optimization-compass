@@ -864,7 +864,10 @@ def _source_review_issues(
 
     try:
         case_review_age = generated_at.date() - date.fromisoformat(journey.last_reviewed)
-        if case_review_age.days < 0 or case_review_age.days > 365:
+        # Site exports are pinned to the SQLite release date for deterministic
+        # artifact identity, while Gallery prose can be reviewed afterwards.
+        # A review newer than the dataset release is fresh, not stale.
+        if case_review_age.days > 365:
             issues.add("stale_case_review")
     except ValueError:
         issues.add("stale_case_review")

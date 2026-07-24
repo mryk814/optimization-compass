@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import pytest
@@ -355,3 +355,31 @@ def test_source_review_uses_surface_sources_and_type_specific_freshness() -> Non
         source_index=stale_index,
         **kwargs,
     )
+
+
+def test_source_review_accepts_case_review_after_dataset_release() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "constrained-design")
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    comparisons_payload = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
+    gallery_payload = json.loads(GALLERY_FIXTURE.read_text(encoding="utf-8"))
+    source_index = SourceEvidenceIndex.model_validate_json(
+        SOURCE_FIXTURE.read_text(encoding="utf-8")
+    )
+    case = next(item for item in gallery_payload["cases"] if item["case_id"] == journey.case_id)
+
+    issues = _source_review_issues(
+        journey.model_copy(update={"last_reviewed": "2026-07-24"}),
+        case={**case, "last_reviewed": "2026-07-24"},
+        scenarios_by_id={item.scenario_id: item for item in scenarios.scenarios},
+        comparisons_by_id={
+            item["comparison_id"]: item for item in comparisons_payload["comparisons"]
+        },
+        content_pages=load_content(ROOT / "content"),
+        source_index=source_index,
+        generated_at=datetime(2026, 7, 19, tzinfo=UTC),
+    )
+
+    assert "stale_case_review" not in issues
