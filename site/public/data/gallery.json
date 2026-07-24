@@ -210,7 +210,7 @@
       ],
       "case_id": "shift-scheduling",
       "comparison_ids": [
-        "COMPARE_REPEATED_MPC_QP_WARM_START"
+        "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
       ],
       "conditional_methods": [
         {
@@ -311,8 +311,8 @@
       "variable_domain": "固定教材では4名・3日・日勤／夜勤の割当 $x\\in X=\\{0,1\\}^{4\\times3\\times2}$。$x_{s,d,h}=1$ はスタッフ $s$ を日 $d$ の勤務帯 $h$ へ割り当てること、0は割り当てないことを表す。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
-        "SCENARIO_REPEATED_MPC_QP_WARM_START",
-        "SCENARIO_REPEATED_MPC_QP_COLD_START"
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
       ]
     },
     {
@@ -493,10 +493,10 @@
       ],
       "map_node_id": "answer:Q11:lp_qp_conic",
       "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
-      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
+      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "problem_archetype_id": "PA018",
       "python_example": "import cvxpy as cp\nimport numpy as np\n\nmu = np.array([0.08, 0.06, 0.05, 0.03])\nsigma = np.array([[0.040, 0.006, 0.004, 0.002], [0.006, 0.025, 0.005, 0.003], [0.004, 0.005, 0.018, 0.002], [0.002, 0.003, 0.002, 0.010]])\nrisk_aversion = 2.0\nw = cp.Variable(4)\nobjective = cp.Minimize(risk_aversion * cp.quad_form(w, sigma) - mu @ w)\nconstraints = [cp.sum(w) == 1, w >= 0, w <= 0.6]\nproblem = cp.Problem(objective, constraints)\nproblem.solve()\nprint(problem.status, np.round(w.value, 4), float(mu @ w.value), float(w.value @ sigma @ w.value))",
-      "question": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。",
+      "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
       "question_answers": {
         "Q01": "continuous",
         "Q02": "explicit_algebraic",
@@ -517,7 +517,7 @@
       ],
       "status": "published",
       "title_en": "Portfolio allocation",
-      "title_ja": "ポートフォリオの配分を決める",
+      "title_ja": "平均・共分散でポートフォリオを配分する",
       "variable_domain": "固定教材では資産比率 $w\\in X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_iw_i=1\\}$。$w_i$ は資産 $i$ の保有比率で、空売りと借入は認めない。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE"
@@ -3003,5 +3003,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.16"
+  "dataset_version": "0.18.17"
 }

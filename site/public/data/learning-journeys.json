@@ -3692,21 +3692,21 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "SCENARIO_REPEATED_MPC_QP_COLD_START"
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
           ]
         },
         "canonical_comparison": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "COMPARE_REPEATED_MPC_QP_WARM_START"
+            "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
           ]
         },
         "canonical_problem_instance": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "INSTANCE_REPEATED_MPC_QP_EC025"
+            "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
           ]
         },
         "cross_surface_links": {
@@ -3714,23 +3714,21 @@
           "state": "complete",
           "target_ids": [
             "/gallery/shift-scheduling",
-            "/traces/repeated-mpc-qp-cold-start",
-            "/traces/repeated-mpc-qp-warm-start",
-            "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
+            "/traces/portfolio-mean-variance-gamma-high",
+            "/traces/portfolio-mean-variance-gamma-low",
+            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
             "/sources/S005",
-            "/sources/S012",
+            "/sources/S010",
             "/sources/S016",
             "/sources/S021",
             "/sources/S022",
             "/sources/S023",
-            "/sources/S043",
             "/sources/S053",
             "/sources/S054",
             "/sources/S055",
-            "/sources/S076",
             "/sources/S079"
           ]
         },
@@ -3761,7 +3759,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "SCENARIO_REPEATED_MPC_QP_WARM_START"
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
           ]
         },
         "route_reachability": {
@@ -3769,23 +3767,21 @@
           "state": "complete",
           "target_ids": [
             "/gallery/shift-scheduling",
-            "/traces/repeated-mpc-qp-cold-start",
-            "/traces/repeated-mpc-qp-warm-start",
-            "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
+            "/traces/portfolio-mean-variance-gamma-high",
+            "/traces/portfolio-mean-variance-gamma-low",
+            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
             "/sources/S005",
-            "/sources/S012",
+            "/sources/S010",
             "/sources/S016",
             "/sources/S021",
             "/sources/S022",
             "/sources/S023",
-            "/sources/S043",
             "/sources/S053",
             "/sources/S054",
             "/sources/S055",
-            "/sources/S076",
             "/sources/S079"
           ]
         },
@@ -3794,16 +3790,14 @@
           "state": "complete",
           "target_ids": [
             "S005",
-            "S012",
+            "S010",
             "S016",
             "S021",
             "S022",
             "S023",
-            "S043",
             "S053",
             "S054",
             "S055",
-            "S076",
             "S079"
           ]
         },
@@ -3811,8 +3805,8 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
-            "SCENARIO_REPEATED_MPC_QP_COLD_START",
-            "SCENARIO_REPEATED_MPC_QP_WARM_START"
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
           ]
         },
         "terminology_prerequisite": {
@@ -4111,7 +4105,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "generated_at": "2026-07-24T00:00:00Z",
   "journeys": [
     {
@@ -4136,7 +4130,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4227,7 +4221,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4300,7 +4294,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4376,7 +4370,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4459,7 +4453,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4551,7 +4545,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4629,7 +4623,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4714,7 +4708,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4795,7 +4789,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4871,7 +4865,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4953,7 +4947,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5027,7 +5021,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5107,7 +5101,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5185,7 +5179,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5262,7 +5256,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5339,7 +5333,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5416,7 +5410,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5497,7 +5491,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5587,7 +5581,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5664,7 +5658,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5754,7 +5748,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5846,7 +5840,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5923,7 +5917,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6039,7 +6033,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6055,7 +6049,7 @@
       ],
       "journey_id": "portfolio-allocation",
       "last_reviewed": "2026-07-24",
-      "learning_objective": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。",
+      "learning_objective": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
       "limitations": [
         "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
         "凸QPの大域解は入力したmodel内の保証であり、将来収益、損失上限、tail risk、実現performanceを保証しない。実運用では時系列のheld-out評価と推定不確実性の検証が必要である。"
@@ -6076,9 +6070,9 @@
         "S103"
       ],
       "status": "partial",
-      "takeaway": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
+      "takeaway": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "title_en": "Portfolio allocation",
-      "title_ja": "ポートフォリオの配分を決める"
+      "title_ja": "平均・共分散でポートフォリオを配分する"
     },
     {
       "candidate_method_ids": [
@@ -6100,7 +6094,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6178,7 +6172,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6258,7 +6252,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6334,8 +6328,8 @@
       "case_id": "shift-scheduling",
       "comparisons": [
         {
-          "canonical_url": "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
-          "comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START"
+          "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
         }
       ],
       "completion_reasons": [],
@@ -6346,7 +6340,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6370,36 +6364,34 @@
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA026",
       "problem_instance_ids": [
-        "INSTANCE_REPEATED_MPC_QP_EC025"
+        "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
       ],
       "scenarios": [
         {
-          "canonical_url": "/traces/repeated-mpc-qp-cold-start",
-          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
-          "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
-          "role": "sensitivity",
-          "scenario_id": "SCENARIO_REPEATED_MPC_QP_COLD_START"
+          "canonical_url": "/traces/portfolio-mean-variance-gamma-high",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
         },
         {
-          "canonical_url": "/traces/repeated-mpc-qp-warm-start",
-          "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
-          "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
-          "role": "primary",
-          "scenario_id": "SCENARIO_REPEATED_MPC_QP_WARM_START"
+          "canonical_url": "/traces/portfolio-mean-variance-gamma-low",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
         }
       ],
       "source_ids": [
         "S005",
-        "S012",
+        "S010",
         "S016",
         "S021",
         "S022",
         "S023",
-        "S043",
         "S053",
         "S054",
         "S055",
-        "S076",
         "S079"
       ],
       "status": "complete",
@@ -6429,7 +6421,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6514,7 +6506,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"

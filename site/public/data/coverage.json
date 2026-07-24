@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "expectations": [
     {
       "applicability": "expected",
@@ -1678,11 +1678,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 3,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+            "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "COMPARE_REPEATED_MPC_QP_WARM_START"
           ]
@@ -1745,7 +1746,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 55,
+          "count": 58,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1758,6 +1759,7 @@
             "/methods/M_PRIMAL_DUAL_CONIC",
             "/methods/M_SIMPLEX",
             "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
+            "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
             "COMPARE_REPEATED_MPC_QP_WARM_START",
             "EC025",
@@ -1799,6 +1801,8 @@
             "portfolio-allocation",
             "portfolio-cvar-8-4",
             "portfolio-cvar-allocation",
+            "portfolio-mean-variance-gamma-high",
+            "portfolio-mean-variance-gamma-low",
             "portfolio-nominal-8-4",
             "primal-dual-conic",
             "primal-simplex",
@@ -1845,11 +1849,13 @@
           ]
         },
         "visualization": {
-          "count": 4,
+          "count": 6,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "portfolio-cvar-8-4",
+            "portfolio-mean-variance-gamma-high",
+            "portfolio-mean-variance-gamma-low",
             "portfolio-nominal-8-4",
             "repeated-mpc-qp-cold-start",
             "repeated-mpc-qp-warm-start"

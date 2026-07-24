@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -232,6 +232,26 @@
       "title_en": "CVaR allocation · training / held-out diagnostics",
       "title_ja": "CVaR配分 · training / held-out診断",
       "trace_id": "portfolio-cvar-8-4"
+    },
+    {
+      "method_id": "MF_LP_QP_CONIC",
+      "objective_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "path": "portfolio-mean-variance-gamma-low.json",
+      "profile_id": "PROFILE_PORTFOLIO_MEAN_VARIANCE",
+      "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+      "title_en": "portfolio-mean-variance-gamma-low",
+      "title_ja": "portfolio-mean-variance-gamma-low",
+      "trace_id": "portfolio-mean-variance-gamma-low"
+    },
+    {
+      "method_id": "MF_LP_QP_CONIC",
+      "objective_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "path": "portfolio-mean-variance-gamma-high.json",
+      "profile_id": "PROFILE_PORTFOLIO_MEAN_VARIANCE",
+      "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+      "title_en": "portfolio-mean-variance-gamma-high",
+      "title_ja": "portfolio-mean-variance-gamma-high",
+      "trace_id": "portfolio-mean-variance-gamma-high"
     },
     {
       "method_id": "M_ADMM_QP",

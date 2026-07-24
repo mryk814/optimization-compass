@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "entities": [
     {
       "aliases": [],
@@ -2841,12 +2841,17 @@
       "entity_id": "portfolio-allocation",
       "entity_type": "case",
       "external_url": null,
-      "label": "ポートフォリオの配分を決める",
+      "label": "平均・共分散でポートフォリオを配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
           "target_id": "MF_LP_QP_CONIC",
           "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
         },
         {
           "relation_type": "conditional_method",
@@ -2939,7 +2944,7 @@
           "target_type": "view"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -3274,7 +3279,7 @@
         },
         {
           "relation_type": "comparison",
-          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
           "target_type": "comparison"
         },
         {
@@ -3379,12 +3384,12 @@
         },
         {
           "relation_type": "visualization",
-          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
           "target_type": "view"
         },
         {
           "relation_type": "visualization",
-          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
           "target_type": "view"
         },
         {
@@ -4882,6 +4887,67 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+      "entity_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "risk aversionで平均・分散配分を読み比べる",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "portfolio-allocation",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "portfolio-allocation",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-mean-variance-gamma-high",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "portfolio-mean-variance-gamma-low",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
       "entity_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
       "entity_type": "comparison",
@@ -4972,11 +5038,6 @@
         {
           "relation_type": "learning_journey",
           "target_id": "EC025",
-          "target_type": "journey"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
           "target_type": "journey"
         },
         {
@@ -20728,7 +20789,7 @@
       "entity_id": "portfolio-allocation",
       "entity_type": "journey",
       "external_url": null,
-      "label": "ポートフォリオの配分を決める",
+      "label": "平均・共分散でポートフォリオを配分する",
       "relations": [
         {
           "relation_type": "candidate_method",
@@ -20739,6 +20800,11 @@
           "relation_type": "case",
           "target_id": "portfolio-allocation",
           "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
         },
         {
           "relation_type": "conditional_method",
@@ -20816,7 +20882,7 @@
           "target_type": "problem"
         }
       ],
-      "summary": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。"
+      "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
     },
     {
       "aliases": [],
@@ -21191,7 +21257,7 @@
         },
         {
           "relation_type": "comparison",
-          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
           "target_type": "comparison"
         },
         {
@@ -21206,7 +21272,7 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S012",
+          "target_id": "S010",
           "target_type": "source"
         },
         {
@@ -21231,11 +21297,6 @@
         },
         {
           "relation_type": "evidence",
-          "target_id": "S043",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
           "target_id": "S053",
           "target_type": "source"
         },
@@ -21247,11 +21308,6 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
-          "target_id": "S076",
           "target_type": "source"
         },
         {
@@ -21281,7 +21337,7 @@
         },
         {
           "relation_type": "primary",
-          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
           "target_type": "scenario"
         },
         {
@@ -21291,7 +21347,7 @@
         },
         {
           "relation_type": "sensitivity",
-          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
           "target_type": "scenario"
         }
       ],
@@ -21981,6 +22037,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
           "target_type": "comparison"
         },
@@ -22037,6 +22098,16 @@
         {
           "relation_type": "visualization",
           "target_id": "portfolio-cvar-8-4",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-mean-variance-gamma-high",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "portfolio-mean-variance-gamma-low",
           "target_type": "trace"
         },
         {
@@ -30670,6 +30741,78 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "平均・分散配分: high gamma",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "portfolio-mean-variance-gamma-high",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "平均・分散配分: low gamma",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "portfolio-mean-variance-gamma-low",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S010",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
       "entity_type": "scenario",
       "external_url": null,
@@ -30755,11 +30898,6 @@
           "relation_type": "learning_journey",
           "target_id": "EC025",
           "target_type": "journey"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
-          "target_type": "journey"
         }
       ],
       "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
@@ -30800,11 +30938,6 @@
         {
           "relation_type": "learning_journey",
           "target_id": "EC025",
-          "target_type": "journey"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
           "target_type": "journey"
         }
       ],
@@ -33738,6 +33871,58 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/portfolio-mean-variance-gamma-high",
+      "entity_id": "portfolio-mean-variance-gamma-high",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "portfolio-mean-variance-gamma-high",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/portfolio-mean-variance-gamma-low",
+      "entity_id": "portfolio-mean-variance-gamma-low",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "portfolio-mean-variance-gamma-low",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "MF_LP_QP_CONIC",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/portfolio-nominal-8-4",
       "entity_id": "portfolio-nominal-8-4",
       "entity_type": "trace",
@@ -34446,6 +34631,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_PORTFOLIO_CVAR_8_4",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
       "relations": [],
       "summary": ""
     },

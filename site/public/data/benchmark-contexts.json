@@ -1368,6 +1368,78 @@
     },
     {
       "category": "QP",
+      "context_id": "BENCH_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "context_version": "1.0.0",
+      "dimension": 4,
+      "evaluation_budget": 1,
+      "hardware": {
+        "reason": "deterministic educational ledger; no wall-clock benchmark",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.portfolio_mean_variance.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.25,
+          0.25,
+          0.25,
+          0.25
+        ],
+        "policy": "uniform_initial_point"
+      },
+      "last_verified": "2026-07-24",
+      "oracle_budget": {
+        "limit": 1,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "expected_return",
+        "variance",
+        "mean_variance_objective",
+        "maximum_weight",
+        "simplex_residual"
+      ],
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "problem_variant": "fixed_four_asset_mean_variance_capped_simplex",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "parameter_sensitivity",
+        "generator_id": "educational.portfolio_mean_variance.v1",
+        "generator_version": "1.0.0",
+        "runtime": "deterministic_educational_grid"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S010",
+        "S055"
+      ],
+      "sparsity": {
+        "decision": "dense_four_asset_vector"
+      },
+      "status_mapping": {
+        "future_return_guarantee": "not_applicable",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "record_fixed_allocation_snapshot",
+        "value": 1
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "max_asset_weight": 0.6,
+        "simplex_sum": 1.0
+      },
+      "tuning_policy": "mean, covariance, capped simplex, and 0.05 grid fixed before gamma sensitivity contrast"
+    },
+    {
+      "category": "QP",
       "context_id": "BENCH_QP",
       "context_version": "1.0.0",
       "dimension": 2,
@@ -1508,7 +1580,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

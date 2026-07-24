@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "definitions": [
     {
       "available_oracles": [
@@ -412,6 +412,41 @@
         "S076"
       ],
       "variable_domain": "trajectory"
+    },
+    {
+      "available_oracles": [
+        "objective_value",
+        "gradient",
+        "constraint_value"
+      ],
+      "constraint_class": "simplex_and_bounds",
+      "dimensionality_policy": {
+        "dimension": 4,
+        "kind": "fixed"
+      },
+      "feature_ids": [
+        "F_VARIABLE_SIMPLEX",
+        "F_CONSTRAINT_SIMPLEX",
+        "F_CONSTRAINT_BOUNDS",
+        "F_OBJECTIVE_QUADRATIC",
+        "F_DERIVATIVE_ANALYTIC_GRADIENT"
+      ],
+      "known_reference_semantics": "The fixed teaching reference is the exact solution of the declared four-asset convex QP with fixed mean and covariance inputs; it does not establish future return, tail risk, or parameter-estimation quality.",
+      "last_verified": "2026-07-24",
+      "mathematical_family": "convex_quadratic_portfolio",
+      "name_en": "Nominal mean-variance portfolio allocation",
+      "name_ja": "名目平均・分散ポートフォリオ配分",
+      "objective_direction": "minimize",
+      "objective_form": "convex_quadratic",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "related_problem_ids": [
+        "PA018"
+      ],
+      "source_ids": [
+        "S010",
+        "S055"
+      ],
+      "variable_domain": "simplex"
     },
     {
       "available_oracles": [
@@ -2254,6 +2289,125 @@
       "source_ids": [
         "S055",
         "S103"
+      ]
+    },
+    {
+      "bounds": {
+        "simplex_sum": 1.0,
+        "weights": [
+          0.0,
+          0.6
+        ]
+      },
+      "constraints": [
+        {
+          "constraint_id": "capped_simplex",
+          "expression": "sum(w)=1, 0<=w_i<=0.6",
+          "sense": "eq_and_bounds"
+        }
+      ],
+      "dimension": 4,
+      "display": {
+        "axis_labels": [
+          "fixed allocation snapshot",
+          "diagnostic value"
+        ],
+        "expression": "min gamma w^T Sigma w - mu^T w, gamma=2, sum(w)=1, 0<=w_i<=0.6",
+        "range": {
+          "expected_return": [
+            0.0,
+            0.08
+          ],
+          "objective_value": [
+            -0.08,
+            0.05
+          ],
+          "simplex_residual": [
+            0.0,
+            1e-10
+          ],
+          "variance": [
+            0.0,
+            0.04
+          ],
+          "weight": [
+            0.0,
+            0.6
+          ]
+        },
+        "units": [
+          "snapshot",
+          "mixed portfolio diagnostic"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "uniform",
+          "point": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ]
+        }
+      ],
+      "intended_phenomena": [
+        "simplex_allocation",
+        "mean_variance_tradeoff",
+        "risk_aversion_sensitivity",
+        "convex_qp_diagnostics"
+      ],
+      "known_reference": null,
+      "known_reference_status": "unknown",
+      "last_verified": "2026-07-24",
+      "limitations_en": "A four-asset teaching QP with fixed moments and no shorting; it does not represent estimation error, tail risk, scenario uncertainty, turnover, transaction costs, or future returns.",
+      "limitations_ja": "固定4資産・固定平均/共分散・空売りなしの教育用QPです。推定誤差、tail risk、scenario不確実性、turnover、取引費用、将来収益を表しません。",
+      "name_en": "Four-asset nominal mean-variance allocation with fixed moments",
+      "name_ja": "4資産・固定平均/共分散の名目平均・分散配分",
+      "parameters": {
+        "covariance": [
+          [
+            0.04,
+            0.006,
+            0.004,
+            0.002
+          ],
+          [
+            0.006,
+            0.025,
+            0.005,
+            0.003
+          ],
+          [
+            0.004,
+            0.005,
+            0.018,
+            0.002
+          ],
+          [
+            0.002,
+            0.003,
+            0.002,
+            0.01
+          ]
+        ],
+        "expected_returns": [
+          0.08,
+          0.06,
+          0.05,
+          0.03
+        ],
+        "max_asset_weight": 0.6,
+        "risk_aversion": 2.0
+      },
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "registry_key": "problem.portfolio_mean_variance.fixed_4.v1",
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S010",
+        "S055"
       ]
     },
     {

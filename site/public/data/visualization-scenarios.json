@@ -1,6 +1,6 @@
 {
   "contract_version": "1.2.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "scenarios": [
     {
       "artifact": {
@@ -14,13 +14,13 @@
         ],
         "payload_bytes": 215663,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "01b61f1a7b17cf9b3a6715e73d06ca32130aba406e6e6e333d0d38fc911ee20e",
+        "payload_sha256": "d4db8eb94d189b56b505b7a1eb224d11046ffab3e81bf186dc17c529dda3c43c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -269,13 +269,13 @@
         ],
         "payload_bytes": 210212,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "a293ac0d483a97ff4691fcc6e480a0de0b366e78bce172753e72164255d9cd13",
+        "payload_sha256": "7712199d66ac95e7fd859fd8731ff22d705da477cdbe35fb2c154221ebf3ebaa",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -442,13 +442,13 @@
         ],
         "payload_bytes": 208171,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "0dfce94887601a931d68853f75ca5a9e23d4989560c57f6062df9f4cf8c5e8e6",
+        "payload_sha256": "cdae8603f1b0c0527a5f29a9f284a84ac2153deaa67cb714fafd23fc4f4a5ea6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -615,13 +615,13 @@
         ],
         "payload_bytes": 204203,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "1f80cfaa90710feb5062d5a9d243e2a8558d4243b1ec90bbf6722224389e6dfb",
+        "payload_sha256": "7c96ceaec95da7c387a74661edaff9d9b69a71135425c7729c427bf419030fe9",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
       "canonical_scenario_id": "SCENARIO_NM_ROSENBROCK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -789,13 +789,13 @@
         ],
         "payload_bytes": 72535,
         "payload_path": "traces/gradient_descent-quadratic.json",
-        "payload_sha256": "8b4b1f9f1b303e55fbf627c4807530f7046ffb970ce612d1bf3de5533347b04e",
+        "payload_sha256": "1199d3d7f734a82bcd78b0bc619ce4daf0dcbc1986d4821e2e11998a3852d381",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1055,13 +1055,13 @@
         ],
         "payload_bytes": 66444,
         "payload_path": "traces/momentum-quadratic.json",
-        "payload_sha256": "5e40615e8cf5184fbab39d9297e01d6581b066e66f62edd9490db20428408b2b",
+        "payload_sha256": "ac26dbe32d690a5c155cf3ccd6f7dc8aded119e4525e542e5a581c7e1466367d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1237,13 +1237,13 @@
         ],
         "payload_bytes": 65996,
         "payload_path": "traces/adam-quadratic.json",
-        "payload_sha256": "1d4132f33d60864cda4d5ce564a99dcf05ed0e974a04a285cf132ab30261a321",
+        "payload_sha256": "bbde11073f8a60269bcd15a1ba60bdff6d8aa07d6fbec11a87d121bca9df6464",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1419,13 +1419,13 @@
         ],
         "payload_bytes": 53139,
         "payload_path": "traces/gradient_descent-quadratic-divergence.json",
-        "payload_sha256": "a514c98199bfebbb6c69de0f94ea72052c5ac7a701edcdab6b659b615fa527ec",
+        "payload_sha256": "0763881be8740486fd4e0c32afd19ba6352db3d324e3f2eb4b24b8f97f86531c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_GD_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1615,13 +1615,13 @@
         ],
         "payload_bytes": 66387,
         "payload_path": "traces/momentum-quadratic-divergence.json",
-        "payload_sha256": "72cf0aa908e5ea2c0d8c470c3681a9e0b0b376431a7ec1934d3bbeeea48bda13",
+        "payload_sha256": "3d7b8c23b9ef1d8e16ecc49abaaa36d241d929933283ff93d04ff43a49c1ee35",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -1811,13 +1811,13 @@
         ],
         "payload_bytes": 66018,
         "payload_path": "traces/adam-quadratic-divergence.json",
-        "payload_sha256": "fc92fc2445ed0364def62f2198ad5ce48df4bdb645a3fc15bcad7852b2495dd2",
+        "payload_sha256": "a688777183da15026cd91c8869f99a70449213569551d10b713b0b6613e9c891",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "continuous_trajectory"
       },
       "canonical_scenario_id": "SCENARIO_ADAM_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2008,13 +2008,13 @@
         ],
         "payload_bytes": 22750,
         "payload_path": "traces/exponential-fit-trf.json",
-        "payload_sha256": "37ae3e203fc3aa11798fe5e2907207c2a00a924de6d8aac10a345efd2026256e",
+        "payload_sha256": "26c0928b338da608669e78b50fc181af0a5b8b6b8f5b2ae63b781d4368c08d5d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2196,13 +2196,13 @@
         ],
         "payload_bytes": 22452,
         "payload_path": "traces/exponential-fit-trf-poor-init.json",
-        "payload_sha256": "348fe89d49b0c061a41c46a6c9a946a78231c754454c7e0653ba3fe70fdb3da5",
+        "payload_sha256": "bf972a821621af63f88c1e26924c828ad6b6481bc9ca0ed9b6c4c1c7db7008a1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2398,13 +2398,13 @@
         ],
         "payload_bytes": 22736,
         "payload_path": "traces/exponential-fit-lm.json",
-        "payload_sha256": "60d7fad3597bfd6fd09ffdef2a9ef3eb05e7f60e5fa45556ea995c3dc5f4bee6",
+        "payload_sha256": "5342db03414591c5cd76140fa2de9d02959662b6485e6f1f92e9de3531c6d03b",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2586,13 +2586,13 @@
         ],
         "payload_bytes": 22742,
         "payload_path": "traces/exponential-fit-lbfgsb.json",
-        "payload_sha256": "ac09ee6ff14306cf6556c80267df0b42b27b307bd53df18547ae882aa2d70c88",
+        "payload_sha256": "7dd7616fab7ff1ff6f95fee61451ab106de0a39eceba40c83b61c46310529862",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2773,13 +2773,13 @@
         ],
         "payload_bytes": 41553,
         "payload_path": "traces/so3-projected-alignment.json",
-        "payload_sha256": "9b14502e18fffc832b5f249774349a51d7cc16d0b73b93766ff6f2e66e159249",
+        "payload_sha256": "e6b3ae91e335e21b8890efa5ef9bedfa492a8c3c2c7f88e09d9894a8d1e74feb",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -2979,13 +2979,13 @@
         ],
         "payload_bytes": 41895,
         "payload_path": "traces/so3-riemannian-alignment.json",
-        "payload_sha256": "9c1f88726dbc73feacabd7cda5e5fc7aed523ad8b1940de066e1bcc85e14af98",
+        "payload_sha256": "049ff38343734c466ed8231c3cfa459880d9562059f4946c881b36ad9bb28234",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SO3_RIEMANNIAN_ALIGNMENT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3175,13 +3175,13 @@
         ],
         "payload_bytes": 14304,
         "payload_path": "traces/optimal-control-ec020-history.json",
-        "payload_sha256": "7b6b17c2a9fd6f5694c2c27752c759953b3906a03651a962c8896968fd752c40",
+        "payload_sha256": "cbca3449e3b614a9bfbe759abab3b077506fd8850a723fa700e49fa43a4406e1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3374,13 +3374,13 @@
         ],
         "payload_bytes": 16113,
         "payload_path": "traces/pendulum-collocation-coarse.json",
-        "payload_sha256": "f3d4e2b8b7daf344e793d500fc83ca5a1bdade52531c92f27abe6a54c1ed17d8",
+        "payload_sha256": "b206c12da63aafa7247b356b55689c2dcc357cfe32f3e1b90a3630db555db48f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3578,13 +3578,13 @@
         ],
         "payload_bytes": 16089,
         "payload_path": "traces/pendulum-collocation-refined.json",
-        "payload_sha256": "461f0b89327b30829b4c77d0606d309161a03aac2a147a3b05c043d2d0f6c512",
+        "payload_sha256": "bba8224f4caa8c272935b003ab6167a2b639703c97bf8f6b7401168700c47d65",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3781,13 +3781,13 @@
         ],
         "payload_bytes": 15786,
         "payload_path": "traces/pendulum-model-rollout-failure.json",
-        "payload_sha256": "79920342a236d01f4d9b4bb199846c451651f1048fbdd2c33d79d30c820fd50b",
+        "payload_sha256": "8bdc1cbab4ea7b8dac2d9a7e745891e3a91ef1558bb00c2d0327db4f220081f7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PENDULUM_SWING_UP_MESH_20",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -3983,13 +3983,13 @@
         ],
         "payload_bytes": 6637,
         "payload_path": "traces/portfolio-nominal-8-4.json",
-        "payload_sha256": "156859ad59abc49bfbcca0ec0fe8d3a0c8f52cb4b86d2fb0c8f7bf889572d079",
+        "payload_sha256": "98914efd17f918140e4017994191d49dcd22c643f9fb693bab8e9d7581f0abe4",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4184,13 +4184,13 @@
         ],
         "payload_bytes": 7041,
         "payload_path": "traces/portfolio-cvar-8-4.json",
-        "payload_sha256": "37532bf526c2cc77e25a941dd9dbcd7fd4116c59940fb138893785eb8bfe1378",
+        "payload_sha256": "a6142c48b9b79725b4dafa6e03c15b3090a69952cd2230557d551383ebf1665e",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4367,6 +4367,396 @@
         "artifact_contract_version": "1.0.0",
         "artifact_kind": "executable_trace",
         "observable_ids": [
+          "expected_return",
+          "variance",
+          "mean_variance_objective",
+          "maximum_weight",
+          "simplex_residual"
+        ],
+        "payload_bytes": 3682,
+        "payload_path": "traces/portfolio-mean-variance-gamma-low.json",
+        "payload_sha256": "113818b33d0f6b07824d98dcb020275a2f16f7d1c5d2f9f5cfd042cb0349d277",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.17",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 1
+        },
+        "initial_condition": {
+          "point": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 1
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-24",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "Nominal mean-variance portfolio allocation ledger",
+          "ja": "名目平均・分散ポートフォリオのallocation ledger"
+        },
+        "expected_phenomenon_en": "Even with fixed inputs, gamma changes allocation, expected return, and variance.",
+        "expected_phenomenon_ja": "固定入力でもgammaで配分・期待収益・分散が動く。",
+        "failure_signals": [
+          {
+            "label_en": "mistake the input-model solution for a future guarantee",
+            "label_ja": "入力QPの解を将来保証と読む",
+            "observable_ids": [
+              "expected_return",
+              "variance"
+            ],
+            "signal_id": "future_guarantee"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No future-return reference is shown.",
+          "note_ja": "将来returnの既知値は表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read return, variance, and feasibility together without turning gamma into a method ranking.",
+          "ja": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+        },
+        "limitations_en": "A fixed four-asset teaching ledger; it does not establish tail risk, estimation quality, or future performance.",
+        "limitations_ja": "固定4資産・固定推定値の教材であり、tail risk、推定誤差、将来performanceを示さない。",
+        "misconception": {
+          "en": "A larger gamma necessarily lowers future losses.",
+          "ja": "gammaを大きくすれば、将来損失も必ず小さくなる。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "expected_return",
+              "variance"
+            ],
+            "title_en": "Fix inputs and gamma",
+            "title_ja": "入力とgammaを固定"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "mean_variance_objective"
+            ],
+            "title_en": "Read the objective components",
+            "title_ja": "目的値の内訳を読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "maximum_weight",
+              "simplex_residual"
+            ],
+            "title_en": "Check allocation and feasibility",
+            "title_ja": "配分と可行性を照合"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.simplex"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "expected return",
+            "label_ja": "期待収益",
+            "observable_id": "expected_return"
+          },
+          {
+            "label_en": "variance risk",
+            "label_ja": "分散risk",
+            "observable_id": "variance"
+          },
+          {
+            "label_en": "mean-variance objective",
+            "label_ja": "平均・分散objective",
+            "observable_id": "mean_variance_objective"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "maximum allocation weight",
+            "label_ja": "最大配分比率",
+            "observable_id": "maximum_weight"
+          },
+          {
+            "label_en": "simplex residual",
+            "label_ja": "simplex残差",
+            "observable_id": "simplex_residual"
+          }
+        ],
+        "static_summary": {
+          "en": "Change only gamma with fixed moments, then read allocation, return, variance, and constraint residual.",
+          "ja": "固定平均・共分散でgammaだけを変え、配分・期待収益・分散・制約残差を読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "inspect return, variance, and constraints together",
+            "label_ja": "収益・分散・制約を同時に確認",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "mean_variance_objective",
+              "maximum_weight",
+              "simplex_residual"
+            ],
+            "signal_id": "diagnostics_together"
+          }
+        ],
+        "text_alternative": {
+          "en": "List weights, expected return, variance, objective, maximum weight, and simplex residual for each snapshot.",
+          "ja": "各snapshotの資産比率、期待収益、分散、objective、最大比率、simplex残差を列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "portfolio-mean-variance-gamma-low",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "MF_LP_QP_CONIC",
+          "profile_id": "PROFILE_PORTFOLIO_MEAN_VARIANCE",
+          "run_id": "RUN_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+        }
+      ],
+      "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+      "source_ids": [
+        "S010",
+        "S055"
+      ],
+      "title_en": "Mean-variance allocation: low gamma",
+      "title_ja": "平均・分散配分: low gamma"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
+          "expected_return",
+          "variance",
+          "mean_variance_objective",
+          "maximum_weight",
+          "simplex_residual"
+        ],
+        "payload_bytes": 3798,
+        "payload_path": "traces/portfolio-mean-variance-gamma-high.json",
+        "payload_sha256": "fe39b8f5ef486a97e50887a86c98848a0bb033f09b566d1b2609be305c8e99d6",
+        "renderer_contract_version": "1.0.0",
+        "renderer_family": "generic_metric_history"
+      },
+      "canonical_scenario_id": null,
+      "contract_version": "1.2.0",
+      "dataset_version": "0.18.17",
+      "experiment": {
+        "budget": {
+          "metric": "oracle_evaluations",
+          "value": 1
+        },
+        "initial_condition": {
+          "point": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ]
+        },
+        "oracle_policy": [
+          "objective_value",
+          "gradient",
+          "constraint_value"
+        ],
+        "parameter_preset_id": "PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+        "seed": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "stopping": {
+          "oracle_evaluations": 1
+        },
+        "tuning_policy": "fixed_preset"
+      },
+      "guided_story": null,
+      "identity_status": "generated_only",
+      "last_verified": "2026-07-24",
+      "lesson": {
+        "comparison_role": "sensitivity_variant",
+        "derived_media_caption": {
+          "en": "Nominal mean-variance portfolio allocation ledger",
+          "ja": "名目平均・分散ポートフォリオのallocation ledger"
+        },
+        "expected_phenomenon_en": "Even with fixed inputs, gamma changes allocation, expected return, and variance.",
+        "expected_phenomenon_ja": "固定入力でもgammaで配分・期待収益・分散が動く。",
+        "failure_signals": [
+          {
+            "label_en": "mistake the input-model solution for a future guarantee",
+            "label_ja": "入力QPの解を将来保証と読む",
+            "observable_ids": [
+              "expected_return",
+              "variance"
+            ],
+            "signal_id": "future_guarantee"
+          }
+        ],
+        "known_reference_display": {
+          "note_en": "No future-return reference is shown.",
+          "note_ja": "将来returnの既知値は表示しない。",
+          "policy": "not_shown"
+        },
+        "learning_objective": {
+          "en": "Read return, variance, and feasibility together without turning gamma into a method ranking.",
+          "ja": "期待収益・分散・可行性を同時に読み、gammaを手法順位へ読み替えない。"
+        },
+        "limitations_en": "A fixed four-asset teaching ledger; it does not establish tail risk, estimation quality, or future performance.",
+        "limitations_ja": "固定4資産・固定推定値の教材であり、tail risk、推定誤差、将来performanceを示さない。",
+        "misconception": {
+          "en": "A larger gamma necessarily lowers future losses.",
+          "ja": "gammaを大きくすれば、将来損失も必ず小さくなる。"
+        },
+        "narration_steps": [
+          {
+            "milestone_id": "start",
+            "observable_ids": [
+              "expected_return",
+              "variance"
+            ],
+            "title_en": "Fix inputs and gamma",
+            "title_ja": "入力とgammaを固定"
+          },
+          {
+            "milestone_id": "first_change",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "mean_variance_objective"
+            ],
+            "title_en": "Read the objective components",
+            "title_ja": "目的値の内訳を読む"
+          },
+          {
+            "milestone_id": "termination",
+            "observable_ids": [
+              "maximum_weight",
+              "simplex_residual"
+            ],
+            "title_en": "Check allocation and feasibility",
+            "title_ja": "配分と可行性を照合"
+          }
+        ],
+        "prerequisite_concept_ids": [
+          "concept.simplex"
+        ],
+        "primary_observables": [
+          {
+            "label_en": "expected return",
+            "label_ja": "期待収益",
+            "observable_id": "expected_return"
+          },
+          {
+            "label_en": "variance risk",
+            "label_ja": "分散risk",
+            "observable_id": "variance"
+          },
+          {
+            "label_en": "mean-variance objective",
+            "label_ja": "平均・分散objective",
+            "observable_id": "mean_variance_objective"
+          }
+        ],
+        "recommended_next_scenario_ids": [
+          "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+        ],
+        "secondary_observables": [
+          {
+            "label_en": "maximum allocation weight",
+            "label_ja": "最大配分比率",
+            "observable_id": "maximum_weight"
+          },
+          {
+            "label_en": "simplex residual",
+            "label_ja": "simplex残差",
+            "observable_id": "simplex_residual"
+          }
+        ],
+        "static_summary": {
+          "en": "Change only gamma with fixed moments, then read allocation, return, variance, and constraint residual.",
+          "ja": "固定平均・共分散でgammaだけを変え、配分・期待収益・分散・制約残差を読む。"
+        },
+        "success_signals": [
+          {
+            "label_en": "inspect return, variance, and constraints together",
+            "label_ja": "収益・分散・制約を同時に確認",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "mean_variance_objective",
+              "maximum_weight",
+              "simplex_residual"
+            ],
+            "signal_id": "diagnostics_together"
+          }
+        ],
+        "text_alternative": {
+          "en": "List weights, expected return, variance, objective, maximum weight, and simplex residual for each snapshot.",
+          "ja": "各snapshotの資産比率、期待収益、分散、objective、最大比率、simplex残差を列挙する。"
+        }
+      },
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "purpose": "sensitivity",
+      "runs": [
+        {
+          "artifact_id": "portfolio-mean-variance-gamma-high",
+          "implementation_id": null,
+          "implementation_mapping_status": "not_applicable",
+          "method_id": "MF_LP_QP_CONIC",
+          "profile_id": "PROFILE_PORTFOLIO_MEAN_VARIANCE",
+          "run_id": "RUN_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+        }
+      ],
+      "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+      "source_ids": [
+        "S010",
+        "S055"
+      ],
+      "title_en": "Mean-variance allocation: high gamma",
+      "title_ja": "平均・分散配分: high gamma"
+    },
+    {
+      "artifact": {
+        "artifact_contract": "AlgorithmTrace",
+        "artifact_contract_version": "1.0.0",
+        "artifact_kind": "executable_trace",
+        "observable_ids": [
           "tracking_error",
           "primal_residual",
           "dual_residual",
@@ -4376,13 +4766,13 @@
         ],
         "payload_bytes": 8691,
         "payload_path": "traces/repeated-mpc-qp-warm-start.json",
-        "payload_sha256": "2534868331ad76ab59edaa594a293b1fc46014f55594859eee826a914eec41f6",
+        "payload_sha256": "ffb6a6ecb0e66f9bb5e4415bc3f785e27e7861a76508995591a3eb57f017e93f",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4570,13 +4960,13 @@
         ],
         "payload_bytes": 8748,
         "payload_path": "traces/repeated-mpc-qp-cold-start.json",
-        "payload_sha256": "a7a6cf689ad37e481049a3cd83f3ea35e1c6c67d93ccbe1a0b1e1300de49d01d",
+        "payload_sha256": "eeb8c11d9b1569c3fabcf2ba798268922925d03a612537afdb45ad46154994a6",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4777,13 +5167,13 @@
         ],
         "payload_bytes": 8684,
         "payload_path": "traces/time-window-routing-feasible.json",
-        "payload_sha256": "d17ecac9a3388a27bfdd07d00b4e266c76e7b5f25bf7f1076f2c38dea5beab42",
+        "payload_sha256": "5898b6ab5d2d6349ecfcc694abc8de445445cfa2cf1d2cbaa80d26732dd3c90e",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -4969,13 +5359,13 @@
         ],
         "payload_bytes": 8719,
         "payload_path": "traces/time-window-routing-violation.json",
-        "payload_sha256": "0d3a7869c79fa50efc3d4d511c35195fbd5bde49ddb00d0785d662aecb1f41b6",
+        "payload_sha256": "91ff0555289df46cac9cf2931667534ddd469c92bfd980c7cadbcb8779010568",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5174,13 +5564,13 @@
         ],
         "payload_bytes": 9561,
         "payload_path": "traces/failed-simulation-feasible-ledger.json",
-        "payload_sha256": "85ddf34a0d2d5528e9d7f03b7efd9196691e53db072d34aa150be5082f06c6cb",
+        "payload_sha256": "aa3b9d0b7cadb6dd31c6696c5281cb8d47652db834bde00f0897c228df72afbd",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5358,13 +5748,13 @@
         ],
         "payload_bytes": 9366,
         "payload_path": "traces/failed-simulation-failure-ledger.json",
-        "payload_sha256": "7f76acd473a31e37ac5cf3de0949d657d86523095684246de95a875271f3faf4",
+        "payload_sha256": "753253f223fe0eecca8c825e153ab7cc18824120f2faa2a400cde767e46dd8ca",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5555,13 +5945,13 @@
         ],
         "payload_bytes": 4993,
         "payload_path": "traces/root-finding-component-tolerance.json",
-        "payload_sha256": "9e773b5fd072c774af44d9d74e1e0178fda79da69635eda3e7353b7e2511c05b",
+        "payload_sha256": "92439256956396537b06080eaaaccbc5a70abc219a0d093b37a8d9e2de5bbc5c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5729,13 +6119,13 @@
         ],
         "payload_bytes": 5114,
         "payload_path": "traces/root-finding-small-squared-residual.json",
-        "payload_sha256": "3340418d10d653d93cbf5455b8facfa820e92d5602e036944c80cfe41399f714",
+        "payload_sha256": "8055677b671bd3dd5dd106e51fae037d7d24f9ea093b3a7fd509c857ec4b6300",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -5918,13 +6308,13 @@
         ],
         "payload_bytes": 13733,
         "payload_path": "traces/pde-state-tolerance-tight.json",
-        "payload_sha256": "8c4140fe63742bf6ae475b71aeb87d4d74f5f66a50995e116fcac52c73eee70b",
+        "payload_sha256": "200cf3c490577ef8e207616629f71ee9705c8595e8022c367fe7892c2d4636df",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6128,13 +6518,13 @@
         ],
         "payload_bytes": 13212,
         "payload_path": "traces/pde-state-tolerance-loose.json",
-        "payload_sha256": "a1f4f435c770eb4d760d3f20ee2589b2f02d6dbc20e25e5d8c60cf4ef5db7d89",
+        "payload_sha256": "9b96fa7f96d53686c3a7f39ee83ead2e9942ea82adff30ee0775fa41ebd4c35c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6338,13 +6728,13 @@
         ],
         "payload_bytes": 9136,
         "payload_path": "traces/pde-state-solve-failure.json",
-        "payload_sha256": "9c48d4659b3cd499d65afb0bafef48139c7aec7fd3042ad66598b311582555db",
+        "payload_sha256": "086bcbab5464a5e151f58741852629ac0e4ecfb69a316a8d9d9e101695067b8d",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6549,13 +6939,13 @@
         ],
         "payload_bytes": 15258,
         "payload_path": "traces/bilevel-regression-exact-inner.json",
-        "payload_sha256": "2256e244f46a853c1910479a25229e69018726bfd78a144f358932b7505f8b1e",
+        "payload_sha256": "4e485dda0008efdcda3a39bfbafd7d6a3541f11972e5db6c9694e8641073d93a",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6765,13 +7155,13 @@
         ],
         "payload_bytes": 15970,
         "payload_path": "traces/bilevel-regression-relaxed-complementarity.json",
-        "payload_sha256": "beda6650c2a4f667696a11889dad1bc606c537b4ecc0bb705e6571a564dc8303",
+        "payload_sha256": "41c1c8da68764098ab790b3010c51e9ebded7e65a5ed0c02fe0d3b9bb8d11898",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -6978,13 +7368,13 @@
         ],
         "payload_bytes": 10967,
         "payload_path": "traces/hybrid-mode-chattering-ledger.json",
-        "payload_sha256": "298b79a25d4550b951ab1d27ec68751a8131d9d979ad0bbd03a52132d7ed4733",
+        "payload_sha256": "2a99322e4bf37ad9157d6381ffca2ffd4918f0022cf2148d25f68ad9196edefa",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7184,13 +7574,13 @@
         ],
         "payload_bytes": 16607,
         "payload_path": "traces/shape-diffuser-valid-update.json",
-        "payload_sha256": "dbcb319a29440c510bb7ff4eef1f1572721fdfbddadf0c0eccac151907f1930f",
+        "payload_sha256": "0ec0b25005f022234e1ccb0b28717af6d27dc87990038c42bab76982869a97a0",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7409,13 +7799,13 @@
         ],
         "payload_bytes": 16505,
         "payload_path": "traces/shape-diffuser-invalid-geometry.json",
-        "payload_sha256": "cb95ac5e451d89b83b98164d43c2fa34589790b56c49b49e8e13eec277e552ef",
+        "payload_sha256": "35fa8458b332bacf7108a78527699ed3449f08da2e113f42940c121a9543569c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7633,13 +8023,13 @@
         ],
         "payload_bytes": 16659,
         "payload_path": "traces/shape-topology-representation-contrast.json",
-        "payload_sha256": "716d9a1d43825c21be156af7d74cee72c931fd83da8f55f0d453ebffbb200d1a",
+        "payload_sha256": "65e5aada33eae6295ab1184e747583b04f9959bd7d9f1244e8f56561715a74ec",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "generic_metric_history"
       },
       "canonical_scenario_id": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -7854,13 +8244,13 @@
         ],
         "payload_bytes": 102177,
         "payload_path": "traces/binary-knapsack-bnb-complete.json",
-        "payload_sha256": "a93c0c45cfcbd853799d2aa328e3065ef0ed897143e18ee61e92c6ea0b6c9ccc",
+        "payload_sha256": "72807183ea61e47fdc7fddbed35d4296c836177312764a6a1b3f0b9a50090953",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8117,13 +8507,13 @@
         ],
         "payload_bytes": 39757,
         "payload_path": "traces/binary-knapsack-bnb-budget.json",
-        "payload_sha256": "84d2e280eee9bc7635f6ded8fa46a266af5cf8e89587ab03dd4a43bb8c6ac476",
+        "payload_sha256": "2a475bfe7ff8b7a3a1ea7bbc923e9b367b21e360d7668f4c8d7a578886d0707c",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "search_tree"
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8319,7 +8709,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8534,7 +8924,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -8749,7 +9139,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9036,7 +9426,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9252,7 +9642,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9477,7 +9867,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9703,7 +10093,7 @@
       },
       "canonical_scenario_id": null,
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -9928,13 +10318,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "0dfd0e2e4bd2d53231d37590c9da525cbb1aa87354ea497fa423b6fc2e433181",
+        "payload_sha256": "b6fbf3aa7eb8482b79f4ea1ed58a39aa7c14368c0db8e78bbbc932ef5cbb5ae3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10123,13 +10513,13 @@
         ],
         "payload_bytes": 4228,
         "payload_path": "visualizations/constrained-disk-feasible-region.json",
-        "payload_sha256": "0dfd0e2e4bd2d53231d37590c9da525cbb1aa87354ea497fa423b6fc2e433181",
+        "payload_sha256": "b6fbf3aa7eb8482b79f4ea1ed58a39aa7c14368c0db8e78bbbc932ef5cbb5ae3",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "feasible_region"
       },
       "canonical_scenario_id": "SCENARIO_CONSTRAINED_DISK",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10335,13 +10725,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "100c22b9e42dbd4947b9d6964d7dd88cc12422d475c1c3ba055cc3e86469de41",
+        "payload_sha256": "3b7b7e2f4af78110251cc6b409ddee112745d9207d9ed2e8c0454b691982c64d",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10513,13 +10903,13 @@
         ],
         "payload_bytes": 23936,
         "payload_path": "visualizations/biobjective-quadratic-pareto-front.json",
-        "payload_sha256": "100c22b9e42dbd4947b9d6964d7dd88cc12422d475c1c3ba055cc3e86469de41",
+        "payload_sha256": "3b7b7e2f4af78110251cc6b409ddee112745d9207d9ed2e8c0454b691982c64d",
         "renderer_contract_version": "1.1.0",
         "renderer_family": "pareto_front"
       },
       "canonical_scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -10706,13 +11096,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "61069d5e1ede89f4e24c2f45319d50501626052333c058deef7e43dfbf04a078",
+        "payload_sha256": "308e1fa9e03c5d88bc011009218ca8cb10e0199379bceee5b94caa39641681c7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11004,13 +11394,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "61069d5e1ede89f4e24c2f45319d50501626052333c058deef7e43dfbf04a078",
+        "payload_sha256": "308e1fa9e03c5d88bc011009218ca8cb10e0199379bceee5b94caa39641681c7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
@@ -11258,13 +11648,13 @@
         ],
         "payload_bytes": 79631,
         "payload_path": "visualizations/topology-optimization-field-evolution.json",
-        "payload_sha256": "61069d5e1ede89f4e24c2f45319d50501626052333c058deef7e43dfbf04a078",
+        "payload_sha256": "308e1fa9e03c5d88bc011009218ca8cb10e0199379bceee5b94caa39641681c7",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "field_evolution"
       },
       "canonical_scenario_id": "SCENARIO_TOPOLOGY_SIMP_OC",
       "contract_version": "1.2.0",
-      "dataset_version": "0.18.16",
+      "dataset_version": "0.18.17",
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",

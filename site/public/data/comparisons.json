@@ -3614,8 +3614,129 @@
       "title_en": "Separate residual vectors from squared residuals in root finding",
       "title_ja": "求根で残差vectorと二乗残差を分けて読む",
       "tuning_policy": "方程式、初期点、scale、許容値をrun前に固定し、終点を見て変更しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 1
+      },
+      "canonical_comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+      "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+      "case_id": "portfolio-allocation",
+      "caveat": "gammaの二値比較であり、solver、推定器、資産、将来performanceの順位付けではない。",
+      "changed_factors": [
+        "risk aversion gammaだけ"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+      "comparison_question": "平均・共分散と制約を固定し、gammaだけを変えると、配分・期待収益・分散はどう動く？",
+      "fairness_note": "同じ入力moments・制約・gridで、gammaだけを変えるparameter sensitivityである。",
+      "fixed_factors": [
+        "4資産",
+        "期待収益",
+        "共分散",
+        "simplexと集中上限",
+        "0.05 teaching grid"
+      ],
+      "formulation_summary": "min gamma w^T Sigma w - mu^T w, sum(w)=1, 0<=w_i<=0.6 の固定4資産教育QP。",
+      "identity_status": "canonical",
+      "journey_id": "portfolio-allocation",
+      "last_verified": "2026-07-24",
+      "limitations": [
+        "固定入力の教育用QPに限る。",
+        "tail riskや将来収益を示さない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "portfolio-mean-variance-gamma-low",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/portfolio-mean-variance-gamma-low.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 1
+          },
+          "label_en": "low gamma",
+          "label_ja": "low gamma",
+          "member_id": "gamma-low",
+          "method_id": "MF_LP_QP_CONIC",
+          "parameters": {
+            "grid_step": 0.05,
+            "input_policy": "fixed_mean_and_covariance",
+            "max_asset_weight": 0.6,
+            "risk_aversion": 0.5
+          },
+          "role": "lower_risk_aversion",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+        },
+        {
+          "artifact": {
+            "artifact_id": "portfolio-mean-variance-gamma-high",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/portfolio-mean-variance-gamma-high.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 1
+          },
+          "label_en": "high gamma",
+          "label_ja": "high gamma",
+          "member_id": "gamma-high",
+          "method_id": "MF_LP_QP_CONIC",
+          "parameters": {
+            "grid_step": 0.05,
+            "input_policy": "fixed_mean_and_covariance",
+            "max_asset_weight": 0.6,
+            "risk_aversion": 4.0
+          },
+          "role": "higher_risk_aversion",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "maximize",
+          "label_ja": "期待収益",
+          "metric_id": "expected_return",
+          "unit": "return"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "分散risk",
+          "metric_id": "variance",
+          "unit": "variance"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "simplex残差",
+          "metric_id": "simplex_residual",
+          "unit": "residual"
+        }
+      ],
+      "mode": "parameter_sensitivity",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "ranking_eligible": false,
+      "seed_policy": "deterministic / not applicable",
+      "source_ids": [
+        "S010",
+        "S055"
+      ],
+      "stopping_policy": "record one fixed allocation snapshot",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "objective値だけでなく期待収益・分散・制約残差を一緒に読む。",
+      "title_en": "Compare mean-variance allocation across risk aversion",
+      "title_ja": "risk aversionで平均・分散配分を読み比べる",
+      "tuning_policy": "gammaの二つの教材用値を事前固定し、run後に調整しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.16"
+  "dataset_version": "0.18.17"
 }

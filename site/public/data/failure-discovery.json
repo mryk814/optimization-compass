@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.16",
+  "dataset_version": "0.18.17",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -1193,7 +1193,7 @@
         "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
         "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
         "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
-        "question": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。"
+        "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
       },
       "case_id": "portfolio-allocation",
       "confidence": "not_applicable",
@@ -1234,7 +1234,7 @@
       "summary": "共分散の二次構造とsimplex・集中上限をnativeに使わず、可行性や凸大域解の根拠を確認しにくいため",
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Portfolio allocation",
-      "title_ja": "ポートフォリオの配分を決めるではNelder–Mead単体法を選ばない"
+      "title_ja": "平均・共分散でポートフォリオを配分するではNelder–Mead単体法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Aportfolio-cvar-allocation%3AM_NELDER_MEAD",
@@ -1415,8 +1415,8 @@
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
       "scenario_ids": [
-        "SCENARIO_REPEATED_MPC_QP_COLD_START",
-        "SCENARIO_REPEATED_MPC_QP_WARM_START"
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
       ],
       "scope": "case_specific",
       "severity": "not_applicable",
