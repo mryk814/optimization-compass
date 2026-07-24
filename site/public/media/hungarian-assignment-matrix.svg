@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">3×3費用行列から一対一の割当を選ぶ</title>
+  <desc id="desc">作業者1から3を行、仕事AからCを列にした費用行列で、作業者1と仕事Bの費用1、作業者2と仕事Aの費用2、作業者3と仕事Cの費用2を選ぶ。各行と各列を一度ずつ使い、合計費用は5になる。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#d97732"/>
+    </marker>
+  </defs>
+  <rect width="760" height="420" rx="24" fill="#f7f3e8"/>
+
+  <text x="226" y="52" text-anchor="middle" fill="#173f56" font-family="sans-serif" font-size="22" font-weight="700">費用行列</text>
+  <text x="565" y="52" text-anchor="middle" fill="#173f56" font-family="sans-serif" font-size="22" font-weight="700">一対一の割当</text>
+
+  <g font-family="sans-serif" font-size="18" fill="#173f56" text-anchor="middle">
+    <text x="170" y="91">仕事A</text>
+    <text x="250" y="91">仕事B</text>
+    <text x="330" y="91">仕事C</text>
+    <text x="84" y="145">作業者1</text>
+    <text x="84" y="225">作業者2</text>
+    <text x="84" y="305">作業者3</text>
+  </g>
+
+  <g fill="#fffdf7" stroke="#b8c4bd" stroke-width="2">
+    <rect x="130" y="105" width="80" height="80" rx="10"/>
+    <rect x="210" y="105" width="80" height="80" rx="10" fill="#dceee9" stroke="#167f78" stroke-width="4"/>
+    <rect x="290" y="105" width="80" height="80" rx="10"/>
+    <rect x="130" y="185" width="80" height="80" rx="10" fill="#dceee9" stroke="#167f78" stroke-width="4"/>
+    <rect x="210" y="185" width="80" height="80" rx="10"/>
+    <rect x="290" y="185" width="80" height="80" rx="10"/>
+    <rect x="130" y="265" width="80" height="80" rx="10"/>
+    <rect x="210" y="265" width="80" height="80" rx="10"/>
+    <rect x="290" y="265" width="80" height="80" rx="10" fill="#dceee9" stroke="#167f78" stroke-width="4"/>
+  </g>
+
+  <g font-family="sans-serif" font-size="27" font-weight="700" fill="#173f56" text-anchor="middle">
+    <text x="170" y="155">4</text>
+    <text x="250" y="155" fill="#167f78">1</text>
+    <text x="330" y="155">3</text>
+    <text x="170" y="235" fill="#167f78">2</text>
+    <text x="250" y="235">0</text>
+    <text x="330" y="235">5</text>
+    <text x="170" y="315">3</text>
+    <text x="250" y="315">2</text>
+    <text x="330" y="315" fill="#167f78">2</text>
+  </g>
+
+  <path d="M397 225 H448" fill="none" stroke="#d97732" stroke-width="6" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <g font-family="sans-serif" font-size="18" fill="#173f56">
+    <text x="472" y="122">作業者1</text>
+    <text x="472" y="212">作業者2</text>
+    <text x="472" y="302">作業者3</text>
+    <text x="662" y="122">仕事A</text>
+    <text x="662" y="212">仕事B</text>
+    <text x="662" y="302">仕事C</text>
+  </g>
+
+  <g fill="none" stroke="#167f78" stroke-width="7" stroke-linecap="round">
+    <path d="M552 115 C590 115 612 205 650 205"/>
+    <path d="M552 205 C590 205 612 115 650 115"/>
+    <path d="M552 295 H650"/>
+  </g>
+
+  <g fill="#167f78">
+    <circle cx="545" cy="115" r="9"/>
+    <circle cx="545" cy="205" r="9"/>
+    <circle cx="545" cy="295" r="9"/>
+    <circle cx="657" cy="115" r="9"/>
+    <circle cx="657" cy="205" r="9"/>
+    <circle cx="657" cy="295" r="9"/>
+  </g>
+
+  <rect x="463" y="344" width="206" height="48" rx="24" fill="#e9e2d5"/>
+  <text x="566" y="376" text-anchor="middle" fill="#173f56" font-family="sans-serif" font-size="21" font-weight="700">合計費用 1 + 2 + 2 = 5</text>
+</svg>
