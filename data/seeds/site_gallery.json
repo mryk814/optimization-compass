@@ -638,16 +638,19 @@
       "source_ids": ["S097", "S098", "S099", "S100", "S101"],
       "difficulty": "intermediate",
       "status": "published",
-      "last_reviewed": "2026-07-18",
-      "question": "片持ちはりの剛性を保ちながら、使う材料の量を減らしたい。",
-      "variable_domain": "固定教材では8×4要素の密度field ρ∈[0.001,1]³²を設計変数にする。設計変数集合は $X=[0.001,1]^{32}$ と書ける。実務ではmeshと材料補間の定義が設計結果を左右する。",
-      "decision_variables": "各有限要素の密度 $ρₑ$。$ρₑ=1$は材料、$ρₑ$が小さい値は空孔に近い状態を表す。",
-      "objective": "線形弾性の状態方程式 $K(ρ)u=F$を解き、$f(ρ)=c(ρ)=Fᵀu$ を最小化する。SIMPでは剛性を $Eₑ=Emin+ρₑᵖ(E₀−Emin)$ で補間する。",
-      "constraints": "平均密度を0.5以下に保つ体積率制約 $mean(ρ)≤0.5$ と、各密度の上下限を課す。",
+      "last_reviewed": "2026-07-24",
+      "question": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。",
+      "variable_domain": "固定教材では32要素の設計密度 $\\rho=(\\rho_1,\\ldots,\\rho_{32})\\in X=[0.001,1]^{32}$。$\\rho_e=1$ は材料、下限に近い値は空孔に近い状態を表す連続緩和であり、0/1配置そのものではない。",
+      "decision_variables": "各有限要素の設計密度 $\\rho_e$。変位field $u$ はdecisionとして自由に動かすのではなく、固定した支持・荷重と現在の密度から状態方程式 $K(\\rho)u=F$ を解いて得るderived stateである。",
+      "objective": "compliance $f(\\rho)=c(\\rho)=F^\\mathsf{T}u$ を最小化する。SIMPでは要素剛性を $E_e=E_{min}+\\rho_e^p(E_0-E_{min})$ と補間し、中間密度をpenalizeしながら荷重経路を残す。",
+      "constraints": "体積率 $\\frac{1}{32}\\sum_e\\rho_e\\le0.5$、密度bounds $0.001\\le\\rho_e\\le1$、状態方程式 $K(\\rho)u=F$ を課す。固定教材ではfilter半径1.5要素を使い、更新前後の体積率を記録する。",
       "map_node_id": "answer:Q01:continuous",
-      "python_example": "import numpy as np\n\nrows, columns = 4, 8\nrho = np.full((rows, columns), 0.5)\nvolume_target = 0.5\nfor iteration in range(12):\n    sensitivity = -rho**2\n    filtered = sensitivity.copy()\n    rho = np.clip(rho * np.exp(0.15 * filtered), 0.001, 1.0)\n    rho *= volume_target / rho.mean()\nprint(float(rho.mean()))",
-      "practical_notes": "最終密度だけでなく、state solve、感度のraw・filter後、volume fraction、gray fraction、checkerboard指標、meshとfilter radiusを一緒に保存します。complianceが下がっても、離散化artifactや製造制約が解決したとは限りません。",
-      "limitations": ["8×4要素の決定的な教育用instanceであり、実際のFEM実装の収束、強度・座屈、製造性、mesh refinement後の同一topology、局所解からの独立性や大域最適性を保証しません。"]
+      "python_example": "from optimization_compass.learning_slices import generate_topology_field_artifact\n\nartifact = generate_topology_field_artifact(\"teaching\")\nrun = next(item for item in artifact.runs if item.role == \"primary\")\nfor step in run.steps:\n    print({\n        \"iteration\": step.iteration,\n        \"volume\": round(step.volume_fraction, 3),\n        \"compliance\": round(step.compliance, 3),\n        \"gray\": round(step.gray_fraction, 3),\n        \"checkerboard\": round(step.checkerboard_score, 3),\n    })",
+      "practical_notes": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
+      "limitations": [
+        "表示する8×4 traceはfield、感度、filter、更新の関係を学ぶ決定的referenceであり、実際のQ4 FEM解析値や物理的な変位・応力を再現するsolverではない。",
+        "minimum-complianceと体積率だけでは強度、座屈、疲労、接触、最小部材寸法、製造性を保証しない。mesh、filter、初期密度、penalizationを変えた局所解の比較と、独立した高忠実度解析が必要である。"
+      ]
     },
     {
       "case_id": "constrained-design",
