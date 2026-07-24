@@ -1594,6 +1594,13 @@ caption {
 .atlas-note, .comparison-contract { margin: .7rem 0 0; padding: .65rem .75rem; border: 1px solid #d1d5cc; border-radius: .45rem; background: #faf9f4; color: #465249; font-size: .75rem; }
 .comparison-contract { display: flex; gap: .4rem .8rem; flex-wrap: wrap; }
 .comparison-contract p { flex-basis: 100%; margin: 0; color: #68736c; }
+.comparison-scope-summary { display: grid; grid-template-columns: minmax(10rem, .38fr) minmax(0, 1fr); align-items: stretch; margin: .7rem 0; overflow: hidden; border: 1px solid #cbd8ce; border-radius: .65rem; background: #f7faf6; }
+.comparison-scope-summary > p { display: flex; align-items: center; margin: 0; padding: .7rem .8rem; border-right: 1px solid #dce4dc; color: #315c48; font-weight: 750; }
+.comparison-scope-summary dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; }
+.comparison-scope-summary dl div { min-width: 0; padding: .58rem .7rem; border-left: 1px solid #dce4dc; }
+.comparison-scope-summary dl div:first-child { border-left: 0; }
+.comparison-scope-summary dt { color: #7b4e34; font-size: .875rem; font-weight: 800; }
+.comparison-scope-summary dd { margin: .15rem 0 0; color: #344d40; overflow-wrap: anywhere; }
 .comparison-contract-v2 { margin: .8rem 0 1rem; overflow: hidden; border: 1px solid #cbd8ce; border-radius: .65rem; background: #f8faf6; }
 .comparison-contract-v2 > header { padding: .75rem .85rem; border-bottom: 1px solid #dce4dc; }
 .comparison-contract-v2 > header > span { color: #8b4d2c; font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
@@ -2093,6 +2100,11 @@ caption {
 }
 
 @media (max-width: 44rem) {
+  .comparison-scope-summary { grid-template-columns: minmax(0, 1fr); }
+  .comparison-scope-summary > p { border-right: 0; border-bottom: 1px solid #dce4dc; }
+  .comparison-scope-summary dl { grid-template-columns: minmax(0, 1fr); }
+  .comparison-scope-summary dl div, .comparison-scope-summary dl div:first-child { border-top: 1px solid #dce4dc; border-left: 0; }
+  .comparison-scope-summary dl div:first-child { border-top: 0; }
   .comparison-factor-grid, .comparison-policy-grid { grid-template-columns: minmax(0, 1fr); }
   .comparison-factor-grid article, .comparison-factor-grid article:first-child { border-top: 1px solid #dce4dc; border-left: 0; }
   .comparison-grid { grid-template-columns: minmax(0, 1fr); }

@@ -24,7 +24,13 @@ import {
   type EvaluationLedgerEntry,
   type SurrogateUncertaintyPayload,
 } from "../../contracts/surrogate-uncertainty";
-import { parseAlgorithmTrace, type AlgorithmTrace, type TraceFrame, type TracePoint } from "../../contracts/trace";
+import {
+  parseAlgorithmTrace,
+  type AlgorithmTrace,
+  type TerminalStatus,
+  type TraceFrame,
+  type TracePoint,
+} from "../../contracts/trace";
 import {
   parseVisualizationScenarioIndex,
   type VisualizationScenario,
@@ -149,6 +155,7 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
           </select>
         </label>
       </section>
+      <ComparisonScopeSummary comparison={comparison} />
       {loaded.renderer === "trajectory" ? (
         <TrajectoryComparison comparison={comparison} scenarios={loaded.scenarios} traces={loaded.traces} />
       ) : loaded.renderer === "simplex" ? (
@@ -189,6 +196,28 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
       </section>
       <EvidenceLinks sourceIds={comparison.source_ids} />
     </>
+  );
+}
+
+function ComparisonScopeSummary({ comparison }: { comparison: ComparisonSet }) {
+  return (
+    <section className="comparison-scope-summary" aria-label="比較条件の要約">
+      <p>図を動かす前に、比較の境界を確認</p>
+      <dl>
+        <div>
+          <dt>固定</dt>
+          <dd>{summarizeScope(comparison.fixed_factors, "項目")}</dd>
+        </div>
+        <div>
+          <dt>変更</dt>
+          <dd>{summarizeScope(comparison.changed_factors, "項目")}</dd>
+        </div>
+        <div>
+          <dt>観測</dt>
+          <dd>{summarizeScope(comparison.metrics.map((metric) => metric.label_ja), "指標")}</dd>
+        </div>
+      </dl>
+    </section>
   );
 }
 
@@ -426,7 +455,7 @@ function SimplexComparisonMemberCard({
     <article className="comparison-card simplex-comparison-card">
       <header>
         <div><h2>{comparisonMember.label_ja}</h2><small>{comparisonMember.label_en}</small></div>
-        <span>{trace.terminal_status}</span>
+        <span>最終: {traceTerminalStatusLabel(trace.terminal_status)}</span>
       </header>
       <p className="method-parameters">{parameterText(comparisonMember.parameters)}</p>
       <p className="comparison-event">
@@ -612,7 +641,7 @@ function MetricHistoryComparison({
           const decisionLabel = isSharedProbe ? "[a, k, c]" : decision?.label_ja ?? "Decision";
           return (
             <article className="comparison-card" key={trace.trace_id}>
-              <header><div><h2>{member.label_ja}</h2><small>{member.label_en}</small></div><span>{trace.terminal_status}</span></header>
+              <header><div><h2>{member.label_ja}</h2><small>{member.label_en}</small></div><span>最終: {traceTerminalStatusLabel(trace.terminal_status)}</span></header>
               <p className="method-parameters">{parameterText(member.parameters)}</p>
               <dl className="comparison-metrics">
                 <div><dt>評価回数</dt><dd>{frame?.oracle_evaluations ?? 0}</dd></div>
@@ -898,7 +927,7 @@ function ComparisonMemberCard({
           <h2>{comparisonMember.label_ja}</h2>
           <small>{comparisonMember.label_en}</small>
         </div>
-        <span>{trace.terminal_status}</span>
+        <span>最終: {traceTerminalStatusLabel(trace.terminal_status)}</span>
       </header>
       <p className="method-parameters">{parameterText(comparisonMember.parameters)}</p>
       <p className="comparison-event">
@@ -1368,6 +1397,24 @@ function metricUnitLabel(unit: string): string {
     status: "終了状態",
     "objective value / evaluation": "目的関数値 / 評価回数",
   }[unit] ?? unit;
+}
+
+function summarizeScope(values: string[], unit: "項目" | "指標"): string {
+  const [first, ...rest] = values;
+  if (!first) return "未登録";
+  const summary = readableComparisonText(first);
+  return rest.length === 0 ? summary : `${summary} · ほか${rest.length}${unit}`;
+}
+
+function traceTerminalStatusLabel(status: TerminalStatus): string {
+  return {
+    completed: "完了",
+    converged: "停止条件を満たす",
+    budget_exhausted: "評価予算で停止",
+    diverged: "発散で停止",
+    stopped: "停止",
+    failed: "評価失敗",
+  }[status];
 }
 
 function readableComparisonText(value: string): string {

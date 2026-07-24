@@ -336,6 +336,11 @@ describe("ComparisonPage search-tree renderer", () => {
     renderPage();
 
     expect(await screen.findByRole("heading", { level: 1, name: "探索を続けるrunとnode予算停止" })).toBeVisible();
+    const scope = within(screen.getByLabelText("比較条件の要約"));
+    expect(scope.getByText("図を動かす前に、比較の境界を確認")).toBeVisible();
+    expect(scope.getByText("problem instance · ほか2項目")).toBeVisible();
+    expect(scope.getByText("node 評価予算 stopping")).toBeVisible();
+    expect(scope.getByText("絶対gap · ほか1指標")).toBeVisible();
     fireEvent.change(screen.getByLabelText("評価回数位置"), { target: { value: "4" } });
 
     await waitFor(() => {
