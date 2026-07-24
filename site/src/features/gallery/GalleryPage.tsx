@@ -29,6 +29,7 @@ export function GalleryPage() {
   const [domain, setDomain] = useState("all");
   const [query, setQuery] = useState("");
   const [error, setError] = useState<Error>();
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     void Promise.all([loadGallery(), loadLearningJourneys()]).then(
       ([gallery, journeyIndex]) => {
@@ -37,8 +38,12 @@ export function GalleryPage() {
         }
         setCases(gallery.cases);
         setJourneys(journeyIndex.journeys);
+        setLoaded(true);
       },
-      (caught: unknown) => setError(asError(caught)),
+      (caught: unknown) => {
+        setError(asError(caught));
+        setLoaded(true);
+      },
     );
   }, []);
   const domains = ["all", ...new Set(cases.map((item) => item.domain))];
@@ -63,6 +68,18 @@ export function GalleryPage() {
     )),
     [cases, domain, normalizedQuery],
   );
+  const isOverview = domain === "all" && normalizedQuery.length === 0;
+  const featured = useMemo(
+    () => isOverview ? selectFeaturedCases(filtered, journeys, 6) : [],
+    [filtered, isOverview, journeys],
+  );
+  const featuredIds = useMemo(
+    () => new Set(featured.map((item) => item.case_id)),
+    [featured],
+  );
+  const remaining = isOverview
+    ? filtered.filter((item) => !featuredIds.has(item.case_id))
+    : [];
 
   return (
     <section className="atlas-page gallery-page">
@@ -113,29 +130,100 @@ export function GalleryPage() {
         remainingItems={remainingDomainCounts}
       />
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
-      <div className="gallery-card-grid">
-        {filtered.map((item) => {
-          const journey = journeyByCase.get(item.case_id);
-          return (
-            <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
-              <span>{domainLabel(item.domain)} · {difficultyLabel(item.difficulty)}</span>
-              <h2>{item.title_ja}</h2>
-              <p>{item.question}</p>
-              <footer>
-                <small className={`gallery-card-status is-${journey?.status ?? "draft"}`}>
-                  {journeyStatusLabel(journey?.status)}
-                </small>
-                <strong>ケースを開く →</strong>
-              </footer>
-            </Link>
-          );
-        })}
-      </div>
-      {filtered.length === 0 && (
+      {!loaded && <p className="gallery-loading" role="status">ケースを読み込んでいます…</p>}
+      {loaded && isOverview && featured.length > 0 && (
+        <>
+          <section aria-labelledby="gallery-featured-title" className="gallery-case-section">
+            <header>
+              <div>
+                <p className="eyebrow">まずはここから</p>
+                <h2 id="gallery-featured-title">分野の異なる6ケース</h2>
+              </div>
+              <p>実行と比較までつながるケースを、分野が重ならないように選びました。</p>
+            </header>
+            <GalleryCaseGrid items={featured} journeyByCase={journeyByCase} />
+          </section>
+          {remaining.length > 0 && (
+            <details className="gallery-all-cases">
+              <summary>
+                <span>ほかのケースも見る</span>
+                <small>{remaining.length}件</small>
+              </summary>
+              <GalleryCaseGrid items={remaining} journeyByCase={journeyByCase} />
+            </details>
+          )}
+        </>
+      )}
+      {loaded && !isOverview && (
+        <GalleryCaseGrid items={filtered} journeyByCase={journeyByCase} />
+      )}
+      {loaded && filtered.length === 0 && (
         <p className="gallery-empty">条件に合うケースはありません。領域か検索語を変えてください。</p>
       )}
     </section>
   );
+}
+
+function GalleryCaseGrid({
+  items,
+  journeyByCase,
+}: {
+  items: GalleryCase[];
+  journeyByCase: Map<string, LearningJourney>;
+}) {
+  return (
+    <div className="gallery-card-grid">
+      {items.map((item) => {
+        const journey = journeyByCase.get(item.case_id);
+        return (
+          <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
+            <span>{domainLabel(item.domain)} · {difficultyLabel(item.difficulty)}</span>
+            <h2>{item.title_ja}</h2>
+            <p>{item.question}</p>
+            <footer>
+              <small className={`gallery-card-status is-${journey?.status ?? "draft"}`}>
+                {journeyStatusLabel(journey?.status)}
+              </small>
+              <strong>開く →</strong>
+            </footer>
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+export function selectFeaturedCases(
+  cases: GalleryCase[],
+  journeys: Array<Pick<LearningJourney, "case_id" | "status">>,
+  limit: number,
+): GalleryCase[] {
+  const completeIds = new Set(
+    journeys
+      .filter((journey) => journey.status === "complete")
+      .map((journey) => journey.case_id),
+  );
+  const selected: GalleryCase[] = [];
+  const selectedIds = new Set<string>();
+  const selectedDomains = new Set<string>();
+  const append = (item: GalleryCase) => {
+    if (selected.length >= limit || selectedIds.has(item.case_id)) return;
+    selected.push(item);
+    selectedIds.add(item.case_id);
+    selectedDomains.add(item.domain);
+  };
+  const appendNewDomains = (items: GalleryCase[]) => {
+    for (const item of items) {
+      if (!selectedDomains.has(item.domain)) append(item);
+    }
+  };
+
+  appendNewDomains(cases.filter((item) => completeIds.has(item.case_id)));
+  cases.filter((item) => completeIds.has(item.case_id)).forEach(append);
+  appendNewDomains(cases);
+  cases.forEach(append);
+
+  return selected;
 }
 
 export function GalleryDomainOverview({

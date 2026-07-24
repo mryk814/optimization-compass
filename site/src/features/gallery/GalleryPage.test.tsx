@@ -3,7 +3,8 @@ import { describe, expect, test, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 
 import rawGallery from "../../../public/data/gallery.json";
-import { parseGalleryIndex } from "../../contracts/gallery";
+import { parseGalleryIndex, type GalleryCase } from "../../contracts/gallery";
+import type { LearningJourney } from "../../contracts/learning-journeys";
 import {
   caseState,
   countCasesByDomain,
@@ -16,6 +17,7 @@ import {
   journeyStatusLabel,
   journeyStatusSummary,
   sameStringSet,
+  selectFeaturedCases,
   splitGalleryNote,
 } from "./GalleryPage";
 
@@ -143,6 +145,7 @@ describe("gallery learning journey status", () => {
     expect(domainLabel("public-policy")).toBe("公共政策");
     expect(domainLabel("agriculture")).toBe("農業・農地");
     expect(domainLabel("environment")).toBe("環境・保全");
+    expect(domainLabel("healthcare")).toBe("医療・地域保健");
     expect(domainLabel("custom-domain")).toBe("custom-domain");
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");
@@ -159,5 +162,23 @@ describe("gallery learning journey status", () => {
       { domain: "science", count: 2 },
       { domain: "engineering", count: 1 },
     ]);
+  });
+
+  test("features complete journeys across different domains before the full catalog", () => {
+    const cases = [
+      { case_id: "A", domain: "engineering" },
+      { case_id: "B", domain: "engineering" },
+      { case_id: "C", domain: "finance" },
+      { case_id: "D", domain: "healthcare" },
+    ] as GalleryCase[];
+    const journeys = [
+      { case_id: "A", status: "complete" },
+      { case_id: "B", status: "complete" },
+      { case_id: "C", status: "complete" },
+      { case_id: "D", status: "partial" },
+    ] as LearningJourney[];
+
+    expect(selectFeaturedCases(cases, journeys, 3).map((item) => item.case_id))
+      .toEqual(["A", "C", "B"]);
   });
 });

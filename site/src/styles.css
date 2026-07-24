@@ -1790,6 +1790,16 @@ caption {
 .learning-relation-grid li span { display: block; margin-top: .15rem; color: #59645d; font-size: .82rem; line-height: 1.45; }
 .content-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: .65rem; }
 .gallery-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: .7rem; }
+.gallery-case-section { display: grid; gap: .65rem; }
+.gallery-case-section > header { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.gallery-case-section > header h2, .gallery-case-section > header p { margin: 0; }
+.gallery-case-section > header h2 { font-size: 1.05rem; }
+.gallery-case-section > header > p { max-width: 33rem; color: #647069; font-size: .75rem; text-align: right; }
+.gallery-all-cases { margin-top: .9rem; overflow: hidden; border: 1px solid #d8ded8; border-radius: .6rem; background: #f8faf7; }
+.gallery-all-cases > summary { display: flex; min-height: 3rem; align-items: center; justify-content: space-between; gap: .75rem; padding: 0 .85rem; color: #315c48; cursor: pointer; }
+.gallery-all-cases > summary span { font-size: .8rem; font-weight: 750; }
+.gallery-all-cases > summary small { color: #647069; font-size: .68rem; }
+.gallery-all-cases > .gallery-card-grid { padding: .8rem; border-top: 1px solid #d8ded8; }
 .content-card, .gallery-card { color: inherit; text-decoration: none; }
 .content-card:hover, .gallery-card:hover { border-color: #6c9a7f; background: #fbfdf9; }
 .content-card p, .gallery-card p { margin: .4rem 0; color: #59645d; font-size: .75rem; line-height: 1.55; }
@@ -1813,13 +1823,15 @@ caption {
 .content-card-related a { display: inline-flex; align-items: center; padding: 0 .55rem; border: 1px solid #c9d7cd; border-radius: 999px; color: #285740; font-weight: 700; text-decoration: none; }
 .content-card-related a:hover { border-color: #699078; background: #fff; }
 .content-empty { padding: .9rem; border: 1px dashed #c7cec7; border-radius: .5rem; color: #59645d; text-align: center; }
-.gallery-card { display: flex; min-height: 11rem; flex-direction: column; }
+.gallery-card { display: flex; min-height: 9.25rem; flex-direction: column; }
+.gallery-card > p { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .gallery-card footer { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid #eceee9; }
 .gallery-card footer strong { color: #285740; font-size: .7rem; }
 .gallery-card-status { width: fit-content; padding: .2rem .42rem; border-radius: 999px; background: #eef1ed; }
 .gallery-card-status.is-complete { color: #276044; background: #e6f3e9; }
 .gallery-card-status.is-partial { color: #87561c; background: #fbf0db; }
 .gallery-empty { padding: 2rem; color: #59645d; text-align: center; }
+.gallery-loading { padding: 1.25rem; color: #59645d; text-align: center; }
 .theater-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .55rem; }
 .theater-card { display: flex; min-width: 0; min-height: 10rem; padding: .7rem; border: 1px solid #d9dbd4; border-radius: .45rem; background: #fff; color: inherit; text-decoration: none; flex-direction: column; }
 .theater-card:hover { border-color: #6c9a7f; background: #fbfdf9; }
@@ -3888,6 +3900,16 @@ main:focus {
 }
 
 @media (max-width: 44rem) {
+  .gallery-case-section > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .2rem;
+  }
+
+  .gallery-case-section > header > p {
+    text-align: left;
+  }
+
   .gallery-domain-content > header {
     align-items: flex-start;
     flex-direction: column;
@@ -3900,7 +3922,7 @@ main:focus {
 
   .gallery-toolbar {
     display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    grid-template-columns: 7rem minmax(0, 1fr);
     align-items: end;
     gap: .5rem;
   }
@@ -3910,8 +3932,9 @@ main:focus {
   }
 
   .gallery-toolbar output {
-    align-self: center;
-    margin-top: 1.1rem;
+    grid-column: 1 / -1;
+    justify-self: end;
+    margin-top: 0;
   }
 }
 

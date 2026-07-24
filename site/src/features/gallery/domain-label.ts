@@ -7,6 +7,7 @@ const DOMAIN_LABELS: Record<string, string> = {
   engineering: "設計・工学",
   environment: "環境・保全",
   finance: "金融",
+  healthcare: "医療・地域保健",
   logistics: "物流",
   "machine-learning": "機械学習",
   manufacturing: "製造",
