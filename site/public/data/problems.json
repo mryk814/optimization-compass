@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "definitions": [
     {
       "available_oracles": [
@@ -477,6 +477,41 @@
       "source_ids": [
         "S055",
         "S056"
+      ],
+      "variable_domain": "continuous"
+    },
+    {
+      "available_oracles": [
+        "residual_vector",
+        "jacobian"
+      ],
+      "constraint_class": "equation_equality",
+      "dimensionality_policy": {
+        "dimension": 2,
+        "kind": "fixed"
+      },
+      "feature_ids": [
+        "F_VARIABLE_CONTINUOUS",
+        "F_STRUCTURE_NONLINEAR_LEAST_SQUARES",
+        "F_DERIVATIVE_ANALYTIC_GRADIENT"
+      ],
+      "known_reference_semantics": "A root is defined by declared component-wise residual tolerances. The squared residual is an auxiliary diagnostic, not a replacement for those tolerances.",
+      "last_verified": "2026-07-24",
+      "mathematical_family": "nonlinear_system_of_equations",
+      "name_en": "Root finding for simultaneous equations",
+      "name_ja": "連立方程式の求根",
+      "objective_direction": "minimize",
+      "objective_form": "residual_vector",
+      "problem_definition_id": "PROBLEM_ROOT_FINDING",
+      "related_problem_ids": [
+        "PA004"
+      ],
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
       ],
       "variable_domain": "continuous"
     },
@@ -2501,6 +2536,98 @@
         "S012",
         "S043",
         "S076"
+      ]
+    },
+    {
+      "bounds": {
+        "x1": [
+          -2.0,
+          2.0
+        ],
+        "x2": [
+          -2.0,
+          2.0
+        ]
+      },
+      "constraints": [
+        {
+          "constraint_id": "equation_1",
+          "expression": "x1^2+x2-1=0",
+          "sense": "eq"
+        },
+        {
+          "constraint_id": "equation_2",
+          "expression": "x1+x2^2-1=0",
+          "sense": "eq"
+        }
+      ],
+      "dimension": 2,
+      "display": {
+        "axis_labels": [
+          "iteration",
+          "residual diagnostic"
+        ],
+        "expression": "solve F(x)=0 for F=[x1^2+x2-1, x1+x2^2-1]; inspect component residuals and 0.5||F||_2^2 separately",
+        "range": {
+          "iteration": [
+            0.0,
+            1.0
+          ],
+          "residual": [
+            -0.1,
+            0.2
+          ],
+          "squared_residual": [
+            0.0,
+            0.05
+          ]
+        },
+        "units": [
+          "iteration",
+          "residual / auxiliary objective"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "near_positive_root",
+          "point": [
+            0.7,
+            0.7
+          ]
+        }
+      ],
+      "intended_phenomena": [
+        "residual_vector",
+        "componentwise_tolerance",
+        "squared_residual_auxiliary",
+        "root_vs_least_squares"
+      ],
+      "known_reference": null,
+      "known_reference_status": "not_meaningful",
+      "last_verified": "2026-07-24",
+      "limitations_en": "A fixed-start, two-variable deterministic lesson; it does not establish enumeration of all roots, SciPy or Gauss-Newton performance, Jacobian approximation, scaling, or measurement error behavior.",
+      "limitations_ja": "固定初期値・2変数・決定的な教育用ledgerであり、全根の列挙、SciPyやGauss-Newtonの性能、Jacobian近似、scale設定、実測誤差を表さない。",
+      "name_en": "EC028 two-variable simultaneous-equation root ledger",
+      "name_ja": "EC028 2変数の連立方程式求根ledger",
+      "parameters": {
+        "component_tolerance": 0.02,
+        "equations": [
+          "x1^2+x2-1",
+          "x1+x2^2-1"
+        ],
+        "scalar_loss_threshold": 0.003
+      },
+      "problem_definition_id": "PROBLEM_ROOT_FINDING",
+      "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+      "registry_key": "problem.root_finding.ec028.v1",
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
       ]
     },
     {

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "entities": [
     {
       "aliases": [],
@@ -1049,6 +1049,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_LEVENBERG_MARQUARDT",
           "target_type": "method"
@@ -1132,6 +1137,16 @@
           "relation_type": "problem",
           "target_id": "PA004",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -5052,6 +5067,77 @@
         }
       ],
       "summary": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "entity_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "求根で残差vectorと二乗残差を分けて読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC028",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "root-finding-component-tolerance",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "root-finding-small-squared-residual",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。"
     },
     {
       "aliases": [],
@@ -19015,6 +19101,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_LEVENBERG_MARQUARDT",
           "target_type": "method"
@@ -19050,6 +19141,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_CERES",
           "target_type": "implementation"
@@ -19068,6 +19164,11 @@
           "relation_type": "learning",
           "target_id": "least-squares",
           "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "scenario"
         },
         {
           "relation_type": "problem",
@@ -24445,6 +24546,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
@@ -24478,6 +24584,16 @@
           "relation_type": "learning",
           "target_id": "gauss-newton",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "root-finding-component-tolerance",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "root-finding-small-squared-residual",
+          "target_type": "trace"
         }
       ],
       "summary": "残差JacobianからJᵀJを用いる非線形最小二乗専用法。"
@@ -30697,6 +30813,108 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "求根: 各残差をゼロへ近づける",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "root-finding-component-tolerance",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "求根: 二乗残差だけでは止めない",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "root-finding-small-squared-residual",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S003",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S041",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S080",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC028",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "残差vector、最大絶対残差、二乗残差を別々に読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
       "entity_type": "scenario",
       "external_url": null,
@@ -33603,6 +33821,58 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/root-finding-component-tolerance",
+      "entity_id": "root-finding-component-tolerance",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "root-finding-component-tolerance",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/root-finding-small-squared-residual",
+      "entity_id": "root-finding-small-squared-residual",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "root-finding-small-squared-residual",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_GAUSS_NEWTON",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/shape-diffuser-invalid-geometry",
       "entity_id": "shape-diffuser-invalid-geometry",
       "entity_type": "trace",
@@ -34206,6 +34476,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
       "relations": [],
       "summary": ""
     },

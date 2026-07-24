@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "expectations": [
     {
       "applicability": "expected",
@@ -2807,11 +2807,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS"
+            "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+            "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
           ]
         },
         "content": {
@@ -2861,7 +2862,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 33,
+          "count": 36,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2873,6 +2874,7 @@
             "/methods/M_TRUST_NCG",
             "/methods/M_TRUST_REGION_REFLECTIVE",
             "COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+            "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
             "EC013",
             "EC026",
             "EC028",
@@ -2894,6 +2896,8 @@
             "family.trust-region",
             "gauss-newton",
             "least-squares",
+            "root-finding-component-tolerance",
+            "root-finding-small-squared-residual",
             "trust-exact",
             "trust-krylov",
             "trust-region-newton-cg",
@@ -2927,13 +2931,15 @@
           ]
         },
         "visualization": {
-          "count": 3,
+          "count": 5,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "exponential-fit-lm",
             "exponential-fit-trf",
-            "exponential-fit-trf-poor-init"
+            "exponential-fit-trf-poor-init",
+            "root-finding-component-tolerance",
+            "root-finding-small-squared-residual"
           ]
         }
       },
@@ -6107,12 +6113,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
+          ]
         },
         "content": {
           "count": 1,
@@ -6148,11 +6154,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 9,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_GAUSS_NEWTON",
+            "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
             "EC028",
             "I_CERES",
             "I_JAXOPT",
@@ -6160,7 +6167,9 @@
             "S003",
             "S041",
             "S056",
-            "gauss-newton"
+            "gauss-newton",
+            "root-finding-component-tolerance",
+            "root-finding-small-squared-residual"
           ]
         },
         "recommendation": {
@@ -6186,12 +6195,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "root-finding-component-tolerance",
+            "root-finding-small-squared-residual"
+          ]
         }
       },
       "label": "Gauss-Newton",

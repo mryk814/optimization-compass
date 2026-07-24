@@ -941,6 +941,77 @@
     },
     {
       "category": "NLP",
+      "context_id": "BENCH_ROOT_FINDING_EC028_3",
+      "context_version": "1.0.0",
+      "dimension": 2,
+      "evaluation_budget": 2,
+      "hardware": {
+        "reason": "deterministic teaching ledger; no wall-clock benchmark",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.root_finding.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.7,
+          0.7
+        ],
+        "policy": "same_initial_state_each_member"
+      },
+      "last_verified": "2026-07-24",
+      "oracle_budget": {
+        "limit": 2,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "residual_1",
+        "residual_2",
+        "residual_max_abs",
+        "squared_residual"
+      ],
+      "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+      "problem_variant": "fixed two-equation root residual ledger",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.root_finding.v1",
+        "generator_version": "1.0.0",
+        "runtime": "deterministic_educational_root_ledger"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "sparsity": {
+        "residual_dimension": 2
+      },
+      "status_mapping": {
+        "ranking": "forbidden",
+        "root_definition": "componentwise_residual_tolerance"
+      },
+      "stopping": {
+        "policy": "component_max_abs_residual_or_scalar_squared_residual_only"
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "component_max_abs": 0.02,
+        "scalar_squared_residual": 0.003
+      },
+      "tuning_policy": "equations, initial point, residual scale, Jacobian availability, and tolerances fixed before contrast"
+    },
+    {
+      "category": "NLP",
       "context_id": "BENCH_SHAPE_TOPOLOGY_REPRESENTATION_6",
       "context_version": "1.0.0",
       "dimension": 3,
@@ -1437,7 +1508,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"

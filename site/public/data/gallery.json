@@ -2611,7 +2611,9 @@
         }
       ],
       "case_id": "EC028",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_LEVENBERG_MARQUARDT",
@@ -2696,7 +2698,9 @@
       "title_ja": "方程式を最適化に変える前に求根として解く",
       "variable_domain": "固定教材では $X=\\mathbb{R}^2$。実務では物理的な範囲がある場合も、root solverがboundsを直接扱えるかを確認してからdomainを定める。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+        "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
       ]
     },
     {
@@ -2999,5 +3003,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.15"
+  "dataset_version": "0.18.16"
 }

@@ -1086,33 +1086,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_ROOT_FINDING_EC028"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/EC028",
+            "/traces/root-finding-component-tolerance",
+            "/traces/root-finding-small-squared-residual",
+            "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "/methods/M_GAUSS_NEWTON",
             "/methods/M_LEVENBERG_MARQUARDT",
@@ -1148,17 +1149,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/EC028",
+            "/traces/root-finding-component-tolerance",
+            "/traces/root-finding-small-squared-residual",
+            "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
             "/methods/M_DIFFERENTIAL_EVOLUTION",
             "/methods/M_GAUSS_NEWTON",
             "/methods/M_LEVENBERG_MARQUARDT",
@@ -1170,11 +1174,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S003",
@@ -1184,11 +1185,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+            "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -1205,16 +1207,8 @@
         }
       },
       "journey_id": "EC028",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4117,7 +4111,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "generated_at": "2026-07-24T00:00:00Z",
   "journeys": [
     {
@@ -4142,7 +4136,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4233,7 +4227,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4306,7 +4300,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4382,7 +4376,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4465,7 +4459,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4557,7 +4551,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4635,7 +4629,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4720,7 +4714,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4787,17 +4781,13 @@
       ],
       "canonical_url": "/gallery/EC028",
       "case_id": "EC028",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_LEVENBERG_MARQUARDT"
       ],
@@ -4805,7 +4795,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4830,8 +4820,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA004",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_ROOT_FINDING_EC028"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/root-finding-component-tolerance",
+          "problem_definition_id": "PROBLEM_ROOT_FINDING",
+          "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+          "role": "primary",
+          "scenario_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE"
+        },
+        {
+          "canonical_url": "/traces/root-finding-small-squared-residual",
+          "problem_definition_id": "PROBLEM_ROOT_FINDING",
+          "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
+        }
+      ],
       "source_ids": [
         "S002",
         "S003",
@@ -4839,7 +4846,7 @@
         "S056",
         "S080"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "最初にsquare、under-determined、over-determinedを区別する。残差normだけでなく各残差、Jacobian rank、scale、初期値感度、終了理由を保存し、複数の根がありうる場合は初期値集合を明示する。",
       "title_en": "Solve equations as roots before scalar optimization",
       "title_ja": "方程式を最適化に変える前に求根として解く"
@@ -4864,7 +4871,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4946,7 +4953,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5020,7 +5027,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5100,7 +5107,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5178,7 +5185,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5255,7 +5262,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5332,7 +5339,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5409,7 +5416,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5490,7 +5497,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5580,7 +5587,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5657,7 +5664,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5747,7 +5754,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5839,7 +5846,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5916,7 +5923,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6032,7 +6039,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6093,7 +6100,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6171,7 +6178,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6251,7 +6258,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6339,7 +6346,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6422,7 +6429,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6507,7 +6514,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.15",
+      "dataset_version": "0.18.16",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -7233,9 +7240,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 28,
+      "complete": 29,
       "draft": 0,
-      "partial": 2
+      "partial": 1
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -292,6 +292,26 @@
       "title_en": "failed-simulation-failure-ledger",
       "title_ja": "failed-simulation-failure-ledger",
       "trace_id": "failed-simulation-failure-ledger"
+    },
+    {
+      "method_id": "M_GAUSS_NEWTON",
+      "objective_id": "INSTANCE_ROOT_FINDING_EC028",
+      "path": "root-finding-component-tolerance.json",
+      "profile_id": "PROFILE_ROOT_FINDING_EC028",
+      "scenario_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "title_en": "root-finding-component-tolerance",
+      "title_ja": "root-finding-component-tolerance",
+      "trace_id": "root-finding-component-tolerance"
+    },
+    {
+      "method_id": "M_GAUSS_NEWTON",
+      "objective_id": "INSTANCE_ROOT_FINDING_EC028",
+      "path": "root-finding-small-squared-residual.json",
+      "profile_id": "PROFILE_ROOT_FINDING_EC028",
+      "scenario_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL",
+      "title_en": "root-finding-small-squared-residual",
+      "title_ja": "root-finding-small-squared-residual",
+      "trace_id": "root-finding-small-squared-residual"
     },
     {
       "method_id": "M_ADJOINT_SENSITIVITY",

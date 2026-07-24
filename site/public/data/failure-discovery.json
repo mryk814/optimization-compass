@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -449,7 +449,10 @@
       "mitigations": [],
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE",
+        "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -2117,7 +2120,7 @@
   "generated_at": "2026-07-24T00:00:00Z",
   "summary": {
     "case_exclusion_count": 30,
-    "entries_with_scenarios": 32,
+    "entries_with_scenarios": 33,
     "structured_failure_count": 12,
     "total_entries": 42
   }

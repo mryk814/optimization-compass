@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -167,7 +167,7 @@
       "intents": [],
       "query": "細長い谷 一次法 比較",
       "query_id": "visual-comparison",
-      "result_count": 12,
+      "result_count": 13,
       "top_document_ids": [
         "comparison:COMPARE_GRADIENT_FAMILY",
         "trace:topology-optimization-field-evolution",

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.15",
+  "dataset_version": "0.18.16",
   "diagnosis_mappings": [
     {
       "cue_ja": "x ∈ X：決める値の種類",

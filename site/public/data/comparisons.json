@@ -3490,8 +3490,132 @@
       "title_en": "Separate simulation status from feasible objectives",
       "title_ja": "失敗simulationでstatusとfeasible objectiveを分けて読む",
       "tuning_policy": "候補列、domain、failure taxonomy、no-penalty policyをrun前に固定し、結果を見て変更しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_ROOT_FINDING_EC028_3",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 2
+      },
+      "canonical_comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "canonical_url": "/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "case_id": "EC028",
+      "caveat": "root solver、least-squares solver、SciPy実装、Jacobian近似、収束速度の性能比較ではない。",
+      "changed_factors": [
+        "停止規則だけをcomponent-wise residualからscalar squared residualへ変える"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+      "comparison_question": "同じ方程式・初期値・Jacobian情報で、component-wise toleranceではなく二乗残差だけで停止すると何を見落とすか？",
+      "fairness_note": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。",
+      "fixed_factors": [
+        "INSTANCE_ROOT_FINDING_EC028の2変数・2方程式",
+        "同じ初期値(0.7, 0.7)、residual scaling、Jacobian利用可能性",
+        "同じ決定的ledgerとcomponent tolerance 0.02"
+      ],
+      "formulation_summary": "solve F(x)=0 for two nonlinear equations; 0.5||F(x)||_2^2 is an auxiliary diagnostic, not the root definition.",
+      "identity_status": "canonical",
+      "journey_id": "EC028",
+      "last_verified": "2026-07-24",
+      "limitations": [
+        "固定2変数・短い決定的ledgerの教育用contrastである。",
+        "このcontrastからroot solverやleast-squares solverの一般的順位を推論しない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "root-finding-component-tolerance",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/root-finding-component-tolerance.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 2
+          },
+          "label_en": "Each residual is within tolerance",
+          "label_ja": "各残差が許容値内",
+          "member_id": "root-component-tolerance",
+          "method_id": "M_GAUSS_NEWTON",
+          "parameters": {
+            "component_tolerance": 0.02,
+            "stopping_policy": "component_max_abs_residual"
+          },
+          "role": "root_primary",
+          "scenario_id": "SCENARIO_ROOT_FINDING_COMPONENT_TOLERANCE"
+        },
+        {
+          "artifact": {
+            "artifact_id": "root-finding-small-squared-residual",
+            "artifact_kind": "executable_trace",
+            "payload_path": "traces/root-finding-small-squared-residual.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "generic_metric_history"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 2
+          },
+          "label_en": "Stop on squared residual only",
+          "label_ja": "二乗残差だけで停止",
+          "member_id": "root-squared-residual-only",
+          "method_id": "M_GAUSS_NEWTON",
+          "parameters": {
+            "scalar_loss_threshold": 0.003,
+            "stopping_policy": "scalar_squared_residual_only"
+          },
+          "role": "scalar_loss_contrast",
+          "scenario_id": "SCENARIO_ROOT_FINDING_SMALL_SQUARED_RESIDUAL"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "minimize",
+          "label_ja": "残差 F1",
+          "metric_id": "residual_1",
+          "unit": "residual"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "残差 F2",
+          "metric_id": "residual_2",
+          "unit": "residual"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "最大絶対残差",
+          "metric_id": "residual_max_abs",
+          "unit": "residual"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "二乗残差の半分",
+          "metric_id": "squared_residual",
+          "unit": "objective"
+        }
+      ],
+      "mode": "failure_contrast",
+      "problem_definition_id": "PROBLEM_ROOT_FINDING",
+      "problem_instance_id": "INSTANCE_ROOT_FINDING_EC028",
+      "ranking_eligible": false,
+      "seed_policy": "決定的ledgerのためseedはnot applicable。",
+      "source_ids": [
+        "S002",
+        "S003",
+        "S041",
+        "S056",
+        "S080"
+      ],
+      "stopping_policy": "root memberはmax(|F_i|)<0.02、contrast memberは0.5||F||^2<0.003だけで停止する。",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "二乗残差が小さくても一つの方程式が要求精度を満たさないことがある。rootとしての終了判定は各残差とscaleを明示する。",
+      "title_en": "Separate residual vectors from squared residuals in root finding",
+      "title_ja": "求根で残差vectorと二乗残差を分けて読む",
+      "tuning_policy": "方程式、初期点、scale、許容値をrun前に固定し、終点を見て変更しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.15"
+  "dataset_version": "0.18.16"
 }
