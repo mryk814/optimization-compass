@@ -1392,9 +1392,11 @@
         "I_NEVERGRAD"
       ],
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_FAILED_SIMULATION_FEASIBLE_LEDGER",
+        "SCENARIO_FAILED_SIMULATION_FAILURE_LEDGER"
       ],
-      "comparison_ids": [],
+      "comparison_ids": ["COMPARE_FAILED_SIMULATION_STATUS_LEDGER"],
       "source_ids": [
         "S002",
         "S018",

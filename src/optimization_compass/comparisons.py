@@ -16,6 +16,15 @@ from optimization_compass.constraint_geometry import (
 from optimization_compass.constraint_geometry import (
     PROFILE_ID as SO3_PROFILE_ID,
 )
+from optimization_compass.failed_simulation import (
+    GENERATOR_ID as FAILED_SIMULATION_GENERATOR_ID,
+)
+from optimization_compass.failed_simulation import (
+    GENERATOR_VERSION as FAILED_SIMULATION_GENERATOR_VERSION,
+)
+from optimization_compass.failed_simulation import (
+    PROFILE_ID as FAILED_SIMULATION_PROFILE_ID,
+)
 from optimization_compass.nested_solve import (
     BILEVEL_GENERATOR_ID,
     BILEVEL_GENERATOR_VERSION,
@@ -63,6 +72,10 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "generic_metric_history": ("educational.optimal_control.v1", "1.1.0"),
 }
 _EDUCATIONAL_GENERATORS_BY_PROFILE = {
+    FAILED_SIMULATION_PROFILE_ID: (
+        FAILED_SIMULATION_GENERATOR_ID,
+        FAILED_SIMULATION_GENERATOR_VERSION,
+    ),
     BILEVEL_PROFILE_ID: (BILEVEL_GENERATOR_ID, BILEVEL_GENERATOR_VERSION),
     HYBRID_PROFILE_ID: (HYBRID_GENERATOR_ID, HYBRID_GENERATOR_VERSION),
     PORTFOLIO_PROFILE_ID: (PORTFOLIO_GENERATOR_ID, PORTFOLIO_GENERATOR_VERSION),

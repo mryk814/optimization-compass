@@ -274,6 +274,23 @@
       "last_verified": "2026-07-19"
     },
     {
+      "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+      "name_ja": "失敗を含むblack-box simulation設計",
+      "name_en": "Black-box simulation design with evaluation failures",
+      "mathematical_family": "simulation_with_implicit_failure_region",
+      "variable_domain": "mixed_continuous_binary",
+      "objective_form": "simulation",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "feasibility", "evaluation_status"],
+      "constraint_class": "implicit_simulation_failure",
+      "dimensionality_policy": {"kind": "mixed", "continuous_dimension": 2, "binary_dimension": 1},
+      "known_reference_semantics": "The fixed failure ledger has no optimizer-visible optimum; only successful evaluation values are comparable within the declared teaching contract.",
+      "related_problem_ids": ["PA054"],
+      "feature_ids": ["F_VARIABLE_CONTINUOUS", "F_VARIABLE_BINARY", "F_OBJECTIVE_SIMULATION", "F_CONSTRAINT_IMPLICIT"],
+      "source_ids": ["S002", "S018", "S031", "S034", "S035", "S060", "S063"],
+      "last_verified": "2026-07-24"
+    },
+    {
       "problem_definition_id": "PROBLEM_TIME_WINDOW_ROUTING",
       "name_ja": "時間窓付き配送routing",
       "name_en": "Time-window vehicle routing",
@@ -681,6 +698,28 @@
       "limitations_ja": "状態1次元・入力1次元・4周期・決定的iteration-to-latency ledgerの教育用instanceです。OSQPまたはADMMの実CPU時間、100Hz達成、閉loop安定性、recursive feasibility、安全性、一般性能順位を示しません。",
       "limitations_en": "A one-state, one-input, four-cycle educational instance with a deterministic iteration-to-latency ledger. It does not establish OSQP or ADMM CPU time, 100-Hz operation, closed-loop stability, recursive feasibility, safety, or general performance ranking.",
       "source_ids": ["S012", "S043", "S076"],
+      "last_verified": "2026-07-24"
+    },
+    {
+      "problem_instance_id": "INSTANCE_FAILED_SIMULATION_EC027",
+      "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
+      "name_ja": "EC027 2連続変数・1二値modeの失敗simulation ledger",
+      "name_en": "EC027 two-continuous-one-binary failed-simulation ledger",
+      "registry_key": "problem.failed_simulation.ec027.v1",
+      "dimension": 3,
+      "parameters": {"failure_region": "u1+u2<0.25", "mode_penalty": 0.08, "simulation_statuses": ["ok", "crash", "timeout", "nonphysical"]},
+      "bounds": {"u1": [0.0, 1.0], "u2": [0.0, 1.0], "mode": [0.0, 1.0]},
+      "constraints": [{"constraint_id": "domain", "expression": "0<=u1,u2<=1 and mode in {0,1}", "sense": "bounds_and_binary"}, {"constraint_id": "implicit_failure", "expression": "u1+u2>=0.25 is required for a successful teaching evaluation", "sense": "implicit"}],
+      "initialization_candidates": [{"candidate_id": "nominal_feasible", "point": [0.65, 0.35, 0.0]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "not_meaningful",
+      "known_reference": null,
+      "display": {"range": {"evaluation": [1.0, 6.0], "objective_value": [0.0, 0.3], "feasible_rate": [0.0, 1.0], "evaluation_count": [0.0, 6.0]}, "axis_labels": ["evaluation", "objective or status diagnostic"], "units": ["calls", "mixed"], "expression": "min successful simulation objective subject to bounds and explicit recording of implicit evaluation failures"},
+      "intended_phenomena": ["implicit_failure_region", "status_not_penalty", "feasible_rate", "best_feasible_separation"],
+      "limitations_ja": "固定6評価・単純なfailure境界の教材であり、実solverの収束、crash原因、timeout、MADSまたはNevergradの性能、実simulationの安全性を表さない。",
+      "limitations_en": "A fixed six-evaluation lesson with a simple failure boundary; it does not establish solver convergence, crash causes, timeout behavior, MADS or Nevergrad performance, or simulation safety.",
+      "source_ids": ["S002", "S018", "S031", "S034", "S035", "S060", "S063"],
       "last_verified": "2026-07-24"
     },
     {

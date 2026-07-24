@@ -24,6 +24,13 @@ from optimization_compass.db import KnowledgeRepository
 from optimization_compass.derived_media import write_derived_media
 from optimization_compass.entity_links import build_entity_link_index
 from optimization_compass.evidence import build_source_evidence_index
+from optimization_compass.failed_simulation import (
+    PROFILE_ID as FAILED_SIMULATION_PROFILE_ID,
+)
+from optimization_compass.failed_simulation import (
+    build_failed_simulation_scenario,
+    generate_failed_simulation_traces,
+)
 from optimization_compass.failure_discovery import build_failure_discovery_index
 from optimization_compass.formulation_primer import build_formulation_primer_index
 from optimization_compass.learning_graph import build_learning_graph_index
@@ -1172,6 +1179,7 @@ def _write_dummy_trace(
     generated_traces.extend(generate_portfolio_uncertainty_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_repeated_mpc_qp_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_time_window_routing_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_failed_simulation_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
     generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
@@ -2507,6 +2515,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         return build_repeated_mpc_qp_scenario(trace)
     if trace.profile_id == TIME_WINDOW_ROUTING_PROFILE_ID:
         return build_time_window_routing_scenario(trace)
+    if trace.profile_id == FAILED_SIMULATION_PROFILE_ID:
+        return build_failed_simulation_scenario(trace)
     if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:
         return build_nested_solve_scenario(trace)
     if trace.profile_id == SO3_PROFILE_ID:

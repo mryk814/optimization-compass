@@ -20,7 +20,7 @@ def test_problem_suite_has_twenty_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 21
+    assert len(suite.instances) == 22
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -120,8 +120,8 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 18
-    assert len(catalog.instances) == 21
+    assert len(catalog.definitions) == 19
+    assert len(catalog.instances) == 22
     context = next(
         item
         for item in repository.benchmark_contexts()

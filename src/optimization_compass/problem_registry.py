@@ -294,6 +294,18 @@ def _time_window_routing(instance: ProblemInstance, point: Sequence[float]) -> f
         raise ValueError(f"invalid routing matrix for {instance.problem_instance_id}") from error
 
 
+def _failed_simulation(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the successful EC027 teaching objective; failed points stay explicit errors."""
+    u1, u2, mode = (float(value) for value in point)
+    if not 0.0 <= u1 <= 1.0 or not 0.0 <= u2 <= 1.0 or mode not in {0.0, 1.0}:
+        raise ValueError(
+            f"{instance.problem_instance_id} point is outside the declared mixed domain"
+        )
+    if u1 + u2 < 0.25:
+        raise ValueError(f"{instance.problem_instance_id} evaluation failed: implicit_failure")
+    return float((u1 - 0.65) ** 2 + (u2 - 0.35) ** 2 + 0.08 * mode)
+
+
 def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
     mesh_nodes = instance.parameters.get("mesh_nodes")
@@ -532,6 +544,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
     "problem.optimal_control.repeated_mpc_qp_ec025.v1": (_repeated_mpc_qp, None),
     "problem.routing.time_window_ec019.v1": (_time_window_routing, None),
+    "problem.failed_simulation.ec027.v1": (_failed_simulation, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
     "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),

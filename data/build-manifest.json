@@ -110,6 +110,11 @@
       "id": "024",
       "path": "data/migrations/024_time_window_routing.sql",
       "sha256": "243f90feff3d789cf06de5a26fd0e5cc200d80239e0123bfc24688757cb9047c"
+    },
+    {
+      "id": "025",
+      "path": "data/migrations/025_failed_simulation_ec027.sql",
+      "sha256": "7e5bd7a44d0bdfbda5ecd2d4c6c6781f378269ff199735dabc1272289e0ddd23"
     }
   ],
   "specialized_inputs": [
