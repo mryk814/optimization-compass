@@ -1,6 +1,7 @@
 export const TRACE_CONTRACT_VERSION = "1.0.0" as const;
 export const MAX_TRACE_FRAMES = 1_000;
-export const MAX_TRACE_BYTES = 2 * 1024 * 1024;
+export const MAX_TRACE_MIB = 8;
+export const MAX_TRACE_BYTES = MAX_TRACE_MIB * 1024 * 1024;
 
 export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
 export type SupportStatus = "supported" | "unsupported" | "unknown" | "not_applicable";
@@ -202,7 +203,9 @@ export function parseAlgorithmTrace(input: unknown): AlgorithmTrace {
   };
   const byteLength = canonicalTraceBytes(parsed).byteLength;
   if (byteLength > MAX_TRACE_BYTES) {
-    throw new Error(`AlgorithmTrace raw canonical JSON exceeds 2 MiB (${byteLength} bytes).`);
+    throw new Error(
+      `AlgorithmTrace raw canonical JSON exceeds ${MAX_TRACE_MIB} MiB (${byteLength} bytes).`,
+    );
   }
   return parsed;
 }

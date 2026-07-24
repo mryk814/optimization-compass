@@ -10,7 +10,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 TRACE_CONTRACT_VERSION: Literal["1.0.0"] = "1.0.0"
 MAX_TRACE_FRAMES = 1_000
-MAX_TRACE_BYTES = 2 * 1024 * 1024
+MAX_TRACE_MIB = 8
+MAX_TRACE_BYTES = MAX_TRACE_MIB * 1024 * 1024
 MAX_SAFE_INTEGER = 2**53 - 1
 
 NonBlank = Annotated[str, Field(min_length=1, pattern=r".*\S.*")]
@@ -154,7 +155,8 @@ class AlgorithmTrace(TraceModel):
         raw_size = len(_canonical_model_bytes(self))
         if raw_size > MAX_TRACE_BYTES:
             raise ValueError(
-                f"trace raw canonical JSON exceeds 2 MiB ({raw_size} bytes > {MAX_TRACE_BYTES})"
+                f"trace raw canonical JSON exceeds {MAX_TRACE_MIB} MiB "
+                f"({raw_size} bytes > {MAX_TRACE_BYTES})"
             )
         return self
 

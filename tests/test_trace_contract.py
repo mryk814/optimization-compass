@@ -7,6 +7,7 @@ import pytest
 from pydantic import ValidationError
 
 from optimization_compass.trace_models import (
+    MAX_TRACE_BYTES,
     AlgorithmTrace,
     TraceBundle,
     TraceFrame,
@@ -229,8 +230,8 @@ def test_non_ascii_canonical_bytes_match_the_typescript_contract_fixture() -> No
 def test_frame_count_and_raw_canonical_size_limits_are_enforced() -> None:
     with pytest.raises(ValidationError, match="1,000"):
         trace(*(frame(index) for index in range(1001)))
-    with pytest.raises(ValidationError, match="2 MiB"):
-        trace(frame(0, payload={"text": "x" * (2 * 1024 * 1024)}))
+    with pytest.raises(ValidationError, match="8 MiB"):
+        trace(frame(0, payload={"text": "x" * MAX_TRACE_BYTES}))
 
 
 def test_downsampling_is_deterministic_and_preserves_event_boundaries_and_keyframes() -> None:
