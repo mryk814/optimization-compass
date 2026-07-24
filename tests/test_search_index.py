@@ -10,6 +10,7 @@ import optimization_compass.site_export as site_export
 from optimization_compass.content_models import load_content
 from optimization_compass.db import KnowledgeRepository
 from optimization_compass.search_index import (
+    MAX_SEARCH_INDEX_BYTES,
     RetrievalExport,
     SearchIndex,
     evaluate_search_benchmark,
@@ -64,7 +65,7 @@ def test_exported_search_and_retrieval_contracts_are_closed(
         "failure",
     } <= entity_types
     assert len(index.documents) > 500
-    assert (tmp_path / "search-index.json").stat().st_size < 2 * 1024 * 1024
+    assert (tmp_path / "search-index.json").stat().st_size < MAX_SEARCH_INDEX_BYTES
     assert len(retrieval.chunks) > len(index.documents)
     failure_hits = search_documents(index, "noise", entity_types={"failure"})
     assert failure_hits[0].document_id == "failure:structured:FM003"

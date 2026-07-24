@@ -88,7 +88,7 @@ def test_trf_has_a_beginner_first_published_guide() -> None:
     assert page.method_id == "M_TRUST_REGION_REFLECTIVE"
     assert page.status == "published"
     assert page.source_ids == ("S003", "S096")
-    assert "この手法の気持ち" in page.body
+    assert "## 30秒でつかむ" in page.body
     assert "## なぜReflectiveなのか" in page.body
     assert "## LM・dogbox・L-BFGS-Bとの違い" in page.body
     assert 'method="trf"' in page.body
