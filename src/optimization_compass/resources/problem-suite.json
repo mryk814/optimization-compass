@@ -274,6 +274,23 @@
       "last_verified": "2026-07-19"
     },
     {
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "name_ja": "名目平均・分散ポートフォリオ配分",
+      "name_en": "Nominal mean-variance portfolio allocation",
+      "mathematical_family": "convex_quadratic_portfolio",
+      "variable_domain": "simplex",
+      "objective_form": "convex_quadratic",
+      "objective_direction": "minimize",
+      "available_oracles": ["objective_value", "gradient", "constraint_value"],
+      "constraint_class": "simplex_and_bounds",
+      "dimensionality_policy": {"kind": "fixed", "dimension": 4},
+      "known_reference_semantics": "The fixed teaching reference is the exact solution of the declared four-asset convex QP with fixed mean and covariance inputs; it does not establish future return, tail risk, or parameter-estimation quality.",
+      "related_problem_ids": ["PA018"],
+      "feature_ids": ["F_VARIABLE_SIMPLEX", "F_CONSTRAINT_SIMPLEX", "F_CONSTRAINT_BOUNDS", "F_OBJECTIVE_QUADRATIC", "F_DERIVATIVE_ANALYTIC_GRADIENT"],
+      "source_ids": ["S010", "S055"],
+      "last_verified": "2026-07-24"
+    },
+    {
       "problem_definition_id": "PROBLEM_FAILED_SIMULATION",
       "name_ja": "失敗を含むblack-box simulation設計",
       "name_en": "Black-box simulation design with evaluation failures",
@@ -835,6 +852,28 @@
       "limitations_en": "A teaching instance with eight fixed training scenarios, four fixed held-out scenarios, and a 0.05 grid; it provides no population-risk, confidence-interval, future-return, chance-constraint, robust-feasibility, or DRO guarantee.",
       "source_ids": ["S055", "S103"],
       "last_verified": "2026-07-19"
+    },
+    {
+      "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+      "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+      "name_ja": "4資産・固定平均/共分散の名目平均・分散配分",
+      "name_en": "Four-asset nominal mean-variance allocation with fixed moments",
+      "registry_key": "problem.portfolio_mean_variance.fixed_4.v1",
+      "dimension": 4,
+      "parameters": {"expected_returns": [0.08, 0.06, 0.05, 0.03], "covariance": [[0.04, 0.006, 0.004, 0.002], [0.006, 0.025, 0.005, 0.003], [0.004, 0.005, 0.018, 0.002], [0.002, 0.003, 0.002, 0.01]], "risk_aversion": 2.0, "max_asset_weight": 0.6},
+      "bounds": {"weights": [0.0, 0.6], "simplex_sum": 1.0},
+      "constraints": [{"constraint_id": "capped_simplex", "expression": "sum(w)=1, 0<=w_i<=0.6", "sense": "eq_and_bounds"}],
+      "initialization_candidates": [{"candidate_id": "uniform", "point": [0.25, 0.25, 0.25, 0.25]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "unknown",
+      "known_reference": null,
+      "display": {"range": {"weight": [0.0, 0.6], "expected_return": [0.0, 0.08], "variance": [0.0, 0.04], "objective_value": [-0.08, 0.05], "simplex_residual": [0.0, 1e-10]}, "axis_labels": ["fixed allocation snapshot", "diagnostic value"], "units": ["snapshot", "mixed portfolio diagnostic"], "expression": "min gamma w^T Sigma w - mu^T w, gamma=2, sum(w)=1, 0<=w_i<=0.6"},
+      "intended_phenomena": ["simplex_allocation", "mean_variance_tradeoff", "risk_aversion_sensitivity", "convex_qp_diagnostics"],
+      "limitations_ja": "固定4資産・固定平均/共分散・空売りなしの教育用QPです。推定誤差、tail risk、scenario不確実性、turnover、取引費用、将来収益を表しません。",
+      "limitations_en": "A four-asset teaching QP with fixed moments and no shorting; it does not represent estimation error, tail risk, scenario uncertainty, turnover, transaction costs, or future returns.",
+      "source_ids": ["S010", "S055"],
+      "last_verified": "2026-07-24"
     },
     {
       "problem_instance_id": "INSTANCE_SO3_ATTITUDE_FIXED_3",

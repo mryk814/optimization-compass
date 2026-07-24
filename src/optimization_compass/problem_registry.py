@@ -451,6 +451,50 @@ def _portfolio_cvar(instance: ProblemInstance, point: Sequence[float]) -> float:
     return float(sum(losses) / len(losses) + risk_weight * empirical_cvar)
 
 
+def _portfolio_mean_variance(instance: ProblemInstance, point: Sequence[float]) -> float:
+    expected_returns = _vector(
+        instance.parameters.get("expected_returns"), length=instance.dimension, owner=instance
+    )
+    covariance = _matrix(
+        instance.parameters.get("covariance"),
+        rows=instance.dimension,
+        columns=instance.dimension,
+        owner=instance,
+    )
+    risk_aversion = _number(instance.parameters.get("risk_aversion"))
+    variance = sum(
+        point[row] * covariance[row][column] * point[column]
+        for row in range(instance.dimension)
+        for column in range(instance.dimension)
+    )
+    expected_return = sum(
+        value * weight for value, weight in zip(expected_returns, point, strict=True)
+    )
+    return float(risk_aversion * variance - expected_return)
+
+
+def _portfolio_mean_variance_gradient(
+    instance: ProblemInstance, point: Sequence[float]
+) -> list[float]:
+    covariance = _matrix(
+        instance.parameters.get("covariance"),
+        rows=instance.dimension,
+        columns=instance.dimension,
+        owner=instance,
+    )
+    expected_returns = _vector(
+        instance.parameters.get("expected_returns"), length=instance.dimension, owner=instance
+    )
+    risk_aversion = _number(instance.parameters.get("risk_aversion"))
+    return [
+        2.0
+        * risk_aversion
+        * sum(covariance[row][column] * point[column] for column in range(instance.dimension))
+        - expected_returns[row]
+        for row in range(instance.dimension)
+    ]
+
+
 def _bilevel_regression(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Evaluate the fixed reduced outer objective after an exact two-variable inner solve."""
     (regularization,) = point
@@ -558,5 +602,9 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.root_finding.ec028.v1": (_root_finding, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
+    "problem.portfolio_mean_variance.fixed_4.v1": (
+        _portfolio_mean_variance,
+        _portfolio_mean_variance_gradient,
+    ),
     "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),
 }

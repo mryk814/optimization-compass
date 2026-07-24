@@ -120,6 +120,11 @@
       "id": "026",
       "path": "data/migrations/026_root_finding_ec028.sql",
       "sha256": "f74412046b7c440aa78c98bf4b8c4416a69b0857b9d0fed1fece488bd6aeea07"
+    },
+    {
+      "id": "027",
+      "path": "data/migrations/027_portfolio_mean_variance.sql",
+      "sha256": "b29457e30a0b2270a3df1cc894ac2c61155d51ce06a1dba4543b507513acb891"
     }
   ],
   "specialized_inputs": [

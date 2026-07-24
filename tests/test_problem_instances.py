@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_twenty_closed_representative_instances() -> None:
+def test_problem_suite_has_twenty_one_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 23
+    assert len(suite.instances) == 24
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -37,6 +37,7 @@ def test_problem_suite_has_twenty_closed_representative_instances() -> None:
         "INSTANCE_REPEATED_MPC_QP_EC025",
         "INSTANCE_PENDULUM_SWING_UP_EC020",
         "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
+        "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
         "INSTANCE_BILEVEL_REGRESSION_2COEF",
         "INSTANCE_HYBRID_CHATTERING_LEDGER",
         "INSTANCE_DIFFUSER_SHAPE_3P",
@@ -71,6 +72,7 @@ def test_problem_suite_has_twenty_closed_representative_instances() -> None:
         ),
         ("INSTANCE_EXPONENTIAL_DECAY_FIT_3P", [1.8, 0.7, 0.25], 0.0),
         ("INSTANCE_PORTFOLIO_CVAR_FIXED_8_4", [0.3, 0.4, 0.0, 0.3], -0.0055),
+        ("INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4", [0.25, 0.25, 0.25, 0.25], -0.037875),
     ],
 )
 def test_registry_reproduces_scalar_known_references(
@@ -120,8 +122,8 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 20
-    assert len(catalog.instances) == 23
+    assert len(catalog.definitions) == 21
+    assert len(catalog.instances) == 24
     context = next(
         item
         for item in repository.benchmark_contexts()

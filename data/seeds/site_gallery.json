@@ -154,8 +154,8 @@
         }
       ],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
-      "comparison_ids": [],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW", "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"],
+      "comparison_ids": ["COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"],
       "source_ids": ["S022", "S053", "S054", "S055", "S079"],
       "difficulty": "intro",
       "status": "published",
