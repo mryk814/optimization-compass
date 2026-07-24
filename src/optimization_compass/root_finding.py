@@ -286,7 +286,7 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
             parameter_preset_id="ROOT_FINDING_EC028_FIXED",
             seed=VisualizationSeed(status="not_applicable", value=None),
             budget=VisualizationBudget(metric="oracle_evaluations", value=trace.evaluation_budget),
-            stopping=trace.stopping,
+            stopping={"oracle_evaluations": trace.evaluation_budget},
             tuning_policy="fixed_preset",
         ),
         runs=[

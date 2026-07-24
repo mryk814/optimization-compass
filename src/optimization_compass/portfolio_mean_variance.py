@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 from itertools import product
-from typing import Literal
+from typing import Literal, cast
 
 from optimization_compass.problem_registry import get_runtime_problem
 from optimization_compass.trace_models import (
@@ -59,8 +59,11 @@ def _diagnostics(
     weights: tuple[float, ...], gamma: float
 ) -> tuple[float, float, float, float, float]:
     parameters = get_runtime_problem(PROBLEM_INSTANCE_ID).instance.parameters
-    mu = tuple(float(value) for value in parameters["expected_returns"])
-    sigma = tuple(tuple(float(value) for value in row) for row in parameters["covariance"])
+    mu = tuple(float(value) for value in cast(list[float], parameters["expected_returns"]))
+    sigma = tuple(
+        tuple(float(value) for value in row)
+        for row in cast(list[list[float]], parameters["covariance"])
+    )
     expected_return = sum(value * weight for value, weight in zip(mu, weights, strict=True))
     variance = sum(weights[i] * sigma[i][j] * weights[j] for i in range(4) for j in range(4))
     return (
@@ -323,7 +326,7 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
             parameter_preset_id=str(trace.preset["preset_id"]),
             seed=VisualizationSeed(status="not_applicable", value=None),
             budget=VisualizationBudget(metric="oracle_evaluations", value=1),
-            stopping=trace.stopping,
+            stopping={"oracle_evaluations": 1},
             tuning_policy="fixed_preset",
         ),
         runs=[
