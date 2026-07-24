@@ -255,6 +255,25 @@ def _optimal_control(instance: ProblemInstance, point: Sequence[float]) -> float
     return float(running_cost + terminal_cost)
 
 
+def _repeated_mpc_qp(instance: ProblemInstance, point: Sequence[float]) -> float:
+    """Return the finite-horizon scalar MPC QP objective for the EC025 lesson."""
+    horizon = instance.parameters.get("horizon")
+    reference = _number(instance.parameters.get("reference"))
+    control_weight = _number(instance.parameters.get("control_weight"))
+    if isinstance(horizon, bool) or not isinstance(horizon, int) or horizon < 1:
+        raise ValueError(f"invalid MPC horizon for {instance.problem_instance_id}")
+    if len(point) != 2 * horizon:
+        raise ValueError(
+            f"{instance.problem_instance_id} expects {2 * horizon} state and control values"
+        )
+    states = point[:horizon]
+    controls = point[horizon:]
+    return float(
+        sum((float(state) - reference) ** 2 for state in states)
+        + control_weight * sum(float(control) ** 2 for control in controls)
+    )
+
+
 def _pendulum_swing_up(instance: ProblemInstance, point: Sequence[float]) -> float:
     """Return the fixed-mesh pendulum teaching objective without claiming feasibility."""
     mesh_nodes = instance.parameters.get("mesh_nodes")
@@ -491,6 +510,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.bilevel_regression.two_coefficient.v1": (_bilevel_regression, None),
     "problem.hybrid_mode.chattering_ledger.v1": (_hybrid_mode_relaxation, None),
     "problem.optimal_control.ec020.v1": (_optimal_control, None),
+    "problem.optimal_control.repeated_mpc_qp_ec025.v1": (_repeated_mpc_qp, None),
     "problem.optimal_control.pendulum_swing_up.v1": (_pendulum_swing_up, None),
     "problem.portfolio_cvar.fixed_8_4.v1": (_portfolio_cvar, None),
     "problem.so3_attitude.fixed_3.v1": (_so3_attitude, _so3_attitude_gradient),

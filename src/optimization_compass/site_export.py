@@ -64,6 +64,13 @@ from optimization_compass.release_catalog import (
     validate_release_catalog,
 )
 from optimization_compass.release_identity import DatasetReleaseIdentity, canonical_identity_json
+from optimization_compass.repeated_mpc_qp import (
+    PROFILE_ID as REPEATED_MPC_QP_PROFILE_ID,
+)
+from optimization_compass.repeated_mpc_qp import (
+    build_repeated_mpc_qp_scenario,
+    generate_repeated_mpc_qp_traces,
+)
 from optimization_compass.search_index import (
     build_search_artifacts,
     evaluate_search_benchmark,
@@ -1156,6 +1163,7 @@ def _write_dummy_trace(
     )
     generated_traces.extend(_generate_optimal_control_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_portfolio_uncertainty_traces(dataset_version=dataset_version))
+    generated_traces.extend(generate_repeated_mpc_qp_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_simulation_constrained_traces(dataset_version=dataset_version))
     generated_traces.extend(generate_bilevel_regression_traces(dataset_version=dataset_version))
     generated_traces.append(generate_hybrid_chattering_trace(dataset_version=dataset_version))
@@ -2487,6 +2495,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         return build_shape_optimization_scenario(trace)
     if trace.profile_id == PORTFOLIO_UNCERTAINTY_PROFILE_ID:
         return build_portfolio_uncertainty_scenario(trace)
+    if trace.profile_id == REPEATED_MPC_QP_PROFILE_ID:
+        return build_repeated_mpc_qp_scenario(trace)
     if trace.profile_id in {BILEVEL_PROFILE_ID, HYBRID_PROFILE_ID}:
         return build_nested_solve_scenario(trace)
     if trace.profile_id == SO3_PROFILE_ID:

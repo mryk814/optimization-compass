@@ -1627,6 +1627,49 @@
           "artifact": {"artifact_id": "binary-knapsack-bnb-budget", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-budget.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+      "canonical_url": "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+      "aliases": [],
+      "mode": "parameter_sensitivity",
+      "journey_id": "EC025",
+      "case_id": "EC025",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
+      "benchmark_context_id": "BENCH_REPEATED_MPC_QP_EC025_4",
+      "title_ja": "反復MPC QPでwarm startとdeadline余裕を読む",
+      "title_en": "Read warm starts and deadline margin in a repeated MPC QP",
+      "comparison_question": "同じMPC QP、残差ledger、3ms deadline、4 control cycleでwarm startだけを変えると、solver反復とdeadline余裕はどの周期から変わる？",
+      "formulation_summary": "min sum_{k=1}^4(x_k-1)^2+0.1 sum_{k=0}^3u_k^2 subject to x[k+1]=x[k]+u[k]、state/control bounds。",
+      "fixed_factors": ["INSTANCE_REPEATED_MPC_QP_EC025のstate 1・input 1・horizon 4", "同じ線形dynamics、reference、state/control bounds", "同じ4 control cycleと3ms deadline policy", "同じprimal/dual residual ledger", "同じ決定的iteration-to-latency model"],
+      "changed_factors": ["第2周期以降に前周期解をwarm startとして渡すかどうかだけ"],
+      "seed_policy": "固定した決定論的ledgerのためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 4},
+      "stopping_policy": "4 control cycleで停止し、deadline missがあっても次周期のledgerを記録する。",
+      "tuning_policy": "horizon、reference、bounds、deadline、iteration-to-latency modelをrun前に固定し、結果を見て変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "primal_residual", "label_ja": "primal残差", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "dual_residual", "label_ja": "dual残差", "direction": "minimize", "unit": "residual"},
+        {"metric_id": "solver_iterations", "label_ja": "solver反復", "direction": "minimize", "unit": "iterations"},
+        {"metric_id": "solve_time_ms", "label_ja": "解時間ledger", "direction": "minimize", "unit": "ms"},
+        {"metric_id": "deadline_margin_ms", "label_ja": "deadline余裕", "direction": "maximize", "unit": "ms"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。",
+      "caveat": "解時間はdeterministic educational ledgerであり、CPU、OS、linear algebra backend、OSQP/ADMM実装、cache、jitterを測定していない。",
+      "takeaway": "warm startは初回解を短縮する保証ではない。残差とdeadline余裕を各周期で分け、target hardwareのp99・最大latencyとfailure pathで別途検証する。",
+      "limitations": ["state 1・input 1・horizon 4・4周期だけの教材であり、実機の100Hzやclosed-loop安定性を証明しない。", "このcontrastは一般的なsolver、implementation、hardware、warm-start設定の順位付けに使わない。"],
+      "source_ids": ["S012", "S043", "S076"],
+      "last_verified": "2026-07-24",
+      "members": [
+        {"member_id": "mpc-qp-warm-start", "role": "warm_start_primary", "method_id": "M_ADMM_QP", "scenario_id": "SCENARIO_REPEATED_MPC_QP_WARM_START", "label_ja": "前周期解をwarm start", "label_en": "Reuse the previous solution as a warm start", "parameters": {"warm_start": true, "deadline_ms": 3.0, "horizon": 4, "latency_model": "deterministic_iteration_to_latency_ledger"}, "budget": {"metric": "oracle_evaluations", "value": 4}, "artifact": {"artifact_id": "repeated-mpc-qp-warm-start", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/repeated-mpc-qp-warm-start.json"}},
+        {"member_id": "mpc-qp-cold-start", "role": "cold_start_sensitivity", "method_id": "M_ADMM_QP", "scenario_id": "SCENARIO_REPEATED_MPC_QP_COLD_START", "label_ja": "毎周期cold start", "label_en": "Restart cold at every cycle", "parameters": {"warm_start": false, "deadline_ms": 3.0, "horizon": 4, "latency_model": "deterministic_iteration_to_latency_ledger"}, "budget": {"metric": "oracle_evaluations", "value": 4}, "artifact": {"artifact_id": "repeated-mpc-qp-cold-start", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/repeated-mpc-qp-cold-start.json"}}
+      ]
     }
   ]
 }

@@ -645,6 +645,28 @@
       "last_verified": "2026-07-19"
     },
     {
+      "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
+      "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
+      "name_ja": "EC025 4周期の反復MPC二次計画",
+      "name_en": "EC025 four-cycle repeated MPC quadratic program",
+      "registry_key": "problem.optimal_control.repeated_mpc_qp_ec025.v1",
+      "dimension": 8,
+      "parameters": {"horizon": 4, "state_dimension": 1, "control_dimension": 1, "dynamics": "x[k+1]=x[k]+u[k]", "reference": 1.0, "control_weight": 0.1, "deadline_ms": 3.0, "latency_model": "deterministic_iteration_to_latency_ledger"},
+      "bounds": {"state": [-1.5, 1.5], "control": [-0.4, 0.4]},
+      "constraints": [{"constraint_id": "linear_dynamics", "expression": "x[k+1]-x[k]-u[k]=0 with x[0]=x_current", "sense": "eq"}, {"constraint_id": "state_bounds", "expression": "-1.5<=x[k]<=1.5", "sense": "bounds"}, {"constraint_id": "control_bounds", "expression": "-0.4<=u[k]<=0.4", "sense": "bounds"}],
+      "initialization_candidates": [{"candidate_id": "zero_state_zero_control", "point": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]}],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "unknown",
+      "known_reference": null,
+      "display": {"range": {"control_cycle": [1.0, 4.0], "tracking_error": [0.0, 1.0], "residual": [0.0, 0.00001], "solver_iterations": [0.0, 70.0], "solve_time_ms": [0.0, 4.0], "deadline_margin_ms": [-1.0, 3.0]}, "axis_labels": ["control cycle", "diagnostic value"], "units": ["cycle", "mixed diagnostics"], "expression": "min sum_{k=1}^4(x_k-1)^2+0.1 sum_{k=0}^3 u_k^2 subject to x[k+1]=x[k]+u[k], state and control bounds"},
+      "intended_phenomena": ["receding_horizon", "warm_start", "primal_dual_residual", "deadline_margin", "closed_loop_revalidation"],
+      "limitations_ja": "状態1次元・入力1次元・4周期・決定的iteration-to-latency ledgerの教育用instanceです。OSQPまたはADMMの実CPU時間、100Hz達成、閉loop安定性、recursive feasibility、安全性、一般性能順位を示しません。",
+      "limitations_en": "A one-state, one-input, four-cycle educational instance with a deterministic iteration-to-latency ledger. It does not establish OSQP or ADMM CPU time, 100-Hz operation, closed-loop stability, recursive feasibility, safety, or general performance ranking.",
+      "source_ids": ["S012", "S043", "S076"],
+      "last_verified": "2026-07-24"
+    },
+    {
       "problem_instance_id": "INSTANCE_PENDULUM_SWING_UP_EC020",
       "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
       "name_ja": "トルク制約付きpendulum swing-up",

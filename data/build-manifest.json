@@ -100,6 +100,11 @@
       "id": "022",
       "path": "data/migrations/022_topopt_educational_implementation.sql",
       "sha256": "43fce7ea025ff58cefb79b4b68c5516bf8c9a6d564ec2717c244ce7a6ce1a750"
+    },
+    {
+      "id": "023",
+      "path": "data/migrations/023_repeated_mpc_qp.sql",
+      "sha256": "4e4aa34c39ce970b79d1bb1c6ed6cde5a2d0d1c8b30498d5661a36f379903999"
     }
   ],
   "specialized_inputs": [

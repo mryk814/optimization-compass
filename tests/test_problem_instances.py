@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_nineteen_closed_representative_instances() -> None:
+def test_problem_suite_has_twenty_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 19
+    assert len(suite.instances) == 20
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -34,6 +34,7 @@ def test_problem_suite_has_nineteen_closed_representative_instances() -> None:
         "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
         "INSTANCE_OPTIMAL_CONTROL_EC020",
+        "INSTANCE_REPEATED_MPC_QP_EC025",
         "INSTANCE_PENDULUM_SWING_UP_EC020",
         "INSTANCE_PORTFOLIO_CVAR_FIXED_8_4",
         "INSTANCE_BILEVEL_REGRESSION_2COEF",
@@ -94,6 +95,12 @@ def test_registry_reproduces_optimal_control_educational_objective() -> None:
     assert problem.objective_value([0.0] * 60) == pytest.approx(1.0)
 
 
+def test_registry_reproduces_repeated_mpc_qp_objective() -> None:
+    problem = get_runtime_problem("INSTANCE_REPEATED_MPC_QP_EC025")
+
+    assert problem.objective_value([1.0] * 4 + [0.0] * 4) == pytest.approx(0.0)
+
+
 def test_registry_reproduces_pendulum_terminal_penalty() -> None:
     problem = get_runtime_problem("INSTANCE_PENDULUM_SWING_UP_EC020")
 
@@ -114,7 +121,7 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
 
     catalog = repository.problem_catalog()
     assert len(catalog.definitions) == 17
-    assert len(catalog.instances) == 19
+    assert len(catalog.instances) == 20
     context = next(
         item
         for item in repository.benchmark_contexts()
