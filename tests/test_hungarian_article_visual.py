@@ -4,7 +4,6 @@ from pathlib import Path
 
 from optimization_compass.content_models import load_content
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
