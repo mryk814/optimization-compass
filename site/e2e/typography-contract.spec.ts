@@ -48,6 +48,8 @@ async function expectNoTinyInterfaceText(page: Page): Promise<void> {
         || bounds.height === 0
         || style.display === "none"
         || style.visibility === "hidden"
+        || style.clip !== "auto"
+        || style.clipPath !== "none"
       ) continue;
       const fontSize = Number.parseFloat(style.fontSize);
       if (fontSize < 14) {
@@ -70,7 +72,7 @@ const surfaces = [
   {
     route: "/learn",
     primary: ".atlas-page-header p:not(.eyebrow)",
-    metadata: ".content-card > span",
+    metadata: ".content-card-main > span",
     control: ".content-search",
   },
   {
@@ -99,8 +101,8 @@ const surfaces = [
   },
   {
     route: "/coverage",
-    primary: ".coverage-language-note",
-    metadata: ".coverage-pill",
+    primary: ".coverage-heading p:not(.eyebrow)",
+    metadata: ".coverage-pill:visible",
     control: ".coverage-filters label",
   },
   {
