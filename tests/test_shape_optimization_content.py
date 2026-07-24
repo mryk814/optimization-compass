@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from optimization_compass.content_models import ContentPage, load_content
+from optimization_compass.content_quality import style_warnings
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,7 +30,8 @@ def test_shape_slice_uses_existing_canonical_entities_and_sources() -> None:
 
 def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> None:
     pages = _pages()
-    shape_body = pages["shape-optimization"].body
+    shape = pages["shape-optimization"]
+    shape_body = shape.body
     failure_body = pages["geometry-update-failure-modes"].body
 
     for phrase in ("geometry validity", "mesh quality", "state residual", "mesh refinement"):
@@ -39,3 +41,13 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     assert "連続体の可行性" in failure_body
     assert "::: warning" in shape_body
     assert "::: warning" in failure_body
+    assert shape.visualization_ids == (
+        "shape-diffuser-valid-update",
+        "shape-diffuser-invalid-geometry",
+        "shape-topology-representation-contrast",
+    )
+    assert shape.comparison_ids == ("COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",)
+    assert "#/gallery/shape-diffuser" in shape_body
+    assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in shape_body
+    assert "parameter → geometry → mesh → physical state" in shape_body
+    assert style_warnings(shape) == ()

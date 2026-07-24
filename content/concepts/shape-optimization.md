@@ -13,14 +13,15 @@ visualization_ids: [shape-diffuser-valid-update, shape-diffuser-invalid-geometry
 comparison_ids: [COMPARE_SHAPE_TOPOLOGY_REPRESENTATION]
 aliases: [/learn/shape-optimization]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-24
 ---
 
 形状最適化では、境界や形状を表す設計変数を更新し、物理状態を再計算して性能と幾何の妥当性を同時に確認します。
 
 ## 形状変数は「何を動かすか」を表す
 
-形状最適化で更新するのは、単なる数値列ではありません。境界の位置、断面寸法、節点の移動量、または形状を表す係数が設計変数になります。
+形状最適化で更新するのは、単なる数値列ではありません。
+境界位置／断面寸法／節点移動量／形状basisの係数などが設計変数になります。
 同じ設計領域でも、どの表現を選ぶかで更新できる形状と失敗の仕方が変わります。
 
 | 設計変数の表現 | 更新する対象 | 最初に確認すること |
@@ -42,13 +43,18 @@ last_reviewed: 2026-07-19
 3. 目的、制約、感度を記録する。
 4. 更新候補を受け入れる前に、geometryとmesh qualityを再確認する。
 
-目的関数だけを返すblack-box評価にすると、幾何の失敗と物理状態の失敗が同じ「評価失敗」に隠れます。診断では、geometry update、mesh quality、state residual、目的、制約違反を別の値として保存します。
+目的関数だけを返すblack-box評価では、幾何と物理状態の失敗が同じ「評価失敗」に隠れます。
+geometry update／mesh quality／state residual／目的／制約違反を別々に保存します。
+この層分けが、更新を止める場所と直す場所を示します。
 
 ## 形状の表現が保証する範囲
 
-低次元の形状parameterは、更新を安定させやすい一方で、表現できる形状を狭めます。自由度を増やすと表現力は広がりますが、meshの変形や感度のnoiseが増える場合があります。
+低次元の形状parameterは更新を安定させやすい一方で、表現できる形状を狭めます。
+自由度を増やすと表現力は広がりますが、meshの変形や感度のnoiseが増える場合があります。
 
-形状変数のboundsを守っても、自己交差しないこと、要素が反転しないこと、物理制約を満たすことまでは保証しません。geometry validityを独立した制約または事前チェックとして扱います。
+形状変数のboundsを守るだけでは、自己交差や要素反転を防げません。
+物理制約を満たす保証もありません。
+geometry validityを独立した制約または事前チェックとして扱います。
 
 ::: warning
 離散mesh上で目的関数が改善しても、連続体の形状が改善したことや、細かいmeshでも同じ設計になることは示されません。mesh refinement、geometry validity、物理制約を分けて再評価してください。
@@ -62,11 +68,13 @@ last_reviewed: 2026-07-19
 - 目的関数、感度、finite-differenceまたはgradient check
 - mesh refinement後の目的・制約・形状の変化
 
-目的だけが改善し、mesh qualityやconstraint violationが悪化するなら、その更新は採用せず、更新幅、parameterization、mesh-motion、または再meshの方針を見直します。
+目的だけが改善しても、mesh qualityやconstraint violationが悪化する更新は採用しません。
+更新幅／parameterization／mesh-motion／再meshのうち、失敗した層に対応する方針を見直します。
 
 ## applicationへ広げるときのmap
 
-[2D diffuser Case](#/gallery/shape-diffuser)は、parameter、geometry、mesh、physical stateを分ける最小contractです。physical stateを置き換えるときも、この順序は維持します。
+[2D diffuser Case](#/gallery/shape-diffuser)は、parameterからphysical stateまでを分ける最小contractです。
+別のdomainへ移るときも、parameter → geometry → mesh → physical stateの順序を維持します。
 
 | domain | physical stateと目的 | 追加で確認する制約 |
 | --- | --- | --- |
@@ -76,9 +84,11 @@ last_reviewed: 2026-07-19
 | acoustic | pressure wave、散乱・透過 | 周波数帯、放射境界、共振 |
 | photonic | Maxwell state、透過・反射 | 波長帯、材料分散、fabrication rule |
 
-いずれも離散stateの目的改善だけでは、連続modelや別meshでの性能を保証しません。geometry validity、mesh refinement、state residual、物理制約を同じlayer contractで再評価します。
+離散stateの目的改善だけでは、連続modelや別meshでの性能を保証しません。
+geometry validity／mesh refinement／state residual／物理制約を同じlayer contractで再評価します。
 
-[shape／topology表現Compare](#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION)では、同じ物理briefの下でfixed-topology parameterと接続変更を許すfieldをcontrast-onlyで確認できます。
+[shape／topology表現Compare](#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION)は、同じ物理briefを使います。
+fixed-topology parameterと接続変更を許すfieldの違いをcontrast-onlyで確認できます。
 
 ## 次に読む
 
