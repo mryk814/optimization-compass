@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.10",
+  "dataset_version": "0.18.11",
   "expectations": [
     {
       "applicability": "expected",
@@ -324,7 +324,7 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-07-19T00:00:00Z",
+  "generated_at": "2026-07-24T00:00:00Z",
   "integrity_issues": [],
   "priorities": [
     {
@@ -2700,12 +2700,12 @@
           ]
         },
         "implementation": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_TOPOPT_88_MATLAB"
+          ]
         },
         "journey": {
           "count": 0,
@@ -2716,7 +2716,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 26,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2729,6 +2729,7 @@
             "COMPARE_PDE_STATE_TOLERANCE_COST",
             "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA",
+            "I_TOPOPT_88_MATLAB",
             "S097",
             "S098",
             "S099",
@@ -5188,12 +5189,12 @@
           ]
         },
         "implementation": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_TOPOPT_88_MATLAB"
+          ]
         },
         "journey": {
           "count": 0,
@@ -5204,12 +5205,13 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_DENSITY_FILTER",
             "COMPARE_TOPOLOGY_OC_MMA",
+            "I_TOPOPT_88_MATLAB",
             "S097",
             "S099",
             "density-filter",
@@ -8450,12 +8452,12 @@
           ]
         },
         "implementation": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_TOPOPT_88_MATLAB"
+          ]
         },
         "journey": {
           "count": 0,
@@ -8466,12 +8468,13 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_OC_TOPOLOGY",
             "COMPARE_TOPOLOGY_OC_MMA",
+            "I_TOPOPT_88_MATLAB",
             "S097",
             "S098",
             "optimality-criteria-topology",
@@ -10016,12 +10019,12 @@
           ]
         },
         "implementation": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "I_TOPOPT_88_MATLAB"
+          ]
         },
         "journey": {
           "count": 0,
@@ -10032,13 +10035,14 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_SIMP_TOPOLOGY",
             "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
             "COMPARE_TOPOLOGY_OC_MMA",
+            "I_TOPOPT_88_MATLAB",
             "S097",
             "S098",
             "S099",

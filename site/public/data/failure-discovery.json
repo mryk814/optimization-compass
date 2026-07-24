@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.10",
+  "dataset_version": "0.18.11",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -1531,7 +1531,7 @@
       "failure_mode_id": "FM003",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_BFGS",
         "M_NEWTON",
@@ -1573,7 +1573,7 @@
       "failure_mode_id": "FM007",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_BFGS",
         "M_CMA_ES",
@@ -1618,7 +1618,7 @@
       "failure_mode_id": "FM009",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_GAUSS_NEWTON",
         "M_INTERIOR_POINT_NLP",
@@ -1662,7 +1662,7 @@
       "failure_mode_id": "FM011",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_ACTIVE_SET",
         "M_INTERIOR_POINT_NLP",
@@ -1707,7 +1707,7 @@
         "F_CONSTRAINT_CLASS"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [],
       "mitigations": [
         {
@@ -1747,7 +1747,7 @@
       "failure_mode_id": "FM015",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_COBYLA",
         "M_INTERIOR_POINT_NLP",
@@ -1790,7 +1790,7 @@
       "failure_mode_id": "FM016",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_BFGS",
         "M_INTERIOR_POINT_NLP",
@@ -1833,7 +1833,7 @@
       "failure_mode_id": "FM022",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_COBYQA",
         "M_MADS",
@@ -1880,7 +1880,7 @@
         "F_EVALUATION_RELIABILITY"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [],
       "mitigations": [
         {
@@ -1983,9 +1983,10 @@
         "I_SCS",
         "I_SMAC3",
         "I_SNOPT",
-        "I_TENSORFLOW_OPTIM"
+        "I_TENSORFLOW_OPTIM",
+        "I_TOPOPT_88_MATLAB"
       ],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [],
       "mitigations": [
         {
@@ -2025,7 +2026,7 @@
       "failure_mode_id": "FM033",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_BAYESIAN_OPT_GP",
         "M_SMAC_RF"
@@ -2067,7 +2068,7 @@
       "failure_mode_id": "FM037",
       "feature_ids": [],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-07-24",
       "method_ids": [
         "M_CMA_ES",
         "M_GENETIC_ALGORITHM",
@@ -2097,7 +2098,7 @@
       "title_ja": "population多様性喪失"
     }
   ],
-  "generated_at": "2026-07-19T00:00:00Z",
+  "generated_at": "2026-07-24T00:00:00Z",
   "summary": {
     "case_exclusion_count": 30,
     "entries_with_scenarios": 28,

@@ -4043,11 +4043,11 @@
           ]
         },
         "implementation": {
-          "reason_codes": [
-            "missing_implementation"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_TOPOPT_88_MATLAB"
+          ]
         },
         "method_roles": {
           "reason_codes": [],
@@ -4126,15 +4126,13 @@
         }
       },
       "journey_id": "topology-cantilever",
-      "missing_dimensions": [
-        "implementation"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.10",
-  "generated_at": "2026-07-19T00:00:00Z",
+  "dataset_version": "0.18.11",
+  "generated_at": "2026-07-24T00:00:00Z",
   "journeys": [
     {
       "candidate_method_ids": [
@@ -4158,7 +4156,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4249,7 +4247,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4326,7 +4324,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4385,7 +4383,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4453,7 +4451,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4549,7 +4547,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4610,7 +4608,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4699,7 +4697,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4767,7 +4765,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4826,7 +4824,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4908,7 +4906,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4982,7 +4980,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5062,7 +5060,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5140,7 +5138,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5217,7 +5215,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5294,7 +5292,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5371,7 +5369,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5452,7 +5450,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5542,7 +5540,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5619,7 +5617,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5709,7 +5707,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5801,7 +5799,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5878,7 +5876,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5994,7 +5992,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6055,7 +6053,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6133,7 +6131,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6213,7 +6211,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6305,7 +6303,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6368,7 +6366,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6440,9 +6438,7 @@
           "comparison_id": "COMPARE_TOPOLOGY_OC_MMA"
         }
       ],
-      "completion_reasons": [
-        "missing_implementation"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_ADJOINT_SENSITIVITY",
         "M_DENSITY_FILTER",
@@ -6455,7 +6451,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.10",
+      "dataset_version": "0.18.11",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6466,7 +6462,9 @@
         "objective": "compliance <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mi>c</mi><mo stretchy=\"false\">&#x00028;</mo><mi>&#x003C1;</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><msup><mi>F</mi><mi>&#x1D5B3;</mi></msup><mi>u</mi></mrow></math> を最小化する。SIMPでは要素剛性を <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>E</mi><mi>e</mi></msub><mo>&#x0003D;</mo><msub><mi>E</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>&#x0002B;</mo><msubsup><mi>&#x003C1;</mi><mi>e</mi><mi>p</mi></msubsup><mo stretchy=\"false\">&#x00028;</mo><msub><mi>E</mi><mn>0</mn></msub><mo>&#x02212;</mo><msub><mi>E</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と補間し、中間密度をpenalizeしながら荷重経路を残す。",
         "variable_domain_summary": "固定教材では32要素の設計密度 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C1;</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>&#x003C1;</mi><mn>1</mn></msub><mo>&#x0002C;</mo><mi>&#x02026;</mi><mo>&#x0002C;</mo><msub><mi>&#x003C1;</mi><mrow><mn>32</mn></mrow></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0.001</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">]</mo><mrow><mn>32</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>&#x003C1;</mi><mi>e</mi></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は材料、下限に近い値は空孔に近い状態を表す連続緩和であり、0/1配置そのものではない。"
       },
-      "implementation_ids": [],
+      "implementation_ids": [
+        "I_TOPOPT_88_MATLAB"
+      ],
       "journey_id": "topology-cantilever",
       "last_reviewed": "2026-07-24",
       "learning_objective": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。",
@@ -6502,7 +6500,7 @@
         "S100",
         "S101"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
       "title_en": "Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くする"
@@ -7179,9 +7177,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 22,
+      "complete": 23,
       "draft": 0,
-      "partial": 8
+      "partial": 7
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

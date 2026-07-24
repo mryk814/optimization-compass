@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.10",
+  "dataset_version": "0.18.11",
   "metrics": {
     "expected_entity_recall": 1.0,
     "top_1_relevance": 0.8,
@@ -148,7 +148,7 @@
       "intents": [],
       "query": "OR-Tools CP-SAT",
       "query_id": "implementation",
-      "result_count": 8,
+      "result_count": 9,
       "top_document_ids": [
         "implementation:I_ORTOOLS_CPSAT",
         "implementation:I_ORTOOLS_ROUTING",

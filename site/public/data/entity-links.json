@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.10",
+  "dataset_version": "0.18.11",
   "entities": [
     {
       "aliases": [],
@@ -3513,6 +3513,11 @@
           "relation_type": "feature_value",
           "target_id": "F_VARIABLE_DOMAIN:continuous",
           "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TOPOPT_88_MATLAB",
+          "target_type": "implementation"
         },
         {
           "relation_type": "learning_journey",
@@ -17721,6 +17726,32 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "I_TOPOPT_88_MATLAB",
+      "entity_type": "implementation",
+      "external_url": "https://www.topopt.mek.dtu.dk/apps-and-software/efficient-topology-optimization-in-matlab",
+      "label": "DTU TopOpt",
+      "relations": [
+        {
+          "relation_type": "implements",
+          "target_id": "M_DENSITY_FILTER",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_OC_TOPOLOGY",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implements",
+          "target_id": "M_SIMP_TOPOLOGY",
+          "target_type": "method"
+        }
+      ],
+      "summary": "Bounded to the official 88-line teaching implementation. It does not represent a production FEM package, general MMA implementation, stress or buckling constraints, or manufacturing validation."
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "EC013",
       "entity_type": "journey",
       "external_url": null,
@@ -20916,6 +20947,11 @@
           "target_type": "scenario"
         },
         {
+          "relation_type": "implementation",
+          "target_id": "I_TOPOPT_88_MATLAB",
+          "target_type": "implementation"
+        },
+        {
           "relation_type": "learning",
           "target_id": "adjoint-sensitivity",
           "target_type": "content"
@@ -23430,6 +23466,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "implementation",
+          "target_id": "I_TOPOPT_88_MATLAB",
+          "target_type": "implementation"
+        },
+        {
           "relation_type": "learning",
           "target_id": "density-filter",
           "target_type": "content"
@@ -25360,6 +25401,11 @@
           "target_type": "source"
         },
         {
+          "relation_type": "implementation",
+          "target_id": "I_TOPOPT_88_MATLAB",
+          "target_type": "implementation"
+        },
+        {
           "relation_type": "learning",
           "target_id": "optimality-criteria-topology",
           "target_type": "content"
@@ -26441,6 +26487,11 @@
           "relation_type": "evidence",
           "target_id": "S099",
           "target_type": "source"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_TOPOPT_88_MATLAB",
+          "target_type": "implementation"
         },
         {
           "relation_type": "learning",
@@ -33270,5 +33321,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-07-19T00:00:00Z"
+  "generated_at": "2026-07-24T00:00:00Z"
 }
