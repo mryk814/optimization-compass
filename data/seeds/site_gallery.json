@@ -228,7 +228,7 @@
     },
     {
       "case_id": "portfolio-allocation",
-      "title_ja": "ポートフォリオの配分を決める",
+      "title_ja": "平均・共分散でポートフォリオを配分する",
       "title_en": "Portfolio allocation",
       "domain": "finance",
       "problem_archetype_id": "PA018",
@@ -283,14 +283,14 @@
       "difficulty": "intermediate",
       "status": "published",
       "last_reviewed": "2026-07-24",
-      "question": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。",
+      "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
       "variable_domain": "固定教材では資産比率 $w\\in X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_iw_i=1\\}$。$w_i$ は資産 $i$ の保有比率で、空売りと借入は認めない。",
       "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
       "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
       "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
       "map_node_id": "answer:Q11:lp_qp_conic",
       "python_example": "import cvxpy as cp\nimport numpy as np\n\nmu = np.array([0.08, 0.06, 0.05, 0.03])\nsigma = np.array([[0.040, 0.006, 0.004, 0.002], [0.006, 0.025, 0.005, 0.003], [0.004, 0.005, 0.018, 0.002], [0.002, 0.003, 0.002, 0.010]])\nrisk_aversion = 2.0\nw = cp.Variable(4)\nobjective = cp.Minimize(risk_aversion * cp.quad_form(w, sigma) - mu @ w)\nconstraints = [cp.sum(w) == 1, w >= 0, w <= 0.6]\nproblem = cp.Problem(objective, constraints)\nproblem.solve()\nprint(problem.status, np.round(w.value, 4), float(mu @ w.value), float(w.value @ sigma @ w.value))",
-      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
+      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "limitations": [
         "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
         "凸QPの大域解は入力したmodel内の保証であり、将来収益、損失上限、tail risk、実現performanceを保証しない。実運用では時系列のheld-out評価と推定不確実性の検証が必要である。"
