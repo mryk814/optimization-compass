@@ -264,11 +264,23 @@ def test_completeness_checks_comparison_contract_and_real_route_targets() -> Non
     broken = json.loads(json.dumps(comparisons["COMPARE_CONSTRAINED_FAILURE"]))
     broken["fixed_factors"] = []
     broken["case_id"] = "other-case"
+    broken["problem_instance_id"] = "OTHER_INSTANCE"
     issues = _comparison_issues(
         journey,
         comparisons_by_id={"COMPARE_CONSTRAINED_FAILURE": broken},
     )
     assert issues == ["comparison_contract_incomplete", "comparison_wrong_journey"]
+
+    shared_instance = json.loads(json.dumps(comparisons["COMPARE_CONSTRAINED_FAILURE"]))
+    shared_instance["case_id"] = "source-case"
+    shared_instance["journey_id"] = "source-journey"
+    assert (
+        _comparison_issues(
+            journey,
+            comparisons_by_id={"COMPARE_CONSTRAINED_FAILURE": shared_instance},
+        )
+        == []
+    )
 
     scenarios = VisualizationScenarioIndex.model_validate_json(
         SCENARIO_FIXTURE.read_text(encoding="utf-8")

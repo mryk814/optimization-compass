@@ -757,10 +757,14 @@ def _comparison_issues(
             or comparison.get("canonical_comparison_id") != reference.comparison_id
         ):
             issues.add("comparison_not_canonical")
-        if (
-            comparison.get("case_id") != journey.case_id
-            or comparison.get("journey_id") != journey.journey_id
-        ):
+        owned_by_journey = (
+            comparison.get("case_id") == journey.case_id
+            and comparison.get("journey_id") == journey.journey_id
+        )
+        reuses_same_instance = comparison.get("problem_instance_id") in set(
+            journey.problem_instance_ids
+        )
+        if not owned_by_journey and not reuses_same_instance:
             issues.add("comparison_wrong_journey")
         if any(not comparison.get(field) for field in required_fields):
             issues.add("comparison_contract_incomplete")
