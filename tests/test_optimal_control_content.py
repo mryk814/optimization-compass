@@ -19,6 +19,19 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
     ]
     assert "## Roboticsでの読み替え" in family.body
     assert "#/learn/concept.receding-horizon" in family.body
+    assert family.body.index("## 30秒でつかむ") < family.body.index("## まず読む: 5つの概念")
+    assert family.visualization_ids == (
+        "pendulum-collocation-coarse",
+        "pendulum-collocation-refined",
+        "pendulum-model-rollout-failure",
+    )
+    assert family.comparison_ids == ("COMPARE_PENDULUM_COLLOCATION_MESH",)
+    for route in (
+        "#/gallery/EC029",
+        "#/gallery/EC025",
+        "#/compare/COMPARE_PENDULUM_COLLOCATION_MESH",
+    ):
+        assert route in family.body
 
     expected = {
         "direct-shooting": ["concept.trajectory-variable", "concept.time-discretization"],
@@ -46,3 +59,4 @@ def test_optimal_control_content_forms_a_robotics_reading_path() -> None:
         assert "#/learn/concept.trajectory-variable" in page.body
 
     assert style_warnings(pages["ilqr-ddp"]) == ()
+    assert style_warnings(family) == ()

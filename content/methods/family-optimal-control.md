@@ -4,21 +4,36 @@ kind: method
 method_id: MF_OPTIMAL_CONTROL
 title_ja: 最適制御・軌道最適化の選び分け
 title_en: Choosing a Trajectory Optimization Method
-summary: 時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。
+summary: 時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題を、変数・離散化・制約・実行頻度から各手法へつなぐ入口です。
 source_ids: [S042, S043, S050, S076, S102]
 prerequisites: [concept.trajectory-variable, concept.dynamics-defect, concept.path-terminal-constraints, concept.time-discretization]
 related_ids: [concept.receding-horizon, direct-shooting, multiple-shooting, direct-collocation, ilqr-ddp]
 visualization_ids: [pendulum-collocation-coarse, pendulum-collocation-refined, pendulum-model-rollout-failure]
 comparison_ids: [COMPARE_PENDULUM_COLLOCATION_MESH]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-24
 ---
 
-時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題群を、direct shooting、direct multiple shooting、direct collocation、iLQR/DDPなどの離散化・解法へつなぐ入口です。
+時間発展するdynamicsの下でtrajectoryとcontrolを選ぶ問題を、変数・離散化・制約・実行頻度から各手法へつなぐ入口です。
+
+## 30秒でつかむ
+
+このfamilyは、**dynamicsという時間方向の構造を使います。**
+trajectoryとcontrolを同時に、または段階的に改善します。
+
+- 見ているもの: dynamics model、state / controlのtrajectory、cost、path / boundary制約
+- 動かすもの: control列（と、定式化によってはstate列そのもの）
+- 前進の判断: dynamics defectの縮小、costの低下、path制約充足の維持
+- 主な弱点: dynamics modelとdiscretizationの誤差、初期軌道の推測への依存、path制約の扱いにくさ
+
+これは「どの手法が常に優れているか」という順位ではありません。
+変数／制約の置き場所／real-time性の必要度で選びます。
 
 ## まず読む: 5つの概念
 
-手法名から入ると、stateを変数にするか、dynamicsをどこで確認するか、MPCとして繰り返すかが混ざりやすくなります。次の順で読むと、同じ軌道を見ながら定式化の違いを追えます。
+手法名だけでは、stateを変数にするか、dynamicsをどこで確認するかが見えません。
+MPCとして解き直すかも、別の判断です。
+次の順で読むと、同じ軌道に対する定式化の違いを追えます。
 
 1. [trajectory variable](#/learn/concept.trajectory-variable) — state列とcontrol列のどちらを動かすか
 2. [dynamics defect](#/learn/concept.dynamics-defect) — 隣り合うstateがモデルと整合するか
@@ -28,20 +43,13 @@ last_reviewed: 2026-07-19
 
 ## Roboticsでの読み替え
 
-ロボティクスでは、state $x_k$ を位置・速度・姿勢など、control $u_k$ を力・トルク・操舵などとして読み替えます。initial / terminal conditionは開始姿勢と目標姿勢、path constraintは関節・入力の上下限や障害物回避として現れます。
+ロボティクスでは、state $x_k$ を位置・速度・姿勢などとして読み替えます。
+control $u_k$ は、力・トルク・操舵などです。
+initial / terminal conditionは開始姿勢と目標姿勢に対応します。
+path constraintには、関節・入力の上下限や障害物回避があります。
 
-この対応は読み進めるための地図であり、特定のロボットの安全性や実機性能を保証するものではありません。mesh上の制約を満たした後も、区間内の挙動を高精度simulationや実機側の監視で確認します。
-
-## 30秒でつかむ
-
-このfamilyでは、**dynamicsという時間方向の構造を使い、trajectoryとcontrolを同時に、または段階的に改善します**。
-
-- 見ているもの: dynamics model、state / controlのtrajectory、cost、path / boundary制約
-- 動かすもの: control列（と、定式化によってはstate列そのもの）
-- 前進の判断: dynamics defectの縮小、costの低下、path制約充足の維持
-- 主な弱点: dynamics modelとdiscretizationの誤差、初期軌道の推測への依存、path制約の扱いにくさ
-
-「どの手法が常に優れているか」という順位ではありません。変数として何を持つか、制約をどこで扱うか、real-time性をどこまで必要とするかの違いで選びます。
+この対応は読み進めるための地図であり、特定のロボットの安全性や実機性能を保証しません。
+mesh上の制約を満たした後も、区間内を高精度simulationや実機側の監視で確認します。
 
 ## まず確認すること
 
@@ -64,7 +72,8 @@ last_reviewed: 2026-07-19
 | path制約が密な同時最適化 | [Direct Collocation](#/learn/direct-collocation) | path / boundary制約が多い、疎な構造をsolverに使わせたい | mesh refinementで解が大きく変わる、meshが粗い |
 | 高速なlocal refinementとfeedback則 | [iLQR / DDP](#/learn/ilqr-ddp) | dynamicsが滑らか、real-time MPCでfeedback gainが欲しい | 一般path制約が本質、backward passのregularizationで解消しない不安定さ |
 
-これは一般性能rankingではありません。同じdynamics model、horizon、初期軌道、離散化の粗さ、停止条件をそろえて比較します。
+これは一般性能rankingではありません。
+同じdynamics model／horizon／初期軌道／離散化の粗さ／停止条件をそろえて比較します。
 
 ## うまくいったサインと切替サイン
 
@@ -101,9 +110,13 @@ assert experiment["discretization_step"] > 0
 
 ## コラム: 離散化が解けたことは連続時間の保証ではない
 
-direct shooting、multiple shooting、direct collocation、iLQR/DDPのいずれも、実際に扱っているのはdynamicsを離散化した近似問題です。solverが「成功」を報告しても、それは離散化されたNLPやLQR部分問題が収束したことを意味するにとどまり、元の連続時間dynamicsを厳密に満たす保証ではありません。
+各手法が実際に扱うのは、dynamicsを離散化した近似問題です。
+solverの「成功」は、離散化したNLPやLQR部分問題の収束を示します。
+元の連続時間dynamicsを厳密に満たす保証ではありません。
 
-離散化解を連続時間の解として無条件に扱わないために、得られたcontrolを高精度なsimulationへ通して軌道を再確認し、離散化を細かくしたときに解やcostが安定するかを確認します。mesh依存やstep size依存が大きい場合、その解は離散化のartifactを含んでいる可能性があります。
+得られたcontrolは高精度なsimulationへ通し、軌道を再確認します。
+離散化を細かくしたときに、解やcostが安定するかも確認します。
+mesh依存やstep size依存が大きい解は、離散化のartifactを含む可能性があります。
 
 ## Roboticsと制御への導線
 
