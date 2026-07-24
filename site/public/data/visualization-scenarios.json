@@ -5973,9 +5973,7 @@
           "value": null
         },
         "stopping": {
-          "component_tolerance": 0.02,
-          "componentwise_required": true,
-          "scalar_loss_threshold": 0.003
+          "oracle_evaluations": 2
         },
         "tuning_policy": "fixed_preset"
       },
@@ -6147,9 +6145,7 @@
           "value": null
         },
         "stopping": {
-          "component_tolerance": 0.02,
-          "componentwise_required": false,
-          "scalar_loss_threshold": 0.003
+          "oracle_evaluations": 2
         },
         "tuning_policy": "fixed_preset"
       },
