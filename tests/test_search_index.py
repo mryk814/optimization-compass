@@ -25,6 +25,10 @@ def test_search_normalization_handles_width_punctuation_and_japanese() -> None:
     assert {"cp", "sat", "論理", "理制", "制約"} <= set(lexical_tokens("ＣＰ－ＳＡＴ 論理制約"))
 
 
+def test_search_index_budget_leaves_growth_headroom() -> None:
+    assert MAX_SEARCH_INDEX_BYTES == 4 * 1024 * 1024
+
+
 def test_exported_search_and_retrieval_contracts_are_closed(
     tmp_path: Path, repository: KnowledgeRepository, monkeypatch: pytest.MonkeyPatch
 ) -> None:

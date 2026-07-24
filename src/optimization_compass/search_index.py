@@ -42,7 +42,8 @@ SearchEntityType = Literal[
 SearchField = Literal["canonical_label", "alias", "title", "summary", "keyword", "related"]
 
 # Raw JSON guard for the client-loaded index; transfer compression is measured separately.
-MAX_SEARCH_INDEX_BYTES = 3 * 1024 * 1024
+# Four MiB leaves room for new Japanese-first content without forcing search-quality cuts.
+MAX_SEARCH_INDEX_BYTES = 4 * 1024 * 1024
 
 FIELD_WEIGHTS: dict[SearchField, int] = {
     "canonical_label": 120,
