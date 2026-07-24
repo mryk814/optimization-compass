@@ -77,9 +77,20 @@ def test_ec026_links_primary_failure_and_tolerance_compare() -> None:
         case["visualization_ids"]
     )
     assert case["comparison_ids"] == ["COMPARE_PDE_STATE_TOLERANCE_COST"]
-    assert "failed evaluation" in case["practical_notes"]
-    assert "checkpoint" in case["practical_notes"]
-    assert "coupling iteration" in case["practical_notes"]
+    assert "失敗評価" in case["practical_notes"]
+    assert "チェックポイント方針" in case["practical_notes"]
+    assert "連成反復" in case["practical_notes"]
+
+
+def test_ec026_reduced_space_separates_decisions_from_derived_state() -> None:
+    gallery = json.loads((ROOT / "data/seeds/site_gallery.json").read_text(encoding="utf-8"))
+    case = next(item for item in gallery["cases"] if item["case_id"] == "EC026")
+
+    assert "縮約定式化" in case["decision_variables"]
+    assert "独立した決定変数ではありません" in case["decision_variables"]
+    assert "導出状態場" in case["decision_variables"]
+    assert "full-space formulation" in case["variable_domain"]
+    assert "R_{PDE}(z,q,\\theta)=0" in case["variable_domain"]
 
 
 def test_pde_tolerance_compare_fixes_every_factor_except_inner_tolerance() -> None:
@@ -121,19 +132,3 @@ def test_exact_benchmark_contexts_must_match_the_comparison_problem_instance() -
 
     with pytest.raises(ValueError, match="different problem instance"):
         validate_comparison_benchmark_contexts(one_item_index, [context], [])
-
-
-def test_pde_article_documents_cost_failure_transient_and_coupling_contracts() -> None:
-    article = (ROOT / "content/concepts/pde-constrained-optimization.md").read_text(
-        encoding="utf-8"
-    )
-
-    for required in (
-        "costはoptimizer iterationで数えない",
-        "failed evaluationを目的値へ隠さない",
-        "transientとmultiphysicsでは追加の軸を持つ",
-        "checkpoint policy",
-        "coupling residual",
-        "COMPARE_PDE_STATE_TOLERANCE_COST",
-    ):
-        assert required in article

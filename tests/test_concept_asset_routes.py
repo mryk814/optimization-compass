@@ -108,9 +108,9 @@ def test_concepts_scope_failed_evaluations_and_quotient_ambiguity() -> None:
     pages = _pages()
 
     pde = pages["concept.pde-constrained-optimization"]
-    assert "この教材のreduced formulationでは" in pde.body
-    assert "state solveが停止した評価をvalidな観測として扱いません" in pde.body
-    assert "stateに依存する目的値を確定できないためです" in pde.body
+    assert "この教材の縮約定式化（reduced formulation）では" in pde.body
+    assert "状態計算が停止した評価を有効な観測として扱いません" in pde.body
+    assert "状態に依存する目的値を確定できないためです" in pde.body
 
     spd = pages["concept.spd-matrix-geometry"]
     assert "$Q$を直交行列とすると" in spd.body

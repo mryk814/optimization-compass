@@ -5,7 +5,7 @@ canonical_entity_type: feature
 canonical_entity_id: F_STRUCTURE_PDE_CONSTRAINED
 title_ja: PDE制約付き最適化
 title_en: PDE-Constrained Optimization
-summary: PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。
+summary: PDE制約付き最適化では、設計変数から状態場（state field）を解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。
 source_ids: [S019, S054, S056, S097, S098, S101, S110, S111]
 related_ids: [topology-optimization, adjoint-sensitivity, concept.constraint-class, concept.variable-domain, density-filter]
 visualization_ids: [pde-state-tolerance-tight, pde-state-tolerance-loose, pde-state-solve-failure]
@@ -14,13 +14,13 @@ status: published
 last_reviewed: 2026-07-24
 ---
 
-PDE制約付き最適化では、設計変数から状態fieldを解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。
+PDE制約付き最適化では、設計変数から状態場（state field）を解き、離散化した状態方程式の残差と最適化制約の可行性を分けて確認します。
 
-## まず「設計」と「状態」を分ける
+## まず設計と状態を分ける
 
-PDEを含む問題では、最適化が直接動かす変数と、設計から計算する変数を分けます。前者を設計変数（design variable）、後者を状態変数（state variable）と呼びます。
+PDEを含む問題では、最適化器が直接動かす変数と、設計から計算する変数を分けます。前者を設計変数（design variable）、後者を状態変数（state variable）と呼びます。
 
-設計変数の例は、材料密度／形状／境界入力です。状態変数はPDEを解いて得るfieldで、変位／温度／圧力などが該当します。
+設計変数は材料密度、形状、境界入力などです。状態変数は変位、温度、圧力など、PDEを解いて得る状態場です。
 
 典型的な形は次のとおりです。
 
@@ -30,127 +30,109 @@ $$
 R(u,m)=0,\quad c(u,m)\le 0.
 $$
 
-ここで$m$は設計、$u$は状態です。$R$は状態方程式を表し、$c$は目的とは別に守る制約です。
+ここで$m$は設計、$u$は状態、$R$は状態方程式、$c$は目的とは別に守る制約です。設計を1回更新するたびに、状態計算（state solve）、目的と制約の評価、必要なら感度計算を行います。
 
-設計を1回更新するたびにstate solveを行い、目的と制約を評価します。必要なら感度も計算します。
+たとえばトポロジー最適化では、密度場から剛性を作り、変位場を状態計算で求めます。コンプライアンス（compliance）が改善しても、状態方程式を正しく解けたことや体積制約（volume constraint）を守ったことまでは示しません。[トポロジー最適化](#/learn/topology-optimization)では、設計場と状態場の対応を具体的に追えます。
 
-たとえばトポロジー最適化では、密度fieldから剛性を作り、変位fieldをstate solveで求めます。complianceが改善しても、状態方程式を正しく解けたことやvolume constraintを守ったことまでは示しません。[トポロジー最適化](#/learn/topology-optimization)では、この設計fieldと状態fieldの対応を具体的に追えます。
+## 離散化すると残差と離散制約になる
 
-## 離散化すると「残差」と「離散制約」になる
-
-連続なPDEをmesh上で解くと、状態方程式は離散化した残差として表されます。
+連続なPDEをメッシュ（mesh）上で解くと、状態方程式は離散化した残差（residual）として表されます。
 
 $$
 R_h(u_h,m_h)=0.
 $$
 
-添字$h$は、meshや近似空間に依存することを表します。実際の計算では、残差のnormが許容値より小さいか、solverが指定したtoleranceまで到達したかを確認します。これは、固定したmesh上でstate solveが収束したかという判定です。
+添字$h$は、メッシュや近似空間に依存することを表します。実際の計算では、残差のノルムが許容値（tolerance）より小さいか、数値解法（solver）が指定した許容値まで到達したかを確認します。これは、固定したメッシュ上で状態計算が収束したかという判定です。
 
-一方、最適化には別の制約があります。代表例はvolume／応力／境界／設計変数のboundsです。たとえば、
+一方、最適化には体積、応力、境界、設計変数の上下限（bounds）など、別の制約があります。たとえば、
 
 $$
 \|R_h(u_h,m_h)\|\le\tau_{state},
 \qquad c_h(u_h,m_h)\le\tau_{constraint}
 $$
 
-のように、状態残差と最適化制約を別々に記録します。残差が小さくてもvolumeを超えていれば、最適化の候補としては不適切です。逆に、制約値がよく見えてもstate solveが未収束なら、その目的値や感度はまだ確定していません。
+のように、状態残差と最適化制約を別々に記録します。体積上限を超えていれば、残差が小さくても最適化の候補としては不適切です。逆に、制約値がよく見えても状態計算が未収束なら、その目的値や感度はまだ確定していません。
 
-## solverの収束と最適化の可行性は別の判定
+## 状態計算の収束と最適化の可行性は別の判定
 
-「solverが収束した」と「最適化問題で可行な点を得た」は同じではありません。次の3段階を分けると、反復のどこで問題が起きたかを追えます。
+「数値解法が収束した」と「最適化問題で可行な点を得た」は同じではありません。次の3段階を分けると、反復のどこで問題が起きたかを追えます。
 
 | 判定 | 主に見るもの | 何が分かるか |
 | --- | --- | --- |
-| state solve | state residual、solver status、state tolerance | 固定した設計とmeshでPDEを解けたか |
-| optimization feasibility | design bounds、volume、state/path constraintのviolation | 設計と状態が制約を満たすか |
-| optimization progress | objective、gradient norm、KKT residual、design change | 最適化の停止条件に近づいたか |
+| 状態計算 | 状態残差、解法の終了状態（status）、状態の許容値 | 固定した設計とメッシュでPDEを解けたか |
+| 最適化問題の可行性 | 設計の上下限、体積、状態・経路制約の違反量 | 設計と状態が制約を満たすか |
+| 最適化の進捗 | 目的関数、勾配ノルム（gradient norm）、KKT残差、設計変化量 | 最適化の停止条件に近づいたか |
 
-この3つを1つの`success`フラグにまとめないでください。state solveが失敗した評価は、低い目的値を返した評価と同じではありません。失敗の条件、再試行したか、inexact solveとして扱ったかを別に記録します。
+この3つを1つの`success`フラグにまとめないでください。状態計算が失敗した評価は、低い目的値を返した評価と同じではありません。失敗の条件、再試行したか、不完全な状態計算（inexact solve）として扱ったかを別に記録します。
 
-感度を使う場合も順番は変わりません。state solveの後にdirect sensitivityやadjoint solveを行い、gradient checkとadjoint residualを確認します。[adjoint sensitivity](#/learn/adjoint-sensitivity)は、設計変数が多いときに状態方程式を介した感度を計算する考え方を説明します。
+感度を使う場合も順番は変わりません。状態計算の後に直接感度（direct sensitivity）や随伴計算（adjoint solve）を行い、勾配検査（gradient check）と随伴残差を確認します。[adjoint sensitivity](#/learn/adjoint-sensitivity)は、設計変数が多いときに状態方程式を介した感度を計算する考え方を説明します。
 
-## 境界条件はstateとadjointの両方で確認する
+## 境界条件は状態と随伴の両方で確認する
 
-境界条件（boundary condition）は、PDEの解が境界で持つ値や流束を定めます。固定値を指定するDirichlet boundary conditionや、流束・荷重を指定するNeumann boundary conditionがあります。どの境界へ適用したかも記録します。
+境界条件（boundary condition）は、PDEの解が境界でどのような値や流束を持つかを定めます。固定値を指定するディリクレ条件（Dirichlet boundary condition）と、流束や荷重を指定するノイマン条件（Neumann boundary condition）などを、適用先とともに記録します。
 
-境界条件を変えるとstateの意味が変わります。設計を比較するなら、荷重／固定支持／流入条件を揃えます。揃っていなければ、目的値の差を手法や設計の差として読めません。adjoint sensitivityを使うときは、stateとadjointの両方で境界条件と固定自由度の扱いを確認します。
+境界条件を変えると状態の意味が変わります。設計を比較するなら、荷重、固定支持、流入条件を揃えなければ、目的値の差を手法や設計の差として読めません。随伴感度を使うときは、状態だけでなく随伴側の境界条件と固定自由度の扱いも確認します。
 
 境界上の値だけでは、設定の正しさは判断できません。
 
 - 境界条件が意図した自由度へ適用されているか
-- 境界条件とloadの単位とscaleが揃っているか
-- 境界近くのstate residualやgradientが不自然に大きくないか
-- meshを変えたとき、境界の表現が変わっていないか
+- 境界条件と荷重の単位と尺度が揃っているか
+- 境界近くの状態残差や勾配が不自然に大きくないか
+- メッシュを変えたとき、境界の表現が変わっていないか
 
-境界条件のミスは、solverを収束させたまま別の物理問題を解かせることがあります。
+境界条件のミスは、数値解法を収束させたまま別の物理問題を解かせることがあります。
 
-## mesh refinementは別の検証である
+## メッシュ細分化は別の検証である
 
-固定したmeshでstate residualを小さくしても、連続モデルの解が十分に近いとは限りません。mesh refinementではmeshを細かくし、解／目的／制約／感度の変化を調べます。
+固定したメッシュで状態残差を小さくしても、連続モデルの解が十分に近いとは限りません。メッシュ細分化（mesh refinement）では、メッシュを細かくしたときの解、目的、制約、感度の変化を調べます。
 
 次の2つは混ぜません。
 
 | 検証 | 変更するもの | 解釈 |
 | --- | --- | --- |
-| state solveの収束 | 設計とmeshを固定し、solver iterationを進める | 離散化した方程式を数値的に解けたか |
-| mesh refinement | mesh、自由度、必要なら設計表現を変える | 解がmeshの解像度に依存していないか |
+| 状態計算の収束 | 設計とメッシュを固定し、数値解法の反復を進める | 離散化した方程式を数値的に解けたか |
+| メッシュ細分化 | メッシュ、自由度、必要なら設計表現を変える | 解がメッシュの解像度に依存していないか |
 
-meshを細かくすると、状態の自由度だけでなく設計fieldの表現も変わります。感度と計算費も変化します。
-
-目的値の変化は、solver toleranceの不足／mesh依存性／設計の局所解に分けて確認します。トポロジー最適化でfilterやprojectionを使う場合は、mesh sizeとfilter radiusの関係を固定して比較します。
+メッシュを細かくすると、状態の自由度だけでなく、設計場の表現、感度、計算費用も変わります。目的値が変わったときは、数値解法の許容値不足なのか、メッシュ依存性なのか、設計の局所解なのかを分けて確認します。トポロジー最適化でフィルター（filter）や射影（projection）を使う場合も、メッシュ幅とフィルター半径の関係を固定したまま比較できているかを確認します。
 
 ::: warning
-離散化したPDEの残差が小さく、最適化制約を満たしていても、連続モデルや実物の安全性が自動的に保証されるわけではありません。mesh refinement／境界条件／model mismatch／必要な物理制約を別に検証します。
+離散化したPDEの残差が小さく、最適化制約を満たしていても、連続モデルや実物の安全性が自動的に保証されるわけではありません。メッシュ細分化、境界条件、モデルのずれ（model mismatch）、必要な物理制約を別に検証します。
 :::
 
-## costはoptimizer iterationで数えない
+## 計算費用は最適化器の反復で数えない
 
-simulation-constrained問題では、outer optimizerの1 iterationに複数の計算が入ります。少なくとも次を別々に数えます。
+simulation-constrained問題では、外側の最適化器の1回の反復に複数の計算が入ります。少なくとも次を別々に数えます。
 
-- stateまたはsimulator call数
-- nonlinear／linear solverの反復数と終了reason
-- objective・constraintの追加評価数
-- direct sensitivityまたはadjoint solve数
-- failed、timeout、censored evaluation数
-- wall time、core-hours、memory、checkpointの再計算量
+- 状態計算またはシミュレータ呼び出しの回数
+- 非線形・線形解法の反復数と終了理由
+- 目的関数・制約の追加評価数
+- 直接感度または随伴計算の回数
+- 失敗・タイムアウト・打ち切り評価の回数
+- 実時間（wall time）、CPU時間（core-hours）、メモリ量、チェックポイント（checkpoint）の再計算量
 
-2つのrunを比べるときは、optimizer iterationではなく、問題に合う共通budgetへ同期します。[EC026](#/gallery/EC026)の教材では、同じstate-solve call数でtoleranceだけを変えます。[tolerance/cost Compare](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)では、state/adjoint残差と線形反復costを並べます。これは実装速度の順位ではありません。inner solveの精度がouter progressの解釈へ与える影響を見るcontrastです。
+2つの実行を比べるときは、最適化器の反復ではなく、問題に合う共通の計算予算へ同期します。[EC026](#/gallery/EC026)の教材では、同じ状態計算回数の下で許容値だけを変え、[許容値と計算費用の比較](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)で状態・随伴残差と線形反復の計算費用を並べます。これは実装速度の順位ではなく、内部計算の精度が外側の進捗の解釈へどう影響するかを見る対比です。
 
-## failed evaluationを目的値へ隠さない
+## 失敗評価を目的値へ隠さない
 
-この教材のreduced formulationでは、state solveが停止した評価をvalidな観測として扱いません。最大反復／breakdown／NaN／preconditioner failureの場合は、stateに依存する目的値を確定できないためです。自動的に大きなpenalty値へ置き換えると、「物理的に悪い設計」と「計算できなかった設計」を区別できません。
+この教材の縮約定式化（reduced formulation）では、状態計算が停止した評価を有効な観測として扱いません。最大反復、破綻、NaN、前処理失敗（preconditioner failure）の場合は、状態に依存する目的値を確定できないためです。自動的に大きなペナルティ値へ置き換えると、「物理的に悪い設計」と「計算できなかった設計」を区別できません。
 
-failure recordには次の情報を残します。
-
-- 候補design
-- state residualとsolver reason
-- 消費budget
-- retryとfallbackの有無
-
-penaltyやsurrogate処理を採用する場合も、それを観測値ではなく明示したpolicyとして保存します。[state-solve failure Theater](#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE)では、preconditioner failureに架空のobjectiveを与えません。failed statusで停止します。
+失敗記録には、候補設計、状態残差、解法の終了理由、消費した計算予算、再試行と代替経路の有無を残します。ペナルティや代理モデルによる処理を採用する場合も、それを観測値ではなく明示した方針として保存します。[状態計算失敗のTheater](#/theater/learning/SCENARIO_PDE_STATE_SOLVE_FAILURE)では、前処理失敗に架空の目的値を与えず、失敗状態で停止します。
 
 Diagnoseでは次を順に確認します。
 
-1. 境界条件、単位、null space、行列の対称性などmodel／discretizationの問題か
-2. tolerance、max iteration、preconditionerなどsolver policyの問題か
-3. design updateが可解領域を外れた問題か
-4. retry、trust region縮小、step拒否、failure-aware surrogateのどれを採用したか
+1. 境界条件、単位、零空間（null space）、行列の対称性など、モデルや離散化の問題か
+2. 許容値、最大反復数、前処理など、数値解法の方針の問題か
+3. 設計更新が可解領域を外れた問題か
+4. 再試行、信頼領域の縮小、更新の拒否、失敗を考慮した代理モデルのどれを採用したか
 
-## transientとmultiphysicsでは追加の軸を持つ
+## 非定常問題と複合物理では追加の軸を持つ
 
-transient問題では、time stepごとのstateを保存するか、checkpointからforward solveを再計算してadjointを戻すかを決めます。比較では、time-step数／checkpoint数／再計算したforward step数を固定または明示します。storageとadjoint residualも同様です。checkpoint policyが違うrunをoptimizer iterationだけで比べません。
+非定常問題（transient）では、時間刻みごとの状態を保存するか、チェックポイントから順方向計算を再計算して随伴計算を戻すかを決めます。比較では、時間刻み数、チェックポイント数、再計算した順方向計算の回数、保存容量、随伴残差を固定または明示します。チェックポイント方針が違う実行を、最適化器の反復だけで比べません。
 
-multiphysicsでは、熱／流体／構造などfieldごとの残差とcoupling residualを分けます。一方向coupling／逐次反復／monolithic solveでは、1回の「simulation call」に含むsubsolve数が異なります。couplingが収束したことは、各物理modelの妥当性や離散化誤差が小さいことを意味しません。
+複合物理では、熱・流体・構造など場ごとの残差と連成残差（coupling residual）を分けます。一方向連成、逐次反復、単一体系の同時解法（monolithic solve）では、1回のシミュレーション呼び出しに含む内部解法の数が異なります。連成が収束したことは、各物理モデルの妥当性や離散化誤差が小さいことを意味しません。
 
-follow-up Caseは、次の順で同じdesign／state／cost／failure contractへ接続します。
-
-1. transient heat control
-2. fluid–structure design
-3. thermo-mechanical design
-4. wave／acoustic inverse design
-
-最初のsteady教材から、それらの性能や保証を推論しません。
+今後のCaseは、非定常熱制御、流体・構造連成設計、熱・機械連成設計、波動・音響の逆設計の順で、同じ設計・状態・計算費用・失敗記録の契約へ接続します。最初の定常教材から、それらの性能や保証を推論しません。
 
 ## 次に読む
 
-[制約class](#/learn/concept.constraint-class)で、状態方程式を含む制約と可行性の扱いを整理します。[adjoint sensitivity](#/learn/adjoint-sensitivity)でderivative routeを確認し、[density filter](#/learn/density-filter)でmesh上のfield更新とmesh依存性を読みます。その後に[EC026](#/gallery/EC026)からprimary／failure Theaterと[tolerance/cost Compare](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)へ進みます。
+[制約class](#/learn/concept.constraint-class)で、状態方程式を含む制約と可行性の扱いを整理します。[adjoint sensitivity](#/learn/adjoint-sensitivity)で微分経路を確認し、[density filter](#/learn/density-filter)でメッシュ上の場の更新とメッシュ依存性を読みます。その後に[EC026](#/gallery/EC026)から主教材と失敗教材（Theater）へ進み、[許容値と計算費用の比較](#/compare/COMPARE_PDE_STATE_TOLERANCE_COST)で対比を確認します。
