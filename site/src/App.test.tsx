@@ -129,12 +129,12 @@ describe("application routes", () => {
     vi.unstubAllGlobals();
   });
 
-  test.each(routes)("%s renders %s", (hash, heading) => {
+  test.each(routes)("%s renders %s", async (hash, heading) => {
     window.location.hash = hash;
 
     render(<App initialEntityLinks={testLinks} />);
 
-    expect(screen.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+    expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeVisible();
   });
 
   test("returns to the top when the route changes", async () => {
@@ -143,7 +143,11 @@ describe("application routes", () => {
     fireEvent.click(screen.getByRole("link", { name: "条件から診断を始める" }));
 
     await waitFor(() => expect(window.location.hash).toBe("#/diagnose"));
-    expect(window.scrollTo).toHaveBeenCalledWith({ left: 0, top: 0, behavior: "auto" });
+    await waitFor(() => expect(window.scrollTo).toHaveBeenCalledWith({
+      left: 0,
+      top: 0,
+      behavior: "auto",
+    }));
   });
 
   test("home foregrounds one problem and keeps technical reasons on demand", async () => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent } from "react";
 import {
   HashRouter,
   Link,
@@ -16,33 +16,82 @@ import { parseLearningJourneyIndex } from "./contracts/learning-journeys";
 import { parseProblemCatalog } from "./contracts/problems";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { siteBaseUrl } from "./data/base-url";
-import { CompareLabIndexPage } from "./features/compare/CompareLabIndexPage";
-import { ComparisonPage as CompareLabPage } from "./features/compare/ComparisonPage";
 import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
-import { ContentIndexPage, ContentPage } from "./features/content/ContentPages";
-import { CoveragePage } from "./features/coverage/CoveragePage";
-import { DataPage } from "./features/data/DataPage";
-import { DiagnosePage } from "./features/diagnose/DiagnosePage";
-import { SourceDetailPage, SourceIndexPage } from "./features/evidence/SourcePages";
-import { FailureModePage } from "./features/failures/FailureModePage";
-import { domainLabel, GalleryCasePage, GalleryPage } from "./features/gallery/GalleryPage";
+import { domainLabel } from "./features/gallery/domain-label";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
-import { LearningSlicePage } from "./features/learning-slices/LearningSlicePage";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
-import { MapPage } from "./features/map/MapPage";
-import { MethodPage } from "./features/methods/MethodPage";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
-import { TraceDemoPage } from "./features/playback/TraceDemoPage";
-import { SearchPage } from "./features/search/SearchPage";
-import { SearchTreeTheaterPage } from "./features/search-tree/SearchTreeTheaterPage";
-import { BayesianOptimizationPage } from "./features/theater/BayesianOptimizationPage";
-import { TheaterIndexPage } from "./features/theater/TheaterIndexPage";
 import { THEATER_ROUTES } from "./features/theater/theater-routes";
 import { EntityLinkProvider, useEntityLinks } from "./state/entity-links";
 import { JourneyNavigation } from "./state/journey-navigation";
 
 import "./styles.css";
 import "./home.css";
+
+const CompareLabIndexPage = lazy(() => import("./features/compare/CompareLabIndexPage").then(
+  (module) => ({ default: module.CompareLabIndexPage }),
+));
+const CompareLabPage = lazy(() => import("./features/compare/ComparisonPage").then(
+  (module) => ({ default: module.ComparisonPage }),
+));
+const ContentIndexPage = lazy(() => import("./features/content/ContentPages").then(
+  (module) => ({ default: module.ContentIndexPage }),
+));
+const ContentPage = lazy(() => import("./features/content/ContentPages").then(
+  (module) => ({ default: module.ContentPage }),
+));
+const CoveragePage = lazy(() => import("./features/coverage/CoveragePage").then(
+  (module) => ({ default: module.CoveragePage }),
+));
+const DataPage = lazy(() => import("./features/data/DataPage").then(
+  (module) => ({ default: module.DataPage }),
+));
+const DiagnosePage = lazy(() => import("./features/diagnose/DiagnosePage").then(
+  (module) => ({ default: module.DiagnosePage }),
+));
+const SourceIndexPage = lazy(() => import("./features/evidence/SourcePages").then(
+  (module) => ({ default: module.SourceIndexPage }),
+));
+const SourceDetailPage = lazy(() => import("./features/evidence/SourcePages").then(
+  (module) => ({ default: module.SourceDetailPage }),
+));
+const FailureModePage = lazy(() => import("./features/failures/FailureModePage").then(
+  (module) => ({ default: module.FailureModePage }),
+));
+const GalleryPage = lazy(() => import("./features/gallery/GalleryPage").then(
+  (module) => ({ default: module.GalleryPage }),
+));
+const GalleryCasePage = lazy(() => import("./features/gallery/GalleryPage").then(
+  (module) => ({ default: module.GalleryCasePage }),
+));
+const LearningSlicePage = lazy(() => import("./features/learning-slices/LearningSlicePage").then(
+  (module) => ({ default: module.LearningSlicePage }),
+));
+const MapPage = lazy(() => import("./features/map/MapPage").then(
+  (module) => ({ default: module.MapPage }),
+));
+const MethodPage = lazy(() => import("./features/methods/MethodPage").then(
+  (module) => ({ default: module.MethodPage }),
+));
+const TraceDemoPage = lazy(() => import("./features/playback/TraceDemoPage").then(
+  (module) => ({ default: module.TraceDemoPage }),
+));
+const SearchPage = lazy(() => import("./features/search/SearchPage").then(
+  (module) => ({ default: module.SearchPage }),
+));
+const SearchTreeTheaterPage = lazy(
+  () => import("./features/search-tree/SearchTreeTheaterPage").then(
+    (module) => ({ default: module.SearchTreeTheaterPage }),
+  ),
+);
+const BayesianOptimizationPage = lazy(
+  () => import("./features/theater/BayesianOptimizationPage").then(
+    (module) => ({ default: module.BayesianOptimizationPage }),
+  ),
+);
+const TheaterIndexPage = lazy(() => import("./features/theater/TheaterIndexPage").then(
+  (module) => ({ default: module.TheaterIndexPage }),
+));
 
 const primaryNavigation = [
   { label: "条件で診断", to: "/diagnose", matchPaths: ["/diagnose"] },
@@ -316,32 +365,34 @@ function AppShell() {
       <main id="main-content" tabIndex={-1}>
         <SafeBackButton />
         <JourneyNavigation />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/diagnose" element={<DiagnosePage />} />
-          <Route path="/methods/:methodId" element={<MethodPage />} />
-          <Route path="/traces/:traceId" element={<TraceDemoPage />} />
-          <Route path={THEATER_ROUTES.index} element={<TheaterIndexPage />} />
-          <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
-          <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
-          <Route path="/theater/bayesian-optimization/:scenarioId" element={<BayesianOptimizationPage />} />
-          <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
-          <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
-          <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
-          <Route path="/failures" element={<FailureModePage />} />
-          <Route path="/sources" element={<SourceIndexPage />} />
-          <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
-          <Route path="/coverage" element={<CoveragePage />} />
-          <Route path="/data" element={<DataPage />} />
-          <Route path="/learn" element={<ContentIndexPage />} />
-          <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/theater/:alias" element={<AliasRoute />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <Suspense fallback={<p className="route-loading" role="status">画面を読み込んでいます…</p>}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/map" element={<MapPage />} />
+            <Route path="/diagnose" element={<DiagnosePage />} />
+            <Route path="/methods/:methodId" element={<MethodPage />} />
+            <Route path="/traces/:traceId" element={<TraceDemoPage />} />
+            <Route path={THEATER_ROUTES.index} element={<TheaterIndexPage />} />
+            <Route path="/theater/search-tree/:artifactId" element={<SearchTreeTheaterPage />} />
+            <Route path="/theater/bayesian-optimization" element={<BayesianOptimizationPage />} />
+            <Route path="/theater/bayesian-optimization/:scenarioId" element={<BayesianOptimizationPage />} />
+            <Route path="/theater/learning/:scenarioId" element={<LearningSlicePage />} />
+            <Route path={COMPARE_LAB_ROUTE} element={<CompareLabIndexPage />} />
+            <Route path="/compare/:comparisonId" element={<CanonicalRoute><CompareLabPage /></CanonicalRoute>} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/gallery/:caseId" element={<GalleryCasePage />} />
+            <Route path="/failures" element={<FailureModePage />} />
+            <Route path="/sources" element={<SourceIndexPage />} />
+            <Route path="/sources/:sourceId" element={<SourceDetailPage />} />
+            <Route path="/coverage" element={<CoveragePage />} />
+            <Route path="/data" element={<DataPage />} />
+            <Route path="/learn" element={<ContentIndexPage />} />
+            <Route path="/learn/:contentId" element={<CanonicalRoute><ContentPage /></CanonicalRoute>} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/theater/:alias" element={<AliasRoute />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
       </main>
       <footer className="site-footer">
         <Link aria-live="polite" to="/data">Dataset {datasetVersion ?? "…"}</Link>
