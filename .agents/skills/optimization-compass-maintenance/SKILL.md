@@ -1,6 +1,6 @@
 ---
 name: optimization-compass-maintenance
-description: Safely correct or extend Optimization Compass knowledge, content, Gallery cases, comparisons, problem instances, scenarios, and release inputs without editing generated artifacts or breaking canonical identity.
+description: Safely correct, extend, validate, or publish Optimization Compass knowledge, content, Gallery cases, comparisons, problem instances, scenarios, release inputs, and GitHub Pages without editing generated artifacts or breaking canonical identity. Use for Pages publication, deployment recovery, and pre-push release preparation as well as repository maintenance.
 ---
 
 # Optimization Compass maintenance skill
@@ -21,6 +21,11 @@ For source or copied-material changes, also read:
 - `/docs/licensing.md`
 - `/NOTICE`
 - `/THIRD_PARTY_SOURCE_AUDIT.md`
+
+For GitHub Pages or public release work, also read:
+
+- `/docs/pages-deployment.md`
+- `/docs/public-release-checklist.md`
 
 ## Task classification
 
@@ -272,6 +277,62 @@ Do not execute this recipe as a hidden side effect of a small article or Gallery
 6. Add contract tests, artifact tests, frontend tests, accessibility/static-summary tests, and E2E.
 7. Run complete validation.
 
+### Recipe H — Publish GitHub Pages without avoidable reruns
+
+Use this recipe only after the user explicitly authorizes publication or a push to `main`.
+
+1. Inspect `git status`, branch, stash ownership, `origin/main...main`, and the latest Pages run before
+   changing or publishing anything.
+2. Batch the intended publishable slice before pushing. When Actions capacity is constrained, do not
+   push intermediate fixes that each start a full workflow.
+3. Run focused tests while iterating. Before the single publish push, run the smallest authoritative
+   validation that owns every changed path, plus `ruff check .` and `ruff format --check .` when Python
+   or generated-data policy changed.
+4. Regenerate every tracked projection and report required by the selected CI task from canonical
+   inputs. Inspect `git diff` after each generator. Never omit generated drift merely to obtain a
+   smaller commit, and never hand-edit `site/public/data/**`.
+5. Search frontend and backend tests for stale exact counts, statuses, labels, and selectors whenever
+   generated catalogs grow or progressive disclosure changes the DOM. Prefer invariant assertions;
+   update intentional release snapshots to the generated current facts.
+6. Build the production site, then run the main-only browser gates locally against one built artifact:
+
+   ```powershell
+   npm.cmd --prefix site run build
+   $env:CI = "1"
+   $env:PLAYWRIGHT_PORT = "<unused-high-port>"
+   npm.cmd --prefix site run test:e2e:critical
+   $env:PLAYWRIGHT_PORT = "<another-unused-high-port>"
+   npm.cmd --prefix site run test:e2e:artifact -- e2e/accessibility.spec.ts --project=chromium-desktop
+   ```
+
+   Use a new high port after a failed or interrupted Playwright server. Do not mistake a port collision
+   for a product failure.
+7. Commit coherent fixes with DCO sign-off. Push `main` once after the bounded local gate passes.
+8. Monitor that exact `Validated CI and Pages` run through all three gates: artifact validation,
+   Browser E2E/accessibility, and `Deploy validated artifact and smoke it`. Do not start a replacement
+   run while the current run is merely slow.
+9. If the run fails, read the complete failed-step log. Fix canonical inputs for data drift; fix stale
+   consumer expectations for intentional generated growth; preserve progressive disclosure by opening
+   hidden details in E2E instead of forcing identifiers back into the visible surface. Re-run only the
+   failed focused slice locally, then make one follow-up push.
+10. Treat workflow success as necessary but not sufficient. Fetch the public `/deployment.json`
+    without cache, require its 40-character `commit_sha` and dataset version to match the successful
+    run, require the public root to return HTTP 200, and confirm `origin/main...main` is `0 0`.
+
+#### Interruption-safe checkpoint
+
+Before starting a long local or remote gate:
+
+- preserve the current coherent slice in a DCO-signed commit;
+- keep the worktree free of unrelated changes;
+- record the exact commit SHA, workflow run URL, completed checks, and remaining gate;
+- do not push an unvalidated `main` checkpoint solely because interruption is possible;
+- once publication is authorized and the bounded local gate passes, push and monitor without waiting
+  for another prompt.
+
+If interruption happens after a successful push, the next agent must resume from the recorded commit
+and live workflow state instead of rebuilding the publication plan from chat history.
+
 ## Validation tiers
 
 ### Tier A
@@ -338,3 +399,10 @@ A task is complete only when:
 - required tests pass or failures are reported precisely;
 - the PR description contains the evidence and impact summary;
 - no hidden release or recommendation change remains.
+
+For an authorized Pages publication, completion additionally requires:
+
+- the exact pushed commit passes validation, Browser E2E/accessibility, deploy, and remote smoke;
+- public `deployment.json` identifies that commit and the expected dataset version;
+- the public root responds successfully;
+- local `main` and `origin/main` are synchronized.
