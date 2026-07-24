@@ -488,16 +488,19 @@
       "source_ids": ["S012", "S043", "S076"],
       "difficulty": "intermediate",
       "status": "published",
-      "last_reviewed": "2026-07-15",
+      "last_reviewed": "2026-07-24",
       "question": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。",
-      "variable_domain": "予測horizon $N$ の固定QPでは $X=\\mathbb{R}^{n(N+1)+mN}$ の状態・制御入力増分ベクトル。ただし上下限（bounds）と線形制約で実行可能領域（feasible set）を切り出す。",
-      "decision_variables": "予測horizonの状態列 $x_0,\\ldots,x_N$ と制御入力の増分（control increment）$\\Delta u_0,\\ldots,\\Delta u_{N-1}$。実機の現在状態はパラメータ（parameter）として毎周期更新する。",
-      "objective": "参照値との差と入力変更を、凸二次目的（convex quadratic objective）$f=\\sum\\lVert x_k-r_k\\rVert_Q^2+\\sum\\lVert\\Delta u_k\\rVert_R^2$ として最小化する。",
-      "constraints": "線形化した動力学 $x_{k+1}=A_kx_k+B_k\\Delta u_k+c_k$、初期状態 $x_0=x_{current}$、入力・状態の上下限を線形制約として課す。",
+      "variable_domain": "固定教材では予測horizon $N=4$、状態1次元・入力1次元とし、$z=(x_1,\\ldots,x_4,u_0,\\ldots,u_3)\\in X=\\mathbb{R}^8$。線形動力学と状態・入力boundsが、この空間から実行可能領域を切り出す。",
+      "decision_variables": "次の4周期の予測状態 $x_1,\\ldots,x_4$ と操作量 $u_0,\\ldots,u_3$。現在状態 $x_0=x_{current}$ と参照値 $r=1$ はdecisionではなく、制御周期ごとに更新するparameterである。",
+      "objective": "固定教材では $f(z)=\\sum_{k=1}^{4}(x_k-r)^2+0.1\\sum_{k=0}^{3}u_k^2$ を最小化する。第1項で参照追従、第2項で過大な操作を抑え、同じ正定値行列を周期間で再利用する。",
+      "constraints": "scalar dynamics $x_{k+1}=x_k+u_k$、初期状態 $x_0=x_{current}$、状態bounds $-1.5\\le x_k\\le1.5$、入力bounds $-0.4\\le u_k\\le0.4$ を全4stepに課す。各周期では最初の入力 $u_0$ だけを適用し、次の計測値で再度解く。",
       "map_node_id": "answer:Q12:online_or_realtime",
-      "python_example": "import numpy as np\nimport osqp\nfrom scipy import sparse\n\nproblem = osqp.OSQP()\nproblem.setup(P=sparse.eye(2, format=\"csc\"), q=np.array([-1.0, -1.0]), A=sparse.eye(2, format=\"csc\"), l=np.zeros(2), u=np.ones(2), verbose=False)\nprint(problem.solve().x)",
-      "practical_notes": "初期解の引き継ぎ、行列分解の再利用、主・双対残差（primal/dual residual）、最悪遅延（worst-case latency）、初期解なしの代替経路を同時に監視します。",
-      "limitations": ["平均計算時間だけでは100Hzを保証できず、最悪遅延と初期解なしの状態を実機で検証する必要があります。"]
+      "python_example": "import numpy as np\nimport osqp\nfrom scipy import sparse\n\nN = 4\nP = sparse.diags(np.r_[2.0 * np.ones(N), 0.2 * np.ones(N)], format=\"csc\")\nq = np.r_[-2.0 * np.ones(N), np.zeros(N)]\ndynamics = sparse.lil_matrix((N, 2 * N))\nfor k in range(N):\n    dynamics[k, k] = 1.0\n    if k > 0:\n        dynamics[k, k - 1] = -1.0\n    dynamics[k, N + k] = -1.0\nA = sparse.vstack([dynamics, sparse.eye(2 * N)], format=\"csc\")\nlower = np.r_[np.zeros(N), -1.5 * np.ones(N), -0.4 * np.ones(N)]\nupper = np.r_[np.zeros(N), 1.5 * np.ones(N), 0.4 * np.ones(N)]\nsolver = osqp.OSQP()\nsolver.setup(P=P, q=q, A=A, l=lower, u=upper, warm_starting=True, verbose=False)\nprevious = None\nfor x_current in (0.0, 0.25, 0.55):\n    cycle_lower, cycle_upper = lower.copy(), upper.copy()\n    cycle_lower[0] = cycle_upper[0] = x_current\n    solver.update(l=cycle_lower, u=cycle_upper)\n    if previous is not None:\n        solver.warm_start(x=previous)\n    result = solver.solve()\n    if not result.info.status.lower().startswith(\"solved\"):\n        raise RuntimeError(result.info.status)\n    previous = result.x\n    print(x_current, result.x[N], result.info.iter, result.info.prim_res, result.info.dual_res)",
+      "practical_notes": "100Hzは平均10msではなく各周期のdeadlineとして扱う。QPの構造・scaling・solver設定・CPU・build条件を固定し、cold startとwarm startを分けてp50、p99、最大latency、iteration数、primal/dual residual、deadline miss率を計測する。status成功後も動力学とboundsを独立に再計算し、計測値欠落・infeasible・残差未達・deadline miss時には事前検証済みのbackup controllerへ切り替える。",
+      "limitations": [
+        "状態1次元・入力1次元・4step・線形時不変・固定boundsの教育用instanceであり、実機の多変数model、非線形性、推定誤差、外乱、actuator遅延を表さない。",
+        "このcodeは行列更新とwarm startの形を示すだけで、100Hz、閉loop安定性、recursive feasibility、安全性を保証しない。target hardware上のworst-case計測と、solver failureを含むclosed-loop試験が別途必要である。"
+      ]
     },
     {
       "case_id": "EC026",
