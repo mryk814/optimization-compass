@@ -89,16 +89,19 @@
       "source_ids": ["S002", "S021", "S022", "S079"],
       "difficulty": "intro",
       "status": "published",
-      "last_reviewed": "2026-07-17",
+      "last_reviewed": "2026-07-24",
       "question": "候補施策を実施するか選び、予算上限内で期待効果を最大化したい。",
       "variable_domain": "実務では施策集合 i ごとに $x_i\\in\\{0,1\\}$。固定教材では $X=\\{0,1\\}^4$、$x=(x_A,x_B,x_D,x_C)$。",
       "decision_variables": "施策 i を採用するとき1、採用しないとき0の二値変数（binary variable）$x_i$。固定教材では $x=(x_A,x_B,x_D,x_C)$ の4変数。",
       "objective": "施策ごとの期待効果 $v_i$ の合計を最大化する。固定教材では $f(x)=9x_A+6x_B+4x_D+5x_C$ を最大化する。",
       "constraints": "費用 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_D+3x_C\\le7$ と $x_i\\in\\{0,1\\}$。",
       "map_node_id": "answer:Q01:binary",
-      "python_example": "from ortools.sat.python import cp_model\n\nitems = {\"A\": (4, 9), \"B\": (3, 6), \"D\": (2, 4), \"C\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in items}\nmodel.add(sum(weight * x[name] for name, (weight, _) in items.items()) <= 7)\nmodel.maximize(sum(value * x[name] for name, (_, value) in items.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), solver.objective_value)",
-      "practical_notes": "Caseは施策選択、Theaterは同じ数式を4品目の問題インスタンス（instance）にしたものとして読みます。最良既知解（incumbent）、大域下界（global bound）、最適性の差（gap）、実行可能性（feasibility）、停止理由を一緒に記録します。",
-      "limitations": ["4施策・固定費用・固定期待効果の教育用0-1ナップサック問題です。施策間相互作用、効果の不確実性、実solverのカットや前処理、大規模インスタンスでの一般性能は示しません。"]
+      "python_example": "from ortools.sat.python import cp_model\n\nitems = {\"A\": (4, 9), \"B\": (3, 6), \"D\": (2, 4), \"C\": (3, 5)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in items}\nmodel.add(sum(cost * x[name] for name, (cost, _) in items.items()) <= 7)\nmodel.maximize(sum(effect * x[name] for name, (_, effect) in items.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nif status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):\n    raise RuntimeError(solver.status_name(status))\nselected = [name for name in items if solver.value(x[name])]\ncost = sum(items[name][0] for name in selected)\neffect = sum(items[name][1] for name in selected)\nprint({\n    \"status\": solver.status_name(status),\n    \"selected\": selected,\n    \"cost\": cost,\n    \"effect\": effect,\n    \"bound\": solver.best_objective_bound,\n})",
+      "practical_notes": "search-treeは、①nodeの部分assignment、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤incumbentとglobal boundの差、の順に読む。完全探索ではvalue 15の施策A+Bと上界15が一致して最適性を証明するが、4 node停止では可行なincumbentがあっても正のgapが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約をversion管理し、係数感度とheld-out評価を別に行う。",
+      "limitations": [
+        "4施策・固定費用・固定期待効果の教育用0-1 knapsackであり、効果推定の不確実性、施策間相互作用、時期、対象者の重複、実行能力を表さない。",
+        "Theaterの決定的Branch-and-Bound traceはboundとgapの読み方を示す教材であり、CP-SATやMIP solverのcut、presolve、並列探索、wall-clock、大規模instanceでの一般性能を順位付けしない。"
+      ]
     },
     {
       "case_id": "shift-scheduling",
