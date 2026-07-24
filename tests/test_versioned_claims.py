@@ -45,7 +45,7 @@ def test_every_implementation_has_explicit_active_claims_and_freshness(
         "SELECT COUNT(*) FROM implementation_claims WHERE value_status = 'explicit_unknown'"
     ).fetchone()[0]
 
-    assert implementation_count == 64
+    assert implementation_count == 65
     assert active_claims == implementation_count * len(CLAIM_PREDICATES) + len(
         DEFAULT_METHOD_CLAIM_PREDICATES
     )

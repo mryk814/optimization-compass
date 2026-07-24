@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import ast
 import json
+import sqlite3
 from pathlib import Path
+
+from optimization_compass.dataset_release import build_staged_release
+
+ROOT = Path(__file__).parents[1]
+BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
 
 
 def test_topology_cantilever_connects_formulation_to_visual_diagnostics() -> None:
@@ -22,3 +28,39 @@ def test_topology_cantilever_connects_formulation_to_visual_diagnostics() -> Non
     assert "①density" in case["practical_notes"]
     assert "④gray fraction" in case["practical_notes"]
     assert "Q4 FEM解析値" in case["limitations"][0]
+    assert case["implementation_ids"] == ["I_TOPOPT_88_MATLAB"]
+
+
+def test_topopt_88_mapping_is_bounded_to_the_documented_teaching_workflow(
+    tmp_path: Path,
+) -> None:
+    staged = build_staged_release(BASE_DATABASE, tmp_path / "release")
+    with sqlite3.connect(staged.database_path) as connection:
+        implementation = connection.execute(
+            """
+            SELECT library_name, license, open_source, supported_method_ids, source_ids
+            FROM implementations
+            WHERE implementation_id = 'I_TOPOPT_88_MATLAB'
+            """
+        ).fetchone()
+        mappings = connection.execute(
+            """
+            SELECT method_id, support_level
+            FROM method_implementation_map
+            WHERE implementation_id = 'I_TOPOPT_88_MATLAB'
+            ORDER BY method_id
+            """
+        ).fetchall()
+
+    assert implementation == (
+        "DTU TopOpt",
+        "source-specific terms; not stated on the official download page",
+        "unknown",
+        "M_SIMP_TOPOLOGY;M_DENSITY_FILTER;M_OC_TOPOLOGY",
+        "S097;S098;S099",
+    )
+    assert mappings == [
+        ("M_DENSITY_FILTER", "native"),
+        ("M_OC_TOPOLOGY", "native"),
+        ("M_SIMP_TOPOLOGY", "native"),
+    ]

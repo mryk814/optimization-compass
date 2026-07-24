@@ -18,8 +18,8 @@ from optimization_compass.dataset_release import (
 
 ROOT = Path(__file__).parents[1]
 BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlite"
-STAGED_TEST_VERSION = "0.18.10"
-STAGED_TEST_DATE = "2026-07-19"
+STAGED_TEST_VERSION = "0.18.11"
+STAGED_TEST_DATE = "2026-07-24"
 
 
 def test_every_staged_format_round_trips_exactly(tmp_path: Path) -> None:

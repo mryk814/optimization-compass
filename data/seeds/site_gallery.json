@@ -635,7 +635,7 @@
         {"method_id": "M_ADJOINT_SENSITIVITY", "reason": "状態方程式を解いた後の感度計算を大規模fieldへ拡張するため"}
       ],
       "excluded_methods": [{"method_id": "M_BFGS", "reason": "密度field、状態方程式、体積制約を持つ設計問題の更新契約を単独では表さないため"}],
-      "implementation_ids": [],
+      "implementation_ids": ["I_TOPOPT_88_MATLAB"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "VIEW_METHOD_MECHANISM", "SCENARIO_TOPOLOGY_SIMP_OC", "SCENARIO_TOPOLOGY_CHECKERBOARD"],
       "comparison_ids": ["COMPARE_TOPOLOGY_OC_MMA"],
       "source_ids": ["S097", "S098", "S099", "S100", "S101"],

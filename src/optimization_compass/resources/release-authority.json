@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "dataset_version": "0.18.10",
-  "release_date": "2026-07-19",
+  "dataset_version": "0.18.11",
+  "release_date": "2026-07-24",
   "base_dataset_version": "0.2.0",
   "base_database_sha256": "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13"
 }
