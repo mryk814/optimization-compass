@@ -102,31 +102,73 @@
     },
     {
       "case_id": "shift-scheduling",
-      "title_ja": "スタッフのシフトを組む",
+      "title_ja": "必要人数と希望を両立してシフトを組む",
       "title_en": "Shift scheduling",
       "domain": "operations",
-      "problem_archetype_id": "PA006",
-      "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"}],
-      "question_answers": {"Q01": "binary"},
-      "candidate_methods": [{"method_id": "M_CP_SAT", "reason": "資格・休憩・連続勤務などの論理制約を直接表し、必要人数を満たす割当を探索できるため"}],
-      "conditional_methods": [{"method_id": "MF_DISCRETE_EXACT", "reason": "線形割当として十分に表せる場合は混合整数計画（MIP）も候補になる"}],
-      "excluded_methods": [{"method_id": "M_GRADIENT_DESCENT", "reason": "シフト割当は離散・論理制約が中心"}],
+      "problem_archetype_id": "PA026",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "discrete"},
+        {"feature_id": "F_CONVEXITY", "value": "nonconvex"},
+        {"feature_id": "F_SMOOTHNESS", "value": "discrete_valued"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "combinatorial"},
+        {"feature_id": "F_DIMENSION_CONTEXT", "value": "medium"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_NOISE_LEVEL", "value": "deterministic"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "feasible_only"}
+      ],
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "global_candidate_desired",
+        "Q10": "feasible_solution_first",
+        "Q11": "scheduling_routing",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "必要人数、資格、1日1勤務、夜勤後の休みなどの二値・論理制約を直接保ち、まず実行可能な勤務表を得られるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "勤務ルールを線形式で表せ、緩和boundや最適性gapまで必要な場合はMIP familyとして定式化する"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "0-1の割当と論理制約を連続gradient updateだけでは保持できず、丸め後に必要人数・資格・休憩条件を破り得るため"
+        }
+      ],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
       "comparison_ids": [],
-      "source_ids": ["S054", "S055"],
+      "source_ids": ["S022", "S053", "S054", "S055", "S079"],
       "difficulty": "intro",
       "status": "published",
-      "last_reviewed": "2026-07-14",
-      "question": "必要人数を満たしながら、希望と公平性を反映したい。",
-      "variable_domain": "固定教材では $X=\\{0,1\\}^{4\\times9}$。$x_{s,t}=1$ はスタッフ s を曜日・勤務帯 t に割り当てることを表す。",
-      "decision_variables": "スタッフ s と曜日・勤務帯 t の組ごとの二値変数（binary variable）$x_{s,t}$。固定教材では4名×9枠の36変数。",
-      "objective": "希望勤務帯の違反とスタッフ間の勤務数の偏りをペナルティ（penalty）として最小化する。$f(x)=\\sum p_{s,t}x_{s,t}+\\lambda\\,\\operatorname{fairness}(x)$。",
-      "constraints": "各枠の必要人数を $\\sum_s x_{s,t}\\ge d_t$ とし、資格のないスタッフの配置 $x_{s,t}=0$、同日の連続勤務・休憩に関する禁止条件を論理制約として課す。",
+      "last_reviewed": "2026-07-24",
+      "question": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。",
+      "variable_domain": "固定教材では4名・3日・日勤／夜勤の割当 $x\\in X=\\{0,1\\}^{4\\times3\\times2}$。$x_{s,d,h}=1$ はスタッフ $s$ を日 $d$ の勤務帯 $h$ へ割り当てること、0は割り当てないことを表す。",
+      "decision_variables": "スタッフ $s$、日 $d$、勤務帯 $h$ ごとの二値変数 $x_{s,d,h}$ と、勤務数の最大値・最小値 $u_{max},u_{min}$。需要、資格、希望、休暇申請は入力であり、solverが変更するdecision variableではない。",
+      "objective": "希望適合度 $p_{s,d,h}$ を増やしながら勤務数の幅を抑えるため、固定教材では $f(x,u)=-10\\sum_{s,d,h}p_{s,d,h}x_{s,d,h}+(u_{max}-u_{min})$ を最小化する。必要人数や資格はpenaltyへ落とさずhard constraintとして扱う。",
+      "constraints": "各勤務帯の必要人数を $\\sum_sx_{s,d,h}\\ge r_{d,h}$、1日1勤務を $\\sum_hx_{s,d,h}\\le1$、資格のない割当を $x_{s,d,h}=0$ とする。夜勤後の翌日日勤を $x_{s,d,night}+x_{s,d+1,day}\\le1$ とし、各スタッフの勤務数を $u_{min}\\le\\sum_{d,h}x_{s,d,h}\\le u_{max}$ で挟む。",
       "map_node_id": "answer:Q01:binary",
-      "python_example": "from ortools.sat.python import cp_model\nmodel = cp_model.CpModel()",
-      "practical_notes": "必ず守る制約（hard constraint）と、できれば満たしたい制約（soft constraint）を最初に分離します。",
-      "limitations": ["固定した必要人数と希望を扱う例であり、欠勤や需要変動を含む実運用の可行性は保証しません。"]
+      "python_example": "from ortools.sat.python import cp_model\n\nstaff, days, shifts = range(4), range(3), range(2)\nrequired = {(d, h): 1 for d in days for h in shifts}\npreference = {(s, d, h): (s + d + h) % 2 for s in staff for d in days for h in shifts}\nmodel = cp_model.CpModel()\nx = {(s, d, h): model.new_bool_var(f\"x_{s}_{d}_{h}\") for s in staff for d in days for h in shifts}\nfor d in days:\n    for h in shifts:\n        model.add(sum(x[s, d, h] for s in staff) >= required[d, h])\nfor s in staff:\n    for d in days:\n        model.add(sum(x[s, d, h] for h in shifts) <= 1)\n    for d in range(2):\n        model.add(x[s, d, 1] + x[s, d + 1, 0] <= 1)\nmodel.add(x[3, 0, 1] == 0)\nworkloads = [sum(x[s, d, h] for d in days for h in shifts) for s in staff]\nmax_load, min_load = model.new_int_var(0, 3, \"max_load\"), model.new_int_var(0, 3, \"min_load\")\nmodel.add_max_equality(max_load, workloads)\nmodel.add_min_equality(min_load, workloads)\nmodel.maximize(10 * sum(preference[s, d, h] * x[s, d, h] for s in staff for d in days for h in shifts) - (max_load - min_load))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [[solver.value(x[s, d, h]) for h in shifts] for s in staff for d in days])",
+      "practical_notes": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
+      "limitations": [
+        "4名・3日・2勤務帯、各枠1名、固定資格・固定希望の教育用instanceであり、実際の労働協約、複数資格、skill mix、有給、突発欠勤、需要変動、長期の公平性を表さない。",
+        "固定教材で実行可能な勤務表が得られても、実運用の法令適合、健康、安全、本人同意、公平性を保証しない。運用前に人事・現場責任者・スタッフによる確認と変更履歴の監査が必要である。"
+      ]
     },
     {
       "case_id": "hyperparameter-search",
