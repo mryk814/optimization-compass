@@ -1075,6 +1075,81 @@
         "5候補・固定cost・固定便益proxyの教育用選択問題であり、種間相互作用、空間連結性、気候変動、土地利用、実施失敗、長期monitoringを表さない。",
         "proxy最大化やgapの証明は、生物多様性の回復、法令・土地権利への適合、社会的合意を保証しない。実運用では現地調査、複数指標、関係者レビュー、実施後の効果検証が必要である。"
       ]
+    },
+    {
+      "case_id": "EC021",
+      "title_ja": "mini-batchで画像分類モデルを学習する",
+      "title_en": "Train an image classifier with mini-batches",
+      "domain": "machine-learning",
+      "problem_archetype_id": "PA040",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "general_nonlinear"},
+        {"feature_id": "F_CONVEXITY", "value": "nonconvex"},
+        {"feature_id": "F_SMOOTHNESS", "value": "smooth"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "stochastic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "unconstrained"},
+        {"feature_id": "F_DIMENSION_CONTEXT", "value": "very_high"},
+        {"feature_id": "F_EVALUATION_COST", "value": "moderate"},
+        {"feature_id": "F_NOISE_LEVEL", "value": "moderate_noise"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "automatic_differentiation_graph",
+        "Q03": "general_nonlinear",
+        "Q04": "none",
+        "Q05": "stochastic_gradient",
+        "Q06": "seconds",
+        "Q07": "random_seeded",
+        "Q08": "over_10000",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "stochastic_or_robust",
+        "Q12": "gpu_available"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_ADAMW",
+          "reason": "mini-batchのstochastic gradientを使い、weight decayを勾配updateから分離したbaselineとして学習率・validation・停止時点を診断できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_MOMENTUM_SGD",
+          "reason": "十分な学習budgetがあり、AdamWより立ち上がりが遅くても最終validationとseed間の安定性を比較したい場合"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "非常に高次元のparameterとmini-batchごとに変わるgradientに対し、full-batchの決定的gradientとline searchを前提にすると1 stepの計算・memory負荷が大きいため"
+        }
+      ],
+      "implementation_ids": ["I_PYTORCH_OPTIM", "I_TENSORFLOW_OPTIM", "I_OPTAX"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_GD_QUADRATIC",
+        "SCENARIO_MOMENTUM_QUADRATIC",
+        "SCENARIO_ADAM_QUADRATIC"
+      ],
+      "comparison_ids": ["COMPARE_GRADIENT_FAMILY"],
+      "source_ids": ["S047", "S048", "S049", "S070"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-24",
+      "question": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
+      "variable_domain": "実務のdecision variableはnetwork parameter $\\theta\\in X=\\mathbb{R}^d$ で、$d$ は数万から数十億になり得る。固定教材では4入力・8 hidden unit・3 classの小さなMLPのparameterだけを更新する。",
+      "decision_variables": "各layerのweightとbiasをまとめた連続parameter $\\theta$。dataset split、入力特徴、label、model構造、batch sizeは比較中に固定し、optimizerのparameterへ混ぜない。",
+      "objective": "train mini-batch $B_k$ のcross-entropy $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ をstochastic gradientで改善する。採用判断はtrain lossだけでなく、固定したvalidation splitのloss、主要metric、wall time、peak memoryで行う。",
+      "constraints": "明示的なparameter制約は置かない。代わりにupdate回数 $k\\le K$、wall-timeまたはdata accessのbudget、early stopping、learning-rate schedule、weight decay、gradient clippingを事前に実験契約として固定する。",
+      "map_node_id": "answer:Q05:stochastic_gradient",
+      "python_example": "import torch\n\nx = torch.tensor([[1.0, 0.0, 0.5, -0.2], [0.2, 1.0, -0.4, 0.7], [-0.3, 0.4, 1.0, 0.2]])\ny = torch.tensor([0, 1, 2])\nmodel = torch.nn.Sequential(torch.nn.Linear(4, 8), torch.nn.ReLU(), torch.nn.Linear(8, 3))\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)\noptimizer.zero_grad()\nloss = torch.nn.functional.cross_entropy(model(x), y)\nloss.backward()\noptimizer.step()\nprint(float(loss))",
+      "practical_notes": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。Adamのupdate geometryを読む補助であって、AdamWや実データでの汎化性能を比較するものではない。",
+      "limitations": [
+        "固定した3 sample・4入力・8 hidden unit・3 classの1 step教材であり、実際の画像、data augmentation、distributed training、mixed precision、長期学習、hardware bottleneckを表さない。",
+        "小さな教材でlossが下がることや2次関数上の軌跡は、実データでのaccuracy、calibration、robustness、公平性、AdamWとMomentum SGDの順位を保証しない。実運用では同じsplit・budget・tuning方針と複数seedで再検証する。"
+      ]
     }
   ]
 }
