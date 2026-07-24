@@ -353,8 +353,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -534,17 +533,15 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "comparison_wrong_journey"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "COMPARE_GRADIENT_FAMILY"
           ]
@@ -562,6 +559,7 @@
           "target_ids": [
             "/gallery/EC021",
             "/traces/adam-quadratic",
+            "/traces/adam-quadratic-divergence",
             "/traces/gradient_descent-quadratic",
             "/traces/momentum-quadratic",
             "/compare/COMPARE_GRADIENT_FAMILY",
@@ -615,6 +613,7 @@
           "target_ids": [
             "/gallery/EC021",
             "/traces/adam-quadratic",
+            "/traces/adam-quadratic-divergence",
             "/traces/gradient_descent-quadratic",
             "/traces/momentum-quadratic",
             "/compare/COMPARE_GRADIENT_FAMILY",
@@ -631,10 +630,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S001",
             "S002",
@@ -650,6 +647,7 @@
           "state": "complete",
           "target_ids": [
             "SCENARIO_ADAM_QUADRATIC",
+            "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
             "SCENARIO_GD_QUADRATIC",
             "SCENARIO_MOMENTUM_QUADRATIC"
           ]
@@ -669,12 +667,8 @@
         }
       },
       "journey_id": "EC021",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -771,8 +765,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -1058,8 +1051,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -1197,8 +1189,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -1384,10 +1375,8 @@
           ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "comparison_wrong_journey"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "COMPARE_PARETO_PREFERENCE"
           ]
@@ -1463,10 +1452,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S039",
             "S055",
@@ -1496,11 +1483,8 @@
         }
       },
       "journey_id": "battery-operation-tradeoff",
-      "missing_dimensions": [
-        "canonical_comparison",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -1736,10 +1720,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S005",
@@ -1775,10 +1757,8 @@
         }
       },
       "journey_id": "budget-allocation",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2750,10 +2730,8 @@
           ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "comparison_wrong_journey"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
           ]
@@ -2841,10 +2819,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S034",
             "S035",
@@ -2880,11 +2856,8 @@
         }
       },
       "journey_id": "manufacturing-process-window",
-      "missing_dimensions": [
-        "canonical_comparison",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -2982,10 +2955,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -3020,10 +2991,8 @@
         }
       },
       "journey_id": "mobile-clinic-outreach-selection",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3270,8 +3239,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -3464,10 +3432,8 @@
           ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "comparison_wrong_journey"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "COMPARE_KNAPSACK_BNB_BUDGET"
           ]
@@ -3552,10 +3518,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -3590,11 +3554,8 @@
         }
       },
       "journey_id": "public-infrastructure-selection",
-      "missing_dimensions": [
-        "canonical_comparison",
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3704,10 +3665,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "invalid_source_currentness"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S017",
@@ -3747,10 +3706,8 @@
         }
       },
       "journey_id": "shape-diffuser",
-      "missing_dimensions": [
-        "source_review"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3848,8 +3805,7 @@
         "source_review": {
           "reason_codes": [
             "missing_comparison_source",
-            "missing_scenario_source",
-            "stale_case_review"
+            "missing_scenario_source"
           ],
           "state": "missing",
           "target_ids": [
@@ -4134,10 +4090,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "stale_case_review"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S097",
             "S098",
@@ -4173,8 +4127,7 @@
       },
       "journey_id": "topology-cantilever",
       "missing_dimensions": [
-        "implementation",
-        "source_review"
+        "implementation"
       ],
       "status": "partial"
     }
@@ -4364,8 +4317,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_CP_SAT"
@@ -4493,11 +4445,7 @@
           "comparison_id": "COMPARE_GRADIENT_FAMILY"
         }
       ],
-      "completion_reasons": [
-        "comparison_wrong_journey",
-        "missing_failure_or_sensitivity_scenario",
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_MOMENTUM_SGD"
       ],
@@ -4542,6 +4490,13 @@
           "scenario_id": "SCENARIO_ADAM_QUADRATIC"
         },
         {
+          "canonical_url": "/traces/adam-quadratic-divergence",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
+        },
+        {
           "canonical_url": "/traces/gradient_descent-quadratic",
           "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
           "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
@@ -4565,7 +4520,7 @@
         "S056",
         "S070"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。Adamのupdate geometryを読む補助であって、AdamWや実データでの汎化性能を比較するものではない。",
       "title_en": "Train an image classifier with mini-batches",
       "title_ja": "mini-batchで画像分類モデルを学習する"
@@ -4585,8 +4540,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_ACTIVE_SET_QP"
@@ -4736,8 +4690,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_RANDOM_SEARCH"
@@ -4805,8 +4758,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_LEVENBERG_MARQUARDT"
@@ -4948,10 +4900,7 @@
           "comparison_id": "COMPARE_PARETO_PREFERENCE"
         }
       ],
-      "completion_reasons": [
-        "comparison_wrong_journey",
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_EPSILON_CONSTRAINT"
       ],
@@ -5008,7 +4957,7 @@
         "S055",
         "S068"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "実運用では価格、負荷、再生可能発電、初期state of charge、efficiency、power上限、終端条件、予測時点を固定して比較する。Pareto frontを得た後に、選好や運用規則で1候補を選び、別期間の価格・負荷で再評価する。",
       "title_en": "Explore cost-throughput trade-offs in battery operation",
       "title_ja": "蓄電池運用のコストと充放電量を両方見る"
@@ -5105,9 +5054,7 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -5168,7 +5115,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "search-treeは、①nodeの部分assignment、②使用予算と可行性、③残り施策を含む上界、④枝刈り理由、⑤incumbentとglobal boundの差、の順に読む。完全探索ではvalue 15の施策A+Bと上界15が一致して最適性を証明するが、4 node停止では可行なincumbentがあっても正のgapが残る。実務では期待効果の推定期間・母集団・単位・因果性、施策間の重複効果、必須・排他・公平性制約をversion管理し、係数感度とheld-out評価を別に行う。",
       "title_en": "Budget allocation",
       "title_ja": "限られた予算を施策へ配分する"
@@ -5754,10 +5701,7 @@
           "comparison_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE"
         }
       ],
-      "completion_reasons": [
-        "comparison_wrong_journey",
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_RANDOM_SEARCH"
       ],
@@ -5832,7 +5776,7 @@
         "S069",
         "S075"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "各試作について材料lot、装置、operator、環境、入力条件、測定値、測定不確かさ、失敗status、wall timeを保存する。random baselineとの比較では初期点、探索範囲、試行budget、並列数、noiseの扱いを固定し、best observedとsurrogate予測を分けて読む。",
       "title_en": "Tune manufacturing conditions with expensive experiments",
       "title_ja": "高価な製造実験から工程条件を探す"
@@ -5849,9 +5793,7 @@
           "comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -5911,7 +5853,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintとaccess proxyを分け、候補ID、対象地域、日時、運営cost、必要資格・設備、会場のaccessibility、予約・紹介先のcapacity、proxyの算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定Theaterは4品目knapsackであり、このhealthcare caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
       "title_en": "Select mobile clinic outreach sessions under a budget",
       "title_ja": "予算内で巡回健診の開催候補を選ぶ"
@@ -6043,8 +5985,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "M_SLSQP"
@@ -6184,10 +6125,7 @@
           "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
         }
       ],
-      "completion_reasons": [
-        "comparison_wrong_journey",
-        "stale_case_review"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6248,7 +6186,7 @@
         "S054",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "便益scoreの定義者、対象期間、地域、根拠data、不確実性、最低実施条件、相互依存を公開し、採択結果だけでなく未採択理由、unused budget、最適性gap、停止理由を記録する。scoreやcostを変えた感度分析と、地域・公平性制約を追加した場合の差を別に確認する。",
       "title_en": "Select resilience projects under a fixed budget",
       "title_ja": "限られた予算で防災事業を選ぶ"
@@ -6265,9 +6203,7 @@
           "comparison_id": "COMPARE_SHAPE_TOPOLOGY_REPRESENTATION"
         }
       ],
-      "completion_reasons": [
-        "invalid_source_currentness"
-      ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_ADJOINT_SENSITIVITY",
         "M_INTERIOR_POINT_NLP"
@@ -6340,7 +6276,7 @@
         "S105",
         "S106"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "各evaluationでparameter、geometry、mesh、physical state、目的を別recordにします。有限差分またはadjoint sensitivityはvalid geometryと収束済みstateの後に検査します。mesh motionでqualityを保てなければremeshingへ切り替えます。level-setはtopology changeを許す別表現です。follow-upは、構造ではstress／buckling、CFDではviscous loss、thermalではheat-transfer surface、acousticではwave scattering、photonicではMaxwell stateとfabrication constraintを同じlayer contractへ接続します。",
       "title_en": "Update a two-dimensional diffuser wall shape",
       "title_ja": "2D diffuserの壁面shapeを更新する"
@@ -6360,8 +6296,7 @@
         "missing_primary_scenario",
         "missing_problem_instance",
         "missing_scenario_source",
-        "missing_static_text_alternative",
-        "stale_case_review"
+        "missing_static_text_alternative"
       ],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
@@ -6506,8 +6441,7 @@
         }
       ],
       "completion_reasons": [
-        "missing_implementation",
-        "stale_case_review"
+        "missing_implementation"
       ],
       "conditional_method_ids": [
         "M_ADJOINT_SENSITIVITY",
@@ -7146,12 +7080,6 @@
       "reason_code": "published_content_without_journey"
     },
     {
-      "asset_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
       "asset_type": "scenario",
       "policy": "warning",
@@ -7198,12 +7126,6 @@
       "asset_type": "scenario",
       "policy": "warning",
       "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "adam-quadratic-divergence",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
     },
     {
       "asset_id": "gradient_descent-quadratic-divergence",
@@ -7257,9 +7179,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 15,
+      "complete": 22,
       "draft": 0,
-      "partial": 15
+      "partial": 8
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

@@ -241,6 +241,7 @@
       ],
       "scenario_ids": [
         "SCENARIO_ADAM_QUADRATIC",
+        "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "SCENARIO_GD_QUADRATIC",
         "SCENARIO_MOMENTUM_QUADRATIC"
       ],

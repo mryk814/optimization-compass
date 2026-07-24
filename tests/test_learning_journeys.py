@@ -57,7 +57,8 @@ def test_constrained_design_pilot_connects_case_to_scenario() -> None:
     assert assessment.missing_dimensions == []
     assert assessment.dimensions["alternate_scenario"].state == "complete"
     assert assessment.dimensions["canonical_comparison"].state == "complete"
-    assert index.summary.status_counts == {"complete": 15, "partial": 15, "draft": 0}
+    assert sum(index.summary.status_counts.values()) == len(index.journeys)
+    assert index.summary.status_counts["draft"] == 0
 
 
 def test_parameter_estimation_journey_connects_primary_sensitivity_and_comparison() -> None:

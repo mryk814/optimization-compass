@@ -601,6 +601,11 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "SCENARIO_GD_QUADRATIC",
           "target_type": "view"
         },
@@ -18181,6 +18186,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_OPTAX",
           "target_type": "implementation"
@@ -28219,6 +28229,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -32819,6 +32834,16 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_ADAM_QUADRATIC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
       "relations": [],
       "summary": ""
     },

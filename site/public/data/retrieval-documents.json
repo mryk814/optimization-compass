@@ -196,6 +196,7 @@
         "source:S049",
         "source:S070",
         "view:SCENARIO_ADAM_QUADRATIC",
+        "view:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "view:SCENARIO_GD_QUADRATIC",
         "view:SCENARIO_MOMENTUM_QUADRATIC",
         "view:VIEW_PROBLEM_STRUCTURE"
@@ -32217,6 +32218,7 @@
         "failure:structured:FM016",
         "method:M_BFGS",
         "scenario:SCENARIO_ADAM_QUADRATIC",
+        "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_GD_QUADRATIC",
         "scenario:SCENARIO_MOMENTUM_QUADRATIC",
         "source:S047",
@@ -39081,6 +39083,7 @@
         "method:M_MOMENTUM_SGD",
         "problem:PA040",
         "scenario:SCENARIO_ADAM_QUADRATIC",
+        "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_GD_QUADRATIC",
         "scenario:SCENARIO_MOMENTUM_QUADRATIC",
         "source:S001",
@@ -44110,6 +44113,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "journey:EC021",
         "source:S001",
         "source:S002",
         "trace:adam-quadratic-divergence"
