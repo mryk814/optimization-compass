@@ -65,6 +65,23 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "一般性能rankingや将来分布への保証ではありません" in chance_risk.body
     assert style_warnings(chance_risk) == ()
 
+    constraint_class = pages["concept.constraint-class"]
+    for route in (
+        "#/learn/projected-gradient",
+        "#/learn/family.constrained-nlp",
+        "#/learn/family.discrete-structure",
+    ):
+        assert route in constraint_class.body
+    for constraint_oracle in (
+        "`g(x)`の値",
+        "Jacobian",
+        "Boolean論理",
+        "simulationが失敗した後",
+    ):
+        assert constraint_oracle in constraint_class.body
+    assert "式／単位／tolerance／判定時点" in constraint_class.body
+    assert style_warnings(constraint_class) == ()
+
     variable_domain = pages["concept.variable-domain"]
     for route in (
         "#/learn/family.smooth-local",
