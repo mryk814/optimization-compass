@@ -1475,6 +1475,79 @@
           "artifact": {"artifact_id": "binary-knapsack-bnb-budget", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-budget.json"}
         }
       ]
+    },
+    {
+      "comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+      "canonical_url": "/compare/COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_MOBILE_CLINIC_BNB_BUDGET",
+      "aliases": [],
+      "mode": "failure_contrast",
+      "journey_id": "mobile-clinic-outreach-selection",
+      "case_id": "mobile-clinic-outreach-selection",
+      "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+      "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+      "benchmark_context_id": "BENCH_KNAPSACK_BNB_EDUCATIONAL_9",
+      "title_ja": "巡回健診Caseから探索完了と予算停止を読む",
+      "title_en": "Read completed and budget-stopped search from the mobile-clinic case",
+      "comparison_question": "healthcare caseの5候補を直接再現しない固定4変数教材で、node予算だけを変えるとincumbent・bound・gap・feasibilityの意味はどう変わる？",
+      "formulation_summary": "巡回健診Caseと同じ二値選択・予算構造を、max 9A+6B+4D+5C subject to 4A+3B+2D+3C≤7 の固定教材で読む。",
+      "fixed_factors": [
+        "problem instance INSTANCE_BINARY_KNAPSACK_4",
+        "depth-first include-first strategy",
+        "initial heuristic incumbent value 13",
+        "seed 0",
+        "oracle evaluation budget 9",
+        "fractional-knapsack upper bound"
+      ],
+      "changed_factors": ["node_stop_limitだけを9から4へ変える"],
+      "seed_policy": "deterministic generatorのseed 0を固定する。",
+      "budget": {"metric": "oracle_evaluations", "value": 9},
+      "stopping_policy": "共通evaluation budgetは9とし、memberごとのnode_stop_limit=9または4へ最初に到達した時点で停止する。",
+      "tuning_policy": "branch順、初期incumbent、relaxation boundを固定し、run後に変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "explored_nodes", "label_ja": "展開node数", "direction": "none", "unit": "nodes"},
+        {"metric_id": "incumbent", "label_ja": "best feasible値", "direction": "maximize", "unit": "objective value"},
+        {"metric_id": "global_bound", "label_ja": "大域上界", "direction": "minimize", "unit": "objective bound"},
+        {"metric_id": "absolute_gap", "label_ja": "絶対gap", "direction": "minimize", "unit": "objective gap"},
+        {"metric_id": "feasibility", "label_ja": "incumbentの可行性", "direction": "target", "unit": "status"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberはinstance、seed、branch順、初期incumbent、bound、9 evaluation上限を共有し、node_stop_limitだけを変える。",
+      "caveat": "4変数教材は実際の開催候補、地域、需要、医療資源、access proxyを再現しない。固定探索の差からsolver、開催案、医療施策の一般的順位を推論できない。",
+      "takeaway": "予算停止時のincumbentは可行候補でも、未探索nodeと正のgapが残る限り最適性は未証明である。",
+      "limitations": [
+        "巡回健診Caseの5候補ではなく、4変数の決定的なknapsack教材だけを扱う。",
+        "cut生成、presolve、並列探索、wall-clock、需要不確実性、移動、予約・紹介先capacity、医療上の安全性と公平性を比較しない。"
+      ],
+      "source_ids": ["S021", "S022", "S079"],
+      "last_verified": "2026-07-24",
+      "members": [
+        {
+          "member_id": "mobile-clinic-bnb-complete",
+          "role": "complete_reference",
+          "method_id": "M_BRANCH_BOUND",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+          "label_ja": "9 node以内で証明完了",
+          "label_en": "Proof completed within 9 nodes",
+          "parameters": {"node_stop_limit": 9},
+          "budget": {"metric": "oracle_evaluations", "value": 9},
+          "artifact": {"artifact_id": "binary-knapsack-bnb-complete", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-complete.json"}
+        },
+        {
+          "member_id": "mobile-clinic-bnb-budget-stop",
+          "role": "budget_stop_sensitivity",
+          "method_id": "M_BRANCH_BOUND",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+          "label_ja": "4 nodeで予算停止",
+          "label_en": "Stopped at 4 nodes",
+          "parameters": {"node_stop_limit": 4},
+          "budget": {"metric": "oracle_evaluations", "value": 9},
+          "artifact": {"artifact_id": "binary-knapsack-bnb-budget", "artifact_kind": "executable_trace", "renderer_family": "search_tree", "renderer_contract_version": "1.0.0", "payload_path": "search-trees/binary-knapsack-bnb-budget.json"}
+        }
+      ]
     }
   ]
 }

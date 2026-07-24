@@ -1173,6 +1173,76 @@
       ]
     },
     {
+      "case_id": "mobile-clinic-outreach-selection",
+      "title_ja": "予算内で巡回健診の開催候補を選ぶ",
+      "title_en": "Select mobile clinic outreach sessions under a budget",
+      "domain": "healthcare",
+      "problem_archetype_id": "PA032",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "binary"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "linear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "not_differentiable"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "combinatorial"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "optimality_gap"}
+      ],
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "scheduling_routing",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "開催する／しないの二値判断、地域群ごとの最低1枠、同時に運営できない候補の排他条件を保ち、実行可能案と最適性gapを確認できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "access proxyと運営costが線形で、地域群・設備・人員の条件も線形制約として表せる場合はMIP familyの緩和boundを使う"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "開催候補の採否と地域群ごとの最低配置を連続gradient updateだけでは保持できず、丸め後の予算超過や未配置を防げないため"
+        }
+      ],
+      "implementation_ids": ["I_ORTOOLS_CPSAT"],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ],
+      "comparison_ids": ["COMPARE_MOBILE_CLINIC_BNB_BUDGET"],
+      "source_ids": ["S021", "S022", "S054", "S079"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-07-24",
+      "question": "巡回健診の開催候補から実施枠を選び、運営予算内で二つの地域群を少なくとも1枠ずつ含めながら、監査済みのaccess proxyを最大化したい。",
+      "variable_domain": "固定教材では5候補枠の採否 $x\\in X=\\{0,1\\}^5$。$x_i=1$ は候補枠 $i$ を開催すること、0は今期は開催しないことを表す。",
+      "decision_variables": "開催候補 $A,B,C,D,E$ ごとの二値変数 $x_i$。候補地、日時、対象人数、移動時間、必要な医療職・設備は入力であり、solverが変更するdecision variableではない。",
+      "objective": "固定教材ではaccess proxyの合計 $f(x)=9x_A+8x_B+6x_C+5x_D+4x_E$ を最大化する。proxyは候補を比較する教育用入力であり、受診者数、診断精度、健康改善、医療上の優先度を保証する値ではない。",
+      "constraints": "運営cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、地域群1から少なくとも1枠 $x_A+x_B\\ge1$、地域群2から少なくとも1枠 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
+      "map_node_id": "answer:Q01:binary",
+      "python_example": "from ortools.sat.python import cp_model\n\naccess_proxy = [9, 8, 6, 5, 4]\ncost = [4, 4, 3, 2, 2]\nmodel = cp_model.CpModel()\nx = [model.new_bool_var(f\"outreach_{i}\") for i in range(5)]\nmodel.add(sum(cost[i] * x[i] for i in range(5)) <= 8)\nmodel.add(x[0] + x[1] >= 1)\nmodel.add(x[2] + x[3] + x[4] >= 1)\nmodel.maximize(sum(access_proxy[i] * x[i] for i in range(5)))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), [solver.value(item) for item in x], solver.objective_value)",
+      "practical_notes": "hard constraintとaccess proxyを分け、候補ID、対象地域、日時、運営cost、必要資格・設備、会場のaccessibility、予約・紹介先のcapacity、proxyの算定者・根拠・更新日を記録する。公開前に医療職、地域関係者、運営責任者が安全、同意、個人情報、代替手段を確認する。接続先の分枝限定Theaterは4品目knapsackであり、このhealthcare caseの候補データではない。incumbent、bound、gap、予算停止の読み方だけを共有する。",
+      "limitations": [
+        "5候補・固定cost・固定access proxyの教育用選択問題であり、実際の需要、移動距離、予約枠、検査能力、スタッフ勤務、需要不確実性、複数期の巡回計画を表さない。",
+        "proxy最大化やgapの証明は、医療上の有効性、安全性、公平性、法令・倫理への適合を保証しない。実運用では臨床・地域のレビュー、複数のaccess指標、需要scenario、実施後の評価が必要である。"
+      ]
+    },
+    {
       "case_id": "EC021",
       "title_ja": "mini-batchで画像分類モデルを学習する",
       "title_en": "Train an image classifier with mini-batches",
