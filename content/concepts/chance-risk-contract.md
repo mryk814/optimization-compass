@@ -5,15 +5,17 @@ canonical_entity_type: feature
 canonical_entity_id: F_CONSTRAINT_CHANCE
 title_ja: Chance constraint・CVaR・robustness
 title_en: Chance Constraints, CVaR, and Robustness
-summary: Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。
+summary: Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。
 source_ids: [S054, S055, S056, S103]
 prerequisites: [concept.uncertainty-models, concept.constraint-class]
 related_ids: [concept.simplex, family.stochastic-ml, lp-qp-conic]
+visualization_ids: [portfolio-nominal-8-4, portfolio-cvar-8-4]
+comparison_ids: [COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-24
 ---
 
-Chance constraintは、制約違反の確率を指定して不確実な制約を扱う枠組みで、CVaR・robust・stochastic・DROとの違いを目的・制約・保証範囲で整理します。
+Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。
 
 ## 30秒でつかむ
 
@@ -63,7 +65,9 @@ chance constraintが「制約違反の頻度をどこまで許すか」を問う
 | 制約 | chance constraint | 違反の頻度に上限を置く |
 | 両方 | CVaR objective + robust constraint | tailの大きさとset内の最悪可行性を別々に読む |
 
-CVaRの値を比較するときは、lossの向き、tail水準、sample数、scenarioの重み、最適化に使ったsampleと評価用sampleを固定します。値が小さいことだけで、異なる分布や異なるtail水準の結果を順位付けしません。
+CVaRを比較するときは、lossの向き／tail水準／sample数／scenarioの重みを固定します。
+最適化用sampleと評価用sampleの分割もそろえます。
+値が小さいことだけで、異なる分布やtail水準の結果を順位付けしません。
 
 chance constraintの`α`を違反確率、CVaRの`α`をquantileまたはtail levelとして書く流儀があります。同じ記号でも意味は別です。さらに、どちらも推定値のconfidence levelとは限りません。Case・Theater・Compareでは`violation_probability`、`tail_level`、`confidence_level`を別fieldとして読みます。
 
@@ -78,7 +82,9 @@ chance constraintの`α`を違反確率、CVaRの`α`をquantileまたはtail le
 
 robust optimizationのsetは、parameterが取りうる範囲を表します。DROのambiguity setは、確率分布そのものの候補集合を表します。どちらも「不確実なものを集合で扱う」と説明できますが、集合の要素がparameterなのか分布なのかを省略しません。
 
-stochastic programmingでscenarioを増やすと、計算問題の表現は細かくなります。しかし、sample sizeが増えたことだけでout-of-sample性能や確率保証が自動的に得られるわけではありません。scenarioの生成、重み、seed、評価用データを固定して、in-sampleとheld-outを分けます。
+stochastic programmingでscenarioを増やすと、計算問題の表現は細かくなります。
+しかし、sample sizeだけでout-of-sample性能や確率保証は得られません。
+scenarioの生成／重み／seed／評価用データを固定し、in-sampleとheld-outを分けます。
 
 ## simplex配分での読み方
 
@@ -96,7 +102,12 @@ $$
 - robust: 定めた損失・需要のsetの全てで制約を守る
 - DRO: scenario分布の候補集合に対するworst-caseを抑える
 
-同じ配分変数を使っても、目的・制約・保証範囲が変われば別の問題です。nominalな共分散riskの結果を、そのままCVaR、chance constraint、robust、DROの結果として表示しません。
+同じ配分変数でも、目的・制約・保証範囲が変われば別の問題です。
+nominalな共分散riskの結果を、CVaR／chance constraint／robust／DROの結果として表示しません。
+
+[nominal目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4)と[CVaR目的のTrace](#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4)は、同じ固定教材を使います。
+[nominal／CVaR Compare](#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4)では、変数とsample contractを固定し、risk treatmentだけをcontrast-onlyで読みます。
+これは一般性能rankingや将来分布への保証ではありません。
 
 ## 仕様に残す最小contract
 
@@ -114,10 +125,14 @@ uncertainty_contract = {
 }
 ```
 
-`unknown`は、まだ調べていない前提を`nominal`や`not_applicable`へ変換する値ではありません。分布、set、tail水準、評価データのどれが未確定かをそのまま残し、追加で必要な観測やsourceを記録します。
+`unknown`は、未確認の前提を`nominal`や`not_applicable`へ変換する値ではありません。
+分布／set／tail水準／評価データのうち、未確定な対象をそのまま残します。
+追加で必要な観測やsourceも記録します。
 
 ::: warning
-scenario上の可行性、chance constraintの確率計算、robust set内の可行性、DROのambiguity set内のworst-caseは、それぞれ保証の範囲が違います。表示する結果には、対象となったscenario・分布・setと、評価時のtoleranceを添えます。
+scenario上の可行性／chance constraintの確率計算／robust set内の可行性は、保証範囲が異なります。
+DROのambiguity set内で評価するworst-caseも、別の範囲です。
+結果には、対象のscenario・分布・setと評価時のtoleranceを添えます。
 :::
 
 ## 次に読む

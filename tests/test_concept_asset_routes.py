@@ -49,6 +49,22 @@ def test_concepts_reference_their_canonical_learning_assets() -> None:
     assert "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4" in uncertainty.body
     assert style_warnings(uncertainty) == ()
 
+    chance_risk = pages["concept.chance-risk-contract"]
+    assert chance_risk.visualization_ids == (
+        "portfolio-nominal-8-4",
+        "portfolio-cvar-8-4",
+    )
+    assert chance_risk.comparison_ids == ("COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",)
+    for route in (
+        "#/theater/learning/SCENARIO_PORTFOLIO_NOMINAL_8_4",
+        "#/theater/learning/SCENARIO_PORTFOLIO_CVAR_8_4",
+        "#/compare/COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+    ):
+        assert route in chance_risk.body
+    assert "risk treatmentだけをcontrast-onlyで読みます" in chance_risk.body
+    assert "一般性能rankingや将来分布への保証ではありません" in chance_risk.body
+    assert style_warnings(chance_risk) == ()
+
     variable_domain = pages["concept.variable-domain"]
     for route in (
         "#/learn/family.smooth-local",
