@@ -1827,9 +1827,12 @@ caption {
 .gallery-card > p { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .gallery-card footer { display: flex; align-items: center; justify-content: space-between; gap: .65rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid #eceee9; }
 .gallery-card footer strong { color: #285740; font-size: .7rem; }
-.gallery-card-status { width: fit-content; padding: .2rem .42rem; border-radius: 999px; background: #eef1ed; }
-.gallery-card-status.is-complete { color: #276044; background: #e6f3e9; }
-.gallery-card-status.is-partial { color: #87561c; background: #fbf0db; }
+.gallery-card-progress { display: inline-flex; min-width: 0; align-items: center; gap: .5rem; }
+.gallery-card-progress > span { display: inline-flex; align-items: center; gap: .24rem; color: #737b75; font-size: .62rem; font-weight: 700; white-space: nowrap; }
+.gallery-card-progress > span::before { width: .42rem; height: .42rem; border: 1px solid #aeb7b0; border-radius: 50%; background: #fff; content: ""; }
+.gallery-card-progress > .is-ready { color: #315c48; }
+.gallery-card-progress > .is-ready::before { border-color: #4d8064; background: #4d8064; box-shadow: inset 0 0 0 1px #f7fbf7; }
+.gallery-card-progress > .is-pending::before { border-color: #c8914c; background: #fff8ee; }
 .gallery-empty { padding: 2rem; color: #59645d; text-align: center; }
 .gallery-loading { padding: 1.25rem; color: #59645d; text-align: center; }
 .theater-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .55rem; }

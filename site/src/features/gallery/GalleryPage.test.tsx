@@ -12,6 +12,7 @@ import {
   GalleryDomainOverview,
   GalleryNote,
   GalleryTakeaway,
+  JourneyProgress,
   JourneyStatus,
   journeyCompletionLabel,
   journeyStatusLabel,
@@ -38,6 +39,29 @@ describe("gallery Atlas state", () => {
 });
 
 describe("gallery learning journey status", () => {
+  test("shows formulation, run, and comparison as a compact accessible progression", () => {
+    render(<JourneyProgress journey={{
+      status: "partial",
+      scenarios: [{
+        scenario_id: "SCENARIO_EXAMPLE",
+        role: "primary",
+        canonical_url: "/traces/example",
+        problem_definition_id: "PROBLEM_EXAMPLE",
+        problem_instance_id: "INSTANCE_EXAMPLE",
+      }],
+      comparisons: [],
+    } as Pick<LearningJourney, "status" | "scenarios" | "comparisons">} />);
+
+    const progress = screen.getByRole("img", {
+      name: "定式化あり、実行あり、比較未接続。定式化は読めます。実行・比較は順次整備中です。",
+    });
+    expect(progress).toHaveTextContent("定式化");
+    expect(progress).toHaveTextContent("実行");
+    expect(progress).toHaveTextContent("比較");
+    expect(progress.querySelectorAll(".is-ready")).toHaveLength(2);
+    expect(progress.querySelectorAll(".is-pending")).toHaveLength(1);
+  });
+
   test("keeps coverage counts behind a disclosure while preserving domain filtering", () => {
     const onSelect = vi.fn();
     render(

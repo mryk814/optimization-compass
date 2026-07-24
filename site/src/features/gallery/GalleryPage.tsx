@@ -181,15 +181,49 @@ function GalleryCaseGrid({
             <h2>{item.title_ja}</h2>
             <p>{item.question}</p>
             <footer>
-              <small className={`gallery-card-status is-${journey?.status ?? "draft"}`}>
-                {journeyStatusLabel(journey?.status)}
-              </small>
+              <JourneyProgress journey={journey} />
               <strong>開く →</strong>
             </footer>
           </Link>
         );
       })}
     </div>
+  );
+}
+
+export function JourneyProgress({
+  journey,
+}: {
+  journey?: Pick<LearningJourney, "status" | "scenarios" | "comparisons">;
+}) {
+  const steps = [
+    { label: "定式化", ready: Boolean(journey) },
+    {
+      label: "実行",
+      ready: Boolean(journey?.scenarios.some((scenario) => scenario.role === "primary")),
+    },
+    { label: "比較", ready: Boolean(journey?.comparisons.length) },
+  ];
+  const connectionSummary = steps
+    .map((step) => `${step.label}${step.ready ? "あり" : "未接続"}`)
+    .join("、");
+
+  return (
+    <span
+      aria-label={`${connectionSummary}。${journeyStatusSummary(journey?.status)}`}
+      className="gallery-card-progress"
+      role="img"
+    >
+      {steps.map((step) => (
+        <span
+          aria-hidden="true"
+          className={step.ready ? "is-ready" : "is-pending"}
+          key={step.label}
+        >
+          {step.label}
+        </span>
+      ))}
+    </span>
   );
 }
 
