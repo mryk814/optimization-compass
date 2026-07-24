@@ -228,28 +228,70 @@
       "title_ja": "ポートフォリオの配分を決める",
       "title_en": "Portfolio allocation",
       "domain": "finance",
-      "problem_archetype_id": "PA052",
-      "feature_values": [{"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"}],
-      "question_answers": {"Q01": "continuous"},
-      "candidate_methods": [{"method_id": "MF_LP_QP_CONIC", "reason": "二次リスク（risk）と線形の配分制約を凸モデルとして明示し、大域解を確認できるため"}],
-      "conditional_methods": [{"method_id": "M_SLSQP", "reason": "非線形制約を追加して凸モデルでなくなる場合に検討する"}],
-      "excluded_methods": [{"method_id": "M_NELDER_MEAD", "reason": "共分散構造と制約を明示的に活かしにくい"}],
+      "problem_archetype_id": "PA018",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "quadratic"},
+        {"feature_id": "F_CONVEXITY", "value": "convex"},
+        {"feature_id": "F_SMOOTHNESS", "value": "smooth"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "analytic_gradient"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "linear"},
+        {"feature_id": "F_DIMENSION_CONTEXT", "value": "very_low"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_NOISE_LEVEL", "value": "deterministic"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "convex_global"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "explicit_algebraic",
+        "Q03": "quadratic",
+        "Q04": "linear",
+        "Q05": "analytic_gradient",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "local_is_fine",
+        "Q10": "gap_desired",
+        "Q11": "lp_qp_conic",
+        "Q12": "repeated_similar"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "MF_LP_QP_CONIC",
+          "reason": "positive semidefiniteな共分散行列による二次riskと、simplex・上下限を凸QPとして明示し、大域解とsolver statusを確認できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_SLSQP",
+          "reason": "市場impactや非線形な運用制約を追加して凸QPとして表せなくなり、gradientを使う局所的な制約付きNLPとして解く場合"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_NELDER_MEAD",
+          "reason": "共分散の二次構造とsimplex・集中上限をnativeに使わず、可行性や凸大域解の根拠を確認しにくいため"
+        }
+      ],
       "implementation_ids": ["I_CVXPY"],
       "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
       "comparison_ids": [],
-      "source_ids": ["S001", "S054"],
+      "source_ids": ["S010", "S055"],
       "difficulty": "intermediate",
       "status": "published",
-      "last_reviewed": "2026-07-14",
-      "question": "リスクを抑えながら期待収益と運用制約を両立したい。",
-      "variable_domain": "4資産の固定教材では $X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_i w_i=1\\}$。$w_i$ は資産 i の保有比率。",
-      "decision_variables": "各資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。現金を含める場合は $w_{cash}$ も同じベクトルへ加える。",
-      "objective": "期待収益を増やし、共分散リスク（covariance risk）$w^\\mathsf{T}\\Sigma w$ と取引コスト（transaction cost）を抑える。代表的には $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w+\\kappa\\,cost(w)$ を最小化する。",
-      "constraints": "全資産への配分を $\\sum_i w_i=1$ とし、空売り禁止 $0\\le w_i$、集中投資上限 $w_i\\le0.6$、必要なら売買回転（turnover）の制約を課す。",
-      "map_node_id": "answer:Q01:continuous",
-      "python_example": "import cvxpy as cp\nw = cp.Variable(n)\nproblem = cp.Problem(cp.Minimize(risk), constraints)",
-      "practical_notes": "過去データの不確実性と、実運用での取引コストを別に検証します。",
-      "limitations": ["期待収益と共分散の推定に依存し、取引コスト（cost）や将来分布の変化を保証範囲に含めません。"]
+      "last_reviewed": "2026-07-24",
+      "question": "4資産へ全額を配分し、期待収益を確保しながら共分散riskと集中投資を抑えたい。",
+      "variable_domain": "固定教材では資産比率 $w\\in X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_iw_i=1\\}$。$w_i$ は資産 $i$ の保有比率で、空売りと借入は認めない。",
+      "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",
+      "objective": "固定した期待収益と共分散を使い、固定教材では $f(w)=\\gamma w^\\mathsf{T}\\Sigma w-\\mu^\\mathsf{T}w$、$\\gamma=2$ を最小化する。第1項は分散risk、第2項は期待収益であり、異なる単位を重みでまとめるため $\\gamma$ の感度を別に確認する。",
+      "constraints": "全額配分 $\\sum_iw_i=1$、空売り禁止 $w_i\\ge0$、集中投資上限 $w_i\\le0.6$ を課す。固定教材ではturnover、最低売買単位、税、流動性、取引費用を入れない。",
+      "map_node_id": "answer:Q11:lp_qp_conic",
+      "python_example": "import cvxpy as cp\nimport numpy as np\n\nmu = np.array([0.08, 0.06, 0.05, 0.03])\nsigma = np.array([[0.040, 0.006, 0.004, 0.002], [0.006, 0.025, 0.005, 0.003], [0.004, 0.005, 0.018, 0.002], [0.002, 0.003, 0.002, 0.010]])\nrisk_aversion = 2.0\nw = cp.Variable(4)\nobjective = cp.Minimize(risk_aversion * cp.quad_form(w, sigma) - mu @ w)\nconstraints = [cp.sum(w) == 1, w >= 0, w <= 0.6]\nproblem = cp.Problem(objective, constraints)\nproblem.solve()\nprint(problem.status, np.round(w.value, 4), float(mu @ w.value), float(w.value @ sigma @ w.value))",
+      "practical_notes": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
+      "limitations": [
+        "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
+        "凸QPの大域解は入力したmodel内の保証であり、将来収益、損失上限、tail risk、実現performanceを保証しない。実運用では時系列のheld-out評価と推定不確実性の検証が必要である。"
+      ]
     },
     {
       "case_id": "portfolio-cvar-allocation",
