@@ -985,9 +985,9 @@ def _primary_scenario(
         "mechanism": 0,
         "application_result": 1,
         "schematic": 2,
-        "failure_contrast": 3,
-        "sensitivity": 4,
-        "comparison": 5,
+        "comparison": 3,
+        "failure_contrast": 4,
+        "sensitivity": 5,
     }
     return min(
         scenarios,

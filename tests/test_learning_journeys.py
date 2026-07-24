@@ -14,9 +14,11 @@ from optimization_compass.learning_journeys import (
     LearningJourneyIndex,
     _classify_orphan_assets,
     _comparison_issues,
+    _primary_scenario,
     _reject_broken_routes_for_otherwise_complete_journey,
     _reject_error_orphans,
     _route_is_reachable,
+    _scenario_role,
     _source_review_issues,
     validate_learning_journey_references,
 )
@@ -395,3 +397,27 @@ def test_source_review_accepts_case_review_after_dataset_release() -> None:
     )
 
     assert "stale_case_review" not in issues
+
+
+def test_primary_scenario_keeps_failure_contrast_in_a_diagnostic_role() -> None:
+    scenarios = VisualizationScenarioIndex.model_validate_json(
+        SCENARIO_FIXTURE.read_text(encoding="utf-8")
+    )
+    selected = [
+        item
+        for item in scenarios.scenarios
+        if item.scenario_id
+        in {
+            "SCENARIO_ADAM_QUADRATIC",
+            "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+        }
+    ]
+
+    primary = _primary_scenario(selected)
+
+    assert primary is not None
+    assert primary.scenario_id == "SCENARIO_ADAM_QUADRATIC"
+    divergence = next(
+        item for item in selected if item.scenario_id == "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
+    )
+    assert _scenario_role(divergence, primary) == "failure_contrast"
