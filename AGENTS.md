@@ -60,71 +60,26 @@ For high or critical changes, inspect similar merged work and document the autho
 - A library default is not presented as a universal recommendation or ranking.
 - Comparisons state fixed factors, changed factors, budget, synchronization, metrics, fairness, caveats, and ranking eligibility.
 - Continuous-model guarantees are not inferred from a discretized solve without qualification.
+- Published explanatory prose uses Japanese as the sentence language; English remains for canonical terms, proper names, APIs, source titles, code, formulas, and identifiers.
+- PDE-constrained data keeps decision variables, derived state, residual constraints, evaluation failures, and solver cost distinguishable. Detailed modeling guidance belongs in the PDE article and ADR, not in this entry point.
 - UI code does not gain per-entity routing crosswalks when canonical relations can generate the route.
 - Generated JSON is regenerated from the latest branch state; it is not manually merged.
 
-## Minimum workflow
+## Lightweight workflow
 
 1. Classify the change using the routing table above.
-2. Read the matching recipe in `docs/adding-knowledge.md`.
-3. Identify the existing canonical IDs and sources before creating new IDs.
-4. Change the smallest editable authority that owns the information.
-5. Add or update focused tests for new behavior and validation rules.
-6. Run the smallest applicable validation tier below.
-7. Inspect generated diffs. Unexpected unrelated generated changes are a stop signal.
-8. In the PR, state changed IDs, sources, behavioral impact, generated artifacts, and validation results.
+2. Read the matching recipe only when adding a new entity or changing a contract.
+3. Edit the canonical input, preserve IDs and sources, and run the smallest focused validation.
+4. For prose or small seed corrections, inspect the rendered Pages result in the PR or after deploy.
+5. Use the complete release validation only for schema, recommendation, generator, executable-problem, or release changes.
 
-## Release sequencing lessons
+## Validation policy
 
-These are recurring operational rules, not topology-specific exceptions:
+Use the smallest task exposed by `optimization-compass validate`. The local content tasks check parsing, relations, licensing, and the focused authoring contract. They do not run the full Python suite, site build, or browser suite.
 
-- Treat a published dataset version as immutable. Decide and bump the version before the first `--publish`; if the generated artifact changes after publication, use a new patch version rather than trying to republish the old one.
-- Finalize generator and serialization code before preparing the release bundle. Regenerate `site/public/data` with the same CLI used by CI, and make numeric payload serialization platform-stable when `math`/libm output is hashed.
-- Record the exact source commit used to build the staged release. Do not make output-affecting generator, migration, fixture, or content changes after preparing the bundle without rebuilding the release metadata and bundle.
-- When the dataset version changes, search the repository for the previous version and update parity fixtures and other committed expectations before pushing. PR CI is the fastest place to catch stale version literals.
-- A green PR is not the publication finish line: after merge, verify the main-branch Pages workflow, browser/accessibility job, deploy smoke, public `deployment.json`, public `data/release.json`, release asset digest, and issue state.
+CI and main-branch Pages still run the broader artifact and release gates. Do not weaken generated-data identity, canonical data integrity, stable IDs, or deployment identity merely to shorten local feedback.
 
-## Validation tiers
-
-Each tier is runnable as one cross-platform command: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`; tier C = tier B plus site typecheck and browser E2E). `--list` prints a tier's checks without running them; `--format json` emits machine-readable results with stable rule codes. The composition is owned by `src/optimization_compass/validation_tasks.py` and tested against the lists below. POSIX users may call the same commands through `make tier-a` etc.
-
-Pull-request CI selects `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b` from the changed paths through `optimization-compass select-validation-task`; the workflow does not maintain a second test matrix. Backend/data/schema/generator/release and unknown paths select full Tier B. Draft/prose content uses Tier A; published content plus its deterministic indexes uses `content-ready`; site/workflow/test-contract and documentation-only changes use the smallest owning task. Pushes to `main` and scheduled/manual validation always run full Tier B; the full Playwright suite remains a visible nightly gate while its time-boxed quarantine Issues are open.
-
-For an existing canonical method article, use `author content method`, iterate with `validate content <content-id>`, and finish with `ready content <content-id>`. The ready command owns generated site indexes and prints the PR/Pages handoff. Ordinary content publication never runs the dataset-version publish flow.
-
-### Tier A — prose or existing-content correction
-
-```bash
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
-npm --prefix site test -- --run
-```
-
-### Tier B — Gallery, comparison, relations, or canonical data using existing contracts
-
-```bash
-uv run optimization-compass validate content-reports
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src
-uv run optimization-compass validate manifest
-uv run optimization-compass verify-data
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
-uv run pytest
-uv run python scripts/rebuild_dataset.py --stage
-npm --prefix site run parity
-npm --prefix site test -- --run
-npm --prefix site run build
-```
-
-### Tier C — executable problem, scenario, generator, renderer, schema, or release change
-
-Run Tier B plus the applicable browser and focused contract tests:
-
-```bash
-npm --prefix site run test:e2e
-```
+For an existing canonical method article, `ready content <content-id>` exports public data and runs the focused content contract. It no longer regenerates review reports as a side effect; report scripts remain available when a report is explicitly needed.
 
 A staged build is read-only with respect to published repository artifacts. Publishing is a separate atomic operation and must not be improvised in an ordinary content edit.
 

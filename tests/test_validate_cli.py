@@ -41,7 +41,7 @@ def test_every_task_names_a_known_gate() -> None:
 
 
 def test_tier_compositions_match_agents_documentation() -> None:
-    assert TASKS["tier-a"].check_codes == ("content.pages", "content.licensing", "site.unit")
+    assert TASKS["tier-a"].check_codes == ("content.pages", "content.licensing")
     assert TASKS["tier-b"].check_codes == (
         "content.report-drift",
         "python.lint",
@@ -120,9 +120,14 @@ def test_mixed_changes_escalate_to_the_highest_required_gate() -> None:
 def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() -> None:
     task = TASKS["content-ready"]
     assert task.gate == "content-ready"
-    assert task.check_codes[0] == "content.report-drift"
+    assert task.check_codes == (
+        "content.pages",
+        "content.licensing",
+        "content.publish-ready-tests",
+    )
     assert "content.publish-ready-tests" in task.check_codes
-    assert "site.build" in task.check_codes
+    assert "site.build" not in task.check_codes
+    assert "content.report-drift" not in task.check_codes
     assert "python.tests" not in task.check_codes
 
 
@@ -237,7 +242,6 @@ def test_run_task_stops_after_first_failure(monkeypatch: pytest.MonkeyPatch) -> 
     assert statuses == {
         "content.pages": "pass",
         "content.licensing": "fail",
-        "site.unit": "skip",
     }
 
 

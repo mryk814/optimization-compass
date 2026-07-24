@@ -21,6 +21,18 @@ _FENCED_CODE_PATTERN = re.compile(r"^```.*?^```$", re.MULTILINE | re.DOTALL)
 _DISPLAY_MATH_PATTERN = re.compile(r"^\$\$.*?^\$\$$", re.MULTILINE | re.DOTALL)
 _MARKDOWN_LINK_PATTERN = re.compile(r"\[([^\]]+)\]\([^)]+\)")
 _SENTENCE_PATTERN = re.compile(r"[^。！？]+[。！？]")
+_BARE_ENGLISH_PARTICLE_PATTERN = re.compile(
+    r"\b(?:cost|model|state|design|mesh|solver|tolerance|field|objective|constraint|"
+    r"gradient|residual|failure|success|boundary|load|scale|iteration|policy|reason|"
+    r"status|update|quality|parameter|geometry|physics|optimization|progress|valid|"
+    r"unknown|time|storage)(?:を|は|が|の|に|で|へ|と|も|だけ|した|する|しない|"
+    r"まで|から|より)"
+)
+_GLUED_ENGLISH_PATTERN = re.compile(
+    r"(?:statefield|designfield|statevariable|designvariable|"
+    r"失敗status|失敗theater|状態field|状態status|設計field|設計status)",
+    re.IGNORECASE,
+)
 _NONCANONICAL_HEADINGS = {
     "Python例": "Python",
     "見るべき診断値": "診断値",
@@ -176,6 +188,39 @@ def style_warnings(page: ContentPage) -> tuple[StyleWarning, ...]:
                             phrase,
                         )
                     )
+    return tuple(warnings)
+
+
+def language_contract_warnings(page: ContentPage) -> tuple[StyleWarning, ...]:
+    """Detect clear Japanese/English prose mixing in the article being prepared.
+
+    Canonical English terms, proper names, code, formulas, and identifiers remain allowed.
+    This check targets only English ordinary words joined directly to Japanese grammar or
+    glued into Japanese compounds. It is intentionally target-specific so legacy pages are
+    not made to fail merely because an unrelated article is being changed.
+    """
+    body = _FENCED_CODE_PATTERN.sub("", page.body)
+    body = _DISPLAY_MATH_PATTERN.sub("", body)
+    warnings: list[StyleWarning] = []
+    for line_number, raw_line in enumerate(body.splitlines(), start=1):
+        line = raw_line.strip()
+        if not line or line.startswith(("|", ":::", "![")):
+            continue
+        visible = _MARKDOWN_LINK_PATTERN.sub(r"\1", line)
+        visible = re.sub(r"`[^`]+`", "code", visible)
+        matches = [
+            *_BARE_ENGLISH_PARTICLE_PATTERN.finditer(visible),
+            *_GLUED_ENGLISH_PATTERN.finditer(visible),
+        ]
+        for match in matches:
+            warnings.append(
+                StyleWarning(
+                    page.content_id,
+                    "prose.language-mixing",
+                    line_number,
+                    match.group(0),
+                )
+            )
     return tuple(warnings)
 
 

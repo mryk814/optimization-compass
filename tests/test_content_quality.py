@@ -9,8 +9,8 @@ import pytest
 from optimization_compass.content_models import ContentPage, load_content
 from optimization_compass.content_quality import (
     inspect_concept,
+    language_contract_warnings,
     public_content_routes,
-    render_content_quality_report,
     require_published_concept_quality,
     style_warnings,
 )
@@ -42,18 +42,6 @@ def test_all_published_concepts_meet_the_publication_floor() -> None:
 
     assert rows
     assert all(row.meets_floor for row in rows)
-
-
-def test_committed_quality_report_matches_canonical_content() -> None:
-    root = Path(__file__).parents[1]
-    pages = _published_pages()
-    routes = _public_routes(pages)
-    rows = [inspect_concept(page, routes) for page in pages if page.kind == "concept"]
-
-    expected = render_content_quality_report(rows, load_content(root / "content"))
-    committed = (root / "docs/content-quality-report.md").read_text(encoding="utf-8")
-
-    assert committed == expected
 
 
 def test_concept_floor_requires_a_valid_next_route() -> None:
@@ -114,3 +102,15 @@ def test_style_warnings_are_review_signals() -> None:
         "sentence.commas",
         "sentence.long",
     }
+
+
+def test_language_contract_detects_bare_mixed_prose() -> None:
+    page = next(page for page in _published_pages() if page.kind == "concept")
+    noisy = replace(page, body="costを最小化し、状態fieldを更新します。")
+
+    warnings = language_contract_warnings(noisy)
+
+    assert [(warning.code, warning.detail) for warning in warnings] == [
+        ("prose.language-mixing", "costを"),
+        ("prose.language-mixing", "状態field"),
+    ]

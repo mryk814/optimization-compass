@@ -99,10 +99,10 @@ requires a summary of at least 35 characters, a body of at least 1,200 character
 sections, and at least one valid internal route under `## 次に読む`. Broken internal links in that
 section fail content verification.
 
-`docs/content-quality-report.md` records this publication floor and review-oriented prose warnings.
-Warnings cover unusually long sentences, dense Japanese comma use, meta prose, and legacy heading
-names. They expose existing debt without making unrelated legacy articles fail. The article passed
-to `ready content` must have no warnings, so a changed article cannot add new prose debt.
+`docs/content-quality-report.md` is an optional review report, not a publication dependency.
+Warnings cover unusually long sentences, dense Japanese comma use, meta prose, legacy heading names,
+and clear Japanese/English prose mixing. They are useful for a larger content batch, but ordinary
+article edits do not need to regenerate the report.
 
 Regenerate the report from canonical content with:
 
@@ -113,15 +113,9 @@ uv run python scripts/content_quality_report.py
 ## Verification
 
 ```powershell
-uv run --extra dev pytest tests/test_content_models.py
-uv run optimization-compass export-site-data --output site/public/data
-uv run python scripts/verify_content.py
-cd site
-npm.cmd run typecheck
-npm.cmd test -- --run
-npm.cmd run build
+uv run optimization-compass validate content
 ```
 
-Inspect at least one lesson containing math, Python, a table, a callout, a figure, and
-an external link at desktop and narrow viewport sizes. Tab through the TOC and links;
-focus must move to the selected heading without changing the app route.
+For a visible correction, check the rendered GitHub Pages preview or deployed page. Run the site
+build or browser checks only when the renderer, route, interaction, or generated artifact contract
+changed.

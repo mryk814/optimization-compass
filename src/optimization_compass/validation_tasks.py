@@ -163,15 +163,12 @@ CHECKS: tuple[ValidationCheck, ...] = (
     ),
     ValidationCheck(
         code="content.publish-ready-tests",
-        description="Published content, density-report, and authoring-contract tests.",
-        next_action="Complete the target article and regenerate it through `ready content`.",
+        description="Focused published-content authoring contract tests.",
+        next_action="Complete the target article and rerun `ready content`.",
         command=(
             _PYTHON_TOKEN,
             "-m",
             "pytest",
-            "tests/test_content_models.py",
-            "tests/test_content_quality.py",
-            "tests/test_method_content_density.py",
             "tests/test_content_authoring.py",
         ),
     ),
@@ -250,7 +247,7 @@ CHECKS: tuple[ValidationCheck, ...] = (
 
 _CHECKS_BY_CODE: dict[str, ValidationCheck] = {check.code: check for check in CHECKS}
 
-_TIER_A_CODES: tuple[str, ...] = ("content.pages", "content.licensing", "site.unit")
+_TIER_A_CODES: tuple[str, ...] = ("content.pages", "content.licensing")
 _TIER_B_CODES: tuple[str, ...] = (
     "content.report-drift",
     "python.lint",
@@ -278,12 +275,9 @@ _PR_FAST_CODES: tuple[str, ...] = (
     "site.build",
 )
 _CONTENT_READY_CODES: tuple[str, ...] = (
-    "content.report-drift",
     "content.pages",
     "content.licensing",
     "content.publish-ready-tests",
-    "site.unit",
-    "site.build",
 )
 
 TASKS: dict[str, ValidationTask] = {

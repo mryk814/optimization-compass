@@ -13,12 +13,12 @@ from pydantic import BaseModel, ConfigDict
 from optimization_compass.content_models import ContentPage, load_content, parse_content
 from optimization_compass.content_quality import (
     inspect_concept,
+    language_contract_warnings,
     public_content_routes,
-    render_content_quality_report,
     style_warnings,
 )
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.method_content_density import inspect_page, render_report
+from optimization_compass.method_content_density import inspect_page
 from optimization_compass.site_export import export_site_data
 from optimization_compass.validation_tasks import run_task, validation_task_for_paths
 
@@ -141,7 +141,7 @@ def require_publish_ready(
                 f"invalid={','.join(concept.invalid_next_links) or '-'})"
             )
     if strict_style:
-        warnings = style_warnings(page)
+        warnings = (*style_warnings(page), *language_contract_warnings(page))
         if warnings:
             summary = ", ".join(f"{warning.code}@{warning.line}" for warning in warnings[:8])
             if len(warnings) > 8:
@@ -220,26 +220,6 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
 
     output = root / "site/public/data"
     export_site_data(output, repository)
-    if page.kind == "method":
-        published_methods = [
-            item
-            for item in load_content(root / "content")
-            if item.status == "published" and item.kind == "method"
-        ]
-        rows = [
-            inspect_page(item)
-            for item in sorted(published_methods, key=lambda item: item.content_id)
-        ]
-        (root / "docs/method-content-density-report.md").write_text(
-            render_report(rows), encoding="utf-8", newline="\n"
-        )
-    published_concepts = [item for item in published_pages if item.kind == "concept"]
-    concept_rows = [inspect_concept(item, known_routes) for item in published_concepts]
-    (root / "docs/content-quality-report.md").write_text(
-        render_content_quality_report(concept_rows, pages),
-        encoding="utf-8",
-        newline="\n",
-    )
 
     public_routes = _require_public_artifacts(page, output)
     result = run_task("content-ready", root, capture=False)
@@ -254,12 +234,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
             f"generated change set selected unexpected PR gate {selected.task}; "
             "split unrelated changes"
         )
-    generated = tuple(
-        path
-        for path in changed
-        if path.startswith("site/public/data/")
-        or path in {"docs/method-content-density-report.md", "docs/content-quality-report.md"}
-    )
+    generated = tuple(path for path in changed if path.startswith("site/public/data/"))
     return ReadyContentReport(
         content_id=content_id,
         canonical_path=source_path.relative_to(root).as_posix(),

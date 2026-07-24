@@ -3,7 +3,7 @@
 - Published concept guides: `22`
 - Meeting the concept floor: `22`
 - Below the concept floor: `0`
-- Prose review warnings: `518`
+- Prose review warnings: `516`
 
 ## Concept publication floor
 
@@ -18,7 +18,7 @@
 | `concept.manifold` | 64 | 3979 | 6 | 3 | 0 | pass |
 | `concept.nested-equilibrium-complementarity-hybrid` | 73 | 6007 | 9 | 5 | 0 | pass |
 | `concept.path-terminal-constraints` | 62 | 1832 | 5 | 3 | 0 | pass |
-| `concept.pde-constrained-optimization` | 63 | 5367 | 9 | 5 | 0 | pass |
+| `concept.pde-constrained-optimization` | 72 | 4652 | 9 | 5 | 0 | pass |
 | `concept.receding-horizon` | 75 | 1999 | 5 | 4 | 0 | pass |
 | `concept.simplex` | 68 | 3631 | 7 | 3 | 0 | pass |
 | `concept.so3-rotation-representation` | 92 | 3062 | 8 | 4 | 0 | pass |
@@ -36,7 +36,7 @@
 
 - `prose.meta`: 1
 - `sentence.commas`: 335
-- `sentence.long`: 182
+- `sentence.long`: 180
 
 | Content | Warnings |
 |---|---:|
@@ -68,7 +68,7 @@
 | `concept.manifold` | 5 |
 | `concept.nested-equilibrium-complementarity-hybrid` | 17 |
 | `concept.path-terminal-constraints` | 1 |
-| `concept.pde-constrained-optimization` | 17 |
+| `concept.pde-constrained-optimization` | 15 |
 | `concept.receding-horizon` | 5 |
 | `concept.simplex` | 5 |
 | `concept.so3-rotation-representation` | 0 |

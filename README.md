@@ -131,20 +131,16 @@ uv run optimization-compass recommend examples/binary_linear.json
 
 ## Validation
 
+普段の編集は、変更箇所に対応する最小のタスクだけを実行します。
+
 ```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src
-uv run pytest
-uv run optimization-compass verify-data
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
-uv run python scripts/rebuild_dataset.py --stage
-uv run python scripts/sync_readme_facts.py --check
-npm --prefix site run parity
-npm --prefix site test -- --run
-npm --prefix site run build
+uv run optimization-compass validate content
+uv run optimization-compass validate gallery
 ```
+
+スキーマ、推薦ロジック、生成器、実行可能問題、リリースを変更したときだけ、
+`validate tier-b` / `validate tier-c` を使います。公開後はGitHub PagesのCIが生成物・ビルド・重要導線を確認します。
+詳しい入口は [`docs/adding-knowledge.md`](docs/adding-knowledge.md) を参照してください。
 
 ## Contributing
 

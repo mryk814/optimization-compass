@@ -7,7 +7,6 @@ import pytest
 from optimization_compass.content_models import load_content
 from optimization_compass.content_validation import require_published_method_references
 from optimization_compass.db import KnowledgeRepository
-from optimization_compass.method_content_density import inspect_page, render_report
 
 MINIMUM_PUBLISHED_METHOD_GUIDES = 67
 MINIMUM_SUMMARY_CHARACTERS = 35
@@ -135,19 +134,6 @@ def test_published_method_guides_reference_canonical_methods() -> None:
         ),
     ):
         require_published_method_references([invalid_page], known_methods)
-
-
-def test_committed_density_report_matches_published_method_guides() -> None:
-    root = Path(__file__).resolve().parents[1]
-    pages = [
-        page
-        for page in load_content(root / "content")
-        if page.status == "published" and page.kind == "method"
-    ]
-    rows = [inspect_page(page) for page in sorted(pages, key=lambda item: item.content_id)]
-
-    committed = (root / "docs/method-content-density-report.md").read_text(encoding="utf-8")
-    assert committed == render_report(rows)
 
 
 def test_family_choice_guides_use_the_beginner_first_contract() -> None:

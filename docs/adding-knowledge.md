@@ -197,12 +197,11 @@ uv run optimization-compass ready content example-method
 
 The target-specific iteration check parses only the named article and verifies its canonical method,
 source, and content-relation IDs; it intentionally allows a draft and placeholders. `ready content`
-replaces generated indexes from canonical inputs, validates the canonical method and
-source IDs, rejects placeholders and future review dates, enforces the published method density
-floor, regenerates `site/public/data`, refreshes the density report, proves the content/search/
-retrieval/entity-link entries and routes, runs `content-ready`, and prints the exact files, PR gate,
-and post-merge URLs. If it is green, do not additionally run dataset staging or dataset publish for
-an ordinary existing-entity article.
+exports `site/public/data` from canonical inputs, validates the canonical method and source IDs,
+rejects placeholders and future review dates, enforces the published method density floor, runs the
+focused `content-ready` checks, and prints the exact files, PR gate, and post-merge URLs. Reports can
+be regenerated separately when a batch review needs them. If it is green, do not additionally run
+dataset staging or dataset publish for an ordinary existing-entity article.
 
 Draft pages are not public inputs: site export, search, retrieval, and entity links include only
 `status: published` content. A draft-only PR therefore remains a Tier A change without generated
@@ -586,37 +585,26 @@ Do not publish as an incidental step in a prose, Gallery, or ordinary content PR
 
 ## 17. Validation matrix
 
-| Change | Minimum focused checks | Full stage | Site parity/build | Browser E2E |
-|---|---|---:|---:|---:|
-| Prose correction | content + licensing | when generated relations change | tests | no |
-| Existing-entity draft | `validate content` / Tier A | no | tests | no |
-| Existing-entity published article | `ready content <id>` / `content-ready` | no | generated indexes + tests/build | critical journeys in PR |
-| Gallery case | content + data + site export tests | yes | tests/build | journey changes |
-| Comparison | content + site export tests | yes | parity/tests/build | route/interaction changes |
-| Problem instance | ruff + mypy + pytest | yes | tests/build | scenario changes |
-| Method/implementation/source | full Python/data/licensing | yes | parity/tests/build | public journey changes |
-| Scenario/generator/renderer | full Python/data/licensing | yes | parity/tests/build | yes |
-| Release/schema/recommendation | complete repository validation | yes | yes | yes |
+| Change | Local minimum | CI / release escalation |
+|---|---|---|
+| Prose correction | `validate content` | Pages review; no full suite |
+| Existing-entity draft | `validate content` | Pages review when published |
+| Existing-entity published article | `ready content <id>` | Pages artifact and critical journeys in CI |
+| Gallery case | `validate gallery` | Tier B when merged |
+| Comparison | `validate comparison` | Tier B when merged |
+| Problem instance | `validate problem` | Tier C and scenario checks |
+| Method/implementation/source | focused data checks | Tier B/C and staged release |
+| Scenario/generator/renderer | focused contract checks | Tier C and browser checks |
+| Release/schema/recommendation | explicit release plan | complete repository validation |
 
-The validation tiers from `AGENTS.md` are runnable as single cross-platform commands: `uv run optimization-compass validate tier-a` (likewise `tier-b`, `tier-c`). Focused iteration subsets exist per task (`validate content`, `validate gallery`, `validate comparison`, `validate problem`, `validate manifest`). Published content uses the complete `ready content <id>` handoff and its `content-ready` gate. `--list` shows a task's checks, `--format json` emits stable rule codes.
+The focused commands are intentionally small. `tier-b` and `tier-c` are for changes that can alter
+canonical data, executable behavior, generated artifacts, or release identity; CI remains the place
+where the broader proof runs. `--list` shows a task's checks and `--format json` is available for
+automation.
 
-Common commands:
-
-```bash
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src
-uv run pytest
-uv run optimization-compass verify-data
-uv run python scripts/verify_content.py
-uv run python scripts/verify_licensing.py
-uv run python scripts/rebuild_dataset.py --stage
-npm --prefix site run typecheck
-npm --prefix site run parity
-npm --prefix site test -- --run
-npm --prefix site run build
-npm --prefix site run test:e2e
-```
+For ordinary edits, use the focused command in the matrix. For a contract or release change, use
+the named `tier-b` / `tier-c` task instead of copying a long command list; the registry is the
+single source of truth for its checks.
 
 ## 18. Pull request expectations
 
