@@ -51,3 +51,13 @@ def test_shape_slice_makes_geometry_and_discretization_limits_observable() -> No
     assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in shape_body
     assert "parameter → geometry → mesh → physical state" in shape_body
     assert style_warnings(shape) == ()
+    failure = pages["geometry-update-failure-modes"]
+    assert failure.visualization_ids == (
+        "shape-diffuser-valid-update",
+        "shape-diffuser-invalid-geometry",
+    )
+    assert failure.comparison_ids == ("COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",)
+    assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE" in failure_body
+    assert "#/theater/learning/SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY" in failure_body
+    assert "#/compare/COMPARE_SHAPE_TOPOLOGY_REPRESENTATION" in failure_body
+    assert style_warnings(failure) == ()
