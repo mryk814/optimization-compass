@@ -11,7 +11,7 @@ describe("gallery contract", () => {
     );
 
     expect(index.contract_version).toBe("2.0.0");
-    expect(index.cases).toHaveLength(18);
+    expect(index.cases).toHaveLength(30);
     expect(index.cases.find((item) => item.case_id === "constrained-design")?.visualization_ids)
       .toContain("constrained-disk-feasible-region");
     expect(index.cases.every((item) => item.candidate_methods.length > 0)).toBe(true);
