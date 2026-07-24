@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "entities": [
     {
       "aliases": [],
@@ -661,6 +661,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_ACTIVE_SET_QP",
           "target_type": "method"
@@ -734,6 +739,16 @@
           "relation_type": "problem",
           "target_id": "PA043",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -3213,6 +3228,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -3311,6 +3331,16 @@
           "relation_type": "problem",
           "target_id": "PA026",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -4784,6 +4814,72 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
+      "entity_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "反復MPC QPでwarm startとdeadline余裕を読む",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "EC025",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC025",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "repeated-mpc-qp-cold-start",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "repeated-mpc-qp-warm-start",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。"
     },
     {
       "aliases": [],
@@ -18379,6 +18475,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "M_ACTIVE_SET_QP",
           "target_type": "method"
@@ -18449,9 +18550,19 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA043",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "scenario"
         }
       ],
       "summary": "同じ構造でパラメータだけ変わるMPCの二次計画問題を、100Hzの期限内で繰り返し解きたい。"
@@ -20771,6 +20882,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -20778,6 +20894,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S005",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
           "target_type": "source"
         },
         {
@@ -20802,6 +20923,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S053",
           "target_type": "source"
         },
@@ -20813,6 +20939,11 @@
         {
           "relation_type": "evidence",
           "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
           "target_type": "source"
         },
         {
@@ -20841,9 +20972,19 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA026",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "scenario"
         }
       ],
       "summary": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。"
@@ -22309,6 +22450,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S004",
           "target_type": "source"
@@ -22367,6 +22513,16 @@
           "relation_type": "learning",
           "target_id": "admm-qp",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "repeated-mpc-qp-cold-start",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "repeated-mpc-qp-warm-start",
+          "target_type": "trace"
         }
       ],
       "summary": "準定値QPをoperator splittingで反復解法。"
@@ -30090,6 +30246,98 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "反復MPC QP: cold startのdeadline ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "repeated-mpc-qp-cold-start",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC025",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "反復MPC QP: warm startのdeadline ledger",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "repeated-mpc-qp-warm-start",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S012",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S043",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S076",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC025",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "追従誤差、QP残差、反復数、deadline余裕を制御周期ごとに分けて読む。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY",
       "entity_type": "scenario",
       "external_url": null,
@@ -32800,6 +33048,58 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/traces/repeated-mpc-qp-cold-start",
+      "entity_id": "repeated-mpc-qp-cold-start",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "repeated-mpc-qp-cold-start",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/repeated-mpc-qp-warm-start",
+      "entity_id": "repeated-mpc-qp-warm-start",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "repeated-mpc-qp-warm-start",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_ADMM_QP",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/shape-diffuser-invalid-geometry",
       "entity_id": "shape-diffuser-invalid-geometry",
       "entity_type": "trace",
@@ -33311,6 +33611,26 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_PORTFOLIO_NOMINAL_8_4",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_REPEATED_MPC_QP_WARM_START",
       "relations": [],
       "summary": ""
     },

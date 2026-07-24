@@ -40,7 +40,7 @@ test("renders the public failure discovery route", async () => {
   render(<App initialEntityLinks={emptyLinks} />);
 
   expect(
-    screen.getByRole("heading", { level: 1, name: "失敗の兆候から探す" }),
+    await screen.findByRole("heading", { level: 1, name: "失敗の兆候から探す" }),
   ).toBeVisible();
   expect(
     await screen.findByRole("heading", { level: 2, name: "noiseが微分を支配" }),

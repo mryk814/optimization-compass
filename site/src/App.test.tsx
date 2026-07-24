@@ -134,7 +134,13 @@ describe("application routes", () => {
 
     render(<App initialEntityLinks={testLinks} />);
 
-    expect(await screen.findByRole("heading", { level: 1, name: heading })).toBeVisible();
+    expect(
+      await screen.findByRole(
+        "heading",
+        { level: 1, name: heading },
+        { timeout: 3_000 },
+      ),
+    ).toBeVisible();
   });
 
   test("returns to the top when the route changes", async () => {

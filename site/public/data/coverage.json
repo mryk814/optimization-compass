@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "expectations": [
     {
       "applicability": "expected",
@@ -1668,12 +1668,13 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
-            "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4"
+            "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+            "COMPARE_REPEATED_MPC_QP_WARM_START"
           ]
         },
         "content": {
@@ -1734,7 +1735,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 52,
+          "count": 55,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1748,6 +1749,7 @@
             "/methods/M_SIMPLEX",
             "COMPARE_ENERGY_NOMINAL_CVAR_8_4",
             "COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+            "COMPARE_REPEATED_MPC_QP_WARM_START",
             "EC025",
             "I_ACADOS",
             "I_CLARABEL",
@@ -1789,7 +1791,9 @@
             "portfolio-cvar-allocation",
             "portfolio-nominal-8-4",
             "primal-dual-conic",
-            "primal-simplex"
+            "primal-simplex",
+            "repeated-mpc-qp-cold-start",
+            "repeated-mpc-qp-warm-start"
           ]
         },
         "recommendation": {
@@ -1831,12 +1835,14 @@
           ]
         },
         "visualization": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "portfolio-cvar-8-4",
-            "portfolio-nominal-8-4"
+            "portfolio-nominal-8-4",
+            "repeated-mpc-qp-cold-start",
+            "repeated-mpc-qp-warm-start"
           ]
         }
       },
@@ -3505,12 +3511,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_REPEATED_MPC_QP_WARM_START"
+          ]
         },
         "content": {
           "count": 1,
@@ -3547,11 +3553,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 14,
+          "count": 17,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_ADMM_QP",
+            "COMPARE_REPEATED_MPC_QP_WARM_START",
             "EC025",
             "I_ACADOS",
             "I_CVXPY",
@@ -3564,7 +3571,9 @@
             "S016",
             "S055",
             "S062",
-            "admm-qp"
+            "admm-qp",
+            "repeated-mpc-qp-cold-start",
+            "repeated-mpc-qp-warm-start"
           ]
         },
         "recommendation": {
@@ -3596,12 +3605,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "repeated-mpc-qp-cold-start",
+            "repeated-mpc-qp-warm-start"
+          ]
         }
       },
       "label": "ADMM/operator-splitting QP",

@@ -8,7 +8,7 @@
     "report_path": "coverage.md",
     "version": "1.0.0"
   },
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "derived_media": {
     "path": "media/manifest.json",
     "version": "1.1.0"
@@ -84,11 +84,11 @@
     "version": "1.0.0"
   },
   "traces": {
-    "bytes": 14303,
+    "bytes": 15103,
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "8c48f5afda0e382ab3069fc08cba01905619644a38b3c8047124b9d4588f4c01"
+    "sha256": "3041f63b955bd7e023090d0795a8dea53c4744bf91aa93db2520fd0fa40ce63a"
   },
   "version": "1.4.0",
   "views": [

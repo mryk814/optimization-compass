@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "entries": [
     {
       "canonical_route": "/failures?entry=case%3AEC013%3AM_NELDER_MEAD",
@@ -293,7 +293,10 @@
       "mitigations": [],
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_REPEATED_MPC_QP_COLD_START",
+        "SCENARIO_REPEATED_MPC_QP_WARM_START"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -1402,7 +1405,10 @@
       "mitigations": [],
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_REPEATED_MPC_QP_COLD_START",
+        "SCENARIO_REPEATED_MPC_QP_WARM_START"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -2105,7 +2111,7 @@
   "generated_at": "2026-07-24T00:00:00Z",
   "summary": {
     "case_exclusion_count": 30,
-    "entries_with_scenarios": 28,
+    "entries_with_scenarios": 30,
     "structured_failure_count": 12,
     "total_entries": 42
   }

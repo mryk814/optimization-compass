@@ -209,7 +209,9 @@
         }
       ],
       "case_id": "shift-scheduling",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_REPEATED_MPC_QP_WARM_START"
+      ],
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
@@ -308,7 +310,9 @@
       "title_ja": "必要人数と希望を両立してシフトを組む",
       "variable_domain": "固定教材では4名・3日・日勤／夜勤の割当 $x\\in X=\\{0,1\\}^{4\\times3\\times2}$。$x_{s,d,h}=1$ はスタッフ $s$ を日 $d$ の勤務帯 $h$ へ割り当てること、0は割り当てないことを表す。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_REPEATED_MPC_QP_WARM_START",
+        "SCENARIO_REPEATED_MPC_QP_COLD_START"
       ]
     },
     {
@@ -992,7 +996,9 @@
         }
       ],
       "case_id": "EC025",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_REPEATED_MPC_QP_WARM_START"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_ACTIVE_SET_QP",
@@ -1074,7 +1080,9 @@
       "title_ja": "100Hzで反復MPCの二次計画問題を解く",
       "variable_domain": "固定教材では予測horizon $N=4$、状態1次元・入力1次元とし、$z=(x_1,\\ldots,x_4,u_0,\\ldots,u_3)\\in X=\\mathbb{R}^8$。線形動力学と状態・入力boundsが、この空間から実行可能領域を切り出す。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_REPEATED_MPC_QP_WARM_START",
+        "SCENARIO_REPEATED_MPC_QP_COLD_START"
       ]
     },
     {
@@ -2983,5 +2991,5 @@
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.12"
+  "dataset_version": "0.18.13"
 }

@@ -1,7 +1,7 @@
 {
   "contract_version": "1.0.0",
   "data_version": "1.0.0",
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "traces": [
     {
       "method_id": "M_NELDER_MEAD",
@@ -232,6 +232,26 @@
       "title_en": "CVaR allocation · training / held-out diagnostics",
       "title_ja": "CVaR配分 · training / held-out診断",
       "trace_id": "portfolio-cvar-8-4"
+    },
+    {
+      "method_id": "M_ADMM_QP",
+      "objective_id": "INSTANCE_REPEATED_MPC_QP_EC025",
+      "path": "repeated-mpc-qp-warm-start.json",
+      "profile_id": "PROFILE_REPEATED_MPC_QP",
+      "scenario_id": "SCENARIO_REPEATED_MPC_QP_WARM_START",
+      "title_en": "repeated-mpc-qp-warm-start",
+      "title_ja": "repeated-mpc-qp-warm-start",
+      "trace_id": "repeated-mpc-qp-warm-start"
+    },
+    {
+      "method_id": "M_ADMM_QP",
+      "objective_id": "INSTANCE_REPEATED_MPC_QP_EC025",
+      "path": "repeated-mpc-qp-cold-start.json",
+      "profile_id": "PROFILE_REPEATED_MPC_QP",
+      "scenario_id": "SCENARIO_REPEATED_MPC_QP_COLD_START",
+      "title_en": "repeated-mpc-qp-cold-start",
+      "title_ja": "repeated-mpc-qp-cold-start",
+      "trace_id": "repeated-mpc-qp-cold-start"
     },
     {
       "method_id": "M_ADJOINT_SENSITIVITY",

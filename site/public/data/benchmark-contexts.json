@@ -1202,10 +1202,88 @@
         "relative": 1e-06
       },
       "tuning_policy": "documented defaults; no per-instance winner tuning"
+    },
+    {
+      "category": "QP",
+      "context_id": "BENCH_REPEATED_MPC_QP_EC025_4",
+      "context_version": "1.0.0",
+      "dimension": 8,
+      "evaluation_budget": 4,
+      "hardware": {
+        "reason": "deterministic educational iteration-to-latency ledger; no CPU or wall-clock benchmark",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.repeated_mpc_qp.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0.0
+        ],
+        "policy": "same_initial_state_each_member",
+        "reference": 1.0
+      },
+      "last_verified": "2026-07-24",
+      "oracle_budget": {
+        "limit": 4,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "tracking_error",
+        "primal_residual",
+        "dual_residual",
+        "solver_iterations",
+        "solve_time_ms",
+        "deadline_margin_ms"
+      ],
+      "problem_instance_id": "INSTANCE_REPEATED_MPC_QP_EC025",
+      "problem_variant": "fixed scalar repeated MPC QP; warm-start sensitivity under an educational timing ledger",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.repeated_mpc_qp.v1",
+        "generator_version": "1.0.0",
+        "precision": "float64",
+        "runtime": "deterministic_educational_ledger"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S012",
+        "S043",
+        "S076"
+      ],
+      "sparsity": {
+        "control_dimension": 1,
+        "horizon": 4,
+        "state_dimension": 1,
+        "structure": "banded_linear_dynamics"
+      },
+      "status_mapping": {
+        "deadline": "educational_ledger_only",
+        "hardware_measurement": "not_applicable",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "four_control_cycles",
+        "value": 4
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "deadline_ms": 3.0,
+        "dual_residual": 1e-05,
+        "primal_residual": 1e-05
+      },
+      "tuning_policy": "horizon, dynamics, reference, bounds, residual ledger, deadline policy, and iteration-to-latency model fixed before comparing warm-start reuse"
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.12",
+  "dataset_version": "0.18.13",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"
