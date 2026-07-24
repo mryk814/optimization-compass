@@ -154,8 +154,8 @@
         }
       ],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE", "SCENARIO_REPEATED_MPC_QP_WARM_START", "SCENARIO_REPEATED_MPC_QP_COLD_START"],
-      "comparison_ids": ["COMPARE_REPEATED_MPC_QP_WARM_START"],
+      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
+      "comparison_ids": [],
       "source_ids": ["S022", "S053", "S054", "S055", "S079"],
       "difficulty": "intro",
       "status": "published",
