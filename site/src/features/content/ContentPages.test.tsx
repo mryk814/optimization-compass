@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import rawContent from "../../../public/data/content.json";
@@ -8,6 +8,7 @@ import { parseContentIndex } from "../../contracts/atlas-content";
 import { parseEntityLinkIndex } from "../../contracts/entity-links";
 import { EntityLinkProvider } from "../../state/entity-links";
 import {
+  ContentPage,
   ContentIndexPage,
   contentFilterCounts,
   filterAndRankContentPages,
@@ -21,6 +22,18 @@ function renderPage() {
     <EntityLinkProvider initialIndex={entityLinks}>
       <MemoryRouter>
         <ContentIndexPage />
+      </MemoryRouter>
+    </EntityLinkProvider>,
+  );
+}
+
+function renderDetail(contentId: string) {
+  return render(
+    <EntityLinkProvider initialIndex={entityLinks}>
+      <MemoryRouter initialEntries={[`/learn/${contentId}`]}>
+        <Routes>
+          <Route element={<ContentPage />} path="/learn/:contentId" />
+        </Routes>
       </MemoryRouter>
     </EntityLinkProvider>,
   );
@@ -80,6 +93,30 @@ describe("ContentIndexPage", () => {
     await waitFor(() => expect(screen.getByText("0件")).toBeInTheDocument());
     expect(screen.getByText("一致する教材が見つかりません。種類か検索語を変えてください。"))
       .toBeVisible();
+  });
+
+  test("hides an empty related-links row and labels connected routes for readers", async () => {
+    renderDetail("concept.spd-matrix-geometry");
+    expect(await screen.findByRole("heading", { name: "SPD matrixの表現と境界" }))
+      .toBeVisible();
+    expect(screen.queryByText("関連する動き・比較")).not.toBeInTheDocument();
+    cleanup();
+
+    renderDetail("concept.pde-constrained-optimization");
+    expect(await screen.findByRole("heading", { name: "PDE制約付き最適化" })).toBeVisible();
+
+    const page = content.pages.find(
+      (item) => item.content_id === "concept.pde-constrained-optimization",
+    );
+    const trace = entityLinks.entities.find(
+      (entity) => entity.entity_type === "trace"
+        && entity.entity_id === page?.visualization_ids[0],
+    );
+    expect(trace).toBeDefined();
+    expect(screen.getByRole("link", { name: `動きを見る: ${trace!.label}` })).toBeVisible();
+    expect(screen.getByRole("link", { name: "比較条件を見る" })).toBeVisible();
+    expect(screen.queryByText(page!.visualization_ids[0])).not.toBeInTheDocument();
+    expect(screen.queryByText(page!.comparison_ids[0])).not.toBeInTheDocument();
   });
 });
 

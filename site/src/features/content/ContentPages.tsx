@@ -178,14 +178,93 @@ function hasConnectedLearning(page: AtlasContentPage): boolean {
 
 export function ContentPage() {
   const links = useEntityLinks();
-  const { contentId = "" } = useParams(); const [page, setPage] = useState<AtlasContentPage>(); const [error, setError] = useState<Error>();
-  useEffect(() => { setPage(undefined); setError(undefined); void loadContent().then((index) => { const found = index.pages.find((item) => item.content_id === contentId); if (!found) { setError(new EntityNotFoundError("教材ID", contentId)); return; } setPage(found); }, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, [contentId]);
-  useEffect(() => { if (!page) return; document.title = `${page.title_ja} | Optimization Compass`; const meta = document.querySelector('meta[name="description"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" })); meta.setAttribute("content", page.summary); }, [page]);
+  const { contentId = "" } = useParams();
+  const [page, setPage] = useState<AtlasContentPage>();
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    setPage(undefined);
+    setError(undefined);
+    void loadContent().then(
+      (index) => {
+        const found = index.pages.find((item) => item.content_id === contentId);
+        if (!found) {
+          setError(new EntityNotFoundError("教材ID", contentId));
+          return;
+        }
+        setPage(found);
+      },
+      (caught: unknown) => setError(
+        caught instanceof Error ? caught : new Error(String(caught)),
+      ),
+    );
+  }, [contentId]);
+
+  useEffect(() => {
+    if (!page) return;
+    document.title = `${page.title_ja} | Optimization Compass`;
+    const meta = document.querySelector('meta[name="description"]')
+      ?? document.head.appendChild(Object.assign(document.createElement("meta"), {
+        name: "description",
+      }));
+    meta.setAttribute("content", page.summary);
+  }, [page]);
+
   if (error instanceof EntityNotFoundError) return <NotFoundPage detail={error.message} />;
-  const destination = (type: "trace" | "comparison", id: string) => links.status === "ready"
-    ? findEntity(links.index, type, id)?.canonical_url
-    : undefined;
-  return <section className="atlas-page content-detail"><p className="eyebrow">{page ? (page.kind === "method" ? "手法" : "概念") : "教材"}</p><h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>{error && <p className="atlas-error" role="alert">{error.message}</p>}{page && <><CompiledContent page={page} /><LearningRelations entityId={page.canonical_entity_id} entityType={page.canonical_entity_type} /><div className="content-links"><strong>関連リンク</strong>{page.visualization_ids.map((id) => destination("trace", id) ? <Link key={id} to={destination("trace", id)!}>{id}</Link> : null)}{page.comparison_ids.map((id) => destination("comparison", id) ? <Link key={id} to={destination("comparison", id)!}>{id}</Link> : null)}</div><small>確認日 {page.last_reviewed}</small><EvidenceLinks sourceIds={page.source_ids} /></>}</section>;
+
+  const relatedLinks = page && links.status === "ready"
+    ? [
+        ...page.visualization_ids.flatMap((id) => {
+          const entity = findEntity(links.index, "trace", id);
+          return entity?.canonical_url
+            ? [{
+                key: `trace:${id}`,
+                label: `動きを見る: ${entity.label}`,
+                to: entity.canonical_url,
+              }]
+            : [];
+        }),
+        ...page.comparison_ids.flatMap((id, index) => {
+          const entity = findEntity(links.index, "comparison", id);
+          return entity?.canonical_url
+            ? [{
+                key: `comparison:${id}`,
+                label: page.comparison_ids.length > 1
+                  ? `比較条件を見る ${index + 1}`
+                  : "比較条件を見る",
+                to: entity.canonical_url,
+              }]
+            : [];
+        }),
+      ]
+    : [];
+
+  return (
+    <section className="atlas-page content-detail">
+      <p className="eyebrow">{page ? (page.kind === "method" ? "手法" : "概念") : "教材"}</p>
+      <h1>{page?.title_ja ?? "教材を読み込み中…"}</h1>
+      {error && <p className="atlas-error" role="alert">{error.message}</p>}
+      {page && (
+        <>
+          <CompiledContent page={page} />
+          <LearningRelations
+            entityId={page.canonical_entity_id}
+            entityType={page.canonical_entity_type}
+          />
+          {relatedLinks.length > 0 && (
+            <nav aria-label="関連する動きと比較" className="content-links">
+              <strong>関連する動き・比較</strong>
+              {relatedLinks.map((item) => (
+                <Link key={item.key} to={item.to}>{item.label}</Link>
+              ))}
+            </nav>
+          )}
+          <small>確認日 {page.last_reviewed}</small>
+          <EvidenceLinks sourceIds={page.source_ids} />
+        </>
+      )}
+    </section>
+  );
 }
 
 async function loadContent() { const response = await fetch(`${siteBaseUrl()}data/content.json`); if (!response.ok) throw new Error(`Content request failed (${response.status}).`); return parseContentIndex(await response.json()); }
