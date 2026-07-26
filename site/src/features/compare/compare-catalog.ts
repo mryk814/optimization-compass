@@ -55,6 +55,7 @@ const rendererFamilyLabels: Record<ComparisonRendererFamily, string> = {
   feasible_region: "実行可能領域",
   pareto_front: "パレート前線",
   field_evolution: "設計fieldの進化",
+  assignment_schedule: "勤務シフト表",
 };
 
 export function buildComparisonCatalog(comparisons: ComparisonSet[]): ComparisonCatalogSection[] {

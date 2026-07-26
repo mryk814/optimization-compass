@@ -1,11 +1,56 @@
 import { useMemo, useState } from "react";
 
-import type { FeasibleRegionArtifact, ParetoFrontArtifact, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
+import type { FeasibleRegionArtifact, ParetoFrontArtifact, ShiftScheduleArtifact, TriObjectiveLens, TriObjectivePoint } from "../../contracts/learning-slices";
 import type { FieldEvolutionPayload } from "../../contracts/field-evolution";
 
 const SIZE = 360;
 const LEFT = 70;
 const TOP = 38;
+
+export function AssignmentScheduleRenderer({ artifact }: { artifact: ShiftScheduleArtifact }) {
+  const days = [...new Map(artifact.assignments.map((item) => [item.day_id, item.day_label_ja])).entries()];
+  const shifts = [...new Map(artifact.assignments.map((item) => [item.shift_id, item.shift_label_ja])).entries()];
+  const assignment = (dayId: string, shiftId: string) => artifact.assignments.find((item) => item.day_id === dayId && item.shift_id === shiftId)!;
+  const maximumLoad = Math.max(...artifact.workloads.map((item) => item.assigned_shifts), 1);
+  return (
+    <section className="learning-renderer shift-schedule-renderer" aria-labelledby={`shift-schedule-${artifact.artifact_id}`}>
+      <div className="learning-renderer-heading">
+        <div><p className="eyebrow">勤務表 (assignment_schedule) · 1.0.0</p><h2 id={`shift-schedule-${artifact.artifact_id}`}>{artifact.title_ja}</h2></div>
+        <strong>hard違反 {artifact.metrics.hard_violations}</strong>
+      </div>
+      <p className="projection-disclosure"><strong>見る順番:</strong> 各枠の担当 → 希望一致 → 人ごとの勤務数。色だけでなく、勤務帯・担当者・「希望」を文字で示します。</p>
+      <div className="shift-schedule-layout">
+        <table className="shift-schedule-table">
+          <caption>{artifact.text_alternative_ja}</caption>
+          <thead><tr><th scope="col">勤務帯</th>{days.map(([dayId, label]) => <th key={dayId} scope="col">{label}</th>)}</tr></thead>
+          <tbody>
+            {shifts.map(([shiftId, shiftLabel]) => (
+              <tr key={shiftId}>
+                <th scope="row">{shiftLabel}</th>
+                {days.map(([dayId]) => {
+                  const item = assignment(dayId, shiftId);
+                  return <td className={item.requested ? "is-requested" : undefined} key={dayId}><strong>{item.staff_label_ja}</strong><span>{item.requested ? "希望" : "割当"}</span></td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <section className="shift-workloads" aria-labelledby={`shift-workloads-${artifact.artifact_id}`}>
+          <h3 id={`shift-workloads-${artifact.artifact_id}`}>人ごとの勤務数</h3>
+          <ul>{artifact.workloads.map((item) => <li key={item.staff_id}><span>{item.staff_label_ja}</span><span className="shift-workload-track" aria-hidden="true"><i style={{ width: `${item.assigned_shifts / maximumLoad * 100}%` }} /></span><strong>{item.assigned_shifts}</strong></li>)}</ul>
+        </section>
+      </div>
+      <dl className="comparison-policy-grid shift-schedule-metrics" aria-label="勤務表の評価">
+        <div><dt>希望充足</dt><dd>{artifact.metrics.fulfilled_requests} / 6</dd></div>
+        <div><dt>勤務数の最大差</dt><dd>{artifact.metrics.workload_range}</dd></div>
+        <div><dt>hard違反</dt><dd>{artifact.metrics.hard_violations}</dd></div>
+        <div><dt>目的値</dt><dd>{artifact.metrics.canonical_objective}</dd></div>
+      </dl>
+      <details><summary>固定したhard制約と証明範囲</summary><ul>{artifact.hard_constraints_ja.map((item) => <li key={item}>{item}</li>)}</ul><p>4096候補を完全列挙し、可行な勤務表は{artifact.metrics.feasible_schedules}件でした。</p></details>
+      <p className="atlas-note">{artifact.limitations_ja}</p>
+    </section>
+  );
+}
 
 export function FeasibleRegionRenderer({ artifact }: { artifact: FeasibleRegionArtifact }) {
   const primary = artifact.paths.find((path) => path.role === "constraint_aware")!;

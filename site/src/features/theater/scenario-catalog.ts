@@ -78,6 +78,7 @@ export function scenarioRoute(scenario: VisualizationScenario): string {
     case "feasible_region":
     case "pareto_front":
     case "field_evolution":
+    case "assignment_schedule":
       return `/theater/learning/${scenario.scenario_id}`;
   }
 }
@@ -118,6 +119,7 @@ function scenarioDomain(scenario: VisualizationScenario): TheaterDomain {
   if (renderer === "feasible_region") return "constrained";
   if (renderer === "pareto_front") return "multi-objective";
   if (renderer === "field_evolution") return "constrained";
+  if (renderer === "assignment_schedule") return "discrete";
   return "continuous";
 }
 
@@ -146,4 +148,5 @@ export const rendererLabels: Record<RendererFamily, string> = {
   feasible_region: "実行可能領域",
   pareto_front: "パレート前線",
   field_evolution: "設計fieldの進化",
+  assignment_schedule: "勤務シフト表",
 };

@@ -490,6 +490,106 @@ def _benchmark_context_fixtures(
             "last_verified": release_date,
         }
     )
+    shift_instance = connection.execute(
+        "SELECT source_ids_json FROM problem_instances WHERE problem_instance_id = ?",
+        ("INSTANCE_SHIFT_SCHEDULING_4X3X2",),
+    ).fetchone()
+    if shift_instance is None:
+        raise ValueError("educational shift-scheduling benchmark instance does not resolve")
+    results.append(
+        {
+            "context_id": "BENCH_SHIFT_SCHEDULING_EDUCATIONAL_4096",
+            "context_version": "1.0.0",
+            "category": "MIP",
+            "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+            "problem_variant": (
+                "fixed four-staff, three-day, two-shift roster with preference tie-break"
+            ),
+            "dimension": 24,
+            "sparsity_json": _json(
+                {"status": "reported", "structure": "staff-by-day-by-shift binary tensor"}
+            ),
+            "hardware_json": _json(
+                {
+                    "status": "not_applicable",
+                    "reason": "deterministic complete enumeration; no wall-clock comparison",
+                }
+            ),
+            "runtime_json": _json(
+                {
+                    "comparison_scope": "exact",
+                    "runtime": "deterministic_educational_generator",
+                    "generator_id": "educational.shift_scheduling.v1",
+                    "generator_version": "1.0.0",
+                    "precision": "integer",
+                }
+            ),
+            "oracle_budget_json": _json({"unit": "oracle_evaluations", "limit": 4096}),
+            "evaluation_budget": 4096,
+            "time_budget_seconds": None,
+            "tolerance_json": _json(
+                {"status": "not_applicable", "reason": "finite complete enumeration"}
+            ),
+            "stopping_json": _json({"policy": "complete_enumeration", "value": 4096}),
+            "initialization_json": _json(
+                {
+                    "policy": "fixed_feasible_reference",
+                    "points": [
+                        0,
+                        1,
+                        0,
+                        1,
+                        0,
+                        1,
+                        1,
+                        0,
+                        1,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                    ],
+                }
+            ),
+            "seed_status": "not_applicable",
+            "seed_value": None,
+            "tuning_policy": (
+                "same feasible roster set and preference requests; only the workload-range "
+                "secondary tie-break changes"
+            ),
+            "implementation_versions_json": _json(
+                {
+                    "implementation_mapping_status": "not_applicable",
+                    "generator_id": "educational.shift_scheduling.v1",
+                    "generator_version": "1.0.0",
+                }
+            ),
+            "outcome_metrics_json": _json(
+                [
+                    "fulfilled_requests",
+                    "workload_range",
+                    "hard_violations",
+                    "canonical_objective",
+                ]
+            ),
+            "status_mapping_json": _json(
+                {"complete_enumeration": "complete", "error": "failed", "ranking": "forbidden"}
+            ),
+            "source_ids_json": str(shift_instance["source_ids_json"]),
+            "last_verified": release_date,
+        }
+    )
     nelder_mead_instance = connection.execute(
         "SELECT source_ids_json FROM problem_instances WHERE problem_instance_id = ?",
         ("OBJECTIVE_QUADRATIC_2D",),

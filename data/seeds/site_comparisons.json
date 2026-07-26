@@ -1806,6 +1806,68 @@
       "source_ids": ["S010", "S055"],
       "last_verified": "2026-07-24",
       "members": [{"member_id": "gamma-low", "role": "lower_risk_aversion", "method_id": "MF_LP_QP_CONIC", "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW", "label_ja": "low gamma", "label_en": "low gamma", "parameters": {"risk_aversion": 0.5, "input_policy": "fixed_mean_and_covariance", "max_asset_weight": 0.6, "grid_step": 0.05}, "budget": {"metric": "oracle_evaluations", "value": 1}, "artifact": {"artifact_id": "portfolio-mean-variance-gamma-low", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-mean-variance-gamma-low.json"}}, {"member_id": "gamma-high", "role": "higher_risk_aversion", "method_id": "MF_LP_QP_CONIC", "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH", "label_ja": "high gamma", "label_en": "high gamma", "parameters": {"risk_aversion": 4.0, "input_policy": "fixed_mean_and_covariance", "max_asset_weight": 0.6, "grid_step": 0.05}, "budget": {"metric": "oracle_evaluations", "value": 1}, "artifact": {"artifact_id": "portfolio-mean-variance-gamma-high", "artifact_kind": "executable_trace", "renderer_family": "generic_metric_history", "renderer_contract_version": "1.0.0", "payload_path": "traces/portfolio-mean-variance-gamma-high.json"}}]
+    },
+    {
+      "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "identity_status": "canonical",
+      "canonical_comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "aliases": [],
+      "mode": "strategy_contrast",
+      "journey_id": "shift-scheduling",
+      "case_id": "shift-scheduling",
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+      "benchmark_context_id": "BENCH_SHIFT_SCHEDULING_EDUCATIONAL_4096",
+      "title_ja": "希望が同率の勤務表を負荷の偏りで読み比べる",
+      "title_en": "Compare tied-preference rosters by workload imbalance",
+      "comparison_question": "hard制約・希望・全4096候補を固定し、勤務数の幅をsecondary tie-breakへ加えると、同じ希望充足6件の勤務表はどう変わる？",
+      "formulation_summary": "max 10×fulfilled requests − workload range。各日・各勤務帯1名、1日高々1勤務、資格、夜勤翌日の日勤禁止をhard制約とする。",
+      "fixed_factors": ["4名・3日・日勤夜勤の固定instance", "同じ希望・資格・hard制約", "同じ4096候補の完全列挙", "同じ希望weight 10", "seed not applicable"],
+      "changed_factors": ["勤務数の最大差をsecondary tie-breakへ入れるかどうかだけ"],
+      "seed_policy": "有限集合の決定的な完全列挙のためseedはnot applicable。",
+      "budget": {"metric": "oracle_evaluations", "value": 4096},
+      "stopping_policy": "4^6=4096のslot assignmentをすべて評価して停止する。",
+      "tuning_policy": "希望、資格、hard制約、weight、列挙順をrun前に固定し、結果を見て変更しない。",
+      "synchronization_axis": "oracle_evaluations",
+      "metrics": [
+        {"metric_id": "fulfilled_requests", "label_ja": "満たした希望", "direction": "maximize", "unit": "requests"},
+        {"metric_id": "workload_range", "label_ja": "勤務数の最大差", "direction": "minimize", "unit": "shifts"},
+        {"metric_id": "hard_violations", "label_ja": "hard制約違反", "direction": "target", "unit": "violations"},
+        {"metric_id": "canonical_objective", "label_ja": "教材上の目的値", "direction": "maximize", "unit": "score"}
+      ],
+      "comparability": "contrast_only",
+      "ranking_eligible": false,
+      "fairness_note": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。",
+      "caveat": "固定教材の目的設計contrastであり、CP-SAT、MIP、列挙法、勤務表、組織の一般的な優劣を示さない。",
+      "takeaway": "希望充足数だけでは同率解の選び方が未定義になる。運用上重要な偏りはsecondary objectiveとして明示し、勤務表のセルと人別集計を一緒に確認する。",
+      "limitations": ["4名・3日・2勤務帯の固定教材だけを扱う。", "法令、健康、安全、本人同意、欠勤、需要変動、複数資格、長期公平性を表さない。"],
+      "source_ids": ["S022", "S053"],
+      "last_verified": "2026-07-26",
+      "members": [
+        {
+          "member_id": "balanced-tiebreak",
+          "role": "balanced_secondary_objective",
+          "method_id": "M_CP_SAT",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "label_ja": "希望 + 負荷のtie-break",
+          "label_en": "Preference plus workload tie-break",
+          "parameters": {"objective_policy": "preference_then_workload_range"},
+          "budget": {"metric": "oracle_evaluations", "value": 4096},
+          "artifact": {"artifact_id": "shift-scheduling-balanced", "artifact_kind": "result_visualization", "renderer_family": "assignment_schedule", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/shift-scheduling-balanced.json"}
+        },
+        {
+          "member_id": "preference-only",
+          "role": "preference_only_tie",
+          "method_id": "M_CP_SAT",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+          "label_ja": "希望充足数だけ",
+          "label_en": "Preference fulfillment only",
+          "parameters": {"objective_policy": "preference_only"},
+          "budget": {"metric": "oracle_evaluations", "value": 4096},
+          "artifact": {"artifact_id": "shift-scheduling-preference-only", "artifact_kind": "result_visualization", "renderer_family": "assignment_schedule", "renderer_contract_version": "1.0.0", "payload_path": "visualizations/shift-scheduling-preference-only.json"}
+        }
+      ]
     }
   ]
 }

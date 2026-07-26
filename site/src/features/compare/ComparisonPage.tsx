@@ -92,6 +92,10 @@ type Loaded = LoadedBase & ({
   renderer: "learning-slice";
   artifact: LearningSliceArtifact;
   scenario: VisualizationScenario;
+} | {
+  renderer: "assignment-schedule";
+  artifacts: LearningSliceArtifact[];
+  scenarios: VisualizationScenario[];
 });
 
 const trajectoryPlot = { left: 18, right: 282, top: 16, bottom: 176 } as const;
@@ -166,6 +170,8 @@ function ComparisonExperience({ loaded, onPresetChange }: { loaded: Loaded; onPr
         <SurrogateComparison comparison={comparison} payloads={loaded.payloads} scenarios={loaded.scenarios} />
       ) : loaded.renderer === "search-tree" ? (
         <SearchTreeComparison artifacts={loaded.artifacts} comparison={comparison} scenarios={loaded.scenarios} />
+      ) : loaded.renderer === "assignment-schedule" ? (
+        <AssignmentScheduleComparison artifacts={loaded.artifacts} comparison={comparison} scenarios={loaded.scenarios} />
       ) : (
         <ScenarioComparison artifact={loaded.artifact} comparison={comparison} scenario={loaded.scenario} />
       )}
@@ -557,6 +563,32 @@ function simplexSummary(frame: TraceFrame | undefined, vertices: readonly Ranked
   if (!frame) return "まだ評価されていません。";
   const best = vertices[0]?.point;
   return `${frame.event_label_ja ?? frame.event_type}。最良点 ${best ? `(${best.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "未評価"}、simplexの直径 ${simplexDiameter(vertices).toFixed(3)}、重心 ${centroid ? `(${centroid.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "なし"}、候補点 ${candidate ? `(${candidate.coordinates.map((value) => value.toFixed(3)).join(", ")})` : "なし"}。`;
+}
+
+function AssignmentScheduleComparison({
+  artifacts,
+  comparison,
+  scenarios,
+}: {
+  artifacts: LearningSliceArtifact[];
+  comparison: ComparisonSet;
+  scenarios: VisualizationScenario[];
+}) {
+  return (
+    <section className="scenario-comparison" aria-labelledby="assignment-comparison-title">
+      <header><h2 id="assignment-comparison-title">同じ希望充足数から、勤務数の偏りを読む</h2><p>各勤務表を同じ順序・同じ尺度で並べます。希望は色と文字、人別負荷は棒と数値で重ねています。</p></header>
+      <div className="assignment-comparison-grid">
+        {comparison.members.map((member, index) => (
+          <article key={member.member_id}>
+            <header><span>{member.role}</span><h3>{member.label_ja}</h3><p>{scenarios[index].lesson.static_summary.ja}</p></header>
+            <LearningSliceRenderer artifact={artifacts[index]} />
+          </article>
+        ))}
+      </div>
+      <p className="atlas-note"><strong>Takeaway:</strong> {comparison.takeaway}</p>
+      <ul className="comparison-limitations">{comparison.limitations.map((limitation) => <li key={limitation}>{limitation}</li>)}</ul>
+    </section>
+  );
 }
 
 function ScenarioComparison({ artifact, comparison, scenario }: { artifact: LearningSliceArtifact; comparison: ComparisonSet; scenario: VisualizationScenario }) {
@@ -1233,6 +1265,47 @@ async function loadComparison(comparisonId: string, signal: AbortSignal): Promis
       comparison,
       comparisons: index.comparisons,
       renderer: "search-tree",
+      artifacts: loadedMembers.map((item) => item.artifact),
+      scenarios: loadedMembers.map((item) => item.scenario),
+    };
+  }
+  if (families.size === 1 && family === "assignment_schedule") {
+    const loadedMembers = await Promise.all(comparison.members.map(async (member) => {
+      const scenario = scenarioIndex.scenarios.find((candidate) => candidate.scenario_id === member.scenario_id);
+      const run = scenario?.runs.find((candidate) => (
+        candidate.artifact_id === member.artifact.artifact_id
+        && candidate.method_id === member.method_id
+      ));
+      if (
+        !scenario
+        || !run
+        || scenario.problem_definition_id !== comparison.problem_definition_id
+        || scenario.problem_instance_id !== comparison.problem_instance_id
+        || scenario.artifact.artifact_kind !== member.artifact.artifact_kind
+        || scenario.artifact.renderer_family !== member.artifact.renderer_family
+        || scenario.artifact.renderer_contract_version !== member.artifact.renderer_contract_version
+        || scenario.artifact.payload_path !== member.artifact.payload_path
+        || scenario.experiment.budget.metric !== member.budget.metric
+        || scenario.experiment.budget.value !== member.budget.value
+      ) {
+        throw new Error(`Assignment schedule contract differs from comparison member ${member.member_id}.`);
+      }
+      const response = await fetch(`${siteBaseUrl()}data/${member.artifact.payload_path}`, { signal });
+      if (!response.ok) throw new Error(`Assignment schedule request failed (${response.status}).`);
+      const artifact = parseLearningSliceArtifact(await response.json());
+      if (
+        artifact.renderer_family !== "assignment_schedule"
+        || artifact.dataset_version !== manifest.dataset_version
+        || artifact.artifact_id !== member.artifact.artifact_id
+      ) {
+        throw new Error(`Assignment schedule identity differs from comparison member ${member.member_id}.`);
+      }
+      return { artifact, scenario };
+    }));
+    return {
+      comparison,
+      comparisons: index.comparisons,
+      renderer: "assignment-schedule",
       artifacts: loadedMembers.map((item) => item.artifact),
       scenarios: loadedMembers.map((item) => item.scenario),
     };

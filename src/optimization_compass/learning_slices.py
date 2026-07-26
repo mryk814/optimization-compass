@@ -4,6 +4,7 @@ import json
 import math
 from datetime import date
 from hashlib import sha256
+from itertools import product
 from pathlib import Path
 from typing import Literal, Self
 
@@ -47,6 +48,12 @@ TOPOLOGY_ARTIFACT_ID: Literal["topology-optimization-field-evolution"] = (
 TOPOLOGY_SCENARIO_ID = "SCENARIO_TOPOLOGY_SIMP_OC"
 TOPOLOGY_FAILURE_SCENARIO_ID = "SCENARIO_TOPOLOGY_CHECKERBOARD"
 TOPOLOGY_COMPARISON_SCENARIO_ID = "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
+SHIFT_BALANCED_ARTIFACT_ID = "shift-scheduling-balanced"
+SHIFT_PREFERENCE_ARTIFACT_ID = "shift-scheduling-preference-only"
+SHIFT_BALANCED_SCENARIO_ID = "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+SHIFT_PREFERENCE_SCENARIO_ID = "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+SHIFT_GENERATOR_ID = "educational.shift_scheduling.v1"
+SHIFT_GENERATOR_VERSION = "1.0.0"
 
 
 class PlotBounds(TraceModel):
@@ -286,6 +293,182 @@ class LearningSliceLink(TraceModel):
     source_ids: list[NonBlank] = Field(min_length=1)
     view_ids: list[NonBlank] = Field(min_length=1)
     last_verified: date
+
+
+class ShiftAssignment(TraceModel):
+    staff_id: NonBlank
+    staff_label_ja: NonBlank
+    day_id: NonBlank
+    day_label_ja: NonBlank
+    shift_id: NonBlank
+    shift_label_ja: NonBlank
+    requested: bool
+
+
+class ShiftWorkload(TraceModel):
+    staff_id: NonBlank
+    staff_label_ja: NonBlank
+    assigned_shifts: int = Field(ge=0)
+
+
+class ShiftScheduleMetrics(TraceModel):
+    fulfilled_requests: int = Field(ge=0)
+    workload_range: int = Field(ge=0)
+    hard_violations: Literal[0]
+    canonical_objective: int
+    feasible_schedules: int = Field(gt=0)
+    enumerated_candidates: Literal[4096]
+
+
+class ShiftScheduleArtifact(TraceModel):
+    contract_version: Literal["1.0.0"] = "1.0.0"
+    dataset_version: NonBlank
+    artifact_id: NonBlank
+    artifact_kind: Literal["result_visualization"]
+    execution_status: Literal["executable_result"]
+    renderer_family: Literal["assignment_schedule"]
+    generator_id: Literal["educational.shift_scheduling.v1"]
+    generator_version: Literal["1.0.0"]
+    problem_definition_id: Literal["PROBLEM_SHIFT_SCHEDULING"]
+    problem_instance_id: Literal["INSTANCE_SHIFT_SCHEDULING_4X3X2"]
+    strategy_id: Literal["balanced_tiebreak", "preference_only"]
+    title_ja: NonBlank
+    assignments: list[ShiftAssignment] = Field(min_length=6, max_length=6)
+    workloads: list[ShiftWorkload] = Field(min_length=4, max_length=4)
+    metrics: ShiftScheduleMetrics
+    hard_constraints_ja: list[NonBlank] = Field(min_length=4)
+    text_alternative_ja: NonBlank
+    limitations_ja: NonBlank
+    source_ids: list[NonBlank] = Field(min_length=1)
+    last_verified: NonBlank
+
+
+def generate_shift_schedule_artifacts(
+    dataset_version: str,
+) -> tuple[ShiftScheduleArtifact, ShiftScheduleArtifact]:
+    problem = get_runtime_problem("INSTANCE_SHIFT_SCHEDULING_4X3X2")
+    staff_rows = problem.instance.parameters["staff"]
+    day_rows = problem.instance.parameters["days"]
+    shift_rows = problem.instance.parameters["shifts"]
+    requests = problem.instance.parameters["requests"]
+    if not all(isinstance(value, list) for value in (staff_rows, day_rows, shift_rows, requests)):
+        raise ValueError("shift-scheduling teaching data is malformed")
+    staff = list(staff_rows)
+    days = list(day_rows)
+    shifts = list(shift_rows)
+    request_values = list(requests)
+    feasible: list[tuple[int, int, tuple[int, ...], list[int]]] = []
+    for slots in product(range(len(staff)), repeat=len(days) * len(shifts)):
+        point = [0] * problem.instance.dimension
+        for slot, staff_index in enumerate(slots):
+            day_index, shift_index = divmod(slot, len(shifts))
+            point[(staff_index * len(days) + day_index) * len(shifts) + shift_index] = 1
+        objective = problem.objective_value(point)
+        if objective == float("-inf"):
+            continue
+        fulfilled = sum(
+            int(request_values[staff_index][day_index][shift_index])
+            for slot, staff_index in enumerate(slots)
+            for day_index, shift_index in [divmod(slot, len(shifts))]
+        )
+        loads = [slots.count(staff_index) for staff_index in range(len(staff))]
+        feasible.append((fulfilled, max(loads) - min(loads), slots, loads))
+    preference = max(feasible, key=lambda row: (row[0], tuple(-value for value in row[2])))
+    balanced = max(
+        feasible, key=lambda row: (10 * row[0] - row[1], tuple(-value for value in row[2]))
+    )
+    return (
+        _shift_schedule_artifact(
+            dataset_version, balanced, len(feasible), staff, days, shifts, request_values, True
+        ),
+        _shift_schedule_artifact(
+            dataset_version, preference, len(feasible), staff, days, shifts, request_values, False
+        ),
+    )
+
+
+def _shift_schedule_artifact(
+    dataset_version: str,
+    result: tuple[int, int, tuple[int, ...], list[int]],
+    feasible_count: int,
+    staff: list[object],
+    days: list[object],
+    shifts: list[object],
+    requests: list[object],
+    balanced: bool,
+) -> ShiftScheduleArtifact:
+    fulfilled, workload_range, slots, loads = result
+    assignments: list[ShiftAssignment] = []
+    for slot, staff_index in enumerate(slots):
+        day_index, shift_index = divmod(slot, len(shifts))
+        staff_row = staff[staff_index]
+        day_row = days[day_index]
+        shift_row = shifts[shift_index]
+        if not all(isinstance(row, dict) for row in (staff_row, day_row, shift_row)):
+            raise ValueError("shift-scheduling label data is malformed")
+        assignments.append(
+            ShiftAssignment(
+                staff_id=str(staff_row["staff_id"]),
+                staff_label_ja=str(staff_row["label_ja"]),
+                day_id=str(day_row["day_id"]),
+                day_label_ja=str(day_row["label_ja"]),
+                shift_id=str(shift_row["shift_id"]),
+                shift_label_ja=str(shift_row["label_ja"]),
+                requested=bool(requests[staff_index][day_index][shift_index]),
+            )
+        )
+    workloads = []
+    for index, row in enumerate(staff):
+        if not isinstance(row, dict):
+            raise ValueError("shift-scheduling staff data is malformed")
+        workloads.append(
+            ShiftWorkload(
+                staff_id=str(row["staff_id"]),
+                staff_label_ja=str(row["label_ja"]),
+                assigned_shifts=loads[index],
+            )
+        )
+    return ShiftScheduleArtifact(
+        dataset_version=dataset_version,
+        artifact_id=SHIFT_BALANCED_ARTIFACT_ID if balanced else SHIFT_PREFERENCE_ARTIFACT_ID,
+        artifact_kind="result_visualization",
+        execution_status="executable_result",
+        renderer_family="assignment_schedule",
+        generator_id=SHIFT_GENERATOR_ID,
+        generator_version=SHIFT_GENERATOR_VERSION,
+        problem_definition_id="PROBLEM_SHIFT_SCHEDULING",
+        problem_instance_id="INSTANCE_SHIFT_SCHEDULING_4X3X2",
+        strategy_id="balanced_tiebreak" if balanced else "preference_only",
+        title_ja=(
+            "希望を満たしたうえで勤務数の差を抑える" if balanced else "希望充足数だけで同率解を選ぶ"
+        ),
+        assignments=assignments,
+        workloads=workloads,
+        metrics=ShiftScheduleMetrics(
+            fulfilled_requests=fulfilled,
+            workload_range=workload_range,
+            hard_violations=0,
+            canonical_objective=10 * fulfilled - workload_range,
+            feasible_schedules=feasible_count,
+            enumerated_candidates=4096,
+        ),
+        hard_constraints_ja=[
+            "各日・各勤務帯にちょうど1名",
+            "1人は1日に高々1勤務",
+            "資格のない勤務には割り当てない",
+            "夜勤の翌日に日勤を入れない",
+        ],
+        text_alternative_ja=(
+            f"月曜から水曜までの日勤・夜勤6枠を4名へ割り当てています。"
+            f"希望充足は{fulfilled}件、勤務数の最大差は{workload_range}、hard違反は0件です。"
+        ),
+        limitations_ja=(
+            "4名・3日・2勤務帯の固定教材です。法令、健康、安全、同意、欠勤、"
+            "需要変動、複数資格、長期公平性を表しません。"
+        ),
+        source_ids=["S022", "S053"],
+        last_verified="2026-07-26",
+    )
 
 
 def generate_topology_field_artifact(dataset_version: str) -> TopologyFieldArtifact:
@@ -776,10 +959,13 @@ def write_learning_slice_scenarios(
     feasible = generate_feasible_region_artifact(dataset_version)
     pareto = generate_pareto_front_artifact(dataset_version)
     topology = generate_topology_field_artifact(dataset_version)
+    shift_balanced, shift_preference = generate_shift_schedule_artifacts(dataset_version)
     payloads: list[tuple[TraceModel, str]] = [
         (feasible, f"visualizations/{CONSTRAINED_ARTIFACT_ID}.json"),
         (pareto, f"visualizations/{PARETO_ARTIFACT_ID}.json"),
         (topology, f"visualizations/{TOPOLOGY_ARTIFACT_ID}.json"),
+        (shift_balanced, f"visualizations/{SHIFT_BALANCED_ARTIFACT_ID}.json"),
+        (shift_preference, f"visualizations/{SHIFT_PREFERENCE_ARTIFACT_ID}.json"),
     ]
     payload_metadata: dict[str, tuple[int, str]] = {}
     for artifact, relative_path in payloads:
@@ -802,6 +988,8 @@ def write_learning_slice_scenarios(
         topology_primary,
         _topology_failure_scenario(topology_primary),
         _topology_comparison_scenario(topology_primary),
+        _shift_schedule_scenario(dataset_version, payload_metadata, balanced=True),
+        _shift_schedule_scenario(dataset_version, payload_metadata, balanced=False),
     ]
     links = [
         LearningSliceLink(
@@ -840,8 +1028,217 @@ def write_learning_slice_scenarios(
             view_ids=["VIEW_PROBLEM_STRUCTURE", "VIEW_METHOD_MECHANISM"],
             last_verified=date.fromisoformat(LAST_VERIFIED),
         ),
+        LearningSliceLink(
+            artifact_id=SHIFT_BALANCED_ARTIFACT_ID,
+            scenario_id=SHIFT_BALANCED_SCENARIO_ID,
+            label="勤務シフト: 希望と負荷のタイブレーク",
+            route=f"/theater/learning/{SHIFT_BALANCED_SCENARIO_ID}",
+            method_ids=["M_CP_SAT"],
+            source_ids=list(shift_balanced.source_ids),
+            view_ids=["VIEW_PROBLEM_STRUCTURE", "VIEW_METHOD_MECHANISM"],
+            last_verified=date(2026, 7, 26),
+        ),
     ]
     return scenarios, links
+
+
+def _shift_schedule_scenario(
+    dataset_version: str,
+    payload_metadata: dict[str, tuple[int, str]],
+    *,
+    balanced: bool,
+) -> VisualizationScenario:
+    artifact_id = SHIFT_BALANCED_ARTIFACT_ID if balanced else SHIFT_PREFERENCE_ARTIFACT_ID
+    scenario_id = SHIFT_BALANCED_SCENARIO_ID if balanced else SHIFT_PREFERENCE_SCENARIO_ID
+    counterpart = SHIFT_PREFERENCE_SCENARIO_ID if balanced else SHIFT_BALANCED_SCENARIO_ID
+    path = f"visualizations/{artifact_id}.json"
+    size, digest = payload_metadata[path]
+    observables = [
+        VisualizationObservable(
+            observable_id="assignments",
+            label_ja="勤務割当",
+            label_en="shift assignments",
+        ),
+        VisualizationObservable(
+            observable_id="fulfilled_requests",
+            label_ja="満たした希望",
+            label_en="fulfilled requests",
+        ),
+        VisualizationObservable(
+            observable_id="workload_range",
+            label_ja="勤務数の最大差",
+            label_en="workload range",
+        ),
+        VisualizationObservable(
+            observable_id="hard_violations",
+            label_ja="hard制約違反",
+            label_en="hard-constraint violations",
+        ),
+        VisualizationObservable(
+            observable_id="canonical_objective",
+            label_ja="教材上の目的値",
+            label_en="teaching objective",
+        ),
+    ]
+    title_ja = (
+        "同じ希望充足数から負荷の偏りが小さい勤務表を選ぶ"
+        if balanced
+        else "希望だけを目的にすると同率の勤務表が残る"
+    )
+    return VisualizationScenario(
+        contract_version="1.2.0",
+        dataset_version=dataset_version,
+        scenario_id=scenario_id,
+        identity_status="canonical" if balanced else "derived",
+        canonical_scenario_id=SHIFT_BALANCED_SCENARIO_ID,
+        title_ja=title_ja,
+        title_en=(
+            "Choose the less imbalanced schedule among equal-preference solutions"
+            if balanced
+            else "Preference-only optimization leaves tied schedules"
+        ),
+        purpose="application_result" if balanced else "failure_contrast",
+        problem_definition_id="PROBLEM_SHIFT_SCHEDULING",
+        problem_instance_id="INSTANCE_SHIFT_SCHEDULING_4X3X2",
+        lesson=VisualizationLesson(
+            learning_objective=LocalizedText(
+                ja="hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む",
+                en=(
+                    "Read hard constraints, fulfilled requests, and workload imbalance "
+                    "from one roster"
+                ),
+            ),
+            misconception=LocalizedText(
+                ja="希望を最大化すれば、同率解の負荷も自動的に均等になる",
+                en="Maximizing preferences automatically balances every tied schedule",
+            ),
+            expected_phenomenon_ja=(
+                "希望充足は同じ6件でも、負荷のタイブレークで勤務数の最大差が小さくなります。"
+            ),
+            expected_phenomenon_en=(
+                "Both schedules fulfill six requests, while the workload tie-break "
+                "reduces the load range."
+            ),
+            success_signals=[
+                VisualizationSignal(
+                    signal_id="feasible_roster",
+                    label_ja="6枠をhard違反なしで埋める",
+                    label_en="fill all six slots without hard violations",
+                    observable_ids=["assignments", "hard_violations"],
+                ),
+                VisualizationSignal(
+                    signal_id="preference_and_balance",
+                    label_ja="希望充足を保って勤務数の差を抑える",
+                    label_en="preserve preference fulfillment while reducing workload range",
+                    observable_ids=["fulfilled_requests", "workload_range"],
+                ),
+            ],
+            failure_signals=[
+                VisualizationSignal(
+                    signal_id="arbitrary_preference_tie",
+                    label_ja="希望だけでは負荷の偏った同率解が残る",
+                    label_en="a preference-only tie can retain an imbalanced roster",
+                    observable_ids=["fulfilled_requests", "workload_range"],
+                )
+            ],
+            primary_observables=observables[:3],
+            secondary_observables=observables[3:],
+            narration_steps=[
+                VisualizationNarrationStep(
+                    milestone_id="start",
+                    title_ja="各日の日勤・夜勤を確認",
+                    title_en="Inspect each day and night slot",
+                    observable_ids=["assignments"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="first_change",
+                    title_ja="希望ラベルを重ねる",
+                    title_en="Overlay request labels",
+                    observable_ids=["assignments", "fulfilled_requests"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="人ごとの勤務数を比べる",
+                    title_en="Compare workloads by staff member",
+                    observable_ids=["workload_range"],
+                ),
+                VisualizationNarrationStep(
+                    milestone_id="termination",
+                    title_ja="hard違反と目的値を照合",
+                    title_en="Check hard violations and the objective",
+                    observable_ids=["hard_violations", "canonical_objective"],
+                ),
+            ],
+            comparison_role="primary_example" if balanced else "failure_contrast",
+            prerequisite_concept_ids=["concept.constraint", "concept.objective-function"],
+            recommended_next_scenario_ids=[counterpart],
+            known_reference_display=KnownReferenceDisplay(
+                policy="show",
+                note_ja="4096通りを完全列挙した、この固定教材だけのexact referenceです。",
+                note_en=(
+                    "An exact reference for this fixed lesson from complete enumeration "
+                    "of 4096 assignments."
+                ),
+            ),
+            static_summary=LocalizedText(
+                ja="4名×3日×2勤務帯の勤務表を、希望と人別勤務数つきで表示します。",
+                en=(
+                    "Display a four-person, three-day roster with preferences and "
+                    "per-person workloads."
+                ),
+            ),
+            text_alternative=LocalizedText(
+                ja="月曜から水曜の日勤・夜勤と担当者、希望一致、勤務数を表で確認できます。",
+                en="A table lists each day/night assignment, request match, and staff workload.",
+            ),
+            derived_media_caption=LocalizedText(
+                ja="希望と負荷を読む勤務シフト表",
+                en="Shift roster for reading preferences and workload",
+            ),
+            limitations_ja=(
+                "4名・3日・2勤務帯の固定教材です。法令、健康、安全、同意、欠勤、"
+                "需要変動、複数資格、長期公平性を表しません。"
+            ),
+            limitations_en=(
+                "A fixed four-person, three-day lesson; it omits law, health, safety, "
+                "consent, absence, uncertain demand, multiple skills, and long-horizon fairness."
+            ),
+        ),
+        experiment=VisualizationExperiment(
+            oracle_policy=["objective_value"],
+            initial_condition=VisualizationInitialCondition(
+                point=[0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ),
+            parameter_preset_id="balanced_tiebreak" if balanced else "preference_only",
+            seed=VisualizationSeed(status="not_applicable", value=None),
+            budget=VisualizationBudget(metric="oracle_evaluations", value=4096),
+            stopping={"complete_enumeration": True},
+            tuning_policy="fixed_preset",
+        ),
+        runs=[
+            VisualizationRun(
+                run_id=f"run-{artifact_id}",
+                method_id="M_CP_SAT",
+                profile_id="balanced_tiebreak" if balanced else "preference_only",
+                implementation_mapping_status="not_applicable",
+                implementation_id=None,
+                artifact_id=artifact_id,
+            )
+        ],
+        artifact=VisualizationArtifact(
+            artifact_kind="result_visualization",
+            artifact_contract="ShiftSchedule",
+            artifact_contract_version="1.0.0",
+            renderer_family="assignment_schedule",
+            renderer_contract_version="1.0.0",
+            observable_ids=[item.observable_id for item in observables],
+            payload_path=path,
+            payload_bytes=size,
+            payload_sha256=digest,
+        ),
+        source_ids=["S022", "S053"],
+        last_verified="2026-07-26",
+    )
 
 
 def _topology_scenario(

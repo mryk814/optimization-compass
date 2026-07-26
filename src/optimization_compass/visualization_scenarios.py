@@ -24,6 +24,7 @@ RendererFamily = Literal[
     "feasible_region",
     "pareto_front",
     "field_evolution",
+    "assignment_schedule",
 ]
 ScenarioIdentityStatus = Literal["canonical", "derived", "generated_only"]
 
@@ -41,6 +42,7 @@ CANONICAL_SCENARIO_IDS = frozenset(
         "SCENARIO_PENDULUM_SWING_UP_MESH_20",
         "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
         "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+        "SCENARIO_SHIFT_SCHEDULING_BALANCED",
     }
 )
 
@@ -62,6 +64,7 @@ DERIVED_SCENARIO_BASE_IDS = {
     "SCENARIO_PDE_STATE_SOLVE_FAILURE": "SCENARIO_PDE_STATE_TOLERANCE_TIGHT",
     "SCENARIO_SHAPE_DIFFUSER_INVALID_GEOMETRY": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
     "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST": "SCENARIO_SHAPE_DIFFUSER_VALID_UPDATE",
+    "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
 }
 
 
@@ -249,6 +252,7 @@ class VisualizationArtifact(TraceModel):
         "FeasibleRegion",
         "ParetoFront",
         "TopologyFieldEvolution",
+        "ShiftSchedule",
     ]
     artifact_contract_version: Literal["1.0.0", "1.1.0"]
     renderer_family: RendererFamily

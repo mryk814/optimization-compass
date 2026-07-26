@@ -1956,6 +1956,26 @@ caption {
 .learning-renderer-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
 .learning-renderer-heading h2 { margin-top: .15rem; }
 .learning-renderer-heading > strong { white-space: nowrap; color: #315d4a; }
+.shift-schedule-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(13rem, .65fr); gap: 1rem; align-items: start; }
+.shift-schedule-table { width: 100%; border-collapse: separate; border-spacing: .35rem; }
+.shift-schedule-table caption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.shift-schedule-table th { color: var(--muted); font-size: .83rem; text-align: left; }
+.shift-schedule-table td { min-width: 6.5rem; padding: .75rem; border: 1px solid var(--border); border-radius: .65rem; background: #f7f8f5; }
+.shift-schedule-table td.is-requested { border-color: #8fbca5; background: #edf7f1; }
+.shift-schedule-table td strong, .shift-schedule-table td span { display: block; }
+.shift-schedule-table td span { margin-top: .2rem; color: var(--muted); font-size: .78rem; }
+.shift-workloads h3 { margin: .15rem 0 .7rem; font-size: .95rem; }
+.shift-workloads ul { display: grid; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+.shift-workloads li { display: grid; grid-template-columns: 3rem minmax(5rem, 1fr) 1.2rem; gap: .5rem; align-items: center; }
+.shift-workload-track { height: .65rem; overflow: hidden; border-radius: 999px; background: #e8ebe6; }
+.shift-workload-track i { display: block; height: 100%; border-radius: inherit; background: #417c65; }
+.shift-schedule-metrics { margin-top: 1rem; }
+.assignment-comparison-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.assignment-comparison-grid > article { min-width: 0; padding: .8rem; border: 1px solid var(--border); border-radius: .8rem; background: #fbfcf9; }
+.assignment-comparison-grid > article > header span { color: var(--muted); font-size: .72rem; }
+.assignment-comparison-grid > article > header h3 { margin: .2rem 0; }
+.assignment-comparison-grid .learning-renderer { margin-bottom: 0; }
+.assignment-comparison-grid .shift-schedule-layout { grid-template-columns: 1fr; }
 .learning-plot-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); gap: 1rem; align-items: start; }
 .learning-plot { display: block; width: 100%; max-height: 34rem; border: 1px solid #d7dfd8; border-radius: .6rem; background: #fbfcf9; }
 .plot-background { fill: #f7f8f3; }
@@ -2037,6 +2057,10 @@ caption {
 
 @media (max-width: 760px) {
   .learning-plot-layout { grid-template-columns: 1fr; }
+  .shift-schedule-layout { grid-template-columns: 1fr; }
+  .assignment-comparison-grid { grid-template-columns: 1fr; }
+  .shift-schedule-table { border-spacing: .2rem; }
+  .shift-schedule-table td { min-width: 0; padding: .55rem .35rem; }
   .topology-field-grid { grid-template-columns: 1fr; }
   .topology-controls, .topology-metrics { grid-template-columns: 1fr; }
   .learning-renderer { padding: .65rem; }

@@ -79,6 +79,7 @@ _EDUCATIONAL_GENERATORS_BY_RENDERER = {
     "simplex_geometry": ("educational.nelder_mead.v1", "1.0.0"),
     "field_evolution": ("educational.topology_optimization.v1", "1.0.0"),
     "generic_metric_history": ("educational.optimal_control.v1", "1.1.0"),
+    "assignment_schedule": ("educational.shift_scheduling.v1", "1.0.0"),
 }
 _EDUCATIONAL_GENERATORS_BY_PROFILE = {
     FAILED_SIMULATION_PROFILE_ID: (
@@ -122,6 +123,7 @@ RendererFamily = Literal[
     "feasible_region",
     "pareto_front",
     "field_evolution",
+    "assignment_schedule",
 ]
 
 
@@ -166,6 +168,11 @@ class ComparisonArtifact(ComparisonModel):
             raise ValueError(f"{self.renderer_family} requires an executable_trace artifact")
         if self.renderer_family == "pareto_front" and self.artifact_kind != "result_visualization":
             raise ValueError("pareto_front requires a result_visualization artifact")
+        if (
+            self.renderer_family == "assignment_schedule"
+            and self.artifact_kind != "result_visualization"
+        ):
+            raise ValueError("assignment_schedule requires a result_visualization artifact")
         return self
 
 

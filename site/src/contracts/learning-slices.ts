@@ -131,14 +131,122 @@ export interface TopologyFieldArtifact {
   last_verified: string;
 }
 
-export type LearningSliceArtifact = FeasibleRegionArtifact | ParetoFrontArtifact | TopologyFieldArtifact;
+export interface ShiftScheduleArtifact {
+  contract_version: "1.0.0";
+  dataset_version: string;
+  artifact_id: string;
+  artifact_kind: "result_visualization";
+  execution_status: "executable_result";
+  renderer_family: "assignment_schedule";
+  generator_id: "educational.shift_scheduling.v1";
+  generator_version: "1.0.0";
+  problem_definition_id: "PROBLEM_SHIFT_SCHEDULING";
+  problem_instance_id: "INSTANCE_SHIFT_SCHEDULING_4X3X2";
+  strategy_id: "balanced_tiebreak" | "preference_only";
+  title_ja: string;
+  assignments: {
+    staff_id: string;
+    staff_label_ja: string;
+    day_id: string;
+    day_label_ja: string;
+    shift_id: string;
+    shift_label_ja: string;
+    requested: boolean;
+  }[];
+  workloads: { staff_id: string; staff_label_ja: string; assigned_shifts: number }[];
+  metrics: {
+    fulfilled_requests: number;
+    workload_range: number;
+    hard_violations: 0;
+    canonical_objective: number;
+    feasible_schedules: number;
+    enumerated_candidates: 4096;
+  };
+  hard_constraints_ja: string[];
+  text_alternative_ja: string;
+  limitations_ja: string;
+  source_ids: string[];
+  last_verified: string;
+}
+
+export type LearningSliceArtifact = FeasibleRegionArtifact | ParetoFrontArtifact | TopologyFieldArtifact | ShiftScheduleArtifact;
 
 export function parseLearningSliceArtifact(raw: unknown): LearningSliceArtifact {
   const data = record(raw, "learning slice");
   if (data.renderer_family === "feasible_region") return parseFeasible(data);
   if (data.renderer_family === "pareto_front") return parsePareto(data);
   if (data.renderer_family === "field_evolution") return parseTopology(data);
+  if (data.renderer_family === "assignment_schedule") return parseShiftSchedule(data);
   throw new Error(`Unsupported learning-slice renderer: ${String(data.renderer_family)}`);
+}
+
+function parseShiftSchedule(data: Record<string, unknown>): ShiftScheduleArtifact {
+  literal(data.contract_version, "1.0.0", "contract_version");
+  literal(data.artifact_kind, "result_visualization", "artifact_kind");
+  literal(data.execution_status, "executable_result", "execution_status");
+  literal(data.renderer_family, "assignment_schedule", "renderer_family");
+  literal(data.generator_id, "educational.shift_scheduling.v1", "generator_id");
+  literal(data.generator_version, "1.0.0", "generator_version");
+  literal(data.problem_definition_id, "PROBLEM_SHIFT_SCHEDULING", "problem_definition_id");
+  literal(data.problem_instance_id, "INSTANCE_SHIFT_SCHEDULING_4X3X2", "problem_instance_id");
+  const strategy = data.strategy_id === "balanced_tiebreak" || data.strategy_id === "preference_only"
+    ? data.strategy_id
+    : invalid("strategy_id");
+  const assignments = list(data.assignments, "assignments").map((raw, index) => {
+    const item = record(raw, `assignments[${index}]`);
+    return {
+      staff_id: text(item.staff_id, "staff_id"),
+      staff_label_ja: text(item.staff_label_ja, "staff_label_ja"),
+      day_id: text(item.day_id, "day_id"),
+      day_label_ja: text(item.day_label_ja, "day_label_ja"),
+      shift_id: text(item.shift_id, "shift_id"),
+      shift_label_ja: text(item.shift_label_ja, "shift_label_ja"),
+      requested: boolean(item.requested, "requested"),
+    };
+  });
+  if (assignments.length !== 6) throw new Error("assignments must contain six slots.");
+  const workloads = list(data.workloads, "workloads").map((raw, index) => {
+    const item = record(raw, `workloads[${index}]`);
+    return {
+      staff_id: text(item.staff_id, "staff_id"),
+      staff_label_ja: text(item.staff_label_ja, "staff_label_ja"),
+      assigned_shifts: integer(item.assigned_shifts, "assigned_shifts"),
+    };
+  });
+  if (workloads.length !== 4) throw new Error("workloads must contain four staff members.");
+  const metrics = record(data.metrics, "metrics");
+  const hardViolations = integer(metrics.hard_violations, "hard_violations");
+  const enumeratedCandidates = integer(metrics.enumerated_candidates, "enumerated_candidates");
+  if (hardViolations !== 0 || enumeratedCandidates !== 4096) throw new Error("shift schedule proof metadata is invalid.");
+  return {
+    contract_version: "1.0.0",
+    dataset_version: text(data.dataset_version, "dataset_version"),
+    artifact_id: text(data.artifact_id, "artifact_id"),
+    artifact_kind: "result_visualization",
+    execution_status: "executable_result",
+    renderer_family: "assignment_schedule",
+    generator_id: "educational.shift_scheduling.v1",
+    generator_version: "1.0.0",
+    problem_definition_id: "PROBLEM_SHIFT_SCHEDULING",
+    problem_instance_id: "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+    strategy_id: strategy,
+    title_ja: text(data.title_ja, "title_ja"),
+    assignments,
+    workloads,
+    metrics: {
+      fulfilled_requests: integer(metrics.fulfilled_requests, "fulfilled_requests"),
+      workload_range: integer(metrics.workload_range, "workload_range"),
+      hard_violations: 0,
+      canonical_objective: integer(metrics.canonical_objective, "canonical_objective"),
+      feasible_schedules: integer(metrics.feasible_schedules, "feasible_schedules"),
+      enumerated_candidates: 4096,
+    },
+    hard_constraints_ja: texts(data.hard_constraints_ja, "hard_constraints_ja"),
+    text_alternative_ja: text(data.text_alternative_ja, "text_alternative_ja"),
+    limitations_ja: text(data.limitations_ja, "limitations_ja"),
+    source_ids: texts(data.source_ids, "source_ids"),
+    last_verified: text(data.last_verified, "last_verified"),
+  };
 }
 
 function parseTopology(data: Record<string, unknown>): TopologyFieldArtifact {

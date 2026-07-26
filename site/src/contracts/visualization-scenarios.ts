@@ -10,7 +10,8 @@ export type RendererFamily =
   | "surrogate_uncertainty"
   | "feasible_region"
   | "pareto_front"
-  | "field_evolution";
+  | "field_evolution"
+  | "assignment_schedule";
 
 export type GuidedPlaybackSpeed = 0.25 | 0.5 | 1 | 2 | 4;
 
@@ -69,7 +70,7 @@ export interface VisualizationScenario {
   }[];
   artifact: {
     artifact_kind: VisualizationArtifactKind;
-    artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty" | "FeasibleRegion" | "ParetoFront" | "TopologyFieldEvolution";
+    artifact_contract: "AlgorithmTrace" | "SurrogateUncertainty" | "FeasibleRegion" | "ParetoFront" | "TopologyFieldEvolution" | "ShiftSchedule";
     artifact_contract_version: "1.0.0" | "1.1.0";
     renderer_family: RendererFamily;
     renderer_contract_version: "1.0.0" | "1.1.0";
@@ -134,6 +135,7 @@ const rendererFamilies = new Set<RendererFamily>([
   "feasible_region",
   "pareto_front",
   "field_evolution",
+  "assignment_schedule",
 ]);
 const guidedPlaybackSpeeds = new Set<GuidedPlaybackSpeed>([0.25, 0.5, 1, 2, 4]);
 
@@ -456,7 +458,7 @@ function parseRun(raw: unknown, field: string): VisualizationScenario["runs"][nu
 function parseArtifact(raw: unknown, field: string): VisualizationScenario["artifact"] {
   const data = record(raw, field);
   exact(data, ["artifact_kind", "artifact_contract", "artifact_contract_version", "renderer_family", "renderer_contract_version", "observable_ids", "payload_path", "payload_bytes", "payload_sha256"], field);
-  if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty" && data.artifact_contract !== "FeasibleRegion" && data.artifact_contract !== "ParetoFront" && data.artifact_contract !== "TopologyFieldEvolution") throw new Error(`${field}.artifact_contract is invalid.`);
+  if (data.artifact_contract !== "AlgorithmTrace" && data.artifact_contract !== "SurrogateUncertainty" && data.artifact_contract !== "FeasibleRegion" && data.artifact_contract !== "ParetoFront" && data.artifact_contract !== "TopologyFieldEvolution" && data.artifact_contract !== "ShiftSchedule") throw new Error(`${field}.artifact_contract is invalid.`);
   const artifactContractVersion = contractVersion(data.artifact_contract_version, `${field}.artifact_contract_version`);
   const rendererContractVersion = contractVersion(data.renderer_contract_version, `${field}.renderer_contract_version`);
   return {

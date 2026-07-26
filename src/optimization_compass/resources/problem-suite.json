@@ -121,6 +121,23 @@
       "last_verified": "2026-07-15"
     },
     {
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "name_ja": "hard制約と希望を持つシフト割当",
+      "name_en": "Shift scheduling with hard constraints and preferences",
+      "mathematical_family": "binary_shift_scheduling",
+      "variable_domain": "binary",
+      "objective_form": "linear_with_secondary_range_tiebreak",
+      "objective_direction": "maximize",
+      "available_oracles": ["objective_value", "feasibility"],
+      "constraint_class": "assignment_and_logical",
+      "dimensionality_policy": {"kind": "staff_by_day_by_shift", "minimum_staff": 2, "minimum_days": 1, "minimum_shifts": 1},
+      "known_reference_semantics": "A finite fixed roster can be exhaustively certified; the reference is scoped to the declared requests, qualifications, hard constraints, and tie-break.",
+      "related_problem_ids": ["PA026"],
+      "feature_ids": ["F_STRUCTURE_ASSIGNMENT", "F_VARIABLE_BINARY", "F_CONSTRAINT_LOGICAL"],
+      "source_ids": ["S022", "S053"],
+      "last_verified": "2026-07-26"
+    },
+    {
       "problem_definition_id": "PROBLEM_CONSTRAINED_CONTINUOUS_2D",
       "name_ja": "制約付き2次元問題",
       "name_en": "Constrained two-dimensional problem",
@@ -535,6 +552,72 @@
       "limitations_en": "A small dense cost matrix without forbidden edges or rectangular assignment.",
       "source_ids": ["S054", "S078"],
       "last_verified": "2026-07-15"
+    },
+    {
+      "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "name_ja": "4名・3日・日勤夜勤の固定シフト",
+      "name_en": "Fixed four-staff, three-day, day-night schedule",
+      "registry_key": "problem.shift_scheduling.4x3x2.v1",
+      "dimension": 24,
+      "parameters": {
+        "staff": [
+          {"staff_id": "A", "label_ja": "Aさん", "qualified_shifts": ["day", "night"]},
+          {"staff_id": "B", "label_ja": "Bさん", "qualified_shifts": ["day", "night"]},
+          {"staff_id": "C", "label_ja": "Cさん", "qualified_shifts": ["day", "night"]},
+          {"staff_id": "D", "label_ja": "Dさん", "qualified_shifts": ["day"]}
+        ],
+        "days": [
+          {"day_id": "mon", "label_ja": "月"},
+          {"day_id": "tue", "label_ja": "火"},
+          {"day_id": "wed", "label_ja": "水"}
+        ],
+        "shifts": [
+          {"shift_id": "day", "label_ja": "日勤"},
+          {"shift_id": "night", "label_ja": "夜勤"}
+        ],
+        "requests": [
+          [[1, 1], [1, 1], [1, 1]],
+          [[1, 0], [1, 0], [1, 0]],
+          [[0, 1], [0, 1], [0, 1]],
+          [[1, 1], [0, 1], [1, 0]]
+        ],
+        "required_per_shift": 1,
+        "preference_weight": 10,
+        "workload_range_weight": 1
+      },
+      "bounds": {"binary_variables": {"lower": 0, "upper": 1, "count": 24}},
+      "constraints": [
+        {"constraint_id": "coverage", "type": "exactly_one_per_day_shift"},
+        {"constraint_id": "one_shift_per_day", "type": "at_most_one"},
+        {"constraint_id": "qualification", "type": "forbidden_assignment"},
+        {"constraint_id": "night_rest", "type": "night_forbids_next_day_day"}
+      ],
+      "initialization_candidates": [
+        {"candidate_id": "preference_only_feasible", "point": [0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+      ],
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "known_reference_status": "known_exact",
+      "known_reference": {
+        "point": [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+        "value": 59,
+        "fulfilled_requests": 6,
+        "workload_range": 1,
+        "certification": "complete enumeration of 4096 slot assignments",
+        "source_ids": ["S022", "S053"]
+      },
+      "display": {
+        "range": {"objective": [0, 60], "fulfilled_requests": [0, 6], "workload_range": [0, 3], "hard_violations": [0, 6]},
+        "axis_labels": ["staff", "day", "shift"],
+        "units": ["staff", "days", "shifts"],
+        "expression": "max 10×fulfilled_requests − workload_range"
+      },
+      "intended_phenomena": ["hard_constraint_feasibility", "preference_tie", "secondary_workload_balance"],
+      "limitations_ja": "4名・3日・2勤務帯の固定教材であり、法令、健康、安全、同意、欠勤、需要変動、複数資格、長期公平性を表しません。",
+      "limitations_en": "A fixed four-staff, three-day, two-shift lesson; it omits law, health, safety, consent, absence, uncertain demand, multiple skills, and long-horizon fairness.",
+      "source_ids": ["S022", "S053"],
+      "last_verified": "2026-07-26"
     },
     {
       "problem_instance_id": "INSTANCE_CONSTRAINED_DISK_2D",

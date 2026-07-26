@@ -169,6 +169,82 @@ def _assignment(instance: ProblemInstance, point: Sequence[float]) -> float:
     return sum(float(rows[row][column]) for row, column in enumerate(assignment))
 
 
+def _shift_scheduling(instance: ProblemInstance, point: Sequence[float]) -> float:
+    staff = instance.parameters.get("staff")
+    days = instance.parameters.get("days")
+    shifts = instance.parameters.get("shifts")
+    requests = instance.parameters.get("requests")
+    if not all(isinstance(value, list) for value in (staff, days, shifts, requests)):
+        raise ValueError("invalid shift-scheduling data")
+    staff_rows = [cast(dict[str, object], row) for row in cast(list[object], staff)]
+    day_count = len(cast(list[object], days))
+    shift_rows = [cast(dict[str, object], row) for row in cast(list[object], shifts)]
+    shift_count = len(shift_rows)
+    values = [int(value) for value in point]
+    if any(
+        value not in {0, 1} or float(raw) != value for raw, value in zip(point, values, strict=True)
+    ):
+        raise ValueError("shift-scheduling decisions must be binary")
+    request_rows = cast(list[list[list[int]]], requests)
+    assignment = [
+        [
+            values[(staff_index * day_count + day_index) * shift_count + shift_index]
+            for shift_index in range(shift_count)
+        ]
+        for staff_index in range(len(staff_rows))
+        for day_index in range(day_count)
+    ]
+    for day_index in range(day_count):
+        for shift_index in range(shift_count):
+            if (
+                sum(
+                    assignment[staff_index * day_count + day_index][shift_index]
+                    for staff_index in range(len(staff_rows))
+                )
+                != 1
+            ):
+                return float("-inf")
+    if any(sum(row) > 1 for row in assignment):
+        return float("-inf")
+    shift_ids = [str(row["shift_id"]) for row in shift_rows]
+    day_shift = shift_ids.index("day")
+    night_shift = shift_ids.index("night")
+    for staff_index, row in enumerate(staff_rows):
+        qualifications = row.get("qualified_shifts")
+        if not isinstance(qualifications, list):
+            raise ValueError("invalid shift qualification data")
+        allowed = {str(value) for value in qualifications}
+        for day_index in range(day_count):
+            for shift_index, shift_id in enumerate(shift_ids):
+                if (
+                    shift_id not in allowed
+                    and assignment[staff_index * day_count + day_index][shift_index]
+                ):
+                    return float("-inf")
+            if (
+                day_index + 1 < day_count
+                and assignment[staff_index * day_count + day_index][night_shift]
+                and assignment[staff_index * day_count + day_index + 1][day_shift]
+            ):
+                return float("-inf")
+    fulfilled = sum(
+        request_rows[staff_index][day_index][shift_index]
+        * assignment[staff_index * day_count + day_index][shift_index]
+        for staff_index in range(len(staff_rows))
+        for day_index in range(day_count)
+        for shift_index in range(shift_count)
+    )
+    workloads = [
+        sum(sum(assignment[staff_index * day_count + day_index]) for day_index in range(day_count))
+        for staff_index in range(len(staff_rows))
+    ]
+    workload_range = max(workloads) - min(workloads)
+    return float(
+        _number(instance.parameters.get("preference_weight")) * fulfilled
+        - _number(instance.parameters.get("workload_range_weight")) * workload_range
+    )
+
+
 def _number(value: object) -> float:
     if not isinstance(value, int | float):
         raise ValueError("problem registry expected a numeric value")
@@ -585,6 +661,7 @@ _REGISTRY: dict[str, tuple[Evaluator, Gradient | None]] = {
     "problem.wavy_black_box.v1": (_wavy_black_box, None),
     "problem.knapsack.binary.v1": (_knapsack, None),
     "problem.assignment.linear.v1": (_assignment, None),
+    "problem.shift_scheduling.4x3x2.v1": (_shift_scheduling, None),
     "problem.constrained_disk.v1": (_constrained_disk, None),
     "problem.topology.cantilever.v1": (_topology_compliance, _topology_compliance_gradient),
     "problem.shape.diffuser_3p.v1": (_diffuser_shape, _diffuser_shape_gradient),

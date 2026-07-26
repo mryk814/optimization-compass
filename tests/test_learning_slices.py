@@ -9,12 +9,16 @@ from optimization_compass.learning_slices import (
     PARETO_ARTIFACT_ID,
     PARETO_PREFERENCE_SCENARIO_ID,
     PARETO_SCENARIO_ID,
+    SHIFT_BALANCED_ARTIFACT_ID,
+    SHIFT_BALANCED_SCENARIO_ID,
+    SHIFT_PREFERENCE_SCENARIO_ID,
     TOPOLOGY_ARTIFACT_ID,
     TOPOLOGY_COMPARISON_SCENARIO_ID,
     TOPOLOGY_FAILURE_SCENARIO_ID,
     TOPOLOGY_SCENARIO_ID,
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
+    generate_shift_schedule_artifacts,
     validate_reference_geometry,
     write_learning_slice_scenarios,
 )
@@ -54,6 +58,16 @@ def test_pareto_result_is_deterministic_and_contains_dominance_contrast() -> Non
     assert lens.objective_expressions[2] == "f₃=(x−2)²+y²"
 
 
+def test_shift_schedule_tiebreak_preserves_preferences_and_reduces_imbalance() -> None:
+    balanced, preference = generate_shift_schedule_artifacts("0.18.18")
+
+    assert balanced.metrics.fulfilled_requests == preference.metrics.fulfilled_requests == 6
+    assert balanced.metrics.workload_range == 1
+    assert preference.metrics.workload_range == 3
+    assert balanced.metrics.hard_violations == preference.metrics.hard_violations == 0
+    assert balanced.metrics.feasible_schedules == preference.metrics.feasible_schedules == 441
+
+
 def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> None:
     scenarios, links = write_learning_slice_scenarios(tmp_path, dataset_version="0.10.0")
 
@@ -65,16 +79,20 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         TOPOLOGY_SCENARIO_ID,
         TOPOLOGY_FAILURE_SCENARIO_ID,
         TOPOLOGY_COMPARISON_SCENARIO_ID,
+        SHIFT_BALANCED_SCENARIO_ID,
+        SHIFT_PREFERENCE_SCENARIO_ID,
     }
     assert {scenario.artifact.renderer_family for scenario in scenarios} == {
         "feasible_region",
         "pareto_front",
         "field_evolution",
+        "assignment_schedule",
     }
     assert {link.artifact_id for link in links} == {
         CONSTRAINED_ARTIFACT_ID,
         PARETO_ARTIFACT_ID,
         TOPOLOGY_ARTIFACT_ID,
+        SHIFT_BALANCED_ARTIFACT_ID,
     }
     for scenario in scenarios:
         payload = tmp_path / scenario.artifact.payload_path

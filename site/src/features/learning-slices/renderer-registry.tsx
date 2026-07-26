@@ -1,6 +1,6 @@
 import type { LearningSliceArtifact } from "../../contracts/learning-slices";
 import { buildFieldEvolutionPayload } from "../../contracts/field-evolution";
-import { FeasibleRegionRenderer, FieldEvolutionRenderer, ParetoFrontRenderer } from "./renderers";
+import { AssignmentScheduleRenderer, FeasibleRegionRenderer, FieldEvolutionRenderer, ParetoFrontRenderer } from "./renderers";
 
 export type InitialRunRole = "primary" | "comparison" | "failure_contrast";
 type Renderer = (artifact: LearningSliceArtifact, initialRunRole?: InitialRunRole) => React.ReactNode;
@@ -14,6 +14,9 @@ const renderers = {
   ),
   field_evolution: (artifact: LearningSliceArtifact, initialRunRole?: InitialRunRole) => (
     <FieldEvolutionRenderer payload={buildFieldEvolutionPayload(artifact as Extract<LearningSliceArtifact, { renderer_family: "field_evolution" }>)} initialRunRole={initialRunRole} />
+  ),
+  assignment_schedule: (artifact: LearningSliceArtifact) => (
+    <AssignmentScheduleRenderer artifact={artifact as Extract<LearningSliceArtifact, { renderer_family: "assignment_schedule" }>} />
   ),
 } satisfies Record<LearningSliceArtifact["renderer_family"], Renderer>;
 

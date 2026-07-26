@@ -154,8 +154,12 @@
         }
       ],
       "implementation_ids": ["I_ORTOOLS_CPSAT"],
-      "visualization_ids": ["VIEW_PROBLEM_STRUCTURE"],
-      "comparison_ids": [],
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+      ],
+      "comparison_ids": ["COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"],
       "source_ids": ["S022", "S053", "S054", "S055", "S079"],
       "difficulty": "intro",
       "status": "published",
@@ -282,7 +286,7 @@
       "source_ids": ["S010", "S055"],
       "difficulty": "intermediate",
       "status": "published",
-      "last_reviewed": "2026-07-24",
+      "last_reviewed": "2026-07-26",
       "question": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
       "variable_domain": "固定教材では資産比率 $w\\in X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_iw_i=1\\}$。$w_i$ は資産 $i$ の保有比率で、空売りと借入は認めない。",
       "decision_variables": "4資産の保有比率 $w=(w_1,w_2,w_3,w_4)$。期待収益 $\\mu$、共分散行列 $\\Sigma$、risk aversion $\\gamma$、集中上限0.6は入力であり、最適化中に推定し直さない。",

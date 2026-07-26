@@ -16,11 +16,11 @@ BASE_DATABASE = ROOT / "data/optimization_method_selection_database_v0.2.0.sqlit
 PROBLEM_SEED = ROOT / "src/optimization_compass/resources/problem-suite.json"
 
 
-def test_problem_suite_has_twenty_one_closed_representative_instances() -> None:
+def test_problem_suite_has_closed_representative_instances() -> None:
     suite = ProblemSuiteSeed.model_validate_json(PROBLEM_SEED.read_text(encoding="utf-8"))
 
     assert suite == load_problem_suite()
-    assert len(suite.instances) == 24
+    assert len(suite.instances) == 25
     assert {item.known_reference_status for item in suite.instances} >= {
         "known_exact",
         "unknown",
@@ -30,6 +30,7 @@ def test_problem_suite_has_twenty_one_closed_representative_instances() -> None:
         "OBJECTIVE_ROSENBROCK_2D",
         "OBJECTIVE_EDUCATIONAL_WAVY_1D",
         "INSTANCE_BINARY_KNAPSACK_4",
+        "INSTANCE_SHIFT_SCHEDULING_4X3X2",
         "INSTANCE_CONSTRAINED_DISK_2D",
         "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
         "INSTANCE_EXPONENTIAL_DECAY_FIT_3P",
@@ -65,6 +66,11 @@ def test_problem_suite_has_twenty_one_closed_representative_instances() -> None:
         ("INSTANCE_ABSOLUTE_RIDGE_2D", [0.0, 0.0], 0.0),
         ("INSTANCE_BINARY_KNAPSACK_4", [1.0, 1.0, 0.0, 0.0], 15.0),
         ("INSTANCE_ASSIGNMENT_3X3", [1.0, 0.0, 2.0], 5.0),
+        (
+            "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+            [1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+            59.0,
+        ),
         (
             "INSTANCE_CONSTRAINED_DISK_2D",
             [0.2928932188134524, 0.2928932188134524],
@@ -122,8 +128,8 @@ def test_staged_sqlite_and_generated_catalog_share_one_authority(tmp_path: Path)
     repository = KnowledgeRepository(release.database_path)
 
     catalog = repository.problem_catalog()
-    assert len(catalog.definitions) == 21
-    assert len(catalog.instances) == 24
+    assert len(catalog.definitions) == 22
+    assert len(catalog.instances) == 25
     context = next(
         item
         for item in repository.benchmark_contexts()

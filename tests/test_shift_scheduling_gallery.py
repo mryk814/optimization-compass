@@ -16,8 +16,12 @@ def test_shift_scheduling_uses_the_scheduling_archetype_and_explicit_hard_constr
     assert {item["method_id"] for item in case["candidate_methods"]} == {"M_CP_SAT"}
     assert {item["method_id"] for item in case["conditional_methods"]} == {"MF_DISCRETE_EXACT"}
     assert {item["method_id"] for item in case["excluded_methods"]} == {"M_GRADIENT_DESCENT"}
-    assert case["visualization_ids"] == ["VIEW_PROBLEM_STRUCTURE"]
-    assert case["comparison_ids"] == []
+    assert case["visualization_ids"] == [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+    ]
+    assert case["comparison_ids"] == ["COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"]
     ast.parse(case["python_example"])
     assert "hard constraint" in case["objective"]
     assert "夜勤後の翌日日勤" in case["constraints"]
