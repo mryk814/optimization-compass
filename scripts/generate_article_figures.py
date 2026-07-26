@@ -56,6 +56,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         ),
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
         "pbt-lineage-execution.svg": _pbt_lineage_svg(dataset_version).encode("utf-8"),
+        "pdlp-residual-execution.svg": _pdlp_residual_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "sgd-mini-batch-execution.svg": _sgd_mini_batch_svg(dataset_version).encode("utf-8"),
@@ -730,6 +731,262 @@ def _direct_shooting_svg(dataset_version: str) -> str:
   .dsh-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
   .dsh-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
   .dsh-note { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _pdlp_probe() -> dict[str, object]:
+    costs = (3.0, 1.0, 2.0)
+    right_hand_side = 1.0
+    spectral_norm = math.sqrt(3.0)
+    primal_step = 0.9 / spectral_norm
+    dual_step = 0.9 / spectral_norm
+    primal = [1.0 / 3.0] * 3
+    dual = 0.0
+    history: list[dict[str, object]] = []
+
+    for iteration in range(101):
+        primal_residual = abs(sum(primal) - right_hand_side)
+        reduced_costs = tuple(cost - dual for cost in costs)
+        dual_residual = math.sqrt(
+            sum(min(reduced_cost, 0.0) ** 2 for reduced_cost in reduced_costs)
+        )
+        primal_objective = sum(cost * value for cost, value in zip(costs, primal, strict=True))
+        dual_objective = right_hand_side * dual
+        history.append(
+            {
+                "iteration": iteration,
+                "primal": tuple(primal),
+                "dual": dual,
+                "primal_residual": primal_residual,
+                "dual_residual": dual_residual,
+                "objective_difference": abs(primal_objective - dual_objective),
+                "primal_objective": primal_objective,
+                "dual_objective": dual_objective,
+            }
+        )
+        if iteration == 100:
+            break
+
+        primal_next = [
+            max(0.0, value - primal_step * (cost - dual))
+            for value, cost in zip(primal, costs, strict=True)
+        ]
+        extrapolated_sum = sum(
+            2.0 * next_value - value for next_value, value in zip(primal_next, primal, strict=True)
+        )
+        dual += dual_step * (right_hand_side - extrapolated_sum)
+        primal = primal_next
+
+    return {
+        "costs": costs,
+        "right_hand_side": right_hand_side,
+        "spectral_norm": spectral_norm,
+        "primal_step": primal_step,
+        "dual_step": dual_step,
+        "history": tuple(history),
+        "snapshots": tuple(history[index] for index in (0, 5, 20, 100)),
+        "final_primal": history[-1]["primal"],
+        "final_dual": history[-1]["dual"],
+        "final_primal_residual": history[-1]["primal_residual"],
+        "final_dual_residual": history[-1]["dual_residual"],
+        "final_objective_difference": history[-1]["objective_difference"],
+    }
+
+
+def _pdlp_residual_svg(dataset_version: str) -> str:
+    probe = _pdlp_probe()
+    history = probe["history"]
+    snapshots = probe["snapshots"]
+    if not isinstance(history, tuple) or not isinstance(snapshots, tuple):
+        raise TypeError("PDLP teaching probe history and snapshots must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 82.0, 592.0
+    plot_top, plot_bottom = 632.0, 864.0
+    log_floor = -8.0
+
+    def iteration_x(iteration: int) -> float:
+        return plot_left + iteration / 100.0 * (plot_right - plot_left)
+
+    def residual_y(value: float) -> float:
+        exponent = max(log_floor, min(0.0, math.log10(max(value, 10.0**log_floor))))
+        return plot_top + (0.0 - exponent) / -log_floor * (plot_bottom - plot_top)
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">PDHG反復で変数と三つの判定量が変わる様子</title>',
+        (
+            '<desc id="figure-description">三変数simplex線形計画を100回更新した固定教材。'
+            "上段では初期に均等だった質量が最小costのx2へ移る。"
+            "下段ではprimal residual、dual residual、primalとdualの目的値差を同時に示す。"
+            "dual residualだけは初期にもゼロであり、一つの量だけでは停止できない。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="pdlp-title">一つの残差では、収束を判定できない</text>',
+        (
+            '<text x="32" y="80" class="pdlp-subtitle">'
+            "fixed 3-variable LP · matrix-vector updates · 100 iterations</text>"
+        ),
+        '<rect x="24" y="112" width="592" height="406" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="152" class="pdlp-panel">primal variable · target sum = 1</text>',
+        '<rect x="44" y="174" width="18" height="18" rx="4" fill="#d67835"/>',
+        '<text x="72" y="189" class="pdlp-legend">x₁ · cost 3</text>',
+        '<rect x="210" y="174" width="18" height="18" rx="4" fill="#2c7564"/>',
+        '<text x="238" y="189" class="pdlp-legend">x₂ · cost 1</text>',
+        '<rect x="376" y="174" width="18" height="18" rx="4" fill="#8ba7a0"/>',
+        '<text x="404" y="189" class="pdlp-legend">x₃ · cost 2</text>',
+    ]
+
+    colors = ("#d67835", "#2c7564", "#8ba7a0")
+    for row_index, snapshot in enumerate(snapshots):
+        if not isinstance(snapshot, dict):
+            raise TypeError("PDLP teaching snapshot must be a dictionary")
+        primal = snapshot["primal"]
+        if not isinstance(primal, tuple):
+            raise TypeError("PDLP teaching primal vector must be a tuple")
+        y = 218.0 + row_index * 68.0
+        elements.extend(
+            [
+                (
+                    f'<text x="44" y="{y + 22:.2f}" class="pdlp-step">'
+                    f"k = {int(snapshot['iteration'])}</text>"
+                ),
+                (f'<rect x="126" y="{y:.2f}" width="360" height="34" rx="8" fill="#edf2ef"/>'),
+                (
+                    f'<line x1="414" y1="{y - 4:.2f}" x2="414" y2="{y + 38:.2f}" '
+                    'stroke="#102a2e" stroke-width="2" stroke-dasharray="4 4"/>'
+                ),
+            ]
+        )
+        cursor = 126.0
+        for value, color in zip(primal, colors, strict=True):
+            segment_width = 288.0 * max(0.0, float(value))
+            if segment_width > 0.0:
+                elements.append(
+                    f'<rect x="{cursor:.2f}" y="{y:.2f}" width="{segment_width:.2f}" '
+                    f'height="34" fill="{color}"/>'
+                )
+            cursor += segment_width
+        elements.append(
+            f'<text x="584" y="{y + 22:.2f}" text-anchor="end" class="pdlp-value">'
+            f"cᵀx = {float(snapshot['primal_objective']):.3f}</text>"
+        )
+
+    elements.extend(
+        [
+            '<text x="44" y="494" class="pdlp-note">最小costの x₂ へ質量が集まる</text>',
+            '<rect x="24" y="542" width="592" height="376" rx="18" fill="#fff" stroke="#cad8d2"/>',
+            '<text x="44" y="582" class="pdlp-panel">three stopping quantities</text>',
+        ]
+    )
+
+    for exponent in (0, -2, -4, -6, -8):
+        y = residual_y(10.0**exponent)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#e4e9e5" stroke-width="1"/>'
+                ),
+                (
+                    f'<text x="68" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="pdlp-axis">10^{exponent}</text>'
+                ),
+            ]
+        )
+    for iteration in (0, 20, 40, 60, 80, 100):
+        x = iteration_x(iteration)
+        elements.append(
+            f'<text x="{x:.2f}" y="892" text-anchor="middle" class="pdlp-axis">{iteration}</text>'
+        )
+
+    series = (
+        ("primal residual", "primal_residual", "#2c7564", ""),
+        ("dual residual", "dual_residual", "#d67835", "7 5"),
+        ("|cᵀx − bᵀy|", "objective_difference", "#102a2e", "3 5"),
+    )
+    for _, key, color, dash in series:
+        points = " ".join(
+            f"{iteration_x(int(item['iteration'])):.2f},{residual_y(float(item[key])):.2f}"
+            for item in history
+            if isinstance(item, dict)
+        )
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        elements.append(
+            f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="4" '
+            f'stroke-linecap="round" stroke-linejoin="round"{dash_attribute}/>'
+        )
+    legend_items = (
+        (44, "primal residual", "#2c7564", ""),
+        (232, "dual residual", "#d67835", "7 5"),
+        (410, "|objective diff|", "#102a2e", "3 5"),
+    )
+    for x, label, color, dash in legend_items:
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x}" y1="606" x2="{x + 28}" y2="606" '
+                    f'stroke="{color}" stroke-width="4"{dash_attribute}/>'
+                ),
+                f'<text x="{x + 36}" y="612" class="pdlp-legend">{label}</text>',
+            ]
+        )
+    final_primal = probe["final_primal"]
+    if not isinstance(final_primal, tuple):
+        raise TypeError("PDLP teaching final primal vector must be a tuple")
+    elements.extend(
+        [
+            '<circle cx="82" cy="864" r="7" fill="#d67835" stroke="#fff" stroke-width="2"/>',
+            '<text x="96" y="850" class="pdlp-callout">feasibility residuals = 0 at k = 0</text>',
+            '<text x="96" y="874" class="pdlp-callout">but |objective diff| = 2</text>',
+            '<text x="32" y="956" class="pdlp-metric-label">solution</text>',
+            (
+                '<text x="32" y="984" class="pdlp-metric">'
+                f"x = ({', '.join(f'{float(value):.3f}' for value in final_primal)})"
+                "</text>"
+            ),
+            '<text x="352" y="956" class="pdlp-metric-label">objective</text>',
+            '<text x="352" y="984" class="pdlp-metric">2.000 → 1.000</text>',
+            (
+                '<text x="32" y="1024" class="pdlp-meta">'
+                "実行生成: scripts.generate_article_figures._pdlp_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1048" class="pdlp-limit">'
+                "図のobjective differenceはraw absolute differenceです。infeasible iterateでは"
+                "</text>"
+            ),
+            (
+                '<text x="32" y="1070" class="pdlp-limit">'
+                "dual bound／certificateを意味しません。scaling、restart、solver性能も"
+                "示しません。</text>"
+            ),
+            """
+<style>
+  .pdlp-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .pdlp-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .pdlp-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .pdlp-legend { font: 400 15px system-ui, sans-serif; fill: #45656a; }
+  .pdlp-step { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
+  .pdlp-value { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
+  .pdlp-note { font: 700 16px system-ui, sans-serif; fill: #2c7564; }
+  .pdlp-axis { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .pdlp-callout { font: 700 14px system-ui, sans-serif; fill: #8b4c3d; }
+  .pdlp-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .pdlp-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .pdlp-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .pdlp-limit { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
 </style>
 """,
             "</svg>\n",

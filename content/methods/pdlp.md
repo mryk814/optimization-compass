@@ -10,14 +10,15 @@ prerequisites: [concept.convexity]
 related_ids: [barrier-lp-qp, primal-simplex, family.composite-convex]
 aliases: [/learn/pdlp]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 行列因数分解を避け、行列ベクトル積だけを使う一次法（PDHG）をLPへ適用し、巨大疎LPを扱う近年の方向です。
 
 ## 30秒でつかむ
 
-PDLPは、basisやKKT行列のfactorizationを毎回作る代わりに、primalとdualのresidualを行列ベクトル積で少しずつ減らします。
+PDLPは、basisやKKT行列のfactorizationを毎回作りません。
+primalとdualのresidualを、行列ベクトル積で少しずつ減らします。
 
 - 見ているもの: primal residual、dual residual、duality gap
 - 動かしているもの: primal variable $x$、dual variable $y$、step size、restart
@@ -28,10 +29,11 @@ PDLPは、basisやKKT行列のfactorizationを毎回作る代わりに、primal�
 
 [Primal simplex](#/learn/primal-simplex)はbasis行列を更新します。
 [primal-dual barrier法](#/learn/barrier-lp-qp)は、中心pathのNewton stepでKKT行列を扱います。
-超大規模な疎問題では、factorizationのfill-inがmemoryと計算時間を圧迫する場合があります。
+超大規模な疎問題では、factorizationのfill-inがmemoryを圧迫する場合があります。
+計算時間への影響も無視できません。
 
 PDHG（primal-dual hybrid gradient）は、$Ax$や$A^Ty$の行列ベクトル積で反復を進めます。
-factorizationを避けるため、巨大疎LPまで同じ更新形式を保てます。
+factorizationを避けるため、巨大疎LPでも同じ更新形式を保てます。
 Google OR-ToolsのPDLPは、この方向を実装したsolverです（S078）。
 
 ## PDHG反復が何をしているか
@@ -56,6 +58,22 @@ $\Pi_{x\ge0}$は非負制約へのprojectionで、閉形式（clip）で計算�
 step size $\tau,\sigma$は、$A$のスペクトルノルム$L=\|A\|_2$を使って決めます。
 基本形では$\tau\sigma L^2<1$を満たすように保守的な値を選びます。
 
+上段では、最初は均等だった$x$が最小costの$x_2$へ移ります。
+下段では、停止判定に使う三つの量を同じ反復軸で追います。
+
+![3変数のsimplex LPをPDHGで100回更新した固定実行。上段ではx1、x2、x3へ均等だった質量が、反復5、20、100を経て最小costのx2へ集まる。下段ではprimal residual、dual residual、primalとdualの目的値差を対数軸で示す。初期のdual residualは0だが目的値差は2であり、一つの量だけでは収束を判定できない。](./media/pdlp-residual-execution.svg "同じPDHG実行からprimal変数と三つの停止判定量を生成した固定教材")
+
+初期点はprimalとdualのfeasibility residualがともに0です。
+しかし、primalとdualの目的値差は2なので、まだ最適ではありません。
+一つの残差だけでなく、feasibilityと目的値差を同時に確認する必要があります。
+
+> 固定した3変数equality LPの100反復です。
+> 最終解は `x = (0, 1, 0)` 付近、目的値は `2.000 → 1.000` です。
+> 図のobjective differenceはraw absolute differenceです。
+> infeasibleな途中反復では、dual boundやcertificateを意味しません。
+> scaling、restart、infeasibility certificateは含みません。
+> PDLP実装一般の性能も示していません。
+
 ## 許容誤差をどう読むか
 
 PDHGは頂点（basis）を直接たどるのではなく、次の3量を同時に小さくします。
@@ -69,7 +87,9 @@ PDHGは頂点（basis）を直接たどるのではなく、次の3量を同時�
 高い相対精度へ到達した実例もあるため、PDLPを中精度だけのsolverとはみなしません。
 
 simplex系とPDLPでは、停止条件と返す解の形が異なります。
-同じ許容誤差$10^{-8}$でも、primal／dual infeasibilityとgapの定義・absolute／relative scalingを揃えて比較します。
+同じ許容誤差$10^{-8}$でも、その意味が同じとは限りません。
+primal／dual infeasibilityとgapの定義を揃えて比較します。
+absolute／relative scalingも確認します。
 factorizationのmemory、必要精度、反復時間を同じ問題で確認して選びます。
 
 ## 向いている条件
@@ -90,39 +110,49 @@ factorizationのmemory、必要精度、反復時間を同じ問題で確認し�
 
 次はequality制約LP $\min_x c^Tx$ subject to $Ax=b,\ x\ge0$ の教育用PDHG反復です。
 制約は単純なsimplex $x_1+x_2+x_3=1$ とします。
-step sizeは$A$のスペクトルノルムから保守的に決めています。
+step sizeは$A$のスペクトルノルムから決めます。
 
 ```python
-import numpy as np
+from math import sqrt
 
 
-def project_nonneg(x: np.ndarray) -> np.ndarray:
-    return np.maximum(x, 0.0)
+costs = (3.0, 1.0, 2.0)
+rhs = 1.0
+tau = sigma = 0.9 / sqrt(3.0)
+primal = [1.0 / 3.0] * 3
+dual = 0.0
+history = []
 
+for iteration in range(101):
+    primal_residual = abs(sum(primal) - rhs)
+    reduced_costs = [cost - dual for cost in costs]
+    dual_residual = sqrt(sum(min(value, 0.0) ** 2 for value in reduced_costs))
+    primal_objective = sum(cost * value for cost, value in zip(costs, primal))
+    objective_difference = abs(primal_objective - rhs * dual)
+    history.append(
+        (iteration, tuple(primal), primal_residual, dual_residual, objective_difference)
+    )
+    if iteration == 100:
+        break
 
-a = np.array([[1.0, 1.0, 1.0]])
-b = np.array([1.0])
-c = np.array([3.0, 1.0, 2.0])
+    primal_next = [
+        max(0.0, value - tau * (cost - dual))
+        for value, cost in zip(primal, costs)
+    ]
+    extrapolated_sum = sum(
+        2.0 * next_value - value
+        for next_value, value in zip(primal_next, primal)
+    )
+    dual += sigma * (rhs - extrapolated_sum)
+    primal = primal_next
 
-lipschitz = np.linalg.norm(a, ord=2)
-tau = 0.9 / lipschitz
-sigma = 0.9 / lipschitz
-
-x = np.full(3, 1.0 / 3.0)
-y = np.zeros(1)
-
-for _ in range(5_000):
-    x_next = project_nonneg(x - tau * (c - a.T @ y))
-    y = y + sigma * (b - a @ (2.0 * x_next - x))
-    x = x_next
-
-primal_residual = float(np.linalg.norm(a @ x - b))
-print(x, float(c @ x), primal_residual)
+print(history[0])
+print(history[-1])
 ```
 
-$x$は$[0,1,0]$付近へ近づきます。
+最終行では$x$が`(0, 1, 0)`付近へ近づきます。
 これは$c$が最小の座標に質量が寄る解です。
-あわせて、`primal_residual`が反復とともに小さくなることを確認します。
+三つの判定量が同時に小さいことも確認します。
 
 実務では、restart／diagonal scaling／収束判定をsolverへ任せます。
 [OR-Tools Linear Optimization公式ドキュメント](https://developers.google.com/optimization/lp)で利用versionのAPIと挙動を確認してください。

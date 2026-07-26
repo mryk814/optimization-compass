@@ -11,6 +11,7 @@ from scripts.generate_article_figures import (
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
     _pbt_population_probe,
+    _pdlp_probe,
     _sgd_mini_batch_probe,
     _spatial_branch_bound_probe,
     _spatial_interval_lower_bound,
@@ -62,6 +63,23 @@ def test_direct_shooting_probe_keeps_controls_and_rollout_states_separate() -> N
     assert probe["final_objective"] == pytest.approx(0.03435619268834956)
     assert probe["terminal_error"] == pytest.approx(0.049612429863726715)
     assert probe["saturated_controls"] == 11
+
+
+def test_pdlp_probe_requires_all_three_stopping_quantities() -> None:
+    probe = _pdlp_probe()
+    history = probe["history"]
+
+    assert len(history) == 101
+    assert history[0]["primal"] == pytest.approx((1.0 / 3.0,) * 3)
+    assert history[0]["dual_residual"] == pytest.approx(0.0)
+    assert history[0]["primal_residual"] == pytest.approx(0.0)
+    assert history[0]["objective_difference"] == pytest.approx(2.0)
+    assert history[5]["dual_residual"] > 0.48
+    assert probe["final_primal"] == pytest.approx((0.0, 1.0, 0.0), abs=3e-7)
+    assert probe["final_dual"] == pytest.approx(1.0, abs=3e-7)
+    assert probe["final_primal_residual"] < 3e-7
+    assert probe["final_dual_residual"] < 3e-7
+    assert probe["final_objective_difference"] < 4e-7
 
 
 def test_lqr_probe_matches_the_fixed_article_equations() -> None:
@@ -162,6 +180,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
         "pbt-lineage-execution.svg",
+        "pdlp-residual-execution.svg",
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
         "sgd-mini-batch-execution.svg",
@@ -205,6 +224,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/branch-and-cut.md": "search-tree-proof-execution.svg",
         "content/methods/family-discrete-structure.md": "search-tree-proof-execution.svg",
         "content/methods/pbt.md": "pbt-lineage-execution.svg",
+        "content/methods/pdlp.md": "pdlp-residual-execution.svg",
         "content/methods/sgd.md": "sgd-mini-batch-execution.svg",
         "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
         "content/methods/simp-topology.md": "topology-field-execution.svg",
