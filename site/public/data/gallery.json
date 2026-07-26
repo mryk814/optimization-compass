@@ -3101,6 +3101,315 @@
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
         "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
       ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "授業、教室、担当者、時間帯の採否と重複禁止を二値・論理制約として保ち、まず実行可能な時間割を得られるため"
+        }
+      ],
+      "case_id": "course-timetabling",
+      "comparison_ids": [
+        "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "割当ルールを線形式で表せ、緩和boundや最適性gapまで確認したい場合はMIP familyとして定式化する"
+        }
+      ],
+      "constraints": "各授業を必要回数だけ配置し、同じ教室・教員・受講グループを同時刻に重複させない。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
+      "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
+      "difficulty": "intro",
+      "domain": "education",
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "binary"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "discrete"
+        },
+        {
+          "feature_id": "F_CONVEXITY",
+          "value": "nonconvex"
+        },
+        {
+          "feature_id": "F_SMOOTHNESS",
+          "value": "discrete_valued"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "not_differentiable"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "combinatorial"
+        },
+        {
+          "feature_id": "F_DIMENSION_CONTEXT",
+          "value": "medium"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "cheap"
+        },
+        {
+          "feature_id": "F_NOISE_LEVEL",
+          "value": "deterministic"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "feasible_only"
+        }
+      ],
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "last_reviewed": "2026-07-26",
+      "limitations": [
+        "4授業・3日・2時間帯、各枠1授業の教育用instanceであり、複数教室、選択科目、学期全体、移動時間、教員負荷、学生ごとの履修を表さない。",
+        "実行可能な時間割が得られても、教育上の質、学生間の公平性、教職員の合意を保証しない。制約と重みは関係者が確認し、手動変更の履歴を残す必要がある。"
+      ],
+      "map_node_id": "answer:Q01:binary",
+      "objective": "希望適合度を増やしながら担当数や空き時間の偏りを抑える。固定教材では希望違反の重み付き合計と担当数の幅を最小化し、教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+      "practical_notes": "hard constraintとsoft preferenceを別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点をversion管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先のTheater／Compareは勤務シフトの固定教材であり、この時間割と同じdataではない。共通する二値割当、hard constraint、tie-breakの読み方だけを再利用する。",
+      "problem_archetype_id": "PA026",
+      "python_example": "from ortools.sat.python import cp_model\n\ncourses, days, slots = range(4), range(3), range(2)\nmodel = cp_model.CpModel()\nx = {(c, d, h): model.new_bool_var(f\"x_{c}_{d}_{h}\") for c in courses for d in days for h in slots}\nfor c in courses:\n    model.add(sum(x[c, d, h] for d in days for h in slots) == 1)\nfor d in days:\n    for h in slots:\n        model.add(sum(x[c, d, h] for c in courses) <= 1)\nmodel.add(x[3, 0, 0] == 0)\nmodel.maximize(sum(((c + d + h) % 2) * x[c, d, h] for c in courses for d in days for h in slots))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {(c, d, h): solver.value(x[c, d, h]) for c in courses for d in days for h in slots})",
+      "question": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。",
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "global_candidate_desired",
+        "Q10": "feasible_solution_first",
+        "Q11": "scheduling_routing",
+        "Q12": "repeated_similar"
+      },
+      "source_ids": [
+        "S022",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "status": "published",
+      "title_en": "Build a course timetable with room and instructor constraints",
+      "title_ja": "教室・担当・時間帯を守って時間割を組む",
+      "variable_domain": "固定教材では4授業・3日・午前／午後の割当 $x\\in X=\\{0,1\\}^{4\\times3\\times2}$。$x_{c,d,h}=1$ は授業 $c$ を日 $d$ の時間帯 $h$ へ置くこと、0は置かないことを表す。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "設備候補の採否、依存関係、同時実施不可、地域ごとの最低更新数を二値・論理制約として保ち、実行可能解と最適性gapを確認できるため"
+        }
+      ],
+      "case_id": "network-upgrade-portfolio",
+      "comparison_ids": [
+        "COMPARE_SUPPORT_SITE_BNB_BUDGET"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "MF_DISCRETE_EXACT",
+          "reason": "便益と費用が線形で、容量や依存関係を線形制約として表せる場合はMIP familyで緩和boundを使う"
+        }
+      ],
+      "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
+      "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、solverが変更する変数ではない。",
+      "difficulty": "intro",
+      "domain": "telecommunications",
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "binary"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "not_differentiable"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "combinatorial"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "cheap"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "optimality_gap"
+        }
+      ],
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "last_reviewed": "2026-07-26",
+      "limitations": [
+        "5候補・単一予算・固定scoreの教育用instanceであり、traffic flow、電波伝搬、冗長経路、工事順序、需要変動、障害の相関を表さない。",
+        "score最大化は容量、安全、規制適合、災害耐性を保証しない。候補と制約はnetwork engineerが検証し、scenario別の性能評価を別に行う必要がある。"
+      ],
+      "map_node_id": "answer:Q01:binary",
+      "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
+      "practical_notes": "便益scoreの定義期間、需要予測、障害data、費用単位、設備依存、地域下限をversion管理し、採択だけでなく未採択理由、unused budget、停止理由、best boundを記録する。接続先のTheater／Compareは一般の二値knapsack教材であり、通信網のflowや電波伝搬を計算しない。実務では候補生成とscore推定をnetwork simulationで別途検証する。",
+      "problem_archetype_id": "PA032",
+      "python_example": "from ortools.sat.python import cp_model\n\nupgrades = {\"A\": (4, 8), \"B\": (3, 7), \"C\": (3, 6), \"D\": (2, 5), \"E\": (2, 4)}\nmodel = cp_model.CpModel()\nx = {name: model.new_bool_var(name) for name in upgrades}\nmodel.add(sum(cost * x[name] for name, (cost, _) in upgrades.items()) <= 8)\nmodel.add(x[\"A\"] + x[\"B\"] >= 1)\nmodel.add(x[\"C\"] + x[\"D\"] + x[\"E\"] >= 1)\nmodel.maximize(sum(score * x[name] for name, (_, score) in upgrades.items()))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {name: solver.value(var) for name, var in x.items()}, solver.best_objective_bound)",
+      "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "question_answers": {
+        "Q01": "binary",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "logical_or_combinatorial",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "scheduling_routing",
+        "Q12": "one_off"
+      },
+      "source_ids": [
+        "S021",
+        "S022",
+        "S054",
+        "S079"
+      ],
+      "status": "published",
+      "title_en": "Select network upgrades under a capital budget",
+      "title_ja": "予算内で通信設備の更新候補を選ぶ",
+      "variable_domain": "候補設備 $A,B,C,D,E$ ごとの二値変数 $x_i\\in\\{0,1\\}$。固定教材では設備位置や通信量を連続変数へ変換せず、事前に監査した便益scoreと更新費用を入力する。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
+          "method_id": "M_BAYESIAN_OPT_GP",
+          "reason": "実験後にだけ得られる品質lossと観測noiseをsurrogateの平均・不確実性として分け、限られた追加実験で次の連続条件を選べるため"
+        }
+      ],
+      "case_id": "formulation-experiment-tuning",
+      "comparison_ids": [
+        "COMPARE_LASER_BO_ACQUISITION_NOISE"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_CMA_ES",
+          "reason": "実験を十分に並列化でき、surrogate modelよりもpopulationによる頑健な大域候補探索を優先できる予算がある場合"
+        }
+      ],
+      "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗やprotocol逸脱は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+      "decision_variables": "次に試す実験条件 $x$。原料lot、測定系、前処理、実験日、operatorは記録する入力またはblockであり、decision variableと混同しない。",
+      "difficulty": "intermediate",
+      "domain": "life-sciences",
+      "excluded_methods": [
+        {
+          "method_id": "M_BFGS",
+          "reason": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "continuous"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "simulation"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "none_available"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "bounds"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "very_expensive"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "global_candidate"
+        }
+      ],
+      "implementation_ids": [
+        "I_BOTORCH"
+      ],
+      "last_reviewed": "2026-07-26",
+      "limitations": [
+        "1次元・少数点・小noiseの固定教材であり、実際の混合物制約、カテゴリ原料、batch effect、時間変化、多目的品質、測定限界を表さない。",
+        "Bayesian optimizationが提案した候補は品質、安全性、有効性、規制適合を保証しない。許容領域は専門家が先に定義し、確認実験と独立検証を別に行う必要がある。"
+      ],
+      "map_node_id": "answer:Q05:unreliable_or_none",
+      "objective": "1回の実験後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
+      "practical_notes": "配合単位、原料lot、protocol、測定系、失敗status、実験日時を揃え、surrogate平均、uncertainty、acquisition、候補理由を各iterationで保存する。接続先のTheater／Compareは1次元の合成関数であり、実在の配合や安全性を再現しない。候補は次の実験点であって製品条件ではなく、独立反復、hold-out、専門家審査を経て判断する。",
+      "problem_archetype_id": "PA014",
+      "python_example": "import torch\nfrom botorch.acquisition import LogExpectedImprovement\nfrom botorch.fit import fit_gpytorch_mll\nfrom botorch.models import SingleTaskGP\nfrom gpytorch.mlls import ExactMarginalLogLikelihood\n\ntrain_x = torch.tensor([[-2.5], [0.0], [2.5]], dtype=torch.double)\ntrain_y = (0.18 * (train_x - 1.2) ** 2 + 0.35 * torch.sin(2.4 * train_x) + 0.08 * torch.sin(6.0 * train_x))\nmodel = SingleTaskGP(train_x, train_y)\nfit_gpytorch_mll(ExactMarginalLogLikelihood(model.likelihood, model))\nacq = LogExpectedImprovement(model, best_f=train_y.min(), maximize=False)\ngrid = torch.linspace(-3.0, 3.0, 301, dtype=torch.double).unsqueeze(-1)\nnext_x = grid[torch.argmax(acq(grid.unsqueeze(-2)))]\nprint(next_x.item())",
+      "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "experiment_only",
+        "Q03": "unknown",
+        "Q04": "bounds",
+        "Q05": "unreliable_or_none",
+        "Q06": "hours_or_more",
+        "Q07": "small_noise",
+        "Q08": "under_10",
+        "Q09": "global_candidate_desired",
+        "Q10": "no_certificate_needed",
+        "Q11": "none_known",
+        "Q12": "repeated_similar"
+      },
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "status": "published",
+      "title_en": "Tune formulation settings with a limited experiment budget",
+      "title_ja": "少ない実験で配合条件を絞る",
+      "variable_domain": "実務では成分比、混合時間、温度をそれぞれの安全・設備bounds内で保持する。固定教材だけがacquisitionの読み方を示すため、これらを1個の正規化変数 $x\\in[-3,3]$ へ縮約する。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+      ]
     }
   ],
   "contract_version": "3.0.0",
@@ -3117,6 +3426,10 @@
     {
       "domain": "control",
       "label_ja": "制御"
+    },
+    {
+      "domain": "education",
+      "label_ja": "教育・学習"
     },
     {
       "domain": "energy",
@@ -3143,6 +3456,10 @@
       "label_ja": "物流"
     },
     {
+      "domain": "life-sciences",
+      "label_ja": "生命科学・実験"
+    },
+    {
       "domain": "machine-learning",
       "label_ja": "機械学習"
     },
@@ -3161,6 +3478,10 @@
     {
       "domain": "science",
       "label_ja": "科学・推定"
+    },
+    {
+      "domain": "telecommunications",
+      "label_ja": "通信・ネットワーク"
     },
     {
       "domain": "transportation",

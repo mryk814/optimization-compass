@@ -588,6 +588,50 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:course-timetabling:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:course-timetabling",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+        "feature_value:F_CONSTRAINT_CLASS:combinatorial",
+        "feature_value:F_CONVEXITY:nonconvex",
+        "feature_value:F_DERIVATIVE_ACCESS:not_differentiable",
+        "feature_value:F_DIMENSION_CONTEXT:medium",
+        "feature_value:F_EVALUATION_COST:cheap",
+        "feature_value:F_NOISE_LEVEL:deterministic",
+        "feature_value:F_OBJECTIVE_FORM:discrete",
+        "feature_value:F_SMOOTHNESS:discrete_valued",
+        "feature_value:F_SOLUTION_GOAL:feasible_only",
+        "feature_value:F_VARIABLE_DOMAIN:binary",
+        "implementation:I_ORTOOLS_CPSAT",
+        "journey:course-timetabling",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA026",
+        "source:S022",
+        "source:S053",
+        "source:S054",
+        "source:S055",
+        "source:S079",
+        "view:SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "view:SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S022",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "text": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。",
+      "title": "教室・担当・時間帯を守って時間割を組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:ecosystem-restoration-selection:overview",
       "dataset_version": "0.18.19",
       "document_id": "case:ecosystem-restoration-selection",
@@ -696,6 +740,44 @@
       ],
       "text": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
       "title": "価格scenarioのtail costを抑えて電力を調達する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:formulation-experiment-tuning:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:formulation-experiment-tuning",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_LASER_BO_ACQUISITION_NOISE",
+        "feature_value:F_CONSTRAINT_CLASS:bounds",
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:very_expensive",
+        "feature_value:F_OBJECTIVE_FORM:simulation",
+        "feature_value:F_SOLUTION_GOAL:global_candidate",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_BOTORCH",
+        "journey:formulation-experiment-tuning",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_BFGS",
+        "method:M_CMA_ES",
+        "problem:PA014",
+        "source:S035",
+        "source:S059",
+        "source:S075",
+        "view:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "view:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "view:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "view:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "title": "少ない実験で配合条件を絞る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -945,6 +1027,44 @@
       ],
       "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
       "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "case:network-upgrade-portfolio:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:network-upgrade-portfolio",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_SUPPORT_SITE_BNB_BUDGET",
+        "feature_value:F_CONSTRAINT_CLASS:combinatorial",
+        "feature_value:F_DERIVATIVE_ACCESS:not_differentiable",
+        "feature_value:F_EVALUATION_COST:cheap",
+        "feature_value:F_OBJECTIVE_FORM:linear",
+        "feature_value:F_SOLUTION_GOAL:optimality_gap",
+        "feature_value:F_VARIABLE_DOMAIN:binary",
+        "implementation:I_ORTOOLS_CPSAT",
+        "journey:network-upgrade-portfolio",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA032",
+        "source:S021",
+        "source:S022",
+        "source:S054",
+        "source:S079",
+        "view:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "view:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S021",
+        "S022",
+        "S054",
+        "S079"
+      ],
+      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "title": "予算内で通信設備の更新候補を選ぶ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -1597,6 +1717,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:laser-process-tuning",
+        "journey:formulation-experiment-tuning",
         "journey:laser-process-tuning",
         "method:M_BAYESIAN_OPT_GP",
         "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
@@ -1955,6 +2076,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:shift-scheduling",
+        "journey:course-timetabling",
         "journey:shift-scheduling",
         "method:M_CP_SAT",
         "scenario:SCENARIO_SHIFT_SCHEDULING_BALANCED",
@@ -2011,6 +2133,7 @@
       "relation_context": [
         "case:emergency-shelter-selection",
         "journey:emergency-shelter-selection",
+        "journey:network-upgrade-portfolio",
         "method:M_BRANCH_BOUND",
         "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
         "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
@@ -32771,6 +32894,34 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:course-timetabling:M_GRADIENT_DESCENT:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:course-timetabling:M_GRADIENT_DESCENT",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:course-timetabling",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "scenario:SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+        "source:S022",
+        "source:S053",
+        "source:S054",
+        "source:S055",
+        "source:S079"
+      ],
+      "source_ids": [
+        "S022",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "text": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
+      "title": "教室・担当・時間帯を守って時間割を組むでは最急降下法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:ecosystem-restoration-selection:M_GRADIENT_DESCENT:overview",
       "dataset_version": "0.18.19",
       "document_id": "failure:case:ecosystem-restoration-selection:M_GRADIENT_DESCENT",
@@ -32844,6 +32995,35 @@
       ],
       "text": "simplex・供給上限とscenarioごとのtail costを明示せず探索すると、低い平均costでも調達制約やtailの根拠を確認できないため",
       "title": "価格scenarioのtail costを抑えて電力を調達するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:formulation-experiment-tuning:M_BFGS:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:formulation-experiment-tuning:M_BFGS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:formulation-experiment-tuning",
+        "failure:structured:FM003",
+        "failure:structured:FM007",
+        "failure:structured:FM016",
+        "method:M_BFGS",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "source:S035",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "text": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため",
+      "title": "少ない実験で配合条件を絞るではBFGS法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -33025,6 +33205,32 @@
       ],
       "text": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
       "title": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:network-upgrade-portfolio:M_GRADIENT_DESCENT:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:network-upgrade-portfolio:M_GRADIENT_DESCENT",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:network-upgrade-portfolio",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S021",
+        "source:S022",
+        "source:S054",
+        "source:S079"
+      ],
+      "source_ids": [
+        "S021",
+        "S022",
+        "S054",
+        "S079"
+      ],
+      "text": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため",
+      "title": "予算内で通信設備の更新候補を選ぶでは最急降下法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -39803,6 +40009,49 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:course-timetabling:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:course-timetabling",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:course-timetabling",
+        "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "implementation:I_ORTOOLS_CPSAT",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA026",
+        "scenario:SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "scenario:SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S023",
+        "source:S053",
+        "source:S054",
+        "source:S055",
+        "source:S079"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "text": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。",
+      "title": "教室・担当・時間帯を守って時間割を組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:ecosystem-restoration-selection:overview",
       "dataset_version": "0.18.19",
       "document_id": "journey:ecosystem-restoration-selection",
@@ -39922,6 +40171,45 @@
       ],
       "text": "複数の調達枠へ比率を配分し、平均調達costだけでなく価格scenarioの悪い側のtail costも抑えたい。",
       "title": "価格scenarioのtail costを抑えて電力を調達する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:formulation-experiment-tuning:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:formulation-experiment-tuning",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:formulation-experiment-tuning",
+        "comparison:COMPARE_LASER_BO_ACQUISITION_NOISE",
+        "content:bayesian-optimization",
+        "content:cma-es",
+        "implementation:I_BOTORCH",
+        "method:M_BAYESIAN_OPT_GP",
+        "method:M_BFGS",
+        "method:M_CMA_ES",
+        "problem:PA014",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "scenario:SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "scenario:SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+        "source:S032",
+        "source:S034",
+        "source:S035",
+        "source:S058",
+        "source:S059",
+        "source:S075"
+      ],
+      "source_ids": [
+        "S032",
+        "S034",
+        "S035",
+        "S058",
+        "S059",
+        "S075"
+      ],
+      "text": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "title": "少ない実験で配合条件を絞る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -40175,6 +40463,47 @@
       ],
       "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
       "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:network-upgrade-portfolio:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:network-upgrade-portfolio",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:network-upgrade-portfolio",
+        "comparison:COMPARE_SUPPORT_SITE_BNB_BUDGET",
+        "content:cp-sat",
+        "content:family.discrete-structure",
+        "implementation:I_ORTOOLS_CPSAT",
+        "method:MF_DISCRETE_EXACT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA032",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S023",
+        "source:S053",
+        "source:S054",
+        "source:S079"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "text": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "title": "予算内で通信設備の更新候補を選ぶ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -40615,10 +40944,12 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:budget-allocation",
+        "case:course-timetabling",
         "case:ecosystem-restoration-selection",
         "case:emergency-shelter-selection",
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
+        "case:network-upgrade-portfolio",
         "case:public-infrastructure-selection",
         "case:shift-scheduling",
         "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
@@ -41285,6 +41616,7 @@
       "document_id": "method:M_BAYESIAN_OPT_GP",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:formulation-experiment-tuning",
         "case:hyperparameter-search",
         "case:laser-process-tuning",
         "case:manufacturing-process-window",
@@ -41341,6 +41673,7 @@
         "case:battery-operation-tradeoff",
         "case:bilevel-regularized-regression",
         "case:constrained-design",
+        "case:formulation-experiment-tuning",
         "case:hyperparameter-search",
         "case:laser-process-tuning",
         "case:manufacturing-process-window",
@@ -41506,6 +41839,7 @@
       "document_id": "method:M_CMA_ES",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:formulation-experiment-tuning",
         "case:laser-process-tuning",
         "content:cma-es",
         "implementation:I_NEVERGRAD",
@@ -41618,10 +41952,12 @@
       "relation_context": [
         "case:EC019",
         "case:budget-allocation",
+        "case:course-timetabling",
         "case:ecosystem-restoration-selection",
         "case:emergency-shelter-selection",
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
+        "case:network-upgrade-portfolio",
         "case:public-infrastructure-selection",
         "case:shift-scheduling",
         "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
@@ -41995,10 +42331,12 @@
       "document_id": "method:M_GRADIENT_DESCENT",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:course-timetabling",
         "case:ecosystem-restoration-selection",
         "case:emergency-shelter-selection",
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
+        "case:network-upgrade-portfolio",
         "case:shift-scheduling",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
@@ -43739,9 +44077,11 @@
       "document_id": "problem:PA014",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:formulation-experiment-tuning",
         "case:laser-process-tuning",
         "case:manufacturing-process-window",
         "case:multi-fidelity-simulator",
+        "journey:formulation-experiment-tuning",
         "journey:laser-process-tuning",
         "journey:manufacturing-process-window",
         "journey:multi-fidelity-simulator"
@@ -43945,7 +44285,9 @@
       "document_id": "problem:PA026",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "case:course-timetabling",
         "case:shift-scheduling",
+        "journey:course-timetabling",
         "journey:shift-scheduling"
       ],
       "source_ids": [
@@ -44043,12 +44385,14 @@
         "case:emergency-shelter-selection",
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
+        "case:network-upgrade-portfolio",
         "case:public-infrastructure-selection",
         "journey:budget-allocation",
         "journey:ecosystem-restoration-selection",
         "journey:emergency-shelter-selection",
         "journey:irrigation-retrofit-selection",
         "journey:mobile-clinic-outreach-selection",
+        "journey:network-upgrade-portfolio",
         "journey:public-infrastructure-selection"
       ],
       "source_ids": [
@@ -44593,6 +44937,7 @@
         "journey:emergency-shelter-selection",
         "journey:irrigation-retrofit-selection",
         "journey:mobile-clinic-outreach-selection",
+        "journey:network-upgrade-portfolio",
         "journey:public-infrastructure-selection",
         "source:S021",
         "source:S022",
@@ -44625,6 +44970,7 @@
         "journey:emergency-shelter-selection",
         "journey:irrigation-retrofit-selection",
         "journey:mobile-clinic-outreach-selection",
+        "journey:network-upgrade-portfolio",
         "journey:public-infrastructure-selection",
         "source:S021",
         "source:S022",
@@ -44697,6 +45043,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "journey:formulation-experiment-tuning",
         "journey:hyperparameter-search",
         "journey:laser-process-tuning",
         "journey:manufacturing-process-window",
@@ -44724,6 +45071,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_LASER_BO_ACQUISITION_NOISE",
+        "journey:formulation-experiment-tuning",
         "journey:hyperparameter-search",
         "journey:laser-process-tuning",
         "journey:manufacturing-process-window",
@@ -44751,6 +45099,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "journey:formulation-experiment-tuning",
         "journey:hyperparameter-search",
         "journey:laser-process-tuning",
         "journey:manufacturing-process-window",
@@ -44779,6 +45128,7 @@
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
         "comparison:COMPARE_LASER_BO_ACQUISITION_NOISE",
+        "journey:formulation-experiment-tuning",
         "journey:hyperparameter-search",
         "journey:laser-process-tuning",
         "journey:manufacturing-process-window",
@@ -45717,6 +46067,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+        "journey:course-timetabling",
         "journey:shift-scheduling",
         "source:S022",
         "source:S053",
@@ -45738,6 +46089,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+        "journey:course-timetabling",
         "journey:shift-scheduling",
         "source:S022",
         "source:S053",

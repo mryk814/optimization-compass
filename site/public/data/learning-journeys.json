@@ -1879,6 +1879,144 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_SHIFT_SCHEDULING_4X3X2"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/course-timetabling",
+            "/traces/shift-scheduling-balanced",
+            "/traces/shift-scheduling-preference-only",
+            "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "course-timetabling"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/course-timetabling",
+            "/traces/shift-scheduling-balanced",
+            "/traces/shift-scheduling-preference-only",
+            "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S055",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S055",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+            "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "course-timetabling",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
             "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
           ]
         },
@@ -2275,6 +2413,143 @@
         }
       },
       "journey_id": "energy-cvar-procurement",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_LASER_BO_ACQUISITION_NOISE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/formulation-experiment-tuning",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_CMA_ES",
+            "/sources/S032",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S058",
+            "/sources/S059",
+            "/sources/S075"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "formulation-experiment-tuning"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_BOTORCH"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BAYESIAN_OPT_GP",
+            "M_BFGS",
+            "M_CMA_ES"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/formulation-experiment-tuning",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+            "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+            "/methods/M_BAYESIAN_OPT_GP",
+            "/methods/M_BFGS",
+            "/methods/M_CMA_ES",
+            "/sources/S032",
+            "/sources/S034",
+            "/sources/S035",
+            "/sources/S058",
+            "/sources/S059",
+            "/sources/S075"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S032",
+            "S034",
+            "S035",
+            "S058",
+            "S059",
+            "S075"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+            "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+            "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+            "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "bayesian-optimization",
+            "cma-es"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "formulation-experiment-tuning",
       "missing_dimensions": [],
       "status": "complete"
     },
@@ -3117,6 +3392,141 @@
         }
       },
       "journey_id": "multi-fidelity-simulator",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SUPPORT_SITE_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/network-upgrade-portfolio",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "network-upgrade-portfolio"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_ORTOOLS_CPSAT"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "MF_DISCRETE_EXACT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/network-upgrade-portfolio",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+            "/methods/MF_DISCRETE_EXACT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S023",
+            "/sources/S053",
+            "/sources/S054",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S023",
+            "S053",
+            "S054",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "cp-sat",
+            "family.discrete-structure"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "network-upgrade-portfolio",
       "missing_dimensions": [],
       "status": "complete"
     },
@@ -5351,6 +5761,84 @@
       "candidate_method_ids": [
         "M_CP_SAT"
       ],
+      "canonical_url": "/gallery/course-timetabling",
+      "case_id": "course-timetabling",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "education",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "各授業を必要回数だけ配置し、同じ教室・教員・受講グループを同時刻に重複させない。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
+        "decision_variables": "授業 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>c</mi></mrow></math>、日 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi></mrow></math>、時間帯 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>c</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub></mrow></math> と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
+        "objective": "希望適合度を増やしながら担当数や空き時間の偏りを抑える。固定教材では希望違反の重み付き合計と担当数の幅を最小化し、教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+        "variable_domain_summary": "固定教材では4授業・3日・午前／午後の割当 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mrow><mn>4</mn><mo>&#x000D7;</mo><mn>3</mn><mo>&#x000D7;</mo><mn>2</mn></mrow></msup></mrow></math>。<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mrow><mi>c</mi><mo>&#x0002C;</mo><mi>d</mi><mo>&#x0002C;</mo><mi>h</mi></mrow></msub><mo>&#x0003D;</mo><mn>1</mn></mrow></math> は授業 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>c</mi></mrow></math> を日 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>d</mi></mrow></math> の時間帯 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>h</mi></mrow></math> へ置くこと、0は置かないことを表す。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "course-timetabling",
+      "last_reviewed": "2026-07-26",
+      "learning_objective": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。",
+      "limitations": [
+        "4授業・3日・2時間帯、各枠1授業の教育用instanceであり、複数教室、選択科目、学期全体、移動時間、教員負荷、学生ごとの履修を表さない。",
+        "実行可能な時間割が得られても、教育上の質、学生間の公平性、教職員の合意を保証しない。制約と重みは関係者が確認し、手動変更の履歴を残す必要がある。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA026",
+      "problem_instance_ids": [
+        "INSTANCE_SHIFT_SCHEDULING_4X3X2"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/shift-scheduling-balanced",
+          "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+          "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+          "role": "primary",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+        },
+        {
+          "canonical_url": "/traces/shift-scheduling-preference-only",
+          "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+          "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "hard constraintとsoft preferenceを別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点をversion管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先のTheater／Compareは勤務シフトの固定教材であり、この時間割と同じdataではない。共通する二値割当、hard constraint、tie-breakの読み方だけを再利用する。",
+      "title_en": "Build a course timetable with room and instructor constraints",
+      "title_ja": "教室・担当・時間帯を守って時間割を組む"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
       "canonical_url": "/gallery/ecosystem-restoration-selection",
       "case_id": "ecosystem-restoration-selection",
       "comparisons": [
@@ -5577,6 +6065,95 @@
       "takeaway": "価格scenarioの生成時点、需要予測、単位、欠測処理を固定し、最適化に使ったscenarioとheld-out scenarioを分ける。接続先のCVaR Theater／Compareは4資産の教材であり、この電力調達caseと同じ実データではない。共通するsimplex・scenario loss・tail riskの読み方だけを再利用する。",
       "title_en": "Procure electricity while controlling scenario tail cost",
       "title_ja": "価格scenarioのtail costを抑えて電力を調達する"
+    },
+    {
+      "candidate_method_ids": [
+        "M_BAYESIAN_OPT_GP"
+      ],
+      "canonical_url": "/gallery/formulation-experiment-tuning",
+      "case_id": "formulation-experiment-tuning",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_LASER_BO_ACQUISITION_NOISE",
+          "comparison_id": "COMPARE_LASER_BO_ACQUISITION_NOISE"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_CMA_ES"
+      ],
+      "content_ids": [
+        "bayesian-optimization",
+        "cma-es"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "life-sciences",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo>&#x02212;</mo><mn>3</mn><mo>&#x02264;</mo><mi>x</mi><mo>&#x02264;</mo><mn>3</mn></mrow></math>、追加実験は最大12回とする。測定失敗やprotocol逸脱は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+        "decision_variables": "次に試す実験条件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi></mrow></math>。原料lot、測定系、前処理、実験日、operatorは記録する入力またはblockであり、decision variableと混同しない。",
+        "objective": "1回の実験後にだけ観測できる品質loss <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x0003D;</mo><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mi>&#x003B5;</mi></mrow></math> を最小化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>0.18</mn><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo>&#x02212;</mo><mn>1.2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mn>0.35</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>2.4</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0002B;</mo><mn>0.08</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>6</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003B5;</mi><mo>&#x0003D;</mo><mn>0.025</mn><mi>sin</mi><mo stretchy=\"false\">&#x00028;</mo><mn>11</mn><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo></mrow></math> とし、実在する化学・生物応答を表さない。",
+        "variable_domain_summary": "実務では成分比、混合時間、温度をそれぞれの安全・設備bounds内で保持する。固定教材だけがacquisitionの読み方を示すため、これらを1個の正規化変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>3</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> へ縮約する。"
+      },
+      "implementation_ids": [
+        "I_BOTORCH"
+      ],
+      "journey_id": "formulation-experiment-tuning",
+      "last_reviewed": "2026-07-26",
+      "learning_objective": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。",
+      "limitations": [
+        "1次元・少数点・小noiseの固定教材であり、実際の混合物制約、カテゴリ原料、batch effect、時間変化、多目的品質、測定限界を表さない。",
+        "Bayesian optimizationが提案した候補は品質、安全性、有効性、規制適合を保証しない。許容領域は専門家が先に定義し、確認実験と独立検証を別に行う必要がある。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA014",
+      "problem_instance_ids": [
+        "OBJECTIVE_EDUCATIONAL_WAVY_1D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_NOISELESS",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_NOISELESS"
+        },
+        {
+          "canonical_url": "/theater/bayesian-optimization/SCENARIO_BO_1D_EXPLORE_SMALL_NOISE",
+          "problem_definition_id": "PROBLEM_EXPENSIVE_BLACK_BOX_1D",
+          "problem_instance_id": "OBJECTIVE_EDUCATIONAL_WAVY_1D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+        }
+      ],
+      "source_ids": [
+        "S032",
+        "S034",
+        "S035",
+        "S058",
+        "S059",
+        "S075"
+      ],
+      "status": "complete",
+      "takeaway": "配合単位、原料lot、protocol、測定系、失敗status、実験日時を揃え、surrogate平均、uncertainty、acquisition、候補理由を各iterationで保存する。接続先のTheater／Compareは1次元の合成関数であり、実在の配合や安全性を再現しない。候補は次の実験点であって製品条件ではなく、独立反復、hold-out、専門家審査を経て判断する。",
+      "title_en": "Tune formulation settings with a limited experiment budget",
+      "title_ja": "少ない実験で配合条件を絞る"
     },
     {
       "candidate_method_ids": [
@@ -6119,6 +6696,83 @@
       "takeaway": "教育用の evaluation ledger では call ごとに x、fidelity、cost、status、observed value を記録し、best-so-far は成功した high-fidelity 観測から別に計算します。Compare は initial design、noise、fidelity cost、parallel workers=1、固定tuning、失敗をnullのまま記録してcostを課しretryしないpolicyを固定し、high-fidelity-equivalent costで同期します。独立failure Theaterでは同じ2候補のlow/high観測を照合し、low-fidelity biasによる順位反転を示します。",
       "title_en": "Allocate a budget across low- and high-fidelity simulation",
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "candidate_method_ids": [
+        "M_CP_SAT"
+      ],
+      "canonical_url": "/gallery/network-upgrade-portfolio",
+      "case_id": "network-upgrade-portfolio",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SUPPORT_SITE_BNB_BUDGET",
+          "comparison_id": "COMPARE_SUPPORT_SITE_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "MF_DISCRETE_EXACT"
+      ],
+      "content_ids": [
+        "cp-sat",
+        "family.discrete-structure"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "telecommunications",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "更新cost <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>4</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>3</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>2</mn><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02264;</mo><mn>8</mn></mrow></math>、地域1から少なくとも1件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>B</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、地域2から少なくとも1件 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><msub><mi>x</mi><mi>E</mi></msub><mo>&#x02265;</mo><mn>1</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
+        "decision_variables": "候補設備 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> を更新するとき1、見送るとき0の二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math>。需要予測、障害率、工事費、地域区分は入力であり、solverが変更する変数ではない。",
+        "objective": "固定教材では便益scoreの合計 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><mi>x</mi><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>8</mn><msub><mi>x</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>7</mn><msub><mi>x</mi><mi>B</mi></msub><mo>&#x0002B;</mo><mn>6</mn><msub><mi>x</mi><mi>C</mi></msub><mo>&#x0002B;</mo><mn>5</mn><msub><mi>x</mi><mi>D</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>x</mi><mi>E</mi></msub></mrow></math> を最大化する。scoreは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
+        "variable_domain_summary": "候補設備 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>A</mi><mo>&#x0002C;</mo><mi>B</mi><mo>&#x0002C;</mo><mi>C</mi><mo>&#x0002C;</mo><mi>D</mi><mo>&#x0002C;</mo><mi>E</mi></mrow></math> ごとの二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math>。固定教材では設備位置や通信量を連続変数へ変換せず、事前に監査した便益scoreと更新費用を入力する。"
+      },
+      "implementation_ids": [
+        "I_ORTOOLS_CPSAT"
+      ],
+      "journey_id": "network-upgrade-portfolio",
+      "last_reviewed": "2026-07-26",
+      "learning_objective": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。",
+      "limitations": [
+        "5候補・単一予算・固定scoreの教育用instanceであり、traffic flow、電波伝搬、冗長経路、工事順序、需要変動、障害の相関を表さない。",
+        "score最大化は容量、安全、規制適合、災害耐性を保証しない。候補と制約はnetwork engineerが検証し、scenario別の性能評価を別に行う必要がある。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA032",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S053",
+        "S054",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "便益scoreの定義期間、需要予測、障害data、費用単位、設備依存、地域下限をversion管理し、採択だけでなく未採択理由、unused budget、停止理由、best boundを記録する。接続先のTheater／Compareは一般の二値knapsack教材であり、通信網のflowや電波伝搬を計算しない。実務では候補生成とscore推定をnetwork simulationで別途検証する。",
+      "title_en": "Select network upgrades under a capital budget",
+      "title_ja": "予算内で通信設備の更新候補を選ぶ"
     },
     {
       "candidate_method_ids": [
@@ -7428,11 +8082,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 31,
+      "complete": 34,
       "draft": 0,
       "partial": 0
     },
     "target_complete_journeys": 5,
-    "total_journeys": 31
+    "total_journeys": 34
   }
 }

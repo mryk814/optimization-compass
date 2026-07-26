@@ -728,6 +728,59 @@
       "title_ja": "強度制約を守りながら軽量設計を探すではBFGS法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Acourse-timetabling%3AM_GRADIENT_DESCENT",
+      "case_context": {
+        "constraints": "各授業を必要回数だけ配置し、同じ教室・教員・受講グループを同時刻に重複させない。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
+        "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
+        "objective": "希望適合度を増やしながら担当数や空き時間の偏りを抑える。固定教材では希望違反の重み付き合計と担当数の幅を最小化し、教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+        "question": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。"
+      },
+      "case_id": "course-timetabling",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:course-timetabling:M_GRADIENT_DESCENT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_CONVEXITY",
+        "F_DERIVATIVE_ACCESS",
+        "F_DIMENSION_CONTEXT",
+        "F_EVALUATION_COST",
+        "F_NOISE_LEVEL",
+        "F_OBJECTIVE_FORM",
+        "F_SMOOTHNESS",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-26",
+      "method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+        "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S022",
+        "S053",
+        "S054",
+        "S055",
+        "S079"
+      ],
+      "summary": "0-1の割当と同時刻の重複禁止を連続gradient updateだけでは保持できず、丸め後に必修授業や教室容量を破り得るため",
+      "symptoms": [],
+      "title_en": "Why Gradient descent is excluded for Build a course timetable with room and instructor constraints",
+      "title_ja": "教室・担当・時間帯を守って時間割を組むでは最急降下法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Aecosystem-restoration-selection%3AM_GRADIENT_DESCENT",
       "case_context": {
         "constraints": "実施cost $4x_A+4x_B+3x_C+2x_D+2x_E\\le8$、水域系から少なくとも1件 $x_A+x_B\\ge1$、陸域系から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。",
@@ -871,6 +924,59 @@
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Procure electricity while controlling scenario tail cost",
       "title_ja": "価格scenarioのtail costを抑えて電力を調達するではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Aformulation-experiment-tuning%3AM_BFGS",
+      "case_context": {
+        "constraints": "各条件の安全・設備上限と成分比の整合を守り、固定教材では $-3\\le x\\le3$、追加実験は最大12回とする。測定失敗やprotocol逸脱は大きな目的値へ置換せず、statusと消費budgetを別に記録する。",
+        "decision_variables": "次に試す実験条件 $x$。原料lot、測定系、前処理、実験日、operatorは記録する入力またはblockであり、decision variableと混同しない。",
+        "objective": "1回の実験後にだけ観測できる品質loss $y=f(x)+\\varepsilon$ を最小化する。固定教材では $f(x)=0.18(x-1.2)^2+0.35\\sin(2.4x)+0.08\\sin(6x)$、$\\varepsilon=0.025\\sin(11x)$ とし、実在する化学・生物応答を表さない。",
+        "question": "成分比、混合時間、温度の連続条件を、少ない実験回数で品質lossが小さい領域へ絞りたい。"
+      },
+      "case_id": "formulation-experiment-tuning",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:formulation-experiment-tuning:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-26",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_BO_1D_EXPLOIT_NOISELESS",
+        "SCENARIO_BO_1D_EXPLOIT_SMALL_NOISE",
+        "SCENARIO_BO_1D_EXPLORE_NOISELESS",
+        "SCENARIO_BO_1D_EXPLORE_SMALL_NOISE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S035",
+        "S059",
+        "S075"
+      ],
+      "summary": "品質指標が実験後にだけ得られ、再現性のあるgradientを直接観測できないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Tune formulation settings with a limited experiment budget",
+      "title_ja": "少ない実験で配合条件を絞るではBFGS法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Ahyperparameter-search%3AM_BFGS",
@@ -1186,6 +1292,54 @@
       "symptoms": [],
       "title_en": "Why Nelder-Mead simplex is excluded for Allocate a budget across low- and high-fidelity simulation",
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+    },
+    {
+      "canonical_route": "/failures?entry=case%3Anetwork-upgrade-portfolio%3AM_GRADIENT_DESCENT",
+      "case_context": {
+        "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
+        "decision_variables": "候補設備 $i$ を更新するとき1、見送るとき0の二値変数 $x_i$。需要予測、障害率、工事費、地域区分は入力であり、solverが変更する変数ではない。",
+        "objective": "固定教材では便益scoreの合計 $f(x)=8x_A+7x_B+6x_C+5x_D+4x_E$ を最大化する。scoreは容量、信頼性、利用者影響を監査可能な規則で集約した入力であり、実ネットワーク性能そのものではない。",
+        "question": "基地局、伝送路、電源設備の更新候補から、固定予算内で採択する組合せを選び、最低限の地域カバレッジを守りながら監査可能な便益scoreを最大化したい。"
+      },
+      "case_id": "network-upgrade-portfolio",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:network-upgrade-portfolio:M_GRADIENT_DESCENT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-26",
+      "method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S021",
+        "S022",
+        "S054",
+        "S079"
+      ],
+      "summary": "設備を更新する／しないという二値判断と依存関係を連続gradient updateだけでは保持できないため",
+      "symptoms": [],
+      "title_en": "Why Gradient descent is excluded for Select network upgrades under a capital budget",
+      "title_ja": "予算内で通信設備の更新候補を選ぶでは最急降下法を選ばない"
     },
     {
       "canonical_route": "/failures?entry=case%3Aportfolio-allocation%3AM_NELDER_MEAD",
@@ -2172,9 +2326,9 @@
   ],
   "generated_at": "2026-07-26T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 31,
-    "entries_with_scenarios": 35,
+    "case_exclusion_count": 34,
+    "entries_with_scenarios": 38,
     "structured_failure_count": 12,
-    "total_entries": 43
+    "total_entries": 46
   }
 }
