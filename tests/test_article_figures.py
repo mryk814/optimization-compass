@@ -10,6 +10,7 @@ from scripts.generate_article_figures import (
     _dijkstra_astar_grid_probe,
     _direct_shooting_probe,
     _dynamic_programming_knapsack_probe,
+    _epsilon_constraint_production_probe,
     _finite_horizon_lqr_probe,
     _local_search_two_opt_probe,
     _multiple_shooting_probe,
@@ -99,6 +100,27 @@ def test_dynamic_programming_probe_fills_table_and_backtracks_selected_items() -
     assert probe["selected_weight"] == 7
     assert probe["unused_capacity"] == 1
     assert probe["optimal_value"] == 13
+
+
+def test_epsilon_constraint_probe_moves_along_pareto_plans_and_detects_infeasibility() -> None:
+    probe = _epsilon_constraint_production_probe()
+
+    assert probe["feasible_count"] == 88
+    assert probe["pareto"] == (
+        (6, 0, 18, 48, 36),
+        (4, 3, 18, 53, 30),
+        (2, 6, 18, 58, 24),
+        (0, 9, 18, 63, 18),
+    )
+    assert probe["solutions"] == (
+        (36, (6, 0, 18, 48, 36)),
+        (30, (4, 3, 18, 53, 30)),
+        (24, (2, 6, 18, 58, 24)),
+        (18, (0, 9, 18, 63, 18)),
+        (12, None),
+    )
+    assert probe["pareto_count"] == 4
+    assert probe["solved_count"] == 4
 
 
 def test_pdlp_probe_requires_all_three_stopping_quantities() -> None:
@@ -274,6 +296,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "direct-shooting-rollout-execution.svg",
         "dijkstra-astar-grid-execution.svg",
         "dynamic-programming-knapsack-execution.svg",
+        "epsilon-constraint-production-execution.svg",
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
@@ -344,6 +367,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
         "content/methods/dijkstra-astar.md": "dijkstra-astar-grid-execution.svg",
         "content/methods/dynamic-programming.md": "dynamic-programming-knapsack-execution.svg",
+        "content/methods/epsilon-constraint.md": "epsilon-constraint-production-execution.svg",
         "content/methods/dual-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",

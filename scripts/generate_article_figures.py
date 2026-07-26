@@ -51,6 +51,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "dynamic-programming-knapsack-execution.svg": _dynamic_programming_knapsack_svg(
             dataset_version
         ).encode("utf-8"),
+        "epsilon-constraint-production-execution.svg": _epsilon_constraint_production_svg(
+            dataset_version
+        ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
         "lqr-backward-forward-execution.svg": _lqr_backward_forward_svg(dataset_version).encode(
             "utf-8"
@@ -1315,6 +1318,239 @@ def _dynamic_programming_knapsack_svg(dataset_version: str) -> str:
   .dp-result { font: 400 15px system-ui, sans-serif; fill: #245c42; }
   .dp-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
   .dp-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _epsilon_constraint_production_probe() -> dict[str, object]:
+    demand = 18
+    technology_x = ("X", 3, 8, 6)
+    technology_y = ("Y", 2, 7, 2)
+    plans: list[tuple[int, int, int, int, int]] = []
+    for x_count in range(11):
+        for y_count in range(11):
+            output = technology_x[1] * x_count + technology_y[1] * y_count
+            if output < demand:
+                continue
+            cost = technology_x[2] * x_count + technology_y[2] * y_count
+            emissions = technology_x[3] * x_count + technology_y[3] * y_count
+            plans.append((x_count, y_count, output, cost, emissions))
+
+    pareto = tuple(
+        sorted(
+            (
+                plan
+                for plan in plans
+                if not any(
+                    candidate[3] <= plan[3]
+                    and candidate[4] <= plan[4]
+                    and candidate[3:5] != plan[3:5]
+                    for candidate in plans
+                )
+            ),
+            key=lambda plan: plan[4],
+            reverse=True,
+        )
+    )
+    thresholds = (36, 30, 24, 18, 12)
+    solutions: list[tuple[int, tuple[int, int, int, int, int] | None]] = []
+    for epsilon in thresholds:
+        eligible = [plan for plan in plans if plan[4] <= epsilon]
+        solution = (
+            min(eligible, key=lambda plan: (plan[3], plan[4], plan[0], plan[1]))
+            if eligible
+            else None
+        )
+        solutions.append((epsilon, solution))
+
+    return {
+        "demand": demand,
+        "technology_x": technology_x,
+        "technology_y": technology_y,
+        "plans": tuple(plans),
+        "pareto": pareto,
+        "solutions": tuple(solutions),
+        "thresholds": thresholds,
+        "feasible_count": len(plans),
+        "pareto_count": len(pareto),
+        "solved_count": sum(solution is not None for _, solution in solutions),
+    }
+
+
+def _epsilon_constraint_production_svg(dataset_version: str) -> str:
+    probe = _epsilon_constraint_production_probe()
+    plans = probe["plans"]
+    pareto = probe["pareto"]
+    solutions = probe["solutions"]
+    if not all(isinstance(value, tuple) for value in (plans, pareto, solutions)):
+        raise TypeError("epsilon-constraint teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 78.0, 590.0
+    plot_top, plot_bottom = 212.0, 612.0
+    cost_min, cost_max = 45.0, 152.0
+    emissions_min, emissions_max = 15.0, 82.0
+
+    def cost_x(cost: int) -> float:
+        return plot_left + (cost - cost_min) / (cost_max - cost_min) * (plot_right - plot_left)
+
+    def emissions_y(emissions: int) -> float:
+        return plot_bottom - (emissions - emissions_min) / (emissions_max - emissions_min) * (
+            plot_bottom - plot_top
+        )
+
+    selected_plans = {solution for _, solution in solutions if solution is not None}
+    pareto_points = " ".join(f"{cost_x(plan[3]):.2f},{emissions_y(plan[4]):.2f}" for plan in pareto)
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">ε-constraintで生産planのcostとemissionsを選ぶ固定実行</title>',
+        (
+            '<desc id="figure-description">需要18以上を満たす技術XとYの整数生産planを'
+            "88個列挙し、cost最小化を主目的、emissionsを上限制約として解く。"
+            "emissions上限36、30、24、18では異なる4つのPareto planを選ぶ。"
+            "上限12では実行可能planがない。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="ec-title">許容上限を下げると、選ぶ生産planが移る</text>',
+        (
+            '<text x="32" y="80" class="ec-subtitle">'
+            "integer plans · demand ≥ 18 · minimize cost · emissions ≤ ε</text>"
+        ),
+        '<circle cx="40" cy="116" r="6" fill="#d67835" opacity=".55"/>',
+        '<text x="54" y="121" class="ec-legend">feasible plan</text>',
+        '<line x1="174" y1="116" x2="200" y2="116" stroke="#2c7564" stroke-width="5"/>',
+        '<text x="210" y="121" class="ec-legend">Pareto front</text>',
+        '<circle cx="348" cy="116" r="8" fill="#2c7564"/>',
+        '<text x="364" y="121" class="ec-legend">ε solution</text>',
+        '<rect x="24" y="148" width="592" height="500" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="184" class="ec-panel">objective space · lower-left is preferred</text>',
+    ]
+    for cost_tick in (50, 75, 100, 125, 150):
+        x = cost_x(cost_tick)
+        elements.extend(
+            [
+                f'<line x1="{x:.2f}" y1="{plot_top}" x2="{x:.2f}" y2="{plot_bottom}" '
+                'stroke="#e4ebe7"/>',
+                f'<text x="{x:.2f}" y="634" text-anchor="middle" '
+                f'class="ec-axis">{cost_tick}</text>',
+            ]
+        )
+    for emissions_tick in (20, 40, 60, 80):
+        y = emissions_y(emissions_tick)
+        elements.extend(
+            [
+                f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                'stroke="#e4ebe7"/>',
+                f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                f'class="ec-axis">{emissions_tick}</text>',
+            ]
+        )
+    for plan in plans:
+        if plan in selected_plans:
+            continue
+        elements.append(
+            f'<circle cx="{cost_x(plan[3]):.2f}" cy="{emissions_y(plan[4]):.2f}" r="4" '
+            'fill="#d67835" opacity=".34"/>'
+        )
+    elements.append(
+        f'<polyline points="{pareto_points}" fill="none" stroke="#2c7564" '
+        'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    for epsilon, plan in solutions:
+        if plan is None:
+            continue
+        x = cost_x(plan[3])
+        y = emissions_y(plan[4])
+        elements.extend(
+            [
+                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="9" fill="#2c7564" '
+                'stroke="#fff" stroke-width="3"/>',
+                f'<text x="{x + 12:.2f}" y="{y - 10:.2f}" class="ec-label">ε {epsilon}</text>',
+            ]
+        )
+    elements.extend(
+        [
+            '<text x="334" y="642" text-anchor="middle" class="ec-axis-title">cost →</text>',
+            (
+                '<text x="22" y="422" transform="rotate(-90 22 422)" '
+                'text-anchor="middle" class="ec-axis-title">emissions →</text>'
+            ),
+            '<rect x="24" y="674" width="592" height="258" rx="18" fill="#fff" stroke="#cad8d2"/>',
+            '<text x="44" y="710" class="ec-panel">one subproblem per emissions limit</text>',
+            '<text x="52" y="740" class="ec-table-head">ε</text>',
+            '<text x="126" y="740" class="ec-table-head">status</text>',
+            '<text x="270" y="740" class="ec-table-head">plan (X, Y)</text>',
+            '<text x="456" y="740" class="ec-table-head">cost</text>',
+        ]
+    )
+    for row_index, (epsilon, plan) in enumerate(solutions):
+        row_y = 772.0 + row_index * 34.0
+        if plan is None:
+            status = "infeasible"
+            plan_label = "—"
+            cost_label = "—"
+            status_class = "ec-infeasible"
+        else:
+            status = "optimal"
+            plan_label = f"({plan[0]}, {plan[1]})"
+            cost_label = str(plan[3])
+            status_class = "ec-optimal"
+        elements.extend(
+            [
+                f'<line x1="44" y1="{row_y - 20:.2f}" x2="596" y2="{row_y - 20:.2f}" '
+                'stroke="#edf1ef"/>',
+                f'<text x="52" y="{row_y:.2f}" class="ec-table">{epsilon}</text>',
+                f'<text x="126" y="{row_y:.2f}" class="{status_class}">{status}</text>',
+                f'<text x="270" y="{row_y:.2f}" class="ec-table">{plan_label}</text>',
+                f'<text x="456" y="{row_y:.2f}" class="ec-table">{cost_label}</text>',
+            ]
+        )
+    elements.extend(
+        [
+            '<text x="32" y="972" class="ec-metric-label">feasible plans</text>',
+            (f'<text x="32" y="1000" class="ec-metric">{int(probe["feasible_count"])}</text>'),
+            '<text x="230" y="972" class="ec-metric-label">Pareto plans</text>',
+            (f'<text x="230" y="1000" class="ec-metric">{int(probe["pareto_count"])}</text>'),
+            '<text x="430" y="972" class="ec-metric-label">solved thresholds</text>',
+            (
+                '<text x="430" y="1000" class="ec-metric">'
+                f"{int(probe['solved_count'])} / {len(solutions)}</text>"
+            ),
+            (
+                '<text x="32" y="1032" class="ec-meta">'
+                "実行生成: scripts.generate_article_figures._epsilon_constraint_production_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1058" class="ec-limit">'
+                "固定整数列挙です。別需要、連続変数、backend solver、threshold設計、"
+                "一般性能は示しません。</text>"
+            ),
+            """
+<style>
+  .ec-title { font: 700 23px system-ui, sans-serif; fill: #102a2e; }
+  .ec-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .ec-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .ec-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .ec-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .ec-axis-title { font: 700 14px system-ui, sans-serif; fill: #45656a; }
+  .ec-label { font: 700 13px system-ui, sans-serif; fill: #245c42; }
+  .ec-table-head { font: 700 13px system-ui, sans-serif; fill: #45656a; }
+  .ec-table { font: 400 15px system-ui, sans-serif; fill: #102a2e; }
+  .ec-optimal { font: 700 14px system-ui, sans-serif; fill: #2c7564; }
+  .ec-infeasible { font: 700 14px system-ui, sans-serif; fill: #a34f43; }
+  .ec-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .ec-metric { font: 700 20px system-ui, sans-serif; fill: #102a2e; }
+  .ec-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
+  .ec-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
 </style>
 """,
             "</svg>\n",
