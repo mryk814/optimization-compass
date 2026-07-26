@@ -9,6 +9,7 @@ __pycache__/
 htmlcov/
 dependency-reports/
 dist/
+node_modules/
 site/node_modules/
 site/playwright-report/
 site/test-results/
