@@ -144,7 +144,7 @@ def test_explicit_policy_marks_an_orphan_as_intentionally_standalone() -> None:
     comparisons = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
     linked_scenarios = {
         reference.scenario_id for journey in index.journeys for reference in journey.scenarios
-    }
+    } - {"SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"}
     standalone_id = next(
         scenario.scenario_id
         for scenario in scenarios.scenarios

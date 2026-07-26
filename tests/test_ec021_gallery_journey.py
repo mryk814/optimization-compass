@@ -13,7 +13,10 @@ def test_ec021_connects_neural_training_without_overclaiming_the_quadratic_lesso
     assert case["problem_archetype_id"] == "PA040"
     assert case["question_answers"]["Q05"] == "stochastic_gradient"
     assert case["map_node_id"] == "answer:Q05:stochastic_gradient"
-    assert case["comparison_ids"] == ["COMPARE_GRADIENT_FAMILY"]
+    assert case["comparison_ids"] == [
+        "COMPARE_GRADIENT_FAMILY",
+        "COMPARE_GRADIENT_DIVERGENCE",
+    ]
     assert {item["method_id"] for item in case["candidate_methods"]} == {"M_ADAMW"}
     assert {item["method_id"] for item in case["conditional_methods"]} == {"M_MOMENTUM_SGD"}
     assert {item["method_id"] for item in case["excluded_methods"]} == {"M_BFGS"}
