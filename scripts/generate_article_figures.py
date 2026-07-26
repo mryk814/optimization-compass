@@ -5,6 +5,7 @@ import html
 import math
 from pathlib import Path
 
+from optimization_compass.constraint_geometry import generate_so3_traces
 from optimization_compass.learning_slices import (
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
@@ -18,7 +19,7 @@ from optimization_compass.search_tree import (
 )
 from optimization_compass.site_export import _generate_optimal_control_traces
 from optimization_compass.surrogate_uncertainty import generate_surrogate_scenario
-from optimization_compass.trace_models import TraceFrame
+from optimization_compass.trace_models import AlgorithmTrace, TraceFrame
 from optimization_compass.traces import generate_gradient_bundle
 
 ROOT = Path(__file__).parents[1]
@@ -46,9 +47,212 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
+        "so3-update-diagnostic.svg": _so3_update_svg(dataset_version).encode("utf-8"),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _so3_update_svg(dataset_version: str) -> str:
+    traces = {
+        str(trace.parameters["strategy"]): trace
+        for trace in generate_so3_traces(dataset_version=dataset_version)
+    }
+    projected = traces["projected"]
+    riemannian = traces["riemannian"]
+    plot_x, plot_y, plot_width, plot_height = 70.0, 190.0, 520.0, 245.0
+    angle_max = 2.8
+
+    def history_points(trace: AlgorithmTrace) -> list[tuple[float, float]]:
+        return [
+            (
+                plot_x + frame.oracle_evaluations / 12 * plot_width,
+                plot_y
+                + plot_height
+                - _metric_value(frame, "geodesic_residual") / angle_max * plot_height,
+            )
+            for frame in trace.frames
+        ]
+
+    def metric_max(trace: AlgorithmTrace, metric_id: str) -> float:
+        return max(_metric_value(frame, metric_id) for frame in trace.frames)
+
+    def line(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
+        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        return (
+            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
+            'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"'
+            f"{dash_attribute}/>"
+        )
+
+    projected_history = history_points(projected)
+    riemannian_history = history_points(riemannian)
+    projected_first = projected.frames[1]
+    riemannian_first = riemannian.frames[1]
+    projected_final = projected.frames[-1]
+    riemannian_final = riemannian.frames[-1]
+    elements = [
+        _svg_open(
+            "SO(3)へ戻る二つの一歩は、同じではない",
+            (
+                "identityから同じnear-pi targetへ向かう固定Python実行です。"
+                "Projected Gradientはambient step後にQR projectionし、Riemann勾配法は"
+                "Lie algebra上の接空間stepをexponential mapで戻します。12 updateの"
+                "geodesic residual、最初のmap correction、accepted rotationの直交性と"
+                "determinant残差を比較します。固定3対応、noiseなし、固定stepの教材であり、"
+                "一般性能rankingではありません。"
+            ),
+            width=640,
+            height=1080,
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="50" class="so-title">SO(3)へ戻る二つの一歩は、同じではない</text>',
+        (
+            '<text x="32" y="82" class="so-subtitle">'
+            "identity → near-π target · fixed step 0.35 · 12 updates"
+            "</text>"
+        ),
+        '<line x1="36" y1="116" x2="78" y2="116" stroke="#d67835" stroke-width="6"/>',
+        '<text x="88" y="122" class="so-legend">ambient + QR projection</text>',
+        (
+            '<line x1="336" y1="116" x2="378" y2="116" stroke="#245c42" '
+            'stroke-width="6" stroke-dasharray="10 7"/>'
+        ),
+        '<text x="388" y="122" class="so-legend">tangent + exp map</text>',
+        '<text x="32" y="162" class="so-section">targetまでのgeodesic residual</text>',
+        (
+            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
+            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
+        ),
+    ]
+    for angle in (0.0, 1.0, 2.0, 2.8):
+        y = plot_y + plot_height - angle / angle_max * plot_height
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
+                    f'y2="{y:.2f}" stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_x - 12}" y="{y + 6:.2f}" text-anchor="end" '
+                    f'class="so-axis">{angle:g}</text>'
+                ),
+            ]
+        )
+    for evaluation in (0, 4, 8, 12):
+        x = plot_x + evaluation / 12 * plot_width
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x:.2f}" y1="{plot_y}" x2="{x:.2f}" '
+                    f'y2="{plot_y + plot_height}" stroke="#f1efe9"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{plot_y + plot_height + 28}" '
+                    f'text-anchor="middle" class="so-axis">{evaluation}</text>'
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            line(projected_history, "#d67835"),
+            line(riemannian_history, "#245c42", "10 7"),
+        ]
+    )
+    for points, color in (
+        (projected_history, "#d67835"),
+        (riemannian_history, "#245c42"),
+    ):
+        for index in (0, 4, 12):
+            x, y = points[index]
+            elements.append(
+                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="6" fill="{color}" '
+                'stroke="#fff" stroke-width="3"/>'
+            )
+    elements.extend(
+        [
+            (
+                '<text x="70" y="485" class="so-result">'
+                f"QR: 2.800 → {_metric_value(projected_final, 'geodesic_residual'):.3f} rad"
+                "</text>"
+            ),
+            (
+                '<text x="590" y="485" text-anchor="end" class="so-result">'
+                f"Riemann: 2.800 → {_metric_value(riemannian_final, 'geodesic_residual'):.3f} rad"
+                "</text>"
+            ),
+            '<text x="32" y="535" class="so-section">最初のupdateを分解する</text>',
+            '<rect x="24" y="558" width="592" height="154" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            '<circle cx="58" cy="600" r="13" fill="#d67835"/>',
+            '<text x="82" y="607" class="so-card-title">Projected Gradient</text>',
+            '<text x="82" y="638" class="so-card">ambient step ‖Δ‖ 0.976</text>',
+            '<text x="278" y="638" class="so-arrow">→</text>',
+            '<text x="312" y="638" class="so-card">QR correction 1.136</text>',
+            '<text x="504" y="638" class="so-arrow">→</text>',
+            '<text x="540" y="638" class="so-card">accepted R</text>',
+            (
+                '<text x="82" y="678" class="so-card-note">'
+                f"accepted angle {_metric_value(projected_first, 'geodesic_residual'):.3f} rad"
+                "</text>"
+            ),
+            '<rect x="24" y="730" width="592" height="154" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            '<circle cx="58" cy="772" r="13" fill="#245c42"/>',
+            '<text x="82" y="779" class="so-card-title">Riemannian Gradient</text>',
+            '<text x="82" y="810" class="so-card">tangent step ‖ξ‖ 0.980</text>',
+            '<text x="278" y="810" class="so-arrow">→</text>',
+            '<text x="312" y="810" class="so-card">1次近似との差 0.661</text>',
+            '<text x="504" y="810" class="so-arrow">→</text>',
+            '<text x="540" y="810" class="so-card">accepted R</text>',
+            (
+                '<text x="82" y="850" class="so-card-note">'
+                f"accepted angle {_metric_value(riemannian_first, 'geodesic_residual'):.3f} rad"
+                "</text>"
+            ),
+            '<text x="32" y="928" class="so-section">accepted rotationの構造残差</text>',
+            (
+                '<text x="32" y="962" class="so-structure">'
+                f"QR max: orthogonality {_metric(metric_max(projected, 'orthogonality_error'))}"
+                f" · determinant {_metric(metric_max(projected, 'determinant_error'))}</text>"
+            ),
+            (
+                '<text x="32" y="990" class="so-structure">'
+                "Riemann max: orthogonality "
+                f"{_metric(metric_max(riemannian, 'orthogonality_error'))}"
+                f" · determinant {_metric(metric_max(riemannian, 'determinant_error'))}</text>"
+            ),
+            (
+                '<text x="32" y="1026" class="so-provenance">'
+                "実行生成: optimization_compass.constraint_geometry.generate_so3_traces"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1056" class="so-caveat">'
+                "固定3対応・noiseなし・固定stepです。速度rankingや一般的な局所収束を示しません。"
+                "</text>"
+            ),
+            (
+                "<style>"
+                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
+                ".so-title{font-size:27px;font-weight:760}"
+                ".so-subtitle{font-size:17px;fill:#617068}"
+                ".so-legend{font-size:16px;fill:#46554d}"
+                ".so-section{font-size:21px;font-weight:750}"
+                ".so-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".so-result{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}"
+                ".so-card-title{font-size:20px;font-weight:750}"
+                ".so-card{font-size:17px;font-variant-numeric:tabular-nums}"
+                ".so-card-note{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".so-arrow{font-size:22px;fill:#9a6b45}"
+                ".so-structure{font-size:16px;font-variant-numeric:tabular-nums}"
+                ".so-provenance{font-size:14px;fill:#617068}"
+                ".so-caveat{font-size:14px;fill:#7a4b38}"
+                "</style>"
+            ),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _least_squares_fit_svg(dataset_version: str) -> str:

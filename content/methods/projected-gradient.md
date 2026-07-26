@@ -12,7 +12,7 @@ visualization_ids: [so3-projected-alignment]
 comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 aliases: [/learn/projected-gradient]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 勾配stepの後に実行可能集合へprojectionし、単純な凸制約を常に満たしながら目的関数を改善する一次法です。
@@ -25,6 +25,14 @@ Projected Gradientは、勾配で下った点をそのまま採用せず、実�
 - 動かしているもの: 現在点、step size、active face、projection
 - 前進の判断: mapping normと目的値が下がり、projection後の点が実行可能であること
 - 恐れていること: projectionの高コスト、悪いstep、単純なclipによる制約の取り違え
+
+projection後の点がfeasibleなら、接空間に沿って進んだ一歩と同じでしょうか。
+SO(3)の固定実行では、どちらもaccepted rotationの構造残差を小さく保ちますが、QR projectionが直す量とtargetまでの角度履歴は一致しません。
+
+![identityから同じnear-pi targetへ向かうProjected GradientとRiemannian Gradientの固定Python実行。上段は12 updateのgeodesic residual、中央は最初のupdate normとmap correction、下段はaccepted rotationの直交性とdeterminant残差を示す。](./media/so3-update-diagnostic.svg "同じtarget、初期rotation、step size、12評価で、ambient stepと接空間stepを比較します。固定3対応・noiseなしの教材であり、一般性能rankingや一般的な局所収束は示しません。")
+
+橙の履歴がこの手法です。
+accepted pointがfeasibleであることと、projection前のcandidateをどれだけ修正したかを分けて読みます。
 
 ## 更新式
 

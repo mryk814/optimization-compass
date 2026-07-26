@@ -9715,7 +9715,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "変数の制約が球面、直交行列、固定rank行列、回転群などの多様体構造そのものであるとき、Riemann勾配法とRiemann trust-region法を条件に応じて選び分けるための入口です。"
+      "summary": "球面／直交行列／固定rank行列／回転群などの多様体構造を持つ変数に対し、Riemann勾配法とRiemann trust-region法を選び分ける入口です。"
     },
     {
       "aliases": [],

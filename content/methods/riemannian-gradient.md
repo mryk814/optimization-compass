@@ -11,7 +11,7 @@ related_ids: [riemannian-trust-region, family.manifold, family.smooth-local]
 visualization_ids: [so3-riemannian-alignment]
 comparison_ids: [COMPARE_SO3_PROJECTED_RIEMANNIAN]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 変数を制約多面体としてではなく多様体そのものとして扱い、接空間へ射影した勾配方向へ進んでretractionで多様体上に戻す一次法です。
@@ -20,13 +20,21 @@ last_reviewed: 2026-07-24
 
 Riemann勾配法は、多様体上の点を保ちながら、接空間へ射影した勾配で一歩進む一次法です。
 
+同じSO(3)上のrotationへ戻るなら、ambient stepのprojectionと接空間stepは同じ更新でしょうか。
+固定実行では、accepted rotationがどちらも直交性とdeterminantを保っていても、最初の一歩の作り方とtargetまでの角度は異なります。
+
+![identityから同じnear-pi targetへ向かうProjected GradientとRiemannian Gradientの固定Python実行。上段は12 updateのgeodesic residual、中央は最初のupdate normとmap correction、下段はaccepted rotationの直交性とdeterminant残差を示す。](./media/so3-update-diagnostic.svg "同じtarget、初期rotation、step size、12評価で、ambient stepと接空間stepを比較します。固定3対応・noiseなしの教材であり、一般性能rankingや一般的な局所収束は示しません。")
+
+緑の履歴がこの手法です。
+targetへの角度が下がることと、accepted rotationがSO(3)構造を保つことを別々に確認します。
+
 ## 何を「制約」とみなさないか
 
 球面上のベクトルや正規直交行列、固定rank行列は、不等式・等式制約の集合としても表現できます。
 Riemann勾配法はそれらを制約付きproblemではなく、解空間そのものが持つ幾何構造（多様体）として扱います。
 球面上の点は常に「半径1の球面上」にあります。
 正規直交行列も常に「直交行列の集合上」にあります。
-この見方では探索の各stepが多様体の外へ出ないため、制約違反という概念自体が消えます。
+この見方ではretraction後に採用する反復点が多様体上に留まるため、accepted iterateの可行性を別の制約処理で回復する必要がありません。
 
 ## 3つの操作で進む仕組み
 
