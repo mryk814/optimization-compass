@@ -9,7 +9,7 @@ source_ids: [S042, S043, S050, S076]
 prerequisites: [concept.trajectory-variable, concept.time-discretization, concept.receding-horizon]
 related_ids: [concept.dynamics-defect, concept.path-terminal-constraints, multiple-shooting, direct-collocation, dynamic-programming, family.optimal-control]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 現在の軌道の周りでdynamicsとcostを二次近似する軌道最適化法です。backward passでRiccati型のfeedback gainを求め、forward passで軌道を更新します。
@@ -25,6 +25,15 @@ last_reviewed: 2026-07-24
 - 恐れていること: 不良な$Q_{uu}$、初期軌道依存、強い非線形性、一般path constraintの扱いにくさ
 
 costが下がること、制約を満たすこと、real-time deadlineに間に合うことは別の判定です。
+
+backward passでfeedback gainが得られても、forward rolloutがどう変わるかはまだ分かりません。
+記事後半のlinear LQR部分問題を実行します。
+時刻別gainが初期state $[2, 0]$をtarget $[0, 0]$へ戻す過程を、stateとcontrolの履歴で確認できます。
+
+![2 state、1 control、40 stepの有限horizon LQR部分問題をpure Pythonで実行した結果。backward passで終端側から時刻別gainを作り、forward rolloutでposition、velocity、controlを追う。controlなしのpositionは2に留まり、feedbackありではterminal stateが0へ近づく。](./media/lqr-backward-forward-execution.svg "記事のPython例と同じlinear LQR部分問題の実行結果です。非線形iLQR/DDP反復、regularization、line search、一般制約、real-time性能は含みません。")
+
+上段のgainはterminal costから逆向きに作られ、stateとcontrolは初期stateから順向きに進みます。
+二つの向きを混同しないことが、backward passとforward passを読む最初の足場です。
 
 ## まず確認すること
 
@@ -151,12 +160,13 @@ print("maximum control:", max(abs(value) for value in controls))
 - 離散化の時間刻みを変えると解やcostが大きく変わる
 - 一般path制約の違反が反復後も残り続ける
 
-segment分割で感度を抑える定式化は、[Direct Multiple Shooting](#/learn/multiple-shooting)で確認できます。path制約を密に扱いたい場合は、[Direct Collocation](#/learn/direct-collocation)へ進みます。時間構造を使う考え方の原型は[動的計画法](#/learn/dynamic-programming)です。軌道最適化手法全体の選び分けは、[最適制御・軌道最適化の選び分け](#/learn/family.optimal-control)で確認できます。
-
 ## 次に読む
 
-[trajectory variable](#/learn/concept.trajectory-variable)でnominal state/control trajectoryを読みます。[時間discretization](#/learn/concept.time-discretization)では、local modelの時間刻みを確認します。
+[trajectory variable](#/learn/concept.trajectory-variable)でnominal state/control trajectoryを読みます。
+[時間discretization](#/learn/concept.time-discretization)ではlocal modelの時間刻みを確認し、時間構造の原型は[動的計画法](#/learn/dynamic-programming)で確かめます。
 
-実行するcontrol列の先頭だけを使う場合は、[receding horizon](#/learn/concept.receding-horizon)へ進みます。forward rolloutの[dynamics defect](#/learn/concept.dynamics-defect)とconstraint violationは、分けて記録します。
+実行するcontrol列の先頭だけを使う場合は、[receding horizon](#/learn/concept.receding-horizon)へ進みます。
+forward rolloutの[dynamics defect](#/learn/concept.dynamics-defect)とconstraint violationは分けて記録します。
 
-一般path制約や障害物回避が主役なら、[path・terminal制約](#/learn/concept.path-terminal-constraints)を経て[Direct Collocation](#/learn/direct-collocation)と比較します。
+segment分割で感度を抑えるなら[Direct Multiple Shooting](#/learn/multiple-shooting)、path制約を密に扱うなら[Direct Collocation](#/learn/direct-collocation)と比較します。
+[最適制御・軌道最適化の選び分け](#/learn/family.optimal-control)では、この二つを含む全体の入口を確認できます。

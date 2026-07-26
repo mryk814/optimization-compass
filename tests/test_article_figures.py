@@ -3,10 +3,26 @@ from __future__ import annotations
 from pathlib import Path
 from xml.etree import ElementTree
 
-from scripts.generate_article_figures import generate_article_figures, read_dataset_version
+import pytest
+
+from scripts.generate_article_figures import (
+    _finite_horizon_lqr_probe,
+    generate_article_figures,
+    read_dataset_version,
+)
 
 ROOT = Path(__file__).parents[1]
 VERSION = read_dataset_version()
+
+
+def test_lqr_probe_matches_the_fixed_article_equations() -> None:
+    states, controls, gains = _finite_horizon_lqr_probe()
+
+    assert len(states) == 41
+    assert len(controls) == len(gains) == 40
+    assert states[-1] == pytest.approx((2.7723676704340833e-05, 3.0156938335117316e-05))
+    assert max(abs(value) for value in controls) == pytest.approx(15.208943465016517)
+    assert gains[0] == pytest.approx((7.604471732508259, 4.977648136580166))
 
 
 def test_article_figures_are_deterministic_and_current() -> None:
@@ -19,6 +35,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "bayesian-optimization-execution.svg",
         "constrained-feasibility-execution.svg",
         "gradient-family-execution.svg",
+        "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
@@ -52,6 +69,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/gradient-descent.md": "gradient-family-execution.svg",
         "content/methods/adam.md": "gradient-family-execution.svg",
         "content/methods/momentum-sgd.md": "gradient-family-execution.svg",
+        "content/methods/ilqr-ddp.md": "lqr-backward-forward-execution.svg",
         "content/methods/least-squares.md": "least-squares-fit-diagnostic.svg",
         "content/methods/projected-gradient.md": "so3-update-diagnostic.svg",
         "content/methods/riemannian-gradient.md": "so3-update-diagnostic.svg",

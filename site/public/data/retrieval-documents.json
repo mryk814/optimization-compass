@@ -19625,7 +19625,7 @@
         "S050",
         "S076"
       ],
-      "text": "この手法は、 大きな非線形問題をいきなり解かず、現在の軌道の近くで小さなLQR問題を解きます 。得られたfeedback則で実際のtrajectoryを更新します。 見ているもの: rollout trajectory、cost、local quadratic model、feedback gain 動かしているもの: control sequenceと局所近似 前進の判断: forward pass後のcost改善とrollout安定性 別に確認するもの: constraint violation、離散化への依存、backward / forward passの実時間 恐れていること: 不良な Q u u 、初期軌道依存、強い非線形性、一般path constraintの扱いにくさ costが下がること、制約を満たすこと、real-time deadlineに間に合うことは別の判定です。",
+      "text": "この手法は、 大きな非線形問題をいきなり解かず、現在の軌道の近くで小さなLQR問題を解きます 。得られたfeedback則で実際のtrajectoryを更新します。 見ているもの: rollout trajectory、cost、local quadratic model、feedback gain 動かしているもの: control sequenceと局所近似 前進の判断: forward pass後のcost改善とrollout安定性 別に確認するもの: constraint violation、離散化への依存、backward / forward passの実時間 恐れていること: 不良な Q u u 、初期軌道依存、強い非線形性、一般path constraintの扱いにくさ costが下がること、制約を満たすこと、real-time deadlineに間に合うことは別の判定です。 backward passでfeedback gainが得られても、forward rolloutがどう変わるかはまだ分かりません。 記事後半のlinear LQR部分問題を実行します。 時刻別gainが初期state [ 2 , 0 ] をtarget [ 0 , 0 ] へ戻す過程を、stateとcontrolの履歴で確認できます。 記事のPython例と同じlinear LQR部分問題の実行結果です。非線形iLQR/DDP反復、regularization、line search、一般制約、real-time性能は含みません。 上段のgainはterminal costから逆向きに作られ、stateとcontrolは初期stateから順向きに進みます。 二つの向きを混同しないことが、backward passとforward passを読む最初の足場です。",
       "title": "30秒でつかむ"
     },
     {
@@ -19881,7 +19881,7 @@
         "S050",
         "S076"
       ],
-      "text": "forward passのrolloutが発散し、line searchでcostが改善しない backward passで Q u u が正定値でなくなり、regularizationを強めても解消しない 反復を重ねてもdefectやcostの変化が停滞する 離散化の時間刻みを変えると解やcostが大きく変わる 一般path制約の違反が反復後も残り続ける segment分割で感度を抑える定式化は、 Direct Multiple Shooting で確認できます。path制約を密に扱いたい場合は、 Direct Collocation へ進みます。時間構造を使う考え方の原型は 動的計画法 です。軌道最適化手法全体の選び分けは、 最適制御・軌道最適化の選び分け で確認できます。",
+      "text": "forward passのrolloutが発散し、line searchでcostが改善しない backward passで Q u u が正定値でなくなり、regularizationを強めても解消しない 反復を重ねてもdefectやcostの変化が停滞する 離散化の時間刻みを変えると解やcostが大きく変わる 一般path制約の違反が反復後も残り続ける",
       "title": "失敗・切替の兆候"
     },
     {
@@ -19913,7 +19913,7 @@
         "S050",
         "S076"
       ],
-      "text": "trajectory variable でnominal state/control trajectoryを読みます。 時間discretization では、local modelの時間刻みを確認します。 実行するcontrol列の先頭だけを使う場合は、 receding horizon へ進みます。forward rolloutの dynamics defect とconstraint violationは、分けて記録します。 一般path制約や障害物回避が主役なら、 path・terminal制約 を経て Direct Collocation と比較します。",
+      "text": "trajectory variable でnominal state/control trajectoryを読みます。 時間discretization ではlocal modelの時間刻みを確認し、時間構造の原型は 動的計画法 で確かめます。 実行するcontrol列の先頭だけを使う場合は、 receding horizon へ進みます。 forward rolloutの dynamics defect とconstraint violationは分けて記録します。 segment分割で感度を抑えるなら Direct Multiple Shooting 、path制約を密に扱うなら Direct Collocation と比較します。 最適制御・軌道最適化の選び分け では、この二つを含む全体の入口を確認できます。",
       "title": "次に読む"
     },
     {

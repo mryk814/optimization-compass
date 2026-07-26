@@ -40,6 +40,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             dataset_version
         ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
+        "lqr-backward-forward-execution.svg": _lqr_backward_forward_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "least-squares-fit-diagnostic.svg": _least_squares_fit_svg(dataset_version).encode("utf-8"),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
@@ -51,6 +54,255 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _finite_horizon_lqr_probe() -> tuple[
+    list[tuple[float, float]], list[float], list[tuple[float, float]]
+]:
+    dt = 0.1
+    control_scale = 0.1
+    control_cost = 0.01
+    position_cost = 1.0
+    velocity_cost = 0.1
+    p00, p01, p10, p11 = 10.0, 0.0, 0.0, 1.0
+    reversed_gains: list[tuple[float, float]] = []
+    for _ in range(40):
+        control_hessian = control_cost + control_scale * control_scale * p11
+        gain_position = control_scale * p10 / control_hessian
+        gain_velocity = control_scale * (dt * p10 + p11) / control_hessian
+        reversed_gains.append((gain_position, gain_velocity))
+
+        a_minus_bk00 = 1.0
+        a_minus_bk01 = dt
+        a_minus_bk10 = -control_scale * gain_position
+        a_minus_bk11 = 1.0 - control_scale * gain_velocity
+        product00 = p00 * a_minus_bk00 + p01 * a_minus_bk10
+        product01 = p00 * a_minus_bk01 + p01 * a_minus_bk11
+        product10 = p10 * a_minus_bk00 + p11 * a_minus_bk10
+        product11 = p10 * a_minus_bk01 + p11 * a_minus_bk11
+        next00 = position_cost + product00
+        next01 = product01
+        next10 = dt * product00 + product10
+        next11 = velocity_cost + dt * product01 + product11
+        off_diagonal = 0.5 * (next01 + next10)
+        p00, p01, p10, p11 = next00, off_diagonal, off_diagonal, next11
+
+    gains = list(reversed(reversed_gains))
+    position, velocity = 2.0, 0.0
+    states = [(position, velocity)]
+    controls: list[float] = []
+    for gain_position, gain_velocity in gains:
+        control = -(gain_position * position + gain_velocity * velocity)
+        position, velocity = (
+            position + dt * velocity,
+            velocity + control_scale * control,
+        )
+        controls.append(control)
+        states.append((position, velocity))
+    return states, controls, gains
+
+
+def _lqr_backward_forward_svg(dataset_version: str) -> str:
+    states, controls, gains = _finite_horizon_lqr_probe()
+    plot_x, plot_width = 68.0, 536.0
+    state_y, state_height = 318.0, 285.0
+    state_min, state_max = -2.8, 2.1
+    control_y, control_height = 760.0, 145.0
+    control_limit = max(abs(value) for value in controls)
+
+    def project_x(step: int) -> float:
+        return plot_x + step / 40 * plot_width
+
+    def project_state(value: float) -> float:
+        bounded = min(state_max, max(state_min, value))
+        return (
+            state_y + state_height - (bounded - state_min) / (state_max - state_min) * state_height
+        )
+
+    def project_control(value: float) -> float:
+        return control_y + control_height / 2 - value / control_limit * control_height * 0.43
+
+    position_points = [
+        (project_x(index), project_state(state[0])) for index, state in enumerate(states)
+    ]
+    velocity_points = [
+        (project_x(index), project_state(state[1])) for index, state in enumerate(states)
+    ]
+    uncontrolled_points = [(project_x(index), project_state(2.0)) for index in range(41)]
+    control_points = [
+        (project_x(index), project_control(value)) for index, value in enumerate(controls)
+    ]
+
+    def polyline(points: list[tuple[float, float]], color: str, dash: str = "") -> str:
+        coordinates = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        dash_attribute = f' stroke-dasharray="{dash}"' if dash else ""
+        return (
+            f'<polyline points="{coordinates}" fill="none" stroke="{color}" '
+            'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"'
+            f"{dash_attribute}/>"
+        )
+
+    terminal_position, terminal_velocity = states[-1]
+    first_gain, middle_gain, final_gain = gains[0], gains[20], gains[-1]
+    elements = [
+        _svg_open(
+            "backward passのgainがforward rolloutを変える",
+            (
+                "記事のPython例と同じ2 state、1 control、40 stepの有限horizon linear LQR"
+                "部分問題をpure Pythonで実行した結果です。backward passで時刻別feedback "
+                "gainを求め、初期state [2, 0]からforward rolloutします。stateとcontrolの"
+                "履歴、terminal state、maximum controlを示します。非線形iLQR/DDP反復、"
+                "regularization、line search、一般制約、実時間性能は含みません。"
+            ),
+            width=640,
+            height=1080,
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="50" class="lqr-title">backward passのgainがforward rolloutを変える</text>',
+        (
+            '<text x="32" y="82" class="lqr-subtitle">'
+            "2 state · 1 control · horizon 40 · dt 0.1 · target [0, 0]"
+            "</text>"
+        ),
+        '<text x="32" y="128" class="lqr-section">terminal costから時刻別gainへ</text>',
+        '<rect x="24" y="150" width="592" height="118" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+        '<text x="48" y="183" class="lqr-small-label">backward</text>',
+        '<text x="48" y="218" class="lqr-gain">K₃₉</text>',
+        (
+            '<text x="48" y="246" class="lqr-gain-value">'
+            f"[{final_gain[0]:.3f}, {final_gain[1]:.3f}]</text>"
+        ),
+        '<text x="201" y="225" class="lqr-arrow">→</text>',
+        '<text x="251" y="218" class="lqr-gain">K₂₀</text>',
+        (
+            '<text x="251" y="246" class="lqr-gain-value">'
+            f"[{middle_gain[0]:.3f}, {middle_gain[1]:.3f}]</text>"
+        ),
+        '<text x="404" y="225" class="lqr-arrow">→</text>',
+        '<text x="454" y="218" class="lqr-gain">K₀</text>',
+        (
+            '<text x="454" y="246" class="lqr-gain-value">'
+            f"[{first_gain[0]:.3f}, {first_gain[1]:.3f}]</text>"
+        ),
+        '<text x="32" y="302" class="lqr-section">forward rolloutのstate</text>',
+        (
+            f'<rect x="{plot_x}" y="{state_y}" width="{plot_width}" height="{state_height}" '
+            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
+        ),
+    ]
+    for value in (-2.0, -1.0, 0.0, 1.0, 2.0):
+        y = project_state(value)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
+                    f'y2="{y:.2f}" stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_x - 10}" y="{y + 6:.2f}" text-anchor="end" '
+                    f'class="lqr-axis">{value:g}</text>'
+                ),
+            ]
+        )
+    for step in (0, 10, 20, 30, 40):
+        x = project_x(step)
+        elements.append(
+            f'<text x="{x:.2f}" y="{state_y + state_height + 27}" '
+            f'text-anchor="middle" class="lqr-axis">{step}</text>'
+        )
+    elements.extend(
+        [
+            polyline(uncontrolled_points, "#9aa49e", "9 7"),
+            polyline(position_points, "#245c42"),
+            polyline(velocity_points, "#d67835"),
+            '<line x1="36" y1="658" x2="76" y2="658" stroke="#245c42" stroke-width="5"/>',
+            '<text x="84" y="664" class="lqr-legend">position</text>',
+            '<line x1="190" y1="658" x2="230" y2="658" stroke="#d67835" stroke-width="5"/>',
+            '<text x="238" y="664" class="lqr-legend">velocity</text>',
+            (
+                '<line x1="344" y1="658" x2="384" y2="658" stroke="#9aa49e" '
+                'stroke-width="4" stroke-dasharray="9 7"/>'
+            ),
+            '<text x="392" y="664" class="lqr-legend">u=0 position</text>',
+            (
+                '<text x="32" y="708" class="lqr-result">'
+                f"terminal state [{terminal_position:.5f}, {terminal_velocity:.5f}]"
+                "</text>"
+            ),
+            (
+                '<text x="608" y="708" text-anchor="end" class="lqr-result">'
+                f"max |u| {control_limit:.3f}</text>"
+            ),
+            '<text x="32" y="746" class="lqr-section">forward rolloutのcontrol</text>',
+            (
+                f'<rect x="{plot_x}" y="{control_y}" width="{plot_width}" '
+                f'height="{control_height}" rx="14" fill="#fff" stroke="#cfd8d1"/>'
+            ),
+            (
+                f'<line x1="{plot_x}" y1="{project_control(0.0):.2f}" '
+                f'x2="{plot_x + plot_width}" y2="{project_control(0.0):.2f}" '
+                'stroke="#cfd8d1"/>'
+            ),
+            (
+                f'<text x="{plot_x - 10}" y="{project_control(control_limit) + 6:.2f}" '
+                'text-anchor="end" class="lqr-axis">+15</text>'
+            ),
+            (
+                f'<text x="{plot_x - 10}" y="{project_control(0.0) + 6:.2f}" '
+                'text-anchor="end" class="lqr-axis">0</text>'
+            ),
+            (
+                f'<text x="{plot_x - 10}" y="{project_control(-control_limit) + 6:.2f}" '
+                'text-anchor="end" class="lqr-axis">−15</text>'
+            ),
+            polyline(control_points, "#7e5f98"),
+        ]
+    )
+    for step in (0, 10, 20, 30, 39):
+        x = project_x(step)
+        elements.append(
+            f'<text x="{x:.2f}" y="{control_y + control_height + 27}" '
+            f'text-anchor="middle" class="lqr-axis">{step}</text>'
+        )
+    elements.extend(
+        [
+            '<line x1="36" y1="954" x2="76" y2="954" stroke="#7e5f98" stroke-width="5"/>',
+            '<text x="84" y="960" class="lqr-legend">feedback control uₖ</text>',
+            (
+                '<text x="32" y="1002" class="lqr-provenance">'
+                "実行生成: finite-horizon Riccati backward pass + closed-loop forward rollout"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1032" class="lqr-caveat">'
+                "記事のlinear LQR部分問題です。非線形iLQR/DDP反復や制約処理は含みません。"
+                "</text>"
+            ),
+            (
+                '<text x="32" y="1058" class="lqr-caveat">'
+                "この1例から一般的な収束速度、安定性、real-time性能を判断できません。</text>"
+            ),
+            (
+                "<style>"
+                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
+                ".lqr-title{font-size:26px;font-weight:760}"
+                ".lqr-subtitle{font-size:17px;fill:#617068}"
+                ".lqr-section{font-size:21px;font-weight:750}"
+                ".lqr-small-label{font-size:14px;fill:#617068}"
+                ".lqr-gain{font-size:20px;font-weight:750}"
+                ".lqr-gain-value{font-size:16px;fill:#46554d;font-variant-numeric:tabular-nums}"
+                ".lqr-arrow{font-size:24px;fill:#9a6b45}"
+                ".lqr-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".lqr-legend{font-size:16px;fill:#46554d}"
+                ".lqr-result{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}"
+                ".lqr-provenance{font-size:14px;fill:#617068}"
+                ".lqr-caveat{font-size:14px;fill:#7a4b38}"
+                "</style>"
+            ),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _so3_update_svg(dataset_version: str) -> str:
