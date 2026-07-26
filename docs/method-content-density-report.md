@@ -18,7 +18,7 @@
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2298 | 9 | 1 | pass |
 | `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 5733 | 11 | 1 | pass |
 | `bfgs` | `M_BFGS` | 68 | 2446 | 9 | 1 | pass |
-| `branch-and-bound` | `M_BRANCH_BOUND` | 79 | 4011 | 10 | 1 | pass |
+| `branch-and-bound` | `M_BRANCH_BOUND` | 79 | 4257 | 10 | 1 | pass |
 | `branch-and-cut` | `M_BRANCH_CUT` | 80 | 2585 | 9 | 1 | pass |
 | `bundle-method` | `M_BUNDLE` | 60 | 2300 | 9 | 1 | pass |
 | `cdcl-sat` | `M_CDCL_SAT` | 59 | 3265 | 8 | 1 | pass |
@@ -32,7 +32,7 @@
 | `density-filter` | `M_DENSITY_FILTER` | 76 | 1691 | 5 | 1 | pass |
 | `differential-evolution` | `M_DIFFERENTIAL_EVOLUTION` | 70 | 1703 | 6 | 1 | pass |
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 69 | 2414 | 8 | 1 | pass |
-| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 4978 | 9 | 1 | pass |
+| `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 5314 | 9 | 1 | pass |
 | `direct-global` | `M_DIRECT` | 85 | 3002 | 11 | 1 | pass |
 | `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 3703 | 10 | 1 | pass |
 | `dual-annealing` | `M_SIMULATED_ANNEALING` | 72 | 2171 | 7 | 1 | pass |
@@ -73,7 +73,7 @@
 | `mma` | `M_MMA` | 63 | 1250 | 5 | 1 | pass |
 | `moead` | `M_MOEA_D` | 80 | 2772 | 8 | 1 | pass |
 | `momentum-sgd` | `M_MOMENTUM_SGD` | 53 | 3234 | 9 | 1 | pass |
-| `multi-objective` | `M_NSGA_II` | 76 | 4182 | 12 | 1 | pass |
+| `multi-objective` | `M_NSGA_II` | 76 | 4460 | 12 | 1 | pass |
 | `multi-start` | `M_MULTISTART` | 41 | 2635 | 9 | 1 | pass |
 | `multiple-shooting` | `M_MULTIPLE_SHOOTING` | 81 | 5177 | 10 | 1 | pass |
 | `network-simplex` | `M_NETWORK_SIMPLEX` | 60 | 3309 | 9 | 1 | pass |

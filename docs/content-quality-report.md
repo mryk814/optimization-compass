@@ -3,7 +3,7 @@
 - Published concept guides: `22`
 - Meeting the concept floor: `22`
 - Below the concept floor: `0`
-- Prose review warnings: `261`
+- Prose review warnings: `258`
 
 ## Concept publication floor
 
@@ -35,7 +35,7 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 172
+- `sentence.commas`: 169
 - `sentence.long`: 88
 
 | Content | Warnings |
@@ -84,7 +84,7 @@
 | `density-filter` | 4 |
 | `differential-evolution` | 0 |
 | `dijkstra-astar` | 2 |
-| `direct-collocation` | 3 |
+| `direct-collocation` | 0 |
 | `direct-global` | 2 |
 | `direct-shooting` | 7 |
 | `dual-annealing` | 2 |
