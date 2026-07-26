@@ -35,14 +35,38 @@ def test_report_separates_inventory_from_expected_coverage() -> None:
     assert not hasattr(report.summary, "coverage_percent")
 
 
-def test_current_artifacts_are_partial_without_inferred_renderer_contract() -> None:
+def test_current_artifacts_satisfy_educational_renderer_expectations() -> None:
     report = load_report()
-    nelder_mead = next(
-        item for item in report.expectations if item.expectation_id == "COV_NM_MECHANISM"
-    )
-    assert nelder_mead.status == "partial"
-    assert nelder_mead.reason_codes == ["scenario_contract_incomplete"]
-    assert nelder_mead.artifact_ids == []
+    expected = {
+        "COV_GD_COMPARISON": (
+            {
+                "gradient_descent-quadratic",
+            },
+            ["/compare/first-order"],
+        ),
+        "COV_NM_MECHANISM": (
+            {
+                "nelder-mead-quadratic",
+                "nelder-mead-rosenbrock",
+            },
+            ["/theater/nelder-mead"],
+        ),
+        "COV_NM_SENSITIVITY_NA": (
+            {
+                "nelder-mead-quadratic-shifted",
+                "nelder-mead-rosenbrock-shifted",
+            },
+            ["/theater/nelder-mead"],
+        ),
+    }
+
+    for expectation_id, (artifact_ids, route_ids) in expected.items():
+        expectation = next(
+            item for item in report.expectations if item.expectation_id == expectation_id
+        )
+        assert expectation.status == "available"
+        assert artifact_ids <= set(expectation.artifact_ids)
+        assert expectation.route_ids == route_ids
 
 
 def test_broken_references_are_distinct_from_unbuilt_scenarios() -> None:
@@ -72,16 +96,14 @@ def test_priority_order_is_deterministic_and_ignores_popularity() -> None:
 
 def test_explicit_release_delta_reports_transitions() -> None:
     before_payload = json.loads(load_report().model_dump_json())
+    before_payload["dataset_version"] = "0.3.0"
+    before_payload["expectations"][0]["status"] = "partial"
+    before_payload["summary"]["status_counts"]["available"] -= 1
+    before_payload["summary"]["status_counts"]["partial"] += 1
     after_payload = deepcopy(before_payload)
     after_payload["dataset_version"] = "0.4.0"
-    incomplete = next(
-        expectation
-        for expectation in after_payload["expectations"]
-        if expectation["status"] in {"missing", "partial"}
-    )
-    previous_status = incomplete["status"]
-    incomplete["status"] = "available"
-    after_payload["summary"]["status_counts"][previous_status] -= 1
+    after_payload["expectations"][0]["status"] = "available"
+    after_payload["summary"]["status_counts"]["partial"] -= 1
     after_payload["summary"]["status_counts"]["available"] += 1
     delta = diff_coverage(
         CoverageReport.model_validate_json(json.dumps(before_payload)),

@@ -2331,7 +2331,14 @@ def _trace_lesson(
                 "単体の幾何操作と候補の受理判断を結び付けて読む",
                 "Connect simplex geometry with candidate acceptance decisions",
             ),
-            misconception=None,
+            misconception=(
+                _localized(
+                    "同じ目的関数なら初期simplexを変えても同じ経路を通る",
+                    "Changing the initial simplex does not change the path on the same objective",
+                )
+                if shifted
+                else None
+            ),
             expected_phenomenon_ja="反射・拡大・収縮・縮小で単体が移動する",
             expected_phenomenon_en=(
                 "The simplex moves by reflection, expansion, contraction, and shrinkage"
@@ -2346,7 +2353,20 @@ def _trace_lesson(
                     "objective_value",
                 )
             ],
-            failure_signals=[],
+            failure_signals=(
+                [
+                    _signal(
+                        "initial_simplex_changes_path",
+                        "初期simplexの位置により受理操作と収束経路が変わる",
+                        "The initial simplex changes accepted operations and the convergence path",
+                        "simplex_vertices",
+                        "accepted_operation",
+                        "objective_value",
+                    )
+                ]
+                if shifted
+                else []
+            ),
             primary_observables=[
                 _observable("simplex_vertices", "単体の頂点", "simplex vertices"),
                 _observable("accepted_operation", "受理操作", "accepted operation"),
@@ -2623,6 +2643,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         if is_optimal_control
         else "failure_contrast"
         if is_divergence or (is_search_tree and trace.terminal_status == "budget_exhausted")
+        else "sensitivity"
+        if is_nelder_mead and trace.scenario_id.endswith("_SHIFTED")
         else "mechanism"
         if is_nelder_mead or is_search_tree
         else "comparison"

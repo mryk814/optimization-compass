@@ -312,7 +312,18 @@
         },
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "failure_signals": [],
+        "failure_signals": [
+          {
+            "label_en": "The initial simplex changes accepted operations and the convergence path",
+            "label_ja": "初期simplexの位置により受理操作と収束経路が変わる",
+            "observable_ids": [
+              "simplex_vertices",
+              "accepted_operation",
+              "objective_value"
+            ],
+            "signal_id": "initial_simplex_changes_path"
+          }
+        ],
         "known_reference_display": {
           "note_en": "Show the problem instance optimum as a goal cue",
           "note_ja": "問題instanceの既知最適点をgoal cueとして表示する",
@@ -324,7 +335,10 @@
         },
         "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
-        "misconception": null,
+        "misconception": {
+          "en": "Changing the initial simplex does not change the path on the same objective",
+          "ja": "同じ目的関数なら初期simplexを変えても同じ経路を通る"
+        },
         "narration_steps": [
           {
             "milestone_id": "start",
@@ -411,7 +425,7 @@
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
       "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
-      "purpose": "mechanism",
+      "purpose": "sensitivity",
       "runs": [
         {
           "artifact_id": "nelder-mead-quadratic-shifted",
@@ -658,7 +672,18 @@
         },
         "expected_phenomenon_en": "The simplex moves by reflection, expansion, contraction, and shrinkage",
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
-        "failure_signals": [],
+        "failure_signals": [
+          {
+            "label_en": "The initial simplex changes accepted operations and the convergence path",
+            "label_ja": "初期simplexの位置により受理操作と収束経路が変わる",
+            "observable_ids": [
+              "simplex_vertices",
+              "accepted_operation",
+              "objective_value"
+            ],
+            "signal_id": "initial_simplex_changes_path"
+          }
+        ],
         "known_reference_display": {
           "note_en": "Show the problem instance optimum as a goal cue",
           "note_ja": "問題instanceの既知最適点をgoal cueとして表示する",
@@ -670,7 +695,10 @@
         },
         "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
         "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
-        "misconception": null,
+        "misconception": {
+          "en": "Changing the initial simplex does not change the path on the same objective",
+          "ja": "同じ目的関数なら初期simplexを変えても同じ経路を通る"
+        },
         "narration_steps": [
           {
             "milestone_id": "start",
@@ -757,7 +785,7 @@
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
       "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
-      "purpose": "mechanism",
+      "purpose": "sensitivity",
       "runs": [
         {
           "artifact_id": "nelder-mead-rosenbrock-shifted",

@@ -8,8 +8,8 @@
 
 | Status | Count |
 |---|---:|
-| available | 8 |
-| partial | 3 |
+| available | 11 |
+| partial | 0 |
 | missing | 0 |
 | not_applicable | 0 |
 

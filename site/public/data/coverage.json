@@ -100,16 +100,18 @@
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "gradient_descent-quadratic"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_GD_COMPARISON",
       "purpose": "comparison",
       "rationale": "一次法の軌跡を同一予算で比較する。",
-      "reason_codes": [
-        "scenario_contract_incomplete"
-      ],
+      "reason_codes": [],
       "renderer_family": "first_order_trajectory_2d",
-      "route_ids": [],
+      "route_ids": [
+        "/compare/first-order"
+      ],
       "scenario_ids": [
         "SCENARIO_GD_QUADRATIC",
         "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE"
@@ -119,7 +121,7 @@
         "S002",
         "S056"
       ],
-      "status": "partial",
+      "status": "available",
       "subject_id": "M_GRADIENT_DESCENT",
       "subject_type": "method"
     },
@@ -152,16 +154,19 @@
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "nelder-mead-quadratic",
+        "nelder-mead-rosenbrock"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_NM_MECHANISM",
       "purpose": "mechanism",
       "rationale": "単体の反射・展開・収縮を逐次確認する。",
-      "reason_codes": [
-        "scenario_contract_incomplete"
-      ],
+      "reason_codes": [],
       "renderer_family": "simplex_2d",
-      "route_ids": [],
+      "route_ids": [
+        "/theater/nelder-mead"
+      ],
       "scenario_ids": [
         "SCENARIO_NM_QUADRATIC",
         "SCENARIO_NM_QUADRATIC_SHIFTED",
@@ -173,22 +178,25 @@
         "S002",
         "S018"
       ],
-      "status": "partial",
+      "status": "available",
       "subject_id": "M_NELDER_MEAD",
       "subject_type": "method"
     },
     {
       "applicability": "expected",
-      "artifact_ids": [],
+      "artifact_ids": [
+        "nelder-mead-quadratic-shifted",
+        "nelder-mead-rosenbrock-shifted"
+      ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_NM_SENSITIVITY_NA",
       "purpose": "sensitivity",
       "rationale": "同じ目的・係数・評価予算で初期simplexの位置だけを変え、幾何操作の経路を同期比較する。",
-      "reason_codes": [
-        "scenario_contract_incomplete"
-      ],
+      "reason_codes": [],
       "renderer_family": "simplex_2d",
-      "route_ids": [],
+      "route_ids": [
+        "/theater/nelder-mead"
+      ],
       "scenario_ids": [
         "SCENARIO_NM_QUADRATIC",
         "SCENARIO_NM_QUADRATIC_SHIFTED",
@@ -199,7 +207,7 @@
       "source_ids": [
         "S002"
       ],
-      "status": "partial",
+      "status": "available",
       "subject_id": "M_NELDER_MEAD",
       "subject_type": "method"
     },
@@ -247,7 +255,7 @@
       "reason_codes": [],
       "renderer_family": "field_evolution",
       "route_ids": [
-        "/theater/learning/SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
+        "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "scenario_ids": [
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
@@ -275,7 +283,7 @@
       "reason_codes": [],
       "renderer_family": "field_evolution",
       "route_ids": [
-        "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD"
+        "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "scenario_ids": [
         "SCENARIO_SHAPE_TOPOLOGY_REPRESENTATION_CONTRAST",
@@ -17192,10 +17200,10 @@
   "summary": {
     "baseline": "not_provided",
     "status_counts": {
-      "available": 8,
+      "available": 11,
       "missing": 0,
       "not_applicable": 0,
-      "partial": 3
+      "partial": 0
     },
     "subject_counts": {
       "feature_family": 10,

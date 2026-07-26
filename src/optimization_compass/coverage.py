@@ -27,6 +27,15 @@ DIMENSIONS = (
     "source",
 )
 
+# Coverage expectations predate the public renderer contract and describe the
+# educational geometry, while VisualizationScenario uses the renderer's public
+# contract name. Keep that distinction explicit instead of treating a complete
+# scenario as missing because the two vocabularies use different labels.
+EDUCATIONAL_FAMILY_TO_RENDERER = {
+    "simplex_2d": "simplex_geometry",
+    "first_order_trajectory_2d": "continuous_trajectory",
+}
+
 
 class CoverageModel(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
@@ -261,14 +270,9 @@ def _load_scenario_contracts(root: Path, artifacts: dict[str, Any]) -> list[dict
             and sha256(payload_path.read_bytes()).hexdigest() == scenario.artifact.payload_sha256
         )
         for run in scenario.runs:
-            route = (
-                f"/theater/learning/{scenario.scenario_id}"
-                if scenario.artifact.renderer_family == "field_evolution"
-                else routes.get(run.artifact_id)
-                or _scenario_route(
-                    scenario.artifact.renderer_family, scenario.scenario_id, run.artifact_id
-                )
-            )
+            route = _scenario_route(
+                scenario.artifact.renderer_family, scenario.scenario_id, run.artifact_id
+            ) or routes.get(run.artifact_id)
             contracts.append(
                 {
                     "scenario_id": scenario.scenario_id,
@@ -463,7 +467,10 @@ def _derive_expectations(
             for item in contracted_candidates
             if item.get("purpose") == row["purpose"]
             and item.get("artifact_kind") == row["artifact_kind"]
-            and item.get("renderer_family") == row["renderer_family"]
+            and item.get("renderer_family")
+            == EDUCATIONAL_FAMILY_TO_RENDERER.get(
+                str(row["renderer_family"]), str(row["renderer_family"])
+            )
         ]
         applicability = str(row["applicability"])
         if applicability == "not_applicable":
