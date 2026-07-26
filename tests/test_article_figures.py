@@ -7,6 +7,7 @@ import pytest
 
 from scripts.generate_article_figures import (
     _active_set_qp_probe,
+    _direct_shooting_probe,
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
     _pbt_population_probe,
@@ -45,6 +46,22 @@ def test_active_set_qp_probe_adds_and_removes_constraints_sequentially() -> None
     assert probe["initial_objective"] == pytest.approx(0.0)
     assert probe["final_objective"] == pytest.approx(-4.125)
     assert probe["max_residual"] == pytest.approx(0.0)
+
+
+def test_direct_shooting_probe_keeps_controls_and_rollout_states_separate() -> None:
+    probe = _direct_shooting_probe()
+
+    assert len(probe["initial_controls"]) == len(probe["optimized_controls"]) == 20
+    assert len(probe["initial_states"]) == len(probe["optimized_states"]) == 21
+    assert len(probe["history"]) == 81
+    assert probe["initial_objective"] == pytest.approx(1.0)
+    assert probe["optimized_controls"][0] == pytest.approx(0.5075261591704722)
+    assert probe["optimized_controls"][8] == pytest.approx(0.9889078241953825)
+    assert probe["optimized_controls"][9:] == pytest.approx((1.0,) * 11)
+    assert probe["optimized_states"][-1] == pytest.approx(0.9503875701362733)
+    assert probe["final_objective"] == pytest.approx(0.03435619268834956)
+    assert probe["terminal_error"] == pytest.approx(0.049612429863726715)
+    assert probe["saturated_controls"] == 11
 
 
 def test_lqr_probe_matches_the_fixed_article_equations() -> None:
@@ -137,6 +154,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "active-set-qp-execution.svg",
         "bayesian-optimization-execution.svg",
         "constrained-feasibility-execution.svg",
+        "direct-shooting-rollout-execution.svg",
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
@@ -196,6 +214,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/concepts/chance-risk-contract.md": "portfolio-risk-execution.svg",
         "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
         "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
+        "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
         "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",
         "content/methods/bfgs.md": "constrained-feasibility-execution.svg",

@@ -40,6 +40,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "constrained-feasibility-execution.svg": _constrained_feasibility_svg(
             dataset_version
         ).encode("utf-8"),
+        "direct-shooting-rollout-execution.svg": _direct_shooting_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
         "lqr-backward-forward-execution.svg": _lqr_backward_forward_svg(dataset_version).encode(
             "utf-8"
@@ -419,6 +422,314 @@ def _active_set_qp_svg(dataset_version: str) -> str:
   .asq-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
   .asq-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
   .asq-note { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _direct_shooting_rollout(
+    controls: tuple[float, ...],
+    *,
+    decay: float = 0.92,
+    time_step: float = 0.1,
+) -> tuple[float, ...]:
+    states = [0.0]
+    for control in controls:
+        states.append(decay * states[-1] + time_step * control)
+    return tuple(states)
+
+
+def _direct_shooting_probe() -> dict[str, object]:
+    horizon = 20
+    decay = 0.92
+    time_step = 0.1
+    target = 1.0
+    control_penalty = 0.002
+    learning_rate = 4.0
+    controls = [0.0] * horizon
+    initial_controls = tuple(controls)
+    initial_states = _direct_shooting_rollout(
+        initial_controls,
+        decay=decay,
+        time_step=time_step,
+    )
+    terminal_weights = tuple(time_step * decay ** (horizon - 1 - index) for index in range(horizon))
+    history: list[tuple[int, float, float, int]] = []
+
+    for iteration in range(81):
+        states = _direct_shooting_rollout(
+            tuple(controls),
+            decay=decay,
+            time_step=time_step,
+        )
+        terminal_error = states[-1] - target
+        objective = terminal_error * terminal_error + control_penalty * sum(
+            control * control for control in controls
+        )
+        saturated = sum(control >= 1.0 - 1e-12 for control in controls)
+        history.append((iteration, objective, states[-1], saturated))
+        if iteration == 80:
+            break
+
+        gradient = [
+            2.0 * terminal_error * weight + 2.0 * control_penalty * control
+            for weight, control in zip(terminal_weights, controls, strict=True)
+        ]
+        controls = [
+            max(-1.0, min(1.0, control - learning_rate * derivative))
+            for control, derivative in zip(controls, gradient, strict=True)
+        ]
+
+    optimized_controls = tuple(controls)
+    optimized_states = _direct_shooting_rollout(
+        optimized_controls,
+        decay=decay,
+        time_step=time_step,
+    )
+    return {
+        "horizon": horizon,
+        "decay": decay,
+        "time_step": time_step,
+        "target": target,
+        "control_penalty": control_penalty,
+        "learning_rate": learning_rate,
+        "initial_controls": initial_controls,
+        "optimized_controls": optimized_controls,
+        "initial_states": initial_states,
+        "optimized_states": optimized_states,
+        "history": tuple(history),
+        "initial_objective": history[0][1],
+        "final_objective": history[-1][1],
+        "terminal_error": abs(optimized_states[-1] - target),
+        "saturated_controls": history[-1][3],
+    }
+
+
+def _direct_shooting_svg(dataset_version: str) -> str:
+    probe = _direct_shooting_probe()
+    initial_controls = probe["initial_controls"]
+    optimized_controls = probe["optimized_controls"]
+    initial_states = probe["initial_states"]
+    optimized_states = probe["optimized_states"]
+    if not all(
+        isinstance(values, tuple)
+        for values in (
+            initial_controls,
+            optimized_controls,
+            initial_states,
+            optimized_states,
+        )
+    ):
+        raise TypeError("direct-shooting teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 72.0, 592.0
+    control_top, control_bottom = 214.0, 452.0
+    state_top, state_bottom = 590.0, 828.0
+    horizon = int(probe["horizon"])
+
+    def time_x(index: int) -> float:
+        return plot_left + index / horizon * (plot_right - plot_left)
+
+    def control_y(value: float) -> float:
+        return control_bottom - value / 1.05 * (control_bottom - control_top)
+
+    def state_y(value: float) -> float:
+        return state_bottom - value / 1.05 * (state_bottom - state_top)
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">Direct Shootingのcontrol列とrollout結果</title>',
+        (
+            '<desc id="figure-description">20個のcontrolをprojected gradientで更新する'
+            "固定Direct Shooting教材。上段では後半のcontrolが上限1へ達する。"
+            "下段ではそのcontrol列を前進simulationしたstateが0から0.950へ進む。"
+            "初期control列ではstateは0のままである。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="dsh-title">control列を変えると、trajectoryが決まる</text>',
+        (
+            '<text x="32" y="80" class="dsh-subtitle">'
+            "fixed damped dynamics · 20 controls · 80 projected-gradient updates</text>"
+        ),
+        '<line x1="36" y1="116" x2="68" y2="116" stroke="#aebbb6" stroke-width="4"/>',
+        '<text x="78" y="122" class="dsh-legend">initial</text>',
+        '<line x1="190" y1="116" x2="222" y2="116" stroke="#d67835" stroke-width="5"/>',
+        '<text x="232" y="122" class="dsh-legend">optimized control</text>',
+        '<line x1="438" y1="116" x2="470" y2="116" stroke="#2c7564" stroke-width="5"/>',
+        '<text x="480" y="122" class="dsh-legend">rollout state</text>',
+        '<defs><marker id="dsh-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" '
+        'orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#d67835"/></marker></defs>',
+        '<rect x="24" y="150" width="592" height="338" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="188" class="dsh-panel">decision variable: control sequence</text>',
+        '<text x="590" y="188" text-anchor="end" class="dsh-status">−1 ≤ uₜ ≤ 1</text>',
+    ]
+
+    for value in (0.0, 0.5, 1.0):
+        y = control_y(value)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#e4e9e5" stroke-width="1"/>'
+                ),
+                (
+                    f'<text x="60" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="dsh-axis">{value:g}</text>'
+                ),
+            ]
+        )
+
+    bar_step = (plot_right - plot_left) / horizon
+    bar_width = bar_step * 0.62
+    baseline_y = control_y(0.0)
+    for index, value in enumerate(optimized_controls):
+        x = time_x(index) + (bar_step - bar_width) / 2
+        y = control_y(float(value))
+        elements.append(
+            f'<rect x="{x:.2f}" y="{y:.2f}" width="{bar_width:.2f}" '
+            f'height="{baseline_y - y:.2f}" rx="3" fill="#d67835"/>'
+        )
+    elements.append(
+        f'<line x1="{plot_left}" y1="{baseline_y:.2f}" x2="{plot_right}" '
+        f'y2="{baseline_y:.2f}" stroke="#aebbb6" stroke-width="4"/>'
+    )
+    for tick in (0, 5, 10, 15, 20):
+        x = time_x(tick)
+        elements.append(
+            f'<text x="{x:.2f}" y="476" text-anchor="middle" class="dsh-axis">{tick}</text>'
+        )
+    elements.extend(
+        [
+            '<line x1="320" y1="498" x2="320" y2="536" stroke="#d67835" '
+            'stroke-width="4" marker-end="url(#dsh-arrow)"/>',
+            '<text x="336" y="522" class="dsh-flow">forward simulation</text>',
+            '<rect x="24" y="548" width="592" height="338" rx="18" fill="#fff" stroke="#cad8d2"/>',
+            '<text x="44" y="586" class="dsh-panel">rollout result: state trajectory</text>',
+        ]
+    )
+
+    for value in (0.0, 0.5, 1.0):
+        y = state_y(value)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#e4e9e5" stroke-width="1"/>'
+                ),
+                (
+                    f'<text x="60" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="dsh-axis">{value:g}</text>'
+                ),
+            ]
+        )
+
+    target_y = state_y(float(probe["target"]))
+    elements.extend(
+        [
+            (
+                f'<line x1="{plot_left}" y1="{target_y:.2f}" x2="{plot_right}" '
+                f'y2="{target_y:.2f}" stroke="#102a2e" stroke-width="2" '
+                'stroke-dasharray="7 6"/>'
+            ),
+            (
+                f'<text x="586" y="{target_y - 9:.2f}" text-anchor="end" '
+                'class="dsh-target">target = 1</text>'
+            ),
+        ]
+    )
+    initial_path = " ".join(
+        f"{time_x(index):.2f},{state_y(float(value)):.2f}"
+        for index, value in enumerate(initial_states)
+    )
+    optimized_path = " ".join(
+        f"{time_x(index):.2f},{state_y(float(value)):.2f}"
+        for index, value in enumerate(optimized_states)
+    )
+    elements.extend(
+        [
+            (
+                f'<polyline points="{initial_path}" fill="none" stroke="#aebbb6" '
+                'stroke-width="4" stroke-dasharray="7 6"/>'
+            ),
+            (
+                f'<polyline points="{optimized_path}" fill="none" stroke="#2c7564" '
+                'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'
+            ),
+        ]
+    )
+    final_x = time_x(horizon)
+    final_y = state_y(float(optimized_states[-1]))
+    elements.extend(
+        [
+            f'<circle cx="{final_x:.2f}" cy="{final_y:.2f}" r="8" fill="#2c7564" '
+            'stroke="#fff" stroke-width="3"/>',
+            (
+                f'<text x="{final_x - 12:.2f}" y="{final_y + 26:.2f}" text-anchor="end" '
+                f'class="dsh-final">x₂₀ = {float(optimized_states[-1]):.3f}</text>'
+            ),
+        ]
+    )
+    for tick in (0, 5, 10, 15, 20):
+        x = time_x(tick)
+        elements.append(
+            f'<text x="{x:.2f}" y="872" text-anchor="middle" class="dsh-axis">{tick}</text>'
+        )
+
+    elements.extend(
+        [
+            '<text x="32" y="928" class="dsh-metric-label">objective</text>',
+            (
+                '<text x="32" y="956" class="dsh-metric">'
+                f"{float(probe['initial_objective']):.3f} → "
+                f"{float(probe['final_objective']):.4f}</text>"
+            ),
+            '<text x="252" y="928" class="dsh-metric-label">terminal error</text>',
+            (
+                '<text x="252" y="956" class="dsh-metric">'
+                f"{float(probe['terminal_error']):.4f}</text>"
+            ),
+            '<text x="446" y="928" class="dsh-metric-label">upper bound</text>',
+            (
+                '<text x="446" y="956" class="dsh-metric">'
+                f"{int(probe['saturated_controls'])} / 20 controls</text>"
+            ),
+            (
+                '<text x="32" y="992" class="dsh-meta">'
+                "実行生成: scripts.generate_article_figures._direct_shooting_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1024" class="dsh-note">'
+                "固定1-state教材です。hard terminal constraintとpath constraintは"
+                "示しません。</text>"
+            ),
+            (
+                '<text x="32" y="1052" class="dsh-note">'
+                "unstable dynamics、model mismatch、solver一般の性能も"
+                "示しません。</text>"
+            ),
+            """
+<style>
+  .dsh-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .dsh-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .dsh-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .dsh-legend, .dsh-status { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .dsh-axis { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .dsh-flow { font: 700 15px system-ui, sans-serif; fill: #8b4c3d; }
+  .dsh-target { font: 700 15px system-ui, sans-serif; fill: #102a2e; }
+  .dsh-final { font: 700 16px system-ui, sans-serif; fill: #2c7564; }
+  .dsh-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .dsh-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .dsh-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .dsh-note { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
 </style>
 """,
             "</svg>\n",
