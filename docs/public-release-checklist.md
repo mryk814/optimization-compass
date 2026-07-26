@@ -79,5 +79,7 @@ GitHub Pages artifact.
 - [ ] Post-deploy smoke checks confirm routes, data fetches, manifest identity,
       and license links.
 - [ ] Public `deployment.json` matches the validated workflow commit SHA and dataset version.
+- [ ] `scripts/pages_checkpoint.py --run-id <run-id> --require-published` proves the exact workflow,
+      public identity, HTTP 200, clean worktree, and local/remote synchronization in one snapshot.
 - [ ] Pages failure and rollback follow [pages-deployment.md](pages-deployment.md); no artifact
       from another commit or hand-built fallback is uploaded.

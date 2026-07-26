@@ -112,3 +112,20 @@ route rendering. #18 owns browser-level route semantics and accessibility agains
 
 Never upload a hand-built directory, reuse an artifact from a different commit, or bypass a failed
 gate. The public `deployment.json` and workflow run must always identify the same source commit.
+
+## Interruption-safe operator checkpoint
+
+Capture the current publication state before a long gate, after pushing, and before declaring Pages
+current:
+
+```bash
+uv run python scripts/pages_checkpoint.py --format markdown
+uv run python scripts/pages_checkpoint.py --run-id <run-id> --require-published
+```
+
+The command fetches `origin` by default, locates the workflow run for the exact local commit, lists
+completed and remaining jobs, and compares the public root, `deployment.json`, and
+`data/release.json`. It reports states such as `not-pushed`, `workflow-running`, `workflow-failed`,
+`public-stale`, and `published`; a non-final state is a resume instruction, not permission to start a
+duplicate run. Use `--output <untracked-path>` to preserve a Markdown or JSON handoff when the session
+may be interrupted. Use `--no-fetch` only for an explicitly offline snapshot.

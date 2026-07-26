@@ -281,8 +281,11 @@ Do not execute this recipe as a hidden side effect of a small article or Gallery
 
 Use this recipe only after the user explicitly authorizes publication or a push to `main`.
 
-1. Inspect `git status`, branch, stash ownership, `origin/main...main`, and the latest Pages run before
-   changing or publishing anything.
+1. Run `uv run python scripts/pages_checkpoint.py --format markdown`, then inspect stash ownership
+   and other worktrees before changing or publishing anything. The checkpoint fetches `origin`,
+   identifies the exact-HEAD workflow run, checks public deployment identity, and names the one
+   remaining publication action. If it reports `workflow-running`, resume that run instead of pushing
+   again.
 2. Batch the intended publishable slice before pushing. When Actions capacity is constrained, do not
    push intermediate fixes that each start a full workflow.
 3. Run focused tests while iterating. Before the single publish push, run the smallest authoritative
@@ -309,15 +312,18 @@ Use this recipe only after the user explicitly authorizes publication or a push 
    for a product failure.
 7. Commit coherent fixes with DCO sign-off. Push `main` once after the bounded local gate passes.
 8. Monitor that exact `Validated CI and Pages` run through all three gates: artifact validation,
-   Browser E2E/accessibility, and `Deploy validated artifact and smoke it`. Do not start a replacement
-   run while the current run is merely slow.
+   Browser E2E/accessibility, and `Deploy validated artifact and smoke it`. Record a copyable handoff
+   at any interruption boundary with
+   `uv run python scripts/pages_checkpoint.py --run-id <run-id> --output <untracked-path>`. Do not
+   start a replacement run while the current run is merely slow.
 9. If the run fails, read the complete failed-step log. Fix canonical inputs for data drift; fix stale
    consumer expectations for intentional generated growth; preserve progressive disclosure by opening
    hidden details in E2E instead of forcing identifiers back into the visible surface. Re-run only the
    failed focused slice locally, then make one follow-up push.
-10. Treat workflow success as necessary but not sufficient. Fetch the public `/deployment.json`
-    without cache, require its 40-character `commit_sha` and dataset version to match the successful
-    run, require the public root to return HTTP 200, and confirm `origin/main...main` is `0 0`.
+10. Treat workflow success as necessary but not sufficient. Run
+    `uv run python scripts/pages_checkpoint.py --run-id <run-id> --require-published`; it must prove
+    public `/deployment.json`, `data/release.json`, HTTP 200, exact workflow identity, a clean
+    worktree, and `origin/main...HEAD` synchronization in one snapshot.
 
 #### Interruption-safe checkpoint
 
@@ -325,7 +331,8 @@ Before starting a long local or remote gate:
 
 - preserve the current coherent slice in a DCO-signed commit;
 - keep the worktree free of unrelated changes;
-- record the exact commit SHA, workflow run URL, completed checks, and remaining gate;
+- capture the exact commit SHA, workflow run URL, completed checks, and remaining gate with
+  `scripts/pages_checkpoint.py`;
 - do not push an unvalidated `main` checkpoint solely because interruption is possible;
 - once publication is authorized and the bounded local gate passes, push and monitor without waiting
   for another prompt.
