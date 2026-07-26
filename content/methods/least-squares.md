@@ -14,7 +14,7 @@ aliases: [/learn/least-squares]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-26
 ---
 
 観測ごとの残差vectorとJacobian構造を保ち、二乗和・damping・trust-region診断を使ってparameterを局所推定する方法です。
@@ -26,6 +26,14 @@ last_reviewed: 2026-07-19
 - 見ているもの: residual vector、Jacobian、weights、bounds
 - 前進の判断: costの低下、residual pattern、Jacobianの状態
 - 注意すること: 小さいcostだけではmodelの正しさやparameterの一意性は決まりません
+
+予測curveが観測点に重なれば、推定は終わったと判断できるでしょうか。
+固定診断probeでは、見た目がほぼ重なる最終frameでも停止criterionには到達していません。
+
+![20点のnoiseless合成dataへ3 parameter指数減衰modelを当てる固定Python診断probe。初期parameterではmodel curveと観測点の間に大きなresidualがあり、12評価後はcurveがほぼ重なる。一方、下段の履歴ではresidual normと既知truthからのparameter距離がともに0ではなく、停止criterion未達である。](./media/least-squares-fit-diagnostic.svg "solver-independentなdamped Gauss–Newton診断probeの実行結果です。curve、観測別residual、residual norm、parameter errorを分けて読みます。LMやSciPy solverの実行結果、実dataの識別性、統計的妥当性は示しません。")
+
+上の2枚は同じ20観測に対する初期frameと12評価後です。
+curveの重なりだけで止めず、その下のresidual normとparameter errorを確認します。
 
 ## 仕組み
 
@@ -75,7 +83,7 @@ $$
 
 小さい二乗和だけではmodelが正しいとは言えません。residualに系統的patternが残れば、parameterではなくmodel構造が不足している可能性があります。
 
-## 向いている条件・避ける条件
+## 向く条件・避ける条件
 
 向いている条件:
 
@@ -181,14 +189,8 @@ optimizerの成功statusを統計的妥当性と混同しません。parameter u
 
 ## 失敗・切替の兆候
 
-小さいcostでも、residualに系統的patternが残るなら、parameterではなくmodel構造が不足している可能性があります。
-
-異なるparameter組がほぼ同じ予測を作る場合、costが小さくてもparameterは一意に決まりません。
-
-::: warning
-optimizerの成功statusを統計的妥当性と混同しません。
-parameter uncertainty、model mismatch、measurement processを別に評価します。
-:::
+- residual normが下がっても系統的patternが残る → parameter追加より先にmodel構造を見直す
+- 異なる初期点から同程度のcostへ到達し、parameterが大きく異なる → 識別可能性と実験設計を見直す
 
 ## 次に読む
 

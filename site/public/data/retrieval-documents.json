@@ -20703,7 +20703,7 @@
         "S003",
         "S041"
       ],
-      "text": "観測ごとの残差を保ったまま、Jacobianと診断値を使ってparameterを局所推定します。 見ているもの: residual vector、Jacobian、weights、bounds 前進の判断: costの低下、residual pattern、Jacobianの状態 注意すること: 小さいcostだけではmodelの正しさやparameterの一意性は決まりません",
+      "text": "観測ごとの残差を保ったまま、Jacobianと診断値を使ってparameterを局所推定します。 見ているもの: residual vector、Jacobian、weights、bounds 前進の判断: costの低下、residual pattern、Jacobianの状態 注意すること: 小さいcostだけではmodelの正しさやparameterの一意性は決まりません 予測curveが観測点に重なれば、推定は終わったと判断できるでしょうか。 固定診断probeでは、見た目がほぼ重なる最終frameでも停止criterionには到達していません。 solver-independentなdamped Gauss–Newton診断probeの実行結果です。curve、観測別residual、residual norm、parameter errorを分けて読みます。LMやSciPy solverの実行結果、実dataの識別性、統計的妥当性は示しません。 上の2枚は同じ20観測に対する初期frameと12評価後です。 curveの重なりだけで止めず、その下のresidual normとparameter errorを確認します。",
       "title": "30秒でつかむ"
     },
     {
@@ -20805,7 +20805,7 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:least-squares:向いている条件・避ける条件",
+      "chunk_id": "content:least-squares:向く条件・避ける条件",
       "dataset_version": "0.18.19",
       "document_id": "content:least-squares",
       "license": "CC-BY-4.0",
@@ -20824,7 +20824,7 @@
         "S041"
       ],
       "text": "向いている条件: 観測ごとのresidualとJacobianを作れる weights、bounds、正値性などを残差とともに扱う必要がある residual patternやJacobian rankを診断したい 避ける／切り替える条件: 線形least squares → QR / SVDを先に使う root findingが本来の問い → 二乗和化で解が変わらないか確認 bounds中心・大規模 → Trust Region Reflective 強い一般制約 → constrained NLP residual/Jacobianを作れないblack-box → derivative-free法 ill-conditioning → scaling、regularization、実験設計を見直す",
-      "title": "向いている条件・避ける条件"
+      "title": "向く条件・避ける条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -20847,7 +20847,7 @@
         "S003",
         "S041"
       ],
-      "text": "小さいcostでも、residualに系統的patternが残るなら、parameterではなくmodel構造が不足している可能性があります。 異なるparameter組がほぼ同じ予測を作る場合、costが小さくてもparameterは一意に決まりません。 Warning optimizerの成功statusを統計的妥当性と混同しません。 parameter uncertainty、model mismatch、measurement processを別に評価します。",
+      "text": "residual normが下がっても系統的patternが残る → parameter追加より先にmodel構造を見直す 異なる初期点から同程度のcostへ到達し、parameterが大きく異なる → 識別可能性と実験設計を見直す",
       "title": "失敗・切替の兆候"
     },
     {

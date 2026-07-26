@@ -39,6 +39,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             dataset_version
         ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
+        "least-squares-fit-diagnostic.svg": _least_squares_fit_svg(dataset_version).encode("utf-8"),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -48,6 +49,232 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _least_squares_fit_svg(dataset_version: str) -> str:
+    trace = next(
+        trace
+        for trace in generate_parameter_estimation_traces(dataset_version=dataset_version)
+        if trace.trace_id == "exponential-fit-lm"
+    )
+    initial, final = trace.frames[0], trace.frames[-1]
+    time_start, time_stop, observation_count = 0.0, 5.0, 20
+    times = [
+        time_start + index * (time_stop - time_start) / (observation_count - 1)
+        for index in range(observation_count)
+    ]
+    truth_a, truth_k, truth_c = (float(value) for value in trace.parameters["truth"])
+    observations = [truth_a * math.exp(-truth_k * time) + truth_c for time in times]
+    panel_specs = (
+        ("初期parameter", initial, "#d67835", ' stroke-dasharray="10 7"', 145.0),
+        ("12評価後", final, "#245c42", "", 435.0),
+    )
+    plot_x, plot_width, plot_height = 64.0, 518.0, 190.0
+    response_min, response_max = 0.0, 2.2
+
+    def project_x(time: float) -> float:
+        return plot_x + (time - time_start) / (time_stop - time_start) * plot_width
+
+    def project_y(response: float, plot_y: float) -> float:
+        return (
+            plot_y
+            + plot_height
+            - (response - response_min) / (response_max - response_min) * plot_height
+        )
+
+    elements = [
+        _svg_open(
+            "曲線が重なっても、診断は終わらない",
+            (
+                "20点のnoiseless合成dataに3 parameter指数減衰modelを当てる固定Python診断"
+                "probeです。初期parameterと12評価後の予測曲線、観測別residual、residual "
+                "norm、既知truthからのparameter距離を比較します。12評価後のcurveは観測へ"
+                "近づきますが、停止criterionには到達していません。LMやSciPy solverの実行"
+                "結果ではありません。"
+            ),
+            width=640,
+            height=1120,
+        ),
+        '<rect width="640" height="1120" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="48" class="ls-title">曲線が重なっても、診断は終わらない</text>',
+        (
+            '<text x="32" y="78" class="ls-subtitle">'
+            "20 observations · noiseless · a exp(-k t)+c · 12 evaluation budget"
+            "</text>"
+        ),
+        '<circle cx="42" cy="108" r="7" fill="#245c42" stroke="#fff" stroke-width="3"/>',
+        '<text x="58" y="114" class="ls-legend">observations</text>',
+        '<line x1="194" y1="108" x2="232" y2="108" stroke="#d67835" stroke-width="5"/>',
+        '<text x="240" y="114" class="ls-legend">model curve</text>',
+        '<line x1="382" y1="94" x2="382" y2="120" stroke="#bd6754" stroke-width="3"/>',
+        '<text x="394" y="114" class="ls-legend">point residual</text>',
+    ]
+
+    for panel_title, frame, color, dash, panel_y in panel_specs:
+        plot_y = panel_y + 57
+        parameters = [float(value) for value in frame.points[0].coordinates]
+        amplitude, rate, offset = parameters
+        predictions = [amplitude * math.exp(-rate * time) + offset for time in times]
+        curve_points = " ".join(
+            f"{project_x(time):.2f},{project_y(prediction, plot_y):.2f}"
+            for time, prediction in zip(times, predictions, strict=True)
+        )
+        metrics = {metric.metric_id: float(metric.value) for metric in frame.metrics}
+        elements.extend(
+            [
+                (
+                    f'<rect x="24" y="{panel_y}" width="592" height="272" rx="18" '
+                    'fill="#fff" stroke="#cfd8d1"/>'
+                ),
+                (
+                    f'<text x="44" y="{panel_y + 32}" class="ls-panel">'
+                    f"{html.escape(panel_title)}</text>"
+                ),
+                (
+                    f'<text x="596" y="{panel_y + 32}" text-anchor="end" class="ls-status">'
+                    f"a={amplitude:.3f} · k={rate:.3f} · c={offset:.3f} · "
+                    f"‖r‖={metrics['residual_norm']:.3f}</text>"
+                ),
+                (
+                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
+                    f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
+                ),
+            ]
+        )
+        for response in (0.0, 1.0, 2.0):
+            tick_y = project_y(response, plot_y)
+            elements.extend(
+                [
+                    (
+                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
+                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
+                        'stroke="#ebe8e0"/>'
+                    ),
+                    (
+                        f'<text x="{plot_x - 10}" y="{tick_y + 6:.2f}" '
+                        f'text-anchor="end" class="ls-axis">{response:g}</text>'
+                    ),
+                ]
+            )
+        for time, observation, prediction in zip(times, observations, predictions, strict=True):
+            x = project_x(time)
+            observation_y = project_y(observation, plot_y)
+            prediction_y = project_y(prediction, plot_y)
+            elements.append(
+                f'<line x1="{x:.2f}" y1="{observation_y:.2f}" '
+                f'x2="{x:.2f}" y2="{prediction_y:.2f}" '
+                'stroke="#bd6754" stroke-width="3" opacity="0.72"/>'
+            )
+        elements.append(
+            f'<polyline points="{curve_points}" fill="none" stroke="{color}" '
+            f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+        )
+        for time, observation in zip(times, observations, strict=True):
+            elements.append(
+                f'<circle cx="{project_x(time):.2f}" '
+                f'cy="{project_y(observation, plot_y):.2f}" r="6" '
+                'fill="#245c42" stroke="#fff" stroke-width="2"/>'
+            )
+        for tick in (0.0, 2.5, 5.0):
+            tick_x = project_x(tick)
+            elements.append(
+                f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 25}" '
+                f'text-anchor="middle" class="ls-axis">{tick:g}</text>'
+            )
+
+    history_y, history_height = 790.0, 120.0
+    history_x, history_width = 64.0, 518.0
+    log_min, log_max = -2.0, 0.4
+
+    def history_point(frame: TraceFrame, metric_id: str) -> tuple[float, float]:
+        value = _metric_value(frame, metric_id)
+        bounded = min(10**log_max, max(10**log_min, value))
+        return (
+            history_x
+            + (frame.oracle_evaluations - 1) / (trace.evaluation_budget - 1) * history_width,
+            history_y
+            + history_height
+            - (math.log10(bounded) - log_min) / (log_max - log_min) * history_height,
+        )
+
+    residual_history = [history_point(frame, "residual_norm") for frame in trace.frames]
+    parameter_history = [history_point(frame, "parameter_error") for frame in trace.frames]
+    elements.extend(
+        [
+            '<text x="32" y="754" class="ls-summary">curveの下で追う診断値</text>',
+            (
+                f'<rect x="{history_x}" y="{history_y}" width="{history_width}" '
+                f'height="{history_height}" rx="12" fill="#fff" stroke="#cfd8d1"/>'
+            ),
+        ]
+    )
+    for exponent in (-2, -1, 0):
+        y = history_y + history_height - (exponent - log_min) / (log_max - log_min) * history_height
+        elements.extend(
+            [
+                (
+                    f'<line x1="{history_x}" y1="{y:.2f}" '
+                    f'x2="{history_x + history_width}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{history_x - 10}" y="{y + 6:.2f}" '
+                    f'text-anchor="end" class="ls-axis">1e{exponent}</text>'
+                ),
+            ]
+        )
+    for points, color in (
+        (residual_history, "#245c42"),
+        (parameter_history, "#d67835"),
+    ):
+        point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        elements.append(
+            f'<polyline points="{point_string}" fill="none" stroke="{color}" '
+            'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+        for x, y in points:
+            elements.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="{color}"/>')
+    elements.extend(
+        [
+            '<line x1="64" y1="944" x2="102" y2="944" stroke="#245c42" stroke-width="5"/>',
+            '<text x="112" y="950" class="ls-legend">residual norm 1.867 → 0.034</text>',
+            '<line x1="344" y1="944" x2="382" y2="944" stroke="#d67835" stroke-width="5"/>',
+            '<text x="392" y="950" class="ls-legend">parameter error 0.890 → 0.036</text>',
+            (
+                '<text x="32" y="990" class="ls-provenance">'
+                "実行生成: generate_parameter_estimation_traces</text>"
+            ),
+            (
+                '<text x="32" y="1018" class="ls-provenance">'
+                "solver-independent damped Gauss–Newton probe · "
+                f"dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1060" class="ls-caveat">'
+                "20点・noiseなしの合成dataです。LM／SciPyの実行結果ではありません。</text>"
+            ),
+            (
+                '<text x="32" y="1088" class="ls-caveat">'
+                "識別性、統計的妥当性、実dataへの適合を保証しません。</text>"
+            ),
+            (
+                "<style>"
+                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
+                ".ls-title{font-size:30px;font-weight:760}"
+                ".ls-subtitle{font-size:17px;fill:#617068}"
+                ".ls-legend{font-size:17px;fill:#46554d}"
+                ".ls-panel{font-size:23px;font-weight:750}"
+                ".ls-status{font-size:17px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".ls-axis{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".ls-summary{font-size:21px;font-weight:750}"
+                ".ls-provenance{font-size:15px;fill:#617068}"
+                ".ls-caveat{font-size:15px;fill:#7a4b38}"
+                "</style>"
+            ),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _bayesian_optimization_svg(dataset_version: str) -> str:
