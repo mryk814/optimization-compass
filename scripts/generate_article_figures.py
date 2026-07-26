@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import heapq
 import html
 import math
 import random
@@ -42,6 +43,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             dataset_version
         ).encode("utf-8"),
         "direct-shooting-rollout-execution.svg": _direct_shooting_svg(dataset_version).encode(
+            "utf-8"
+        ),
+        "dijkstra-astar-grid-execution.svg": _dijkstra_astar_grid_svg(dataset_version).encode(
             "utf-8"
         ),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
@@ -1002,6 +1006,241 @@ def _pdlp_residual_svg(dataset_version: str) -> str:
             "</svg>\n",
         ]
     )
+    return "".join(elements)
+
+
+def _dijkstra_astar_grid_probe() -> dict[str, object]:
+    width, height = 17, 11
+    start = (1, 5)
+    goal = (15, 5)
+    obstacles = tuple(
+        sorted({(6, y) for y in range(1, 10) if y != 2} | {(11, y) for y in range(1, 10) if y != 8})
+    )
+    blocked = set(obstacles)
+
+    def search(*, use_heuristic: bool) -> dict[str, object]:
+        def heuristic(node: tuple[int, int]) -> int:
+            if not use_heuristic:
+                return 0
+            return abs(goal[0] - node[0]) + abs(goal[1] - node[1])
+
+        distance = {start: 0}
+        predecessor: dict[tuple[int, int], tuple[int, int]] = {}
+        queue = [(heuristic(start), heuristic(start), start)]
+        closed: set[tuple[int, int]] = set()
+        expanded: list[tuple[int, int]] = []
+        relaxed_edges = 0
+
+        while queue:
+            _, _, node = heapq.heappop(queue)
+            if node in closed:
+                continue
+            closed.add(node)
+            expanded.append(node)
+            if node == goal:
+                break
+
+            for delta_x, delta_y in ((1, 0), (0, 1), (-1, 0), (0, -1)):
+                neighbor = (node[0] + delta_x, node[1] + delta_y)
+                if not (0 <= neighbor[0] < width and 0 <= neighbor[1] < height):
+                    continue
+                if neighbor in blocked:
+                    continue
+                candidate = distance[node] + 1
+                if candidate >= distance.get(neighbor, width * height + 1):
+                    continue
+                distance[neighbor] = candidate
+                predecessor[neighbor] = node
+                priority = candidate + heuristic(neighbor)
+                heapq.heappush(queue, (priority, heuristic(neighbor), neighbor))
+                relaxed_edges += 1
+
+        path = [goal]
+        while path[-1] != start:
+            path.append(predecessor[path[-1]])
+        path.reverse()
+        return {
+            "cost": distance[goal],
+            "path": tuple(path),
+            "expanded": tuple(expanded),
+            "relaxed_edges": relaxed_edges,
+        }
+
+    dijkstra = search(use_heuristic=False)
+    astar = search(use_heuristic=True)
+    return {
+        "width": width,
+        "height": height,
+        "start": start,
+        "goal": goal,
+        "obstacles": obstacles,
+        "dijkstra": dijkstra,
+        "astar": astar,
+        "expansion_reduction": (len(dijkstra["expanded"]) - len(astar["expanded"]))
+        / len(dijkstra["expanded"]),
+    }
+
+
+def _dijkstra_astar_grid_svg(dataset_version: str) -> str:
+    probe = _dijkstra_astar_grid_probe()
+    obstacles = probe["obstacles"]
+    dijkstra = probe["dijkstra"]
+    astar = probe["astar"]
+    if (
+        not isinstance(obstacles, tuple)
+        or not isinstance(dijkstra, dict)
+        or not isinstance(astar, dict)
+    ):
+        raise TypeError("Dijkstra/A* teaching probe has invalid collections")
+
+    width, height = 640, 1080
+    grid_columns = int(probe["width"])
+    grid_rows = int(probe["height"])
+    cell_size = 25.0
+    grid_left = (width - grid_columns * cell_size) / 2
+
+    def grid_elements(
+        result: dict[str, object],
+        *,
+        grid_top: float,
+    ) -> list[str]:
+        expanded = result["expanded"]
+        path = result["path"]
+        if not isinstance(expanded, tuple) or not isinstance(path, tuple):
+            raise TypeError("Dijkstra/A* result collections must be tuples")
+        expanded_order = {node: index for index, node in enumerate(expanded)}
+        path_nodes = set(path)
+        obstacle_nodes = set(obstacles)
+        elements: list[str] = []
+        for row in range(grid_rows):
+            for column in range(grid_columns):
+                node = (column, row)
+                x = grid_left + column * cell_size
+                y = grid_top + row * cell_size
+                fill = "#ffffff"
+                if node in obstacle_nodes:
+                    fill = "#243f49"
+                elif node in expanded_order:
+                    progress = expanded_order[node] / max(1, len(expanded) - 1)
+                    fill = "#f0c8a6" if progress < 0.5 else "#f7e2cf"
+                if node in path_nodes:
+                    fill = "#73b7a2"
+                elements.append(
+                    f'<rect x="{x:.2f}" y="{y:.2f}" width="{cell_size:.2f}" '
+                    f'height="{cell_size:.2f}" fill="{fill}" stroke="#d7e0dc" '
+                    'stroke-width="1"/>'
+                )
+
+        path_points = " ".join(
+            (
+                f"{grid_left + node[0] * cell_size + cell_size / 2:.2f},"
+                f"{grid_top + node[1] * cell_size + cell_size / 2:.2f}"
+            )
+            for node in path
+        )
+        elements.append(
+            f'<polyline points="{path_points}" fill="none" stroke="#236956" '
+            'stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
+        )
+        for node, label, fill in (
+            (probe["start"], "S", "#102a2e"),
+            (probe["goal"], "G", "#2c7564"),
+        ):
+            node_x, node_y = node
+            center_x = grid_left + int(node_x) * cell_size + cell_size / 2
+            center_y = grid_top + int(node_y) * cell_size + cell_size / 2
+            elements.extend(
+                [
+                    f'<circle cx="{center_x:.2f}" cy="{center_y:.2f}" r="10" fill="{fill}"/>',
+                    f'<text x="{center_x:.2f}" y="{center_y + 4.5:.2f}" '
+                    f'text-anchor="middle" class="da-node">{label}</text>',
+                ]
+            )
+        return elements
+
+    dijkstra_expanded = len(dijkstra["expanded"])
+    astar_expanded = len(astar["expanded"])
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">Dijkstra法とA*探索の展開範囲を比較する固定grid実行</title>',
+        (
+            '<desc id="figure-description">17列11行の4近傍gridで、同じ始点と終点を'
+            "Dijkstra法とManhattan heuristicのA*で探索する。両者の最短路costは24。"
+            f"Dijkstra法は{dijkstra_expanded} cell、A*は{astar_expanded} cellを展開し、"
+            "A*はgoal方向へ探索範囲を絞る。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="da-title">同じcost 24でも、探した範囲は違う</text>',
+        (
+            '<text x="32" y="80" class="da-subtitle">'
+            "17 × 11 grid · unit edge cost · 4-neighbor moves · Manhattan h</text>"
+        ),
+        '<rect x="32" y="106" width="18" height="18" rx="3" fill="#f0c8a6"/>',
+        '<text x="60" y="120" class="da-legend">expanded</text>',
+        '<rect x="174" y="106" width="18" height="18" rx="3" fill="#73b7a2"/>',
+        '<text x="202" y="120" class="da-legend">shortest path</text>',
+        '<rect x="352" y="106" width="18" height="18" rx="3" fill="#243f49"/>',
+        '<text x="380" y="120" class="da-legend">obstacle</text>',
+        '<rect x="24" y="148" width="592" height="350" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="184" class="da-panel">Dijkstra · h(n) = 0</text>',
+        (
+            '<text x="596" y="184" text-anchor="end" class="da-count">'
+            f"{dijkstra_expanded} expanded</text>"
+        ),
+        *grid_elements(dijkstra, grid_top=207.0),
+        '<rect x="24" y="520" width="592" height="350" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="556" class="da-panel">A* · Manhattan h(n)</text>',
+        (
+            '<text x="596" y="556" text-anchor="end" class="da-count">'
+            f"{astar_expanded} expanded</text>"
+        ),
+        *grid_elements(astar, grid_top=579.0),
+        '<text x="32" y="920" class="da-metric-label">shortest path cost</text>',
+        (
+            '<text x="32" y="950" class="da-metric">'
+            f"{int(dijkstra['cost'])} = {int(astar['cost'])}</text>"
+        ),
+        '<text x="258" y="920" class="da-metric-label">expanded cells</text>',
+        (f'<text x="258" y="950" class="da-metric">{dijkstra_expanded} → {astar_expanded}</text>'),
+        '<text x="474" y="920" class="da-metric-label">reduction</text>',
+        (
+            '<text x="474" y="950" class="da-metric">'
+            f"{float(probe['expansion_reduction']):.0%}</text>"
+        ),
+        (
+            '<text x="32" y="1002" class="da-meta">'
+            "実行生成: scripts.generate_article_figures._dijkstra_astar_grid_probe "
+            f"· dataset {html.escape(dataset_version)}</text>"
+        ),
+        (
+            '<text x="32" y="1034" class="da-limit">'
+            "固定unit-cost gridです。別graph、重み、tie-break、heuristic一般の"
+            "展開削減率は示しません。</text>"
+        ),
+        (
+            '<text x="32" y="1058" class="da-limit">'
+            "Manhattan hはこの4近傍設定でadmissibleです。side constraintは含みません。</text>"
+        ),
+        """
+<style>
+  .da-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .da-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .da-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .da-panel { font: 700 20px system-ui, sans-serif; fill: #102a2e; }
+  .da-count { font: 700 16px system-ui, sans-serif; fill: #2c7564; }
+  .da-node { font: 700 12px system-ui, sans-serif; fill: #fff; }
+  .da-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .da-metric { font: 700 20px system-ui, sans-serif; fill: #102a2e; }
+  .da-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
+  .da-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+        "</svg>\n",
+    ]
     return "".join(elements)
 
 

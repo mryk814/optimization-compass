@@ -7,6 +7,7 @@ import pytest
 
 from scripts.generate_article_figures import (
     _active_set_qp_probe,
+    _dijkstra_astar_grid_probe,
     _direct_shooting_probe,
     _finite_horizon_lqr_probe,
     _local_search_two_opt_probe,
@@ -66,6 +67,20 @@ def test_direct_shooting_probe_keeps_controls_and_rollout_states_separate() -> N
     assert probe["final_objective"] == pytest.approx(0.03435619268834956)
     assert probe["terminal_error"] == pytest.approx(0.049612429863726715)
     assert probe["saturated_controls"] == 11
+
+
+def test_dijkstra_and_astar_find_equal_cost_with_different_expansion_areas() -> None:
+    probe = _dijkstra_astar_grid_probe()
+    dijkstra = probe["dijkstra"]
+    astar = probe["astar"]
+
+    assert dijkstra["cost"] == astar["cost"] == 24
+    assert len(dijkstra["path"]) == len(astar["path"]) == 25
+    assert len(dijkstra["expanded"]) == 168
+    assert len(astar["expanded"]) == 92
+    assert dijkstra["relaxed_edges"] == 169
+    assert astar["relaxed_edges"] == 125
+    assert probe["expansion_reduction"] == pytest.approx(76 / 168)
 
 
 def test_pdlp_probe_requires_all_three_stopping_quantities() -> None:
@@ -239,6 +254,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "bayesian-optimization-execution.svg",
         "constrained-feasibility-execution.svg",
         "direct-shooting-rollout-execution.svg",
+        "dijkstra-astar-grid-execution.svg",
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
@@ -307,6 +323,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
         "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
         "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
+        "content/methods/dijkstra-astar.md": "dijkstra-astar-grid-execution.svg",
         "content/methods/dual-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",
