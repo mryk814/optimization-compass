@@ -31,6 +31,12 @@ $$
 状態 $u$ は密度から決まり、密度は状態を通じてcomplianceに影響します。
 したがって、普通の連続変数の目的関数に見えても、実際には「設計fieldを更新する問題」です。
 
+## 実行結果を先に見る
+
+![8×4要素の固定教材を12反復実行したdensity field。初期field、filterありの反復6と反復12、filterなしの反復12を並べ、compliance、gray fraction、checkerboard scoreを同じ反復から表示している。](./media/topology-field-execution.svg "Optimization CompassのPython teaching generatorを実行した結果です。filterありでは滑らかな材料経路が現れ、filterなしではcheckerboardが強く残ります。実FEMの妥当性や製造性は示しません。")
+
+濃淡の形だけでなく、各panelのgray fractionとcheckerboardも一緒に見ます。complianceが下がったという一つの数値だけでは、fieldの妥当性を判断できません。
+
 ## shape optimizationとの違い
 
 形状最適化は境界や形状parameterを更新しますが、SIMPのような密度法は要素ごとの密度fieldを更新します。

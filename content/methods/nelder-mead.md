@@ -26,6 +26,12 @@ last_reviewed: 2026-07-24
 - **動かすもの**: 単体の頂点と探索geometry
 - **前進の判断**: best-so-farの目的関数値が改善すること
 
+## 実行結果を先に見る
+
+![二次元の二次目的上でNelder–Meadを80回の評価予算で実行し、初期simplexから反射、拡大、収縮を経て終端simplexへ進む軌跡。各frameでは頂点順位、candidate、受理操作、best valueを同期している。](./data/media/scenario-nm-quadratic/static.svg "Optimization Compassの決定論的Python generatorが出力した終端frameです。2次元の固定教材であり、別問題での速度や頑健性を示しません。")
+
+三角形が動き、形を変え、最後に小さくなる様子がこの手法の本体です。[frameを順に再生する](#/theater/learning/SCENARIO_NM_QUADRATIC)と、候補の採否まで追えます。
+
 ## 単体は何を表すか
 
 2次元では三角形、3次元では四面体がsimplexです。

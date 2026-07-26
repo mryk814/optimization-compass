@@ -21652,7 +21652,7 @@
         "S001",
         "S002"
       ],
-      "text": "この手法の気持ちは、坂の下り方を読み、無理のない一歩を繰り返して低い場所へ進むことです。 この手法は、現在地の坂を読み、最も下りやすい向きへ少しずつ進みます。 見るもの : 現在の目的関数値、勾配、試したstepの結果 動かすもの : 現在点とstep size 前進の判断 : 目的関数値が下がり、gradient normが小さくなること 勾配を使えることが、この手法を選ぶ出発点です。目的関数が滑らかでも、勾配のscaleや制約の扱いが合わなければ、stepは安定しません。",
+      "text": "この手法の気持ちは、坂の下り方を読み、無理のない一歩を繰り返して低い場所へ進むことです。 見るもの : 現在の目的関数値、勾配、試したstepの結果 動かすもの : 現在点とstep size 前進の判断 : 目的関数値が下がり、gradient normが小さくなること 勾配を使えることが、この手法を選ぶ出発点です。目的関数が滑らかでも、勾配のscaleや制約の扱いが合わなければ、stepは安定しません。",
       "title": "30秒でつかむ"
     },
     {
@@ -21862,6 +21862,32 @@
       ],
       "text": "小さすぎると、安定でも収束が遅くなります。 大きすぎると、谷を飛び越えて振動または発散します。 一方向では適切でも、条件数の悪い谷では他方向に大きすぎる場合があります。 固定stepが難しい場合は、line search／schedule／preconditioningを検討します。 細長い谷でzig-zagする現象は、勾配方向が最適点への直線方向とは限らないことを示します。 Gradient family comparison では、MomentumやAdamと同じ初期点・budgetで確認できます。",
       "title": "学習率を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.gradient-descent:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:method.gradient-descent",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:concept.convexity",
+        "content:proximal-gradient",
+        "content:trust-region-newton-cg",
+        "method:M_GRADIENT_DESCENT",
+        "source:S001",
+        "source:S002",
+        "trace:gradient_descent-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "Optimization Compassの固定Python generatorを実行した結果です。軌跡と最終目的値は同じrunから描画しています。一般的な性能rankingではありません。 図では、勾配を下るという同じ目的でも、update ruleによって点の運び方が変わります。まず線の形を見てから、下の式と診断値へ進んでください。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -22148,6 +22174,32 @@
       ],
       "text": "simplexが細長く退化する shrinkを繰り返してもbestが改善しない noise floor以下の差を追い続ける boundsへ多数の頂点がclipされ同一点になる 高次元で一操作あたりの評価数が重い 多峰性で初期点ごとに別解へ入る 一般制約をpenaltyだけで扱い、infeasible解を誤採用する Warning Nelder–Meadは「微分不要」ですが、「評価回数が少ない」ことを意味しません。 高価なblack-boxでは、評価budgetをBayesian Optimizationやsurrogate法と比較します。",
       "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:method.nelder-mead:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:method.nelder-mead",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:mads",
+        "method:M_NELDER_MEAD",
+        "source:S001",
+        "source:S002",
+        "trace:nelder-mead-quadratic",
+        "trace:nelder-mead-quadratic-shifted"
+      ],
+      "source_ids": [
+        "S001",
+        "S002"
+      ],
+      "text": "Optimization Compassの決定論的Python generatorが出力した終端frameです。2次元の固定教材であり、別問題での速度や頑健性を示しません。 三角形が動き、形を変え、最後に小さくなる様子がこの手法の本体です。 frameを順に再生する と、候補の採否まで追えます。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -31203,6 +31255,36 @@
       ],
       "text": "設計field ：現在の材料分布です。 状態field ：その設計で解いた変位やひずみエネルギーです。 感度 ：密度を変えたときcomplianceがどう変わるかを表します。 制約指標 ：volume fraction、gray fraction、checkerboard scoreです。 complianceが下がっても、checkerboardやgray densityが消えたとは限りません。 離散化の解像度やfilter radiusを変えると、別の局所解へ移る場合もあります。",
       "title": "反復ごとに対応づける量"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:topology-optimization:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:topology-optimization",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_TOPOLOGY_OC_MMA",
+        "content:adjoint-sensitivity",
+        "content:concept.constraint-class",
+        "content:concept.variable-domain",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:optimality-criteria-topology",
+        "content:shape-optimization",
+        "content:simp-topology",
+        "source:S097",
+        "source:S098",
+        "source:S101",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S097",
+        "S098",
+        "S101"
+      ],
+      "text": "Optimization CompassのPython teaching generatorを実行した結果です。filterありでは滑らかな材料経路が現れ、filterなしではcheckerboardが強く残ります。実FEMの妥当性や製造性は示しません。 濃淡の形だけでなく、各panelのgray fractionとcheckerboardも一緒に見ます。complianceが下がったという一つの数値だけでは、fieldの妥当性を判断できません。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",
