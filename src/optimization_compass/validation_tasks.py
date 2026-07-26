@@ -412,7 +412,8 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
     content_lane_support_paths = {
         path
         for path in normalized
-        if path.startswith("docs/") or path in {"README.md", "CONTRIBUTING.md", "CHANGELOG.md"}
+        if path.startswith(("docs/", "site/public/media/"))
+        or path in {"README.md", "CONTRIBUTING.md", "CHANGELOG.md"}
     }
     if (
         content_paths

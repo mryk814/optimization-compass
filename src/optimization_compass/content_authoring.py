@@ -210,6 +210,7 @@ def prepare_content_for_pr(content_id: str, *, root: Path) -> ReadyContentReport
         path
         for path in branch_paths
         if not path.startswith(("content/", "docs/"))
+        and not path.startswith("site/public/media/")
         and path not in {"README.md", "CONTRIBUTING.md", "CHANGELOG.md"}
     ]
     if unrelated:
