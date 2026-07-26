@@ -8316,7 +8316,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.18",
+  "dataset_version": "0.18.19",
   "freshness": {
     "as_of": "2026-07-26",
     "claim_count": 457,

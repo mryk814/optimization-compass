@@ -4096,7 +4096,7 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.18",
+  "dataset_version": "0.18.19",
   "generated_at": "2026-07-26T00:00:00Z",
   "journeys": [
     {
@@ -4121,7 +4121,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4212,7 +4212,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4285,7 +4285,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4361,7 +4361,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4444,7 +4444,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4536,7 +4536,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4614,7 +4614,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4699,7 +4699,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4780,7 +4780,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4856,7 +4856,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4938,7 +4938,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5012,7 +5012,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5092,7 +5092,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5170,7 +5170,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5247,7 +5247,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5324,7 +5324,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5401,7 +5401,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5482,7 +5482,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5572,7 +5572,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5649,7 +5649,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5739,7 +5739,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5831,7 +5831,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5908,7 +5908,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6020,7 +6020,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6098,7 +6098,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6176,7 +6176,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6256,7 +6256,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6344,7 +6344,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6424,7 +6424,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6509,7 +6509,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.18",
+      "dataset_version": "0.18.19",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"

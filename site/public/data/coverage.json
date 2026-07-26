@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.18",
+  "dataset_version": "0.18.19",
   "expectations": [
     {
       "applicability": "expected",
@@ -325,15 +325,7 @@
     }
   ],
   "generated_at": "2026-07-26T00:00:00Z",
-  "integrity_issues": [
-    {
-      "code": "broken_scenario_alias",
-      "detail": "A derived generated scenario points to a canonical scenario missing from the database.",
-      "entity_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
-      "entity_type": "scenario",
-      "severity": "error"
-    }
-  ],
+  "integrity_issues": [],
   "priorities": [
     {
       "factors": {
