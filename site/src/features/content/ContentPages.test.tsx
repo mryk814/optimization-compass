@@ -58,7 +58,9 @@ describe("ContentIndexPage", () => {
     expect(await screen.findByText("37件")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "動き・比較で学ぶ 37件" }))
       .toHaveAttribute("aria-pressed", "true");
-    expect(screen.getAllByRole("article")).toHaveLength(37);
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+    expect(screen.getByText("12 / 37件")).toBeVisible();
+    expect(screen.getByRole("button", { name: "次の12件を見る" })).toBeVisible();
     expect(screen.getByRole("button", { name: "すべて 128件" })).toBeVisible();
     expect(screen.getByRole("button", { name: "手法 106件" })).toBeVisible();
     expect(screen.getByRole("button", { name: "概念 22件" })).toBeVisible();
@@ -67,6 +69,9 @@ describe("ContentIndexPage", () => {
     expect(within(firstCard).getByText("手法")).toBeVisible();
     expect(within(firstCard).getByText("教材を読む →")).toBeVisible();
     expect(within(firstCard).getByRole("navigation")).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "次の12件を見る" }));
+    expect(screen.getAllByRole("article")).toHaveLength(24);
   });
 
   test("filters by kind, connected learning, query, and empty results", async () => {
@@ -75,11 +80,11 @@ describe("ContentIndexPage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "概念 22件" }));
     expect(screen.getByText("22件")).toBeInTheDocument();
-    expect(screen.getAllByRole("article")).toHaveLength(22);
+    expect(screen.getAllByRole("article")).toHaveLength(12);
 
     fireEvent.click(screen.getByRole("button", { name: "動き・比較で学ぶ 37件" }));
     expect(screen.getByText("37件")).toBeInTheDocument();
-    expect(screen.getAllByRole("article")).toHaveLength(37);
+    expect(screen.getAllByRole("article")).toHaveLength(12);
 
     fireEvent.click(screen.getByRole("button", { name: "すべて 128件" }));
     fireEvent.change(screen.getByRole("searchbox", { name: "教材を検索" }), {

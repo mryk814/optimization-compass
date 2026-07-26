@@ -14,11 +14,14 @@ import { CompiledContent } from "./CompiledContent";
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { LearningRelations } from "../learning/LearningRelations";
 
+const CONTENT_PAGE_SIZE = 12;
+
 export function ContentIndexPage() {
   const links = useEntityLinks();
   const [pages, setPages] = useState<AtlasContentPage[]>([]);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<ContentFilter>("connected");
+  const [visibleLimit, setVisibleLimit] = useState(CONTENT_PAGE_SIZE);
   const [error, setError] = useState<Error>();
 
   useEffect(() => {
@@ -33,6 +36,12 @@ export function ContentIndexPage() {
     () => filterAndRankContentPages(pages, query, filter),
     [filter, pages, query],
   );
+  const visiblePages = filtered.slice(0, visibleLimit);
+
+  useEffect(() => {
+    setVisibleLimit(CONTENT_PAGE_SIZE);
+  }, [filter, query]);
+
   const pageUrl = (page: AtlasContentPage) => {
     if (links.status !== "ready") return `/learn/${page.content_id}`;
     const entity = findEntity(links.index, "content", page.content_id);
@@ -88,7 +97,7 @@ export function ContentIndexPage() {
 
       {error && <p className="atlas-error" role="alert">{error.message}</p>}
       <div className="content-card-grid">
-        {filtered.map((page) => {
+        {visiblePages.map((page) => {
           const visualizationUrl = relatedUrl("trace", page.visualization_ids);
           const comparisonUrl = relatedUrl("comparison", page.comparison_ids);
           return (
@@ -117,6 +126,17 @@ export function ContentIndexPage() {
           );
         })}
       </div>
+      {filtered.length > visiblePages.length && (
+        <div className="content-result-limit">
+          <p>{visiblePages.length} / {filtered.length}件</p>
+          <button
+            onClick={() => setVisibleLimit((current) => current + CONTENT_PAGE_SIZE)}
+            type="button"
+          >
+            次の{Math.min(CONTENT_PAGE_SIZE, filtered.length - visiblePages.length)}件を見る
+          </button>
+        </div>
+      )}
       {!error && pages.length > 0 && filtered.length === 0 && (
         <p className="content-empty">一致する教材が見つかりません。種類か検索語を変えてください。</p>
       )}
