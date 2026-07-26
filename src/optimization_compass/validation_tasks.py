@@ -159,6 +159,8 @@ CHECKS: tuple[ValidationCheck, ...] = (
             "pytest",
             "tests/test_validate_cli.py",
             "tests/test_pages_workflow.py",
+            "tests/test_pages_checkpoint.py",
+            "tests/test_repository_skills.py",
         ),
     ),
     ValidationCheck(
@@ -429,7 +431,20 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
         )
     task = "docs"
     reasons: set[str] = set()
+    repository_contract_paths = {
+        "scripts/pages_checkpoint.py",
+        "src/optimization_compass/validation_tasks.py",
+        "tests/test_pages_checkpoint.py",
+        "tests/test_pages_workflow.py",
+        "tests/test_repository_skills.py",
+        "tests/test_validate_cli.py",
+    }
     for path in normalized:
+        if path in repository_contract_paths or path.startswith(".agents/skills/"):
+            if task != "tier-b":
+                task = "pr-fast"
+            reasons.add("site_or_repository_contract")
+            continue
         if (
             path.startswith("site/public/data/")
             or path.startswith(("src/", "data/", "scripts/"))
@@ -438,10 +453,7 @@ def validation_task_for_paths(paths: list[str] | tuple[str, ...]) -> ChangeValid
             task = "tier-b"
             reasons.add("backend_or_data_authority")
             continue
-        if path in {
-            "tests/test_validate_cli.py",
-            "tests/test_pages_workflow.py",
-        } or path.startswith(("site/", ".github/")):
+        if path.startswith(("site/", ".github/")):
             if task != "tier-b":
                 task = "pr-fast"
             reasons.add("site_or_repository_contract")

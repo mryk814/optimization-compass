@@ -101,6 +101,15 @@ def test_problem_task_gate_is_tier_c() -> None:
         (["site/public/data/content.json"], "tier-b"),
         (["site/src/App.tsx", ".github/workflows/ci.yml"], "pr-fast"),
         (["tests/test_validate_cli.py", "tests/test_pages_workflow.py"], "pr-fast"),
+        (
+            [
+                "scripts/pages_checkpoint.py",
+                "src/optimization_compass/validation_tasks.py",
+                "tests/test_pages_checkpoint.py",
+                ".agents/skills/optimization-compass-maintenance/SKILL.md",
+            ],
+            "pr-fast",
+        ),
         (["tests/test_engine.py"], "tier-b"),
         (["src/optimization_compass/engine.py"], "tier-b"),
         (["data/seeds/site_gallery.json"], "tier-b"),
@@ -123,6 +132,13 @@ def test_mixed_changes_escalate_to_the_highest_required_gate() -> None:
         "content_authority",
         "site_or_repository_contract",
     }
+
+
+def test_repository_contract_gate_runs_publication_checkpoint_tests() -> None:
+    check = next(check for check in CHECKS if check.code == "repository.contract-tests")
+
+    assert "tests/test_pages_checkpoint.py" in check.command
+    assert "tests/test_repository_skills.py" in check.command
 
 
 def test_content_ready_task_owns_public_indexes_without_the_full_python_suite() -> None:
