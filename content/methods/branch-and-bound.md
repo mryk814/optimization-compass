@@ -13,7 +13,7 @@ comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 aliases: [/learn/branch-and-bound]
 visualization_aliases: []
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 離散問題を部分空間へ分枝し、incumbentとrelaxation boundで改善不能なsubtreeを除外しながら最適性の証明まで進める厳密探索法です。
@@ -27,6 +27,11 @@ last_reviewed: 2026-07-24
 - 実行可能解を作れるか
 - incumbentを改善できる可能性があるか
 - さらに分枝すべき変数は何か
+
+探索中のsubtreeと次に調べるnodeは、探索木の位置で見分けます。
+pruneした枝は、探索を打ち切った状態として分けて読みます。
+
+![濃紺の探索木のうち左側の探索済み経路が青緑、次に調べるnodeが橙の輪、改善不能として打ち切った枝が赤い印で示された模式図](./media/branch-and-bound-pruning.png "探索済みの経路、open node、pruneした枝を分けて読む教育用模式図です。実際のnode選択順、bound値、最適性の証明は図だけでは示しません。")
 
 minimizationでは、nodeのlower boundが現在のincumbent以上なら、そのsubtreeは改善できないためpruneできます。
 
@@ -117,7 +122,7 @@ fractional knapsackのvalueをupper boundとして使っています。
 - best-bound: 証明側を進めやすい
 - depth-first: memoryを抑え、incumbentを早く得る場合がある
 - breadth-first: levelごとに探索するがmemoryが増えやすい
-- hybrid: solverがphaseに応じて切替
+- hybrid: phaseに応じたsolver切替
 
 branching variable／node selection／heuristicは性能へ強く影響します。
 model formulationの強さも同じくらい重要です。
@@ -144,7 +149,7 @@ instance・seed・branch順・初期incumbent・fractional boundを固定しま�
 9回のevaluation上限も共通にし、node stop limitだけを9から4へ変えます。
 
 これは停止条件の読み方を学ぶ固定教材です。
-CP-SATやMIP solverの速度、総当たりとの一般性能rankingを示すものではありません。
+CP-SATやMIPのsolver速度、総当たりとの一般性能rankingを示すものではありません。
 
 ## 失敗・切替の兆候
 
@@ -163,4 +168,4 @@ problem instance／formulation／presolve／cut／heuristic／hardware／time li
 
 ## 次に読む
 
-現代的MILP solverでcutを統合する枠組みは[Branch-and-Cut](#/learn/branch-and-cut)、論理・scheduling制約中心なら[CP-SAT](#/learn/cp-sat)も比較します。
+現代的なMILPでcutを統合する枠組みは[Branch-and-Cut](#/learn/branch-and-cut)、論理・scheduling制約中心なら[CP-SAT](#/learn/cp-sat)も比較します。

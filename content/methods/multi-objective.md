@@ -14,7 +14,7 @@ aliases: [/learn/multi-objective]
 visualization_aliases: [biobjective-quadratic-pareto-front|/theater/multi-objective]
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 複数目的を根拠なく一つのscoreへ潰さず、domination・Pareto集合・preferenceを分けてtrade-off候補を作る最適化です。
@@ -31,6 +31,10 @@ last_reviewed: 2026-07-24
 - 恐れていること: infeasible候補の混入、単一のscoreへの過剰な圧縮、比較条件の不一致
 
 frontが広がったことだけでは、最終選択が決まったことになりません。
+
+非支配候補のfrontと、frontの内側にあるdominated候補を分けてから、preferenceに合う一点を選びます。
+
+![青緑の非支配候補が右下がりのfrontを作り、その内側に濃紺のdominated候補が散らばり、front上の一点だけが橙で選ばれた模式図](./media/multi-objective-pareto-front.png "非支配候補、dominated候補、preferenceで選ぶ一点を区別する教育用模式図です。目的の尺度、frontの凸性、橙の点の普遍的な優位は示しません。")
 
 ## まず確認すること
 
@@ -53,7 +57,7 @@ minimizationで解 $x_a$ が $x_b$ をdominateするとは、
 
 一方を改善すると他方が悪化する場合、数学だけでは最終選択を一意に決められません。
 preferenceとriskを明示します。
-policyと実務制約も別に確認します。
+運用方針（policy）と実務制約も別に確認します。
 
 ## Decision spaceとobjective space
 
@@ -128,7 +132,7 @@ NSGA-IIは、
 
 ## Normalizationとreference
 
-costが数千、riskが0.01のようにscaleが違うと、plotやweighted sumが一方に支配されます。
+コスト（cost）が数千、riskが0.01のようにscaleが違うと、plotやweighted sumが一方に支配されます。
 
 - objective direction
 - physical unit
@@ -160,13 +164,13 @@ seedが異なるfrontや、停止条件が異なるfrontを単純に優劣比較
 - 本当に競合する複数目的がある
 - preferenceを事前に完全固定できない
 - 候補集合を意思決定者へ提示したい
-- black-boxやnonconvexでscalar solverだけではfrontを取りにくい
+- black-boxやnonconvexでscalarizationだけではfrontを取りにくい
 - 複数設計のrobustnessを比較したい
 
 ## 避ける／切り替える条件
 
 - 単位換算可能な同一価値を別目的として重複計上
-- hard constraintをobjectiveへ弱く入れてinfeasible候補を残す
+- hardな制約（constraint）をobjectiveへ弱く入れてinfeasible候補を残す
 - preferenceが明確なのに巨大frontを無目的に生成
 - objective directionを混同
 - weighted sum一回だけで「Pareto最適化済み」とする

@@ -12,23 +12,29 @@ visualization_ids: [pendulum-collocation-coarse, pendulum-collocation-refined, p
 comparison_ids: [COMPARE_PENDULUM_COLLOCATION_MESH]
 aliases: [/learn/direct-collocation]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-26
 ---
 
 状態とcontrolを時間mesh上の変数にし、dynamics defectを制約として同時に解くtrajectory optimization法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**stateをsimulationだけに任せず、軌道全体を変数として置き、dynamicsとのずれをconstraintとして解きたい**というものです。
+この手法の気持ちは、**状態（state）をsimulationだけに任せない**ことです。
+軌道全体を変数として置き、dynamicsとのずれを制約（constraint）として解きます。
 
 - 見ているもの: state history、control history、cost、dynamics defect、constraint violation
 - 動かしているもの: mesh上のstateとcontrol
-- 前進の判断: costの改善と、defect、path constraint、boundary constraintの同時成立
-- 別に確認するもの: meshを細かくしたときの解の変化、solver時間、real-time deadline
+- 前進の判断: コスト（cost）の改善、defect、経路制約（path constraint）、境界制約（boundary constraint）の同時成立
+- 別に確認するもの: 時間格子（mesh）を細かくしたときの解の変化、solver時間、real-time deadline
 - 恐れていること: 粗いmesh、discretization error、sparse構造の破綻、未処理のevent
 
 変数は増えます。
 その代わり、長いhorizonや不安定dynamicsでも、全区間のrollout感度を一つの初期点から伝え続けずに済む場合があります。
+
+同じ軌道でも、mesh点とcontrolによる更新は別の対象です。
+隣接点のdynamics defectも分けて読みます。
+
+![青緑のmesh点を結ぶ濃紺の軌道に橙のcontrol矢印が並び、隣接する2点の間だけ赤い破線でdynamics defectが示された模式図](./media/direct-collocation-mesh-defect.png "mesh上のstateとcontrolを並べ、隣接点の整合しない区間をdynamics defectとして区別する教育用模式図です。連続時間の可行性や実機での安全性は示しません。")
 
 ## まず確認すること
 
@@ -41,7 +47,7 @@ last_reviewed: 2026-07-19
 | initialization | stateとcontrolの初期軌道を用意できるか |
 | real-time | solve timeとwarm startが運用deadlineに合うか |
 
-costが下がっても、mesh上のdefectやconstraint violationが許容範囲に入るとは限りません。
+コスト（cost）が下がっても、mesh上のdefectやconstraint violationが許容範囲に入るとは限りません。
 solver status、連続時間へ戻したsimulation、real-time運用を別々に確認します。
 
 ## 点ではなく軌道を変数にする
@@ -53,7 +59,8 @@ $$
 $$
 
 に対し、時間点ごとのstate $x_k$ とcontrol $u_k$ をdecision variablesとして並べます。
-dynamicsをcollocation formulaで離散化し、隣接点の整合性をconstraintとしてNLP solverへ渡します。
+dynamicsはcollocation formulaで離散化します。
+隣接点の整合性をNLPの制約（constraint）として渡します。
 
 これにより、
 
@@ -76,24 +83,24 @@ dynamicsをcollocation formulaで離散化し、隣接点の整合性をconstrai
 | variable数 | 多い | 少ない |
 
 長いhorizonや不安定systemではcollocationの疎構造が有利な場合があります。
-一方、meshとdiscretizationを設計し、連続時間の挙動を別途検証する必要があります。
+一方、時間格子（mesh）とdiscretizationを設計し、連続時間の挙動を別途検証する必要があります。
 
 ## 向く条件・避ける条件
 
 向いている条件:
 
 - known dynamicsを持つtrajectory optimization
-- path / boundary constraintが多い
+- 経路制約や境界制約の数が多い
 - sparse derivativeを利用できる
 - warm startを使うMPC
-- stateとcontrolの全履歴を説明したい
+- 状態（state）とcontrolの全履歴を説明したい
 
 避ける／切り替える条件:
 
 - dynamicsが未同定または強くstochastic
 - discontinuous eventをmeshへ明示していない
 - derivativeやscalingが不正確
-- meshが粗くsolutionがgrid依存
+- 時間格子（mesh）の粗さでsolutionがgrid依存
 - real-time deadlineにsolver時間が合わない
 
 ## Python
@@ -141,7 +148,8 @@ print(result.success, objective(result.x), np.linalg.norm(equality_constraints(r
 ```
 
 この例は単純なdynamicsです。
-実務ではintegration error、state constraints、units、solver statusを保存します。
+実務ではintegration errorとstate constraintsを保存します。
+単位とsolverの停止状態も別々に保存します。
 
 ## 診断値
 
@@ -156,9 +164,9 @@ print(result.success, objective(result.x), np.linalg.norm(equality_constraints(r
 - objective accumulation
 - active bounds
 - mesh point / refinement
-- KKT residualとtermination reason
+- KKT条件の残差（residual）とtermination reason
 
-meshが粗いと、離散NLPでは可行でも連続systemへ戻すとconstraintを破ることがあります。
+粗いmeshでは、離散NLPが可行でも連続systemへ戻すとconstraintを破ることがあります。
 確認は、mesh上のdefectだけで終えず、高精度simulationとmesh変更の両方で行います。
 
 1. mesh上のdefectを確認
@@ -167,18 +175,19 @@ meshが粗いと、離散NLPでは可行でも連続systemへ戻すとconstraint
 4. 誤差が大きい区間をrefine
 5. warm startして再solve
 
-cost、feasibility、mesh依存性、KKT residual、solver時間は別々の診断軸です。
+コスト（cost）とfeasibilityは別の診断軸です。
+mesh依存性、KKT residual、solver時間も分けて読みます。
 
 ## 失敗・切替の兆候
 
-- mesh上のcostは改善するが、高精度simulationでconstraintを破る → meshをrefineし、discretization errorを確認する
+- 時間格子（mesh）上のコスト（cost）は改善するが、高精度simulationで制約（constraint）を破る → 時間格子を細分化し、discretization errorを確認する
 - dynamics defectが停滞する → derivative、scaling、initial trajectoryを見直す
-- path constraintがmesh間で破れる → event区間やmesh密度を見直す
+- 経路制約（path constraint）の違反がmesh間に残る → event区間やmesh密度を見直す
 - solver時間がreal-time deadlineを超える → mesh、warm start、problem size、専用solverを検討する
-- dynamicsが未同定または強くstochastic → deterministicなdefect constraintを前提にしない定式化と比較する
+- dynamicsが未同定または強くstochastic → defectを制約として置く決定論的な前提に依存しない定式化と比較する
 
 ::: warning
-NLP solverの`success`は、連続時間問題の正しさを直接保証しません。
+NLPの`success`は、連続時間問題の正しさを直接保証しません。
 discretization error、model mismatch、simulation validationを別に確認します。
 :::
 
