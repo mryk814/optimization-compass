@@ -156,14 +156,18 @@ describe("DiagnosePage", () => {
       status: "answered",
       values: ["binary"],
     });
-    fireEvent.click(within(q1).getByRole("button", { name: "該当なし" }));
+    fireEvent.click(screen.getByText("回答済み・変更"));
+    const q1ForChange = screen.getByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    fireEvent.click(within(q1ForChange).getByRole("button", { name: "該当なし" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toEqual({
       status: "not_applicable",
       values: [],
     });
-    fireEvent.click(within(q1).getByRole("button", { name: "選択を解除" }));
+    const q1AfterNotApplicable = screen.getByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    fireEvent.click(within(q1AfterNotApplicable).getByRole("button", { name: "選択を解除" }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q01).toBeUndefined();
 
+    fireEvent.click(screen.getByRole("button", { name: "すべての質問を表示" }));
     const q2 = screen.getByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u });
     fireEvent.click(within(q2).getByRole("button", { name: /まだ分からない/u }));
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q02).toEqual({
@@ -183,19 +187,25 @@ describe("DiagnosePage", () => {
     expect(decodeAtlasState(tokenFromLocation(), catalog()).state.answers.Q04).toBeUndefined();
   });
 
-  test("opens one question stage at a time and shows measurable progress", async () => {
+  test("keeps one unanswered question in focus until the full list is requested", async () => {
     renderDiagnose();
 
-    await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    const q1 = await screen.findByRole("group", { name: /x（決めるもの）はどの種類ですか/u });
+    expect(screen.queryByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u })).not.toBeInTheDocument();
     const nextGroup = screen.getByText("次に、計算の性質").closest("details");
     expect(nextGroup).not.toHaveAttribute("open");
     expect(screen.getByRole("progressbar", { name: "診断の回答進捗" })).toHaveAttribute(
       "value",
       "0",
     );
+    fireEvent.click(within(q1).getByRole("button", { name: /^0-1/u }));
+    expect(await screen.findByRole("group", { name: /f\(x\)や制約は、式や計算手順として書けますか/u })).toBeVisible();
+    expect(screen.getByText("回答済み・変更")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "すべての質問を表示" }));
+    expect(nextGroup).not.toHaveAttribute("open");
     fireEvent.click(screen.getByText("次に、計算の性質"));
     expect(nextGroup).toHaveAttribute("open");
-    expect(screen.getByText(/候補はまだ絞れていません/u)).toBeVisible();
+    expect(screen.getByRole("progressbar", { name: "診断の回答進捗" })).toHaveAttribute("value", "1");
   });
 
   test("renders all result bands, implementations, problems, follow-ups, trace, and safe sources", async () => {

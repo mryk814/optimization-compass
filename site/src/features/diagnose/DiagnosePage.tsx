@@ -122,10 +122,12 @@ function Question({
   question,
   answer,
   onChange,
+  compact = false,
 }: {
   question: SiteQuestion;
   answer: ReturnType<typeof useAtlasState>["state"]["answers"][string] | undefined;
   onChange(action: "set" | "toggle" | "not_applicable" | "clear", value?: string): void;
+  compact?: boolean;
 }) {
   const selected = (value: string) =>
     answer?.status === "unknown"
@@ -133,6 +135,18 @@ function Question({
       : answer?.status === "answered" && answer.values.includes(value);
   const title = DIAGNOSIS_QUESTION_TITLES[question.question_id] ?? question.beginner_wording;
   const hasAnswer = answer !== undefined;
+  if (compact && hasAnswer) {
+    return (
+      <details className="diagnose-question-stage diagnose-question-stage-answered">
+        <summary>
+          <span aria-hidden="true">{question.sequence}</span>
+          <span>{title}</span>
+          <small>回答済み・変更</small>
+        </summary>
+        <Question answer={answer} onChange={onChange} question={question} />
+      </details>
+    );
+  }
   return (
     <fieldset className={hasAnswer ? "diagnose-question diagnose-question-answered" : "diagnose-question"}>
       <legend><span aria-hidden="true">{question.sequence}</span>{title}</legend>
@@ -300,6 +314,10 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
     (answer) => answer.status === "answered" && answer.values.includes("hours_or_more"),
   ) || result.first_choices.some((item) => item.entity_id === "M_BAYESIAN_OPT_GP");
   const answeredCount = Object.keys(atlas.state.answers).length;
+  const [showAllQuestions, setShowAllQuestions] = useState(false);
+  const nextQuestionId = data.questions.find(
+    (question) => atlas.state.answers[question.question_id] === undefined,
+  )?.question_id;
   const [openGroups, setOpenGroups] = useState<Set<string>>(() => new Set(
     QUESTION_GROUPS
       .filter((group) => group.from === 1 || data.questions
@@ -324,7 +342,15 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
       <div className="diagnose-progress" role="status">
         <strong>{answeredCount} / {data.questions.length} 回答済み</strong>
         <progress aria-label="診断の回答進捗" max={data.questions.length} value={answeredCount} />
-        <span>分かる項目だけで構いません。</span>
+        <span>次の一問からで構いません。</span>
+        <button
+          aria-expanded={showAllQuestions}
+          className="diagnose-all-questions-toggle"
+          onClick={() => setShowAllQuestions((current) => !current)}
+          type="button"
+        >
+          {showAllQuestions ? "質問を絞る" : "すべての質問を表示"}
+        </button>
       </div>
       <div className="diagnose-layout">
         <section className="diagnose-form" aria-label="診断条件">
@@ -356,9 +382,13 @@ function LoadedDiagnose({ manifest, data, view }: DiagnoseArtifacts) {
               <div className="diagnose-question-grid">
                 {data.questions
                   .filter((question) => question.sequence >= group.from && question.sequence <= group.to)
+                  .filter((question) => showAllQuestions
+                    || atlas.state.answers[question.question_id] !== undefined
+                    || question.question_id === nextQuestionId)
                   .map((question) => (
                     <Question
                       answer={atlas.state.answers[question.question_id]}
+                      compact={!showAllQuestions && atlas.state.answers[question.question_id] !== undefined}
                       key={question.question_id}
                       onChange={(action, value) => atlas.setState((current) => updateDiagnosticAnswer(current, question.question_id, question.answer_type, action, value))}
                       question={question}
