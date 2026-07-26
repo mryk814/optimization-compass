@@ -7,6 +7,7 @@ import pytest
 
 from scripts.generate_article_figures import (
     _active_set_qp_probe,
+    _cp_search_probe,
     _dijkstra_astar_grid_probe,
     _direct_shooting_probe,
     _dynamic_programming_knapsack_probe,
@@ -84,6 +85,35 @@ def test_dijkstra_and_astar_find_equal_cost_with_different_expansion_areas() -> 
     assert dijkstra["relaxed_edges"] == 169
     assert astar["relaxed_edges"] == 125
     assert probe["expansion_reduction"] == pytest.approx(76 / 168)
+
+
+def test_cp_search_probe_prunes_failed_queen_branches_before_backtracking() -> None:
+    probe = _cp_search_probe()
+    events = probe["events"]
+
+    assert probe["solution"] == ((0, 1), (1, 3), (2, 0), (3, 2))
+    assert probe["nodes"] == 8
+    assert probe["pruned_values"] == 29
+    assert probe["conflicts"] == 2
+    assert probe["backtracks"] == 2
+    assert [event["action"] for event in events] == [
+        "assign",
+        "assign",
+        "conflict",
+        "assign",
+        "assign",
+        "conflict",
+        "backtrack",
+        "backtrack",
+        "assign",
+        "assign",
+        "assign",
+        "assign",
+        "solution",
+    ]
+    assert events[0]["domains"] == ((0,), (2, 3), (1, 3), (1, 2))
+    assert events[4]["domains"] == ((0,), (3,), (1,), ())
+    assert events[-1]["domains"] == ((1,), (3,), (0,), (2,))
 
 
 def test_dynamic_programming_probe_fills_table_and_backtracks_selected_items() -> None:
@@ -314,6 +344,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "active-set-qp-execution.svg",
         "bayesian-optimization-execution.svg",
         "constrained-feasibility-execution.svg",
+        "cp-search-propagation-execution.svg",
         "direct-shooting-rollout-execution.svg",
         "dijkstra-astar-grid-execution.svg",
         "dynamic-programming-knapsack-execution.svg",
@@ -387,6 +418,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/concepts/chance-risk-contract.md": "portfolio-risk-execution.svg",
         "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
         "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
+        "content/methods/cp-search.md": "cp-search-propagation-execution.svg",
         "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
         "content/methods/dijkstra-astar.md": "dijkstra-astar-grid-execution.svg",
         "content/methods/dynamic-programming.md": "dynamic-programming-knapsack-execution.svg",

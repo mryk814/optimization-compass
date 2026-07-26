@@ -42,6 +42,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "constrained-feasibility-execution.svg": _constrained_feasibility_svg(
             dataset_version
         ).encode("utf-8"),
+        "cp-search-propagation-execution.svg": _cp_search_propagation_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "direct-shooting-rollout-execution.svg": _direct_shooting_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -1086,6 +1089,311 @@ def _dijkstra_astar_grid_probe() -> dict[str, object]:
         "expansion_reduction": (len(dijkstra["expanded"]) - len(astar["expanded"]))
         / len(dijkstra["expanded"]),
     }
+
+
+def _cp_search_probe() -> dict[str, object]:
+    size = 4
+    initial_domains = tuple(tuple(range(size)) for _ in range(size))
+    events: list[dict[str, object]] = []
+    nodes = 0
+    pruned_values = 0
+    conflicts = 0
+    backtracks = 0
+
+    def search(
+        domains: tuple[tuple[int, ...], ...],
+        assignments: tuple[tuple[int, int], ...],
+    ) -> tuple[tuple[int, int], ...] | None:
+        nonlocal nodes, pruned_values, conflicts, backtracks
+        assigned = dict(assignments)
+        if len(assigned) == size:
+            events.append(
+                {
+                    "action": "solution",
+                    "assignments": assignments,
+                    "domains": domains,
+                }
+            )
+            return assignments
+
+        row = min(
+            (candidate for candidate in range(size) if candidate not in assigned),
+            key=lambda candidate: (len(domains[candidate]), candidate),
+        )
+        for column in domains[row]:
+            nodes += 1
+            next_domains = [tuple(values) for values in domains]
+            pruned_values += len(next_domains[row]) - 1
+            next_domains[row] = (column,)
+            next_assignments = tuple(sorted((*assignments, (row, column))))
+            next_assigned = dict(next_assignments)
+            removed: list[tuple[int, int]] = []
+            conflict_row: int | None = None
+
+            for other_row in range(size):
+                if other_row in next_assigned:
+                    continue
+                previous = next_domains[other_row]
+                filtered = tuple(
+                    candidate
+                    for candidate in previous
+                    if candidate != column and abs(candidate - column) != abs(other_row - row)
+                )
+                removed.extend(
+                    (other_row, candidate) for candidate in previous if candidate not in filtered
+                )
+                pruned_values += len(previous) - len(filtered)
+                next_domains[other_row] = filtered
+                if not filtered and conflict_row is None:
+                    conflict_row = other_row
+
+            next_domain_tuple = tuple(next_domains)
+            events.append(
+                {
+                    "action": "assign",
+                    "row": row,
+                    "column": column,
+                    "assignments": next_assignments,
+                    "domains": next_domain_tuple,
+                    "removed": tuple(removed),
+                    "conflict_row": conflict_row,
+                }
+            )
+            if conflict_row is not None:
+                conflicts += 1
+                events.append(
+                    {
+                        "action": "conflict",
+                        "row": conflict_row,
+                        "assignments": next_assignments,
+                        "domains": next_domain_tuple,
+                    }
+                )
+                continue
+
+            solution = search(next_domain_tuple, next_assignments)
+            if solution is not None:
+                return solution
+
+        backtracks += 1
+        events.append(
+            {
+                "action": "backtrack",
+                "row": row,
+                "assignments": assignments,
+                "domains": domains,
+            }
+        )
+        return None
+
+    solution = search(initial_domains, ())
+    assert solution is not None
+    return {
+        "size": size,
+        "initial_domains": initial_domains,
+        "events": tuple(events),
+        "solution": solution,
+        "nodes": nodes,
+        "pruned_values": pruned_values,
+        "conflicts": conflicts,
+        "backtracks": backtracks,
+    }
+
+
+def _cp_search_propagation_svg(dataset_version: str) -> str:
+    probe = _cp_search_probe()
+    events = probe["events"]
+    assert isinstance(events, tuple)
+    stages = (
+        {
+            "title": "1. まだ決めていない",
+            "subtitle": "各queenのdomainは0–3",
+            "domains": probe["initial_domains"],
+            "assignments": (),
+            "conflict_row": None,
+            "accent": "#102a2e",
+        },
+        {
+            "title": "2. Q1 = 0 を仮決定",
+            "subtitle": "攻撃される6値を除く",
+            "domains": events[0]["domains"],
+            "assignments": events[0]["assignments"],
+            "conflict_row": None,
+            "accent": "#d77b42",
+        },
+        {
+            "title": "3. domainが空になる",
+            "subtitle": "Q4に置けず、この枝を戻る",
+            "domains": events[4]["domains"],
+            "assignments": events[4]["assignments"],
+            "conflict_row": events[4]["conflict_row"],
+            "accent": "#a24c3d",
+        },
+        {
+            "title": "4. Q1 = 1 から解へ",
+            "subtitle": "全domainが単一値になる",
+            "domains": events[-1]["domains"],
+            "assignments": events[-1]["assignments"],
+            "conflict_row": None,
+            "accent": "#2c7564",
+        },
+    )
+    elements = [
+        _svg_open(
+            "制約プログラミング探索の固定実行",
+            (
+                "4-Queensをforward checkingと最小domain優先のbranchingで解く。"
+                "全行が0から3の列候補を持つ初期状態から、Q1イコール0の枝で値を削り、"
+                "Q4のdomainが空になってbacktrackする。その後Q1イコール1の枝で"
+                "解1、3、0、2へ到達する。"
+            ),
+            height=1080,
+        ),
+        '<rect width="800" height="1080" fill="#fbfaf6"/>',
+        '<text x="36" y="50" class="title">値を消してから、残った枝だけを探す</text>',
+        (
+            '<text x="36" y="78" class="subtitle">'
+            "4-Queens · forward checking · minimum remaining values</text>"
+        ),
+        '<rect x="38" y="101" width="22" height="22" rx="7" fill="#2c7564"/>',
+        '<text x="70" y="117" class="axis">assigned</text>',
+        ('<rect x="169" y="101" width="22" height="22" rx="7" fill="#f5e4d7" stroke="#d77b42"/>'),
+        '<text x="201" y="117" class="axis">remaining domain</text>',
+        ('<rect x="370" y="101" width="22" height="22" rx="7" fill="#f4ded9" stroke="#a24c3d"/>'),
+        '<text x="402" y="117" class="axis">empty domain / conflict</text>',
+    ]
+
+    panel_origins = ((36, 148), (410, 148), (36, 416), (410, 416))
+    for stage, (panel_x, panel_y) in zip(stages, panel_origins, strict=True):
+        domains = stage["domains"]
+        assignments = dict(stage["assignments"])
+        conflict_row = stage["conflict_row"]
+        assert isinstance(domains, tuple)
+        elements.extend(
+            [
+                (
+                    f'<rect x="{panel_x}" y="{panel_y}" width="354" height="238" '
+                    'rx="18" fill="#fff" stroke="#d8ded9"/>'
+                ),
+                (
+                    f'<text x="{panel_x + 18}" y="{panel_y + 30}" '
+                    f'class="panel-title" fill="{stage["accent"]}">{stage["title"]}</text>'
+                ),
+                (
+                    f'<text x="{panel_x + 18}" y="{panel_y + 54}" '
+                    f'class="status">{stage["subtitle"]}</text>'
+                ),
+            ]
+        )
+        for row, domain in enumerate(domains):
+            row_y = panel_y + 83 + row * 35
+            elements.append(
+                f'<text x="{panel_x + 20}" y="{row_y + 19}" class="metric">Q{row + 1}</text>'
+            )
+            if row == conflict_row:
+                elements.extend(
+                    [
+                        (
+                            f'<rect x="{panel_x + 72}" y="{row_y}" width="202" height="27" '
+                            'rx="8" fill="#f4ded9" stroke="#a24c3d"/>'
+                        ),
+                        (
+                            f'<text x="{panel_x + 173}" y="{row_y + 19}" '
+                            'text-anchor="middle" class="metric-value" fill="#a24c3d">∅</text>'
+                        ),
+                    ]
+                )
+                continue
+            for column in range(4):
+                chip_x = panel_x + 72 + column * 50
+                available = column in domain
+                assigned = assignments.get(row) == column
+                fill = "#2c7564" if assigned else "#f5e4d7" if available else "#f0f1ed"
+                stroke = "#2c7564" if assigned else "#d77b42" if available else "#d8ded9"
+                text_fill = "#fff" if assigned else "#26352d" if available else "#a8afa9"
+                elements.extend(
+                    [
+                        (
+                            f'<rect x="{chip_x}" y="{row_y}" width="40" height="27" '
+                            f'rx="8" fill="{fill}" stroke="{stroke}"/>'
+                        ),
+                        (
+                            f'<text x="{chip_x + 20}" y="{row_y + 19}" text-anchor="middle" '
+                            f'class="metric-value" fill="{text_fill}">{column}</text>'
+                        ),
+                    ]
+                )
+
+    elements.extend(
+        [
+            (
+                '<text x="36" y="694" class="panel-title">'
+                "探索木は、空domainの枝をその場で捨てる</text>"
+            ),
+            '<line x1="400" y1="735" x2="250" y2="804" stroke="#d77b42" stroke-width="3"/>',
+            '<line x1="400" y1="735" x2="550" y2="804" stroke="#2c7564" stroke-width="3"/>',
+            '<rect x="344" y="711" width="112" height="48" rx="16" fill="#fff" stroke="#102a2e"/>',
+            '<text x="400" y="741" text-anchor="middle" class="metric-value">Q1</text>',
+            (
+                '<rect x="192" y="786" width="116" height="48" rx="16" '
+                'fill="#f5e4d7" stroke="#d77b42"/>'
+            ),
+            '<text x="250" y="816" text-anchor="middle" class="metric-value">Q1 = 0</text>',
+            (
+                '<rect x="492" y="786" width="116" height="48" rx="16" '
+                'fill="#d8e5df" stroke="#2c7564"/>'
+            ),
+            '<text x="550" y="816" text-anchor="middle" class="metric-value">Q1 = 1</text>',
+            '<line x1="250" y1="834" x2="176" y2="884" stroke="#a24c3d" stroke-width="2"/>',
+            '<line x1="250" y1="834" x2="324" y2="884" stroke="#a24c3d" stroke-width="2"/>',
+            '<line x1="550" y1="834" x2="550" y2="884" stroke="#2c7564" stroke-width="3"/>',
+            (
+                '<rect x="102" y="878" width="148" height="50" rx="14" '
+                'fill="#f4ded9" stroke="#a24c3d"/>'
+            ),
+            '<text x="176" y="899" text-anchor="middle" class="status">Q2 = 2</text>',
+            (
+                '<text x="176" y="919" text-anchor="middle" '
+                'class="metric-value" fill="#a24c3d">Q3 = ∅</text>'
+            ),
+            (
+                '<rect x="250" y="878" width="148" height="50" rx="14" '
+                'fill="#f4ded9" stroke="#a24c3d"/>'
+            ),
+            '<text x="324" y="899" text-anchor="middle" class="status">Q2 = 3, Q3 = 1</text>',
+            (
+                '<text x="324" y="919" text-anchor="middle" '
+                'class="metric-value" fill="#a24c3d">Q4 = ∅</text>'
+            ),
+            (
+                '<rect x="452" y="878" width="196" height="50" rx="14" '
+                'fill="#d8e5df" stroke="#2c7564"/>'
+            ),
+            '<text x="550" y="899" text-anchor="middle" class="status">Q2 = 3 → Q3 = 0</text>',
+            (
+                '<text x="550" y="919" text-anchor="middle" '
+                'class="metric-value" fill="#2c7564">Q4 = 2 · solution</text>'
+            ),
+            (
+                '<text x="36" y="974" class="caption">'
+                f"attempted nodes {probe['nodes']} · pruned values {probe['pruned_values']} · "
+                f"conflicts {probe['conflicts']} · backtracks {probe['backtracks']}</text>"
+            ),
+            (
+                '<text x="36" y="1008" class="caption">'
+                "実行生成: scripts/generate_article_figures.py::_cp_search_probe"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="36" y="1042" class="caveat">'
+                "固定4-Queensのforward checkingです。実solverのglobal constraint、"
+                "学習、restart性能は示しません。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _dynamic_programming_knapsack_probe() -> dict[str, object]:

@@ -10,89 +10,175 @@ prerequisites: []
 related_ids: [cp-sat, cdcl-sat, family.constraint-programming]
 aliases: [/learn/cp-search]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 有限domainの変数からpropagationで候補を削り、branchingで残った探索を分ける制約プログラミングの探索法です。
 
-## domainをどう削るか
+## 30秒でつかむ
 
-制約プログラミング探索では、各変数が取り得る値の集合（domain）を明示的に持ちます。各制約は「この制約を満たせない値をdomainから消してよいか」を判定するpropagatorとして働き、矛盾なく消せる値を繰り返し取り除きます。domainがすべて単一値になれば解、どこかのdomainが空になれば矛盾です。全変数のdomainを縮められなくなった時点で、1つの変数を選んで値を仮決定し（branching）、再びpropagationへ戻ります。
+各変数は、取り得る値の集合（domain）を持ちます。
+一つの値を仮決定したら、制約を満たせない値をほかのdomainから消します。
 
-## global constraintの宣言力
+- 見ているもの: 各変数のdomainとconstraint violation
+- 動かすもの: domainの縮小と探索木のbranch
+- 前進の判断: domainが縮み、単一値へ近づいているか
+- 矛盾の判断: どれか一つでもdomainが空になったか
+- 恐れていること: 弱いpropagationで巨大な探索木を残すこと
 
-alldifferent（全変数が異なる値を取る）やcumulative（資源使用量が容量を超えない）のようなglobal constraintは、同じ条件を等号・不等号の組み合わせへ分解するより強い伝播を行えます。alldifferentは、単なるペアごとの不等号制約の集合として書くよりも、ある値を1つの変数が確定した時点で他の変数のdomainから即座にその値を除去でき、矛盾をより早く検出します。global constraintの選び方は、モデルの読みやすさだけでなく、伝播の強さそのものを左右します。
+先に値を消し、消し切れなかった部分だけを探す手法です。
 
-## 伝播の強さと分岐戦略の関係
+## まず確認すること
 
-伝播が強いほどdomainは早く縮みますが、伝播だけで解に至らない問題も多く、分岐戦略（どの変数を先に決めるか、どの値から試すか）が探索木の大きさを左右します。伝播が弱い制約表現では分岐の負担が増え、逆に高コストな強い伝播を使うと1 nodeあたりの計算が重くなります。目的関数がある場合は、見つかった解の目的値より良い値を要求する新しいbound制約を都度追加し、伝播と探索を反復して最適解へ絞り込みます。モデリング言語（[MiniZinc](https://docs.minizinc.dev/en/stable/)など）はモデルの記述とsolverの探索戦略を分離しており、同じモデルを異なるsolver backendで実行できます。
+| 項目 | 確認内容 |
+|---|---|
+| variables | Boolean・整数・有限集合で表せるか |
+| constraints | alldifferent、cumulative、no-overlapなどで自然に書けるか |
+| propagation | 仮決定から除外できる値があるか |
+| search | どの変数・値からbranchするか |
+| objective | feasibilityだけか、boundを更新する最適化か |
+| scale | 連続量の整数化で必要な精度を保てるか |
 
-## 向いている条件
+本質的に連続で滑らかな問題を、粗い整数gridへ無理に移しません。
 
-- 変数が有限domainの整数・Boolean
-- alldifferent、cumulative、no-overlapなどglobal constraintで問題が自然に書ける
-- scheduling・割当・pathのようなfeasibility中心の問題
-- 目的関数があっても、bound制約の反復で最適化を扱える規模
+## domainを削ってからbranchする
 
-本質的に連続で滑らかな問題や、実数精度を整数scaleで表せない問題では、このアプローチを第一候補にしません。
+propagatorは、現在の仮決定と制約から不可能な値を取り除きます。
+すべてのdomainが単一値になれば解です。
+一つでも空になれば、そのbranchには解がないため直前の分岐へ戻ります。
+
+propagationだけで決まらない場合は、domainの小さい変数などを選んでbranchします。
+仮決定のたびに、再びpropagationを実行します。
+
+## 空domainを見つけたら戻る
+
+次の固定実行は、4×4盤の各行へqueenを一つ置く4-Queensです。
+domainの数字は列番号0–3を表し、同じ列と斜めにqueenを置けない制約を使います。
+
+![4-Queensをforward checkingで解く制約プログラミング探索。初期状態ではQ1からQ4が列0から3を候補に持つ。Q1を列0へ置くと攻撃される6値がdomainから消える。その枝を進むとQ4のdomainが空になり、探索はbacktrackする。Q1を列1へ置く枝では全domainが単一値になり、列1、3、0、2の解へ到達する。下段の探索木はQ1が列0の二つの失敗枝と、Q1が列1の成功枝を分けて示す。](./media/cp-search-propagation-execution.svg "固定4-Queensをforward checkingと最小domain優先で解いた実行です。global constraint、学習節、restartを備える実solverの内部や一般性能は示しません。")
+
+`Q1 = 0`は一見置ける候補です。
+しかし先へ進むと`Q3 = ∅`または`Q4 = ∅`になり、その場で枝を捨てられます。
+
+> 最終解だけでは、探索しなかった組合せが見えません。
+> domainの縮小と空集合を残すと、propagationが探索を減らした場所を説明できます。
+
+## 大域制約（global constraint）の強さ
+
+`alldifferent`や`cumulative`のような`global constraint`は、条件全体を一つの構造として伝播します。
+同じ条件を小さな制約へ分解すると、論理的には同値でも早期に消せる値が減る場合があります。
+
+強いpropagationは探索木を小さくできますが、1 nodeあたりの処理は重くなります。
+したがってbranch数だけでなく、propagation数と`wall time`も見ます。
+
+## 向く条件・避ける条件
+
+向きやすい条件:
+
+- 変数がBoolean・整数・有限集合
+- scheduling、割当、配置などfeasibilityが難しい
+- `global constraint`で問題構造を直接表せる
+- 矛盾を早い段階で検出したい
+
+避ける条件:
+
+- 本質的に連続で滑らかな問題
+- 整数化で必要な精度を失う問題
+- domainが巨大でpropagationがほとんど効かない問題
+- 問題構造に合う専用graph algorithmや動的計画法がある場合
 
 ## Python
 
 ```python
 from __future__ import annotations
 
-Domains = dict[str, list[int]]
+size = 4
+stats = {"nodes": 0, "pruned": 0, "conflicts": 0, "backtracks": 0}
 
 
-def forward_check(domains: Domains, var: str, value: int) -> Domains | None:
-    reduced = {name: list(values) for name, values in domains.items()}
-    reduced[var] = [value]
-    for other in reduced:
-        if other == var:
+def search(domains, assigned):
+    if len(assigned) == size:
+        return assigned
+
+    row = min(
+        (candidate for candidate in range(size) if candidate not in assigned),
+        key=lambda candidate: (len(domains[candidate]), candidate),
+    )
+    for column in domains[row]:
+        stats["nodes"] += 1
+        next_domains = [list(values) for values in domains]
+        stats["pruned"] += len(next_domains[row]) - 1
+        next_domains[row] = [column]
+        next_assigned = {**assigned, row: column}
+        conflict = False
+
+        for other_row in range(size):
+            if other_row in next_assigned:
+                continue
+            previous = next_domains[other_row]
+            next_domains[other_row] = [
+                candidate
+                for candidate in previous
+                if candidate != column
+                and abs(candidate - column) != abs(other_row - row)
+            ]
+            stats["pruned"] += len(previous) - len(next_domains[other_row])
+            conflict |= not next_domains[other_row]
+
+        if conflict:
+            stats["conflicts"] += 1
             continue
-        reduced[other] = [v for v in reduced[other] if v != value]
-        if not reduced[other]:
-            return None
-    return reduced
 
+        solution = search(next_domains, next_assigned)
+        if solution is not None:
+            return solution
 
-def backtrack(domains: Domains, order: list[str]) -> dict[str, int] | None:
-    if not order:
-        return {name: values[0] for name, values in domains.items()}
-    var, rest = order[0], order[1:]
-    for value in domains[var]:
-        reduced = forward_check(domains, var, value)
-        if reduced is not None:
-            result = backtrack(reduced, rest)
-            if result is not None:
-                return result
+    stats["backtracks"] += 1
     return None
 
 
-variables = ["a", "b", "c", "d"]
-domains: Domains = {name: [0, 1, 2, 3] for name in variables}
-solution = backtrack(domains, variables)
-print(solution)
+initial_domains = [list(range(size)) for _ in range(size)]
+solution = search(initial_domains, {})
+columns = [solution[row] for row in range(size)]
+print(f"solution columns: {columns}")
+print(
+    f"nodes={stats['nodes']}, pruned={stats['pruned']}, "
+    f"conflicts={stats['conflicts']}, backtracks={stats['backtracks']}"
+)
 ```
 
-`forward_check`は、1つの変数へ値を仮決定するたびに他の変数のdomainからその値を除くalldifferentの簡易版propagationです。空になったdomainがあれば即座に打ち切ります。実務のglobal constraint propagatorやbranching戦略は、利用するsolver（[OR-Tools CP-SAT](https://developers.google.com/optimization/cp/cp_solver)や[MiniZinc](https://docs.minizinc.dev/en/stable/)経由のbackend）の公式referenceで、利用versionの説明を確認します。
+```text
+solution columns: [1, 3, 0, 2]
+nodes=8, pruned=29, conflicts=2, backtracks=2
+```
+
+`pruned=29`は、探索した各branchで削除した値の累積です。
+一意な値29個を消したという意味ではありません。
+
+このコードはforward checkingの教育用実装です。
+[OR-Tools CP-SAT](https://developers.google.com/optimization/cp/cp_solver)や[MiniZinc](https://docs.minizinc.dev/en/stable/)のsolver内部を再現しません。
 
 ## 診断値
 
-- conflicts
-- branches
-- propagations
-- best_bound（最適化時）
-- feasible_solutions
+- domain sizeの推移
+- pruned value数とpropagation数
+- conflicts / branches / backtracks
+- nodeあたりのpropagation cost
+- feasible solution数
+- objective / best bound / gap（最適化時）
+- random seed、worker数、wall time
 
 ## 失敗・切替の兆候
 
-- conflict数やbranch数が増え続けて収束しない
-- propagationを重ねてもdomainがほとんど縮まらない
-- 整数scaleが過大で、変数のdomainが不必要に大きい
-- symmetryにより等価な部分木を繰り返し探索する
-- 一部制約だけ強い伝播を持つglobal constraintへ書き換えられていない
+- domainが縮まらない → global constraintやencodingを見直す
+- branch数だけ増える → variable / value orderingを見直す
+- 同じ形の部分木を反復する → symmetry breakingを加える
+- 1 nodeが重すぎる → propagation strengthとのtrade-offを測る
+- 整数scaleが過大 → 単位・精度・別familyを見直す
+- 線形緩和が強い → MILPのBranch-and-Cutとも比較する
 
 ## 次に読む
 
-CDCLの学習節と非時系列バックトラックとの違いは[CDCL SAT](#/learn/cdcl-sat)、propagationと探索を統合した実装は[CP-SAT](#/learn/cp-sat)、制約プログラミング・SAT全体の選び分けは[制約プログラミング・SATの選び分け](#/learn/family.constraint-programming)で確認できます。
+- propagationとSAT学習を統合する: [CP-SAT](#/learn/cp-sat)
+- conflictから学習節を作る: [CDCL SAT](#/learn/cdcl-sat)
+- 離散手法全体から選ぶ: [制約プログラミング・SATの選び分け](#/learn/family.constraint-programming)
