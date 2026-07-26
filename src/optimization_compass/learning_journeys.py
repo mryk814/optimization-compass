@@ -947,11 +947,19 @@ def _classify_orphan_assets(
             reason_code=explicit.reason if explicit else default_reason,
         )
 
+    linked_artifact_ids = {
+        run.artifact_id
+        for scenario in scenario_index.scenarios
+        if scenario.scenario_id in linked_scenarios
+        for run in scenario.runs
+    }
     for scenario in scenario_index.scenarios:
         if scenario.scenario_id in linked_scenarios:
             continue
         assets.append(orphan("scenario", scenario.scenario_id, "scenario_without_journey"))
         for run in scenario.runs:
+            if run.artifact_id in linked_artifact_ids:
+                continue
             assets.append(
                 orphan(
                     "visualization_artifact",

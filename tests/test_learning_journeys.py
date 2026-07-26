@@ -184,6 +184,15 @@ def test_explicit_policy_marks_an_orphan_as_intentionally_standalone() -> None:
     )
     assert standalone.policy == "standalone"
     assert standalone.reason_code == "intentionally_standalone_demo"
+    assert any(
+        item.asset_type == "scenario" and item.asset_id == "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
+        for item in classified
+    )
+    assert not any(
+        item.asset_type == "visualization_artifact"
+        and item.asset_id == "topology-optimization-field-evolution"
+        for item in classified
+    )
 
     with pytest.raises(ValueError, match=f"scenario:{standalone_id}"):
         _reject_error_orphans([standalone.model_copy(update={"policy": "error"})])

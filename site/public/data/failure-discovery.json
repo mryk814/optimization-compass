@@ -1715,7 +1715,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "method_ids": [
         "M_BFGS"
       ],
@@ -1728,6 +1728,7 @@
       ],
       "scenario_ids": [
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "scope": "case_specific",

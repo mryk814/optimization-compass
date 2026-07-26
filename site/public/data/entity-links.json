@@ -4135,6 +4135,11 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "SCENARIO_TOPOLOGY_SIMP_OC",
           "target_type": "view"
         },
@@ -22678,6 +22683,11 @@
       "label": "片持ちはりの材料配置を軽くする",
       "relations": [
         {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "candidate_method",
           "target_id": "M_OC_TOPOLOGY",
           "target_type": "method"
@@ -33034,6 +33044,11 @@
           "relation_type": "evidence",
           "target_id": "S101",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "topology-cantilever",
+          "target_type": "journey"
         }
       ],
       "summary": "同じ問題・初期密度・予算でOCとMMAの更新差を読む"
@@ -36467,6 +36482,16 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_TOPOLOGY_CHECKERBOARD",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
       "relations": [],
       "summary": ""
     },

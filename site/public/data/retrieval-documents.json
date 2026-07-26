@@ -1369,6 +1369,7 @@
         "source:S100",
         "source:S101",
         "view:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "view:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "view:SCENARIO_TOPOLOGY_SIMP_OC",
         "view:VIEW_METHOD_MECHANISM",
         "view:VIEW_PROBLEM_STRUCTURE"
@@ -33799,6 +33800,7 @@
         "failure:structured:FM016",
         "method:M_BFGS",
         "scenario:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "scenario:SCENARIO_TOPOLOGY_SIMP_OC",
         "source:S097",
         "source:S098",
@@ -41229,6 +41231,7 @@
         "method:M_SIMP_TOPOLOGY",
         "problem:PA045",
         "scenario:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "scenario:SCENARIO_TOPOLOGY_SIMP_OC",
         "source:S097",
         "source:S098",
@@ -46687,6 +46690,7 @@
       "document_id": "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "journey:topology-cantilever",
         "source:S097",
         "source:S098",
         "source:S099",

@@ -4544,6 +4544,7 @@
           "target_ids": [
             "/gallery/topology-cantilever",
             "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "/theater/learning/SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
             "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
             "/compare/COMPARE_TOPOLOGY_OC_MMA",
             "/methods/M_ADJOINT_SENSITIVITY",
@@ -4598,6 +4599,7 @@
           "target_ids": [
             "/gallery/topology-cantilever",
             "/theater/learning/SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "/theater/learning/SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
             "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
             "/compare/COMPARE_TOPOLOGY_OC_MMA",
             "/methods/M_ADJOINT_SENSITIVITY",
@@ -4629,6 +4631,7 @@
           "state": "complete",
           "target_ids": [
             "SCENARIO_TOPOLOGY_CHECKERBOARD",
+            "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
             "SCENARIO_TOPOLOGY_SIMP_OC"
           ]
         },
@@ -7544,7 +7547,7 @@
         "I_TOPOPT_88_MATLAB"
       ],
       "journey_id": "topology-cantilever",
-      "last_reviewed": "2026-07-24",
+      "last_reviewed": "2026-07-26",
       "learning_objective": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。",
       "limitations": [
         "minimum-complianceと体積率だけでは強度、座屈、疲労、接触、最小部材寸法、製造性を保証しない。mesh、filter、初期密度、penalizationを変えた局所解の比較と、独立した高忠実度解析が必要である。",
@@ -7564,6 +7567,13 @@
           "scenario_id": "SCENARIO_TOPOLOGY_CHECKERBOARD"
         },
         {
+          "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
+          "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
+          "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON"
+        },
+        {
           "canonical_url": "/theater/learning/SCENARIO_TOPOLOGY_SIMP_OC",
           "problem_definition_id": "PROBLEM_TOPOLOGY_OPTIMIZATION",
           "problem_instance_id": "INSTANCE_TOPOLOGY_CANTILEVER_2D",
@@ -7579,7 +7589,7 @@
         "S101"
       ],
       "status": "complete",
-      "takeaway": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
+      "takeaway": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。OCとMMAの比較では問題、初期密度、体積率、filter、12回の評価予算を固定し、更新則によるfieldの差を読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
       "title_en": "Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くする"
     },
@@ -8247,12 +8257,6 @@
       "reason_code": "scenario_without_journey"
     },
     {
-      "asset_id": "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "hybrid-mode-chattering-ledger",
       "asset_type": "visualization_artifact",
       "policy": "warning",
@@ -8278,12 +8282,6 @@
     },
     {
       "asset_id": "nelder-mead-rosenbrock-shifted",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "topology-optimization-field-evolution",
       "asset_type": "visualization_artifact",
       "policy": "warning",
       "reason_code": "public_artifact_without_journey"
