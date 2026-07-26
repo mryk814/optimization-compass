@@ -245,13 +245,10 @@ def test_index_rejects_missing_and_circular_relations() -> None:
 
 def test_index_rejects_complete_journey_with_missing_dimension() -> None:
     payload = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    journey = next(item for item in payload["journeys"] if item["status"] == "partial")
-    assessment = next(
-        item for item in payload["assessments"] if item["journey_id"] == journey["journey_id"]
-    )
-    journey["status"] = "complete"
-    journey["completion_reasons"] = []
-    assessment["status"] = "complete"
+    assessment = payload["assessments"][0]
+    assessment["dimensions"]["primary_scenario"]["state"] = "missing"
+    assessment["dimensions"]["primary_scenario"]["reason_codes"] = ["missing_primary_scenario"]
+    assessment["missing_dimensions"] = ["primary_scenario"]
 
     with pytest.raises(ValidationError, match="cannot have missing dimensions"):
         LearningJourneyIndex.model_validate(payload)

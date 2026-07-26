@@ -94,6 +94,14 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         TOPOLOGY_ARTIFACT_ID,
         SHIFT_BALANCED_ARTIFACT_ID,
     }
+    shift_scenarios = [
+        scenario for scenario in scenarios if scenario.scenario_id in {
+            SHIFT_BALANCED_SCENARIO_ID,
+            SHIFT_PREFERENCE_SCENARIO_ID,
+        }
+    ]
+    assert all(scenario.identity_status == "generated_only" for scenario in shift_scenarios)
+    assert all(scenario.canonical_scenario_id is None for scenario in shift_scenarios)
     for scenario in scenarios:
         payload = tmp_path / scenario.artifact.payload_path
         assert payload.stat().st_size == scenario.artifact.payload_bytes

@@ -1085,8 +1085,8 @@ def _shift_schedule_scenario(
         contract_version="1.2.0",
         dataset_version=dataset_version,
         scenario_id=scenario_id,
-        identity_status="canonical" if balanced else "derived",
-        canonical_scenario_id=SHIFT_BALANCED_SCENARIO_ID,
+        identity_status="generated_only",
+        canonical_scenario_id=None,
         title_ja=title_ja,
         title_en=(
             "Choose the less imbalanced schedule among equal-preference solutions"
