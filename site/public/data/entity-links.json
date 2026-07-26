@@ -3669,6 +3669,112 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/traffic-signal-tradeoff",
+      "entity_id": "traffic-signal-tradeoff",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "信号制御の遅れと停止回数を両方見る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:bounds",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:moderate",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:multiobjective",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:pareto_set",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "traffic-signal-tradeoff",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "biobjective-quadratic-pareto-front",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        }
+      ],
+      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/compare/COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "entity_id": "COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
       "entity_type": "comparison",
@@ -4748,6 +4854,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "traffic-signal-tradeoff",
           "target_type": "journey"
         },
         {
@@ -21662,6 +21773,87 @@
       "summary": "8×4要素の片持ちはりで、材料量を50%に抑えながら荷重を受ける経路を残したい。"
     },
     {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "traffic-signal-tradeoff",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "信号制御の遅れと停止回数を両方見る",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NSGA_II",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "traffic-signal-tradeoff",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_PARETO_PREFERENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_EPSILON_CONSTRAINT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S039",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S055",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S068",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_BFGS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_PYMOO",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "epsilon-constraint",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "multi-objective",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA038",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+    },
+    {
       "aliases": [
         "/learn/family.composite-convex"
       ],
@@ -23430,6 +23622,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "traffic-signal-tradeoff",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_CONSTRAINED_FAILURE",
           "target_type": "comparison"
@@ -24619,6 +24816,11 @@
         {
           "relation_type": "case",
           "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "traffic-signal-tradeoff",
           "target_type": "case"
         },
         {
@@ -26059,6 +26261,11 @@
         {
           "relation_type": "case",
           "target_id": "battery-operation-tradeoff",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "traffic-signal-tradeoff",
           "target_type": "case"
         },
         {
@@ -28696,6 +28903,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "traffic-signal-tradeoff",
+          "target_type": "case"
+        },
+        {
           "relation_type": "learning_journey",
           "target_id": "EC017",
           "target_type": "journey"
@@ -28703,6 +28915,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "traffic-signal-tradeoff",
           "target_type": "journey"
         }
       ],
@@ -29352,6 +29569,11 @@
           "relation_type": "learning_journey",
           "target_id": "battery-operation-tradeoff",
           "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "traffic-signal-tradeoff",
+          "target_type": "journey"
         }
       ],
       "summary": "同じPareto frontから、weightによって選択点が変わることを読む"
@@ -29392,6 +29614,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "battery-operation-tradeoff",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "traffic-signal-tradeoff",
           "target_type": "journey"
         }
       ],

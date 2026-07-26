@@ -2002,12 +2002,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
-            "battery-operation-tradeoff"
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -2028,7 +2029,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 21,
+          "count": 22,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2052,6 +2053,7 @@
             "moead",
             "multi-objective",
             "nsga-iii",
+            "traffic-signal-tradeoff",
             "weighted-sum"
           ]
         },
@@ -2239,7 +2241,7 @@
           ]
         },
         "gallery": {
-          "count": 19,
+          "count": 20,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2261,7 +2263,8 @@
             "mobile-clinic-outreach-selection",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -2288,7 +2291,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 59,
+          "count": 60,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2350,7 +2353,8 @@
             "nonlinear-cg",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "recommendation": {
@@ -4120,7 +4124,7 @@
           ]
         },
         "gallery": {
-          "count": 12,
+          "count": 13,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4135,7 +4139,8 @@
             "laser-process-tuning",
             "manufacturing-process-window",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -4156,7 +4161,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -4183,7 +4188,8 @@
             "laser-process-tuning",
             "manufacturing-process-window",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "recommendation": {
@@ -5978,12 +5984,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
-            "battery-operation-tradeoff"
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -6003,7 +6010,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 7,
+          "count": 8,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6013,7 +6020,8 @@
             "S055",
             "S068",
             "battery-operation-tradeoff",
-            "epsilon-constraint"
+            "epsilon-constraint",
+            "traffic-signal-tradeoff"
           ]
         },
         "recommendation": {
@@ -8331,12 +8339,13 @@
           ]
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
-            "battery-operation-tradeoff"
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -8357,7 +8366,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 11,
+          "count": 12,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -8371,7 +8380,8 @@
             "S068",
             "battery-operation-tradeoff",
             "biobjective-quadratic-pareto-front",
-            "multi-objective"
+            "multi-objective",
+            "traffic-signal-tradeoff"
           ]
         },
         "recommendation": {
@@ -14518,12 +14528,13 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 2,
+          "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
-            "battery-operation-tradeoff"
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -14535,22 +14546,24 @@
           "target_ids": []
         },
         "journey": {
-          "count": 2,
-          "reason_codes": [],
-          "state": "connected",
-          "target_ids": [
-            "EC017",
-            "battery-operation-tradeoff"
-          ]
-        },
-        "map": {
           "count": 3,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "EC017",
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
+          ]
+        },
+        "map": {
+          "count": 4,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "EC017",
             "None",
-            "battery-operation-tradeoff"
+            "battery-operation-tradeoff",
+            "traffic-signal-tradeoff"
           ]
         },
         "recommendation": {
@@ -16142,7 +16155,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 28,
+          "count": 29,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16173,7 +16186,8 @@
             "public-infrastructure-selection",
             "shape-diffuser",
             "shift-scheduling",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -16263,7 +16277,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 29,
+          "count": 30,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16295,7 +16309,8 @@
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -16384,7 +16399,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 29,
+          "count": 30,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16416,7 +16431,8 @@
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -16589,7 +16605,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 29,
+          "count": 30,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16621,7 +16637,8 @@
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -16787,7 +16804,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 29,
+          "count": 30,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16819,7 +16836,8 @@
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {
@@ -17095,7 +17113,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 30,
+          "count": 31,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -17128,7 +17146,8 @@
             "shape-diffuser",
             "shift-scheduling",
             "so3-attitude-alignment",
-            "topology-cantilever"
+            "topology-cantilever",
+            "traffic-signal-tradeoff"
           ]
         },
         "implementation": {

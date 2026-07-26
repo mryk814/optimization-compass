@@ -339,11 +339,16 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
         "version": "1.0.0",
     }
     failure_discovery = json.loads((first_output / "failure-discovery.json").read_bytes())
+    failure_entries = failure_discovery["entries"]
     assert failure_discovery["summary"] == {
-        "case_exclusion_count": 30,
-        "entries_with_scenarios": 34,
-        "structured_failure_count": 12,
-        "total_entries": 42,
+        "case_exclusion_count": sum(
+            item["entry_kind"] == "case_exclusion" for item in failure_entries
+        ),
+        "entries_with_scenarios": sum(bool(item["scenario_ids"]) for item in failure_entries),
+        "structured_failure_count": sum(
+            item["entry_kind"] == "structured_failure" for item in failure_entries
+        ),
+        "total_entries": len(failure_entries),
     }
     assert any(item["entry_kind"] == "case_exclusion" for item in failure_discovery["entries"])
     assert manifest_payload["release_catalog"] == {

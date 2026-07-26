@@ -4093,6 +4093,126 @@
       "journey_id": "topology-cantilever",
       "missing_dimensions": [],
       "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PARETO_PREFERENCE"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/traffic-signal-tradeoff",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_BFGS",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "traffic-signal-tradeoff"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_PYMOO"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BFGS",
+            "M_EPSILON_CONSTRAINT",
+            "M_NSGA_II"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/traffic-signal-tradeoff",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+            "/compare/COMPARE_PARETO_PREFERENCE",
+            "/methods/M_BFGS",
+            "/methods/M_EPSILON_CONSTRAINT",
+            "/methods/M_NSGA_II",
+            "/sources/S039",
+            "/sources/S055",
+            "/sources/S068"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S039",
+            "S055",
+            "S068"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+            "SCENARIO_BIOBJECTIVE_QUADRATIC"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "epsilon-constraint",
+            "multi-objective"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "traffic-signal-tradeoff",
+      "missing_dimensions": [],
+      "status": "complete"
     }
   ],
   "contract_version": "1.1.0",
@@ -6562,6 +6682,79 @@
       "takeaway": "可視化は、①densityとstrain energyで荷重経路を見る、②raw sensitivityとfiltered sensitivityの差から次の更新方向を見る、③volume fractionとcomplianceを確認する、④gray fractionとcheckerboard scoreで見かけの改善を疑う、の順に読む。実務ではstate・adjoint residual、gradient check、mesh、filter radius、penalization、境界条件、load caseを同じrun identityへ保存し、mesh refinementと別load caseで再検証する。compliance低下だけを成功判定にしない。",
       "title_en": "Reduce material in a cantilever",
       "title_ja": "片持ちはりの材料配置を軽くする"
+    },
+    {
+      "candidate_method_ids": [
+        "M_NSGA_II"
+      ],
+      "canonical_url": "/gallery/traffic-signal-tradeoff",
+      "case_id": "traffic-signal-tradeoff",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PARETO_PREFERENCE",
+          "comparison_id": "COMPARE_PARETO_PREFERENCE"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_EPSILON_CONSTRAINT"
+      ],
+      "content_ids": [
+        "epsilon-constraint",
+        "multi-objective"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "transportation",
+      "excluded_method_ids": [
+        "M_BFGS"
+      ],
+      "formulation": {
+        "constraints": "実務ではcycle長、最小green、歩行者横断時間、交差点間offsetの上下限を置く。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>0</mn><mo>&#x02264;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02264;</mo><mn>2</mn></mrow></math> だけを課し、現示順序、queue spillback、歩行者制約は表さない。",
+        "decision_variables": "実務では交差点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>j</mi></mrow></math> ごとのcycle長 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>c</mi><mi>j</mi></msub></mrow></math>、green split <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>g</mi><mi>j</mi></msub></mrow></math>、offset <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>o</mi><mi>j</mi></msub></mrow></math>。固定教材の <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub></mrow></math> は実際の秒数や現示を直接表さず、二つのtiming傾向を読むための代理変数である。",
+        "objective": "実務では対象時間帯の平均遅れ <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub></mrow></math> と車両1台あたり停止回数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub></mrow></math> を交通simulationで評価し、同時に小さくする。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>1</mn></msub><mo>&#x0003D;</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>&#x0002B;</mo><msubsup><mi>x</mi><mn>2</mn><mn>2</mn></msubsup></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02212;</mo><mn>2</mn><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化する。",
+        "variable_domain_summary": "実務では各交差点のcycle長、green split、offsetを安全な上下限内に置く連続領域。固定教材では二つのtiming傾向を表す無次元代理変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math> を使い、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>2</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup></mrow></math> とする。"
+      },
+      "implementation_ids": [
+        "I_PYMOO"
+      ],
+      "journey_id": "traffic-signal-tradeoff",
+      "last_reviewed": "2026-07-26",
+      "learning_objective": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "limitations": [
+        "2変数の二次関数はtrade-offの読み方を示す固定教材であり、交通流、信号現示、queue、歩行者、公共交通優先をsimulationしていない。",
+        "平均遅れと停止回数だけでは安全性、公平性、緊急車両、歩行者待ち時間、周辺道路へのspillbackを評価できない。実運用ではこれらを制約または別指標として審査する必要がある。",
+        "有限populationと評価budgetで得る近似Pareto集合であり、真のfront、実交通での改善、NSGA-IIの一般的優位性を保証しない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA038",
+      "problem_instance_ids": [
+        "INSTANCE_BIOBJECTIVE_QUADRATIC_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+          "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+          "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_BIOBJECTIVE_QUADRATIC",
+          "problem_definition_id": "PROBLEM_BIOBJECTIVE_CONTINUOUS",
+          "problem_instance_id": "INSTANCE_BIOBJECTIVE_QUADRATIC_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BIOBJECTIVE_QUADRATIC"
+        }
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "status": "complete",
+      "takeaway": "対象network、需要data、時間帯、初期queue、車種、歩行者需要、simulation seed、評価budgetを固定して候補を比較する。Pareto frontから選んだtimingは、異なる需要日と複数seedで再評価し、平均値だけでなくqueue長、最大待ち時間、spillback、歩行者制約違反も確認する。",
+      "title_en": "Explore delay-stop trade-offs in traffic signal timing",
+      "title_ja": "信号制御の遅れと停止回数を両方見る"
     }
   ],
   "orphan_assets": [
@@ -7235,11 +7428,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 30,
+      "complete": 31,
       "draft": 0,
       "partial": 0
     },
     "target_complete_journeys": 5,
-    "total_journeys": 30
+    "total_journeys": 31
   }
 }

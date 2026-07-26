@@ -1225,6 +1225,41 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:traffic-signal-tradeoff:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:traffic-signal-tradeoff",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_PARETO_PREFERENCE",
+        "feature_value:F_CONSTRAINT_CLASS:bounds",
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:moderate",
+        "feature_value:F_OBJECTIVE_FORM:multiobjective",
+        "feature_value:F_SOLUTION_GOAL:pareto_set",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_PYMOO",
+        "journey:traffic-signal-tradeoff",
+        "method:M_BFGS",
+        "method:M_EPSILON_CONSTRAINT",
+        "method:M_NSGA_II",
+        "problem:PA038",
+        "source:S039",
+        "source:S068",
+        "trace:biobjective-quadratic-pareto-front",
+        "view:SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+        "view:SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "title": "信号制御の遅れと停止回数を両方見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "comparison:COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT:overview",
       "dataset_version": "0.18.19",
       "document_id": "comparison:COMPARE_BILEVEL_COMPLEMENTARITY_TREATMENT",
@@ -1670,6 +1705,7 @@
         "case:EC017",
         "journey:EC017",
         "journey:battery-operation-tradeoff",
+        "journey:traffic-signal-tradeoff",
         "method:M_WEIGHTED_SUM",
         "scenario:SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
         "source:S039",
@@ -33183,6 +33219,31 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:traffic-signal-tradeoff:M_BFGS:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:traffic-signal-tradeoff:M_BFGS",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:traffic-signal-tradeoff",
+        "failure:structured:FM003",
+        "failure:structured:FM007",
+        "failure:structured:FM016",
+        "method:M_BFGS",
+        "scenario:SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+        "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "source:S039",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "text": "二つのsimulation目的をscalar化せず、信頼できるgradientもないまま通常のBFGSへ渡しても、選べるtrade-off集合を得られないため",
+      "title": "信号制御の遅れと停止回数を両方見るではBFGS法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:structured:FM003:overview",
       "dataset_version": "0.18.19",
       "document_id": "failure:structured:FM003",
@@ -40421,6 +40482,37 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:traffic-signal-tradeoff:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:traffic-signal-tradeoff",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:traffic-signal-tradeoff",
+        "comparison:COMPARE_PARETO_PREFERENCE",
+        "content:epsilon-constraint",
+        "content:multi-objective",
+        "implementation:I_PYMOO",
+        "method:M_BFGS",
+        "method:M_EPSILON_CONSTRAINT",
+        "method:M_NSGA_II",
+        "problem:PA038",
+        "scenario:SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+        "scenario:SCENARIO_BIOBJECTIVE_QUADRATIC",
+        "source:S039",
+        "source:S055",
+        "source:S068"
+      ],
+      "source_ids": [
+        "S039",
+        "S055",
+        "S068"
+      ],
+      "text": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。",
+      "title": "信号制御の遅れと停止回数を両方見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "method:MF_COMPOSITE_CONVEX:overview",
       "dataset_version": "0.18.19",
       "document_id": "method:MF_COMPOSITE_CONVEX",
@@ -41254,6 +41346,7 @@
         "case:manufacturing-process-window",
         "case:so3-attitude-alignment",
         "case:topology-cantilever",
+        "case:traffic-signal-tradeoff",
         "comparison:COMPARE_CONSTRAINED_FAILURE",
         "content:bfgs",
         "implementation:I_OPTIMJL",
@@ -41799,6 +41892,7 @@
       "relation_context": [
         "case:EC017",
         "case:battery-operation-tradeoff",
+        "case:traffic-signal-tradeoff",
         "content:epsilon-constraint",
         "source:S039",
         "source:S055",
@@ -42472,6 +42566,7 @@
       "relation_context": [
         "case:EC017",
         "case:battery-operation-tradeoff",
+        "case:traffic-signal-tradeoff",
         "comparison:COMPARE_PARETO_PREFERENCE",
         "content:multi-objective",
         "implementation:I_DEAP",
@@ -44063,8 +44158,10 @@
       "relation_context": [
         "case:EC017",
         "case:battery-operation-tradeoff",
+        "case:traffic-signal-tradeoff",
         "journey:EC017",
-        "journey:battery-operation-tradeoff"
+        "journey:battery-operation-tradeoff",
+        "journey:traffic-signal-tradeoff"
       ],
       "source_ids": [
         "S039",
@@ -44553,6 +44650,7 @@
         "comparison:COMPARE_PARETO_PREFERENCE",
         "journey:EC017",
         "journey:battery-operation-tradeoff",
+        "journey:traffic-signal-tradeoff",
         "source:S039",
         "source:S055",
         "source:S068",
@@ -44576,6 +44674,7 @@
       "relation_context": [
         "journey:EC017",
         "journey:battery-operation-tradeoff",
+        "journey:traffic-signal-tradeoff",
         "source:S039",
         "source:S055",
         "source:S068",

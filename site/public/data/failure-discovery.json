@@ -1540,6 +1540,56 @@
       "title_ja": "片持ちはりの材料配置を軽くするではBFGS法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Atraffic-signal-tradeoff%3AM_BFGS",
+      "case_context": {
+        "constraints": "実務ではcycle長、最小green、歩行者横断時間、交差点間offsetの上下限を置く。固定教材では $0\\le x_1,x_2\\le2$ だけを課し、現示順序、queue spillback、歩行者制約は表さない。",
+        "decision_variables": "実務では交差点 $j$ ごとのcycle長 $c_j$、green split $g_j$、offset $o_j$。固定教材の $x_1,x_2$ は実際の秒数や現示を直接表さず、二つのtiming傾向を読むための代理変数である。",
+        "objective": "実務では対象時間帯の平均遅れ $f_1$ と車両1台あたり停止回数 $f_2$ を交通simulationで評価し、同時に小さくする。固定教材では $f_1=x_1^2+x_2^2$、$f_2=(x_1-2)^2+(x_2-2)^2$ を最小化する。",
+        "question": "交差点群の信号timingを、平均遅れだけで決めず、停止回数の少ない候補も並べて選びたい。"
+      },
+      "case_id": "traffic-signal-tradeoff",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:traffic-signal-tradeoff:M_BFGS",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-26",
+      "method_ids": [
+        "M_BFGS"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [
+        "FM003",
+        "FM007",
+        "FM016"
+      ],
+      "scenario_ids": [
+        "SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY",
+        "SCENARIO_BIOBJECTIVE_QUADRATIC"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S039",
+        "S068"
+      ],
+      "summary": "二つのsimulation目的をscalar化せず、信頼できるgradientもないまま通常のBFGSへ渡しても、選べるtrade-off集合を得られないため",
+      "symptoms": [],
+      "title_en": "Why BFGS is excluded for Explore delay-stop trade-offs in traffic signal timing",
+      "title_ja": "信号制御の遅れと停止回数を両方見るではBFGS法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=structured%3AFM003",
       "case_context": null,
       "case_id": null,
@@ -2122,9 +2172,9 @@
   ],
   "generated_at": "2026-07-26T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 30,
-    "entries_with_scenarios": 34,
+    "case_exclusion_count": 31,
+    "entries_with_scenarios": 35,
     "structured_failure_count": 12,
-    "total_entries": 42
+    "total_entries": 43
   }
 }

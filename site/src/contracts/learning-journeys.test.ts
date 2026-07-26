@@ -17,7 +17,17 @@ describe("LearningJourney parser", () => {
     expect(pilot?.status).toBe("complete");
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
-    expect(index.summary.status_counts).toEqual({ complete: 30, partial: 0, draft: 0 });
+    expect(index.summary.status_counts).toEqual({
+      complete: index.journeys.filter((journey) => journey.status === "complete").length,
+      partial: index.journeys.filter((journey) => journey.status === "partial").length,
+      draft: index.journeys.filter((journey) => journey.status === "draft").length,
+    });
+    expect(index.journeys.find((journey) =>
+      journey.journey_id === "traffic-signal-tradeoff")).toMatchObject({
+      status: "complete",
+      domain: "transportation",
+      comparisons: [{ comparison_id: "COMPARE_PARETO_PREFERENCE" }],
+    });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
     expect(parameterEstimation?.status).toBe("complete");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)

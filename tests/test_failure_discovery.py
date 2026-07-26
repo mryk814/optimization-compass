@@ -15,14 +15,19 @@ def test_failure_discovery_joins_structured_failures_and_case_exclusions(
         (tmp_path / "failure-discovery.json").read_bytes()
     )
 
-    assert index.summary.total_entries == 42
-    assert index.summary.structured_failure_count == 12
-    assert index.summary.case_exclusion_count == 30
     assert {entry.entry_kind for entry in index.entries} == {
         "structured_failure",
         "case_exclusion",
     }
     exclusions = [entry for entry in index.entries if entry.entry_kind == "case_exclusion"]
+    structured = [entry for entry in index.entries if entry.entry_kind == "structured_failure"]
+    assert index.summary.total_entries == len(index.entries)
+    assert index.summary.structured_failure_count == len(structured)
+    assert index.summary.case_exclusion_count == len(exclusions)
+    assert index.summary.entries_with_scenarios == sum(
+        bool(entry.scenario_ids) for entry in index.entries
+    )
+    assert any(entry.case_id == "traffic-signal-tradeoff" for entry in exclusions)
     assert all(entry.disposition == "excluded" for entry in exclusions)
     assert all(entry.case_context is not None for entry in exclusions)
     assert all(entry.method_ids for entry in exclusions)
