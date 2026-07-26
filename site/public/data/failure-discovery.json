@@ -235,7 +235,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "method_ids": [
         "M_BFGS"
       ],
@@ -250,11 +250,15 @@
         "SCENARIO_ADAM_QUADRATIC",
         "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "SCENARIO_GD_QUADRATIC",
-        "SCENARIO_MOMENTUM_QUADRATIC"
+        "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+        "SCENARIO_MOMENTUM_QUADRATIC",
+        "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE"
       ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
+        "S001",
+        "S002",
         "S047",
         "S048",
         "S049",
@@ -1711,7 +1715,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "method_ids": [
         "M_BFGS"
       ],
@@ -1724,6 +1728,7 @@
       ],
       "scenario_ids": [
         "SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "SCENARIO_TOPOLOGY_SIMP_OC"
       ],
       "scope": "case_specific",

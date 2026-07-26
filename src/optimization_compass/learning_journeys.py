@@ -737,6 +737,8 @@ def _comparison_issues(
     if not journey.comparisons:
         return ["missing_comparison"]
     issues: set[str] = set()
+    reference_ids = {reference.comparison_id for reference in journey.comparisons}
+    has_canonical_comparison = False
     required_fields = (
         "fixed_factors",
         "changed_factors",
@@ -752,10 +754,14 @@ def _comparison_issues(
         if comparison is None:
             issues.add("broken_comparison_reference")
             continue
-        if (
-            comparison.get("identity_status") != "canonical"
-            or comparison.get("canonical_comparison_id") != reference.comparison_id
-        ):
+        identity_status = comparison.get("identity_status")
+        canonical_comparison_id = comparison.get("canonical_comparison_id")
+        if identity_status == "canonical" and canonical_comparison_id == reference.comparison_id:
+            has_canonical_comparison = True
+        elif identity_status == "derived":
+            if canonical_comparison_id not in reference_ids:
+                issues.add("derived_comparison_without_canonical")
+        else:
             issues.add("comparison_not_canonical")
         owned_by_journey = (
             comparison.get("case_id") == journey.case_id
@@ -768,6 +774,8 @@ def _comparison_issues(
             issues.add("comparison_wrong_journey")
         if any(not comparison.get(field) for field in required_fields):
             issues.add("comparison_contract_incomplete")
+    if not has_canonical_comparison:
+        issues.add("comparison_not_canonical")
     return sorted(issues)
 
 
@@ -939,11 +947,19 @@ def _classify_orphan_assets(
             reason_code=explicit.reason if explicit else default_reason,
         )
 
+    linked_artifact_ids = {
+        run.artifact_id
+        for scenario in scenario_index.scenarios
+        if scenario.scenario_id in linked_scenarios
+        for run in scenario.runs
+    }
     for scenario in scenario_index.scenarios:
         if scenario.scenario_id in linked_scenarios:
             continue
         assets.append(orphan("scenario", scenario.scenario_id, "scenario_without_journey"))
         for run in scenario.runs:
+            if run.artifact_id in linked_artifact_ids:
+                continue
             assets.append(
                 orphan(
                     "visualization_artifact",

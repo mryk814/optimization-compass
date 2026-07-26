@@ -182,6 +182,7 @@
       "document_id": "case:EC021",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "feature_value:F_CONSTRAINT_CLASS:unconstrained",
         "feature_value:F_CONVEXITY:nonconvex",
@@ -201,6 +202,8 @@
         "method:M_BFGS",
         "method:M_MOMENTUM_SGD",
         "problem:PA040",
+        "source:S001",
+        "source:S002",
         "source:S047",
         "source:S048",
         "source:S049",
@@ -208,10 +211,14 @@
         "view:SCENARIO_ADAM_QUADRATIC",
         "view:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "view:SCENARIO_GD_QUADRATIC",
+        "view:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
         "view:SCENARIO_MOMENTUM_QUADRATIC",
+        "view:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
         "view:VIEW_PROBLEM_STRUCTURE"
       ],
       "source_ids": [
+        "S001",
+        "S002",
         "S047",
         "S048",
         "S049",
@@ -788,8 +795,6 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-        "comparison:COMPARE_GRADIENT_DIVERGENCE",
-        "comparison:COMPARE_GRADIENT_FAMILY",
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "feature_value:F_CONSTRAINT_CLASS:bounds",
         "feature_value:F_DERIVATIVE_ACCESS:none_available",
@@ -1364,6 +1369,7 @@
         "source:S100",
         "source:S101",
         "view:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "view:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "view:SCENARIO_TOPOLOGY_SIMP_OC",
         "view:VIEW_METHOD_MECHANISM",
         "view:VIEW_PROBLEM_STRUCTURE"
@@ -1638,8 +1644,8 @@
       "document_id": "comparison:COMPARE_GRADIENT_DIVERGENCE",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:hyperparameter-search",
-        "journey:hyperparameter-search",
+        "case:EC021",
+        "journey:EC021",
         "method:M_ADAM",
         "method:M_GRADIENT_DESCENT",
         "method:M_MOMENTUM_SGD",
@@ -1667,9 +1673,8 @@
       "document_id": "comparison:COMPARE_GRADIENT_FAMILY",
       "license": "CC-BY-4.0",
       "relation_context": [
-        "case:hyperparameter-search",
+        "case:EC021",
         "journey:EC021",
-        "journey:hyperparameter-search",
         "method:M_ADAM",
         "method:M_GRADIENT_DESCENT",
         "method:M_MOMENTUM_SGD",
@@ -32972,13 +32977,19 @@
         "scenario:SCENARIO_ADAM_QUADRATIC",
         "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_GD_QUADRATIC",
+        "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_MOMENTUM_QUADRATIC",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+        "source:S001",
+        "source:S002",
         "source:S047",
         "source:S048",
         "source:S049",
         "source:S070"
       ],
       "source_ids": [
+        "S001",
+        "S002",
         "S047",
         "S048",
         "S049",
@@ -33789,6 +33800,7 @@
         "failure:structured:FM016",
         "method:M_BFGS",
         "scenario:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "scenario:SCENARIO_TOPOLOGY_SIMP_OC",
         "source:S097",
         "source:S098",
@@ -39992,6 +40004,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC021",
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
         "content:adamw",
         "content:momentum-sgd",
@@ -40005,7 +40018,9 @@
         "scenario:SCENARIO_ADAM_QUADRATIC",
         "scenario:SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_GD_QUADRATIC",
+        "scenario:SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
         "scenario:SCENARIO_MOMENTUM_QUADRATIC",
+        "scenario:SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
         "source:S001",
         "source:S002",
         "source:S047",
@@ -40605,8 +40620,6 @@
       "relation_context": [
         "case:hyperparameter-search",
         "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-        "comparison:COMPARE_GRADIENT_DIVERGENCE",
-        "comparison:COMPARE_GRADIENT_FAMILY",
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
         "content:bayesian-optimization",
         "content:method.nelder-mead",
@@ -41218,6 +41231,7 @@
         "method:M_SIMP_TOPOLOGY",
         "problem:PA045",
         "scenario:SCENARIO_TOPOLOGY_CHECKERBOARD",
+        "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
         "scenario:SCENARIO_TOPOLOGY_SIMP_OC",
         "source:S097",
         "source:S098",
@@ -45905,6 +45919,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "journey:EC021",
         "source:S001",
         "source:S002",
         "trace:gradient_descent-quadratic-divergence"
@@ -45969,6 +45984,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "journey:EC021",
         "source:S001",
         "source:S002",
         "trace:momentum-quadratic-divergence"
@@ -46674,6 +46690,7 @@
       "document_id": "scenario:SCENARIO_TOPOLOGY_OC_MMA_COMPARISON",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "journey:topology-cantilever",
         "source:S097",
         "source:S098",
         "source:S099",

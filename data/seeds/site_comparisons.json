@@ -7,8 +7,8 @@
       "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
       "aliases": ["COMPARE_FIRST_ORDER_ROSENBROCK"],
       "mode": "method_contrast",
-      "journey_id": "hyperparameter-search",
-      "case_id": "hyperparameter-search",
+      "journey_id": "EC021",
+      "case_id": "EC021",
       "problem_definition_id": "PROBLEM_QUADRATIC_CONTINUOUS",
       "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "benchmark_context_id": "BENCH_QP",
@@ -34,7 +34,7 @@
       "takeaway": "同じbudgetでも更新則により谷を横切る振動と進み方が変わります。",
       "limitations": ["2次元の決定的な二次目的に限る。", "wall-clockやmemory costは比較していない。"],
       "source_ids": ["S001", "S002"],
-      "last_verified": "2026-07-16",
+      "last_verified": "2026-07-26",
       "members": [
         {
           "member_id": "gradient-descent",
@@ -78,8 +78,8 @@
       "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
       "aliases": [],
       "mode": "parameter_sensitivity",
-      "journey_id": "hyperparameter-search",
-      "case_id": "hyperparameter-search",
+      "journey_id": "EC021",
+      "case_id": "EC021",
       "problem_definition_id": "PROBLEM_QUADRATIC_CONTINUOUS",
       "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
       "benchmark_context_id": "BENCH_QP",
@@ -105,7 +105,7 @@
       "takeaway": "手法名だけでなくparameterとterminal statusを一緒に記録します。",
       "limitations": ["良いparameterを探索する比較ではない。", "この二次目的以外へ発散境界を一般化しない。"],
       "source_ids": ["S001", "S002"],
-      "last_verified": "2026-07-16",
+      "last_verified": "2026-07-26",
       "members": [
         {
           "member_id": "gradient-descent-high-lr",
