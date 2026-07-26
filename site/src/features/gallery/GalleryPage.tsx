@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
@@ -274,8 +274,14 @@ export function GalleryDomainOverview({
   remainingItems: Array<{ domain: string; count: number }>;
 }) {
   const domainCount = featuredItems.length + remainingItems.length;
+  const detailsRef = useRef<HTMLDetailsElement>(null);
+  useEffect(() => detailsRef.current?.removeAttribute("open"), [activeDomain]);
+  const selectAndClose = (domain: string) => {
+    onSelect(domain);
+    detailsRef.current?.removeAttribute("open");
+  };
   return (
-    <details className="gallery-domain-overview">
+    <details className="gallery-domain-overview" ref={detailsRef}>
       <summary>
         <span className="gallery-domain-summary-row">
           <span>分野の広がりを見る</span>
@@ -295,7 +301,7 @@ export function GalleryDomainOverview({
             activeDomain={activeDomain}
             items={featuredItems}
             largestDomainCount={largestDomainCount}
-            onSelect={onSelect}
+            onSelect={selectAndClose}
           />
         </div>
         {remainingItems.length > 0 && (
@@ -306,7 +312,7 @@ export function GalleryDomainOverview({
                 activeDomain={activeDomain}
                 items={remainingItems}
                 largestDomainCount={largestDomainCount}
-                onSelect={onSelect}
+                onSelect={selectAndClose}
               />
             </div>
           </details>

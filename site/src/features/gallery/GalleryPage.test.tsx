@@ -84,6 +84,7 @@ describe("gallery learning journey status", () => {
     fireEvent.click(screen.getByRole("button", { name: /設計・工学/u }));
 
     expect(onSelect).toHaveBeenCalledWith("engineering");
+    expect(screen.getByRole("button", { name: /設計・工学/u })).not.toBeVisible();
   });
 
   test("translates missing canonical routes into reader-facing labels", () => {
@@ -170,6 +171,7 @@ describe("gallery learning journey status", () => {
     expect(domainLabel("agriculture")).toBe("農業・農地");
     expect(domainLabel("environment")).toBe("環境・保全");
     expect(domainLabel("healthcare")).toBe("医療・地域保健");
+    expect(domainLabel("transportation")).toBe("交通・モビリティ");
     expect(domainLabel("custom-domain")).toBe("custom-domain");
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");

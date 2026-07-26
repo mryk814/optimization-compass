@@ -14,6 +14,7 @@ const DOMAIN_LABELS: Record<string, string> = {
   operations: "運用・計画",
   "public-policy": "公共政策",
   science: "科学・推定",
+  transportation: "交通・モビリティ",
 };
 
 export function domainLabel(domain: string): string {
