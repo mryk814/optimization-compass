@@ -11,6 +11,7 @@ from optimization_compass.content_models import load_content
 from optimization_compass.evidence import SourceEvidenceIndex
 from optimization_compass.learning_journey_policy import LearningJourneyAssetPolicyIndex
 from optimization_compass.learning_journeys import (
+    JourneyComparisonReference,
     LearningJourneyIndex,
     _classify_orphan_assets,
     _comparison_issues,
@@ -128,9 +129,9 @@ def test_index_reports_summary_and_explicit_orphan_policies() -> None:
     assert any(
         item.asset_type == "scenario" and item.policy == "warning" for item in index.orphan_assets
     )
-    assert any(
-        item.asset_type == "comparison" and item.policy == "warning" for item in index.orphan_assets
-    )
+    orphan_ids = {item.asset_id for item in index.orphan_assets}
+    assert "COMPARE_GRADIENT_FAMILY" not in orphan_ids
+    assert "COMPARE_GRADIENT_DIVERGENCE" not in orphan_ids
     assert any(item.asset_type == "visualization_artifact" for item in index.orphan_assets)
     assert any(item.asset_type == "content" for item in index.orphan_assets)
 
@@ -260,6 +261,43 @@ def test_completeness_checks_comparison_contract_and_real_route_targets() -> Non
     comparison_payload = json.loads(COMPARISON_FIXTURE.read_text(encoding="utf-8"))
     comparisons = {item["comparison_id"]: item for item in comparison_payload["comparisons"]}
     assert _comparison_issues(journey, comparisons_by_id=comparisons) == []
+
+    canonical = comparisons["COMPARE_CONSTRAINED_FAILURE"]
+    derived = json.loads(json.dumps(canonical))
+    derived["comparison_id"] = "COMPARE_CONSTRAINED_FAILURE_SENSITIVITY"
+    derived["canonical_url"] = "/compare/COMPARE_CONSTRAINED_FAILURE_SENSITIVITY"
+    derived["identity_status"] = "derived"
+    derived["canonical_comparison_id"] = "COMPARE_CONSTRAINED_FAILURE"
+    mixed_journey = journey.model_copy(
+        update={
+            "comparisons": [
+                *journey.comparisons,
+                JourneyComparisonReference(
+                    comparison_id=derived["comparison_id"],
+                    canonical_url=derived["canonical_url"],
+                ),
+            ]
+        }
+    )
+    assert (
+        _comparison_issues(
+            mixed_journey,
+            comparisons_by_id={
+                "COMPARE_CONSTRAINED_FAILURE": canonical,
+                derived["comparison_id"]: derived,
+            },
+        )
+        == []
+    )
+
+    derived_only_journey = journey.model_copy(update={"comparisons": mixed_journey.comparisons[1:]})
+    assert _comparison_issues(
+        derived_only_journey,
+        comparisons_by_id={derived["comparison_id"]: derived},
+    ) == [
+        "comparison_not_canonical",
+        "derived_comparison_without_canonical",
+    ]
 
     broken = json.loads(json.dumps(comparisons["COMPARE_CONSTRAINED_FAILURE"]))
     broken["fixed_factors"] = []

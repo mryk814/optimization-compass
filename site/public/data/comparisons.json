@@ -11,7 +11,7 @@
       },
       "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
       "canonical_url": "/compare/COMPARE_GRADIENT_FAMILY",
-      "case_id": "hyperparameter-search",
+      "case_id": "EC021",
       "caveat": "勾配と目的関数の計算費は同一と仮定した教材比較です。実装や問題が変わると比較可能性も変わります。",
       "changed_factors": [
         "更新則",
@@ -29,8 +29,8 @@
       ],
       "formulation_summary": "f(x, y) = 100x² + y² を同じ初期点から最小化する。",
       "identity_status": "canonical",
-      "journey_id": "hyperparameter-search",
-      "last_verified": "2026-07-16",
+      "journey_id": "EC021",
+      "last_verified": "2026-07-26",
       "limitations": [
         "2次元の決定的な二次目的に限る。",
         "wall-clockやmemory costは比較していない。"
@@ -145,7 +145,7 @@
       },
       "canonical_comparison_id": "COMPARE_GRADIENT_FAMILY",
       "canonical_url": "/compare/COMPARE_GRADIENT_DIVERGENCE",
-      "case_id": "hyperparameter-search",
+      "case_id": "EC021",
       "caveat": "発散を説明するparameter sensitivityであり、手法の一般的な順位付けには使用できません。",
       "changed_factors": [
         "learning rate preset",
@@ -162,8 +162,8 @@
       ],
       "formulation_summary": "f(x, y) = 100x² + y² を同じ初期点から最小化する。",
       "identity_status": "derived",
-      "journey_id": "hyperparameter-search",
-      "last_verified": "2026-07-16",
+      "journey_id": "EC021",
+      "last_verified": "2026-07-26",
       "limitations": [
         "良いparameterを探索する比較ではない。",
         "この二次目的以外へ発散境界を一般化しない。"

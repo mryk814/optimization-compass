@@ -526,6 +526,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -533,6 +538,16 @@
           "relation_type": "conditional_method",
           "target_id": "M_MOMENTUM_SGD",
           "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
         },
         {
           "relation_type": "evidence",
@@ -651,7 +666,17 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "SCENARIO_MOMENTUM_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
           "target_type": "view"
         },
         {
@@ -2342,16 +2367,6 @@
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-          "target_type": "comparison"
-        },
-        {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
-          "target_type": "comparison"
-        },
-        {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
         {
@@ -4769,7 +4784,7 @@
       "relations": [
         {
           "relation_type": "case",
-          "target_id": "hyperparameter-search",
+          "target_id": "EC021",
           "target_type": "case"
         },
         {
@@ -4784,7 +4799,7 @@
         },
         {
           "relation_type": "learning_journey",
-          "target_id": "hyperparameter-search",
+          "target_id": "EC021",
           "target_type": "journey"
         },
         {
@@ -4848,7 +4863,7 @@
       "relations": [
         {
           "relation_type": "case",
-          "target_id": "hyperparameter-search",
+          "target_id": "EC021",
           "target_type": "case"
         },
         {
@@ -4864,11 +4879,6 @@
         {
           "relation_type": "learning_journey",
           "target_id": "EC021",
-          "target_type": "journey"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "hyperparameter-search",
           "target_type": "journey"
         },
         {
@@ -19445,6 +19455,11 @@
         },
         {
           "relation_type": "comparison",
+          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "comparison",
           "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
@@ -19496,6 +19511,16 @@
         {
           "relation_type": "failure_contrast",
           "target_id": "SCENARIO_ADAM_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
           "target_type": "scenario"
         },
         {
@@ -21061,16 +21086,6 @@
         {
           "relation_type": "comparison",
           "target_id": "COMPARE_BO_ACQUISITION_NOISE_BASELINE",
-          "target_type": "comparison"
-        },
-        {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_GRADIENT_DIVERGENCE",
-          "target_type": "comparison"
-        },
-        {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_GRADIENT_FAMILY",
           "target_type": "comparison"
         },
         {
@@ -31631,6 +31646,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -31734,6 +31754,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC021",
+          "target_type": "journey"
         }
       ],
       "summary": "勾配、更新vector、軌跡、目的値を同じevaluationで読む"
@@ -36168,10 +36193,30 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_MOMENTUM_QUADRATIC",
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_MOMENTUM_QUADRATIC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
       "relations": [],
       "summary": ""
     },

@@ -2397,7 +2397,8 @@
       ],
       "case_id": "EC021",
       "comparison_ids": [
-        "COMPARE_GRADIENT_FAMILY"
+        "COMPARE_GRADIENT_FAMILY",
+        "COMPARE_GRADIENT_DIVERGENCE"
       ],
       "conditional_methods": [
         {
@@ -2462,14 +2463,14 @@
         "I_TENSORFLOW_OPTIM",
         "I_OPTAX"
       ],
-      "last_reviewed": "2026-07-24",
+      "last_reviewed": "2026-07-26",
       "limitations": [
         "固定した3 sample・4入力・8 hidden unit・3 classの1 step教材であり、実際の画像、data augmentation、distributed training、mixed precision、長期学習、hardware bottleneckを表さない。",
         "小さな教材でlossが下がることや2次関数上の軌跡は、実データでのaccuracy、calibration、robustness、公平性、AdamWとMomentum SGDの順位を保証しない。実運用では同じsplit・budget・tuning方針と複数seedで再検証する。"
       ],
       "map_node_id": "answer:Q05:stochastic_gradient",
       "objective": "train mini-batch $B_k$ のcross-entropy $f_k(\\theta)=\\frac{1}{|B_k|}\\sum_{(x,y)\\in B_k}\\ell(h_\\theta(x),y)$ をstochastic gradientで改善する。採用判断はtrain lossだけでなく、固定したvalidation splitのloss、主要metric、wall time、peak memoryで行う。",
-      "practical_notes": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。Adamのupdate geometryを読む補助であって、AdamWや実データでの汎化性能を比較するものではない。",
+      "practical_notes": "dataset splitと前処理のversion、初期weight seed、data順序seed、batch size、最大epoch、learning-rate schedule、early stopping、hardwareを記録する。複数seedでvalidationの中央値とばらつきを比べ、train lossが下がってもvalidationが悪化する場合はoptimizerの優劣ではなくoverfitting、regularization、停止時点を調べる。接続先の一次法比較は2次元の細長い二次関数を同じ初期点・40評価で解く教材であり、画像dataやneural networkを学習していない。通常presetの軌跡ではupdate geometryを読み、高い学習率の感度比較では目的値の増大、振幅、terminal statusを同じ評価軸で確認する。AdamWや実データでの汎化性能を順位付けする比較ではない。",
       "problem_archetype_id": "PA040",
       "python_example": "import torch\n\nx = torch.tensor([[1.0, 0.0, 0.5, -0.2], [0.2, 1.0, -0.4, 0.7], [-0.3, 0.4, 1.0, 0.2]])\ny = torch.tensor([0, 1, 2])\nmodel = torch.nn.Sequential(torch.nn.Linear(4, 8), torch.nn.ReLU(), torch.nn.Linear(8, 3))\noptimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)\noptimizer.zero_grad()\nloss = torch.nn.functional.cross_entropy(model(x), y)\nloss.backward()\noptimizer.step()\nprint(float(loss))",
       "question": "固定したtrain/validation splitと計算budgetのもとで、mini-batchを使う画像分類モデルのparameterを更新し、未見データでの分類損失を改善したい。",
@@ -2488,6 +2489,8 @@
         "Q12": "gpu_available"
       },
       "source_ids": [
+        "S001",
+        "S002",
         "S047",
         "S048",
         "S049",
@@ -2502,6 +2505,8 @@
         "SCENARIO_GD_QUADRATIC",
         "SCENARIO_MOMENTUM_QUADRATIC",
         "SCENARIO_ADAM_QUADRATIC",
+        "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+        "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
         "SCENARIO_ADAM_QUADRATIC_DIVERGENCE"
       ]
     },
