@@ -27,6 +27,16 @@ describe("SearchPage", () => {
     );
   });
 
+  test("keeps advanced target filters folded behind a task-oriented empty state", async () => {
+    mockSearchData();
+    render(<MemoryRouter initialEntries={["/search"]}><SearchPage /></MemoryRouter>);
+
+    expect(await screen.findByRole("heading", { name: "状況をそのまま入力できます" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "勾配なしで高価な実験" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "配送順を決めたい" })).toBeInTheDocument();
+    expect(screen.getByText("対象を絞る").closest("details")).not.toHaveAttribute("open");
+  });
+
   test("resolves an English alias and explains why it matched", async () => {
     mockSearchData();
     render(<MemoryRouter initialEntries={["/search?q=BO&type=method"]}><SearchPage /></MemoryRouter>);
@@ -39,9 +49,25 @@ describe("SearchPage", () => {
     mockSearchData();
     render(<MemoryRouter initialEntries={["/search?q=配送順を決めたい"]}><SearchPage /></MemoryRouter>);
     expect(await screen.findByRole("heading", { name: /配送・経路最適化/u })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("対象を絞る"));
     fireEvent.click(screen.getByRole("checkbox", { name: /ケース/u }));
     await waitFor(() => expect(screen.getByRole("checkbox", { name: /ケース/u })).toBeChecked());
     expect(screen.getByRole("searchbox", { name: "検索" })).toHaveValue("配送順を決めたい");
+  });
+
+  test("shows a bounded first page and reveals technical evidence on demand", async () => {
+    mockSearchData();
+    render(<MemoryRouter initialEntries={["/search?q=配合条件"]}><SearchPage /></MemoryRouter>);
+
+    expect((await screen.findAllByRole("heading", { name: "少ない実験で配合条件を絞る" })).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("article")).toHaveLength(12);
+    expect(screen.getAllByText("一致理由・根拠")).toHaveLength(12);
+
+    fireEvent.click(screen.getAllByText("一致理由・根拠")[0]);
+    expect(screen.getAllByText(/一致: 正式名/u).length).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole("button", { name: "次の12件を見る" }));
+    await waitFor(() => expect(screen.getAllByRole("article")).toHaveLength(24));
   });
 
   test("focuses global search with the slash shortcut", async () => {

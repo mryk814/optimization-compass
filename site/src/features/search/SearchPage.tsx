@@ -27,11 +27,19 @@ const FIELD_LABELS: Record<SearchField, string> = {
   canonical_label: "正式名", alias: "別名・略語", title: "タイトル", summary: "要約", keyword: "特徴", related: "関連語",
 };
 
+const RESULT_PAGE_SIZE = 12;
+const STARTER_QUERIES = [
+  "勾配なしで高価な実験",
+  "配送順を決めたい",
+  "制約違反の原因",
+] as const;
+
 export function SearchPage() {
   const [params, setParams] = useSearchParams();
   const [index, setIndex] = useState<SearchIndex>();
   const [error, setError] = useState<Error>();
   const [draftQuery, setDraftQuery] = useState(() => params.get("q") ?? "");
+  const [visibleLimit, setVisibleLimit] = useState(RESULT_PAGE_SIZE);
   const inputRef = useRef<HTMLInputElement>(null);
   const isComposingRef = useRef(false);
   const query = params.get("q") ?? "";
@@ -41,11 +49,13 @@ export function SearchPage() {
     params.getAll("type").filter((value): value is SearchEntityType => SEARCH_ENTITY_TYPES.some((type) => type === value)),
   ), [params]);
   const directEntity = params.get("entity");
+  const resultContextKey = params.toString();
 
   useEffect(() => { void loadSearchIndex().then(setIndex, (caught: unknown) => setError(caught instanceof Error ? caught : new Error(String(caught)))); }, []);
   useEffect(() => {
     if (!isComposingRef.current) setDraftQuery(query);
   }, [query]);
+  useEffect(() => { setVisibleLimit(RESULT_PAGE_SIZE); }, [resultContextKey]);
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if ((event.key === "/" && !isTypingTarget(event.target)) || (event.key.toLocaleLowerCase() === "k" && (event.ctrlKey || event.metaKey))) {
@@ -57,7 +67,9 @@ export function SearchPage() {
 
   const hits = useMemo(() => index ? searchDocuments(index, query, { entityTypes: selectedTypes, intent }) : [], [index, intent, query, selectedTypes]);
   const directDocument = useMemo(() => index && directEntity ? index.documents.find((document) => document.document_id === directEntity) : undefined, [directEntity, index]);
-  const visibleHits = directDocument && !query ? [{ document: directDocument, score: 0, matchedFields: [] as SearchField[] }] : hits.slice(0, 80);
+  const visibleHits = directDocument && !query
+    ? [{ document: directDocument, score: 0, matchedFields: [] as SearchField[] }]
+    : hits.slice(0, visibleLimit);
   const availableTypes = useMemo(() => {
     const documents = index?.documents ?? [];
     return SEARCH_ENTITY_TYPES.map((type) => ({ type, count: documents.filter((document) => document.entity_type === type).length })).filter((item) => item.count > 0);
@@ -111,20 +123,38 @@ export function SearchPage() {
         <span id="search-shortcut" className="search-shortcut" aria-hidden="true">/ または Ctrl K</span>
       </div>
       <div className="search-controls">
-        <fieldset><legend>対象</legend><div className="search-filter-chips">{availableTypes.map(({ type, count }) => <label key={type} className={selectedTypes.has(type) ? "search-chip is-selected" : "search-chip"}><input checked={selectedTypes.has(type)} onChange={() => toggleType(type)} type="checkbox" /><span>{TYPE_LABELS[type]} <small>{count}</small></span></label>)}</div></fieldset>
+        <details className="search-filter-details">
+          <summary>対象を絞る{selectedTypes.size > 0 && <span>{selectedTypes.size}種類を選択中</span>}</summary>
+          <fieldset><legend className="sr-only">検索対象</legend><div className="search-filter-chips">{availableTypes.map(({ type, count }) => <label key={type} className={selectedTypes.has(type) ? "search-chip is-selected" : "search-chip"}><input checked={selectedTypes.has(type)} onChange={() => toggleType(type)} type="checkbox" /><span>{TYPE_LABELS[type]} <small>{count}</small></span></label>)}</div></fieldset>
+        </details>
         <label className="search-intent">目的<select aria-label="検索の目的" onChange={(event) => updateParams((next) => { event.target.value ? next.set("intent", event.target.value) : next.delete("intent"); next.delete("entity"); })} value={intent ?? ""}><option value="">すべて</option>{SEARCH_INTENTS.map((value) => <option key={value} value={value}>{INTENT_LABELS[value]}</option>)}</select></label>
       </div>
       {error && <p className="atlas-error" role="alert">検索データを読み込めませんでした: {error.message}</p>}
       {!index && !error && <p id="search-status" aria-live="polite">検索データを読み込み中…</p>}
       {index && <p id="search-status" className="search-result-summary" aria-live="polite">{query ? `${hits.length}件` : directDocument ? "用語を表示中" : `${index.documents.length}件を検索できます`}{selectedTypes.size || intent ? " · 絞り込み中" : ""}</p>}
+      {index && !query && !directEntity && (
+        <section className="search-starters" aria-labelledby="search-starters-heading">
+          <h2 id="search-starters-heading">状況をそのまま入力できます</h2>
+          <div>{STARTER_QUERIES.map((starter) => <button key={starter} onClick={() => { setDraftQuery(starter); commitQuery(starter); }} type="button">{starter}</button>)}</div>
+        </section>
+      )}
       {index && (query || directEntity) && visibleHits.length === 0 && <div className="search-empty"><h2>一致する項目が見つかりません</h2><p>検索語を短くするか、対象・目的の絞り込みを外してください。</p></div>}
       <div className="search-results">{visibleHits.map(({ document, matchedFields }) => <article key={document.document_id} className="search-result-card">
         <div className="search-result-heading"><span className={`search-type search-type-${document.entity_type}`}>{TYPE_LABELS[document.entity_type]}</span><h2><Link to={document.canonical_route}>{document.title_ja}</Link></h2>{document.title_en !== document.title_ja && <p lang="en">{document.title_en}</p>}</div>
         {document.summary && <p className="search-result-copy">{document.summary}</p>}
-        <div className="search-result-meta">{matchedFields.length > 0 && <span>一致: {matchedFields.map((field) => FIELD_LABELS[field]).join("・")}</span>}<code>{document.entity_id}</code>{document.last_reviewed && <span>確認 {document.last_reviewed}</span>}</div>
-        <div className="search-result-actions"><Link className="text-link" to={document.canonical_route}>開く →</Link>{document.external_url && <a className="text-link" href={document.external_url} rel="noreferrer" target="_blank">公式資料 ↗</a>}{document.source_ids.slice(0, 3).map((sourceId) => <Link key={sourceId} className="search-source-link" to={`/sources/${sourceId}`}>{sourceId}</Link>)}</div>
+        <div className="search-result-actions"><Link className="text-link" to={document.canonical_route}>開く →</Link>{document.external_url && <a className="text-link" href={document.external_url} rel="noreferrer" target="_blank">公式資料 ↗</a>}</div>
+        <details className="search-result-details">
+          <summary>一致理由・根拠</summary>
+          <div className="search-result-meta">{matchedFields.length > 0 && <span>一致: {matchedFields.map((field) => FIELD_LABELS[field]).join("・")}</span>}<code>{document.entity_id}</code>{document.last_reviewed && <span>確認 {document.last_reviewed}</span>}</div>
+          {document.source_ids.length > 0 && <div className="search-result-sources"><span>根拠</span>{document.source_ids.slice(0, 3).map((sourceId) => <Link key={sourceId} className="search-source-link" to={`/sources/${sourceId}`}>{sourceId}</Link>)}</div>}
+        </details>
       </article>)}</div>
-      {hits.length > visibleHits.length && <p className="search-result-limit">上位{visibleHits.length}件を表示中。検索語や絞り込みでさらに絞れます。</p>}
+      {hits.length > visibleHits.length && (
+        <div className="search-result-limit">
+          <p>上位{visibleHits.length}件 / {hits.length}件</p>
+          <button onClick={() => setVisibleLimit((current) => current + RESULT_PAGE_SIZE)} type="button">次の{Math.min(RESULT_PAGE_SIZE, hits.length - visibleHits.length)}件を見る</button>
+        </div>
+      )}
     </section>
   );
 }
