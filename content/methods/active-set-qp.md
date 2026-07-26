@@ -9,7 +9,7 @@ source_ids: [S012, S016, S055, S056]
 prerequisites: [concept.convexity]
 related_ids: [active-set, admm-qp, barrier-lp-qp, lp-qp-conic]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 凸二次計画（convex QP）で「どの不等式制約が解で等号になるか」を表すworking setを推定・更新しながら、等式制約付きQPを繰り返し解く方法です。
@@ -46,6 +46,19 @@ $$
 
 「1反復＝1つの等式制約QPを解く」という構造は、[一般NLPのactive-set法](#/learn/active-set)にも共通します。一方、QP専用の実装ではKKT行列がQPの係数だけで決まります。そのため、rank-1更新やSchur補行列を使うfactorization更新に特化しやすい点が異なります。
 
+制約を外す判断は、点を動かさずmultiplierの符号を見て行います。
+制約を加える判断は、face上を進みblocking constraintへ触れた時点で行います。
+
+![2変数の固定convex QPを原点から解くactive-set実行。原点Aではx1下限制約を外す。x2下限のface上をBまで進んでx1上限制約を加える。同じ点Bでx2下限制約を外す。斜めの制約へ進みCで最適になる。下段はremove → add → remove → add → optimalの5 eventを示す。](./media/active-set-qp-execution.svg "working setから制約を外し、blocking constraintを加える固定active-set QP実行")
+
+図のAとBでは、`direction = 0` のまま負のmultiplierを持つ制約を外しています。
+BとCへ向かう橙の線では、実行可能性を保つstep lengthを選び、最初に触れた制約を加えています。
+
+> この図は2変数の固定convex QPをfeasibleな原点から解いた教材です。
+> objectiveは `0.000 → -4.125`、最終点は `(1.5, 0.5)` です。
+> degeneracyやcyclingは含みません。
+> factorization更新costやactive-set QP一般の性能も示していません。
+
 ## Simplex法のQP版という直感とMPCでの再解
 
 LPのsimplex法は、頂点から頂点へbasisを更新しながら進みます。active-set QPは「等号制約の組」であるworking setを更新します。この意味で、simplex法のQP版とみなせます。この類似性から、前回のworking setを初期値として使うwarm startが自然に働きます。特に、
@@ -71,60 +84,69 @@ LPのsimplex法は、頂点から頂点へbasisを更新しながら進みます
 
 ## Python
 
-次はactive-set QPの考え方を教育用に近似した例です。2変数QPに対し、候補となるworking set（制約なし・各不等式制約を等号にした場合）を列挙してKKT系を解き、実行可能な候補の中から目的値が最良のものを選びます。実際のactive-set solverはworking setを1反復ごとに少しずつ更新するのに対し、この例は候補を総当たりする教育的な近似です。
+図と同じQPを、working setを1制約ずつ更新して解きます。
+`direction = 0` ならmultiplierを調べ、動けるならblocking constraintまで進みます。
 
 ```python
-import itertools
 import numpy as np
 
-p = np.array([[4.0, 1.0], [1.0, 2.0]])
-q = np.array([1.0, 1.0])
-# 不等式制約 a_ub @ x <= b_ub
+hessian = np.diag([2.0, 1.0])
+linear = np.array([-4.0, -1.0])
 a_ub = np.array([
-    [1.0, 0.0],
-    [0.0, 1.0],
-    [1.0, 1.0],
+    [-1.0, 0.0],  # x1 >= 0
+    [0.0, -1.0],  # x2 >= 0
+    [1.0, 0.0],   # x1 <= 1.5
+    [1.0, 1.0],   # x1 + x2 <= 2
 ])
-b_ub = np.array([1.0, 1.0, 1.5])
+b_ub = np.array([0.0, 0.0, 1.5, 2.0])
+labels = ["x1 >= 0", "x2 >= 0", "x1 <= 1.5", "x1 + x2 <= 2"]
 
+x = np.array([0.0, 0.0])
+working = [0, 1]
+events = []
+for _ in range(10):
+    gradient = hessian @ x + linear
+    a_working = a_ub[working]
+    kkt = np.block([
+        [hessian, a_working.T],
+        [a_working, np.zeros((len(working), len(working)))],
+    ])
+    solution = np.linalg.solve(kkt, np.r_[-gradient, np.zeros(len(working))])
+    direction, multipliers = solution[:2], solution[2:]
 
-def objective(x: np.ndarray) -> float:
-    return float(0.5 * x @ p @ x + q @ x)
+    if np.linalg.norm(direction) <= 1e-10:
+        if np.all(multipliers >= -1e-10):
+            events.append(("optimal", None))
+            break
+        position = int(np.argmin(multipliers))
+        removed = working.pop(position)
+        events.append(("remove", labels[removed]))
+        continue
 
-
-def solve_equality_qp(active: tuple[int, ...]) -> np.ndarray | None:
-    if not active:
-        return np.linalg.solve(p, -q)
-    a_active = a_ub[list(active)]
-    kkt = np.zeros((2 + len(active), 2 + len(active)))
-    kkt[:2, :2] = p
-    kkt[:2, 2:] = a_active.T
-    kkt[2:, :2] = a_active
-    rhs = np.concatenate([-q, b_ub[list(active)]])
-    try:
-        solution = np.linalg.solve(kkt, rhs)
-    except np.linalg.LinAlgError:
-        return None
-    return solution[:2]
-
-
-best_x: np.ndarray | None = None
-best_value = float("inf")
-for size in range(len(a_ub) + 1):
-    for active in itertools.combinations(range(len(a_ub)), size):
-        candidate = solve_equality_qp(active)
-        if candidate is None:
+    step_length = 1.0
+    blocker = None
+    for index, normal in enumerate(a_ub):
+        if index in working or normal @ direction <= 1e-10:
             continue
-        if np.all(a_ub @ candidate <= b_ub + 1e-9):
-            value = objective(candidate)
-            if value < best_value:
-                best_value = value
-                best_x = candidate
+        candidate = (b_ub[index] - normal @ x) / (normal @ direction)
+        if candidate < step_length - 1e-12:
+            step_length, blocker = float(candidate), index
 
-print(best_x, best_value)
+    x += step_length * direction
+    if blocker is not None:
+        working.append(blocker)
+        events.append(("add", labels[blocker]))
+
+objective = 0.5 * x @ hessian @ x + linear @ x
+print(events)
+print(x, objective)
 ```
 
-working setの候補を総当たりで列挙しているため、制約数が増えると組合せが急増します。実務のactive-set型solverは、working setを逐次更新して総当たりを避けます。OSQPのようなoperator-splitting型は、working setとは別の反復を使います。利用versionのAPIやdefault parameterは[OSQP公式ドキュメント](https://osqp.org/docs/)や[HiGHSドキュメント](https://highs.dev/)で確認します。
+出力のevent順は `remove → add → remove → add → optimal` です。
+最終点は `[1.5, 0.5]`、目的関数値は `-4.125` になります。
+
+実務のactive-set型solverはfactorizationを更新し、等式制約QPを毎回ゼロから解くcostを抑えます。
+OSQPのようなoperator-splitting型は、working setとは別の反復を使います。利用versionのAPIやdefault parameterは[OSQP公式ドキュメント](https://osqp.org/docs/)や[HiGHSドキュメント](https://highs.dev/)で確認します。
 
 ## 診断値
 

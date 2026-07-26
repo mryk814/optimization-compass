@@ -33,6 +33,7 @@ def read_dataset_version() -> str:
 
 def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     return {
+        "active-set-qp-execution.svg": _active_set_qp_svg(dataset_version).encode("utf-8"),
         "bayesian-optimization-execution.svg": _bayesian_optimization_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -62,6 +63,368 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _active_set_qp_objective(point: tuple[float, float]) -> float:
+    x1, x2 = point
+    return x1 * x1 + 0.5 * x2 * x2 - 4.0 * x1 - x2
+
+
+def _active_set_qp_probe() -> dict[str, object]:
+    hessian = ((2.0, 0.0), (0.0, 1.0))
+    linear = (-4.0, -1.0)
+    constraints = (
+        ("x₁ ≥ 0", (-1.0, 0.0), 0.0),
+        ("x₂ ≥ 0", (0.0, -1.0), 0.0),
+        ("x₁ ≤ 1.5", (1.0, 0.0), 1.5),
+        ("x₁ + x₂ ≤ 2", (1.0, 1.0), 2.0),
+    )
+    point = [0.0, 0.0]
+    working_set = [0, 1]
+    events: list[dict[str, object]] = []
+
+    for iteration in range(10):
+        gradient = [
+            hessian[row][0] * point[0] + hessian[row][1] * point[1] + linear[row]
+            for row in range(2)
+        ]
+        system_size = 2 + len(working_set)
+        kkt = [[0.0] * system_size for _ in range(system_size)]
+        for row in range(2):
+            for column in range(2):
+                kkt[row][column] = hessian[row][column]
+        for offset, constraint_index in enumerate(working_set):
+            normal = constraints[constraint_index][1]
+            for row in range(2):
+                kkt[row][2 + offset] = normal[row]
+                kkt[2 + offset][row] = normal[row]
+        solution = _solve_dense_linear_system(
+            kkt,
+            [-gradient[0], -gradient[1], *([0.0] * len(working_set))],
+        )
+        direction = tuple(solution[:2])
+        multipliers = tuple(solution[2:])
+
+        if math.hypot(*direction) <= 1e-10:
+            if min(multipliers, default=0.0) >= -1e-10:
+                events.append(
+                    {
+                        "iteration": iteration,
+                        "action": "optimal",
+                        "constraint_index": None,
+                        "point": tuple(point),
+                        "working_set": tuple(working_set),
+                        "value": min(multipliers, default=0.0),
+                        "objective": _active_set_qp_objective(tuple(point)),
+                    }
+                )
+                break
+            removal_position = min(
+                range(len(multipliers)),
+                key=multipliers.__getitem__,
+            )
+            constraint_index = working_set.pop(removal_position)
+            events.append(
+                {
+                    "iteration": iteration,
+                    "action": "remove",
+                    "constraint_index": constraint_index,
+                    "point": tuple(point),
+                    "working_set": tuple(working_set),
+                    "value": multipliers[removal_position],
+                    "objective": _active_set_qp_objective(tuple(point)),
+                }
+            )
+            continue
+
+        step_length = 1.0
+        blocking_constraint = None
+        for constraint_index, (_, normal, bound) in enumerate(constraints):
+            if constraint_index in working_set:
+                continue
+            directional_change = normal[0] * direction[0] + normal[1] * direction[1]
+            if directional_change <= 1e-10:
+                continue
+            candidate_length = (
+                bound - normal[0] * point[0] - normal[1] * point[1]
+            ) / directional_change
+            if candidate_length < step_length - 1e-12:
+                step_length = candidate_length
+                blocking_constraint = constraint_index
+
+        point = [point[index] + step_length * direction[index] for index in range(2)]
+        if blocking_constraint is not None:
+            working_set.append(blocking_constraint)
+        events.append(
+            {
+                "iteration": iteration,
+                "action": "add" if blocking_constraint is not None else "step",
+                "constraint_index": blocking_constraint,
+                "point": tuple(point),
+                "working_set": tuple(working_set),
+                "value": step_length,
+                "objective": _active_set_qp_objective(tuple(point)),
+            }
+        )
+    else:
+        raise RuntimeError("fixed active-set QP probe did not terminate")
+
+    final_point = tuple(point)
+    residuals = tuple(
+        normal[0] * point[0] + normal[1] * point[1] - bound for _, normal, bound in constraints
+    )
+    return {
+        "constraints": constraints,
+        "events": tuple(events),
+        "initial_point": (0.0, 0.0),
+        "final_point": final_point,
+        "initial_objective": _active_set_qp_objective((0.0, 0.0)),
+        "final_objective": _active_set_qp_objective(final_point),
+        "max_residual": max(residuals),
+    }
+
+
+def _active_set_qp_svg(dataset_version: str) -> str:
+    probe = _active_set_qp_probe()
+    constraints = probe["constraints"]
+    events = probe["events"]
+    if not isinstance(constraints, tuple) or not isinstance(events, tuple):
+        raise TypeError("active-set QP teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 82.0, 592.0
+    plot_top, plot_bottom = 198.0, 612.0
+    x_min, x_max = -0.15, 2.2
+    y_min, y_max = -0.15, 2.15
+
+    def screen(point: tuple[float, float]) -> tuple[float, float]:
+        x1, x2 = point
+        x = plot_left + (x1 - x_min) / (x_max - x_min) * (plot_right - plot_left)
+        y = plot_bottom - (x2 - y_min) / (y_max - y_min) * (plot_bottom - plot_top)
+        return x, y
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">active-set QPで制約を外し、加える固定実行</title>',
+        (
+            '<desc id="figure-description">2変数の凸二次計画をfeasibleな原点から解く。'
+            "原点では負のmultiplierを持つx1下限制約を外し、x2下限のface上を進む。"
+            "x1上限制約を加え、同じ点でx2下限制約を外した後、"
+            "斜めの制約へ進んで最適点に到達する。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        (
+            f'<defs><clipPath id="asq-plot"><rect x="{plot_left}" y="{plot_top}" '
+            f'width="{plot_right - plot_left}" height="{plot_bottom - plot_top}"/>'
+            "</clipPath></defs>"
+        ),
+        '<text x="32" y="48" class="asq-title">止まったら外す。動いたら加える。</text>',
+        (
+            '<text x="32" y="80" class="asq-subtitle">'
+            "fixed convex QP · feasible start · deterministic working-set updates</text>"
+        ),
+        '<line x1="36" y1="116" x2="68" y2="116" stroke="#d67835" stroke-width="5"/>',
+        '<text x="78" y="122" class="asq-legend">iterate path</text>',
+        '<line x1="238" y1="116" x2="270" y2="116" stroke="#2c7564" stroke-width="6"/>',
+        '<text x="280" y="122" class="asq-legend">final active constraints</text>',
+        '<rect x="24" y="150" width="592" height="512" rx="18" fill="#ffffff" stroke="#cad8d2"/>',
+        '<text x="44" y="184" class="asq-panel">feasible regionとiterate</text>',
+    ]
+
+    for tick in (0.0, 0.5, 1.0, 1.5, 2.0):
+        x, _ = screen((tick, 0.0))
+        _, y = screen((0.0, tick))
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x:.2f}" y1="{plot_top}" x2="{x:.2f}" y2="{plot_bottom}" '
+                    'stroke="#edf0ec" stroke-width="1"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="638" text-anchor="middle" '
+                    f'class="asq-axis">{tick:g}</text>'
+                ),
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#edf0ec" stroke-width="1"/>'
+                ),
+                (
+                    f'<text x="68" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="asq-axis">{tick:g}</text>'
+                ),
+            ]
+        )
+
+    feasible_points = " ".join(
+        f"{x:.2f},{y:.2f}"
+        for x, y in (
+            screen((0.0, 0.0)),
+            screen((1.5, 0.0)),
+            screen((1.5, 0.5)),
+            screen((0.0, 2.0)),
+        )
+    )
+    elements.append(
+        f'<polygon points="{feasible_points}" fill="#dceee7" stroke="#45656a" stroke-width="2"/>'
+    )
+
+    for objective_gap in (0.125, 0.5, 1.125, 2.0, 3.125):
+        points = []
+        for index in range(101):
+            angle = 2.0 * math.pi * index / 100
+            point = (
+                2.0 + math.sqrt(objective_gap) * math.cos(angle),
+                1.0 + math.sqrt(2.0 * objective_gap) * math.sin(angle),
+            )
+            points.append(screen(point))
+        contour = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        elements.append(
+            f'<polyline points="{contour}" fill="none" stroke="#b9c7c2" '
+            'stroke-width="1.5" stroke-dasharray="5 5" clip-path="url(#asq-plot)"/>'
+        )
+
+    final_active_segments = (
+        ((1.5, 0.0), (1.5, 0.5)),
+        ((0.0, 2.0), (1.5, 0.5)),
+    )
+    for start, end in final_active_segments:
+        x1, y1 = screen(start)
+        x2, y2 = screen(end)
+        elements.append(
+            f'<line x1="{x1:.2f}" y1="{y1:.2f}" x2="{x2:.2f}" y2="{y2:.2f}" '
+            'stroke="#2c7564" stroke-width="7" stroke-linecap="round"/>'
+        )
+
+    path_points = ((0.0, 0.0), (1.5, 0.0), (1.5, 0.5))
+    path = " ".join(f"{x:.2f},{y:.2f}" for x, y in map(screen, path_points))
+    elements.append(
+        f'<polyline points="{path}" fill="none" stroke="#d67835" stroke-width="5" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    point_labels = (
+        ((0.0, 0.0), "A", "remove x₁ ≥ 0", -42.0),
+        ((1.5, 0.0), "B", "add x₁ ≤ 1.5 / remove x₂ ≥ 0", 28.0),
+        ((1.5, 0.5), "C", "add x₁ + x₂ ≤ 2", 28.0),
+    )
+    for point, marker, label, label_offset_y in point_labels:
+        x, y = screen(point)
+        label_anchor = "end" if marker != "A" else "start"
+        label_x = x - 12 if marker != "A" else x + 12
+        elements.extend(
+            [
+                (
+                    f'<circle cx="{x:.2f}" cy="{y:.2f}" r="9" fill="#d67835" '
+                    'stroke="#fff" stroke-width="3"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{y - 16:.2f}" text-anchor="middle" '
+                    f'class="asq-marker">{marker}</text>'
+                ),
+                (
+                    f'<text x="{label_x:.2f}" y="{y + label_offset_y:.2f}" '
+                    f'text-anchor="{label_anchor}" '
+                    f'class="asq-label">{html.escape(label)}</text>'
+                ),
+            ]
+        )
+
+    elements.extend(
+        [
+            '<text x="586" y="638" text-anchor="end" class="asq-axis">x₁</text>',
+            '<text x="84" y="212" class="asq-axis">x₂</text>',
+            (
+                '<rect x="24" y="682" width="592" height="268" rx="18" '
+                'fill="#ffffff" stroke="#cad8d2"/>'
+            ),
+            '<text x="44" y="718" class="asq-panel">working set event</text>',
+        ]
+    )
+
+    constraint_labels = tuple(str(row[0]) for row in constraints)
+    action_labels = {
+        "remove": "remove",
+        "add": "add",
+        "step": "step",
+        "optimal": "optimal",
+    }
+    action_colors = {
+        "remove": "#102a2e",
+        "add": "#d67835",
+        "step": "#45656a",
+        "optimal": "#2c7564",
+    }
+    for row_index, event in enumerate(events):
+        action = str(event["action"])
+        constraint_index = event["constraint_index"]
+        point = event["point"]
+        if not isinstance(point, tuple):
+            raise TypeError("active-set QP event point must be a tuple")
+        y = 758.0 + row_index * 40.0
+        if constraint_index is None:
+            detail = "KKT signs satisfied"
+        else:
+            constraint_label = constraint_labels[int(constraint_index)]
+            if action == "remove":
+                detail = f"{constraint_label} · λ={float(event['value']):.2f}"
+            else:
+                detail = f"{constraint_label} · α={float(event['value']):.2f}"
+        elements.extend(
+            [
+                f'<circle cx="52" cy="{y - 5:.2f}" r="7" fill="{action_colors[action]}"/>',
+                (
+                    f'<text x="72" y="{y:.2f}" class="asq-action">'
+                    f"{event['iteration']} · {action_labels[action]}</text>"
+                ),
+                f'<text x="210" y="{y:.2f}" class="asq-detail">{html.escape(detail)}</text>',
+            ]
+        )
+
+    elements.extend(
+        [
+            (
+                '<text x="32" y="988" class="asq-metric">'
+                f"objective {float(probe['initial_objective']):.3f} → "
+                f"{float(probe['final_objective']):.3f}</text>"
+            ),
+            '<text x="344" y="988" text-anchor="middle" class="asq-metric">add 2 · remove 2</text>',
+            (
+                '<text x="608" y="988" text-anchor="end" class="asq-metric">'
+                f"max violation {max(0.0, float(probe['max_residual'])):.1f}</text>"
+            ),
+            (
+                '<text x="32" y="1028" class="asq-meta">'
+                "実行生成: scripts.generate_article_figures._active_set_qp_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1056" class="asq-note">'
+                "固定2変数convex QPです。degeneracy、cycling、factorization cost、"
+                "solver一般の性能は示しません。</text>"
+            ),
+            """
+<style>
+  .asq-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .asq-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .asq-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .asq-legend { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .asq-axis { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .asq-marker { font: 700 16px system-ui, sans-serif; fill: #102a2e; }
+  .asq-label { font: 600 15px system-ui, sans-serif; fill: #8b4c3d; }
+  .asq-action { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
+  .asq-detail { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .asq-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
+  .asq-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .asq-note { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _pbt_validation_score(weight: float, learning_rate: float) -> float:

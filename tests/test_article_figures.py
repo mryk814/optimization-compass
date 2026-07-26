@@ -6,6 +6,7 @@ from xml.etree import ElementTree
 import pytest
 
 from scripts.generate_article_figures import (
+    _active_set_qp_probe,
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
     _pbt_population_probe,
@@ -19,6 +20,31 @@ from scripts.generate_article_figures import (
 
 ROOT = Path(__file__).parents[1]
 VERSION = read_dataset_version()
+
+
+def test_active_set_qp_probe_adds_and_removes_constraints_sequentially() -> None:
+    probe = _active_set_qp_probe()
+    events = probe["events"]
+
+    assert [(event["action"], event["constraint_index"]) for event in events] == [
+        ("remove", 0),
+        ("add", 2),
+        ("remove", 1),
+        ("add", 3),
+        ("optimal", None),
+    ]
+    assert [event["working_set"] for event in events] == [
+        (1,),
+        (1, 2),
+        (2,),
+        (2, 3),
+        (2, 3),
+    ]
+    assert probe["initial_point"] == pytest.approx((0.0, 0.0))
+    assert probe["final_point"] == pytest.approx((1.5, 0.5))
+    assert probe["initial_objective"] == pytest.approx(0.0)
+    assert probe["final_objective"] == pytest.approx(-4.125)
+    assert probe["max_residual"] == pytest.approx(0.0)
 
 
 def test_lqr_probe_matches_the_fixed_article_equations() -> None:
@@ -108,6 +134,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
 
     assert first == second
     assert set(first) == {
+        "active-set-qp-execution.svg",
         "bayesian-optimization-execution.svg",
         "constrained-feasibility-execution.svg",
         "gradient-family-execution.svg",
@@ -144,6 +171,7 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
 
 def test_articles_place_execution_results_before_long_diagnostic_sections() -> None:
     expected = {
+        "content/methods/active-set-qp.md": "active-set-qp-execution.svg",
         "content/methods/bayesian-optimization.md": "bayesian-optimization-execution.svg",
         "content/methods/family-expensive-black-box.md": "bayesian-optimization-execution.svg",
         "content/methods/gradient-descent.md": "gradient-family-execution.svg",
