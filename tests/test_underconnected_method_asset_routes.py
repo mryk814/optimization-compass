@@ -12,6 +12,12 @@ def test_existing_method_guides_expose_their_canonical_learning_assets() -> None
             "#/compare/COMPARE_REPEATED_MPC_QP_WARM_START",
             "実機latencyを必ず改善するとも主張しません",
         ),
+        "branch-and-cut": (
+            ("binary-knapsack-bnb-complete", "binary-knapsack-bnb-budget"),
+            ("COMPARE_KNAPSACK_BNB_BUDGET",),
+            "#/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+            "cut生成、separation round、root relaxationの強化そのものは表示しません",
+        ),
         "family.constrained-nlp": (
             ("constrained-disk-feasible-region",),
             (),

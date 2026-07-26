@@ -19,7 +19,7 @@
 | `bayesian-optimization` | `M_BAYESIAN_OPT_GP` | 74 | 5733 | 11 | 1 | pass |
 | `bfgs` | `M_BFGS` | 68 | 2446 | 9 | 1 | pass |
 | `branch-and-bound` | `M_BRANCH_BOUND` | 79 | 4257 | 10 | 1 | pass |
-| `branch-and-cut` | `M_BRANCH_CUT` | 80 | 2585 | 9 | 1 | pass |
+| `branch-and-cut` | `M_BRANCH_CUT` | 80 | 3037 | 10 | 1 | pass |
 | `bundle-method` | `M_BUNDLE` | 60 | 2300 | 9 | 1 | pass |
 | `cdcl-sat` | `M_CDCL_SAT` | 59 | 3265 | 8 | 1 | pass |
 | `cma-es` | `M_CMA_ES` | 81 | 2738 | 10 | 1 | pass |

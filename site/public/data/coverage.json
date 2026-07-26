@@ -4375,12 +4375,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
         },
         "content": {
           "count": 1,
@@ -4428,11 +4428,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 23,
+          "count": 26,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_BRANCH_CUT",
+            "COMPARE_KNAPSACK_BNB_BUDGET",
             "EC019",
             "I_CBC",
             "I_CPLEX",
@@ -4453,6 +4454,8 @@
             "S024",
             "S025",
             "S028",
+            "binary-knapsack-bnb-budget",
+            "binary-knapsack-bnb-complete",
             "branch-and-cut",
             "production-mix-planning"
           ]
@@ -4485,12 +4488,13 @@
           ]
         },
         "visualization": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "binary-knapsack-bnb-budget",
+            "binary-knapsack-bnb-complete"
+          ]
         }
       },
       "label": "Branch and cut",

@@ -5931,6 +5931,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -5940,7 +5941,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -5961,6 +5964,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -5970,7 +5974,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -5980,7 +5986,7 @@
         "S025",
         "S028"
       ],
-      "text": "incumbent / primal bound : 現在見つかっている最良整数実行可能解 best bound / dual bound : 未探索領域から得られる可能性の限界 gap : incumbentとboundの差 minimizationではbest boundがincumbentを下から追い、gapが許容値以下になれば、設定したtoleranceにおける最適性を主張できます。 Warning solverが optimal と返す場合でも、integrality tolerance、feasibility tolerance、relative / absolute gapを確認します。数学的な完全一致ではなく数値許容値付きの判定です。",
+      "text": "incumbent / primal bound : 現在見つかっている最良整数実行可能解 best bound / dual bound : 未探索領域から得られる可能性の限界 gap : incumbentとboundの差 minimizationではbest boundがincumbentを下から追い、gapが許容値以下になれば、設定したtoleranceにおける最適性を主張できます。 Warning ソルバーが optimal と返す場合でも、整数許容誤差と実行可能性許容誤差を確認します。 相対gapと絶対gapも含め、数学的な完全一致ではなく数値許容値付きの判定です。",
       "title": "boundとgapをどう読むか"
     },
     {
@@ -5991,6 +5997,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6000,7 +6007,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6021,6 +6030,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6030,7 +6040,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6040,7 +6052,7 @@
         "S025",
         "S028"
       ],
-      "text": "MILPのLP relaxationは整数条件を外すため、整数実行可能解より良すぎるfractional解を返すことがあります。cutting planeは、 すべての整数実行可能解を残す 現在のfractional解を除外する 不等式を追加し、relaxationを強くします。 Branch-and-Cutは、 presolve LP relaxation cut separation primal heuristic branching node pruning を統合した現代的MILP solverの中心的枠組みです。",
+      "text": "MILPのLP relaxationは整数条件を外すため、整数実行可能解より良すぎるfractional解を返すことがあります。cutting planeは、 すべての整数実行可能解を残す 現在のfractional解を除外する 不等式を追加し、relaxationを強くします。 Branch-and-Cutは、 presolve LP relaxation cut separation primal heuristic branching node pruning を統合した現代的なMILPソルバーの中心的枠組みです。",
       "title": "Cutは何をするか"
     },
     {
@@ -6051,6 +6063,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6060,7 +6073,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6081,6 +6096,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6090,7 +6106,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6111,6 +6129,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6120,7 +6139,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6130,7 +6151,7 @@
         "S025",
         "S028"
       ],
-      "text": "Branch-and-Cutの性能はalgorithm parameterだけでなく定式化に強く依存します。 確認項目: Big-Mが必要以上に大きくないか symmetryがないか variable boundsが十分tightか strong formulationやvalid inequalityがあるか presolveで固定できる変数があるか 初期incumbentをwarm startできるか coefficient scaleが極端でないか",
+      "text": "Branch-and-Cutの性能はアルゴリズムの設定値だけでなく、定式化に強く依存します。 確認項目: Big-Mが必要以上に大きくないか symmetryがないか variable boundsが十分tightか strong formulationやvalid inequalityがあるか presolveで固定できる変数があるか 初期incumbentをwarm startできるか 係数の桁が極端でないか",
       "title": "まず確認すること"
     },
     {
@@ -6141,6 +6162,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6150,7 +6172,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6166,11 +6190,12 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:branch-and-cut:次に読む",
+      "chunk_id": "content:branch-and-cut:探索木で基礎部分を確認する",
       "dataset_version": "0.18.19",
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6180,7 +6205,42 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S024",
+        "S025",
+        "S028"
+      ],
+      "text": "最後まで探索した木 では、incumbentの更新とboundによる枝刈りを追えます。 最後にgapが閉じるところまで確認できます。 予算で止めた木 では、同じ問題を途中で止めたときに何が未証明として残るかを確認できます。 2つの停止条件を並べる では、問題とseedを固定しています。 branch順、bound計算、評価予算も同じです。 nodeの停止上限だけを変えた差を読めます。 これらはBranch-and-Cutの土台であるBranch-and-Boundの教材です。 cut生成、separation round、root relaxationの強化そのものは表示しません。 Branch-and-Cut実装のsolver rankingでもありません。",
+      "title": "探索木で基礎部分を確認する"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:branch-and-cut:次に読む",
+      "dataset_version": "0.18.19",
+      "document_id": "content:branch-and-cut",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:lp-qp-conic",
+        "method:M_BRANCH_CUT",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S024",
+        "source:S025",
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -6201,6 +6261,7 @@
       "document_id": "content:branch-and-cut",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-bound",
         "content:cp-sat",
         "content:lp-qp-conic",
@@ -6210,7 +6271,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",
@@ -42118,6 +42181,7 @@
       "relation_context": [
         "case:EC019",
         "case:production-mix-planning",
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
         "content:branch-and-cut",
         "implementation:I_CBC",
         "implementation:I_CPLEX",
@@ -42137,7 +42201,9 @@
         "source:S021",
         "source:S024",
         "source:S025",
-        "source:S028"
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
       ],
       "source_ids": [
         "S005",

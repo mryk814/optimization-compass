@@ -9,8 +9,10 @@ source_ids: [S005, S016, S021, S024, S025, S028]
 prerequisites: [branch-and-bound]
 related_ids: [branch-and-bound, cp-sat, lp-qp-conic]
 aliases: [/learn/branch-and-cut]
+visualization_ids: [binary-knapsack-bnb-complete, binary-knapsack-bnb-budget]
+comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。
@@ -44,7 +46,7 @@ Branch-and-Cutは、
 5. branching
 6. node pruning
 
-を統合した現代的MILP solverの中心的枠組みです。
+を統合した現代的なMILPソルバーの中心的枠組みです。
 
 ## boundとgapをどう読むか
 
@@ -55,12 +57,27 @@ Branch-and-Cutは、
 minimizationではbest boundがincumbentを下から追い、gapが許容値以下になれば、設定したtoleranceにおける最適性を主張できます。
 
 ::: warning
-solverが`optimal`と返す場合でも、integrality tolerance、feasibility tolerance、relative / absolute gapを確認します。数学的な完全一致ではなく数値許容値付きの判定です。
+ソルバーが`optimal`と返す場合でも、整数許容誤差と実行可能性許容誤差を確認します。
+相対gapと絶対gapも含め、数学的な完全一致ではなく数値許容値付きの判定です。
 :::
+
+## 探索木で基礎部分を確認する
+
+[最後まで探索した木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE)では、incumbentの更新とboundによる枝刈りを追えます。
+最後にgapが閉じるところまで確認できます。
+[予算で止めた木](#/theater/learning/SCENARIO_BINARY_KNAPSACK_BNB_BUDGET)では、同じ問題を途中で止めたときに何が未証明として残るかを確認できます。
+
+[2つの停止条件を並べる](#/compare/COMPARE_KNAPSACK_BNB_BUDGET)では、問題とseedを固定しています。
+branch順、bound計算、評価予算も同じです。
+nodeの停止上限だけを変えた差を読めます。
+
+これらはBranch-and-Cutの土台であるBranch-and-Boundの教材です。
+cut生成、separation round、root relaxationの強化そのものは表示しません。
+Branch-and-Cut実装のsolver rankingでもありません。
 
 ## まず確認すること
 
-Branch-and-Cutの性能はalgorithm parameterだけでなく定式化に強く依存します。
+Branch-and-Cutの性能はアルゴリズムの設定値だけでなく、定式化に強く依存します。
 
 確認項目:
 
@@ -70,7 +87,7 @@ Branch-and-Cutの性能はalgorithm parameterだけでなく定式化に強く�
 - strong formulationやvalid inequalityがあるか
 - presolveで固定できる変数があるか
 - 初期incumbentをwarm startできるか
-- coefficient scaleが極端でないか
+- 係数の桁が極端でないか
 
 ## Python: MILPをsolverへ渡す
 

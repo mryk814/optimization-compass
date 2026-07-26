@@ -3,7 +3,7 @@
 - Published concept guides: `22`
 - Meeting the concept floor: `22`
 - Below the concept floor: `0`
-- Prose review warnings: `241`
+- Prose review warnings: `239`
 
 ## Concept publication floor
 
@@ -35,8 +35,8 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 157
-- `sentence.long`: 83
+- `sentence.commas`: 156
+- `sentence.long`: 82
 
 | Content | Warnings |
 |---|---:|
@@ -53,7 +53,7 @@
 | `bayesian-optimization` | 0 |
 | `bfgs` | 0 |
 | `branch-and-bound` | 0 |
-| `branch-and-cut` | 2 |
+| `branch-and-cut` | 0 |
 | `bundle-method` | 1 |
 | `cdcl-sat` | 2 |
 | `cma-es` | 2 |

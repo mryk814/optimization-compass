@@ -7018,6 +7018,11 @@
       "label": "Branch-and-Cut",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S005",
           "target_type": "source"
@@ -7066,6 +7071,16 @@
           "relation_type": "related_content",
           "target_id": "lp-qp-conic",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
         }
       ],
       "summary": "MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、incumbentとboundのgapを詰めて最適性を証明する厳密探索法です。"
@@ -24821,6 +24836,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_KNAPSACK_BNB_BUDGET",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S005",
           "target_type": "source"
@@ -24919,6 +24939,16 @@
           "relation_type": "learning",
           "target_id": "branch-and-cut",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-budget",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
         }
       ],
       "summary": "branch-and-boundにcut生成を統合するMILP主力法。"
