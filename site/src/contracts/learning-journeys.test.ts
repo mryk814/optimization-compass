@@ -17,7 +17,7 @@ describe("LearningJourney parser", () => {
     expect(pilot?.status).toBe("complete");
     expect(index.summary.target_complete_journeys).toBe(5);
     expect(index.summary.total_journeys).toBe(index.journeys.length);
-    expect(index.summary.status_counts).toEqual({ complete: 29, partial: 1, draft: 0 });
+    expect(index.summary.status_counts).toEqual({ complete: 30, partial: 0, draft: 0 });
     const parameterEstimation = index.journeys.find((journey) => journey.journey_id === "EC013");
     expect(parameterEstimation?.status).toBe("complete");
     expect(parameterEstimation?.scenarios.find((scenario) => scenario.role === "primary")?.scenario_id)
@@ -49,18 +49,18 @@ describe("LearningJourney parser", () => {
 
   test("rejects a complete journey with a missing dimension", () => {
     const changed = structuredClone(rawJourneys);
-    const journey = changed.journeys.find((item) => item.status === "partial");
-    const assessment = changed.assessments.find((item) => item.journey_id === journey?.journey_id);
-    if (!journey || !assessment) throw new Error("Expected a partial journey fixture.");
-    journey.status = "complete";
-    journey.completion_reasons = [];
-    assessment.status = "complete";
-    expect(() => parseLearningJourneyIndex(changed)).toThrow(/incomplete|missing dimensions/u);
+    const assessment = changed.assessments[0];
+    assessment.dimensions.primary_scenario.state = "missing";
+    (assessment.dimensions.primary_scenario.reason_codes as string[]).push(
+      "missing_primary_scenario",
+    );
+    (assessment.missing_dimensions as string[]).push("primary_scenario");
+    expect(() => parseLearningJourneyIndex(changed)).toThrow(/missing dimensions/u);
   });
 
   test("rejects mismatched assessment reasons", () => {
     const changed = structuredClone(rawJourneys);
-    changed.journeys[0].completion_reasons = ["unrelated_reason"];
+    (changed.journeys[0].completion_reasons as string[]).push("unrelated_reason");
     expect(() => parseLearningJourneyIndex(changed)).toThrow(/completion reasons/u);
   });
 });

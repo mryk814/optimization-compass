@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "expectations": [
     {
       "applicability": "expected",
@@ -324,8 +324,16 @@
       "subject_type": "method"
     }
   ],
-  "generated_at": "2026-07-24T00:00:00Z",
-  "integrity_issues": [],
+  "generated_at": "2026-07-26T00:00:00Z",
+  "integrity_issues": [
+    {
+      "code": "broken_scenario_alias",
+      "detail": "A derived generated scenario points to a canonical scenario missing from the database.",
+      "entity_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+      "entity_type": "scenario",
+      "severity": "error"
+    }
+  ],
   "priorities": [
     {
       "factors": {
@@ -841,12 +849,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+          ]
         },
         "content": {
           "count": 4,
@@ -893,7 +901,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 24,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -901,6 +909,7 @@
             "/methods/M_CDCL_SAT",
             "/methods/M_CP_SAT",
             "/methods/M_CP_SEARCH",
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
             "EC019",
             "I_MINIZINC",
             "I_ORTOOLS_CPSAT",
@@ -920,7 +929,9 @@
             "irrigation-retrofit-selection",
             "mobile-clinic-outreach-selection",
             "public-infrastructure-selection",
-            "shift-scheduling"
+            "shift-scheduling",
+            "shift-scheduling-balanced",
+            "shift-scheduling-preference-only"
           ]
         },
         "recommendation": {
@@ -947,12 +958,14 @@
           ]
         },
         "visualization": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "binary-knapsack-bnb-budget",
-            "binary-knapsack-bnb-complete"
+            "binary-knapsack-bnb-complete",
+            "shift-scheduling-balanced",
+            "shift-scheduling-preference-only"
           ]
         }
       },
@@ -5001,12 +5014,12 @@
     {
       "dimensions": {
         "comparison": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+          ]
         },
         "content": {
           "count": 1,
@@ -5049,11 +5062,12 @@
           "target_ids": []
         },
         "map": {
-          "count": 17,
+          "count": 20,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "/methods/M_CP_SAT",
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
             "EC019",
             "I_MINIZINC",
             "I_ORTOOLS_CPSAT",
@@ -5069,7 +5083,9 @@
             "irrigation-retrofit-selection",
             "mobile-clinic-outreach-selection",
             "public-infrastructure-selection",
-            "shift-scheduling"
+            "shift-scheduling",
+            "shift-scheduling-balanced",
+            "shift-scheduling-preference-only"
           ]
         },
         "recommendation": {
@@ -5096,12 +5112,14 @@
           ]
         },
         "visualization": {
-          "count": 2,
+          "count": 4,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
             "binary-knapsack-bnb-budget",
-            "binary-knapsack-bnb-complete"
+            "binary-knapsack-bnb-complete",
+            "shift-scheduling-balanced",
+            "shift-scheduling-preference-only"
           ]
         }
       },

@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "entities": [
     {
       "aliases": [],
@@ -3288,6 +3288,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -3386,6 +3391,16 @@
           "relation_type": "problem",
           "target_id": "PA026",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -5265,6 +5280,62 @@
         }
       ],
       "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "entity_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "entity_type": "comparison",
+      "external_url": null,
+      "label": "希望が同率の勤務表を負荷の偏りで読み比べる",
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "shift-scheduling",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "member_method",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_scenario",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "shift-scheduling-balanced",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "member_trace",
+          "target_id": "shift-scheduling-preference-only",
+          "target_type": "trace"
+        }
+      ],
+      "summary": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。"
     },
     {
       "aliases": [],
@@ -21256,6 +21327,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -21311,6 +21387,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_ORTOOLS_CPSAT",
           "target_type": "implementation"
@@ -21324,6 +21405,11 @@
           "relation_type": "learning",
           "target_id": "family.discrete-structure",
           "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "target_type": "scenario"
         },
         {
           "relation_type": "problem",
@@ -23971,6 +24057,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S022",
           "target_type": "source"
@@ -24008,6 +24099,16 @@
         {
           "relation_type": "visualization",
           "target_id": "binary-knapsack-bnb-complete",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shift-scheduling-balanced",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "shift-scheduling-preference-only",
           "target_type": "trace"
         }
       ],
@@ -31176,6 +31277,78 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "同じ希望充足数から負荷の偏りが小さい勤務表を選ぶ",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "shift-scheduling-balanced",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+      "entity_type": "scenario",
+      "external_url": null,
+      "label": "希望だけを目的にすると同率の勤務表が残る",
+      "relations": [
+        {
+          "relation_type": "artifact",
+          "target_id": "shift-scheduling-preference-only",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "shift-scheduling",
+          "target_type": "journey"
+        }
+      ],
+      "summary": "hard制約、希望充足、勤務数の偏りを勤務表の同じセルから読む"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
       "entity_type": "scenario",
       "external_url": null,
@@ -34111,6 +34284,78 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/theater/learning/SCENARIO_SHIFT_SCHEDULING_BALANCED",
+      "entity_id": "shift-scheduling-balanced",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "勤務シフト: 希望と負荷のタイブレーク",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S022",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S053",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "related_map",
+          "target_id": "VIEW_METHOD_MECHANISM",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "related_map",
+          "target_id": "VIEW_PROBLEM_STRUCTURE",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": "/traces/shift-scheduling-preference-only",
+      "entity_id": "shift-scheduling-preference-only",
+      "entity_type": "trace",
+      "external_url": null,
+      "label": "希望だけを目的にすると同率の勤務表が残る",
+      "relations": [
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "scenario",
+          "target_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "visualizes",
+          "target_id": "M_CP_SAT",
+          "target_type": "method"
+        }
+      ],
+      "summary": ""
+    },
+    {
+      "aliases": [],
       "canonical_url": "/traces/so3-projected-alignment",
       "entity_id": "so3-projected-alignment",
       "entity_type": "trace",
@@ -34717,6 +34962,26 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "SCENARIO_SO3_PROJECTED_ALIGNMENT",
       "entity_type": "view",
       "external_url": null,
@@ -34804,6 +35069,11 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "shift-scheduling-balanced",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "topology-optimization-field-evolution",
           "target_type": "trace"
         }
@@ -34840,6 +35110,11 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "shift-scheduling-balanced",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "topology-optimization-field-evolution",
           "target_type": "trace"
         }
@@ -34847,5 +35122,5 @@
       "summary": ""
     }
   ],
-  "generated_at": "2026-07-24T00:00:00Z"
+  "generated_at": "2026-07-26T00:00:00Z"
 }

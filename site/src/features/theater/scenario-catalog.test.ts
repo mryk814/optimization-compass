@@ -15,7 +15,8 @@ describe("scenario catalog", () => {
     expect(catalog).toHaveLength(parseVisualizationScenarioIndex(scenarios).scenarios.length);
     expect(new Set(catalog.map((entry) => entry.scenario.artifact.renderer_family))).toEqual(new Set([
       "simplex_geometry", "continuous_trajectory", "search_tree", "surrogate_uncertainty",
-      "feasible_region", "pareto_front", "generic_metric_history", "field_evolution",
+      "assignment_schedule", "feasible_region", "pareto_front", "generic_metric_history",
+      "field_evolution",
     ]));
     expect(catalog.every((entry) => entry.route.startsWith("/"))).toBe(true);
   });

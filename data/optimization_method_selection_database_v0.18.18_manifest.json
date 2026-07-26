@@ -1,0 +1,789 @@
+{
+  "artifacts": {
+    "csv_directory": "optimization_method_selection_database_v0.18.18_csv",
+    "csv_zip": "optimization_method_selection_database_v0.18.18_csv.zip",
+    "database": "optimization_method_selection_database_v0.18.18.sqlite",
+    "ddl": "optimization_method_selection_database_v0.18.18_schema.sql",
+    "json": "optimization_method_selection_database_v0.18.18.json",
+    "jsonl": "optimization_method_selection_database_v0.18.18.jsonl",
+    "release_identity": "optimization_method_selection_database_v0.18.18_release.json",
+    "report": "optimization_method_selection_database_v0.18.18_report.md",
+    "site_data": "optimization_method_selection_database_v0.18.18_site-data",
+    "xlsx": "optimization_method_selection_database_v0.18.18.xlsx"
+  },
+  "base_sha256": "4c916f293ec7ce5ce452297238f455bb23e971ae2ef38a92eaeafc3c79f02d13",
+  "database_sha256": "2af0922fc3771935350fef25abc29b571a3caf1163fd5215101d2352a61b8830",
+  "files": {
+    "licenses/CC-BY-4.0.txt": {
+      "bytes": 695,
+      "sha256": "6c11dcd31268ad8590284799c70838fd5d72c307b5e13d2a3da7644b9391a34b"
+    },
+    "licenses/CONTENT_LICENSE.txt": {
+      "bytes": 1719,
+      "sha256": "079054b698acefafe01bed38124105fb2867c2956684d462558f6f4de1a67909"
+    },
+    "licenses/DATA_LICENSE.txt": {
+      "bytes": 1821,
+      "sha256": "e6dea495979542bd6c372c02b02c75dea995f76f641c25609e4925c42745e8d6"
+    },
+    "licenses/LICENSE.txt": {
+      "bytes": 1128,
+      "sha256": "7ae11e0c78700cc2cd6197c6447525d9b9591d6b8fd1a26923f0eb1410e5ef4c"
+    },
+    "licenses/NOTICE.txt": {
+      "bytes": 1457,
+      "sha256": "3c99945f322c33a7363cee9898dd1ee79ef144ce21baee0f9fab51bb90563d16"
+    },
+    "optimization_method_selection_database_v0.18.18.json": {
+      "bytes": 6115240,
+      "sha256": "8769ad22075cefec25a0a963e8dd098077d49f93b18a885ac411288cf4edb9e8"
+    },
+    "optimization_method_selection_database_v0.18.18.jsonl": {
+      "bytes": 5034115,
+      "sha256": "a43c21ba421a01f819caaaf9b88b3e991aa8f5607384b7d4805c5262a0a4daab"
+    },
+    "optimization_method_selection_database_v0.18.18.sqlite": {
+      "bytes": 4128768,
+      "sha256": "2af0922fc3771935350fef25abc29b571a3caf1163fd5215101d2352a61b8830"
+    },
+    "optimization_method_selection_database_v0.18.18.xlsx": {
+      "bytes": 785383,
+      "sha256": "445353b306b96f91d7ed2543c7e0822ecfc898913b281cc7e696e70af52cc2bc"
+    },
+    "optimization_method_selection_database_v0.18.18_csv.zip": {
+      "bytes": 343555,
+      "sha256": "0bd5608148d4609c20f1801003bb8644292998c9ad1f168a4ff85d9cd6a27d33"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/advanced_view.csv": {
+      "bytes": 195787,
+      "sha256": "6119b51b41560ba9cbb46b82009327eb969817a3c15bc39519280698376869be"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/alternative_solution_checks.csv": {
+      "bytes": 5538,
+      "sha256": "319c8c784d3de0e14e03b2903a49b9cdcddfdcce0575df1144edfe4cc1774780"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/atomic_predicates.csv": {
+      "bytes": 4457,
+      "sha256": "739ee3713e4fa5d094e87fbaa43cb7f737bba4ece968ee82393ad4957596af5b"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/backlog.csv": {
+      "bytes": 8305,
+      "sha256": "7dfdad849468d202dad0e13f6c611ec660eb2df8f366be0407e597179ac29a9a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/beginner_view.csv": {
+      "bytes": 15465,
+      "sha256": "464ab69fb97f1d270c05c88796f3793a9ebde3786de2057a03204193b5eda445"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/benchmark_contexts.csv": {
+      "bytes": 27349,
+      "sha256": "7dbf103e57c66723792b61716fe418b1570c3f6bad17ad64857a2b224f4b1757"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/case_alternative_map.csv": {
+      "bytes": 9700,
+      "sha256": "fd735190a38b51e8aabb981d414e7268330fa0cc0b70cef1e645319c299bc9be"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/case_feature_map.csv": {
+      "bytes": 52453,
+      "sha256": "274ee85a878b83dd236bdca09d851a755b94dffa81cc1cd6590f22b3188a4465"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/case_implementation_map.csv": {
+      "bytes": 12306,
+      "sha256": "bbb90600d902cb184fc6bf1dc1ce4d15dd2a2446ad00647774e62885ff33253c"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/case_method_map.csv": {
+      "bytes": 20826,
+      "sha256": "c0ef4756e511837304fd6943acac100b1e046e04da83cf74ca9289d3b65a4cdc"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/comparison_set_members.csv": {
+      "bytes": 502,
+      "sha256": "61c80c871003566396b266e1608a084ffb2d4f8e64b2a58b4d489450c81bacfa"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/comparison_sets.csv": {
+      "bytes": 589,
+      "sha256": "1ca33169d0f3e584750dbe043be26517e48e94585c893b6d7e2abb5fdc8d4900"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/controlled_vocab.csv": {
+      "bytes": 9950,
+      "sha256": "e8c8418c7ce1499dbdf10316bd0d92ebd1551bcf3571d30aea259c6eeec30d51"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/decision_questions.csv": {
+      "bytes": 6634,
+      "sha256": "1f15fe2c9969aa06ca5d1c9a73734abf047c7c3f1ee960aba7d6151074b8e2a9"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/decision_rule_target_retirements.csv": {
+      "bytes": 1502,
+      "sha256": "e0e4c7df06d7b690e6159c7a11de10c685af85af066fc1ed652736251dd3626f"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/decision_rules.csv": {
+      "bytes": 21311,
+      "sha256": "5f62a52e2ae5bd7f928cfafbda74e31b6e50519a786814a7999060f7bfd63c80"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/demo_scenarios.csv": {
+      "bytes": 5607,
+      "sha256": "93f99d167f5458362d9f40bd370a5768fcf8a3df77f654575ac345f3e4f5c31b"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/diagnostics.csv": {
+      "bytes": 16175,
+      "sha256": "437dc89d3e8a82111b38768ee7fabc0b5160bc518d24ee324fc02e4c3524f028"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/evidence_links.csv": {
+      "bytes": 1110697,
+      "sha256": "eebd40c611128ddd859832fc1621a48dfe841cceb822ed636708fbceb4ca1691"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/example_cases.csv": {
+      "bytes": 19907,
+      "sha256": "fadcfec25f641505174798f26480814fb1d2eaf2ad075585de01fd1d310006cc"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_affected_entities.csv": {
+      "bytes": 5361,
+      "sha256": "f951aaa28223ea98799f06c48a2abbffd240503a1d9c9fdd6c67f191331eab6d"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_diagnostics.csv": {
+      "bytes": 524,
+      "sha256": "181195af6ddd5e57bc4dbe179d16006f019eaff422e0fe3dc7e106e5151b0cc2"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_mitigations.csv": {
+      "bytes": 2014,
+      "sha256": "3ba224866db4d63a33c76578d3cfd9c4559b5fedc21ed29dec26d1b801b0990a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_profiles.csv": {
+      "bytes": 1449,
+      "sha256": "a84a8d8116f844c60fa82bb3beefbc6fe1f269a6bffb114015132fcedb211890"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_scenarios.csv": {
+      "bytes": 315,
+      "sha256": "34cccf332a173322a6881a11a0ad18d22e2e3593447a2c8bc6c19ea620a0856a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_symptoms.csv": {
+      "bytes": 1033,
+      "sha256": "2eece3870074b1707903736dab84cca456775a5c80bbddf741026400dbbe1bbf"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_mode_triggers.csv": {
+      "bytes": 1456,
+      "sha256": "1d56bc661676178e7a2ef7088374d29b436cf4d6a2ba075fc86e7ae2b20790f3"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/failure_modes.csv": {
+      "bytes": 16982,
+      "sha256": "df0863fe1ce91861306e405522c75aefd51799685c3dd286ca25c2d56df0ac4e"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/feature_values.csv": {
+      "bytes": 9617,
+      "sha256": "f918d517d9d89fd0f614a55a0d05e8c1e7d17401ddde5361fea250aa444880d4"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/glossary.csv": {
+      "bytes": 15908,
+      "sha256": "ff0e45d728af0878bbfe4b3059d610fc9683ef9b1e7ac89242a1c8e4f0fa9e7e"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/implementation_claims.csv": {
+      "bytes": 93608,
+      "sha256": "89810e232f7ee044cc819aadf9fbc9ac51a6269c2a80f6351c2c6b8007145637"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/implementations.csv": {
+      "bytes": 64225,
+      "sha256": "a4483207fa5683d7de8afd5a10da811f01278d127a3f86be8b5b1c9cb9cdfe9c"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/learning_coverage_expectations.csv": {
+      "bytes": 2859,
+      "sha256": "77e003b7641340d411266906fda7e439c430d4abe3026d6ade0fba15e9460b11"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/learning_edges.csv": {
+      "bytes": 12108,
+      "sha256": "6f5054242337a750c3823098c84582f67a466da70dc1f7c46b9f1d266e0fa2b7"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/learning_slice_priorities.csv": {
+      "bytes": 3794,
+      "sha256": "c382862b609a2ead13a53e276c3f40285e6996f11a9842e90c2742c11812b0f4"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/method_hierarchy.csv": {
+      "bytes": 17094,
+      "sha256": "a4764361cab517a1868060a44b15479623eb9edfab249b4d1eaf60b466e41057"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/method_implementation_map.csv": {
+      "bytes": 51391,
+      "sha256": "76e90852c857e3f4d5972a23a1034c3d651e8bfedbceccb285628d0576590747"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/method_visualization_profiles.csv": {
+      "bytes": 4290,
+      "sha256": "f27c372cdb4a249fc03640e2a22f1e97f175c811359feb57175f4cb38cb02216"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/methods.csv": {
+      "bytes": 170658,
+      "sha256": "39c5b85994d93022b530c0e38fd86c824b60006b09f639d725fe5d9c636cc35a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/model_revisions.csv": {
+      "bytes": 2517,
+      "sha256": "c26ef502868de97ab0873ce328f98de57e389ce9e61034b53ba6e269a711f9d5"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/predicate_coverage.csv": {
+      "bytes": 2934,
+      "sha256": "b3cf7a45850146cc6128b00b0b4e8a6401582e0c0c43d72d940484667549f6d8"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/predicate_policies.csv": {
+      "bytes": 4570,
+      "sha256": "3695bc4d68a89e7727e1ff85996f15628ba4444b16a3884c9016073ba6ac0a63"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_alternative_map.csv": {
+      "bytes": 18343,
+      "sha256": "3a37bd634d85c8b0041e270ddd0e45c53e78ae0b6100152fcd167a07d726ed4a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_archetypes.csv": {
+      "bytes": 31321,
+      "sha256": "1e3ad58ed26e5eb20ced2869f0a145bde64718491e0030928515a86b1522d328"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_definition_archetypes.csv": {
+      "bytes": 1173,
+      "sha256": "8bfd2c7de49f0dd6ffcad87fa2139d67b035f502d5416b6aed63a826c3d30fff"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_definition_features.csv": {
+      "bytes": 4717,
+      "sha256": "0f3b847dced9acd62f8ce4ca1494715153907eb1c0285334789a8167fe1765f8"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_definitions.csv": {
+      "bytes": 13444,
+      "sha256": "68d217c4f4d1278b12b5b0478c68394087902a2f901b90d8773342ac4eea603b"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_feature_map.csv": {
+      "bytes": 91168,
+      "sha256": "c71ee0528e15abc210902b49e71982392de4872e770dfbf68230f033baff3818"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_features.csv": {
+      "bytes": 49536,
+      "sha256": "b2a1022f35a880035bbc151822f6ad76ba573f49d55c2bbfd0604f725cc22ceb"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_instances.csv": {
+      "bytes": 39153,
+      "sha256": "c2d2b089f9367330bea5c8ec26b8c514cacfda528ac10848ec26bef745faaea0"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/problem_method_fit.csv": {
+      "bytes": 464535,
+      "sha256": "dff10b4bafbe1783f6b2fb4b0edb12081e10c01ccf0fd04a882e7eb09d5c8fcc"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/readme.csv": {
+      "bytes": 3538,
+      "sha256": "3d9cbf86a4e08df10cad6f0e54e978185eb530e14bd2eee45d7aae1cd17d8d30"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/release_checks.csv": {
+      "bytes": 5157,
+      "sha256": "3159b5ed870d2819262beb594c11bb78984db98809ae65d23187225615b26ab0"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/schema_dictionary.csv": {
+      "bytes": 96498,
+      "sha256": "31aa811b65c60e1919c1e6640b364b39e931394b66fc9be81d6ff6e6539fe28a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/sheet_catalog.csv": {
+      "bytes": 9477,
+      "sha256": "a610974418c4e08ede5a6bd597f318d55e6cc770e3ae3657e936f543d2cd3560"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/sources.csv": {
+      "bytes": 23411,
+      "sha256": "c24c9c86ab98b1c4dcd480e9f7b8a4967693d1142a051d7430181fd04cd92ece"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/terminology_aliases.csv": {
+      "bytes": 11456,
+      "sha256": "abd1a6031d5c91c0f6a0619c0a65de2a2a85628c8496ff0944ea4c7a7e31a9b3"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/version_history.csv": {
+      "bytes": 1279,
+      "sha256": "d920a622a3dad29dc3ed7811ef74f1c36f905a363fda25f223f3d91b75e4da4a"
+    },
+    "optimization_method_selection_database_v0.18.18_csv/view_presets.csv": {
+      "bytes": 10015,
+      "sha256": "8355fc740d10116e50cca4279c23698da83dbba75162fd0729f865f98567732f"
+    },
+    "optimization_method_selection_database_v0.18.18_release.json": {
+      "bytes": 179,
+      "sha256": "e984f9913bbd5efcb4ae0c2d0e707c78dad5f7f287260139a8867724339c1747"
+    },
+    "optimization_method_selection_database_v0.18.18_report.md": {
+      "bytes": 14327,
+      "sha256": "ae47225714588fabaf0fbaf307549fb71c4bbc63ae6b9ab845df753875044492"
+    },
+    "optimization_method_selection_database_v0.18.18_schema.sql": {
+      "bytes": 53548,
+      "sha256": "43150d3c5756a19e0611ee49e4bb56b5b6e24077e48924c9876d0fc77f2dcd05"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/benchmark-contexts.json": {
+      "bytes": 48320,
+      "sha256": "ed186316fff5bf25b5be9c09a6cb866f82b6412ab81dd6bc6d594d08c64f8102"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/comparisons.json": {
+      "bytes": 164853,
+      "sha256": "ec9ff043b36671a921b2e91ce40211c40b4fb646b7895e28164acbf2a805714d"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/content.json": {
+      "bytes": 1714761,
+      "sha256": "265d0ed7e0e1df492e7ba9a65e0ffc6c9abf5f7cc66e773837e51e5bfd5e3d6c"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/coverage.json": {
+      "bytes": 436814,
+      "sha256": "29f87517ffa5b50ef28cde078157025b07e6c6b46198a75c60b5d1ceb6c38d41"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/coverage.md": {
+      "bytes": 1404,
+      "sha256": "e7d28968651e9bcc472161a020a7aed146ed474f1e46e447d87cd3a40d13e0c9"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/entity-links.json": {
+      "bytes": 1011160,
+      "sha256": "a30880ec1d9b1b9ae8fd7822cbddd6d2a5c6aecf826632124d5147caad413c11"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/failure-discovery.json": {
+      "bytes": 91199,
+      "sha256": "fdf6c9666af56738b2bb8712353ac103b15a5dd3ec16a7caa38ae5e7e517f2a9"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/failure-modes.json": {
+      "bytes": 37582,
+      "sha256": "9a684846b6775bded353dbcb3dad966db9dacc05c33ccf8233d5db7199e3350e"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/formulation-primer.json": {
+      "bytes": 14875,
+      "sha256": "bdfb01fce322e36d193ec657dd6afe5c2b3d5432fbfbb5bb279f22045fd63ec6"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/gallery.json": {
+      "bytes": 165094,
+      "sha256": "ca65960dc25ccd07645da803b89dfab60905c814739c3778914f268288fd4d7c"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/implementation-claims.json": {
+      "bytes": 396087,
+      "sha256": "a89dd2c9bfe6f8611ac1a71a8ace8b58e7e72fc7c405478ac743b82b437a3c63"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/learning-graph.json": {
+      "bytes": 68657,
+      "sha256": "665b795c62149cfffeddfe0bdf4077f2e120b0c6a0b543898c46b2d4298f27dd"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/learning-journeys.json": {
+      "bytes": 347316,
+      "sha256": "dfd164b00638070f13cfa278c65c51c14547417188436fe43d8f912b4ea7d280"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/manifest.json": {
+      "bytes": 2837,
+      "sha256": "53cdf66ffe5107085553be18f6abcecb4f37530e9567ea274e986d0172d62f84"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/manifest.json": {
+      "bytes": 4157,
+      "sha256": "1f6de9ea1571a6ac6de966ff564fd1a419ce41c457c3f5472b3b85c0f75faceb"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/animation.gif": {
+      "bytes": 11392,
+      "sha256": "4b6a8b0bd0e2e2999f2848b752ec703a51d25a9fff7920fcf83cf577fb94345b"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/animation.webm": {
+      "bytes": 10037,
+      "sha256": "6809f85301c92d5508af3c97642146040033613b964a840252492d68c8347c9b"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/captions.vtt": {
+      "bytes": 729,
+      "sha256": "38191c82fbef7fc28d1e9ef608b1164e9d8c03a430cadf86cd1ddc811c038d1f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/static.png": {
+      "bytes": 10289,
+      "sha256": "6e7008e612da77fa054403c2e4bbc3f88ac33c9c074f244eff456c4b7f629827"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/static.svg": {
+      "bytes": 3611,
+      "sha256": "abde2e1d64c83ee0274a3db5346a95b475733c4c0c1bd4179f9c5959de11f09c"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/thumbnail.png": {
+      "bytes": 3893,
+      "sha256": "e9c575b038c52aa401482efac022aa1802f003810276e4cb6737f94e86587008"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/media/scenario-nm-quadratic/transcript.txt": {
+      "bytes": 724,
+      "sha256": "e834eaa6ca79122b5a77bdd1a0ed5e4980e8a72dc659ad4eeb4885c1a4846756"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/problems.json": {
+      "bytes": 98680,
+      "sha256": "ad8f5ffd28e72ec9ffea7010676cf01b3c214049e41a0fa0a11d6c9bfb58c07f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/recommendation/site-data.json": {
+      "bytes": 224605,
+      "sha256": "c417202db7ed352b9eb8d378333bb662be6ba7fbf0fe9d14f323ff13a7af319c"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/release-catalog.json": {
+      "bytes": 24150,
+      "sha256": "eae2dc365d60ef37ff60c06c6c047e5c343ae875147c2be7fb4fb16fb82a5ef4"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/release.json": {
+      "bytes": 179,
+      "sha256": "e984f9913bbd5efcb4ae0c2d0e707c78dad5f7f287260139a8867724339c1747"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/retrieval-documents.json": {
+      "bytes": 2061695,
+      "sha256": "408226aedcfcb2e0344ce81c1b02e4c0696eae993d5194385a215d858956e8c3"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-benchmark.json": {
+      "bytes": 5009,
+      "sha256": "6921f2e8af8fdd9bd6e69c847aeee0288538e6341354069da73929896f51f196"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-index.json": {
+      "bytes": 2356604,
+      "sha256": "927941c089e0916a94cac5d883c776b37be79a75232acf169e7aa93f07ba1038"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-trees/binary-knapsack-bnb-budget.json": {
+      "bytes": 69107,
+      "sha256": "8023d20ce434545904816c7d77a26d6d495f0acd324603c0c38498c6266eecc1"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-trees/binary-knapsack-bnb-budget.svg": {
+      "bytes": 2426,
+      "sha256": "9e28fd5969b04e51c13a6fb8966606ef52aa557171594b66c842860b6f0850ef"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-trees/binary-knapsack-bnb-complete.json": {
+      "bytes": 180105,
+      "sha256": "e568969401856c50504fee9baf593f10842255f3647318ed5f78991e38c3b21d"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-trees/binary-knapsack-bnb-complete.svg": {
+      "bytes": 2914,
+      "sha256": "4cf3e691e908b3c07f2dcb8a120dc806c51ebec2756e1b1f9041fea0a5b96013"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/search-trees/index.json": {
+      "bytes": 971,
+      "sha256": "0d41784978344537c4250552a7522e6a2c8974ac7015ed7a0cdff77bc261fb2b"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/sources.json": {
+      "bytes": 2861624,
+      "sha256": "eafcc07c6e69b8d02594c5b9a91b43b6c20cdb73e22b992d2a1fcc94b0599005"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/adam-quadratic-divergence.json": {
+      "bytes": 66018,
+      "sha256": "6918637fbe32624fb1faf8ff62171f1b01d0841374eede0030c955bded99e75a"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/adam-quadratic.json": {
+      "bytes": 65996,
+      "sha256": "c574feb9a5fa9fc670192bf7222b48c9d3e4647a6a515c4fddbe292330743175"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/bilevel-regression-exact-inner.json": {
+      "bytes": 15258,
+      "sha256": "b1a362ff06842f44d50a232e47a16b12d73cbd4f35ed73208d6a9096e4435039"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/bilevel-regression-relaxed-complementarity.json": {
+      "bytes": 15970,
+      "sha256": "7524c7e26a2576cc0de3568c51ac92206d46b05cf2348287c97b499d6b6bb321"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/binary-knapsack-bnb-budget.json": {
+      "bytes": 39757,
+      "sha256": "22c3bb48cb6fe96ff37e8ab50dd6e09cb933005212ba7d406232da5847951265"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/binary-knapsack-bnb-complete.json": {
+      "bytes": 102177,
+      "sha256": "21346ca7f5451148addefd0c8c6f9cc9efd3988d59555479fada3b79102ee637"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/dummy-educational.json": {
+      "bytes": 6819,
+      "sha256": "0729e148e7c78ae850dd699c9dd42b5385d5efb3b92d6da219d19a66b4144ab7"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/exponential-fit-lbfgsb.json": {
+      "bytes": 22742,
+      "sha256": "ca316a7491e8384c1eb80aa2d1671bd0838af35adae41577ac605cedc0430b7a"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/exponential-fit-lm.json": {
+      "bytes": 22736,
+      "sha256": "df94f7e6c9f7ecc6b8c5b77e65f26fd75dccb6f7d8504ef0fcc2e64d4532bcb6"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/exponential-fit-trf-poor-init.json": {
+      "bytes": 22452,
+      "sha256": "524b9e2607a50d8273d28f6bfeaca12d2cdb5dd71dc143d79c23705a628c7103"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/exponential-fit-trf.json": {
+      "bytes": 22750,
+      "sha256": "c6ac31bdf3890678d26fe3c51cb6b65314d5967ec8e795b1cd2b9e5e0912dbc3"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/failed-simulation-failure-ledger.json": {
+      "bytes": 9366,
+      "sha256": "7732eb7e8de982b9d5da3ff502c371832e8216000cc6be568f4a440f4519e930"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/failed-simulation-feasible-ledger.json": {
+      "bytes": 9561,
+      "sha256": "52bb7893e1c8e5ff4d61c9555f0aa647acf28142145ee29fbe47957017792dac"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/gradient_descent-quadratic-divergence.json": {
+      "bytes": 53139,
+      "sha256": "2cda859f536881f9481cc75a0703ab5d9345322307e0c5aa148e64c604423286"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/gradient_descent-quadratic.json": {
+      "bytes": 72535,
+      "sha256": "d658e982163178814e8e4616d233aebc661602e2859501c65eb71aa28bf9a202"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/hybrid-mode-chattering-ledger.json": {
+      "bytes": 10967,
+      "sha256": "4aac97143af7b4d519f65d8f7df9889aa237ad0b0d53d07797cb14c428a1a5a4"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/index.json": {
+      "bytes": 18667,
+      "sha256": "98e6d0a6d4a0ebbbd72be653df11465d5e02192f61addc0be80ece683a80c65f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/momentum-quadratic-divergence.json": {
+      "bytes": 66387,
+      "sha256": "b6d735c3839e55412e6f30099505eba151e54652ae6b65852be55b72859d2160"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/momentum-quadratic.json": {
+      "bytes": 66444,
+      "sha256": "83375d6639cdbbb5bac01991844b8d1a5970ea38bd867c2561fc283cdf941f4a"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/nelder-mead-quadratic-shifted.json": {
+      "bytes": 210212,
+      "sha256": "809155e978c6f53c6000a9f3e253916104155cf45bf7221fde93ee38b6f224cd"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/nelder-mead-quadratic.json": {
+      "bytes": 215663,
+      "sha256": "cbf724817423b2da29e806c185fff708dead8779f42cc0f85a8b906087f0360b"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/nelder-mead-rosenbrock-shifted.json": {
+      "bytes": 204203,
+      "sha256": "4a4ed9f4ca4e9ccd76a9cfb47a7d3f050b28c8ab855ad1ee0dfa911b398bf53a"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/nelder-mead-rosenbrock.json": {
+      "bytes": 208171,
+      "sha256": "db5e0c6703737ff4bb43f1690f5ae9f575774a443561c64688e2e3acbd7c2991"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/optimal-control-ec020-history.json": {
+      "bytes": 14304,
+      "sha256": "c1825a3b8a1e26c55a00720a59141aa40acaa792e6d8d5dd1ebc0a34dcf15160"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pde-state-solve-failure.json": {
+      "bytes": 9136,
+      "sha256": "9625bb2ac2e6ab426c6b252215e7cdfa945310b5d5c229360c5dcd086fe94158"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pde-state-tolerance-loose.json": {
+      "bytes": 13212,
+      "sha256": "e71ef9b679169f2933e788b0ce5f8072d6f1a6d6da588062bd80f889e0cc983e"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pde-state-tolerance-tight.json": {
+      "bytes": 13733,
+      "sha256": "dd391147a55af478b976409903fdcf9550b851eb5792e2ef22ca6e49d04c7a86"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pendulum-collocation-coarse.json": {
+      "bytes": 16113,
+      "sha256": "87d15306135c2d48c58b89f30b72d5d907f370a976715a50b41e64c2dabcad35"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pendulum-collocation-refined.json": {
+      "bytes": 16089,
+      "sha256": "ceca84ae10296589c8502924989cf64eae9a858519652fbb19ad691cc9bfc0d4"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/pendulum-model-rollout-failure.json": {
+      "bytes": 15786,
+      "sha256": "43d30690350af75e140d486322880fc7d0e4df69d81d3ded345842d6b77d6ea6"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/portfolio-cvar-8-4.json": {
+      "bytes": 7041,
+      "sha256": "d8037a42d808260627f0e1b7194317cc85b3f74315ecfa7100a1b31a373c8419"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/portfolio-mean-variance-gamma-high.json": {
+      "bytes": 3798,
+      "sha256": "125577ce94ebcaed46268a6e388504bf05690235ca861bc233ae8419bd095742"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/portfolio-mean-variance-gamma-low.json": {
+      "bytes": 3682,
+      "sha256": "a72d383753a3702f00e7a93021afc7ee0b85fceddd814f07b4afd0d46d6eb91e"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/portfolio-nominal-8-4.json": {
+      "bytes": 6637,
+      "sha256": "7b1fbd1af625e18311b80c7178b89c0a25b3ea573d3c4987a84742d222289548"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/repeated-mpc-qp-cold-start.json": {
+      "bytes": 8748,
+      "sha256": "a7a401150fee3fa2149e79ad0cb00bbbebf1a8c987cfe12e9044376cea565bdb"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/repeated-mpc-qp-warm-start.json": {
+      "bytes": 8691,
+      "sha256": "a7997255630113484d706cb0b79456edd0cf812b4c713ed6624c1baadffc53fb"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/root-finding-component-tolerance.json": {
+      "bytes": 4993,
+      "sha256": "09c04eb84d4eb8b61ae7bfe666608a823867282dea0d066c762912aefce543e9"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/root-finding-small-squared-residual.json": {
+      "bytes": 5114,
+      "sha256": "ccdb0bcab06bc8500336bc00ad1dcb9b1f7cba343fc98707dafd884d97431f0d"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/shape-diffuser-invalid-geometry.json": {
+      "bytes": 16505,
+      "sha256": "7347273b61ce78fc9c005746639a29d7a6f9cadfaffa081e5a8abb69eb4261a6"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/shape-diffuser-valid-update.json": {
+      "bytes": 16607,
+      "sha256": "b390cc51d038d6b47362b095b0cbfd9761e35cfb0a99a6190c356d4f5f4c59af"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/shape-topology-representation-contrast.json": {
+      "bytes": 16659,
+      "sha256": "3619550b87c464955fc573f0ad8ae9ba9a5dba86cee85a7e80d2d21fa5278c06"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/so3-projected-alignment.json": {
+      "bytes": 41553,
+      "sha256": "aeca1da95cb006c50609145957074188dac8a4e461f697aaf35b97b837c6d6ac"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/so3-riemannian-alignment.json": {
+      "bytes": 41895,
+      "sha256": "8f01a966d0b187fac46cc6b8dae093d3bf06dc185912be1337ea7804471ea120"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/time-window-routing-feasible.json": {
+      "bytes": 8684,
+      "sha256": "b8ddf5a4fba2894daf66caa284624ed117ea29ed4290235404a1b8d62a2db31f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/traces/time-window-routing-violation.json": {
+      "bytes": 8719,
+      "sha256": "f01ff1872b261802b2caa990ad2bb464df19c376f0b61623697f5987a7d2d72f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/views/available-information.json": {
+      "bytes": 80751,
+      "sha256": "ecfe902832569942adff0b5960631dc6d6f05a9fe70a9ec9110e845b8848db8a"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/views/guarantee-outcome.json": {
+      "bytes": 76007,
+      "sha256": "6aee6fac512cab3ce4daf3a807e4d67d0bb9aa7bc9eb09517c72aec2bf83e1e7"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/views/method-mechanism.json": {
+      "bytes": 87866,
+      "sha256": "f888eeae240d53cb9e709f1a1af96ab2df9c3d249e1f612e6f11a675d2224609"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/views/problem-structure.json": {
+      "bytes": 199463,
+      "sha256": "746954e12ae2afeb2b4b299b510d83046f93960fe465aae7f04813d884a3779e"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualization-scenarios.json": {
+      "bytes": 469926,
+      "sha256": "4d22b8729be8085e7df352c7557a1be08a50a2fa556f3efd22340d12805f5540"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/biobjective-quadratic-pareto-front.json": {
+      "bytes": 23936,
+      "sha256": "205a6a7213e32eb6f7b33c97194d1154d3ebee1d35d123496e42796cc213e066"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-exploit-noiseless.json": {
+      "bytes": 80289,
+      "sha256": "baa940549a7854d1d0f449aaf1497c3a4ec3da56e67baa5170129e554d50d0fd"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-exploit-small_noise.json": {
+      "bytes": 81046,
+      "sha256": "f0a0e83c79ffe76177655e9c9dfdb2609f5024b31f836f3ae37574d9492f77fe"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-explore-noiseless.json": {
+      "bytes": 79786,
+      "sha256": "3fa0098741c0e19e1fe2d1f88fb286ac6327d574a65108cf9dcdd205ff0ec335"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-explore-small_noise.json": {
+      "bytes": 80144,
+      "sha256": "661b944220b988f552393837d85f85ff832845f4314cf13c18c4dd614e88eb0f"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-high-fidelity-baseline.json": {
+      "bytes": 10722,
+      "sha256": "4037f8fe4c474de555876303d5b93b66e78fd26b1481721e3ebe429934e5e19d"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-low-fidelity-bias.json": {
+      "bytes": 21500,
+      "sha256": "d66926dd1e3ee3061c388adac2545cc4d9875fc5b37b2270765f1922b6f5064b"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/bo-multi-fidelity-ledger.json": {
+      "bytes": 122003,
+      "sha256": "32bb14e6c8116d972613124ff592cfcc64a78cb27e56b26e6647b8116aa8d1e9"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/constrained-disk-feasible-region.json": {
+      "bytes": 4228,
+      "sha256": "168e0f17072d84f205561bd1ffab4b0765246e595c56da4a36688e8257236d78"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/shift-scheduling-balanced.json": {
+      "bytes": 2399,
+      "sha256": "846d0e1aa0bbfa88f0e6b75e5d53586b5cf4815561bb24080baae9af40a26034"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/shift-scheduling-preference-only.json": {
+      "bytes": 2389,
+      "sha256": "065a878cd3e689d643e745a3aaf000d93920c4e90b62496edc2e89aa9133f0f9"
+    },
+    "optimization_method_selection_database_v0.18.18_site-data/visualizations/topology-optimization-field-evolution.json": {
+      "bytes": 79631,
+      "sha256": "ae184666a0b3b2ec341061ca10c1c3d515e168f78509cc9e51b09fcad983dd92"
+    }
+  },
+  "licenses": {
+    "attribution": "Optimization Compass, Copyright 2026 TAKUYA OTANI and Optimization Compass contributors, https://github.com/mryk814/optimization-compass",
+    "code": {
+      "path": "licenses/LICENSE.txt",
+      "spdx_id": "MIT"
+    },
+    "content": {
+      "legal_code_path": "licenses/CC-BY-4.0.txt",
+      "path": "licenses/CONTENT_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "data": {
+      "legal_code_path": "licenses/CC-BY-4.0.txt",
+      "path": "licenses/DATA_LICENSE.txt",
+      "spdx_id": "CC-BY-4.0"
+    },
+    "notice_path": "licenses/NOTICE.txt"
+  },
+  "release_date": "2026-07-26",
+  "schema_version": 2,
+  "table_counts": {
+    "advanced_view": 280,
+    "alternative_solution_checks": 18,
+    "atomic_predicates": 16,
+    "backlog": 38,
+    "beginner_view": 28,
+    "benchmark_contexts": 22,
+    "case_alternative_map": 50,
+    "case_feature_map": 290,
+    "case_implementation_map": 74,
+    "case_method_map": 87,
+    "comparison_set_members": 3,
+    "comparison_sets": 1,
+    "controlled_vocab": 129,
+    "decision_questions": 12,
+    "decision_rule_target_retirements": 7,
+    "decision_rules": 78,
+    "demo_scenarios": 12,
+    "diagnostics": 42,
+    "evidence_links": 4193,
+    "example_cases": 29,
+    "failure_mode_affected_entities": 94,
+    "failure_mode_diagnostics": 12,
+    "failure_mode_mitigations": 12,
+    "failure_mode_profiles": 12,
+    "failure_mode_scenarios": 4,
+    "failure_mode_symptoms": 12,
+    "failure_mode_triggers": 12,
+    "failure_modes": 42,
+    "feature_values": 93,
+    "glossary": 84,
+    "implementation_claims": 458,
+    "implementations": 65,
+    "learning_coverage_expectations": 11,
+    "learning_edges": 53,
+    "learning_slice_priorities": 6,
+    "method_hierarchy": 88,
+    "method_implementation_map": 165,
+    "method_visualization_profiles": 12,
+    "methods": 105,
+    "model_revisions": 7,
+    "predicate_coverage": 15,
+    "predicate_policies": 15,
+    "problem_alternative_map": 96,
+    "problem_archetypes": 57,
+    "problem_definition_archetypes": 30,
+    "problem_definition_features": 84,
+    "problem_definitions": 22,
+    "problem_feature_map": 842,
+    "problem_features": 211,
+    "problem_instances": 25,
+    "problem_method_fit": 280,
+    "readme": 24,
+    "release_checks": 25,
+    "schema_dictionary": 487,
+    "sheet_catalog": 33,
+    "sources": 110,
+    "terminology_aliases": 37,
+    "version_history": 3,
+    "view_presets": 6
+  },
+  "validation": {
+    "formats": [
+      "csv_directory",
+      "csv_zip",
+      "ddl",
+      "json",
+      "jsonl",
+      "sqlite",
+      "xlsx"
+    ],
+    "live_release_checks": "pass",
+    "round_trip": "pass"
+  },
+  "version": "0.18.18"
+}

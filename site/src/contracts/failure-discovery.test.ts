@@ -9,7 +9,7 @@ describe("failure discovery contract", () => {
       total_entries: 42,
       structured_failure_count: 12,
       case_exclusion_count: 30,
-      entries_with_scenarios: 33,
+      entries_with_scenarios: 34,
     });
     expect(index.entries.some((entry) => entry.entry_kind === "case_exclusion")).toBe(true);
     expect(index.entries.filter((entry) => entry.entry_kind === "structured_failure").every((entry) => entry.diagnostics.length > 0)).toBe(true);

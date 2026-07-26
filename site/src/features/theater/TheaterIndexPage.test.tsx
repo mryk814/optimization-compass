@@ -36,8 +36,12 @@ describe("TheaterIndexPage", () => {
 
     fireEvent.change(screen.getByLabelText("見る目的"), { target: { value: "application_result" } });
     fireEvent.change(screen.getByLabelText("問題領域"), { target: { value: "discrete" } });
-    expect(screen.getByText("この条件に合う公開シナリオはありません。")).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "絞り込みを戻す" }));
+    expect(screen.getByRole("link", {
+      name: /同じ希望充足数から負荷の偏りが小さい勤務表を選ぶ/u,
+    })).toBeVisible();
+    fireEvent.change(screen.getByLabelText("表示範囲"), { target: { value: "representative" } });
+    fireEvent.change(screen.getByLabelText("見る目的"), { target: { value: "all" } });
+    fireEvent.change(screen.getByLabelText("問題領域"), { target: { value: "all" } });
     expect(screen.getByText(`${representativeCount}件を表示 · 条件一致 ${scenarioCount}件 · 公開 ${scenarioCount}件`)).toBeVisible();
   });
 });

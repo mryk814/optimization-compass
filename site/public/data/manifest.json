@@ -8,7 +8,7 @@
     "report_path": "coverage.md",
     "version": "1.0.0"
   },
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "derived_media": {
     "path": "media/manifest.json",
     "version": "1.1.0"
@@ -29,7 +29,7 @@
     "path": "formulation-primer.json",
     "version": "1.0.0"
   },
-  "generated_at": "2026-07-24T00:00:00Z",
+  "generated_at": "2026-07-26T00:00:00Z",
   "implementation_claims": {
     "path": "implementation-claims.json",
     "version": "1.0.0"
@@ -88,7 +88,7 @@
     "contract_version": "1.0.0",
     "index_version": "1.0.0",
     "path": "traces/index.json",
-    "sha256": "523b1e26ea702a6ae3ee133caca1b641a8d20f310677c60673b2166a6c59a17b"
+    "sha256": "98e6d0a6d4a0ebbbd72be653df11465d5e02192f61addc0be80ece683a80c65f"
   },
   "version": "1.4.0",
   "views": [

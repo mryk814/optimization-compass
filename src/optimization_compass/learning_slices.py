@@ -6,7 +6,7 @@ from datetime import date
 from hashlib import sha256
 from itertools import product
 from pathlib import Path
-from typing import Literal, Self
+from typing import Literal, Self, cast
 
 from pydantic import Field, model_validator
 
@@ -52,8 +52,8 @@ SHIFT_BALANCED_ARTIFACT_ID = "shift-scheduling-balanced"
 SHIFT_PREFERENCE_ARTIFACT_ID = "shift-scheduling-preference-only"
 SHIFT_BALANCED_SCENARIO_ID = "SCENARIO_SHIFT_SCHEDULING_BALANCED"
 SHIFT_PREFERENCE_SCENARIO_ID = "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
-SHIFT_GENERATOR_ID = "educational.shift_scheduling.v1"
-SHIFT_GENERATOR_VERSION = "1.0.0"
+SHIFT_GENERATOR_ID: Literal["educational.shift_scheduling.v1"] = "educational.shift_scheduling.v1"
+SHIFT_GENERATOR_VERSION: Literal["1.0.0"] = "1.0.0"
 
 
 class PlotBounds(TraceModel):
@@ -353,10 +353,10 @@ def generate_shift_schedule_artifacts(
     requests = problem.instance.parameters["requests"]
     if not all(isinstance(value, list) for value in (staff_rows, day_rows, shift_rows, requests)):
         raise ValueError("shift-scheduling teaching data is malformed")
-    staff = list(staff_rows)
-    days = list(day_rows)
-    shifts = list(shift_rows)
-    request_values = list(requests)
+    staff = cast(list[dict[str, object]], staff_rows)
+    days = cast(list[dict[str, object]], day_rows)
+    shifts = cast(list[dict[str, object]], shift_rows)
+    request_values = cast(list[list[list[int]]], requests)
     feasible: list[tuple[int, int, tuple[int, ...], list[int]]] = []
     for slots in product(range(len(staff)), repeat=len(days) * len(shifts)):
         point = [0] * problem.instance.dimension
@@ -391,10 +391,10 @@ def _shift_schedule_artifact(
     dataset_version: str,
     result: tuple[int, int, tuple[int, ...], list[int]],
     feasible_count: int,
-    staff: list[object],
-    days: list[object],
-    shifts: list[object],
-    requests: list[object],
+    staff: list[dict[str, object]],
+    days: list[dict[str, object]],
+    shifts: list[dict[str, object]],
+    requests: list[list[list[int]]],
     balanced: bool,
 ) -> ShiftScheduleArtifact:
     fulfilled, workload_range, slots, loads = result
@@ -404,8 +404,6 @@ def _shift_schedule_artifact(
         staff_row = staff[staff_index]
         day_row = days[day_index]
         shift_row = shifts[shift_index]
-        if not all(isinstance(row, dict) for row in (staff_row, day_row, shift_row)):
-            raise ValueError("shift-scheduling label data is malformed")
         assignments.append(
             ShiftAssignment(
                 staff_id=str(staff_row["staff_id"]),
@@ -419,8 +417,6 @@ def _shift_schedule_artifact(
         )
     workloads = []
     for index, row in enumerate(staff):
-        if not isinstance(row, dict):
-            raise ValueError("shift-scheduling staff data is malformed")
         workloads.append(
             ShiftWorkload(
                 staff_id=str(row["staff_id"]),

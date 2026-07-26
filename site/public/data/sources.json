@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "freshness_policy": [
     {
       "max_age_days": 90,
@@ -35,7 +35,7 @@
       "source_type": "vendor_manual"
     }
   ],
-  "generated_at": "2026-07-24T00:00:00Z",
+  "generated_at": "2026-07-26T00:00:00Z",
   "sources": [
     {
       "access_note": "公開条件・再利用条件は公式公開元で確認してください。",
@@ -13046,6 +13046,20 @@
           "target_id": "EC024",
           "target_table": "example_cases",
           "target_type": "case"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_shift-scheduling-balanced_S022",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "勤務シフト: 希望と負荷のタイブレーク",
+          "last_verified": "2026-07-26",
+          "supported_field": "artifact",
+          "target_id": "shift-scheduling-balanced",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
         }
       ],
       "last_verified": "2026-07-13",
@@ -27584,6 +27598,20 @@
           "target_id": "EC024",
           "target_table": "example_cases",
           "target_type": "case"
+        },
+        {
+          "canonical_url": "/theater/learning/SCENARIO_SHIFT_SCHEDULING_BALANCED",
+          "claim_summary": "Canonical scenarioとrenderer artifactを支える資料です。",
+          "confidence": "high",
+          "evidence_link_id": "GENERATED_VIS_shift-scheduling-balanced_S053",
+          "evidence_role": "supporting_or_primary",
+          "external_url": null,
+          "label": "勤務シフト: 希望と負荷のタイブレーク",
+          "last_verified": "2026-07-26",
+          "supported_field": "artifact",
+          "target_id": "shift-scheduling-balanced",
+          "target_table": "visualization_artifacts",
+          "target_type": "visualization"
         }
       ],
       "last_verified": "2026-07-13",

@@ -3683,33 +3683,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_SHIFT_SCHEDULING_4X3X2"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/shift-scheduling",
+            "/traces/shift-scheduling-balanced",
+            "/traces/shift-scheduling-preference-only",
+            "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
@@ -3748,17 +3749,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/shift-scheduling",
+            "/traces/shift-scheduling-balanced",
+            "/traces/shift-scheduling-preference-only",
+            "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
@@ -3774,11 +3778,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S005",
             "S016",
@@ -3792,11 +3793,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_SHIFT_SCHEDULING_BALANCED",
+            "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -3813,16 +3815,8 @@
         }
       },
       "journey_id": "shift-scheduling",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -4102,8 +4096,8 @@
     }
   ],
   "contract_version": "1.1.0",
-  "dataset_version": "0.18.17",
-  "generated_at": "2026-07-24T00:00:00Z",
+  "dataset_version": "0.18.18",
+  "generated_at": "2026-07-26T00:00:00Z",
   "journeys": [
     {
       "candidate_method_ids": [
@@ -4127,7 +4121,7 @@
         "least-squares",
         "trust-region-reflective"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "science",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -4218,7 +4212,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_WEIGHTED_SUM"
@@ -4291,7 +4285,7 @@
         "cp-sat",
         "local-search-combinatorial"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "logistics",
       "excluded_method_ids": [
         "M_BRANCH_CUT"
@@ -4367,7 +4361,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4450,7 +4444,7 @@
         "adamw",
         "momentum-sgd"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4542,7 +4536,7 @@
         "active-set-qp",
         "admm-qp"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "control",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4620,7 +4614,7 @@
         "newton-cg",
         "trust-krylov"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4705,7 +4699,7 @@
         "mads",
         "random-search"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4786,7 +4780,7 @@
         "gauss-newton",
         "least-squares"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "science",
       "excluded_method_ids": [
         "M_DIFFERENTIAL_EVOLUTION"
@@ -4862,7 +4856,7 @@
         "direct-collocation",
         "multiple-shooting"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "control",
       "excluded_method_ids": [
         "M_BFGS"
@@ -4944,7 +4938,7 @@
         "epsilon-constraint",
         "multi-objective"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "energy",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5018,7 +5012,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "science",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5098,7 +5092,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "business",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5176,7 +5170,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5253,7 +5247,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "environment",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5330,7 +5324,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5407,7 +5401,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "energy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -5488,7 +5482,7 @@
         "bayesian-optimization",
         "method.nelder-mead"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "machine-learning",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5578,7 +5572,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "agriculture",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5655,7 +5649,7 @@
         "bayesian-optimization",
         "cma-es"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5745,7 +5739,7 @@
         "bayesian-optimization",
         "random-search"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "manufacturing",
       "excluded_method_ids": [
         "M_BFGS"
@@ -5837,7 +5831,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "healthcare",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -5914,7 +5908,7 @@
         "bayesian-optimization",
         "hyperband-asha"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6026,7 +6020,7 @@
         "lp-qp-conic",
         "slsqp"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6041,7 +6035,7 @@
         "I_CVXPY"
       ],
       "journey_id": "portfolio-allocation",
-      "last_reviewed": "2026-07-24",
+      "last_reviewed": "2026-07-26",
       "learning_objective": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。",
       "limitations": [
         "4資産・固定した期待収益と共分散・空売りなし・取引費用なしの教育用instanceであり、推定誤差、regime変化、流動性、税、売買単位、既存保有を表さない。",
@@ -6104,7 +6098,7 @@
         "lp-qp-conic",
         "projected-gradient"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "finance",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6182,7 +6176,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "public-policy",
       "excluded_method_ids": [
         "M_NELDER_MEAD"
@@ -6262,7 +6256,7 @@
         "interior-point-nlp",
         "slsqp"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_SIMP_TOPOLOGY"
@@ -6336,17 +6330,13 @@
       ],
       "canonical_url": "/gallery/shift-scheduling",
       "case_id": "shift-scheduling",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+          "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6354,7 +6344,7 @@
         "cp-sat",
         "family.discrete-structure"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "operations",
       "excluded_method_ids": [
         "M_GRADIENT_DESCENT"
@@ -6377,8 +6367,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA026",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_SHIFT_SCHEDULING_4X3X2"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/shift-scheduling-balanced",
+          "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+          "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+          "role": "primary",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+        },
+        {
+          "canonical_url": "/traces/shift-scheduling-preference-only",
+          "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+          "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+        }
+      ],
       "source_ids": [
         "S005",
         "S016",
@@ -6390,7 +6397,7 @@
         "S055",
         "S079"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
       "title_en": "Shift scheduling",
       "title_ja": "必要人数と希望を両立してシフトを組む"
@@ -6417,7 +6424,7 @@
         "riemannian-gradient",
         "riemannian-trust-region"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -6502,7 +6509,7 @@
         "optimality-criteria-topology",
         "simp-topology"
       ],
-      "dataset_version": "0.18.17",
+      "dataset_version": "0.18.18",
       "domain": "engineering",
       "excluded_method_ids": [
         "M_BFGS"
@@ -7228,9 +7235,9 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 29,
+      "complete": 30,
       "draft": 0,
-      "partial": 1
+      "partial": 0
     },
     "target_complete_journeys": 5,
     "total_journeys": 30

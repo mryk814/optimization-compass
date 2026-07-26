@@ -223,7 +223,8 @@ function parseArtifact(raw: unknown, field: string): ComparisonArtifact {
   exact(data, ["artifact_id", "artifact_kind", "renderer_family", "renderer_contract_version", "payload_path"], field);
   const family = oneOf(data.renderer_family, rendererFamilies, `${field}.renderer_family`);
   const kind = oneOf(data.artifact_kind, ["executable_trace", "result_visualization"] as const, `${field}.artifact_kind`);
-  if (family === "pareto_front" ? kind !== "result_visualization" : kind !== "executable_trace") {
+  const resultVisualization = family === "pareto_front" || family === "assignment_schedule";
+  if (resultVisualization ? kind !== "result_visualization" : kind !== "executable_trace") {
     throw new Error(`${family} uses an incompatible artifact kind.`);
   }
   return {

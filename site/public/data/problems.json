@@ -1,6 +1,6 @@
 {
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "definitions": [
     {
       "available_oracles": [
@@ -623,6 +623,40 @@
         "S106"
       ],
       "variable_domain": "shape"
+    },
+    {
+      "available_oracles": [
+        "objective_value",
+        "feasibility"
+      ],
+      "constraint_class": "assignment_and_logical",
+      "dimensionality_policy": {
+        "kind": "staff_by_day_by_shift",
+        "minimum_days": 1,
+        "minimum_shifts": 1,
+        "minimum_staff": 2
+      },
+      "feature_ids": [
+        "F_STRUCTURE_ASSIGNMENT",
+        "F_VARIABLE_BINARY",
+        "F_CONSTRAINT_LOGICAL"
+      ],
+      "known_reference_semantics": "A finite fixed roster can be exhaustively certified; the reference is scoped to the declared requests, qualifications, hard constraints, and tie-break.",
+      "last_verified": "2026-07-26",
+      "mathematical_family": "binary_shift_scheduling",
+      "name_en": "Shift scheduling with hard constraints and preferences",
+      "name_ja": "hard制約と希望を持つシフト割当",
+      "objective_direction": "maximize",
+      "objective_form": "linear_with_secondary_range_tiebreak",
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "related_problem_ids": [
+        "PA026"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "variable_domain": "binary"
     },
     {
       "available_oracles": [
@@ -2782,6 +2816,272 @@
         "S041",
         "S056",
         "S080"
+      ]
+    },
+    {
+      "bounds": {
+        "binary_variables": {
+          "count": 24,
+          "lower": 0,
+          "upper": 1
+        }
+      },
+      "constraints": [
+        {
+          "constraint_id": "coverage",
+          "type": "exactly_one_per_day_shift"
+        },
+        {
+          "constraint_id": "one_shift_per_day",
+          "type": "at_most_one"
+        },
+        {
+          "constraint_id": "qualification",
+          "type": "forbidden_assignment"
+        },
+        {
+          "constraint_id": "night_rest",
+          "type": "night_forbids_next_day_day"
+        }
+      ],
+      "dimension": 24,
+      "display": {
+        "axis_labels": [
+          "staff",
+          "day",
+          "shift"
+        ],
+        "expression": "max 10×fulfilled_requests − workload_range",
+        "range": {
+          "fulfilled_requests": [
+            0,
+            6
+          ],
+          "hard_violations": [
+            0,
+            6
+          ],
+          "objective": [
+            0,
+            60
+          ],
+          "workload_range": [
+            0,
+            3
+          ]
+        },
+        "units": [
+          "staff",
+          "days",
+          "shifts"
+        ]
+      },
+      "initialization_candidates": [
+        {
+          "candidate_id": "preference_only_feasible",
+          "point": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "intended_phenomena": [
+        "hard_constraint_feasibility",
+        "preference_tie",
+        "secondary_workload_balance"
+      ],
+      "known_reference": {
+        "certification": "complete enumeration of 4096 slot assignments",
+        "fulfilled_requests": 6,
+        "point": [
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "source_ids": [
+          "S022",
+          "S053"
+        ],
+        "value": 59,
+        "workload_range": 1
+      },
+      "known_reference_status": "known_exact",
+      "last_verified": "2026-07-26",
+      "limitations_en": "A fixed four-staff, three-day, two-shift lesson; it omits law, health, safety, consent, absence, uncertain demand, multiple skills, and long-horizon fairness.",
+      "limitations_ja": "4名・3日・2勤務帯の固定教材であり、法令、健康、安全、同意、欠勤、需要変動、複数資格、長期公平性を表しません。",
+      "name_en": "Fixed four-staff, three-day, day-night schedule",
+      "name_ja": "4名・3日・日勤夜勤の固定シフト",
+      "parameters": {
+        "days": [
+          {
+            "day_id": "mon",
+            "label_ja": "月"
+          },
+          {
+            "day_id": "tue",
+            "label_ja": "火"
+          },
+          {
+            "day_id": "wed",
+            "label_ja": "水"
+          }
+        ],
+        "preference_weight": 10,
+        "requests": [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              1
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        ],
+        "required_per_shift": 1,
+        "shifts": [
+          {
+            "label_ja": "日勤",
+            "shift_id": "day"
+          },
+          {
+            "label_ja": "夜勤",
+            "shift_id": "night"
+          }
+        ],
+        "staff": [
+          {
+            "label_ja": "Aさん",
+            "qualified_shifts": [
+              "day",
+              "night"
+            ],
+            "staff_id": "A"
+          },
+          {
+            "label_ja": "Bさん",
+            "qualified_shifts": [
+              "day",
+              "night"
+            ],
+            "staff_id": "B"
+          },
+          {
+            "label_ja": "Cさん",
+            "qualified_shifts": [
+              "day",
+              "night"
+            ],
+            "staff_id": "C"
+          },
+          {
+            "label_ja": "Dさん",
+            "qualified_shifts": [
+              "day"
+            ],
+            "staff_id": "D"
+          }
+        ],
+        "workload_range_weight": 1
+      },
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+      "registry_key": "problem.shift_scheduling.4x3x2.v1",
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S022",
+        "S053"
       ]
     },
     {

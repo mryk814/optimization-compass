@@ -3735,8 +3735,129 @@
       "title_en": "Compare mean-variance allocation across risk aversion",
       "title_ja": "risk aversionで平均・分散配分を読み比べる",
       "tuning_policy": "gammaの二つの教材用値を事前固定し、run後に調整しない。"
+    },
+    {
+      "aliases": [],
+      "benchmark_context_id": "BENCH_SHIFT_SCHEDULING_EDUCATIONAL_4096",
+      "budget": {
+        "metric": "oracle_evaluations",
+        "value": 4096
+      },
+      "canonical_comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "canonical_url": "/compare/COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "case_id": "shift-scheduling",
+      "caveat": "固定教材の目的設計contrastであり、CP-SAT、MIP、列挙法、勤務表、組織の一般的な優劣を示さない。",
+      "changed_factors": [
+        "勤務数の最大差をsecondary tie-breakへ入れるかどうかだけ"
+      ],
+      "comparability": "contrast_only",
+      "comparison_id": "COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
+      "comparison_question": "hard制約・希望・全4096候補を固定し、勤務数の幅をsecondary tie-breakへ加えると、同じ希望充足6件の勤務表はどう変わる？",
+      "fairness_note": "両memberは同じ可行勤務表441件と希望充足最大6件を共有し、負荷のtie-breakだけを変える。",
+      "fixed_factors": [
+        "4名・3日・日勤夜勤の固定instance",
+        "同じ希望・資格・hard制約",
+        "同じ4096候補の完全列挙",
+        "同じ希望weight 10",
+        "seed not applicable"
+      ],
+      "formulation_summary": "max 10×fulfilled requests − workload range。各日・各勤務帯1名、1日高々1勤務、資格、夜勤翌日の日勤禁止をhard制約とする。",
+      "identity_status": "canonical",
+      "journey_id": "shift-scheduling",
+      "last_verified": "2026-07-26",
+      "limitations": [
+        "4名・3日・2勤務帯の固定教材だけを扱う。",
+        "法令、健康、安全、本人同意、欠勤、需要変動、複数資格、長期公平性を表さない。"
+      ],
+      "members": [
+        {
+          "artifact": {
+            "artifact_id": "shift-scheduling-balanced",
+            "artifact_kind": "result_visualization",
+            "payload_path": "visualizations/shift-scheduling-balanced.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "assignment_schedule"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 4096
+          },
+          "label_en": "Preference plus workload tie-break",
+          "label_ja": "希望 + 負荷のtie-break",
+          "member_id": "balanced-tiebreak",
+          "method_id": "M_CP_SAT",
+          "parameters": {
+            "objective_policy": "preference_then_workload_range"
+          },
+          "role": "balanced_secondary_objective",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_BALANCED"
+        },
+        {
+          "artifact": {
+            "artifact_id": "shift-scheduling-preference-only",
+            "artifact_kind": "result_visualization",
+            "payload_path": "visualizations/shift-scheduling-preference-only.json",
+            "renderer_contract_version": "1.0.0",
+            "renderer_family": "assignment_schedule"
+          },
+          "budget": {
+            "metric": "oracle_evaluations",
+            "value": 4096
+          },
+          "label_en": "Preference fulfillment only",
+          "label_ja": "希望充足数だけ",
+          "member_id": "preference-only",
+          "method_id": "M_CP_SAT",
+          "parameters": {
+            "objective_policy": "preference_only"
+          },
+          "role": "preference_only_tie",
+          "scenario_id": "SCENARIO_SHIFT_SCHEDULING_PREFERENCE_ONLY"
+        }
+      ],
+      "metrics": [
+        {
+          "direction": "maximize",
+          "label_ja": "満たした希望",
+          "metric_id": "fulfilled_requests",
+          "unit": "requests"
+        },
+        {
+          "direction": "minimize",
+          "label_ja": "勤務数の最大差",
+          "metric_id": "workload_range",
+          "unit": "shifts"
+        },
+        {
+          "direction": "target",
+          "label_ja": "hard制約違反",
+          "metric_id": "hard_violations",
+          "unit": "violations"
+        },
+        {
+          "direction": "maximize",
+          "label_ja": "教材上の目的値",
+          "metric_id": "canonical_objective",
+          "unit": "score"
+        }
+      ],
+      "mode": "strategy_contrast",
+      "problem_definition_id": "PROBLEM_SHIFT_SCHEDULING",
+      "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+      "ranking_eligible": false,
+      "seed_policy": "有限集合の決定的な完全列挙のためseedはnot applicable。",
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "stopping_policy": "4^6=4096のslot assignmentをすべて評価して停止する。",
+      "synchronization_axis": "oracle_evaluations",
+      "takeaway": "希望充足数だけでは同率解の選び方が未定義になる。運用上重要な偏りはsecondary objectiveとして明示し、勤務表のセルと人別集計を一緒に確認する。",
+      "title_en": "Compare tied-preference rosters by workload imbalance",
+      "title_ja": "希望が同率の勤務表を負荷の偏りで読み比べる",
+      "tuning_policy": "希望、資格、hard制約、weight、列挙順をrun前に固定し、結果を見て変更しない。"
     }
   ],
   "contract_version": "2.0.0",
-  "dataset_version": "0.18.17"
+  "dataset_version": "0.18.18"
 }

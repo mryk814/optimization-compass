@@ -16,7 +16,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 25,
         "unit": "objective_evaluations"
@@ -85,7 +85,7 @@
         ],
         "policy": "fixed_initial_design"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 10,
         "unit": "oracle_evaluations"
@@ -151,7 +151,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 300,
         "unit": "objective_evaluations"
@@ -287,7 +287,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -451,7 +451,7 @@
         ],
         "policy": "fixed_empty_assignment_with_heuristic_incumbent"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 9,
         "unit": "oracle_evaluations"
@@ -524,7 +524,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 100,
         "unit": "objective_evaluations"
@@ -570,6 +570,100 @@
         "relative": 1e-06
       },
       "tuning_policy": "documented defaults; no per-instance winner tuning"
+    },
+    {
+      "category": "MIP",
+      "context_id": "BENCH_SHIFT_SCHEDULING_EDUCATIONAL_4096",
+      "context_version": "1.0.0",
+      "dimension": 24,
+      "evaluation_budget": 4096,
+      "hardware": {
+        "reason": "deterministic complete enumeration; no wall-clock comparison",
+        "status": "not_applicable"
+      },
+      "implementation_versions": {
+        "generator_id": "educational.shift_scheduling.v1",
+        "generator_version": "1.0.0",
+        "implementation_mapping_status": "not_applicable"
+      },
+      "initialization": {
+        "points": [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "policy": "fixed_feasible_reference"
+      },
+      "last_verified": "2026-07-26",
+      "oracle_budget": {
+        "limit": 4096,
+        "unit": "oracle_evaluations"
+      },
+      "outcome_metrics": [
+        "fulfilled_requests",
+        "workload_range",
+        "hard_violations",
+        "canonical_objective"
+      ],
+      "problem_instance_id": "INSTANCE_SHIFT_SCHEDULING_4X3X2",
+      "problem_variant": "fixed four-staff, three-day, two-shift roster with preference tie-break",
+      "ranking_eligibility": {
+        "ranking_eligible": false,
+        "reason": "context_forbids_ranking"
+      },
+      "runtime": {
+        "comparison_scope": "exact",
+        "generator_id": "educational.shift_scheduling.v1",
+        "generator_version": "1.0.0",
+        "precision": "integer",
+        "runtime": "deterministic_educational_generator"
+      },
+      "seed_status": "not_applicable",
+      "seed_value": null,
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "sparsity": {
+        "status": "reported",
+        "structure": "staff-by-day-by-shift binary tensor"
+      },
+      "status_mapping": {
+        "complete_enumeration": "complete",
+        "error": "failed",
+        "ranking": "forbidden"
+      },
+      "stopping": {
+        "policy": "complete_enumeration",
+        "value": 4096
+      },
+      "time_budget_seconds": null,
+      "tolerance": {
+        "reason": "finite complete enumeration",
+        "status": "not_applicable"
+      },
+      "tuning_policy": "same feasible roster set and preference requests; only the workload-range secondary tie-break changes"
     },
     {
       "category": "MIP",
@@ -740,7 +834,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 200,
         "unit": "objective_evaluations"
@@ -1316,7 +1410,7 @@
         ],
         "policy": "member_initial_points"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 80,
         "unit": "oracle_evaluations"
@@ -1454,7 +1548,7 @@
       "initialization": {
         "policy": "canonical_instance_candidates"
       },
-      "last_verified": "2026-07-24",
+      "last_verified": "2026-07-26",
       "oracle_budget": {
         "limit": 40,
         "unit": "objective_evaluations"
@@ -1580,7 +1674,7 @@
     }
   ],
   "contract_version": "1.0.0",
-  "dataset_version": "0.18.17",
+  "dataset_version": "0.18.18",
   "ranking_policy": {
     "context_required": true,
     "missing_context_action": "ranking_forbidden"
