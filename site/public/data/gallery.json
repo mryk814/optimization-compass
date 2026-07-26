@@ -209,9 +209,7 @@
         }
       ],
       "case_id": "shift-scheduling",
-      "comparison_ids": [
-        "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
-      ],
+      "comparison_ids": [],
       "conditional_methods": [
         {
           "method_id": "MF_DISCRETE_EXACT",
@@ -310,9 +308,7 @@
       "title_ja": "必要人数と希望を両立してシフトを組む",
       "variable_domain": "固定教材では4名・3日・日勤／夜勤の割当 $x\\in X=\\{0,1\\}^{4\\times3\\times2}$。$x_{s,d,h}=1$ はスタッフ $s$ を日 $d$ の勤務帯 $h$ へ割り当てること、0は割り当てないことを表す。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE",
-        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
-        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+        "VIEW_PROBLEM_STRUCTURE"
       ]
     },
     {
@@ -424,7 +420,9 @@
         }
       ],
       "case_id": "portfolio-allocation",
-      "comparison_ids": [],
+      "comparison_ids": [
+        "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
+      ],
       "conditional_methods": [
         {
           "method_id": "M_SLSQP",
@@ -520,7 +518,9 @@
       "title_ja": "平均・共分散でポートフォリオを配分する",
       "variable_domain": "固定教材では資産比率 $w\\in X=\\{w\\in\\mathbb{R}^4\\mid 0\\le w_i\\le0.6,\\ \\sum_iw_i=1\\}$。$w_i$ は資産 $i$ の保有比率で、空売りと借入は認めない。",
       "visualization_ids": [
-        "VIEW_PROBLEM_STRUCTURE"
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
       ]
     },
     {

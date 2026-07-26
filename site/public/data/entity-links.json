@@ -2940,6 +2940,16 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "VIEW_PROBLEM_STRUCTURE",
           "target_type": "view"
         }
@@ -3278,11 +3288,6 @@
           "target_type": "method"
         },
         {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
-          "target_type": "comparison"
-        },
-        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -3381,16 +3386,6 @@
           "relation_type": "problem",
           "target_id": "PA026",
           "target_type": "problem"
-        },
-        {
-          "relation_type": "visualization",
-          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
-          "target_type": "view"
-        },
-        {
-          "relation_type": "visualization",
-          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
-          "target_type": "view"
         },
         {
           "relation_type": "visualization",
@@ -4911,11 +4906,6 @@
         {
           "relation_type": "learning_journey",
           "target_id": "portfolio-allocation",
-          "target_type": "journey"
-        },
-        {
-          "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
           "target_type": "journey"
         },
         {
@@ -20877,9 +20867,19 @@
           "target_type": "content"
         },
         {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "problem",
           "target_id": "PA018",
           "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
+          "target_type": "scenario"
         }
       ],
       "summary": "4資産へ全額を配分し、期待収益と共分散risk、集中上限を明示して比率を決めたい。tail lossやscenarioベースの不確実性は、このCaseでは目的に入れない。"
@@ -21256,11 +21256,6 @@
           "target_type": "case"
         },
         {
-          "relation_type": "comparison",
-          "target_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
-          "target_type": "comparison"
-        },
-        {
           "relation_type": "conditional_method",
           "target_id": "MF_DISCRETE_EXACT",
           "target_type": "method"
@@ -21268,11 +21263,6 @@
         {
           "relation_type": "evidence",
           "target_id": "S005",
-          "target_type": "source"
-        },
-        {
-          "relation_type": "evidence",
-          "target_id": "S010",
           "target_type": "source"
         },
         {
@@ -21336,19 +21326,9 @@
           "target_type": "content"
         },
         {
-          "relation_type": "primary",
-          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
-          "target_type": "scenario"
-        },
-        {
           "relation_type": "problem",
           "target_id": "PA026",
           "target_type": "problem"
-        },
-        {
-          "relation_type": "sensitivity",
-          "target_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW",
-          "target_type": "scenario"
         }
       ],
       "summary": "各勤務帯の必要人数と資格・休憩ルールを必ず守りながら、スタッフの希望違反と勤務数の偏りが小さいシフトを作りたい。"
@@ -30768,7 +30748,7 @@
         },
         {
           "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
+          "target_id": "portfolio-allocation",
           "target_type": "journey"
         }
       ],
@@ -30804,7 +30784,7 @@
         },
         {
           "relation_type": "learning_journey",
-          "target_id": "shift-scheduling",
+          "target_id": "portfolio-allocation",
           "target_type": "journey"
         }
       ],

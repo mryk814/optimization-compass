@@ -1224,7 +1224,10 @@
       "related_failure_mode_ids": [
         "FM022"
       ],
-      "scenario_ids": [],
+      "scenario_ids": [
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+      ],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [
@@ -1414,10 +1417,7 @@
       "mitigations": [],
       "recoverability": "not_applicable",
       "related_failure_mode_ids": [],
-      "scenario_ids": [
-        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
-        "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
-      ],
+      "scenario_ids": [],
       "scope": "case_specific",
       "severity": "not_applicable",
       "source_ids": [

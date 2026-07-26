@@ -4468,6 +4468,16 @@
             "title_ja": "目的値の内訳を読む"
           },
           {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "maximum_weight"
+            ],
+            "title_en": "Read the allocation difference across gamma",
+            "title_ja": "gammaによる配分差を読む"
+          },
+          {
             "milestone_id": "termination",
             "observable_ids": [
               "maximum_weight",
@@ -4661,6 +4671,16 @@
             ],
             "title_en": "Read the objective components",
             "title_ja": "目的値の内訳を読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "expected_return",
+              "variance",
+              "maximum_weight"
+            ],
+            "title_en": "Read the allocation difference across gamma",
+            "title_ja": "gammaによる配分差を読む"
           },
           {
             "milestone_id": "termination",
@@ -6020,6 +6040,16 @@
             "title_ja": "最大成分を読む"
           },
           {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "residual_1",
+              "residual_2",
+              "residual_max_abs"
+            ],
+            "title_en": "Read the residual imbalance",
+            "title_ja": "残差の偏りを読む"
+          },
+          {
             "milestone_id": "termination",
             "observable_ids": [
               "residual_max_abs",
@@ -6203,6 +6233,16 @@
             ],
             "title_en": "Read the largest component",
             "title_ja": "最大成分を読む"
+          },
+          {
+            "milestone_id": "pattern_visible",
+            "observable_ids": [
+              "residual_1",
+              "residual_2",
+              "residual_max_abs"
+            ],
+            "title_en": "Read the residual imbalance",
+            "title_ja": "残差の偏りを読む"
           },
           {
             "milestone_id": "termination",

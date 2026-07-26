@@ -3123,33 +3123,34 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [
-            "missing_failure_or_sensitivity_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+          ]
         },
         "canonical_comparison": {
-          "reason_codes": [
-            "missing_comparison"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
+          ]
         },
         "canonical_problem_instance": {
-          "reason_codes": [
-            "missing_problem_instance"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
+          ]
         },
         "cross_surface_links": {
-          "reason_codes": [
-            "missing_cross_surface_link"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "/gallery/portfolio-allocation",
+            "/traces/portfolio-mean-variance-gamma-high",
+            "/traces/portfolio-mean-variance-gamma-low",
+            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_SLSQP",
@@ -3188,17 +3189,20 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [
-            "missing_primary_scenario"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+          ]
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/portfolio-allocation",
+            "/traces/portfolio-mean-variance-gamma-high",
+            "/traces/portfolio-mean-variance-gamma-low",
+            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_LP_QP_CONIC",
             "/methods/M_NELDER_MEAD",
             "/methods/M_SLSQP",
@@ -3214,11 +3218,8 @@
           ]
         },
         "source_review": {
-          "reason_codes": [
-            "missing_comparison_source",
-            "missing_scenario_source"
-          ],
-          "state": "missing",
+          "reason_codes": [],
+          "state": "complete",
           "target_ids": [
             "S002",
             "S004",
@@ -3232,11 +3233,12 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [
-            "missing_static_text_alternative"
-          ],
-          "state": "missing",
-          "target_ids": []
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
+            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+          ]
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -3253,16 +3255,8 @@
         }
       },
       "journey_id": "portfolio-allocation",
-      "missing_dimensions": [
-        "alternate_scenario",
-        "canonical_comparison",
-        "canonical_problem_instance",
-        "cross_surface_links",
-        "primary_scenario",
-        "source_review",
-        "static_text_alternative"
-      ],
-      "status": "partial"
+      "missing_dimensions": [],
+      "status": "complete"
     },
     {
       "dimensions": {
@@ -3689,39 +3683,37 @@
     {
       "dimensions": {
         "alternate_scenario": {
-          "reason_codes": [],
-          "state": "complete",
-          "target_ids": [
-            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
-          ]
+          "reason_codes": [
+            "missing_failure_or_sensitivity_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
         },
         "canonical_comparison": {
-          "reason_codes": [],
-          "state": "complete",
-          "target_ids": [
-            "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
-          ]
+          "reason_codes": [
+            "missing_comparison"
+          ],
+          "state": "missing",
+          "target_ids": []
         },
         "canonical_problem_instance": {
-          "reason_codes": [],
-          "state": "complete",
-          "target_ids": [
-            "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
-          ]
+          "reason_codes": [
+            "missing_problem_instance"
+          ],
+          "state": "missing",
+          "target_ids": []
         },
         "cross_surface_links": {
-          "reason_codes": [],
-          "state": "complete",
+          "reason_codes": [
+            "missing_cross_surface_link"
+          ],
+          "state": "missing",
           "target_ids": [
             "/gallery/shift-scheduling",
-            "/traces/portfolio-mean-variance-gamma-high",
-            "/traces/portfolio-mean-variance-gamma-low",
-            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
             "/sources/S005",
-            "/sources/S010",
             "/sources/S016",
             "/sources/S021",
             "/sources/S022",
@@ -3756,25 +3748,21 @@
           ]
         },
         "primary_scenario": {
-          "reason_codes": [],
-          "state": "complete",
-          "target_ids": [
-            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
-          ]
+          "reason_codes": [
+            "missing_primary_scenario"
+          ],
+          "state": "missing",
+          "target_ids": []
         },
         "route_reachability": {
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
             "/gallery/shift-scheduling",
-            "/traces/portfolio-mean-variance-gamma-high",
-            "/traces/portfolio-mean-variance-gamma-low",
-            "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
             "/methods/MF_DISCRETE_EXACT",
             "/methods/M_CP_SAT",
             "/methods/M_GRADIENT_DESCENT",
             "/sources/S005",
-            "/sources/S010",
             "/sources/S016",
             "/sources/S021",
             "/sources/S022",
@@ -3786,11 +3774,13 @@
           ]
         },
         "source_review": {
-          "reason_codes": [],
-          "state": "complete",
+          "reason_codes": [
+            "missing_comparison_source",
+            "missing_scenario_source"
+          ],
+          "state": "missing",
           "target_ids": [
             "S005",
-            "S010",
             "S016",
             "S021",
             "S022",
@@ -3802,12 +3792,11 @@
           ]
         },
         "static_text_alternative": {
-          "reason_codes": [],
-          "state": "complete",
-          "target_ids": [
-            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH",
-            "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
-          ]
+          "reason_codes": [
+            "missing_static_text_alternative"
+          ],
+          "state": "missing",
+          "target_ids": []
         },
         "terminology_prerequisite": {
           "reason_codes": [],
@@ -3824,8 +3813,16 @@
         }
       },
       "journey_id": "shift-scheduling",
-      "missing_dimensions": [],
-      "status": "complete"
+      "missing_dimensions": [
+        "alternate_scenario",
+        "canonical_comparison",
+        "canonical_problem_instance",
+        "cross_surface_links",
+        "primary_scenario",
+        "source_review",
+        "static_text_alternative"
+      ],
+      "status": "partial"
     },
     {
       "dimensions": {
@@ -6015,17 +6012,13 @@
       ],
       "canonical_url": "/gallery/portfolio-allocation",
       "case_id": "portfolio-allocation",
-      "comparisons": [],
-      "completion_reasons": [
-        "missing_comparison",
-        "missing_comparison_source",
-        "missing_cross_surface_link",
-        "missing_failure_or_sensitivity_scenario",
-        "missing_primary_scenario",
-        "missing_problem_instance",
-        "missing_scenario_source",
-        "missing_static_text_alternative"
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
+          "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
+        }
       ],
+      "completion_reasons": [],
       "conditional_method_ids": [
         "M_SLSQP"
       ],
@@ -6056,8 +6049,25 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA018",
-      "problem_instance_ids": [],
-      "scenarios": [],
+      "problem_instance_ids": [
+        "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/traces/portfolio-mean-variance-gamma-high",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
+        },
+        {
+          "canonical_url": "/traces/portfolio-mean-variance-gamma-low",
+          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
+          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
+        }
+      ],
       "source_ids": [
         "S002",
         "S004",
@@ -6069,7 +6079,7 @@
         "S064",
         "S103"
       ],
-      "status": "partial",
+      "status": "complete",
       "takeaway": "期待収益と共分散の推定期間、通貨・年率換算、欠測処理、資産universeをversion管理する。最適化に使った期間とheld-out期間を分け、$\\gamma$、集中上限、共分散推定法を変えた感度を確認する。scenarioごとの悪い側のlossを目的へ入れたい場合は、このQPをCVaRへ言い換えず、scenario、tail level、held-out集計を明示した別Caseとして扱う。実運用では現在保有、turnover、slippage、税、最低売買単位を制約または目的へ追加し、solver statusだけでなく予算合計・上下限・実現可能な発注量を再検査する。",
       "title_en": "Portfolio allocation",
       "title_ja": "平均・共分散でポートフォリオを配分する"
@@ -6326,13 +6336,17 @@
       ],
       "canonical_url": "/gallery/shift-scheduling",
       "case_id": "shift-scheduling",
-      "comparisons": [
-        {
-          "canonical_url": "/compare/COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA",
-          "comparison_id": "COMPARE_PORTFOLIO_MEAN_VARIANCE_GAMMA"
-        }
+      "comparisons": [],
+      "completion_reasons": [
+        "missing_comparison",
+        "missing_comparison_source",
+        "missing_cross_surface_link",
+        "missing_failure_or_sensitivity_scenario",
+        "missing_primary_scenario",
+        "missing_problem_instance",
+        "missing_scenario_source",
+        "missing_static_text_alternative"
       ],
-      "completion_reasons": [],
       "conditional_method_ids": [
         "MF_DISCRETE_EXACT"
       ],
@@ -6363,28 +6377,10 @@
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA026",
-      "problem_instance_ids": [
-        "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4"
-      ],
-      "scenarios": [
-        {
-          "canonical_url": "/traces/portfolio-mean-variance-gamma-high",
-          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
-          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
-          "role": "primary",
-          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_HIGH"
-        },
-        {
-          "canonical_url": "/traces/portfolio-mean-variance-gamma-low",
-          "problem_definition_id": "PROBLEM_PORTFOLIO_MEAN_VARIANCE",
-          "problem_instance_id": "INSTANCE_PORTFOLIO_MEAN_VARIANCE_FIXED_4",
-          "role": "sensitivity",
-          "scenario_id": "SCENARIO_PORTFOLIO_MEAN_VARIANCE_GAMMA_LOW"
-        }
-      ],
+      "problem_instance_ids": [],
+      "scenarios": [],
       "source_ids": [
         "S005",
-        "S010",
         "S016",
         "S021",
         "S022",
@@ -6394,7 +6390,7 @@
         "S055",
         "S079"
       ],
-      "status": "complete",
+      "status": "partial",
       "takeaway": "hard constraintとsoft preferenceを別表にし、勤務帯ID、資格、休暇申請、契約上限、最低休息時間、希望の提出時点をversion管理する。公開前に全勤務帯の充足、資格違反、連続勤務、個人別勤務数を機械検査し、欠勤発生時には残りの割当を固定した再最適化と手動代替手順を用意する。statusがFEASIBLEなら勤務表は使えても目的値の最適性は未証明なので、停止理由とbest boundを併記する。",
       "title_en": "Shift scheduling",
       "title_ja": "必要人数と希望を両立してシフトを組む"

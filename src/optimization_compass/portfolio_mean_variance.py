@@ -290,6 +290,12 @@ def build_portfolio_mean_variance_scenario(trace: AlgorithmTrace) -> Visualizati
                     observable_ids=["expected_return", "variance", "mean_variance_objective"],
                 ),
                 VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="gammaによる配分差を読む",
+                    title_en="Read the allocation difference across gamma",
+                    observable_ids=["expected_return", "variance", "maximum_weight"],
+                ),
+                VisualizationNarrationStep(
                     milestone_id="termination",
                     title_ja="配分と可行性を照合",
                     title_en="Check allocation and feasibility",

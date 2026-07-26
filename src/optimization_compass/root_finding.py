@@ -252,6 +252,12 @@ def build_root_finding_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
                     observable_ids=["residual_max_abs"],
                 ),
                 VisualizationNarrationStep(
+                    milestone_id="pattern_visible",
+                    title_ja="残差の偏りを読む",
+                    title_en="Read the residual imbalance",
+                    observable_ids=["residual_1", "residual_2", "residual_max_abs"],
+                ),
+                VisualizationNarrationStep(
                     milestone_id="termination",
                     title_ja="停止理由を照合",
                     title_en="Check the stopping reason",
