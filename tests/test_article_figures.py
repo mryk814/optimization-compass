@@ -18,6 +18,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
     assert set(first) == {
         "constrained-feasibility-execution.svg",
         "gradient-family-execution.svg",
+        "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
@@ -60,6 +61,8 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",
         "content/methods/bfgs.md": "constrained-feasibility-execution.svg",
         "content/methods/weighted-sum.md": "pareto-preference-execution.svg",
+        "content/methods/direct-collocation.md": "optimal-control-mesh-execution.svg",
+        "content/methods/family-optimal-control.md": "optimal-control-mesh-execution.svg",
     }
 
     for relative_path, figure in expected.items():

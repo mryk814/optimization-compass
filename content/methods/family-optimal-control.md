@@ -29,6 +29,13 @@ trajectoryとcontrolを同時に、または段階的に改善します。
 これは「どの手法が常に優れているか」という順位ではありません。
 変数／制約の置き場所／real-time性の必要度で選びます。
 
+mesh node上の残差だけで軌道を採用すると、区間内の違反を見落とします。
+
+![同じpendulum swing-upをN=20、N=40、gravityを10%変えたvalidation rolloutで実行し、mesh node上と区間再構成またはvalidation rollout上のpath violationを反復ごとに比較した結果。](./media/optimal-control-mesh-execution.svg "mesh refinementとmodel mismatchで、node上の収束とrollout上の違反がどう分かれるかを示す固定教材です。手法間の一般性能rankingではありません。")
+
+N=40では区間再構成の違反がN=20より小さくなります。
+しかし、gravityを変えたvalidation rolloutでは、node上の値が小さくても違反が残ります。
+
 ## まず読む: 5つの概念
 
 手法名だけでは、stateを変数にするか、dynamicsをどこで確認するかが見えません。

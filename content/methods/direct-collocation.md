@@ -34,7 +34,13 @@ last_reviewed: 2026-07-26
 同じ軌道でも、mesh点とcontrolによる更新は別の対象です。
 隣接点のdynamics defectも分けて読みます。
 
-![青緑のmesh点を結ぶ濃紺の軌道に橙のcontrol矢印が並び、隣接する2点の間だけ赤い破線でdynamics defectが示された模式図](./media/direct-collocation-mesh-defect.png "mesh上のstateとcontrolを並べ、隣接点の整合しない区間をdynamics defectとして区別する教育用模式図です。連続時間の可行性や実機での安全性は示しません。")
+mesh node上のviolationがtolerance内なら、軌道全体も可行でしょうか。
+固定pendulum教材では、そうとは限りません。
+
+![同じpendulum swing-upをN=20、N=40、gravityを10%変えたvalidation rolloutで実行し、mesh node上と区間再構成またはvalidation rollout上のpath violationを反復ごとに比較した結果。node上では3runとも許容値へ近づくが、区間内では違反の残り方が異なる。](./media/optimal-control-mesh-execution.svg "固定Python Traceの実行結果です。mesh node上の収束と区間内またはmodel mismatch下の可行性を分けて読みます。連続時間可行性や実機安全性は保証しません。")
+
+上段では3runともnode上のviolationが下がります。
+下段ではN=40がN=20より小さくなる一方、model mismatchのvalidation rolloutには大きな違反が残ります。
 
 ## まず確認すること
 

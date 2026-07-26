@@ -16,6 +16,7 @@ from optimization_compass.search_tree import (
     SearchTreeFramePayload,
     generate_search_tree_artifact,
 )
+from optimization_compass.site_export import _generate_optimal_control_traces
 from optimization_compass.trace_models import TraceFrame
 from optimization_compass.traces import generate_gradient_bundle
 
@@ -34,12 +35,182 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             dataset_version
         ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
+        "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _optimal_control_mesh_svg(dataset_version: str) -> str:
+    traces = _generate_optimal_control_traces(dataset_version=dataset_version)
+    trace_styles = {
+        "pendulum-collocation-coarse": ("N=20", "#245c42", ""),
+        "pendulum-collocation-refined": ("N=40", "#456b92", ""),
+        "pendulum-model-rollout-failure": (
+            "model mismatch",
+            "#a53d3d",
+            ' stroke-dasharray="14 9"',
+        ),
+    }
+    panels = (
+        ("mesh node上のpath violation", "node_path_violation", 130.0),
+        ("区間再構成 / validation rolloutのpath violation", "reconstructed_path_violation", 430.0),
+    )
+    plot_x, plot_width, plot_height = 92.0, 620.0, 210.0
+    log_min, log_max = -5.0, 0.0
+
+    def project(
+        *,
+        iteration: int,
+        value: float,
+        plot_y: float,
+        max_iteration: int,
+    ) -> tuple[float, float]:
+        bounded = min(10**log_max, max(10**log_min, value))
+        return (
+            plot_x + iteration / max_iteration * plot_width,
+            plot_y
+            + plot_height
+            - (math.log10(bounded) - log_min) / (log_max - log_min) * plot_height,
+        )
+
+    elements = [
+        _svg_open(
+            "mesh上で収束しても、区間内の違反は別に残る",
+            (
+                "同じpendulum swing-up教材でN=20、N=40、gravityを10%変えたvalidation "
+                "rolloutを比較します。mesh node上のpath violationは許容値内まで下がりますが、"
+                "区間再構成とmodel mismatchでは別の違反が残ります。"
+            ),
+            height=920,
+        ),
+        '<rect width="800" height="920" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">mesh上で収束しても、区間内の違反は別に残る</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "same pendulum · 2 s horizon · same initial trajectory · 8 evaluation budget"
+            "</text>"
+        ),
+    ]
+    for panel_title, metric_key, plot_y in panels:
+        elements.extend(
+            [
+                (
+                    f'<text x="{plot_x}" y="{plot_y - 18}" class="panel-title">'
+                    f"{html.escape(panel_title)}</text>"
+                ),
+                (
+                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
+                    f'height="{plot_height}" rx="14" fill="#fff" stroke="#cfd8d1"/>'
+                ),
+            ]
+        )
+        for exponent in range(-5, 1):
+            value = 10.0**exponent
+            _, tick_y = project(
+                iteration=0,
+                value=value,
+                plot_y=plot_y,
+                max_iteration=8,
+            )
+            elements.extend(
+                [
+                    (
+                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
+                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
+                        'stroke="#ebe8e0"/>'
+                    ),
+                    (
+                        f'<text x="{plot_x - 16}" y="{tick_y + 5:.2f}" '
+                        f'text-anchor="end" class="axis">1e{exponent}</text>'
+                    ),
+                ]
+            )
+        _, tolerance_y = project(
+            iteration=0,
+            value=1e-4,
+            plot_y=plot_y,
+            max_iteration=8,
+        )
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_x}" y1="{tolerance_y:.2f}" '
+                    f'x2="{plot_x + plot_width}" y2="{tolerance_y:.2f}" '
+                    'stroke="#c56b32" stroke-width="2" stroke-dasharray="5 5"/>'
+                ),
+                (
+                    f'<text x="{plot_x + 10}" y="{tolerance_y - 8:.2f}" '
+                    'class="axis" fill="#9a4f24">path tolerance 1e-4</text>'
+                ),
+            ]
+        )
+        for trace in traces:
+            _, color, dash = trace_styles[trace.trace_id]
+            points = [
+                project(
+                    iteration=frame.iteration,
+                    value=float(frame.payload[metric_key]),
+                    plot_y=plot_y,
+                    max_iteration=trace.frames[-1].iteration,
+                )
+                for frame in trace.frames
+            ]
+            point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+            elements.append(
+                f'<polyline points="{point_string}" fill="none" stroke="{color}" '
+                f'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+            )
+            for x, y in points:
+                elements.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4" fill="{color}"/>')
+        elements.append(
+            f'<text x="{plot_x + plot_width / 2}" y="{plot_y + plot_height + 28}" '
+            'text-anchor="middle" class="axis">iteration</text>'
+        )
+    for row, trace in enumerate(traces):
+        label, color, dash = trace_styles[trace.trace_id]
+        terminal = trace.frames[-1]
+        node = float(terminal.payload["node_path_violation"])
+        reconstructed = float(terminal.payload["reconstructed_path_violation"])
+        row_y = 718 + row * 42
+        elements.extend(
+            [
+                (
+                    f'<line x1="92" y1="{row_y}" x2="132" y2="{row_y}" '
+                    f'stroke="{color}" stroke-width="6"{dash}/>'
+                ),
+                (
+                    f'<text x="148" y="{row_y + 6}" class="method" fill="{color}">'
+                    f"{html.escape(label)}</text>"
+                ),
+                (
+                    f'<text x="712" y="{row_y + 6}" text-anchor="end" class="metric-value">'
+                    f"node {node:.1e} · rollout {reconstructed:.3g}</text>"
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            (
+                '<text x="42" y="858" class="caption">'
+                "実行生成: optimization_compass.site_export._generate_optimal_control_traces"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="42" y="892" class="caveat">'
+                "固定pendulum教材の診断履歴です。連続時間可行性・実機安全性・一般性能を保証しません。"
+                "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _constrained_feasibility_svg(dataset_version: str) -> str:
