@@ -28,7 +28,12 @@ The `Validate and build Pages artifact` job enforces the following supply-chain 
    `site/package.json` and `site/package-lock.json`.
 3. `pip-audit --skip-editable` rejects known vulnerabilities in the environment installed from the
    frozen uv lock; the editable project itself is excluded.
-4. `npm audit --audit-level=high` rejects high and critical npm vulnerabilities.
+4. `npm audit --audit-level=high` rejects high and critical npm vulnerabilities. The sole temporary
+   exception is `GHSA-qwww-vcr4-c8h2` for `react-router` 7.18.1: it applies to RSC Mode action
+   processing, while this Vite artifact is a static HashRouter SPA with no server, RSC, loaders, or
+   actions. `scripts/verify_npm_audit.py` still rejects every other high/critical result and rejects
+   any drift from that exact package/advisory set. Replace the exception with the upstream fixed
+   release as soon as npm publishes `react-router-dom` 8.3.0 or later.
 5. `scripts/verify_workflow_pins.py` rejects mutable external action references and missing version
    comments. Every external action must use a full 40-character commit SHA with an exact release
    comment such as `# v7.0.0`.
@@ -83,7 +88,8 @@ uv run --frozen python scripts/verify_workflow_pins.py
 uv run --frozen pip-audit --skip-editable
 npm --prefix site install --package-lock-only --ignore-scripts
 git diff --exit-code -- site/package-lock.json
-npm --prefix site audit --audit-level=high
+npm --prefix site audit --audit-level=high --json > npm-audit.json || true
+uv run --frozen python scripts/verify_npm_audit.py --report npm-audit.json
 uv run --frozen python scripts/dependency_report.py \
   --node-lock site/package-lock.json \
   --output dependency-reports/dependency-licenses.json

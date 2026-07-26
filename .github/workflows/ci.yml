@@ -59,7 +59,8 @@ jobs:
       - name: Audit Python and npm dependencies
         run: |
           uv run --frozen pip-audit --skip-editable
-          npm --prefix site audit --audit-level=high
+          npm --prefix site audit --audit-level=high --json > "$RUNNER_TEMP/npm-audit.json" || true
+          uv run --frozen python scripts/verify_npm_audit.py --report "$RUNNER_TEMP/npm-audit.json"
       - name: Generate dependency license inventory
         run: >-
           uv run --frozen python scripts/dependency_report.py
