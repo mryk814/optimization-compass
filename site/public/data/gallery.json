@@ -2871,7 +2871,7 @@
         "接続先のBranch-and-Bound traceはboundと停止理由の読み方を示す教育用knapsackであり、SciPy/HiGHS、SCIP、CP-SATの速度や実務生産計画での一般性能を順位付けしない。"
       ],
       "map_node_id": "answer:Q01:mixed",
-      "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
+      "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $f(x)=8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
       "practical_notes": "需要予測の時点、単位、歩留まり、在庫、machine calendar、段取り費、最小lot、禁止組合せを同じversionで保存する。status、incumbent、bound、gap、time limitを併記し、前週解をwarm startへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木とCompareは4変数knapsackで停止条件を学ぶ別教材であり、この生産計画のsolver実行や利益比較ではない。",
       "problem_archetype_id": "PA023",
       "python_example": "import numpy as np\nfrom scipy.optimize import Bounds, LinearConstraint, milp\n\nc = np.array([-8.0, -7.0, 8.0, 5.0])\nintegrality = np.array([0, 0, 1, 1])\nbounds = Bounds([0.0, 0.0, 0.0, 0.0], [6.0, 6.0, 1.0, 1.0])\nA = np.array([\n    [3.0, 1.0, 0.0, 0.0],\n    [1.0, 4.0, 0.0, 0.0],\n    [1.0, 0.0, -6.0, 0.0],\n    [0.0, 1.0, 0.0, -6.0],\n    [-1.0, 0.0, 1.5, 0.0],\n    [0.0, -1.0, 0.0, 1.0],\n])\nconstraint = LinearConstraint(A, np.full(6, -np.inf), [18.0, 20.0, 0.0, 0.0, 0.0, 0.0])\nresult = milp(c, integrality=integrality, bounds=bounds, constraints=constraint)\nif not result.success or result.x is None:\n    raise RuntimeError(result.message)\nprint({\"q_A\": result.x[0], \"q_B\": result.x[1], \"setup_A\": result.x[2], \"setup_B\": result.x[3], \"profit\": -result.fun})",
@@ -2898,7 +2898,7 @@
       "status": "published",
       "title_en": "Plan a weekly production mix with setup costs",
       "title_ja": "段取り費を含む週間生産計画を組む",
-      "variable_domain": "実務では製品 $i$ ごとの連続または整数の生産量 $q_i$ と、生産を開始するかを表す二値変数 $y_i\\in\\{0,1\\}$ を組み合わせる。固定教材では $x=(q_A,q_B,y_A,y_B)\\in[0,6]^2\\times\\{0,1\\}^2$。",
+      "variable_domain": "実務では製品 $i$ ごとの連続または整数の生産量 $q_i$ と、生産を開始するかを表す二値変数 $y_i\\in\\{0,1\\}$ を組み合わせる。固定教材では $x=(q_A,q_B,y_A,y_B)$、$X=[0,6]^2\\times\\{0,1\\}^2$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",

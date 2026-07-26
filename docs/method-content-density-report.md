@@ -55,7 +55,7 @@
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 68 | 3376 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 80 | 3344 | 7 | 1 | pass |
 | `fista` | `M_FISTA` | 49 | 2555 | 8 | 1 | pass |
-| `gauss-newton` | `M_GAUSS_NEWTON` | 57 | 3086 | 10 | 1 | pass |
+| `gauss-newton` | `M_GAUSS_NEWTON` | 57 | 3092 | 10 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 83 | 2334 | 6 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 56 | 2732 | 8 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 2809 | 8 | 1 | pass |

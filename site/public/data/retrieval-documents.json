@@ -18361,7 +18361,7 @@
         "S041",
         "S056"
       ],
-      "text": "この手法では、合計lossだけでなく観測ごとの残差を見ます。 parameter の変化に対する残差の動きを使い、全ての残差をまとめて小さくします。 見ているもの: 残差vectorとJacobian 動かしているもの: parameter・線形化されたleast-squares step 前進の判断: 二乗和、残差分布、gradient相当量の低下 恐れていること: rank deficiency／外れ値／初期値の悪さ／大きな残差での近似誤差 一般のNewton法とは異なり、目的関数が残差二乗和であることを利用してHessianの一部を近似します。",
+      "text": "この手法の気持ちは、合計lossだけでなく観測ごとの残差を見ることです。 parameter の変化に対する残差の動きを使い、全ての残差をまとめて小さくします。 見ているもの: 残差vectorとJacobian 動かしているもの: parameter・線形化されたleast-squares step 前進の判断: 二乗和、残差分布、gradient相当量の低下 恐れていること: rank deficiency／外れ値／初期値の悪さ／大きな残差での近似誤差 一般のNewton法とは異なり、目的関数が残差二乗和であることを利用してHessianの一部を近似します。",
       "title": "30秒でつかむ"
     },
     {
