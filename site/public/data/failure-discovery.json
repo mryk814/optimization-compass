@@ -730,9 +730,9 @@
     {
       "canonical_route": "/failures?entry=case%3Acourse-timetabling%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "各授業を必要回数だけ配置し、同じ教室・教員・受講グループを同時刻に重複させない。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
+        "constraints": "各授業を必要回数だけ配置する条件を $\\sum_{d,h}x_{c,d,h}=1$ とし、同じ教室・教員・受講グループの同時刻利用を $\\sum_cx_{c,d,h}\\le1$ で禁止する。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
         "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
-        "objective": "希望適合度を増やしながら担当数や空き時間の偏りを抑える。固定教材では希望違反の重み付き合計と担当数の幅を最小化し、教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+        "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
         "question": "必修授業、教室容量、担当可能な教員、同時刻の重複禁止を守りながら、空き時間の偏りと希望違反が小さい時間割を作りたい。"
       },
       "case_id": "course-timetabling",

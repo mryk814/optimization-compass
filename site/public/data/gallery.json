@@ -3119,7 +3119,7 @@
           "reason": "割当ルールを線形式で表せ、緩和boundや最適性gapまで確認したい場合はMIP familyとして定式化する"
         }
       ],
-      "constraints": "各授業を必要回数だけ配置し、同じ教室・教員・受講グループを同時刻に重複させない。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
+      "constraints": "各授業を必要回数だけ配置する条件を $\\sum_{d,h}x_{c,d,h}=1$ とし、同じ教室・教員・受講グループの同時刻利用を $\\sum_cx_{c,d,h}\\le1$ で禁止する。教室容量と設備要件、担当可能科目を満たし、固定が必要な授業は指定時間帯へ置く。",
       "decision_variables": "授業 $c$、日 $d$、時間帯 $h$ ごとの二値変数 $x_{c,d,h}$ と、担当者ごとの授業数の最大値・最小値。受講者数、教室容量、担当可能科目、希望時間帯は入力であり、solverが変更する変数ではない。",
       "difficulty": "intro",
       "domain": "education",
@@ -3180,7 +3180,7 @@
         "実行可能な時間割が得られても、教育上の質、学生間の公平性、教職員の合意を保証しない。制約と重みは関係者が確認し、手動変更の履歴を残す必要がある。"
       ],
       "map_node_id": "answer:Q01:binary",
-      "objective": "希望適合度を増やしながら担当数や空き時間の偏りを抑える。固定教材では希望違反の重み付き合計と担当数の幅を最小化し、教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
+      "objective": "希望適合度 $p_{c,d,h}$ を増やしながら担当数や空き時間の偏りを抑えるため、固定教材では $f(x,u)=-10\\sum_{c,d,h}p_{c,d,h}x_{c,d,h}+(u_{max}-u_{min})$ を最小化する。教室容量、担当資格、重複禁止はpenaltyへ落とさずhard constraintとして扱う。",
       "practical_notes": "hard constraintとsoft preferenceを別表にし、科目ID、受講グループ、教室設備、担当資格、固定枠、希望の提出時点をversion管理する。公開前に未配置、二重割当、容量不足、移動不能な連続授業を機械検査する。接続先のTheater／Compareは勤務シフトの固定教材であり、この時間割と同じdataではない。共通する二値割当、hard constraint、tie-breakの読み方だけを再利用する。",
       "problem_archetype_id": "PA026",
       "python_example": "from ortools.sat.python import cp_model\n\ncourses, days, slots = range(4), range(3), range(2)\nmodel = cp_model.CpModel()\nx = {(c, d, h): model.new_bool_var(f\"x_{c}_{d}_{h}\") for c in courses for d in days for h in slots}\nfor c in courses:\n    model.add(sum(x[c, d, h] for d in days for h in slots) == 1)\nfor d in days:\n    for h in slots:\n        model.add(sum(x[c, d, h] for c in courses) <= 1)\nmodel.add(x[3, 0, 0] == 0)\nmodel.maximize(sum(((c + d + h) % 2) * x[c, d, h] for c in courses for d in days for h in slots))\nsolver = cp_model.CpSolver()\nstatus = solver.solve(model)\nprint(solver.status_name(status), {(c, d, h): solver.value(x[c, d, h]) for c in courses for d in days for h in slots})",
@@ -3306,7 +3306,7 @@
       "status": "published",
       "title_en": "Select network upgrades under a capital budget",
       "title_ja": "予算内で通信設備の更新候補を選ぶ",
-      "variable_domain": "候補設備 $A,B,C,D,E$ ごとの二値変数 $x_i\\in\\{0,1\\}$。固定教材では設備位置や通信量を連続変数へ変換せず、事前に監査した便益scoreと更新費用を入力する。",
+      "variable_domain": "候補設備 $A,B,C,D,E$ ごとの二値変数を扱い、固定教材の領域は $X=\\{0,1\\}^5$ とする。設備位置や通信量を連続変数へ変換せず、事前に監査した便益scoreと更新費用を入力する。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
@@ -3402,7 +3402,7 @@
       "status": "published",
       "title_en": "Tune formulation settings with a limited experiment budget",
       "title_ja": "少ない実験で配合条件を絞る",
-      "variable_domain": "実務では成分比、混合時間、温度をそれぞれの安全・設備bounds内で保持する。固定教材だけがacquisitionの読み方を示すため、これらを1個の正規化変数 $x\\in[-3,3]$ へ縮約する。",
+      "variable_domain": "実務では成分比、混合時間、温度をそれぞれの安全・設備bounds内で保持する。固定教材だけがacquisitionの読み方を示すため、これらを1個の正規化変数へ縮約し、$X=[-3,3]$ とする。",
       "visualization_ids": [
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_BO_1D_EXPLORE_NOISELESS",
