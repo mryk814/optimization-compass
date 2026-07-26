@@ -12,7 +12,7 @@
 | `adamw` | `M_ADAMW` | 122 | 2926 | 9 | 1 | pass |
 | `adjoint-sensitivity` | `M_ADJOINT_SENSITIVITY` | 69 | 2544 | 8 | 1 | pass |
 | `admm` | `M_ADMM` | 51 | 2309 | 9 | 1 | pass |
-| `admm-qp` | `M_ADMM_QP` | 83 | 3140 | 9 | 1 | pass |
+| `admm-qp` | `M_ADMM_QP` | 83 | 3620 | 10 | 1 | pass |
 | `augmented-lagrangian` | `M_AUGMENTED_LAGRANGIAN` | 73 | 2563 | 7 | 1 | pass |
 | `barrier-lp-qp` | `M_BARRIER_LP_QP` | 81 | 2977 | 9 | 1 | pass |
 | `basin-hopping` | `M_BASIN_HOPPING` | 55 | 2298 | 9 | 1 | pass |
@@ -40,7 +40,7 @@
 | `dynamic-programming` | `M_DYNAMIC_PROGRAMMING` | 56 | 1946 | 7 | 1 | pass |
 | `epsilon-constraint` | `M_EPSILON_CONSTRAINT` | 59 | 2706 | 8 | 1 | pass |
 | `family.composite-convex` | `MF_COMPOSITE_CONVEX` | 76 | 2948 | 7 | 1 | pass |
-| `family.constrained-nlp` | `MF_CONSTRAINED_NLP` | 56 | 2955 | 7 | 1 | pass |
+| `family.constrained-nlp` | `MF_CONSTRAINED_NLP` | 56 | 3203 | 8 | 1 | pass |
 | `family.constraint-programming` | `MF_CONSTRAINT_PROGRAMMING` | 66 | 2500 | 7 | 1 | pass |
 | `family.discrete-structure` | `MF_DISCRETE_EXACT` | 68 | 4177 | 9 | 1 | pass |
 | `family.evolutionary` | `MF_EVOLUTIONARY` | 78 | 2959 | 7 | 1 | pass |
@@ -55,7 +55,7 @@
 | `family.stochastic-ml` | `MF_STOCHASTIC_ML` | 68 | 3376 | 7 | 1 | pass |
 | `family.trust-region` | `MF_TRUST_REGION` | 80 | 3344 | 7 | 1 | pass |
 | `fista` | `M_FISTA` | 49 | 2555 | 8 | 1 | pass |
-| `gauss-newton` | `M_GAUSS_NEWTON` | 57 | 2682 | 9 | 1 | pass |
+| `gauss-newton` | `M_GAUSS_NEWTON` | 57 | 3086 | 10 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 83 | 2334 | 6 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 56 | 2732 | 8 | 1 | pass |
 | `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 2809 | 8 | 1 | pass |
@@ -64,9 +64,9 @@
 | `lbfgs` | `M_LBFGS` | 71 | 2999 | 9 | 1 | pass |
 | `lbfgsb` | `M_LBFGSB` | 49 | 2209 | 7 | 1 | pass |
 | `least-squares` | `M_LEVENBERG_MARQUARDT` | 79 | 3946 | 13 | 1 | pass |
-| `local-search-combinatorial` | `M_LOCAL_SEARCH_COMBINATORIAL` | 57 | 3176 | 8 | 1 | pass |
+| `local-search-combinatorial` | `M_LOCAL_SEARCH_COMBINATORIAL` | 57 | 3556 | 9 | 1 | pass |
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 83 | 3960 | 14 | 1 | pass |
-| `mads` | `M_MADS` | 65 | 2670 | 7 | 1 | pass |
+| `mads` | `M_MADS` | 65 | 3113 | 8 | 1 | pass |
 | `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 3455 | 11 | 1 | pass |
 | `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 2979 | 10 | 1 | pass |
 | `mirror-descent` | `M_MIRROR_DESCENT` | 92 | 2835 | 9 | 1 | pass |

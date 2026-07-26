@@ -3,7 +3,7 @@
 - Published concept guides: `22`
 - Meeting the concept floor: `22`
 - Below the concept floor: `0`
-- Prose review warnings: `258`
+- Prose review warnings: `241`
 
 ## Concept publication floor
 
@@ -35,8 +35,8 @@
 ## Prose warning summary
 
 - `prose.meta`: 1
-- `sentence.commas`: 169
-- `sentence.long`: 88
+- `sentence.commas`: 157
+- `sentence.long`: 83
 
 | Content | Warnings |
 |---|---:|
@@ -46,7 +46,7 @@
 | `adamw` | 5 |
 | `adjoint-sensitivity` | 0 |
 | `admm` | 2 |
-| `admm-qp` | 3 |
+| `admm-qp` | 0 |
 | `augmented-lagrangian` | 2 |
 | `barrier-lp-qp` | 2 |
 | `basin-hopping` | 3 |
@@ -92,7 +92,7 @@
 | `dynamic-programming` | 0 |
 | `epsilon-constraint` | 2 |
 | `family.composite-convex` | 4 |
-| `family.constrained-nlp` | 4 |
+| `family.constrained-nlp` | 0 |
 | `family.constraint-programming` | 2 |
 | `family.discrete-structure` | 0 |
 | `family.evolutionary` | 6 |
@@ -107,7 +107,7 @@
 | `family.stochastic-ml` | 5 |
 | `family.trust-region` | 2 |
 | `fista` | 1 |
-| `gauss-newton` | 4 |
+| `gauss-newton` | 0 |
 | `genetic-algorithm` | 2 |
 | `geometry-update-failure-modes` | 0 |
 | `hungarian-algorithm` | 0 |
@@ -117,9 +117,9 @@
 | `lbfgs` | 1 |
 | `lbfgsb` | 0 |
 | `least-squares` | 0 |
-| `local-search-combinatorial` | 3 |
+| `local-search-combinatorial` | 0 |
 | `lp-qp-conic` | 0 |
-| `mads` | 3 |
+| `mads` | 0 |
 | `method.gradient-descent` | 0 |
 | `method.nelder-mead` | 0 |
 | `mirror-descent` | 4 |
