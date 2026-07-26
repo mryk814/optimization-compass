@@ -9,6 +9,7 @@ from scripts.generate_article_figures import (
     _active_set_qp_probe,
     _dijkstra_astar_grid_probe,
     _direct_shooting_probe,
+    _dynamic_programming_knapsack_probe,
     _finite_horizon_lqr_probe,
     _local_search_two_opt_probe,
     _multiple_shooting_probe,
@@ -81,6 +82,23 @@ def test_dijkstra_and_astar_find_equal_cost_with_different_expansion_areas() -> 
     assert dijkstra["relaxed_edges"] == 169
     assert astar["relaxed_edges"] == 125
     assert probe["expansion_reduction"] == pytest.approx(76 / 168)
+
+
+def test_dynamic_programming_probe_fills_table_and_backtracks_selected_items() -> None:
+    probe = _dynamic_programming_knapsack_probe()
+
+    assert probe["table"] == (
+        (0, 0, 0, 0, 0, 0, 0, 0, 0),
+        (0, 0, 0, 0, 8, 8, 8, 8, 8),
+        (0, 0, 0, 5, 8, 8, 8, 13, 13),
+        (0, 0, 0, 5, 8, 8, 8, 13, 13),
+        (0, 0, 4, 5, 8, 9, 12, 13, 13),
+    )
+    assert probe["selected"] == (0, 1)
+    assert probe["backtrack"] == ((4, 8), (3, 8), (2, 8), (1, 5), (0, 1))
+    assert probe["selected_weight"] == 7
+    assert probe["unused_capacity"] == 1
+    assert probe["optimal_value"] == 13
 
 
 def test_pdlp_probe_requires_all_three_stopping_quantities() -> None:
@@ -255,6 +273,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "constrained-feasibility-execution.svg",
         "direct-shooting-rollout-execution.svg",
         "dijkstra-astar-grid-execution.svg",
+        "dynamic-programming-knapsack-execution.svg",
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
@@ -324,6 +343,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
         "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
         "content/methods/dijkstra-astar.md": "dijkstra-astar-grid-execution.svg",
+        "content/methods/dynamic-programming.md": "dynamic-programming-knapsack-execution.svg",
         "content/methods/dual-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",

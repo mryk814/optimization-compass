@@ -48,6 +48,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "dijkstra-astar-grid-execution.svg": _dijkstra_astar_grid_svg(dataset_version).encode(
             "utf-8"
         ),
+        "dynamic-programming-knapsack-execution.svg": _dynamic_programming_knapsack_svg(
+            dataset_version
+        ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
         "lqr-backward-forward-execution.svg": _lqr_backward_forward_svg(dataset_version).encode(
             "utf-8"
@@ -1079,6 +1082,245 @@ def _dijkstra_astar_grid_probe() -> dict[str, object]:
         "expansion_reduction": (len(dijkstra["expanded"]) - len(astar["expanded"]))
         / len(dijkstra["expanded"]),
     }
+
+
+def _dynamic_programming_knapsack_probe() -> dict[str, object]:
+    items = (
+        ("A", 4, 8),
+        ("B", 3, 5),
+        ("C", 5, 6),
+        ("D", 2, 4),
+    )
+    capacity = 8
+    table = [[0] * (capacity + 1) for _ in range(len(items) + 1)]
+    take = [[False] * (capacity + 1) for _ in range(len(items) + 1)]
+
+    for item_count, (_, weight, value) in enumerate(items, start=1):
+        for available_capacity in range(capacity + 1):
+            skip_value = table[item_count - 1][available_capacity]
+            take_value = (
+                table[item_count - 1][available_capacity - weight] + value
+                if weight <= available_capacity
+                else -1
+            )
+            if take_value > skip_value:
+                table[item_count][available_capacity] = take_value
+                take[item_count][available_capacity] = True
+            else:
+                table[item_count][available_capacity] = skip_value
+
+    remaining_capacity = capacity
+    selected: list[int] = []
+    backtrack = [(len(items), remaining_capacity)]
+    for item_count in range(len(items), 0, -1):
+        if take[item_count][remaining_capacity]:
+            selected.append(item_count - 1)
+            remaining_capacity -= items[item_count - 1][1]
+        backtrack.append((item_count - 1, remaining_capacity))
+    selected.reverse()
+
+    return {
+        "items": items,
+        "capacity": capacity,
+        "table": tuple(tuple(row) for row in table),
+        "take": tuple(tuple(row) for row in take),
+        "selected": tuple(selected),
+        "backtrack": tuple(backtrack),
+        "optimal_value": table[-1][-1],
+        "selected_weight": sum(items[index][1] for index in selected),
+        "unused_capacity": remaining_capacity,
+    }
+
+
+def _dynamic_programming_knapsack_svg(dataset_version: str) -> str:
+    probe = _dynamic_programming_knapsack_probe()
+    items = probe["items"]
+    table = probe["table"]
+    selected = probe["selected"]
+    backtrack = probe["backtrack"]
+    if not all(isinstance(value, tuple) for value in (items, table, selected, backtrack)):
+        raise TypeError("dynamic-programming teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    selected_indices = set(selected)
+    item_card_width = 132.0
+    item_gap = 10.0
+    item_left = 36.0
+    grid_cell_width = 50.0
+    grid_cell_height = 50.0
+    grid_left = 142.0
+    grid_top = 340.0
+    maximum_value = int(probe["optimal_value"])
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">0/1 knapsackのDP tableとbacktracking実行結果</title>',
+        (
+            '<desc id="figure-description">capacity 8の0/1 knapsackに4 itemを順に追加し、'
+            "5行9列のDP tableを埋める固定実行。最終value 13からbacktrackingすると、"
+            "weight 4・value 8のitem Aとweight 3・value 5のitem Bを選び、"
+            "合計weight 7、unused capacity 1となる。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="dp-title">小さな部分問題を再利用し、最後に選択を戻す</text>',
+        (
+            '<text x="32" y="80" class="dp-subtitle">'
+            "0/1 knapsack · 4 items · capacity 8 · exact integer table</text>"
+        ),
+        '<text x="36" y="112" class="dp-section">items</text>',
+    ]
+    for index, (name, weight, value) in enumerate(items):
+        x = item_left + index * (item_card_width + item_gap)
+        chosen = index in selected_indices
+        fill = "#e3f0ea" if chosen else "#fff"
+        stroke = "#2c7564" if chosen else "#cad8d2"
+        badge = "selected" if chosen else "available"
+        elements.extend(
+            [
+                f'<rect x="{x:.2f}" y="126" width="{item_card_width:.2f}" height="86" '
+                f'rx="14" fill="{fill}" stroke="{stroke}" stroke-width="2"/>',
+                f'<text x="{x + 14:.2f}" y="156" class="dp-item">{name}</text>',
+                (
+                    f'<text x="{x + 14:.2f}" y="180" class="dp-item-detail">'
+                    f"weight {weight} · value {value}</text>"
+                ),
+                (
+                    f'<text x="{x + item_card_width - 12:.2f}" y="202" text-anchor="end" '
+                    f'class="dp-item-status">{badge}</text>'
+                ),
+            ]
+        )
+
+    elements.extend(
+        [
+            '<rect x="24" y="238" width="592" height="452" rx="18" fill="#fff" stroke="#cad8d2"/>',
+            (
+                '<text x="44" y="276" class="dp-panel">'
+                "best value by items considered × capacity</text>"
+            ),
+            '<rect x="44" y="298" width="18" height="18" rx="3" fill="#f2c8a3"/>',
+            '<text x="72" y="312" class="dp-legend">larger value</text>',
+            ('<line x1="214" y1="307" x2="240" y2="307" stroke="#2c7564" stroke-width="4"/>'),
+            '<text x="250" y="312" class="dp-legend">backtrack</text>',
+            '<text x="126" y="330" text-anchor="end" class="dp-axis">items</text>',
+        ]
+    )
+    for capacity in range(int(probe["capacity"]) + 1):
+        center_x = grid_left + capacity * grid_cell_width + grid_cell_width / 2
+        elements.append(
+            f'<text x="{center_x:.2f}" y="330" text-anchor="middle" '
+            f'class="dp-axis">{capacity}</text>'
+        )
+    row_labels = ("none", "A", "A+B", "A..C", "A..D")
+    for row_index, row in enumerate(table):
+        center_y = grid_top + row_index * grid_cell_height + grid_cell_height / 2
+        elements.append(
+            f'<text x="126" y="{center_y + 5:.2f}" text-anchor="end" '
+            f'class="dp-axis">{row_labels[row_index]}</text>'
+        )
+        for capacity, value in enumerate(row):
+            x = grid_left + capacity * grid_cell_width
+            y = grid_top + row_index * grid_cell_height
+            intensity = int(value) / maximum_value if maximum_value else 0.0
+            fill = "#fff" if value == 0 else ("#f7e2cf" if intensity < 0.7 else "#f0c8a6")
+            elements.extend(
+                [
+                    f'<rect x="{x:.2f}" y="{y:.2f}" width="{grid_cell_width:.2f}" '
+                    f'height="{grid_cell_height:.2f}" fill="{fill}" stroke="#d7e0dc"/>',
+                    f'<text x="{x + grid_cell_width / 2:.2f}" '
+                    f'y="{y + grid_cell_height / 2 + 6:.2f}" text-anchor="middle" '
+                    f'class="dp-cell">{value}</text>',
+                ]
+            )
+
+    backtrack_points = " ".join(
+        (
+            f"{grid_left + capacity * grid_cell_width + grid_cell_width / 2:.2f},"
+            f"{grid_top + row * grid_cell_height + grid_cell_height / 2:.2f}"
+        )
+        for row, capacity in backtrack
+    )
+    elements.append(
+        f'<polyline points="{backtrack_points}" fill="none" stroke="#2c7564" '
+        'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    for row, capacity in backtrack:
+        center_x = grid_left + capacity * grid_cell_width + grid_cell_width / 2
+        center_y = grid_top + row * grid_cell_height + grid_cell_height / 2
+        elements.append(
+            f'<circle cx="{center_x:.2f}" cy="{center_y:.2f}" r="7" '
+            'fill="#fff" stroke="#2c7564" stroke-width="3"/>'
+        )
+    final_x = grid_left + int(probe["capacity"]) * grid_cell_width + grid_cell_width / 2
+    final_y = grid_top + (len(table) - 1) * grid_cell_height + grid_cell_height / 2
+    elements.extend(
+        [
+            f'<circle cx="{final_x:.2f}" cy="{final_y:.2f}" r="11" fill="#2c7564"/>',
+            f'<text x="{final_x:.2f}" y="{final_y + 5:.2f}" text-anchor="middle" '
+            'class="dp-final">13</text>',
+            '<text x="32" y="750" class="dp-metric-label">selected items</text>',
+            '<text x="32" y="782" class="dp-metric">A + B</text>',
+            '<text x="250" y="750" class="dp-metric-label">total weight</text>',
+            (
+                '<text x="250" y="782" class="dp-metric">'
+                f"{int(probe['selected_weight'])} / {int(probe['capacity'])}</text>"
+            ),
+            '<text x="458" y="750" class="dp-metric-label">optimal value</text>',
+            (f'<text x="458" y="782" class="dp-metric">{int(probe["optimal_value"])}</text>'),
+            '<rect x="24" y="824" width="592" height="114" rx="18" fill="#eaf3ef"/>',
+            '<text x="44" y="858" class="dp-result-title">backtracking result</text>',
+            (
+                '<text x="44" y="888" class="dp-result">'
+                "A (weight 4, value 8) + B (weight 3, value 5)</text>"
+            ),
+            (
+                '<text x="44" y="918" class="dp-result">'
+                f"used 7 / 8 · unused {int(probe['unused_capacity'])} · value 13</text>"
+            ),
+            (
+                '<text x="32" y="982" class="dp-meta">'
+                "実行生成: scripts.generate_article_figures._dynamic_programming_knapsack_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1020" class="dp-limit">'
+                "固定4-item整数knapsackです。別instance、連続量、近似、solver一般の"
+                "性能は示しません。</text>"
+            ),
+            (
+                '<text x="32" y="1046" class="dp-limit">'
+                "tableはO(nC)でcapacity値に依存します。大規模state spaceの実用性は"
+                "示しません。</text>"
+            ),
+            """
+<style>
+  .dp-title { font: 700 23px system-ui, sans-serif; fill: #102a2e; }
+  .dp-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .dp-section { font: 700 15px system-ui, sans-serif; fill: #45656a; }
+  .dp-item { font: 700 20px system-ui, sans-serif; fill: #102a2e; }
+  .dp-item-detail { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .dp-item-status { font: 700 12px system-ui, sans-serif; fill: #2c7564; }
+  .dp-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .dp-legend { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .dp-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .dp-cell { font: 700 15px system-ui, sans-serif; fill: #102a2e; }
+  .dp-final { font: 700 13px system-ui, sans-serif; fill: #fff; }
+  .dp-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .dp-metric { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .dp-result-title { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
+  .dp-result { font: 400 15px system-ui, sans-serif; fill: #245c42; }
+  .dp-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
+  .dp-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _dijkstra_astar_grid_svg(dataset_version: str) -> str:
