@@ -5487,7 +5487,7 @@
         "S057",
         "S064"
       ],
-      "text": "BFGSの更新式は、一般の制約を自動では扱いません。 目的関数値が下がっても、制約違反が残る点は解ではありません。 制約を無視するfailure Theater では、円内の可行領域とBFGSのfailure pathを同じ図で確認できます。 SLSQPとのfailure Compare は、同じ目的・disk制約・初期点・12回のteaching budgetを使います。 変えるのは制約を評価するかどうかです。 これは可行性と目的改善を分けて読む固定教材です。 BFGSやSLSQPの実装内部を再現するbenchmarkではなく、solverの一般性能rankingにも使いません。",
+      "text": "BFGSの更新式は、一般の制約を自動では扱いません。 目的関数値が下がっても、制約違反が残る点は解ではありません。 BFGSそのものの性能ではなく、制約を評価しない更新を成功と数えられない理由を示すfailure contrastです。 橙の終了点は目的関数だけなら最小です。 円の外にあるため、この制約付き問題の解ではありません。 制約を無視するfailure Theater では、円内の可行領域とBFGSのfailure pathを同じ図で確認できます。 SLSQPとのfailure Compare は、同じ目的・disk制約・初期点・12回のteaching budgetを使います。 変えるのは制約を評価するかどうかです。 これは可行性と目的改善を分けて読む固定教材です。 BFGSやSLSQPの実装内部を再現するbenchmarkではなく、solverの一般性能rankingにも使いません。",
       "title": "制約処理はBFGSの外にある"
     },
     {
@@ -11564,6 +11564,34 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:constrained-continuous:目的値と制約違反を同時に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:constrained-continuous",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:concept.convexity",
+        "content:direct-collocation",
+        "content:lbfgsb",
+        "content:lp-qp-conic",
+        "method:MF_CONSTRAINED_NLP",
+        "source:S017",
+        "source:S029",
+        "source:S030",
+        "source:S055",
+        "trace:constrained-disk-feasible-region"
+      ],
+      "source_ids": [
+        "S017",
+        "S029",
+        "S030",
+        "S055"
+      ],
+      "text": "同じ目的関数と初期点で、制約を評価する経路と無視する経路を実行した結果です。SLSQPやBFGSの実装性能は示しません。 青緑の経路は目的値とviolationを同時に下げ、境界で止まります。 橙の経路は目的値0へ近づきますが、制約違反が残るため候補解にはなりません。",
+      "title": "目的値と制約違反を同時に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:constrained-continuous:診断値",
       "dataset_version": "0.18.19",
       "document_id": "content:constrained-continuous",
@@ -14891,7 +14919,7 @@
         "S056",
         "S064"
       ],
-      "text": "制約付き2次元問題のTrace は、目的関数の等高線と実行可能領域を同じ図に置きます。 目的値が下がる方向と、制約を満たす方向が一致するとは限らないことを、constraint violationと終了statusを分けて確認できます。 これはSLSQP、内点法、拡張Lagrange法の実装性能を順位付けする図ではありません。 固定した教育問題で、低い目的値だけを成功条件にしないための読み方を示します。",
+      "text": "制約付き2次元問題のTrace は、目的関数の等高線と実行可能領域を同じ図に置きます。 目的改善と実行可能性を別々に読む固定教材です。制約付きsolver間の一般性能rankingではありません。 目的値が下がる方向と、制約を満たす方向が一致するとは限らないことを、constraint violationと終了statusを分けて確認できます。 これはSLSQP、内点法、拡張Lagrange法の実装性能を順位付けする図ではありません。 固定した教育問題で、低い目的値だけを成功条件にしないための読み方を示します。",
       "title": "実行可能領域を図で読む"
     },
     {
@@ -30186,7 +30214,7 @@
         "S056",
         "S064"
       ],
-      "text": "制約付きdiskのTheater では、まず制約違反量を見ます。 次に可行領域へ戻る動きと、境界に沿った目的改善を追います。 制約を守るrunと無視するrunの比較 では、目的値だけが良いinfeasibleな点を成功と数えません。 この2次元traceは、SLSQPやBFGSの実装内部を再現するbenchmarkではありません。 可行性と目的改善を別々に読むための固定教材であり、solverの一般性能rankingには使いません。",
+      "text": "SLSQPに対応する制約評価経路と、制約を無視するfailure contrastです。実装内部や一般性能を再現するbenchmarkではありません。 終了点の目的値だけを比べると、橙の経路が良く見えます。 しかし、violationが0でない点は解として採用できません。 制約付きdiskのTheater では、まず制約違反量を見ます。 次に可行領域へ戻る動きと、境界に沿った目的改善を追います。 制約を守るrunと無視するrunの比較 では、目的値だけが良いinfeasibleな点を成功と数えません。 この2次元traceは、SLSQPやBFGSの実装内部を再現するbenchmarkではありません。 可行性と目的改善を別々に読むための固定教材であり、solverの一般性能rankingには使いません。",
       "title": "可行性と目的値を分けて見る"
     },
     {
@@ -32969,7 +32997,7 @@
         "S055",
         "S068"
       ],
-      "text": "preference感度のTheater では、同じPareto frontからweightで1点を選びます。 preferenceを変えるCompare は、81点のresult set・目的方向・Pareto dominanceを固定します。 weightを0.2／0.5／0.8へ変え、front上の選択点だけを動かします。 このCompareはsolverを再実行してfrontを改善する実験ではありません。 weightは意思決定上のpreferenceであり、数学だけから客観的に決まる値でもありません。 これは凸で解析的な2目的教材です。 手法性能のbenchmarkや一般性能rankingではなく、非凸frontの欠落も解消しません。",
+      "text": "同じ解析的Pareto frontからweightで1点を選ぶ固定2目的教材です。weightの客観性や非凸frontの網羅性は示しません。 青緑のfrontは計算で得る候補集合です。 橙の一点は、weightを与えた後の選択です。 frontの生成と最終判断は同じ処理ではありません。 preference感度のTheater では、同じPareto frontからweightで1点を選びます。 preferenceを変えるCompare は、81点のresult set・目的方向・Pareto dominanceを固定します。 weightを0.2／0.5／0.8へ変え、front上の選択点だけを動かします。 このCompareはsolverを再実行してfrontを改善する実験ではありません。 weightは意思決定上のpreferenceであり、数学だけから客観的に決まる値でもありません。 これは凸で解析的な2目的教材です。 手法性能のbenchmarkや一般性能rankingではなく、非凸frontの欠落も解消しません。",
       "title": "Frontを作る計算と選ぶ判断を分ける"
     },
     {

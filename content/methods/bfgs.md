@@ -12,7 +12,7 @@ visualization_ids: [constrained-disk-feasible-region]
 comparison_ids: [COMPARE_CONSTRAINED_FAILURE]
 aliases: [/learn/bfgs]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 勾配の変化から逆Hessian（inverse Hessian）の近似を更新し、Newton法に近い探索方向を作る準Newton法です。
@@ -57,6 +57,11 @@ $$
 
 BFGSの更新式は、一般の制約を自動では扱いません。
 目的関数値が下がっても、制約違反が残る点は解ではありません。
+
+![円内の実行可能領域に対し、制約を無視するBFGS対応のfailure経路が目的値0へ進みながら円外で終了する固定2次元実行結果。](./media/constrained-feasibility-execution.svg "BFGSそのものの性能ではなく、制約を評価しない更新を成功と数えられない理由を示すfailure contrastです。")
+
+橙の終了点は目的関数だけなら最小です。
+円の外にあるため、この制約付き問題の解ではありません。
 
 [制約を無視するfailure Theater](#/theater/learning/SCENARIO_CONSTRAINED_DISK)では、円内の可行領域とBFGSのfailure pathを同じ図で確認できます。
 [SLSQPとのfailure Compare](#/compare/COMPARE_CONSTRAINED_FAILURE)は、同じ目的・disk制約・初期点・12回のteaching budgetを使います。

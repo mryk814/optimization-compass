@@ -11,7 +11,7 @@ related_ids: [epsilon-constraint, multi-objective, moead]
 visualization_ids: [biobjective-quadratic-pareto-front]
 comparison_ids: [COMPARE_PARETO_PREFERENCE]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 複数目的を重み付き和で単一目的へ変換し、重みを変えながら単目的solverを繰り返し解いてPareto候補を集める方法です。
@@ -44,6 +44,12 @@ $$
 重みを決める前に、各目的をideal点やnadir点などの基準で正規化（normalize）しておくと、重みの比が意図した優先度に近づきます。
 
 ## Frontを作る計算と選ぶ判断を分ける
+
+![81個の2目的候補から得たPareto front上で、重みw1を0.2、0.5、0.8へ変えると選択点が移動する固定実行結果。左下のideal点は二つの目的で同時には到達できない。](./media/pareto-preference-execution.svg "同じ解析的Pareto frontからweightで1点を選ぶ固定2目的教材です。weightの客観性や非凸frontの網羅性は示しません。")
+
+青緑のfrontは計算で得る候補集合です。
+橙の一点は、weightを与えた後の選択です。
+frontの生成と最終判断は同じ処理ではありません。
 
 [preference感度のTheater](#/theater/learning/SCENARIO_BIOBJECTIVE_PREFERENCE_SENSITIVITY)では、同じPareto frontからweightで1点を選びます。
 [preferenceを変えるCompare](#/compare/COMPARE_PARETO_PREFERENCE)は、81点のresult set・目的方向・Pareto dominanceを固定します。

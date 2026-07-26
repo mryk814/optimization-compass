@@ -103,6 +103,9 @@ constraint qualificationが破れている場合は、multiplierの解釈も難�
 ## 実行可能領域を図で読む
 
 [制約付き2次元問題のTrace](#/theater/learning/SCENARIO_CONSTRAINED_DISK)は、目的関数の等高線と実行可能領域を同じ図に置きます。
+
+![円内の実行可能領域と目的関数の等高線を重ね、制約を評価する経路と無視する経路の終了点を比較した固定2次元実行結果。](./media/constrained-feasibility-execution.svg "目的改善と実行可能性を別々に読む固定教材です。制約付きsolver間の一般性能rankingではありません。")
+
 目的値が下がる方向と、制約を満たす方向が一致するとは限らないことを、constraint violationと終了statusを分けて確認できます。
 
 これはSLSQP、内点法、拡張Lagrange法の実装性能を順位付けする図ではありません。

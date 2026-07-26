@@ -16,7 +16,9 @@ def test_article_figures_are_deterministic_and_current() -> None:
 
     assert first == second
     assert set(first) == {
+        "constrained-feasibility-execution.svg",
         "gradient-family-execution.svg",
+        "pareto-preference-execution.svg",
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
         "topology-field-execution.svg",
@@ -53,6 +55,11 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/concepts/topology-optimization.md": "topology-field-execution.svg",
         "content/concepts/chance-risk-contract.md": "portfolio-risk-execution.svg",
         "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
+        "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
+        "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
+        "content/methods/slsqp.md": "constrained-feasibility-execution.svg",
+        "content/methods/bfgs.md": "constrained-feasibility-execution.svg",
+        "content/methods/weighted-sum.md": "pareto-preference-execution.svg",
     }
 
     for relative_path, figure in expected.items():

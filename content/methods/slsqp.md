@@ -12,7 +12,7 @@ visualization_ids: [constrained-disk-feasible-region]
 comparison_ids: [COMPARE_CONSTRAINED_FAILURE]
 aliases: [/learn/slsqp]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 一般制約付きの滑らかな問題を逐次二次近似し、QP subproblem・line search・KKT診断で局所解を探すSQP実装です。
@@ -39,6 +39,11 @@ last_reviewed: 2026-07-24
 SLSQPという名前はKraftのsoftware系統を指し、一般的なSQP familyすべてと同一ではありません。
 
 ## 可行性と目的値を分けて見る
+
+![同じ初期点から、制約を評価する経路は円内へ戻って境界上の既知最適点へ到達し、制約を無視する経路は円外の実行不能点へ進む固定2次元実行結果。](./media/constrained-feasibility-execution.svg "SLSQPに対応する制約評価経路と、制約を無視するfailure contrastです。実装内部や一般性能を再現するbenchmarkではありません。")
+
+終了点の目的値だけを比べると、橙の経路が良く見えます。
+しかし、violationが0でない点は解として採用できません。
 
 [制約付きdiskのTheater](#/theater/learning/SCENARIO_CONSTRAINED_DISK_FEASIBLE_PATH)では、まず制約違反量を見ます。
 次に可行領域へ戻る動きと、境界に沿った目的改善を追います。

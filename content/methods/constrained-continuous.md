@@ -14,7 +14,7 @@ aliases: [/learn/constrained-continuous]
 visualization_aliases: [constrained-disk-feasible-region|/theater/constrained-continuous]
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 目的値だけでなくprimal feasibility・stationarity・active constraint・停止理由を同時に追い、実行可能な連続解を求める最適化familyです。
@@ -31,6 +31,13 @@ last_reviewed: 2026-07-18
 - 恐れていること: infeasibleな低objective、ill-conditioning、rank deficiency、誤ったtolerance
 
 solverの`success`は、実行可能性や局所最適性を一つで証明する値ではありません。
+
+## 目的値と制約違反を同時に見る
+
+![円内の実行可能領域に対して、制約を評価する経路は境界上の既知最適点へ到達し、制約を無視する経路は目的値を下げながら円外の実行不能点へ進む固定2次元実行結果。](./media/constrained-feasibility-execution.svg "同じ目的関数と初期点で、制約を評価する経路と無視する経路を実行した結果です。SLSQPやBFGSの実装性能は示しません。")
+
+青緑の経路は目的値とviolationを同時に下げ、境界で止まります。
+橙の経路は目的値0へ近づきますが、制約違反が残るため候補解にはなりません。
 
 ## まず確認すること
 

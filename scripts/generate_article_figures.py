@@ -5,7 +5,11 @@ import html
 import math
 from pathlib import Path
 
-from optimization_compass.learning_slices import generate_topology_field_artifact
+from optimization_compass.learning_slices import (
+    generate_feasible_region_artifact,
+    generate_pareto_front_artifact,
+    generate_topology_field_artifact,
+)
 from optimization_compass.parameter_estimation import generate_parameter_estimation_traces
 from optimization_compass.portfolio_uncertainty import generate_portfolio_uncertainty_traces
 from optimization_compass.search_tree import (
@@ -26,12 +30,268 @@ def read_dataset_version() -> str:
 
 def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     return {
+        "constrained-feasibility-execution.svg": _constrained_feasibility_svg(
+            dataset_version
+        ).encode("utf-8"),
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
+        "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _constrained_feasibility_svg(dataset_version: str) -> str:
+    artifact = generate_feasible_region_artifact(dataset_version)
+    plot_x, plot_y, plot_width, plot_height = 88.0, 126.0, 624.0, 500.0
+    x_min, x_max = artifact.bounds.x
+    y_min, y_max = artifact.bounds.y
+
+    def project(point: tuple[float, float]) -> tuple[float, float]:
+        x, y = point
+        return (
+            plot_x + (x - x_min) / (x_max - x_min) * plot_width,
+            plot_y + plot_height - (y - y_min) / (y_max - y_min) * plot_height,
+        )
+
+    center_x, center_y = project(artifact.constraint.center)
+    radius = artifact.constraint.radius / (x_max - x_min) * plot_width
+    elements = [
+        _svg_open(
+            "目的値が下がっても、制約違反なら解ではない",
+            artifact.text_alternative_ja,
+            height=850,
+        ),
+        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">目的値が下がっても、制約違反なら解ではない</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "min x²+y² · (x−1)²+(y−1)² ≤ 1 · deterministic teaching trace"
+            "</text>"
+        ),
+        (
+            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
+            'rx="16" fill="#fff" stroke="#cfd8d1"/>'
+        ),
+        (
+            f'<clipPath id="feasible-plot"><rect x="{plot_x}" y="{plot_y}" '
+            f'width="{plot_width}" height="{plot_height}" rx="16"/></clipPath>'
+        ),
+        '<g clip-path="url(#feasible-plot)">',
+    ]
+    for level in artifact.contour_values:
+        contour_radius = math.sqrt(level) / (x_max - x_min) * plot_width
+        origin_x, origin_y = project((0.0, 0.0))
+        elements.append(
+            f'<circle cx="{origin_x:.2f}" cy="{origin_y:.2f}" r="{contour_radius:.2f}" '
+            'fill="none" stroke="#dedbd2" stroke-width="2"/>'
+        )
+    elements.extend(
+        [
+            (
+                f'<circle cx="{center_x:.2f}" cy="{center_y:.2f}" r="{radius:.2f}" '
+                'fill="#dcefe4" fill-opacity="0.88" stroke="#245c42" stroke-width="4"/>'
+            ),
+            "</g>",
+            (
+                f'<text x="{center_x:.2f}" y="{center_y - radius + 30:.2f}" '
+                'text-anchor="middle" class="panel-title" fill="#245c42">実行可能領域</text>'
+            ),
+        ]
+    )
+    path_styles = {
+        "constraint_aware": ("制約を評価", "#245c42"),
+        "unconstrained_failure": ("制約を無視", "#c56b32"),
+    }
+    summaries: list[tuple[str, str, float, float]] = []
+    for path in artifact.paths:
+        label, color = path_styles[path.role]
+        points = [project(step.point) for step in path.steps]
+        point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        dash = ' stroke-dasharray="14 9"' if path.role == "unconstrained_failure" else ""
+        elements.append(
+            f'<polyline points="{point_string}" fill="none" stroke="{color}" '
+            f'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"{dash}/>'
+        )
+        for index, (x, y) in enumerate(points):
+            radius_value = 7 if index in {0, len(points) - 1} else 4
+            fill = "#fff" if index == 0 else color
+            elements.append(
+                f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{radius_value}" '
+                f'fill="{fill}" stroke="{color}" stroke-width="3"/>'
+            )
+        terminal = path.steps[-1]
+        summaries.append((label, color, terminal.objective, terminal.violation))
+    elements.extend(
+        [
+            (
+                '<text x="88" y="654" class="note">'
+                "○ 共通初期点　● 終了点　実線: 制約を評価　破線: 制約を無視</text>"
+            ),
+        ]
+    )
+    for row, (label, color, objective, violation) in enumerate(summaries):
+        row_y = 690 + row * 42
+        elements.extend(
+            [
+                (
+                    f'<line x1="88" y1="{row_y}" x2="124" y2="{row_y}" '
+                    f'stroke="{color}" stroke-width="6"/>'
+                ),
+                (
+                    f'<text x="140" y="{row_y + 6}" class="method" fill="{color}">'
+                    f"{html.escape(label)}</text>"
+                ),
+                (
+                    f'<text x="712" y="{row_y + 6}" text-anchor="end" class="metric-value">'
+                    f"f={objective:.3f} · violation={violation:.3f}</text>"
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            (
+                '<text x="42" y="790" class="caption">'
+                "実行生成: optimization_compass.learning_slices.generate_feasible_region_artifact"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="42" y="824" class="caveat">'
+                "固定2次元教材です。SLSQPやBFGSの実装性能・一般的な収束性は示しません。"
+                "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _pareto_preference_svg(dataset_version: str) -> str:
+    artifact = generate_pareto_front_artifact(dataset_version)
+    plot_x, plot_y, plot_width, plot_height = 96.0, 126.0, 600.0, 500.0
+    lower, upper = -0.4, 8.4
+
+    def project(objectives: tuple[float, float]) -> tuple[float, float]:
+        first, second = objectives
+        return (
+            plot_x + (first - lower) / (upper - lower) * plot_width,
+            plot_y + plot_height - (second - lower) / (upper - lower) * plot_height,
+        )
+
+    elements = [
+        _svg_open(
+            "同じfrontでも、weightで選ぶ点が動く",
+            artifact.text_alternative_ja,
+            height=850,
+        ),
+        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">同じfrontでも、weightで選ぶ点が動く</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "2-objective quadratic · 81 sampled points · exact teaching front"
+            "</text>"
+        ),
+        (
+            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
+            'rx="16" fill="#fff" stroke="#cfd8d1"/>'
+        ),
+    ]
+    for tick in (0, 2, 4, 6, 8):
+        tick_x, _ = project((float(tick), 0.0))
+        _, tick_y = project((0.0, float(tick)))
+        elements.extend(
+            [
+                (
+                    f'<line x1="{tick_x:.2f}" y1="{plot_y}" x2="{tick_x:.2f}" '
+                    f'y2="{plot_y + plot_height}" stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<line x1="{plot_x}" y1="{tick_y:.2f}" x2="{plot_x + plot_width}" '
+                    f'y2="{tick_y:.2f}" stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{tick_x:.2f}" y="{plot_y + plot_height + 28}" '
+                    f'text-anchor="middle" class="axis">{tick}</text>'
+                ),
+                (
+                    f'<text x="{plot_x - 18}" y="{tick_y + 5:.2f}" '
+                    f'text-anchor="end" class="axis">{tick}</text>'
+                ),
+            ]
+        )
+    for point in artifact.points:
+        x, y = project(point.objectives)
+        fill = "#b8b5ad" if point.dominated else "#7ca993"
+        opacity = "0.55" if point.dominated else "0.8"
+        elements.append(
+            f'<circle cx="{x:.2f}" cy="{y:.2f}" r="4.5" fill="{fill}" opacity="{opacity}"/>'
+        )
+    front_points = " ".join(
+        f"{x:.2f},{y:.2f}"
+        for x, y in (project(point.objectives) for point in artifact.pareto_front)
+    )
+    elements.append(
+        f'<polyline points="{front_points}" fill="none" stroke="#245c42" '
+        'stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+    for selection in artifact.preference_selections:
+        x, y = project(selection.objectives)
+        label_x = x + (16 if selection.weight_f1 < 0.5 else -16)
+        anchor = "start" if selection.weight_f1 < 0.5 else "end"
+        label_y = y - 14 if selection.weight_f1 != 0.8 else y + 30
+        elements.extend(
+            [
+                (
+                    f'<circle cx="{x:.2f}" cy="{y:.2f}" r="10" fill="#c56b32" '
+                    'stroke="#fff" stroke-width="4"/>'
+                ),
+                (
+                    f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}" '
+                    f'class="method" fill="#9a4f24">w₁={selection.weight_f1:.1f}</text>'
+                ),
+            ]
+        )
+    ideal_x, ideal_y = project(artifact.reference.ideal)
+    elements.extend(
+        [
+            (
+                f'<path d="M {ideal_x - 8:.2f} {ideal_y:.2f} H {ideal_x + 8:.2f} '
+                f'M {ideal_x:.2f} {ideal_y - 8:.2f} V {ideal_y + 8:.2f}" '
+                'stroke="#a53d3d" stroke-width="3"/>'
+            ),
+            (
+                f'<text x="{ideal_x + 16:.2f}" y="{ideal_y - 12:.2f}" '
+                'class="status" fill="#a53d3d">ideal（同時には到達不能）</text>'
+            ),
+            (
+                '<text x="396" y="682" text-anchor="middle" class="axis">'
+                "f₁: originからの距離²（小さいほど良い）</text>"
+            ),
+            (
+                '<text x="28" y="376" text-anchor="middle" class="axis" '
+                'transform="rotate(-90 28 376)">f₂: (2,2)からの距離²（小さいほど良い）</text>'
+            ),
+            (
+                '<text x="96" y="722" class="note">'
+                "灰: dominated　青緑: Pareto front　橙: weightで選んだ点</text>"
+            ),
+            (
+                '<text x="42" y="780" class="caption">'
+                "実行生成: optimization_compass.learning_slices.generate_pareto_front_artifact"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="42" y="814" class="caveat">'
+                "凸な2目的固定教材です。weightは客観的な優先度や一般性能rankingではありません。"
+                "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _gradient_family_svg(dataset_version: str) -> str:
