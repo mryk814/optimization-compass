@@ -95,7 +95,10 @@ def test_learning_slice_writer_closes_payload_hashes_and_routes(tmp_path) -> Non
         SHIFT_BALANCED_ARTIFACT_ID,
     }
     shift_scenarios = [
-        scenario for scenario in scenarios if scenario.scenario_id in {
+        scenario
+        for scenario in scenarios
+        if scenario.scenario_id
+        in {
             SHIFT_BALANCED_SCENARIO_ID,
             SHIFT_PREFERENCE_SCENARIO_ID,
         }
