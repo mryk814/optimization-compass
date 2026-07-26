@@ -72,6 +72,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             "utf-8"
         ),
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
+        "particle-swarm-execution.svg": _particle_swarm_svg(dataset_version).encode("utf-8"),
         "pbt-lineage-execution.svg": _pbt_lineage_svg(dataset_version).encode("utf-8"),
         "pdlp-residual-execution.svg": _pdlp_residual_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
@@ -2586,6 +2587,304 @@ def _network_simplex_pivot_svg(dataset_version: str) -> str:
 """,
         "</svg>\n",
     ]
+    return "".join(elements)
+
+
+def _particle_swarm_objective(point: list[float] | tuple[float, ...]) -> float:
+    return 20.0 + sum(
+        coordinate * coordinate - 10.0 * math.cos(2.0 * math.pi * coordinate)
+        for coordinate in point
+    )
+
+
+def _particle_swarm_probe() -> dict[str, object]:
+    rng = random.Random(5)
+    particle_count = 30
+    lower, upper = -5.12, 5.12
+    inertia = 0.65
+    cognitive = social = 1.4
+    velocity_limit = 1.5
+    snapshot_iterations = {0, 5, 15, 40}
+
+    positions = [
+        [rng.uniform(lower, upper), rng.uniform(lower, upper)] for _ in range(particle_count)
+    ]
+    velocities = [[0.0, 0.0] for _ in range(particle_count)]
+    personal_bests = [position.copy() for position in positions]
+    personal_values = [_particle_swarm_objective(position) for position in personal_bests]
+
+    def diversity() -> float:
+        centroid = [
+            sum(position[dimension] for position in positions) / particle_count
+            for dimension in range(2)
+        ]
+        return math.sqrt(
+            sum(
+                sum((position[dimension] - centroid[dimension]) ** 2 for dimension in range(2))
+                for position in positions
+            )
+            / particle_count
+        )
+
+    def current_median() -> float:
+        values = sorted(_particle_swarm_objective(position) for position in positions)
+        midpoint = len(values) // 2
+        return (values[midpoint - 1] + values[midpoint]) / 2.0
+
+    def snapshot(iteration: int) -> dict[str, object]:
+        best_index = min(range(particle_count), key=personal_values.__getitem__)
+        return {
+            "iteration": iteration,
+            "positions": tuple(tuple(position) for position in positions),
+            "global_best": tuple(personal_bests[best_index]),
+            "global_best_value": personal_values[best_index],
+            "diversity": diversity(),
+        }
+
+    snapshots = [snapshot(0)]
+    history = [
+        {
+            "iteration": 0,
+            "global_best_value": min(personal_values),
+            "median_value": current_median(),
+            "diversity": diversity(),
+        }
+    ]
+    personal_updates = 0
+    boundary_hits = 0
+
+    for iteration in range(1, 41):
+        best_index = min(range(particle_count), key=personal_values.__getitem__)
+        global_best = personal_bests[best_index].copy()
+        for particle in range(particle_count):
+            for dimension in range(2):
+                velocity = (
+                    inertia * velocities[particle][dimension]
+                    + cognitive
+                    * rng.random()
+                    * (personal_bests[particle][dimension] - positions[particle][dimension])
+                    + social
+                    * rng.random()
+                    * (global_best[dimension] - positions[particle][dimension])
+                )
+                velocities[particle][dimension] = max(
+                    -velocity_limit, min(velocity_limit, velocity)
+                )
+                proposed = positions[particle][dimension] + velocities[particle][dimension]
+                if proposed < lower or proposed > upper:
+                    boundary_hits += 1
+                positions[particle][dimension] = max(lower, min(upper, proposed))
+
+            value = _particle_swarm_objective(positions[particle])
+            if value < personal_values[particle]:
+                personal_bests[particle] = positions[particle].copy()
+                personal_values[particle] = value
+                personal_updates += 1
+
+        history.append(
+            {
+                "iteration": iteration,
+                "global_best_value": min(personal_values),
+                "median_value": current_median(),
+                "diversity": diversity(),
+            }
+        )
+        if iteration in snapshot_iterations:
+            snapshots.append(snapshot(iteration))
+
+    best_index = min(range(particle_count), key=personal_values.__getitem__)
+    return {
+        "snapshots": tuple(snapshots),
+        "history": tuple(history),
+        "initial_best_value": history[0]["global_best_value"],
+        "final_best": tuple(personal_bests[best_index]),
+        "final_best_value": personal_values[best_index],
+        "initial_diversity": history[0]["diversity"],
+        "final_diversity": history[-1]["diversity"],
+        "personal_updates": personal_updates,
+        "boundary_hits": boundary_hits,
+    }
+
+
+def _particle_swarm_svg(dataset_version: str) -> str:
+    probe = _particle_swarm_probe()
+    snapshots = probe["snapshots"]
+    history = probe["history"]
+    assert isinstance(snapshots, tuple)
+    assert isinstance(history, tuple)
+
+    elements = [
+        _svg_open(
+            "Particle Swarm Optimizationの固定実行",
+            (
+                "2次元Rastrigin関数上の30粒子をiteration 0、5、15、40で示す。"
+                "粒子は広い初期配置からglobal best付近へ集中し、下段では"
+                "best-so-farが低下する一方で位置多様性も縮小する。"
+                "淡い整数格子は周期的なbasin配置の目安であり、厳密な極小点ではない。"
+            ),
+            height=1080,
+        ),
+        '<rect width="800" height="1080" fill="#fbfaf6"/>',
+        '<text x="36" y="50" class="title">群は散らばりながら、best経験へ引かれる</text>',
+        (
+            '<text x="36" y="78" class="subtitle">'
+            "2D Rastrigin · 30 particles · seed 5 · global-best topology</text>"
+        ),
+        '<circle cx="48" cy="112" r="7" fill="#d77b42"/>',
+        '<text x="64" y="117" class="axis">current position</text>',
+        '<path d="M210 104 l5 10 11 1 -8 7 3 11 -11 -6 -10 6 3 -11 -8 -7 11 -1z" fill="#2c7564"/>',
+        '<text x="238" y="117" class="axis">global best</text>',
+        '<circle cx="365" cy="112" r="5" fill="#d8e5df" stroke="#6e8f83"/>',
+        '<text x="379" y="117" class="axis">periodic-basin guide</text>',
+    ]
+
+    panel_origins = ((36, 150), (410, 150), (36, 454), (410, 454))
+    panel_size = 270.0
+    plot_left = 30.0
+    plot_top = 44.0
+    plot_size = 210.0
+    domain = 5.12
+
+    def project(point: tuple[float, ...], panel_x: float, panel_y: float) -> tuple[float, float]:
+        return (
+            panel_x + plot_left + (point[0] + domain) / (2.0 * domain) * plot_size,
+            panel_y + plot_top + (domain - point[1]) / (2.0 * domain) * plot_size,
+        )
+
+    for snapshot_data, (panel_x, panel_y) in zip(snapshots, panel_origins, strict=True):
+        assert isinstance(snapshot_data, dict)
+        iteration = int(snapshot_data["iteration"])
+        best_value = float(snapshot_data["global_best_value"])
+        diversity = float(snapshot_data["diversity"])
+        elements.extend(
+            [
+                (
+                    f'<rect x="{panel_x}" y="{panel_y}" width="{panel_size}" '
+                    f'height="{panel_size}" rx="18" fill="#fff" stroke="#d8ded9"/>'
+                ),
+                (
+                    f'<text x="{panel_x + 18}" y="{panel_y + 28}" '
+                    f'class="panel-title">iteration {iteration}</text>'
+                ),
+                (
+                    f'<rect x="{panel_x + plot_left}" y="{panel_y + plot_top}" '
+                    f'width="{plot_size}" height="{plot_size}" fill="#f6f3eb" '
+                    'stroke="#d8ded9"/>'
+                ),
+            ]
+        )
+        for guide in range(-4, 5):
+            guide_x, _ = project((float(guide), 0.0), panel_x, panel_y)
+            _, guide_y = project((0.0, float(guide)), panel_x, panel_y)
+            elements.append(
+                f'<line x1="{guide_x:.2f}" y1="{panel_y + plot_top}" '
+                f'x2="{guide_x:.2f}" y2="{panel_y + plot_top + plot_size}" '
+                'stroke="#e8e5dd" stroke-width="1"/>'
+            )
+            elements.append(
+                f'<line x1="{panel_x + plot_left}" y1="{guide_y:.2f}" '
+                f'x2="{panel_x + plot_left + plot_size}" y2="{guide_y:.2f}" '
+                'stroke="#e8e5dd" stroke-width="1"/>'
+            )
+            for other in range(-4, 5):
+                if guide == 0 and other == 0:
+                    continue
+                local_x, local_y = project((float(guide), float(other)), panel_x, panel_y)
+                elements.append(
+                    f'<circle cx="{local_x:.2f}" cy="{local_y:.2f}" r="2.2" fill="#d8e5df"/>'
+                )
+
+        optimum_x, optimum_y = project((0.0, 0.0), panel_x, panel_y)
+        elements.append(
+            f'<circle cx="{optimum_x:.2f}" cy="{optimum_y:.2f}" r="5" '
+            'fill="#fff" stroke="#2c7564" stroke-width="2"/>'
+        )
+        positions = snapshot_data["positions"]
+        assert isinstance(positions, tuple)
+        for position in positions:
+            particle_x, particle_y = project(position, panel_x, panel_y)
+            elements.append(
+                f'<circle cx="{particle_x:.2f}" cy="{particle_y:.2f}" r="4.2" '
+                'fill="#d77b42" fill-opacity=".82" stroke="#fff" stroke-width="1"/>'
+            )
+        best_x, best_y = project(snapshot_data["global_best"], panel_x, panel_y)
+        elements.append(
+            f'<path d="M{best_x:.2f} {best_y - 8:.2f} l3 6 7 1 -5 5 2 7 '
+            f'-7 -4 -6 4 2 -7 -5 -5 7 -1z" fill="#2c7564" stroke="#fff"/>'
+        )
+        elements.append(
+            f'<text x="{panel_x + 18}" y="{panel_y + 263}" class="status">'
+            f"best {_metric(best_value)} · diversity {diversity:.2f}</text>"
+        )
+
+    chart_x, chart_y, chart_width, chart_height = 56.0, 790.0, 688.0, 150.0
+    elements.extend(
+        [
+            (
+                '<text x="36" y="770" class="panel-title">'
+                "bestは下がる。同時に、群の広がりも失われる</text>"
+            ),
+            (
+                f'<rect x="{chart_x}" y="{chart_y}" width="{chart_width}" '
+                f'height="{chart_height}" rx="14" fill="#fff" stroke="#d8ded9"/>'
+            ),
+        ]
+    )
+    best_logs = [math.log10(max(float(item["global_best_value"]), 1.0e-8)) for item in history]
+    diversities = [float(item["diversity"]) for item in history]
+    best_min, best_max = min(best_logs), max(best_logs)
+    diversity_max = max(diversities)
+
+    def chart_point(index: int, value: float, lower: float, upper: float) -> tuple[float, float]:
+        x = chart_x + 18.0 + index / 40.0 * (chart_width - 36.0)
+        ratio = (value - lower) / (upper - lower) if upper > lower else 0.0
+        y = chart_y + chart_height - 22.0 - ratio * (chart_height - 44.0)
+        return x, y
+
+    best_points = [
+        chart_point(index, value, best_min, best_max) for index, value in enumerate(best_logs)
+    ]
+    diversity_points = [
+        chart_point(index, value, 0.0, diversity_max) for index, value in enumerate(diversities)
+    ]
+    elements.extend(
+        [
+            (
+                '<polyline points="'
+                + " ".join(f"{x:.2f},{y:.2f}" for x, y in best_points)
+                + '" fill="none" stroke="#2c7564" stroke-width="4"/>'
+            ),
+            (
+                '<polyline points="'
+                + " ".join(f"{x:.2f},{y:.2f}" for x, y in diversity_points)
+                + '" fill="none" stroke="#d77b42" stroke-width="3" stroke-dasharray="8 6"/>'
+            ),
+            '<text x="72" y="815" class="axis" fill="#2c7564">log10(best-so-far)</text>',
+            '<text x="72" y="838" class="axis" fill="#d77b42">position diversity</text>',
+            '<text x="572" y="815" class="axis">independent y scales</text>',
+            '<text x="56" y="963" class="axis">0</text>',
+            '<text x="726" y="963" class="axis">iteration 40</text>',
+            (
+                '<text x="36" y="1002" class="caption">'
+                f"best {_metric(float(probe['initial_best_value']))} → "
+                f"{_metric(float(probe['final_best_value']))} · diversity "
+                f"{float(probe['initial_diversity']):.2f} → "
+                f"{float(probe['final_diversity']):.2f}</text>"
+            ),
+            (
+                '<text x="36" y="1028" class="caption">'
+                "実行生成: scripts/generate_article_figures.py::_particle_swarm_probe"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="36" y="1054" class="caveat">'
+                "固定2次元・1 seedのglobal-best PSOです。"
+                "大域最適性や他seedでの再現を保証しません。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
     return "".join(elements)
 
 

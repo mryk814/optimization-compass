@@ -15,6 +15,7 @@ from scripts.generate_article_figures import (
     _local_search_two_opt_probe,
     _multiple_shooting_probe,
     _network_simplex_transport_probe,
+    _particle_swarm_probe,
     _pbt_population_probe,
     _pdlp_probe,
     _sgd_mini_batch_probe,
@@ -283,6 +284,26 @@ def test_pbt_probe_records_worker_copy_and_lineage_inheritance() -> None:
     assert probe["final_roots"] == (3, 4, 5)
 
 
+def test_particle_swarm_probe_tracks_best_and_population_collapse() -> None:
+    probe = _particle_swarm_probe()
+    snapshots = probe["snapshots"]
+    history = probe["history"]
+
+    assert len(history) == 41
+    assert [snapshot["iteration"] for snapshot in snapshots] == [0, 5, 15, 40]
+    assert probe["initial_best_value"] == pytest.approx(6.090066675041227)
+    assert probe["final_best"] == pytest.approx((-0.0005254906782732574, 1.868959781557364e-05))
+    assert probe["final_best_value"] == pytest.approx(5.4853330098580955e-05)
+    assert probe["initial_diversity"] == pytest.approx(4.625011539787717)
+    assert probe["final_diversity"] == pytest.approx(0.212919919950744)
+    assert probe["personal_updates"] == 219
+    assert probe["boundary_hits"] == 0
+    assert all(
+        current["global_best_value"] <= previous["global_best_value"]
+        for previous, current in zip(history, history[1:], strict=False)
+    )
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -305,6 +326,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "network-simplex-pivot-execution.svg",
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
+        "particle-swarm-execution.svg",
         "pbt-lineage-execution.svg",
         "pdlp-residual-execution.svg",
         "portfolio-risk-execution.svg",
@@ -354,6 +376,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/family-discrete-structure.md": "search-tree-proof-execution.svg",
         "content/methods/pbt.md": "pbt-lineage-execution.svg",
         "content/methods/pdlp.md": "pdlp-residual-execution.svg",
+        "content/methods/particle-swarm.md": "particle-swarm-execution.svg",
         "content/methods/sgd.md": "sgd-mini-batch-execution.svg",
         "content/methods/simulated-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
