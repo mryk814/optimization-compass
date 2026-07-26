@@ -77,8 +77,9 @@ const releaseIdentity = {
 };
 
 const featuredGallery = {
-  contract_version: "2.0.0",
+  contract_version: "3.0.0",
   dataset_version: rawLearningJourneys.dataset_version,
+  domains: [{ domain: "science", label_ja: "科学・推定" }],
   cases: [
     {
       case_id: "EC017",
@@ -337,7 +338,12 @@ describe("application routes", () => {
     vi.stubGlobal("fetch", vi.fn().mockImplementation(async (url: string) => {
       if (url.endsWith("data/release.json")) return jsonResponse(releaseIdentity);
       if (url.endsWith("data/gallery.json")) {
-        return jsonResponse({ contract_version: "2.0.0", dataset_version: "0.3.0", cases: [] });
+        return jsonResponse({
+          contract_version: "3.0.0",
+          dataset_version: "0.3.0",
+          domains: [],
+          cases: [],
+        });
       }
       return jsonResponse(emptyView);
     }));
@@ -352,7 +358,15 @@ describe("application routes", () => {
 
   test.each([
     ["#/learn/missing", { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, pages: [] }],
-    ["#/gallery/missing", { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, cases: [] }],
+    [
+      "#/gallery/missing",
+      {
+        contract_version: "3.0.0",
+        dataset_version: rawManifest.dataset_version,
+        domains: [],
+        cases: [],
+      },
+    ],
     [
       "#/compare/missing",
       { contract_version: "2.0.0", dataset_version: rawManifest.dataset_version, comparisons: [] },

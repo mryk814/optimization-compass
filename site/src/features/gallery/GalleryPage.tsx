@@ -4,7 +4,11 @@ import { Link, useParams } from "react-router-dom";
 import { OptimizationProblemPrimer } from "../../components/OptimizationProblemPrimer";
 import { PageOrientation } from "../../components/PageOrientation";
 import { findEntity, type EntityType, type LinkedEntity } from "../../contracts/entity-links";
-import { parseGalleryIndex, type GalleryCase } from "../../contracts/gallery";
+import {
+  parseGalleryIndex,
+  type GalleryCase,
+  type GalleryDomain,
+} from "../../contracts/gallery";
 import {
   parseLearningJourneyIndex,
   type LearningJourney,
@@ -19,12 +23,9 @@ import {
 import { EvidenceLinks } from "../evidence/EvidenceLinks";
 import { EntityNotFoundError, NotFoundPage } from "../navigation/NotFoundPage";
 import { PromptExportLauncher } from "../prompt-export/PromptExportLauncher";
-import { domainLabel } from "./domain-label";
-
-export { domainLabel } from "./domain-label";
-
 export function GalleryPage() {
   const [cases, setCases] = useState<GalleryCase[]>([]);
+  const [galleryDomains, setGalleryDomains] = useState<GalleryDomain[]>([]);
   const [journeys, setJourneys] = useState<LearningJourney[]>([]);
   const [domain, setDomain] = useState("all");
   const [query, setQuery] = useState("");
@@ -37,6 +38,7 @@ export function GalleryPage() {
           throw new Error("Gallery and learning journey dataset versions do not match.");
         }
         setCases(gallery.cases);
+        setGalleryDomains(gallery.domains);
         setJourneys(journeyIndex.journeys);
         setLoaded(true);
       },
@@ -46,7 +48,7 @@ export function GalleryPage() {
       },
     );
   }, []);
-  const domains = ["all", ...new Set(cases.map((item) => item.domain))];
+  const domains = [{ domain: "all", label_ja: "すべて" }, ...galleryDomains];
   const domainCounts = useMemo(() => countCasesByDomain(cases), [cases]);
   const featuredDomainCounts = domainCounts.slice(0, 3);
   const remainingDomainCounts = domainCounts.slice(3);
@@ -107,7 +109,7 @@ export function GalleryPage() {
           領域
           <select value={domain} onChange={(event) => setDomain(event.target.value)}>
             {domains.map((item) => (
-              <option key={item} value={item}>{domainLabel(item)}</option>
+              <option key={item.domain} value={item.domain}>{item.label_ja}</option>
             ))}
           </select>
         </label>
@@ -177,7 +179,7 @@ function GalleryCaseGrid({
         const journey = journeyByCase.get(item.case_id);
         return (
           <Link className="gallery-card" key={item.case_id} to={`/gallery/${item.case_id}`}>
-            <span>{domainLabel(item.domain)} · {difficultyLabel(item.difficulty)}</span>
+            <span>{item.domain_label_ja} · {difficultyLabel(item.difficulty)}</span>
             <h2>{item.title_ja}</h2>
             <p>{item.question}</p>
             <footer>
@@ -268,10 +270,10 @@ export function GalleryDomainOverview({
   remainingItems,
 }: {
   activeDomain: string;
-  featuredItems: Array<{ domain: string; count: number }>;
+  featuredItems: GalleryDomainCount[];
   largestDomainCount: number;
   onSelect: (domain: string) => void;
-  remainingItems: Array<{ domain: string; count: number }>;
+  remainingItems: GalleryDomainCount[];
 }) {
   const domainCount = featuredItems.length + remainingItems.length;
   const detailsRef = useRef<HTMLDetailsElement>(null);
@@ -329,7 +331,7 @@ function DomainButtons({
   onSelect,
 }: {
   activeDomain: string;
-  items: Array<{ domain: string; count: number }>;
+  items: GalleryDomainCount[];
   largestDomainCount: number;
   onSelect: (domain: string) => void;
 }) {
@@ -340,7 +342,7 @@ function DomainButtons({
       onClick={() => onSelect(item.domain)}
       type="button"
     >
-      <span>{domainLabel(item.domain)}</span>
+      <span>{item.label_ja}</span>
       <span aria-hidden="true" className="gallery-domain-bar">
         <span style={{ width: `${(item.count / largestDomainCount) * 100}%` }} />
       </span>
@@ -649,14 +651,25 @@ export function journeyStatusSummary(status?: LearningJourney["status"]): string
 }
 
 export function countCasesByDomain(
-  cases: Pick<GalleryCase, "domain">[],
-): Array<{ domain: string; count: number }> {
-  const counts = new Map<string, number>();
-  cases.forEach((item) => counts.set(item.domain, (counts.get(item.domain) ?? 0) + 1));
-  return [...counts.entries()]
-    .map(([domain, count]) => ({ domain, count }))
-    .sort((left, right) => right.count - left.count || domainLabel(left.domain).localeCompare(domainLabel(right.domain), "ja"));
+  cases: Pick<GalleryCase, "domain" | "domain_label_ja">[],
+): GalleryDomainCount[] {
+  const counts = new Map<string, GalleryDomainCount>();
+  cases.forEach((item) => {
+    const current = counts.get(item.domain);
+    counts.set(item.domain, {
+      domain: item.domain,
+      label_ja: item.domain_label_ja,
+      count: (current?.count ?? 0) + 1,
+    });
+  });
+  return [...counts.values()]
+    .sort((left, right) => (
+      right.count - left.count
+      || left.label_ja.localeCompare(right.label_ja, "ja")
+    ));
 }
+
+type GalleryDomainCount = GalleryDomain & { count: number };
 
 function difficultyLabel(difficulty: GalleryCase["difficulty"]): string {
   if (difficulty === "intro") return "入門";

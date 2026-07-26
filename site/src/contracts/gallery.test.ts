@@ -10,9 +10,14 @@ describe("gallery contract", () => {
       index.cases.filter((item) => /^EC\d+$/u.test(item.case_id)).map((item) => item.case_id),
     );
 
-    expect(index.contract_version).toBe("2.0.0");
+    expect(index.contract_version).toBe("3.0.0");
+    expect(index.domains).toContainEqual({
+      domain: "transportation",
+      label_ja: "交通・モビリティ",
+    });
     expect(index.cases.find((item) => item.case_id === "traffic-signal-tradeoff")).toMatchObject({
       domain: "transportation",
+      domain_label_ja: "交通・モビリティ",
       problem_archetype_id: "PA038",
       comparison_ids: ["COMPARE_PARETO_PREFERENCE"],
     });
@@ -32,7 +37,7 @@ describe("gallery contract", () => {
   });
 
   test("rejects the replaced v1 shape and empty learning cautions", () => {
-    expect(() => parseGalleryIndex({ ...structuredClone(raw), contract_version: "1.0.0" }))
+    expect(() => parseGalleryIndex({ ...structuredClone(raw), contract_version: "2.0.0" }))
       .toThrow(/Unsupported gallery contract/u);
 
     const invalid = structuredClone(raw) as unknown as { cases: Array<Record<string, unknown>> };
@@ -42,5 +47,11 @@ describe("gallery contract", () => {
     const legacy = structuredClone(raw) as unknown as { cases: Array<Record<string, unknown>> };
     legacy.cases[0].candidate_method_ids = ["M_CP_SAT"];
     expect(() => parseGalleryIndex(legacy)).toThrow(/candidate_method_ids has been replaced/u);
+
+    const unknownDomain = structuredClone(raw) as unknown as {
+      cases: Array<Record<string, unknown>>;
+    };
+    unknownDomain.cases[0].domain = "unlisted-domain";
+    expect(() => parseGalleryIndex(unknownDomain)).toThrow(/unknown domain/u);
   });
 });

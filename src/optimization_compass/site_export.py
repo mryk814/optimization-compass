@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from datetime import UTC, date, datetime, time
 from hashlib import sha256
@@ -402,11 +403,9 @@ def export_site_data(
     )
     _write_json(output_dir / "release-catalog.json", release_catalog.as_json_object())
     _write_content_index(output_dir / "content.json", release["version"])
-    _write_seeded_index(
+    _write_gallery_index(
         output_dir / "gallery.json",
         GALLERY_SEED,
-        collection_field="cases",
-        contract_version="2.0.0",
         dataset_version=release["version"],
     )
     comparison_seed = load_comparison_seed(COMPARISON_SEED, release["version"])
@@ -3387,23 +3386,53 @@ def _content_payload(page: ContentPage) -> dict[str, Any]:
     }
 
 
-def _write_seeded_index(
+def _write_gallery_index(
     path: Path,
     source: Path,
     *,
-    collection_field: str,
-    contract_version: str,
     dataset_version: str,
 ) -> None:
     payload = json.loads(source.read_text(encoding="utf-8"))
-    if set(payload) != {collection_field} or not isinstance(payload[collection_field], list):
+    if set(payload) != {"domains", "cases"}:
+        raise ValueError(f"invalid Gallery seed fields: {source}")
+    domains = payload["domains"]
+    cases = payload["cases"]
+    if not isinstance(domains, list) or not isinstance(cases, list):
         raise ValueError(f"invalid seeded site index: {source}")
+    normalized_domains: list[dict[str, str]] = []
+    for index, item in enumerate(domains):
+        if not isinstance(item, dict) or set(item) != {"domain", "label_ja"}:
+            raise ValueError(f"invalid Gallery domain metadata at index {index}: {source}")
+        domain = item["domain"]
+        label_ja = item["label_ja"]
+        if (
+            not isinstance(domain, str)
+            or re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", domain) is None
+            or not isinstance(label_ja, str)
+            or not label_ja.strip()
+        ):
+            raise ValueError(f"invalid Gallery domain metadata at index {index}: {source}")
+        normalized_domains.append({"domain": domain, "label_ja": label_ja})
+    domain_ids = [item["domain"] for item in normalized_domains]
+    labels = [item["label_ja"] for item in normalized_domains]
+    if len(domain_ids) != len(set(domain_ids)) or len(labels) != len(set(labels)):
+        raise ValueError(f"duplicate Gallery domain metadata: {source}")
+    if any(not isinstance(item, dict) or not isinstance(item.get("domain"), str) for item in cases):
+        raise ValueError(f"invalid Gallery case entry: {source}")
+    case_domains = {str(item["domain"]) for item in cases}
+    if case_domains != set(domain_ids):
+        missing = sorted(case_domains - set(domain_ids))
+        unused = sorted(set(domain_ids) - case_domains)
+        raise ValueError(
+            f"Gallery domain metadata does not match cases: missing={missing}, unused={unused}"
+        )
     _write_json(
         path,
         {
-            "contract_version": contract_version,
+            "contract_version": "3.0.0",
             "dataset_version": dataset_version,
-            collection_field: payload[collection_field],
+            "domains": normalized_domains,
+            "cases": cases,
         },
     )
 

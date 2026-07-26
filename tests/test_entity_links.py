@@ -65,13 +65,17 @@ def test_relation_index_rejects_dangling_relations() -> None:
         )
 
 
-def test_gallery_loader_requires_v2_candidate_reasons_and_limitations(tmp_path: Path) -> None:
+def test_gallery_loader_requires_v3_domains_candidate_reasons_and_limitations(
+    tmp_path: Path,
+) -> None:
     path = tmp_path / "gallery.json"
     payload = {
-        "contract_version": "2.0.0",
+        "contract_version": "3.0.0",
         "dataset_version": "1.0.0",
+        "domains": [{"domain": "science", "label_ja": "科学・推定"}],
         "cases": [
             {
+                "domain": "science",
                 "candidate_methods": [{"method_id": "M_ONE", "reason": "理由"}],
                 "limitations": ["限界"],
             }

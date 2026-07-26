@@ -630,15 +630,36 @@ def _load_gallery(path: Path, dataset_version: str) -> dict[str, Any]:
     if not isinstance(raw, dict):
         raise ValueError("gallery index must be an object")
     payload: dict[str, Any] = raw
-    if payload.get("contract_version") != "2.0.0":
+    if payload.get("contract_version") != "3.0.0":
         raise ValueError("unsupported gallery contract version")
     if payload.get("dataset_version") != dataset_version:
         raise ValueError("gallery dataset version does not match the release")
+    domains = payload.get("domains")
+    if not isinstance(domains, list):
+        raise ValueError("gallery domains must be a list")
+    domain_ids: set[str] = set()
+    for domain in domains:
+        if (
+            not isinstance(domain, dict)
+            or not isinstance(domain.get("domain"), str)
+            or not domain["domain"].strip()
+            or not isinstance(domain.get("label_ja"), str)
+            or not domain["label_ja"].strip()
+        ):
+            raise ValueError("gallery domain requires domain and label_ja")
+        if domain["domain"] in domain_ids:
+            raise ValueError("gallery domains must be unique")
+        domain_ids.add(domain["domain"])
     if not isinstance(payload.get("cases"), list):
         raise ValueError("gallery cases must be a list")
+    used_domains: set[str] = set()
     for case in payload["cases"]:
         if not isinstance(case, dict):
             raise ValueError("gallery case must be an object")
+        domain_id = case.get("domain")
+        if not isinstance(domain_id, str) or domain_id not in domain_ids:
+            raise ValueError("gallery case uses an unknown domain")
+        used_domains.add(domain_id)
         if "candidate_method_ids" in case:
             raise ValueError("gallery candidate_method_ids has been replaced by candidate_methods")
         candidates = case.get("candidate_methods")
@@ -660,6 +681,8 @@ def _load_gallery(path: Path, dataset_version: str) -> dict[str, Any]:
             or any(not isinstance(item, str) or not item.strip() for item in limitations)
         ):
             raise ValueError("gallery limitations must be a non-empty string list")
+    if used_domains != domain_ids:
+        raise ValueError("gallery domain metadata must match used case domains")
     return payload
 
 

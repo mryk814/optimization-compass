@@ -17,7 +17,6 @@ import { parseProblemCatalog } from "./contracts/problems";
 import { loadDatasetReleaseIdentity } from "./contracts/release";
 import { siteBaseUrl } from "./data/base-url";
 import { COMPARE_LAB_ROUTE } from "./features/compare/compare-routes";
-import { domainLabel } from "./features/gallery/domain-label";
 import { selectFeaturedCase, type FeaturedCase } from "./features/home/featured-case";
 import { LicenseLinks } from "./features/licensing/LicenseLinks";
 import { NotFoundPage } from "./features/navigation/NotFoundPage";
@@ -178,7 +177,7 @@ function HomePage() {
           <>
             <header className="home-case-header">
               <div>
-                <p className="eyebrow">Case preview · {domainLabel(featuredCase.item.domain)}</p>
+                <p className="eyebrow">Case preview · {featuredCase.item.domain_label_ja}</p>
                 <h2 id="home-case-title">{featuredCase.item.title_ja}</h2>
                 <p className="home-case-question">{featuredCase.item.question}</p>
               </div>

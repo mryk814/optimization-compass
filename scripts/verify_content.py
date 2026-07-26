@@ -23,8 +23,8 @@ def verify_content(root: Path) -> dict[str, int | str]:
     identity = load_dataset_release_identity(data_root / "release.json")
     content_index = _load_index(data_root / "content.json", "pages", identity.dataset_version)
     gallery_index = _load_index(data_root / "gallery.json", "cases", identity.dataset_version)
-    if gallery_index.get("contract_version") != "2.0.0":
-        raise ValueError("gallery.json must use contract version 2.0.0")
+    if gallery_index.get("contract_version") != "3.0.0":
+        raise ValueError("gallery.json must use contract version 3.0.0")
     comparison_index = _load_index(
         data_root / "comparisons.json", "comparisons", identity.dataset_version
     )
@@ -43,6 +43,17 @@ def verify_content(root: Path) -> dict[str, int | str]:
     )
 
     case_ids = _unique_ids(gallery_index["cases"], "case_id", "gallery cases")
+    domain_rows = gallery_index.get("domains")
+    if not isinstance(domain_rows, list):
+        raise ValueError("gallery domains must be a list")
+    domain_ids = _unique_ids(domain_rows, "domain", "gallery domains")
+    used_domains = {
+        str(case["domain"])
+        for case in gallery_index["cases"]
+        if isinstance(case, dict) and isinstance(case.get("domain"), str)
+    }
+    if used_domains != domain_ids:
+        raise ValueError("gallery domain metadata must match used case domains")
     _require_minimum("gallery cases", len(case_ids), MINIMUM_GALLERY_CASES)
     comparison_ids = _unique_ids(
         comparison_index["comparisons"], "comparison_id", "comparison sets"

@@ -8,7 +8,6 @@ import type { LearningJourney } from "../../contracts/learning-journeys";
 import {
   caseState,
   countCasesByDomain,
-  domainLabel,
   GalleryDomainOverview,
   GalleryNote,
   GalleryTakeaway,
@@ -68,12 +67,12 @@ describe("gallery learning journey status", () => {
       <GalleryDomainOverview
         activeDomain="all"
         featuredItems={[
-          { domain: "engineering", count: 7 },
-          { domain: "control", count: 3 },
+          { domain: "engineering", label_ja: "設計・工学", count: 7 },
+          { domain: "control", label_ja: "制御", count: 3 },
         ]}
         largestDomainCount={7}
         onSelect={onSelect}
-        remainingItems={[{ domain: "science", count: 2 }]}
+        remainingItems={[{ domain: "science", label_ja: "科学・推定", count: 2 }]}
       />,
     );
 
@@ -162,17 +161,12 @@ describe("gallery learning journey status", () => {
     expect(item.limitations[0]).not.toHaveLength(0);
   });
 
-  test("uses reader-facing domain and journey labels", () => {
-    expect(domainLabel("engineering")).toBe("設計・工学");
-    expect(domainLabel("machine-learning")).toBe("機械学習");
-    expect(domainLabel("manufacturing")).toBe("製造");
-    expect(domainLabel("energy")).toBe("エネルギー");
-    expect(domainLabel("public-policy")).toBe("公共政策");
-    expect(domainLabel("agriculture")).toBe("農業・農地");
-    expect(domainLabel("environment")).toBe("環境・保全");
-    expect(domainLabel("healthcare")).toBe("医療・地域保健");
-    expect(domainLabel("transportation")).toBe("交通・モビリティ");
-    expect(domainLabel("custom-domain")).toBe("custom-domain");
+  test("uses generated reader-facing domain and journey labels", () => {
+    const index = parseGalleryIndex(structuredClone(rawGallery));
+    expect(index.cases.find((item) => item.domain === "engineering")?.domain_label_ja)
+      .toBe("設計・工学");
+    expect(index.cases.find((item) => item.domain === "transportation")?.domain_label_ja)
+      .toBe("交通・モビリティ");
     expect(journeyStatusLabel("complete")).toBe("定式化・実行・比較あり");
     expect(journeyStatusLabel("partial")).toBe("定式化あり・一部準備中");
     expect(journeyStatusLabel()).toBe("準備中");
@@ -181,12 +175,12 @@ describe("gallery learning journey status", () => {
 
   test("summarizes use-case coverage by domain in descending order", () => {
     expect(countCasesByDomain([
-      { domain: "science" },
-      { domain: "engineering" },
-      { domain: "science" },
+      { domain: "science", domain_label_ja: "科学・推定" },
+      { domain: "engineering", domain_label_ja: "設計・工学" },
+      { domain: "science", domain_label_ja: "科学・推定" },
     ])).toEqual([
-      { domain: "science", count: 2 },
-      { domain: "engineering", count: 1 },
+      { domain: "science", label_ja: "科学・推定", count: 2 },
+      { domain: "engineering", label_ja: "設計・工学", count: 1 },
     ]);
   });
 

@@ -110,6 +110,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     second_scenario_bytes = (second_output / "visualization-scenarios.json").read_bytes()
     first_catalog_bytes = (first_output / "release-catalog.json").read_bytes()
     second_catalog_bytes = (second_output / "release-catalog.json").read_bytes()
+    first_gallery_bytes = (first_output / "gallery.json").read_bytes()
+    second_gallery_bytes = (second_output / "gallery.json").read_bytes()
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
@@ -119,12 +121,18 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert first_recommendation_bytes == second_recommendation_bytes
     assert first_scenario_bytes == second_scenario_bytes
     assert first_catalog_bytes == second_catalog_bytes
+    assert first_gallery_bytes == second_gallery_bytes
     assert json.loads(first_catalog_bytes) == json.loads(
         site_export_module.RELEASE_CATALOG_PATH.read_bytes()
     )
     assert first_manifest == second_manifest
     assert first_view_bytes.endswith(b"\n")
     assert first_manifest_bytes.endswith(b"\n")
+    gallery = json.loads(first_gallery_bytes)
+    labels_by_domain = {item["domain"]: item["label_ja"] for item in gallery["domains"]}
+    assert gallery["contract_version"] == "3.0.0"
+    assert labels_by_domain["transportation"] == "交通・モビリティ"
+    assert {item["domain"] for item in gallery["cases"]} == set(labels_by_domain)
 
     view = ViewSpec.model_validate_json(first_view_bytes)
     nodes = {node.node_id: node for node in view.nodes}

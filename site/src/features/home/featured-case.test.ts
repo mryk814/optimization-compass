@@ -13,8 +13,9 @@ import { selectFeaturedCase } from "./featured-case";
 
 const caseIds = ["first-in-gallery", "near-complete", "complete"];
 const gallery = {
-  contract_version: "2.0.0",
+  contract_version: "3.0.0",
   dataset_version: "test",
+  domains: [],
   cases: caseIds.map(galleryCase),
 } as GalleryIndex;
 const problems = problemCatalog(caseIds);

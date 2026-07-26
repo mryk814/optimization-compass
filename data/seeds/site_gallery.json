@@ -1,4 +1,21 @@
 {
+  "domains": [
+    {"domain": "agriculture", "label_ja": "農業・農地"},
+    {"domain": "business", "label_ja": "事業・施策"},
+    {"domain": "control", "label_ja": "制御"},
+    {"domain": "energy", "label_ja": "エネルギー"},
+    {"domain": "engineering", "label_ja": "設計・工学"},
+    {"domain": "environment", "label_ja": "環境・保全"},
+    {"domain": "finance", "label_ja": "金融"},
+    {"domain": "healthcare", "label_ja": "医療・地域保健"},
+    {"domain": "logistics", "label_ja": "物流"},
+    {"domain": "machine-learning", "label_ja": "機械学習"},
+    {"domain": "manufacturing", "label_ja": "製造"},
+    {"domain": "operations", "label_ja": "運用・計画"},
+    {"domain": "public-policy", "label_ja": "公共政策"},
+    {"domain": "science", "label_ja": "科学・推定"},
+    {"domain": "transportation", "label_ja": "交通・モビリティ"}
+  ],
   "cases": [
     {
       "case_id": "multi-fidelity-simulator",
