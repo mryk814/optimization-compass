@@ -28,6 +28,12 @@ MILPをbranch-and-boundで探索しながらcutで連続緩和を強化し、inc
 - **動かすもの**: 探索木、各nodeのrelaxation、追加するcut
 - **前進の判断**: incumbentとbest boundのgapが設定したtoleranceへ近づくこと
 
+## 探索結果を先に見る
+
+![4変数0-1 knapsackを9 nodeまで決定論的に探索したBranch-and-Bound木。各nodeに部分割当、value、bound、枝刈り状態を示し、最終的にbest feasible 15とglobal bound 15が一致してgap 0になる。](./media/search-tree-proof-execution.svg "Branch-and-Cutの土台になるBranch-and-Boundを固定Python generatorで実行した結果です。cut生成やMILP solverの性能は示しません。")
+
+緑の最適nodeだけでなく、灰色のbound枝刈りと赤い実行不能nodeを見ます。解を一つ得ることと、未探索領域に改善余地がないと証明することは別です。
+
 ## Cutは何をするか
 
 MILPのLP relaxationは整数条件を外すため、整数実行可能解より良すぎるfractional解を返すことがあります。cutting planeは、

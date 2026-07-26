@@ -10,7 +10,7 @@ related_ids: [dynamic-programming, dijkstra-astar, cp-sat, branch-and-bound, bra
 visualization_ids: [binary-knapsack-bnb-complete, binary-knapsack-bnb-budget]
 comparison_ids: [COMPARE_KNAPSACK_BNB_BUDGET]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 離散変数を含む問題で、graph・動的計画法・CP-SAT・MILP・local searchを構造と必要な保証から選び分ける入口です。
@@ -26,6 +26,12 @@ last_reviewed: 2026-07-24
 - 主な弱点: state explosion、弱いrelaxation、symmetry、巨大Big-M、弱いpropagation
 
 離散問題を見たら、最初からMILPやmetaheuristicへ進まず、graph・flow・matching・DPなどの専用構造を先に確認します。
+
+## 探索木で構造を見る
+
+![4変数0-1 knapsackを9 nodeまで決定論的に探索したBranch-and-Bound木。部分割当ごとのvalueとboundを使い、実行不能または改善不能な枝を除き、gap 0で最適性を証明する。](./media/search-tree-proof-execution.svg "離散探索で候補を全列挙せずに減らす一例です。固定Branch-and-Bound教材であり、CP-SAT、MILP、local searchの一般性能rankingではありません。")
+
+木の大きさより、各枝を残す理由と切る理由に注目します。専用graph法、constraint propagation、relaxationでも、「調べなくてよい候補を何で判定するか」が選択の軸です。
 
 ## まず確認すること
 

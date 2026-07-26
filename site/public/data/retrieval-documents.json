@@ -6257,6 +6257,39 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:branch-and-cut:探索結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:branch-and-cut",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:lp-qp-conic",
+        "method:M_BRANCH_CUT",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S024",
+        "source:S025",
+        "source:S028",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S024",
+        "S025",
+        "S028"
+      ],
+      "text": "Branch-and-Cutの土台になるBranch-and-Boundを固定Python generatorで実行した結果です。cut生成やMILP solverの性能は示しません。 緑の最適nodeだけでなく、灰色のbound枝刈りと赤い実行不能nodeを見ます。解を一つ得ることと、未探索領域に改善余地がないと証明することは別です。",
+      "title": "探索結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:branch-and-cut:次に読む",
       "dataset_version": "0.18.19",
       "document_id": "content:branch-and-cut",
@@ -12246,6 +12279,31 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:density-filter:filterの有無を先に比べる",
+      "dataset_version": "0.18.19",
+      "document_id": "content:density-filter",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_TOPOLOGY_OC_MMA",
+        "content:adjoint-sensitivity",
+        "content:geometry-update-failure-modes",
+        "content:optimality-criteria-topology",
+        "content:shape-optimization",
+        "content:simp-topology",
+        "content:topology-optimization",
+        "method:M_DENSITY_FILTER",
+        "source:S099",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S099"
+      ],
+      "text": "同じ教育用更新をfilterあり・なしで実行した結果です。filter radiusの一般的な最適値や実部材の製造可能性は示しません。 右下のfilterなしfieldでは、濃淡が細かく交互に残ります。形が滑らかに見えるかだけでなく、checkerboard scoreとgray fractionを対応させます。 python weights = build_neighbor_weights ( mesh , radius ) filtered_density = weighted_average ( density , weights ) filtered_sensitivity = weighted_average ( raw_sensitivity , weights )",
+      "title": "filterの有無を先に比べる"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:density-filter:overview",
       "dataset_version": "0.18.19",
       "document_id": "content:density-filter",
@@ -12390,7 +12448,7 @@
       "source_ids": [
         "S099"
       ],
-      "text": "有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。 density filterは近傍半径と距離重みを使い、各要素の更新を周囲のfieldと結びます。 典型的な平均は、 ρ ~ e = ∑ i w e i ρ i ∑ i w e i , w e i = max ( 0 , r min − dist ( e , i ) ) の形です。 実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。 近傍平均は、単に画像をぼかす処理ではありません。 設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。 したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。 mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。 density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。 python weights = build_neighbor_weights ( mesh , radius ) filtered_density = weighted_average ( density , weights ) filtered_sensitivity = weighted_average ( raw_sensitivity , weights )",
+      "text": "有限要素ごとの感度をそのまま使うと、隣接要素が細かく交互に変化する場合があります。 density filterは近傍半径と距離重みを使い、各要素の更新を周囲のfieldと結びます。 典型的な平均は、 ρ ~ e = ∑ i w e i ρ i ∑ i w e i , w e i = max ( 0 , r min − dist ( e , i ) ) の形です。 実際に密度をfilterするか、感度をfilterするかで、制約の扱いと実装の意味は変わります。 近傍平均は、単に画像をぼかす処理ではありません。 設計変数を更新する前に、どの要素がどの要素へ影響を渡すかを定義するため、境界付近の重み、filter半径、体積制約を同時に確認する必要があります。 半径を大きくすれば細かい模様は消えやすくなりますが、細い部材や局所的な応力経路も消える可能性があります。 したがって、checkerboard scoreだけを下げることを成功条件にせず、compliance、gray fraction、mesh refinement後の挙動を並べて読みます。 mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。 density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。",
       "title": "隣接要素を独立に更新しない"
     },
     {
@@ -15411,6 +15469,43 @@
       ],
       "text": "証明完了の探索木 では、incumbentとglobal boundが一致するまでを追います。 4 nodeで止まる探索木 では、実行可能解があってもgapと未探索nodeが残る状態を確認します。 停止条件を並べるCompare は、同じ4変数knapsackでnode stop limitだけを変えます。 この教材instanceは、上の実務Caseそのものではありません。 CP-SAT／MILP／routing手法の一般性能rankingにも使いません。",
       "title": "探索木でboundと停止を読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:family.discrete-structure:探索木で構造を見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:family.discrete-structure",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
+        "content:branch-and-bound",
+        "content:branch-and-cut",
+        "content:cp-sat",
+        "content:dijkstra-astar",
+        "content:dynamic-programming",
+        "method:MF_DISCRETE_EXACT",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S023",
+        "source:S054",
+        "source:S079",
+        "trace:binary-knapsack-bnb-budget",
+        "trace:binary-knapsack-bnb-complete"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S023",
+        "S054",
+        "S079"
+      ],
+      "text": "離散探索で候補を全列挙せずに減らす一例です。固定Branch-and-Bound教材であり、CP-SAT、MILP、local searchの一般性能rankingではありません。 木の大きさより、各枝を残す理由と切る理由に注目します。専用graph法、constraint propagation、relaxationでも、「調べなくてよい候補を何で判定するか」が選択の軸です。",
+      "title": "探索木で構造を見る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -25154,6 +25249,32 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:optimality-criteria-topology:oc更新のfieldを見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:optimality-criteria-topology",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_TOPOLOGY_OC_MMA",
+        "content:adjoint-sensitivity",
+        "content:density-filter",
+        "content:mma",
+        "content:simp-topology",
+        "content:topology-optimization",
+        "method:M_OC_TOPOLOGY",
+        "source:S097",
+        "source:S098",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S097",
+        "S098"
+      ],
+      "text": "固定OC teaching runの実行結果です。反復履歴とfilterの失敗contrastを読む図であり、MMAとの性能順位や実FEMの妥当性は示しません。 上段から左下へ、OCが同じvolume targetのもとでfieldを更新する流れを追います。右下は更新則の比較ではなく、filterを外したときの失敗contrastです。 python lower , upper = bracket_volume_multiplier ( filtered_sensitivity , target_volume ) multiplier = bisect_volume_multiplier ( lower , upper , density , filtered_sensitivity ) candidate = np . clip ( density * update_factor ( multiplier , filtered_sensitivity ), 0.001 , 1.0 ) next_density = limit_move ( candidate , density , move_limit )",
+      "title": "OC更新のfieldを見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:optimality-criteria-topology:overview",
       "dataset_version": "0.18.19",
       "document_id": "content:optimality-criteria-topology",
@@ -25200,7 +25321,7 @@
         "S097",
         "S098"
       ],
-      "text": "SIMPで状態と感度を計算した後、OCは感度の符号と大きさを使って密度を更新します。 更新倍率にはmove limitと上下限があり、全要素を自由に動かすわけではありません。 体積率制約があるため、更新倍率の係数は通常、更新後の平均密度が目標に近づくように調整します。 この係数を決める部分が、単なるgradient descentとの違いです。 OCの更新は、KKT条件に近づくための実用的な更新則ですが、離散化された問題の大域解を証明するものではありません。 move limit、filter radius、projectionの設定を変えると、同じvolume fractionでも別の局所的なfieldへ到達します。 そのため、更新を速く見せる単一のcompliance値ではなく、停止条件と感度の整合性を含む反復履歴を残します。 python lower , upper = bracket_volume_multiplier ( filtered_sensitivity , target_volume ) multiplier = bisect_volume_multiplier ( lower , upper , density , filtered_sensitivity ) candidate = np . clip ( density * update_factor ( multiplier , filtered_sensitivity ), 0.001 , 1.0 ) next_density = limit_move ( candidate , density , move_limit )",
+      "text": "SIMPで状態と感度を計算した後、OCは感度の符号と大きさを使って密度を更新します。 更新倍率にはmove limitと上下限があり、全要素を自由に動かすわけではありません。 体積率制約があるため、更新倍率の係数は通常、更新後の平均密度が目標に近づくように調整します。 この係数を決める部分が、単なるgradient descentとの違いです。 OCの更新は、KKT条件に近づくための実用的な更新則ですが、離散化された問題の大域解を証明するものではありません。 move limit、filter radius、projectionの設定を変えると、同じvolume fractionでも別の局所的なfieldへ到達します。 そのため、更新を速く見せる単一のcompliance値ではなく、停止条件と感度の整合性を含む反復履歴を残します。",
       "title": "体積率を守りながら密度を変える"
     },
     {
@@ -29491,6 +29612,36 @@
       ],
       "text": "checkerboard scoreが下がらない場合は、 density filter やprojectionを見直します。 gray fractionが残り続ける場合も同様です。 mesh変更で荷重経路が変わる場合は、mesh依存性を先に調べます。 形状parameterを更新している場合は、 形状更新の失敗モード へ進みます。 inversion・mesh quality・state residualを分けて確認します。 更新の制約処理が複雑なら、 MMA との比較が有効です。",
       "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:simp-topology:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:simp-topology",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_SHAPE_TOPOLOGY_REPRESENTATION",
+        "comparison:COMPARE_TOPOLOGY_OC_MMA",
+        "content:concept.constraint-class",
+        "content:density-filter",
+        "content:geometry-update-failure-modes",
+        "content:mma",
+        "content:optimality-criteria-topology",
+        "content:shape-optimization",
+        "content:topology-optimization",
+        "method:M_SIMP_TOPOLOGY",
+        "source:S097",
+        "source:S098",
+        "trace:shape-topology-representation-contrast",
+        "trace:topology-optimization-field-evolution"
+      ],
+      "source_ids": [
+        "S097",
+        "S098"
+      ],
+      "text": "SIMPのdensity fieldを固定Python generatorで更新した結果です。濃淡は設計変数であり、完成部材の強度や製造性を保証しません。 材料経路の濃淡だけでなく、gray fractionとcheckerboardを同じ反復で見ます。complianceだけが改善しても、fieldの離散化artifactが減ったとは限りません。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",

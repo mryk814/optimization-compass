@@ -12,7 +12,7 @@ visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA]
 aliases: [/learn/density-filter]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 density filterは、要素近傍の密度や感度を重み付き平均し、checkerboardとmesh依存性を抑えるトポロジー最適化の正則化手法です。
@@ -39,6 +39,12 @@ $$
 
 mesh nodeを直接動かす形状更新とは、artifactの抑え方が違います。
 density filterはfieldの近傍を平滑化しますが、要素のinversionや自己交差したgeometryを修復する検査ではありません。
+
+## filterの有無を先に比べる
+
+![8×4要素の固定教材で、filterありの反復6と反復12、filterなしの反復12を並べたdensity field。filterなしでは交互模様が強く、checkerboard scoreも大きい。](./media/topology-field-execution.svg "同じ教育用更新をfilterあり・なしで実行した結果です。filter radiusの一般的な最適値や実部材の製造可能性は示しません。")
+
+右下のfilterなしfieldでは、濃淡が細かく交互に残ります。形が滑らかに見えるかだけでなく、checkerboard scoreとgray fractionを対応させます。
 
 ```python
 weights = build_neighbor_weights(mesh, radius)

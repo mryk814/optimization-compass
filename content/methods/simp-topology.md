@@ -12,7 +12,7 @@ visualization_ids: [topology-optimization-field-evolution, shape-topology-repres
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA, COMPARE_SHAPE_TOPOLOGY_REPRESENTATION]
 aliases: [/learn/simp-topology]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 SIMP密度法は、要素密度を連続変数にして剛性を密度のべき乗で補間し、体積率制約のもとでcomplianceを下げるトポロジー最適化手法です。
@@ -51,6 +51,12 @@ volume制約とmesh refinementも同時に監査します。
 
 境界を直接更新する形状最適化とは、設計変数と失敗モードが異なります。
 SIMPのcheckerboardやgray densityを、geometry updateの成功と読み替えないでください。
+
+## 実行結果を先に見る
+
+![8×4要素の固定教材で、初期density field、filterありの反復6と反復12、filterなしの反復12を比較した実行結果。各panelにcompliance、gray fraction、checkerboard scoreを表示する。](./media/topology-field-execution.svg "SIMPのdensity fieldを固定Python generatorで更新した結果です。濃淡は設計変数であり、完成部材の強度や製造性を保証しません。")
+
+材料経路の濃淡だけでなく、gray fractionとcheckerboardを同じ反復で見ます。complianceだけが改善しても、fieldの離散化artifactが減ったとは限りません。
 
 ## 表現と更新則を別に比べる
 

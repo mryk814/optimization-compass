@@ -8,6 +8,10 @@ from pathlib import Path
 from optimization_compass.learning_slices import generate_topology_field_artifact
 from optimization_compass.parameter_estimation import generate_parameter_estimation_traces
 from optimization_compass.portfolio_uncertainty import generate_portfolio_uncertainty_traces
+from optimization_compass.search_tree import (
+    SearchTreeFramePayload,
+    generate_search_tree_artifact,
+)
 from optimization_compass.trace_models import TraceFrame
 from optimization_compass.traces import generate_gradient_bundle
 
@@ -24,6 +28,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     return {
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
+        "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
@@ -396,6 +401,110 @@ def _trf_probe_svg(dataset_version: str) -> str:
                 '<text x="42" y="674" class="caveat">'
                 "solver条件を読む固定診断probeです。"
                 "SciPy TRFの内部iterationや性能差ではありません。"
+                "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _search_tree_proof_svg(dataset_version: str) -> str:
+    artifact = generate_search_tree_artifact(dataset_version=dataset_version)
+    payload = SearchTreeFramePayload.model_validate(artifact.trace.frames[-1].payload)
+    positions = {
+        "root": (400.0, 146.0),
+        "root-0": (190.0, 272.0),
+        "root-1": (610.0, 272.0),
+        "root-1-0": (190.0, 398.0),
+        "root-1-1": (610.0, 398.0),
+        "root-1-1-0": (190.0, 524.0),
+        "root-1-1-1": (610.0, 524.0),
+        "root-1-1-0-0": (190.0, 650.0),
+        "root-1-1-0-1": (610.0, 650.0),
+    }
+    state_labels = {
+        "branched": "分岐",
+        "bound_pruned": "bound枝刈り",
+        "infeasible_pruned": "実行不能",
+        "optimal": "最適解",
+        "open": "未探索",
+        "active": "評価中",
+        "feasible": "実行可能",
+    }
+    elements = [
+        _svg_open(
+            "9 nodeの探索で、bestとboundが一致する",
+            (
+                "4変数0-1 knapsackの決定論的Branch-and-Boundを最後まで実行した探索木です。"
+                "各nodeの部分割当、value、bound、枝刈り理由を示し、最終的にbest feasible 15と"
+                "global bound 15が一致してgap 0になる過程を表します。cut生成は含みません。"
+            ),
+            height=850,
+        ),
+        '<rect width="800" height="850" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">9 nodeの探索で、bestとboundが一致する</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "0-1 knapsack · depth-first include-first · deterministic teaching run"
+            "</text>"
+        ),
+        (
+            '<text x="42" y="112" class="metric">'
+            f"best {payload.best_feasible_value} · bound {payload.global_bound:.2f} · "
+            f"gap {payload.absolute_gap}</text>"
+        ),
+    ]
+    for node in payload.nodes:
+        if node.parent_id is None:
+            continue
+        parent_x, parent_y = positions[node.parent_id]
+        child_x, child_y = positions[node.node_id]
+        elements.append(
+            f'<line x1="{parent_x:.2f}" y1="{parent_y + 40:.2f}" '
+            f'x2="{child_x:.2f}" y2="{child_y - 40:.2f}" '
+            'stroke="#9a968d" stroke-width="3"/>'
+        )
+    for node in payload.nodes:
+        x, y = positions[node.node_id]
+        fill, stroke = {
+            "optimal": ("#d9f2df", "#2d7a46"),
+            "infeasible_pruned": ("#f9dddd", "#a53d3d"),
+            "bound_pruned": ("#e6e3dc", "#746f65"),
+        }.get(node.state, ("#ffffff", "#49463f"))
+        bound = "—" if node.bound is None else f"{node.bound:.2f}"
+        elements.extend(
+            [
+                (
+                    f'<rect x="{x - 94:.2f}" y="{y - 40:.2f}" width="188" height="80" '
+                    f'rx="12" fill="{fill}" stroke="{stroke}" stroke-width="3"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{y - 13:.2f}" text-anchor="middle" '
+                    f'class="method">{html.escape(node.branch_label_ja)}</text>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{y + 10:.2f}" text-anchor="middle" '
+                    f'class="status">value {node.objective_value} · bound {bound}</text>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{y + 30:.2f}" text-anchor="middle" '
+                    f'fill="{stroke}" font-size="14" font-weight="750">'
+                    f"{state_labels[node.state]}</text>"
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            (
+                '<text x="42" y="780" class="caption">'
+                "実行生成: optimization_compass.search_tree.generate_search_tree_artifact"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="42" y="814" class="caveat">'
+                "Branch-and-Boundの固定教材です。cut separationやMILP solver性能は示しません。"
                 "</text>"
             ),
             _svg_style(),

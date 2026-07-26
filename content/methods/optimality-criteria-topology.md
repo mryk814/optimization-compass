@@ -12,7 +12,7 @@ visualization_ids: [topology-optimization-field-evolution]
 comparison_ids: [COMPARE_TOPOLOGY_OC_MMA]
 aliases: [/learn/optimality-criteria-topology]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 Optimality Criteriaは、密度感度と体積率制約から要素密度を乗法的に更新し、minimum-complianceの設計fieldを効率よく改善する更新則です。
@@ -28,6 +28,12 @@ SIMPで状態と感度を計算した後、OCは感度の符号と大きさを�
 OCの更新は、KKT条件に近づくための実用的な更新則ですが、離散化された問題の大域解を証明するものではありません。
 move limit、filter radius、projectionの設定を変えると、同じvolume fractionでも別の局所的なfieldへ到達します。
 そのため、更新を速く見せる単一のcompliance値ではなく、停止条件と感度の整合性を含む反復履歴を残します。
+
+## OC更新のfieldを見る
+
+![8×4要素の固定教材で、OCによる初期density field、反復6、反復12を並べた実行結果。各反復のcompliance、gray fraction、checkerboard scoreと、filterなしの失敗contrastを併記する。](./media/topology-field-execution.svg "固定OC teaching runの実行結果です。反復履歴とfilterの失敗contrastを読む図であり、MMAとの性能順位や実FEMの妥当性は示しません。")
+
+上段から左下へ、OCが同じvolume targetのもとでfieldを更新する流れを追います。右下は更新則の比較ではなく、filterを外したときの失敗contrastです。
 
 ```python
 lower, upper = bracket_volume_multiplier(filtered_sensitivity, target_volume)
