@@ -3830,6 +3830,144 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "/gallery/production-mix-planning",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+            "/methods/M_BRANCH_CUT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S024",
+            "/sources/S025",
+            "/sources/S028",
+            "/sources/S053",
+            "/sources/S079"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "production-mix-planning"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_SCIPY_MILP_HIGHS"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_BRANCH_CUT",
+            "M_CP_SAT",
+            "M_GRADIENT_DESCENT"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/production-mix-planning",
+            "/theater/search-tree/binary-knapsack-bnb-budget",
+            "/theater/search-tree/binary-knapsack-bnb-complete",
+            "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+            "/methods/M_BRANCH_CUT",
+            "/methods/M_CP_SAT",
+            "/methods/M_GRADIENT_DESCENT",
+            "/sources/S005",
+            "/sources/S016",
+            "/sources/S021",
+            "/sources/S022",
+            "/sources/S024",
+            "/sources/S025",
+            "/sources/S028",
+            "/sources/S053",
+            "/sources/S079"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S005",
+            "S016",
+            "S021",
+            "S022",
+            "S024",
+            "S025",
+            "S028",
+            "S053",
+            "S079"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+            "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "branch-and-cut",
+            "cp-sat"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "production-mix-planning",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_KNAPSACK_BNB_BUDGET"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "INSTANCE_BINARY_KNAPSACK_4"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
             "/gallery/public-infrastructure-selection",
             "/theater/search-tree/binary-knapsack-bnb-budget",
             "/theater/search-tree/binary-knapsack-bnb-complete",
@@ -6932,6 +7070,85 @@
     },
     {
       "candidate_method_ids": [
+        "M_BRANCH_CUT"
+      ],
+      "canonical_url": "/gallery/production-mix-planning",
+      "case_id": "production-mix-planning",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_KNAPSACK_BNB_BUDGET",
+          "comparison_id": "COMPARE_KNAPSACK_BNB_BUDGET"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_CP_SAT"
+      ],
+      "content_ids": [
+        "branch-and-cut",
+        "cp-sat"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "manufacturing",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "固定教材では機械時間 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>3</mn><msub><mi>q</mi><mi>A</mi></msub><mo>&#x0002B;</mo><msub><mi>q</mi><mi>B</mi></msub><mo>&#x02264;</mo><mn>18</mn></mrow></math>、材料 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>4</mn><msub><mi>q</mi><mi>B</mi></msub><mo>&#x02264;</mo><mn>20</mn></mrow></math>、段取り連結 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mi>A</mi></msub><mo>&#x02264;</mo><mn>6</mn><msub><mi>y</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>q</mi><mi>B</mi></msub><mo>&#x02264;</mo><mn>6</mn><msub><mi>y</mi><mi>B</mi></msub></mrow></math>、最小lot <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mi>A</mi></msub><mo>&#x02265;</mo><mn>1.5</mn><msub><mi>y</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>q</mi><mi>B</mi></msub><mo>&#x02265;</mo><msub><mi>y</mi><mi>B</mi></msub></mrow></math> を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
+        "decision_variables": "製品A・Bの生産量 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>q</mi><mi>B</mi></msub></mrow></math> と、各製品の段取りを実施するかを表す <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>y</mi><mi>B</mi></msub></mrow></math>。需要予測、在庫、machine能力、材料上限、単位利益は入力であり、solverが変更する変数ではない。",
+        "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mn>8</mn><msub><mi>q</mi><mi>A</mi></msub><mo>&#x0002B;</mo><mn>7</mn><msub><mi>q</mi><mi>B</mi></msub><mo>&#x02212;</mo><mn>8</mn><msub><mi>y</mi><mi>A</mi></msub><mo>&#x02212;</mo><mn>5</mn><msub><mi>y</mi><mi>B</mi></msub></mrow></math> を最大化し、SciPyへは符号を反転した線形目的を渡す。",
+        "variable_domain_summary": "実務では製品 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>i</mi></mrow></math> ごとの連続または整数の生産量 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>q</mi><mi>i</mi></msub></mrow></math> と、生産を開始するかを表す二値変数 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>&#x02208;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x0007D;</mo></mrow></math> を組み合わせる。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>q</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>q</mi><mi>B</mi></msub><mo>&#x0002C;</mo><msub><mi>y</mi><mi>A</mi></msub><mo>&#x0002C;</mo><msub><mi>y</mi><mi>B</mi></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mn>0</mn><mo>&#x0002C;</mo><mn>6</mn><msup><mo stretchy=\"false\">]</mo><mn>2</mn></msup><mo>&#x000D7;</mo><mo stretchy=\"false\">&#x0007B;</mo><mn>0</mn><mo>&#x0002C;</mo><mn>1</mn><msup><mo stretchy=\"false\">&#x0007D;</mo><mn>2</mn></msup></mrow></math>。"
+      },
+      "implementation_ids": [
+        "I_SCIPY_MILP_HIGHS"
+      ],
+      "journey_id": "production-mix-planning",
+      "last_reviewed": "2026-07-26",
+      "learning_objective": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "limitations": [
+        "2製品・1週間・決定的な係数の固定教材であり、需要不確実性、複数工程、在庫繰越、欠品、切替順序、保全、人員、品質、納期を表さない。",
+        "固定係数modelの最適性gapが小さくても、需要予測、能力、歩留まり、段取り費の妥当性や実行可能な現場scheduleを保証しない。計画採用前に現場制約と係数感度を別に確認する。",
+        "接続先のBranch-and-Bound traceはboundと停止理由の読み方を示す教育用knapsackであり、SciPy/HiGHS、SCIP、CP-SATの速度や実務生産計画での一般性能を順位付けしない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA023",
+      "problem_instance_ids": [
+        "INSTANCE_BINARY_KNAPSACK_4"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-budget",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+        },
+        {
+          "canonical_url": "/theater/search-tree/binary-knapsack-bnb-complete",
+          "problem_definition_id": "PROBLEM_BINARY_KNAPSACK",
+          "problem_instance_id": "INSTANCE_BINARY_KNAPSACK_4",
+          "role": "primary",
+          "scenario_id": "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+        }
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S024",
+        "S025",
+        "S028",
+        "S053",
+        "S079"
+      ],
+      "status": "complete",
+      "takeaway": "需要予測の時点、単位、歩留まり、在庫、machine calendar、段取り費、最小lot、禁止組合せを同じversionで保存する。status、incumbent、bound、gap、time limitを併記し、前週解をwarm startへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木とCompareは4変数knapsackで停止条件を学ぶ別教材であり、この生産計画のsolver実行や利益比較ではない。",
+      "title_en": "Plan a weekly production mix with setup costs",
+      "title_ja": "段取り費を含む週間生産計画を組む"
+    },
+    {
+      "candidate_method_ids": [
         "M_CP_SAT"
       ],
       "canonical_url": "/gallery/public-infrastructure-selection",
@@ -7462,12 +7679,6 @@
     },
     {
       "asset_id": "branch-and-bound",
-      "asset_type": "content",
-      "policy": "warning",
-      "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "branch-and-cut",
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
@@ -8082,11 +8293,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 34,
+      "complete": 35,
       "draft": 0,
       "partial": 0
     },
     "target_complete_journeys": 5,
-    "total_journeys": 34
+    "total_journeys": 35
   }
 }

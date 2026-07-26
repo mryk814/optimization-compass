@@ -1138,6 +1138,42 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:production-mix-planning:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:production-mix-planning",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
+        "feature_value:F_CONSTRAINT_CLASS:linear",
+        "feature_value:F_DERIVATIVE_ACCESS:not_differentiable",
+        "feature_value:F_EVALUATION_COST:cheap",
+        "feature_value:F_OBJECTIVE_FORM:linear",
+        "feature_value:F_SOLUTION_GOAL:optimality_gap",
+        "feature_value:F_VARIABLE_DOMAIN:mixed",
+        "implementation:I_SCIPY_MILP_HIGHS",
+        "journey:production-mix-planning",
+        "method:M_BRANCH_CUT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA023",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "view:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "view:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "view:VIEW_PROBLEM_STRUCTURE"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021"
+      ],
+      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "title": "段取り費を含む週間生産計画を組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:public-infrastructure-selection:overview",
       "dataset_version": "0.18.19",
       "document_id": "case:public-infrastructure-selection",
@@ -1690,6 +1726,7 @@
       "relation_context": [
         "case:budget-allocation",
         "journey:budget-allocation",
+        "journey:production-mix-planning",
         "journey:public-infrastructure-selection",
         "method:M_BRANCH_BOUND",
         "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
@@ -33543,6 +33580,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:production-mix-planning:M_GRADIENT_DESCENT:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:production-mix-planning:M_GRADIENT_DESCENT",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:production-mix-planning",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S005",
+        "source:S016",
+        "source:S021"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021"
+      ],
+      "text": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため",
+      "title": "段取り費を含む週間生産計画を組むでは最急降下法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "failure:case:public-infrastructure-selection:M_NELDER_MEAD:overview",
       "dataset_version": "0.18.19",
       "document_id": "failure:case:public-infrastructure-selection:M_NELDER_MEAD",
@@ -40852,6 +40913,49 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "journey:production-mix-planning:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:production-mix-planning",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:production-mix-planning",
+        "comparison:COMPARE_KNAPSACK_BNB_BUDGET",
+        "content:branch-and-cut",
+        "content:cp-sat",
+        "implementation:I_SCIPY_MILP_HIGHS",
+        "method:M_BRANCH_CUT",
+        "method:M_CP_SAT",
+        "method:M_GRADIENT_DESCENT",
+        "problem:PA023",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "scenario:SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "source:S005",
+        "source:S016",
+        "source:S021",
+        "source:S022",
+        "source:S024",
+        "source:S025",
+        "source:S028",
+        "source:S053",
+        "source:S079"
+      ],
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021",
+        "S022",
+        "S024",
+        "S025",
+        "S028",
+        "S053",
+        "S079"
+      ],
+      "text": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "title": "段取り費を含む週間生産計画を組む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "journey:public-infrastructure-selection:overview",
       "dataset_version": "0.18.19",
       "document_id": "journey:public-infrastructure-selection",
@@ -42013,6 +42117,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC019",
+        "case:production-mix-planning",
         "content:branch-and-cut",
         "implementation:I_CBC",
         "implementation:I_CPLEX",
@@ -42218,6 +42323,7 @@
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
         "case:network-upgrade-portfolio",
+        "case:production-mix-planning",
         "case:public-infrastructure-selection",
         "case:shift-scheduling",
         "comparison:COMPARE_SHIFT_SCHEDULING_BALANCE_TIEBREAK",
@@ -42597,6 +42703,7 @@
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
         "case:network-upgrade-portfolio",
+        "case:production-mix-planning",
         "case:shift-scheduling",
         "comparison:COMPARE_GRADIENT_DIVERGENCE",
         "comparison:COMPARE_GRADIENT_FAMILY",
@@ -44496,7 +44603,10 @@
       "dataset_version": "0.18.19",
       "document_id": "problem:PA023",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:production-mix-planning",
+        "journey:production-mix-planning"
+      ],
       "source_ids": [
         "S005",
         "S016",
@@ -45198,6 +45308,7 @@
         "journey:irrigation-retrofit-selection",
         "journey:mobile-clinic-outreach-selection",
         "journey:network-upgrade-portfolio",
+        "journey:production-mix-planning",
         "journey:public-infrastructure-selection",
         "source:S021",
         "source:S022",
@@ -45231,6 +45342,7 @@
         "journey:irrigation-retrofit-selection",
         "journey:mobile-clinic-outreach-selection",
         "journey:network-upgrade-portfolio",
+        "journey:production-mix-planning",
         "journey:public-infrastructure-selection",
         "source:S021",
         "source:S022",

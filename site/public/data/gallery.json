@@ -2811,6 +2811,103 @@
     {
       "candidate_methods": [
         {
+          "method_id": "M_BRANCH_CUT",
+          "reason": "連続の生産量と0-1の段取り判断を同じ線形modelで保ち、実行可能な計画、relaxation bound、optimality gapを分けて確認できるため"
+        }
+      ],
+      "case_id": "production-mix-planning",
+      "comparison_ids": [
+        "COMPARE_KNAPSACK_BNB_BUDGET"
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_CP_SAT",
+          "reason": "生産量を妥当な単位で整数化でき、連続量よりも段取り順序・論理・calendar制約が中心になる場合"
+        }
+      ],
+      "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小lot $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
+      "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、machine能力、材料上限、単位利益は入力であり、solverが変更する変数ではない。",
+      "difficulty": "intro",
+      "domain": "manufacturing",
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため"
+        }
+      ],
+      "feature_values": [
+        {
+          "feature_id": "F_VARIABLE_DOMAIN",
+          "value": "mixed"
+        },
+        {
+          "feature_id": "F_OBJECTIVE_FORM",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_DERIVATIVE_ACCESS",
+          "value": "not_differentiable"
+        },
+        {
+          "feature_id": "F_CONSTRAINT_CLASS",
+          "value": "linear"
+        },
+        {
+          "feature_id": "F_EVALUATION_COST",
+          "value": "cheap"
+        },
+        {
+          "feature_id": "F_SOLUTION_GOAL",
+          "value": "optimality_gap"
+        }
+      ],
+      "implementation_ids": [
+        "I_SCIPY_MILP_HIGHS"
+      ],
+      "last_reviewed": "2026-07-26",
+      "limitations": [
+        "2製品・1週間・決定的な係数の固定教材であり、需要不確実性、複数工程、在庫繰越、欠品、切替順序、保全、人員、品質、納期を表さない。",
+        "固定係数modelの最適性gapが小さくても、需要予測、能力、歩留まり、段取り費の妥当性や実行可能な現場scheduleを保証しない。計画採用前に現場制約と係数感度を別に確認する。",
+        "接続先のBranch-and-Bound traceはboundと停止理由の読み方を示す教育用knapsackであり、SciPy/HiGHS、SCIP、CP-SATの速度や実務生産計画での一般性能を順位付けしない。"
+      ],
+      "map_node_id": "answer:Q01:mixed",
+      "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
+      "practical_notes": "需要予測の時点、単位、歩留まり、在庫、machine calendar、段取り費、最小lot、禁止組合せを同じversionで保存する。status、incumbent、bound、gap、time limitを併記し、前週解をwarm startへ使う場合も入力変更と固定済み判断を記録する。接続先の探索木とCompareは4変数knapsackで停止条件を学ぶ別教材であり、この生産計画のsolver実行や利益比較ではない。",
+      "problem_archetype_id": "PA023",
+      "python_example": "import numpy as np\nfrom scipy.optimize import Bounds, LinearConstraint, milp\n\nc = np.array([-8.0, -7.0, 8.0, 5.0])\nintegrality = np.array([0, 0, 1, 1])\nbounds = Bounds([0.0, 0.0, 0.0, 0.0], [6.0, 6.0, 1.0, 1.0])\nA = np.array([\n    [3.0, 1.0, 0.0, 0.0],\n    [1.0, 4.0, 0.0, 0.0],\n    [1.0, 0.0, -6.0, 0.0],\n    [0.0, 1.0, 0.0, -6.0],\n    [-1.0, 0.0, 1.5, 0.0],\n    [0.0, -1.0, 0.0, 1.0],\n])\nconstraint = LinearConstraint(A, np.full(6, -np.inf), [18.0, 20.0, 0.0, 0.0, 0.0, 0.0])\nresult = milp(c, integrality=integrality, bounds=bounds, constraints=constraint)\nif not result.success or result.x is None:\n    raise RuntimeError(result.message)\nprint({\"q_A\": result.x[0], \"q_B\": result.x[1], \"setup_A\": result.x[2], \"setup_B\": result.x[3], \"profit\": -result.fun})",
+      "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。",
+      "question_answers": {
+        "Q01": "mixed",
+        "Q02": "explicit_algebraic",
+        "Q03": "linear",
+        "Q04": "linear",
+        "Q05": "not_differentiable",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "10_to_100",
+        "Q09": "global_candidate_desired",
+        "Q10": "gap_desired",
+        "Q11": "lp_qp_conic",
+        "Q12": "repeated_similar"
+      },
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021"
+      ],
+      "status": "published",
+      "title_en": "Plan a weekly production mix with setup costs",
+      "title_ja": "段取り費を含む週間生産計画を組む",
+      "variable_domain": "実務では製品 $i$ ごとの連続または整数の生産量 $q_i$ と、生産を開始するかを表す二値変数 $y_i\\in\\{0,1\\}$ を組み合わせる。固定教材では $x=(q_A,q_B,y_A,y_B)\\in[0,6]^2\\times\\{0,1\\}^2$。",
+      "visualization_ids": [
+        "VIEW_PROBLEM_STRUCTURE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE",
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
+      ]
+    },
+    {
+      "candidate_methods": [
+        {
           "method_id": "M_NSGA_II",
           "reason": "時系列simulationから得る購入costと充放電throughputを一つの重みに固定せず、複数の運用候補を近似Pareto集合として残せるため"
         }

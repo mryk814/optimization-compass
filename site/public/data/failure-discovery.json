@@ -1438,6 +1438,53 @@
       "title_ja": "scenarioのtail riskを抑えて配分するではNelder–Mead単体法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Aproduction-mix-planning%3AM_GRADIENT_DESCENT",
+      "case_context": {
+        "constraints": "固定教材では機械時間 $3q_A+q_B\\le18$、材料 $q_A+4q_B\\le20$、段取り連結 $q_A\\le6y_A, q_B\\le6y_B$、最小lot $q_A\\ge1.5y_A, q_B\\ge y_B$ を課す。実務では需要上限、在庫収支、交替勤務、保全、複数期間の連結も別制約として明示する。",
+        "decision_variables": "製品A・Bの生産量 $q_A,q_B$ と、各製品の段取りを実施するかを表す $y_A,y_B$。需要予測、在庫、machine能力、材料上限、単位利益は入力であり、solverが変更する変数ではない。",
+        "objective": "変動利益から段取り費を引いた週間利益を最大化する。固定教材では $8q_A+7q_B-8y_A-5y_B$ を最大化し、SciPyへは符号を反転した線形目的を渡す。",
+        "question": "限られた機械時間と材料の範囲で、段取り費を払ってどの製品を何batch作るかを週間単位で決めたい。"
+      },
+      "case_id": "production-mix-planning",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:production-mix-planning:M_GRADIENT_DESCENT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-07-26",
+      "method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET",
+        "SCENARIO_BINARY_KNAPSACK_BNB_COMPLETE"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S005",
+        "S016",
+        "S021"
+      ],
+      "summary": "段取りの0-1変数と生産量を結ぶhard constraintを連続gradient updateだけでは保持できず、丸め後の計画がcapacityや最小lotを破り得るため",
+      "symptoms": [],
+      "title_en": "Why Gradient descent is excluded for Plan a weekly production mix with setup costs",
+      "title_ja": "段取り費を含む週間生産計画を組むでは最急降下法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Apublic-infrastructure-selection%3AM_NELDER_MEAD",
       "case_context": {
         "constraints": "事業費 $w_i$ の合計を予算 $B$ 以下にする。固定教材では $4x_A+3x_B+2x_C+3x_D\\le7$ と $x_i\\in\\{0,1\\}$。実務では地域下限、依存関係、同時実施不可などを別制約として追加する。",
@@ -2326,9 +2373,9 @@
   ],
   "generated_at": "2026-07-26T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 34,
-    "entries_with_scenarios": 38,
+    "case_exclusion_count": 35,
+    "entries_with_scenarios": 39,
     "structured_failure_count": 12,
-    "total_entries": 46
+    "total_entries": 47
   }
 }
