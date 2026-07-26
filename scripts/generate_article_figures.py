@@ -44,6 +44,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             "utf-8"
         ),
         "least-squares-fit-diagnostic.svg": _least_squares_fit_svg(dataset_version).encode("utf-8"),
+        "multiple-shooting-continuity-execution.svg": _multiple_shooting_svg(
+            dataset_version
+        ).encode("utf-8"),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -54,6 +57,292 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _solve_dense_linear_system(
+    matrix: list[list[float]], right_hand_side: list[float]
+) -> list[float]:
+    size = len(right_hand_side)
+    augmented = [[*row, right_hand_side[index]] for index, row in enumerate(matrix)]
+    for column in range(size):
+        pivot = max(range(column, size), key=lambda row: abs(augmented[row][column]))
+        if abs(augmented[pivot][column]) <= 1e-12:
+            raise ValueError("multiple-shooting teaching KKT system is singular")
+        augmented[column], augmented[pivot] = augmented[pivot], augmented[column]
+        scale = augmented[column][column]
+        augmented[column] = [value / scale for value in augmented[column]]
+        for row in range(size):
+            if row == column:
+                continue
+            factor = augmented[row][column]
+            augmented[row] = [
+                value - factor * pivot_value
+                for value, pivot_value in zip(augmented[row], augmented[column], strict=True)
+            ]
+    return [augmented[index][-1] for index in range(size)]
+
+
+def _multiple_shooting_probe() -> dict[str, object]:
+    duration = 0.5
+    initial_state = 0.0
+    target_state = 1.0
+    initial_guess = (0.5, 0.5, 1.5)
+    hessian = [
+        [0.0, 0.0, 0.0],
+        [0.0, 2.0 * duration, 0.0],
+        [0.0, 0.0, 2.0 * duration],
+    ]
+    constraints = [
+        [-1.0, duration, 0.0],
+        [1.0, 0.0, duration],
+    ]
+    kkt = [[*hessian[row], constraints[0][row], constraints[1][row]] for row in range(3)]
+    kkt.extend(
+        [
+            [*constraints[0], 0.0, 0.0],
+            [*constraints[1], 0.0, 0.0],
+        ]
+    )
+    solution = _solve_dense_linear_system(kkt, [0.0, 0.0, 0.0, 0.0, target_state])
+    solved = tuple(solution[:3])
+
+    def evaluate(vector: tuple[float, ...]) -> dict[str, object]:
+        state1, control0, control1 = vector
+        end0 = initial_state + duration * control0
+        end1 = state1 + duration * control1
+        defects = (end0 - state1, end1 - target_state)
+        return {
+            "vector": vector,
+            "endpoints": (end0, end1),
+            "defects": defects,
+            "defect_norm": math.sqrt(sum(value * value for value in defects)),
+            "objective": duration * (control0 * control0 + control1 * control1),
+        }
+
+    return {
+        "duration": duration,
+        "initial_state": initial_state,
+        "target_state": target_state,
+        "initial": evaluate(initial_guess),
+        "solved": evaluate(solved),
+    }
+
+
+def _multiple_shooting_svg(dataset_version: str) -> str:
+    probe = _multiple_shooting_probe()
+    initial = probe["initial"]
+    solved = probe["solved"]
+    if not isinstance(initial, dict) or not isinstance(solved, dict):
+        raise TypeError("multiple-shooting probe panels must be dictionaries")
+    plot_x, plot_width, plot_height = 76.0, 500.0, 205.0
+    state_min, state_max = -0.1, 1.35
+
+    def project_x(time: float) -> float:
+        return plot_x + time * plot_width
+
+    def project_y(state: float, plot_y: float) -> float:
+        return plot_y + plot_height - (state - state_min) / (state_max - state_min) * plot_height
+
+    def panel(
+        title: str,
+        payload: dict[str, object],
+        panel_y: float,
+        *,
+        show_defects: bool,
+    ) -> list[str]:
+        vector = payload["vector"]
+        endpoints = payload["endpoints"]
+        defects = payload["defects"]
+        if not (
+            isinstance(vector, tuple)
+            and isinstance(endpoints, tuple)
+            and isinstance(defects, tuple)
+        ):
+            raise TypeError("multiple-shooting probe values must be tuples")
+        state1, control0, control1 = (float(value) for value in vector)
+        end0, end1 = (float(value) for value in endpoints)
+        defect0, defect1 = (float(value) for value in defects)
+        plot_y = panel_y + 58
+        segment0 = (
+            (project_x(0.0), project_y(float(probe["initial_state"]), plot_y)),
+            (project_x(0.5), project_y(end0, plot_y)),
+        )
+        segment1 = (
+            (project_x(0.5), project_y(state1, plot_y)),
+            (project_x(1.0), project_y(end1, plot_y)),
+        )
+        result = [
+            (
+                f'<rect x="24" y="{panel_y}" width="592" height="338" rx="18" '
+                'fill="#fff" stroke="#cfd8d1"/>'
+            ),
+            f'<text x="44" y="{panel_y + 35}" class="ms-panel">{html.escape(title)}</text>',
+            (
+                f'<text x="596" y="{panel_y + 35}" text-anchor="end" class="ms-status">'
+                f"u=[{control0:.2f}, {control1:.2f}] · "
+                f"‖defect‖={float(payload['defect_norm']):.3f}</text>"
+            ),
+            (
+                f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
+                f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
+            ),
+        ]
+        for value in (0.0, 0.5, 1.0, 1.25):
+            y = project_y(value, plot_y)
+            result.extend(
+                [
+                    (
+                        f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
+                        f'y2="{y:.2f}" stroke="#ebe8e0"/>'
+                    ),
+                    (
+                        f'<text x="{plot_x - 10}" y="{y + 6:.2f}" text-anchor="end" '
+                        f'class="ms-axis">{value:g}</text>'
+                    ),
+                ]
+            )
+        for time, label in ((0.0, "t₀"), (0.5, "boundary"), (1.0, "target")):
+            result.append(
+                f'<text x="{project_x(time):.2f}" y="{plot_y + plot_height + 27}" '
+                f'text-anchor="middle" class="ms-axis">{label}</text>'
+            )
+        for points in (segment0, segment1):
+            result.append(
+                f'<line x1="{points[0][0]:.2f}" y1="{points[0][1]:.2f}" '
+                f'x2="{points[1][0]:.2f}" y2="{points[1][1]:.2f}" '
+                'stroke="#245c42" stroke-width="7" stroke-linecap="round"/>'
+            )
+        for time, state, label in (
+            (0.0, float(probe["initial_state"]), "x₀"),
+            (0.5, state1, "decision x₁"),
+            (1.0, float(probe["target_state"]), "target"),
+        ):
+            label_y = project_y(state, plot_y) - 15
+            label_anchor = "middle"
+            label_x = project_x(time)
+            if show_defects and time == 1.0:
+                label_y = project_y(state, plot_y) + 24
+                label_anchor = "end"
+                label_x += 20
+            result.extend(
+                [
+                    (
+                        f'<circle cx="{project_x(time):.2f}" cy="{project_y(state, plot_y):.2f}" '
+                        'r="8" fill="#d67835" stroke="#fff" stroke-width="3"/>'
+                    ),
+                    (
+                        f'<text x="{label_x:.2f}" y="{label_y:.2f}" '
+                        f'text-anchor="{label_anchor}" class="ms-label">{label}</text>'
+                    ),
+                ]
+            )
+        if show_defects:
+            for time, start, stop, label in (
+                (0.5, end0, state1, f"δ₀={defect0:.2f}"),
+                (1.0, end1, float(probe["target_state"]), f"δ₁={defect1:+.2f}"),
+            ):
+                x = project_x(time)
+                y1, y2 = project_y(start, plot_y), project_y(stop, plot_y)
+                result.extend(
+                    [
+                        (
+                            f'<line x1="{x:.2f}" y1="{y1:.2f}" x2="{x:.2f}" y2="{y2:.2f}" '
+                            'stroke="#bd6754" stroke-width="5" stroke-dasharray="7 5"/>'
+                        ),
+                        (
+                            f'<text x="{x - 12:.2f}" y="{(y1 + y2) / 2 + 5:.2f}" '
+                            f'text-anchor="end" class="ms-defect">{label}</text>'
+                        ),
+                    ]
+                )
+        return result
+
+    elements = [
+        _svg_open(
+            "短いrolloutは、境界がつながって初めて一本の軌道になる",
+            (
+                "記事と同じ1 state、2 segment、segment duration 0.5の固定Multiple "
+                "Shooting問題です。初期guessと、同じlinear continuity constraintsを"
+                "exact equality KKTで解いた結果を比較します。segment rollout endpointと"
+                "境界state decisionのずれ、terminal targetのずれ、defect norm、control "
+                "costを示します。SciPy SLSQP自体の実行結果、非線形dynamics、path制約、"
+                "一般的な収束性能は示しません。"
+            ),
+            width=640,
+            height=1080,
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#f7f6f1"/>',
+        (
+            '<text x="32" y="50" class="ms-title">'
+            "短いrolloutは、境界がつながって初めて一本の軌道になる</text>"
+        ),
+        (
+            '<text x="32" y="82" class="ms-subtitle">'
+            "1 state · 2 segments · duration 0.5 · target 1.0"
+            "</text>"
+        ),
+        '<line x1="36" y1="116" x2="76" y2="116" stroke="#245c42" stroke-width="7"/>',
+        '<text x="86" y="122" class="ms-legend">segment rollout</text>',
+        '<circle cx="266" cy="116" r="8" fill="#d67835"/>',
+        '<text x="284" y="122" class="ms-legend">state decision</text>',
+        (
+            '<line x1="458" y1="102" x2="458" y2="128" stroke="#bd6754" '
+            'stroke-width="5" stroke-dasharray="7 5"/>'
+        ),
+        '<text x="474" y="122" class="ms-legend">defect</text>',
+    ]
+    elements.extend(panel("初期guess", initial, 148.0, show_defects=True))
+    elements.extend(panel("continuity solve後", solved, 510.0, show_defects=False))
+    elements.extend(
+        [
+            (
+                '<text x="32" y="904" class="ms-result">'
+                f"objective {float(initial['objective']):.2f} → "
+                f"{float(solved['objective']):.2f}</text>"
+            ),
+            (
+                '<text x="608" y="904" text-anchor="end" class="ms-result">'
+                f"defect norm {float(initial['defect_norm']):.3f} → "
+                f"{float(solved['defect_norm']):.1f}</text>"
+            ),
+            (
+                '<text x="32" y="958" class="ms-provenance">'
+                "実行生成: fixed linear segment integration + exact equality KKT solve"
+                f" · dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1002" class="ms-caveat">'
+                "記事と同じ2-segment定式化です。SciPy SLSQP自体の実行結果ではありません。"
+                "</text>"
+            ),
+            (
+                '<text x="32" y="1032" class="ms-caveat">'
+                "非線形dynamics、path制約、積分誤差、solverの一般性能を示しません。</text>"
+            ),
+            (
+                '<text x="32" y="1060" class="ms-caveat">'
+                "実務ではsegment分割と積分toleranceを変えて再検証します。</text>"
+            ),
+            (
+                "<style>"
+                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
+                ".ms-title{font-size:25px;font-weight:760}"
+                ".ms-subtitle{font-size:17px;fill:#617068}"
+                ".ms-legend{font-size:16px;fill:#46554d}"
+                ".ms-panel{font-size:22px;font-weight:750}"
+                ".ms-status{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".ms-axis{font-size:16px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".ms-label{font-size:15px;font-weight:700}"
+                ".ms-defect{font-size:15px;fill:#a33d30;font-weight:700}"
+                ".ms-result{font-size:18px;font-weight:750;font-variant-numeric:tabular-nums}"
+                ".ms-provenance{font-size:14px;fill:#617068}"
+                ".ms-caveat{font-size:14px;fill:#7a4b38}"
+                "</style>"
+            ),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _finite_horizon_lqr_probe() -> tuple[

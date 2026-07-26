@@ -11348,7 +11348,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。"
+      "summary": "時間区間をsegmentに分け、各segmentでdynamicsを積分します。境界の連続性をNLPの等式制約として課す軌道最適化です。"
     },
     {
       "aliases": [],

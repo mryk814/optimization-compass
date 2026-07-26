@@ -23912,7 +23912,7 @@
         "S050",
         "S076"
       ],
-      "text": "この手法の気持ちは、 長いrolloutを一つにつなげて感度を伝えるのではなく、短いsegmentごとにstateを置き、境界のずれだけをconstraintとして管理したい というものです。 見ているもの: segmentごとのrollout、cost、continuity defect、constraint violation 動かしているもの: segment開始state、control、NLPの制約 前進の判断: costの改善と、segment境界・path constraintの成立 別に確認するもの: segment数を変えたときの解、積分器の安定性、solver時間 恐れていること: 初期軌道の不整合、defectの停滞、過大なNLP、real-time deadline超過 stateを変数に増やすことで、single shootingの長時間感度を抑えやすくなります。 ただし、continuity制約を解く負担は残ります。",
+      "text": "長いrollout一つで、すべての感度を伝える必要はありません。 短いsegmentごとにstateを置き、境界のずれをconstraintとして管理する のがこの手法の要点です。 見ているもの: segmentごとのrollout、cost、continuity defect、constraint violation 動かしているもの: segment開始state、control、NLPの制約 前進の判断: costの改善と、segment境界・path constraintの成立 別に確認するもの: segment数を変えたときの解、積分器の安定性、solver時間 恐れていること: 初期軌道の不整合、defectの停滞、過大なNLP、real-time deadline超過 stateを変数に増やすことで、single shootingの長時間感度を抑えやすくなります。 ただし、continuity制約を解く負担は残ります。 segment内の積分がどれだけ滑らかでも、隣のsegmentと境界でずれていれば一本の軌道とは呼べません。 記事後半と同じ2-segment問題では、初期guessに二つの短いrolloutが見えていてもboundaryとtargetにdefectが残ります。 記事と同じlinear 2-segment定式化をexact equality KKTで解いた実行結果です。SciPy SLSQP自体の実行結果、非線形dynamics、path制約、一般的なsolver性能は示しません。 上段では緑のsegment rolloutと橙のstate decisionが赤いdefectで離れています。 下段では同じ三つの時刻がつながり、continuity constraintの役割を形として確認できます。",
       "title": "30秒でつかむ"
     },
     {
@@ -23943,7 +23943,7 @@
         "S050",
         "S076"
       ],
-      "text": "Direct Collocation もstateを決定変数にする点はmultiple shootingと共通しますが、defectの作り方が異なります。multiple shootingは各segmentを実際の積分器（Runge–Kuttaなど）でintegrationしてdefectを作るのに対し、collocationは多項式近似とcollocation pointでdefectを作ります。積分器を信頼できるほどdynamicsが scalarに扱いやすいならmultiple shooting、path constraintが密でmeshの疎構造を強く使いたいならcollocationが選択肢になります。 生成されるNLPはcontinuity制約により疎な構造を持ち、 SQP やinterior-point法といった制約付きNLP solverで解きます。実務では CasADi や acados のような、multiple shootingを組み込みで扱う専用ツールを使うことが一般的です。利用versionのAPIやsolver選択は公式referenceで確認します。",
+      "text": "Direct Collocation もstateを決定変数にしますが、defectの作り方が異なります。 multiple shootingは各segmentを積分器（Runge–Kuttaなど）で進め、終端と次の開始stateの差をdefectにします。 collocationは多項式近似とcollocation pointからdefectを作ります。 積分器を信頼でき、dynamicsをsegmentごとに扱いやすいならmultiple shootingが候補です。 path constraintが密で、meshの疎構造を強く使いたいならcollocationを検討します。 生成されるNLPはcontinuity制約により疎な構造を持ちます。 SQP やinterior-point法といった制約付きNLP solverで解きます。 実務では CasADi や acados のような専用ツールも候補です。 利用versionのAPIやsolver選択は公式referenceで確認します。",
       "title": "collocationとの違い"
     },
     {
@@ -23974,7 +23974,7 @@
         "S050",
         "S076"
       ],
-      "text": "時間区間をsegmentに分割し、各segmentで独立にdynamicsを積分してsegment境界の連続性をNLPの等式制約として課す軌道最適化の定式化です。",
+      "text": "時間区間をsegmentに分け、各segmentでdynamicsを積分します。境界の連続性をNLPの等式制約として課す軌道最適化です。",
       "title": "Direct Multiple Shooting"
     },
     {
@@ -24005,7 +24005,7 @@
         "S050",
         "S076"
       ],
-      "text": "python import numpy as np from scipy.integrate import solve_ivp from scipy.optimize import minimize SEGMENT_DURATION = 0.5 INITIAL_STATE = 0.0 TARGET_STATE = 1.0 def integrate_segment ( state0 : float , control : float ) -> float : solution = solve_ivp ( lambda t , x : [ control ], ( 0.0 , SEGMENT_DURATION ), [ state0 ]) return float ( solution . y [ 0 , - 1 ]) def unpack ( vector : np . ndarray ) -> tuple [ float , float , float ]: state1 , control0 , control1 = vector return state1 , control0 , control1 def objective ( vector : np . ndarray ) -> float : _ , control0 , control1 = unpack ( vector ) return float ( SEGMENT_DURATION * ( control0 ** 2 + control1 ** 2 )) def continuity_constraints ( vector : np . ndarray ) -> np . ndarray : state1 , control0 , control1 = unpack ( vector ) end_of_segment0 = integrate_segment ( INITIAL_STATE , control0 ) end_of_segment1 = integrate_segment ( state1 , control1 ) return np . array ([ end_of_segment0 - state1 , end_of_segment1 - TARGET_STATE ]) initial_guess = np . array ([ 0.5 , 0.5 , 1.5 ]) result = minimize ( objective , initial_guess , method = \"SLSQP\" , constraints = { \"type\" : \"eq\" , \"fun\" : continuity_constraints }, options = { \"ftol\" : 1e-10 , \"maxiter\" : 200 }, ) state1 , control0 , control1 = unpack ( result . x ) print ( result . success , result . x , np . linalg . norm ( continuity_constraints ( result . x ))) この例は1状態・2segmentの最小構成です。 state1 はsegment境界の決定変数、 continuity_constraints がdefectに対応します。実務ではstate次元、segment数、path constraint、積分器のtoleranceを明示的に設計し、解が積分精度に依存していないかを確認します。",
+      "text": "python import numpy as np from scipy.integrate import solve_ivp from scipy.optimize import minimize SEGMENT_DURATION = 0.5 INITIAL_STATE = 0.0 TARGET_STATE = 1.0 def integrate_segment ( state0 : float , control : float ) -> float : solution = solve_ivp ( lambda t , x : [ control ], ( 0.0 , SEGMENT_DURATION ), [ state0 ]) return float ( solution . y [ 0 , - 1 ]) def unpack ( vector : np . ndarray ) -> tuple [ float , float , float ]: state1 , control0 , control1 = vector return state1 , control0 , control1 def objective ( vector : np . ndarray ) -> float : _ , control0 , control1 = unpack ( vector ) return float ( SEGMENT_DURATION * ( control0 ** 2 + control1 ** 2 )) def continuity_constraints ( vector : np . ndarray ) -> np . ndarray : state1 , control0 , control1 = unpack ( vector ) end_of_segment0 = integrate_segment ( INITIAL_STATE , control0 ) end_of_segment1 = integrate_segment ( state1 , control1 ) return np . array ([ end_of_segment0 - state1 , end_of_segment1 - TARGET_STATE ]) initial_guess = np . array ([ 0.5 , 0.5 , 1.5 ]) result = minimize ( objective , initial_guess , method = \"SLSQP\" , constraints = { \"type\" : \"eq\" , \"fun\" : continuity_constraints }, options = { \"ftol\" : 1e-10 , \"maxiter\" : 200 }, ) state1 , control0 , control1 = unpack ( result . x ) print ( result . success , result . x , np . linalg . norm ( continuity_constraints ( result . x ))) この例は1状態・2segmentの最小構成です。 state1 はsegment境界の決定変数、 continuity_constraints がdefectに対応します。 実務ではstate次元とsegment数を決めます。 path constraintと積分器のtoleranceも明示します。 解が積分精度に依存していないかも確認します。",
       "title": "Python"
     },
     {
@@ -24036,7 +24036,7 @@
         "S050",
         "S076"
       ],
-      "text": "Direct Shooting （single shooting）は、初期状態からhorizon全体を一度に積分し、controlだけを最適化変数にします。これに対しmultiple shootingは各segmentの開始stateも変数化するため、次の違いが生まれます。 長時間積分による感度の爆発を、segment単位の短い積分に分割して抑えられます。single shootingでは初期時刻のcontrolの変化がhorizon全体に伝播し、gradientが極端に大きく・小さくなることがあります。 各segmentへ個別に初期軌道の推測を与えられるため、不安定なdynamicsでも現実的な初期値を設定しやすくなります。 segmentごとの積分は互いに独立なので、並列に実行できます。 一方で決定変数の数はsingle shootingより増え、continuity制約という形で問題の疎な構造が生まれます。",
+      "text": "Direct Shooting （single shooting）は、初期状態からhorizon全体を一度に積分します。 最適化変数はcontrolだけです。 これに対しmultiple shootingは、各segmentの開始stateも変数化します。 長時間積分による感度の爆発を、segment単位の短い積分に分けて抑えられます。 single shootingでは初期時刻のcontrolの変化がhorizon全体に伝播し、gradientが極端になることがあります。 各segmentへ個別に初期軌道の推測を与えられるため、不安定なdynamicsでも現実的な初期値を設定しやすくなります。 segmentごとの積分は互いに独立なので、並列に実行できます。 一方で決定変数の数はsingle shootingより増え、continuity制約という形で問題の疎な構造が生まれます。",
       "title": "single shootingと比べて何が変わるか"
     },
     {
@@ -24098,7 +24098,7 @@
         "S050",
         "S076"
       ],
-      "text": "horizon全体を N 個のsegmentに分け、各segmentの開始stateを独立な決定変数 x 0 , x 1 , … , x N − 1 として持ちます。各segment内ではcontrol u i を仮定し、積分器で終端状態を計算します。 x ^ i + 1 = Φ ( x i , u i ) ここで Φ はsegment内の積分結果です。 x ^ i + 1 は積分器が計算した値であり、次segmentの決定変数 x i + 1 とは別物です。両者が一致するという条件 x ^ i + 1 − x i + 1 = 0 をNLPの等式制約（continuity制約、またはdefect制約）として課します。目的関数はsegmentごとのcostの和と終端costで構成します。",
+      "text": "horizon全体を N 個のsegmentに分けます。 各segmentの開始stateは、独立な決定変数 x 0 , x 1 , … , x N − 1 として持ちます。 各segment内ではcontrol u i を仮定し、積分器で終端状態を計算します。 x ^ i + 1 = Φ ( x i , u i ) ここで Φ はsegment内の積分結果です。 x ^ i + 1 は積分器が計算した値であり、次segmentの決定変数 x i + 1 とは別物です。 両者が一致するという条件 x ^ i + 1 − x i + 1 = 0 をNLPの等式制約（continuity制約、またはdefect制約）として課します。目的関数はsegmentごとのcostの和と終端costで構成します。",
       "title": "何を変数にし、何を制約にしているか"
     },
     {
@@ -24129,7 +24129,7 @@
         "S050",
         "S076"
       ],
-      "text": "horizonが中〜長く、dynamicsが不安定または非線形で感度が大きい segmentごとに現実的な初期軌道の推測を用意できる 積分を並列化できる計算資源がある continuity制約を扱えるNLP solver（SQP、interior-point）を利用できる horizonが短くdynamicsが安定しているなら、変数の少ない Direct Shooting のほうが単純です。path constraintが密で多項式近似の疎構造を強く使いたい場合は Direct Collocation を検討します。",
+      "text": "horizonが中〜長く、dynamicsが不安定または非線形で感度が大きい segmentごとに現実的な初期軌道の推測を用意できる 積分を並列化できる計算資源がある continuity制約を扱えるNLP solver（SQP、interior-point）を利用できる horizonが短くdynamicsが安定しているなら、変数の少ない Direct Shooting のほうが単純です。 path constraintが密なら、多項式近似の疎構造を使う Direct Collocation を検討します。",
       "title": "向いている条件"
     },
     {
@@ -24160,7 +24160,7 @@
         "S050",
         "S076"
       ],
-      "text": "defectがiterationを重ねても縮小しない segmentごとのrolloutが発散する segment数や分割位置（mesh）を変えると解が大きく変化する 初期軌道の推測が悪く、solverが可行点へ到達しない 積分器のtoleranceを厳しくすると解や制約違反が大きく変わる solver時間がreal-time deadlineを超える single shootingとの違いは Direct Shooting 、状態を多項式近似で扱う定式化は Direct Collocation 、生成される制約付きNLPの解き方は SQP で確認できます。",
+      "text": "defectがiterationを重ねても縮小しない segmentごとのrolloutが発散する segment数や分割位置（mesh）を変えると解が大きく変化する 初期軌道の推測が悪く、solverが可行点へ到達しない 積分器のtoleranceを厳しくすると解や制約違反が大きく変わる solver時間がreal-time deadlineを超える",
       "title": "失敗・切替の兆候"
     },
     {
@@ -24191,7 +24191,7 @@
         "S050",
         "S076"
       ],
-      "text": "trajectory variable でsegmentごとのstateとcontrolを確認し、 dynamics defect でcontinuity constraintを残差として読みます。 時間discretization でsegment幅と積分器の影響を確認したら、path制約をmesh全体へ置く Direct Collocation と比較します。ロボットの長いhorizonや不安定なdynamicsを読むときは、segment分割が感度と初期軌道にどう効いたかを先に記録します。",
+      "text": "trajectory variable で、segmentごとのstateとcontrolを確認します。 dynamics defect では、continuity constraintを残差として読みます。 時間discretization ではsegment幅と積分器の影響を確認します。 controlだけを変数にする Direct Shooting と、stateを多項式近似する Direct Collocation を比較します。 生成された制約付きNLPの解き方は SQP で確認できます。 長いhorizonや不安定なdynamicsでは、segment分割が感度と初期軌道にどう効いたかを記録します。",
       "title": "次に読む"
     },
     {

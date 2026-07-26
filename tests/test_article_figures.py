@@ -7,6 +7,7 @@ import pytest
 
 from scripts.generate_article_figures import (
     _finite_horizon_lqr_probe,
+    _multiple_shooting_probe,
     generate_article_figures,
     read_dataset_version,
 )
@@ -25,6 +26,21 @@ def test_lqr_probe_matches_the_fixed_article_equations() -> None:
     assert gains[0] == pytest.approx((7.604471732508259, 4.977648136580166))
 
 
+def test_multiple_shooting_probe_closes_the_fixed_continuity_defects() -> None:
+    probe = _multiple_shooting_probe()
+    initial = probe["initial"]
+    solved = probe["solved"]
+
+    assert isinstance(initial, dict)
+    assert isinstance(solved, dict)
+    assert initial["vector"] == pytest.approx((0.5, 0.5, 1.5))
+    assert initial["defects"] == pytest.approx((-0.25, 0.25))
+    assert initial["objective"] == pytest.approx(1.25)
+    assert solved["vector"] == pytest.approx((0.5, 1.0, 1.0))
+    assert solved["defects"] == pytest.approx((0.0, 0.0), abs=1e-12)
+    assert solved["objective"] == pytest.approx(1.0)
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -37,6 +53,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
+        "multiple-shooting-continuity-execution.svg",
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
         "portfolio-risk-execution.svg",
@@ -71,6 +88,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/momentum-sgd.md": "gradient-family-execution.svg",
         "content/methods/ilqr-ddp.md": "lqr-backward-forward-execution.svg",
         "content/methods/least-squares.md": "least-squares-fit-diagnostic.svg",
+        "content/methods/multiple-shooting.md": "multiple-shooting-continuity-execution.svg",
         "content/methods/projected-gradient.md": "so3-update-diagnostic.svg",
         "content/methods/riemannian-gradient.md": "so3-update-diagnostic.svg",
         "content/methods/family-manifold.md": "so3-update-diagnostic.svg",
