@@ -13,7 +13,7 @@ comparison_ids: [COMPARE_GRADIENT_FAMILY, COMPARE_GRADIENT_DIVERGENCE]
 aliases: [/learn/momentum-sgd]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 現在の勾配だけでなく過去の更新を速度として蓄積し、同じ方向の移動を強めて谷を横切る振動を抑える一次法です。
@@ -27,6 +27,12 @@ Momentumは、毎回の勾配をそのまま使わず、過去の更新を速度
 - 動かしているもの: parameter、速度状態、learning rate
 - 前進の判断: best-so-farとgradient normが安定し、velocityが過大にならないこと
 - 恐れていること: overshoot、発散、古いvelocity、mini-batch noise
+
+## 実行結果を先に見る
+
+![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Momentumは谷を横切る往復を残しながら、蓄積した速度で進む。](./media/gradient-family-execution.svg "固定Python generatorの実行結果です。橙のMomentum軌跡では、谷を横切る振動と進行方向への蓄積を同時に読めます。この一例は一般性能rankingではありません。")
+
+橙の線が谷を何度も横切る形を見ます。速度を持つことは振動を即座に消すのではなく、符号が入れ替わる更新を反復の中でならす設計です。
 
 ## 何を状態として持つか
 

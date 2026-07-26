@@ -10,7 +10,7 @@ related_ids: [least-squares, gauss-newton, trust-krylov, lbfgsb, slsqp]
 visualization_ids: [exponential-fit-trf, exponential-fit-trf-poor-init]
 comparison_ids: [COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS]
 status: published
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-26
 ---
 
 bounds付き非線形最小二乗で、境界までの距離に応じてtrust regionを変形し、反射方向も使って局所解を探すGauss–Newton系手法です。
@@ -42,6 +42,12 @@ SciPyの`scipy.optimize.least_squares`では`method="trf"`がdefaultです。
 [悪い初期値から始めるprobe](#/traces/exponential-fit-trf-poor-init)では、同じ観測量で初期値依存を確認します。
 どちらもTRFの実行結果ではありません。
 [solver条件の比較](#/compare/COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS)でbounds対応と残差vector interfaceの違いを読むための固定教材です。
+
+## 診断probeの出力を見る
+
+![同じ指数減衰fitと12回の評価予算で、通常初期値と悪い初期値からsolver-independent診断probeを実行したresidual norm履歴。両方とも残差は下がるが、開始値と途中の経路が異なる。](./media/trf-probe-execution.svg "Optimization Compassのdamped Gauss–Newton診断probeを実行した結果です。初期値感度を読む教材であり、SciPy TRFの内部iterationや性能を示しません。")
+
+線が下がったことだけでなく、出発点と途中の曲がり方を見ます。この図をTRFの収束履歴としては扱わず、初期値を変えて同じ診断量を追う必要性に使います。
 
 ## 仕組み
 

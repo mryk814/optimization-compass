@@ -17,7 +17,9 @@ def test_article_figures_are_deterministic_and_current() -> None:
     assert first == second
     assert set(first) == {
         "gradient-family-execution.svg",
+        "portfolio-risk-execution.svg",
         "topology-field-execution.svg",
+        "trf-probe-execution.svg",
     }
     for name, payload in first.items():
         assert payload == (ROOT / "site" / "public" / "media" / name).read_bytes()
@@ -39,11 +41,16 @@ def test_article_figures_have_accessible_svg_titles_and_execution_provenance() -
 def test_articles_place_execution_results_before_long_diagnostic_sections() -> None:
     expected = {
         "content/methods/gradient-descent.md": "gradient-family-execution.svg",
+        "content/methods/adam.md": "gradient-family-execution.svg",
+        "content/methods/momentum-sgd.md": "gradient-family-execution.svg",
         "content/methods/nelder-mead.md": "scenario-nm-quadratic/static.svg",
         "content/concepts/topology-optimization.md": "topology-field-execution.svg",
+        "content/concepts/chance-risk-contract.md": "portfolio-risk-execution.svg",
+        "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
     }
 
     for relative_path, figure in expected.items():
         source = (ROOT / relative_path).read_text(encoding="utf-8")
         assert figure in source
-        assert source.index(figure) < source.index("## 次に読む")
+        closing_marker = source.find("## 次に読む")
+        assert source.index(figure) < (closing_marker if closing_marker >= 0 else len(source))

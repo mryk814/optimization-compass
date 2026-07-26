@@ -12,7 +12,7 @@ related_ids: [concept.simplex, family.stochastic-ml, lp-qp-conic]
 visualization_ids: [portfolio-nominal-8-4, portfolio-cvar-8-4]
 comparison_ids: [COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 Chance constraintは制約違反の確率を扱います。CVaR・robust・stochastic・DROとの違いを、目的・制約・保証範囲で整理します。
@@ -30,6 +30,12 @@ Chance constraintは制約違反の確率を扱います。CVaR・robust・stoch
 | distributionally robust optimization (DRO) | 目的・制約 | 許容した分布集合の中で結果を抑えられるか | ambiguity set・距離・半径 |
 
 「stochastic」は一つのsolver名ではありません。確率分布や有限scenarioを使う問題の表現です。`robust`は不確実性をsetで囲む考え方であり、`chance constraint`は確率を制約の判定へ入れる考え方です。CVaRはtail riskの測り方で、これらと同じ分類軸ではありません。
+
+## 実行結果を先に見る
+
+![同じ4資産、training 8件、held-out 4件を使い、nominal目的とCVaRを含む目的で得た配分を比較した実行結果。各配分についてtrainingとheld-outのmean loss、CVaR 75%、worst lossを別々に表示する。](./media/portfolio-risk-execution.svg "固定Python generatorの実行結果です。risk treatmentだけを変えた二つの配分を、trainingとheld-outに分けて読みます。固定sampleの結果であり、将来returnを保証しません。")
+
+上段と下段では、変数domainとsampleを固定しています。配分が変わるだけでなく、trainingで見えたriskとheld-outのriskを分けて読むことが要点です。
 
 ## chance constraintは制約違反の確率を指定する
 

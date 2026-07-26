@@ -13,7 +13,7 @@ comparison_ids: [COMPARE_GRADIENT_FAMILY, COMPARE_GRADIENT_DIVERGENCE]
 aliases: [/learn/adam]
 comparison_aliases: [COMPARE_GRADIENT_FAMILY|/compare/gradient-quadratic]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 Adamは勾配のfirst／second momentを座標ごとに推定し、bias correction付きの適応stepでparameterを更新する確率的一次法です。
@@ -26,6 +26,12 @@ Adamは勾配の向きをfirst momentで平滑化します。
 - **見るもの**: 目的関数値、勾配、一次モーメントと二次モーメント、適応的なstep
 - **動かすもの**: 現在のパラメータ、moment state、global learning rate
 - **前進の判断**: 目的関数値またはvalidation metricが改善し、gradient normとupdate normが安定して小さくなること
+
+## 実行結果を先に見る
+
+![同じ細長い二次目的、初期点、40回の評価予算で実行したGradient Descent、Momentum、Adamの軌跡。Adamは座標ごとのgradient scaleを使い、他の二手法と異なる経路を取る。](./media/gradient-family-execution.svg "固定Python generatorの実行結果です。Adamの軌跡を他の更新則と同じ条件で読みます。この一例は一般性能rankingではありません。")
+
+青いAdamの軌跡に注目します。座標ごとのstep調整は、常に最短経路や最小の最終値を与える仕組みではありません。
 
 ## 仕組み
 

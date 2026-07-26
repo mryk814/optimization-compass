@@ -3063,6 +3063,35 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:adam:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:adam",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:bfgs",
+        "content:method.gradient-descent",
+        "content:momentum-sgd",
+        "method:M_ADAM",
+        "source:S047",
+        "source:S048",
+        "source:S049",
+        "source:S070",
+        "trace:adam-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S047",
+        "S048",
+        "S049",
+        "S070"
+      ],
+      "text": "固定Python generatorの実行結果です。Adamの軌跡を他の更新則と同じ条件で読みます。この一例は一般性能rankingではありません。 青いAdamの軌跡に注目します。座標ごとのstep調整は、常に最短経路や最小の最終値を与える仕組みではありません。",
+      "title": "実行結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:adam:次に読む",
       "dataset_version": "0.18.19",
       "document_id": "content:adam",
@@ -7597,6 +7626,36 @@
       ],
       "text": "不確実性を含む問題では、次の項目を空欄にしません。 python uncertainty_contract = { \"source\" : \"parameter | observation_noise | process_disturbance\" , \"model\" : \"distribution | scenarios | uncertainty_set | ambiguity_set\" , \"objective_risk\" : \"expectation | variance | worst_case | cvar | not_applicable\" , \"constraint_treatment\" : \"nominal | robust | chance | scenario\" , \"confidence_or_tail\" : \"explicit_value_and_definition\" , \"training_evaluation_split\" : \"fixed_description\" , \"guarantee_scope\" : \"supported_claim_and_assumptions\" , } unknown は、未確認の前提を nominal や not_applicable へ変換する値ではありません。 分布／set／tail水準／評価データのうち、未確定な対象をそのまま残します。 追加で必要な観測やsourceも記録します。 Warning scenario上の可行性／chance constraintの確率計算／robust set内の可行性は、保証範囲が異なります。 DROのambiguity set内で評価するworst-caseも、別の範囲です。 結果には、対象のscenario・分布・setと評価時のtoleranceを添えます。",
       "title": "仕様に残す最小contract"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:concept.chance-risk-contract:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:concept.chance-risk-contract",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_PORTFOLIO_NOMINAL_CVAR_8_4",
+        "content:concept.constraint-class",
+        "content:concept.simplex",
+        "content:concept.uncertainty-models",
+        "content:family.stochastic-ml",
+        "content:lp-qp-conic",
+        "source:S054",
+        "source:S055",
+        "source:S056",
+        "source:S103",
+        "trace:portfolio-cvar-8-4",
+        "trace:portfolio-nominal-8-4"
+      ],
+      "source_ids": [
+        "S054",
+        "S055",
+        "S056",
+        "S103"
+      ],
+      "text": "固定Python generatorの実行結果です。risk treatmentだけを変えた二つの配分を、trainingとheld-outに分けて読みます。固定sampleの結果であり、将来returnを保証しません。 上段と下段では、変数domainとsampleを固定しています。配分が変わるだけでなく、trainingで見えたriskとheld-outのriskを分けて読むことが要点です。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -23019,6 +23078,33 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:momentum-sgd:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:momentum-sgd",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_GRADIENT_DIVERGENCE",
+        "comparison:COMPARE_GRADIENT_FAMILY",
+        "content:adam",
+        "content:bfgs",
+        "content:method.gradient-descent",
+        "method:M_MOMENTUM_SGD",
+        "source:S048",
+        "source:S049",
+        "source:S056",
+        "trace:momentum-quadratic-divergence"
+      ],
+      "source_ids": [
+        "S048",
+        "S049",
+        "S056"
+      ],
+      "text": "固定Python generatorの実行結果です。橙のMomentum軌跡では、谷を横切る振動と進行方向への蓄積を同時に読めます。この一例は一般性能rankingではありません。 橙の線が谷を何度も横切る形を見ます。速度を持つことは振動を即座に消すのではなく、符号が入れ替わる更新を反復の中でならす設計です。",
+      "title": "実行結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:momentum-sgd:最初に見る診断値",
       "dataset_version": "0.18.19",
       "document_id": "content:momentum-sgd",
@@ -32461,6 +32547,33 @@
       ],
       "text": "残差の作り方とidentifiabilityは 非線形最小二乗とLevenberg–Marquardt 、曲率近似の基礎は Gauss–Newton法 を確認してください。 一般制約がある場合は 制約付き非線形最適化の選び分け へ進みます。",
       "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:trust-region-reflective:診断probeの出力を見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:trust-region-reflective",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_EXPONENTIAL_FIT_SOLVER_CONDITIONS",
+        "content:gauss-newton",
+        "content:lbfgsb",
+        "content:least-squares",
+        "content:slsqp",
+        "content:trust-krylov",
+        "method:M_TRUST_REGION_REFLECTIVE",
+        "source:S003",
+        "source:S096",
+        "trace:exponential-fit-trf",
+        "trace:exponential-fit-trf-poor-init"
+      ],
+      "source_ids": [
+        "S003",
+        "S096"
+      ],
+      "text": "Optimization Compassのdamped Gauss–Newton診断probeを実行した結果です。初期値感度を読む教材であり、SciPy TRFの内部iterationや性能を示しません。 線が下がったことだけでなく、出発点と途中の曲がり方を見ます。この図をTRFの収束履歴としては扱わず、初期値を変えて同じ診断量を追う必要性に使います。",
+      "title": "診断probeの出力を見る"
     },
     {
       "attribution": "Optimization Compass contributors",

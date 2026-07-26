@@ -6,6 +6,8 @@ import math
 from pathlib import Path
 
 from optimization_compass.learning_slices import generate_topology_field_artifact
+from optimization_compass.parameter_estimation import generate_parameter_estimation_traces
+from optimization_compass.portfolio_uncertainty import generate_portfolio_uncertainty_traces
 from optimization_compass.trace_models import TraceFrame
 from optimization_compass.traces import generate_gradient_bundle
 
@@ -21,7 +23,9 @@ def read_dataset_version() -> str:
 def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     return {
         "gradient-family-execution.svg": _gradient_family_svg(dataset_version).encode("utf-8"),
+        "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
+        "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
 
 
@@ -148,6 +152,250 @@ def _gradient_family_svg(dataset_version: str) -> str:
             (
                 '<text x="60" y="870" class="caveat">'
                 "この固定presetの軌跡であり、一般的な性能rankingではありません。"
+                "</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _portfolio_risk_svg(dataset_version: str) -> str:
+    traces = generate_portfolio_uncertainty_traces(dataset_version=dataset_version)
+    panels = (
+        ("nominal目的", traces[0], "#245c42"),
+        ("CVaRを含む目的", traces[1], "#c56b32"),
+    )
+    asset_colors = ("#245c42", "#c56b32", "#456b92", "#8b7d58")
+    elements = [
+        _svg_open(
+            "同じ12 scenarioでも、riskの置き方で配分が変わる",
+            (
+                "4資産の配分を、同じtraining 8件とheld-out 4件で評価した固定教材です。"
+                "nominal目的とCVaRを含む目的について、配分とmean loss、CVaR 75%、"
+                "worst lossをtrainingとheld-outに分けて示します。"
+            ),
+            height=920,
+        ),
+        '<rect width="800" height="920" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">同じsampleでも、riskの置き方で配分が変わる</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "4 assets · training 8 + held-out 4 · same capped simplex · α = 0.75"
+            "</text>"
+        ),
+    ]
+    for panel_index, (label, trace, accent) in enumerate(panels):
+        panel_y = 116 + panel_index * 344
+        weights = trace.frames[0].points[0].coordinates
+        training = trace.frames[1]
+        held_out = trace.frames[2]
+        elements.extend(
+            [
+                (
+                    f'<rect x="42" y="{panel_y}" width="716" height="316" rx="16" '
+                    'fill="#fff" stroke="#cfd8d1"/>'
+                ),
+                (
+                    f'<text x="64" y="{panel_y + 38}" class="panel-title" '
+                    f'fill="{accent}">{html.escape(label)}</text>'
+                ),
+                (
+                    f'<text x="736" y="{panel_y + 38}" text-anchor="end" class="status">'
+                    f"{html.escape(str(trace.objective['definition']))}</text>"
+                ),
+                f'<text x="64" y="{panel_y + 72}" class="metric">配分</text>',
+            ]
+        )
+        bar_x, bar_y, bar_width, bar_height = 126.0, panel_y + 52.0, 610.0, 34.0
+        cursor = bar_x
+        for asset_index, (weight, color) in enumerate(zip(weights, asset_colors, strict=True)):
+            width = float(weight) * bar_width
+            if width > 0:
+                elements.append(
+                    f'<rect x="{cursor:.2f}" y="{bar_y:.2f}" width="{width:.2f}" '
+                    f'height="{bar_height}" fill="{color}"/>'
+                )
+            cursor += width
+            elements.append(
+                f'<text x="{126 + asset_index * 150}" y="{panel_y + 112}" class="status">'
+                f'<tspan fill="{color}" font-weight="750">●</tspan> '
+                f"Asset {asset_index + 1}: {float(weight):.2f}</text>"
+            )
+        elements.extend(
+            [
+                f'<text x="64" y="{panel_y + 158}" class="method">評価split</text>',
+                f'<text x="310" y="{panel_y + 158}" class="method">mean loss</text>',
+                f'<text x="494" y="{panel_y + 158}" class="method">CVaR 75%</text>',
+                f'<text x="668" y="{panel_y + 158}" class="method">worst loss</text>',
+            ]
+        )
+        for row_index, (split_label, frame) in enumerate(
+            (("training 8", training), ("held-out 4", held_out))
+        ):
+            row_y = panel_y + 202 + row_index * 54
+            elements.extend(
+                [
+                    f'<text x="64" y="{row_y}" class="metric">{split_label}</text>',
+                    (
+                        f'<text x="310" y="{row_y}" class="metric-value">'
+                        f"{_metric(_metric_value(frame, 'mean_loss'))}</text>"
+                    ),
+                    (
+                        f'<text x="494" y="{row_y}" class="metric-value">'
+                        f"{_metric(_metric_value(frame, 'cvar_75'))}</text>"
+                    ),
+                    (
+                        f'<text x="668" y="{row_y}" class="metric-value">'
+                        f"{_metric(_metric_value(frame, 'worst_loss'))}</text>"
+                    ),
+                ]
+            )
+        elements.append(
+            f'<line x1="64" y1="{panel_y + 294}" x2="736" y2="{panel_y + 294}" '
+            f'stroke="{accent}" stroke-width="3"/>'
+        )
+    elements.extend(
+        [
+            (
+                '<text x="42" y="826" class="caption">'
+                "実行生成: optimization_compass.portfolio_uncertainty."
+                f"generate_portfolio_uncertainty_traces · dataset {html.escape(dataset_version)}"
+                "</text>"
+            ),
+            (
+                '<text x="42" y="860" class="caveat">'
+                "固定8/4 scenarioのempirical summaryであり、母集団riskや将来returnを保証しません。"
+                "</text>"
+            ),
+            (
+                '<text x="42" y="892" class="note">'
+                "lossは小さい側が良い。trainingとheld-outは別々に読みます。</text>"
+            ),
+            _svg_style(),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
+
+
+def _trf_probe_svg(dataset_version: str) -> str:
+    traces = {
+        trace.trace_id: trace
+        for trace in generate_parameter_estimation_traces(dataset_version=dataset_version)
+    }
+    series = (
+        ("通常初期値", traces["exponential-fit-trf"], "#245c42", 486.0),
+        ("悪い初期値", traces["exponential-fit-trf-poor-init"], "#c56b32", 420.0),
+    )
+    plot_x, plot_y, plot_width, plot_height = 76.0, 136.0, 648.0, 390.0
+    log_min, log_max = math.log10(0.03), math.log10(4.0)
+
+    def project(evaluation: int, residual: float) -> tuple[float, float]:
+        x = plot_x + (evaluation - 1) / 11 * plot_width
+        y = plot_y + (log_max - math.log10(residual)) / (log_max - log_min) * plot_height
+        return x, y
+
+    elements = [
+        _svg_open(
+            "同じ診断probeでも、初期値で残差履歴が変わる",
+            (
+                "20観測の指数減衰fitに対するsolver-independent damped Gauss–Newton"
+                "診断probeの実行結果です。通常初期値と悪い初期値について、"
+                "12 evaluationまでのresidual normを対数目盛で示します。"
+                "TRF本体の実行ではありません。"
+            ),
+            height=720,
+        ),
+        '<rect width="800" height="720" rx="24" fill="#f7f6f1"/>',
+        '<text x="42" y="54" class="title">同じ診断probeでも、初期値で残差履歴が変わる</text>',
+        (
+            '<text x="42" y="84" class="subtitle">'
+            "exponential fit · 20 observations · 12 evaluations · log residual scale"
+            "</text>"
+        ),
+        (
+            f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" height="{plot_height}" '
+            'rx="14" fill="#fff" stroke="#cfd8d1"/>'
+        ),
+    ]
+    for tick in (3.0, 1.0, 0.3, 0.1, 0.03):
+        _, y = project(1, tick)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_x}" y1="{y:.2f}" x2="{plot_x + plot_width}" '
+                    f'y2="{y:.2f}" stroke="#e2e7e2"/>'
+                ),
+                (
+                    f'<text x="{plot_x - 12}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="axis">{tick:g}</text>'
+                ),
+            ]
+        )
+    for evaluation in (1, 4, 8, 12):
+        x, _ = project(evaluation, 1.0)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x:.2f}" y1="{plot_y}" x2="{x:.2f}" '
+                    f'y2="{plot_y + plot_height}" stroke="#eef1ee"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{plot_y + plot_height + 26}" '
+                    f'text-anchor="middle" class="axis">{evaluation}</text>'
+                ),
+            ]
+        )
+    for label, trace, color, label_y in series:
+        points = [
+            project(frame.oracle_evaluations, _metric_value(frame, "residual_norm"))
+            for frame in trace.frames
+        ]
+        point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in points)
+        start_value = _metric_value(trace.frames[0], "residual_norm")
+        final_value = _metric_value(trace.frames[-1], "residual_norm")
+        end_x, end_y = points[-1]
+        elements.extend(
+            [
+                (
+                    f'<polyline points="{point_string}" fill="none" stroke="{color}" '
+                    'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+                ),
+                (
+                    f'<circle cx="{points[0][0]:.2f}" cy="{points[0][1]:.2f}" r="6" '
+                    f'fill="#fff" stroke="{color}" stroke-width="3"/>'
+                ),
+                f'<circle cx="{end_x:.2f}" cy="{end_y:.2f}" r="7" fill="{color}"/>',
+                (
+                    f'<line x1="604" y1="{label_y - 5:.2f}" x2="{end_x - 10:.2f}" '
+                    f'y2="{end_y:.2f}" stroke="{color}" stroke-width="2"/>'
+                ),
+                (
+                    f'<text x="594" y="{label_y:.2f}" text-anchor="end" '
+                    f'class="method" fill="{color}">{html.escape(label)}</text>'
+                ),
+                (
+                    f'<text x="594" y="{label_y + 22:.2f}" text-anchor="end" '
+                    f'class="status">residual {_metric(start_value)}'
+                    f" → {_metric(final_value)}</text>"
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            '<text x="400" y="584" text-anchor="middle" class="metric">oracle evaluations</text>',
+            (
+                '<text x="42" y="640" class="caption">'
+                "実行生成: optimization_compass.parameter_estimation."
+                f"generate_parameter_estimation_traces · dataset {html.escape(dataset_version)}"
+                "</text>"
+            ),
+            (
+                '<text x="42" y="674" class="caveat">'
+                "solver条件を読む固定診断probeです。"
+                "SciPy TRFの内部iterationや性能差ではありません。"
                 "</text>"
             ),
             _svg_style(),
@@ -299,7 +547,11 @@ def _svg_style() -> str:
 
 
 def _objective_value(frame: TraceFrame) -> float:
-    return next(float(metric.value) for metric in frame.metrics if metric.metric_id == "objective")
+    return _metric_value(frame, "objective")
+
+
+def _metric_value(frame: TraceFrame, metric_id: str) -> float:
+    return next(float(metric.value) for metric in frame.metrics if metric.metric_id == metric_id)
 
 
 def _metric(value: float) -> str:
