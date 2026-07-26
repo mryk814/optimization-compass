@@ -10,18 +10,35 @@ prerequisites: [concept.derivative-free]
 related_ids: [shgo, direct-global, differential-evolution]
 aliases: [/learn/dual-annealing]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。
 
-このページでは、canonicalな手法 `M_SIMULATED_ANNEALING` の一変種としてDual Annealingを扱います。Python例はSciPy実装 `I_SCIPY_DUAL_ANNEALING` に固有のAPIであり、simulated annealing一般の保証と実装のoptionを混同しないように読みます。
+Dual Annealingは、canonicalな手法`M_SIMULATED_ANNEALING`の一変種です。
+Python例はSciPy実装`I_SCIPY_DUAL_ANNEALING`に固有のAPIです。
+simulated annealing一般の保証と、実装固有のoptionを分けて読みます。
 
 ## Annealingの直感
 
-高いtemperatureでは悪化するstepも一定確率で受け入れ、local basinから抜けます。temperatureを下げるにつれて探索を局所化します。
+高いtemperatureでは悪化するstepも一定確率で受け入れ、local basinから抜けます。
+temperatureを下げるにつれて探索を局所化します。
 
-Dual Annealingはgeneralized simulated annealingのvisiting distributionとacceptance ruleを使い、必要に応じてlocal minimizerを組み合わせます。
+Dual Annealingはgeneralized simulated annealingのvisiting distributionとacceptance ruleを使います。
+必要に応じてlocal minimizerも組み合わせます。
+
+まず、基礎になるSimulated Annealingの受理機構を固定実行で見ます。
+橙の`current`は悪化しても、青緑の`best-so-far`は手放しません。
+
+![1次元Rastrigin関数を初期点3.5から固定seedで400反復探索したSimulated Annealingの実行結果。上段は受理した状態が複数のbasinを横断する様子を示す。下段では橙の現在値が何度も上昇する一方、青緑の最良値は32.25から0.00076へ単調に改善する。受理65回のうち32回は悪化移動で、最初の100反復に18回、最後の100反復には1回だけ現れる。](./media/simulated-annealing-execution.svg "固定1次元Rastrigin、seed 7、初期温度5.0、幾何冷却0.985のpure Python実行です。Dual Annealing固有のvisiting distributionとlocal searchは含みません。別seed、高次元、別schedule、手法一般の性能や大域最適性も示しません。")
+
+このrunでは、受理した65 moveのうち32 moveが悪化でした。
+最初の100反復では18回、最後の100反復では1回だけです。
+温度低下に伴う「探索から絞り込みへ」の移行が見えます。
+
+> この図はclassicな受理機構を切り出した1次元教材です。
+> SciPyの`dual_annealing`実行結果ではなく、visiting distributionとlocal searchも含みません。
+> Dual Annealingの結果を比較するときは、以下の追加要因を分けて記録します。
 
 ## Local searchの有無
 
@@ -31,7 +48,7 @@ Dual Annealingはgeneralized simulated annealingのvisiting distributionとaccep
 
 - annealing evaluation
 - local-search evaluation
-- local solverとtolerance
+- `local solver`とtolerance
 - local search開始条件
 
 を分けます。local refinementを含むDual Annealingと、含まないpopulation法を同じiteration数で比較しません。
@@ -43,14 +60,14 @@ Dual Annealingはgeneralized simulated annealingのvisiting distributionとaccep
 - accept parameter: 悪化stepの受容
 - restart temperature ratio: re-annealingのタイミング
 
-parameterは相互作用し、problem scaleやboundsへ依存します。
+各`parameter`は相互作用し、problem scaleやboundsへ依存します。
 
 ## 向いている条件
 
 - bounded continuous nonconvex problem
 - multiple basins
-- gradientを要求しない
-- local solverとhybrid化したい
+- `gradient`を要求しない
+- `local solver`とhybrid化したい
 - moderate dimension
 - stochastic explorationを許容
 
@@ -60,7 +77,7 @@ parameterは相互作用し、problem scaleやboundsへ依存します。
 - high dimension
 - noiseでacceptanceが乱れる
 - boundsが広すぎる
-- general constraintが中心
+- `general constraint`が中心
 - reproducibilityにseedを記録しない
 - optimality certificateが必要
 
@@ -101,7 +118,8 @@ SciPy versionにより乱数引数やoption名が変わる可能性があるた�
 - seed間の結果分散
 - termination reason
 
-current stateが悪化してもbest-so-farは保持します。確率的探索ではcurrentとincumbentを分けます。
+`current state`が悪化してもbest-so-farは保持します。
+確率的探索ではcurrentとincumbentを分けます。
 
 ::: warning
 annealing scheduleが終了したことは大域最適性の証明ではありません。複数seed、同じevaluation budget、local-search有無を揃えて候補品質を評価します。

@@ -15,6 +15,7 @@ from scripts.generate_article_figures import (
     _pbt_population_probe,
     _pdlp_probe,
     _sgd_mini_batch_probe,
+    _simulated_annealing_probe,
     _spatial_branch_bound_probe,
     _spatial_interval_lower_bound,
     _spatial_objective,
@@ -187,6 +188,24 @@ def test_sgd_probe_keeps_batch_noise_separate_from_full_data_loss() -> None:
     assert probe["upward_full_loss_steps"] == 5
 
 
+def test_simulated_annealing_probe_accepts_worse_moves_while_preserving_best() -> None:
+    probe = _simulated_annealing_probe()
+    history = probe["history"]
+
+    assert len(history) == 401
+    assert probe["initial_objective"] == pytest.approx(32.25)
+    assert probe["best_x"] == pytest.approx(-0.0019633254984749056)
+    assert probe["best_objective"] == pytest.approx(0.000764721820644354)
+    assert probe["accepted_moves"] == 65
+    assert probe["accepted_worsening"] == 32
+    assert probe["early_worsening"] == 18
+    assert probe["late_worsening"] == 1
+    assert all(
+        float(current["best_objective"]) <= float(previous["best_objective"])
+        for previous, current in zip(history, history[1:], strict=False)
+    )
+
+
 def test_pbt_probe_records_worker_copy_and_lineage_inheritance() -> None:
     probe = _pbt_population_probe()
     snapshots = probe["snapshots"]
@@ -233,6 +252,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
         "sgd-mini-batch-execution.svg",
+        "simulated-annealing-execution.svg",
         "so3-update-diagnostic.svg",
         "spatial-branch-bound-execution.svg",
         "topology-field-execution.svg",
@@ -277,6 +297,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/pbt.md": "pbt-lineage-execution.svg",
         "content/methods/pdlp.md": "pdlp-residual-execution.svg",
         "content/methods/sgd.md": "sgd-mini-batch-execution.svg",
+        "content/methods/simulated-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
         "content/methods/simp-topology.md": "topology-field-execution.svg",
         "content/methods/density-filter.md": "topology-field-execution.svg",
@@ -286,6 +307,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/trust-region-reflective.md": "trf-probe-execution.svg",
         "content/methods/constrained-continuous.md": "constrained-feasibility-execution.svg",
         "content/methods/direct-shooting.md": "direct-shooting-rollout-execution.svg",
+        "content/methods/dual-annealing.md": "simulated-annealing-execution.svg",
         "content/methods/family-constrained-nlp.md": "constrained-feasibility-execution.svg",
         "content/methods/slsqp.md": "constrained-feasibility-execution.svg",
         "content/methods/bfgs.md": "constrained-feasibility-execution.svg",

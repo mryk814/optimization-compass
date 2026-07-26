@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import html
 import math
+import random
 from pathlib import Path
 
 from optimization_compass.constraint_geometry import generate_so3_traces
@@ -66,6 +67,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "sgd-mini-batch-execution.svg": _sgd_mini_batch_svg(dataset_version).encode("utf-8"),
+        "simulated-annealing-execution.svg": _simulated_annealing_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "so3-update-diagnostic.svg": _so3_update_svg(dataset_version).encode("utf-8"),
         "spatial-branch-bound-execution.svg": _spatial_branch_bound_svg(dataset_version).encode(
             "utf-8"
@@ -1276,6 +1280,303 @@ def _local_search_two_opt_svg(dataset_version: str) -> str:
 """,
         "</svg>\n",
     ]
+    return "".join(elements)
+
+
+def _simulated_annealing_objective(x: float) -> float:
+    return 10.0 + x * x - 10.0 * math.cos(2.0 * math.pi * x)
+
+
+def _simulated_annealing_probe() -> dict[str, object]:
+    seed = 7
+    iterations = 400
+    initial_temperature = 5.0
+    cooling_rate = 0.985
+    step_scale = 0.5
+    lower_bound, upper_bound = -5.12, 5.12
+    generator = random.Random(seed)
+
+    x = 3.5
+    objective = _simulated_annealing_objective(x)
+    best_x, best_objective = x, objective
+    temperature = initial_temperature
+    history: list[dict[str, object]] = [
+        {
+            "iteration": 0,
+            "x": x,
+            "objective": objective,
+            "best_x": best_x,
+            "best_objective": best_objective,
+            "temperature": temperature,
+            "accepted": True,
+            "accepted_worsening": False,
+        }
+    ]
+
+    for iteration in range(1, iterations + 1):
+        candidate = min(
+            upper_bound,
+            max(lower_bound, x + generator.gauss(0.0, step_scale)),
+        )
+        candidate_objective = _simulated_annealing_objective(candidate)
+        delta = candidate_objective - objective
+        accepted = delta <= 0.0 or generator.random() < math.exp(-delta / temperature)
+        accepted_worsening = accepted and delta > 0.0
+        if accepted:
+            x, objective = candidate, candidate_objective
+            if objective < best_objective:
+                best_x, best_objective = x, objective
+        history.append(
+            {
+                "iteration": iteration,
+                "x": x,
+                "objective": objective,
+                "best_x": best_x,
+                "best_objective": best_objective,
+                "temperature": temperature,
+                "accepted": accepted,
+                "accepted_worsening": accepted_worsening,
+            }
+        )
+        temperature *= cooling_rate
+
+    accepted_moves = sum(bool(item["accepted"]) for item in history[1:])
+    accepted_worsening = sum(bool(item["accepted_worsening"]) for item in history[1:])
+    early_worsening = sum(bool(item["accepted_worsening"]) for item in history[1:101])
+    late_worsening = sum(bool(item["accepted_worsening"]) for item in history[301:])
+    return {
+        "seed": seed,
+        "iterations": iterations,
+        "initial_x": float(history[0]["x"]),
+        "initial_objective": float(history[0]["objective"]),
+        "initial_temperature": initial_temperature,
+        "final_temperature": temperature,
+        "cooling_rate": cooling_rate,
+        "step_scale": step_scale,
+        "bounds": (lower_bound, upper_bound),
+        "history": tuple(history),
+        "best_x": best_x,
+        "best_objective": best_objective,
+        "accepted_moves": accepted_moves,
+        "accepted_worsening": accepted_worsening,
+        "early_worsening": early_worsening,
+        "late_worsening": late_worsening,
+    }
+
+
+def _simulated_annealing_svg(dataset_version: str) -> str:
+    probe = _simulated_annealing_probe()
+    history = probe["history"]
+    bounds = probe["bounds"]
+    if not isinstance(history, tuple) or not isinstance(bounds, tuple):
+        raise TypeError("simulated-annealing teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 74.0, 594.0
+    landscape_top, landscape_bottom = 194.0, 470.0
+    trace_top, trace_bottom = 628.0, 894.0
+    lower_bound, upper_bound = (float(value) for value in bounds)
+    objective_max = 42.0
+
+    def position_x(value: float) -> float:
+        return plot_left + (value - lower_bound) / (upper_bound - lower_bound) * (
+            plot_right - plot_left
+        )
+
+    def landscape_y(value: float) -> float:
+        return landscape_bottom - min(value, objective_max) / objective_max * (
+            landscape_bottom - landscape_top
+        )
+
+    def iteration_x(iteration: int) -> float:
+        return plot_left + iteration / int(probe["iterations"]) * (plot_right - plot_left)
+
+    def trace_y(value: float) -> float:
+        return trace_bottom - min(value, objective_max) / objective_max * (trace_bottom - trace_top)
+
+    def temperature_y(value: float) -> float:
+        ratio = value / float(probe["initial_temperature"])
+        return trace_bottom - ratio * (trace_bottom - trace_top)
+
+    landscape = " ".join(
+        f"{position_x(x):.2f},{landscape_y(_simulated_annealing_objective(x)):.2f}"
+        for x in (lower_bound + index / 320 * (upper_bound - lower_bound) for index in range(321))
+    )
+    current_trace = " ".join(
+        f"{iteration_x(int(item['iteration'])):.2f},{trace_y(float(item['objective'])):.2f}"
+        for item in history
+    )
+    best_trace = " ".join(
+        f"{iteration_x(int(item['iteration'])):.2f},{trace_y(float(item['best_objective'])):.2f}"
+        for item in history
+    )
+    temperature_trace = " ".join(
+        f"{iteration_x(int(item['iteration'])):.2f},{temperature_y(float(item['temperature'])):.2f}"
+        for item in history
+    )
+    accepted_positions = [
+        (float(item["x"]), float(item["objective"]), int(item["iteration"]))
+        for item in history[1:]
+        if bool(item["accepted"])
+    ]
+    worsening_positions = [
+        (int(item["iteration"]), float(item["objective"]))
+        for item in history[1:]
+        if bool(item["accepted_worsening"])
+    ]
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">Simulated Annealingで悪化移動を受理する固定実行</title>',
+        (
+            '<desc id="figure-description">1次元Rastrigin関数を初期点3.5から400反復探索する'
+            "固定seed実行。高温の序盤では悪化移動も受理して複数の谷を移動し、"
+            "best-so-farは悪化させず保持する。目的値は32.25から0.00076まで改善する。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="sa-title">currentは悪化しても、bestは手放さない</text>',
+        (
+            '<text x="32" y="80" class="sa-subtitle">'
+            "1D Rastrigin · seed 7 · 400 iterations · T₀ 5.0 · cooling 0.985</text>"
+        ),
+        '<line x1="32" y1="116" x2="58" y2="116" stroke="#d67835" stroke-width="5"/>',
+        '<text x="68" y="122" class="sa-legend">current</text>',
+        '<line x1="164" y1="116" x2="190" y2="116" stroke="#2c7564" stroke-width="6"/>',
+        '<text x="200" y="122" class="sa-legend">best-so-far</text>',
+        (
+            '<line x1="342" y1="116" x2="368" y2="116" stroke="#345d6b" '
+            'stroke-width="3" stroke-dasharray="8 6"/>'
+        ),
+        '<text x="378" y="122" class="sa-legend">temperature (scaled)</text>',
+        '<circle cx="516" cy="116" r="7" fill="#fff" stroke="#9f552c" stroke-width="3"/>',
+        '<text x="530" y="122" class="sa-legend">accepted worse</text>',
+        '<rect x="24" y="150" width="592" height="354" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="184" class="sa-panel">accepted states cross several basins</text>',
+        (
+            f'<polyline points="{landscape}" fill="none" stroke="#345d6b" '
+            'stroke-width="3" stroke-linejoin="round"/>'
+        ),
+    ]
+    for x, objective, iteration in accepted_positions:
+        opacity = 0.28 + 0.52 * (1.0 - iteration / int(probe["iterations"]))
+        elements.append(
+            f'<circle cx="{position_x(x):.2f}" cy="{landscape_y(objective):.2f}" r="3.5" '
+            f'fill="#d67835" opacity="{opacity:.2f}"/>'
+        )
+    start_x = position_x(float(probe["initial_x"]))
+    start_y = landscape_y(float(probe["initial_objective"]))
+    best_x = position_x(float(probe["best_x"]))
+    best_y = landscape_y(float(probe["best_objective"]))
+    elements.extend(
+        [
+            f'<circle cx="{start_x:.2f}" cy="{start_y:.2f}" r="8" fill="#102a2e"/>',
+            f'<text x="{start_x - 10:.2f}" y="{start_y - 13:.2f}" text-anchor="end" '
+            'class="sa-label">start</text>',
+            f'<circle cx="{best_x:.2f}" cy="{best_y:.2f}" r="9" fill="#2c7564"/>',
+            f'<text x="{best_x + 12:.2f}" y="{best_y - 10:.2f}" class="sa-label">best</text>',
+        ]
+    )
+    for tick in (-5, -3, -1, 1, 3, 5):
+        elements.append(
+            f'<text x="{position_x(float(tick)):.2f}" y="490" text-anchor="middle" '
+            f'class="sa-axis">{tick}</text>'
+        )
+    elements.extend(
+        [
+            '<rect x="24" y="538" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
+            (
+                '<text x="44" y="576" class="sa-panel">'
+                "temperature falls; current can still rise</text>"
+            ),
+        ]
+    )
+    for tick in (0, 10, 20, 30, 40):
+        y = trace_y(float(tick))
+        elements.extend(
+            [
+                f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                'stroke="#e4ebe7" stroke-width="1"/>',
+                f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                f'class="sa-axis">{tick}</text>',
+            ]
+        )
+    elements.extend(
+        [
+            (
+                f'<polyline points="{temperature_trace}" fill="none" stroke="#345d6b" '
+                'stroke-width="3" stroke-dasharray="8 6"/>'
+            ),
+            (
+                f'<polyline points="{current_trace}" fill="none" stroke="#d67835" '
+                'stroke-width="3" stroke-linejoin="round"/>'
+            ),
+            (
+                f'<polyline points="{best_trace}" fill="none" stroke="#2c7564" '
+                'stroke-width="6" stroke-linejoin="round"/>'
+            ),
+        ]
+    )
+    for iteration, objective in worsening_positions:
+        elements.append(
+            f'<circle cx="{iteration_x(iteration):.2f}" cy="{trace_y(objective):.2f}" r="4.5" '
+            'fill="#fff" stroke="#9f552c" stroke-width="2.5"/>'
+        )
+    for tick in (0, 100, 200, 300, 400):
+        elements.append(
+            f'<text x="{iteration_x(tick):.2f}" y="906" text-anchor="middle" '
+            f'class="sa-axis">{tick}</text>'
+        )
+    elements.extend(
+        [
+            '<text x="334" y="922" text-anchor="middle" class="sa-axis">iteration</text>',
+            '<text x="32" y="966" class="sa-metric-label">best objective</text>',
+            (
+                '<text x="32" y="994" class="sa-metric">'
+                f"{float(probe['initial_objective']):.2f} → "
+                f"{float(probe['best_objective']):.5f}</text>"
+            ),
+            '<text x="278" y="966" class="sa-metric-label">accepted worse</text>',
+            (
+                '<text x="278" y="994" class="sa-metric">'
+                f"{int(probe['accepted_worsening'])} / "
+                f"{int(probe['accepted_moves'])} moves</text>"
+            ),
+            '<text x="480" y="966" class="sa-metric-label">early / late</text>',
+            (
+                '<text x="480" y="994" class="sa-metric">'
+                f"{int(probe['early_worsening'])} / {int(probe['late_worsening'])}</text>"
+            ),
+            (
+                '<text x="32" y="1030" class="sa-meta">'
+                "実行生成: scripts.generate_article_figures._simulated_annealing_probe "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1058" class="sa-limit">'
+                "固定1次元・1 seedの教材です。別seed・高次元・schedule一般の性能や"
+                "大域最適性は示しません。</text>"
+            ),
+            """
+<style>
+  .sa-title { font: 700 23px system-ui, sans-serif; fill: #102a2e; }
+  .sa-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .sa-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .sa-legend { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .sa-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .sa-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
+  .sa-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .sa-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .sa-meta { font: 400 12px system-ui, sans-serif; fill: #45656a; }
+  .sa-limit { font: 400 12px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
     return "".join(elements)
 
 
