@@ -274,6 +274,7 @@ _PR_FAST_CODES: tuple[str, ...] = (
     "site.unit",
     "site.build",
 )
+_MAIN_FAST_CODES: tuple[str, ...] = _PR_FAST_CODES
 _CONTENT_READY_CODES: tuple[str, ...] = (
     "content.pages",
     "content.licensing",
@@ -324,6 +325,12 @@ TASKS: dict[str, ValidationTask] = {
             description="Fast PR gate for site, E2E, workflow, and test-contract changes.",
             gate="pr-fast",
             check_codes=_PR_FAST_CODES,
+        ),
+        ValidationTask(
+            name="main-fast",
+            description="Fast Pages publication gate for non-data changes on main.",
+            gate="main-fast",
+            check_codes=_MAIN_FAST_CODES,
         ),
         ValidationTask(
             name="content-ready",

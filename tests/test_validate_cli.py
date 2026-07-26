@@ -72,6 +72,13 @@ def test_tiers_are_strictly_nested() -> None:
     assert tier_a < tier_b < tier_c
 
 
+def test_main_fast_keeps_the_publishable_site_gate_without_full_python_regression() -> None:
+    task = TASKS["main-fast"]
+    assert task.check_codes == TASKS["pr-fast"].check_codes
+    assert "site.build" in task.check_codes
+    assert "python.tests" not in task.check_codes
+
+
 def test_problem_task_gate_is_tier_c() -> None:
     assert TASKS["problem"].gate == "tier-c"
 

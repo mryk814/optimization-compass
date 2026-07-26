@@ -51,6 +51,9 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "pull_request" ]; then
             TASK="$(uv run optimization-compass select-validation-task --base-ref "origin/$BASE_REF" --format task)"
+          elif [ "$EVENT_NAME" = "push" ]; then
+            TASK="$(uv run optimization-compass select-validation-task --base-ref "${{ github.event.before }}" --format task)"
+            if [ "$TASK" != "tier-b" ]; then TASK="main-fast"; fi
           else
             TASK="tier-b"
           fi
