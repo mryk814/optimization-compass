@@ -9,7 +9,7 @@ source_ids: [S038, S069]
 prerequisites: []
 related_ids: [hyperband-asha, random-search, family.expensive-black-box]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 並走するworkerの途中成績を比較し、良いworkerの学習状態を継承してhyperparameterを変える継続学習型HPOです。
@@ -60,6 +60,19 @@ PBTは途中経過を比較し、学習状態をworker間で受け渡します�
 PBTが探索する対象は、固定のhyperparameter setではありません。
 学習の進行に応じて値を変える**hyperparameter schedule**です。
 
+worker IDの線だけを見ても、copy後に誰の学習状態を継いだかは分かりません。
+次の固定教材では、scoreとlineageを上下に分けて同じround軸で追います。
+
+![6 workerを10 round動かした固定PBT教材。上段では各workerのscoreが上がる。下段では2 roundごとの5回のexploitを矢印で示す。W0のlineage rootは0から5、さらに3へ変わる。best scoreは-1.0032から-0.0118へ上がる。](./media/pbt-lineage-execution.svg "worker scoreとlineage継承を同時に追う固定PBT実行")
+
+上段のW0は一本の線ですが、下段のrootは `0 → 5 → 3` と変わります。
+つまり、最終的なW0とlearning rateだけを保存しても、途中のscheduleは再現できません。
+
+> この図は固定score関数で6 workerを10 round動かした教材です。
+> 2 roundごとに最良workerのstateを最下位へcopyし、learning rateだけを0.8倍または1.2倍します。
+> 実modelの学習、checkpoint転送cost、validation noiseは含みません。
+> 非同期実行やPBT一般の性能も示していません。
+
 ## 通常のHPOと結果の解釈が違う点
 
 random searchやHyperbandは、trialごとに固定のhyperparameter setを割り当てます。
@@ -88,45 +101,53 @@ population全体について、exploit元／explore後の値／評価時点のme
 
 ## Python
 
-次の例では、学習器を単純なscore関数に置き換えます。
-下位workerが上位workerを継承し、learning rateを摂動する1回の更新を確認します。
+図の固定教材をPythonで再現します。
+`lineage_root` をworker IDと分けて持つため、copyを繰り返しても継承元を追えます。
 
 ```python
-from dataclasses import dataclass, replace
-import random
+from dataclasses import dataclass
 
 
-@dataclass(frozen=True)
+@dataclass
 class Worker:
     worker_id: int
     weight: float
     learning_rate: float
+    lineage_root: int
 
 
 def validation_score(worker: Worker) -> float:
-    return -((worker.weight - 1.0) ** 2) - 0.1 * worker.learning_rate
+    return -((worker.weight - 1.0) ** 2) - 0.08 * worker.learning_rate
 
 
-rng = random.Random(7)
 population = [
-    Worker(worker_id=index, weight=rng.uniform(-1.0, 2.0), learning_rate=0.1)
-    for index in range(4)
+    Worker(index, 0.0, rate, index)
+    for index, rate in enumerate((0.04, 0.07, 0.11, 0.16, 0.24, 0.34))
 ]
-ranked = sorted(population, key=validation_score, reverse=True)
-source = ranked[0]
-target = ranked[-1]
+events = []
+for round_index in range(1, 11):
+    for worker in population:
+        worker.weight += 1.8 * worker.learning_rate * (1.0 - worker.weight)
 
-# exploit: 上位workerの状態を継承する
-# explore: 継承したhyperparameterを少し変える
-replacement = replace(
-    source,
-    worker_id=target.worker_id,
-    learning_rate=source.learning_rate * rng.choice([0.8, 1.2]),
-)
-population[target.worker_id] = replacement
+    if round_index % 2 == 0:
+        ranked = sorted(population, key=validation_score, reverse=True)
+        source, target = ranked[0], ranked[-1]
+        factor = 1.2 if round_index % 4 == 2 else 0.8
 
-print([(worker.worker_id, validation_score(worker)) for worker in population])
+        target.weight = source.weight
+        target.learning_rate = min(0.4, max(0.02, source.learning_rate * factor))
+        target.lineage_root = source.lineage_root
+        events.append((round_index, source.worker_id, target.worker_id))
+
+print(events)
+print([(worker.worker_id, worker.lineage_root) for worker in population])
+print(max(map(validation_score, population)))
 ```
+
+出力は、exploitの `(round, source, target)` が
+`[(2, 5, 0), (4, 5, 1), (6, 4, 2), (8, 3, 0), (10, 0, 5)]`、
+最終lineage rootが `[(0, 3), (1, 5), (2, 4), (3, 3), (4, 4), (5, 3)]` になります。
+best scoreは `-0.011770171589838159` です。
 
 実務では、この操作を学習intervalごとに繰り返します。
 weight／optimizer state／系譜はcheckpointへ保存します。

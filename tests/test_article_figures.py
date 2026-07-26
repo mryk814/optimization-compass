@@ -8,6 +8,7 @@ import pytest
 from scripts.generate_article_figures import (
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
+    _pbt_population_probe,
     _sgd_mini_batch_probe,
     _spatial_branch_bound_probe,
     _spatial_interval_lower_bound,
@@ -78,6 +79,28 @@ def test_sgd_probe_keeps_batch_noise_separate_from_full_data_loss() -> None:
     assert probe["upward_full_loss_steps"] == 5
 
 
+def test_pbt_probe_records_worker_copy_and_lineage_inheritance() -> None:
+    probe = _pbt_population_probe()
+    snapshots = probe["snapshots"]
+    events = probe["events"]
+
+    assert len(snapshots) == 11
+    assert len(events) == 5
+    assert [(event[0], event[1], event[2]) for event in events] == [
+        (2, 5, 0),
+        (4, 5, 1),
+        (6, 4, 2),
+        (8, 3, 0),
+        (10, 0, 5),
+    ]
+    assert snapshots[0][0][3] == 0
+    assert snapshots[2][0][3] == 5
+    assert snapshots[8][0][3] == 3
+    assert probe["initial_best"] == pytest.approx(-1.0032)
+    assert probe["final_best"] == pytest.approx(-0.011770171589838159)
+    assert probe["final_roots"] == (3, 4, 5)
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -93,6 +116,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "multiple-shooting-continuity-execution.svg",
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
+        "pbt-lineage-execution.svg",
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
         "sgd-mini-batch-execution.svg",
@@ -134,6 +158,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/nelder-mead.md": "scenario-nm-quadratic/static.svg",
         "content/methods/branch-and-cut.md": "search-tree-proof-execution.svg",
         "content/methods/family-discrete-structure.md": "search-tree-proof-execution.svg",
+        "content/methods/pbt.md": "pbt-lineage-execution.svg",
         "content/methods/sgd.md": "sgd-mini-batch-execution.svg",
         "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
         "content/methods/simp-topology.md": "topology-field-execution.svg",

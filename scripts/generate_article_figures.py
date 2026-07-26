@@ -51,6 +51,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
             "utf-8"
         ),
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
+        "pbt-lineage-execution.svg": _pbt_lineage_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "sgd-mini-batch-execution.svg": _sgd_mini_batch_svg(dataset_version).encode("utf-8"),
@@ -61,6 +62,297 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _pbt_validation_score(weight: float, learning_rate: float) -> float:
+    return -((weight - 1.0) ** 2) - 0.08 * learning_rate
+
+
+def _pbt_population_probe() -> dict[str, object]:
+    learning_rates = (0.04, 0.07, 0.11, 0.16, 0.24, 0.34)
+    workers = [
+        {
+            "worker_id": worker_id,
+            "weight": 0.0,
+            "learning_rate": learning_rate,
+            "lineage_root": worker_id,
+            "score": _pbt_validation_score(0.0, learning_rate),
+        }
+        for worker_id, learning_rate in enumerate(learning_rates)
+    ]
+
+    def snapshot() -> tuple[tuple[int, float, float, int, float], ...]:
+        return tuple(
+            (
+                int(worker["worker_id"]),
+                float(worker["weight"]),
+                float(worker["learning_rate"]),
+                int(worker["lineage_root"]),
+                float(worker["score"]),
+            )
+            for worker in workers
+        )
+
+    snapshots = [snapshot()]
+    events: list[tuple[int, int, int, int, int, float, float, float]] = []
+    for round_index in range(1, 11):
+        for worker in workers:
+            learning_rate = float(worker["learning_rate"])
+            weight = float(worker["weight"])
+            weight += 1.8 * learning_rate * (1.0 - weight)
+            worker["weight"] = weight
+            worker["score"] = _pbt_validation_score(weight, learning_rate)
+
+        if round_index % 2 == 0:
+            ranked = sorted(
+                workers,
+                key=lambda worker: (float(worker["score"]), -int(worker["worker_id"])),
+                reverse=True,
+            )
+            source = ranked[0]
+            target = ranked[-1]
+            previous_root = int(target["lineage_root"])
+            previous_score = float(target["score"])
+            factor = 1.2 if round_index % 4 == 2 else 0.8
+            new_learning_rate = min(
+                0.4,
+                max(0.02, float(source["learning_rate"]) * factor),
+            )
+            target["weight"] = float(source["weight"])
+            target["learning_rate"] = new_learning_rate
+            target["lineage_root"] = int(source["lineage_root"])
+            target["score"] = _pbt_validation_score(
+                float(target["weight"]),
+                new_learning_rate,
+            )
+            events.append(
+                (
+                    round_index,
+                    int(source["worker_id"]),
+                    int(target["worker_id"]),
+                    int(source["lineage_root"]),
+                    previous_root,
+                    new_learning_rate,
+                    previous_score,
+                    float(target["score"]),
+                )
+            )
+        snapshots.append(snapshot())
+
+    initial_best = max(row[4] for row in snapshots[0])
+    final_best = max(row[4] for row in snapshots[-1])
+    final_roots = tuple(sorted({row[3] for row in snapshots[-1]}))
+    return {
+        "snapshots": tuple(snapshots),
+        "events": tuple(events),
+        "initial_best": initial_best,
+        "final_best": final_best,
+        "final_roots": final_roots,
+    }
+
+
+def _pbt_lineage_svg(dataset_version: str) -> str:
+    probe = _pbt_population_probe()
+    snapshots = probe["snapshots"]
+    events = probe["events"]
+    if not isinstance(snapshots, tuple) or not isinstance(events, tuple):
+        raise TypeError("PBT teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 78.0, 590.0
+    worker_colors = ("#d67835", "#245c42", "#45656a", "#b08a3c", "#77647f", "#102a2e")
+    score_top, score_bottom = 218.0, 482.0
+
+    def round_x(round_index: int) -> float:
+        return plot_left + round_index / 10 * (plot_right - plot_left)
+
+    def score_y(score: float) -> float:
+        return score_bottom - (score + 1.05) / 1.1 * (score_bottom - score_top)
+
+    score_lines = []
+    for worker_id in range(6):
+        points = []
+        for round_index, rows in enumerate(snapshots):
+            row = rows[worker_id]
+            points.append(f"{round_x(round_index):.2f},{score_y(float(row[4])):.2f}")
+        score_lines.append(" ".join(points))
+
+    elements = [
+        _svg_open(
+            "scoreの線とlineageの継承を同時に追う",
+            (
+                "6 workerを10 round進め、2 roundごとに最良workerから最下位workerへ"
+                "stateをコピーし、learning rateを0.8倍または1.2倍した固定pure Python "
+                "PBT教材です。worker scoreとlineage rootの継承を示します。実model、"
+                "checkpoint cost、validation noise、並列実行、PBT一般の性能は示しません。"
+            ),
+            width=width,
+            height=height,
+        ),
+        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="50" class="pbt-title">scoreの線とlineageの継承を同時に追う</text>',
+        (
+            '<text x="32" y="82" class="pbt-subtitle">'
+            "6 workers · 10 rounds · exploit every 2 rounds · deterministic toy training</text>"
+        ),
+        '<defs><marker id="pbt-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" '
+        'orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#d67835"/></marker></defs>',
+        '<line x1="36" y1="118" x2="62" y2="118" stroke="#45656a" stroke-width="5"/>',
+        '<text x="72" y="124" class="pbt-legend">worker score</text>',
+        '<path d="M218 126 C230 104, 246 104, 258 126" fill="none" stroke="#d67835" '
+        'stroke-width="3" marker-end="url(#pbt-arrow)"/>',
+        '<text x="270" y="124" class="pbt-legend">exploit copy</text>',
+        '<text x="448" y="124" class="pbt-legend">line color = lineage root</text>',
+        '<rect x="24" y="150" width="592" height="382" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+        '<text x="44" y="188" class="pbt-panel">同じworker IDでもcopy後は別lineageを継ぐ</text>',
+        '<text x="596" y="188" text-anchor="end" class="pbt-status">score: higher is better</text>',
+    ]
+    for score in (-1.0, -0.75, -0.5, -0.25, 0.0):
+        y = score_y(score)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="pbt-axis">{score:g}</text>'
+                ),
+            ]
+        )
+    for worker_id, points in enumerate(score_lines):
+        elements.append(
+            f'<polyline points="{points}" fill="none" stroke="{worker_colors[worker_id]}" '
+            'stroke-width="3" stroke-linejoin="round"/>'
+        )
+        for round_index, rows in enumerate(snapshots):
+            row = rows[worker_id]
+            elements.append(
+                f'<circle cx="{round_x(round_index):.2f}" cy="{score_y(float(row[4])):.2f}" '
+                f'r="3.5" fill="{worker_colors[worker_id]}"/>'
+            )
+    for worker_id, color in enumerate(worker_colors):
+        legend_x = 54 + worker_id * 94
+        elements.extend(
+            [
+                f'<circle cx="{legend_x}" cy="508" r="5" fill="{color}"/>',
+                f'<text x="{legend_x + 10}" y="513" class="pbt-axis">W{worker_id}</text>',
+            ]
+        )
+
+    lineage_top = 620.0
+    row_gap = 48.0
+    elements.extend(
+        [
+            '<rect x="24" y="554" width="592" height="388" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            '<text x="44" y="592" class="pbt-panel">copy元とlearning rate変更を残す</text>',
+        ]
+    )
+    for round_index in range(11):
+        x = round_x(round_index)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x:.2f}" y1="{lineage_top - 18}" x2="{x:.2f}" '
+                    f'y2="{lineage_top + 5 * row_gap + 18}" stroke="#f0ede6"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="918" text-anchor="middle" '
+                    f'class="pbt-axis">{round_index}</text>'
+                ),
+            ]
+        )
+    for worker_id in range(6):
+        y = lineage_top + worker_id * row_gap
+        elements.extend(
+            [
+                (
+                    f'<text x="58" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="pbt-label">W{worker_id}</text>'
+                ),
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0" stroke-width="8" stroke-linecap="round"/>'
+                ),
+            ]
+        )
+        for round_index in range(10):
+            root = int(snapshots[round_index][worker_id][3])
+            elements.append(
+                f'<line x1="{round_x(round_index):.2f}" y1="{y:.2f}" '
+                f'x2="{round_x(round_index + 1):.2f}" y2="{y:.2f}" '
+                f'stroke="{worker_colors[root]}" stroke-width="8" stroke-linecap="round"/>'
+            )
+    for event_index, event in enumerate(events):
+        round_index, source_id, target_id, source_root, _, learning_rate, _, _ = event
+        x = round_x(int(round_index))
+        source_y = lineage_top + int(source_id) * row_gap
+        target_y = lineage_top + int(target_id) * row_gap
+        control_x = x + (12 if target_y >= source_y else -12)
+        elements.extend(
+            [
+                (
+                    f'<path d="M {x - 8:.2f} {source_y:.2f} Q {control_x:.2f} '
+                    f'{(source_y + target_y) / 2:.2f} {x:.2f} {target_y:.2f}" '
+                    'fill="none" stroke="#d67835" stroke-width="3" '
+                    'marker-end="url(#pbt-arrow)"/>'
+                ),
+                (
+                    f'<circle cx="{x:.2f}" cy="{target_y:.2f}" r="7" '
+                    f'fill="{worker_colors[int(source_root)]}" stroke="#fff" stroke-width="2"/>'
+                ),
+            ]
+        )
+        label_y = target_y - 12 if event_index % 2 == 0 else target_y + 22
+        anchor = "end" if round_index == 10 else "start"
+        label_x = x - 8 if round_index == 10 else x + 8
+        elements.append(
+            f'<text x="{label_x:.2f}" y="{label_y:.2f}" text-anchor="{anchor}" '
+            f'class="pbt-event">η={float(learning_rate):.3f}</text>'
+        )
+    elements.extend(
+        [
+            '<text x="78" y="934" class="pbt-axis">round</text>',
+            (
+                '<text x="32" y="982" class="pbt-metric">'
+                f"best score {float(probe['initial_best']):.3f} → "
+                f"{float(probe['final_best']):.3f}</text>"
+            ),
+            (
+                '<text x="350" y="982" text-anchor="middle" class="pbt-metric">'
+                f"exploit events {len(events)}</text>"
+            ),
+            (
+                '<text x="608" y="982" text-anchor="end" class="pbt-metric">'
+                f"final lineage roots {len(probe['final_roots'])}</text>"
+            ),
+            (
+                '<text x="32" y="1026" class="pbt-meta">'
+                f"実行生成: fixed toy training + deterministic exploit/explore "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            '<text x="32" y="1054" class="pbt-note">'
+            "固定score教材です。実model、checkpoint cost、validation noise、"
+            "PBT一般の性能は示しません。</text>",
+            """
+<style>
+  .pbt-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .pbt-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .pbt-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .pbt-status, .pbt-legend { font: 400 15px system-ui, sans-serif; fill: #45656a; }
+  .pbt-axis { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .pbt-label { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
+  .pbt-event { font: 700 14px system-ui, sans-serif; fill: #8b4c3d; }
+  .pbt-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
+  .pbt-meta { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .pbt-note { font: 400 14px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _sgd_samples() -> tuple[tuple[float, float, float], ...]:
