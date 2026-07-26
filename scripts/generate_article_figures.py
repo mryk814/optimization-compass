@@ -54,9 +54,312 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
         "so3-update-diagnostic.svg": _so3_update_svg(dataset_version).encode("utf-8"),
+        "spatial-branch-bound-execution.svg": _spatial_branch_bound_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _spatial_objective(value: float) -> float:
+    return value * value * (1.0 + 0.5 * (value - 1.0) ** 2) - 2.0 * value
+
+
+def _interval_square(lower: float, upper: float) -> tuple[float, float]:
+    minimum = 0.0 if lower <= 0.0 <= upper else min(lower * lower, upper * upper)
+    return minimum, max(lower * lower, upper * upper)
+
+
+def _spatial_interval_lower_bound(lower: float, upper: float) -> float:
+    squared = _interval_square(lower, upper)
+    shifted_squared = _interval_square(lower - 1.0, upper - 1.0)
+    product_lower = squared[0] * shifted_squared[0]
+    return squared[0] + 0.5 * product_lower - 2.0 * upper
+
+
+def _spatial_branch_bound_probe(
+    *,
+    gap_tolerance: float = 0.01,
+    max_nodes: int = 256,
+) -> dict[str, object]:
+    domain = (0.0, 2.0)
+    initial_candidates = (domain[0], domain[1])
+    best_point = min(initial_candidates, key=_spatial_objective)
+    best_value = _spatial_objective(best_point)
+    pending = [(_spatial_interval_lower_bound(*domain), *domain)]
+    pruned: list[tuple[float, float, float]] = []
+    history = [(0, pending[0][0], best_value, len(pending))]
+    explored = 0
+
+    while pending and explored < max_nodes:
+        pending.sort(key=lambda region: (region[0], region[1], region[2]))
+        bound, lower, upper = pending.pop(0)
+        if bound >= best_value:
+            pruned.append((lower, upper, bound))
+            continue
+        if best_value - bound <= gap_tolerance:
+            pending.append((bound, lower, upper))
+            break
+
+        midpoint = 0.5 * (lower + upper)
+        for candidate in (lower, midpoint, upper):
+            candidate_value = _spatial_objective(candidate)
+            if candidate_value < best_value:
+                best_point = candidate
+                best_value = candidate_value
+        explored += 1
+
+        for child_lower, child_upper in ((lower, midpoint), (midpoint, upper)):
+            child_bound = _spatial_interval_lower_bound(child_lower, child_upper)
+            if child_bound >= best_value:
+                pruned.append((child_lower, child_upper, child_bound))
+            else:
+                pending.append((child_bound, child_lower, child_upper))
+
+        global_bound = min((region[0] for region in pending), default=best_value)
+        history.append((explored, global_bound, best_value, len(pending)))
+
+    pending.sort(key=lambda region: (region[1], region[2]))
+    global_bound = min((region[0] for region in pending), default=best_value)
+    return {
+        "domain": domain,
+        "gap_tolerance": gap_tolerance,
+        "best_point": best_point,
+        "best_value": best_value,
+        "global_bound": global_bound,
+        "absolute_gap": best_value - global_bound,
+        "explored": explored,
+        "pruned": tuple(pruned),
+        "pending": tuple(pending),
+        "history": tuple(history),
+    }
+
+
+def _spatial_branch_bound_svg(dataset_version: str) -> str:
+    probe = _spatial_branch_bound_probe()
+    domain = probe["domain"]
+    history = probe["history"]
+    pruned = probe["pruned"]
+    pending = probe["pending"]
+    if not (
+        isinstance(domain, tuple)
+        and isinstance(history, tuple)
+        and isinstance(pruned, tuple)
+        and isinstance(pending, tuple)
+    ):
+        raise TypeError("spatial branch-and-bound probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 70.0, 594.0
+
+    def x_project(value: float) -> float:
+        return plot_left + (value - float(domain[0])) / (float(domain[1]) - float(domain[0])) * (
+            plot_right - plot_left
+        )
+
+    curve_top, curve_bottom = 180.0, 430.0
+
+    def curve_y(value: float) -> float:
+        return curve_bottom - (value + 1.2) / 3.4 * (curve_bottom - curve_top)
+
+    curve_points = []
+    for index in range(161):
+        value = float(domain[0]) + index / 160 * (float(domain[1]) - float(domain[0]))
+        curve_points.append(f"{x_project(value):.2f},{curve_y(_spatial_objective(value)):.2f}")
+
+    history_rows = [(int(row[0]), float(row[1]), float(row[2]), int(row[3])) for row in history]
+    convergence_top, convergence_bottom = 706.0, 925.0
+    max_node = max(row[0] for row in history_rows)
+
+    def history_x(node: int) -> float:
+        return plot_left + node / max_node * (plot_right - plot_left)
+
+    def history_y(value: float) -> float:
+        return convergence_bottom - (value + 4.2) / 4.4 * (convergence_bottom - convergence_top)
+
+    bound_points = " ".join(
+        f"{history_x(node):.2f},{history_y(bound):.2f}" for node, bound, _, _ in history_rows
+    )
+    incumbent_points = " ".join(
+        f"{history_x(node):.2f},{history_y(incumbent):.2f}"
+        for node, _, incumbent, _ in history_rows
+    )
+
+    elements = [
+        _svg_open(
+            "下界が上がると、捨てられる区間が増える",
+            (
+                "固定1変数多項式をpure Pythonのinterval arithmetic lower boundで"
+                "空間branch-and-boundした実行結果です。目的関数、最終partition、"
+                "incumbentとglobal lower boundの履歴を示します。McCormick relaxation、"
+                "多変数MINLP、solver一般の性能や有限時間での厳密解を示す図ではありません。"
+            ),
+            width=width,
+            height=height,
+        ),
+        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
+        ('<text x="32" y="50" class="sbb-title">下界が上がると、捨てられる区間が増える</text>'),
+        (
+            '<text x="32" y="82" class="sbb-subtitle">'
+            "fixed polynomial · x ∈ [0, 2] · gap tolerance 0.01</text>"
+        ),
+        '<line x1="36" y1="118" x2="60" y2="118" stroke="#245c42" stroke-width="7"/>',
+        '<text x="70" y="124" class="sbb-legend">objective / open region</text>',
+        '<rect x="278" y="109" width="22" height="14" rx="3" fill="#bd6754"/>',
+        '<text x="310" y="124" class="sbb-legend">boundでprune</text>',
+        '<circle cx="468" cy="117" r="7" fill="#d67835"/>',
+        '<text x="482" y="124" class="sbb-legend">incumbent</text>',
+        '<rect x="24" y="150" width="592" height="330" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+        '<text x="44" y="185" class="sbb-panel">固定目的関数と得られたincumbent</text>',
+    ]
+    for value in (-1.0, 0.0, 1.0, 2.0):
+        y = curve_y(value)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="sbb-axis">{value:g}</text>'
+                ),
+            ]
+        )
+    elements.append(
+        f'<polyline points="{" ".join(curve_points)}" fill="none" stroke="#245c42" '
+        'stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>'
+    )
+    best_point = float(probe["best_point"])
+    best_value = float(probe["best_value"])
+    elements.extend(
+        [
+            (
+                f'<circle cx="{x_project(best_point):.2f}" cy="{curve_y(best_value):.2f}" '
+                'r="9" fill="#d67835" stroke="#fff" stroke-width="3"/>'
+            ),
+            (
+                f'<text x="{x_project(best_point) + 14:.2f}" '
+                f'y="{curve_y(best_value) - 8:.2f}" class="sbb-label">'
+                f"x*={best_point:.2f} · f={best_value:.2f}</text>"
+            ),
+        ]
+    )
+    for value in (0.0, 0.5, 1.0, 1.5, 2.0):
+        elements.append(
+            f'<text x="{x_project(value):.2f}" y="458" text-anchor="middle" '
+            f'class="sbb-axis">{value:g}</text>'
+        )
+
+    elements.extend(
+        [
+            '<rect x="24" y="502" width="592" height="152" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            '<text x="44" y="538" class="sbb-panel">停止時の区間partition</text>',
+            '<text x="596" y="538" text-anchor="end" class="sbb-status">'
+            f"open {len(pending)} · pruned {len(pruned)}</text>",
+            '<rect x="70" y="566" width="524" height="38" rx="8" fill="#edf1ed"/>',
+        ]
+    )
+    for lower, upper, _ in pruned:
+        x = x_project(float(lower))
+        region_width = max(1.0, x_project(float(upper)) - x)
+        elements.append(
+            f'<rect x="{x:.2f}" y="566" width="{region_width:.2f}" height="38" '
+            'fill="#bd6754" opacity="0.82"/>'
+        )
+    for _, lower, upper in pending:
+        x = x_project(float(lower))
+        region_width = max(1.0, x_project(float(upper)) - x)
+        elements.append(
+            f'<rect x="{x:.2f}" y="566" width="{region_width:.2f}" height="38" '
+            'fill="#245c42" opacity="0.9"/>'
+        )
+    elements.extend(
+        [
+            (
+                f'<line x1="{x_project(best_point):.2f}" y1="558" '
+                f'x2="{x_project(best_point):.2f}" y2="614" '
+                'stroke="#d67835" stroke-width="5"/>'
+            ),
+            (
+                f'<text x="{x_project(best_point):.2f}" y="636" text-anchor="middle" '
+                'class="sbb-label">incumbent x=1</text>'
+            ),
+            '<rect x="24" y="676" width="592" height="302" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            '<text x="44" y="712" class="sbb-panel">nodeを処理するほどglobal boundが上がる</text>',
+        ]
+    )
+    for value in (-4.0, -3.0, -2.0, -1.0, 0.0):
+        y = history_y(value)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="sbb-axis">{value:g}</text>'
+                ),
+            ]
+        )
+    elements.extend(
+        [
+            (
+                f'<polyline points="{bound_points}" fill="none" stroke="#245c42" '
+                'stroke-width="6" stroke-linejoin="round"/>'
+            ),
+            (
+                f'<polyline points="{incumbent_points}" fill="none" stroke="#d67835" '
+                'stroke-width="5" stroke-linejoin="round"/>'
+            ),
+        ]
+    )
+    for node in (0, 20, 40, 60, max_node):
+        elements.append(
+            f'<text x="{history_x(node):.2f}" y="952" text-anchor="middle" '
+            f'class="sbb-axis">{node}</text>'
+        )
+    elements.extend(
+        [
+            '<text x="70" y="968" class="sbb-axis">processed nodes</text>',
+            (f'<text x="32" y="1012" class="sbb-metric">incumbent {best_value:.3f}</text>'),
+            (
+                '<text x="320" y="1012" text-anchor="middle" class="sbb-metric">'
+                f"global bound {float(probe['global_bound']):.3f}</text>"
+            ),
+            (
+                '<text x="608" y="1012" text-anchor="end" class="sbb-metric">'
+                f"gap {float(probe['absolute_gap']):.4f}</text>"
+            ),
+            (
+                '<text x="32" y="1047" class="sbb-meta">'
+                f"実行生成: interval arithmetic lower bound + deterministic best-bound search "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1070" class="sbb-note">'
+                "固定1変数教材です。McCormick relaxation、多変数MINLP、"
+                "solver一般の性能は示しません。</text>"
+            ),
+            """
+<style>
+  .sbb-title { font: 700 22px system-ui, sans-serif; fill: #102a2e; }
+  .sbb-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .sbb-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .sbb-status, .sbb-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .sbb-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .sbb-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
+  .sbb-metric { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
+  .sbb-meta { font: 400 11px system-ui, sans-serif; fill: #45656a; }
+  .sbb-note { font: 400 11px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _solve_dense_linear_system(

@@ -8,6 +8,9 @@ import pytest
 from scripts.generate_article_figures import (
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
+    _spatial_branch_bound_probe,
+    _spatial_interval_lower_bound,
+    _spatial_objective,
     generate_article_figures,
     read_dataset_version,
 )
@@ -41,6 +44,27 @@ def test_multiple_shooting_probe_closes_the_fixed_continuity_defects() -> None:
     assert solved["objective"] == pytest.approx(1.0)
 
 
+def test_spatial_branch_bound_probe_closes_a_valid_interval_gap() -> None:
+    probe = _spatial_branch_bound_probe()
+
+    assert probe["best_point"] == pytest.approx(1.0)
+    assert probe["best_value"] == pytest.approx(-1.0)
+    assert probe["global_bound"] <= probe["best_value"]
+    assert 0.0 <= probe["absolute_gap"] <= probe["gap_tolerance"]
+    assert probe["explored"] == 70
+    assert len(probe["pruned"]) == 25
+    assert len(probe["pending"]) == 46
+
+
+def test_spatial_interval_bound_stays_below_fixed_dense_probes() -> None:
+    for lower, upper in ((0.0, 2.0), (0.5, 1.0), (0.75, 1.25), (1.0, 1.5)):
+        bound = _spatial_interval_lower_bound(lower, upper)
+        sampled_minimum = min(
+            _spatial_objective(lower + index / 100 * (upper - lower)) for index in range(101)
+        )
+        assert bound <= sampled_minimum
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -59,6 +83,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
         "so3-update-diagnostic.svg",
+        "spatial-branch-bound-execution.svg",
         "topology-field-execution.svg",
         "trf-probe-execution.svg",
     }
@@ -95,6 +120,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/nelder-mead.md": "scenario-nm-quadratic/static.svg",
         "content/methods/branch-and-cut.md": "search-tree-proof-execution.svg",
         "content/methods/family-discrete-structure.md": "search-tree-proof-execution.svg",
+        "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
         "content/methods/simp-topology.md": "topology-field-execution.svg",
         "content/methods/density-filter.md": "topology-field-execution.svg",
         "content/methods/optimality-criteria-topology.md": "topology-field-execution.svg",
