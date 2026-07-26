@@ -4,15 +4,15 @@ kind: method
 method_id: M_SGD
 title_ja: 確率的勾配降下法
 title_en: Stochastic Gradient Descent
-summary: 全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。
+summary: 全dataではなく、一様にsampleしたmini-batchの勾配でparameterを更新します。各stepはfull-data勾配の不偏推定ですが、samplingによるvarianceを持つ一次法です。
 source_ids: [S047, S048, S049]
 prerequisites: [method.gradient-descent]
 related_ids: [momentum-sgd, adam, family.stochastic-ml]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
-全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。
+全dataではなく、一様にsampleしたmini-batchの勾配でparameterを更新します。各stepはfull-data勾配の不偏推定ですが、samplingによるvarianceを持つ一次法です。
 
 ## 30秒でつかむ
 
@@ -23,6 +23,14 @@ SGDは、全dataの勾配を毎回計算する代わりに、mini-batchの勾配
 - 動かしているもの: parameter、mini-batch、learning rate、batch size
 - 前進の判断: validation指標が改善し、複数seedで結果が安定すること
 - 恐れていること: divergence、overfitting、gradient noise、seed依存
+
+同じrunでも、mini-batchだけを見たlossとfull-data lossでは線の形が変わります。
+次の固定線形回帰では、橙のstepが揺れながら青緑のfull-data optimumへ近づきます。
+
+![32 sample、2 parameterの固定線形回帰をbatch size 4、learning rate 0.3で8 epoch実行したSGD結果。上段ではparameter pathがfull-data lossの等高線を小刻みに横切る。下段では橙のmini-batch lossが大きく揺れ、青緑のfull-data lossにも63回中5回の上昇stepがある一方、run全体では2.241から0.0016へ下がる。](./media/sgd-mini-batch-execution.svg "固定LCG shuffleとpure Python SGDから生成した実行結果です。full-data optimumは診断用の参照であり、更新には渡していません。validation、汎化性能、neural network、framework実装、SGD一般の性能は示しません。")
+
+1 stepの上下だけでは、run全体の進行を判定できません。
+mini-batch loss、full-dataのtrain loss、未使用dataのvalidation指標は別々に追います。
 
 ## 何を不偏推定しているか
 
@@ -38,15 +46,28 @@ $$
 g_k = \frac{1}{b}\sum_{i \in B_k} \nabla f_i(x_k)
 $$
 
-を計算し、$x_{k+1} = x_k - \eta_k g_k$ で更新します。samplingが一様なら $g_k$ は $\nabla f(x_k)$ の不偏推定ですが、分散を持ちます。1 stepあたりのcostは$b$に比例して下がる一方、各stepの方向にnoiseが乗ります。
+を計算し、$x_{k+1} = x_k - \eta_k g_k$ で更新します。
+samplingが一様なら、$g_k$は$\nabla f(x_k)$の不偏推定です。
+ただし分散を持つため、各stepの方向にはnoiseが乗ります。
+1 stepで読むsample数は、full-batchの$N$から$b$へ減ります。
 
 ## learning rateとbatch sizeが決めるもの
 
-learning rate $\eta_k$ とbatch size $b$ は、更新方向のvarianceと1 stepの安さのtrade-offを操作するhyperparameterです。$\eta_k$ を大きくすると収束は速くなり得ますが、勾配のnoiseがそのまま更新に乗って発散しやすくなります。逆に小さいと安定しますが、epoch数に対する進みが遅くなります。多くの実装ではlearning rate scheduleとして反復や検証指標に応じて$\eta_k$を減衰させ、batch sizeを大きくすると1 stepのvarianceは下がるものの1 stepあたりのcostが増えます。
+learning rate $\eta_k$ とbatch size $b$ は、更新方向のvarianceと1 stepのcostを変えます。
+$\eta_k$を大きくすると速く進む場合がありますが、勾配noiseによる振動や発散も強くなります。
+小さくすると更新は安定しやすい一方、同じepoch数での進みが遅くなります。
+
+learning rate scheduleは、反復数やvalidation指標に応じて$\eta_k$を変えます。
+batch sizeを大きくするとgradient estimateのvarianceは下がりますが、1 stepで読むsample数が増えます。
 
 ## 収束の見方がdeterministicな最適化と違う点
 
-deterministicな最適化はgradient normの単調な減少で進捗を確認できますが、SGDの1 stepはmini-batchのnoiseを含むため、gradient normやtrain lossは単調に下がりません。実務ではtrain lossとvalidation lossを分けて追い、validation lossの停滞や悪化をearly stoppingの判定に使います。また同じhyperparameterでもseedやdata orderの違いで最終的なparameterやvalidation指標が変わるため、単一の実行結果だけで手法を判断せず、複数seedでのvarianceを確認します。
+SGDのgradient normやtrain lossは、mini-batch noiseにより単調には下がりません。
+実務ではtrain lossとvalidation lossを分けて追います。
+validation lossの停滞や悪化は、early stoppingを検討する材料です。
+
+同じhyperparameterでも、seedやdata orderにより最終parameterとvalidation指標が変わります。
+単一runだけで手法を判断せず、複数seedでvarianceを確認します。
 
 ## 向いている条件
 
@@ -97,7 +118,10 @@ for epoch in range(20):
 print(w, true_w, np.linalg.norm(w - true_w))
 ```
 
-`w`が`true_w`へ近づくかは、mini-batchのsamplingとlearning rateに依存します。実務のoptimizerが持つmomentumやper-coordinate scalingなどの機能は、利用framework（[Optax](https://optax.readthedocs.io/en/latest/)、[torch.optim](https://docs.pytorch.org/docs/stable/optim.html)、[Keras optimizers](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers)）の公式referenceで利用versionに対応する説明を確認します。
+`w`が`true_w`へ近づく過程は、mini-batchのsamplingとlearning rateに依存します。
+実務のoptimizerは、momentumやparameterごとのscalingも持ちます。
+
+利用versionの挙動は[Optax](https://optax.readthedocs.io/en/latest/)、[torch.optim](https://docs.pytorch.org/docs/stable/optim.html)、[Keras optimizers](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers)の公式referenceで確認します。
 
 ## 最初に見る診断値
 
@@ -120,4 +144,6 @@ print(w, true_w, np.linalg.norm(w - true_w))
 これらの兆候が出た場合、まずlearning rate scheduleとbatch sizeを見直します。単純な反復回数の増加は解決策にならないことが多いです。
 :::
 
-velocityを蓄積して振動を抑える考え方は[Momentum SGD](#/learn/momentum-sgd)、勾配の1次・2次momentを使うadaptive scalingは[Adam](#/learn/adam)、mini-batch系optimizer全体の選び分けは[確率勾配・機械学習optimizerの選び分け](#/learn/family.stochastic-ml)で確認できます。
+velocityを蓄積する更新は[Momentum SGD](#/learn/momentum-sgd)で確認できます。
+勾配の1次・2次momentを使うadaptive scalingは[Adam](#/learn/adam)です。
+[確率勾配・機械学習optimizerの選び分け](#/learn/family.stochastic-ml)では、mini-batch系optimizerを条件から比較できます。

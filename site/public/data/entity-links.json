@@ -12343,7 +12343,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。"
+      "summary": "全dataではなく、一様にsampleしたmini-batchの勾配でparameterを更新します。各stepはfull-data勾配の不偏推定ですが、samplingによるvarianceを持つ一次法です。"
     },
     {
       "aliases": [],

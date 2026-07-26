@@ -53,6 +53,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "pareto-preference-execution.svg": _pareto_preference_svg(dataset_version).encode("utf-8"),
         "portfolio-risk-execution.svg": _portfolio_risk_svg(dataset_version).encode("utf-8"),
         "search-tree-proof-execution.svg": _search_tree_proof_svg(dataset_version).encode("utf-8"),
+        "sgd-mini-batch-execution.svg": _sgd_mini_batch_svg(dataset_version).encode("utf-8"),
         "so3-update-diagnostic.svg": _so3_update_svg(dataset_version).encode("utf-8"),
         "spatial-branch-bound-execution.svg": _spatial_branch_bound_svg(dataset_version).encode(
             "utf-8"
@@ -60,6 +61,365 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _sgd_samples() -> tuple[tuple[float, float, float], ...]:
+    rows = []
+    for index in range(32):
+        feature1 = -1.0 + 2.0 * index / 31.0
+        feature2 = -1.0 + 2.0 * ((index * 7) % 32) / 31.0
+        noise = 0.08 * math.sin(1.7 * index)
+        target = 1.8 * feature1 - 0.9 * feature2 + noise
+        rows.append((feature1, feature2, target))
+    return tuple(rows)
+
+
+def _sgd_loss(
+    parameters: tuple[float, float],
+    rows: tuple[tuple[float, float, float], ...],
+) -> float:
+    return sum(
+        0.5 * (feature1 * parameters[0] + feature2 * parameters[1] - target) ** 2
+        for feature1, feature2, target in rows
+    ) / len(rows)
+
+
+def _sgd_gradient(
+    parameters: tuple[float, float],
+    rows: tuple[tuple[float, float, float], ...],
+) -> tuple[float, float]:
+    gradient1 = 0.0
+    gradient2 = 0.0
+    for feature1, feature2, target in rows:
+        residual = feature1 * parameters[0] + feature2 * parameters[1] - target
+        gradient1 += feature1 * residual
+        gradient2 += feature2 * residual
+    return gradient1 / len(rows), gradient2 / len(rows)
+
+
+def _sgd_mini_batch_probe() -> dict[str, object]:
+    rows = _sgd_samples()
+    hessian11 = sum(row[0] * row[0] for row in rows) / len(rows)
+    hessian12 = sum(row[0] * row[1] for row in rows) / len(rows)
+    hessian22 = sum(row[1] * row[1] for row in rows) / len(rows)
+    right1 = sum(row[0] * row[2] for row in rows) / len(rows)
+    right2 = sum(row[1] * row[2] for row in rows) / len(rows)
+    determinant = hessian11 * hessian22 - hessian12 * hessian12
+    optimum = (
+        (right1 * hessian22 - right2 * hessian12) / determinant,
+        (hessian11 * right2 - hessian12 * right1) / determinant,
+    )
+
+    learning_rate = 0.3
+    batch_size = 4
+    epochs = 8
+    parameters = (-1.2, 1.4)
+    initial_loss = _sgd_loss(parameters, rows)
+    path = [parameters]
+    history: list[tuple[int, int, float, float, float, float]] = []
+    generator_state = 17
+    update = 0
+
+    for epoch in range(epochs):
+        order = list(range(len(rows)))
+        for index in range(len(order) - 1, 0, -1):
+            generator_state = (1664525 * generator_state + 1013904223) & 0xFFFFFFFF
+            swap_index = generator_state % (index + 1)
+            order[index], order[swap_index] = order[swap_index], order[index]
+        for start in range(0, len(order), batch_size):
+            batch = tuple(rows[index] for index in order[start : start + batch_size])
+            gradient = _sgd_gradient(parameters, batch)
+            parameters = (
+                parameters[0] - learning_rate * gradient[0],
+                parameters[1] - learning_rate * gradient[1],
+            )
+            update += 1
+            path.append(parameters)
+            history.append(
+                (
+                    update,
+                    epoch + 1,
+                    _sgd_loss(parameters, batch),
+                    _sgd_loss(parameters, rows),
+                    parameters[0],
+                    parameters[1],
+                )
+            )
+
+    upward_full_loss_steps = sum(
+        history[index][3] > history[index - 1][3] for index in range(1, len(history))
+    )
+    return {
+        "rows": rows,
+        "learning_rate": learning_rate,
+        "batch_size": batch_size,
+        "epochs": epochs,
+        "initial_parameters": path[0],
+        "initial_loss": initial_loss,
+        "optimum": optimum,
+        "optimum_loss": _sgd_loss(optimum, rows),
+        "path": tuple(path),
+        "history": tuple(history),
+        "final_parameters": parameters,
+        "final_loss": _sgd_loss(parameters, rows),
+        "upward_full_loss_steps": upward_full_loss_steps,
+        "hessian": (hessian11, hessian12, hessian22),
+    }
+
+
+def _sgd_mini_batch_svg(dataset_version: str) -> str:
+    probe = _sgd_mini_batch_probe()
+    path = probe["path"]
+    history = probe["history"]
+    optimum = probe["optimum"]
+    hessian = probe["hessian"]
+    if not (
+        isinstance(path, tuple)
+        and isinstance(history, tuple)
+        and isinstance(optimum, tuple)
+        and isinstance(hessian, tuple)
+    ):
+        raise TypeError("SGD teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 76.0, 590.0
+    parameter_top, parameter_bottom = 220.0, 526.0
+    parameter1_min, parameter1_max = -1.35, 2.15
+    parameter2_min, parameter2_max = -1.2, 1.55
+
+    def parameter_x(value: float) -> float:
+        return plot_left + (value - parameter1_min) / (parameter1_max - parameter1_min) * (
+            plot_right - plot_left
+        )
+
+    def parameter_y(value: float) -> float:
+        return parameter_bottom - (value - parameter2_min) / (parameter2_max - parameter2_min) * (
+            parameter_bottom - parameter_top
+        )
+
+    hessian11, hessian12, hessian22 = (float(value) for value in hessian)
+    trace = hessian11 + hessian22
+    spread = math.sqrt((hessian11 - hessian22) ** 2 + 4.0 * hessian12**2)
+    eigenvalue1 = 0.5 * (trace + spread)
+    eigenvalue2 = 0.5 * (trace - spread)
+    angle = 0.5 * math.atan2(2.0 * hessian12, hessian11 - hessian22)
+    cosine = math.cos(angle)
+    sine = math.sin(angle)
+
+    contour_polylines = []
+    for level in (0.03, 0.12, 0.4, 1.2, 2.4):
+        radius1 = math.sqrt(2.0 * level / eigenvalue1)
+        radius2 = math.sqrt(2.0 * level / eigenvalue2)
+        points = []
+        for index in range(121):
+            phase = 2.0 * math.pi * index / 120
+            local1 = radius1 * math.cos(phase)
+            local2 = radius2 * math.sin(phase)
+            parameter1 = float(optimum[0]) + cosine * local1 - sine * local2
+            parameter2 = float(optimum[1]) + sine * local1 + cosine * local2
+            points.append(f"{parameter_x(parameter1):.2f},{parameter_y(parameter2):.2f}")
+        contour_polylines.append(" ".join(points))
+
+    path_points = " ".join(
+        f"{parameter_x(float(point[0])):.2f},{parameter_y(float(point[1])):.2f}" for point in path
+    )
+    loss_top, loss_bottom = 705.0, 900.0
+    max_update = int(history[-1][0])
+
+    def update_x(update: int) -> float:
+        return plot_left + update / max_update * (plot_right - plot_left)
+
+    def loss_y(value: float) -> float:
+        log_value = math.log10(max(value, 1e-4))
+        return loss_bottom - (log_value + 4.0) / 4.5 * (loss_bottom - loss_top)
+
+    batch_loss_points = " ".join(
+        f"{update_x(int(row[0])):.2f},{loss_y(float(row[2])):.2f}" for row in history
+    )
+    full_loss_points = " ".join(
+        f"{update_x(int(row[0])):.2f},{loss_y(float(row[3])):.2f}" for row in history
+    )
+
+    elements = [
+        _svg_open(
+            "mini-batchの揺れとfull-data lossを分けて読む",
+            (
+                "32 sample、2 parameterの固定線形回帰をbatch size 4、learning rate 0.3で"
+                "8 epoch実行したpure Python SGD結果です。parameter path、mini-batch loss、"
+                "full-data lossを同じrunから示します。validation、generalization、"
+                "neural network、framework実装、SGD一般の性能は示しません。"
+            ),
+            width=width,
+            height=height,
+        ),
+        f'<rect width="{width}" height="{height}" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="50" class="sgd-title">mini-batchの揺れとfull-data lossを分けて読む</text>',
+        (
+            '<text x="32" y="82" class="sgd-subtitle">'
+            "32 samples · 2 parameters · batch 4 · η 0.3 · 8 epochs</text>"
+        ),
+        '<line x1="36" y1="118" x2="62" y2="118" stroke="#245c42" stroke-width="6"/>',
+        '<text x="72" y="124" class="sgd-legend">full-data</text>',
+        '<line x1="222" y1="118" x2="248" y2="118" stroke="#d67835" stroke-width="5"/>',
+        '<text x="258" y="124" class="sgd-legend">mini-batch / update</text>',
+        '<circle cx="500" cy="117" r="7" fill="#245c42"/>',
+        '<text x="514" y="124" class="sgd-legend">full-data optimum</text>',
+        '<rect x="24" y="150" width="592" height="424" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+        (
+            '<text x="44" y="188" class="sgd-panel">'
+            "同じfull-data loss面でもstepは小刻みに揺れる</text>"
+        ),
+        (
+            f'<clipPath id="sgd-parameter-clip"><rect x="{plot_left}" y="{parameter_top}" '
+            f'width="{plot_right - plot_left}" '
+            f'height="{parameter_bottom - parameter_top}"/></clipPath>'
+        ),
+    ]
+    for contour in contour_polylines:
+        elements.append(
+            f'<polyline points="{contour}" fill="none" stroke="#d9e2dd" stroke-width="2" '
+            'clip-path="url(#sgd-parameter-clip)"/>'
+        )
+    for tick in (-1.0, 0.0, 1.0, 2.0):
+        x = parameter_x(tick)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{x:.2f}" y1="{parameter_top}" x2="{x:.2f}" '
+                    f'y2="{parameter_bottom}" stroke="#f0ede6"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="550" text-anchor="middle" '
+                    f'class="sgd-axis">{tick:g}</text>'
+                ),
+            ]
+        )
+    for tick in (-1.0, 0.0, 1.0):
+        y = parameter_y(tick)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#f0ede6"/>'
+                ),
+                (
+                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="sgd-axis">{tick:g}</text>'
+                ),
+            ]
+        )
+    elements.append(
+        f'<polyline points="{path_points}" fill="none" stroke="#d67835" stroke-width="4" '
+        'stroke-linejoin="round" stroke-linecap="round"/>'
+    )
+    start = path[0]
+    elements.append(
+        f'<text x="{parameter_x(float(start[0])) + 12:.2f}" '
+        f'y="{parameter_y(float(start[1])) - 10:.2f}" class="sgd-label">start</text>'
+    )
+    for index, point in enumerate(path):
+        if index % 8 == 0 or index == len(path) - 1:
+            elements.append(
+                f'<circle cx="{parameter_x(float(point[0])):.2f}" '
+                f'cy="{parameter_y(float(point[1])):.2f}" r="5" '
+                'fill="#d67835" stroke="#fff" stroke-width="2"/>'
+            )
+    elements.extend(
+        [
+            (
+                f'<circle cx="{parameter_x(float(optimum[0])):.2f}" '
+                f'cy="{parameter_y(float(optimum[1])):.2f}" r="8" '
+                'fill="#245c42" stroke="#fff" stroke-width="3"/>'
+            ),
+            (
+                f'<text x="{parameter_x(float(optimum[0])) - 12:.2f}" '
+                f'y="{parameter_y(float(optimum[1])) - 14:.2f}" text-anchor="end" '
+                'class="sgd-label">full-data optimum</text>'
+            ),
+            '<text x="76" y="566" class="sgd-axis">parameter 1</text>',
+            '<rect x="24" y="600" width="592" height="348" rx="18" fill="#fff" stroke="#cfd8d1"/>',
+            (
+                '<text x="44" y="638" class="sgd-panel">'
+                "batch lossは揺れ、full-data lossは傾向を示す</text>"
+            ),
+        ]
+    )
+    for tick, label in ((1.0, "1"), (0.1, "0.1"), (0.01, "0.01"), (0.001, "0.001")):
+        y = loss_y(tick)
+        elements.extend(
+            [
+                (
+                    f'<line x1="{plot_left}" y1="{y:.2f}" x2="{plot_right}" y2="{y:.2f}" '
+                    'stroke="#ebe8e0"/>'
+                ),
+                (
+                    f'<text x="{plot_left - 10}" y="{y + 5:.2f}" text-anchor="end" '
+                    f'class="sgd-axis">{label}</text>'
+                ),
+            ]
+        )
+    for epoch in range(1, int(probe["epochs"])):
+        x = update_x(epoch * 8)
+        elements.append(
+            f'<line x1="{x:.2f}" y1="{loss_top}" x2="{x:.2f}" y2="{loss_bottom}" '
+            'stroke="#d8d4ca" stroke-dasharray="4 6"/>'
+        )
+    elements.extend(
+        [
+            (
+                f'<polyline points="{batch_loss_points}" fill="none" stroke="#d67835" '
+                'stroke-width="3" stroke-linejoin="round" opacity="0.9"/>'
+            ),
+            (
+                f'<polyline points="{full_loss_points}" fill="none" stroke="#245c42" '
+                'stroke-width="6" stroke-linejoin="round"/>'
+            ),
+        ]
+    )
+    for update in (0, 16, 32, 48, 64):
+        elements.append(
+            f'<text x="{update_x(update):.2f}" y="928" text-anchor="middle" '
+            f'class="sgd-axis">{update}</text>'
+        )
+    elements.extend(
+        [
+            '<text x="76" y="942" class="sgd-axis">update</text>',
+            (
+                '<text x="32" y="990" class="sgd-metric">'
+                f"full loss {float(probe['initial_loss']):.3f} → "
+                f"{float(probe['final_loss']):.4f}</text>"
+            ),
+            (
+                '<text x="608" y="990" text-anchor="end" class="sgd-metric">'
+                f"full-loss upward steps {int(probe['upward_full_loss_steps'])} / 63</text>"
+            ),
+            (
+                '<text x="32" y="1032" class="sgd-meta">'
+                f"実行生成: fixed LCG shuffle + pure Python mini-batch SGD "
+                f"· dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1058" class="sgd-note">'
+                "固定線形回帰です。validation、汎化性能、neural network、"
+                "SGD一般の性能は示しません。</text>"
+            ),
+            """
+<style>
+  .sgd-title { font: 700 22px system-ui, sans-serif; fill: #102a2e; }
+  .sgd-subtitle { font: 400 16px system-ui, sans-serif; fill: #45656a; }
+  .sgd-panel { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .sgd-legend { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .sgd-axis { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .sgd-label { font: 700 14px system-ui, sans-serif; fill: #102a2e; }
+  .sgd-metric { font: 700 17px system-ui, sans-serif; fill: #102a2e; }
+  .sgd-meta { font: 400 11px system-ui, sans-serif; fill: #45656a; }
+  .sgd-note { font: 400 11px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _spatial_objective(value: float) -> float:

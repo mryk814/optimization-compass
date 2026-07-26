@@ -28625,7 +28625,7 @@
         "S048",
         "S049"
       ],
-      "text": "SGDは、全dataの勾配を毎回計算する代わりに、mini-batchの勾配で安価な更新を多数回行います。 その分、各更新にはsampling noiseが入り、1 stepの改善と学習全体の傾向を分けて読む必要があります。 見ているもの: train loss、validation loss、gradient estimate、seed間のばらつき 動かしているもの: parameter、mini-batch、learning rate、batch size 前進の判断: validation指標が改善し、複数seedで結果が安定すること 恐れていること: divergence、overfitting、gradient noise、seed依存",
+      "text": "SGDは、全dataの勾配を毎回計算する代わりに、mini-batchの勾配で安価な更新を多数回行います。 その分、各更新にはsampling noiseが入り、1 stepの改善と学習全体の傾向を分けて読む必要があります。 見ているもの: train loss、validation loss、gradient estimate、seed間のばらつき 動かしているもの: parameter、mini-batch、learning rate、batch size 前進の判断: validation指標が改善し、複数seedで結果が安定すること 恐れていること: divergence、overfitting、gradient noise、seed依存 同じrunでも、mini-batchだけを見たlossとfull-data lossでは線の形が変わります。 次の固定線形回帰では、橙のstepが揺れながら青緑のfull-data optimumへ近づきます。 固定LCG shuffleとpure Python SGDから生成した実行結果です。full-data optimumは診断用の参照であり、更新には渡していません。validation、汎化性能、neural network、framework実装、SGD一般の性能は示しません。 1 stepの上下だけでは、run全体の進行を判定できません。 mini-batch loss、full-dataのtrain loss、未使用dataのvalidation指標は別々に追います。",
       "title": "30秒でつかむ"
     },
     {
@@ -28650,7 +28650,7 @@
         "S048",
         "S049"
       ],
-      "text": "learning rate η k とbatch size b は、更新方向のvarianceと1 stepの安さのtrade-offを操作するhyperparameterです。 η k を大きくすると収束は速くなり得ますが、勾配のnoiseがそのまま更新に乗って発散しやすくなります。逆に小さいと安定しますが、epoch数に対する進みが遅くなります。多くの実装ではlearning rate scheduleとして反復や検証指標に応じて η k を減衰させ、batch sizeを大きくすると1 stepのvarianceは下がるものの1 stepあたりのcostが増えます。",
+      "text": "learning rate η k とbatch size b は、更新方向のvarianceと1 stepのcostを変えます。 η k を大きくすると速く進む場合がありますが、勾配noiseによる振動や発散も強くなります。 小さくすると更新は安定しやすい一方、同じepoch数での進みが遅くなります。 learning rate scheduleは、反復数やvalidation指標に応じて η k を変えます。 batch sizeを大きくするとgradient estimateのvarianceは下がりますが、1 stepで読むsample数が増えます。",
       "title": "learning rateとbatch sizeが決めるもの"
     },
     {
@@ -28675,7 +28675,7 @@
         "S048",
         "S049"
       ],
-      "text": "全dataではなくmini-batchから計算した勾配を真の勾配の不偏推定として使い、parameterを反復更新する一次法です。",
+      "text": "全dataではなく、一様にsampleしたmini-batchの勾配でparameterを更新します。各stepはfull-data勾配の不偏推定ですが、samplingによるvarianceを持つ一次法です。",
       "title": "確率的勾配降下法"
     },
     {
@@ -28700,7 +28700,7 @@
         "S048",
         "S049"
       ],
-      "text": "python import numpy as np def make_dataset ( rng : np . random . Generator , n_samples : int , n_features : int ) -> tuple [ np . ndarray , np . ndarray , np . ndarray ]: x = rng . normal ( size = ( n_samples , n_features )) true_w = rng . normal ( size = n_features ) noise = 0.1 * rng . normal ( size = n_samples ) y = x @ true_w + noise return x , y , true_w def sgd_step ( x_batch : np . ndarray , y_batch : np . ndarray , w : np . ndarray , learning_rate : float ) -> np . ndarray : residual = x_batch @ w - y_batch grad = x_batch . T @ residual / x_batch . shape [ 0 ] return w - learning_rate * grad rng = np . random . default_rng ( 0 ) x , y , true_w = make_dataset ( rng , n_samples = 2_000 , n_features = 5 ) w = np . zeros ( x . shape [ 1 ]) learning_rate = 0.05 batch_size = 32 for epoch in range ( 20 ): order = rng . permutation ( x . shape [ 0 ]) for start in range ( 0 , x . shape [ 0 ], batch_size ): idx = order [ start : start + batch_size ] w = sgd_step ( x [ idx ], y [ idx ], w , learning_rate ) print ( w , true_w , np . linalg . norm ( w - true_w )) w が true_w へ近づくかは、mini-batchのsamplingとlearning rateに依存します。実務のoptimizerが持つmomentumやper-coordinate scalingなどの機能は、利用framework（ Optax 、 torch.optim 、 Keras optimizers ）の公式referenceで利用versionに対応する説明を確認します。",
+      "text": "python import numpy as np def make_dataset ( rng : np . random . Generator , n_samples : int , n_features : int ) -> tuple [ np . ndarray , np . ndarray , np . ndarray ]: x = rng . normal ( size = ( n_samples , n_features )) true_w = rng . normal ( size = n_features ) noise = 0.1 * rng . normal ( size = n_samples ) y = x @ true_w + noise return x , y , true_w def sgd_step ( x_batch : np . ndarray , y_batch : np . ndarray , w : np . ndarray , learning_rate : float ) -> np . ndarray : residual = x_batch @ w - y_batch grad = x_batch . T @ residual / x_batch . shape [ 0 ] return w - learning_rate * grad rng = np . random . default_rng ( 0 ) x , y , true_w = make_dataset ( rng , n_samples = 2_000 , n_features = 5 ) w = np . zeros ( x . shape [ 1 ]) learning_rate = 0.05 batch_size = 32 for epoch in range ( 20 ): order = rng . permutation ( x . shape [ 0 ]) for start in range ( 0 , x . shape [ 0 ], batch_size ): idx = order [ start : start + batch_size ] w = sgd_step ( x [ idx ], y [ idx ], w , learning_rate ) print ( w , true_w , np . linalg . norm ( w - true_w )) w が true_w へ近づく過程は、mini-batchのsamplingとlearning rateに依存します。 実務のoptimizerは、momentumやparameterごとのscalingも持ちます。 利用versionの挙動は Optax 、 torch.optim 、 Keras optimizers の公式referenceで確認します。",
       "title": "Python"
     },
     {
@@ -28725,7 +28725,7 @@
         "S048",
         "S049"
       ],
-      "text": "full-batch勾配降下法は、全 N 点の勾配平均 ∇ f ( x k ) = 1 N ∑ i = 1 N ∇ f i ( x k ) を1 stepごとに計算します。SGDはdatasetから一様にsamplingしたmini-batch B k （ | B k | = b ≪ N ）だけで g k = 1 b ∑ i ∈ B k ∇ f i ( x k ) を計算し、 x k + 1 = x k − η k g k で更新します。samplingが一様なら g k は ∇ f ( x k ) の不偏推定ですが、分散を持ちます。1 stepあたりのcostは b に比例して下がる一方、各stepの方向にnoiseが乗ります。",
+      "text": "full-batch勾配降下法は、全 N 点の勾配平均 ∇ f ( x k ) = 1 N ∑ i = 1 N ∇ f i ( x k ) を1 stepごとに計算します。SGDはdatasetから一様にsamplingしたmini-batch B k （ | B k | = b ≪ N ）だけで g k = 1 b ∑ i ∈ B k ∇ f i ( x k ) を計算し、 x k + 1 = x k − η k g k で更新します。 samplingが一様なら、 g k は ∇ f ( x k ) の不偏推定です。 ただし分散を持つため、各stepの方向にはnoiseが乗ります。 1 stepで読むsample数は、full-batchの N から b へ減ります。",
       "title": "何を不偏推定しているか"
     },
     {
@@ -28750,7 +28750,7 @@
         "S048",
         "S049"
       ],
-      "text": "deterministicな最適化はgradient normの単調な減少で進捗を確認できますが、SGDの1 stepはmini-batchのnoiseを含むため、gradient normやtrain lossは単調に下がりません。実務ではtrain lossとvalidation lossを分けて追い、validation lossの停滞や悪化をearly stoppingの判定に使います。また同じhyperparameterでもseedやdata orderの違いで最終的なparameterやvalidation指標が変わるため、単一の実行結果だけで手法を判断せず、複数seedでのvarianceを確認します。",
+      "text": "SGDのgradient normやtrain lossは、mini-batch noiseにより単調には下がりません。 実務ではtrain lossとvalidation lossを分けて追います。 validation lossの停滞や悪化は、early stoppingを検討する材料です。 同じhyperparameterでも、seedやdata orderにより最終parameterとvalidation指標が変わります。 単一runだけで手法を判断せず、複数seedでvarianceを確認します。",
       "title": "収束の見方がdeterministicな最適化と違う点"
     },
     {
@@ -28800,7 +28800,7 @@
         "S048",
         "S049"
       ],
-      "text": "divergence（lossが増大し続ける） → learning rate、batch size、gradient clippingを確認する plateau（train_lossが長期間改善しない） → learning-rate schedule、batch size、初期化を見直す overfitting（train_lossは下がるがvalidation_lossが悪化する） → early stoppingとregularizationを確認する bad_learning_rate（大きすぎて発散、または小さすぎて停滞する） → learning rateを調整し、同じbudgetで比較する saddle点付近で更新が長時間停滞する → Momentum SGDや別のoptimizerを検討する gradient explosionやseed間でのvalidation指標のばらつきが大きい → clipping、normalization、複数seed評価を行う Note これらの兆候が出た場合、まずlearning rate scheduleとbatch sizeを見直します。単純な反復回数の増加は解決策にならないことが多いです。 velocityを蓄積して振動を抑える考え方は Momentum SGD 、勾配の1次・2次momentを使うadaptive scalingは Adam 、mini-batch系optimizer全体の選び分けは 確率勾配・機械学習optimizerの選び分け で確認できます。",
+      "text": "divergence（lossが増大し続ける） → learning rate、batch size、gradient clippingを確認する plateau（train_lossが長期間改善しない） → learning-rate schedule、batch size、初期化を見直す overfitting（train_lossは下がるがvalidation_lossが悪化する） → early stoppingとregularizationを確認する bad_learning_rate（大きすぎて発散、または小さすぎて停滞する） → learning rateを調整し、同じbudgetで比較する saddle点付近で更新が長時間停滞する → Momentum SGDや別のoptimizerを検討する gradient explosionやseed間でのvalidation指標のばらつきが大きい → clipping、normalization、複数seed評価を行う Note これらの兆候が出た場合、まずlearning rate scheduleとbatch sizeを見直します。単純な反復回数の増加は解決策にならないことが多いです。 velocityを蓄積する更新は Momentum SGD で確認できます。 勾配の1次・2次momentを使うadaptive scalingは Adam です。 確率勾配・機械学習optimizerの選び分け では、mini-batch系optimizerを条件から比較できます。",
       "title": "失敗・切替の兆候"
     },
     {

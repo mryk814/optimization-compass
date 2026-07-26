@@ -8,6 +8,7 @@ import pytest
 from scripts.generate_article_figures import (
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
+    _sgd_mini_batch_probe,
     _spatial_branch_bound_probe,
     _spatial_interval_lower_bound,
     _spatial_objective,
@@ -65,6 +66,18 @@ def test_spatial_interval_bound_stays_below_fixed_dense_probes() -> None:
         assert bound <= sampled_minimum
 
 
+def test_sgd_probe_keeps_batch_noise_separate_from_full_data_loss() -> None:
+    probe = _sgd_mini_batch_probe()
+
+    assert len(probe["path"]) == 65
+    assert len(probe["history"]) == 64
+    assert probe["initial_loss"] == pytest.approx(2.2409457290153965)
+    assert probe["final_parameters"] == pytest.approx((1.803009481835502, -0.8936153197869711))
+    assert probe["final_loss"] == pytest.approx(0.001566461485889374)
+    assert probe["optimum_loss"] == pytest.approx(0.0015646508562708345)
+    assert probe["upward_full_loss_steps"] == 5
+
+
 def test_article_figures_are_deterministic_and_current() -> None:
     assert "\n" not in VERSION
     first = generate_article_figures(VERSION)
@@ -82,6 +95,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "pareto-preference-execution.svg",
         "portfolio-risk-execution.svg",
         "search-tree-proof-execution.svg",
+        "sgd-mini-batch-execution.svg",
         "so3-update-diagnostic.svg",
         "spatial-branch-bound-execution.svg",
         "topology-field-execution.svg",
@@ -120,6 +134,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/nelder-mead.md": "scenario-nm-quadratic/static.svg",
         "content/methods/branch-and-cut.md": "search-tree-proof-execution.svg",
         "content/methods/family-discrete-structure.md": "search-tree-proof-execution.svg",
+        "content/methods/sgd.md": "sgd-mini-batch-execution.svg",
         "content/methods/spatial-branch-and-bound.md": "spatial-branch-bound-execution.svg",
         "content/methods/simp-topology.md": "topology-field-execution.svg",
         "content/methods/density-filter.md": "topology-field-execution.svg",
