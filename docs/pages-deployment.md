@@ -9,7 +9,7 @@ site along separate paths.
 `validate_pages_artifact` checks out the workflow commit once and performs the complete gate:
 
 1. install the locked Python and Node.js dependencies;
-2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b`; pushes, scheduled runs, and manual runs select `tier-b`. Local authoring commands are intentionally lighter than these CI gates;
+2. use `select-validation-task` to classify pull-request paths as `docs`, `tier-a`, `content-ready`, `pr-fast`, or `tier-b`. Pushes classify the delta from the preceding commit: data, generator, release, and unknown changes retain `tier-b`, while non-data changes use `main-fast` (the publishable `pr-fast` check set). Scheduled and manual runs select `tier-b`. Local authoring commands are intentionally lighter than these CI gates;
 3. for `content-ready` and Tier B, delete and regenerate `site/public/data`, then require zero tracked drift;
 4. run the selected registry task; Tier B checks committed content reports and broader source
    health, while content-oriented tasks stay focused. Unknown paths fail safe to Tier B rather than
@@ -21,8 +21,10 @@ site along separate paths.
 8. on `main`, upload that directory once as the `github-pages` artifact.
 
 The full Python regression suite is required for backend, canonical data, schema, generator,
-release, backend-test, and unknown-path pull requests, and for every main/scheduled/manual Tier B
-run. Draft/prose content uses Tier A; published content and deterministic indexes use
+release, backend-test, and unknown-path pull requests, and for every Tier B run. On `main`,
+non-data changes use `main-fast`, which preserves the publishable site build, type checks,
+repository contracts, content, and licensing checks without repeating the full Python regression.
+Draft/prose content uses Tier A; published content and deterministic indexes use
 `content-ready`; site, workflow, validation-contract, and documentation-only pull requests use the
 smaller authoritative task that owns their surface. The browser job runs tagged critical journeys on non-doc pull
 requests. On `main`, the same critical journeys plus the axe route matrix block publication. A
