@@ -10,6 +10,7 @@ from scripts.generate_article_figures import (
     _direct_shooting_probe,
     _finite_horizon_lqr_probe,
     _multiple_shooting_probe,
+    _network_simplex_transport_probe,
     _pbt_population_probe,
     _pdlp_probe,
     _sgd_mini_batch_probe,
@@ -80,6 +81,30 @@ def test_pdlp_probe_requires_all_three_stopping_quantities() -> None:
     assert probe["final_primal_residual"] < 3e-7
     assert probe["final_dual_residual"] < 3e-7
     assert probe["final_objective_difference"] < 4e-7
+
+
+def test_network_simplex_probe_pivots_one_feasible_transport_tree() -> None:
+    probe = _network_simplex_transport_probe()
+
+    assert probe["entering"] == ("A", "Z")
+    assert probe["leaving"] == ("A", "Y")
+    assert probe["theta"] == pytest.approx(1.0)
+    assert probe["initial_cost"] == pytest.approx(20.0)
+    assert probe["optimized_cost"] == pytest.approx(18.0)
+    assert probe["initial_reduced_costs"][("A", "Z")] == pytest.approx(-2.0)
+    assert min(probe["optimized_reduced_costs"].values()) == pytest.approx(0.0)
+    assert probe["optimized_flows"] == pytest.approx(
+        {
+            ("A", "X"): 3.0,
+            ("A", "Y"): 0.0,
+            ("A", "Z"): 1.0,
+            ("B", "X"): 0.0,
+            ("B", "Y"): 2.0,
+            ("B", "Z"): 3.0,
+        }
+    )
+    assert probe["initial_balance_error"] == pytest.approx(0.0)
+    assert probe["optimized_balance_error"] == pytest.approx(0.0)
 
 
 def test_lqr_probe_matches_the_fixed_article_equations() -> None:
@@ -177,6 +202,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
         "multiple-shooting-continuity-execution.svg",
+        "network-simplex-pivot-execution.svg",
         "optimal-control-mesh-execution.svg",
         "pareto-preference-execution.svg",
         "pbt-lineage-execution.svg",
@@ -217,6 +243,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/ilqr-ddp.md": "lqr-backward-forward-execution.svg",
         "content/methods/least-squares.md": "least-squares-fit-diagnostic.svg",
         "content/methods/multiple-shooting.md": "multiple-shooting-continuity-execution.svg",
+        "content/methods/network-simplex.md": "network-simplex-pivot-execution.svg",
         "content/methods/projected-gradient.md": "so3-update-diagnostic.svg",
         "content/methods/riemannian-gradient.md": "so3-update-diagnostic.svg",
         "content/methods/family-manifold.md": "so3-update-diagnostic.svg",

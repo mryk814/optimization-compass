@@ -51,6 +51,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "multiple-shooting-continuity-execution.svg": _multiple_shooting_svg(
             dataset_version
         ).encode("utf-8"),
+        "network-simplex-pivot-execution.svg": _network_simplex_pivot_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -992,6 +995,298 @@ def _pdlp_residual_svg(dataset_version: str) -> str:
             "</svg>\n",
         ]
     )
+    return "".join(elements)
+
+
+def _network_simplex_transport_probe() -> dict[str, object]:
+    supplies = {"A": 4.0, "B": 5.0}
+    demands = {"X": 3.0, "Y": 2.0, "Z": 4.0}
+    costs = {
+        ("A", "X"): 2.0,
+        ("A", "Y"): 5.0,
+        ("A", "Z"): 4.0,
+        ("B", "X"): 3.0,
+        ("B", "Y"): 1.0,
+        ("B", "Z"): 2.0,
+    }
+    initial_flows = {
+        ("A", "X"): 3.0,
+        ("A", "Y"): 1.0,
+        ("A", "Z"): 0.0,
+        ("B", "X"): 0.0,
+        ("B", "Y"): 1.0,
+        ("B", "Z"): 4.0,
+    }
+    entering = ("A", "Z")
+    cycle = (
+        (("A", "Z"), 1.0),
+        (("B", "Z"), -1.0),
+        (("B", "Y"), 1.0),
+        (("A", "Y"), -1.0),
+    )
+
+    def total_cost(flows: dict[tuple[str, str], float]) -> float:
+        return sum(flows[arc] * cost for arc, cost in costs.items())
+
+    def node_potentials(
+        flows: dict[tuple[str, str], float],
+    ) -> dict[str, float]:
+        tree_arcs = [arc for arc, flow in flows.items() if flow > 1e-12]
+        potentials = {"A": 0.0}
+        while len(potentials) < len(supplies) + len(demands):
+            progress = False
+            for tail, head in tree_arcs:
+                cost = costs[(tail, head)]
+                if tail in potentials and head not in potentials:
+                    potentials[head] = potentials[tail] - cost
+                    progress = True
+                elif head in potentials and tail not in potentials:
+                    potentials[tail] = potentials[head] + cost
+                    progress = True
+            if not progress:
+                raise ValueError("positive-flow arcs must form a spanning tree")
+        return potentials
+
+    def reduced_costs(
+        flows: dict[tuple[str, str], float],
+    ) -> dict[tuple[str, str], float]:
+        potentials = node_potentials(flows)
+        return {arc: cost - potentials[arc[0]] + potentials[arc[1]] for arc, cost in costs.items()}
+
+    def max_balance_error(flows: dict[tuple[str, str], float]) -> float:
+        supply_errors = [
+            abs(sum(flow for (tail, _), flow in flows.items() if tail == node) - amount)
+            for node, amount in supplies.items()
+        ]
+        demand_errors = [
+            abs(sum(flow for (_, head), flow in flows.items() if head == node) - amount)
+            for node, amount in demands.items()
+        ]
+        return max((*supply_errors, *demand_errors))
+
+    initial_reduced_costs = reduced_costs(initial_flows)
+    theta = min(initial_flows[arc] for arc, direction in cycle if direction < 0.0)
+    optimized_flows = dict(initial_flows)
+    for arc, direction in cycle:
+        optimized_flows[arc] += direction * theta
+    optimized_reduced_costs = reduced_costs(optimized_flows)
+    leaving = next(
+        arc for arc, direction in cycle if direction < 0.0 and optimized_flows[arc] <= 1e-12
+    )
+
+    return {
+        "supplies": supplies,
+        "demands": demands,
+        "costs": costs,
+        "initial_flows": initial_flows,
+        "optimized_flows": optimized_flows,
+        "initial_cost": total_cost(initial_flows),
+        "optimized_cost": total_cost(optimized_flows),
+        "initial_reduced_costs": initial_reduced_costs,
+        "optimized_reduced_costs": optimized_reduced_costs,
+        "entering": entering,
+        "leaving": leaving,
+        "cycle": cycle,
+        "theta": theta,
+        "initial_balance_error": max_balance_error(initial_flows),
+        "optimized_balance_error": max_balance_error(optimized_flows),
+    }
+
+
+def _network_simplex_pivot_svg(dataset_version: str) -> str:
+    probe = _network_simplex_transport_probe()
+    costs = probe["costs"]
+    initial_flows = probe["initial_flows"]
+    optimized_flows = probe["optimized_flows"]
+    if not all(
+        isinstance(values, dict)
+        for values in (
+            costs,
+            initial_flows,
+            optimized_flows,
+        )
+    ):
+        raise TypeError("network-simplex teaching probe mappings must be dictionaries")
+
+    width, height = 640, 1080
+    x_supply, x_demand = 104.0, 536.0
+    x_supply_edge, x_demand_edge = 135.0, 501.0
+    supply_y = {"A": 250.0, "B": 400.0}
+    demand_y = {"X": 205.0, "Y": 325.0, "Z": 445.0}
+    label_offsets = {
+        ("A", "X"): -18.0,
+        ("A", "Y"): -13.0,
+        ("A", "Z"): -5.0,
+        ("B", "X"): -14.0,
+        ("B", "Y"): 28.0,
+        ("B", "Z"): 19.0,
+    }
+    label_x = {
+        ("A", "X"): 320.0,
+        ("A", "Y"): 286.0,
+        ("A", "Z"): 276.0,
+        ("B", "X"): 364.0,
+        ("B", "Y"): 372.0,
+        ("B", "Z"): 320.0,
+    }
+
+    def panel_graph(
+        flows: dict[tuple[str, str], float],
+        *,
+        y_offset: float,
+        optimized: bool,
+    ) -> list[str]:
+        elements: list[str] = []
+        active_color = "#2c7564" if optimized else "#102a2e"
+        active_marker = "ns-arrow-active" if optimized else "ns-arrow-tree"
+        for arc, cost in costs.items():
+            tail, head = arc
+            y1 = supply_y[tail] + y_offset
+            y2 = demand_y[head] + y_offset
+            flow = float(flows[arc])
+            elements.append(
+                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
+                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
+                'stroke="#dfe7e3" stroke-width="2"/>'
+            )
+            if flow > 1e-12:
+                elements.append(
+                    f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
+                    f'x2="{x_demand_edge}" y2="{y2:.2f}" '
+                    f'stroke="{active_color}" stroke-width="{3.0 + 1.5 * flow:.2f}" '
+                    f'stroke-linecap="round" marker-end="url(#{active_marker})"/>'
+                )
+                midpoint_y = (y1 + y2) / 2.0 + label_offsets[arc]
+                elements.append(
+                    f'<text x="{label_x[arc]:.2f}" y="{midpoint_y:.2f}" text-anchor="middle" '
+                    f'class="ns-flow">{flow:g} × cost {float(cost):g}</text>'
+                )
+
+        highlighted_arc = probe["leaving"] if optimized else probe["entering"]
+        if not isinstance(highlighted_arc, tuple):
+            raise TypeError("network-simplex highlighted arc must be a tuple")
+        tail, head = highlighted_arc
+        y1 = supply_y[tail] + y_offset
+        y2 = demand_y[head] + y_offset
+        if optimized:
+            elements.append(
+                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
+                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
+                'stroke="#aebbb6" stroke-width="4" stroke-dasharray="8 7" '
+                'marker-end="url(#ns-arrow-muted)"/>'
+            )
+        else:
+            elements.append(
+                f'<line x1="{x_supply_edge}" y1="{y1:.2f}" '
+                f'x2="{x_demand_edge}" y2="{y2:.2f}" '
+                'stroke="#d67835" stroke-width="5" stroke-dasharray="9 7" '
+                'marker-end="url(#ns-arrow-enter)"/>'
+            )
+
+        for node, amount in probe["supplies"].items():
+            y = supply_y[node] + y_offset
+            elements.extend(
+                [
+                    f'<circle cx="{x_supply}" cy="{y:.2f}" r="31" fill="#d67835"/>',
+                    f'<text x="{x_supply}" y="{y + 6:.2f}" text-anchor="middle" '
+                    f'class="ns-node">{node}</text>',
+                    f'<text x="46" y="{y + 5:.2f}" class="ns-balance">+{float(amount):g}</text>',
+                ]
+            )
+        for node, amount in probe["demands"].items():
+            y = demand_y[node] + y_offset
+            elements.extend(
+                [
+                    f'<circle cx="{x_demand}" cy="{y:.2f}" r="31" fill="#2c7564"/>',
+                    f'<text x="{x_demand}" y="{y + 6:.2f}" text-anchor="middle" '
+                    f'class="ns-node">{node}</text>',
+                    f'<text x="582" y="{y + 5:.2f}" class="ns-balance">−{float(amount):g}</text>',
+                ]
+            )
+        return elements
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">Network Simplexの1回のpivotで輸送flowが変わる様子</title>',
+        (
+            '<desc id="figure-description">供給node AとBから需要node X、Y、Zへ9単位を'
+            "輸送する固定最小費用流。初期treeへAからZのedgeを加える。"
+            "できたcycleに1単位を流すとAからYのedgeがtreeを離れる。"
+            "全nodeの需給を保ったまま総費用が20から18へ下がる。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="ns-title">1本加えると、cycleが1つできる</text>',
+        (
+            '<text x="32" y="80" class="ns-subtitle">'
+            "fixed transportation flow · one tree pivot · integer supplies</text>"
+        ),
+        (
+            "<defs>"
+            '<marker id="ns-arrow-muted" markerWidth="6" markerHeight="6" refX="5" refY="3" '
+            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#aebbb6"/></marker>'
+            '<marker id="ns-arrow-tree" markerWidth="6" markerHeight="6" refX="5" refY="3" '
+            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#102a2e"/></marker>'
+            '<marker id="ns-arrow-active" markerWidth="6" markerHeight="6" refX="5" refY="3" '
+            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2c7564"/></marker>'
+            '<marker id="ns-arrow-enter" markerWidth="6" markerHeight="6" refX="5" refY="3" '
+            'orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#d67835"/></marker>'
+            "</defs>"
+        ),
+        '<rect x="24" y="112" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="150" class="ns-panel">before · feasible spanning tree</text>',
+        '<text x="596" y="150" text-anchor="end" class="ns-cost">total cost 20</text>',
+        (
+            '<text x="44" y="184" class="ns-hint">'
+            "orange dashed: entering A → Z · reduced cost −2</text>"
+        ),
+        *panel_graph(initial_flows, y_offset=0.0, optimized=False),
+        '<rect x="24" y="526" width="592" height="390" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="564" class="ns-panel">after · θ = 1 along the cycle</text>',
+        '<text x="596" y="564" text-anchor="end" class="ns-cost">total cost 18</text>',
+        '<text x="44" y="598" class="ns-hint">gray dashed: leaving A → Y · flow reaches 0</text>',
+        *panel_graph(optimized_flows, y_offset=414.0, optimized=True),
+        '<text x="32" y="956" class="ns-metric-label">pivot</text>',
+        '<text x="32" y="984" class="ns-metric">A→Z enters · A→Y leaves</text>',
+        '<text x="424" y="956" class="ns-metric-label">cost change</text>',
+        '<text x="424" y="984" class="ns-metric">20 → 18</text>',
+        (
+            '<text x="32" y="1022" class="ns-meta">'
+            "実行生成: scripts.generate_article_figures._network_simplex_transport_probe "
+            f"· dataset {html.escape(dataset_version)}</text>"
+        ),
+        (
+            '<text x="32" y="1052" class="ns-limit">'
+            "固定2供給×3需要教材です。degeneracy、capacity upper bound、"
+            "大規模networkの性能は示しません。</text>"
+        ),
+        """
+<style>
+  .ns-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .ns-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .ns-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .ns-cost { font: 700 17px system-ui, sans-serif; fill: #2c7564; }
+  .ns-hint { font: 400 15px system-ui, sans-serif; fill: #8b4c3d; }
+  .ns-node { font: 700 20px system-ui, sans-serif; fill: #fff; }
+  .ns-balance { font: 700 16px system-ui, sans-serif; fill: #45656a; }
+  .ns-flow {
+    font: 700 14px system-ui, sans-serif;
+    fill: #102a2e;
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 5px;
+  }
+  .ns-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .ns-metric { font: 700 18px system-ui, sans-serif; fill: #102a2e; }
+  .ns-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .ns-limit { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+        "</svg>\n",
+    ]
     return "".join(elements)
 
 

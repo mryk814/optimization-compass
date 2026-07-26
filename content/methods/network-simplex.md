@@ -9,7 +9,7 @@ source_ids: [S054]
 prerequisites: []
 related_ids: [primal-simplex, dijkstra-astar, family.discrete-structure]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 最小費用流のnetwork構造を使い、basisを全域木として扱うことで一般のsimplex法より高速に解く専用法です。
@@ -37,6 +37,20 @@ Network Simplex法は、basisを一般の行列ではなくgraph上の全域木�
 2. そのedgeを木へ加え、ただ1つできるcycleに沿ってflowを動かす
 3. 容量の上限または下限へ最初に達するedgeを木から外す
 
+上段の太線4本が、5 nodeを結ぶ初期treeです。
+橙の`A → Z`を加えるとcycleが1つだけでき、flowを1単位動かせます。
+
+![供給node AとBから需要node X、Y、Zへ9単位を輸送する固定最小費用流。上段の初期treeはA-Xに3、A-Yに1、B-Yに1、B-Zに4を流し、総費用は20。被約費用がマイナス2のA-Zを加え、cycleに1単位を流す。下段ではA-Yが0になってtreeを離れ、A-Zが1、B-Yが2、B-Zが3となり、全nodeの需給を保ったまま総費用が18へ下がる。](./media/network-simplex-pivot-execution.svg "2供給×3需要の固定輸送問題で、Network Simplexのentering edge、cycle、leaving edgeを1回のpivotとして読む実行結果")
+
+cycle上で増やすedgeと減らすedgeを交互にたどります。
+この例では`A → Y`が最初に0へ達するため、treeから外れます。
+全nodeの需給は変えず、総費用だけが`20 → 18`へ下がります。
+
+> 固定した2供給×3需要の整数flow教材です。
+> `A → Z`の被約費用は`-2`、cycleへ流す量は1です。
+> degeneracy、容量上限、負費用cycleは含みません。
+> 大規模networkやNetwork Simplex実装一般の性能も示していません。
+
 被約費用は、edge costと両端のnode potentialから計算できます。
 したがって、一般のsimplex法が使う行列演算をgraph上の更新へ置き換えられます。
 
@@ -60,46 +74,50 @@ edgeの容量とnodeの需給量が整数なら、最適basic feasible solution�
 
 ## 避ける／切り替える条件
 
-side constraintsが加わり、node-arc接続行列のnetwork構造が崩れる場合は専用法の前提が成り立ちません。この場合は、一般のLP（[Primal simplex法](#/learn/primal-simplex)などのLP・QP・錐最適化solver）や、離散変数を含むならMILP・CP-SATへ戻ることを検討します。
+side constraintsでnode-arc接続行列のnetwork構造が崩れると、専用法の前提が成り立ちません。
+この場合は、一般のLPへ戻ることを検討します。
+離散変数を含むなら、MILPやCP-SATが候補です。
+[Primal simplex法](#/learn/primal-simplex)など、LP・QP・錐最適化solverとの役割を分けて選びます。
 
 ## Python
 
 ```python
-import numpy as np
-from scipy.optimize import linprog
-
-
-def build_incidence_matrix(
-    edges: list[tuple[int, int]], n_nodes: int
-) -> np.ndarray:
-    incidence = np.zeros((n_nodes, len(edges)))
-    for edge_index, (tail, head) in enumerate(edges):
-        incidence[tail, edge_index] = 1.0
-        incidence[head, edge_index] = -1.0
-    return incidence
-
-
-edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
-costs = np.array([4.0, 2.0, 1.0, 5.0, 3.0])
-capacities = np.array([4.0, 3.0, 2.0, 4.0, 5.0])
-supply_demand = np.array([4.0, 0.0, 0.0, -4.0])
-
-incidence = build_incidence_matrix(edges, n_nodes=4)
-bounds = [(0.0, capacity) for capacity in capacities]
-
-result = linprog(
-    c=costs,
-    A_eq=incidence,
-    b_eq=supply_demand,
-    bounds=bounds,
-    method="highs",
+costs = {
+    ("A", "X"): 2.0, ("A", "Y"): 5.0, ("A", "Z"): 4.0,
+    ("B", "X"): 3.0, ("B", "Y"): 1.0, ("B", "Z"): 2.0,
+}
+flows = {
+    ("A", "X"): 3.0, ("A", "Y"): 1.0, ("A", "Z"): 0.0,
+    ("B", "X"): 0.0, ("B", "Y"): 1.0, ("B", "Z"): 4.0,
+}
+potentials = {"A": 0.0, "B": -4.0, "X": -2.0, "Y": -5.0, "Z": -6.0}
+entering = ("A", "Z")
+reduced_cost = (
+    costs[entering] - potentials[entering[0]] + potentials[entering[1]]
 )
+cycle = (
+    (("A", "Z"), 1.0),
+    (("B", "Z"), -1.0),
+    (("B", "Y"), 1.0),
+    (("A", "Y"), -1.0),
+)
+theta = min(flows[arc] for arc, direction in cycle if direction < 0.0)
 
-print(result.success, result.x, result.fun)
+before = sum(flows[arc] * cost for arc, cost in costs.items())
+for arc, direction in cycle:
+    flows[arc] += direction * theta
+after = sum(flows[arc] * cost for arc, cost in costs.items())
+
+print(reduced_cost, theta)
+print(flows)
+print(before, after)
 ```
 
-このコードは`scipy.optimize.linprog`で最小費用流を一般のLPとして解く教育用の例です。
-大規模な実務問題では、node-arc構造を直接使うnetwork simplex実装を検討します。
+出力では`A → Z`の被約費用が`-2`、cycleへ流す量が1になります。
+`A → Y`は0へ達し、総費用は20から18へ下がります。
+
+このコードは、固定した実行可能treeから1回だけpivotする教育用の例です。
+大規模な実務問題では、node-arc構造を直接使うNetwork Simplex実装を検討します。
 対応範囲は、公式の[NEOS Guide: Optimization Problem Types](https://neos-guide.org/guide/types/)と利用versionのsolverドキュメントで確認します。
 
 ## 診断値
