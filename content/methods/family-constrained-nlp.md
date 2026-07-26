@@ -4,23 +4,26 @@ kind: method
 method_id: MF_CONSTRAINED_NLP
 title_ja: 制約付き非線形最適化の選び分け
 title_en: Choosing a Constrained Nonlinear Optimizer
-summary: 滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。
+summary: 滑らかな目的関数と一般制約を同時に扱うとき、SLSQP・内点法・拡張Lagrange法などを選び分ける入口です。
 source_ids: [S017, S029, S030, S056, S064]
 related_ids: [constrained-continuous, slsqp, interior-point-nlp, augmented-lagrangian, projected-gradient, active-set]
+visualization_ids: [constrained-disk-feasible-region]
+comparison_ids: []
 status: published
-last_reviewed: 2026-07-16
+last_reviewed: 2026-07-26
 ---
 
-滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。
+滑らかな目的関数と一般制約を同時に扱うとき、SLSQP・内点法・拡張Lagrange法などを選び分ける入口です。
 
 ## 30秒でつかむ
 
-このfamilyの気持ちは、**目的値を下げるだけでなく、実行可能領域から外れないこと、または外れた状態から制約を満たす方向へ戻ることを同時に考える**ことです。
+このfamilyでは、目的値と実行可能性を同時に考えます。
+実行可能領域から外れないことに加え、外れた状態から制約を満たす方向へ戻ることも重要です。
 
-- 見ているもの: 目的値、constraint violation、勾配、Jacobian、KKT residual
-- 動かすもの: 現在点、Lagrange multiplier、barrierまたはpenalty、部分問題
+- 見ているもの: 目的値／constraint violation／勾配／Jacobian／KKT residual
+- 動かすもの: 現在点／Lagrange multiplier／barrierまたはpenalty／部分問題
 - 前進の判断: objective改善とfeasibility改善の両立
-- 主な弱点: scaling、誤ったJacobian、infeasible model、constraint qualification failure
+- 主な弱点: scaling／誤ったJacobian／infeasible model／constraint qualification failure
 
 低い目的値でも制約違反があれば候補解ではありません。`success=True`だけでなく、最大制約違反と停止理由を読みます。
 
@@ -35,7 +38,8 @@ last_reviewed: 2026-07-16
 | 必要精度 | 実用的な可行解か、高精度なKKT点か |
 | convexity | 局所KKT点と大域最適解を区別できるか |
 
-LP、凸QP、conic formへ落とせる場合は、一般NLPより先に専用solverを検討します。等式制約を安全に変数消去できる場合もあります。
+LP・凸QP・conic formへ落とせる場合は、一般NLPより先に専用解法を検討します。
+等式制約を安全に変数消去できる場合もあります。
 
 ## 条件付きの選び分け
 
@@ -64,9 +68,9 @@ penalty法は「制約付き問題が無制約問題になった」わけでは�
 
 切替サイン:
 
-- 目的値だけ改善し違反が減らない → merit、scaling、Jacobian、手法を再確認
+- 目的値だけ改善し違反が減らない → merit／scaling／Jacobian／手法を再確認
 - multiplierやpenaltyが発散的に増える → infeasibilityまたはmodel mismatchを疑う
-- KKT factorization failure → regularization、scaling、別linear solverを検討
+- KKT factorization failure → regularization／scaling／別の線形方程式解法を検討
 - active setが頻繁に反転 → interior-pointや別のglobalizationを検討
 - feasibilityは良いがstationarityが停滞 → derivative checkとtoleranceを確認
 
@@ -90,10 +94,21 @@ assert comparison["constraint_tolerance"] > 0.0
 
 ## コラム: KKT条件は合格証ではない
 
-KKT条件は、適切な正則性の下で局所最適解が満たす重要な条件です。しかし、非凸問題で小さなKKT residualが得られても、大域最適性を意味しません。また、constraint qualificationが破れている場合にはmultiplierの解釈も難しくなります。
+KKT条件は、適切な正則性の下で局所最適解が満たす重要な条件です。
+しかし、非凸問題でKKTの残差が小さくても大域最適性を意味しません。
+constraint qualificationが破れている場合は、multiplierの解釈も難しくなります。
 
-実務では、KKT residual、feasibility、複数初期値、目的値、物理的妥当性を組み合わせて判断します。
+実務ではKKT residual／feasibility／複数初期値／目的値／物理的妥当性を組み合わせて判断します。
+
+## 実行可能領域を図で読む
+
+[制約付き2次元問題のTrace](#/theater/learning/SCENARIO_CONSTRAINED_DISK)は、目的関数の等高線と実行可能領域を同じ図に置きます。
+目的値が下がる方向と、制約を満たす方向が一致するとは限らないことを、constraint violationと終了statusを分けて確認できます。
+
+これはSLSQP、内点法、拡張Lagrange法の実装性能を順位付けする図ではありません。
+固定した教育問題で、低い目的値だけを成功条件にしないための読み方を示します。
 
 ## 次に読む
 
-制約が線形・凸二次・錐構造なら[LP・QP・錐最適化](#/learn/lp-qp-conic)、制約が評価関数としてしか得られない場合は[局所Derivative-freeの選び分け](#/learn/family.local-dfo)も確認します。
+制約が線形・凸二次・錐構造なら[LP・QP・錐最適化](#/learn/lp-qp-conic)を確認します。
+制約が評価関数としてしか得られない場合は[局所Derivative-freeの選び分け](#/learn/family.local-dfo)へ進みます。

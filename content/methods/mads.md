@@ -9,8 +9,10 @@ source_ids: [S031, S060, S094]
 prerequisites: [concept.derivative-free]
 related_ids: [method.nelder-mead, differential-evolution]
 aliases: [/learn/mads]
+visualization_ids: [failed-simulation-feasible-ledger, failed-simulation-failure-ledger]
+comparison_ids: [COMPARE_FAILED_SIMULATION_STATUS_LEDGER]
 status: published
-last_reviewed: 2026-07-17
+last_reviewed: 2026-07-26
 ---
 
 mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。
@@ -21,7 +23,7 @@ mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制
 
 - **見るもの**: poll候補の目的関数値、constraint violation、評価成否
 - **動かすもの**: incumbent、mesh size、poll directions
-- **前進の判断**: constraint handlingの規則に従い、constraint violationを減らすか、同等のfeasibilityでincumbent objectiveを改善すること
+- **前進の判断**: constraint handlingの規則に従い、constraint violationを減らすか、同等のfeasibilityで`incumbent objective`を改善すること
 
 ## SearchとPoll
 
@@ -34,7 +36,9 @@ MADSは候補点を評価する処理を大きく二つに分けます。
 
 ## Nelder–Meadとの違い
 
-どちらもgradientを使わない局所法ですが、MADSは単体geometryではなくmeshとpoll directionsを管理します。black-box constraint、評価失敗、非滑らかさを扱う実装もあります。
+どちらもgradientを使わない局所法です。
+MADSは単体geometryではなく、`mesh`と`poll directions`を管理します。
+black-box constraint・評価失敗・非滑らかさを扱う実装もあります。
 
 | 観点 | MADS | Nelder–Mead |
 |---|---|---|
@@ -46,7 +50,7 @@ MADSは候補点を評価する処理を大きく二つに分けます。
 ## 向いている条件
 
 - 低〜中次元のblack-box
-- gradientがない、信用できない、またはsimulationが分岐する
+- `gradient`がない、信用できない、またはsimulationが分岐する
 - black-box constraintや評価失敗がある
 - 局所改善とstationarityの目安が欲しい
 - parallel pollを利用できる
@@ -87,7 +91,7 @@ def mads_loop(
     return incumbent
 ```
 
-実際のMADSでは、方向集合のdense性、mesh / poll sizeの関係、barrier rule、opportunistic evaluationなどを実装が管理します。
+実際のMADSでは、方向集合のdense性／`mesh`と`poll size`の関係／barrier rule／opportunistic evaluationを実装が管理します。
 
 ## 診断値
 
@@ -111,5 +115,16 @@ def mads_loop(
 - variable scalingが悪く一部方向だけ変化する
 
 ::: note
-停止時のmeshが小さいことは、大域最適性の証明ではありません。初期点、評価予算、constraint handling、noise levelを併記します。
+停止時のmeshが小さいことは、大域最適性の証明ではありません。
+初期点／評価予算／constraint handling／noise levelを併記します。
 :::
+
+## 失敗した評価を目的値へ混ぜない
+
+[全評価が成功するTrace](#/traces/failed-simulation-feasible-ledger)と[nonphysical評価を含むTrace](#/traces/failed-simulation-failure-ledger)は、同じ候補列を使います。
+変えるのは第5候補のstatusだけです。
+[失敗のstatusを比べる](#/compare/COMPARE_FAILED_SIMULATION_STATUS_LEDGER)ときは、評価不能を大きい目的値へ置換しません。
+status・feasible rate・成功した値だけからのbestを別々に読みます。
+
+これはMADS／simulation runtime／recovery policy／実設計品質のbenchmarkではありません。
+failed evaluationを「悪いが評価できた点」と誤認しないための固定教材です。

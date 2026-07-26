@@ -4578,7 +4578,7 @@
       "entity_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "失敗simulationでstatusとfeasible objectiveを分けて読む",
+      "label": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
       "relations": [
         {
           "relation_type": "case",
@@ -4651,7 +4651,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは候補列・domain・budget・failure taxonomy・statusをpenaltyへ置換しない方針を共有し、第5候補のstatusだけを変える。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -5497,7 +5497,7 @@
       "entity_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "反復MPC QPでwarm startとdeadline余裕を読む",
+      "label": "COMPARE_REPEATED_MPC_QP_WARM_START",
       "relations": [
         {
           "relation_type": "case",
@@ -5550,7 +5550,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは問題、dynamics、bounds、reference、残差、deadline policy、cycle数、iteration-to-latency modelを共有し、warm start reuseだけを変える。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -5619,7 +5619,7 @@
       "entity_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "求根で残差vectorと二乗残差を分けて読む",
+      "label": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
       "relations": [
         {
           "relation_type": "case",
@@ -5682,7 +5682,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは方程式、初期点、domain、残差scale、Jacobian利用可能性を共有し、停止規則だけを変える。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -5964,7 +5964,7 @@
       "entity_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
       "entity_type": "comparison",
       "external_url": null,
-      "label": "時間窓付き配送で可行routeと違反を分けて読む",
+      "label": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
       "relations": [
         {
           "relation_type": "case",
@@ -6022,7 +6022,7 @@
           "target_type": "trace"
         }
       ],
-      "summary": "両memberは固定route・時間行列・車両・出発時刻・service time・他の時間窓・帰着deadlineを共有し、stop 4の終了時刻だけを変える。"
+      "summary": ""
     },
     {
       "aliases": [],
@@ -6455,6 +6455,11 @@
       "label": "Operator-splitting QP（ADMM型）",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_REPEATED_MPC_QP_WARM_START",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S010",
           "target_type": "source"
@@ -6498,6 +6503,16 @@
           "relation_type": "related_content",
           "target_id": "proximal-gradient",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "repeated-mpc-qp-cold-start",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "repeated-mpc-qp-warm-start",
+          "target_type": "trace"
         }
       ],
       "summary": "凸二次計画（convex QP）を固定した分割構造で反復し、同じ線形系の因数分解を使い回しながらoperator splittingで解く専用solverの方式です。"
@@ -9029,9 +9044,14 @@
           "relation_type": "related_content",
           "target_id": "slsqp",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "constrained-disk-feasible-region",
+          "target_type": "trace"
         }
       ],
-      "summary": "滑らかな目的関数と一般制約を同時に扱うとき、SLSQP、内点法、拡張Lagrange法などを選び分ける入口です。"
+      "summary": "滑らかな目的関数と一般制約を同時に扱うとき、SLSQP・内点法・拡張Lagrange法などを選び分ける入口です。"
     },
     {
       "aliases": [],
@@ -9936,6 +9956,11 @@
       "label": "Gauss–Newton法",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S003",
           "target_type": "source"
@@ -9969,6 +9994,16 @@
           "relation_type": "related_content",
           "target_id": "trust-region-newton-cg",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "root-finding-component-tolerance",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "root-finding-small-squared-residual",
+          "target_type": "trace"
         }
       ],
       "summary": "非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。"
@@ -10486,6 +10521,11 @@
       "label": "組合せlocal search",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S023",
           "target_type": "source"
@@ -10514,6 +10554,16 @@
           "relation_type": "related_content",
           "target_id": "simulated-annealing",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "time-window-routing-feasible",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "time-window-routing-violation",
+          "target_type": "trace"
         }
       ],
       "summary": "離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。"
@@ -10613,6 +10663,11 @@
       "label": "Mesh Adaptive Direct Search（MADS）",
       "relations": [
         {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
+          "target_type": "comparison"
+        },
+        {
           "relation_type": "evidence",
           "target_id": "S031",
           "target_type": "source"
@@ -10646,6 +10701,16 @@
           "relation_type": "related_content",
           "target_id": "method.nelder-mead",
           "target_type": "content"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "failed-simulation-failure-ledger",
+          "target_type": "trace"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "failed-simulation-feasible-ledger",
+          "target_type": "trace"
         }
       ],
       "summary": "mesh上のpoll方向を適応させ、微分を使わずにblack-box目的と制約の局所停留点を探すdirect-search法です。"

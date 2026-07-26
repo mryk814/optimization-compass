@@ -8,8 +8,10 @@ summary: 離散的な近傍moveを定義し、改善が見つかる間は可行�
 source_ids: [S054, S023]
 prerequisites: []
 related_ids: [simulated-annealing, genetic-algorithm, family.discrete-structure]
+visualization_ids: [time-window-routing-feasible, time-window-routing-violation]
+comparison_ids: [COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 離散的な近傍moveを定義し、改善が見つかる間は可行解を更新するheuristicです。大域最適性は保証しません。
@@ -30,7 +32,9 @@ last_reviewed: 2026-07-18
 
 ## 局所最適で止まる性質と脱出戦略
 
-組合せlocal searchは、定義した近傍の中に現在の解より良い解が存在しなくなった時点で停止します。この状態を局所最適と呼びますが、それが大域最適である保証はありません。近傍の外側により良い解が存在していても、local searchの手続き自体はそれを見つけられません。
+組合せlocal searchは、定義した近傍に現在解より良い解がなくなった時点で停止します。
+この状態を局所最適と呼びますが、大域最適である保証はありません。
+近傍の外側により良い解が存在しても、local searchの手続き自体は見つけられません。
 
 この性質を踏まえ、実務では次のような脱出戦略が使われます。
 
@@ -38,7 +42,9 @@ last_reviewed: 2026-07-18
 - simulated annealingの考え方: 改善しないmoveも一定の確率で受理し、局所最適に留まりにくくする
 - tabuの考え方: 直近で訪れた解やmoveを一時的に禁止し、同じ局所最適へ戻ることを防ぐ
 
-これらは局所最適から抜け出す確率を高める工夫であり、大域最適性の証明を与えるものではありません。近傍設計と脱出戦略の組み合わせ全体が、解の質と探索costのtrade-offを決めます。
+これらは局所最適から抜け出しやすくする工夫です。
+大域最適性の証明を与えるものではありません。
+近傍設計と脱出戦略の組み合わせ全体が、解の質と探索costのtrade-offを決めます。
 
 ## 向いている条件
 
@@ -49,7 +55,11 @@ last_reviewed: 2026-07-18
 
 ## 避ける／切り替える条件
 
-大域最適性の証明やoptimality gapの保証が必須の場面では、組合せlocal searchだけでは不十分です。MILPやCP-SATのような厳密法は、たとえ実行時間がかかっても最適性のboundを提供できますが、組合せlocal searchは到達した解が最適からどれだけ離れているかを示せません。厳密な保証が必要な場合や、side constraintsが複雑で近傍設計自体が難しい場合は、[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)にある他の手法を検討します。
+大域最適性の証明やoptimality gapの保証が必須なら、組合せlocal searchだけでは不十分です。
+MILPやCP-SATのような厳密法は、実行時間がかかっても最適性のboundを提供できます。
+一方、組合せlocal searchは到達した解が最適からどれだけ離れているかを示せません。
+厳密な保証が必要な場合は、[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)にある他の手法を検討します。
+side constraintsが複雑で、近傍設計自体が難しい場合も同様です。
 
 ## Python
 
@@ -93,7 +103,10 @@ while improved:
 print(tour, tour_length(tour, points))
 ```
 
-このコードは、小さなTSP instanceに対して2-optの近傍を総当たりで調べ、改善がなくなるまで反復する教育用の実装です。実務でのrouting/scheduling問題は、より複雑な近傍や制約を扱うため、[OR-Tools Routing](https://developers.google.com/optimization/routing)のようなmetaheuristicフレームワークを使い、利用versionに対応する公式referenceを確認します。
+このコードは、小さなTSP instanceで2-opt近傍を総当たりする教育用の実装です。
+改善がなくなるまで反復します。
+実務のrouting／scheduling問題は、より複雑な近傍や制約を扱います。
+[OR-Tools Routing](https://developers.google.com/optimization/routing)のようなmetaheuristic frameworkを使う場合は、利用versionの公式referenceを確認します。
 
 ## 診断値
 
@@ -112,6 +125,17 @@ print(tour, tour_length(tour, points))
 - 到達した解の質を保証するboundが得られず、運用上の説明ができない
 - side constraintsが増え、近傍moveのたびに可行性を保つ処理が複雑化している
 
+## 時間窓を`hard constraint`として読む
+
+[可行routeのTrace](#/traces/time-window-routing-feasible)と[時間窓違反のTrace](#/traces/time-window-routing-violation)は、同じ固定routeを使います。
+変えるのは一つの時間窓だけです。
+[時間窓の比較](#/compare/COMPARE_TIME_WINDOW_ROUTING_HARD_CONSTRAINT)では、同じ総移動時間でも到着が時間窓を超えれば実行不可能になることを確認します。
+
+これはOR-Tools／local search／交通予測／route品質の性能比較ではありません。
+時間窓違反を小さな目的値差やpenaltyへ混ぜず、可行性を確認してから解の質を評価するためのcontrastです。
+
 ## 次に読む
 
-近傍の外側を確率的に探索する考え方は[Simulated Annealing](#/learn/simulated-annealing)、集団で複数解を並行して探索する考え方は[遺伝的algorithm](#/learn/genetic-algorithm)で確認できます。離散・組合せ最適化全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。
+近傍の外側を確率的に探索する考え方は[Simulated Annealing](#/learn/simulated-annealing)で確認できます。
+集団で複数解を並行して探索する場合は[遺伝的algorithm](#/learn/genetic-algorithm)へ進みます。
+全体の選び分けは[離散・組合せ最適化の選び分け](#/learn/family.discrete-structure)を参照してください。

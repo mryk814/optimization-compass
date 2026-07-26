@@ -7,20 +7,23 @@ title_en: Gauss-Newton Method
 summary: 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
 source_ids: [S003, S041, S056]
 related_ids: [least-squares, newton-method, trust-region-newton-cg]
+visualization_ids: [root-finding-component-tolerance, root-finding-small-squared-residual]
+comparison_ids: [COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-07-26
 ---
 
 非線形最小二乗の残差Jacobianから曲率近似を作り、一般目的関数として扱わず残差構造を直接利用する局所法です。
 
 ## 30秒でつかむ
 
-この手法の気持ちは、**合計lossだけを見るのではなく、観測ごとの残差がparameterを変えるとどう動くかを使って、全部の残差をまとめて小さくしたい**というものです。
+この手法では、合計lossだけでなく観測ごとの残差を見ます。
+`parameter`の変化に対する残差の動きを使い、全ての残差をまとめて小さくします。
 
 - 見ているもの: 残差vectorとJacobian
-- 動かしているもの: parameterと線形化されたleast-squares step
+- 動かしているもの: parameter・線形化されたleast-squares step
 - 前進の判断: 二乗和、残差分布、gradient相当量の低下
-- 恐れていること: rank deficiency、外れ値、初期値の悪さ、大きな残差での近似誤差
+- 恐れていること: rank deficiency／外れ値／初期値の悪さ／大きな残差での近似誤差
 
 一般のNewton法とは異なり、目的関数が残差二乗和であることを利用してHessianの一部を近似します。
 
@@ -38,7 +41,8 @@ $$
 J^T J p = -J^T r
 $$
 
-$J^T J$を直接作るとcondition numberが悪化する場合があるため、実装ではQR、SVD、疎linear algebra、trust-regionを使うことがあります。
+$J^T J$を直接作るとcondition numberが悪化する場合があります。
+実装ではQR・SVD・疎linear algebra・trust-regionを使うことがあります。
 
 ## まず確認すること
 
@@ -122,9 +126,20 @@ print(parameters, np.linalg.norm(residuals(parameters)))
 
 残差の二乗和が下がっても、モデルの識別性や観測の偏りまで解決したとは限りません。残差patternとparameterの安定性を分けて確認します。
 
+## 残差vectorと二乗和を分けて見る
+
+[各残差を確認するTrace](#/traces/root-finding-component-tolerance)と[二乗残差だけで止めるTrace](#/traces/root-finding-small-squared-residual)は、同じ固定問題を使います。
+変えるのは停止規則だけです。
+[残差の比較](#/compare/COMPARE_ROOT_FINDING_COMPONENT_TOLERANCE)では、二乗和が小さくても一つの成分が要求精度を満たさない状態を確認します。
+
+これは`root solver`と`least-squares solver`の性能比較ではありません。
+Gauss–Newton実装・Jacobian近似・収束速度も順位付けしません。
+残差のscaleと成分別toleranceを終了判定へ残すためのcontrastです。
+
 ## 次に読む
 
 Gauss–Newton stepが大きすぎる、Jacobianが悪条件、初期点が遠い場合にはdampingやtrust regionが必要です。
 Levenberg–Marquardtはその代表的な安定化です。
 
-実務上は[非線形最小二乗とLevenberg–Marquardt](#/learn/least-squares)を入口にし、残差、Jacobian、rank、停止statusを一緒に保存してください。
+実務上は[非線形最小二乗とLevenberg–Marquardt](#/learn/least-squares)を入口にします。
+残差／Jacobian／rank／停止statusを一緒に保存してください。
