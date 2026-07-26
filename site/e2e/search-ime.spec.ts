@@ -37,10 +37,13 @@ test("日本語IMEの変換確定まで検索条件を更新しない", async ({
   await expect(page.getByRole("heading", { name: "ベイズ最適化", exact: true }).first()).toBeVisible();
 });
 
-test("右上ナビゲーションを日本語で統一する", async ({ page, baseURL }) => {
+test("主要導線を常設し、探索導線を必要なときだけ展開する", async ({ page, baseURL }) => {
   await gotoAtlasRoute(page, requiredBaseURL(baseURL), "/");
   const navigation = page.getByRole("navigation", { name: "主要ナビゲーション" });
-  await expect(navigation.getByRole("link")).toHaveText([
-    "ホーム", "問題構造", "条件で診断", "手法を学ぶ", "動きを見る", "条件を比較", "横断検索", "事例を見る", "根拠を見る",
-  ]);
+  await expect(navigation.getByRole("link")).toHaveText(["条件で診断", "事例を見る", "手法を学ぶ"]);
+
+  await expect(navigation.getByRole("link", { name: "横断検索" })).not.toBeVisible();
+  await navigation.getByText("探索", { exact: true }).click();
+  await expect(navigation.getByRole("link", { name: "横断検索" })).toBeVisible();
+  await expect(navigation.getByRole("link", { name: "根拠を見る" })).toBeVisible();
 });
