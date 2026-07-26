@@ -17,6 +17,7 @@ from optimization_compass.search_tree import (
     generate_search_tree_artifact,
 )
 from optimization_compass.site_export import _generate_optimal_control_traces
+from optimization_compass.surrogate_uncertainty import generate_surrogate_scenario
 from optimization_compass.trace_models import TraceFrame
 from optimization_compass.traces import generate_gradient_bundle
 
@@ -31,6 +32,9 @@ def read_dataset_version() -> str:
 
 def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
     return {
+        "bayesian-optimization-execution.svg": _bayesian_optimization_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "constrained-feasibility-execution.svg": _constrained_feasibility_svg(
             dataset_version
         ).encode("utf-8"),
@@ -44,6 +48,242 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _bayesian_optimization_svg(dataset_version: str) -> str:
+    generated = generate_surrogate_scenario(
+        dataset_version=dataset_version,
+        strategy="explore",
+        noise_preset="noiseless",
+    )
+    frames = (generated.payload.frames[0], generated.payload.frames[3])
+    panel_specs = (
+        ("初期観測の直後", frames[0], 145.0),
+        ("3点を追加した後", frames[1], 545.0),
+    )
+    domain_min, domain_max = generated.payload.domain
+    value_min, value_max = -1.3, 4.0
+    plot_x, plot_width, plot_height = 58.0, 530.0, 200.0
+    acquisition_height = 72.0
+
+    def project_x(value: float) -> float:
+        return plot_x + (value - domain_min) / (domain_max - domain_min) * plot_width
+
+    def project_y(value: float, plot_y: float) -> float:
+        bounded = min(value_max, max(value_min, value))
+        return plot_y + plot_height - (bounded - value_min) / (value_max - value_min) * plot_height
+
+    elements = [
+        _svg_open(
+            "観測が増えると、次の評価点も動く",
+            (
+                "固定seedの1次元black-boxをGaussian-process Bayesian Optimizationで実行し、"
+                "3回評価後と6回評価後のsurrogate平均、不確実性、Expected Improvement、"
+                "次の評価点を比較します。真の目的関数は教材用の答え合わせであり、"
+                "optimizerは観測点以外の真値を参照しません。"
+            ),
+            width=640,
+            height=1100,
+        ),
+        '<rect width="640" height="1100" rx="24" fill="#f7f6f1"/>',
+        '<text x="32" y="48" class="bo-title">観測が増えると、次の評価点も動く</text>',
+        (
+            '<text x="32" y="78" class="bo-subtitle">'
+            "fixed seed · 1D · noiseless · RBF kernel · 10 evaluation budget"
+            "</text>"
+        ),
+        '<line x1="34" y1="108" x2="70" y2="108" stroke="#245c42" stroke-width="5"/>',
+        '<text x="78" y="114" class="bo-legend">surrogate</text>',
+        '<rect x="188" y="98" width="36" height="18" rx="5" fill="#cfe7dc"/>',
+        '<text x="232" y="114" class="bo-legend">uncertainty</text>',
+        (
+            '<line x1="368" y1="108" x2="404" y2="108" stroke="#617068" '
+            'stroke-width="3" stroke-dasharray="8 6"/>'
+        ),
+        '<text x="412" y="114" class="bo-legend">truth（教材のみ）</text>',
+    ]
+
+    for panel_title, frame, panel_y in panel_specs:
+        plot_y = panel_y + 50
+        acquisition_y = plot_y + plot_height + 35
+        selected_x = float(frame.selected_point)
+        selected_screen_x = project_x(selected_x)
+        max_acquisition = max(point.acquisition for point in frame.predictive_summary)
+        uncertainty_points = [
+            (project_x(point.x), project_y(point.upper, plot_y))
+            for point in frame.predictive_summary
+        ] + [
+            (project_x(point.x), project_y(point.lower, plot_y))
+            for point in reversed(frame.predictive_summary)
+        ]
+        uncertainty_polygon = " ".join(f"{x:.2f},{y:.2f}" for x, y in uncertainty_points)
+        mean_points = " ".join(
+            f"{project_x(point.x):.2f},{project_y(point.mean, plot_y):.2f}"
+            for point in frame.predictive_summary
+        )
+        truth_points = " ".join(
+            f"{project_x(point.x):.2f},{project_y(point.true_value, plot_y):.2f}"
+            for point in frame.predictive_summary
+        )
+        acquisition_points = [
+            (
+                project_x(point.x),
+                acquisition_y
+                + acquisition_height
+                - (
+                    point.acquisition / max_acquisition * acquisition_height
+                    if max_acquisition
+                    else 0.0
+                ),
+            )
+            for point in frame.predictive_summary
+        ]
+        acquisition_point_string = " ".join(f"{x:.2f},{y:.2f}" for x, y in acquisition_points)
+        _, selected_acquisition_y = min(
+            acquisition_points,
+            key=lambda point: abs(point[0] - selected_screen_x),
+        )
+        acquisition_path = " ".join(
+            [
+                f"{plot_x:.2f},{acquisition_y + acquisition_height:.2f}",
+                *(f"{x:.2f},{y:.2f}" for x, y in acquisition_points),
+                f"{plot_x + plot_width:.2f},{acquisition_y + acquisition_height:.2f}",
+            ]
+        )
+        elements.extend(
+            [
+                (
+                    f'<rect x="24" y="{panel_y}" width="592" height="382" rx="18" '
+                    'fill="#fff" stroke="#cfd8d1"/>'
+                ),
+                (
+                    f'<text x="44" y="{panel_y + 31}" class="bo-panel">'
+                    f"{html.escape(panel_title)}</text>"
+                ),
+                (
+                    f'<text x="596" y="{panel_y + 31}" text-anchor="end" class="bo-status">'
+                    f"実評価 {frame.oracle_evaluations}回 · next x={selected_x:.2f}</text>"
+                ),
+                (
+                    f'<rect x="{plot_x}" y="{plot_y}" width="{plot_width}" '
+                    f'height="{plot_height}" rx="12" fill="#fbfcfa"/>'
+                ),
+            ]
+        )
+        for tick in (-1.0, 0.0, 2.0, 4.0):
+            tick_y = project_y(tick, plot_y)
+            elements.extend(
+                [
+                    (
+                        f'<line x1="{plot_x}" y1="{tick_y:.2f}" '
+                        f'x2="{plot_x + plot_width}" y2="{tick_y:.2f}" '
+                        'stroke="#ebe8e0"/>'
+                    ),
+                    (
+                        f'<text x="{plot_x - 10}" y="{tick_y + 6:.2f}" '
+                        f'text-anchor="end" class="bo-axis">{tick:g}</text>'
+                    ),
+                ]
+            )
+        elements.extend(
+            [
+                f'<polygon points="{uncertainty_polygon}" fill="#cfe7dc" opacity="0.82"/>',
+                (
+                    f'<polyline points="{truth_points}" fill="none" stroke="#617068" '
+                    'stroke-width="3" stroke-dasharray="8 6"/>'
+                ),
+                (
+                    f'<polyline points="{mean_points}" fill="none" stroke="#245c42" '
+                    'stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+                ),
+                (
+                    f'<line x1="{selected_screen_x:.2f}" y1="{plot_y}" '
+                    f'x2="{selected_screen_x:.2f}" '
+                    f'y2="{acquisition_y + acquisition_height}" stroke="#d67835" '
+                    'stroke-width="4" stroke-dasharray="7 6"/>'
+                ),
+            ]
+        )
+        for observation in frame.observations:
+            elements.append(
+                f'<circle cx="{project_x(observation.x):.2f}" '
+                f'cy="{project_y(observation.observed_value, plot_y):.2f}" r="8" '
+                'fill="#245c42" stroke="#fff" stroke-width="3"/>'
+            )
+        elements.extend(
+            [
+                (
+                    f'<text x="{plot_x}" y="{acquisition_y - 9}" class="bo-axis">'
+                    "Expected Improvement</text>"
+                ),
+                (
+                    f'<text x="{plot_x + plot_width}" y="{acquisition_y - 9}" '
+                    'text-anchor="end" class="bo-axis">'
+                    f"max {max_acquisition:.3f}</text>"
+                ),
+                (
+                    f'<rect x="{plot_x}" y="{acquisition_y}" width="{plot_width}" '
+                    f'height="{acquisition_height}" rx="10" fill="#fbf4ed"/>'
+                ),
+                f'<polygon points="{acquisition_path}" fill="#efc5a5" opacity="0.9"/>',
+                (
+                    f'<polyline points="{acquisition_point_string}" '
+                    'fill="none" stroke="#d67835" stroke-width="4" '
+                    'stroke-linecap="round" stroke-linejoin="round"/>'
+                ),
+                (
+                    f'<circle cx="{selected_screen_x:.2f}" '
+                    f'cy="{selected_acquisition_y:.2f}" '
+                    'r="7" fill="#d67835" stroke="#fff" stroke-width="3"/>'
+                ),
+            ]
+        )
+        for tick in (-3.0, 0.0, 3.0):
+            tick_x = project_x(tick)
+            elements.append(
+                f'<text x="{tick_x:.2f}" y="{acquisition_y + acquisition_height + 25}" '
+                f'text-anchor="middle" class="bo-axis">{tick:g}</text>'
+            )
+
+    first_uncertainty = float(frames[0].selected_uncertainty)
+    later_uncertainty = float(frames[1].selected_uncertainty)
+    elements.extend(
+        [
+            '<text x="32" y="970" class="bo-summary">このrunで観測した変化</text>',
+            (
+                '<text x="32" y="1003" class="bo-metric">'
+                f"実評価 3 → 6　　next x 1.73 → 2.10　　"
+                f"next点の不確実性 {first_uncertainty:.2f} → {later_uncertainty:.2f}</text>"
+            ),
+            (
+                '<text x="32" y="1044" class="bo-provenance">'
+                "実行生成: generate_surrogate_scenario · explore / noiseless · "
+                f"dataset {html.escape(dataset_version)}</text>"
+            ),
+            (
+                '<text x="32" y="1077" class="bo-caveat">'
+                "固定seed・1次元・RBF kernelの教材です。大域最適性や一般性能を保証しません。"
+                "</text>"
+            ),
+            (
+                "<style>"
+                "text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;fill:#26352d}"
+                ".bo-title{font-size:30px;font-weight:760}"
+                ".bo-subtitle{font-size:17px;fill:#617068}"
+                ".bo-legend{font-size:17px;fill:#46554d}"
+                ".bo-panel{font-size:23px;font-weight:750}"
+                ".bo-status{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".bo-axis{font-size:18px;fill:#617068;font-variant-numeric:tabular-nums}"
+                ".bo-summary{font-size:21px;font-weight:750}"
+                ".bo-metric{font-size:19px;font-weight:650;font-variant-numeric:tabular-nums}"
+                ".bo-provenance{font-size:15px;fill:#617068}"
+                ".bo-caveat{font-size:15px;fill:#7a4b38}"
+                "</style>"
+            ),
+            "</svg>\n",
+        ]
+    )
+    return "".join(elements)
 
 
 def _optimal_control_mesh_svg(dataset_version: str) -> str:
@@ -1061,9 +1301,9 @@ def _topology_field_svg(dataset_version: str) -> str:
     return "".join(elements)
 
 
-def _svg_open(title: str, description: str, *, height: int) -> str:
+def _svg_open(title: str, description: str, *, width: int = 800, height: int) -> str:
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 {height}" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" '
         'role="img" aria-labelledby="figure-title figure-description">'
         f'<title id="figure-title">{html.escape(title)}</title>'
         f'<desc id="figure-description">{html.escape(description)}</desc>'

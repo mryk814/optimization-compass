@@ -8,7 +8,7 @@ summary: 一回の実験やsimulationが高価な問題の入口です。Bayesia
 source_ids: [S034, S035, S036, S037, S038, S059, S069, S075]
 related_ids: [bayesian-optimization, cma-es, differential-evolution]
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 一回の実験やsimulationが高価な問題の入口です。Bayesian Optimization／TPE／multi-fidelity／random・evolutionary baselineを選び分けます。
@@ -23,6 +23,14 @@ last_reviewed: 2026-07-24
 - 主な弱点: model mismatch、高次元、条件付き空間、失敗trial、非定常性
 
 surrogateの予測平均やacquisitionの最大点は、真の最適点の証明ではありません。次に試す価値を表すmodel上の判断です。
+
+少ない評価を履歴へ戻すと、次の候補はどう変わるのでしょうか。
+固定seedのGaussian-process BOでは、観測の追加とともに不確実性が縮み、Expected Improvementの山も移ります。
+
+![固定seedの1次元black-boxでGaussian-process Bayesian Optimizationを実行し、実評価3回後と6回後のsurrogate平均、不確実性帯、観測点、Expected Improvement、次の評価点を比較した結果。観測の追加後は不確実性帯が縮み、次の評価点がx=1.73からx=2.10へ移る。](./media/bayesian-optimization-execution.svg "高価な評価を履歴で選び直す一巡を示す固定Python実行結果です。1次元・noiseless・RBF kernelの教材であり、手法間の一般性能rankingや大域最適性は示しません。")
+
+上段の実評価3回から下段の6回へ進むと、次点の不確実性は1.57から0.22へ下がります。
+この値は固定教材内の診断であり、別のkernelやnoiseへ一般化しません。
 
 ## まず確認すること
 

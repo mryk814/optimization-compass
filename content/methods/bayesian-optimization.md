@@ -14,7 +14,7 @@ aliases: [/learn/bayesian-optimization]
 visualization_aliases: []
 comparison_aliases: []
 status: published
-last_reviewed: 2026-07-24
+last_reviewed: 2026-07-26
 ---
 
 高価なblack-box評価を節約するため、観測履歴からsurrogate modelと不確実性を更新し、獲得関数で次の評価点を選ぶ逐次最適化です。
@@ -35,9 +35,16 @@ last_reviewed: 2026-07-24
 4. 選んだ点を実際に評価する
 5. budgetまたは停止条件まで繰り返す
 
-![青緑の観測点の近くで狭く、未観測部分で広い青緑の不確実性帯と、その中の橙の次候補を示す模式図](./media/bayesian-optimization-uncertainty.png "観測、surrogate上の不確実性、次に評価する候補を区別する教育用模式図です。実務では目的関数の真の曲線は見えません。")
+観測が増えれば、同じ場所を選び続けるのでしょうか。
+固定seedの実行では、surrogateと次の候補がともに動きます。
 
-Gaussian-process BOでは、各入力に予測平均 $\mu(x)$ と標準偏差 $\sigma(x)$ を持ちます。平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。
+![固定seedの1次元black-boxでGaussian-process Bayesian Optimizationを実行し、実評価3回後と6回後のsurrogate平均、不確実性帯、観測点、Expected Improvement、次の評価点を比較した結果。観測の追加後は不確実性帯が縮み、次の評価点がx=1.73からx=2.10へ移る。](./media/bayesian-optimization-execution.svg "固定1次元・noiseless・RBF kernelのPython実行結果です。真の目的関数は教材用の答え合わせであり、optimizerは観測点以外の真値を参照しません。大域最適性や一般性能は示しません。")
+
+上段は初期3点の直後、下段はさらに3点を評価した後です。
+不確実性が縮む場所と、橙のExpected Improvementが選ぶ次点を対応させて読みます。
+
+Gaussian-process BOでは、各入力に予測平均 $\mu(x)$ と標準偏差 $\sigma(x)$ を持ちます。
+平均は現在の予測、不確実性は未観測領域に関するmodel上の情報不足です。
 
 ## Acquisitionの意味
 
