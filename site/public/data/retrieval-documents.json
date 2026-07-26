@@ -5556,7 +5556,7 @@
         "S022",
         "S079"
       ],
-      "text": "証明完了の探索木 では、incumbentとglobal boundが一致するまでを追います。 4 nodeで止まる探索木 では、実行可能なincumbentがあっても正のgapと未探索nodeが残る状態を確認します。 二つの停止結果を並べるCompare は、同じ4変数knapsackを使います。 instance・seed・branch順・初期incumbent・fractional boundを固定します。 9回のevaluation上限も共通にし、node stop limitだけを9から4へ変えます。 これは停止条件の読み方を学ぶ固定教材です。 CP-SATやMIP solverの速度、総当たりとの一般性能rankingを示すものではありません。",
+      "text": "証明完了の探索木 では、incumbentとglobal boundが一致するまでを追います。 4 nodeで止まる探索木 では、実行可能なincumbentがあっても正のgapと未探索nodeが残る状態を確認します。 二つの停止結果を並べるCompare は、同じ4変数knapsackを使います。 instance・seed・branch順・初期incumbent・fractional boundを固定します。 9回のevaluation上限も共通にし、node stop limitだけを9から4へ変えます。 これは停止条件の読み方を学ぶ固定教材です。 CP-SATやMIPのsolver速度、総当たりとの一般性能rankingを示すものではありません。",
       "title": "探索完了と予算停止を分けて見る"
     },
     {
@@ -5583,7 +5583,7 @@
         "S022",
         "S079"
       ],
-      "text": "best-bound: 証明側を進めやすい depth-first: memoryを抑え、incumbentを早く得る場合がある breadth-first: levelごとに探索するがmemoryが増えやすい hybrid: solverがphaseに応じて切替 branching variable／node selection／heuristicは性能へ強く影響します。 model formulationの強さも同じくらい重要です。",
+      "text": "best-bound: 証明側を進めやすい depth-first: memoryを抑え、incumbentを早く得る場合がある breadth-first: levelごとに探索するがmemoryが増えやすい hybrid: phaseに応じたsolver切替 branching variable／node selection／heuristicは性能へ強く影響します。 model formulationの強さも同じくらい重要です。",
       "title": "探索戦略"
     },
     {
@@ -5610,7 +5610,7 @@
         "S022",
         "S079"
       ],
-      "text": "各nodeは、元問題へ追加の固定条件やboundsを加えた部分問題です。nodeで次を計算します。 infeasibleか relaxationや問題固有のboundはいくつか 実行可能解を作れるか incumbentを改善できる可能性があるか さらに分枝すべき変数は何か minimizationでは、nodeのlower boundが現在のincumbent以上なら、そのsubtreeは改善できないためpruneできます。",
+      "text": "各nodeは、元問題へ追加の固定条件やboundsを加えた部分問題です。nodeで次を計算します。 infeasibleか relaxationや問題固有のboundはいくつか 実行可能解を作れるか incumbentを改善できる可能性があるか さらに分枝すべき変数は何か 探索中のsubtreeと次に調べるnodeは、探索木の位置で見分けます。 pruneした枝は、探索を打ち切った状態として分けて読みます。 探索済みの経路、open node、pruneした枝を分けて読む教育用模式図です。実際のnode選択順、bound値、最適性の証明は図だけでは示しません。 minimizationでは、nodeのlower boundが現在のincumbent以上なら、そのsubtreeは改善できないためpruneできます。",
       "title": "探索木の1 node"
     },
     {
@@ -5637,7 +5637,7 @@
         "S022",
         "S079"
       ],
-      "text": "現代的MILP solverでcutを統合する枠組みは Branch-and-Cut 、論理・scheduling制約中心なら CP-SAT も比較します。",
+      "text": "現代的なMILPでcutを統合する枠組みは Branch-and-Cut 、論理・scheduling制約中心なら CP-SAT も比較します。",
       "title": "次に読む"
     },
     {
@@ -12375,7 +12375,7 @@
         "S076",
         "S102"
       ],
-      "text": "この手法の気持ちは、 stateをsimulationだけに任せず、軌道全体を変数として置き、dynamicsとのずれをconstraintとして解きたい というものです。 見ているもの: state history、control history、cost、dynamics defect、constraint violation 動かしているもの: mesh上のstateとcontrol 前進の判断: costの改善と、defect、path constraint、boundary constraintの同時成立 別に確認するもの: meshを細かくしたときの解の変化、solver時間、real-time deadline 恐れていること: 粗いmesh、discretization error、sparse構造の破綻、未処理のevent 変数は増えます。 その代わり、長いhorizonや不安定dynamicsでも、全区間のrollout感度を一つの初期点から伝え続けずに済む場合があります。",
+      "text": "この手法の気持ちは、 状態（state）をsimulationだけに任せない ことです。 軌道全体を変数として置き、dynamicsとのずれを制約（constraint）として解きます。 見ているもの: state history、control history、cost、dynamics defect、constraint violation 動かしているもの: mesh上のstateとcontrol 前進の判断: コスト（cost）の改善、defect、経路制約（path constraint）、境界制約（boundary constraint）の同時成立 別に確認するもの: 時間格子（mesh）を細かくしたときの解の変化、solver時間、real-time deadline 恐れていること: 粗いmesh、discretization error、sparse構造の破綻、未処理のevent 変数は増えます。 その代わり、長いhorizonや不安定dynamicsでも、全区間のrollout感度を一つの初期点から伝え続けずに済む場合があります。 同じ軌道でも、mesh点とcontrolによる更新は別の対象です。 隣接点のdynamics defectも分けて読みます。 mesh上のstateとcontrolを並べ、隣接点の整合しない区間をdynamics defectとして区別する教育用模式図です。連続時間の可行性や実機での安全性は示しません。",
       "title": "30秒でつかむ"
     },
     {
@@ -12447,7 +12447,7 @@
         "S076",
         "S102"
       ],
-      "text": "次はsingle-integrator x k + 1 = x k + Δ t u k をEuler defectで表す最小例です。 厳密には高次collocationではなく、direct transcriptionの入口です。 python import numpy as np from scipy.optimize import minimize steps = 20 dt = 1.0 / steps def unpack ( vector : np . ndarray ) -> tuple [ np . ndarray , np . ndarray ]: state = vector [: steps + 1 ] control = vector [ steps + 1 :] return state , control def objective ( vector : np . ndarray ) -> float : _ , control = unpack ( vector ) return float ( dt * np . sum ( control * control )) def equality_constraints ( vector : np . ndarray ) -> np . ndarray : state , control = unpack ( vector ) dynamics = state [ 1 :] - state [: - 1 ] - dt * control return np . concatenate (([ state [ 0 ]], dynamics , [ state [ - 1 ] - 1.0 ])) initial = np . concatenate (( np . linspace ( 0.0 , 1.0 , steps + 1 ), np . ones ( steps ))) result = minimize ( objective , initial , method = \"SLSQP\" , constraints = { \"type\" : \"eq\" , \"fun\" : equality_constraints }, bounds = [( None , None )] * ( steps + 1 ) + [( - 2.0 , 2.0 )] * steps , options = { \"ftol\" : 1e-10 , \"maxiter\" : 500 }, ) state , control = unpack ( result . x ) print ( result . success , objective ( result . x ), np . linalg . norm ( equality_constraints ( result . x ))) この例は単純なdynamicsです。 実務ではintegration error、state constraints、units、solver statusを保存します。",
+      "text": "次はsingle-integrator x k + 1 = x k + Δ t u k をEuler defectで表す最小例です。 厳密には高次collocationではなく、direct transcriptionの入口です。 python import numpy as np from scipy.optimize import minimize steps = 20 dt = 1.0 / steps def unpack ( vector : np . ndarray ) -> tuple [ np . ndarray , np . ndarray ]: state = vector [: steps + 1 ] control = vector [ steps + 1 :] return state , control def objective ( vector : np . ndarray ) -> float : _ , control = unpack ( vector ) return float ( dt * np . sum ( control * control )) def equality_constraints ( vector : np . ndarray ) -> np . ndarray : state , control = unpack ( vector ) dynamics = state [ 1 :] - state [: - 1 ] - dt * control return np . concatenate (([ state [ 0 ]], dynamics , [ state [ - 1 ] - 1.0 ])) initial = np . concatenate (( np . linspace ( 0.0 , 1.0 , steps + 1 ), np . ones ( steps ))) result = minimize ( objective , initial , method = \"SLSQP\" , constraints = { \"type\" : \"eq\" , \"fun\" : equality_constraints }, bounds = [( None , None )] * ( steps + 1 ) + [( - 2.0 , 2.0 )] * steps , options = { \"ftol\" : 1e-10 , \"maxiter\" : 500 }, ) state , control = unpack ( result . x ) print ( result . success , objective ( result . x ), np . linalg . norm ( equality_constraints ( result . x ))) この例は単純なdynamicsです。 実務ではintegration errorとstate constraintsを保存します。 単位とsolverの停止状態も別々に保存します。",
       "title": "Python"
     },
     {
@@ -12483,7 +12483,7 @@
         "S076",
         "S102"
       ],
-      "text": "観点 Direct collocation Direct shooting state decision variableとして保持 forward simulationで消去 dynamics defect constraint rollout sparsity banded / sparse sensitivityが長時間伝播 unstable dynamics 比較的扱いやすい rolloutが発散しやすい variable数 多い 少ない 長いhorizonや不安定systemではcollocationの疎構造が有利な場合があります。 一方、meshとdiscretizationを設計し、連続時間の挙動を別途検証する必要があります。",
+      "text": "観点 Direct collocation Direct shooting state decision variableとして保持 forward simulationで消去 dynamics defect constraint rollout sparsity banded / sparse sensitivityが長時間伝播 unstable dynamics 比較的扱いやすい rolloutが発散しやすい variable数 多い 少ない 長いhorizonや不安定systemではcollocationの疎構造が有利な場合があります。 一方、時間格子（mesh）とdiscretizationを設計し、連続時間の挙動を別途検証する必要があります。",
       "title": "Shootingとの違い"
     },
     {
@@ -12519,7 +12519,7 @@
         "S076",
         "S102"
       ],
-      "text": "項目 確認内容 dynamics 連続時間systemとdiscretizationを定義できるか mesh eventや急変区間を表せる密度か constraints initial / terminal、path、control boundsを明示できるか derivatives defect Jacobianのsparse patternを利用できるか initialization stateとcontrolの初期軌道を用意できるか real-time solve timeとwarm startが運用deadlineに合うか costが下がっても、mesh上のdefectやconstraint violationが許容範囲に入るとは限りません。 solver status、連続時間へ戻したsimulation、real-time運用を別々に確認します。",
+      "text": "項目 確認内容 dynamics 連続時間systemとdiscretizationを定義できるか mesh eventや急変区間を表せる密度か constraints initial / terminal、path、control boundsを明示できるか derivatives defect Jacobianのsparse patternを利用できるか initialization stateとcontrolの初期軌道を用意できるか real-time solve timeとwarm startが運用deadlineに合うか コスト（cost）が下がっても、mesh上のdefectやconstraint violationが許容範囲に入るとは限りません。 solver status、連続時間へ戻したsimulation、real-time運用を別々に確認します。",
       "title": "まず確認すること"
     },
     {
@@ -12555,7 +12555,7 @@
         "S076",
         "S102"
       ],
-      "text": "向いている条件: known dynamicsを持つtrajectory optimization path / boundary constraintが多い sparse derivativeを利用できる warm startを使うMPC stateとcontrolの全履歴を説明したい 避ける／切り替える条件: dynamicsが未同定または強くstochastic discontinuous eventをmeshへ明示していない derivativeやscalingが不正確 meshが粗くsolutionがgrid依存 real-time deadlineにsolver時間が合わない",
+      "text": "向いている条件: known dynamicsを持つtrajectory optimization 経路制約や境界制約の数が多い sparse derivativeを利用できる warm startを使うMPC 状態（state）とcontrolの全履歴を説明したい 避ける／切り替える条件: dynamicsが未同定または強くstochastic discontinuous eventをmeshへ明示していない derivativeやscalingが不正確 時間格子（mesh）の粗さでsolutionがgrid依存 real-time deadlineにsolver時間が合わない",
       "title": "向く条件・避ける条件"
     },
     {
@@ -12591,7 +12591,7 @@
         "S076",
         "S102"
       ],
-      "text": "mesh上のcostは改善するが、高精度simulationでconstraintを破る → meshをrefineし、discretization errorを確認する dynamics defectが停滞する → derivative、scaling、initial trajectoryを見直す path constraintがmesh間で破れる → event区間やmesh密度を見直す solver時間がreal-time deadlineを超える → mesh、warm start、problem size、専用solverを検討する dynamicsが未同定または強くstochastic → deterministicなdefect constraintを前提にしない定式化と比較する Warning NLP solverの success は、連続時間問題の正しさを直接保証しません。 discretization error、model mismatch、simulation validationを別に確認します。",
+      "text": "時間格子（mesh）上のコスト（cost）は改善するが、高精度simulationで制約（constraint）を破る → 時間格子を細分化し、discretization errorを確認する dynamics defectが停滞する → derivative、scaling、initial trajectoryを見直す 経路制約（path constraint）の違反がmesh間に残る → event区間やmesh密度を見直す solver時間がreal-time deadlineを超える → mesh、warm start、problem size、専用solverを検討する dynamicsが未同定または強くstochastic → defectを制約として置く決定論的な前提に依存しない定式化と比較する Warning NLPの success は、連続時間問題の正しさを直接保証しません。 discretization error、model mismatch、simulation validationを別に確認します。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -12663,7 +12663,7 @@
         "S076",
         "S102"
       ],
-      "text": "連続時間system x ˙ ( t ) = f ( x ( t ) , u ( t ) , t ) に対し、時間点ごとのstate x k とcontrol u k をdecision variablesとして並べます。 dynamicsをcollocation formulaで離散化し、隣接点の整合性をconstraintとしてNLP solverへ渡します。 これにより、 initial / terminal condition path constraint control bounds obstacle / safety constraint integral cost を同じmodelで扱えます。",
+      "text": "連続時間system x ˙ ( t ) = f ( x ( t ) , u ( t ) , t ) に対し、時間点ごとのstate x k とcontrol u k をdecision variablesとして並べます。 dynamicsはcollocation formulaで離散化します。 隣接点の整合性をNLPの制約（constraint）として渡します。 これにより、 initial / terminal condition path constraint control bounds obstacle / safety constraint integral cost を同じmodelで扱えます。",
       "title": "点ではなく軌道を変数にする"
     },
     {
@@ -12699,7 +12699,7 @@
         "S076",
         "S102"
       ],
-      "text": "軌道を位置だけで見せるとsolver状態が分かりません。 次を同期表示します。 physical trajectory state history control history dynamics defect path constraint violation objective accumulation active bounds mesh point / refinement KKT residualとtermination reason meshが粗いと、離散NLPでは可行でも連続systemへ戻すとconstraintを破ることがあります。 確認は、mesh上のdefectだけで終えず、高精度simulationとmesh変更の両方で行います。 mesh上のdefectを確認 得られたcontrolで高精度simulation mesh間でobjectiveとtrajectoryを比較 誤差が大きい区間をrefine warm startして再solve cost、feasibility、mesh依存性、KKT residual、solver時間は別々の診断軸です。",
+      "text": "軌道を位置だけで見せるとsolver状態が分かりません。 次を同期表示します。 physical trajectory state history control history dynamics defect path constraint violation objective accumulation active bounds mesh point / refinement KKT条件の残差（residual）とtermination reason 粗いmeshでは、離散NLPが可行でも連続systemへ戻すとconstraintを破ることがあります。 確認は、mesh上のdefectだけで終えず、高精度simulationとmesh変更の両方で行います。 mesh上のdefectを確認 得られたcontrolで高精度simulation mesh間でobjectiveとtrajectoryを比較 誤差が大きい区間をrefine warm startして再solve コスト（cost）とfeasibilityは別の診断軸です。 mesh依存性、KKT residual、solver時間も分けて読みます。",
       "title": "診断値"
     },
     {
@@ -22544,7 +22544,7 @@
         "S055",
         "S068"
       ],
-      "text": "多目的最適化の成果物は、単一のbestではなく、互いにdominateされない候補の集合です。 Pareto候補を作る計算、限られたevaluation budgetで比較する実験、最終的なpreferenceによる選択 を分けて扱います。 見ているもの: objective vector、domination、Pareto front、selected solution 動かしているもの: decision variableと候補集合 前進の判断: 非支配候補のcoverageと再現性が、固定したbudget・seed・停止条件の下で改善するか 別に確認するもの: objective direction、normalization、reference point、decision space 恐れていること: infeasible候補の混入、単一のscoreへの過剰な圧縮、比較条件の不一致 frontが広がったことだけでは、最終選択が決まったことになりません。",
+      "text": "多目的最適化の成果物は、単一のbestではなく、互いにdominateされない候補の集合です。 Pareto候補を作る計算、限られたevaluation budgetで比較する実験、最終的なpreferenceによる選択 を分けて扱います。 見ているもの: objective vector、domination、Pareto front、selected solution 動かしているもの: decision variableと候補集合 前進の判断: 非支配候補のcoverageと再現性が、固定したbudget・seed・停止条件の下で改善するか 別に確認するもの: objective direction、normalization、reference point、decision space 恐れていること: infeasible候補の混入、単一のscoreへの過剰な圧縮、比較条件の不一致 frontが広がったことだけでは、最終選択が決まったことになりません。 非支配候補のfrontと、frontの内側にあるdominated候補を分けてから、preferenceに合う一点を選びます。 非支配候補、dominated候補、preferenceで選ぶ一点を区別する教育用模式図です。目的の尺度、frontの凸性、橙の点の普遍的な優位は示しません。",
       "title": "30秒でつかむ"
     },
     {
@@ -22622,7 +22622,7 @@
         "S055",
         "S068"
       ],
-      "text": "costが数千、riskが0.01のようにscaleが違うと、plotやweighted sumが一方に支配されます。 objective direction physical unit normalization range ideal point nadir / reference point hypervolume reference を明示します。ideal pointは各目的を別々に最適化した値で、同時に実現できる解とは限りません。",
+      "text": "コスト（cost）が数千、riskが0.01のようにscaleが違うと、plotやweighted sumが一方に支配されます。 objective direction physical unit normalization range ideal point nadir / reference point hypervolume reference を明示します。ideal pointは各目的を別々に最適化した値で、同時に実現できる解とは限りません。",
       "title": "Normalizationとreference"
     },
     {
@@ -22778,7 +22778,7 @@
         "S055",
         "S068"
       ],
-      "text": "minimizationで解 x a が x b をdominateするとは、 すべての目的で f i ( x a ) ≤ f i ( x b ) 少なくとも一つでstrictに良い ことです。どの他解にもdominateされない解がPareto optimalです。 一方を改善すると他方が悪化する場合、数学だけでは最終選択を一意に決められません。 preferenceとriskを明示します。 policyと実務制約も別に確認します。",
+      "text": "minimizationで解 x a が x b をdominateするとは、 すべての目的で f i ( x a ) ≤ f i ( x b ) 少なくとも一つでstrictに良い ことです。どの他解にもdominateされない解がPareto optimalです。 一方を改善すると他方が悪化する場合、数学だけでは最終選択を一意に決められません。 preferenceとriskを明示します。 運用方針（policy）と実務制約も別に確認します。",
       "title": "単一のbestがない理由"
     },
     {
@@ -22804,7 +22804,7 @@
         "S055",
         "S068"
       ],
-      "text": "本当に競合する複数目的がある preferenceを事前に完全固定できない 候補集合を意思決定者へ提示したい black-boxやnonconvexでscalar solverだけではfrontを取りにくい 複数設計のrobustnessを比較したい",
+      "text": "本当に競合する複数目的がある preferenceを事前に完全固定できない 候補集合を意思決定者へ提示したい black-boxやnonconvexでscalarizationだけではfrontを取りにくい 複数設計のrobustnessを比較したい",
       "title": "向いている条件"
     },
     {
@@ -22856,7 +22856,7 @@
         "S055",
         "S068"
       ],
-      "text": "単位換算可能な同一価値を別目的として重複計上 hard constraintをobjectiveへ弱く入れてinfeasible候補を残す preferenceが明確なのに巨大frontを無目的に生成 objective directionを混同 weighted sum一回だけで「Pareto最適化済み」とする 2D plotの左下だけ見てdecision variablesを確認しない stochastic algorithmの単一seedだけをfrontとして固定",
+      "text": "単位換算可能な同一価値を別目的として重複計上 hardな制約（constraint）をobjectiveへ弱く入れてinfeasible候補を残す preferenceが明確なのに巨大frontを無目的に生成 objective directionを混同 weighted sum一回だけで「Pareto最適化済み」とする 2D plotの左下だけ見てdecision variablesを確認しない stochastic algorithmの単一seedだけをfrontとして固定",
       "title": "避ける／切り替える条件"
     },
     {
