@@ -30,6 +30,20 @@ last_reviewed: 2026-07-26
 近傍が狭すぎると改善の機会を見逃し、広すぎると1回の反復で近傍全体を評価するcostが増えます。
 同じ問題でも、近傍の取り方次第で到達する解の質と探索速度が大きく変わります。
 
+上段は、地点番号を`0 → 2 → 4 → 6 → 1 → 3 → 5 → 7`の順で結んだ初期routeです。
+下段は、2-optでsegment反転を4回受理した後のrouteです。
+
+![固定した8地点の巡回routeをbest-improvement 2-optで改善した実行結果。上段の初期routeは5か所でedgeが交差し、距離は29.07。segment反転を4回受理すると、下段では地点0から7までを周囲に沿って巡回し、交差は0、距離は16.88になる。最後は2-opt近傍内に改善moveがなく停止する。](./media/local-search-two-opt-execution.svg "固定8地点のrouteで、交差のある初期解から2-opt近傍内の局所最適へ進む実行結果")
+
+2-optは、routeからedgeを2本選んで間の順序を反転します。
+この固定例では、交差がほどけるたびに距離も短くなります。
+最後は2-opt近傍内に改善moveがなくなりますが、大域最適性を証明したわけではありません。
+
+> 固定したEuclidean 8地点のbest-improvement教材です。
+> 距離は`29.07 → 16.88`、交差は`5 → 0`、受理moveは4回です。
+> time window、vehicle capacity、trafficは含みません。
+> 別初期routeや別近傍、routing solver一般の性能も示していません。
+
 ## 局所最適で止まる性質と脱出戦略
 
 組合せlocal searchは、定義した近傍に現在解より良い解がなくなった時点で停止します。
@@ -64,47 +78,64 @@ side constraintsが複雑で、近傍設計自体が難しい場合も同様で�
 ## Python
 
 ```python
-import numpy as np
+from math import hypot
 
 
-def tour_length(tour: np.ndarray, points: np.ndarray) -> float:
-    ordered = points[tour]
-    diffs = ordered - np.roll(ordered, -1, axis=0)
-    return float(np.sqrt((diffs**2).sum(axis=1)).sum())
+points = (
+    (0.0, 0.0), (2.0, 0.3), (4.2, 0.0), (4.5, 2.0),
+    (4.0, 4.2), (2.1, 4.5), (-0.2, 4.0), (-0.5, 2.0),
+)
 
 
-def two_opt_step(tour: np.ndarray, points: np.ndarray) -> tuple[np.ndarray, bool]:
-    n = len(tour)
+def tour_length(tour: tuple[int, ...]) -> float:
+    return sum(
+        hypot(
+            points[tour[(index + 1) % len(tour)]][0] - points[tour[index]][0],
+            points[tour[(index + 1) % len(tour)]][1] - points[tour[index]][1],
+        )
+        for index in range(len(tour))
+    )
+
+
+def two_opt_step(
+    tour: tuple[int, ...],
+) -> tuple[tuple[int, ...], float, tuple[int, int] | None]:
     best_tour = tour
-    best_length = tour_length(tour, points)
-    improved = False
-
-    for i in range(n - 1):
-        for j in range(i + 1, n):
-            candidate = tour.copy()
-            candidate[i : j + 1] = candidate[i : j + 1][::-1]
-            candidate_length = tour_length(candidate, points)
-            if candidate_length < best_length:
+    best_length = tour_length(tour)
+    best_move = None
+    for start in range(1, len(tour) - 1):
+        for stop in range(start + 1, len(tour)):
+            candidate = (
+                tour[:start]
+                + tuple(reversed(tour[start : stop + 1]))
+                + tour[stop + 1 :]
+            )
+            candidate_length = tour_length(candidate)
+            if candidate_length < best_length - 1e-12:
                 best_tour = candidate
                 best_length = candidate_length
-                improved = True
+                best_move = (start, stop)
+    return best_tour, best_length, best_move
 
-    return best_tour, improved
 
+tour = (0, 2, 4, 6, 1, 3, 5, 7)
+history = [(tour, tour_length(tour), None)]
+while True:
+    tour, length, move = two_opt_step(tour)
+    if move is None:
+        break
+    history.append((tour, length, move))
 
-rng = np.random.default_rng(0)
-points = rng.uniform(size=(8, 2))
-tour = np.arange(len(points))
-
-improved = True
-while improved:
-    tour, improved = two_opt_step(tour, points)
-
-print(tour, tour_length(tour, points))
+print(history[0])
+print(history[-1])
 ```
 
-このコードは、小さなTSP instanceで2-opt近傍を総当たりする教育用の実装です。
-改善がなくなるまで反復します。
+初期距離は`29.071...`です。
+4回のsegment反転後は、routeが`(0, 1, 2, 3, 4, 5, 6, 7)`になります。
+距離は`16.882...`です。
+
+このコードは、小さなTSP instanceで2-opt近傍を総当たりする教育用実装です。
+改善がなくなるまでbest-improvementを反復します。
 実務のrouting／scheduling問題は、より複雑な近傍や制約を扱います。
 [OR-Tools Routing](https://developers.google.com/optimization/routing)のようなmetaheuristic frameworkを使う場合は、利用versionの公式referenceを確認します。
 

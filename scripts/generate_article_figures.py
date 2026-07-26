@@ -47,6 +47,9 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "lqr-backward-forward-execution.svg": _lqr_backward_forward_svg(dataset_version).encode(
             "utf-8"
         ),
+        "local-search-two-opt-execution.svg": _local_search_two_opt_svg(dataset_version).encode(
+            "utf-8"
+        ),
         "least-squares-fit-diagnostic.svg": _least_squares_fit_svg(dataset_version).encode("utf-8"),
         "multiple-shooting-continuity-execution.svg": _multiple_shooting_svg(
             dataset_version
@@ -995,6 +998,284 @@ def _pdlp_residual_svg(dataset_version: str) -> str:
             "</svg>\n",
         ]
     )
+    return "".join(elements)
+
+
+def _tour_length(
+    tour: tuple[int, ...],
+    points: tuple[tuple[float, float], ...],
+) -> float:
+    return sum(
+        math.hypot(
+            points[tour[(index + 1) % len(tour)]][0] - points[tour[index]][0],
+            points[tour[(index + 1) % len(tour)]][1] - points[tour[index]][1],
+        )
+        for index in range(len(tour))
+    )
+
+
+def _tour_crossings(
+    tour: tuple[int, ...],
+    points: tuple[tuple[float, float], ...],
+) -> int:
+    def orientation(
+        first: tuple[float, float],
+        second: tuple[float, float],
+        third: tuple[float, float],
+    ) -> float:
+        return (second[0] - first[0]) * (third[1] - first[1]) - (second[1] - first[1]) * (
+            third[0] - first[0]
+        )
+
+    crossings = 0
+    size = len(tour)
+    for first_index in range(size):
+        first_start = points[tour[first_index]]
+        first_end = points[tour[(first_index + 1) % size]]
+        for second_index in range(first_index + 1, size):
+            if (second_index + 1) % size == first_index or (first_index + 1) % size == second_index:
+                continue
+            second_start = points[tour[second_index]]
+            second_end = points[tour[(second_index + 1) % size]]
+            if (
+                orientation(first_start, first_end, second_start)
+                * orientation(first_start, first_end, second_end)
+                < 0.0
+                and orientation(second_start, second_end, first_start)
+                * orientation(second_start, second_end, first_end)
+                < 0.0
+            ):
+                crossings += 1
+    return crossings
+
+
+def _local_search_two_opt_probe() -> dict[str, object]:
+    points = (
+        (0.0, 0.0),
+        (2.0, 0.3),
+        (4.2, 0.0),
+        (4.5, 2.0),
+        (4.0, 4.2),
+        (2.1, 4.5),
+        (-0.2, 4.0),
+        (-0.5, 2.0),
+    )
+    initial_tour = (0, 2, 4, 6, 1, 3, 5, 7)
+    tour = initial_tour
+    history: list[dict[str, object]] = [
+        {
+            "iteration": 0,
+            "tour": tour,
+            "length": _tour_length(tour, points),
+            "move": None,
+            "crossings": _tour_crossings(tour, points),
+        }
+    ]
+    evaluated_candidates = 0
+
+    while True:
+        best_tour = tour
+        best_length = _tour_length(tour, points)
+        best_move: tuple[int, int] | None = None
+        for start in range(1, len(tour) - 1):
+            for stop in range(start + 1, len(tour)):
+                evaluated_candidates += 1
+                candidate = (
+                    tour[:start] + tuple(reversed(tour[start : stop + 1])) + tour[stop + 1 :]
+                )
+                candidate_length = _tour_length(candidate, points)
+                if candidate_length < best_length - 1e-12:
+                    best_tour = candidate
+                    best_length = candidate_length
+                    best_move = (start, stop)
+        if best_move is None:
+            break
+        tour = best_tour
+        history.append(
+            {
+                "iteration": len(history),
+                "tour": tour,
+                "length": best_length,
+                "move": best_move,
+                "crossings": _tour_crossings(tour, points),
+            }
+        )
+
+    initial_length = float(history[0]["length"])
+    final_length = float(history[-1]["length"])
+    return {
+        "points": points,
+        "initial_tour": initial_tour,
+        "final_tour": tour,
+        "history": tuple(history),
+        "initial_length": initial_length,
+        "final_length": final_length,
+        "relative_improvement": (initial_length - final_length) / initial_length,
+        "accepted_moves": len(history) - 1,
+        "evaluated_candidates": evaluated_candidates,
+        "initial_crossings": history[0]["crossings"],
+        "final_crossings": history[-1]["crossings"],
+    }
+
+
+def _local_search_two_opt_svg(dataset_version: str) -> str:
+    probe = _local_search_two_opt_probe()
+    points = probe["points"]
+    initial_tour = probe["initial_tour"]
+    final_tour = probe["final_tour"]
+    history = probe["history"]
+    if not all(
+        isinstance(values, tuple)
+        for values in (
+            points,
+            initial_tour,
+            final_tour,
+            history,
+        )
+    ):
+        raise TypeError("local-search teaching probe collections must be tuples")
+
+    width, height = 640, 1080
+    plot_left, plot_right = 84.0, 556.0
+    point_min_x, point_max_x = -0.5, 4.5
+    point_min_y, point_max_y = 0.0, 4.5
+
+    def point_position(
+        point: tuple[float, float],
+        *,
+        plot_top: float,
+        plot_bottom: float,
+    ) -> tuple[float, float]:
+        x = plot_left + (point[0] - point_min_x) / (point_max_x - point_min_x) * (
+            plot_right - plot_left
+        )
+        y = plot_bottom - (point[1] - point_min_y) / (point_max_y - point_min_y) * (
+            plot_bottom - plot_top
+        )
+        return x, y
+
+    def route_elements(
+        tour: tuple[int, ...],
+        *,
+        plot_top: float,
+        plot_bottom: float,
+        color: str,
+    ) -> list[str]:
+        route_points = [
+            point_position(points[node], plot_top=plot_top, plot_bottom=plot_bottom)
+            for node in (*tour, tour[0])
+        ]
+        polyline = " ".join(f"{x:.2f},{y:.2f}" for x, y in route_points)
+        elements = [
+            f'<polyline points="{polyline}" fill="none" stroke="{color}" stroke-width="5" '
+            'stroke-linecap="round" stroke-linejoin="round"/>'
+        ]
+        for node, point in enumerate(points):
+            x, y = point_position(point, plot_top=plot_top, plot_bottom=plot_bottom)
+            fill = "#102a2e" if node == 0 else "#fff"
+            text_color = "#fff" if node == 0 else "#102a2e"
+            elements.extend(
+                [
+                    f'<circle cx="{x:.2f}" cy="{y:.2f}" r="16" fill="{fill}" '
+                    f'stroke="{color}" stroke-width="4"/>',
+                    f'<text x="{x:.2f}" y="{y + 5:.2f}" text-anchor="middle" '
+                    f'style="font: 700 14px system-ui, sans-serif; fill: {text_color};">'
+                    f"{node}</text>",
+                ]
+            )
+        return elements
+
+    elements = [
+        (
+            f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+            f'viewBox="0 0 {width} {height}" role="img" '
+            'aria-labelledby="figure-title figure-description">'
+        ),
+        '<title id="figure-title">2-opt local searchで交差routeを改善する実行結果</title>',
+        (
+            '<desc id="figure-description">8地点の固定巡回routeをbest-improvement 2-optで'
+            "改善する教材。初期routeには5交差があり、距離は29.07。"
+            "segment反転を4回受理すると、周囲を順に回る交差0のrouteとなる。"
+            "最終距離は16.88で、2-opt近傍内に改善moveがなくなる。</desc>"
+        ),
+        '<rect width="640" height="1080" rx="24" fill="#fbfaf5"/>',
+        '<text x="32" y="48" class="ls-title">edgeを2本つなぎ替え、交差をほどく</text>',
+        (
+            '<text x="32" y="80" class="ls-subtitle">'
+            "fixed 8-stop route · best-improvement 2-opt · depot 0 fixed</text>"
+        ),
+        '<rect x="24" y="112" width="592" height="360" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="150" class="ls-panel">before · input order</text>',
+        (
+            '<text x="596" y="150" text-anchor="end" class="ls-length">'
+            f"length {float(probe['initial_length']):.2f}</text>"
+        ),
+        *route_elements(
+            initial_tour,
+            plot_top=184.0,
+            plot_bottom=438.0,
+            color="#d67835",
+        ),
+        '<line x1="320" y1="484" x2="320" y2="516" stroke="#d67835" stroke-width="4"/>',
+        '<path d="M312 508 L320 520 L328 508" fill="none" stroke="#d67835" stroke-width="4"/>',
+        (
+            '<text x="338" y="507" class="ls-moves">'
+            f"best-improvement · {int(probe['accepted_moves'])} accepted reversals</text>"
+        ),
+        '<rect x="24" y="534" width="592" height="360" rx="18" fill="#fff" stroke="#cad8d2"/>',
+        '<text x="44" y="572" class="ls-panel">after · no improving 2-opt move</text>',
+        (
+            '<text x="596" y="572" text-anchor="end" class="ls-length">'
+            f"length {float(probe['final_length']):.2f}</text>"
+        ),
+        *route_elements(
+            final_tour,
+            plot_top=606.0,
+            plot_bottom=860.0,
+            color="#2c7564",
+        ),
+        '<text x="32" y="940" class="ls-metric-label">route length</text>',
+        (
+            '<text x="32" y="970" class="ls-metric">'
+            f"{float(probe['initial_length']):.2f} → {float(probe['final_length']):.2f}"
+            "</text>"
+        ),
+        '<text x="286" y="940" class="ls-metric-label">crossings</text>',
+        (
+            '<text x="286" y="970" class="ls-metric">'
+            f"{int(probe['initial_crossings'])} → {int(probe['final_crossings'])}</text>"
+        ),
+        '<text x="456" y="940" class="ls-metric-label">accepted</text>',
+        (f'<text x="456" y="970" class="ls-metric">{int(probe["accepted_moves"])} moves</text>'),
+        (
+            '<text x="32" y="1014" class="ls-meta">'
+            "実行生成: scripts.generate_article_figures._local_search_two_opt_probe "
+            f"· dataset {html.escape(dataset_version)}</text>"
+        ),
+        (
+            '<text x="32" y="1046" class="ls-limit">'
+            "固定Euclidean 8地点教材です。time window、vehicle capacity、traffic、"
+            "大域最適性は示しません。</text>"
+        ),
+        (
+            '<text x="32" y="1068" class="ls-limit">'
+            "別初期route、別近傍、実routing solver一般の性能も示しません。</text>"
+        ),
+        """
+<style>
+  .ls-title { font: 700 24px system-ui, sans-serif; fill: #102a2e; }
+  .ls-subtitle { font: 400 17px system-ui, sans-serif; fill: #45656a; }
+  .ls-panel { font: 700 21px system-ui, sans-serif; fill: #102a2e; }
+  .ls-length { font: 700 17px system-ui, sans-serif; fill: #2c7564; }
+  .ls-moves { font: 700 14px system-ui, sans-serif; fill: #8b4c3d; }
+  .ls-metric-label { font: 400 14px system-ui, sans-serif; fill: #45656a; }
+  .ls-metric { font: 700 19px system-ui, sans-serif; fill: #102a2e; }
+  .ls-meta { font: 400 13px system-ui, sans-serif; fill: #45656a; }
+  .ls-limit { font: 400 13px system-ui, sans-serif; fill: #8b4c3d; }
+</style>
+""",
+        "</svg>\n",
+    ]
     return "".join(elements)
 
 

@@ -9,6 +9,7 @@ from scripts.generate_article_figures import (
     _active_set_qp_probe,
     _direct_shooting_probe,
     _finite_horizon_lqr_probe,
+    _local_search_two_opt_probe,
     _multiple_shooting_probe,
     _network_simplex_transport_probe,
     _pbt_population_probe,
@@ -107,6 +108,27 @@ def test_network_simplex_probe_pivots_one_feasible_transport_tree() -> None:
     assert probe["optimized_balance_error"] == pytest.approx(0.0)
 
 
+def test_local_search_probe_accepts_four_two_opt_reversals() -> None:
+    probe = _local_search_two_opt_probe()
+    history = probe["history"]
+
+    assert probe["initial_tour"] == (0, 2, 4, 6, 1, 3, 5, 7)
+    assert probe["final_tour"] == (0, 1, 2, 3, 4, 5, 6, 7)
+    assert [item["move"] for item in history[1:]] == [
+        (3, 6),
+        (2, 5),
+        (1, 2),
+        (4, 5),
+    ]
+    assert probe["initial_length"] == pytest.approx(29.071445620639636)
+    assert probe["final_length"] == pytest.approx(16.882399368664082)
+    assert probe["relative_improvement"] == pytest.approx(0.41927898636460614)
+    assert probe["accepted_moves"] == 4
+    assert probe["evaluated_candidates"] == 105
+    assert probe["initial_crossings"] == 5
+    assert probe["final_crossings"] == 0
+
+
 def test_lqr_probe_matches_the_fixed_article_equations() -> None:
     states, controls, gains = _finite_horizon_lqr_probe()
 
@@ -201,6 +223,7 @@ def test_article_figures_are_deterministic_and_current() -> None:
         "gradient-family-execution.svg",
         "lqr-backward-forward-execution.svg",
         "least-squares-fit-diagnostic.svg",
+        "local-search-two-opt-execution.svg",
         "multiple-shooting-continuity-execution.svg",
         "network-simplex-pivot-execution.svg",
         "optimal-control-mesh-execution.svg",
@@ -242,6 +265,7 @@ def test_articles_place_execution_results_before_long_diagnostic_sections() -> N
         "content/methods/momentum-sgd.md": "gradient-family-execution.svg",
         "content/methods/ilqr-ddp.md": "lqr-backward-forward-execution.svg",
         "content/methods/least-squares.md": "least-squares-fit-diagnostic.svg",
+        "content/methods/local-search-combinatorial.md": "local-search-two-opt-execution.svg",
         "content/methods/multiple-shooting.md": "multiple-shooting-continuity-execution.svg",
         "content/methods/network-simplex.md": "network-simplex-pivot-execution.svg",
         "content/methods/projected-gradient.md": "so3-update-diagnostic.svg",
