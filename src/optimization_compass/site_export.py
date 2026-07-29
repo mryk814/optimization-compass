@@ -402,7 +402,6 @@ def export_site_data(
         canonical_identity_json(release_identity), encoding="utf-8", newline="\n"
     )
     _write_json(output_dir / "release-catalog.json", release_catalog.as_json_object())
-    _write_content_index(output_dir / "content.json", release["version"])
     _write_gallery_index(
         output_dir / "gallery.json",
         GALLERY_SEED,
@@ -433,6 +432,21 @@ def export_site_data(
         learning_slice_scenarios=learning_slice_scenarios,
         dataset_version=release["version"],
     )
+    media_scenario = next(
+        scenario
+        for scenario in scenario_index.scenarios
+        if scenario.scenario_id == "SCENARIO_NM_QUADRATIC"
+    )
+    media_trace = next(
+        trace for trace in generated_traces if trace.scenario_id == media_scenario.scenario_id
+    )
+    derived_media = write_derived_media(
+        output_dir,
+        scenario=media_scenario,
+        trace=media_trace,
+    )
+    _write_json(output_dir / "media/manifest.json", derived_media)
+    _write_content_index(output_dir / "content.json", release["version"])
     validate_comparison_benchmark_contexts(
         comparison_seed,
         repository.benchmark_contexts(),
@@ -515,20 +529,6 @@ def export_site_data(
         ],
     )
     _write_json(output_dir / "formulation-primer.json", formulation_primer)
-    media_scenario = next(
-        scenario
-        for scenario in scenario_index.scenarios
-        if scenario.scenario_id == "SCENARIO_NM_QUADRATIC"
-    )
-    media_trace = next(
-        trace for trace in generated_traces if trace.scenario_id == media_scenario.scenario_id
-    )
-    derived_media = write_derived_media(
-        output_dir,
-        scenario=media_scenario,
-        trace=media_trace,
-    )
-    _write_json(output_dir / "media/manifest.json", derived_media)
     search_tree_routes = {
         entry.trace_id: f"/theater/search-tree/{entry.artifact_id}"
         for entry in search_tree_index.artifacts

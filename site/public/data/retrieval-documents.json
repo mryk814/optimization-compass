@@ -12109,7 +12109,7 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:cp-search:domainをどう削るか",
+      "chunk_id": "content:cp-search:30秒でつかむ",
       "dataset_version": "0.18.19",
       "document_id": "content:cp-search",
       "license": "CC-BY-4.0",
@@ -12125,13 +12125,13 @@
         "S022",
         "S053"
       ],
-      "text": "制約プログラミング探索では、各変数が取り得る値の集合（domain）を明示的に持ちます。各制約は「この制約を満たせない値をdomainから消してよいか」を判定するpropagatorとして働き、矛盾なく消せる値を繰り返し取り除きます。domainがすべて単一値になれば解、どこかのdomainが空になれば矛盾です。全変数のdomainを縮められなくなった時点で、1つの変数を選んで値を仮決定し（branching）、再びpropagationへ戻ります。",
-      "title": "domainをどう削るか"
+      "text": "各変数は、取り得る値の集合（domain）を持ちます。 一つの値を仮決定したら、制約を満たせない値をほかのdomainから消します。 見ているもの: 各変数のdomainとconstraint violation 動かすもの: domainの縮小と探索木のbranch 前進の判断: domainが縮み、単一値へ近づいているか 矛盾の判断: どれか一つでもdomainが空になったか 恐れていること: 弱いpropagationで巨大な探索木を残すこと 先に値を消し、消し切れなかった部分だけを探す手法です。",
+      "title": "30秒でつかむ"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:cp-search:global-constraintの宣言力",
+      "chunk_id": "content:cp-search:domainを削ってからbranchする",
       "dataset_version": "0.18.19",
       "document_id": "content:cp-search",
       "license": "CC-BY-4.0",
@@ -12147,8 +12147,8 @@
         "S022",
         "S053"
       ],
-      "text": "alldifferent（全変数が異なる値を取る）やcumulative（資源使用量が容量を超えない）のようなglobal constraintは、同じ条件を等号・不等号の組み合わせへ分解するより強い伝播を行えます。alldifferentは、単なるペアごとの不等号制約の集合として書くよりも、ある値を1つの変数が確定した時点で他の変数のdomainから即座にその値を除去でき、矛盾をより早く検出します。global constraintの選び方は、モデルの読みやすさだけでなく、伝播の強さそのものを左右します。",
-      "title": "global constraintの宣言力"
+      "text": "propagatorは、現在の仮決定と制約から不可能な値を取り除きます。 すべてのdomainが単一値になれば解です。 一つでも空になれば、そのbranchには解がないため直前の分岐へ戻ります。 propagationだけで決まらない場合は、domainの小さい変数などを選んでbranchします。 仮決定のたびに、再びpropagationを実行します。",
+      "title": "domainを削ってからbranchする"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12191,13 +12191,13 @@
         "S022",
         "S053"
       ],
-      "text": "python from __future__ import annotations Domains = dict [ str , list [ int ]] def forward_check ( domains : Domains , var : str , value : int ) -> Domains | None : reduced = { name : list ( values ) for name , values in domains . items ()} reduced [ var ] = [ value ] for other in reduced : if other == var : continue reduced [ other ] = [ v for v in reduced [ other ] if v != value ] if not reduced [ other ]: return None return reduced def backtrack ( domains : Domains , order : list [ str ]) -> dict [ str , int ] | None : if not order : return { name : values [ 0 ] for name , values in domains . items ()} var , rest = order [ 0 ], order [ 1 :] for value in domains [ var ]: reduced = forward_check ( domains , var , value ) if reduced is not None : result = backtrack ( reduced , rest ) if result is not None : return result return None variables = [ \"a\" , \"b\" , \"c\" , \"d\" ] domains : Domains = { name : [ 0 , 1 , 2 , 3 ] for name in variables } solution = backtrack ( domains , variables ) print ( solution ) forward_check は、1つの変数へ値を仮決定するたびに他の変数のdomainからその値を除くalldifferentの簡易版propagationです。空になったdomainがあれば即座に打ち切ります。実務のglobal constraint propagatorやbranching戦略は、利用するsolver（ OR-Tools CP-SAT や MiniZinc 経由のbackend）の公式referenceで、利用versionの説明を確認します。",
+      "text": "python from __future__ import annotations size = 4 stats = { \"nodes\" : 0 , \"pruned\" : 0 , \"conflicts\" : 0 , \"backtracks\" : 0 } def search ( domains , assigned ): if len ( assigned ) == size : return assigned row = min ( ( candidate for candidate in range ( size ) if candidate not in assigned ), key = lambda candidate : ( len ( domains [ candidate ]), candidate ), ) for column in domains [ row ]: stats [ \"nodes\" ] += 1 next_domains = [ list ( values ) for values in domains ] stats [ \"pruned\" ] += len ( next_domains [ row ]) - 1 next_domains [ row ] = [ column ] next_assigned = { ** assigned , row : column } conflict = False for other_row in range ( size ): if other_row in next_assigned : continue previous = next_domains [ other_row ] next_domains [ other_row ] = [ candidate for candidate in previous if candidate != column and abs ( candidate - column ) != abs ( other_row - row ) ] stats [ \"pruned\" ] += len ( previous ) - len ( next_domains [ other_row ]) conflict |= not next_domains [ other_row ] if conflict : stats [ \"conflicts\" ] += 1 continue solution = search ( next_domains , next_assigned ) if solution is not None : return solution stats [ \"backtracks\" ] += 1 return None initial_domains = [ list ( range ( size )) for _ in range ( size )] solution = search ( initial_domains , {}) columns = [ solution [ row ] for row in range ( size )] print ( f \"solution columns: { columns } \" ) print ( f \"nodes= { stats [ 'nodes' ] } , pruned= { stats [ 'pruned' ] } , \" f \"conflicts= { stats [ 'conflicts' ] } , backtracks= { stats [ 'backtracks' ] } \" ) text solution columns: [1, 3, 0, 2] nodes=8, pruned=29, conflicts=2, backtracks=2 pruned=29 は、探索した各branchで削除した値の累積です。 一意な値29個を消したという意味ではありません。 このコードはforward checkingの教育用実装です。 OR-Tools CP-SAT や MiniZinc のsolver内部を再現しません。",
       "title": "Python"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:cp-search:伝播の強さと分岐戦略の関係",
+      "chunk_id": "content:cp-search:まず確認すること",
       "dataset_version": "0.18.19",
       "document_id": "content:cp-search",
       "license": "CC-BY-4.0",
@@ -12213,13 +12213,13 @@
         "S022",
         "S053"
       ],
-      "text": "伝播が強いほどdomainは早く縮みますが、伝播だけで解に至らない問題も多く、分岐戦略（どの変数を先に決めるか、どの値から試すか）が探索木の大きさを左右します。伝播が弱い制約表現では分岐の負担が増え、逆に高コストな強い伝播を使うと1 nodeあたりの計算が重くなります。目的関数がある場合は、見つかった解の目的値より良い値を要求する新しいbound制約を都度追加し、伝播と探索を反復して最適解へ絞り込みます。モデリング言語（ MiniZinc など）はモデルの記述とsolverの探索戦略を分離しており、同じモデルを異なるsolver backendで実行できます。",
-      "title": "伝播の強さと分岐戦略の関係"
+      "text": "項目 確認内容 variables Boolean・整数・有限集合で表せるか constraints alldifferent、cumulative、no-overlapなどで自然に書けるか propagation 仮決定から除外できる値があるか search どの変数・値からbranchするか objective feasibilityだけか、boundを更新する最適化か scale 連続量の整数化で必要な精度を保てるか 本質的に連続で滑らかな問題を、粗い整数gridへ無理に移しません。",
+      "title": "まず確認すること"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:cp-search:向いている条件",
+      "chunk_id": "content:cp-search:向く条件・避ける条件",
       "dataset_version": "0.18.19",
       "document_id": "content:cp-search",
       "license": "CC-BY-4.0",
@@ -12235,8 +12235,30 @@
         "S022",
         "S053"
       ],
-      "text": "変数が有限domainの整数・Boolean alldifferent、cumulative、no-overlapなどglobal constraintで問題が自然に書ける scheduling・割当・pathのようなfeasibility中心の問題 目的関数があっても、bound制約の反復で最適化を扱える規模 本質的に連続で滑らかな問題や、実数精度を整数scaleで表せない問題では、このアプローチを第一候補にしません。",
-      "title": "向いている条件"
+      "text": "向きやすい条件: 変数がBoolean・整数・有限集合 scheduling、割当、配置などfeasibilityが難しい global constraint で問題構造を直接表せる 矛盾を早い段階で検出したい 避ける条件: 本質的に連続で滑らかな問題 整数化で必要な精度を失う問題 domainが巨大でpropagationがほとんど効かない問題 問題構造に合う専用graph algorithmや動的計画法がある場合",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:大域制約-global-constraint-の強さ",
+      "dataset_version": "0.18.19",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "alldifferent や cumulative のような global constraint は、条件全体を一つの構造として伝播します。 同じ条件を小さな制約へ分解すると、論理的には同値でも早期に消せる値が減る場合があります。 強いpropagationは探索木を小さくできますが、1 nodeあたりの処理は重くなります。 したがってbranch数だけでなく、propagation数と wall time も見ます。",
+      "title": "大域制約（global constraint）の強さ"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12257,7 +12279,7 @@
         "S022",
         "S053"
       ],
-      "text": "conflict数やbranch数が増え続けて収束しない propagationを重ねてもdomainがほとんど縮まらない 整数scaleが過大で、変数のdomainが不必要に大きい symmetryにより等価な部分木を繰り返し探索する 一部制約だけ強い伝播を持つglobal constraintへ書き換えられていない",
+      "text": "domainが縮まらない → global constraintやencodingを見直す branch数だけ増える → variable / value orderingを見直す 同じ形の部分木を反復する → symmetry breakingを加える 1 nodeが重すぎる → propagation strengthとのtrade-offを測る 整数scaleが過大 → 単位・精度・別familyを見直す 線形緩和が強い → MILPのBranch-and-Cutとも比較する",
       "title": "失敗・切替の兆候"
     },
     {
@@ -12279,8 +12301,30 @@
         "S022",
         "S053"
       ],
-      "text": "CDCLの学習節と非時系列バックトラックとの違いは CDCL SAT 、propagationと探索を統合した実装は CP-SAT 、制約プログラミング・SAT全体の選び分けは 制約プログラミング・SATの選び分け で確認できます。",
+      "text": "propagationとSAT学習を統合する: CP-SAT conflictから学習節を作る: CDCL SAT 離散手法全体から選ぶ: 制約プログラミング・SATの選び分け",
       "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:cp-search:空domainを見つけたら戻る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:cp-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cdcl-sat",
+        "content:cp-sat",
+        "content:family.constraint-programming",
+        "method:M_CP_SEARCH",
+        "source:S022",
+        "source:S053"
+      ],
+      "source_ids": [
+        "S022",
+        "S053"
+      ],
+      "text": "次の固定実行は、4×4盤の各行へqueenを一つ置く4-Queensです。 domainの数字は列番号0–3を表し、同じ列と斜めにqueenを置けない制約を使います。 固定4-Queensをforward checkingと最小domain優先で解いた実行です。global constraint、学習節、restartを備える実solverの内部や一般性能は示しません。 Q1 = 0 は一見置ける候補です。 しかし先へ進むと Q3 = ∅ または Q4 = ∅ になり、その場で枝を捨てられます。 最終解だけでは、探索しなかった組合せが見えません。 domainの縮小と空集合を残すと、propagationが探索を減らした場所を説明できます。",
+      "title": "空domainを見つけたら戻る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12301,7 +12345,7 @@
         "S022",
         "S053"
       ],
-      "text": "conflicts branches propagations best_bound（最適化時） feasible_solutions",
+      "text": "domain sizeの推移 pruned value数とpropagation数 conflicts / branches / backtracks nodeあたりのpropagation cost feasible solution数 objective / best bound / gap（最適化時） random seed、worker数、wall time",
       "title": "診断値"
     },
     {
@@ -12643,44 +12687,6 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:dijkstra-astar:a-探索",
-      "dataset_version": "0.18.19",
-      "document_id": "content:dijkstra-astar",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:cp-sat",
-        "content:dynamic-programming",
-        "method:M_DIJKSTRA_ASTAR",
-        "source:S054"
-      ],
-      "source_ids": [
-        "S054"
-      ],
-      "text": "A*は、現在までのcostとgoalまでの残りcostの推定を足したpriorityでnodeを選びます。 f ( n ) = g ( n ) + h ( n ) g ( n ) : 始点から現在nodeまでの実cost h ( n ) : goalまでの推定cost h が真の残りcostを過大評価しないadmissible heuristicなら最適性を維持できます。consistent heuristicなら再展開を抑えやすくなります。",
-      "title": "A*探索"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
-      "chunk_id": "content:dijkstra-astar:dijkstra法",
-      "dataset_version": "0.18.19",
-      "document_id": "content:dijkstra-astar",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:cp-sat",
-        "content:dynamic-programming",
-        "method:M_DIJKSTRA_ASTAR",
-        "source:S054"
-      ],
-      "source_ids": [
-        "S054"
-      ],
-      "text": "始点からの暫定距離が最小のnodeを取り出し、そのnodeから伸びるedgeをrelaxします。edge costが非負なら、priority queueから確定した距離は後から改善されません。",
-      "title": "Dijkstra法"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
       "chunk_id": "content:dijkstra-astar:overview",
       "dataset_version": "0.18.19",
       "document_id": "content:dijkstra-astar",
@@ -12694,13 +12700,13 @@
       "source_ids": [
         "S054"
       ],
-      "text": "非負のedge costを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。",
+      "text": "非負の重みを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。",
       "title": "Dijkstra法とA*探索"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:dijkstra-astar:python-dijkstra法",
+      "chunk_id": "content:dijkstra-astar:python",
       "dataset_version": "0.18.19",
       "document_id": "content:dijkstra-astar",
       "license": "CC-BY-4.0",
@@ -12713,8 +12719,8 @@
       "source_ids": [
         "S054"
       ],
-      "text": "python import heapq from collections.abc import Mapping Graph = Mapping [ str , list [ tuple [ str , float ]]] def dijkstra ( graph : Graph , start : str ) -> dict [ str , float ]: distance = { node : float ( \"inf\" ) for node in graph } distance [ start ] = 0.0 queue = [( 0.0 , start )] while queue : current_distance , node = heapq . heappop ( queue ) if current_distance != distance [ node ]: continue for neighbor , edge_cost in graph [ node ]: if edge_cost < 0 : raise ValueError ( \"Dijkstra requires non-negative edge costs\" ) candidate = current_distance + edge_cost if candidate < distance [ neighbor ]: distance [ neighbor ] = candidate heapq . heappush ( queue , ( candidate , neighbor )) return distance graph = { \"A\" : [( \"B\" , 2.0 ), ( \"C\" , 5.0 )], \"B\" : [( \"C\" , 1.0 ), ( \"D\" , 4.0 )], \"C\" : [( \"D\" , 1.0 )], \"D\" : [], } print ( dijkstra ( graph , \"A\" ))",
-      "title": "Python: Dijkstra法"
+      "text": "python import heapq WIDTH , HEIGHT = 17 , 11 START = ( 1 , 5 ) GOAL = ( 15 , 5 ) OBSTACLES = ( {( 6 , y ) for y in range ( 1 , 10 ) if y != 2 } | {( 11 , y ) for y in range ( 1 , 10 ) if y != 8 } ) def shortest_path ( * , use_heuristic : bool , ) -> tuple [ int , tuple [ tuple [ int , int ], ... ], tuple [ tuple [ int , int ], ... ]]: def heuristic ( node : tuple [ int , int ]) -> int : if not use_heuristic : return 0 return abs ( GOAL [ 0 ] - node [ 0 ]) + abs ( GOAL [ 1 ] - node [ 1 ]) distance = { START : 0 } predecessor = {} queue = [( heuristic ( START ), heuristic ( START ), START )] closed = set () expanded = [] while queue : _ , _ , node = heapq . heappop ( queue ) if node in closed : continue closed . add ( node ) expanded . append ( node ) if node == GOAL : break for dx , dy in (( 1 , 0 ), ( 0 , 1 ), ( - 1 , 0 ), ( 0 , - 1 )): neighbor = ( node [ 0 ] + dx , node [ 1 ] + dy ) inside = 0 <= neighbor [ 0 ] < WIDTH and 0 <= neighbor [ 1 ] < HEIGHT if not inside or neighbor in OBSTACLES : continue candidate = distance [ node ] + 1 if candidate >= distance . get ( neighbor , WIDTH * HEIGHT + 1 ): continue distance [ neighbor ] = candidate predecessor [ neighbor ] = node priority = candidate + heuristic ( neighbor ) heapq . heappush ( queue , ( priority , heuristic ( neighbor ), neighbor )) path = [ GOAL ] while path [ - 1 ] != START : path . append ( predecessor [ path [ - 1 ]]) path . reverse () return distance [ GOAL ], tuple ( path ), tuple ( expanded ) for name , use_heuristic in (( \"Dijkstra\" , False ), ( \"A*\" , True )): cost , path , expanded = shortest_path ( use_heuristic = use_heuristic ) print ( f \" { name } : cost= { cost } , expanded= { len ( expanded ) } , path nodes= { len ( path ) } \" ) text Dijkstra: cost=24, expanded=168, path nodes=25 A*: cost=24, expanded=92, path nodes=25 use_heuristic=False がDijkstra法、 True がManhattan heuristic付きA*です。 図と出力は、この同じ条件とtie-breakで生成しています。",
+      "title": "Python"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12732,8 +12738,27 @@
       "source_ids": [
         "S054"
       ],
-      "text": "edge weightが非負か costの単位と加法性が妥当か node / edgeが問題の状態と遷移を正しく表しているか side constraintがpath stateへ含まれているか",
+      "text": "edge weightは非負か コスト（cost）の単位は揃い、path上で加算できるか nodeとedgeは、問題の状態と遷移を表しているか side constraint は path state へ含まれているか",
       "title": "まず確認すること"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:dijkstra-astar:同じ最短costへ-違う範囲を探す",
+      "dataset_version": "0.18.19",
+      "document_id": "content:dijkstra-astar",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cp-sat",
+        "content:dynamic-programming",
+        "method:M_DIJKSTRA_ASTAR",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "次の固定gridでは、どちらもcost 24の最短路を返します。 違うのは、goalへ着くまでに展開したcellの範囲です。 固定したunit-cost 4近傍gridのpure Python実行です。A*の展開数はDijkstra法より45%少なくなりますが、別graph、重み、tie-break、heuristic一般の削減率や実行時間は示しません。 淡い橙が展開済みcell、青緑が返された最短路です。 A*は168 cellから92 cellへ展開範囲を減らしました。 これは、このgridとManhattan heuristicで得た固定結果です。 両者の最短costは同じ24です。 経路そのものは複数あるため、返されたpathの形が同じである必要はありません。 展開数の45%削減は一般性能rankingではありません。",
+      "title": "同じ最短costへ、違う範囲を探す"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -12751,7 +12776,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "state explosionでmemoryが増大 heuristicが弱くDijkstraと同程度に展開 heuristicが過大で最適解を失う side constraintをnode stateへ入れ忘れる negative edgeをDijkstraで処理する path costが加法的でないのに単純edge sumへ落とす",
+      "text": "state explosionでmemoryが増大 heuristicが弱くDijkstraと同程度に展開 heuristicが過大で最適解を失う side constraint を node state へ入れ忘れる negative edgeをDijkstraで処理する path cost が加法的でないのに単純 edge sum へ落とす",
       "title": "失敗・切替の兆候"
     },
     {
@@ -12770,7 +12795,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "stateを拡張して履歴を扱うなら 動的計画法 、論理制約やschedulingを含むなら CP-SAT と比較します。",
+      "text": "state を拡張して履歴を扱う: 動的計画法 論理制約やschedulingを含む: CP-SAT",
       "title": "次に読む"
     },
     {
@@ -12789,7 +12814,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "単純なshortest pathをMIPへ変換しても解けますが、専用algorithmはgraph構造を直接利用し、通常は速く、保証も明確です。 ただし次のside constraintが増えると専用構造が崩れる場合があります。 複数resource capacity time window path全体に依存する論理条件 pickup and delivery 複数車両の相互作用 negative edgeやcycle condition この場合、state拡張DP、resource-constrained shortest path、CP-SAT、MIPなどを検討します。",
+      "text": "単純なshortest pathはMIPへ変換しても解けます。 専用algorithmはgraph構造を直接利用するため、保証と診断値を対応づけやすくなります。 ただし、次の side constraint が増えると専用構造が崩れる場合があります。 複数resource capacity time window path全体に依存する論理条件 pickup and delivery 複数車両の相互作用 negative edgeやcycle condition この場合は、 state 拡張DPやresource-constrained shortest pathを検討します。 CP-SATやMIPも候補です。",
       "title": "汎用最適化より先に確認する理由"
     },
     {
@@ -12808,8 +12833,27 @@
       "source_ids": [
         "S054"
       ],
-      "text": "expanded node数 relaxed edge数 priority queue size reopened node数（A*） heuristic error / consistency memory goal costとlower bound Warning 地図上の直線距離は常に安全なheuristicとは限りません。実costが地理距離より小さくなり得るdiscountやteleport edgeがある場合、admissibilityを確認します。",
+      "text": "expanded node数 relaxed edge数 priority queue size reopened node数（A*） heuristic error / consistency memory goal cost とlower bound Warning 地図上の直線距離は常に安全なheuristicとは限りません。 discountやteleport edgeで実costが地理距離より小さくなる場合は、admissibilityを確認します。",
       "title": "診断値"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:dijkstra-astar:選ぶnodeのpriorityが違う",
+      "dataset_version": "0.18.19",
+      "document_id": "content:dijkstra-astar",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cp-sat",
+        "content:dynamic-programming",
+        "method:M_DIJKSTRA_ASTAR",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "Dijkstra法は、始点からの暫定距離 g ( n ) が最小のnodeを取り出します。 そのnodeから伸びるedgeをrelaxし、goalへ届くまで確定領域を広げます。 edge cost が非負なら、priority queueから確定した距離は後から改善されません。 A*探索は、現在までのcostとgoalまでの残りcostの推定を足したpriorityでnodeを選びます。 f ( n ) = g ( n ) + h ( n ) g ( n ) : 始点から現在nodeまでに支払ったcost h ( n ) : 現在nodeからgoalまでに必要な残りcostの推定 h ( n ) = 0 ならDijkstra法と同じpriorityです。 h が真の残りcostを過大評価しないadmissible heuristicなら、A*も最適性を維持できます。 consistent heuristicなら、確定済みnodeの再展開を抑えやすくなります。",
+      "title": "選ぶnodeのpriorityが違う"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -13810,7 +13854,7 @@
         "S009",
         "S018"
       ],
-      "text": "高いtemperatureでは悪化するstepも一定確率で受け入れ、local basinから抜けます。temperatureを下げるにつれて探索を局所化します。 Dual Annealingはgeneralized simulated annealingのvisiting distributionとacceptance ruleを使い、必要に応じてlocal minimizerを組み合わせます。",
+      "text": "高いtemperatureでは悪化するstepも一定確率で受け入れ、local basinから抜けます。 temperatureを下げるにつれて探索を局所化します。 Dual Annealingはgeneralized simulated annealingのvisiting distributionとacceptance ruleを使います。 必要に応じてlocal minimizerも組み合わせます。 まず、基礎になるSimulated Annealingの受理機構を固定実行で見ます。 橙の current は悪化しても、青緑の best-so-far は手放しません。 固定1次元Rastrigin、seed 7、初期温度5.0、幾何冷却0.985のpure Python実行です。Dual Annealing固有のvisiting distributionとlocal searchは含みません。別seed、高次元、別schedule、手法一般の性能や大域最適性も示しません。 このrunでは、受理した65 moveのうち32 moveが悪化でした。 最初の100反復では18回、最後の100反復では1回だけです。 温度低下に伴う「探索から絞り込みへ」の移行が見えます。 この図はclassicな受理機構を切り出した1次元教材です。 SciPyの dual_annealing 実行結果ではなく、visiting distributionとlocal searchも含みません。 Dual Annealingの結果を比較するときは、以下の追加要因を分けて記録します。",
       "title": "Annealingの直感"
     },
     {
@@ -13833,7 +13877,7 @@
         "S009",
         "S018"
       ],
-      "text": "no_local_search=False では、最終結果や評価回数にlocal minimizerが含まれます。 比較時は、 annealing evaluation local-search evaluation local solverとtolerance local search開始条件 を分けます。local refinementを含むDual Annealingと、含まないpopulation法を同じiteration数で比較しません。",
+      "text": "no_local_search=False では、最終結果や評価回数にlocal minimizerが含まれます。 比較時は、 annealing evaluation local-search evaluation local solver とtolerance local search開始条件 を分けます。local refinementを含むDual Annealingと、含まないpopulation法を同じiteration数で比較しません。",
       "title": "Local searchの有無"
     },
     {
@@ -13856,7 +13900,7 @@
         "S009",
         "S018"
       ],
-      "text": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。 このページでは、canonicalな手法 M_SIMULATED_ANNEALING の一変種としてDual Annealingを扱います。Python例はSciPy実装 I_SCIPY_DUAL_ANNEALING に固有のAPIであり、simulated annealing一般の保証と実装のoptionを混同しないように読みます。",
+      "text": "温度付きの確率的jumpでbounded非凸空間を探索し、re-annealingと局所探索を組み合わせて複数basinから良い候補を探します。 Dual Annealingは、canonicalな手法 M_SIMULATED_ANNEALING の一変種です。 Python例はSciPy実装 I_SCIPY_DUAL_ANNEALING に固有のAPIです。 simulated annealing一般の保証と、実装固有のoptionを分けて読みます。",
       "title": "Dual Annealing"
     },
     {
@@ -13902,7 +13946,7 @@
         "S009",
         "S018"
       ],
-      "text": "initial temperature: 初期jump scale visit parameter: long-tail jumpの性質 accept parameter: 悪化stepの受容 restart temperature ratio: re-annealingのタイミング parameterは相互作用し、problem scaleやboundsへ依存します。",
+      "text": "initial temperature: 初期jump scale visit parameter: long-tail jumpの性質 accept parameter: 悪化stepの受容 restart temperature ratio: re-annealingのタイミング 各 parameter は相互作用し、problem scaleやboundsへ依存します。",
       "title": "Temperatureと分布"
     },
     {
@@ -13925,7 +13969,7 @@
         "S009",
         "S018"
       ],
-      "text": "bounded continuous nonconvex problem multiple basins gradientを要求しない local solverとhybrid化したい moderate dimension stochastic explorationを許容",
+      "text": "bounded continuous nonconvex problem multiple basins gradient を要求しない local solver とhybrid化したい moderate dimension stochastic explorationを許容",
       "title": "向いている条件"
     },
     {
@@ -13948,7 +13992,7 @@
         "S009",
         "S018"
       ],
-      "text": "best-so-far objective current state objective accepted / rejected move数 temperature re-annealing count function evaluation数 local-search call数 boundary hit率 seed間の結果分散 termination reason current stateが悪化してもbest-so-farは保持します。確率的探索ではcurrentとincumbentを分けます。 Warning annealing scheduleが終了したことは大域最適性の証明ではありません。複数seed、同じevaluation budget、local-search有無を揃えて候補品質を評価します。",
+      "text": "best-so-far objective current state objective accepted / rejected move数 temperature re-annealing count function evaluation数 local-search call数 boundary hit率 seed間の結果分散 termination reason current state が悪化してもbest-so-farは保持します。 確率的探索ではcurrentとincumbentを分けます。 Warning annealing scheduleが終了したことは大域最適性の証明ではありません。複数seed、同じevaluation budget、local-search有無を揃えて候補品質を評価します。",
       "title": "診断値"
     },
     {
@@ -13971,7 +14015,7 @@
         "S009",
         "S018"
       ],
-      "text": "1評価が極端に高価 high dimension noiseでacceptanceが乱れる boundsが広すぎる general constraintが中心 reproducibilityにseedを記録しない optimality certificateが必要",
+      "text": "1評価が極端に高価 high dimension noiseでacceptanceが乱れる boundsが広すぎる general constraint が中心 reproducibilityにseedを記録しない optimality certificateが必要",
       "title": "避ける／切り替える条件"
     },
     {
@@ -14175,13 +14219,13 @@
       "source_ids": [
         "S054"
       ],
-      "text": "問題をstateとstageに分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。",
+      "text": "問題を状態（state）と段階（stage）に分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。",
       "title": "動的計画法"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:dynamic-programming:python-0-1-knapsack",
+      "chunk_id": "content:dynamic-programming:python",
       "dataset_version": "0.18.19",
       "document_id": "content:dynamic-programming",
       "license": "CC-BY-4.0",
@@ -14195,8 +14239,28 @@
       "source_ids": [
         "S054"
       ],
-      "text": "python from dataclasses import dataclass @dataclass ( frozen = True ) class Item : value : int weight : int def knapsack ( items : list [ Item ], capacity : int ) -> int : best = [ 0 ] * ( capacity + 1 ) for item in items : for remaining in range ( capacity , item . weight - 1 , - 1 ): best [ remaining ] = max ( best [ remaining ], best [ remaining - item . weight ] + item . value , ) return best [ capacity ] items = [ Item ( 8 , 4 ), Item ( 5 , 3 ), Item ( 6 , 5 ), Item ( 4 , 2 )] print ( knapsack ( items , capacity = 8 )) capacityを後ろから更新することで、同じitemを一度だけ使う0-1条件を保っています。",
-      "title": "Python: 0-1 knapsack"
+      "text": "python from dataclasses import dataclass @dataclass ( frozen = True ) class Item : name : str weight : int value : int def knapsack ( items : list [ Item ], capacity : int , ) -> tuple [ int , list [ str ], list [ list [ int ]]]: table = [[ 0 ] * ( capacity + 1 ) for _ in range ( len ( items ) + 1 )] take = [[ False ] * ( capacity + 1 ) for _ in range ( len ( items ) + 1 )] for item_count , item in enumerate ( items , start = 1 ): for available in range ( capacity + 1 ): skip_value = table [ item_count - 1 ][ available ] take_value = ( table [ item_count - 1 ][ available - item . weight ] + item . value if item . weight <= available else - 1 ) if take_value > skip_value : table [ item_count ][ available ] = take_value take [ item_count ][ available ] = True else : table [ item_count ][ available ] = skip_value selected = [] remaining = capacity for item_count in range ( len ( items ), 0 , - 1 ): if take [ item_count ][ remaining ]: item = items [ item_count - 1 ] selected . append ( item . name ) remaining -= item . weight selected . reverse () return table [ - 1 ][ - 1 ], selected , table items = [ Item ( \"A\" , weight = 4 , value = 8 ), Item ( \"B\" , weight = 3 , value = 5 ), Item ( \"C\" , weight = 5 , value = 6 ), Item ( \"D\" , weight = 2 , value = 4 ), ] value , selected , table = knapsack ( items , capacity = 8 ) weight = sum ( item . weight for item in items if item . name in selected ) print ( f \"selected= { selected } , weight= { weight } , value= { value } \" ) print ( f \"last row= { table [ - 1 ] } \" ) text selected=['A', 'B'], weight=7, value=13 last row=[0, 0, 4, 5, 8, 9, 12, 13, 13] 2次元tableを残すため、図の全cellとbacktrackingを同じ実行から再現できます。 memoryを減らすだけなら1次元rolling arrayへ置き換えられますが、選択復元には追加情報が必要です。",
+      "title": "Python"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:dynamic-programming:tableを埋め-選択を戻る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:dynamic-programming",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:branch-and-bound",
+        "content:cp-sat",
+        "content:dijkstra-astar",
+        "method:M_DYNAMIC_PROGRAMMING",
+        "source:S054"
+      ],
+      "source_ids": [
+        "S054"
+      ],
+      "text": "次の0/1 knapsackでは、itemを1個ずつ追加する段階を縦軸、利用可能capacityを横軸にします。 各cellは、その範囲で得られる最大valueです。 固定4 itemの整数knapsackをpure Pythonで実行した結果です。DP tableは厳密に13を返しますが、別instance、連続量、近似、solver一般の性能や大規模state spaceでの実用性は示しません。 橙が大きいvalueを持つcell、青緑が最終cellから選択を復元するbacktrackingです。 item CとDを追加してもcapacity 8の最良valueは13から増えません。 backtrackingではAとBを選び、weightを 8 → 5 → 1 と戻します。 最大valueは13、選択はAとB、合計weightは7です。 tableを埋める処理と、選択したitemを復元する処理は分けています。 固定4 itemの教材であり、DP一般の性能rankingではありません。",
+      "title": "tableを埋め、選択を戻る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14215,7 +14279,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "knapsack shortest path sequence alignment lot sizing finite-horizon control resource allocation small state-space scheduling 汎用MIPへ書ける問題でも、stateとtransitionが小さければDPの方が速く、厳密保証も説明しやすいことがあります。",
+      "text": "knapsack shortest path sequence alignment lot sizing finite-horizon control resource allocation small state-space scheduling 汎用MIPへ書ける問題でも、 state と transition が小さければDPを直接使える場合があります。 厳密保証とtableの各値を対応づけて説明しやすい点も特徴です。",
       "title": "向いている条件"
     },
     {
@@ -14235,7 +14299,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "stateへ多くの履歴を入れるほど正確になりますが、tableが指数的に増える場合があります。 対策候補: dominanceによるstate pruning sparse dictionary rolling array approximation / discretization decomposition A*やlabel-setting MIP / CP-SATへの切替 Warning stateを小さくするために必要情報を落とすと、異なる履歴を誤って同一stateとして扱います。Markov性または最適部分構造を確認します。",
+      "text": "state へ多くの履歴を入れるほど、tableが指数的に増える場合があります。 対策候補: dominanceによるstate pruning sparse dictionary rolling array approximation / discretization decomposition A*やlabel-setting MIP / CP-SATへの切替 Warning state を小さくするために必要情報を落とすと、異なる履歴を誤って同一 state として扱います。 Markov性または最適部分構造を確認します。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -14255,7 +14319,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "DPでは、意思決定の履歴をすべて保持せず、将来に必要な情報だけをstateへまとめます。 Bellman再帰は、現在のstateから選べるactionと、その後の最適valueを組み合わせます。 代表的な形は V t ( s ) = min a { c t ( s , a ) + V t + 1 ( T ( s , a ) ) } です。 s : 現在state a : action T ( s , a ) : 次state V t ( s ) : そのstate以降の最適value 重要なのは、stateが「過去の全履歴を忘れても将来を正しく評価できる十分な情報」になっていることです。",
+      "text": "DPでは、意思決定の履歴をすべて保持しません。 将来の評価に必要な情報だけを state へまとめます。 Bellman再帰は、現在の state から選べる action と、その後の最適値を組み合わせます。 V t ( s ) = min a { c t ( s , a ) + V t + 1 ( T ( s , a ) ) } s : 現在の state a : 選べる action T ( s , a ) : 次の state V t ( s ) : その state 以降の最適値 重要なのは、 state が将来を正しく評価できる十分な情報を持つことです。 同じ state へ到達した履歴を一つの部分問題として再利用します。",
       "title": "最適化問題を状態へ変える"
     },
     {
@@ -14275,7 +14339,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "最短路への特殊化は Dijkstra / A* 、一般の論理制約が増えた場合は CP-SAT も比較します。",
+      "text": "最短路へ特殊化する: Dijkstra / A* 一般の論理制約が増える: CP-SAT boundで探索を刈り込む: Branch and Bound",
       "title": "次に読む"
     },
     {
@@ -14295,7 +14359,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "全state・transitionを正しく評価し再帰を完了すれば、定義した離散modelに対する厳密解を得られます。ただし、連続量の離散化誤差やmodel simplificationは別問題です。",
+      "text": "全 state と transition を正しく評価して再帰を完了すれば、定義した離散modelに対する厳密解を得られます。 ただし、連続量の離散化誤差やmodel simplificationは別問題です。",
       "title": "結果の保証"
     },
     {
@@ -14315,7 +14379,7 @@
       "source_ids": [
         "S054"
       ],
-      "text": "DPが厳密でも、常に高速とは限りません。 state数 action数 transition数 horizon memory value rangeによるpseudo-polynomial性 を確認します。knapsackの O ( n C ) はcapacity C の数値に依存し、input bit長に対する純粋な多項式時間とは限りません。",
+      "text": "state数 action数 transition数 horizon memory value rangeによるpseudo-polynomial性 DPが厳密でも、常に高速とは限りません。 knapsackの O ( n C ) はcapacity C の数値に依存します。 input bit長に対する純粋な多項式時間とは限りません。",
       "title": "診断値"
     },
     {
@@ -14335,7 +14399,7 @@
         "S039",
         "S055"
       ],
-      "text": "この手法の気持ちは、 複数目的を曖昧な一つのscoreへ足し合わせる代わりに、最も重視する目的を一つ選び、残りは「ここまでは許す」という条件として扱いたい というものです。 見ているもの: 主目的、他目的の値、feasibility、Pareto dominance 動かしているもの: ε thresholdと各単目的subproblemの解 前進の判断: 異なるtrade-off領域を実行可能に取得できたか 別に確認するもの: threshold grid、subproblem数、total evaluation budget 恐れていること: thresholdの選び方、目的scale、infeasible subproblem、重複解 weighted sumで取りにくい非凸Pareto frontの領域も候補にできますが、thresholdを何個解くかというbudgetが必要です。",
+      "text": "複数目的を根拠のない一つのscoreへ足し合わせず、最も重視する目的を一つ選びます。 残りの目的は「ここまでは許す」という条件へ移します。 見ているもの: 主目的、他目的の値、feasibility、Pareto dominance 動かすもの: ε thresholdと各単目的subproblemの解 前進の判断: 異なるtrade-off領域で実行可能解を得られたか 別に確認するもの: threshold grid、subproblem数、total evaluation budget 恐れていること: thresholdの選び方、目的scale、infeasible subproblem、重複解 weighted sumで取りにくい非凸Pareto frontの領域も候補にできます。 一方で、thresholdごとにsubproblemを解くbudgetが必要です。",
       "title": "30秒でつかむ"
     },
     {
@@ -14375,7 +14439,7 @@
         "S039",
         "S055"
       ],
-      "text": "python import numpy as np from scipy.optimize import minimize def cost ( x : np . ndarray ) -> float : return float (( x [ 0 ] - 1.0 ) ** 2 + x [ 1 ] ** 2 ) def risk ( x : np . ndarray ) -> float : return float ( x [ 0 ] ** 2 + ( x [ 1 ] - 1.0 ) ** 2 ) def solve_for_epsilon ( epsilon : float ): constraint = { \"type\" : \"ineq\" , \"fun\" : lambda x : epsilon - risk ( x )} return minimize ( cost , x0 = np . array ([ 0.5 , 0.5 ]), constraints = [ constraint ]) solutions = [ solve_for_epsilon ( value ) for value in np . linspace ( 0.2 , 2.0 , 8 )] print ([( result . fun , risk ( result . x ), result . success ) for result in solutions ]) 比較ではbackend、初期点、tolerance、threshold grid、subproblem数を固定します。 得られたPareto候補の数だけでなく、同じtotal evaluation budgetでどの領域を覆えたかを記録します。",
+      "text": "python from dataclasses import dataclass @dataclass ( frozen = True ) class Plan : x_count : int y_count : int output : int cost : int emissions : int def enumerate_plans ( demand : int = 18 ) -> list [ Plan ]: plans = [] for x_count in range ( 11 ): for y_count in range ( 11 ): output = 3 * x_count + 2 * y_count if output < demand : continue plans . append ( Plan ( x_count = x_count , y_count = y_count , output = output , cost = 8 * x_count + 7 * y_count , emissions = 6 * x_count + 2 * y_count , ) ) return plans def solve_for_epsilon ( plans : list [ Plan ], epsilon : int , ) -> Plan | None : eligible = [ plan for plan in plans if plan . emissions <= epsilon ] if not eligible : return None return min ( eligible , key = lambda plan : ( plan . cost , plan . emissions , plan . x_count , plan . y_count ), ) plans = enumerate_plans () for epsilon in ( 36 , 30 , 24 , 18 , 12 ): solution = solve_for_epsilon ( plans , epsilon ) if solution is None : print ( f \"epsilon= { epsilon } : infeasible\" ) continue print ( f \"epsilon= { epsilon } : X= { solution . x_count } , Y= { solution . y_count } , \" f \"cost= { solution . cost } , emissions= { solution . emissions } \" ) text epsilon=36: X=6, Y=0, cost=48, emissions=36 epsilon=30: X=4, Y=3, cost=53, emissions=30 epsilon=24: X=2, Y=6, cost=58, emissions=24 epsilon=18: X=0, Y=9, cost=63, emissions=18 epsilon=12: infeasible このコードは backend solver の代わりに全整数planを列挙します。 比較では backend と初期点を固定します。 tolerance 、threshold grid、subproblem数も揃えます。 Pareto候補数だけでなく、同じtotal evaluation budgetで覆えた領域も記録します。",
       "title": "Python"
     },
     {
@@ -14395,7 +14459,7 @@
         "S039",
         "S055"
       ],
-      "text": "切替サイン: 多数のthresholdがinfeasible → objective rangeを再推定 同じ解ばかり出る → threshold spacingまたはbackend toleranceを見直す 目的数が多くgridが重い → NSGA-IIIやMOEA/Dを検討 preferenceが明確になった → 関心領域だけへthresholdを集中 backendが局所解のみ → Pareto集合も局所候補であることを明示",
+      "text": "切替サイン: 多数のthresholdがinfeasible → objective rangeを再推定 同じ解ばかり出る → threshold spacingまたは backend tolerance を見直す 目的数が多くgridが重い → NSGA-IIIやMOEA/Dを検討 preferenceが明確になった → 関心領域だけへthresholdを集中 backendが局所解のみ → Pareto集合も局所候補であることを明示",
       "title": "うまくいったサインと切替サイン"
     },
     {
@@ -14415,7 +14479,7 @@
         "S039",
         "S055"
       ],
-      "text": "項目 確認内容 objective direction 各目的がminimizeかmaximizeか primary objective 一時的に主目的として選べるか ranges 各目的の現実的な範囲を把握できるか backend εを制約にした単目的問題を解けるか feasibility thresholdごとのinfeasibilityを区別できるか budget thresholdの個数とsubproblemごとのevaluation costを許容できるか decision use 最終的に誰がtrade-offから選ぶか 目的値をnormalizeせずに閾値幅を決めると、単位の大きな目的だけ細かく調べることがあります。",
+      "text": "項目 確認内容 objective direction 各目的がminimizeかmaximizeか primary objective 一時的に主目的として選べるか ranges 各目的の現実的な範囲を把握できるか backend εを制約にした単目的問題を解けるか feasibility thresholdごとのinfeasibilityを区別できるか budget thresholdの個数とsubproblemごとのevaluation costを許容できるか decision use 最終的に誰がtrade-offから選ぶか 目的値をnormalizeせずに閾値幅を決めると、単位の大きな目的だけを細かく調べる場合があります。",
       "title": "まず確認すること"
     },
     {
@@ -14435,8 +14499,28 @@
         "S039",
         "S055"
       ],
-      "text": "weighted sumのweightは目的間の交換率を表します。ε-constraintのthresholdは、ある目的に対する許容限界です。意味が異なるため、同じ数字を対応させても同じ解になるとは限りません。 多目的最適化とPareto front でdominance、ideal / nadir、reference pointの読み方を確認してください。",
+      "text": "weighted sumのweightは目的間の交換率を表します。 ε-constraint のthresholdは、ある目的に対する許容限界です。 意味が異なるため、同じ数字を対応させても同じ解になるとは限りません。",
       "title": "コラム: εはweightではない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:上限を下げると選択が移る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055"
+      ],
+      "source_ids": [
+        "S039",
+        "S055"
+      ],
+      "text": "次の固定生産計画では、需要18以上を満たす技術XとYの組合せを整数列挙します。 主目的は cost 、制約へ移す目的は emissions です。 固定した2技術・需要18の整数列挙です。4つのthresholdはPareto planを一つずつ選び、ε=12はinfeasibleになります。別需要、連続変数、backend solver、threshold設計、ε-constraint一般の性能は示しません。 上限36では低costな (X, Y) = (6, 0) を選びます。 上限を18まで下げると、より低emissionsな (0, 9) へ移ります。 上限12は実行可能領域より厳しいため、subproblemはinfeasibleです。 88 feasible planのうち、非支配planは4個です。 4個の実行可能thresholdは、それぞれ異なるPareto planを選びます。 これは固定整数列挙であり、一般性能rankingではありません。",
+      "title": "上限を下げると選択が移る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14455,7 +14539,7 @@
         "S039",
         "S055"
       ],
-      "text": "二目的最小化を例に、 f 1 を主目的、 f 2 を制約へ移します。 min x f 1 ( x ) subject to f 2 ( x ) ≤ ϵ , x ∈ X ϵ を変えて複数回解き、得られた実行可能解から非支配解を残します。目的数が増えるとthreshold gridも増えるため、意思決定上重要な領域へ絞る工夫が必要です。",
+      "text": "二目的最小化を例に、 f 1 を主目的、 f 2 を制約へ移します。 min x f 1 ( x ) subject to f 2 ( x ) ≤ ϵ , x ∈ X ϵ を変えて複数回解き、得られた実行可能解から非支配解を残します。 目的数が増えるとthreshold gridも増えるため、意思決定上重要な領域へ絞る必要があります。",
       "title": "仕組み"
     },
     {
@@ -14475,8 +14559,28 @@
         "S039",
         "S055"
       ],
-      "text": "向きやすい条件: 目的の一つを主目的として説明しやすい backend solverが制約付きsubproblemを安定に解ける 非凸frontも含め特定trade-off領域を調べたい 許容値に実務的意味がある 避ける条件: threshold範囲が不明 多数目的でgridが爆発する subproblem一回が極端に高価 実際には単一utilityが明確で複数解不要",
+      "text": "向きやすい条件: 目的の一つを主目的として説明しやすい backend solver が制約付きsubproblemを安定に解ける 非凸frontも含め特定trade-off領域を調べたい 許容値に実務的意味がある 避ける条件: threshold範囲が不明 多数目的でgridが爆発する subproblem一回が極端に高価 実際には単一utilityが明確で複数解不要",
       "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:epsilon-constraint:次に読む",
+      "dataset_version": "0.18.19",
+      "document_id": "content:epsilon-constraint",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:multi-objective",
+        "method:M_EPSILON_CONSTRAINT",
+        "source:S039",
+        "source:S055"
+      ],
+      "source_ids": [
+        "S039",
+        "S055"
+      ],
+      "text": "dominanceとfront全体を読む: 多目的最適化とPareto front 目的をweightでまとめる: 重み付き和scalarization 多数目的へ進む: NSGA-III",
+      "title": "次に読む"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -14495,7 +14599,7 @@
         "S039",
         "S055"
       ],
-      "text": "見る値: thresholdごとのfeasibility 得られた非支配解数 objective spaceのcoverage 重複解率 backend solver status / gap decision makerが関心を持つ領域の密度 thresholdごとのevaluation costとtotal budget",
+      "text": "見る値: thresholdごとのfeasibility 得られた非支配解数 objective spaceのcoverage 重複解率 backend solver status / gap decision makerが関心を持つ領域の密度 thresholdごとの evaluation cost とtotal budget",
       "title": "診断値"
     },
     {
@@ -25710,6 +25814,29 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:particle-swarm:30秒でつかむ",
+      "dataset_version": "0.18.19",
+      "document_id": "content:particle-swarm",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:genetic-algorithm",
+        "method:M_PARTICLE_SWARM",
+        "source:S033",
+        "source:S040"
+      ],
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "text": "複数の粒子が、それぞれ異なる位置から同じ目的関数を調べます。 各粒子は「自分が見つけたbest」と「群から届いたbest」の両方へ引かれます。 見ているもの: 現在位置、personal best、globalまたはneighborhood best 動かすもの: 各粒子のvelocityとposition 前進の判断: best-so-farが更新され、未探索領域も残っているか 別に確認するもの: diversity、boundary hit、seed間分散、evaluation budget 恐れていること: 一つの局所解への早期集中 群が一点へ集まることと、大域最適解を見つけたことは同じではありません。",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:particle-swarm:overview",
       "dataset_version": "0.18.19",
       "document_id": "content:particle-swarm",
@@ -25750,13 +25877,13 @@
         "S033",
         "S040"
       ],
-      "text": "python import numpy as np def objective ( points : np . ndarray ) -> np . ndarray : return np . sum ( points * points , axis = 1 ) rng = np . random . default_rng ( 5 ) particle_count = 30 dimension = 2 lower = np . full ( dimension , - 5.0 ) upper = np . full ( dimension , 5.0 ) position = rng . uniform ( lower , upper , size = ( particle_count , dimension )) velocity = np . zeros_like ( position ) personal_best = position . copy () personal_value = objective ( personal_best ) for _ in range ( 200 ): global_best = personal_best [ np . argmin ( personal_value )] r1 = rng . random ( size = position . shape ) r2 = rng . random ( size = position . shape ) velocity = ( 0.7 * velocity + 1.4 * r1 * ( personal_best - position ) + 1.4 * r2 * ( global_best - position ) ) position = np . clip ( position + velocity , lower , upper ) value = objective ( position ) improved = value < personal_value personal_best [ improved ] = position [ improved ] personal_value [ improved ] = value [ improved ] best = personal_best [ np . argmin ( personal_value )] print ( best , personal_value . min ()) この例はglobal-best topologyです。局所neighborhood topologyでは情報伝播が遅くなり、多様性を保ちやすい場合があります。",
+      "text": "図と同じ固定実行を、標準libraryだけで再現します。 python import math import random import statistics def objective ( point ): return 20.0 + sum ( x * x - 10.0 * math . cos ( 2.0 * math . pi * x ) for x in point ) def diversity ( positions ): center = [ statistics . fmean ( point [ dimension ] for point in positions ) for dimension in range ( 2 ) ] return math . sqrt ( statistics . fmean ( sum (( point [ d ] - center [ d ]) ** 2 for d in range ( 2 )) for point in positions ) ) rng = random . Random ( 5 ) particle_count = 30 lower , upper = - 5.12 , 5.12 positions = [ [ rng . uniform ( lower , upper ), rng . uniform ( lower , upper )] for _ in range ( particle_count ) ] velocities = [[ 0.0 , 0.0 ] for _ in positions ] personal_bests = [ point . copy () for point in positions ] personal_values = [ objective ( point ) for point in personal_bests ] initial_best = min ( personal_values ) initial_diversity = diversity ( positions ) for _ in range ( 40 ): best_index = min ( range ( particle_count ), key = personal_values . __getitem__ ) global_best = personal_bests [ best_index ] . copy () for particle in range ( particle_count ): for dimension in range ( 2 ): velocity = ( 0.65 * velocities [ particle ][ dimension ] + 1.4 * rng . random () * ( personal_bests [ particle ][ dimension ] - positions [ particle ][ dimension ] ) + 1.4 * rng . random () * ( global_best [ dimension ] - positions [ particle ][ dimension ]) ) velocities [ particle ][ dimension ] = max ( - 1.5 , min ( 1.5 , velocity )) positions [ particle ][ dimension ] = max ( lower , min ( upper , positions [ particle ][ dimension ] + velocities [ particle ][ dimension ], ), ) value = objective ( positions [ particle ]) if value < personal_values [ particle ]: personal_bests [ particle ] = positions [ particle ] . copy () personal_values [ particle ] = value best_index = min ( range ( particle_count ), key = personal_values . __getitem__ ) best = personal_bests [ best_index ] print ( f \"best=( { best [ 0 ] : .6f } , { best [ 1 ] : .6f } )\" ) print ( f \"objective: { initial_best : .6f } -> { personal_values [ best_index ] : .8f } \" ) print ( f \"diversity: { initial_diversity : .3f } -> { diversity ( positions ) : .3f } \" ) text best=(-0.000525, 0.000019) objective: 6.090067 -> 0.00005485 diversity: 4.625 -> 0.213 この例は全粒子が同じbestを見るglobal-best topologyです。 local neighborhood topologyでは情報伝播が遅くなり、多様性を保ちやすい場合があります。",
       "title": "Python"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:particle-swarm:一手の構造",
+      "chunk_id": "content:particle-swarm:うまくいったサインと切替サイン",
       "dataset_version": "0.18.19",
       "document_id": "content:particle-swarm",
       "license": "CC-BY-4.0",
@@ -25773,13 +25900,13 @@
         "S033",
         "S040"
       ],
-      "text": "粒子 i の位置 x i と速度 v i を、概ね v i ← ω v i + c 1 r 1 ( p i − x i ) + c 2 r 2 ( g − x i ) x i ← x i + v i で更新します。 p i : その粒子が見つけたpersonal best g : swarmまたはneighborhoodのbest ω : inertia c 1 , c 2 : personal / social attraction 探索と収束のバランスは、係数だけでなくtopology、velocity clamp、bound handlingにも依存します。",
-      "title": "一手の構造"
+      "text": "切替サイン: bestが止まりdiversityも小さい → restart、local topology、CMA-ESを検討 boundary hitが多い → scale、velocity clamp、bound handlingを見直す seed間分散が大きい → budgetを固定して複数seed比較 1評価が高価 → Bayesian Optimizationやsurrogate-assisted探索を検討 勾配が安定して使える → 勾配法も比較 certificateが必要 → 問題構造に合う厳密法へ切り替える Warning PSOの「群が一点へ集まった」は収束診断の一部であり、その点が大域最適解だという証明ではありません。",
+      "title": "うまくいったサインと切替サイン"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:particle-swarm:向いている条件",
+      "chunk_id": "content:particle-swarm:まず確認すること",
       "dataset_version": "0.18.19",
       "document_id": "content:particle-swarm",
       "license": "CC-BY-4.0",
@@ -25796,13 +25923,13 @@
         "S033",
         "S040"
       ],
-      "text": "bounded continuous black-box gradientが得られない evaluationを並列化できる moderate dimension 滑らかさに依存しないglobal candidate探索",
-      "title": "向いている条件"
+      "text": "項目 確認内容 domain bounded continuous variablesとして表せるか scale 変数ごとの範囲と意味を揃えられるか evaluation 粒子を並列評価できるか budget 粒子数×iteration数を許容できるか constraints repair、penalty、feasible-firstなどの扱いを決めたか topology global-bestかlocal neighborhoodか repeatability 複数seedで結果分散を確認できるか",
+      "title": "まず確認すること"
     },
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
-      "chunk_id": "content:particle-swarm:直感的な読み方",
+      "chunk_id": "content:particle-swarm:仕組み",
       "dataset_version": "0.18.19",
       "document_id": "content:particle-swarm",
       "license": "CC-BY-4.0",
@@ -25819,8 +25946,100 @@
         "S033",
         "S040"
       ],
-      "text": "粒子が広く散る: explorationが残っている best周辺へ一斉に集まる: exploitationが強い 同じ方向へ高速で飛び続ける: velocityやscaleが不適切 多峰性なのに一群へ早期集中: premature convergenceの可能性 群のbestだけでなく、粒子間距離や座標ごとの分散を表示すると状態を読みやすくなります。",
-      "title": "直感的な読み方"
+      "text": "粒子 i の位置 x i と速度 v i を、概ね v i ← ω v i + c 1 r 1 ( p i − x i ) + c 2 r 2 ( g − x i ) x i ← x i + v i で更新します。 p i : その粒子が見つけたpersonal best g : swarmまたはneighborhoodのbest ω : inertia c 1 , c 2 : personal / social attraction 探索と収束のバランスは係数だけでは決まりません。 topology、velocity clamp、bound handlingにも依存します。",
+      "title": "仕組み"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:particle-swarm:向く条件・避ける条件",
+      "dataset_version": "0.18.19",
+      "document_id": "content:particle-swarm",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:genetic-algorithm",
+        "method:M_PARTICLE_SWARM",
+        "source:S033",
+        "source:S040"
+      ],
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "text": "向きやすい条件: bounded continuous black-box 勾配を得にくい evaluationを並列化できる moderate dimension 複数のglobal candidateを探索したい 避ける条件: 1評価が極端に高価でswarmを維持できない discrete encodingでvelocityの意味が薄れる 最適性gapやcertificateが必要 強い制約があり、ほとんどの粒子がinfeasibleになる 高次元で粒子数を十分に確保できない",
+      "title": "向く条件・避ける条件"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:particle-swarm:図の読み方",
+      "dataset_version": "0.18.19",
+      "document_id": "content:particle-swarm",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:genetic-algorithm",
+        "method:M_PARTICLE_SWARM",
+        "source:S033",
+        "source:S040"
+      ],
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "text": "粒子が広く散る: explorationが残っている best周辺へ一斉に集まる: exploitationが強いが、早期集中も疑う 同じ方向へ高速で飛び続ける: velocityやscaleが不適切 多峰性なのに一群へ早期集中: premature convergenceの可能性",
+      "title": "図の読み方"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:particle-swarm:次に読む",
+      "dataset_version": "0.18.19",
+      "document_id": "content:particle-swarm",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:genetic-algorithm",
+        "method:M_PARTICLE_SWARM",
+        "source:S033",
+        "source:S040"
+      ],
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "text": "covarianceで探索分布を更新する: CMA-ES 差分vectorで候補を作る: Differential Evolution 高価な評価をsurrogateで節約する: Bayesian Optimization",
+      "title": "次に読む"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:particle-swarm:群の広がりとbestを同時に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:particle-swarm",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:cma-es",
+        "content:concept.derivative-free",
+        "content:differential-evolution",
+        "content:genetic-algorithm",
+        "method:M_PARTICLE_SWARM",
+        "source:S033",
+        "source:S040"
+      ],
+      "source_ids": [
+        "S033",
+        "S040"
+      ],
+      "text": "次は、多峰性のある2次元Rastrigin関数を30粒子で最小化した固定実行です。 橙の粒子が現在位置、青緑の星がその時点のglobal bestです。 固定2次元Rastrigin、30粒子、seed 5、global-best topology、40 iterationsの実行です。淡い格子は厳密な極小点ではありません。係数、topology、dimension、constraints、他seedでの性能や大域最適性は示しません。 iteration 5ではbestが改善していますが、粒子はすでに中央付近へ寄っています。 iteration 40ではbestは原点近傍まで下がる一方、群の広がりは初期の5%未満です。 best-so-farだけなら順調に見えます。 diversityを重ねると、探索余力が同時に減っていることが分かります。 この一回の成功を、PSO一般の性能rankingには使えません。",
+      "title": "群の広がりとbestを同時に見る"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -25842,31 +26061,8 @@
         "S033",
         "S040"
       ],
-      "text": "global best / median objective position diversity velocity norm boundary hit率 personal bestの更新数 feasible fraction seed間の結果分散 evaluation budget",
+      "text": "objective: global best、current median、seed間分散 population: position diversity、速度norm、personal best更新数 boundary: hit率、clip後に停止した粒子数 constraints: feasible fraction、violation量 budget: 粒子数、iteration数、total evaluations",
       "title": "診断値"
-    },
-    {
-      "attribution": "Optimization Compass contributors",
-      "authority": "canonical",
-      "chunk_id": "content:particle-swarm:避ける-切り替える条件",
-      "dataset_version": "0.18.19",
-      "document_id": "content:particle-swarm",
-      "license": "CC-BY-4.0",
-      "relation_context": [
-        "content:cma-es",
-        "content:concept.derivative-free",
-        "content:differential-evolution",
-        "content:genetic-algorithm",
-        "method:M_PARTICLE_SWARM",
-        "source:S033",
-        "source:S040"
-      ],
-      "source_ids": [
-        "S033",
-        "S040"
-      ],
-      "text": "変数scaleが揃っていない boundでclipされた粒子が多数停止する 1評価が極端に高価でswarmを維持できない discrete encodingが速度の意味を失わせる global bestへ早期集中して多様性が消える 最適性gapやcertificateが必要 Warning PSOの「群が一点へ集まった」は収束診断の一部であり、その点が大域最適解だという証明ではありません。",
-      "title": "避ける／切り替える条件"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -29866,7 +30062,7 @@
         "S008",
         "S009"
       ],
-      "text": "python import numpy as np def rastrigin ( x : np . ndarray ) -> float : return float ( 10.0 * len ( x ) + np . sum ( x ** 2 - 10.0 * np . cos ( 2.0 * np . pi * x ))) def anneal ( x0 : np . ndarray , n_iter : int = 2_000 , t0 : float = 5.0 , cooling_rate : float = 0.995 , step_scale : float = 0.5 , seed : int = 7 , ) -> tuple [ np . ndarray , float ]: rng = np . random . default_rng ( seed ) x = x0 . copy () f_x = rastrigin ( x ) best_x , best_f = x . copy (), f_x temperature = t0 for _ in range ( n_iter ): candidate = x + rng . normal ( scale = step_scale , size = x . shape ) f_candidate = rastrigin ( candidate ) delta = f_candidate - f_x if delta <= 0.0 or rng . random () < np . exp ( - delta / temperature ): x , f_x = candidate , f_candidate if f_x < best_f : best_x , best_f = x . copy (), f_x temperature *= cooling_rate return best_x , best_f best_x , best_f = anneal ( np . array ([ 3.5 , - 4.0 ])) print ( best_x , best_f ) temperature が下がるにつれ悪化移動の受理率がほぼ0へ近づく点を確認してください。 cooling_rate や step_scale を変えると、best-so-farの改善curveが大きく変わります。",
+      "text": "python import math import random def rastrigin ( x : float ) -> float : return 10.0 + x * x - 10.0 * math . cos ( 2.0 * math . pi * x ) def anneal ( x0 : float = 3.5 , n_iter : int = 400 , t0 : float = 5.0 , cooling_rate : float = 0.985 , step_scale : float = 0.5 , seed : int = 7 , ) -> tuple [ float , float , list [ tuple [ int , float , float , float , bool ]]]: rng = random . Random ( seed ) x = x0 f_x = rastrigin ( x ) best_x = x best_f = f_x temperature = t0 history = [( 0 , f_x , best_f , temperature , False )] for iteration in range ( 1 , n_iter + 1 ): step = rng . gauss ( 0.0 , step_scale ) candidate = min ( 5.12 , max ( - 5.12 , x + step )) f_candidate = rastrigin ( candidate ) delta = f_candidate - f_x accepted = delta <= 0.0 or rng . random () < math . exp ( - delta / temperature ) accepted_worsening = accepted and delta > 0.0 if accepted : x , f_x = candidate , f_candidate if f_x < best_f : best_x , best_f = x , f_x history . append (( iteration , f_x , best_f , temperature , accepted_worsening )) temperature *= cooling_rate return best_x , best_f , history best_x , best_f , history = anneal () accepted_worse = sum ( row [ 4 ] for row in history ) print ( f \"best_x= { best_x : .6f } , best_f= { best_f : .6f } \" ) print ( f \"accepted worsening moves= { accepted_worse } \" ) text best_x=-0.001963, best_f=0.000765 accepted worsening moves=32 history の current objective と best-so-far を別々にplotしてください。 cooling_rate や step_scale を変えると、受理回数と改善curveが変わります。",
       "title": "Python"
     },
     {
@@ -29890,7 +30086,7 @@
         "S008",
         "S009"
       ],
-      "text": "通常の局所法は改善する移動だけを採用します。Simulated Annealingは、現在点 x から候補点 x ′ を作った後、目的値が悪化しても一定確率で採用します。よく使われる受理確率はMetropolis型です。 P ( accept ) = min ( 1 , exp ( − f ( x ′ ) − f ( x ) T ) ) f ( x ′ ) ≤ f ( x ) なら確率1で採用します。悪化する場合でも、差 f ( x ′ ) − f ( x ) が小さいほど、また温度 T が高いほど採用されやすくなります。 T を反復とともに下げる規則をcooling scheduleと呼びます。",
+      "text": "通常の局所法は改善する移動だけを採用します。 Simulated Annealingは、現在点 x から候補点 x ′ を作った後、目的値が悪化しても一定確率で採用します。 よく使われる受理確率はMetropolis型です。 P ( accept ) = min ( 1 , exp ( − f ( x ′ ) − f ( x ) T ) ) f ( x ′ ) ≤ f ( x ) なら確率1で採用します。 悪化する場合でも、差 f ( x ′ ) − f ( x ) が小さいほど、また温度 T が高いほど採用されやすくなります。 T を反復とともに下げる規則をcooling scheduleと呼びます。",
       "title": "何を確率的に受理しているか"
     },
     {
@@ -29914,7 +30110,7 @@
         "S008",
         "S009"
       ],
-      "text": "Simulated Annealingはheuristicであり、有限回の実行で大域最適性を証明する手法ではありません。理論上は無限回・十分遅い冷却で大域最適へ収束するという結果がありますが、実務で使う有限budgetの設定にはそのまま適用できません。bounded低次元で決定的な網羅性を持たせたい場合は、 SHGO や DIRECT のような領域分割型の手法が別の選択肢になります。 SciPyには古典的なSimulated Annealingの直接実装はなく、後継として scipy.optimize.dual_annealing が提供されています。dual_annealingはvisiting distributionと局所探索を組み合わせた発展形で、詳細は Dual Annealing を確認してください。",
+      "text": "Simulated Annealingはheuristicであり、有限回の実行で大域最適性を証明する手法ではありません。 理論上は無限回・十分遅い冷却で大域最適へ収束するという結果がありますが、実務の有限budgetにはそのまま適用できません。 bounded低次元で決定的な網羅性を持たせたい場合は、 SHGO や DIRECT のような領域分割型が別の選択肢になります。 SciPyには古典的なSimulated Annealingの直接実装はなく、後継として scipy.optimize.dual_annealing が提供されています。 dual_annealing はvisiting distributionと局所探索を組み合わせた発展形です。",
       "title": "保証の弱さ"
     },
     {
@@ -29962,7 +30158,7 @@
         "S008",
         "S009"
       ],
-      "text": "評価予算を消費してもincumbentがほとんど改善しない 探索点群の多様性が早期に失われ、同じbasin付近に留まる 悪化移動の受理率がほぼ0または1のまま変化しない 異なるseedで得られる解が大きくばらつく Warning 「Simulated Annealingを実行した」だけでは結果の再現条件として不十分です。初期点、cooling schedule、step size、seedを一緒に記録します。",
+      "text": "評価予算を消費してもincumbentがほとんど改善しない 探索点群の多様性が早期に失われ、同じbasin付近に留まる 悪化移動の受理率がほぼ0または1のまま変化しない 異なるseedで得られる解が大きくばらつく Warning 「Simulated Annealingを実行した」だけでは結果の再現条件として不十分です。 初期点とseedを記録します。 cooling scheduleとstep sizeも残してください。",
       "title": "失敗・切替の兆候"
     },
     {
@@ -29986,7 +30182,7 @@
         "S008",
         "S009"
       ],
-      "text": "より発展したvisiting distributionとlocal searchの組み合わせは Dual Annealing 、ランダム摂動と局所法を交互に行う近い戦略は Basin Hopping 、大域探索全体の選び分けは 大域探索・多峰性問題の選び分け で確認できます。",
+      "text": "発展したvisiting distributionとlocal search: Dual Annealing ランダム摂動と局所法の交互実行: Basin Hopping 大域探索全体の選び分け: 大域探索・多峰性問題の選び分け",
       "title": "次に読む"
     },
     {
@@ -30010,7 +30206,7 @@
         "S008",
         "S009"
       ],
-      "text": "温度が高いときは悪化移動をほぼ自由に受理するため、探索はrandom walkに近づき、広い領域のbasinへ移動できます。温度が低いときは改善移動しか事実上受理せず、局所法に近い挙動になります。 高温段階: 多様なbasinへの到達を優先し、incumbentの改善は保証しない 低温段階: 見つけたbasin内を絞り込み、局所的な精緻化を行う cooling scheduleが速すぎる: 局所解へ早期収束し、他のbasinを見逃す cooling scheduleが遅すぎる: 評価予算を使い切っても収束しない 温度の下げ方（線形、幾何、対数など）とrestart（re-annealing）の有無は実装ごとに異なるparameterです。",
+      "text": "温度が高いと、悪化移動を受理して広い領域のbasinへ移れます。 温度が低いと、改善移動を中心に受理する局所法へ近づきます。 ここで、探索中の current と、これまでの最良値 best-so-far を分けて見ます。 次の固定実行では、橙の current が上昇しても、青緑の best-so-far は悪化しません。 固定1次元Rastrigin、seed 7、初期温度5.0、幾何冷却0.985のpure Python実行です。別seed、高次元、別schedule、Simulated Annealing一般の性能や大域最適性は示しません。 このrunでは、受理した65 moveのうち32 moveが悪化でした。 そのうち18 moveは最初の100反復、1 moveだけが最後の100反復に現れます。 温度が下がるにつれて、探索から絞り込みへ重心が移った結果です。 固定した1次元Rastrigin、seed 7の教材実行です。 最良目的値は 32.25 → 0.00076 ですが、最適性証明ではありません。 別seed、高次元、別scheduleで同じ結果になることも保証しません。 cooling scheduleが速すぎると、他のbasinへ移る前に探索が固まります。 遅すぎると、評価予算を使い切っても探索が絞れません。 温度の下げ方とrestart（re-annealing）の有無は、実装ごとに記録すべきparameterです。",
       "title": "温度が挙動をどう変えるか"
     },
     {

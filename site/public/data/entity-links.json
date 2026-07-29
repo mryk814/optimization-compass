@@ -8683,7 +8683,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "非負のedge costを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。"
+      "summary": "非負の重みを持つgraphで、確定済み距離やadmissible heuristicを使って最短路を厳密に求める探索法です。"
     },
     {
       "aliases": [],
@@ -9019,7 +9019,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "問題をstateとstageに分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。"
+      "summary": "問題を状態（state）と段階（stage）に分け、同じ部分問題を再利用してBellman再帰を解く、離散問題向けの厳密法です。"
     },
     {
       "aliases": [],
