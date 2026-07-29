@@ -34,11 +34,11 @@
 | `dijkstra-astar` | `M_DIJKSTRA_ASTAR` | 62 | 4238 | 8 | 1 | pass |
 | `direct-collocation` | `M_DIRECT_COLLOCATION` | 77 | 5596 | 9 | 1 | pass |
 | `direct-global` | `M_DIRECT` | 85 | 3002 | 11 | 1 | pass |
-| `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 5268 | 10 | 1 | pass |
+| `direct-shooting` | `M_DIRECT_SHOOTING` | 83 | 5274 | 10 | 1 | pass |
 | `dual-annealing` | `M_SIMULATED_ANNEALING` | 72 | 2909 | 7 | 1 | pass |
 | `dual-simplex` | `M_DUAL_SIMPLEX` | 85 | 2015 | 7 | 1 | pass |
 | `dynamic-programming` | `M_DYNAMIC_PROGRAMMING` | 64 | 3975 | 8 | 1 | pass |
-| `epsilon-constraint` | `M_EPSILON_CONSTRAINT` | 59 | 4574 | 10 | 1 | pass |
+| `epsilon-constraint` | `M_EPSILON_CONSTRAINT` | 59 | 4586 | 10 | 1 | pass |
 | `family.composite-convex` | `MF_COMPOSITE_CONVEX` | 76 | 2948 | 7 | 1 | pass |
 | `family.constrained-nlp` | `MF_CONSTRAINED_NLP` | 56 | 3370 | 8 | 1 | pass |
 | `family.constraint-programming` | `MF_CONSTRAINT_PROGRAMMING` | 66 | 2500 | 7 | 1 | pass |
@@ -68,7 +68,7 @@
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 83 | 3960 | 14 | 1 | pass |
 | `mads` | `M_MADS` | 65 | 3113 | 8 | 1 | pass |
 | `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 3778 | 12 | 1 | pass |
-| `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 3357 | 11 | 1 | pass |
+| `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 3345 | 11 | 1 | pass |
 | `mirror-descent` | `M_MIRROR_DESCENT` | 92 | 2835 | 9 | 1 | pass |
 | `mma` | `M_MMA` | 63 | 1250 | 5 | 1 | pass |
 | `moead` | `M_MOEA_D` | 80 | 2772 | 8 | 1 | pass |

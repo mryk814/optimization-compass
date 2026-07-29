@@ -8,6 +8,7 @@ import random
 from pathlib import Path
 
 from optimization_compass.constraint_geometry import generate_so3_traces
+from optimization_compass.derived_media import render_nelder_mead_static_svg
 from optimization_compass.learning_slices import (
     generate_feasible_region_artifact,
     generate_pareto_front_artifact,
@@ -19,10 +20,13 @@ from optimization_compass.search_tree import (
     SearchTreeFramePayload,
     generate_search_tree_artifact,
 )
-from optimization_compass.site_export import _generate_optimal_control_traces
+from optimization_compass.site_export import (
+    _generate_optimal_control_traces,
+    _visualization_scenario,
+)
 from optimization_compass.surrogate_uncertainty import generate_surrogate_scenario
 from optimization_compass.trace_models import AlgorithmTrace, TraceFrame
-from optimization_compass.traces import generate_gradient_bundle
+from optimization_compass.traces import generate_gradient_bundle, generate_nelder_mead_trace
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_OUTPUT = ROOT / "site" / "public" / "media"
@@ -71,6 +75,7 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "network-simplex-pivot-execution.svg": _network_simplex_pivot_svg(dataset_version).encode(
             "utf-8"
         ),
+        "nelder-mead-execution.svg": _nelder_mead_svg(dataset_version),
         "optimal-control-mesh-execution.svg": _optimal_control_mesh_svg(dataset_version).encode(
             "utf-8"
         ),
@@ -91,6 +96,29 @@ def generate_article_figures(dataset_version: str) -> dict[str, bytes]:
         "topology-field-execution.svg": _topology_field_svg(dataset_version).encode("utf-8"),
         "trf-probe-execution.svg": _trf_probe_svg(dataset_version).encode("utf-8"),
     }
+
+
+def _nelder_mead_svg(dataset_version: str) -> bytes:
+    trace = generate_nelder_mead_trace(
+        problem_instance_id="OBJECTIVE_QUADRATIC_2D",
+        trace_id="nelder-mead-quadratic",
+        dataset_version=dataset_version,
+    )
+    rendered = render_nelder_mead_static_svg(
+        scenario=_visualization_scenario(trace),
+        trace=trace,
+    ).decode("utf-8")
+    return (
+        rendered.replace(
+            'aria-labelledby="title description"',
+            'aria-labelledby="figure-title figure-description"',
+            1,
+        )
+        .replace('id="title"', 'id="figure-title"', 1)
+        .replace('id="description"', 'id="figure-description"', 1)
+        .replace(">Scenario SCENARIO_NM_QUADRATIC", ">実行生成: Scenario SCENARIO_NM_QUADRATIC", 1)
+        .encode("utf-8")
+    )
 
 
 def _active_set_qp_objective(point: tuple[float, float]) -> float:

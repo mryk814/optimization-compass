@@ -16,7 +16,7 @@ last_reviewed: 2026-07-26
 
 ## 30秒でつかむ
 
-この手法では、stateをすべて独立には決めません。
+この手法の気持ちは、stateをすべて独立には決めないことです。
 **controlを仮定してsimulationし、trajectoryが目標へ近づくよう調整します。**
 
 - 見ているもの: rollout trajectory、cost、terminal error、constraint violation

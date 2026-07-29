@@ -13541,7 +13541,7 @@
         "S050",
         "S076"
       ],
-      "text": "この手法では、stateをすべて独立には決めません。 controlを仮定してsimulationし、trajectoryが目標へ近づくよう調整します。 見ているもの: rollout trajectory、cost、terminal error、constraint violation 動かしているもの: control sequenceまたはそのparameter 前進の判断: costが下がり、feasibilityが保たれているか 別に確認するもの: rolloutの実時間、warm startの効き、deadlineへの余裕 恐れていること: 不安定dynamics、長いhorizon、初期control依存、感度の悪条件化 stateはsimulationで決まるため、変数数を減らせます。 一方、長いhorizonでは早い時刻のcontrolが後半stateへ強く影響します。 その結果、optimizationが難しくなります。",
+      "text": "この手法の気持ちは、stateをすべて独立には決めないことです。 controlを仮定してsimulationし、trajectoryが目標へ近づくよう調整します。 見ているもの: rollout trajectory、cost、terminal error、constraint violation 動かしているもの: control sequenceまたはそのparameter 前進の判断: costが下がり、feasibilityが保たれているか 別に確認するもの: rolloutの実時間、warm startの効き、deadlineへの余裕 恐れていること: 不安定dynamics、長いhorizon、初期control依存、感度の悪条件化 stateはsimulationで決まるため、変数数を減らせます。 一方、長いhorizonでは早い時刻のcontrolが後半stateへ強く影響します。 その結果、optimizationが難しくなります。",
       "title": "30秒でつかむ"
     },
     {
@@ -14399,7 +14399,7 @@
         "S039",
         "S055"
       ],
-      "text": "複数目的を根拠のない一つのscoreへ足し合わせず、最も重視する目的を一つ選びます。 残りの目的は「ここまでは許す」という条件へ移します。 見ているもの: 主目的、他目的の値、feasibility、Pareto dominance 動かすもの: ε thresholdと各単目的subproblemの解 前進の判断: 異なるtrade-off領域で実行可能解を得られたか 別に確認するもの: threshold grid、subproblem数、total evaluation budget 恐れていること: thresholdの選び方、目的scale、infeasible subproblem、重複解 weighted sumで取りにくい非凸Pareto frontの領域も候補にできます。 一方で、thresholdごとにsubproblemを解くbudgetが必要です。",
+      "text": "この手法の気持ちは、複数目的を根拠のない一つのscoreへ足し合わせず、最も重視する目的を一つ選ぶことです。 残りの目的は「ここまでは許す」という条件へ移します。 見ているもの: 主目的、他目的の値、feasibility、Pareto dominance 動かすもの: ε thresholdと各単目的subproblemの解 前進の判断: 異なるtrade-off領域で実行可能解を得られたか 別に確認するもの: threshold grid、subproblem数、total evaluation budget 恐れていること: thresholdの選び方、目的scale、infeasible subproblem、重複解 weighted sumで取りにくい非凸Pareto frontの領域も候補にできます。 一方で、thresholdごとにsubproblemを解くbudgetが必要です。",
       "title": "30秒でつかむ"
     },
     {

@@ -87,6 +87,33 @@ class DerivedMediaManifest(TraceModel):
     entries: list[DerivedMediaEntry] = Field(min_length=1)
 
 
+def render_nelder_mead_static_svg(
+    *,
+    scenario: VisualizationScenario,
+    trace: AlgorithmTrace,
+) -> bytes:
+    if scenario.scenario_id != "SCENARIO_NM_QUADRATIC":
+        raise ValueError("the static-media pilot requires SCENARIO_NM_QUADRATIC")
+    if scenario.guided_story is None:
+        raise ValueError("the static-media pilot requires an authored guided story")
+    if trace.scenario_id != scenario.scenario_id:
+        raise ValueError("derived-media trace and scenario identities differ")
+
+    frame_index = scenario.guided_story.steps[-1].frame_index
+    if frame_index >= len(trace.frames):
+        raise ValueError("guided terminal frame is outside the trace")
+    bounds = _plot_bounds(trace)
+    trajectory = _best_trajectory(trace.frames)
+    simplex = [
+        point.coordinates
+        for point in trace.frames[frame_index].points
+        if point.role == "simplex-vertex"
+    ]
+    if len(simplex) != 3:
+        raise ValueError("Nelder-Mead static media requires three terminal simplex vertices")
+    return _render_svg(scenario, bounds, trajectory, simplex)
+
+
 def write_derived_media(
     output_dir: Path,
     *,
