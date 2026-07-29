@@ -2113,7 +2113,7 @@ caption {
 .markdown-body th { background: #ecefe9; color: #34453b; }
 .markdown-body figure { margin: .8rem 0; }
 .markdown-body figure img { display: block; width: 100%; height: auto; border: 1px solid #d9dbd4; border-radius: .45rem; }
-.markdown-body figcaption { margin-top: .3rem; color: #68736c; font-size: .82rem; line-height: 1.6; }
+.markdown-body figcaption { margin-top: .3rem; color: #526058; font-size: .82rem; line-height: 1.6; }
 .markdown-body math { max-width: 100%; font-size: 1.02em; }
 .math-block { overflow-x: auto; margin: .65rem 0; padding: .55rem; border-radius: .35rem; background: #f6f5ef; text-align: center; }
 .callout { margin: .75rem 0; padding: .6rem .7rem; border: 1px solid #cfd8d1; border-left: 4px solid #6c9a7f; border-radius: .35rem; background: #f5f8f3; }
