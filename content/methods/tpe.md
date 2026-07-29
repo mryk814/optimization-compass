@@ -25,6 +25,17 @@ last_reviewed: 2026-07-18
 
 Gaussian-process BOと同じ「履歴を使う逐次探索」ですが、model化する向きと得意なsearch spaceが異なります。
 
+## 実行結果を先に見る
+
+![12 trialを良い4件と悪い8件へ分け、固定bandwidthのGaussian KDEでl(x)とg(x)を比較した一次元教材。](./media/tpe-density-ratio-execution.svg "TPEの良い群と悪い群のdensity ratio")
+
+緑の $l(x)$ が高く、灰色の $g(x)$ が低い場所ほど、良いtrialに特徴的なparameterです。
+TPEの要点は、objective曲面を直接当てるのではなく、この密度差を次の提案へ使うことにあります。
+
+> **この図の範囲**
+> 1次元・12 trialの固定履歴を単純なGaussian KDEで可視化しています。
+> Optunaの内部実装や条件付きsearch space全体を再現する図ではありません。
+
 ## まず確認すること
 
 | 項目 | 確認内容 |

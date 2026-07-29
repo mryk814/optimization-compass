@@ -25,6 +25,17 @@ last_reviewed: 2026-07-18
 
 ASHAはasynchronousにpromotion / stoppingを進め、worker待ちを減らす実装strategyです。samplerとprunerは別の役割として記録します。
 
+## 実行結果を先に見る
+
+![12 trialをresource 1、3、9のrungで12件、4件、1件へ絞る固定Successive Halving実行。](./media/hyperband-rungs-execution.svg "Hyperband / ASHAのresource配分")
+
+灰色のtrialはresource 1で止まり、緑は3、橙は9まで進みます。
+この図が示すのは「どこをsamplingするか」ではなく、途中結果を見て「どのtrialへresourceを残すか」です。
+
+> **この図の範囲**
+> 滑らかな固定learning curveを使い、promotionだけを同期的に再現しています。
+> 遅咲きtrial、noise、ASHAのasynchronousなworker待ちは省略しています。
+
 ## まず確認すること
 
 | 項目 | 確認内容 |

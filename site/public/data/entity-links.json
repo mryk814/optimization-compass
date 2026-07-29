@@ -13331,7 +13331,7 @@
           "target_type": "content"
         }
       ],
-      "summary": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。"
+      "summary": "高次元の高価なblack-box向けのBayesian Optimizationです。TuRBOは局所trust regionへ探索を絞り、SAASBOは有効次元が少ないという仮定を置きます。"
     },
     {
       "aliases": [],

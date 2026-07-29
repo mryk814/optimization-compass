@@ -19679,6 +19679,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:hyperband-asha:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:hyperband-asha",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:tpe",
+        "method:M_HYPERBAND_ASHA",
+        "source:S034",
+        "source:S038",
+        "source:S069"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "Hyperband / ASHAのresource配分 灰色のtrialはresource 1で止まり、緑は3、橙は9まで進みます。 この図が示すのは「どこをsamplingするか」ではなく、途中結果を見て「どのtrialへresourceを残すか」です。 この図の範囲 滑らかな固定learning curveを使い、promotionだけを同期的に再現しています。 遅咲きtrial、noise、ASHAのasynchronousなworker待ちは省略しています。",
+      "title": "実行結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:hyperband-asha:診断値",
       "dataset_version": "0.18.19",
       "document_id": "content:hyperband-asha",
@@ -28176,6 +28200,33 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:random-search:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:random-search",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_BO_ACQUISITION_NOISE_BASELINE",
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:hyperband-asha",
+        "content:tpe",
+        "method:M_RANDOM_SEARCH",
+        "source:S034",
+        "source:S038",
+        "source:S069",
+        "trace:ARTIFACT_BO_EXPLORE_NOISELESS_RANDOM_BASELINE"
+      ],
+      "source_ids": [
+        "S034",
+        "S038",
+        "S069"
+      ],
+      "text": "Random Searchのsampling範囲とbest-so-far 同じ48 evaluationsを、左では「どこを試したか」、右では「best-so-farがいつ改善したか」として読めます。 点はsearch space全体へ散りますが、履歴を使わないので、有望な領域へ次の点が寄っていくわけではありません。 この図の範囲 固定した2次元objectiveとseed 7による教材です。 高次元での被覆率やRandom Searchの一般性能を主張する図ではありません。",
+      "title": "実行結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:random-search:次に読む",
       "dataset_version": "0.18.19",
       "document_id": "content:random-search",
@@ -31962,6 +32013,25 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:tpe:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:tpe",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "method:M_TPE",
+        "source:S034"
+      ],
+      "source_ids": [
+        "S034"
+      ],
+      "text": "TPEの良い群と悪い群のdensity ratio 緑の l ( x ) が高く、灰色の g ( x ) が低い場所ほど、良いtrialに特徴的なparameterです。 TPEの要点は、objective曲面を直接当てるのではなく、この密度差を次の提案へ使うことにあります。 この図の範囲 1次元・12 trialの固定履歴を単純なGaussian KDEで可視化しています。 Optunaの内部実装や条件付きsearch space全体を再現する図ではありません。",
+      "title": "実行結果を先に見る"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:tpe:診断値",
       "dataset_version": "0.18.19",
       "document_id": "content:tpe",
@@ -32980,6 +33050,30 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "canonical",
+      "chunk_id": "content:turbo-saasbo:30秒でつかむ",
+      "dataset_version": "0.18.19",
+      "document_id": "content:turbo-saasbo",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:smac",
+        "method:M_TURBO_SAASBO",
+        "source:S035",
+        "source:S036",
+        "source:S059"
+      ],
+      "source_ids": [
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "text": "TuRBO: 有望点の周囲だけをlocalに探索し、改善と停滞に応じてboxを伸縮する SAASBO: 多数の変数のうち、目的へ強く効く次元は少ないというpriorを置く 共通点: 高次元space全体を一様に理解しようとする負担を減らす 別に確認するもの: evaluation budget・effective dimension・restart・surrogateの診断",
+      "title": "30秒でつかむ"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
       "chunk_id": "content:turbo-saasbo:overview",
       "dataset_version": "0.18.19",
       "document_id": "content:turbo-saasbo",
@@ -32998,7 +33092,7 @@
         "S036",
         "S059"
       ],
-      "text": "高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。",
+      "text": "高次元の高価なblack-box向けのBayesian Optimizationです。TuRBOは局所trust regionへ探索を絞り、SAASBOは有効次元が少ないという仮定を置きます。",
       "title": "高次元Bayesian最適化（TuRBO / SAASBO）"
     },
     {
@@ -33120,6 +33214,30 @@
       ],
       "text": "trust regionが縮小してすぐrestartを繰り返し、best-so-farが進まない SAASBOのlengthscaleがほぼ全次元で同程度になり、sparsityの仮定が支持されない acquisitionが依然としてtrust region内の境界付近にsampleを集中させる 複数の初期点・restartで到達する最良値が大きくばらつく surrogateのcross-validation errorが高い、またはuncertaintyが未校正 局所trust regionを使わない標準的なBOは、 Bayesian Optimization で確認できます。 カテゴリ変数や条件付き空間を扱うtree-based surrogateは、 SMAC で確認できます。 高価なblack-box全体の選び分けは、 高価なblack-box・HPOの選び分け にまとめています。",
       "title": "失敗・切替の兆候"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "canonical",
+      "chunk_id": "content:turbo-saasbo:実行結果を先に見る",
+      "dataset_version": "0.18.19",
+      "document_id": "content:turbo-saasbo",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "content:bayesian-optimization",
+        "content:family.expensive-black-box",
+        "content:smac",
+        "method:M_TURBO_SAASBO",
+        "source:S035",
+        "source:S036",
+        "source:S059"
+      ],
+      "source_ids": [
+        "S035",
+        "S036",
+        "S059"
+      ],
+      "text": "TuRBO型trust regionの拡大と縮小 左は時点の異なるlocal box、右はbox lengthとbest-so-farの履歴です。 改善した点へ中心を移します。 停滞が続くと探索範囲を狭める、というTuRBO側の制御を先に掴めます。 この図の範囲 教材で実行するのはtrust-region controllerだけです。 Gaussian process・acquisition・SAAS priorは実装していません。 TuRBOとSAASBOの性能比較でもありません。",
+      "title": "実行結果を先に見る"
     },
     {
       "attribution": "Optimization Compass contributors",

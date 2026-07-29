@@ -58,7 +58,7 @@
 | `gauss-newton` | `M_GAUSS_NEWTON` | 57 | 3092 | 10 | 1 | pass |
 | `genetic-algorithm` | `M_GENETIC_ALGORITHM` | 83 | 2334 | 6 | 1 | pass |
 | `hungarian-algorithm` | `M_HUNGARIAN` | 56 | 2732 | 8 | 1 | pass |
-| `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 2809 | 8 | 1 | pass |
+| `hyperband-asha` | `M_HYPERBAND_ASHA` | 80 | 3181 | 9 | 1 | pass |
 | `ilqr-ddp` | `M_ILQR_DDP` | 100 | 5743 | 11 | 1 | pass |
 | `interior-point-nlp` | `M_INTERIOR_POINT_NLP` | 78 | 2823 | 8 | 1 | pass |
 | `lbfgs` | `M_LBFGS` | 71 | 2999 | 9 | 1 | pass |
@@ -92,7 +92,7 @@
 | `primal-simplex` | `M_SIMPLEX` | 61 | 3180 | 8 | 1 | pass |
 | `projected-gradient` | `M_PROJECTED_GRADIENT` | 58 | 3549 | 9 | 1 | pass |
 | `proximal-gradient` | `M_PROX_GRADIENT` | 55 | 2434 | 7 | 1 | pass |
-| `random-search` | `M_RANDOM_SEARCH` | 89 | 3247 | 9 | 1 | pass |
+| `random-search` | `M_RANDOM_SEARCH` | 89 | 3641 | 10 | 1 | pass |
 | `riemannian-gradient` | `M_RIEMANNIAN_GRADIENT` | 68 | 3926 | 10 | 1 | pass |
 | `riemannian-trust-region` | `M_RIEMANNIAN_TRUST_REGION` | 68 | 3047 | 10 | 1 | pass |
 | `sgd` | `M_SGD` | 105 | 4653 | 8 | 1 | pass |
@@ -105,12 +105,12 @@
 | `spsa` | `M_SPSA` | 50 | 2261 | 7 | 1 | pass |
 | `sqp` | `M_SQP` | 69 | 3077 | 9 | 1 | pass |
 | `subgradient` | `M_SUBGRADIENT` | 68 | 2632 | 7 | 1 | pass |
-| `tpe` | `M_TPE` | 69 | 2778 | 8 | 1 | pass |
+| `tpe` | `M_TPE` | 69 | 3152 | 9 | 1 | pass |
 | `trust-exact` | `M_TRUST_EXACT` | 66 | 3501 | 9 | 1 | pass |
 | `trust-krylov` | `M_TRUST_KRYLOV` | 77 | 2501 | 9 | 1 | pass |
 | `trust-region-newton-cg` | `M_TRUST_NCG` | 49 | 2361 | 8 | 1 | pass |
 | `trust-region-reflective` | `M_TRUST_REGION_REFLECTIVE` | 77 | 5217 | 15 | 1 | pass |
-| `turbo-saasbo` | `M_TURBO_SAASBO` | 173 | 3721 | 7 | 1 | pass |
+| `turbo-saasbo` | `M_TURBO_SAASBO` | 96 | 4223 | 9 | 1 | pass |
 | `weighted-sum` | `M_WEIGHTED_SUM` | 62 | 3377 | 8 | 1 | pass |
 
 ## Floor

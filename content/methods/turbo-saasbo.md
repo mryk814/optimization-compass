@@ -4,7 +4,7 @@ kind: method
 method_id: M_TURBO_SAASBO
 title_ja: 高次元Bayesian最適化（TuRBO / SAASBO）
 title_en: TuRBO / SAASBO
-summary: 高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
+summary: 高次元の高価なblack-box向けのBayesian Optimizationです。TuRBOは局所trust regionへ探索を絞り、SAASBOは有効次元が少ないという仮定を置きます。
 source_ids: [S035, S036, S059]
 prerequisites: []
 related_ids: [bayesian-optimization, smac, family.expensive-black-box]
@@ -12,7 +12,27 @@ status: published
 last_reviewed: 2026-07-18
 ---
 
-高次元では、ガウス過程（Gaussian process）を使うベイズ最適化（Bayesian Optimization, BO）は性能を落としやすくなります。TuRBOは局所的な探索領域（trust region）に絞り、SAASBOは有効次元が少ないという仮定を置くことで、この難しさを緩和します。どちらも高次元のベイズ最適化に使う手法です。
+高次元の高価なblack-box向けのBayesian Optimizationです。TuRBOは局所trust regionへ探索を絞り、SAASBOは有効次元が少ないという仮定を置きます。
+
+## 30秒でつかむ
+
+- TuRBO: 有望点の周囲だけをlocalに探索し、改善と停滞に応じてboxを伸縮する
+- SAASBO: 多数の変数のうち、目的へ強く効く次元は少ないというpriorを置く
+- 共通点: 高次元space全体を一様に理解しようとする負担を減らす
+- 別に確認するもの: evaluation budget・effective dimension・restart・surrogateの診断
+
+## 実行結果を先に見る
+
+![固定seedの二次元objectiveでtrust regionの中心移動と縮小を示す教材。](./media/turbo-trust-region-execution.svg "TuRBO型trust regionの拡大と縮小")
+
+左は時点の異なるlocal box、右はbox lengthとbest-so-farの履歴です。
+改善した点へ中心を移します。
+停滞が続くと探索範囲を狭める、というTuRBO側の制御を先に掴めます。
+
+> **この図の範囲**
+> 教材で実行するのはtrust-region controllerだけです。
+> Gaussian process・acquisition・SAAS priorは実装していません。
+> TuRBOとSAASBOの性能比較でもありません。
 
 ## 高次元で標準的なGP-BOが苦しむ理由
 

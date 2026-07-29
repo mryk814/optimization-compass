@@ -17,6 +17,17 @@ last_reviewed: 2026-07-24
 
 search spaceから同じ分布に従って独立にsamplingし評価するだけの、hyperparameter optimizationにおける最も単純なbaselineです。
 
+## 実行結果を先に見る
+
+![固定seedで48回samplingした点とbest-so-far。二次元の教育用objectiveであり、手法の一般的なrankingは示さない。](./media/random-search-coverage-execution.svg "Random Searchのsampling範囲とbest-so-far")
+
+同じ48 evaluationsを、左では「どこを試したか」、右では「best-so-farがいつ改善したか」として読めます。
+点はsearch space全体へ散りますが、履歴を使わないので、有望な領域へ次の点が寄っていくわけではありません。
+
+> **この図の範囲**
+> 固定した2次元objectiveとseed 7による教材です。
+> 高次元での被覆率やRandom Searchの一般性能を主張する図ではありません。
+
 ## 何を仮定しない手法か
 
 random searchは、各trialでsearch spaceの分布からparameterを1組samplingします。
