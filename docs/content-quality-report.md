@@ -3,13 +3,13 @@
 - Published concept guides: `22`
 - Meeting the concept floor: `22`
 - Below the concept floor: `0`
-- Prose review warnings: `239`
+- Prose review warnings: `191`
 
 ## Concept publication floor
 
 | Content | Summary | Body | TOC | Valid next links | Invalid next links | Result |
 |---|---:|---:|---:|---:|---:|---|
-| `concept.chance-risk-contract` | 80 | 4961 | 7 | 4 | 0 | pass |
+| `concept.chance-risk-contract` | 80 | 5351 | 8 | 4 | 0 | pass |
 | `concept.constraint-class` | 68 | 2089 | 5 | 2 | 0 | pass |
 | `concept.convexity` | 61 | 1867 | 8 | 2 | 0 | pass |
 | `concept.derivative-free` | 81 | 2385 | 8 | 4 | 0 | pass |
@@ -30,13 +30,12 @@
 | `geometry-update-failure-modes` | 61 | 2289 | 5 | 3 | 0 | pass |
 | `shape-optimization` | 54 | 2627 | 6 | 3 | 0 | pass |
 | `shape-parameter-sensitivity` | 100 | 2635 | 7 | 3 | 0 | pass |
-| `topology-optimization` | 66 | 1639 | 6 | 3 | 0 | pass |
+| `topology-optimization` | 66 | 2058 | 7 | 3 | 0 | pass |
 
 ## Prose warning summary
 
-- `prose.meta`: 1
-- `sentence.commas`: 156
-- `sentence.long`: 82
+- `sentence.commas`: 136
+- `sentence.long`: 55
 
 | Content | Warnings |
 |---|---:|
@@ -80,27 +79,27 @@
 | `constrained-continuous` | 7 |
 | `coordinate-descent` | 1 |
 | `cp-sat` | 2 |
-| `cp-search` | 6 |
+| `cp-search` | 0 |
 | `density-filter` | 4 |
 | `differential-evolution` | 0 |
-| `dijkstra-astar` | 2 |
+| `dijkstra-astar` | 0 |
 | `direct-collocation` | 0 |
 | `direct-global` | 2 |
-| `direct-shooting` | 7 |
-| `dual-annealing` | 2 |
+| `direct-shooting` | 0 |
+| `dual-annealing` | 0 |
 | `dual-simplex` | 5 |
 | `dynamic-programming` | 0 |
-| `epsilon-constraint` | 2 |
+| `epsilon-constraint` | 0 |
 | `family.composite-convex` | 4 |
 | `family.constrained-nlp` | 0 |
 | `family.constraint-programming` | 2 |
-| `family.discrete-structure` | 0 |
+| `family.discrete-structure` | 1 |
 | `family.evolutionary` | 6 |
 | `family.expensive-black-box` | 0 |
 | `family.global-search` | 5 |
 | `family.graph-dp` | 6 |
 | `family.local-dfo` | 5 |
-| `family.manifold` | 7 |
+| `family.manifold` | 0 |
 | `family.multi-objective` | 4 |
 | `family.optimal-control` | 0 |
 | `family.smooth-local` | 6 |
@@ -128,7 +127,7 @@
 | `momentum-sgd` | 0 |
 | `multi-objective` | 0 |
 | `multi-start` | 0 |
-| `multiple-shooting` | 7 |
+| `multiple-shooting` | 0 |
 | `network-simplex` | 0 |
 | `newton-cg` | 0 |
 | `newton-method` | 1 |
@@ -136,7 +135,7 @@
 | `nsga-iii` | 4 |
 | `optimality-criteria-topology` | 4 |
 | `outer-approximation-minlp` | 4 |
-| `particle-swarm` | 1 |
+| `particle-swarm` | 0 |
 | `pattern-search` | 3 |
 | `pbt` | 0 |
 | `pdlp` | 0 |
@@ -148,15 +147,15 @@
 | `random-search` | 0 |
 | `riemannian-gradient` | 0 |
 | `riemannian-trust-region` | 3 |
-| `sgd` | 7 |
+| `sgd` | 0 |
 | `shape-optimization` | 0 |
 | `shape-parameter-sensitivity` | 0 |
 | `shgo` | 2 |
 | `simp-topology` | 0 |
-| `simulated-annealing` | 2 |
+| `simulated-annealing` | 0 |
 | `slsqp` | 0 |
 | `smac` | 4 |
-| `spatial-branch-and-bound` | 6 |
+| `spatial-branch-and-bound` | 0 |
 | `spsa` | 1 |
 | `sqp` | 3 |
 | `subgradient` | 0 |
