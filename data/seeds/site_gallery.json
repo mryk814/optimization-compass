@@ -2085,6 +2085,78 @@
         "1次元・少数点・小noiseの固定教材であり、実際の混合物制約、カテゴリ原料、batch effect、時間変化、多目的品質、測定限界を表さない。",
         "Bayesian optimizationが提案した候補は品質、安全性、有効性、規制適合を保証しない。許容領域は専門家が先に定義し、確認実験と独立検証を別に行う必要がある。"
       ]
+    },
+    {
+      "case_id": "nelder-mead-initial-simplex",
+      "title_ja": "初期simplexで局所探索の感度を見抜く",
+      "title_en": "Diagnose local-search sensitivity from the initial simplex",
+      "domain": "education",
+      "problem_archetype_id": "PA006",
+      "feature_values": [
+        {"feature_id": "F_VARIABLE_DOMAIN", "value": "continuous"},
+        {"feature_id": "F_OBJECTIVE_FORM", "value": "general_nonlinear"},
+        {"feature_id": "F_DERIVATIVE_ACCESS", "value": "none_available"},
+        {"feature_id": "F_CONSTRAINT_CLASS", "value": "unconstrained"},
+        {"feature_id": "F_EVALUATION_COST", "value": "cheap"},
+        {"feature_id": "F_SOLUTION_GOAL", "value": "local_stationary"}
+      ],
+      "question_answers": {
+        "Q01": "continuous",
+        "Q02": "explicit_algebraic",
+        "Q03": "general_nonlinear",
+        "Q04": "none",
+        "Q05": "unreliable_or_none",
+        "Q06": "milliseconds_or_less",
+        "Q07": "deterministic_reliable",
+        "Q08": "under_10",
+        "Q09": "local_is_fine",
+        "Q10": "no_certificate_needed",
+        "Q11": "none_known",
+        "Q12": "one_off"
+      },
+      "candidate_methods": [
+        {
+          "method_id": "M_NELDER_MEAD",
+          "reason": "目的値だけを返す低次元・無制約の局所問題で、simplexの頂点配置と受理操作を追いながらgradientなしで候補を更新できるため"
+        }
+      ],
+      "conditional_methods": [
+        {
+          "method_id": "M_MADS",
+          "reason": "bounds、black-box制約、評価失敗を追加する場合や、meshに基づく停止診断をNelder–Meadより明示したい場合"
+        }
+      ],
+      "excluded_methods": [
+        {
+          "method_id": "M_GRADIENT_DESCENT",
+          "reason": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため"
+        }
+      ],
+      "implementation_ids": ["I_SCIPY_NELDER_MEAD"],
+      "visualization_ids": [
+        "SCENARIO_NM_QUADRATIC",
+        "SCENARIO_NM_QUADRATIC_SHIFTED",
+        "SCENARIO_NM_ROSENBROCK",
+        "SCENARIO_NM_ROSENBROCK_SHIFTED"
+      ],
+      "comparison_ids": ["COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"],
+      "source_ids": ["S001", "S002", "S056", "S063"],
+      "difficulty": "intro",
+      "status": "published",
+      "last_reviewed": "2026-08-09",
+      "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
+      "variable_domain": "実務ではscaleをそろえた2個の連続calibration parameterを扱う。固定教材では $X=\\mathbb{R}^2$ とし、表示範囲だけを $x\\in[-2,2]$、$y\\in[-1,3]$ に固定する。",
+      "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
+      "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
+      "constraints": "固定教材に明示制約はない。両runでNelder–Mead係数、initial simplex scale $s=0.8$、simplex tolerance $\\tau=10^{-4}$、目的関数評価budget $B=80$を固定し、変えるのはinitial simplexの位置だけとする。",
+      "map_node_id": "answer:Q05:unreliable_or_none",
+      "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\ndef rosenbrock(x):\n    return 100.0 * (x[1] - x[0] ** 2) ** 2 + (1.0 - x[0]) ** 2\n\nfor start in (np.array([-2.5, 2.0]), np.array([-2.0, -1.0])):\n    result = minimize(rosenbrock, start, method=\"Nelder-Mead\", options={\"maxfev\": 80, \"xatol\": 1e-4, \"fatol\": 1e-4})\n    print(start.tolist(), result.fun, result.nfev, result.message)",
+      "practical_notes": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認し、次にRosenbrockの曲がった谷で経路差を読む。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
+      "limitations": [
+        "2次元・決定的・安価な標準関数と2個の初期simplexだけを扱う教育用Journeyであり、実calibrationのnoise、失敗、parameter scale、評価費、同定可能性を表さない。",
+        "既知最適点への接近や小さいsimplex diameterは大域最適性、別初期点での再現性、実問題でのNelder–Meadの優位性を保証しない。",
+        "quadraticとRosenbrockは異なる目的関数なので、両者の終端値や評価回数を性能rankingとして比較しない。既存Compareは同じquadratic内で初期simplexだけを変える感度contrastに限る。"
+      ]
     }
   ]
 }

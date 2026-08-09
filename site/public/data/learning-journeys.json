@@ -3412,6 +3412,140 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_NM_QUADRATIC_SHIFTED",
+            "SCENARIO_NM_ROSENBROCK_SHIFTED"
+          ]
+        },
+        "canonical_comparison": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+          ]
+        },
+        "canonical_problem_instance": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "OBJECTIVE_QUADRATIC_2D",
+            "OBJECTIVE_ROSENBROCK_2D"
+          ]
+        },
+        "cross_surface_links": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/nelder-mead-initial-simplex",
+            "/theater/nelder-mead",
+            "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+            "/methods/M_GRADIENT_DESCENT",
+            "/methods/M_MADS",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S031",
+            "/sources/S056",
+            "/sources/S060",
+            "/sources/S063",
+            "/sources/S094"
+          ]
+        },
+        "formulation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "nelder-mead-initial-simplex"
+          ]
+        },
+        "implementation": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "I_SCIPY_NELDER_MEAD"
+          ]
+        },
+        "method_roles": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "M_GRADIENT_DESCENT",
+            "M_MADS",
+            "M_NELDER_MEAD"
+          ]
+        },
+        "primary_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_NM_QUADRATIC"
+          ]
+        },
+        "route_reachability": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "/gallery/nelder-mead-initial-simplex",
+            "/theater/nelder-mead",
+            "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+            "/methods/M_GRADIENT_DESCENT",
+            "/methods/M_MADS",
+            "/methods/M_NELDER_MEAD",
+            "/sources/S001",
+            "/sources/S002",
+            "/sources/S031",
+            "/sources/S056",
+            "/sources/S060",
+            "/sources/S063",
+            "/sources/S094"
+          ]
+        },
+        "source_review": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "S001",
+            "S002",
+            "S031",
+            "S056",
+            "S060",
+            "S063",
+            "S094"
+          ]
+        },
+        "static_text_alternative": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "SCENARIO_NM_QUADRATIC",
+            "SCENARIO_NM_QUADRATIC_SHIFTED",
+            "SCENARIO_NM_ROSENBROCK",
+            "SCENARIO_NM_ROSENBROCK_SHIFTED"
+          ]
+        },
+        "terminology_prerequisite": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
+            "mads",
+            "method.nelder-mead"
+          ]
+        },
+        "validation_status": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": []
+        }
+      },
+      "journey_id": "nelder-mead-initial-simplex",
+      "missing_dimensions": [],
+      "status": "complete"
+    },
+    {
+      "dimensions": {
+        "alternate_scenario": {
+          "reason_codes": [],
+          "state": "complete",
+          "target_ids": [
             "SCENARIO_BINARY_KNAPSACK_BNB_BUDGET"
           ]
         },
@@ -6869,6 +7003,98 @@
     },
     {
       "candidate_method_ids": [
+        "M_NELDER_MEAD"
+      ],
+      "canonical_url": "/gallery/nelder-mead-initial-simplex",
+      "case_id": "nelder-mead-initial-simplex",
+      "comparisons": [
+        {
+          "canonical_url": "/compare/COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "comparison_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+        }
+      ],
+      "completion_reasons": [],
+      "conditional_method_ids": [
+        "M_MADS"
+      ],
+      "content_ids": [
+        "mads",
+        "method.nelder-mead"
+      ],
+      "dataset_version": "0.18.19",
+      "domain": "education",
+      "excluded_method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "formulation": {
+        "constraints": "固定教材に明示制約はない。両runでNelder–Mead係数、initial simplex scale <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi><mo>&#x0003D;</mo><mn>0.8</mn></mrow></math>、simplex tolerance <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C4;</mi><mo>&#x0003D;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>4</mn></mrow></msup></mrow></math>、目的関数評価budget <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>80</mn></mrow></math>を固定し、変えるのはinitial simplexの位置だけとする。",
+        "decision_variables": "2次元Rosenbrock関数の座標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
+        "objective": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>100</mn><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02212;</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><msub><mi>x</mi><mn>1</mn></msub><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化する。最適点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
+        "variable_domain_summary": "実務ではscaleをそろえた2個の連続calibration parameterを扱う。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mn>2</mn></msup></mrow></math> とし、表示範囲だけを <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>2</mn><mo>&#x0002C;</mo><mn>2</mn><mo stretchy=\"false\">]</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> に固定する。"
+      },
+      "implementation_ids": [
+        "I_SCIPY_NELDER_MEAD"
+      ],
+      "journey_id": "nelder-mead-initial-simplex",
+      "last_reviewed": "2026-08-09",
+      "learning_objective": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
+      "limitations": [
+        "2次元・決定的・安価な標準関数と2個の初期simplexだけを扱う教育用Journeyであり、実calibrationのnoise、失敗、parameter scale、評価費、同定可能性を表さない。",
+        "quadraticとRosenbrockは異なる目的関数なので、両者の終端値や評価回数を性能rankingとして比較しない。既存Compareは同じquadratic内で初期simplexだけを変える感度contrastに限る。",
+        "既知最適点への接近や小さいsimplex diameterは大域最適性、別初期点での再現性、実問題でのNelder–Meadの優位性を保証しない。"
+      ],
+      "prerequisite_journey_ids": [],
+      "problem_archetype_id": "PA006",
+      "problem_instance_ids": [
+        "OBJECTIVE_QUADRATIC_2D",
+        "OBJECTIVE_ROSENBROCK_2D"
+      ],
+      "scenarios": [
+        {
+          "canonical_url": "/theater/nelder-mead",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "primary",
+          "scenario_id": "SCENARIO_NM_QUADRATIC"
+        },
+        {
+          "canonical_url": "/theater/nelder-mead",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_QUADRATIC_2D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_NM_QUADRATIC_SHIFTED"
+        },
+        {
+          "canonical_url": "/theater/nelder-mead",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
+          "role": "alternate",
+          "scenario_id": "SCENARIO_NM_ROSENBROCK"
+        },
+        {
+          "canonical_url": "/theater/nelder-mead",
+          "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
+          "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
+          "role": "sensitivity",
+          "scenario_id": "SCENARIO_NM_ROSENBROCK_SHIFTED"
+        }
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S031",
+        "S056",
+        "S060",
+        "S063",
+        "S094"
+      ],
+      "status": "complete",
+      "takeaway": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認し、次にRosenbrockの曲がった谷で経路差を読む。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
+      "title_en": "Diagnose local-search sensitivity from the initial simplex",
+      "title_ja": "初期simplexで局所探索の感度を見抜く"
+    },
+    {
+      "candidate_method_ids": [
         "M_CP_SAT"
       ],
       "canonical_url": "/gallery/network-upgrade-portfolio",
@@ -8233,55 +8459,7 @@
       "reason_code": "scenario_without_journey"
     },
     {
-      "asset_id": "SCENARIO_NM_QUADRATIC",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_NM_ROSENBROCK",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
       "asset_id": "hybrid-mode-chattering-ledger",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "nelder-mead-quadratic",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "nelder-mead-quadratic-shifted",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "nelder-mead-rosenbrock",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
-    },
-    {
-      "asset_id": "nelder-mead-rosenbrock-shifted",
       "asset_type": "visualization_artifact",
       "policy": "warning",
       "reason_code": "public_artifact_without_journey"
@@ -8290,11 +8468,11 @@
   "summary": {
     "milestone_status": "met",
     "status_counts": {
-      "complete": 35,
+      "complete": 36,
       "draft": 0,
       "partial": 0
     },
     "target_complete_journeys": 5,
-    "total_journeys": 35
+    "total_journeys": 36
   }
 }

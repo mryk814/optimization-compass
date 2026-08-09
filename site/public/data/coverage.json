@@ -1007,7 +1007,7 @@
           ]
         },
         "gallery": {
-          "count": 9,
+          "count": 10,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1017,6 +1017,7 @@
             "energy-cvar-procurement",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "portfolio-allocation",
             "portfolio-cvar-allocation",
             "public-infrastructure-selection"
@@ -1045,7 +1046,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 50,
+          "count": 51,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -1089,6 +1090,7 @@
             "mads",
             "method.nelder-mead",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "nelder-mead-quadratic",
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
@@ -2255,7 +2257,7 @@
           ]
         },
         "gallery": {
-          "count": 24,
+          "count": 25,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2277,6 +2279,7 @@
             "laser-process-tuning",
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "production-mix-planning",
             "shift-scheduling",
@@ -2309,7 +2312,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 64,
+          "count": 65,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -2368,6 +2371,7 @@
             "manufacturing-process-window",
             "method.gradient-descent",
             "mobile-clinic-outreach-selection",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "newton-cg",
             "newton-method",
@@ -6396,7 +6400,7 @@
           ]
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6405,6 +6409,7 @@
             "emergency-shelter-selection",
             "irrigation-retrofit-selection",
             "mobile-clinic-outreach-selection",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "production-mix-planning",
             "shift-scheduling"
@@ -6427,7 +6432,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 19,
+          "count": 20,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -6447,6 +6452,7 @@
             "irrigation-retrofit-selection",
             "method.gradient-descent",
             "mobile-clinic-outreach-selection",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "production-mix-planning",
             "shift-scheduling"
@@ -7270,11 +7276,12 @@
           ]
         },
         "gallery": {
-          "count": 1,
+          "count": 2,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "EC027"
+            "EC027",
+            "nelder-mead-initial-simplex"
           ]
         },
         "implementation": {
@@ -7294,7 +7301,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 13,
+          "count": 14,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7310,7 +7317,8 @@
             "S094",
             "failed-simulation-failure-ledger",
             "failed-simulation-feasible-ledger",
-            "mads"
+            "mads",
+            "nelder-mead-initial-simplex"
           ]
         },
         "recommendation": {
@@ -7920,7 +7928,7 @@
           ]
         },
         "gallery": {
-          "count": 8,
+          "count": 9,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7929,6 +7937,7 @@
             "energy-cvar-procurement",
             "hyperparameter-search",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "portfolio-allocation",
             "portfolio-cvar-allocation",
             "public-infrastructure-selection"
@@ -7953,7 +7962,7 @@
           "target_ids": []
         },
         "map": {
-          "count": 26,
+          "count": 27,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -7976,6 +7985,7 @@
             "hyperparameter-search",
             "method.nelder-mead",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "nelder-mead-quadratic",
             "nelder-mead-quadratic-shifted",
             "nelder-mead-rosenbrock",
@@ -11952,12 +11962,12 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
+          "count": 1,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "nelder-mead-initial-simplex"
+          ]
         },
         "implementation": {
           "count": 0,
@@ -11968,19 +11978,20 @@
           "target_ids": []
         },
         "journey": {
-          "count": 0,
-          "reason_codes": [
-            "no_inventory_connection"
-          ],
-          "state": "absent",
-          "target_ids": []
-        },
-        "map": {
           "count": 1,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
-            "None"
+            "nelder-mead-initial-simplex"
+          ]
+        },
+        "map": {
+          "count": 2,
+          "reason_codes": [],
+          "state": "connected",
+          "target_ids": [
+            "None",
+            "nelder-mead-initial-simplex"
           ]
         },
         "recommendation": {
@@ -16213,7 +16224,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 33,
+          "count": 34,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16242,6 +16253,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "production-mix-planning",
@@ -16339,7 +16351,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 34,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16368,6 +16380,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "production-mix-planning",
@@ -16465,7 +16478,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 34,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16494,6 +16507,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "production-mix-planning",
@@ -16675,7 +16689,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 34,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16704,6 +16718,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "production-mix-planning",
@@ -16878,7 +16893,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 34,
+          "count": 35,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -16907,6 +16922,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "production-mix-planning",
@@ -17192,7 +17208,7 @@
           "target_ids": []
         },
         "gallery": {
-          "count": 35,
+          "count": 36,
           "reason_codes": [],
           "state": "connected",
           "target_ids": [
@@ -17221,6 +17237,7 @@
             "manufacturing-process-window",
             "mobile-clinic-outreach-selection",
             "multi-fidelity-simulator",
+            "nelder-mead-initial-simplex",
             "network-upgrade-portfolio",
             "portfolio-allocation",
             "portfolio-cvar-allocation",

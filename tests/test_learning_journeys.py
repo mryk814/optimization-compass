@@ -77,6 +77,48 @@ def test_parameter_estimation_journey_connects_primary_sensitivity_and_compariso
     }
 
 
+def test_nelder_mead_journey_adopts_all_four_orphaned_scenarios() -> None:
+    index = load_index()
+    journey = next(
+        item for item in index.journeys if item.journey_id == "nelder-mead-initial-simplex"
+    )
+
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    assert {item.scenario_id for item in journey.scenarios} == {
+        "SCENARIO_NM_QUADRATIC",
+        "SCENARIO_NM_QUADRATIC_SHIFTED",
+        "SCENARIO_NM_ROSENBROCK",
+        "SCENARIO_NM_ROSENBROCK_SHIFTED",
+    }
+    assert {item.comparison_id for item in journey.comparisons} == {
+        "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+    }
+    assert {"method.nelder-mead", "mads"} <= set(journey.content_ids)
+
+    assessment = next(
+        item for item in index.assessments if item.journey_id == "nelder-mead-initial-simplex"
+    )
+    assert (
+        assessment.dimensions["cross_surface_links"].target_ids.count("/theater/nelder-mead") == 1
+    )
+
+    orphan_ids = {item.asset_id for item in index.orphan_assets}
+    assert (
+        not {
+            "SCENARIO_NM_QUADRATIC",
+            "SCENARIO_NM_QUADRATIC_SHIFTED",
+            "SCENARIO_NM_ROSENBROCK",
+            "SCENARIO_NM_ROSENBROCK_SHIFTED",
+            "nelder-mead-quadratic",
+            "nelder-mead-quadratic-shifted",
+            "nelder-mead-rosenbrock",
+            "nelder-mead-rosenbrock-shifted",
+        }
+        & orphan_ids
+    )
+
+
 def test_expensive_black_box_journey_reuses_bo_scenarios_and_related_comparisons() -> None:
     index = load_index()
     journey = next(item for item in index.journeys if item.journey_id == "hyperparameter-search")

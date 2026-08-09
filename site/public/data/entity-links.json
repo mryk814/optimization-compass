@@ -3104,6 +3104,122 @@
     },
     {
       "aliases": [],
+      "canonical_url": "/gallery/nelder-mead-initial-simplex",
+      "entity_id": "nelder-mead-initial-simplex",
+      "entity_type": "case",
+      "external_url": null,
+      "label": "初期simplexで局所探索の感度を見抜く",
+      "relations": [
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_CONSTRAINT_CLASS:unconstrained",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_DERIVATIVE_ACCESS:none_available",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_EVALUATION_COST:cheap",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_OBJECTIVE_FORM:general_nonlinear",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_SOLUTION_GOAL:local_stationary",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "feature_value",
+          "target_id": "F_VARIABLE_DOMAIN:continuous",
+          "target_type": "feature_value"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_NELDER_MEAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA006",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_NM_QUADRATIC",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_NM_ROSENBROCK",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
+          "target_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+          "target_type": "view"
+        }
+      ],
+      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+    },
+    {
+      "aliases": [],
       "canonical_url": "/gallery/network-upgrade-portfolio",
       "entity_id": "network-upgrade-portfolio",
       "entity_type": "case",
@@ -5221,6 +5337,11 @@
         {
           "relation_type": "learning_journey",
           "target_id": "hyperparameter-search",
+          "target_type": "journey"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
           "target_type": "journey"
         },
         {
@@ -21764,6 +21885,117 @@
     {
       "aliases": [],
       "canonical_url": null,
+      "entity_id": "nelder-mead-initial-simplex",
+      "entity_type": "journey",
+      "external_url": null,
+      "label": "初期simplexで局所探索の感度を見抜く",
+      "relations": [
+        {
+          "relation_type": "alternate",
+          "target_id": "SCENARIO_NM_ROSENBROCK",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "candidate_method",
+          "target_id": "M_NELDER_MEAD",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "comparison",
+          "target_id": "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+          "target_type": "comparison"
+        },
+        {
+          "relation_type": "conditional_method",
+          "target_id": "M_MADS",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S001",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S002",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S031",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S060",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S063",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
+          "target_id": "S094",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "excluded_method",
+          "target_id": "M_GRADIENT_DESCENT",
+          "target_type": "method"
+        },
+        {
+          "relation_type": "implementation",
+          "target_id": "I_SCIPY_NELDER_MEAD",
+          "target_type": "implementation"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "mads",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "learning",
+          "target_id": "method.nelder-mead",
+          "target_type": "content"
+        },
+        {
+          "relation_type": "primary",
+          "target_id": "SCENARIO_NM_QUADRATIC",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "problem",
+          "target_id": "PA006",
+          "target_type": "problem"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+          "target_type": "scenario"
+        },
+        {
+          "relation_type": "sensitivity",
+          "target_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+          "target_type": "scenario"
+        }
+      ],
+      "summary": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
       "entity_id": "network-upgrade-portfolio",
       "entity_type": "journey",
       "external_url": null,
@@ -26135,6 +26367,11 @@
         },
         {
           "relation_type": "case",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
           "target_id": "network-upgrade-portfolio",
           "target_type": "case"
         },
@@ -26696,6 +26933,11 @@
           "target_type": "case"
         },
         {
+          "relation_type": "case",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "case"
+        },
+        {
           "relation_type": "comparison",
           "target_id": "COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
           "target_type": "comparison"
@@ -27104,6 +27346,11 @@
         {
           "relation_type": "case",
           "target_id": "multi-fidelity-simulator",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "case",
+          "target_id": "nelder-mead-initial-simplex",
           "target_type": "case"
         },
         {
@@ -29474,7 +29721,18 @@
       "entity_type": "problem",
       "external_url": null,
       "label": "滑らかな低次元無制約",
-      "relations": [],
+      "relations": [
+        {
+          "relation_type": "case",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "case"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
+        }
+      ],
       "summary": "滑らかな低次元無制約。変数=continuous、目的=general_nonlinear、制約=unconstrained。"
     },
     {
@@ -31800,6 +32058,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
         }
       ],
       "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
@@ -31831,6 +32094,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
         }
       ],
       "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
@@ -31857,6 +32125,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
         }
       ],
       "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
@@ -31883,6 +32156,11 @@
           "relation_type": "evidence",
           "target_id": "S002",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "nelder-mead-initial-simplex",
+          "target_type": "journey"
         }
       ],
       "summary": "単体の幾何操作と候補の受理判断を結び付けて読む"
@@ -36232,6 +36510,46 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_MOMENTUM_QUADRATIC_DIVERGENCE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_QUADRATIC",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_NM_QUADRATIC",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_NM_QUADRATIC_SHIFTED",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_ROSENBROCK",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_NM_ROSENBROCK",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_NM_ROSENBROCK_SHIFTED",
       "relations": [],
       "summary": ""
     },

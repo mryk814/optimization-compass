@@ -476,22 +476,26 @@ def _assess_journey(
         item for item in journey.scenarios if item.role in {"failure_contrast", "sensitivity"}
     ]
     reference_issues = _missing_journey_references(journey, inventories=inventories)
-    routes = [
-        journey.canonical_url,
-        *(item.canonical_url for item in journey.scenarios),
-        *(item.canonical_url for item in journey.comparisons),
-        *(
-            f"/methods/{method_id}"
-            for method_id in sorted(
-                {
-                    *journey.candidate_method_ids,
-                    *journey.conditional_method_ids,
-                    *journey.excluded_method_ids,
-                }
-            )
-        ),
-        *(f"/sources/{source_id}" for source_id in journey.source_ids),
-    ]
+    routes = list(
+        dict.fromkeys(
+            [
+                journey.canonical_url,
+                *(item.canonical_url for item in journey.scenarios),
+                *(item.canonical_url for item in journey.comparisons),
+                *(
+                    f"/methods/{method_id}"
+                    for method_id in sorted(
+                        {
+                            *journey.candidate_method_ids,
+                            *journey.conditional_method_ids,
+                            *journey.excluded_method_ids,
+                        }
+                    )
+                ),
+                *(f"/sources/{source_id}" for source_id in journey.source_ids),
+            ]
+        )
+    )
     scenario_ids = [item.scenario_id for item in journey.scenarios]
     has_static_alternatives = bool(scenario_ids) and all(
         scenario_id in scenarios_by_id
