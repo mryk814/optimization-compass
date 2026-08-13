@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 PIN_SCRIPT = ROOT / "scripts/verify_workflow_pins.py"
 REPORT_SCRIPT = ROOT / "scripts/dependency_report.py"
+AUDIT_SCRIPT = ROOT / "scripts/verify_npm_audit.py"
 
 
 def test_repository_workflows_pin_every_external_action() -> None:
@@ -57,6 +58,50 @@ def test_workflow_pin_validator_rejects_mutable_refs_and_missing_versions(tmp_pa
     assert result.returncode == 1
     assert "external action is not pinned to a 40-char SHA" in result.stdout
     assert "pinned action needs an exact version comment" in result.stdout
+
+
+def test_npm_audit_validator_accepts_report_without_high_findings(tmp_path: Path) -> None:
+    report = tmp_path / "npm-audit.json"
+    report.write_text(
+        json.dumps({"vulnerabilities": {"example": {"severity": "moderate"}}}),
+        encoding="utf-8",
+    )
+
+    result = subprocess.run(
+        [sys.executable, str(AUDIT_SCRIPT), "--report", str(report)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0
+
+
+def test_npm_audit_validator_rejects_every_high_finding(tmp_path: Path) -> None:
+    report = tmp_path / "npm-audit.json"
+    report.write_text(
+        json.dumps(
+            {
+                "vulnerabilities": {
+                    "react-router": {"severity": "high"},
+                    "undici": {"severity": "critical"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = subprocess.run(
+        [sys.executable, str(AUDIT_SCRIPT), "--report", str(report)],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 1
+    assert "high/critical vulnerabilities: react-router, undici" in result.stderr
 
 
 def test_dependency_report_inventory_is_sorted_and_keeps_duplicate_lock_paths(
