@@ -1172,6 +1172,8 @@ def _write_dummy_trace(
         generate_nelder_mead_trace(
             problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
             initial_point=[-2.0, -1.0],
+            initial_scale=0.8,
+            budget=80,
             trace_id="nelder-mead-rosenbrock-shifted",
             scenario_id="SCENARIO_NM_ROSENBROCK_SHIFTED",
             dataset_version=dataset_version,
@@ -2323,6 +2325,7 @@ def _trace_lesson(
 
     if is_nelder_mead:
         shifted = trace.scenario_id.endswith("_SHIFTED")
+        failure_slice = trace.scenario_id == "SCENARIO_NM_ROSENBROCK_SHIFTED"
         base_id = trace.scenario_id.removesuffix("_SHIFTED")
         next_id = base_id if shifted else f"{trace.scenario_id}_SHIFTED"
         return VisualizationLesson(
@@ -2332,8 +2335,21 @@ def _trace_lesson(
             ),
             misconception=(
                 _localized(
-                    "同じ目的関数なら初期simplexを変えても同じ経路を通る",
-                    "Changing the initial simplex does not change the path on the same objective",
+                    (
+                        "開始位置、initial simplex scale、評価budgetが異なるrunの差を、"
+                        "開始位置だけの感度と解釈できる"
+                    )
+                    if failure_slice
+                    else "同じ目的関数なら初期simplexを変えても同じ経路を通る",
+                    (
+                        "A run with a different start, initial simplex scale, and evaluation "
+                        "budget can be interpreted as start-position sensitivity alone"
+                    )
+                    if failure_slice
+                    else (
+                        "Changing the initial simplex does not change the path on the same "
+                        "objective"
+                    ),
                 )
                 if shifted
                 else None
@@ -2355,9 +2371,25 @@ def _trace_lesson(
             failure_signals=(
                 [
                     _signal(
-                        "initial_simplex_changes_path",
-                        "初期simplexの位置により受理操作と収束経路が変わる",
-                        "The initial simplex changes accepted operations and the convergence path",
+                        (
+                            "shrink_slice_is_multifactor"
+                            if failure_slice
+                            else "initial_simplex_changes_path"
+                        ),
+                        (
+                            "開始位置、scale、budgetが異なるfailure sliceで縮小と予算停止を読む"
+                            if failure_slice
+                            else "初期simplexの位置により受理操作と収束経路が変わる"
+                        ),
+                        (
+                            "Read shrinkage and budget termination in a failure slice whose "
+                            "start, scale, and budget all differ"
+                            if failure_slice
+                            else (
+                                "The initial simplex changes accepted operations and the "
+                                "convergence path"
+                            )
+                        ),
                         "simplex_vertices",
                         "accepted_operation",
                         "objective_value",
@@ -2397,7 +2429,13 @@ def _trace_lesson(
                     "objective_value",
                 ),
             ],
-            comparison_role="sensitivity_variant" if shifted else "primary_example",
+            comparison_role=(
+                "failure_contrast"
+                if failure_slice
+                else "sensitivity_variant"
+                if shifted
+                else "primary_example"
+            ),
             prerequisite_concept_ids=["CONCEPT_DERIVATIVE_FREE", "CONCEPT_SIMPLEX"],
             recommended_next_scenario_ids=[next_id],
             known_reference_display=KnownReferenceDisplay(
@@ -2419,8 +2457,19 @@ def _trace_lesson(
                 "Nelder–Mead: simplexの幾何操作と受理判断",
                 "Nelder–Mead: simplex geometry and acceptance decisions",
             ),
-            limitations_ja="2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
-            limitations_en="A deterministic 2D educational run, not a general performance ranking",
+            limitations_ja=(
+                "2次元の教育用failure sliceであり、開始位置、initial simplex scale、評価budgetを"
+                "同時に変えるため、単一要因の感度や一般的な性能優劣を示さない"
+                if failure_slice
+                else "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない"
+            ),
+            limitations_en=(
+                "A 2D educational failure slice that changes the start, initial simplex scale, "
+                "and evaluation budget together; it is neither a one-factor sensitivity study "
+                "nor a general performance ranking"
+                if failure_slice
+                else "A deterministic 2D educational run, not a general performance ranking"
+            ),
         )
 
     method_label = trace.method_id.removeprefix("M_").replace("_", " ").title()
@@ -2642,6 +2691,8 @@ def _visualization_scenario(trace: AlgorithmTrace) -> VisualizationScenario:
         if is_optimal_control
         else "failure_contrast"
         if is_divergence or (is_search_tree and trace.terminal_status == "budget_exhausted")
+        else "failure_contrast"
+        if trace.scenario_id == "SCENARIO_NM_ROSENBROCK_SHIFTED"
         else "sensitivity"
         if is_nelder_mead and trace.scenario_id.endswith("_SHIFTED")
         else "mechanism"

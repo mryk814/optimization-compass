@@ -100,7 +100,7 @@
       "renderer_family": "simplex_geometry",
       "scenario_id": "SCENARIO_NM_QUADRATIC",
       "source_artifact_path": "traces/nelder-mead-quadratic.json",
-      "source_artifact_sha256": "ebcf2218c868ea03bac2d7ea26161b3dee09e4468d51656603d26c9a88d9ac34",
+      "source_artifact_sha256": "49ff177f8545f5958678ebadd8d6d6f37297303fafebba4e6e301e8381517b73",
       "source_ids": [
         "S001",
         "S002"

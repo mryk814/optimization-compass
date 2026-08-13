@@ -185,8 +185,7 @@
     {
       "applicability": "expected",
       "artifact_ids": [
-        "nelder-mead-quadratic-shifted",
-        "nelder-mead-rosenbrock-shifted"
+        "nelder-mead-quadratic-shifted"
       ],
       "artifact_kind": "executable_trace",
       "expectation_id": "COV_NM_SENSITIVITY_NA",

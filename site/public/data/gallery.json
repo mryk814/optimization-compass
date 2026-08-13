@@ -954,13 +954,14 @@
         "I_ACADOS",
         "I_DRAKE"
       ],
-      "last_reviewed": "2026-07-19",
+      "last_reviewed": "2026-08-13",
       "limitations": [
-        "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。"
+        "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。",
+        "hybrid mode chattering ledgerは固定した合成mode sequenceであり、hybrid solver execution、contact／friction model、物理simulationを表しません。mode discoveryの一般性能やtrajectoryの可行性も保証しません。"
       ],
       "map_node_id": "answer:Q11:optimal_control",
       "objective": "参照軌道との差である追従誤差（tracking error）、制御入力の大きさ（control effort）、所要時間を重み付けし、$f=\\sum\\lVert x_k-x_{ref,k}\\rVert_Q^2+\\sum\\lVert u_k\\rVert_R^2+\\rho T$ を最小化する。",
-      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のTheater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
+      "practical_notes": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のpendulum Theater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。hybrid mode chattering ledgerもEC020のtrajectoryへmode変数を追加したsolver実行ではない。固定した合成mode sequenceのsecondary failure sliceとして、objective／dynamics defectとは別にmode switch数とswitching intervalを読む。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "problem_archetype_id": "PA042",
       "python_example": "import casadi as ca\n\nx = ca.MX.sym(\"x\")\nu = ca.MX.sym(\"u\")\ndt = 0.1\nnext_x = x + dt * (-x + u)\nstage_cost = x**2 + 0.1 * u**2\nstep = ca.Function(\"step\", [x, u], [next_x, stage_cost])\nprint(step(1.0, 0.0))",
       "question": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
@@ -993,7 +994,8 @@
         "VIEW_PROBLEM_STRUCTURE",
         "SCENARIO_OPTIMAL_CONTROL_EC020",
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
-        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
+        "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+        "SCENARIO_HYBRID_MODE_CHATTERING"
       ]
     },
     {
@@ -3531,7 +3533,7 @@
           "reason": "bounds、black-box制約、評価失敗を追加する場合や、meshに基づく停止診断をNelder–Meadより明示したい場合"
         }
       ],
-      "constraints": "固定教材に明示制約はない。両runでNelder–Mead係数、initial simplex scale $s=0.8$、simplex tolerance $\\tau=10^{-4}$、目的関数評価budget $B=80$を固定し、変えるのはinitial simplexの位置だけとする。",
+      "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance $\\tau=10^{-4}$、scale $s=0.8$、budget $B=80$を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは $s=0.5$、$B=160$、shrink failure sliceは $s=0.8$、$B=80$を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
       "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
       "difficulty": "intro",
       "domain": "education",
@@ -3570,7 +3572,7 @@
       "implementation_ids": [
         "I_SCIPY_NELDER_MEAD"
       ],
-      "last_reviewed": "2026-08-09",
+      "last_reviewed": "2026-08-13",
       "limitations": [
         "2次元・決定的・安価な標準関数と2個の初期simplexだけを扱う教育用Journeyであり、実calibrationのnoise、失敗、parameter scale、評価費、同定可能性を表さない。",
         "既知最適点への接近や小さいsimplex diameterは大域最適性、別初期点での再現性、実問題でのNelder–Meadの優位性を保証しない。",
@@ -3578,9 +3580,9 @@
       ],
       "map_node_id": "answer:Q05:unreliable_or_none",
       "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
-      "practical_notes": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認し、次にRosenbrockの曲がった谷で経路差を読む。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
+      "practical_notes": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認する。次にRosenbrockのcanonical runとshrink failure sliceで経路を読むが、scaleとbudgetも異なるため差を初期位置だけに帰属させない。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
       "problem_archetype_id": "PA006",
-      "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\ndef rosenbrock(x):\n    return 100.0 * (x[1] - x[0] ** 2) ** 2 + (1.0 - x[0]) ** 2\n\nfor start in (np.array([-2.5, 2.0]), np.array([-2.0, -1.0])):\n    result = minimize(rosenbrock, start, method=\"Nelder-Mead\", options={\"maxfev\": 80, \"xatol\": 1e-4, \"fatol\": 1e-4})\n    print(start.tolist(), result.fun, result.nfev, result.message)",
+      "python_example": "import numpy as np\nfrom scipy.optimize import minimize\n\ndef rosenbrock(x):\n    return 100.0 * (x[1] - x[0] ** 2) ** 2 + (1.0 - x[0]) ** 2\n\nruns = ((\"canonical\", np.array([-1.2, 1.0]), 0.5, 160), (\"shrink slice\", np.array([-2.0, -1.0]), 0.8, 80))\nfor label, start, scale, budget in runs:\n    initial_simplex = np.vstack([start, start + [scale, 0.0], start + [0.0, scale]])\n    history = [start.copy()]\n    result = minimize(\n        rosenbrock,\n        start,\n        method=\"Nelder-Mead\",\n        callback=lambda xk: history.append(xk.copy()),\n        options={\n            \"initial_simplex\": initial_simplex,\n            \"maxfev\": budget,\n            \"xatol\": 1e-4,\n            \"fatol\": 1e-4,\n            \"adaptive\": False,\n        },\n    )\n    print(label, start.tolist(), scale, budget, result.x.tolist(), result.fun, result.nfev, len(history), result.message)\n    print(\"final simplex\", result.final_simplex[0].tolist())",
       "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
       "question_answers": {
         "Q01": "continuous",

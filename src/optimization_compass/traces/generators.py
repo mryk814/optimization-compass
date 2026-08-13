@@ -36,19 +36,34 @@ def generate_nelder_mead_trace(
     dataset_version: str,
     problem_instance_id: str = "OBJECTIVE_QUADRATIC_2D",
     initial_point: Sequence[float] | None = None,
-    budget: int = 80,
+    initial_scale: float | None = None,
+    budget: int | None = None,
     trace_id: str | None = None,
     scenario_id: str | None = None,
 ) -> AlgorithmTrace:
-    if budget < 4:
+    default_candidate_id = "simplex_default"
+    default_initial_point = [-2.5, 2.0]
+    default_initial_scale = 0.8
+    default_budget = 80
+    if problem_instance_id == "OBJECTIVE_ROSENBROCK_2D":
+        default_candidate_id = "default"
+        default_initial_point = [-1.2, 1.0]
+        default_initial_scale = 0.5
+        default_budget = 160
+    resolved_scale = default_initial_scale if initial_scale is None else float(initial_scale)
+    resolved_budget = default_budget if budget is None else budget
+    if resolved_scale <= 0:
+        raise ValueError("Nelder–Mead initial scale must be positive")
+    if resolved_budget < 4:
         raise ValueError("Nelder–Mead budget must allow the initial simplex and one trial")
     problem = get_runtime_problem(problem_instance_id)
     objective = problem.trace_objective()
     objective_family = problem.definition.mathematical_family
     initial = list(
-        initial_point or _initial_point(problem, "simplex_default", fallback=[-2.5, 2.0])
+        initial_point
+        or _initial_point(problem, default_candidate_id, fallback=default_initial_point)
     )
-    scale = 0.8
+    scale = resolved_scale
     simplex = [initial[:], [initial[0] + scale, initial[1]], [initial[0], initial[1] + scale]]
     values = [_scalar_value(problem, point) for point in simplex]
     frames: list[TraceFrame] = []
@@ -68,7 +83,7 @@ def generate_nelder_mead_trace(
     iteration = 0
     frame_index = 1
     alpha, gamma, rho, sigma = 1.0, 2.0, 0.5, 0.5
-    while evaluations < budget:
+    while evaluations < resolved_budget:
         iteration += 1
         order = sorted(range(3), key=lambda index: values[index])
         simplex = [simplex[index] for index in order]
@@ -93,7 +108,7 @@ def generate_nelder_mead_trace(
         reflected = [centroid[axis] + alpha * (centroid[axis] - worst[axis]) for axis in range(2)]
         reflected_value = _scalar_value(problem, reflected)
         evaluations += 1
-        if evaluations >= budget:
+        if evaluations >= resolved_budget:
             simplex[2], values[2] = reflected, reflected_value
             _append_nm_frame(
                 frames,
@@ -174,7 +189,7 @@ def generate_nelder_mead_trace(
                 )
         if event == "shrink":
             for index in (1, 2):
-                if evaluations >= budget:
+                if evaluations >= resolved_budget:
                     break
                 simplex[index] = [
                     simplex[0][axis] + sigma * (simplex[index][axis] - simplex[0][axis])
@@ -237,6 +252,7 @@ def generate_nelder_mead_trace(
             "rho": rho,
             "sigma": sigma,
             "initial_scale": scale,
+            "adaptive": False,
         },
         initial_state={
             "point": initial,
@@ -247,8 +263,8 @@ def generate_nelder_mead_trace(
             ],
         },
         seed={"status": "not_applicable", "value": None},
-        evaluation_budget=budget,
-        stopping={"max_oracle_evaluations": budget, "simplex_tolerance": 1e-4},
+        evaluation_budget=resolved_budget,
+        stopping={"max_oracle_evaluations": resolved_budget, "simplex_tolerance": 1e-4},
         environment={"runtime": "educational", "version": "1.0.0"},
         fairness_statement="同じ初期simplex・目的関数・評価予算で再生する教育用Traceです。単独再生で優劣を断定しません。",
         frames=frames,

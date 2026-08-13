@@ -490,6 +490,11 @@
         },
         {
           "relation_type": "visualization",
+          "target_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+          "target_type": "view"
+        },
+        {
+          "relation_type": "visualization",
           "target_id": "SCENARIO_OPTIMAL_CONTROL_EC020",
           "target_type": "view"
         },
@@ -19490,6 +19495,11 @@
         },
         {
           "relation_type": "evidence",
+          "target_id": "S056",
+          "target_type": "source"
+        },
+        {
+          "relation_type": "evidence",
           "target_id": "S076",
           "target_type": "source"
         },
@@ -19502,6 +19512,11 @@
           "relation_type": "excluded_method",
           "target_id": "M_BFGS",
           "target_type": "method"
+        },
+        {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+          "target_type": "scenario"
         },
         {
           "relation_type": "failure_contrast",
@@ -21956,6 +21971,11 @@
           "target_type": "method"
         },
         {
+          "relation_type": "failure_contrast",
+          "target_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
+          "target_type": "scenario"
+        },
+        {
           "relation_type": "implementation",
           "target_id": "I_SCIPY_NELDER_MEAD",
           "target_type": "implementation"
@@ -21983,11 +22003,6 @@
         {
           "relation_type": "sensitivity",
           "target_id": "SCENARIO_NM_QUADRATIC_SHIFTED",
-          "target_type": "scenario"
-        },
-        {
-          "relation_type": "sensitivity",
-          "target_id": "SCENARIO_NM_ROSENBROCK_SHIFTED",
           "target_type": "scenario"
         }
       ],
@@ -31955,6 +31970,11 @@
           "relation_type": "evidence",
           "target_id": "S076",
           "target_type": "source"
+        },
+        {
+          "relation_type": "learning_journey",
+          "target_id": "EC020",
+          "target_type": "journey"
         }
       ],
       "summary": "目的関数とdynamics defectが改善してもmode chatteringを独立して止める"
@@ -36490,6 +36510,16 @@
       "entity_type": "view",
       "external_url": null,
       "label": "SCENARIO_GRADIENT_DESCENT_QUADRATIC_DIVERGENCE",
+      "relations": [],
+      "summary": ""
+    },
+    {
+      "aliases": [],
+      "canonical_url": null,
+      "entity_id": "SCENARIO_HYBRID_MODE_CHATTERING",
+      "entity_type": "view",
+      "external_url": null,
+      "label": "SCENARIO_HYBRID_MODE_CHATTERING",
       "relations": [],
       "summary": ""
     },

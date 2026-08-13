@@ -177,7 +177,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-08-13",
       "method_ids": [
         "M_BFGS"
       ],
@@ -189,6 +189,7 @@
         "FM016"
       ],
       "scenario_ids": [
+        "SCENARIO_HYBRID_MODE_CHATTERING",
         "SCENARIO_OPTIMAL_CONTROL_EC020",
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
@@ -1300,7 +1301,7 @@
     {
       "canonical_route": "/failures?entry=case%3Anelder-mead-initial-simplex%3AM_GRADIENT_DESCENT",
       "case_context": {
-        "constraints": "固定教材に明示制約はない。両runでNelder–Mead係数、initial simplex scale $s=0.8$、simplex tolerance $\\tau=10^{-4}$、目的関数評価budget $B=80$を固定し、変えるのはinitial simplexの位置だけとする。",
+        "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance $\\tau=10^{-4}$、scale $s=0.8$、budget $B=80$を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは $s=0.5$、$B=160$、shrink failure sliceは $s=0.8$、$B=80$を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
         "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
         "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
         "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
@@ -1321,7 +1322,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-08-09",
+      "last_verified": "2026-08-13",
       "method_ids": [
         "M_GRADIENT_DESCENT"
       ],

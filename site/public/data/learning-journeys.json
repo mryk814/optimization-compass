@@ -398,6 +398,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_HYBRID_MODE_CHATTERING",
             "SCENARIO_PENDULUM_SWING_UP_MESH_40",
             "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
           ]
@@ -413,6 +414,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "INSTANCE_HYBRID_CHATTERING_LEDGER",
             "INSTANCE_OPTIMAL_CONTROL_EC020",
             "INSTANCE_PENDULUM_SWING_UP_EC020"
           ]
@@ -422,6 +424,7 @@
           "state": "complete",
           "target_ids": [
             "/gallery/EC020",
+            "/traces/hybrid-mode-chattering-ledger",
             "/traces/optimal-control-ec020-history",
             "/traces/pendulum-collocation-refined",
             "/traces/pendulum-model-rollout-failure",
@@ -432,6 +435,7 @@
             "/sources/S042",
             "/sources/S043",
             "/sources/S050",
+            "/sources/S056",
             "/sources/S076",
             "/sources/S102"
           ]
@@ -473,6 +477,7 @@
           "state": "complete",
           "target_ids": [
             "/gallery/EC020",
+            "/traces/hybrid-mode-chattering-ledger",
             "/traces/optimal-control-ec020-history",
             "/traces/pendulum-collocation-refined",
             "/traces/pendulum-model-rollout-failure",
@@ -483,6 +488,7 @@
             "/sources/S042",
             "/sources/S043",
             "/sources/S050",
+            "/sources/S056",
             "/sources/S076",
             "/sources/S102"
           ]
@@ -494,6 +500,7 @@
             "S042",
             "S043",
             "S050",
+            "S056",
             "S076",
             "S102"
           ]
@@ -502,6 +509,7 @@
           "reason_codes": [],
           "state": "complete",
           "target_ids": [
+            "SCENARIO_HYBRID_MODE_CHATTERING",
             "SCENARIO_OPTIMAL_CONTROL_EC020",
             "SCENARIO_PENDULUM_SWING_UP_MESH_40",
             "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
@@ -5194,18 +5202,27 @@
         "I_DRAKE"
       ],
       "journey_id": "EC020",
-      "last_reviewed": "2026-07-19",
+      "last_reviewed": "2026-08-13",
       "learning_objective": "非線形動力学と経路制約（path constraint）を守る軌道を設計したい。",
       "limitations": [
+        "hybrid mode chattering ledgerは固定した合成mode sequenceであり、hybrid solver execution、contact／friction model、物理simulationを表しません。mode discoveryの一般性能やtrajectoryの可行性も保証しません。",
         "離散mesh上の実行可能性であり、連続時間の安全性や動力学モデルの正確さは保証しません。"
       ],
       "prerequisite_journey_ids": [],
       "problem_archetype_id": "PA042",
       "problem_instance_ids": [
+        "INSTANCE_HYBRID_CHATTERING_LEDGER",
         "INSTANCE_OPTIMAL_CONTROL_EC020",
         "INSTANCE_PENDULUM_SWING_UP_EC020"
       ],
       "scenarios": [
+        {
+          "canonical_url": "/traces/hybrid-mode-chattering-ledger",
+          "problem_definition_id": "PROBLEM_HYBRID_MODE_DISCOVERY",
+          "problem_instance_id": "INSTANCE_HYBRID_CHATTERING_LEDGER",
+          "role": "failure_contrast",
+          "scenario_id": "SCENARIO_HYBRID_MODE_CHATTERING"
+        },
         {
           "canonical_url": "/traces/optimal-control-ec020-history",
           "problem_definition_id": "PROBLEM_OPTIMAL_CONTROL",
@@ -5232,11 +5249,12 @@
         "S042",
         "S043",
         "S050",
+        "S056",
         "S076",
         "S102"
       ],
       "status": "complete",
-      "takeaway": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のTheater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
+      "takeaway": "mesh／knot数 $N=20$、積分器（integrator）またはcollocation scheme、初期軌道、max dynamics defect、max path／bound／terminal violation、NLPのfeasibility toleranceをobjectiveとは別に保存する。得られたmesh上のstate／controlから区間内の軌道を再構成し、高精度simulationでpath制約と終端誤差を再評価してからmeshをrefineする。接続先のpendulum Theater／Compareは固定pendulum教材であり、この抽象Caseと同じtrajectoryや実データではない。共通するstate／control、dynamics defect、mesh refinement、modelずれvalidationの読み方だけを再利用する。hybrid mode chattering ledgerもEC020のtrajectoryへmode変数を追加したsolver実行ではない。固定した合成mode sequenceのsecondary failure sliceとして、objective／dynamics defectとは別にmode switch数とswitching intervalを読む。solverのsuccessやmesh点でのfeasibilityだけを、連続時間の実行可能性・安全性・動力学モデルの正しさと読み替えない。",
       "title_en": "Optimize a trajectory with nonlinear dynamics",
       "title_ja": "非線形動力学を含む軌道を最適化する"
     },
@@ -7027,7 +7045,7 @@
         "M_GRADIENT_DESCENT"
       ],
       "formulation": {
-        "constraints": "固定教材に明示制約はない。両runでNelder–Mead係数、initial simplex scale <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi><mo>&#x0003D;</mo><mn>0.8</mn></mrow></math>、simplex tolerance <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C4;</mi><mo>&#x0003D;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>4</mn></mrow></msup></mrow></math>、目的関数評価budget <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>80</mn></mrow></math>を固定し、変えるのはinitial simplexの位置だけとする。",
+        "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>&#x003C4;</mi><mo>&#x0003D;</mo><msup><mn>10</mn><mrow><mo>&#x02212;</mo><mn>4</mn></mrow></msup></mrow></math>、scale <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi><mo>&#x0003D;</mo><mn>0.8</mn></mrow></math>、budget <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>80</mn></mrow></math>を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi><mo>&#x0003D;</mo><mn>0.5</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>160</mn></mrow></math>、shrink failure sliceは <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>s</mi><mo>&#x0003D;</mo><mn>0.8</mn></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>B</mi><mo>&#x0003D;</mo><mn>80</mn></mrow></math>を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
         "decision_variables": "2次元Rosenbrock関数の座標 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x0003D;</mo><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo></mrow></math>。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
         "objective": "固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>f</mi><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&#x0002C;</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy=\"false\">&#x00029;</mo><mo>&#x0003D;</mo><mn>100</mn><mo stretchy=\"false\">&#x00028;</mo><msub><mi>x</mi><mn>2</mn></msub><mo>&#x02212;</mo><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup><mo>&#x0002B;</mo><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x02212;</mo><msub><mi>x</mi><mn>1</mn></msub><msup><mo stretchy=\"false\">&#x00029;</mo><mn>2</mn></msup></mrow></math> を最小化する。最適点 <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mo stretchy=\"false\">&#x00028;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>1</mn><mo stretchy=\"false\">&#x00029;</mo></mrow></math> と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
         "variable_domain_summary": "実務ではscaleをそろえた2個の連続calibration parameterを扱う。固定教材では <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>X</mi><mo>&#x0003D;</mo><msup><mi>&#x0211D;</mi><mn>2</mn></msup></mrow></math> とし、表示範囲だけを <math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>x</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>2</mn><mo>&#x0002C;</mo><mn>2</mn><mo stretchy=\"false\">]</mo></mrow></math>、<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><mrow><mi>y</mi><mo>&#x02208;</mo><mo stretchy=\"false\">[</mo><mo>&#x02212;</mo><mn>1</mn><mo>&#x0002C;</mo><mn>3</mn><mo stretchy=\"false\">]</mo></mrow></math> に固定する。"
@@ -7036,7 +7054,7 @@
         "I_SCIPY_NELDER_MEAD"
       ],
       "journey_id": "nelder-mead-initial-simplex",
-      "last_reviewed": "2026-08-09",
+      "last_reviewed": "2026-08-13",
       "learning_objective": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
       "limitations": [
         "2次元・決定的・安価な標準関数と2個の初期simplexだけを扱う教育用Journeyであり、実calibrationのnoise、失敗、parameter scale、評価費、同定可能性を表さない。",
@@ -7075,7 +7093,7 @@
           "canonical_url": "/theater/nelder-mead",
           "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
           "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
-          "role": "sensitivity",
+          "role": "failure_contrast",
           "scenario_id": "SCENARIO_NM_ROSENBROCK_SHIFTED"
         }
       ],
@@ -7089,7 +7107,7 @@
         "S094"
       ],
       "status": "complete",
-      "takeaway": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認し、次にRosenbrockの曲がった谷で経路差を読む。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
+      "takeaway": "変数scale、初期点、initial simplex全頂点、係数、評価budget、受理操作、best objective、simplex diameter、終了理由をrunごとに保存する。まずquadraticのTheater／Compareで初期simplex以外が固定されていることを確認する。次にRosenbrockのcanonical runとshrink failure sliceで経路を読むが、scaleとbudgetも異なるため差を初期位置だけに帰属させない。その後にNelder–Mead記事と局所Derivative-free選択ガイドで、simplex縮小の停滞、multi-start、MADS等への切替条件を確認する。",
       "title_en": "Diagnose local-search sensitivity from the initial simplex",
       "title_ja": "初期simplexで局所探索の感度を見抜く"
     },
@@ -8451,18 +8469,6 @@
       "asset_type": "content",
       "policy": "warning",
       "reason_code": "published_content_without_journey"
-    },
-    {
-      "asset_id": "SCENARIO_HYBRID_MODE_CHATTERING",
-      "asset_type": "scenario",
-      "policy": "warning",
-      "reason_code": "scenario_without_journey"
-    },
-    {
-      "asset_id": "hybrid-mode-chattering-ledger",
-      "asset_type": "visualization_artifact",
-      "policy": "warning",
-      "reason_code": "public_artifact_without_journey"
     }
   ],
   "summary": {
