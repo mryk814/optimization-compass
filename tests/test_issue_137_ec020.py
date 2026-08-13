@@ -79,11 +79,17 @@ def test_existing_ec020_case_instance_scenario_and_trace_identity_are_unchanged(
     assert {
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
+        "SCENARIO_HYBRID_MODE_CHATTERING",
     } <= set(case["visualization_ids"])
     assert "SCENARIO_PENDULUM_SWING_UP_MESH_20" not in case["visualization_ids"]
     assert case["comparison_ids"] == ["COMPARE_OPTIMAL_CONTROL_MESH_BRIDGE"]
     assert "固定pendulum教材" in case["practical_notes"]
     assert "同じtrajectoryや実データではない" in case["practical_notes"]
+    assert "EC020のtrajectoryへmode変数を追加したsolver実行ではない" in case["practical_notes"]
+    assert "mode switch数" in case["practical_notes"]
+    assert "switching interval" in case["practical_notes"]
+    assert any("mode discoveryの一般性能" in item for item in case["limitations"])
+    assert any("trajectoryの可行性" in item for item in case["limitations"])
     assert instances["INSTANCE_OPTIMAL_CONTROL_EC020"].registry_key == (
         "problem.optimal_control.ec020.v1"
     )

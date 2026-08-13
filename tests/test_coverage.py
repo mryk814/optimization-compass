@@ -54,7 +54,6 @@ def test_current_artifacts_satisfy_educational_renderer_expectations() -> None:
         "COV_NM_SENSITIVITY_NA": (
             {
                 "nelder-mead-quadratic-shifted",
-                "nelder-mead-rosenbrock-shifted",
             },
             ["/theater/nelder-mead"],
         ),

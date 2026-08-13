@@ -1,3 +1,8 @@
+import json
+from pathlib import Path
+
+import pytest
+
 from optimization_compass.dataset_release import TARGET_DATASET_VERSION
 from optimization_compass.trace_models import canonical_trace_bytes
 from optimization_compass.traces import (
@@ -5,6 +10,8 @@ from optimization_compass.traces import (
     generate_gradient_trace,
     generate_nelder_mead_trace,
 )
+
+ROOT = Path(__file__).parents[1]
 
 
 def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
@@ -29,11 +36,66 @@ def test_nelder_mead_trace_is_deterministic_and_full_snapshot() -> None:
     )
 
 
+def test_canonical_nelder_mead_traces_match_atlas_scenario_contracts() -> None:
+    payload = json.loads((ROOT / "data/seeds/atlas_metadata.json").read_text(encoding="utf-8"))
+    seeds = {
+        item["scenario_id"]: item
+        for item in payload["demo_scenarios"]
+        if item["scenario_id"] in {"SCENARIO_NM_QUADRATIC", "SCENARIO_NM_ROSENBROCK"}
+    }
+
+    for scenario_id, seed in seeds.items():
+        trace = generate_nelder_mead_trace(
+            dataset_version=TARGET_DATASET_VERSION,
+            problem_instance_id=seed["problem_instance_id"],
+        )
+        assert trace.scenario_id == scenario_id
+        assert trace.initial_state["point"] == seed["initial_point"]
+        assert trace.evaluation_budget == seed["budget"]
+        assert trace.stopping == seed["stopping"]
+        assert all(trace.parameters[key] == value for key, value in seed["parameters"].items())
+
+
+@pytest.mark.parametrize(
+    ("initial_point", "initial_scale", "budget"),
+    [(None, None, None), ([-2.0, -1.0], 0.8, 80)],
+)
+def test_rosenbrock_initial_simplex_stays_inside_display_range(
+    initial_point: list[float] | None,
+    initial_scale: float | None,
+    budget: int | None,
+) -> None:
+    trace = generate_nelder_mead_trace(
+        dataset_version=TARGET_DATASET_VERSION,
+        problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
+        initial_point=initial_point,
+        initial_scale=initial_scale,
+        budget=budget,
+    )
+    display_range = trace.objective["display_range"]
+
+    assert all(
+        display_range["x"][0] <= point[0] <= display_range["x"][1]
+        and display_range["y"][0] <= point[1] <= display_range["y"][1]
+        for point in trace.initial_state["simplex"]
+    )
+
+
+def test_nelder_mead_rejects_nonpositive_initial_scale() -> None:
+    with pytest.raises(ValueError, match="initial scale must be positive"):
+        generate_nelder_mead_trace(
+            dataset_version=TARGET_DATASET_VERSION,
+            initial_scale=0.0,
+        )
+
+
 def test_nelder_mead_rejected_candidate_is_preserved_for_shrink_explanation() -> None:
     trace = generate_nelder_mead_trace(
         dataset_version=TARGET_DATASET_VERSION,
         problem_instance_id="OBJECTIVE_ROSENBROCK_2D",
         initial_point=[-2.0, -1.0],
+        initial_scale=0.8,
+        budget=80,
     )
     rejected = [frame for frame in trace.frames if frame.decision == "rejected"]
 

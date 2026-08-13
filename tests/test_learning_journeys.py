@@ -77,6 +77,89 @@ def test_parameter_estimation_journey_connects_primary_sensitivity_and_compariso
     }
 
 
+def test_nelder_mead_journey_adopts_all_four_orphaned_scenarios() -> None:
+    index = load_index()
+    journey = next(
+        item for item in index.journeys if item.journey_id == "nelder-mead-initial-simplex"
+    )
+
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    assert {item.scenario_id for item in journey.scenarios} == {
+        "SCENARIO_NM_QUADRATIC",
+        "SCENARIO_NM_QUADRATIC_SHIFTED",
+        "SCENARIO_NM_ROSENBROCK",
+        "SCENARIO_NM_ROSENBROCK_SHIFTED",
+    }
+    assert {item.comparison_id for item in journey.comparisons} == {
+        "COMPARE_NELDER_MEAD_INITIAL_SIMPLEX"
+    }
+    roles = {item.scenario_id: item.role for item in journey.scenarios}
+    assert roles["SCENARIO_NM_QUADRATIC_SHIFTED"] == "sensitivity"
+    assert roles["SCENARIO_NM_ROSENBROCK_SHIFTED"] == "failure_contrast"
+    assert {"method.nelder-mead", "mads"} <= set(journey.content_ids)
+
+    assessment = next(
+        item for item in index.assessments if item.journey_id == "nelder-mead-initial-simplex"
+    )
+    assert (
+        assessment.dimensions["cross_surface_links"].target_ids.count("/theater/nelder-mead") == 1
+    )
+
+    orphan_ids = {item.asset_id for item in index.orphan_assets}
+    assert (
+        not {
+            "SCENARIO_NM_QUADRATIC",
+            "SCENARIO_NM_QUADRATIC_SHIFTED",
+            "SCENARIO_NM_ROSENBROCK",
+            "SCENARIO_NM_ROSENBROCK_SHIFTED",
+            "nelder-mead-quadratic",
+            "nelder-mead-quadratic-shifted",
+            "nelder-mead-rosenbrock",
+            "nelder-mead-rosenbrock-shifted",
+        }
+        & orphan_ids
+    )
+
+
+def test_ec020_journey_connects_hybrid_chattering_as_a_secondary_failure_slice() -> None:
+    index = load_index()
+    journey = next(item for item in index.journeys if item.journey_id == "EC020")
+
+    assert journey.status == "complete"
+    assert journey.completion_reasons == []
+    assert next(item for item in journey.scenarios if item.role == "primary").scenario_id == (
+        "SCENARIO_OPTIMAL_CONTROL_EC020"
+    )
+    hybrid = next(
+        item for item in journey.scenarios if item.scenario_id == "SCENARIO_HYBRID_MODE_CHATTERING"
+    )
+    assert hybrid.role == "failure_contrast"
+    assert hybrid.canonical_url == "/traces/hybrid-mode-chattering-ledger"
+    assert hybrid.problem_definition_id == "PROBLEM_HYBRID_MODE_DISCOVERY"
+    assert hybrid.problem_instance_id == "INSTANCE_HYBRID_CHATTERING_LEDGER"
+    assert "INSTANCE_HYBRID_CHATTERING_LEDGER" in journey.problem_instance_ids
+
+    assessment = next(item for item in index.assessments if item.journey_id == "EC020")
+    assert (
+        "SCENARIO_HYBRID_MODE_CHATTERING" in assessment.dimensions["alternate_scenario"].target_ids
+    )
+    assert (
+        "SCENARIO_HYBRID_MODE_CHATTERING"
+        in assessment.dimensions["static_text_alternative"].target_ids
+    )
+    assert (
+        "/traces/hybrid-mode-chattering-ledger"
+        in assessment.dimensions["route_reachability"].target_ids
+    )
+
+    orphan_pairs = {(item.asset_type, item.asset_id) for item in index.orphan_assets}
+    assert {
+        ("scenario", "SCENARIO_HYBRID_MODE_CHATTERING"),
+        ("visualization_artifact", "hybrid-mode-chattering-ledger"),
+    }.isdisjoint(orphan_pairs)
+
+
 def test_expensive_black_box_journey_reuses_bo_scenarios_and_related_comparisons() -> None:
     index = load_index()
     journey = next(item for item in index.journeys if item.journey_id == "hyperparameter-search")
@@ -126,14 +209,10 @@ def test_index_reports_summary_and_explicit_orphan_policies() -> None:
     assert index.summary.total_journeys == len(index.journeys)
     assert sum(index.summary.status_counts.values()) == len(index.journeys)
     assert {item.policy for item in index.orphan_assets} == {"warning"}
-    assert any(
-        item.asset_type == "scenario" and item.policy == "warning" for item in index.orphan_assets
-    )
     orphan_ids = {item.asset_id for item in index.orphan_assets}
     assert "COMPARE_GRADIENT_FAMILY" not in orphan_ids
     assert "COMPARE_GRADIENT_DIVERGENCE" not in orphan_ids
-    assert any(item.asset_type == "visualization_artifact" for item in index.orphan_assets)
-    assert any(item.asset_type == "content" for item in index.orphan_assets)
+    assert {item.asset_type for item in index.orphan_assets} == {"content"}
 
 
 def test_explicit_policy_marks_an_orphan_as_intentionally_standalone() -> None:

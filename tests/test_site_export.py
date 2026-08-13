@@ -112,6 +112,8 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     second_catalog_bytes = (second_output / "release-catalog.json").read_bytes()
     first_gallery_bytes = (first_output / "gallery.json").read_bytes()
     second_gallery_bytes = (second_output / "gallery.json").read_bytes()
+    first_journey_bytes = (first_output / "learning-journeys.json").read_bytes()
+    second_journey_bytes = (second_output / "learning-journeys.json").read_bytes()
 
     assert first_view_bytes == second_view_bytes
     assert first_manifest_bytes == second_manifest_bytes
@@ -122,6 +124,7 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert first_scenario_bytes == second_scenario_bytes
     assert first_catalog_bytes == second_catalog_bytes
     assert first_gallery_bytes == second_gallery_bytes
+    assert first_journey_bytes == second_journey_bytes
     assert json.loads(first_catalog_bytes) == json.loads(
         site_export_module.RELEASE_CATALOG_PATH.read_bytes()
     )
@@ -129,10 +132,22 @@ def test_exporter_writes_five_branch_golden_and_is_byte_identical(
     assert first_view_bytes.endswith(b"\n")
     assert first_manifest_bytes.endswith(b"\n")
     gallery = json.loads(first_gallery_bytes)
+    journeys = json.loads(first_journey_bytes)
     labels_by_domain = {item["domain"]: item["label_ja"] for item in gallery["domains"]}
     assert gallery["contract_version"] == "3.0.0"
     assert labels_by_domain["transportation"] == "交通・モビリティ"
     assert {item["domain"] for item in gallery["cases"]} == set(labels_by_domain)
+    nelder_assessment = next(
+        item
+        for item in journeys["assessments"]
+        if item["journey_id"] == "nelder-mead-initial-simplex"
+    )
+    assert (
+        nelder_assessment["dimensions"]["cross_surface_links"]["target_ids"].count(
+            "/theater/nelder-mead"
+        )
+        == 1
+    )
 
     view = ViewSpec.model_validate_json(first_view_bytes)
     nodes = {node.node_id: node for node in view.nodes}
@@ -553,6 +568,14 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     assert (
         scenario_by_artifact["nelder-mead-quadratic"].artifact.renderer_family == "simplex_geometry"
     )
+    shifted_quadratic = scenario_by_artifact["nelder-mead-quadratic-shifted"]
+    assert shifted_quadratic.purpose == "sensitivity"
+    assert shifted_quadratic.lesson.comparison_role == "sensitivity_variant"
+    shifted_rosenbrock = scenario_by_artifact["nelder-mead-rosenbrock-shifted"]
+    assert shifted_rosenbrock.purpose == "failure_contrast"
+    assert shifted_rosenbrock.lesson.comparison_role == "failure_contrast"
+    assert shifted_rosenbrock.lesson.failure_signals[0].signal_id == ("shrink_slice_is_multifactor")
+    assert "単一要因の感度" in shifted_rosenbrock.lesson.limitations_ja
     assert (
         scenario_by_artifact["gradient_descent-quadratic"].artifact.renderer_family
         == "continuous_trajectory"
@@ -625,9 +648,32 @@ def test_exporter_writes_canonical_three_frame_dummy_trace_and_index(
     bias_payload = json.loads((first_output / bias_scenario.artifact.payload_path).read_bytes())
     assert bias_payload["evaluation_ledger"]["calls"][0]["fidelity"] == "low"
     assert bias_payload["evaluation_ledger"]["calls"][2]["fidelity"] == "high"
+    atlas_metadata = json.loads(Path("data/seeds/atlas_metadata.json").read_bytes())
+    canonical_nelder_paths = {
+        "SCENARIO_NM_QUADRATIC": "traces/nelder-mead-quadratic.json",
+        "SCENARIO_NM_ROSENBROCK": "traces/nelder-mead-rosenbrock.json",
+    }
+    for seed in atlas_metadata["demo_scenarios"]:
+        trace_path = canonical_nelder_paths.get(seed["scenario_id"])
+        if trace_path is None:
+            continue
+        canonical_trace = AlgorithmTrace.model_validate_json(
+            (first_output / trace_path).read_bytes()
+        )
+        assert canonical_trace.objective_id == seed["problem_instance_id"]
+        assert canonical_trace.initial_state["point"] == seed["initial_point"]
+        assert canonical_trace.evaluation_budget == seed["budget"]
+        assert canonical_trace.stopping == seed["stopping"]
+        assert all(
+            canonical_trace.parameters[key] == value for key, value in seed["parameters"].items()
+        )
+
     shrink_trace = AlgorithmTrace.model_validate_json(
         (first_output / "traces/nelder-mead-rosenbrock-shifted.json").read_bytes()
     )
+    assert shrink_trace.initial_state["point"] == [-2.0, -1.0]
+    assert shrink_trace.parameters["initial_scale"] == 0.8
+    assert shrink_trace.evaluation_budget == 80
     assert any(
         frame.event_type == "shrink"
         and frame.decision == "rejected"

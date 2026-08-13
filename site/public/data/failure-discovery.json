@@ -177,7 +177,7 @@
         "F_VARIABLE_DOMAIN"
       ],
       "implementation_ids": [],
-      "last_verified": "2026-07-19",
+      "last_verified": "2026-08-13",
       "method_ids": [
         "M_BFGS"
       ],
@@ -189,6 +189,7 @@
         "FM016"
       ],
       "scenario_ids": [
+        "SCENARIO_HYBRID_MODE_CHATTERING",
         "SCENARIO_OPTIMAL_CONTROL_EC020",
         "SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH"
@@ -1298,6 +1299,56 @@
       "title_ja": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
     },
     {
+      "canonical_route": "/failures?entry=case%3Anelder-mead-initial-simplex%3AM_GRADIENT_DESCENT",
+      "case_context": {
+        "constraints": "固定教材に明示制約はない。quadraticの2 runはNelder–Mead係数、simplex tolerance $\\tau=10^{-4}$、scale $s=0.8$、budget $B=80$を固定し、initial simplexの位置だけを変える。Rosenbrockのcanonical runは $s=0.5$、$B=160$、shrink failure sliceは $s=0.8$、$B=80$を使うため、この2 runを初期位置だけの一因子比較として扱わない。",
+        "decision_variables": "2次元Rosenbrock関数の座標 $x=(x_1,x_2)$。初期点、initial simplex scale、反射・拡大・収縮・縮小係数はdecision variableではなく、run前に固定して比較する実験条件である。",
+        "objective": "固定教材では $f(x_1,x_2)=100(x_2-x_1^2)^2+(1-x_1)^2$ を最小化する。最適点 $(1,1)$ と値0は表示用の既知referenceであり、optimizerへgradientや解として渡さない。quadratic Theaterは同じ更新則を単純な等高線で先に読むcontrol教材として使う。",
+        "question": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。"
+      },
+      "case_id": "nelder-mead-initial-simplex",
+      "confidence": "not_applicable",
+      "diagnostics": [],
+      "disposition": "excluded",
+      "entry_id": "case:nelder-mead-initial-simplex:M_GRADIENT_DESCENT",
+      "entry_kind": "case_exclusion",
+      "failure_mode_id": null,
+      "feature_ids": [
+        "F_CONSTRAINT_CLASS",
+        "F_DERIVATIVE_ACCESS",
+        "F_EVALUATION_COST",
+        "F_OBJECTIVE_FORM",
+        "F_SOLUTION_GOAL",
+        "F_VARIABLE_DOMAIN"
+      ],
+      "implementation_ids": [],
+      "last_verified": "2026-08-13",
+      "method_ids": [
+        "M_GRADIENT_DESCENT"
+      ],
+      "mitigations": [],
+      "recoverability": "not_applicable",
+      "related_failure_mode_ids": [],
+      "scenario_ids": [
+        "SCENARIO_NM_QUADRATIC",
+        "SCENARIO_NM_QUADRATIC_SHIFTED",
+        "SCENARIO_NM_ROSENBROCK",
+        "SCENARIO_NM_ROSENBROCK_SHIFTED"
+      ],
+      "scope": "case_specific",
+      "severity": "not_applicable",
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063"
+      ],
+      "summary": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため",
+      "symptoms": [],
+      "title_en": "Why Gradient descent is excluded for Diagnose local-search sensitivity from the initial simplex",
+      "title_ja": "初期simplexで局所探索の感度を見抜くでは最急降下法を選ばない"
+    },
+    {
       "canonical_route": "/failures?entry=case%3Anetwork-upgrade-portfolio%3AM_GRADIENT_DESCENT",
       "case_context": {
         "constraints": "更新cost $4x_A+3x_B+3x_C+2x_D+2x_E\\le8$、地域1から少なくとも1件 $x_A+x_B\\ge1$、地域2から少なくとも1件 $x_C+x_D+x_E\\ge1$、$x_i\\in\\{0,1\\}$。実務では依存関係、停止可能時間、工事班、冗長性を別制約として追加する。",
@@ -2378,9 +2429,9 @@
   ],
   "generated_at": "2026-07-26T00:00:00Z",
   "summary": {
-    "case_exclusion_count": 35,
-    "entries_with_scenarios": 39,
+    "case_exclusion_count": 36,
+    "entries_with_scenarios": 40,
     "structured_failure_count": 12,
-    "total_entries": 47
+    "total_entries": 48
   }
 }

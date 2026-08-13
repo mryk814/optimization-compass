@@ -12,9 +12,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 215663,
+        "payload_bytes": 215680,
         "payload_path": "traces/nelder-mead-quadratic.json",
-        "payload_sha256": "ebcf2218c868ea03bac2d7ea26161b3dee09e4468d51656603d26c9a88d9ac34",
+        "payload_sha256": "49ff177f8545f5958678ebadd8d6d6f37297303fafebba4e6e301e8381517b73",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -267,9 +267,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 210212,
+        "payload_bytes": 210229,
         "payload_path": "traces/nelder-mead-quadratic-shifted.json",
-        "payload_sha256": "5e76f16ab53f78aeaf518913b6fd523dce5962134bb18a57992a0dd06ef347d9",
+        "payload_sha256": "213074670beb54688eb90ccf2396b66a29e4a557b9139a2d157849300a025986",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -454,9 +454,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 208171,
+        "payload_bytes": 392512,
         "payload_path": "traces/nelder-mead-rosenbrock.json",
-        "payload_sha256": "22c3017ef5e07d85058272190ec0b65edd1b506deb274cb46b56e7e0f93e60e2",
+        "payload_sha256": "2b81761ef9106cc71bc94bb91ea809e37f7cb6bf2d6e8074a135f00a1a21cc33",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -466,12 +466,12 @@
       "experiment": {
         "budget": {
           "metric": "oracle_evaluations",
-          "value": 80
+          "value": 160
         },
         "initial_condition": {
           "point": [
-            -2.5,
-            2.0
+            -1.2,
+            1.0
           ]
         },
         "oracle_policy": [
@@ -483,7 +483,7 @@
           "value": null
         },
         "stopping": {
-          "max_oracle_evaluations": 80,
+          "max_oracle_evaluations": 160,
           "simplex_tolerance": 0.0001
         },
         "tuning_policy": "fixed_preset"
@@ -627,9 +627,9 @@
           "simplex_vertices",
           "accepted_operation"
         ],
-        "payload_bytes": 204203,
+        "payload_bytes": 204220,
         "payload_path": "traces/nelder-mead-rosenbrock-shifted.json",
-        "payload_sha256": "754af8604318cee91a3058ced6ec45c193564d3440020167182aa273ef1049b0",
+        "payload_sha256": "252317f4359363d54bed1c850a3fa948d128481063367786dc31b1daf12e29d1",
         "renderer_contract_version": "1.0.0",
         "renderer_family": "simplex_geometry"
       },
@@ -665,7 +665,7 @@
       "identity_status": "derived",
       "last_verified": "2026-07-15",
       "lesson": {
-        "comparison_role": "sensitivity_variant",
+        "comparison_role": "failure_contrast",
         "derived_media_caption": {
           "en": "Nelder–Mead: simplex geometry and acceptance decisions",
           "ja": "Nelder–Mead: simplexの幾何操作と受理判断"
@@ -674,14 +674,14 @@
         "expected_phenomenon_ja": "反射・拡大・収縮・縮小で単体が移動する",
         "failure_signals": [
           {
-            "label_en": "The initial simplex changes accepted operations and the convergence path",
-            "label_ja": "初期simplexの位置により受理操作と収束経路が変わる",
+            "label_en": "Read shrinkage and budget termination in a failure slice whose start, scale, and budget all differ",
+            "label_ja": "開始位置、scale、budgetが異なるfailure sliceで縮小と予算停止を読む",
             "observable_ids": [
               "simplex_vertices",
               "accepted_operation",
               "objective_value"
             ],
-            "signal_id": "initial_simplex_changes_path"
+            "signal_id": "shrink_slice_is_multifactor"
           }
         ],
         "known_reference_display": {
@@ -693,11 +693,11 @@
           "en": "Connect simplex geometry with candidate acceptance decisions",
           "ja": "単体の幾何操作と候補の受理判断を結び付けて読む"
         },
-        "limitations_en": "A deterministic 2D educational run, not a general performance ranking",
-        "limitations_ja": "2次元の教育用決定論的実行であり、一般的な性能優劣を示さない",
+        "limitations_en": "A 2D educational failure slice that changes the start, initial simplex scale, and evaluation budget together; it is neither a one-factor sensitivity study nor a general performance ranking",
+        "limitations_ja": "2次元の教育用failure sliceであり、開始位置、initial simplex scale、評価budgetを同時に変えるため、単一要因の感度や一般的な性能優劣を示さない",
         "misconception": {
-          "en": "Changing the initial simplex does not change the path on the same objective",
-          "ja": "同じ目的関数なら初期simplexを変えても同じ経路を通る"
+          "en": "A run with a different start, initial simplex scale, and evaluation budget can be interpreted as start-position sensitivity alone",
+          "ja": "開始位置、initial simplex scale、評価budgetが異なるrunの差を、開始位置だけの感度と解釈できる"
         },
         "narration_steps": [
           {
@@ -785,7 +785,7 @@
       },
       "problem_definition_id": "PROBLEM_CONTINUOUS_UNCONSTRAINED",
       "problem_instance_id": "OBJECTIVE_ROSENBROCK_2D",
-      "purpose": "sensitivity",
+      "purpose": "failure_contrast",
       "runs": [
         {
           "artifact_id": "nelder-mead-rosenbrock-shifted",

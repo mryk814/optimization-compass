@@ -159,6 +159,7 @@
         "source:S050",
         "source:S076",
         "source:S102",
+        "view:SCENARIO_HYBRID_MODE_CHATTERING",
         "view:SCENARIO_OPTIMAL_CONTROL_EC020",
         "view:SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "view:SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
@@ -1036,6 +1037,45 @@
     {
       "attribution": "Optimization Compass contributors",
       "authority": "generated_from_canonical",
+      "chunk_id": "case:nelder-mead-initial-simplex:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "case:nelder-mead-initial-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+        "feature_value:F_CONSTRAINT_CLASS:unconstrained",
+        "feature_value:F_DERIVATIVE_ACCESS:none_available",
+        "feature_value:F_EVALUATION_COST:cheap",
+        "feature_value:F_OBJECTIVE_FORM:general_nonlinear",
+        "feature_value:F_SOLUTION_GOAL:local_stationary",
+        "feature_value:F_VARIABLE_DOMAIN:continuous",
+        "implementation:I_SCIPY_NELDER_MEAD",
+        "journey:nelder-mead-initial-simplex",
+        "method:M_GRADIENT_DESCENT",
+        "method:M_MADS",
+        "method:M_NELDER_MEAD",
+        "problem:PA006",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063",
+        "view:SCENARIO_NM_QUADRATIC",
+        "view:SCENARIO_NM_QUADRATIC_SHIFTED",
+        "view:SCENARIO_NM_ROSENBROCK",
+        "view:SCENARIO_NM_ROSENBROCK_SHIFTED"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063"
+      ],
+      "text": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
+      "title": "初期simplexで局所探索の感度を見抜く"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
       "chunk_id": "case:network-upgrade-portfolio:overview",
       "dataset_version": "0.18.19",
       "document_id": "case:network-upgrade-portfolio",
@@ -1815,6 +1855,7 @@
       "relation_context": [
         "case:hyperparameter-search",
         "journey:hyperparameter-search",
+        "journey:nelder-mead-initial-simplex",
         "method:M_NELDER_MEAD",
         "scenario:SCENARIO_NM_QUADRATIC",
         "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
@@ -33512,6 +33553,7 @@
         "failure:structured:FM007",
         "failure:structured:FM016",
         "method:M_BFGS",
+        "scenario:SCENARIO_HYBRID_MODE_CHATTERING",
         "scenario:SCENARIO_OPTIMAL_CONTROL_EC020",
         "scenario:SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "scenario:SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
@@ -34146,6 +34188,34 @@
       ],
       "text": "fidelity ごとの評価 cost、失敗・censoring status、noise を評価 policy として扱う既存契約がなく、少数評価の配分根拠を記録しにくい",
       "title": "低／高 fidelity シミュレータを予算内で使い分けるではNelder–Mead単体法を選ばない"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "failure:case:nelder-mead-initial-simplex:M_GRADIENT_DESCENT:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "failure:case:nelder-mead-initial-simplex:M_GRADIENT_DESCENT",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:nelder-mead-initial-simplex",
+        "method:M_GRADIENT_DESCENT",
+        "scenario:SCENARIO_NM_QUADRATIC",
+        "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
+        "scenario:SCENARIO_NM_ROSENBROCK",
+        "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED",
+        "source:S001",
+        "source:S002",
+        "source:S056",
+        "source:S063"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S056",
+        "S063"
+      ],
+      "text": "この評価契約は目的値だけを返し、信頼できるgradientやstep-size選択の根拠を提供しないため",
+      "title": "初期simplexで局所探索の感度を見抜くでは最急降下法を選ばない"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -40546,12 +40616,14 @@
         "method:M_DIRECT_COLLOCATION",
         "method:M_MULTIPLE_SHOOTING",
         "problem:PA042",
+        "scenario:SCENARIO_HYBRID_MODE_CHATTERING",
         "scenario:SCENARIO_OPTIMAL_CONTROL_EC020",
         "scenario:SCENARIO_PENDULUM_SWING_UP_MESH_40",
         "scenario:SCENARIO_PENDULUM_SWING_UP_MODEL_MISMATCH",
         "source:S042",
         "source:S043",
         "source:S050",
+        "source:S056",
         "source:S076",
         "source:S102"
       ],
@@ -40559,6 +40631,7 @@
         "S042",
         "S043",
         "S050",
+        "S056",
         "S076",
         "S102"
       ],
@@ -41430,6 +41503,47 @@
       ],
       "text": "低 fidelity の安価な近似と高 fidelity の高価な simulator を使い分け、限られた評価 budget で高 fidelity の候補を改善したい。",
       "title": "低／高 fidelity シミュレータを予算内で使い分ける"
+    },
+    {
+      "attribution": "Optimization Compass contributors",
+      "authority": "generated_from_canonical",
+      "chunk_id": "journey:nelder-mead-initial-simplex:overview",
+      "dataset_version": "0.18.19",
+      "document_id": "journey:nelder-mead-initial-simplex",
+      "license": "CC-BY-4.0",
+      "relation_context": [
+        "case:nelder-mead-initial-simplex",
+        "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+        "content:mads",
+        "content:method.nelder-mead",
+        "implementation:I_SCIPY_NELDER_MEAD",
+        "method:M_GRADIENT_DESCENT",
+        "method:M_MADS",
+        "method:M_NELDER_MEAD",
+        "problem:PA006",
+        "scenario:SCENARIO_NM_QUADRATIC",
+        "scenario:SCENARIO_NM_QUADRATIC_SHIFTED",
+        "scenario:SCENARIO_NM_ROSENBROCK",
+        "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED",
+        "source:S001",
+        "source:S002",
+        "source:S031",
+        "source:S056",
+        "source:S060",
+        "source:S063",
+        "source:S094"
+      ],
+      "source_ids": [
+        "S001",
+        "S002",
+        "S031",
+        "S056",
+        "S060",
+        "S063",
+        "S094"
+      ],
+      "text": "勾配を取得できない2変数のcalibration objectiveをNelder–Meadで局所探索するとき、初期simplexを変えた結果から経路依存と停止の妥当性を診断したい。",
+      "title": "初期simplexで局所探索の感度を見抜く"
     },
     {
       "attribution": "Optimization Compass contributors",
@@ -43352,6 +43466,7 @@
         "case:emergency-shelter-selection",
         "case:irrigation-retrofit-selection",
         "case:mobile-clinic-outreach-selection",
+        "case:nelder-mead-initial-simplex",
         "case:network-upgrade-portfolio",
         "case:production-mix-planning",
         "case:shift-scheduling",
@@ -43604,6 +43719,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "case:EC027",
+        "case:nelder-mead-initial-simplex",
         "comparison:COMPARE_FAILED_SIMULATION_STATUS_LEDGER",
         "content:mads",
         "implementation:I_NOMAD",
@@ -43796,6 +43912,7 @@
         "case:energy-cvar-procurement",
         "case:hyperparameter-search",
         "case:multi-fidelity-simulator",
+        "case:nelder-mead-initial-simplex",
         "case:portfolio-allocation",
         "case:portfolio-cvar-allocation",
         "case:public-infrastructure-selection",
@@ -44964,7 +45081,10 @@
       "dataset_version": "0.18.19",
       "document_id": "problem:PA006",
       "license": "CC-BY-4.0",
-      "relation_context": [],
+      "relation_context": [
+        "case:nelder-mead-initial-simplex",
+        "journey:nelder-mead-initial-simplex"
+      ],
       "source_ids": [
         "S002",
         "S056"
@@ -46509,6 +46629,7 @@
       "document_id": "scenario:SCENARIO_HYBRID_MODE_CHATTERING",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "journey:EC020",
         "source:S042",
         "source:S043",
         "source:S056",
@@ -46575,6 +46696,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+        "journey:nelder-mead-initial-simplex",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-quadratic"
@@ -46595,6 +46717,7 @@
       "license": "CC-BY-4.0",
       "relation_context": [
         "comparison:COMPARE_NELDER_MEAD_INITIAL_SIMPLEX",
+        "journey:nelder-mead-initial-simplex",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-quadratic-shifted"
@@ -46614,6 +46737,7 @@
       "document_id": "scenario:SCENARIO_NM_ROSENBROCK",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "journey:nelder-mead-initial-simplex",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-rosenbrock"
@@ -46633,6 +46757,7 @@
       "document_id": "scenario:SCENARIO_NM_ROSENBROCK_SHIFTED",
       "license": "CC-BY-4.0",
       "relation_context": [
+        "journey:nelder-mead-initial-simplex",
         "source:S001",
         "source:S002",
         "trace:nelder-mead-rosenbrock-shifted"
