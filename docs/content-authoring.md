@@ -88,6 +88,9 @@ For the decision to add a figure and the shared generated-image language, also r
 - Callouts use `::: note`, `::: tip`, or `::: warning`, closed by `:::`.
 - A figure uses `![alt text](./media/file.svg "visible caption")`. Store its file at
   `site/public/media/file.svg`; both alt text and caption are required.
+- An interactive figure uses `::: explorable <id>` with exactly one caption paragraph, closed by
+  `:::`. The id must be registered in `src/optimization_compass/resources/explorables.json`; see
+  [`docs/explorables.md`](explorables.md) for when to use one and how to add a new figure.
 - External links must be HTTPS. App routes use `#/path`, site files use `/path`, and a
   heading link uses its generated slug such as `#python`.
 - Raw HTML is never allowed. Add a supported construct to the pipeline instead.

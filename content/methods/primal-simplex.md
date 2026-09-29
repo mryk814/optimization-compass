@@ -10,7 +10,7 @@ prerequisites: [concept.convexity]
 related_ids: [dual-simplex, lp-qp-conic, family.discrete-structure]
 aliases: [/learn/primal-simplex]
 status: published
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-29
 ---
 
 LPの実行可能なbasisを保ちながら、被約費用が示す隣接basisへpivotし、目的値を改善するsimplex法です。
@@ -23,6 +23,14 @@ LPの実行可能なbasisを保ちながら、被約費用が示す隣接basis�
 
 $n$個の変数と$m$本の等式制約からなる標準形では、頂点は$m$個の変数を基底（basis）として選び、残りを$0$に固定した解に対応します。
 primal simplexは、常にprimal feasibleなbasisを保ったまま、より目的値の良い隣接basisへ移動を繰り返します。
+
+2変数なら、頂点は多角形の角で、隣接basisへの移動は隣の角への移動です。次の図は、下のPython例と同じLPです。$x+y\le4$ と $2x+y\le5$ と $x,y\ge0$ のもとで $3x+2y$ を最大化します。目的の係数を動かして、最適解が頂点に現れることを確かめてください。
+
+::: explorable lp-vertex-walk
+橙の直線は、いまの位置での目的値が等しい点の集まりです。係数 c を動かすと、最良の頂点が切り替わります。紺の点は実行可能領域の内部を自由に動かせますが、目的値は最良の頂点を超えません。隣の頂点へ移る動きはpivotの直感を示す教材用の模式化で、実際のpivot ruleではありません。
+:::
+
+係数を $(1,1)$ にすると、目的の向きが辺 $x+y=4$ と直角になり、その辺全体が最適になります。最適解が頂点一つとは限らないことが、図から読み取れます。
 
 ## 被約費用とpivotの直感
 

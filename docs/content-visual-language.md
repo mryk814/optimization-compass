@@ -33,6 +33,8 @@
 
 生成画像は直感を担います。変数名、数式、厳密な矢印、軸、定量値、実行結果は生成画像に委ねません。厳密な対応が教材の主題なら、SVGまたは既存のTheater / Visualization Scenarioを使います。
 
+読者が条件を動かして結果の変化を確かめることが理解の核なら、静的な図ではなく explorable（`::: explorable <id>`）を使います。判断基準、色と動きの規則、追加手順は [`docs/explorables.md`](explorables.md) に従います。
+
 動的な可視化は、候補・受理判断・分岐・時間変化そのものを追う必要がある場合だけ追加します。scenarioの目的、固定条件、観測量、text alternative、限界は既存のVisualization Scenario contractに従います。
 
 ## 図の制作brief

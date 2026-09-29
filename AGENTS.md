@@ -17,6 +17,7 @@ Optimization Compass is a versioned, data-driven Optimization Atlas. Keep these 
 | Comparison definitions | `data/seeds/site_comparisons.json` |
 | Problem definitions and instances | `src/optimization_compass/resources/problem-suite.json` |
 | Executable problem behavior | `src/optimization_compass/problem_registry.py` |
+| Interactive teaching figures (explorables) | `src/optimization_compass/resources/explorables.json` and `site/src/features/explorable/` (see [`docs/explorables.md`](docs/explorables.md)) |
 | View and visualization metadata | validated seeds and Python contracts under `data/seeds/` and `src/optimization_compass/` |
 | Generated site indexes and distributions | generated from the inputs above; never treated as editable authority |
 
@@ -43,6 +44,7 @@ Find and change the canonical input instead. Generated artifacts may appear in a
 | Add a Gallery case using existing problem/method/implementation/source IDs | `data/seeds/site_gallery.json` | low–medium |
 | Add or revise a comparison using existing traces and entities | `data/seeds/site_comparisons.json` | medium |
 | Add a problem instance with executable evaluation | `problem-suite.json` and `problem_registry.py` | medium |
+| Add an interactive explorable figure to an article | `docs/explorables.md` recipe: registry JSON, `math/` core with tests, figure component, `::: explorable` block | medium |
 | Add a new method, implementation, source, evidence relation, or controlled vocabulary | dataset migration/build inputs plus content | high |
 | Add a scenario, generator, artifact contract, or renderer family | Python contracts/generators plus site implementation | high |
 | Change recommendation behavior, schema, release identity, or publishing | dedicated design and release flow | critical |

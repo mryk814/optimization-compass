@@ -11,7 +11,7 @@
 |---|---:|---:|---:|---:|---:|---|
 | `concept.chance-risk-contract` | 80 | 5351 | 8 | 4 | 0 | pass |
 | `concept.constraint-class` | 68 | 2089 | 5 | 2 | 0 | pass |
-| `concept.convexity` | 61 | 1867 | 8 | 2 | 0 | pass |
+| `concept.convexity` | 61 | 2236 | 8 | 2 | 0 | pass |
 | `concept.derivative-free` | 81 | 2385 | 8 | 4 | 0 | pass |
 | `concept.dynamics-defect` | 80 | 1718 | 5 | 3 | 0 | pass |
 | `concept.evaluation-cost` | 67 | 6013 | 9 | 3 | 0 | pass |

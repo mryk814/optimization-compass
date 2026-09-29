@@ -1,6 +1,8 @@
 import type { AtlasContentPage } from "../../contracts/atlas-content";
 import { useLayoutEffect, useRef, type MouseEvent } from "react";
 
+import { ExplorableMounts } from "../explorable/ExplorableMounts";
+
 export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" | "toc"> }) {
   const contentRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -35,6 +37,7 @@ export function CompiledContent({ page }: { page: Pick<AtlasContentPage, "html" 
         </nav>
       )}
       <div ref={contentRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: page.html }} onClick={followContentAnchor} />
+      <ExplorableMounts container={contentRef} html={page.html} />
     </div>
   );
 }

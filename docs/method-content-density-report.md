@@ -67,7 +67,7 @@
 | `local-search-combinatorial` | `M_LOCAL_SEARCH_COMBINATORIAL` | 57 | 4673 | 9 | 1 | pass |
 | `lp-qp-conic` | `MF_LP_QP_CONIC` | 83 | 3960 | 14 | 1 | pass |
 | `mads` | `M_MADS` | 65 | 3113 | 8 | 1 | pass |
-| `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 3778 | 12 | 1 | pass |
+| `method.gradient-descent` | `M_GRADIENT_DESCENT` | 53 | 4814 | 12 | 1 | pass |
 | `method.nelder-mead` | `M_NELDER_MEAD` | 51 | 3345 | 11 | 1 | pass |
 | `mirror-descent` | `M_MIRROR_DESCENT` | 92 | 2835 | 9 | 1 | pass |
 | `mma` | `M_MMA` | 63 | 1250 | 5 | 1 | pass |
@@ -89,7 +89,7 @@
 | `pdlp` | `M_PDLP` | 55 | 5026 | 10 | 1 | pass |
 | `powell` | `M_POWELL` | 61 | 2132 | 7 | 1 | pass |
 | `primal-dual-conic` | `M_PRIMAL_DUAL_CONIC` | 73 | 3318 | 9 | 1 | pass |
-| `primal-simplex` | `M_SIMPLEX` | 61 | 3180 | 8 | 1 | pass |
+| `primal-simplex` | `M_SIMPLEX` | 61 | 3595 | 8 | 1 | pass |
 | `projected-gradient` | `M_PROJECTED_GRADIENT` | 58 | 3549 | 9 | 1 | pass |
 | `proximal-gradient` | `M_PROX_GRADIENT` | 55 | 2434 | 7 | 1 | pass |
 | `random-search` | `M_RANDOM_SEARCH` | 89 | 3247 | 9 | 1 | pass |

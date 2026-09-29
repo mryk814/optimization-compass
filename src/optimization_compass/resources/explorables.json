@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "explorables": [
+    {
+      "id": "gradient-descent-valley",
+      "title_ja": "学習率と谷の形を動かして、勾配降下法の進み方を見る",
+      "question": "同じ更新式でも、learning rateと谷の細長さで、収束・遅い収束・振動・発散が切り替わるのはなぜか。",
+      "fixed_conditions": "目的関数は f(x,y)=(x-1)^2+κ(y+2)^2 に固定し、勾配は解析式で厳密に与える。",
+      "not_implied": "一般的な手法の優劣や、実問題で良いlearning rateを示すものではない。"
+    },
+    {
+      "id": "lp-vertex-walk",
+      "title_ja": "目的の向きを回して、LPの最適解が頂点に現れる様子を見る",
+      "question": "線形目的の最適解が、なぜ実行可能領域の頂点だけを調べれば見つかるのか。",
+      "fixed_conditions": "2変数・2本の不等式と非負制約からなる固定のLP（max 3x+2y の係数を動かす）。",
+      "not_implied": "実際のprimal simplex実装のpivot ruleや計算量を示すものではない。隣の頂点へ移る動きは教育用の模式化である。"
+    },
+    {
+      "id": "convexity-chord",
+      "title_ja": "2点を結ぶ線分で、関数の凸性を確かめる",
+      "question": "関数が凸であるとは、グラフ上の任意の2点を結ぶ線分がグラフより下へ入らないことだと、どう確かめられるか。",
+      "fixed_conditions": "1変数の3つの固定関数を使い、点a・bと混合比θを動かして定義の不等式を数値で確かめる。",
+      "not_implied": "有限個の点の確認は凸性の証明ではない。可行集合の凸性も別に確認が必要である。"
+    }
+  ]
+}
