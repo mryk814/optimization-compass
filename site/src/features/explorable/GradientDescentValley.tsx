@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { memo, useCallback, useMemo, useRef, useState, type KeyboardEvent } from "react";
 
 import { Choice, PlayerBar, Slider } from "./controls";
 import { ExplorableFrame } from "./ExplorableFrame";
@@ -17,6 +17,8 @@ import {
   type ValleyProblem,
 } from "./math/descent";
 import { LiveMath, addend, mi, mn, mo, paren, row, signed, sub } from "./mathml";
+import { EXPLORABLE_META } from "./meta";
+import { numberSetting, stringSetting, type BeatSettings } from "./scene";
 import {
   clamp,
   makeScale,
@@ -27,6 +29,7 @@ import {
   type Scale,
   type Viewport,
 } from "./svg";
+import { useSceneTour } from "./useSceneTour";
 import { useReplayOnChange, useTimeline } from "./useTimeline";
 
 const MAX_STEPS = 100;
@@ -36,15 +39,48 @@ const BOUNDS: Bounds = { xMin: -4.5, xMax: 7, yMin: -5.5, yMax: 3.5 };
 const ASPECT = (BOUNDS.yMax - BOUNDS.yMin) / (BOUNDS.xMax - BOUNDS.xMin);
 const LEVELS = [0.5, 2, 6, 15, 35, 80, 180, 400, 900];
 const CHART = { height: 190, left: 58, right: 14, top: 12, bottom: 34 };
+/** Iterations per second while a guided beat plays; time stays linear in k (ADR 0018 §3). */
+const TOUR_STEPS_PER_SECOND = 20;
+const METHODS: readonly DescentMethod[] = ["gd", "momentum"];
+
+interface Settings {
+  eta: number;
+  kappa: number;
+  beta: number;
+  method: DescentMethod;
+  start: readonly [number, number];
+}
+
+const INITIAL: Settings = { eta: 0.04, kappa: 20, beta: 0.5, method: "gd", start: DEFAULT_START };
+
+/** A beat names only what it changes; the start is the default point unless it sets x0 / y0. */
+function fromBeat(settings: BeatSettings, base: Settings): Settings {
+  return {
+    eta: numberSetting(settings, "eta", base.eta),
+    kappa: numberSetting(settings, "kappa", base.kappa),
+    beta: numberSetting(settings, "beta", base.beta),
+    method: stringSetting(settings, "method", METHODS, base.method),
+    start: [numberSetting(settings, "x0", DEFAULT_START[0]), numberSetting(settings, "y0", DEFAULT_START[1])],
+  };
+}
 
 type Tone = "good" | "slow" | "swing" | "bad";
 
 export default function GradientDescentValley() {
-  const [eta, setEta] = useState(0.04);
-  const [kappa, setKappa] = useState(20);
-  const [method, setMethod] = useState<DescentMethod>("gd");
-  const [beta, setBeta] = useState(0.5);
-  const [start, setStart] = useState<readonly [number, number]>(DEFAULT_START);
+  const [chosen, setChosen] = useState<Settings>(INITIAL);
+  const setEta = (eta: number) => setChosen((value) => ({ ...value, eta }));
+  const setKappa = (kappa: number) => setChosen((value) => ({ ...value, kappa }));
+  const setBeta = (beta: number) => setChosen((value) => ({ ...value, beta }));
+  const setMethod = (method: DescentMethod) => setChosen((value) => ({ ...value, method }));
+  const setStart = (update: (start: readonly [number, number]) => readonly [number, number]) =>
+    setChosen((value) => ({ ...value, start: update(value.start) }));
+  // Leaving the guided scene keeps what it was showing, so the reader continues from there.
+  const tour = useSceneTour(
+    "gradient-descent-valley",
+    EXPLORABLE_META["gradient-descent-valley"].beats,
+    useCallback((settings: BeatSettings) => setChosen((value) => fromBeat(settings, value)), []),
+  );
+  const { eta, kappa, beta, method, start } = tour.beat ? fromBeat(tour.beat.settings, chosen) : chosen;
   const svgRef = useRef<SVGSVGElement>(null);
   const { ref: stageRef, viewport } = useStageViewport(BOUNDS, ASPECT);
 
@@ -59,13 +95,19 @@ export default function GradientDescentValley() {
   const gentleRate = axisRate(method, gentle, eta, beta);
   const steepRate = axisRate(method, steep, eta, beta);
 
-  useReplayOnChange(timeline, [eta, kappa, method, beta, start[0], start[1]].join("|"));
+  useReplayOnChange(
+    timeline,
+    tour.active ? "guided" : [eta, kappa, method, beta, start[0], start[1]].join("|"),
+  );
+  const position = tour.active
+    ? Math.min(timeline.length, tour.local * TOUR_STEPS_PER_SECOND)
+    : timeline.position;
 
   const scale = useMemo(() => makeScale(viewport), [viewport]);
   const drag = useDomainDrag({
     svgRef,
     viewport,
-    onDrag: (x, y) => setStart([clamp(x, BOUNDS.xMin + 0.3, BOUNDS.xMax - 0.3), clamp(y, BOUNDS.yMin + 0.3, BOUNDS.yMax - 0.3)]),
+    onDrag: (x, y) => setStart(() => [clamp(x, BOUNDS.xMin + 0.3, BOUNDS.xMax - 0.3), clamp(y, BOUNDS.yMin + 0.3, BOUNDS.yMax - 0.3)]),
   });
   const nudgeStart = (event: KeyboardEvent<SVGGElement>) => {
     const amount = event.shiftKey ? 1 : 0.25;
@@ -85,19 +127,22 @@ export default function GradientDescentValley() {
   };
 
   const points = run.points;
-  const step = Math.min(timeline.step, points.length - 1);
+  const step = Math.min(Math.floor(position + 1e-9), points.length - 1);
   const current = points[step];
   const previous = points[Math.max(0, step - 1)];
   const next = nextPoint(current, previous, { eta, method, beta });
-  const travelled = points.slice(0, step + 1).map((p) => [p.x, p.y] as const);
-  const fraction = timeline.position - step;
+  // A diverging run is drawn only until it leaves the view; past that, every segment would
+  // cross the whole figure and bury the picture in lines.
+  const drawable = run.outcome === "diverged" ? drawableCount(points) : points.length;
+  const travelled = points.slice(0, Math.min(step + 1, drawable)).map((p) => [p.x, p.y] as const);
+  const fraction = position - step;
   const head: readonly [number, number] = step < points.length - 1
     ? [
         current.x + (points[step + 1].x - current.x) * fraction,
         current.y + (points[step + 1].y - current.y) * fraction,
       ]
     : [current.x, current.y];
-  const trail = fraction > 0 && step < points.length - 1 ? [...travelled, head] : travelled;
+  const trail = fraction > 0 && step < drawable - 1 ? [...travelled, head] : travelled;
 
   const verdict = describeRun(run.outcome, points, limit, eta);
   const summary = [
@@ -154,6 +199,7 @@ export default function GradientDescentValley() {
         </>
       }
       id="gradient-descent-valley"
+      tour={tour}
       player={
         <PlayerBar
           positionText={`k = ${step} / ${points.length - 1}`}
@@ -189,7 +235,7 @@ export default function GradientDescentValley() {
             <ContourLayer kappa={kappa} scale={scale} startValue={valleyValue(problem, start[0], start[1])} />
             <path
               className="ex-ghost"
-              d={polylinePath(points.map((p) => [p.x, p.y] as const), scale)}
+              d={polylinePath(points.slice(0, drawable).map((p) => [p.x, p.y] as const), scale)}
             />
             <path className="ex-trail" d={polylinePath(trail, scale)} />
             {travelled.map(([x, y], index) => (
@@ -202,23 +248,32 @@ export default function GradientDescentValley() {
               />
             ))}
             <Minimum scale={scale} />
-            <line
-              className="ex-next-step"
-              markerEnd="url(#ex-arrow)"
-              x1={scale.px(current.x)}
-              x2={scale.px(next[0])}
-              y1={scale.py(current.y)}
-              y2={scale.py(next[1])}
-            />
-            <circle className="ex-head" cx={scale.px(head[0])} cy={scale.py(head[1])} r={8} />
+            {step < drawable && (
+              <>
+                <line
+                  className="ex-next-step"
+                  markerEnd="url(#ex-arrow)"
+                  x1={scale.px(current.x)}
+                  x2={scale.px(next[0])}
+                  y1={scale.py(current.y)}
+                  y2={scale.py(next[1])}
+                />
+                <circle className="ex-head" cx={scale.px(head[0])} cy={scale.py(head[1])} r={8} />
+              </>
+            )}
+            {/* The guided scene fixes the start, so the handle is only a marker while it plays. */}
             <g
-              aria-label={`初期点 ${fmtPair(start[0], start[1])}。ドラッグか矢印キーで動かせます。`}
-              aria-roledescription="2次元のつまみ"
-              className="ex-handle"
-              onKeyDown={nudgeStart}
-              role="group"
-              tabIndex={0}
-              {...drag}
+              {...(tour.active
+                ? { className: "ex-handle is-fixed" }
+                : {
+                    "aria-label": `初期点 ${fmtPair(start[0], start[1])}。ドラッグか矢印キーで動かせます。`,
+                    "aria-roledescription": "2次元のつまみ",
+                    className: "ex-handle",
+                    onKeyDown: nudgeStart,
+                    role: "group",
+                    tabIndex: 0,
+                    ...drag,
+                  })}
             >
               <circle className="ex-handle-hit" cx={scale.px(start[0])} cy={scale.py(start[1])} r={20} />
               <circle className="ex-handle-ring" cx={scale.px(start[0])} cy={scale.py(start[1])} r={11} />
@@ -231,12 +286,20 @@ export default function GradientDescentValley() {
             </defs>
           </svg>
           </div>
-          <LossChart points={points} position={timeline.position} width={viewport.width} />
+          <LossChart points={points} position={position} width={viewport.width} />
         </>
       }
       summary={summary}
     />
   );
+}
+
+/** Points up to and including the first one outside the view. */
+function drawableCount(points: DescentPoint[]): number {
+  const outside = points.findIndex(
+    (p) => p.x < BOUNDS.xMin || p.x > BOUNDS.xMax || p.y < BOUNDS.yMin || p.y > BOUNDS.yMax,
+  );
+  return outside === -1 ? points.length : outside + 1;
 }
 
 function nextPoint(

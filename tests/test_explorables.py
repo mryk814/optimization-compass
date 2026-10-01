@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from optimization_compass.content_models import load_content, parse_content
-from optimization_compass.explorables import load_explorables
+from optimization_compass.explorables import Beat, Explorable, load_explorables
 
 _HEADER = """---
 content_id: concept.example
@@ -106,3 +106,47 @@ def test_published_articles_only_use_registered_explorables() -> None:
 
     assert used <= registry
     assert used, "at least one article should embed an explorable"
+
+
+def test_guided_scene_beats_are_sentences_within_the_length_budget() -> None:
+    beats = load_explorables()["gradient-descent-valley"].beats
+
+    assert beats
+    assert sum(beat.duration_s for beat in beats) <= 60
+    for beat in beats:
+        assert beat.caption_ja.endswith("。")
+        assert beat.narration_ja.endswith("。")
+
+
+@pytest.mark.parametrize(
+    ("beat", "message"),
+    [
+        ({"duration_s": 1}, "between 2 and 15 seconds"),
+        ({"caption_ja": "句点がない"}, "ending with 。"),
+        ({"narration_ja": " "}, "ending with 。"),
+        ({"extra": 1}, "Extra inputs"),
+    ],
+)
+def test_beats_reject_invalid_authoring(beat: dict[str, object], message: str) -> None:
+    valid = {
+        "settings": {"eta": 0.1},
+        "duration_s": 5,
+        "caption_ja": "見る。",
+        "narration_ja": "話す。",
+    }
+    with pytest.raises(ValueError, match=message):
+        Beat.model_validate(valid | beat)
+
+
+def test_guided_scene_must_fit_in_a_minute() -> None:
+    beat = {"settings": {}, "duration_s": 15, "caption_ja": "見る。", "narration_ja": "話す。"}
+    entry = {
+        "id": "x",
+        "title_ja": "t",
+        "question": "q。",
+        "fixed_conditions": "f",
+        "not_implied": "n。",
+        "beats": [beat] * 5,
+    }
+    with pytest.raises(ValueError, match="must not exceed 60 seconds"):
+        Explorable.model_validate(entry)

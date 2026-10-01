@@ -8,7 +8,9 @@ import { CompiledContent } from "../content/CompiledContent";
 import ConvexityChord from "./ConvexityChord";
 import GradientDescentValley from "./GradientDescentValley";
 import LpVertexWalk from "./LpVertexWalk";
+import { axisRate, runDescent, valleyCurvatures } from "./math/descent";
 import { EXPLORABLE_META } from "./meta";
+import { numberSetting, stringSetting } from "./scene";
 import { EXPLORABLE_COMPONENTS } from "./registry";
 
 interface RegistryFile {
@@ -17,6 +19,12 @@ interface RegistryFile {
     question: string;
     fixed_conditions: string;
     not_implied: string;
+    beats?: Array<{
+      settings: Record<string, number | string>;
+      duration_s: number;
+      caption_ja: string;
+      narration_ja: string;
+    }>;
   }>;
 }
 
@@ -40,6 +48,12 @@ describe("explorable registry", () => {
         question: entry.question,
         fixedConditions: entry.fixed_conditions,
         notImplied: entry.not_implied,
+        beats: (entry.beats ?? []).map((beat) => ({
+          settings: beat.settings,
+          durationS: beat.duration_s,
+          captionJa: beat.caption_ja,
+          narrationJa: beat.narration_ja,
+        })),
       });
     }
   });
@@ -62,6 +76,67 @@ describe("ExplorableMounts inside compiled content", () => {
     render(<CompiledContent page={{ html: figure("not-registered"), toc: [] }} />);
 
     expect(screen.getByText("静的な代替")).toBeInTheDocument();
+  });
+});
+
+describe("GradientDescentValley guided scene", () => {
+  const beats = EXPLORABLE_META["gradient-descent-valley"].beats;
+  const runOf = (index: number) => {
+    const settings = beats[index].settings;
+    const kappa = numberSetting(settings, "kappa", 20);
+    const options = {
+      eta: numberSetting(settings, "eta", 0.04),
+      method: stringSetting(settings, "method", ["gd", "momentum"] as const, "gd"),
+      beta: numberSetting(settings, "beta", 0.5),
+      maxSteps: 100,
+    };
+    const problem = { cx: 1, cy: -2, kappa };
+    const { gentle, steep } = valleyCurvatures(problem);
+    return {
+      run: runDescent(problem, [numberSetting(settings, "x0", 4), numberSetting(settings, "y0", 3)], options),
+      gentle: axisRate(options.method, gentle, options.eta, options.beta),
+      steep: axisRate(options.method, steep, options.eta, options.beta),
+    };
+  };
+
+  // The captions make claims about the computation; these keep the claims true.
+  it("says only what each beat's computation shows", () => {
+    const slow = runOf(0);
+    expect(slow.run.outcome).toBe("unfinished");
+    expect(slow.gentle.factor).toBeCloseTo(0.96, 10);
+    expect(slow.steep.rate).toBeLessThan(0.5);
+
+    const swing = runOf(1);
+    expect(swing.steep.oscillates).toBe(true);
+    expect(swing.gentle.rate).toBeLessThan(slow.gentle.rate);
+
+    const diverge = runOf(2);
+    expect(diverge.run.outcome).toBe("diverged");
+    expect(numberSetting(beats[2].settings, "eta", 0)).toBeGreaterThan(1 / 20);
+
+    const round = runOf(3);
+    expect(round.run.outcome).toBe("converged");
+    expect(round.run.points.length).toBeLessThan(20);
+
+    const momentum = runOf(4);
+    expect(momentum.gentle.rate).toBeLessThan(slow.gentle.rate);
+    expect(momentum.run.points.at(-1)!.f).toBeLessThan(slow.run.points.at(-1)!.f);
+  });
+
+  it("replaces the controls with captions and hands the last beat back on exit", () => {
+    render(<GradientDescentValley />);
+
+    fireEvent.click(screen.getByRole("button", { name: /解説付きで見る/ }));
+    expect(screen.queryByRole("slider", { name: /learning rate/ })).not.toBeInTheDocument();
+    expect(screen.getByText(beats[0].captionJa)).toBeInTheDocument();
+    expect(screen.queryByRole("group", { name: /初期点/ })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "次へ ▶" }));
+    expect(screen.getByText(beats[1].captionJa)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "解説を終えて、自分で動かす" }));
+    expect(slider(/learning rate/)).toHaveValue("0.045");
+    expect(screen.getByRole("button", { name: /解説付きで見る/ })).toBeInTheDocument();
   });
 });
 

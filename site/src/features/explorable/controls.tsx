@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from "react";
 
+import type { SceneTour } from "./useSceneTour";
 import { TIMELINE_SPEEDS, type Timeline, type TimelineSpeed } from "./useTimeline";
 
 interface SliderProps {
@@ -163,6 +164,59 @@ export function PlayerBar({ timeline, stepLabel, positionText }: PlayerBarProps)
           OSの「視差効果を減らす」設定を尊重して、自動再生は止めています。1つ進む／戻るで確認できます。
         </p>
       )}
+    </div>
+  );
+}
+
+/**
+ * Guided-scene chrome: the current beat's caption, its position in the scene, and the
+ * buttons to pause, move between beats, or leave and take over the controls.
+ */
+export function TourPanel({ tour }: { tour: SceneTour }) {
+  const { beats, index, beat, playing, reducedMotion, recording } = tour;
+  if (!beat) return null;
+  return (
+    <section aria-label="解説" className="ex-tour">
+      <p className="ex-tour-count">
+        解説 <strong>{index + 1}</strong> / {beats.length}
+      </p>
+      <p aria-live={recording ? "off" : "polite"} className="ex-tour-caption">{beat.captionJa}</p>
+      <div aria-hidden="true" className="ex-tour-progress">
+        {beats.map((item, position) => (
+          <span
+            className={position < index ? "is-done" : position === index ? "is-current" : undefined}
+            key={position}
+            style={position === index ? { ["--ex-beat-progress" as string]: String(tour.local / item.durationS) } : undefined}
+          />
+        ))}
+      </div>
+      {!recording && (
+        <div className="ex-player-buttons">
+          <button disabled={index === 0} onClick={() => tour.goTo(index - 1)} type="button">◀ 前へ</button>
+          <button
+            aria-pressed={playing}
+            className="ex-play"
+            disabled={reducedMotion}
+            onClick={tour.toggle}
+            type="button"
+          >
+            {playing ? "⏸ 一時停止" : "▶ 再生"}
+          </button>
+          <button disabled={index === beats.length - 1} onClick={() => tour.goTo(index + 1)} type="button">次へ ▶</button>
+          <button className="ex-tour-exit" onClick={tour.stop} type="button">解説を終えて、自分で動かす</button>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export function TourStart({ tour }: { tour: SceneTour }) {
+  if (tour.beats.length === 0 || tour.active) return null;
+  return (
+    <div className="ex-button-row">
+      <button className="ex-action" onClick={tour.start} type="button">
+        ▶ 解説付きで見る（{tour.beats.length}場面・約{Math.round(tour.durationS)}秒）
+      </button>
     </div>
   );
 }

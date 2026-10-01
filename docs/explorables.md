@@ -76,6 +76,25 @@ site/src/features/explorable/
 - **前提の開示**: 各図の下に「固定している条件」と「読み取れないこと」を開閉できる形で常に置きます。
 - **計算は描画から分ける**: `math/` は React に依存しません。解析解（例: 二次関数での誤差の倍率 `1-ηλ`）と一致することをテストで固定します。
 
+## 解説付き再生（beats）と録画
+
+図には、自動で進む解説（guided scene）を付けられます。方針は [ADR 0018](adr/0018-motion-3d-and-video.md) です。
+
+- `explorables.json` の entry に `beats` を書きます。各 beat は `settings`（図の設定のうち変えるもの）、`duration_s`（2〜15秒）、`caption_ja`（画面に出す要点）、`narration_ja`（話す文。数式・記号は「イータ」のように読みを書き下す）です。合計は60秒以内です。
+- `meta.ts` に同じ内容を写します（不一致は `explorable.test.tsx` が検出します）。
+- caption が計算について主張することは、テストで固定します（例: 「100回でも収束しない」なら `runDescent` の結果が `unfinished`）。
+- 図の側では `useSceneTour(id, beats, onExit)` を使い、`tour.beat` の設定を表示し、`tour.local`（beat 内の秒）から反復の位置を決めます。反復は等速で進めます。終了すると最後の beat の設定が読者の操作に引き継がれます。
+- 解説中は操作部品を隠し、caption・進捗・前へ／次へ・終了を出します。reduced motion では各 beat の終了状態を出し、手で進めます。
+
+録画は、scene time `t` を外から与えてフレームごとに撮ります（実時間の再生を録画しません）。
+
+```bash
+npm --prefix site run record:scene -- gradient-descent-valley              # 動画一式
+npm --prefix site run record:scene -- gradient-descent-valley --still 12.5 # 1フレームだけ（レイアウト確認）
+```
+
+出力は `site/.scene-media/<id>/`（git 管理外）に、`scene.mp4`、`scene.webm`、`poster.png`、`captions.vtt`、`transcript.txt`、`manifest.json` です。`manifest.json` の `input_sha256` は registry と `site/src/features/explorable/` の内容から計算し、録画が古いかどうかの判定に使います。ffmpeg が必要です。録画用の画面は `#/record/<id>`（1280×720、サイトの外枠なし）です。
+
 ## 検証
 
 ```bash
@@ -102,5 +121,5 @@ CI=1 PLAYWRIGHT_PORT=4199 npm --prefix site exec playwright test e2e/explorable.
 
 - **曲面の3D表示**: 二変数の目的関数を回転できる曲面として見せ、軌跡を曲面上に重ねる。高さの圧縮などの表現上の加工を必ず開示する。
 - **既存の Theater の外枠**: 現在の Theater / Trace ページは、メタデータと操作が図より先に並び、図が画面の下に隠れる。`ExplorableFrame` と同じ「問い → 図 → 再生 → 読み取り」の順へ組み替える。Trace の契約は変えずに、ページの外枠だけを差し替えられる。
-- **動画**: Explorable の各状態を、固定の設定で書き出して動画にする経路。`docs/derived-media.md` の派生メディアの契約に沿って設計する。
+- **動画の配信とナレーション**: 録画（上記）を Pages のデプロイで生成して配信する。ナレーションは手元で TTS 生成した音声を置く（ADR 0018 §5a）。
 - **手法ごとの図**: 各 method 記事について、第1候補（BFGS の曲率、Newton 法の接線、Nelder–Mead の単体、Adam の座標ごとの step など）を、この基準で選別する。

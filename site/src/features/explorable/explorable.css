@@ -440,3 +440,142 @@
 @media (prefers-reduced-motion: reduce) {
   .explorable * { transition: none !important; animation: none !important; }
 }
+
+/* Guided scene (ADR 0018) */
+.ex-tour {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--ex-orange);
+  border-radius: 0.5rem;
+  background: #fff8ef;
+}
+
+.markdown-body .ex-frame .ex-tour-count,
+.ex-tour-count {
+  color: var(--ex-orange-ink);
+  font-size: var(--type-label);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.markdown-body .ex-frame .ex-tour-caption,
+.ex-tour-caption {
+  min-height: 3.2em;
+  font-size: var(--type-body, 1.05rem);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.ex-tour-progress {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.ex-tour-progress span {
+  --ex-beat-progress: 0;
+  flex: 1;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--ex-orange) calc(var(--ex-beat-progress) * 100%),
+    var(--ex-line) 0
+  );
+}
+
+.ex-tour-progress span.is-done {
+  background: var(--ex-orange);
+}
+
+.ex-tour button {
+  min-height: 2.5rem;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--ex-ink);
+  border-radius: 0.4rem;
+  background: var(--ex-panel);
+  color: var(--ex-ink);
+  font: inherit;
+  font-size: var(--type-support);
+  cursor: pointer;
+}
+
+.ex-tour button:disabled {
+  border-color: var(--ex-line);
+  color: #7a8194;
+  cursor: not-allowed;
+}
+
+.ex-tour .ex-play {
+  min-width: 8.5rem;
+  border-color: var(--ex-teal-ink);
+  background: var(--ex-teal-ink);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.ex-tour .ex-tour-exit {
+  margin-left: auto;
+  border-color: var(--ex-orange-ink);
+  color: var(--ex-orange-ink);
+  font-weight: 700;
+}
+
+.ex-tour button:focus-visible {
+  outline: 3px solid var(--ex-ink);
+  outline-offset: 2px;
+}
+
+.ex-handle.is-fixed {
+  pointer-events: none;
+}
+
+/* Record page: one 16:9 frame (1280×720 CSS px), figure left, reading right. */
+.ex-record {
+  box-sizing: border-box;
+  width: 1280px;
+  height: 720px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+}
+
+.ex-record .ex-frame {
+  grid-template-columns: 620px 1fr;
+  grid-template-areas:
+    "question question"
+    "tour tour"
+    "canvas readout"
+    "canvas chart"
+    "canvas .";
+  grid-template-rows: auto auto auto auto 1fr;
+  gap: 0.6rem 1.25rem;
+  height: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+}
+
+.ex-record p { margin: 0; }
+.ex-record .ex-question {
+  display: flex;
+  grid-area: question;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.3rem 0.7rem;
+  font-size: var(--type-support);
+}
+.ex-record .ex-question span { flex: none; }
+.ex-record .ex-tour { grid-area: tour; gap: 0.35rem; padding: 0.55rem 0.85rem; }
+.ex-record .ex-tour-caption { min-height: 0; font-size: 1.3rem; line-height: 1.5; }
+.ex-record .ex-stage { display: contents; }
+.ex-record .ex-canvas { grid-area: canvas; align-self: start; }
+.ex-record .ex-chart { grid-area: chart; }
+.ex-record .ex-tour { grid-template-columns: auto 1fr; align-items: baseline; column-gap: 1rem; }
+.ex-record .ex-tour-progress { grid-column: 1 / -1; }
+.ex-record .ex-readout { grid-area: readout; gap: 0.6rem; }
+.ex-record .ex-equation math { font-size: 0.92em; }
+.ex-record .ex-readout .ex-hint,
+.ex-record .ex-limits,
+.ex-record .ex-button-row { display: none; }
